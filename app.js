@@ -798,13 +798,8 @@ function worldCount(id){
   var n=0; for(var i=0;i<SPOTS.length;i++) if(SPOT_WORLD[SPOTS[i].id]===id) n++;
   return n;
 }
-/* ====== LES ÎLES DE LA MAQUETTE ======
-   Les vignettes viennent du modèle envoyé par Thomas (Designer2.pdf), découpées
-   au-dessus de la plaque de nom d'origine : notre plaque vient se poser au même
-   endroit et recouvre la coupe. La France, absente du modèle, reprend le rocher
-   au phare de la bannière du haut — même illustration, même matière.
-   Sept WebP en data-URI, ~140 ko : rien à télécharger, hors ligne compris. */
-var ISLE_PIC={"fr":"assets/original/132bc4e7d67f64.webp","na":"assets/original/e64cdb0aeb2625.webp","eu":"assets/original/afa2d4757cdb20.webp","as":"assets/original/f07fb727ce5d43.webp","sa":"assets/original/a3bb387a54e5f9.webp","af":"assets/original/b5004e8b85bfaf.webp","oc":"assets/original/f93a2e9d9b14ec.webp"};
+/* Photographies de destinations réelles, créditées dans photos.html. */
+var WORLD_PHOTOS={"fr": {"place": "Palombaggia, Corse", "author": "dronepicr", "license": "CC BY 2.0", "source": "https://commons.wikimedia.org/wiki/File:Top-down_aerial_of_Palombaggia_Beach%2C_France_%2852723809351%29.jpg", "src": "assets/photos/fr.jpg"}, "eu": {"place": "Algarve, Portugal", "author": "Tobi 87", "license": "CC BY-SA 3.0", "source": "https://commons.wikimedia.org/wiki/File:Praia_da_Marinha-Algarve-Portugal.jpg", "src": "assets/photos/eu.jpg"}, "af": {"place": "La Digue, Seychelles", "author": "dronepicr", "license": "CC BY 2.0", "source": "https://commons.wikimedia.org/wiki/File:Beach_Anse_Source_d'Argent_aerial_La_Digue_Seychelles_(39616965691).jpg", "src": "assets/photos/af.jpg"}, "na": {"place": "Isla Mujeres, Mexique", "author": "dronepicr", "license": "CC BY 2.0", "source": "https://commons.wikimedia.org/wiki/File:Mexican_island_Isla_Mujeres_(42882051294).jpg", "src": "assets/photos/na.jpg"}, "sa": {"place": "Fernando de Noronha, Brésil", "author": "Rosana Antunes", "license": "CC0", "source": "https://commons.wikimedia.org/wiki/File:Praia_do_Le%C3%A3o_localizada_em_Fernando_de_Noronha.jpg", "src": "assets/photos/sa.jpg"}, "as": {"place": "Raja Ampat, Indonésie", "author": "Lasthib", "license": "CC BY-SA 4.0", "source": "https://commons.wikimedia.org/wiki/File:20170909_Kri_island_beach.jpg", "src": "assets/photos/as.jpg"}, "oc": {"place": "Whitsundays, Australie", "author": "dnatheist", "license": "CC BY 3.0", "source": "https://commons.wikimedia.org/wiki/File:Whitehaven_Beach_-_panoramio.jpg", "src": "assets/photos/oc.jpg"}};
 function worldVisited(id){
   /* la progression vient du carnet de sessions, pas d'un score décoratif */
   var seen={}; sessions.forEach(function(s){ seen[s.spot]=1; });
@@ -817,21 +812,18 @@ function worldVisited(id){
   return n;
 }
 function renderWorlds(){
-  var host=document.getElementById('worldGrid'); if(!host) return;
-  host.innerHTML = WORLDS.map(function(w){
-    var tot=worldCount(w.id), vus=worldVisited(w.id);
-    var pct=tot?Math.round(vus/tot*100):0;
-    var solo=(WORLDS.length%2===1 && w===WORLDS[WORLDS.length-1]);
-    return '<button class="isl'+(solo?' solo':'')+'" onclick="openWorld(\''+w.id+'\')">'
-      + '<img class="isl-img" src="'+(ISLE_PIC[w.id]||'')+'" alt="" loading="lazy" decoding="async">'
-      + '<span class="isl-plate"><b>'+w.lab+'</b>'
-      +   '<span class="isl-bar"><i style="width:'+Math.max(pct,2)+'%"></i></span>'
-      +   '<span class="isl-n">'+tot+' spots à explorer <span aria-hidden="true">↗</span></span>'
-      + '</span></button>';
+  const host=document.getElementById('worldGrid');if(!host)return;
+  host.innerHTML=WORLDS.map((w,index)=>{
+    const photo=WORLD_PHOTOS[w.id],total=worldCount(w.id);
+    return `<button class="isl world-${w.id}" onclick="openWorld('${w.id}')" aria-label="Explorer ${w.lab}, ${total} spots">
+      <img class="isl-img" src="${photo.src}" alt="" loading="lazy" decoding="async">
+      <span class="world-num" aria-hidden="true">0${index+1}</span>
+      <span class="world-count">${total} spots</span>
+      <span class="isl-plate"><span class="world-place">${photo.place}</span><b>${w.lab}</b><span class="world-sub">${w.sub}</span><span class="world-open">Explorer <span aria-hidden="true">↗</span></span></span>
+    </button>`;
   }).join('');
-  var tot=document.getElementById('worldTotal');
-  if(tot) tot.textContent=SPOTS.length+' spots · '+WORLDS.length+' destinations';
-  const allLabel=document.querySelector('.w-all-tx i');if(allLabel)allLabel.textContent=SPOTS.length+' spots à découvrir sur la carte du monde';
+  const total=document.getElementById('worldTotal');if(total)total.innerHTML='<b>'+SPOTS.length+' spots.</b> Sept portes vers le grand bleu.';
+  const allLabel=document.querySelector('.w-all-tx i');if(allLabel)allLabel.textContent='Ouvre la carte et trouve ton prochain terrain de jeu.';
 }
 
 function openWorld(id){
@@ -859,11 +851,14 @@ function syncWorldUI(){
   if(!on){ if(lv)lv.style.display='none'; if(mv)mv.style.display='none'; }
   else { setView('list'); }
   var w=on?worldOf(spotWorld):null;
-  var ttl=document.querySelector('#spotsTitle .th'), sub=document.getElementById('spotsSub');
-  if(ttl) ttl.textContent = w?w.lab : (spotWorld==='all'?'Tous les spots':'Choisis ta destination');
+  var top=document.getElementById('spotsTop');
+  if(top)top.style.setProperty('--region-photo',`url("${w?WORLD_PHOTOS[w.id].src:'assets/photos/hero.jpg'}")`);
+  var ttl=document.getElementById('spotsTitle'), sub=document.getElementById('spotsSub');
+  if(ttl) ttl.textContent = w?w.lab : (spotWorld==='all'?'Trouve ton spot.':'Le monde est à toi.');
+  if(ttl&&!on)ttl.innerHTML='Le monde<br> <span>est à toi.</span>';
   if(sub) sub.textContent = on
     ? (w? worldCount(w.id)+' spots à explorer' : SPOTS.length+' spots, partout dans le monde')
-    : 'Les meilleurs spots nautiques du monde';
+    : 'Choisis un horizon. Prépare ta session. Vis ton aventure.';
 }
 function renderSpots(filter=currentFilter,keep){
   currentFilter=filter;const q=currentSearch;

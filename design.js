@@ -59,8 +59,8 @@
   });
   const headings = {
     spotsTop:['LE MONDE T’ATTEND','Trouve ton prochain horizon.'],
-    chalTop:['CHAQUE GESTE COMPTE','Un petit geste.<br>Un grand impact.'],
-    aqTop:['TON PETIT BOUT D’OCÉAN','La vie grandit avec toi.'],
+    chalTop:['À TOI DE JOUER','Passe à l’action.<br>Protège ton terrain.'],
+    aqTop:['CHAQUE AVENTURE FAIT GRANDIR TON RÉCIF','Ton océan.<br>Prends-en soin.'],
     profTop:['TON AVENTURE','']
   };
   for(const [id,[eyebrow,title]] of Object.entries(headings)){
@@ -69,8 +69,13 @@
     if(title&&id!=='spotsTop')$('h1',header).innerHTML=title;
   }
   $('#chalTop .sub').textContent='Relève des défis, gagne de l’XP et prends soin de l’océan.';
-  $('#aqTop .sub').textContent='Tes découvertes et tes gestes font grandir un récif qui te ressemble.';
-  $('.hero-coordinate').textContent='SUR & SOUS L’EAU';
+  $('#aqTop .sub').textContent='De tes premières découvertes à un océan de vie. Fais grandir ton récif.';
+
+  const credits=document.createElement('a');credits.className='photo-credits';credits.href='photos.html';credits.target='_blank';credits.rel='noopener';credits.textContent='Photographies & crédits ↗';$('#worldPick').append(credits);
+  const photoNote=document.createElement('a');photoNote.className='hero-photo-credit';photoNote.href='photos.html';photoNote.target='_blank';photoNote.rel='noopener';photoNote.textContent='Photo · byronetmedia';$('#homeTop').append(photoNote);
+  const homeStats=document.createElement('div');homeStats.className='hero-stats';homeStats.innerHTML='<span><b>'+SPOTS.length+'</b> spots</span><span><b>9</b> activités</span><span><b>1</b> océan à protéger</span>';$('#homeTop').append(homeStats);
+  const worldsSync=syncWorldUI;syncWorldUI=function(){worldsSync();document.body.classList.toggle('is-world-picker',!spotWorld)};syncWorldUI();
+
   // Give the ecology challenges their own prominent section before the optional circuit.
   const events=$('#cmpEvents');const eventBox=events.parentElement;
   const eventTitle=eventBox.previousElementSibling;

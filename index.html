@@ -4,16 +4,17 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
-<meta name="theme-color" content="#062f3c">
+<meta name="theme-color" content="#061d2a">
 <link rel="icon" type="image/webp" href="assets/design/poulpy.webp">
 <meta name="description" content="Trouve ton prochain spot nautique, prépare ta session et protège l’océan avec Poulpy, ton guide Ocean Buddy.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="design.css">
+<link rel="stylesheet" href="adventure.css">
 </head>
 <body class="ocean-v2" data-screen="home">
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
@@ -66,15 +67,15 @@
         <div class="topbar" id="homeTop">
           <div class="brand"><span class="hero-kicker">EXPLORE. PROGRESSE. PROTÈGE.</span><span class="hero-live"><i></i> L’aventure commence ici</span></div>
           <div id="homeHello" class="hero-greeting">Salut Thomas</div>
-          <h1>Le large<br>t’attend<span>.</span></h1>
-          <p class="hero-description">De la première vague au prochain horizon,<br>trouve l’aventure qui te ressemble.</p>
-          <button class="hero-cta" onclick="go('spots');openWorld('all');setView('list')">Trouver mon prochain spot <span aria-hidden="true">↗</span></button>
+          <h1>Prends<br><span>le large.</span></h1>
+          <p class="hero-description">Ta prochaine session commence ici.<br>Des spots qui font vibrer. Un océan à préserver.</p>
+          <button class="hero-cta" onclick="go('spots');openWorld('all');setView('list')">Trouver mon spot <span aria-hidden="true">↗</span></button>
           <div class="hero-foot"><span>Ton océan. À ton rythme.</span><span class="hero-coordinate" aria-hidden="true">SUR & SOUS L’EAU</span></div>
           <div class="level-row"><div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:64%"></div></div><span class="xp-text" id="xpText">320 / 500 XP</span></div>
         </div>
         <div class="mascot-card" id="welcomeCard" onclick="openChat()" role="button" tabindex="0" aria-label="Discuter avec Poulpy">
-          <div class="poulpy-eyebrow"><i></i> TON COMPAGNON D’AVENTURE</div>
-          <div class="poulpy-title">Un coup de<br> tentacule&nbsp;?</div>
+          <div class="poulpy-eyebrow"><i></i> POULPY, TON COÉQUIPIER</div>
+          <div class="poulpy-title">On part<br>où&nbsp;?</div>
           <svg class="mascot-svg" id="octoHi" viewBox="0 0 140 140" role="img" aria-label="Poulpy, ton guide"></svg>
           <div class="bubble" id="welcomeBubble"></div>
           <span class="poulpy-action">Parler à Poulpy <span aria-hidden="true">↗</span></span>
@@ -399,7 +400,7 @@
       <div class="set-row"><input id="setName" class="set-input" maxlength="18" placeholder="Ton prénom"><button class="set-save" onclick="saveName()">OK</button></div>
       <label class="set-toggle"><span>🎬 Réduire les animations</span><input type="checkbox" id="setReduce" onchange="toggleReduceMotion(this.checked)"></label>
       <button class="set-reset" onclick="resetProgress()">♻️ Réinitialiser ma progression</button>
-      <div class="set-about"><b>Ocean Buddy</b><br>Explore. Progresse. Protège.<br><br>Météo & marées : Open-Meteo.<br>Carte : OpenStreetMap. Photos : Wikimedia Commons.<br>Poulpy utilise un guide intégré lorsque le service de discussion est indisponible.</div>
+      <div class="set-about"><b>Ocean Buddy</b><br>Explore. Progresse. Protège.<br><br>Météo & marées : Open-Meteo.<br>Carte : OpenStreetMap. Photos : Wikimedia Commons et Unsplash.<br><a href="photos.html" target="_blank" rel="noopener">Photographes et licences</a><br>Poulpy utilise un guide intégré lorsque le service de discussion est indisponible.</div>
     </div>
   </div>
 

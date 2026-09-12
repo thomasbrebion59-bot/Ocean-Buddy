@@ -1,37 +1,38 @@
 # Notes de conception et vérification
 
-## Identité
+## Identité actuelle
 
-Palette : bleu profond `#092f3c`, lagon `#087e83`, écume `#f4f6f3`, sable `#faf4e8`, orange `#ee773c`. Typographies : Manrope et DM Sans, chargées via Google Fonts.
+Bleu nuit `#071f2c`, fond de navigation `#041822`, turquoise `#1cd3be`, orange `#ff7847` et blanc écume. Barlow Condensed pour les grands titres, Manrope et DM Sans pour les éléments de lecture et de navigation.
 
-Les panneaux respirent davantage, les photos structurent la découverte et les couleurs des actions restent cohérentes. Sur téléphone, Poulpy est accessible dans l’en-tête pour ne pas couvrir les contenus. Sur ordinateur, il est accessible depuis la navigation latérale.
+L’accueil affiche une vraie vague, un titre expressif « Prends le large », une action orange et Poulpy sur un panneau orange. Les destinations utilisent une grille de grandes photographies. Le fond bleu nuit unifie les écrans secondaires ; les fenêtres de lecture et de quiz gardent des fonds clairs. Les préférences de réduction des animations sont respectées.
 
-## Images
+## Photographies
 
-Le panorama `hero.webp` a été généré avec ImageGen à partir de l’ambiance publicitaire de `Designer-38.png` fourni par le propriétaire de l’application. Il s’agit d’une illustration d’ambiance, sans prétention à représenter un spot précis. Son original est `hero-source.png`.
+`assets/photos/sources.json` conserve les sources, licences et métadonnées Wikimedia. `photos.html` fournit les crédits et liens de licence à l’utilisateur. Les images sont redimensionnées à la source ; seuls le cadrage CSS et un voile de contraste sont appliqués dans l’interface.
 
-`poulpy.webp`, `wave.webp` et `protect.webp` proviennent des visuels générés pendant la réalisation de la publicité Ocean Buddy dans cette même collaboration, inspirés des designs fournis. Poulpy reprend la mascotte orange, la casquette, le sac et la boussole.
+| Carte | Lieu | Auteur | Licence |
+|---|---|---|---|
+| France | Palombaggia, Corse, vue verticale | dronepicr | CC BY 2.0 |
+| Europe | Praia da Marinha, Algarve | Tobi 87 | CC BY-SA 3.0 |
+| Afrique | Anse Source d’Argent, La Digue | dronepicr | CC BY 2.0 |
+| Amérique du Nord | Isla Mujeres, Mexique | dronepicr | CC BY 2.0 |
+| Amérique du Sud | Praia do Leão, Fernando de Noronha | Rosana Antunes | CC0 |
+| Asie | Île de Kri, Raja Ampat | Lasthib | CC BY-SA 4.0 |
+| Océanie | Whitehaven Beach, Whitsundays | dnatheist | CC BY 3.0 |
+| Accueil | Vague et surfeur | byronetmedia | Licence Unsplash |
 
-Les 137 images sous `assets/original` sont identiques, octet pour octet, aux images WebP embarquées dans la version GitHub initiale. Les photos identifiées par spot restent celles de l’application et gardent leurs crédits Wikimedia Commons.
+Les photographies de chaque fiche de spot restent celles de l’application initiale, avec leurs propres crédits. Les paysages artificiels de la précédente interface ne sont plus utilisés dans les cartes de destinations. Le panorama ImageGen de la première refonte et les visuels `wave.webp` et `protect.webp` restent archivés sous `assets/design/` ; `adventure.css` remplace leurs usages de fond. Poulpy et l’aquarium conservent leur identité illustrée.
 
-## Vérifications réalisées
+## Vérifications de cette version
 
-- Syntaxe JavaScript : `node --check app.js` et `node --check design.js`.
-- Concordance SHA-256 des 137 images extraites avec les images de la version source.
-- Existence des 140 références de visuels locaux ; identifiants HTML sans doublon.
-- Navigation dans le navigateur : accueil, destinations, recherche, favoris, fiche Lacanau, conditions, défis, quiz, aquarium, fiche Poisson-clown, profil, réglages et Poulpy.
-- Recherche « Lacanau » sur téléphone et depuis la recherche globale ordinateur : résultat correct. Ajout aux favoris puis présence au profil.
-- Carte : la recherche « Lacanau » donne un seul marqueur identifié ; ouverture de sa fenêtre avec le bouton d’accès à la fiche.
-- Prévisions et courbe de marée : données du service chargées et affichées, indications de provenance conservées.
-- Quiz Faune : réponse, correction et bouton de question suivante affichés.
-- Réglages : enregistrement du prénom, retour au profil ; discussion Poulpy avec une réponse du guide intégré.
-- Fermeture des fenêtres avec Échap, mise au point du clavier, libellés des boutons et états sélectionnés.
-- Reprise de session après rechargement sans onboarding répétitif.
-- Inspection visuelle à 320, 390, 1280 et 1440 pixels de largeur. Corrections des superpositions mobiles, du rail de navigation et des espacements du bandeau Défis.
-- Aucune erreur JavaScript signalée par le navigateur lors des parcours contrôlés.
+- Syntaxe JavaScript contrôlée avec Node pour `app.js` et `design.js`.
+- Références de fichiers locaux et identifiants HTML vérifiés.
+- Sept photographies de destinations chargées ; aucune image manquante dans la grille.
+- Affichage des destinations contrôlé à 320, 390 et 1280 pixels de largeur ; accueil et écrans secondaires inspectés sur mobile et ordinateur.
+- Parcours Asie → Uluwatu → Conditions : fiche, prévisions et marée affichées. Contraste corrigé sur les dangers et le fuseau horaire.
+- Le bandeau d’une région reprend sa photographie : vérification du bandeau Asie.
+- Recherche globale « Lacanau » : un résultat, puis un marqueur sur la carte ; fenêtre et bouton de fiche lisibles.
+- Navigation dans Défis, fenêtre du quiz, aquarium et profil ; fermeture du quiz et retour à l’application.
+- Aucune erreur JavaScript observée pendant les parcours contrôlés.
 
-Ces contrôles couvrent les parcours indiqués. Ils ne remplacent pas un audit exhaustif d’accessibilité ni un essai sur chaque modèle de téléphone. Aucun déploiement sur le site public n’a été effectué.
-
-## Prompt du panorama
-
-Use case: ads-marketing. Asset type: wide cinematic hero photograph for the Ocean Buddy ocean exploration app redesign. Create one panoramic 16:9 high end editorial travel photograph, drone above a beautiful lush tropical coastal headland, emerald textured island rising in the right third, sweeping pristine ivory sand beach bottom right, brilliantly clear turquoise lagoon transitioning to deep navy open ocean left. Tiny natural waves, subtle sun rays through golden late-afternoon clouds, atmospheric distant coastal mountains. A small distant surfer or paddleboarder near the lagoon emphasizes scale without dominating. Premium real adventure magazine aesthetic, detailed realistic geology and palm trees, vibrant but tasteful teal blues and dark evergreen, warm sand accents. Reserve left third as deep dark open water for readable white interface title layered later. Horizon in upper third. Reference posters provided for Ocean Buddy visual mood only; avoid all their phones, copy and mascots in this background. No words, no logo, no UI, no border, no collage, no artificial map pins, no fantasy floating islands. Single beautiful photographic scene.
+La première refonte avait également été vérifiée sur les favoris, les réponses du quiz, les réglages, Poulpy, la sélection d’activité et la reprise de session. Ces parcours ne constituent pas un audit exhaustif sur tous les appareils. Aucun déploiement public n’a été effectué.
