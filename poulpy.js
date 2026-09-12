@@ -13,7 +13,7 @@
   const storageKey = 'oceanbuddy_poulpy_style_v1';
   let preferred = 'auto';
   try {const saved=localStorage.getItem(storageKey);if(saved==='auto'||Object.hasOwn(variants,saved))preferred=saved;} catch (_) { /* Session-only preferences remain usable. */ }
-  const src = key => `assets/poulpy/scenes/${Object.hasOwn(variants,key)?key:'travel'}.webp`;
+  const src = key => {const variant=Object.hasOwn(variants,key)?key:'travel';return `assets/poulpy/scenes/${variant}${['surf','paddle','travel','celebrate'].includes(variant)?'-v2':''}.webp`;};
   const image = (key,cls='',lazy=true) => `<img class="${cls}" src="${src(key)}" alt="" width="960" height="640" decoding="async" ${lazy?'loading="lazy"':''}>`;
   const sportVariant = sport => ({surf:'surf',bodyboard:'surf',plongee:'dive',snorkeling:'dive',baignade:'dive',paddle:'paddle',kayak:'paddle',windsurf:'surf',kitesurf:'surf'}[sport]||'travel');
   function context(page=document.body.dataset.screen) {
@@ -45,15 +45,8 @@
     const label=$('#poulpyPreference');if(label)label.textContent=preferred==='auto'?'Selon ton activité':variants[preferred].name;
     document.querySelectorAll('[data-poulpy-choice]').forEach(button=>button.setAttribute('aria-pressed',String(button.dataset.poulpyChoice===preferred)));
   }
-  function explore(sport) {
-    currentSearch='';$('#spotSearch').value='';favOnly=false;
-    $('#favChip')?.classList.remove('active');
-    document.querySelectorAll('#filters .chip:not(.fav-chip)').forEach((chip,i)=>chip.classList.toggle('active',i===0));
-    currentFilter='all';setSport(sport);chosenSport=sport;
-    saveState();renderHome();go('spots');openWorld('all');setView('list');
-    refresh();
-  }
-  function openWorlds(){go('spots');backToWorlds();setView('list');refresh();}
+  function explore(sport){setSport(sport);refresh();}
+  function openWorlds(){window.OceanNavigation?.begin();backToWorlds();go('spots');refresh();}
   const activities=[
     {key:'surf',sport:'surf',title:'Prends la vague.',label:'Surf',copy:'Trouve ta prochaine session.'},
     {key:'dive',sport:'plongee',title:'Change de monde.',label:'Plongée',copy:'Explore sous la surface.'},

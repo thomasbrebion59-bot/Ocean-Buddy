@@ -561,7 +561,7 @@ function octoTag(){
        + poulpySVG() + '</svg>';
 }
 function poulpySVG(){
-  const asset=window.OceanPoulpy?window.OceanPoulpy.src(window.OceanPoulpy.context()):'assets/poulpy/scenes/travel.webp';
+  const asset=window.OceanPoulpy?window.OceanPoulpy.src(window.OceanPoulpy.context()):'assets/poulpy/scenes/travel-v2.webp';
   return '<image href="'+asset+'" x="0" y="0" width="140" height="140" preserveAspectRatio="xMidYMid slice"/>';
 }
 
@@ -706,7 +706,7 @@ function spotCard(s){
   const dist=(nearMode&&userPos)?spotDist(s):null;
   const sc=(SCORES[s.id]||0).toFixed(1);
   const photo=spotPhotoUrl(s.id,480);
-  return `<article class="spot" tabindex="0" role="button" aria-label="Découvrir ${s.name}" onclick="openSpot('${s.id}')">
+  return `<article class="spot" data-spot-id="${s.id}" tabindex="0" role="button" aria-label="Découvrir ${s.name}" onclick="openSpot('${s.id}')">
     <div class="spot-banner">${scene(s,false)}
       ${photo?`<img class="spot-photo" src="${photo}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">`:''}
       <div class="spot-shade"></div>
@@ -735,11 +735,15 @@ function renderSportFilters(){
   el.innerHTML=h;
 }
 function setSport(id){
-  activeSport=id;renderSportFilters();renderSpots();renderMap(true);
-  const t=document.getElementById('spotsTitle');
-  if(t)t.innerHTML=id?`${sportIcon(id)} Spots · ${SPORTMAP[id].label}`:'<span class="th"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 4 6v14l5-2 6 2 5-2V4l-5 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg> Spots & activités</span>';
-  if(id)toast(`Activité : ${SPORTMAP[id].label}`);
-  renderLiveTop();
+  window.OceanNavigation?.begin();
+  activeSport=id&&SPORTMAP[id]?id:null;chosenSport=activeSport||'all';
+  currentFilter='all';currentSearch='';favOnly=false;nearMode=false;
+  document.getElementById('spotSearch').value='';
+  document.getElementById('favChip')?.classList.remove('active');
+  document.getElementById('nearBtn')?.classList.remove('on');
+  document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
+  renderSportFilters();renderWorlds();backToWorlds();renderSpots();
+  saveState();renderHome();go('spots');
 }
 /* ====== GÉOLOCALISATION / AUTOUR DE MOI ====== */
 let userPos=null,nearMode=false,userMarker=null;
@@ -764,15 +768,21 @@ function centerOnUser(){
 function hideOnb(){const o=document.getElementById('onb');o.classList.add('hide');setTimeout(()=>o.style.display='none',560);}
 function goNearMe(){
   requestGeo(()=>{
+    window.OceanNavigation?.begin();
     nearMode=true;chosenSport='all';activeSport=null;quickGate=false;hideOnb();
+    currentFilter='all';currentSearch='';favOnly=false;
+    document.getElementById('spotSearch').value='';
+    document.getElementById('favChip').classList.remove('active');
+    document.getElementById('nearBtn').classList.add('on');
+    document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
+    openWorld('all');
     renderSportFilters();renderSpots();saveState();renderHome();
     go('spots');setView('map');centerOnUser();
     document.getElementById('octoBubble').innerHTML='Voici tout ce que tu peux faire <b>près de toi</b> 🐙📍';
     toast('Les activités autour de toi 🌊');
   },()=>{
-    nearMode=false;quickGate=false;activeSport=(chosenSport&&chosenSport!=='all')?chosenSport:null;hideOnb();
-    renderSportFilters();renderSpots();go('spots');
-    toast('📍 Localisation indisponible — voici tous les spots');
+    quickGate=false;hideOnb();setSport(chosenSport==='all'?null:chosenSport);
+    toast('📍 Localisation indisponible — choisis une destination');
   });
 }
 function toggleNear(){
@@ -796,7 +806,7 @@ var spotWorld=null;
 function inWorld(s){ return !spotWorld||spotWorld==='all'||SPOT_WORLD[s.id]===spotWorld; }
 function worldOf(id){ for(var i=0;i<WORLDS.length;i++) if(WORLDS[i].id===id) return WORLDS[i]; return null; }
 function worldCount(id){
-  var n=0; for(var i=0;i<SPOTS.length;i++) if(SPOT_WORLD[SPOTS[i].id]===id) n++;
+  var n=0; for(var i=0;i<SPOTS.length;i++) if(SPOT_WORLD[SPOTS[i].id]===id&&(!activeSport||spotSports(SPOTS[i]).includes(activeSport))) n++;
   return n;
 }
 /* Photographies de destinations réelles, créditées dans photos.html. */
@@ -823,11 +833,12 @@ function renderWorlds(){
       <span class="isl-plate"><span class="world-place">${photo.place}</span><b>${w.lab}</b><span class="world-sub">${w.sub}</span><span class="world-open">Explorer <span aria-hidden="true">↗</span></span></span>
     </button>`;
   }).join('');
-  const total=document.getElementById('worldTotal');if(total)total.innerHTML='<b>'+SPOTS.length+' spots.</b> Sept portes vers le grand bleu.';
+  const total=document.getElementById('worldTotal');if(total){const count=SPOTS.filter(s=>!activeSport||spotSports(s).includes(activeSport)).length;total.innerHTML='<b>'+count+' spots'+(activeSport?' de '+SPORTMAP[activeSport].label.toLowerCase():'')+'.</b> Choisis ta destination.';}
   const allLabel=document.querySelector('.w-all-tx i');if(allLabel)allLabel.textContent='Ouvre la carte et trouve ton prochain terrain de jeu.';
 }
 
 function openWorld(id){
+  window.OceanNavigation?.begin();
   spotWorld=id;
   syncWorldUI();
   renderSpots();
@@ -835,7 +846,9 @@ function openWorld(id){
   var w=document.getElementById('screenWrap'); if(w) w.scrollTop=0;
 }
 function backToWorlds(){
+  window.OceanNavigation?.begin();
   spotWorld=null;
+  renderWorlds();
   currentSearch=''; favOnly=false;
   var si=document.getElementById('spotSearch'); if(si) si.value='';
   var fc=document.getElementById('favChip'); if(fc) fc.classList.remove('active');
@@ -901,7 +914,9 @@ function syncViewBtn(v){
   b.setAttribute('title', onMap ? 'Liste' : 'Carte');
   b.classList.toggle('on', onMap);
 }
-function setView(v){ syncViewBtn(v);
+function setView(v){
+  if(!spotWorld){document.getElementById('listView').style.display='none';document.getElementById('mapView').style.display='none';return;}
+  syncViewBtn(v);
   if(v!=='map'&&typeof setMapFull==='function')setMapFull(false);
   const list=document.getElementById('listView'),map=document.getElementById('mapView');
   document.getElementById('vtList').classList.toggle('active',v==='list');
@@ -1499,7 +1514,8 @@ function renderDetailFacts(s,act){
   e.innerHTML=h;
 }
 function openSpot(id){
-  const s=SPOTS.find(x=>x.id===id);
+  const s=SPOTS.find(x=>x.id===id);if(!s)return;
+  window.OceanNavigation?.begin();
   if(id!==currentSpot)detailSport=null;   /* le choix d'activite ne suit pas d'un spot a l'autre */
   currentSpot=id;
   const act=detailAct(s);
@@ -2337,15 +2353,13 @@ function onbNext(){
   showStep(Math.min(3,onbStep+1));
 }
 function pickLevel(el){document.querySelectorAll('.lvl-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');chosenLevel=el.dataset.lvl;}
-function finishOnb(){const o=document.getElementById('onb');o.classList.add('hide');setTimeout(()=>o.style.display='none',560);
+function finishOnb(){
+  window.OceanNavigation?.begin();
+  const o=document.getElementById('onb');o.classList.add('hide');setTimeout(()=>o.style.display='none',560);
   quickGate=false;
-  activeSport=(chosenSport&&chosenSport!=='all')?chosenSport:null;
-  renderSportFilters();renderSpots();if(leafMap)renderMap(true);
-  const st=document.getElementById('spotsTitle');if(st)st.innerHTML=activeSport?`${sportIcon(activeSport)} Spots · ${SPORTMAP[activeSport].label}`:'<span class="th"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 4 6v14l5-2 6 2 5-2V4l-5 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg> Spots & activités</span>';
-  const spName=activeSport?` pour le ${SPORTMAP[activeSport].label.toLowerCase()}`:'';
-  if(chosenLevel){const lab={debutant:'faciles 🟢',intermediaire:'intermédiaires 🟡',expert:'engagés 🔴'}[chosenLevel];
-    window.__obHello=`Coucou, c'est <b>Poulpy</b> 🐙 ! Je t'ai préparé une sélection de spots ${lab}${spName}. On explore ?<span class="bub-cta">Une question sur l’océan ? Écris-moi →</span>`;}
-  saveState();window.__obKeep=true;renderHome();realHomeForecast();go('home');}
+  setSport(chosenSport==='all'?null:chosenSport);
+  realHomeForecast();
+}
 
 /* ================= XP ================= */
 let xp=320;const LVL=500;
@@ -2406,6 +2420,7 @@ function updateNavPill(s){
 let goTimer=null;
 let liveScreenId=(document.querySelector('.screen.active')||{id:'home'}).id;
 function go(s){
+  window.OceanNavigation?.begin();
   if(s!=='spots'&&typeof setMapFull==='function')setMapFull(false);
   const wrap=document.getElementById('screenWrap');
   const target=document.getElementById(s);
@@ -2432,6 +2447,7 @@ function go(s){
     wrap.focus({preventScroll:true});
     if(s==='home')animateCounts();
     if(s==='profile')renderProfile();
+    window.OceanNavigation?.settled();
     return;
   }
   const dirFrom=SCREEN_ORDER.hasOwnProperty(cur.id)?SCREEN_ORDER[cur.id]:0;
@@ -2460,6 +2476,7 @@ function go(s){
     wrap.focus({preventScroll:true});
     if(s==='home')animateCounts();
     if(s==='profile')renderProfile();
+    window.OceanNavigation?.settled();
   },420);
 }
 function countUp(el){const t=+el.dataset.count;let c=0;const step=Math.max(1,Math.ceil(t/22));

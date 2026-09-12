@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
 <meta name="theme-color" content="#164bd6">
-<link rel="icon" type="image/webp" href="assets/poulpy/scenes/travel.webp">
+<link rel="icon" type="image/webp" href="assets/poulpy/scenes/travel-v2.webp">
 <meta name="description" content="Trouve ton prochain spot nautique, prépare ta session et protège l’océan avec Poulpy, ton guide Ocean Buddy.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,6 +18,7 @@
 <link rel="stylesheet" href="coastal.css?v=5c155d7c74a3">
 <link rel="stylesheet" href="trips.css?v=f24eb933bdb8">
 <link rel="stylesheet" href="poulpy.css?v=7e71afd7e7b1">
+<link rel="stylesheet" href="navigation.css?v=1ad9b43229b1">
 </head>
 <body class="ocean-v2" data-screen="home">
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
@@ -72,7 +73,7 @@
           <div id="homeHello" class="hero-greeting">Salut Thomas</div>
           <h1>Prends<br><span>le large.</span></h1>
           <p class="hero-description">Ta prochaine session commence ici.<br>Des spots qui font vibrer. Un océan à préserver.</p>
-          <button class="hero-cta" onclick="go('spots');openWorld('all');setView('list')">Trouver mon spot <span aria-hidden="true">↗</span></button>
+          <button class="hero-cta" onclick="OceanPoulpy.openWorlds()">Trouver mon spot <span aria-hidden="true">↗</span></button>
           <div class="hero-foot"><span>Ton océan. À ton rythme.</span><span class="hero-coordinate" aria-hidden="true">SUR & SOUS L’EAU</span></div>
           <div class="level-row"><div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:64%"></div></div><span class="xp-text" id="xpText">320 / 500 XP</span></div>
         </div>
@@ -153,6 +154,13 @@
 
     <!-- ============ SPOTS ============ -->
     <section class="screen" id="spots">
+      <nav class="explore-path" id="explorePath" aria-label="Étapes de l’exploration">
+        <button type="button" id="exploreActivity" onclick="openActivityGate()"><span class="path-number">1</span><span><small>Activité</small><b id="exploreSportLabel">Toutes les activités</b></span><i>Modifier</i></button>
+        <span class="path-separator" aria-hidden="true">›</span>
+        <button type="button" id="exploreDestination" onclick="backToWorlds()"><span class="path-number">2</span><span><small>Destination</small><b id="exploreWorldLabel">Les continents</b></span></button>
+        <span class="path-separator" aria-hidden="true">›</span>
+        <span class="path-final"><span class="path-number">3</span><span>Les spots</span></span>
+      </nav>
       <div class="topbar" id="spotsTop" style="padding-bottom:14px;">
         <div class="float-bubbles" id="sb"></div>
         <h1 id="spotsTitle"><span class="th"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 4 6v14l5-2 6 2 5-2V4l-5 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg> Spots & activités</span></h1>
@@ -194,7 +202,7 @@
     <!-- ============ DETAIL ============ -->
     <section class="screen" id="detail">
       <div class="detail-hero" id="detailHero">
-        <button class="back-btn" aria-label="Retour aux spots" onclick="go('spots')">←</button>
+        <button class="back-btn" aria-label="Retour à la page précédente" onclick="OceanNavigation.back()">←</button>
         <button class="fav" id="dFav" aria-label="Modifier les favoris" onclick="toggleFav(currentSpot,event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.4S3.8 14.9 3.8 9.4A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.2 2.8c0 5.5-8.2 11-8.2 11z"/></svg></button>
         <img class="hero-photo" id="dHeroPhoto" alt="" decoding="async">
         <div class="htxt"><div class="eyebrow" id="dEyebrow"></div><h2 id="dName"></h2><div class="loc" id="dLoc"></div><div class="hero-credit" id="dHeroCred"></div></div>
@@ -391,9 +399,10 @@
 
 <script src="photo-catalog.js?v=182de268842e"></script>
 <script src="trip-model.js?v=887d94bb3e8a"></script>
-<script src="app.js?v=cc7518804e3a"></script>
-<script src="design.js?v=beb013baae83"></script>
-<script src="trips.js?v=5b7b9f47384f"></script>
-<script src="poulpy.js?v=c3673f9a7e97"></script>
+<script src="app.js?v=eac156d88072"></script>
+<script src="design.js?v=5870db6d04d0"></script>
+<script src="trips.js?v=200562ec4584"></script>
+<script src="poulpy.js?v=37b49b7d162a"></script>
+<script src="navigation.js?v=e4b0948a1b21"></script>
 </body>
 </html>

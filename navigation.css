@@ -1,0 +1,44 @@
+/* Navigation remains visible while content scrolls. */
+.app-back { display:inline-flex; align-items:center; justify-content:center; gap:8px; flex-shrink:0; min-height:44px; padding:10px 13px; border:1px solid #d5e0f0; border-radius:10px; background:#fff; color:#2154dc; font:700 12px var(--body); cursor:pointer; }
+.app-back[hidden] { display:none; }
+.app-back svg { width:19px; height:19px; }
+.app-back:hover { background:#e7eefb; border-color:#2154dc; }
+.app-page-title { display:none; }
+.explore-path { display:flex; align-items:center; gap:17px; margin:20px 0 8px; padding:14px 17px; border:1px solid #d6e1f0; border-radius:14px; background:#fff; color:#6e819a; }
+.explore-path button { display:flex; align-items:center; gap:11px; min-height:44px; padding:4px 8px; border:0; border-radius:9px; background:none; color:#173b84; text-align:left; cursor:pointer; }
+.explore-path button:hover { background:#edf3ff; }
+.explore-path small { display:block; color:#6b809c; font-size:9px; margin-bottom:4px; }
+.explore-path b { display:block; font-size:12px; line-height:1.3; }
+.explore-path i { margin-left:12px; font-size:10px; font-style:normal; color:#2154dc; text-decoration:underline; text-underline-offset:3px; }
+.path-number { display:grid; place-items:center; width:28px; height:28px; flex-shrink:0; border-radius:50%; background:#edf2fb; color:#5d7ca8; font-size:11px; font-weight:800; }
+.explore-path [aria-current=step] .path-number,.path-final.current .path-number { background:#2154dc; color:white; }
+.path-separator { font-size:23px; color:#a5b6d1; }
+.path-final { display:flex; align-items:center; gap:10px; font-size:12px; }
+.path-final.current { color:#173b84; font-weight:700; }
+.ocean-v2 #sportFilters { display:none!important; }
+.ocean-v2 .wback { min-height:44px; }
+@media(max-width:959px) {
+ .has-app-back .chrome-mobile-brand { display:none; }
+ .has-app-back .app-page-title { display:block; color:#173b84; font-size:13px; font-weight:700; }
+ .has-app-back .chrome-title { min-width:0; flex:1; }
+ .has-app-back .chrome-search { display:none; }
+}
+@media(max-width:639px) {
+ .app-back { padding:8px 10px; gap:5px; font-size:11px; }
+ .has-app-back .app-chrome { gap:9px; padding-left:17px; padding-right:17px; }
+ .has-app-back .app-page-title { font-size:12px; }
+ .explore-path { display:grid; grid-template-columns:minmax(0,1fr) minmax(0,1fr); gap:6px; padding:9px; margin:12px 0 0; }
+ .explore-path button { gap:8px; padding:7px 4px; min-width:0; }
+ .explore-path button>span:last-of-type { min-width:0; }
+ .explore-path b { font-size:10px; overflow-wrap:anywhere; }
+ .explore-path small { font-size:8px; }
+ .explore-path i,.path-separator { display:none; }
+ .path-number { width:23px; height:23px; font-size:10px; }
+ .path-final { grid-column:1/-1; padding:7px 4px 1px; border-top:1px solid #e8edf5; font-size:10px; gap:8px; }
+ .path-final .path-number { width:20px; height:20px; font-size:9px; }
+}
+@media(max-width:359px) {
+ .has-app-back .app-chrome { gap:6px; padding-left:13px; padding-right:13px; }
+ .app-back { padding-left:8px; padding-right:8px; }
+ .has-app-back .app-page-title { font-size:11px; }
+}

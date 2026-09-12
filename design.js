@@ -16,7 +16,7 @@
   const labels = {home:'Accueil',spots:'Explorer',challenges:'Défis',profile:'Mon profil',trips:'Surf trips',detail:'Le spot'};
   const short = {home:'Accueil',spots:'Spots',challenges:'Défis',profile:'Profil',trips:'Voyages'};
   const nav = $('.nav');
-  nav.insertAdjacentHTML('afterbegin', `<a class="sidebar-brand" href="#home" aria-label="Ocean Buddy — Accueil"><img src="assets/poulpy/scenes/travel.webp" alt=""><span>OCEAN <b>BUDDY</b><small>L’OCÉAN, À TES CÔTÉS.</small></span></a><div class="sidebar-label">TON TERRAIN DE JEU</div>`);
+  nav.insertAdjacentHTML('afterbegin', `<a class="sidebar-brand" href="#home" aria-label="Ocean Buddy — Accueil"><img src="assets/poulpy/scenes/travel-v2.webp" alt=""><span>OCEAN <b>BUDDY</b><small>L’OCÉAN, À TES CÔTÉS.</small></span></a><div class="sidebar-label">TON TERRAIN DE JEU</div>`);
   $('.sidebar-brand').addEventListener('click', e => {e.preventDefault();go('home')});
   nav.querySelectorAll('button[data-s]').forEach(button => {
     const page = button.dataset.s;
@@ -26,7 +26,7 @@
   });
   // Planning follows exploration in the main navigation.
   nav.insertBefore($('.n-trips',nav),$('.center',nav));
-  nav.insertAdjacentHTML('beforeend', `<div class="sidebar-bottom"><button class="sidebar-poulpy" type="button"><img src="assets/poulpy/scenes/travel.webp" alt=""><b>Une question ?</b><span>Poulpy est là pour toi.</span><i>Discuter avec Poulpy ↗</i></button><button class="sidebar-settings" type="button">${icon('settings')} Réglages</button><button class="sidebar-user" type="button"><span class="user-initial"></span><span><b class="user-name"></b><small id="sidebarXp"></small></span>${icon('arrow')}</button><span class="sidebar-motto">Moins de traces. Plus de souvenirs.</span></div>`);
+  nav.insertAdjacentHTML('beforeend', `<div class="sidebar-bottom"><button class="sidebar-poulpy" type="button"><img src="assets/poulpy/scenes/travel-v2.webp" alt=""><b>Une question ?</b><span>Poulpy est là pour toi.</span><i>Discuter avec Poulpy ↗</i></button><button class="sidebar-settings" type="button">${icon('settings')} Réglages</button><button class="sidebar-user" type="button"><span class="user-initial"></span><span><b class="user-name"></b><small id="sidebarXp"></small></span>${icon('arrow')}</button><span class="sidebar-motto">Moins de traces. Plus de souvenirs.</span></div>`);
   $('.sidebar-poulpy').onclick = openChat;
   $('.sidebar-settings').onclick = openSettings;
   $('.sidebar-user').onclick = () => go('profile');
@@ -36,7 +36,7 @@
   $('.chrome-user').onclick = () => go('profile');
   $('.chrome-user').insertAdjacentHTML('beforebegin',`<button class="mobile-search" aria-label="Rechercher un spot">${icon('search')}</button>`);
   $('.mobile-search').onclick = () => {go('spots');openWorld('all');setView('list');$('#spotSearch').focus()};
-  $('.chrome-user').insertAdjacentHTML('afterend','<button class="mobile-poulpy" aria-label="Discuter avec Poulpy"><img src="assets/poulpy/scenes/travel.webp" alt=""></button>');
+  $('.chrome-user').insertAdjacentHTML('afterend','<button class="mobile-poulpy" aria-label="Discuter avec Poulpy"><img src="assets/poulpy/scenes/travel-v2.webp" alt=""></button>');
   $('.mobile-poulpy').onclick = openChat;
   $('.chrome-search').onsubmit = event => {
     event.preventDefault();const query=$('#globalSearch').value.trim();
