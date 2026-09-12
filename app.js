@@ -561,8 +561,8 @@ function octoTag(){
        + poulpySVG() + '</svg>';
 }
 function poulpySVG(){
-  const asset=window.OceanPoulpy?window.OceanPoulpy.src(window.OceanPoulpy.context()):'assets/design/poulpy.webp';
-  return '<image href="'+asset+'" x="0" y="0" width="140" height="140" preserveAspectRatio="xMidYMid meet"/>';
+  const asset=window.OceanPoulpy?window.OceanPoulpy.src(window.OceanPoulpy.context()):'assets/poulpy/scenes/travel.webp';
+  return '<image href="'+asset+'" x="0" y="0" width="140" height="140" preserveAspectRatio="xMidYMid slice"/>';
 }
 
 /* ================= OCEAN SCENE (rich) ================= */
