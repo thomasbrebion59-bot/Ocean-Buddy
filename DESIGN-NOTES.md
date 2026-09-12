@@ -25,4 +25,4 @@ Les idées de voyage n’impliquent aucune réservation ni disponibilité. Aucun
 - Affichage vérifié à 320, 390 et 1280 pixels de largeur : destinations, voyages, profil, défis et accueil.
 - Préservation des données de profil et de favoris existantes, sans migration destructive.
 
-Le voyage « Exemple · Côte basque » utilisé pour la vérification est archivé dans la prévisualisation locale. Aucun voyage de démonstration n’est livré dans le code. Aucun déploiement public n’a été effectué.
+Le voyage « Exemple · Côte basque » utilisé pour la vérification est archivé dans la prévisualisation locale. Aucun voyage de démonstration n’est livré dans le code. Ces contrôles ont été réalisés localement avant publication.

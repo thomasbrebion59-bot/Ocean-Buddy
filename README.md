@@ -40,6 +40,8 @@ node --test tests/trip-model.test.js
 
 ## Publication
 
-Application statique compatible avec GitHub Pages et le chemin `/Ocean-Buddy/`. Publier l’ensemble des fichiers HTML, CSS et JavaScript à la racine, ainsi que le dossier `assets`. Le ZIP de livraison contient ces éléments. Cette modification n’a pas été déployée sur le site public.
+Application statique compatible avec GitHub Pages et le chemin `/Ocean-Buddy/`. Publier l’ensemble des fichiers HTML, CSS et JavaScript à la racine, ainsi que le dossier `assets`. Le ZIP de livraison contient ces éléments.
+
+Adresse publique : [Ocean Buddy](https://thomasbrebion59-bot.github.io/Ocean-Buddy/). GitHub Pages publie automatiquement la branche principale.
 
 Les conditions Open-Meteo, les cartes OpenStreetMap, Google Fonts et Leaflet nécessitent une connexion. La prévisualisation localhost et GitHub Pages ont chacune leur stockage. Le carnet de voyages utilise une clé indépendante (`oceanbuddy_trips_v1`) pour préserver les anciennes données de progression.
