@@ -1,38 +1,28 @@
-# Notes de conception et vérification
+# Notes de conception et vérification — Surf trips
 
-## Identité actuelle
+## Identité
 
-Bleu nuit `#071f2c`, fond de navigation `#041822`, turquoise `#1cd3be`, orange `#ff7847` et blanc écume. Barlow Condensed pour les grands titres, Manrope et DM Sans pour les éléments de lecture et de navigation.
+Cobalt `#2154dc`, bleu de navigation `#174bd3`, sable `#f5f5f0`, corail `#fc7955` et citron vert `#e0ff91`. Grands titres Barlow Condensed, interface DM Sans et Manrope. Les fonds de lecture sont clairs ; le cobalt structure la navigation, les boutons et les profils. Les masques sur les photos de destinations ont été allégés.
 
-L’accueil affiche une vraie vague, un titre expressif « Prends le large », une action orange et Poulpy sur un panneau orange. Les destinations utilisent une grille de grandes photographies. Le fond bleu nuit unifie les écrans secondaires ; les fenêtres de lecture et de quiz gardent des fonds clairs. Les préférences de réduction des animations sont respectées.
+L’aquarium, ses modales et ses récompenses de créatures sont retirés du parcours. Les défis, XP, badges et gestes pour l’océan restent accessibles. L’espace Surf trips est relié à l’accueil et à chaque fiche de spot.
 
 ## Photographies
 
-`assets/photos/sources.json` conserve les sources, licences et métadonnées Wikimedia. `photos.html` fournit les crédits et liens de licence à l’utilisateur. Les images sont redimensionnées à la source ; seuls le cadrage CSS et un voile de contraste sont appliqués dans l’interface.
+Les 168 photos sont servies depuis `assets/spots/`. Le manifeste `sources.json` conserve les noms de fichiers Wikimedia, liens, auteurs, licences et tailles. Les miniatures sont demandées en largeur 1280 pixels, dans la limite de la résolution originale. La source et la licence de la vague d’accueil restent dans `assets/photos/sources.json`.
 
-| Carte | Lieu | Auteur | Licence |
-|---|---|---|---|
-| France | Palombaggia, Corse, vue verticale | dronepicr | CC BY 2.0 |
-| Europe | Praia da Marinha, Algarve | Tobi 87 | CC BY-SA 3.0 |
-| Afrique | Anse Source d’Argent, La Digue | dronepicr | CC BY 2.0 |
-| Amérique du Nord | Isla Mujeres, Mexique | dronepicr | CC BY 2.0 |
-| Amérique du Sud | Praia do Leão, Fernando de Noronha | Rosana Antunes | CC0 |
-| Asie | Île de Kri, Raja Ampat | Lasthib | CC BY-SA 4.0 |
-| Océanie | Whitehaven Beach, Whitsundays | dnatheist | CC BY 3.0 |
-| Accueil | Vague et surfeur | byronetmedia | Licence Unsplash |
+Les couvertures représentent la calanque d’En-Vau, Navagio, Anse Source d’Argent, Isla Mujeres, Fernando de Noronha, Raja Ampat et Whitehaven. Le cadrage CSS s’adapte au format des cartes. Les photographies ne subissent aucune transformation générative. Les crédits complets sont générés dans `photos.html`.
 
-Les photographies de chaque fiche de spot restent celles de l’application initiale, avec leurs propres crédits. Les paysages artificiels de la précédente interface ne sont plus utilisés dans les cartes de destinations. Le panorama ImageGen de la première refonte et les visuels `wave.webp` et `protect.webp` restent archivés sous `assets/design/` ; `adventure.css` remplace leurs usages de fond. Poulpy et l’aquarium conservent leur identité illustrée.
+## Voyages
 
-## Vérifications de cette version
+Stockage indépendant versionné, validation des dates réelles et des intervalles, rejet d’un budget invalide, sauvegarde des textes à la saisie. Les erreurs de lecture ou de quota sont signalées sans écraser les données. L’archivage est réversible. Le retrait d’une étape propose une annulation pendant douze secondes.
 
-- Syntaxe JavaScript contrôlée avec Node pour `app.js` et `design.js`.
-- Références de fichiers locaux et identifiants HTML vérifiés.
-- Sept photographies de destinations chargées ; aucune image manquante dans la grille.
-- Affichage des destinations contrôlé à 320, 390 et 1280 pixels de largeur ; accueil et écrans secondaires inspectés sur mobile et ordinateur.
-- Parcours Asie → Uluwatu → Conditions : fiche, prévisions et marée affichées. Contraste corrigé sur les dangers et le fuseau horaire.
-- Le bandeau d’une région reprend sa photographie : vérification du bandeau Asie.
-- Recherche globale « Lacanau » : un résultat, puis un marqueur sur la carte ; fenêtre et bouton de fiche lisibles.
-- Navigation dans Défis, fenêtre du quiz, aquarium et profil ; fermeture du quiz et retour à l’application.
-- Aucune erreur JavaScript observée pendant les parcours contrôlés.
+Les idées de voyage n’impliquent aucune réservation ni disponibilité. Aucun voyage n’est créé au chargement. La carte utilise les coordonnées des spots et une ligne d’ordre des étapes, explicitement distinguée d’un trajet routier.
 
-La première refonte avait également été vérifiée sur les favoris, les réponses du quiz, les réglages, Poulpy, la sélection d’activité et la reprise de session. Ces parcours ne constituent pas un audit exhaustif sur tous les appareils. Aucun déploiement public n’a été effectué.
+## Vérification
+
+- Neuf tests unitaires du modèle : dates impossibles, années bissextiles, changement d’heure, dates des étapes, budgets, ordre, répétition d’un spot, persistance et erreurs de stockage.
+- Parcours réel dans le navigateur : création depuis une idée, notes, transport, budget, checklist, déplacement d’étapes, recherche et ajout, ajout depuis une fiche, retrait et annulation, modification invalide, puis rechargement et récupération des valeurs.
+- Affichage vérifié à 320, 390 et 1280 pixels de largeur : destinations, voyages, profil, défis et accueil.
+- Préservation des données de profil et de favoris existantes, sans migration destructive.
+
+Le voyage « Exemple · Côte basque » utilisé pour la vérification est archivé dans la prévisualisation locale. Aucun voyage de démonstration n’est livré dans le code. Aucun déploiement public n’a été effectué.

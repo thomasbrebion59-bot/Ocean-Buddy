@@ -799,7 +799,7 @@ function worldCount(id){
   return n;
 }
 /* Photographies de destinations réelles, créditées dans photos.html. */
-var WORLD_PHOTOS={"fr": {"place": "Palombaggia, Corse", "author": "dronepicr", "license": "CC BY 2.0", "source": "https://commons.wikimedia.org/wiki/File:Top-down_aerial_of_Palombaggia_Beach%2C_France_%2852723809351%29.jpg", "src": "assets/photos/fr.jpg"}, "eu": {"place": "Algarve, Portugal", "author": "Tobi 87", "license": "CC BY-SA 3.0", "source": "https://commons.wikimedia.org/wiki/File:Praia_da_Marinha-Algarve-Portugal.jpg", "src": "assets/photos/eu.jpg"}, "af": {"place": "La Digue, Seychelles", "author": "dronepicr", "license": "CC BY 2.0", "source": "https://commons.wikimedia.org/wiki/File:Beach_Anse_Source_d'Argent_aerial_La_Digue_Seychelles_(39616965691).jpg", "src": "assets/photos/af.jpg"}, "na": {"place": "Isla Mujeres, Mexique", "author": "dronepicr", "license": "CC BY 2.0", "source": "https://commons.wikimedia.org/wiki/File:Mexican_island_Isla_Mujeres_(42882051294).jpg", "src": "assets/photos/na.jpg"}, "sa": {"place": "Fernando de Noronha, Brésil", "author": "Rosana Antunes", "license": "CC0", "source": "https://commons.wikimedia.org/wiki/File:Praia_do_Le%C3%A3o_localizada_em_Fernando_de_Noronha.jpg", "src": "assets/photos/sa.jpg"}, "as": {"place": "Raja Ampat, Indonésie", "author": "Lasthib", "license": "CC BY-SA 4.0", "source": "https://commons.wikimedia.org/wiki/File:20170909_Kri_island_beach.jpg", "src": "assets/photos/as.jpg"}, "oc": {"place": "Whitsundays, Australie", "author": "dnatheist", "license": "CC BY 3.0", "source": "https://commons.wikimedia.org/wiki/File:Whitehaven_Beach_-_panoramio.jpg", "src": "assets/photos/oc.jpg"}};
+var WORLD_PHOTOS={"fr": {"src": "assets/spots/calanques.jpg", "source": "https://commons.wikimedia.org/wiki/File:Vue_de_la_calanque_d%27En-Vau.jpg", "author": "Bastien Guigue", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Calanque d’En-Vau, France"}, "eu": {"src": "assets/spots/navagio.jpg", "source": "https://commons.wikimedia.org/wiki/File:Aerial_of_Navagio_Shipwreck_Beach_(46470701841).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "place": "Navagio, Grèce"}, "af": {"src": "assets/spots/anse_source.jpg", "source": "https://commons.wikimedia.org/wiki/File:Anse_source_dagent_beach_la_digue.jpg", "author": "Svein-Magne Tunli - tunliweb.no", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Anse Source d’Argent, Seychelles"}, "na": {"src": "assets/spots/islamujeres.jpg", "source": "https://commons.wikimedia.org/wiki/File:Playa_Norte,_Isla_Mujeres_(42695470885).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "place": "Isla Mujeres, Mexique"}, "sa": {"src": "assets/spots/noronha.jpg", "source": "https://commons.wikimedia.org/wiki/File:Baia_dos_Porcos,_Fernando_de_Noronha.jpg", "author": "Marcia Luppi", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Fernando de Noronha, Brésil"}, "as": {"src": "assets/spots/rajaampat.jpg", "source": "https://commons.wikimedia.org/wiki/File:Wayag_Island.jpg", "author": "Rolandandika", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Raja Ampat, Indonésie"}, "oc": {"src": "assets/spots/whitehaven.jpg", "source": "https://commons.wikimedia.org/wiki/File:Whitehaven_Beach_-_Northern_End.jpg", "author": "Hush Neo", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Whitehaven, Australie"}};
 function worldVisited(id){
   /* la progression vient du carnet de sessions, pas d'un score décoratif */
   var seen={}; sessions.forEach(function(s){ seen[s.spot]=1; });
@@ -1200,9 +1200,9 @@ saintmalo:['View of Saint-Malo Beach 04.jpg','Jsamwrites','CC BY-SA 4.0'],
 saintlunaire:['StLunairePlage.JPG','LeCardinal','CC BY 3.0'],
 erquy:['Cotes-D\'Armor Erquy Plage - panoramio.jpg','René Boulay','CC BY-SA 3.0'],
 perros:['Plage de Trestraou - Perros-Guirec, France - August 16, 2018.jpg','Giorgio Galeotti','CC BY 4.0']};
-function spotPhotoUrl(id,w){var p=WPHOTO[id];if(!p)return null;
+function spotPhotoUrl(id,w){if(window.SPOT_PHOTOS&&SPOT_PHOTOS[id])return SPOT_PHOTOS[id].src;var p=WPHOTO[id];if(!p)return null;
   return 'https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(p[0].replace(/ /g,'_'))+'?width='+(w||480);}
-function spotPhotoCredit(id){var p=WPHOTO[id];
+function spotPhotoCredit(id){if(window.SPOT_PHOTOS&&SPOT_PHOTOS[id]){var local=SPOT_PHOTOS[id];return local.author+' · '+local.license+' — Wikimedia Commons';}var p=WPHOTO[id];
   return p?(p[1]+' · '+p[2]+' — Wikimedia Commons'):'';}
 
 const SCENIC={
@@ -1574,18 +1574,13 @@ function renderProfile(){
   var pct=Math.min(100,Math.round(xp/LVL*100));
   var fill=document.getElementById('profXpFill');if(fill)fill.style.width=pct+'%';
   var xt=document.getElementById('profXpText');if(xt)xt.textContent=xp+' / '+LVL+' XP · plus que '+Math.max(0,LVL-xp)+' avant Niv. 5';
-  var unlocked=(typeof REEF!=='undefined')?REEF.filter(function(r){return xp>=r.xp;}).length:0;
-  var total=(typeof REEF!=='undefined')?REEF.length:0;
-  var rt=document.getElementById('profReef');if(rt)rt.textContent=unlocked+'/'+total;
+  var rt=document.getElementById('profTrips');if(rt)rt.textContent=window.OceanTrips?OceanTrips.count():0;
   var appB=(typeof BADGES!=='undefined')?BADGES.filter(function(b){return !b.locked;}).length:0;
   var quizB=0;try{quizB=quizLoad().badges.length;}catch(e){}
   var bt=document.getElementById('profBadges');if(bt)bt.textContent=(appB+quizB);
   var spotsSet={};sessions.forEach(function(s){spotsSet[s.spot]=1;});
   var grid=document.getElementById('profStats');
   if(grid)grid.innerHTML=pstatTile(SURF_ICON,'#e3f1fb','#1f9bbf',sessions.length,'Sessions')+pstatTile(PIN_ICON,'#e2f0f8','#2f8fb8',Object.keys(spotsSet).length,'Spots visités')+pstatTile(LEAF_ICON,'#e7f7ef','#2faf72',ecoLog.length,'Gestes écolo','showEcoLog()')+pstatTile(HEART_ICON,'#fdeaf0','#eb5b83',favs.size,'Favoris');
-  var next=(typeof REEF!=='undefined')?REEF.find(function(r){return xp<r.xp;}):null;
-  var pp=document.getElementById('profProg');if(pp)pp.innerHTML=next?('Prochain élément du récif : <b>'+next.name+'</b> à '+next.xp+' XP — plus que <b>'+(next.xp-xp)+' XP</b> !'):'Ton récif est complet — bravo ! 🎉';
-  var pb=document.getElementById('profProgBar');if(pb)pb.style.width=pct+'%';
 }
 function renderQuizBadges(){var el=document.getElementById('quizBadgesProfile');if(!el||typeof QUIZ_CATS==='undefined')return;var d=quizLoad();
   el.innerHTML=QUIZ_CATS.filter(function(c){return c.id!=='tout';}).map(function(c){var got=d.badges.indexOf(c.id)>=0;return '<div class="qb '+(got?'got':'')+'"><div class="qb-e">'+(got?'🏅':c.emoji)+'</div><div class="qb-n">Expert '+c.label+'</div><div class="qb-s">'+(got?'Débloqué ✓':'Sans-faute requis')+'</div></div>';}).join('');}
@@ -2053,7 +2048,6 @@ async function realHomeForecast(){
 function renderProg(){
   const pct=Math.min(100,Math.round(xp/LVL*100));
   const remain=Math.max(0,LVL-xp);
-  const next=REEF.find(r=>xp<r.xp);
   document.getElementById('progCard').innerHTML=`
     <div class="prog-medal"><div class="lv">4</div><div class="nv">NIVEAU</div></div>
     <div class="prog-left">
@@ -2061,11 +2055,7 @@ function renderProg(){
       <div class="progressbar" style="margin-top:9px"><i style="width:${pct}%"></i></div>
       <div class="pl-sub">Plus que <b>${remain} XP</b> pour le niveau suivant</div>
     </div>
-    <div class="prog-next">
-      <div class="pn-svg">${next?next.thumb():'<div style=\"font-size:34px\">🏆</div>'}</div>
-      <div class="pn-name">${next?next.name:'Complet !'}</div>
-      <div class="pn-xp">${next?('à '+next.xp+' XP'):'🎉'}</div>
-    </div>`;
+    <a class="prog-next" onclick="go('challenges')"><b>Continue à progresser</b><span>Voir mes défis →</span></a>`;
 }
 var WAVE_ICON='<svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5c2.2 0 2.2-2.4 4.4-2.4S8.6 8.5 10.8 8.5 13 6.1 15.2 6.1 17.4 8.5 19.6 8.5"/><path d="M2 14c2.2 0 2.2-2.4 4.4-2.4S8.6 14 10.8 14 13 11.6 15.2 11.6 17.4 14 19.6 14"/><path d="M2 19.5c2.2 0 2.2-2.4 4.4-2.4S8.6 19.5 10.8 19.5 13 17.1 15.2 17.1 17.4 19.5 19.6 19.5"/></svg>';
 function renderActivityBar(){
@@ -2238,828 +2228,6 @@ const CREATURES=[
 
 
 
-/* ================= GRAND RÉCIF DE POULPY ================= */
-/* --- habitants --- */
-function rClown(w){return '<svg width="'+w+'" viewBox="0 0 50 32"><path d="M6 16 L-2 9 L0 16 L-2 23Z" fill="#ff7d1e" stroke="#e85d00" stroke-width="1"/><path d="M6 16 Q18 3 36 7 Q46 4 48 16 Q46 28 36 25 Q18 29 6 16Z" fill="#ff7d1e" stroke="#e85d00" stroke-width="1"/><path d="M18 8 Q15 16 18 24 L23 23 Q21 16 23 9Z" fill="#fff"/><path d="M31 8 Q34 16 31 24 L35 23 Q33 16 35 10Z" fill="#fff"/><circle cx="41" cy="14" r="2.6" fill="#fff"/><circle cx="41.4" cy="14" r="1.4" fill="#10160f"/></svg>';}
-function rTang(w){return '<svg width="'+w+'" viewBox="0 0 54 32"><path d="M42 9 L54 4 L51 16 L54 28 L42 23Z" fill="#ffd23e" stroke="#e0a800" stroke-width="1"/><path d="M6 16 Q18 4 36 8 Q42 6 46 13 L42 16 L46 19 Q42 26 36 24 Q18 28 6 16Z" fill="#1f7fe0" stroke="#0e5bb0" stroke-width="1"/><path d="M16 9 Q26 14 32 23" stroke="#0b2e5e" stroke-width="3.4" fill="none"/><circle cx="38" cy="13" r="2.3" fill="#fff"/><circle cx="38.4" cy="13" r="1.2" fill="#10160f"/></svg>';}
-function rYellow(w){return '<svg width="'+w+'" viewBox="0 0 44 32"><path d="M6 16 L-2 9 L0 16 L-2 23Z" fill="#ffd21f" stroke="#e9b400" stroke-width="1"/><path d="M6 16 Q17 4 30 8 Q39 5 40 16 Q39 27 30 24 Q17 28 6 16Z" fill="#ffd21f" stroke="#e9b400" stroke-width="1"/><circle cx="33" cy="13" r="2.2" fill="#fff"/><circle cx="33.4" cy="13" r="1.1" fill="#3a2a00"/></svg>';}
-function rAngel(w){return '<svg width="'+w+'" viewBox="0 0 46 34"><path d="M6 17 L-2 10 L0 17 L-2 24Z" fill="#2e3f86"/><path d="M6 17 Q16 3 30 7 Q42 5 42 17 Q42 29 30 27 Q16 31 6 17Z" fill="#3b54b0"/><g stroke="#ffd23e" stroke-width="2.6"><path d="M12 7 L8 27M19 6 L14 29M26 6 L21 29M33 8 L29 27"/></g><circle cx="35" cy="14" r="2.2" fill="#0b1430"/><circle cx="35.7" cy="13.4" r=".8" fill="#fff"/></svg>';}
-function rButterfly(w){return '<svg width="'+w+'" viewBox="0 0 44 32"><path d="M6 16 L-2 9 L0 16 L-2 23Z" fill="#ffd23e"/><path d="M6 16 Q16 4 30 8 Q40 6 40 16 Q40 26 30 24 Q16 28 6 16Z" fill="#fff4dc"/><path d="M14 8 Q12 16 14 24" stroke="#f5a623" stroke-width="3" fill="none"/><path d="M22 7 Q19 16 22 25" stroke="#f5a623" stroke-width="3" fill="none"/><path d="M31 9 L27 16 L31 23" stroke="#2a2a2a" stroke-width="3" fill="none"/><circle cx="34" cy="14" r="2.1" fill="#fff"/><circle cx="34.4" cy="14" r="1.1" fill="#16202a"/></svg>';}
-function rPuffer(w){return '<svg width="'+w+'" viewBox="0 0 42 38"><path d="M6 19 L0 13 L2 19 L0 25Z" fill="#e7b56a"/><g stroke="#cf9a4f" stroke-width="2"><path d="M21 4 v-3M35 19 h3M21 34 v3M31 9 l2 -2M31 29 l2 2M11 9 l-2 -2M11 29 l-2 2"/></g><circle cx="21" cy="19" r="13" fill="#e7b56a"/><circle cx="27" cy="15" r="3" fill="#fff"/><circle cx="28" cy="15" r="1.6" fill="#10160f"/><circle cx="15" cy="15" r="3" fill="#fff"/><circle cx="16" cy="15" r="1.6" fill="#10160f"/><path d="M22 25 q3 2 6 0" stroke="#9c6f33" stroke-width="1.6" fill="none"/></svg>';}
-function rSeahorse(w){return '<svg width="'+w+'" viewBox="0 0 30 44"><path d="M14 4 Q22 4 21 13 Q20 20 14 24 Q9 28 12 34 Q14 40 9 42 Q12 36 9 33 Q5 29 8 23 Q11 17 11 12 Q11 5 14 4Z" fill="#ffce54" stroke="#e9a93a" stroke-width="1"/><path d="M14 4 Q19 2 19 7 Q22 7 22 10" stroke="#e9a93a" stroke-width="2" fill="none"/><circle cx="16" cy="9" r="1.5" fill="#3a2a00"/><g stroke="#e9a93a" stroke-width="1" opacity=".55"><path d="M12 14 h6M11 19 h7"/></g></svg>';}
-function rTurtle(w){return '<svg width="'+w+'" viewBox="0 0 56 38"><ellipse cx="11" cy="11" rx="5" ry="3" transform="rotate(-28 11 11)" fill="#4eae5c"/><ellipse cx="11" cy="29" rx="5" ry="3" transform="rotate(28 11 29)" fill="#4eae5c"/><circle cx="46" cy="18" r="5.5" fill="#4eae5c"/><ellipse cx="26" cy="20" rx="16" ry="12" fill="#3f9a55"/><path d="M12 16 q14 -9 30 0 q-14 8 -30 0Z" fill="#6cc070"/><g fill="none" stroke="#2f7a44" stroke-width="1.3" opacity=".55"><path d="M20 13 v14M28 11 v17M36 13 v14"/></g><circle cx="48" cy="17" r="1.2" fill="#10130f"/></svg>';}
-function rManta(w){return '<svg width="'+w+'" viewBox="0 0 64 38"><path d="M32 8 C18 8 5 24 9 28 C16 25 22 27 28 31 C30 25 32 25 32 25 C32 25 34 25 36 31 C42 27 48 25 55 28 C59 24 46 8 32 8Z" fill="#3b4a6b"/><path d="M22 10 q-3 -5 -7 -6M42 10 q3 -5 7 -6" stroke="#2c3852" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M32 25 q1 9 -1 13" stroke="#3b4a6b" stroke-width="2.4" fill="none"/><circle cx="26" cy="16" r="1.4" fill="#fff"/><circle cx="38" cy="16" r="1.4" fill="#fff"/></svg>';}
-function rMoray(w){return '<svg width="'+w+'" viewBox="0 0 40 40"><path d="M30 38 Q26 24 30 14 Q33 7 26 5 Q18 3 16 10 Q15 15 20 16 Q24 17 22 21 Q20 28 24 38Z" fill="#5fae5a" stroke="#3f8a40" stroke-width="1"/><path d="M16 10 q-4 -1 -6 2 q4 1 6 -2Z" fill="#5fae5a"/><circle cx="21" cy="9" r="1.4" fill="#10160f"/><path d="M14 12 q3 1 6 0" stroke="#2f6a32" stroke-width="1.4" fill="none"/></svg>';}
-function rJelly(w){return '<svg width="'+w+'" viewBox="0 0 34 46"><path d="M3 17 a14 13 0 0 1 28 0 q0 4 -3 5 l-22 0 q-3 -1 -3 -5Z" fill="#e07ab8" opacity=".92"/><ellipse cx="12" cy="12" rx="4" ry="5" fill="#fff" opacity=".4"/><g stroke="#d56bac" stroke-width="2.4" fill="none" stroke-linecap="round" opacity=".85"><path d="M8 24 q-2 12 1 20M14 24 q-1 13 1 20M20 24 v20M26 24 q2 12 -1 20"/></g></svg>';}
-function rStar(w){return '<svg width="'+w+'" viewBox="0 0 26 26"><path d="M13 1 l3 7 7.5 .5 -5.8 5 1.9 7.5 -6.6 -4.2 -6.6 4.2 1.9 -7.5 -5.8 -5 7.5 -.5Z" fill="#ff8f4d" stroke="#ef7a36" stroke-width="1"/><g fill="#ffd0a8"><circle cx="13" cy="12" r="1.4"/><circle cx="9" cy="10" r=".9"/><circle cx="17" cy="10" r=".9"/></g></svg>';}
-function rCrab(w){return '<svg width="'+w+'" viewBox="0 0 40 28"><g stroke="#c43c1f" stroke-width="2.4" stroke-linecap="round"><path d="M9 18 l-6 4M9 22 l-5 5M31 18 l6 4M31 22 l5 5"/></g><path d="M9 12 Q3 6 6 3 Q9 7 12 10Z" fill="#e8512e"/><path d="M31 12 Q37 6 34 3 Q31 7 28 10Z" fill="#e8512e"/><ellipse cx="20" cy="17" rx="12" ry="8" fill="#e8512e"/><circle cx="15" cy="13" r="2.2" fill="#fff"/><circle cx="25" cy="13" r="2.2" fill="#fff"/><circle cx="15" cy="13" r="1.1" fill="#10160f"/><circle cx="25" cy="13" r="1.1" fill="#10160f"/><path d="M15 21 q5 3 10 0" stroke="#fff" stroke-width="1.4" fill="none"/></svg>';}
-function rMini(w,col){return '<svg width="'+w+'" viewBox="0 0 30 18"><path d="M3 9 L-2 5 L0 9 L-2 13Z" fill="'+col+'"/><path d="M3 9 Q10 2 20 5 Q27 3 27 9 Q27 15 20 13 Q10 16 3 9Z" fill="'+col+'"/><circle cx="22" cy="8" r="1.4" fill="#fff"/><circle cx="22.3" cy="8" r=".7" fill="#10160f"/></svg>';}
-/* --- décors --- */
-function rBrain(w){return '<svg width="'+w+'" viewBox="0 0 44 32"><path d="M3 32 Q2 9 22 7 Q42 9 41 32Z" fill="#ff8fa3"/><g stroke="#e87a92" stroke-width="1.5" fill="none" opacity=".6"><path d="M9 30 q5 -10 0 -18M16 30 q5 -12 0 -20M24 30 q-5 -12 0 -20M32 30 q-5 -10 0 -18"/></g></svg>';}
-function rTube(w){return '<svg width="'+w+'" viewBox="0 0 40 36"><g fill="#ff9a5b"><path d="M8 36 V16 q0 -6 6 -6 q6 0 6 6 V36Z"/><path d="M20 36 V12 q0 -6 6 -6 q6 0 6 6 V36Z"/><path d="M0 36 V20 q0 -5 5 -5 q5 0 5 5 V36Z"/></g><g fill="#ffb98a"><ellipse cx="14" cy="11" rx="3.4" ry="2"/><ellipse cx="26" cy="7" rx="3.4" ry="2"/><ellipse cx="5" cy="16" rx="3" ry="1.8"/></g></svg>';}
-function rFan(w){return '<svg width="'+w+'" viewBox="0 0 40 48"><g stroke="#b06fd0" stroke-width="3" fill="none" stroke-linecap="round"><path d="M20 48 V22"/><path d="M20 34 q-12 -6 -16 -20M20 34 q12 -6 16 -20M20 26 q-9 -6 -12 -16M20 26 q9 -6 12 -16M20 42 q-6 -4 -8 -11M20 42 q6 -4 8 -11"/></g></svg>';}
-function rAnemone(w){return '<svg width="'+w+'" viewBox="0 0 40 40"><ellipse cx="20" cy="36" rx="12" ry="5" fill="#ff8f5e"/><g stroke="#ff9d6e" stroke-width="3.4" stroke-linecap="round"><path d="M20 34 V16M20 34 l-8 -15M20 34 l8 -15M20 34 l-12 -10M20 34 l12 -10M20 34 l-4 -18M20 34 l4 -18"/></g><g fill="#ffd0b0"><circle cx="20" cy="15" r="1.8"/><circle cx="12" cy="20" r="1.5"/><circle cx="28" cy="20" r="1.5"/></g></svg>';}
-function rClam(w){return '<svg width="'+w+'" viewBox="0 0 42 32"><path d="M3 30 Q1 14 21 12 Q41 14 39 30Z" fill="#9ad0e0"/><path d="M3 30 Q21 22 39 30Z" fill="#7fbcd0"/><g stroke="#6aa9bf" stroke-width="1.4" fill="none"><path d="M11 28 Q12 18 21 14M21 28 V14M31 28 Q30 18 21 14"/></g><circle cx="21" cy="24" r="3.4" fill="#fff"/><circle cx="20" cy="23" r="1.2" fill="#eaf6ff"/></svg>';}
-function rChest(w){return '<svg width="'+w+'" viewBox="0 0 54 40"><rect x="4" y="18" width="46" height="20" rx="3" fill="#8a5a2b"/><rect x="4" y="18" width="46" height="6" fill="#6e4520"/><path d="M4 19 q23 -15 46 0Z" fill="#a06a33"/><rect x="2" y="22" width="50" height="4" fill="#c98a3a"/><rect x="24" y="22" width="6" height="9" rx="1" fill="#ffd25a"/><g fill="#ffe07a"><circle cx="13" cy="34" r="2.6"/><circle cx="19" cy="36" r="2"/><circle cx="40" cy="34" r="2.4"/></g></svg>';}
-function rWreck(w){return '<svg width="'+w+'" viewBox="0 0 90 46"><path d="M6 30 Q10 44 30 44 L70 44 Q82 44 84 30 L78 28 Q70 34 45 34 Q20 34 12 28Z" fill="#5a4a3a"/><path d="M40 30 V6 L66 16 L40 18Z" fill="#7a6450"/><path d="M30 30 V12" stroke="#6b5743" stroke-width="3"/><path d="M52 31 V14" stroke="#6b5743" stroke-width="3"/><circle cx="22" cy="26" r="2.4" fill="#2a3a4a" opacity=".6"/><circle cx="60" cy="26" r="2.4" fill="#2a3a4a" opacity=".6"/></svg>';}
-function rArch(w){return '<svg width="'+w+'" viewBox="0 0 80 56"><path d="M8 56 V28 Q8 8 40 8 Q72 8 72 28 V56 L60 56 V30 Q60 22 40 22 Q20 22 20 30 V56Z" fill="#ff9aae"/><g fill="#ffd0a8"><circle cx="14" cy="20" r="3"/><circle cx="40" cy="11" r="3.4"/><circle cx="66" cy="20" r="3"/></g><g fill="#7fd0c0"><circle cx="22" cy="44" r="2.4"/><circle cx="58" cy="44" r="2.4"/></g></svg>';}
-/* --- placement --- */
-function rSwim(svg,top,dur,dir,delay){return '<div class="rfish '+(dir==='L'?'fishL':'fishR')+'" style="top:'+top+'%;animation-duration:'+dur+'s;animation-delay:'+(delay||0)+'s">'+svg+'</div>';}
-function rBob(svg,left,top,delay){return '<div class="rbob" style="left:'+left+'%;top:'+top+'%;animation-delay:'+(delay||0)+'s">'+svg+'</div>';}
-function rDecor(svg,left,bottom,cls){return '<div class="decor '+(cls||'')+'" style="left:'+left+'%;bottom:'+bottom+'px">'+svg+'</div>';}
-/* --- collection (xp croissant) --- */
-/* --- scène récif (multi-couches, façon Nemo) --- */
-function rcBlob(cx,cy,s,c1,c2){var p=[[0,0,1],[-.72,-.05,.72],[.72,-.02,.74],[-.36,-.5,.6],[.4,-.46,.62],[0,-.8,.5],[-.85,.28,.5],[.85,.28,.5],[0,.35,.7]];var g='<g>';for(var i=0;i<p.length;i++){g+='<circle cx="'+(cx+p[i][0]*s).toFixed(1)+'" cy="'+(cy+p[i][1]*s).toFixed(1)+'" r="'+(p[i][2]*s*0.55).toFixed(1)+'" fill="'+c1+'"/>';}for(var j=0;j<4;j++){g+='<circle cx="'+(cx+p[j][0]*s-s*0.12).toFixed(1)+'" cy="'+(cy+p[j][1]*s-s*0.12).toFixed(1)+'" r="'+(p[j][2]*s*0.28).toFixed(1)+'" fill="'+c2+'" opacity=".55"/>';}return g+'</g>';}
-function rcTable(cx,cy,w,c1,c2){return '<g><path d="M'+(cx-w*0.1)+' '+cy+' L'+(cx-w*0.16)+' '+(cy+w*0.5)+' L'+(cx+w*0.16)+' '+(cy+w*0.5)+' L'+(cx+w*0.1)+' '+cy+'Z" fill="'+c2+'"/><ellipse cx="'+cx+'" cy="'+cy+'" rx="'+(w*0.5)+'" ry="'+(w*0.17)+'" fill="'+c1+'"/><ellipse cx="'+(cx-w*0.12)+'" cy="'+(cy-w*0.03)+'" rx="'+(w*0.34)+'" ry="'+(w*0.1)+'" fill="'+c2+'" opacity=".5"/></g>';}
-function rcStag(x,baseY,c,n){var g='<g stroke="'+c+'" stroke-width="3.4" stroke-linecap="round">';for(var i=-n;i<=n;i++){var hh=16-Math.abs(i)*1.8;g+='<path d="M'+(x+i*4.5)+' '+baseY+' l'+(i*1.6)+' '+(-hh-6)+'"/>';}return g+'</g>';}
-function rcPen(x,baseY,h,c){return '<path d="M'+x+' '+baseY+' q-7 '+(-h*0.35)+' 2 '+(-h*0.6)+' q8 '+(-h*0.18)+' -1 '+(-h)+'" stroke="'+c+'" stroke-width="3.4" fill="none" stroke-linecap="round"/>';}
-function rcTube(x,baseY,c1,c2){var tu=[[0,40,9],[15,32,8],[-13,30,7.5],[7,46,7]];var g='<g>';for(var i=0;i<tu.length;i++){var tx=x+tu[i][0],ht=tu[i][1],r=tu[i][2];g+='<path d="M'+(tx-r)+' '+baseY+' Q'+(tx-r)+' '+(baseY-ht)+' '+tx+' '+(baseY-ht)+' Q'+(tx+r)+' '+(baseY-ht)+' '+(tx+r)+' '+baseY+'Z" fill="'+c1+'"/><ellipse cx="'+tx+'" cy="'+(baseY-ht)+'" rx="'+r+'" ry="'+(r*0.42)+'" fill="'+c2+'"/><ellipse cx="'+tx+'" cy="'+(baseY-ht)+'" rx="'+(r*0.52)+'" ry="'+(r*0.22)+'" fill="#3a0d10"/>';}return g+'</g>';}
-function rcGorgon(x,baseY,h,c){var g='<g stroke="'+c+'" fill="none" stroke-linecap="round">';g+='<path d="M'+x+' '+baseY+' C'+(x-4)+' '+(baseY-h*0.45)+' '+(x+6)+' '+(baseY-h*0.7)+' '+(x+1)+' '+(baseY-h)+'" stroke-width="3.2"/>';for(var i=1;i<=6;i++){var by=baseY-h*(0.14*i+0.06);var ln=h*0.16*(1.05-i*0.1);var dir=(i%2?-1:1);g+='<path d="M'+(x+dir*1.5)+' '+by.toFixed(1)+' q'+(dir*ln*0.7).toFixed(1)+' '+(-ln*0.35).toFixed(1)+' '+(dir*ln*1.2).toFixed(1)+' '+(-ln).toFixed(1)+'" stroke-width="2"/>';g+='<path d="M'+(x-dir*1.5)+' '+by.toFixed(1)+' q'+(-dir*ln*0.6).toFixed(1)+' '+(-ln*0.3).toFixed(1)+' '+(-dir*ln).toFixed(1)+' '+(-ln*0.95).toFixed(1)+'" stroke-width="1.8"/>';}return g+'</g>';}
-function rcAnem(x,baseY){return '<g><ellipse cx="'+x+'" cy="'+baseY+'" rx="13" ry="5" fill="#ff8f5e"/><g stroke="#ff9d6e" stroke-width="3.2" stroke-linecap="round"><path d="M'+x+' '+(baseY-2)+' V'+(baseY-20)+'"/><path d="M'+x+' '+(baseY-2)+' l-9 -16"/><path d="M'+x+' '+(baseY-2)+' l9 -16"/><path d="M'+x+' '+(baseY-2)+' l-14 -11"/><path d="M'+x+' '+(baseY-2)+' l14 -11"/></g></g>';}
-function rcBrain(cx,cy,r,c1,c2){var g='<g><ellipse cx="'+cx+'" cy="'+cy+'" rx="'+r+'" ry="'+(r*0.78).toFixed(1)+'" fill="'+c1+'"/><g stroke="'+c2+'" stroke-width="'+(r*0.14).toFixed(1)+'" fill="none" opacity=".6" stroke-linecap="round">';for(var i=-2;i<=2;i++){g+='<path d="M'+(cx-r*0.72).toFixed(1)+' '+(cy+i*r*0.3).toFixed(1)+' q'+(r*0.36).toFixed(1)+' '+(r*0.2).toFixed(1)+' '+(r*0.72).toFixed(1)+' 0 q'+(r*0.36).toFixed(1)+' '+(-r*0.2).toFixed(1)+' '+(r*0.72).toFixed(1)+' 0"/>';}return g+'</g></g>';}
-function rcFinger(x,baseY,h,c1,c2){var g='<g>',off=[-10,-4,2,8,0];for(var i=0;i<off.length;i++){var fx=x+off[i],fh=h*(0.7+(i%2)*0.4);g+='<path d="M'+(fx-3.5)+' '+baseY+' V'+(baseY-fh).toFixed(1)+' a3.5 3.5 0 0 1 7 0 V'+baseY+'Z" fill="'+c1+'"/><ellipse cx="'+fx+'" cy="'+(baseY-fh).toFixed(1)+'" rx="3.5" ry="2.4" fill="'+c2+'"/>';}return g+'</g>';}
-function reefSceneSVG(){
-  var S=[];
-  S.push('<svg class="reefscene" viewBox="0 0 360 340" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">');
-  S.push('<defs><linearGradient id="rw" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bdeef6"/><stop offset=".26" stop-color="#5cc3df"/><stop offset=".52" stop-color="#2796c4"/><stop offset=".78" stop-color="#136e9f"/><stop offset="1" stop-color="#0a4f7a"/></linearGradient>');
-  S.push('<radialGradient id="rg" cx="50%" cy="-4%" r="75%"><stop offset="0" stop-color="#eaffff" stop-opacity=".55"/><stop offset="1" stop-color="#eaffff" stop-opacity="0"/></radialGradient>');
-  S.push('<radialGradient id="cgPur" cx="36%" cy="26%" r="78%"><stop offset="0" stop-color="#cdbcf2"/><stop offset="1" stop-color="#664f9e"/></radialGradient>');
-  S.push('<radialGradient id="cgBlu" cx="36%" cy="26%" r="78%"><stop offset="0" stop-color="#a9caf0"/><stop offset="1" stop-color="#33609c"/></radialGradient>');
-  S.push('<radialGradient id="cgGrn" cx="40%" cy="20%" r="80%"><stop offset="0" stop-color="#bfe39a"/><stop offset="1" stop-color="#47762e"/></radialGradient>');
-  S.push('<radialGradient id="cgPnk" cx="38%" cy="26%" r="80%"><stop offset="0" stop-color="#ffd0dc"/><stop offset="1" stop-color="#dc4f78"/></radialGradient>');
-  S.push('<radialGradient id="cgOrg" cx="38%" cy="26%" r="80%"><stop offset="0" stop-color="#ffd8b0"/><stop offset="1" stop-color="#dd7234"/></radialGradient>');
-  S.push('<radialGradient id="cgRed" cx="36%" cy="24%" r="82%"><stop offset="0" stop-color="#f49584"/><stop offset="1" stop-color="#a82a24"/></radialGradient>');
-  S.push('<radialGradient id="cgYel" cx="40%" cy="24%" r="80%"><stop offset="0" stop-color="#ffedb0"/><stop offset="1" stop-color="#d4a230"/></radialGradient>');
-  S.push('<radialGradient id="cgTea" cx="38%" cy="26%" r="80%"><stop offset="0" stop-color="#abe9e0"/><stop offset="1" stop-color="#268b92"/></radialGradient>');
-  S.push('<filter id="rbf1" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="2.2"/></filter><filter id="rbf2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="5"/></filter><filter id="rbf3"><feGaussianBlur stdDeviation="3.5"/></filter></defs>');
-  S.push('<rect width="360" height="340" fill="url(#rw)"/><rect width="360" height="230" fill="url(#rg)"/>');
-  S.push('<g fill="#ffffff"><polygon points="55,0 100,0 150,340 85,340" opacity=".07"/><polygon points="160,0 195,0 245,340 195,340" opacity=".05"/><polygon points="275,0 315,0 300,340 250,340" opacity=".06"/></g>');
-  // FOND lointain flou
-  S.push('<g opacity=".4" filter="url(#rbf3)">');
-  S.push('<path d="M0 196 Q90 178 180 192 Q270 204 360 188 L360 232 L0 232Z" fill="#1f6f9a"/>');
-  S.push(rcBlob(45,182,22,'#2f7fa6','#4f9ec2')+rcBlob(120,186,20,'#357fa0','#5aa0c0')+rcBlob(250,184,22,'#2f7fa6','#4f9ec2')+rcBlob(320,188,18,'#357fa0','#5aa0c0'));
-  S.push(rcGorgon(70,196,120,'#2a5f7e')+rcGorgon(300,196,130,'#2a5f7e'));
-  S.push('</g>');
-  // MID
-  S.push('<g opacity=".96">');
-  S.push('<path d="M0 250 Q80 232 170 246 Q260 258 360 244 L360 292 L0 292Z" fill="#15638f"/>');
-  S.push(rcBlob(58,240,26,'url(#cgPur)','#efe6ff')+rcBlob(110,246,23,'url(#cgBlu)','#e2eefc')+rcTable(172,238,62,'url(#cgGrn)','#3e6a26')+rcBlob(238,244,25,'url(#cgPur)','#efe6ff')+rcBlob(306,246,22,'url(#cgBlu)','#e2eefc'));
-  S.push(rcBrain(150,250,15,'url(#cgPnk)','#ffeef3')+rcBrain(205,248,13,'url(#cgOrg)','#fff2e2')+rcFinger(330,256,20,'url(#cgYel)','#fff6d6')+rcBlob(20,246,18,'url(#cgGrn)','#eaf6da')+rcFinger(275,256,18,'url(#cgPnk)','#ffe6ee'));
-  S.push(rcPen(140,240,44,'#d7be54')+rcPen(270,242,40,'#79c178')+rcPen(95,244,34,'#e1c258'));
-  S.push('</g>');
-  // GORGONES droite (hautes, sombres)
-  S.push('<g opacity=".92">'+rcGorgon(298,320,290,'#5a2740')+rcGorgon(322,326,300,'#612a46')+rcGorgon(284,316,250,'#522238')+'</g>');
-  // colonie haut-droite
-  S.push(rcBlob(344,44,28,'url(#cgPnk)','#ffe0ec')+rcBlob(330,70,18,'url(#cgPur)','#efe6ff'));
-  // SOL premier plan
-  S.push('<path d="M0 294 Q90 272 185 290 Q280 306 360 286 L360 340 L0 340Z" fill="#2a7d57"/>');
-  S.push('<path d="M0 304 Q90 286 185 300 Q280 314 360 298 L360 340 L0 340Z" fill="#7a5d3a" opacity=".4"/>');
-  // coraux premier plan (dégradés)
-  S.push(rcTable(70,316,72,'url(#cgGrn)','#3e6a26')+rcTable(300,320,76,'url(#cgGrn)','#3e6a26'));
-  S.push(rcBlob(150,316,28,'url(#cgPur)','#efe6ff')+rcBlob(250,324,26,'url(#cgPur)','#efe6ff')+rcBlob(112,330,24,'url(#cgBlu)','#e2eefc')+rcBlob(208,332,22,'url(#cgBlu)','#e2eefc'));
-  S.push(rcBrain(120,316,16,'url(#cgPnk)','#ffeef3')+rcBrain(268,318,14,'url(#cgOrg)','#fff2e2')+rcBrain(40,322,13,'url(#cgPnk)','#ffeef3'));
-  S.push(rcFinger(176,338,26,'url(#cgPnk)','#ffe6ee')+rcFinger(92,340,22,'url(#cgGrn)','#eaf6da')+rcFinger(232,340,24,'url(#cgBlu)','#e2eefc')+rcFinger(20,340,18,'url(#cgYel)','#fff6d6'));
-  S.push(rcBlob(178,322,18,'url(#cgRed)','#ffb7a4')+rcBlob(54,330,18,'url(#cgGrn)','#eaf6da')+rcBlob(300,332,17,'url(#cgPur)','#efe6ff')+rcBlob(132,326,15,'url(#cgTea)','#d6f5ef')+rcBlob(348,326,16,'url(#cgPur)','#efe6ff'));
-  S.push(rcStag(40,336,'#a877dc',4)+rcStag(196,338,'#8a6fc4',3)+rcStag(336,334,'#7d62b8',3)+rcStag(118,338,'#e98ac4',3)+rcStag(286,340,'#6fc07a',3));
-  S.push(rcPen(185,330,42,'#d7be54')+rcPen(60,330,34,'#79c178')+rcPen(330,326,30,'#d7be54'));
-  S.push(rcAnem(328,316)+rcAnem(150,330));
-  // perles roses (knobs)
-  S.push('<g fill="#ff9ab0"><circle cx="92" cy="334" r="5"/><circle cx="168" cy="338" r="4"/><circle cx="230" cy="334" r="5"/><circle cx="284" cy="338" r="4"/><circle cx="62" cy="338" r="4"/><circle cx="318" cy="336" r="4"/><circle cx="208" cy="336" r="4.5"/></g>');
-  // éponges rouges premier plan (gauche, flou léger) + bokeh
-  S.push('<g filter="url(#rbf1)">'+rcTube(36,352,'url(#cgRed)','#f0998a')+'</g>');
-  S.push('<g filter="url(#rbf2)"><circle cx="16" cy="330" r="30" fill="#d8423a" opacity=".5"/><circle cx="48" cy="352" r="20" fill="#bf352c" opacity=".5"/></g>');
-  S.push('</svg>');
-  return S.join('');
-}
-function reefBase(){
-  var t=reefSceneSVG();
-  t+=rSwim(rYellow(22),36,15,'R',-2)+rSwim(rYellow(18),43,16,'L',-7)+rSwim(rYellow(20),50,17,'R',-11)+rSwim(rYellow(16),28,15,'L',-4);
-  t+=rSwim(rMini(15,'#ff7d3a'),58,13,'L',-3)+rSwim(rMini(13,'#ffd21f'),64,15,'R',-9)+rSwim(rMini(12,'#7fd0e6'),46,14,'L',-12);
-  t+=rBob(rTang(32),80,40,.6)+rBob(rYellow(22),88,58,1.4)+rBob(rClown(26),74,64,2)+rBob(rAngel(28),84,28,.9);
-  t+=rSwim(rTurtle(40),24,30,'R',-8);
-  t+='<div class="rfish bgcreature fishL" style="top:30%;animation-duration:42s;animation-delay:3s">'+rShark(66)+'</div>';
-  t+='<div class="rfish bgcreature fishR" style="top:13%;animation-duration:62s">'+rWhale(80)+'</div>';
-  for(var i=0;i<12;i++){t+='<i class="particle" style="left:'+(Math.random()*100).toFixed(1)+'%;bottom:'+(60+Math.random()*40).toFixed(0)+'px;animation-duration:'+(7+Math.random()*6).toFixed(1)+'s;animation-delay:'+(Math.random()*7).toFixed(1)+'s"></i>';}
-  for(var k=0;k<8;k++){var sz=(4+Math.random()*7).toFixed(1);t+='<i class="tbub" style="left:'+(Math.random()*100).toFixed(1)+'%;bottom:40px;width:'+sz+'px;height:'+sz+'px;animation-duration:'+(4+Math.random()*4).toFixed(1)+'s;animation-delay:'+(Math.random()*4).toFixed(1)+'s"></i>';}
-  return t;
-}
-function rShark(w){return '<svg width="'+w+'" viewBox="0 0 82 40"><path d="M6 22 L-5 13 L-1 22 L-5 31Z" fill="#7d93a3"/><path d="M6 22 Q26 8 54 12 Q70 13 77 22 Q70 30 54 28 Q26 33 6 22Z" fill="#8aa0b0"/><path d="M40 12 L48 -3 L53 13Z" fill="#7d93a3"/><path d="M58 23 q6 4 9 9 q-7 -1 -11 -5Z" fill="#7d93a3"/><path d="M30 28 q2 7 -2 11 q5 -2 7 -8Z" fill="#7d93a3"/><path d="M10 24 Q40 32 70 24 Q44 30 14 27Z" fill="#cfdbe3" opacity=".7"/><circle cx="67" cy="20" r="1.9" fill="#16202a"/><path d="M64 26 q5 1 9 -1" stroke="#5f7585" stroke-width="1.4" fill="none"/><g stroke="#6f8595" stroke-width="1" opacity=".5"><path d="M52 18 h4M50 22 h5"/></g></svg>';}
-function rWhale(w){return '<svg width="'+w+'" viewBox="0 0 120 62"><path d="M10 34 L-6 19 Q-1 34 -6 49Z" fill="#3f6cad"/><path d="M10 34 Q24 12 60 12 Q98 12 110 30 Q114 38 108 45 Q92 55 58 53 Q24 51 10 34Z" fill="#4f7fc4"/><path d="M16 40 Q42 57 80 51 Q99 48 108 41 Q92 51 60 51 Q30 51 16 40Z" fill="#cfe2f7"/><g stroke="#3a6098" stroke-width="1.5" fill="none" opacity=".6"><path d="M14 30 Q18 33 16 37M20 27 Q24 31 22 35M26 25 Q30 29 28 33"/></g><g stroke="#aecbef" stroke-width="2.6" fill="none" stroke-linecap="round"><path d="M44 12 q-3 -10 0 -13"/><path d="M44 12 q3 -10 8 -12"/></g><circle cx="99" cy="28" r="2.3" fill="#16202a"/><path d="M104 33 q4 1 8 -1" stroke="#3a6098" stroke-width="1.6" fill="none"/></svg>';}
-function reefExtra(){
-  var t=rSwim(rWhale(150),20,48,'L',0);
-  t+=rSwim(rShark(96),58,30,'R',5)+rSwim(rShark(66),42,36,'L',16);
-  t+=rSwim(rTurtle(70),30,30,'R',3)+rSwim(rTurtle(50),74,34,'L',12);
-  var i;
-  for(i=0;i<7;i++){t+=rSwim(rYellow((16+Math.random()*10).toFixed(0)),(18+Math.random()*60).toFixed(0),(12+Math.random()*8).toFixed(0),(i%2?'L':'R'),(Math.random()*12).toFixed(1));}
-  for(i=0;i<6;i++){t+=rSwim(rMini((12+Math.random()*7).toFixed(0),i%2?'#ff7d3a':'#7fd0e6'),(18+Math.random()*64).toFixed(0),(12+Math.random()*8).toFixed(0),(i%2?'R':'L'),(Math.random()*12).toFixed(1));}
-  return t;
-}
-/* ================= AQUARIUM (sprites 3D) ================= */
-/* ===== Ocean Buddy - aquariums 2D (vectoriel) =====
-   Chaque bac est dessiné dans un viewBox 200x170, socle compris.
-   La zone d'eau (où nagent les créatures) est déclarée en % dans AQ_TANKS. */
-
-var AQP = {              /* palette partagée */
-  deep:'#0b3c63', navy:'#0a2740', glass:'#bfe9f7',
-  w1:'#7fd8ef', w2:'#39b3dc', w3:'#1b7fae',
-  sand:'#f7e4b8', sand2:'#e3c88d',
-  coral:'#ff7d6e', coralD:'#ec5a4b', sun:'#ffce54', amber:'#f0a92e',
-  purple:'#9b6bd1', magenta:'#e56ba8', green:'#3ec98a', greenD:'#2a9e6d',
-  rock:'#5d7a8c', rockD:'#455f70'
-};
-
-/* défs communes : eau dégradée + reflet de verre */
-function aqDefs(id){
-  return '<defs>'
-  + '<linearGradient id="w'+id+'" x1="0" y1="0" x2="0" y2="1">'
-  +   '<stop offset="0%" stop-color="' + AQP.w1 + '"/>'
-  +   '<stop offset="55%" stop-color="' + AQP.w2 + '"/>'
-  +   '<stop offset="100%" stop-color="' + AQP.w3 + '"/>'
-  + '</linearGradient>'
-  + '<linearGradient id="g'+id+'" x1="0" y1="0" x2="1" y2="1">'
-  +   '<stop offset="0%" stop-color="#ffffff" stop-opacity=".55"/>'
-  +   '<stop offset="45%" stop-color="#ffffff" stop-opacity=".08"/>'
-  +   '<stop offset="100%" stop-color="#ffffff" stop-opacity=".28"/>'
-  + '</linearGradient>'
-  + '<linearGradient id="s'+id+'" x1="0" y1="0" x2="0" y2="1">'
-  +   '<stop offset="0%" stop-color="' + AQP.sand + '"/>'
-  +   '<stop offset="100%" stop-color="' + AQP.sand2 + '"/>'
-  + '</linearGradient>'
-  + '</defs>';
-}
-
-/* petits éléments de décor intégrés au bac */
-function aqPlant(x, base, h, col, w){
-  w = w || 5;
-  var lean = (x % 7 < 3.5) ? 1 : -1;
-  function blade(dx, hh, ww, c){
-    var tipx = x + dx + lean * hh * 0.20, tipy = base - hh;
-    return '<path d="M' + (x + dx) + ' ' + base
-         + ' C' + (x + dx - ww) + ' ' + (base - hh * .42) + ' ' + (tipx - ww * .5) + ' ' + (tipy + hh * .3) + ' ' + tipx + ' ' + tipy
-         + ' C' + (tipx + ww * .55) + ' ' + (tipy + hh * .32) + ' ' + (x + dx + ww * 1.05) + ' ' + (base - hh * .4) + ' ' + (x + dx) + ' ' + base
-         + 'z" fill="' + c + '"/>';
-  }
-  return '<g>' + blade(-w * .9, h * .72, w * .8, col)
-       + blade(w * .95, h * .82, w * .85, col)
-       + blade(0, h, w, col)
-       + '<path d="M' + x + ' ' + (base - h * .12) + ' q' + (lean * h * .1) + ' ' + (-h * .42) + ' ' + (lean * h * .17) + ' ' + (-h * .78) + '" '
-       + 'stroke="#ffffff" stroke-opacity=".28" stroke-width="' + (w * .3) + '" fill="none" stroke-linecap="round"/></g>';
-}
-function aqCoralFan(x, base, s, col){
-  return '<g stroke="' + col + '" stroke-width="' + (s * .16) + '" fill="none" stroke-linecap="round">'
-       + '<path d="M' + x + ' ' + base + ' V' + (base - s * .62) + '"/>'
-       + '<path d="M' + x + ' ' + (base - s * .3) + ' q' + (-s * .3) + ' ' + (-s * .16) + ' ' + (-s * .42) + ' ' + (-s * .5) + '"/>'
-       + '<path d="M' + x + ' ' + (base - s * .3) + ' q' + (s * .3) + ' ' + (-s * .16) + ' ' + (s * .42) + ' ' + (-s * .5) + '"/>'
-       + '</g>';
-}
-function aqCoralLump(x, base, s, c1, c2){
-  var r = s * .52;
-  return '<g><path d="M' + (x - r) + ' ' + base + ' a' + r + ' ' + (r * .92) + ' 0 0 1 ' + (r * 2) + ' 0 z" fill="' + c1 + '"/>'
-       + '<g stroke="' + c2 + '" stroke-width="' + (s * .085) + '" fill="none" opacity=".65" stroke-linecap="round">'
-       + '<path d="M' + (x - r * .55) + ' ' + (base - 1) + ' q' + (r * .2) + ' ' + (-r * .5) + ' 0 ' + (-r * .78) + '"/>'
-       + '<path d="M' + x + ' ' + (base - 1) + ' q' + (r * .22) + ' ' + (-r * .55) + ' 0 ' + (-r * .9) + '"/>'
-       + '<path d="M' + (x + r * .55) + ' ' + (base - 1) + ' q' + (-r * .2) + ' ' + (-r * .5) + ' 0 ' + (-r * .78) + '"/>'
-       + '</g>'
-       + '<ellipse cx="' + (x - r * .3) + '" cy="' + (base - r * .55) + '" rx="' + (r * .28) + '" ry="' + (r * .18) + '" fill="#ffffff" opacity=".22"/></g>';
-}
-function aqStag(x, base, s, col){
-  var t = s * .17;
-  return '<g stroke="' + col + '" stroke-width="' + t + '" fill="none" stroke-linecap="round">'
-       + '<path d="M' + x + ' ' + base + ' V' + (base - s * .5) + '"/>'
-       + '<path d="M' + x + ' ' + (base - s * .3) + ' q' + (-s * .12) + ' ' + (-s * .2) + ' ' + (-s * .3) + ' ' + (-s * .42) + '"/>'
-       + '<path d="M' + x + ' ' + (base - s * .38) + ' q' + (s * .13) + ' ' + (-s * .2) + ' ' + (s * .32) + ' ' + (-s * .36) + '"/>'
-       + '</g>';
-}
-function aqRock(x, base, s){
-  return '<path d="M' + (x - s) + ' ' + base + ' q' + (s * .18) + ' ' + (-s * .62) + ' ' + (s * .62) + ' ' + (-s * .66)
-       + ' q' + (s * .5) + ' ' + (-s * .04) + ' ' + (s * .68) + ' ' + (s * .5)
-       + ' q' + (s * .12) + ' ' + (s * .12) + ' ' + (s * .7) + ' ' + (s * .16) + ' Z" fill="' + AQP.rock + '"/>'
-       + '<path d="M' + (x - s * .5) + ' ' + (base - s * .3) + ' q' + (s * .3) + ' ' + (-s * .2) + ' ' + (s * .6) + ' ' + (s * .05) + '" '
-       + 'stroke="' + AQP.rockD + '" stroke-width="' + (s * .12) + '" fill="none" stroke-linecap="round" opacity=".5"/>';
-}
-function aqBubbles(x, y, n, s){
-  var g = '<g fill="#ffffff" opacity=".5">', i;
-  for (i = 0; i < n; i++) {
-    g += '<circle cx="' + (x + (i % 2 ? s * 1.1 : -s * .5)) + '" cy="' + (y - i * s * 2.1) + '" r="' + (s * (i % 3 ? .5 : .74)) + '"/>';
-  }
-  return g + '</g>';
-}
-
-/* --- 1. Bocal --------------------------------------------------------- */
-function tkBowl(){
-  return '<svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg">' + aqDefs('b')
-  + '<ellipse cx="100" cy="153" rx="30" ry="6" fill="' + AQP.navy + '" opacity=".13"/>'
-  + '<path d="M78 138 h44 l-4 14 h-36z" fill="' + AQP.deep + '"/>'
-  + '<circle cx="100" cy="88" r="56" fill="#eaf7fd"/>'
-  + '<clipPath id="cb"><circle cx="100" cy="88" r="56"/></clipPath>'
-  + '<g clip-path="url(#cb)">'
-  +   '<path d="M40 58 q30 -7 60 0 t60 0 v92 h-120z" fill="url(#wb)"/>'
-  +   '<path d="M40 58 q30 -7 60 0 t60 0" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="2"/>'
-  +   '<path d="M44 126 q56 -20 112 0 v26 h-112z" fill="url(#sb)"/>'
-  +   aqPlant(78, 128, 34, AQP.green, 5) + aqPlant(120, 128, 26, AQP.greenD, 4)
-  +   aqCoralLump(100, 130, 20, AQP.coral, AQP.magenta)
-  +   aqBubbles(140, 110, 3, 3)
-  + '</g>'
-  + '<circle cx="100" cy="88" r="56" fill="url(#gb)"/>'
-  + '<circle cx="100" cy="88" r="56" fill="none" stroke="#ffffff" stroke-opacity=".55" stroke-width="2.5"/>'
-  + '<path d="M66 62 q10 -18 30 -22" stroke="#fff" stroke-opacity=".7" stroke-width="5" fill="none" stroke-linecap="round"/>'
-  + '</svg>';
-}
-
-/* --- bac rectangulaire générique (sert aux paliers 2 à 7) ------------- */
-function tkBox(o){
-  var x = o.x, y = o.y, w = o.w, h = o.h, id = o.id, r = o.r || 10;
-  var s = '<svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg">' + aqDefs(id)
-  + '<ellipse cx="100" cy="' + (y + h + (o.stand ? 20 : 12)) + '" rx="' + (w * .46) + '" ry="5" fill="' + AQP.navy + '" opacity=".12"/>';
-  /* socle */
-  s += '<rect x="' + (x - 5) + '" y="' + (y + h - 2) + '" width="' + (w + 10) + '" height="12" rx="4" fill="' + AQP.deep + '"/>';
-  if (o.stand) s += '<rect x="' + (x + 6) + '" y="' + (y + h + 10) + '" width="' + (w - 12) + '" height="7" rx="3" fill="' + AQP.navy + '"/>';
-  /* eau */
-  s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + r + '" fill="url(#w' + id + ')"/>';
-  s += '<clipPath id="c' + id + '"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + r + '"/></clipPath>';
-  s += '<g clip-path="url(#c' + id + ')">' + o.scene + '</g>';
-  /* verre + rebord */
-  s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + r + '" fill="url(#g' + id + ')"/>';
-  s += '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + r + '" fill="none" stroke="#ffffff" stroke-opacity=".6" stroke-width="2.5"/>';
-  /* capot éclairé sur les grands modèles */
-  if (o.hood) {
-    s += '<rect x="' + (x - 5) + '" y="' + (y - 11) + '" width="' + (w + 10) + '" height="13" rx="5" fill="' + AQP.deep + '"/>';
-    s += '<rect x="' + (x + 8) + '" y="' + (y - 4) + '" width="' + (w - 16) + '" height="3" rx="1.5" fill="' + AQP.sun + '" opacity=".9"/>';
-  }
-  /* reflet */
-  s += '<path d="M' + (x + 12) + ' ' + (y + h - 14) + ' L' + (x + 30) + ' ' + (y + 10) + ' h9 L' + (x + 21) + ' ' + (y + h - 14) + 'z" fill="#fff" opacity=".18"/>';
-  return s + '</svg>';
-}
-
-function tkMini(){
-  return tkBox({ id:'m', x:56, y:44, w:88, h:78, stand:true, scene:
-      '<path d="M50 104 q50 -16 104 0 v24 h-104z" fill="url(#sm)"/>'
-    + aqPlant(74, 106, 30, AQP.green, 5)
-    + aqCoralLump(118, 108, 18, AQP.purple, AQP.magenta)
-    + aqBubbles(132, 92, 3, 2.6) });
-}
-function tkBasic(){
-  return tkBox({ id:'k', x:42, y:36, w:116, h:92, stand:true, scene:
-      '<path d="M36 108 q64 -18 130 0 v28 h-130z" fill="url(#sk)"/>'
-    + aqRock(70, 110, 16)
-    + aqPlant(96, 112, 40, AQP.green, 5.5) + aqPlant(108, 112, 30, AQP.greenD, 4.5)
-    + aqCoralLump(130, 112, 20, AQP.coral, AQP.sun)
-    + aqBubbles(56, 96, 3, 2.8) });
-}
-function tkReef(){
-  return tkBox({ id:'r', x:34, y:32, w:132, h:98, stand:true, scene:
-      '<path d="M28 110 q72 -20 146 0 v30 h-146z" fill="url(#sr)"/>'
-    + aqRock(60, 112, 15)
-    + aqCoralFan(52, 112, 40, AQP.purple)
-    + aqPlant(86, 114, 42, AQP.green, 5.5)
-    + aqCoralLump(112, 114, 24, AQP.coral, AQP.magenta)
-    + aqCoralLump(142, 112, 18, AQP.sun, AQP.amber)
-    + aqBubbles(126, 96, 4, 2.8) });
-}
-function tkBigReef(){
-  return tkBox({ id:'g', x:26, y:28, w:148, h:104, stand:true, scene:
-      '<path d="M20 112 q80 -22 162 0 v32 h-162z" fill="url(#sg)"/>'
-    + aqRock(56, 116, 20) + aqRock(146, 114, 16)
-    + aqCoralFan(40, 116, 46, AQP.purple)
-    + aqPlant(78, 118, 50, AQP.green, 6) + aqPlant(90, 118, 38, AQP.greenD, 4.5)
-    + aqCoralLump(112, 118, 26, AQP.coral, AQP.magenta)
-    + aqCoralLump(136, 116, 20, AQP.sun, AQP.amber)
-    + aqBubbles(160, 100, 4, 3) });
-}
-function tkPremium(){
-  return tkBox({ id:'p', x:24, y:26, w:152, h:110, r:14, stand:true, hood:true, scene:
-      '<path d="M18 116 q82 -24 166 0 v34 h-166z" fill="url(#sp)"/>'
-    + aqRock(52, 120, 22) + aqRock(150, 118, 18)
-    + aqCoralFan(36, 120, 50, AQP.purple) + aqCoralFan(166, 118, 40, AQP.magenta)
-    + aqPlant(76, 122, 56, AQP.green, 6) + aqPlant(88, 122, 42, AQP.greenD, 5)
-    + aqCoralLump(112, 122, 28, AQP.coral, AQP.sun)
-    + aqCoralLump(134, 120, 22, AQP.magenta, AQP.purple)
-    + aqBubbles(62, 104, 4, 3) });
-}
-function tkPano(){
-  return tkBox({ id:'n', x:14, y:34, w:172, h:98, r:14, stand:true, hood:true, scene:
-      '<path d="M8 112 q92 -24 186 0 v32 h-186z" fill="url(#sn)"/>'
-    + aqRock(44, 116, 20) + aqRock(160, 116, 22)
-    + aqCoralFan(28, 116, 44, AQP.purple) + aqCoralFan(178, 116, 38, AQP.magenta)
-    + aqPlant(70, 118, 52, AQP.green, 6) + aqPlant(82, 118, 40, AQP.greenD, 5)
-    + aqCoralLump(104, 118, 26, AQP.coral, AQP.sun)
-    + aqCoralLump(130, 118, 24, AQP.sun, AQP.amber)
-    + aqCoralLump(150, 116, 18, AQP.magenta, AQP.purple)
-    + aqBubbles(96, 100, 4, 3) });
-}
-
-/* --- 8. Dôme océanique ------------------------------------------------ */
-function tkDome(){
-  return '<svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg">' + aqDefs('d')
-  + '<ellipse cx="100" cy="143" rx="58" ry="6" fill="' + AQP.navy + '" opacity=".12"/>'
-  + '<path d="M22 118 a78 74 0 0 1 156 0 z" fill="url(#wd)"/>'
-  + '<clipPath id="cd"><path d="M22 118 a78 74 0 0 1 156 0 z"/></clipPath>'
-  + '<g clip-path="url(#cd)">'
-  +   '<path d="M16 104 q84 -22 170 0 v24 h-170z" fill="url(#sd)"/>'
-  +   aqRock(48, 108, 20) + aqRock(154, 108, 18)
-  +   aqCoralFan(32, 108, 46, AQP.purple) + aqCoralFan(172, 108, 38, AQP.magenta)
-  +   aqPlant(72, 110, 52, AQP.green, 6) + aqPlant(84, 110, 40, AQP.greenD, 5)
-  +   aqCoralLump(106, 110, 28, AQP.coral, AQP.sun)
-  +   aqCoralLump(132, 110, 22, AQP.sun, AQP.amber)
-  +   aqBubbles(60, 92, 5, 3.2) + aqBubbles(140, 86, 4, 2.8)
-  + '</g>'
-  + '<path d="M22 118 a78 74 0 0 1 156 0 z" fill="url(#gd${_i})"/>'
-  + '<path d="M22 118 a78 74 0 0 1 156 0" fill="none" stroke="#ffffff" stroke-opacity=".6" stroke-width="3"/>'
-  + '<path d="M52 70 q16 -26 44 -32" stroke="#fff" stroke-opacity=".65" stroke-width="6" fill="none" stroke-linecap="round"/>'
-  + '<rect x="16" y="116" width="168" height="14" rx="6" fill="' + AQP.deep + '"/>'
-  + '<rect x="34" y="130" width="132" height="9" rx="4" fill="' + AQP.navy + '"/>'
-  + '</svg>';
-}
-
-var AQ_TANK_ART = { bowl:tkBowl, mini:tkMini, basic:tkBasic, reef:tkReef,
-                    bigreef:tkBigReef, premium:tkPremium, panoramic:tkPano, dome:tkDome };
-
-/* ===== Ocean Buddy - créatures 2D =====
-   Toutes regardent vers la DROITE. Construction commune :
-   corps en dégradé 2 tons + ventre clair + œil unique avec reflet. */
-
-function cvEye(x, y, r, dark){
-  return '<circle cx="' + x + '" cy="' + y + '" r="' + r + '" fill="#ffffff"/>'
-       + '<circle cx="' + (x + r * .16) + '" cy="' + y + '" r="' + (r * .58) + '" fill="' + (dark || '#12212c') + '"/>'
-       + '<circle cx="' + (x + r * .42) + '" cy="' + (y - r * .38) + '" r="' + (r * .24) + '" fill="#ffffff"/>';
-}
-function cvGrad(id, c1, c2){
-  return '<linearGradient id="' + id + '" x1="0" y1="0" x2="0" y2="1">'
-       + '<stop offset="0%" stop-color="' + c1 + '"/><stop offset="100%" stop-color="' + c2 + '"/></linearGradient>';
-}
-function cvSvg(vb, defs, body){
-  return '<svg viewBox="' + vb + '" xmlns="http://www.w3.org/2000/svg">'
-       + (defs ? '<defs>' + defs + '</defs>' : '') + body + '</svg>';
-}
-
-/* --- communes -------------------------------------------------------- */
-function cvClown(){
-  return cvSvg('0 0 100 66', cvGrad('cl', '#ff9d52', '#f2762c'),
-    '<path d="M18 33 L2 17 q5 16 0 32z" fill="#f2762c"/>'
-  + '<path d="M18 33 Q34 8 60 11 Q84 12 92 33 Q84 54 60 55 Q34 58 18 33z" fill="url(#cl)"/>'
-  + '<path d="M30 46 Q54 56 84 44 Q64 54 34 50z" fill="#ffb87e" opacity=".55"/>'
-  + '<path d="M36 13 Q31 33 36 53 L46 51 Q41 33 46 15z" fill="#fff"/>'
-  + '<path d="M62 11 Q68 33 62 54 L70 52 Q65 33 70 13z" fill="#fff"/>'
-  + '<path d="M44 12 q4 -9 12 -5 q-3 5 -3 8z" fill="#f2762c"/>'
-  + '<path d="M46 55 q5 8 13 5 q-4 -5 -4 -8z" fill="#f2762c"/>'
-  + cvEye(80, 28, 6.4));
-}
-function cvTang(){
-  return cvSvg('0 0 100 66', cvGrad('tg', '#3f95e6', '#1b5fbf'),
-    '<path d="M14 33 L1 20 q4 13 0 26z" fill="#ffce54"/>'
-  + '<path d="M14 33 Q30 9 58 11 Q84 13 93 33 Q84 53 58 55 Q30 57 14 33z" fill="url(#tg)"/>'
-  + '<path d="M26 40 Q52 54 86 42 Q60 52 30 46z" fill="#6fb6f2" opacity=".5"/>'
-  + '<path d="M30 18 Q48 30 60 50 L52 52 Q40 32 24 24z" fill="#123a6b" opacity=".5"/>'
-  + '<path d="M44 12 q8 -8 16 -3 q-6 4 -7 7z" fill="#1b5fbf"/>'
-  + '<path d="M46 55 q7 7 15 3 q-6 -4 -7 -7z" fill="#1b5fbf"/>'
-  + cvEye(80, 27, 6.6));
-}
-function cvYellow(){
-  function one(x, y, s){
-    return '<g transform="translate(' + x + ' ' + y + ') scale(' + s + ')">'
-    + '<path d="M8 14 L0 6 q3 8 0 16z" fill="#eda520"/>'
-    + '<path d="M8 14 Q18 3 32 5 Q44 8 46 14 Q44 21 32 24 Q18 26 8 14z" fill="#ffce54"/>'
-    + '<path d="M14 19 Q28 25 43 17 Q30 23 17 21z" fill="#ffe49a" opacity=".7"/>'
-    + cvEye(38, 12, 3.1) + '</g>';
-  }
-  return cvSvg('0 0 100 66', '', one(2, 8, .92) + one(36, 28, 1.05) + one(54, 3, .8) + one(20, 42, .74));
-}
-function cvSeahorse(){
-  return cvSvg('0 0 64 100', cvGrad('sh', '#ffd166', '#e0951f'),
-    /* corps : tube épais suivant une courbe en S, queue enroulée */
-    '<path d="M38 26 C40 40 30 46 26 56 C22 66 28 72 32 76 C37 81 32 88 25 86 C18 84 18 76 24 74" '
-  + 'stroke="url(#sh)" stroke-width="15" fill="none" stroke-linecap="round"/>'
-  + '<path d="M34 30 C36 42 27 48 24 57" stroke="#ffe3a3" stroke-width="5" fill="none" '
-  + 'stroke-linecap="round" opacity=".6"/>'
-    /* nageoire dorsale */
-  + '<path d="M43 34 q11 4 9 14 q-7 -7 -12 -5z" fill="#f0aa32"/>'
-    /* tête + museau tourné vers la droite */
-  + '<circle cx="38" cy="24" r="12" fill="url(#sh)"/>'
-  + '<path d="M46 20 q14 1 15 7 q-1 6 -15 5 q-4 -6 0 -12z" fill="#ffd166"/>'
-  + '<path d="M47 22 q11 1 12 5 q-11 -2 -12 -5z" fill="#ffe3a3" opacity=".7"/>'
-    /* crête */
-  + '<g fill="#f0aa32"><path d="M32 12 q4 -9 10 -7 q-5 4 -5 9z"/><path d="M25 18 q-6 -6 -3 -11 q1 6 6 8z"/></g>'
-  + '<g fill="#f0aa32" opacity=".55"><circle cx="27" cy="44" r="2"/><circle cx="24" cy="56" r="1.9"/><circle cx="29" cy="68" r="1.8"/></g>'
-  + cvEye(40, 22, 5.2));
-}
-function cvCrab(){
-  return cvSvg('0 0 100 72', cvGrad('cb', '#ff8062', '#e34f34'),
-    '<g stroke="#e34f34" stroke-width="6" stroke-linecap="round" fill="none">'
-  +   '<path d="M26 50 L12 60M28 56 L18 68M74 50 L88 60M72 56 L82 68"/></g>'
-  + '<path d="M24 34 Q8 22 14 10 Q22 20 32 26z" fill="#ff8062"/>'
-  + '<path d="M76 34 Q92 22 86 10 Q78 20 68 26z" fill="#ff8062"/>'
-  + '<ellipse cx="50" cy="44" rx="30" ry="21" fill="url(#cb)"/>'
-  + '<path d="M24 48 q26 16 52 0 q-24 22 -52 0z" fill="#ffa88f" opacity=".45"/>'
-  + cvEye(38, 36, 7.4) + cvEye(62, 36, 7.4)
-  + '<path d="M40 56 q10 7 20 0" stroke="#c8412a" stroke-width="3" fill="none" stroke-linecap="round"/>');
-}
-/* --- peu communes ---------------------------------------------------- */
-function cvAngel(){
-  return cvSvg('0 0 100 74', cvGrad('an', '#3b54b0', '#22307a'),
-    '<path d="M16 37 L2 24 q4 13 0 26z" fill="#ffce54"/>'
-  + '<path d="M16 37 Q28 6 56 8 Q84 12 92 37 Q84 62 56 66 Q28 68 16 37z" fill="url(#an)"/>'
-  + '<g fill="#ffce54"><path d="M28 15 L23 59 l9 3 L37 16z"/><path d="M44 10 L39 64 l9 1 L53 11z"/><path d="M60 10 L56 63 l9 -2 L69 13z"/></g>'
-  + '<path d="M50 9 q10 -10 20 -2 q-9 3 -11 8z" fill="#22307a"/>'
-  + '<path d="M50 65 q10 9 20 2 q-9 -3 -11 -8z" fill="#22307a"/>'
-  + cvEye(80, 31, 6.4));
-}
-function cvTurtle(){
-  return cvSvg('0 0 100 72', cvGrad('tu', '#4fc07a', '#2b8f57'),
-    '<g fill="#5cc98a"><ellipse cx="26" cy="20" rx="10" ry="6" transform="rotate(-28 26 20)"/>'
-  +   '<ellipse cx="26" cy="54" rx="10" ry="6" transform="rotate(28 26 54)"/>'
-  +   '<ellipse cx="66" cy="58" rx="9" ry="5.5" transform="rotate(18 66 58)"/></g>'
-  + '<ellipse cx="82" cy="32" rx="13" ry="12" fill="#5cc98a"/>'
-  + '<ellipse cx="48" cy="38" rx="32" ry="25" fill="url(#tu)"/>'
-  + '<path d="M20 30 q28 -16 56 0 q-28 15 -56 0z" fill="#7ddba0" opacity=".7"/>'
-  + '<g fill="none" stroke="#1f7346" stroke-width="2.2" opacity=".45">'
-  +   '<path d="M34 20 v36M50 16 v44M66 20 v36"/><path d="M18 38 h60"/></g>'
-  + cvEye(88, 28, 5.4)
-  + '<path d="M86 40 q6 3 10 0" stroke="#1f7346" stroke-width="2.4" fill="none" stroke-linecap="round"/>');
-}
-function cvPuffer(){
-  return cvSvg('0 0 100 92', cvGrad('pu', '#f8d693', '#e0a94f'),
-    '<g stroke="#e0a94f" stroke-width="5" stroke-linecap="round">'
-  +   '<path d="M50 12 V2M84 46 h10M50 80 v10M16 46 H6M74 22 l7 -7M74 70 l7 7M26 22 l-7 -7M26 70 l-7 7"/></g>'
-  + '<path d="M14 46 L2 34 q4 12 0 24z" fill="#e0a94f"/>'
-  + '<circle cx="52" cy="46" r="34" fill="url(#pu)"/>'
-  + '<path d="M22 56 q30 22 60 0 q-28 30 -60 0z" fill="#ffe9bf" opacity=".55"/>'
-  + '<g fill="#e0a94f" opacity=".55"><circle cx="40" cy="28" r="2.4"/><circle cx="62" cy="26" r="2.2"/><circle cx="72" cy="42" r="2.4"/><circle cx="34" cy="44" r="2"/></g>'
-  + cvEye(40, 42, 8.2) + cvEye(66, 42, 8.2)
-  + '<path d="M46 62 q7 6 14 0" stroke="#b9822f" stroke-width="3" fill="none" stroke-linecap="round"/>');
-}
-/* --- rares ----------------------------------------------------------- */
-function cvSeadragon(){
-  return cvSvg('0 0 78 100', cvGrad('sd', '#ffc24d', '#e0851f'),
-    /* appendices feuillus derrière le corps */
-    '<g fill="#63bf7d">'
-  +   '<path d="M30 30 q-16 -10 -24 -1 q11 1 18 9z"/>'
-  +   '<path d="M24 52 q-18 -1 -19 11 q10 -8 20 -3z"/>'
-  +   '<path d="M34 74 q-14 8 -9 19 q2 -11 13 -13z"/>'
-  +   '<path d="M52 22 q2 -16 -9 -19 q5 9 3 19z"/>'
-  +   '<path d="M56 48 q14 -4 18 6 q-11 -3 -18 2z"/></g>'
-  + '<path d="M44 26 C46 40 36 46 32 56 C28 66 34 72 38 76 C43 81 38 88 31 86 C24 84 24 76 30 74" '
-  + 'stroke="url(#sd)" stroke-width="15" fill="none" stroke-linecap="round"/>'
-  + '<path d="M40 30 C42 42 33 48 30 57" stroke="#ffdf9e" stroke-width="5" fill="none" '
-  + 'stroke-linecap="round" opacity=".55"/>'
-  + '<circle cx="44" cy="24" r="12" fill="url(#sd)"/>'
-  + '<path d="M52 20 q15 1 16 7 q-1 6 -16 5 q-4 -6 0 -12z" fill="#ffc24d"/>'
-  + '<g fill="#63bf7d"><path d="M38 12 q4 -10 11 -8 q-6 4 -6 10z"/><path d="M58 30 q12 3 11 12 q-6 -8 -12 -6z"/></g>'
-  + cvEye(46, 22, 5.2));
-}
-function cvManta(){
-  return cvSvg('0 0 100 70', cvGrad('mt', '#5f7fd0', '#2f4487'),
-    '<path d="M50 10 C28 10 6 34 12 44 C24 38 34 42 42 50 C46 38 50 37 50 37 C50 37 54 38 58 50 C66 42 76 38 88 44 C94 34 72 10 50 10z" fill="url(#mt)"/>'
-  + '<path d="M50 37 q2 16 -1 24" stroke="#2f4487" stroke-width="4" fill="none" stroke-linecap="round"/>'
-  + '<g stroke="#2f4487" stroke-width="5" stroke-linecap="round" fill="none">'
-  +   '<path d="M40 15 q-4 -8 -10 -10"/><path d="M60 15 q4 -8 10 -10"/></g>'
-  + '<path d="M22 38 q28 -18 56 0 q-28 -8 -56 0z" fill="#8ba4e2" opacity=".45"/>'
-  + '<g fill="#c9d6f7" opacity=".7"><circle cx="36" cy="26" r="2.6"/><circle cx="64" cy="26" r="2.6"/><circle cx="50" cy="20" r="2.2"/></g>'
-  + cvEye(40, 30, 4.6) + cvEye(60, 30, 4.6));
-}
-function cvJelly(){
-  return cvSvg('0 0 72 100',
-    '<radialGradient id="jl" cx="45%" cy="30%" r="70%"><stop offset="0%" stop-color="#ffc2ef"/>'
-  + '<stop offset="60%" stop-color="#e07ac9"/><stop offset="100%" stop-color="#b455ac"/></radialGradient>',
-    '<path d="M6 42 a30 30 0 0 1 60 0 q0 8 -7 10 l-46 0 q-7 -2 -7 -10z" fill="url(#jl)"/>'
-  + '<ellipse cx="24" cy="30" rx="9" ry="11" fill="#ffffff" opacity=".38"/>'
-  + '<g stroke="#d munkey" stroke-width="0" fill="none"></g>'
-  + '<g stroke="#d472bd" stroke-width="4.6" fill="none" stroke-linecap="round" opacity=".9">'
-  +   '<path d="M18 54 q-4 22 1 40"/><path d="M30 55 q-2 24 1 41"/><path d="M42 55 q2 24 -1 41"/><path d="M54 54 q4 22 -1 40"/></g>'
-  + '<g fill="#ffd6f2" opacity=".8"><circle cx="26" cy="46" r="3"/><circle cx="36" cy="48" r="3"/><circle cx="46" cy="46" r="3"/></g>');
-}
-function cvOctopus(){
-  return cvSvg('0 0 100 92',
-    '<radialGradient id="oc" cx="42%" cy="28%" r="78%"><stop offset="0%" stop-color="#c9f0ff"/>'
-  + '<stop offset="55%" stop-color="#8fd3f4"/><stop offset="100%" stop-color="#5aa6d8"/></radialGradient>',
-    '<g fill="#8fd3f4">'
-  +   '<path d="M24 56 q-10 16 -4 26 q6 6 10 -2 q-4 -12 4 -20z"/>'
-  +   '<path d="M38 62 q-6 18 0 26 q6 5 8 -3 q-5 -11 0 -21z"/>'
-  +   '<path d="M62 62 q6 18 0 26 q-6 5 -8 -3 q5 -11 0 -21z"/>'
-  +   '<path d="M76 56 q10 16 4 26 q-6 6 -10 -2 q4 -12 -4 -20z"/></g>'
-  + '<path d="M50 8 q30 0 30 30 q0 26 -30 26 q-30 0 -30 -26 q0 -30 30 -30z" fill="url(#oc)"/>'
-  + '<ellipse cx="38" cy="24" rx="11" ry="7" fill="#ffffff" opacity=".45" transform="rotate(-18 38 24)"/>'
-  + '<g fill="#6fbde4" opacity=".5"><circle cx="34" cy="16" r="3"/><circle cx="50" cy="12" r="2.6"/><circle cx="66" cy="18" r="3"/></g>'
-  + cvEye(38, 36, 8) + cvEye(64, 36, 8)
-  + '<path d="M44 50 q6 5 12 0" stroke="#4a94c4" stroke-width="3" fill="none" stroke-linecap="round"/>');
-}
-function cvReefShark(){
-  return cvSvg('0 0 110 62', cvGrad('rs', '#9fb6c6', '#5f7d92'),
-    '<path d="M16 32 L2 18 q5 14 0 28z" fill="#5f7d92"/>'
-  + '<path d="M16 32 Q34 14 62 16 Q88 18 104 32 Q88 46 62 48 Q34 50 16 32z" fill="url(#rs)"/>'
-  + '<path d="M46 12 L58 -2 L64 16z" fill="#5f7d92"/>'
-  + '<path d="M52 46 q6 10 14 12 q-6 -9 -6 -13z" fill="#5f7d92"/>'
-  + '<path d="M24 38 Q56 52 98 36 Q60 46 28 42z" fill="#dbe6ee" opacity=".75"/>'
-  + '<g stroke="#4e6b7f" stroke-width="1.6" opacity=".5"><path d="M74 26 h5M72 31 h6M74 36 h5"/></g>'
-  + '<path d="M92 36 q7 2 11 -1" stroke="#4e6b7f" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
-  + cvEye(90, 27, 4.8));
-}
-/* --- épiques --------------------------------------------------------- */
-function cvHammerhead(){
-  return cvSvg('0 0 116 70', cvGrad('hh', '#b3c8d6', '#66809a'),
-    '<path d="M10 35 L0 21 q4 14 0 28z" fill="#66809a"/>'
-    /* corps */
-  + '<path d="M10 35 Q28 19 52 21 Q74 24 88 35 Q74 46 52 49 Q28 51 10 35z" fill="url(#hh)"/>'
-  + '<path d="M38 19 L48 4 L54 22z" fill="#66809a"/>'
-  + '<path d="M44 48 q6 10 13 12 q-6 -9 -6 -13z" fill="#66809a"/>'
-  + '<path d="M18 41 Q48 53 84 38 Q52 48 22 45z" fill="#e2ecf2" opacity=".8"/>'
-    /* tête en T, vue de profil : un lobe en haut, un en bas */
-  + '<path d="M84 20 q10 -6 16 0 q5 4 5 15 q0 11 -5 15 q-6 6 -16 0 q-7 -6 -7 -15 q0 -9 7 -15z" fill="#a4bccb"/>'
-  + '<path d="M86 22 q9 -5 14 0 q4 3 4 8 q-11 -5 -20 -3z" fill="#cfdde6" opacity=".65"/>'
-    /* museau qui dépasse entre les deux lobes */
-  + '<path d="M103 30 q9 2 9 5 q0 3 -9 5z" fill="#93aec0"/>'
-  + '<path d="M92 47 q9 3 15 -1" stroke="#5f7c93" stroke-width="2.4" fill="none" stroke-linecap="round"/>'
-  + cvEye(92, 21, 4.6) + cvEye(92, 49, 4.6));
-}
-function cvNarwhal(){
-  return cvSvg('0 0 122 66', cvGrad('nw', '#c3e2f7', '#6fa8d8'),
-    '<path d="M16 36 L2 22 q5 14 0 28z" fill="#6fa8d8"/>'
-  + '<path d="M16 36 Q34 14 62 16 Q86 18 94 36 Q86 54 62 56 Q34 58 16 36z" fill="url(#nw)"/>'
-  + '<path d="M24 44 Q56 58 92 42 Q58 52 28 48z" fill="#f0f8ff" opacity=".85"/>'
-  + '<path d="M52 14 L62 4 L66 18z" fill="#6fa8d8"/>'
-    /* défense : longue pointe effilée avec ses spirales */
-  + '<path d="M92 26 L120 10 L121 15 L94 31z" fill="#f7fbfe"/>'
-  + '<g stroke="#c6dcec" stroke-width="1.5" stroke-linecap="round">'
-  +   '<path d="M99 25 l4 -3M105 21 l4 -3M111 18 l4 -3"/></g>'
-  + '<g fill="#ffffff" opacity=".65"><circle cx="44" cy="28" r="2.4"/><circle cx="58" cy="24" r="2"/><circle cx="70" cy="30" r="2.2"/></g>'
-  + cvEye(82, 31, 5)
-  + '<path d="M84 42 q7 3 11 -1" stroke="#5991c4" stroke-width="2.4" fill="none" stroke-linecap="round"/>');
-}
-function cvWhale(){
-  return cvSvg('0 0 124 72', cvGrad('wh', '#5b8fd0', '#2f5b96'),
-    '<path d="M14 38 L0 20 q6 18 0 36z" fill="#2f5b96"/>'
-  + '<path d="M14 38 Q30 14 66 14 Q104 16 116 36 Q108 60 66 62 Q30 62 14 38z" fill="url(#wh)"/>'
-  + '<path d="M22 44 Q60 66 110 44 Q70 58 26 50z" fill="#d5e6f7" opacity=".85"/>'
-  + '<g stroke="#2b5289" stroke-width="2" opacity=".45" fill="none">'
-  +   '<path d="M30 42 q4 6 2 10M40 44 q4 6 2 10M50 46 q4 6 2 10"/></g>'
-  + '<path d="M74 14 q4 -12 10 -14 q-2 9 0 14z" fill="#2f5b96"/>'
-  + '<g fill="#ffffff" opacity=".55"><circle cx="86" cy="26" r="2.6"/><circle cx="98" cy="30" r="2.2"/></g>'
-  + cvEye(102, 34, 5)
-  + '<path d="M104 44 q8 3 12 -2" stroke="#2b5289" stroke-width="2.6" fill="none" stroke-linecap="round"/>');
-}
-/* --- légendaires ----------------------------------------------------- */
-function cvLeviathan(){
-  return cvSvg('0 0 104 100',
-    cvGrad('lv', '#7fe8ee', '#2f7fbd')
-  + '<linearGradient id="lvf" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#c07fe0"/>'
-  + '<stop offset="100%" stop-color="#6a3fa8"/></linearGradient>',
-    /* crête dorsale, posée avant le corps */
-    '<g fill="url(#lvf)">'
-  +   '<path d="M60 16 q10 -10 18 -6 q-9 4 -11 11z"/>'
-  +   '<path d="M74 36 q13 -3 16 6 q-11 -3 -15 2z"/>'
-  +   '<path d="M70 60 q13 4 11 14 q-8 -9 -14 -7z"/>'
-  +   '<path d="M40 82 q-13 6 -9 17 q4 -10 13 -10z"/></g>'
-    /* corps serpentin : un long tube en S */
-  + '<path d="M56 22 C70 34 66 48 52 54 C38 60 34 70 40 78 C45 85 38 92 30 89" '
-  + 'stroke="url(#lv)" stroke-width="17" fill="none" stroke-linecap="round"/>'
-  + '<path d="M54 28 C64 37 60 46 50 51" stroke="#c4f6fa" stroke-width="5.5" fill="none" '
-  + 'stroke-linecap="round" opacity=".5"/>'
-    /* tête */
-  + '<path d="M40 12 q20 -2 24 12 q2 12 -12 14 q-14 1 -17 -10 q-2 -12 5 -16z" fill="url(#lv)"/>'
-  + '<path d="M62 22 q12 2 13 8 q-9 2 -14 -2z" fill="#7fe8ee"/>'
-  + '<g fill="#ffd166"><path d="M44 8 q9 -8 16 -3 q-9 2 -12 7z"/></g>'
-  + '<g fill="#c9f4ff" opacity=".75"><circle cx="48" cy="46" r="2.6"/><circle cx="42" cy="62" r="2.4"/><circle cx="36" cy="76" r="2.2"/></g>'
-  + cvEye(56, 22, 5.4, '#3a1d5c'));
-}
-function cvKraken(){
-  return cvSvg('0 0 110 96',
-    '<radialGradient id="kr" cx="42%" cy="28%" r="80%"><stop offset="0%" stop-color="#f0708f"/>'
-  + '<stop offset="55%" stop-color="#c93f77"/><stop offset="100%" stop-color="#7d2560"/></radialGradient>',
-    '<g fill="#c93f77">'
-  +   '<path d="M22 54 q-16 12 -14 28 q8 10 14 -2 q-6 -14 6 -20z"/>'
-  +   '<path d="M38 62 q-10 20 -2 30 q9 6 10 -6 q-8 -12 0 -22z"/>'
-  +   '<path d="M72 62 q10 20 2 30 q-9 6 -10 -6 q8 -12 0 -22z"/>'
-  +   '<path d="M88 54 q16 12 14 28 q-8 10 -14 -2 q6 -14 -6 -20z"/>'
-  +   '<path d="M54 66 q-4 20 2 28 q6 -8 4 -28z"/></g>'
-  + '<g fill="#e86ba0" opacity=".5"><circle cx="20" cy="72" r="3"/><circle cx="38" cy="80" r="2.8"/><circle cx="72" cy="80" r="2.8"/><circle cx="90" cy="72" r="3"/></g>'
-  + '<path d="M55 6 q34 0 34 32 q0 28 -34 28 q-34 0 -34 -28 q0 -32 34 -32z" fill="url(#kr)"/>'
-  + '<ellipse cx="40" cy="24" rx="12" ry="8" fill="#ffffff" opacity=".28" transform="rotate(-18 40 24)"/>'
-  + '<g fill="#a02f68" opacity=".5"><circle cx="36" cy="14" r="3.2"/><circle cx="55" cy="10" r="2.8"/><circle cx="74" cy="16" r="3.2"/></g>'
-  + '<path d="M34 34 q10 -8 18 0 q-9 -3 -18 0z" fill="#ffd166"/>'
-  + '<path d="M58 34 q10 -8 18 0 q-9 -3 -18 0z" fill="#ffd166"/>'
-  + cvEye(43, 38, 7.6, '#3d0f2e') + cvEye(67, 38, 7.6, '#3d0f2e')
-  + '<path d="M48 52 q7 6 14 0" stroke="#7d2560" stroke-width="3" fill="none" stroke-linecap="round"/>');
-}
-
-var AQ_CREATURE_ART = {
-  clownfish:cvClown, tang:cvTang, yellowschool:cvYellow, seahorse:cvSeahorse, crab:cvCrab,
-  angelfish:cvAngel, turtle:cvTurtle, pufferfish:cvPuffer, seadragon:cvSeadragon, manta:cvManta,
-  jellyfish:cvJelly, octopus:cvOctopus, reefshark:cvReefShark, hammerhead:cvHammerhead,
-  narwhal:cvNarwhal, whale:cvWhale, leviathan:cvLeviathan, kraken:cvKraken
-};
-
-/* ===== Ocean Buddy - décors 2D =====
-   Chacun posé sur une base, viewBox 100x100, lisible à 60 px. */
-
-function dcSand(w){
-  w = w || 74;
-  return '<ellipse cx="50" cy="92" rx="' + (w / 2) + '" ry="7" fill="#f2ddaf"/>'
-       + '<ellipse cx="50" cy="90" rx="' + (w / 2 - 4) + '" ry="5" fill="#fbeecb"/>';
-}
-function dcSvg(body){
-  return '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">' + body + '</svg>';
-}
-
-function dcBrain(){
-  return dcSvg(dcSand(70)
-  + '<path d="M18 88 q-4 -40 32 -42 q36 2 32 42z" fill="#ff8fa3"/>'
-  + '<path d="M26 86 q-2 -30 24 -33 q26 3 24 33z" fill="#ffa8b9" opacity=".55"/>'
-  + '<g stroke="#e2708c" stroke-width="3.2" fill="none" stroke-linecap="round" opacity=".75">'
-  +   '<path d="M32 86 q6 -22 2 -32M46 88 q6 -24 0 -34M62 86 q-6 -22 0 -32M74 84 q-6 -16 -3 -24"/></g>'
-  + '<ellipse cx="38" cy="58" rx="8" ry="5" fill="#ffffff" opacity=".3" transform="rotate(-20 38 58)"/>');
-}
-function dcAnemone(){
-  var g = '', i, a;
-  for (i = 0; i < 11; i++) {
-    a = -160 + i * 14;
-    g += '<path d="M50 78 q' + (Math.cos(a * Math.PI / 180) * 12).toFixed(1) + ' ' + (Math.sin(a * Math.PI / 180) * 12).toFixed(1)
-       + ' ' + (Math.cos(a * Math.PI / 180) * 30).toFixed(1) + ' ' + (Math.sin(a * Math.PI / 180) * 30).toFixed(1) + '" '
-       + 'stroke="' + (i % 2 ? '#ff9d8a' : '#ff7d6e') + '" stroke-width="6" fill="none" stroke-linecap="round"/>';
-  }
-  return dcSvg(dcSand(58) + g
-  + '<ellipse cx="50" cy="82" rx="20" ry="11" fill="#c8527a"/>'
-  + '<ellipse cx="50" cy="79" rx="14" ry="7" fill="#e0688f"/>'
-  + '<g fill="#ffd6cd"><circle cx="38" cy="56" r="3"/><circle cx="50" cy="49" r="3.2"/><circle cx="63" cy="56" r="3"/></g>');
-}
-function dcTube(){
-  function tube(x, y, w, h, c1, c2){
-    return '<path d="M' + (x - w) + ' 88 V' + (y + h) + ' q0 -' + h + ' ' + w + ' -' + h + ' q' + w + ' 0 ' + w + ' ' + h + ' V88z" fill="' + c1 + '"/>'
-         + '<ellipse cx="' + x + '" cy="' + (y + h) + '" rx="' + w + '" ry="' + (w * .42) + '" fill="' + c2 + '"/>'
-         + '<ellipse cx="' + x + '" cy="' + (y + h + 1) + '" rx="' + (w * .55) + '" ry="' + (w * .24) + '" fill="#c97a1d"/>';
-  }
-  return dcSvg(dcSand(72)
-  + tube(32, 44, 11, 8, '#f0a92e', '#ffce54')
-  + tube(68, 50, 10, 7, '#f0a92e', '#ffce54')
-  + tube(50, 32, 13, 9, '#ffb63e', '#ffe08a'));
-}
-function dcStar(){
-  var pts = '', i, a, r;
-  for (i = 0; i < 10; i++) {
-    a = -90 + i * 36; r = i % 2 ? 15 : 36;
-    pts += (50 + Math.cos(a * Math.PI / 180) * r).toFixed(1) + ',' + (56 + Math.sin(a * Math.PI / 180) * r).toFixed(1) + ' ';
-  }
-  return dcSvg(dcSand(60)
-  + '<polygon points="' + pts.trim() + '" fill="#ff8f4d" stroke="#ef7a36" stroke-width="3" stroke-linejoin="round"/>'
-  + '<g fill="#ffd0a8"><circle cx="50" cy="54" r="4"/><circle cx="40" cy="44" r="2.4"/><circle cx="60" cy="44" r="2.4"/>'
-  +   '<circle cx="42" cy="66" r="2.2"/><circle cx="58" cy="66" r="2.2"/></g>');
-}
-function dcFan(){
-  return dcSvg(dcSand(52)
-  + '<g stroke="#b06fd0" stroke-width="6" fill="none" stroke-linecap="round">'
-  +   '<path d="M50 88 V52"/>'
-  +   '<path d="M50 64 q-14 -8 -20 -26M50 64 q14 -8 20 -26"/>'
-  +   '<path d="M50 52 q-11 -7 -14 -20M50 52 q11 -7 14 -20"/>'
-  +   '<path d="M50 74 q-9 -5 -12 -14M50 74 q9 -5 12 -14"/></g>'
-  + '<g stroke="#c98fe0" stroke-width="3" fill="none" stroke-linecap="round" opacity=".7">'
-  +   '<path d="M50 60 q-8 -6 -11 -16M50 60 q8 -6 11 -16"/></g>');
-}
-function dcClam(){
-  return dcSvg(dcSand(70)
-    /* coquille du bas */
-  + '<path d="M14 88 Q16 62 50 58 Q84 62 86 88z" fill="#7fc3dc"/>'
-  + '<g stroke="#5aa3bd" stroke-width="2.6" fill="none" opacity=".8">'
-  +   '<path d="M28 87 Q30 68 50 61M50 87 V61M72 87 Q70 68 50 61"/></g>'
-    /* perle bien détachée */
-  + '<circle cx="50" cy="58" r="11" fill="#ffffff"/>'
-  + '<circle cx="50" cy="58" r="11" fill="none" stroke="#dfeef5" stroke-width="1.6"/>'
-  + '<circle cx="46" cy="54" r="3.6" fill="#f7fdff"/>'
-    /* coquille du haut, ouverte */
-  + '<path d="M14 52 Q18 26 50 22 Q82 26 86 52 Q50 40 14 52z" fill="#a8dcef"/>'
-  + '<g stroke="#7fc3dc" stroke-width="2.4" fill="none" opacity=".85">'
-  +   '<path d="M30 47 Q32 32 50 26M50 44 V25M70 47 Q68 32 50 26"/></g>'
-  + '<path d="M22 40 Q34 28 50 26" stroke="#d6f0fa" stroke-width="3" fill="none" stroke-linecap="round" opacity=".8"/>');
-}
-function dcRock(){
-  return dcSvg(dcSand(76)
-    /* roche volcanique : silhouette anguleuse, pas de trait flottant */
-  + '<path d="M16 88 L30 52 L40 60 L52 34 L64 58 L72 48 L86 88z" fill="#4d5f77"/>'
-  + '<path d="M30 88 L40 58 L50 66 L58 46 L64 62 L70 56 L76 88z" fill="#63788f" opacity=".7"/>'
-  + '<g fill="#2f3d54"><circle cx="42" cy="74" r="4.2"/><circle cx="58" cy="78" r="3.4"/>'
-  +   '<circle cx="50" cy="62" r="2.8"/><circle cx="68" cy="72" r="2.6"/><circle cx="32" cy="80" r="2.4"/></g>'
-  + '<path d="M52 34 L58 46 L48 44z" fill="#8b9db2" opacity=".75"/>');
-}
-function dcWreck(){
-  return dcSvg(dcSand(84)
-  + '<path d="M14 66 q4 22 20 22 h32 q16 0 20 -22 l-8 -3 q-14 8 -28 8 q-14 0 -28 -8z" fill="#7a5a3c"/>'
-  + '<path d="M20 72 q6 12 16 12 h28 q11 0 15 -11 q-15 6 -29 6 q-15 0 -30 -7z" fill="#96744d"/>'
-  + '<path d="M46 66 V26 L74 38 L46 43z" fill="#a8865c"/>'
-  + '<path d="M46 26 V66" stroke="#6b4f34" stroke-width="4" stroke-linecap="round"/>'
-  + '<path d="M32 66 V38" stroke="#6b4f34" stroke-width="3.4" stroke-linecap="round"/>'
-  + '<g fill="#3f5566" opacity=".55"><circle cx="30" cy="76" r="3"/><circle cx="52" cy="78" r="2.6"/><circle cx="68" cy="74" r="2.4"/></g>'
-  + '<path d="M64 84 q8 -14 16 -6" stroke="#3ec98a" stroke-width="4" fill="none" stroke-linecap="round"/>');
-}
-function dcTemple(){
-  return dcSvg(dcSand(84)
-  + '<rect x="18" y="80" width="64" height="8" rx="3" fill="#8fa3b8"/>'
-  + '<g fill="#a7bbcd"><rect x="26" y="40" width="10" height="40" rx="3"/><rect x="45" y="40" width="10" height="40" rx="3"/>'
-  +   '<rect x="64" y="40" width="10" height="40" rx="3"/></g>'
-  + '<g fill="#8fa3b8" opacity=".6"><rect x="26" y="40" width="4" height="40"/><rect x="45" y="40" width="4" height="40"/>'
-  +   '<rect x="64" y="40" width="4" height="40"/></g>'
-  + '<rect x="18" y="32" width="64" height="10" rx="3" fill="#b8cadb"/>'
-  + '<path d="M22 32 L50 18 L78 32z" fill="#a7bbcd"/>'
-  + '<path d="M30 78 q8 -12 14 -4" stroke="#3ec98a" stroke-width="3.4" fill="none" stroke-linecap="round"/>'
-  + '<path d="M68 78 q-7 -10 -12 -4" stroke="#2a9e6d" stroke-width="3" fill="none" stroke-linecap="round"/>');
-}
-function dcPlants(){
-  function blade(x, h, w, c){
-    return '<path d="M' + x + ' 88 C' + (x - w) + ' ' + (88 - h * .45) + ' ' + (x + w * .6) + ' ' + (88 - h * .7) + ' ' + (x + w * .3) + ' ' + (88 - h)
-         + ' C' + (x + w * 1.4) + ' ' + (88 - h * .66) + ' ' + (x + w * 1.2) + ' ' + (88 - h * .4) + ' ' + x + ' 88z" fill="' + c + '"/>';
-  }
-  return dcSvg(dcSand(64)
-  + blade(34, 54, 9, '#2a9e6d') + blade(66, 48, 8, '#2a9e6d')
-  + blade(42, 66, 10, '#3ec98a') + blade(58, 60, 9, '#4fd89a')
-  + blade(50, 74, 11, '#45c98d')
-  + '<path d="M50 78 q4 -22 2 -40" stroke="#ffffff" stroke-opacity=".3" stroke-width="3" fill="none" stroke-linecap="round"/>');
-}
-function dcLight(){
-  return dcSvg(
-    '<defs><radialGradient id="lg" cx="50%" cy="45%" r="55%">'
-  + '<stop offset="0%" stop-color="#bff4ff" stop-opacity=".85"/><stop offset="100%" stop-color="#bff4ff" stop-opacity="0"/>'
-  + '</radialGradient>'
-  + '<linearGradient id="cr" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#d8f6ff"/>'
-  + '<stop offset="100%" stop-color="#4bb8e0"/></linearGradient></defs>'
-  + '<circle cx="50" cy="52" r="44" fill="url(#lg)"/>'
-  + dcSand(60)
-  + '<path d="M50 16 L64 60 L50 84 L36 60z" fill="url(#cr)"/>'
-  + '<path d="M50 16 L50 84 L36 60z" fill="#8fd9f2" opacity=".75"/>'
-  + '<path d="M32 46 L40 70 L30 82 L24 66z" fill="#9b6bd1" opacity=".9"/>'
-  + '<path d="M68 50 L74 70 L66 82 L61 66z" fill="#b98fe0" opacity=".9"/>'
-  + '<g fill="#ffffff" opacity=".8"><circle cx="46" cy="34" r="2.6"/><circle cx="56" cy="46" r="2"/></g>');
-}
-function dcBubble(){
-  return dcSvg(
-    '<defs><radialGradient id="bb" cx="36%" cy="30%" r="70%">'
-  + '<stop offset="0%" stop-color="#ffffff" stop-opacity=".9"/><stop offset="55%" stop-color="#cfe9ff" stop-opacity=".5"/>'
-  + '<stop offset="100%" stop-color="#9b6bd1" stop-opacity=".45"/></radialGradient></defs>'
-  + dcSand(58)
-  + '<ellipse cx="50" cy="84" rx="22" ry="8" fill="#c8a2e8"/>'
-  + '<ellipse cx="50" cy="82" rx="16" ry="5" fill="#dcc0f2"/>'
-  + '<circle cx="50" cy="52" r="26" fill="url(#bb)" stroke="#ffffff" stroke-opacity=".6" stroke-width="2"/>'
-  + '<circle cx="42" cy="44" r="7" fill="#ffffff" opacity=".55"/>'
-  + '<circle cx="74" cy="34" r="9" fill="url(#bb)" stroke="#ffffff" stroke-opacity=".5" stroke-width="1.6"/>'
-  + '<circle cx="27" cy="30" r="6.5" fill="url(#bb)" stroke="#ffffff" stroke-opacity=".5" stroke-width="1.4"/>'
-  + '<circle cx="64" cy="18" r="4.5" fill="url(#bb)" stroke="#ffffff" stroke-opacity=".45" stroke-width="1.2"/>');
-}
-
-var AQ_DECOR_ART = {
-  braincoral:dcBrain, anemone:dcAnemone, tubecoral:dcTube, starfish:dcStar, seafan:dcFan,
-  clam:dcClam, volcanicrock:dcRock, wreck:dcWreck, temple:dcTemple, giantplants:dcPlants,
-  lightsource:dcLight, magicbubble:dcBubble
-};
-
-/* les dessins vectoriels deviennent des data-URI SVG : AQIMG garde la même
-   forme qu'avant, donc le reste de l'aquarium est inchangé */
-var AQIMG = (function(){
-  var out = {}, k, all = {};
-  for (k in AQ_TANK_ART) all[k] = AQ_TANK_ART[k];
-  for (k in AQ_CREATURE_ART) all[k] = AQ_CREATURE_ART[k];
-  for (k in AQ_DECOR_ART) all[k] = AQ_DECOR_ART[k];
-  for (k in all) {
-    try { out[k] = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(all[k]()); }
-    catch (e) { out[k] = ''; }
-  }
-  return out;
-})();
-
-var AQ_RARITY={commune:{l:'Commune',c:'#eef5f9'},peucommune:{l:'Peu commune',c:'#3ec98a'},rare:{l:'Rare',c:'#36b5d8'},epique:{l:'Épique',c:'#d768c9'},legendaire:{l:'Légendaire',c:'#ffce54'}};
-var AQ_LEVEL_XP=[0,60,150,280,500,800,1150,1550,2000,2500,3050,3650,4300,5000,5750];
-function aqLevel(){var l=1;for(var i=0;i<AQ_LEVEL_XP.length;i++){if(xp>=AQ_LEVEL_XP[i])l=i+1;}return l;}
-var AQ_CREATURES=[{"id":"clownfish","name":"Poisson-clown","rarity":"commune","xp":0,"dir":"r","w":15},{"id":"tang","name":"Poisson chirurgien","rarity":"commune","xp":120,"dir":"r","w":16},{"id":"yellowschool","name":"Banc de poissons jaunes","rarity":"commune","xp":260,"dir":"r","w":22},{"id":"seahorse","name":"Hippocampe doré","rarity":"commune","xp":420,"dir":"bob","w":11},{"id":"crab","name":"Crabe corail","rarity":"commune","xp":600,"dir":"floor","w":15},{"id":"angelfish","name":"Poisson ange impérial","rarity":"peucommune","xp":800,"dir":"r","w":16},{"id":"turtle","name":"Tortue marine","rarity":"peucommune","xp":1020,"dir":"r","w":20},{"id":"pufferfish","name":"Poisson-globe","rarity":"peucommune","xp":1260,"dir":"bob","w":15},{"id":"seadragon","name":"Dragon de mer feuillu","rarity":"rare","xp":1520,"dir":"bob","w":17},{"id":"manta","name":"Raie manta","rarity":"rare","xp":1800,"dir":"l","w":26},{"id":"jellyfish","name":"Méduse bioluminescente","rarity":"rare","xp":2100,"dir":"bob","w":14},{"id":"octopus","name":"Pieuvre de cristal","rarity":"rare","xp":2420,"dir":"floor","w":18},{"id":"reefshark","name":"Requin récif royal","rarity":"rare","xp":2760,"dir":"r","w":30},{"id":"hammerhead","name":"Requin marteau","rarity":"epique","xp":3120,"dir":"r","w":30},{"id":"narwhal","name":"Narval lumineux","rarity":"epique","xp":3500,"dir":"r","w":26},{"id":"whale","name":"Baleine abyssale","rarity":"epique","xp":3900,"dir":"r","w":40},{"id":"leviathan","name":"Leviathan des profondeurs","rarity":"legendaire","xp":4600,"dir":"bob","w":30},{"id":"kraken","name":"Kraken ancien","rarity":"legendaire","xp":5400,"dir":"floor","w":32}];
-var AQ_DECORS=[{"id":"braincoral","name":"Corail cerveau","xp":0,"w":12,"x":6},{"id":"anemone","name":"Anémone","xp":160,"w":12,"x":26},{"id":"tubecoral","name":"Corail tube","xp":340,"w":11,"x":45},{"id":"starfish","name":"Étoile de mer","xp":540,"w":10,"x":63},{"id":"seafan","name":"Gorgone éventail","xp":760,"w":12,"x":80},{"id":"clam","name":"Bénitier & perle","xp":1000,"w":13,"x":36},{"id":"volcanicrock","name":"Roche volcanique","xp":1300,"w":14,"x":92},{"id":"wreck","name":"Épave","xp":1650,"w":22,"x":55},{"id":"temple","name":"Temple antique","xp":2050,"w":20,"x":18},{"id":"giantplants","name":"Plantes géantes","xp":2500,"w":14,"x":72},{"id":"lightsource","name":"Source lumineuse","xp":3000,"w":12,"x":4},{"id":"magicbubble","name":"Bulle magique","xp":3600,"w":13,"x":86}];
-var AQ_TANKS=[{"id":"bowl","name":"Bocal","lvl":1,"x0":22,"x1":78,"y0":24,"y1":74,"rad":"50%"},{"id":"mini","name":"Mini-aquarium","lvl":2,"x0":29,"x1":71,"y0":27,"y1":60,"rad":"10px"},{"id":"basic","name":"Aquarium basique","lvl":4,"x0":22,"x1":78,"y0":23,"y1":62,"rad":"10px"},{"id":"reef","name":"Récif coloré","lvl":6,"x0":18,"x1":82,"y0":20,"y1":63,"rad":"10px"},{"id":"bigreef","name":"Grand récif","lvl":8,"x0":14,"x1":86,"y0":18,"y1":64,"rad":"10px"},{"id":"premium","name":"Aquarium premium","lvl":10,"x0":13,"x1":87,"y0":17,"y1":66,"rad":"12px"},{"id":"panoramic","name":"Aquarium panoramique","lvl":12,"x0":8,"x1":92,"y0":21,"y1":64,"rad":"12px"},{"id":"dome","name":"Dôme océanique","lvl":15,"x0":14,"x1":86,"y0":28,"y1":62,"rad":"50% 50% 10px 10px / 74% 74% 10px 10px"}];
-/* garde REEF pour tout le reste de l'app (profil, progression, chat, addXP) */
-function aqThumb(id){return function(){return '<img src="'+AQIMG[id]+'" alt="" style="width:64px;height:64px;object-fit:contain">';};}
-var REEF=AQ_CREATURES.map(function(c){return {id:c.id,name:c.name,xp:c.xp,kind:'creature',thumb:aqThumb(c.id)};})
-  .concat(AQ_DECORS.map(function(d){return {id:d.id,name:d.name,xp:d.xp,kind:'decor',thumb:aqThumb(d.id)};}))
-  .sort(function(a,b){return a.xp-b.xp;});
-function currentTank(){var lv=aqLevel(),t=AQ_TANKS[0];AQ_TANKS.forEach(function(x){if(lv>=x.lvl)t=x;});return t;}
-function nextTank(){var lv=aqLevel();for(var i=0;i<AQ_TANKS.length;i++){if(AQ_TANKS[i].lvl>lv)return AQ_TANKS[i];}return null;}
-var LOCK_SVG='<svg class="lockic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="9.5" rx="2.5"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg>';
-var CROWN_SVG='<svg class="crown" viewBox="0 0 24 24"><path d="M4 18h16l-1.4-8-4 3-2.6-5-2.6 5-4-3z" fill="#ffce54" stroke="#e0a92e" stroke-width="1.2" stroke-linejoin="round"/></svg>';
-function aqScene(tank,big){
-  var pad=big?1.25:1;
-  var h='<img class="tankimg" src="'+AQIMG[tank.id]+'" alt="'+tank.name+'">';
-  h+='<div class="aq-water" style="left:'+tank.x0+'%;right:'+(100-tank.x1)+'%;top:'+tank.y0+'%;bottom:'+(100-tank.y1)+'%;border-radius:'+(tank.rad||'14px')+'">';
-  var unlocked=AQ_CREATURES.filter(function(c){return xp>=c.xp;});
-  /* les grosses créatures d'abord = elles passent derrière */
-  unlocked.slice().sort(function(a,b){return b.w-a.w;}).forEach(function(c,i){
-    var w=(c.w*pad).toFixed(1), src=AQIMG[c.id];
-    if(c.dir==='bob'){
-      h+='<img class="bobber" src="'+src+'" style="width:'+w+'%;left:'+(8+(i*23)%70)+'%;top:'+(10+(i*29)%45)+'%;animation-delay:'+(i*0.7).toFixed(1)+'s">';
-    }else if(c.dir==='floor'){
-      h+='<img class="floorer" src="'+src+'" style="width:'+w+'%;left:'+(12+(i*31)%62)+'%;bottom:2%;animation-delay:'+(i*0.9).toFixed(1)+'s">';
-    }else{
-      var dur=(16+(c.w*0.35)+(i%4)*3).toFixed(0);
-      h+='<img class="swim'+(c.dir==='l'?' swimL':'')+'" src="'+src+'" style="width:'+w+'%;top:'+(8+(i*37)%58)+'%;animation-duration:'+dur+'s;animation-delay:-'+(i*3.4).toFixed(1)+'s">';
-    }
-  });
-  h+='</div>';
-  return h;
-}
-/* ====== UNE CHOSE À LA FOIS ======
-   L'aquarium empilait la grille des créatures et celle des décors ; l'écran
-   Défis empilait les défis écolo et les défis surf. Dans les deux cas, deux
-   groupes deviennent deux onglets, et le titre de section disparaît puisque
-   l'onglet le porte. */
 function gswPair(a,b,on,sel){
   [[a,on],[b,!on]].forEach(function(p){
     var el=document.getElementById(p[0]); if(!el) return;
@@ -3071,17 +2239,9 @@ function gswPair(a,b,on,sel){
     btn.classList.toggle('on', btn.getAttribute('data-g')===(on?'a':'b'));
   });
 }
-function aqShow(g){
-  gswPair('creatureGrid','decorGrid',g==='a','#aquarium');
-  var c=document.getElementById('aqCount'), d=document.getElementById('aqDecCount');
-  var sc=document.getElementById('gswAqA'), sd=document.getElementById('gswAqB');
-  if(sc&&c) sc.textContent=c.textContent;
-  if(sd&&d) sd.textContent=d.textContent;
-  var lg=document.getElementById('rarLegend'); if(lg) lg.style.display=(g==='a')?'':'none';
-}
 /* Les Points Ocean : un score PROPRE a la competition, calcule sur des donnees
    reelles de l'app. Volontairement distinct de l'XP, qui pilote deja le niveau
-   et l'aquarium — deux echelles sur le meme nombre n'auraient rien apporte.
+   ; les voyages restent indépendants de ce score.
    Un geste vaut plus qu'une session : c'est la mission de l'app. */
 var CMP_TIERS=[
   {n:'Bronze', k:'bronze', min:0},
@@ -3156,105 +2316,6 @@ function cmpRule(ic,label,pts,n){
        + (n?(' <b>×'+n+'</b>'):'')+'</span><span class="rn">+'+pts+' pts</span></div>';
 }
 function chalShow(g){ gswPair('ecoChallenges','surfChallenges',g==='a','#challenges'); }
-function renderAquarium(){
-  var tank=currentTank(),lv=aqLevel();
-  var stage=document.getElementById('aqStage');
-  if(stage)stage.innerHTML=aqScene(tank,false)+'<span class="aq-expand"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3H3v6M15 21h6v-6M21 9V3h-6M3 15v6h6"/></svg>Plein écran</span>';
-  var tier=document.getElementById('aqTier');
-  if(tier)tier.innerHTML=tank.name+' <span class="lv">Niveau '+lv+'</span>';
-  var nt=nextTank(),nx=document.getElementById('aqNext');
-  if(nx){
-    if(nt){
-      var need=AQ_LEVEL_XP[nt.lvl-1],prev=AQ_LEVEL_XP[Math.max(0,lv-1)];
-      var pct=Math.max(0,Math.min(100,Math.round((xp-prev)/Math.max(1,need-prev)*100)));
-      nx.innerHTML='<img src="'+AQIMG[nt.id]+'" alt=""><div style="flex:1;min-width:0"><h4>Prochain aquarium : '+nt.name+'</h4><p>Niveau '+nt.lvl+' · encore <b>'+Math.max(0,need-xp)+' XP</b></p><div class="bar"><i style="width:'+pct+'%"></i></div></div>';
-    }else{
-      nx.innerHTML='<img src="'+AQIMG[tank.id]+'" alt=""><div style="flex:1"><h4>Dôme océanique atteint !</h4><p>Tu as le plus grand aquarium du jeu.</p></div>';
-    }
-  }
-  var tr=document.getElementById('tierRow');
-  if(tr)tr.innerHTML=AQ_TANKS.map(function(t){
-    var cls=t.id===tank.id?'now':(lv>=t.lvl?'':'lock');
-    return '<div class="tier '+cls+'" onclick="aqTapTier(\''+t.id+'\')"><img src="'+AQIMG[t.id]+'" alt=""><div class="tn">'+t.name+'</div><div class="tl">Niveau '+t.lvl+'</div></div>';
-  }).join('');
-  var cg=document.getElementById('creatureGrid');
-  if(cg)cg.innerHTML=AQ_CREATURES.map(function(c){
-    var ok=xp>=c.xp;
-    return '<div class="aqc r-'+c.rarity+(ok?'':' lock')+'" onclick="aqTap(\''+c.id+'\')">'
-      +'<span class="rar" style="background:'+AQ_RARITY[c.rarity].c+'"></span>'
-      +(ok?(c.rarity==='legendaire'?CROWN_SVG:''):LOCK_SVG)
-      +'<img src="'+AQIMG[c.id]+'" alt=""><div class="cn">'+c.name+'</div>'
-      +'<div class="cx">'+(ok?AQ_RARITY[c.rarity].l:c.xp+' XP')+'</div></div>';
-  }).join('');
-  var dg=document.getElementById('decorGrid');
-  if(dg)dg.innerHTML=AQ_DECORS.map(function(d){
-    var ok=xp>=d.xp;
-    return '<div class="aqc'+(ok?'':' lock')+'" onclick="aqTap(\''+d.id+'\')">'+(ok?'':LOCK_SVG)
-      +'<img src="'+AQIMG[d.id]+'" alt=""><div class="cn">'+d.name+'</div>'
-      +'<div class="cx">'+(ok?'Découvert':d.xp+' XP')+'</div></div>';
-  }).join('');
-  var nbC=AQ_CREATURES.filter(function(c){return xp>=c.xp;}).length;
-  var nbD=AQ_DECORS.filter(function(d){return xp>=d.xp;}).length;
-  var ac=document.getElementById('aqCount');if(ac)ac.textContent=nbC+' / '+AQ_CREATURES.length;
-  var ad=document.getElementById('aqDecCount');if(ad)ad.textContent=nbD+' / '+AQ_DECORS.length;
-  var next=REEF.find(function(r){return xp<r.xp;});
-  var hint=document.getElementById('aqHint');
-  if(hint)hint.innerHTML=next?('Encore <b>'+(next.xp-xp)+' XP</b> pour débloquer : '+next.name+'.'):'Collection complète — bravo !';
-  try{aqShow(document.querySelector('#aquarium .gsw button.on[data-g="b"]')?'b':'a');}catch(e){}
-}
-/* ====== L'AQUARIUM ENSEIGNE ======
-   Une vignette touchée ouvrait un message qui répétait la rareté. Elle ouvre
-   maintenant une fiche : espèce réelle, un fait vérifiable, statut de
-   conservation quand il est solide, et où on croise vraiment l'animal. */
-var AQ_SAVOIR={"clownfish":{"s":"Amphiprion ocellaris","f":"Tous naissent mâles. Quand la femelle dominante d'une anémone disparaît, le plus gros mâle du groupe change de sexe et prend sa place.","st":"","k":"","o":"Lagons de l'Indo-Pacifique, toujours dans une anémone."},"tang":{"s":"Paracanthurus hepatus","f":"Il porte de chaque côté de la queue une lame tranchante qu'il dresse pour se défendre. C'est ce scalpel qui lui vaut son nom de chirurgien.","st":"","k":"","o":"Récifs de l'Indo-Pacifique."},"yellowschool":{"s":"Haemulon flavolineatum","f":"Le banc n'est pas décoratif : serrés, les poissons voient dans toutes les directions à la fois et deviennent très difficiles à isoler pour un prédateur.","st":"","k":"","o":"Récifs des Caraïbes, en banc immobile le jour sous les patates de corail."},"seahorse":{"s":"Hippocampus spp.","f":"C'est le mâle qui porte les œufs, dans une poche ventrale, jusqu'à l'éclosion. Il nage debout, très mal, et s'accroche aux herbiers avec sa queue.","st":"Commerce réglementé — CITES annexe II","k":"reg","o":"Herbiers et ports abrités, Méditerranée comprise."},"crab":{"s":"Trapezia spp.","f":"Il vit à demeure dans un corail et le défend : quand l'étoile de mer acanthaster vient dévorer sa colonie, il lui pince les bras jusqu'à la faire fuir.","st":"","k":"","o":"Dans les coraux Pocillopora du Pacifique."},"angelfish":{"s":"Pomacanthus imperator","f":"Le juvénile est bleu nuit à cercles blancs concentriques, sans rien de commun avec l'adulte rayé de jaune. On les a longtemps pris pour deux espèces.","st":"","k":"","o":"Récifs de l'Indo-Pacifique et de la mer Rouge."},"turtle":{"s":"Caretta caretta","f":"La température du sable décide du sexe des petits : plus il est chaud, plus il naît de femelles. Le réchauffement déséquilibre déjà certaines plages de ponte.","st":"Vulnérable — UICN","k":"vuln","o":"Méditerranée et Atlantique. Elle pond désormais jusque sur les côtes françaises."},"pufferfish":{"s":"Tetraodontidae","f":"Il ne se gonfle pas d'air mais d'eau. Sa chair contient de la tétrodotoxine, un poison pour lequel il n'existe pas d'antidote.","st":"","k":"","o":"Lagons et récifs tropicaux."},"seadragon":{"s":"Phycodurus eques","f":"Ses appendices en forme de feuilles ne servent pas à nager : ils le rendent invisible dans les algues. Il avance grâce à deux nageoires presque transparentes.","st":"Protégé par la loi en Australie","k":"reg","o":"Côtes du sud de l'Australie — et nulle part ailleurs au monde."},"manta":{"s":"Mobula birostris","f":"Jusqu'à sept mètres d'envergure, et elle ne mange que du plancton. Les taches sous son ventre forment un motif unique, utilisé comme empreinte pour la recenser.","st":"En danger — UICN","k":"dang","o":"Sites d'agrégation tropicaux : Maldives, Mexique, Indonésie."},"jellyfish":{"s":"Aequorea victoria","f":"C'est d'elle qu'a été extraite la GFP, la protéine fluorescente verte qui permet aujourd'hui d'éclairer des cellules vivantes. Prix Nobel de chimie 2008.","st":"","k":"","o":"Côte Pacifique de l'Amérique du Nord."},"octopus":{"s":"Octopus vulgaris","f":"Trois cœurs, un sang bleu au cuivre, et les deux tiers de ses neurones répartis dans ses bras : chaque bras explore en partie pour son compte.","st":"","k":"","o":"Fonds rocheux de Méditerranée et d'Atlantique — souvent devant son terrier."},"reefshark":{"s":"Carcharhinus melanopterus","f":"Il chasse dans très peu d'eau, aileron parfois hors de l'eau, et fuit le nageur bien avant que celui-ci ne l'ait vu.","st":"Vulnérable — UICN","k":"vuln","o":"Platiers coralliens de l'Indo-Pacifique."},"hammerhead":{"s":"Sphyrna mokarran","f":"Sa tête en T écarte ses yeux et ses capteurs électriques : il repère une raie enfouie sous le sable sans la voir.","st":"En danger critique — UICN","k":"crit","o":"Eaux tropicales, en forte diminution presque partout."},"narwhal":{"s":"Monodon monoceros","f":"Sa « corne » est une dent de la mâchoire supérieure qui pousse en spirale, criblée de terminaisons nerveuses. Au Moyen Âge, ces défenses se vendaient en Europe comme des cornes de licorne.","st":"Préoccupation mineure — UICN, mais entièrement dépendant de la banquise","k":"lc","o":"Arctique. Aucun spot de l'app ne le croise."},"whale":{"s":"Physeter macrocephalus","f":"Le plus gros animal à dents de la planète. Il descend au-delà de mille mètres et reste en apnée près d'une heure pour y chasser le calmar.","st":"Vulnérable — UICN","k":"vuln","o":"Tous les océans, Méditerranée comprise, où une population vit à l'année."},"leviathan":{"s":"","f":"Le Léviathan est un monstre biblique, pas une espèce. Le vrai record est détenu par la baleine bleue, Balaenoptera musculus : jusqu'à trente mètres, le plus gros animal ayant jamais vécu — plus gros qu'aucun dinosaure connu.","st":"Baleine bleue : en danger — UICN","k":"dang","o":"Créature de légende. La baleine bleue, elle, existe vraiment."},"kraken":{"s":"","f":"Le kraken des marins scandinaves a sans doute un modèle réel : le calmar géant, Architeuthis dux, qui dépasse dix mètres. Personne n'en avait observé un vivant dans son milieu avant 2004.","st":"","k":"","o":"Créature de légende. Le calmar géant vit dans les grands fonds, hors de portée."},"braincoral":{"s":"Diploria labyrinthiformis","f":"Ce n'est pas une pierre : une colonie de milliers de polypes identiques, qui grandit de quelques millimètres par an. Un bloc d'un mètre a plusieurs siècles.","st":"","k":"","o":"Récifs des Caraïbes."},"anemone":{"s":"Heteractis magnifica","f":"Ses tentacules urticants paralysent ses proies. Le poisson-clown y échappe grâce à un mucus particulier : en échange du gîte, il la nettoie et la défend.","st":"","k":"","o":"Récifs de l'Indo-Pacifique."},"tubecoral":{"s":"Tubastraea spp.","f":"Ce corail n'héberge pas d'algues : il ne vit pas de la lumière mais capture le plancton, la nuit, tentacules déployés. C'est pourquoi on le trouve aussi dans l'ombre des grottes et des épaves.","st":"","k":"","o":"Surplombs et grottes des mers chaudes."},"starfish":{"s":"Asteroidea","f":"Elle n'a pas de cerveau. Elle sort son estomac hors de son corps pour digérer sa proie sur place, et peut reconstituer un bras perdu.","st":"","k":"","o":"De l'estran breton aux récifs tropicaux."},"seafan":{"s":"Gorgonia / Paramuricea","f":"Elle pousse perpendiculairement au courant, pour filtrer le plus d'eau possible, à raison de quelques centimètres par an. Un coup de palme casse plusieurs décennies de croissance.","st":"","k":"","o":"Tombants de Méditerranée et des Caraïbes."},"clam":{"s":"Tridacna gigas","f":"Plus d'un mètre et jusqu'à deux cents kilos. Il tire l'essentiel de son énergie d'algues qui vivent dans son manteau coloré — c'est ce qui lui donne ses couleurs.","st":"Commerce réglementé — CITES annexe II","k":"reg","o":"Lagons de l'Indo-Pacifique."}};
-var AQ_STK={crit:'En danger critique',dang:'En danger',vuln:'Vulnérable',lc:'Peu menacé',reg:'Réglementé'};
-function closeAqInfo(){
-  var o=document.getElementById('aqInfo'); if(o)o.classList.remove('open');
-}
-function aqTap(id){
-  var it=AQ_CREATURES.concat(AQ_DECORS).find(function(x){return x.id===id;});if(!it)return;
-  var k=AQ_SAVOIR[id], ok=xp>=it.xp;
-  if(!k){   /* décors imaginaires : rien de réel à raconter */
-    toast(ok?(it.name+' · débloqué'):('Atteins '+it.xp+' XP pour débloquer : '+it.name));
-    return;
-  }
-  var h='<button class="aqi-x" onclick="closeAqInfo()" aria-label="Fermer">'
-      + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'
-      + '<div class="aqi-img'+(ok?'':' lock')+'"><img src="'+AQIMG[id]+'" alt=""></div>'
-      + '<div class="aqi-b">';
-  if(it.rarity) h+='<span class="aqi-rar" style="background:'+AQ_RARITY[it.rarity].c+'">'+AQ_RARITY[it.rarity].l+'</span>';
-  h+='<h4>'+it.name+'</h4>';
-  if(k.s) h+='<div class="aqi-sci">'+k.s+'</div>';
-  if(k.st) h+='<div class="aqi-st k-'+(k.k||'')+'">'+k.st+'</div>';
-  if(ok){
-    h+='<p class="aqi-f">'+k.f+'</p>'
-     + '<div class="aqi-o">'+uic('pin')+'<span>'+k.o+'</span></div>';
-  }else{
-    h+='<p class="aqi-hide">Sa fiche s\'ouvre quand tu l\'adoptes.<br>'
-     + '<b>Encore '+(it.xp-xp)+' XP</b> — un défi écolo en rapporte 30 à 60.</p>';
-  }
-  h+='</div>';
-  var c=document.getElementById('aqInfoCard'); if(!c){ toast(it.name); return; }
-  c.innerHTML=h;
-  document.getElementById('aqInfo').classList.add('open');
-}
-function aqTapTier(id){
-  var t=AQ_TANKS.find(function(x){return x.id===id;});if(!t)return;
-  var lv=aqLevel();
-  toast(lv>=t.lvl?(t.name+' · débloqué'):('Niveau '+t.lvl+' requis pour : '+t.name));
-}
-function openReefFull(){
-  var el=document.getElementById('reefFullTank');if(!el)return;
-  el.innerHTML='<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center"><div class="aq-stage big">'+aqScene(currentTank(),true)+'</div></div>';
-  document.getElementById('reefFull').classList.add('open');
-}
-function closeReefFull(){document.getElementById('reefFull').classList.remove('open');}
-function rSwimC(svg,top,dur,dir,delay,cls){return '<div class="rfish '+(dir==='L'?'fishL':'fishR')+' '+(cls||'')+'" style="top:'+top+'%;animation-duration:'+dur+'s;animation-delay:'+(delay||0)+'s">'+svg+'</div>';}
-function rTurtleShiny(w){return '<svg width="'+w+'" viewBox="0 0 56 38"><ellipse cx="11" cy="11" rx="5" ry="3" transform="rotate(-28 11 11)" fill="#ffd86a"/><ellipse cx="11" cy="29" rx="5" ry="3" transform="rotate(28 11 29)" fill="#ffd86a"/><circle cx="46" cy="18" r="5.5" fill="#ffd86a"/><ellipse cx="26" cy="20" rx="16" ry="12" fill="#ffcf4a"/><path d="M12 16 q14 -9 30 0 q-14 8 -30 0Z" fill="#ffe7a0"/><g fill="none" stroke="#e0a93a" stroke-width="1.3" opacity=".6"><path d="M20 13 v14M28 11 v17M36 13 v14"/></g><circle cx="48" cy="17" r="1.2" fill="#5a3a00"/><circle cx="22" cy="14" r="1.8" fill="#fff" opacity=".75"/></svg>';}
-function rMantaShiny(w){return '<svg width="'+w+'" viewBox="0 0 64 38"><defs><linearGradient id="msg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9fd0ff"/><stop offset=".5" stop-color="#c89bff"/><stop offset="1" stop-color="#ff9ad6"/></linearGradient></defs><path d="M32 8 C18 8 5 24 9 28 C16 25 22 27 28 31 C30 25 32 25 32 25 C32 25 34 25 36 31 C42 27 48 25 55 28 C59 24 46 8 32 8Z" fill="url(#msg)"/><path d="M22 10 q-3 -5 -7 -6M42 10 q3 -5 7 -6" stroke="#b78fe0" stroke-width="3" fill="none" stroke-linecap="round"/><path d="M32 25 q1 9 -1 13" stroke="#c89bff" stroke-width="2.4" fill="none"/><circle cx="26" cy="16" r="1.4" fill="#fff"/><circle cx="38" cy="16" r="1.4" fill="#fff"/></svg>';}
-function rClownKing(w){return '<svg width="'+w+'" viewBox="0 0 50 40"><g transform="translate(0,7)"><path d="M6 16 L-2 9 L0 16 L-2 23Z" fill="#ff7d1e" stroke="#e85d00" stroke-width="1"/><path d="M6 16 Q18 3 36 7 Q46 4 48 16 Q46 28 36 25 Q18 29 6 16Z" fill="#ff7d1e" stroke="#e85d00" stroke-width="1"/><path d="M18 8 Q15 16 18 24 L23 23 Q21 16 23 9Z" fill="#fff"/><path d="M31 8 Q34 16 31 24 L35 23 Q33 16 35 10Z" fill="#fff"/><circle cx="41" cy="14" r="2.6" fill="#fff"/><circle cx="41.4" cy="14" r="1.4" fill="#10160f"/></g><g><path d="M30 7 L33 2 L36 6 L39 1 L42 6 L45 2 L45 8Z" fill="#ffd23e" stroke="#e0a800" stroke-width="1"/><circle cx="33" cy="2.4" r="1" fill="#ff5a7a"/><circle cx="39" cy="1.4" r="1" fill="#5ad1ff"/><circle cx="45" cy="2.4" r="1" fill="#7dff9a"/></g></svg>';}
-function rPufferCool(w){return '<svg width="'+w+'" viewBox="0 0 42 40"><path d="M6 21 L0 15 L2 21 L0 27Z" fill="#e7b56a"/><g stroke="#cf9a4f" stroke-width="2"><path d="M21 6 v-3M35 21 h3M21 36 v3M31 11 l2 -2M31 31 l2 2M11 11 l-2 -2M11 31 l-2 2"/></g><circle cx="21" cy="21" r="13" fill="#e7b56a"/><path d="M22 27 q3 2 6 0" stroke="#9c6f33" stroke-width="1.6" fill="none"/><g><rect x="9" y="15" width="9" height="6.5" rx="2.5" fill="#16202a"/><rect x="22" y="15" width="9" height="6.5" rx="2.5" fill="#16202a"/><path d="M18 17 h4" stroke="#16202a" stroke-width="2"/><path d="M31 16 q3 -1 4 1" stroke="#16202a" stroke-width="2" fill="none"/><rect x="10.5" y="16" width="3" height="2" rx="1" fill="#6a7b8a" opacity=".8"/></g></svg>';}
-
 /* ================= ONBOARDING ================= */
 let onbStep=0,chosenLevel=null,chosenSport=null,quickGate=false;
 function renderSportGuide(){
@@ -3292,10 +2353,8 @@ function addXP(n,msg){
   let remain=Math.max(0,LVL-xp);
   document.getElementById('xpText').textContent=`${xp} / ${LVL} XP`;
   toast(msg||`+${n} XP !`);popPoulpy();
-  const newly=REEF.find(r=>r.xp>before&&r.xp<=xp);
-  if(newly)setTimeout(()=>toast(`🎉 Nouveau dans ton récif : ${newly.name} !`),1400);
-  renderAquarium();renderProg();renderProfile();renderCompetition();saveState();
-  if(newly||xp>=LVL){spawnConfetti();vibrate([14,45,14]);}else{vibrate(12);}
+  renderProg();renderProfile();renderCompetition();saveState();
+  if(before<LVL&&xp>=LVL){spawnConfetti();vibrate([14,45,14]);}else{vibrate(12);}
   if(xp>=LVL)setTimeout(()=>toast('🎉 Niveau 5 ! Poulpy a un nouveau chapeau !'),2600);
 }
 function spawnConfetti(){
@@ -3327,16 +2386,16 @@ function logSession(){
 /* ================= UI ================= */
 let tt;
 function toast(msg){const t=document.getElementById('toast');t.innerHTML='🐙 '+msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600);}
-const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',aquarium:'ab'};
+const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',trips:'tb'};
 function vibrate(pattern){try{if(navigator.vibrate)navigator.vibrate(pattern);}catch(e){}}
-const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,profile:4,aquarium:5};
+const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,profile:4,trips:2};
 function resetScreenLive(el){el.classList.remove('sw-live');el.style.top='';el.style.left='';el.style.right='';el.style.transform='';el.style.opacity='';el.style.transition='';}
 function updateNavPill(s){
   const pill=document.getElementById('navPill');if(!pill)return;
   const btn=document.querySelector('.nav button[data-s="'+s+'"]:not(.center)');
   if(!btn){pill.style.opacity='0';return;}
   const left=btn.offsetLeft+(btn.offsetWidth-42)/2;
-  const colors={home:'rgba(17,117,189,.14)',spots:'rgba(31,155,191,.14)',profile:'rgba(155,107,209,.16)',aquarium:'rgba(47,175,114,.16)'};
+  const colors={home:'rgba(17,117,189,.14)',spots:'rgba(31,155,191,.14)',profile:'rgba(155,107,209,.16)',trips:'rgba(33,84,221,.16)'};
   pill.style.transform='translateX('+left+'px)';
   pill.style.background=colors[s]||'rgba(18,115,184,.12)';
   pill.style.opacity='1';
@@ -3697,9 +2756,10 @@ function smartReply(q){
 }
 function poulpyReply(q){
   q=q.toLowerCase();
+  if(/(surf.?trip|voyage|itinéraire|itineraire|préparer.*séjour|preparer.*sejour)/i.test(q))return {html:'Prépare ton aventure dans <b>Surf trips</b> : choisis tes spots, organise les étapes, ajoute tes dates et ta checklist.',btn:{label:'Préparer mon voyage',onclick:"openFromChat('trips')"}};
   const sr=smartReply(q);if(sr)return sr;
   const spotReco=()=>{const s=recommendedSpot(),sc=SCORES[s.id],best=FORECAST.find(f=>f.best);return {html:`Vu ton niveau, je te conseille <b>${s.name.split(' — ')[0]}</b> 🤙<br>${lvlLabel[s.level]} · 💨 ${s.wind} · 🌊 ${s.swell} · 🌡️ ${s.temp} · note <b>${sc}/5</b>.<br>Meilleur créneau de la semaine : <b>${best.d}</b> !`,btn:{label:'Voir le spot 🏄',onclick:`openSpotFromChat('${s.id}')`}};};
-  const prog=()=>{const remain=Math.max(0,LVL-xp),next=REEF.find(r=>xp<r.xp);return {html:`Tu es <b>Niveau 4</b> avec <b>${xp} XP</b> 🏄<br>Plus que <b>${remain} XP</b> pour le niveau 5 !${next?`<br>Prochain élément du récif : <b>${next.name}</b> à ${next.xp} XP.`:''}<br>Astuce : un défi écolo = de l'XP rapide 💪`,btn:{label:'Relever un défi 🏆',onclick:"openFromChat('challenges')"}};};
+  const prog=()=>({html:`Tu as <b>${xp} XP</b>. Continue à explorer, pratiquer et protéger l’océan pour progresser.`,btn:{label:'Voir mes défis',onclick:"openFromChat('challenges')"}});
   const eco=()=>({html:'🌱 '+pick(ECO_T),btn:{label:'Voir les défis écolo 🌊',onclick:"openFromChat('challenges')"}});
   const KB=[
    [/(merci|thanks|génial|genial|parfait|top\b|cool|super|nickel|excellent)/,()=>({html:pick(["Avec plaisir ! 🌊","Toujours là pour toi 🐙 !","De rien ! Bon surf et prends soin de l'océan 💚"])})],
@@ -3833,7 +2893,7 @@ function poulpyReply(q){
    [/(sécur|secur|danger|noyade|risque|leash|seul|accompagn|sauvet)/,()=>({html:'🛟 '+pick(SECU)})],
    [/(écolo|ecolo|déchet|dechet|plastique|planète|planete|environ|propre|pollution|nature|protég|proteg|sauver.*océan)/,eco],
    [/(quel spot|un spot|où surfer|ou surfer|spot.*aujourd|conseille.*spot|recommand|aller surfer|meilleur spot|spot du jour|où aller|ou aller)/,spotReco],
-   [/(progres|niveau|\bxp\b|badge|créature|creature|débloqu|debloqu|défi|defi|coach|motiv|aquarium|prochain ami)/,prog]
+   [/(progres|niveau|\bxp\b|badge|créature|creature|débloqu|debloqu|défi|defi|coach|motiv)/,prog]
   ];
   for(const k of KB){ if(k[0].test(q)) return typeof k[1]==='function'?k[1]():{html:k[1]}; }
   return {html:"Bonne question ! 🐙 Je gère plein de sujets : 🏄 spots &amp; <b>technique de surf</b>, 🌊 <b>vagues / houle / marées</b>, 🐢 <b>faune marine</b>, 🌦️ <b>météo</b>, 🌱 <b>écologie</b>, 📈 ta <b>progression</b>… reformule ta question ou choisis un sujet ci-dessous !"};
@@ -4036,7 +3096,7 @@ var _oi=document.getElementById('octo');if(_oi)_oi.innerHTML=poulpySVG();/* #oct
 document.getElementById('octoProfile').innerHTML=poulpySVG();
 document.getElementById('logoOcto').innerHTML=poulpySVG();
 document.getElementById('logoOcto2').innerHTML=poulpySVG();
-['homeTop','spotsTop','chalTop','profTop','aqTop'].forEach(id=>{const el=document.getElementById(id);el.insertAdjacentHTML('afterbegin',headerSky(id));el.insertAdjacentHTML('beforeend','<svg class="hwave" viewBox="0 0 392 30" preserveAspectRatio="none"><path d="M0 14 Q49 2 98 14 T196 14 T294 14 T392 14 V30 H0Z" fill="#eef9f8"/></svg>');});
+['homeTop','spotsTop','chalTop','profTop'].forEach(id=>{const el=document.getElementById(id);el.insertAdjacentHTML('afterbegin',headerSky(id));el.insertAdjacentHTML('beforeend','<svg class="hwave" viewBox="0 0 392 30" preserveAspectRatio="none"><path d="M0 14 Q49 2 98 14 T196 14 T294 14 T392 14 V30 H0Z" fill="#eef9f8"/></svg>');});
 document.getElementById('fabOcto').innerHTML=poulpySVG();
 document.getElementById('chatOcto').innerHTML=poulpySVG();
 renderCompetition();
@@ -4048,7 +3108,7 @@ try{
 }catch(e){}
 document.body.classList.add('motion-pref-checked');
 applyName();
-ambient();renderSportGuide();renderSportFilters();renderSpots();try{renderWorlds();syncWorldUI();}catch(e){}renderChallenges();renderBadges();renderQuizBadges();renderSessions();renderAquarium();renderHome();renderProfile();renderQuick();chatDragInit();bubbles('hb');bubbles('pb');bubbles('sb');bubbles('cb');bubbles('ab');onbBubbles();animateCounts();realHomeForecast();fetchAllConditions();
+ambient();renderSportGuide();renderSportFilters();renderSpots();try{renderWorlds();syncWorldUI();}catch(e){}renderChallenges();renderBadges();renderQuizBadges();renderSessions();renderHome();renderProfile();renderQuick();chatDragInit();bubbles('hb');bubbles('pb');bubbles('sb');bubbles('cb');onbBubbles();animateCounts();realHomeForecast();fetchAllConditions();
 requestAnimationFrame(()=>requestAnimationFrame(()=>updateNavPill('home')));
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{const ab=document.querySelector('.nav button.active:not(.center)');updateNavPill(ab?ab.dataset.s:'home');}).catch(()=>{});
 window.addEventListener('resize',()=>{const ab=document.querySelector('.nav button.active:not(.center)');if(ab)updateNavPill(ab.dataset.s);});

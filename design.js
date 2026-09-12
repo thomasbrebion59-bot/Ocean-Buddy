@@ -5,7 +5,7 @@
     home:'M3 10.5 12 3l9 7.5M5 9v11h5v-6h4v6h5V9',
     spots:'M12 21s7-6.6 7-12a7 7 0 0 0-14 0c0 5.4 7 12 7 12z M15 9a3 3 0 1 1-6 0 3 3 0 0 1 6 0',
     challenges:'M8 4h8v4a4 4 0 0 1-8 0V4zM8 5H4v2a4 4 0 0 0 4 4m8-6h4v2a4 4 0 0 1-4 4m-4 1v5m-4 3h8m-7-3h6',
-    aquarium:'M3 12c4-6 10-6 14 0-4 6-10 6-14 0zm14 0 4-4v8l-4-4M7.5 11h.01',
+    trips:'M3 5l6-2 6 2 6-2v16l-6 2-6-2-6 2V5zm6-2v16m6-14v16M5 11l2 1m4 1 2 1m4-1 2-2',
     profile:'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0M4 21v-3a8 8 0 0 1 16 0v3',
     search:'M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0m-2 5 6 6',
     settings:'m12 3 2 3 4-.1.1 4 2.9 2-2.9 2-.1 4-4-.1-2 3-2-3-4 .1-.1-4L3 12l2.9-2 .1-4 4 .1 2-3zm3 9a3 3 0 1 1-6 0 3 3 0 0 1 6 0',
@@ -13,8 +13,8 @@
     wave:'M2 9c3 0 3-3 6-3s3 3 6 3 3-3 6-3M2 16c3 0 3-3 6-3s3 3 6 3 3-3 6-3'
   };
   const icon = key => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[key] || paths.wave}"/></svg>`;
-  const labels = {home:'Accueil',spots:'Explorer',challenges:'Défis',profile:'Mon profil',aquarium:'Mon aquarium',detail:'Le spot'};
-  const short = {home:'Accueil',spots:'Spots',challenges:'Défis',profile:'Profil',aquarium:'Aquarium'};
+  const labels = {home:'Accueil',spots:'Explorer',challenges:'Défis',profile:'Mon profil',trips:'Surf trips',detail:'Le spot'};
+  const short = {home:'Accueil',spots:'Spots',challenges:'Défis',profile:'Profil',trips:'Voyages'};
   const nav = $('.nav');
   nav.insertAdjacentHTML('afterbegin', `<a class="sidebar-brand" href="#home" aria-label="Ocean Buddy — Accueil"><img src="assets/design/poulpy.webp" alt=""><span>OCEAN <b>BUDDY</b><small>L’OCÉAN, À TES CÔTÉS.</small></span></a><div class="sidebar-label">TON TERRAIN DE JEU</div>`);
   $('.sidebar-brand').addEventListener('click', e => {e.preventDefault();go('home')});
@@ -24,8 +24,8 @@
     button.setAttribute('aria-label', labels[page]);
     if(button.classList.contains('active'))button.setAttribute('aria-current','page');
   });
-  // The aquarium belongs with exploration and challenges, ahead of the profile.
-  nav.insertBefore($('.n-aqua',nav),$('.n-prof',nav));
+  // Planning follows exploration in the main navigation.
+  nav.insertBefore($('.n-trips',nav),$('.center',nav));
   nav.insertAdjacentHTML('beforeend', `<div class="sidebar-bottom"><button class="sidebar-poulpy" type="button"><img src="assets/design/poulpy.webp" alt=""><b>Une question ?</b><span>Poulpy est là pour toi.</span><i>Discuter avec Poulpy ↗</i></button><button class="sidebar-settings" type="button">${icon('settings')} Réglages</button><button class="sidebar-user" type="button"><span class="user-initial"></span><span><b class="user-name"></b><small id="sidebarXp"></small></span>${icon('arrow')}</button><span class="sidebar-motto">Moins de traces. Plus de souvenirs.</span></div>`);
   $('.sidebar-poulpy').onclick = openChat;
   $('.sidebar-settings').onclick = openSettings;
@@ -60,7 +60,6 @@
   const headings = {
     spotsTop:['LE MONDE T’ATTEND','Trouve ton prochain horizon.'],
     chalTop:['À TOI DE JOUER','Passe à l’action.<br>Protège ton terrain.'],
-    aqTop:['CHAQUE AVENTURE FAIT GRANDIR TON RÉCIF','Ton océan.<br>Prends-en soin.'],
     profTop:['TON AVENTURE','']
   };
   for(const [id,[eyebrow,title]] of Object.entries(headings)){
@@ -69,7 +68,6 @@
     if(title&&id!=='spotsTop')$('h1',header).innerHTML=title;
   }
   $('#chalTop .sub').textContent='Relève des défis, gagne de l’XP et prends soin de l’océan.';
-  $('#aqTop .sub').textContent='De tes premières découvertes à un océan de vie. Fais grandir ton récif.';
 
   const credits=document.createElement('a');credits.className='photo-credits';credits.href='photos.html';credits.target='_blank';credits.rel='noopener';credits.textContent='Photographies & crédits ↗';$('#worldPick').append(credits);
   const photoNote=document.createElement('a');photoNote.className='hero-photo-credit';photoNote.href='photos.html';photoNote.target='_blank';photoNote.rel='noopener';photoNote.textContent='Photo · byronetmedia';$('#homeTop').append(photoNote);
@@ -84,12 +82,11 @@
   eventBox.before(drawer);drawer.append(eventBox);eventTitle.remove();
   const challenges=$('#challenges');challenges.append(drawer);
   const cmp=$('.cmp');challenges.append(cmp);
-  $('#aqStage').setAttribute('aria-label','Voir mon aquarium en immersion');
   $('#homeActivity').setAttribute('aria-label','Changer mon activité');
   $('.onb').setAttribute('aria-label','Bienvenue dans Ocean Buddy');
-  const modalIds=['quizModal','settingsModal','aqInfo','ecoInfo','reefFull','chatSheet'];
-  const closeHandlers={quizModal:closeQuiz,settingsModal:closeSettings,aqInfo:closeAqInfo,ecoInfo:closeEcoLog,reefFull:closeReefFull,chatSheet:closeChat};
-  const modalLabels={quizModal:'Le quiz de Poulpy',settingsModal:'Réglages',aqInfo:'La vie marine',ecoInfo:'Mes gestes pour l’océan',reefFull:'Mon aquarium en immersion',chatSheet:'Discuter avec Poulpy'};
+  const modalIds=['quizModal','settingsModal','ecoInfo','chatSheet'];
+  const closeHandlers={quizModal:closeQuiz,settingsModal:closeSettings,ecoInfo:closeEcoLog,chatSheet:closeChat};
+  const modalLabels={quizModal:'Le quiz de Poulpy',settingsModal:'Réglages',ecoInfo:'Mes gestes pour l’océan',chatSheet:'Discuter avec Poulpy'};
   let previousFocus=null;
   const focusables=el=>[...el.querySelectorAll('button,input,a[href],select,textarea,[tabindex="0"]')].filter(el=>el.offsetParent!==null&&!el.disabled);
   modalIds.forEach(id=>{
@@ -102,7 +99,7 @@
   });
   function improveControls(root){
     root.querySelectorAll('[onclick]:not(button):not(a):not(input):not(label)').forEach(el=>{
-      if(el.matches('.aqi,.quiz-modal,.reeffull'))return;
+      if(el.matches('.quiz-modal'))return;
       if(!el.hasAttribute('role'))el.setAttribute('role','button');
       if(!el.hasAttribute('tabindex'))el.tabIndex=0;
     });

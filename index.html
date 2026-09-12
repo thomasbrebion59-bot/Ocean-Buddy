@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
-<meta name="theme-color" content="#061d2a">
+<meta name="theme-color" content="#164bd6">
 <link rel="icon" type="image/webp" href="assets/design/poulpy.webp">
 <meta name="description" content="Trouve ton prochain spot nautique, prépare ta session et protège l’océan avec Poulpy, ton guide Ocean Buddy.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +15,8 @@
 <link rel="stylesheet" href="base.css">
 <link rel="stylesheet" href="design.css">
 <link rel="stylesheet" href="adventure.css">
+<link rel="stylesheet" href="coastal.css">
+<link rel="stylesheet" href="trips.css">
 </head>
 <body class="ocean-v2" data-screen="home">
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
@@ -138,7 +140,7 @@
         <div class="stat"><div class="ic" style="background:#e2f0f8;color:#2f8fb8"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.4" fill="#fff"/></svg></div><div class="big" id="hsSpots" data-count="7">0</div><div class="lab">Spots visités</div></div>
         <div class="stat"><div class="ic" style="background:#e7f7ef;color:#2faf72"><svg viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z" fill="currentColor"/><path d="M9 15c2-3 5-5 8-6" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div><div class="big" id="hsEco" data-count="23">0</div><div class="lab">Gestes écolo</div></div>
       </div>
-<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#ec5a4b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l5-5 4 4 7-7"/><path d="M16 4h4v4"/></svg> Ta progression</h2><a onclick="go('aquarium')">Aquarium →</a></div>
+<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#ec5a4b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l5-5 4 4 7-7"/><path d="M16 4h4v4"/></svg> Ta progression</h2><a onclick="go('trips')">Surf trips →</a></div>
       <div class="prog-card" id="progCard"></div>
 <div class="quiz-launch" onclick="openQuiz()">
         <div class="ql-ic"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-3.6 10.8c.4.3.6.8.6 1.2h6c0-.4.2-.9.6-1.2A6 6 0 0 0 12 3z"/></svg></div>
@@ -313,7 +315,7 @@
         <div class="ph-xp"><div class="ph-xp-bar"><i id="profXpFill"></i></div><div class="ph-xp-text" id="profXpText"></div></div>
         <div class="ph-chips">
           <div class="ph-chip"><b>5</b><span><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2c1 3-1 4-2.1 5.8-.9 1.5-.8 3.6.6 4.6.5-1 1-1.9 1.9-2.4.4 2 1.9 2.6 1.9 4.6a4.3 4.3 0 0 1-8.6 0c0-2.1 1.6-3.7 3.2-5.3C8 9.4 11 7.2 12 3.2z"/></svg> jours</span></div>
-          <div class="ph-chip"><b id="profReef">—</b><span><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V6"/><path d="M12 15c-2.2 0-3-2-3-4M12 13c2.2 0 3-2 3-4M9 11c-1.6 0-2-1.6-2-3M15 9c1.6 0 2-1.6 2-3"/></svg> récif</span></div>
+          <div class="ph-chip"><b id="profTrips">0</b><span>voyages préparés</span></div>
           <div class="ph-chip"><b id="profBadges">0</b><span><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14.5" r="5"/><path d="M8.5 10 6 3.5M15.5 10 18 3.5"/><path d="M12 12.6l.7 1.5 1.6.2-1.2 1.1.3 1.6-1.4-.8-1.4.8.3-1.6-1.2-1.1 1.6-.2z"/></svg> badges</span></div>
         </div>
       </div>
@@ -329,37 +331,9 @@
       <div style="height:22px"></div>
     </section>
 
-    <!-- ============ AQUARIUM ============ -->
-    <section class="screen" id="aquarium">
-      <div class="topbar" id="aqTop" style="padding-bottom:18px;">
-        <div class="float-bubbles" id="ab"></div>
-        <h1><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path d="M4 8h16M9 8V5.5h6V8"/></svg> Mon aquarium</h1>
-        <div class="sub">Gagne de l'XP pour agrandir ton aquarium et adopter des créatures</div>
-      </div>
-      <div class="aq-hero">
-        <div class="aq-tier" id="aqTier"></div>
-        <div class="aq-stage" id="aqStage" onclick="openReefFull()"></div>
-      </div>
-      <div class="aq-next" id="aqNext"></div>
-      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 8h14v11a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2z"/><path d="M4 8h16M9 8V5.5h6V8"/></svg> Évolution de l'aquarium</h2></div>
-      <div class="tier-row" id="tierRow"></div>
-      <div class="gsw">
-        <button data-g="a" class="on" onclick="aqShow('a')">Créatures <b id="gswAqA"></b></button>
-        <button data-g="b" onclick="aqShow('b')">Décors <b id="gswAqB"></b></button>
-      </div>
-      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12c3-4 8-6 12-4 2 1 4 2.5 6 4-2 1.5-4 3-6 4-4 2-9 0-12-4z"/><circle cx="15.5" cy="10.7" r=".9" fill="currentColor"/></svg> Créatures marines</h2><a id="aqCount"></a></div>
-      <div class="aq-grid" id="creatureGrid"></div>
-      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21V6"/><path d="M12 15c-2.2 0-3-2-3-4M12 13c2.2 0 3-2 3-4M9 11c-1.6 0-2-1.6-2-3M15 9c1.6 0 2-1.6 2-3"/></svg> Décors &amp; habitats</h2><a id="aqDecCount"></a></div>
-      <div class="aq-grid" id="decorGrid"></div>
-      <div class="rar-legend" id="rarLegend">
-        <b>Rareté</b>
-        <span><i style="background:#eef5f9;box-shadow:0 0 0 1.5px #cfdfe9"></i>Commune</span>
-        <span><i style="background:#3ec98a"></i>Peu commune</span>
-        <span><i style="background:#36b5d8"></i>Rare</span>
-        <span><i style="background:#d768c9"></i>Épique</span>
-        <span><i style="background:#ffce54"></i>Légendaire</span>
-      </div>
-      <p id="aqHint" style="margin:10px 18px 0;font-size:11.5px;color:#6a8294;line-height:1.4"></p>
+    <!-- ============ SURF TRIPS ============ -->
+    <section class="screen" id="trips" aria-label="Mes surf trips">
+      <div id="tripContent"></div>
     </section>
 
   </main>
@@ -370,7 +344,7 @@
     <button class="n-spots" data-s="spots" onclick="go('spots')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 5.2 6.3 11.4 6.9 12a.8.8 0 0 0 1.1 0c.7-.6 7-6.8 7-12A7.5 7.5 0 0 0 12 2z"/><circle cx="12" cy="9.3" r="2.6" fill="#fff"/></svg></span>Spots</button>
     <button class="center" data-s="challenges" onclick="go('challenges')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4h10v1.5h2.5a.8.8 0 0 1 .8.9c-.2 2-1.6 3.4-3.6 3.7A5.2 5.2 0 0 1 13 13v2h2.2a.8.8 0 0 1 0 1.6H8.8a.8.8 0 0 1 0-1.6H11v-2a5.2 5.2 0 0 1-3.7-2.9C5.3 9.8 3.9 8.4 3.7 6.4a.8.8 0 0 1 .8-.9H7zM5.6 7c.2.9.8 1.6 1.5 1.9V7zm12.9 0H17v1.9c.7-.3 1.3-1 1.5-1.9z"/><rect x="8" y="18.4" width="8" height="2" rx="1"/></svg></span></button>
     <button class="n-prof" data-s="profile" onclick="go('profile')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-3.6 0-6 2.6-6 5.8 0 1.6.7 2.7 1 3.4-1 .1-2 .9-2 1.9 0 .8.7 1.2 1.5 1 .2 1 1 1.7 1.9 1.5.3.7 1 .9 1.6.7.6.2 1.3 0 1.6-.7.9.2 1.7-.5 1.9-1.5.8.2 1.5-.2 1.5-1 0-1-1-1.8-2-1.9.3-.7 1-1.8 1-3.4C18 5.6 15.6 3 12 3z"/><circle cx="10" cy="9" r="1.3" fill="#fff"/><circle cx="14" cy="9" r="1.3" fill="#fff"/></svg></span>Profil</button>
-    <button class="n-aqua" data-s="aquarium" onclick="go('aquarium')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3.5 12c2.6-4.2 7.5-5.6 11.5-4.2 1.3-1.4 3-2 4.5-1.8-.6 1-.8 2-.6 3 .2 1 .8 1.8 1.6 2.4-1.2 1-3 1.3-4.9.6C11.4 13.7 6.4 15.2 3.5 12z"/><circle cx="9" cy="11" r="1.2" fill="#fff"/></svg></span>Aquarium</button>
+    <button class="n-trips" data-s="trips" onclick="go('trips')">Surf trips</button>
   </nav>
 
   <button class="fab" id="poulpyFab" onclick="openChat()" aria-label="Ouvrir Poulpy"><svg id="fabOcto" viewBox="0 0 140 140"></svg></button>
@@ -404,25 +378,20 @@
     </div>
   </div>
 
-  <div class="aqi" id="aqInfo" onclick="if(event.target===this)closeAqInfo()">
-    <div class="aqi-card" id="aqInfoCard"></div>
-  </div>
 
   <div class="aqi" id="ecoInfo" onclick="if(event.target===this)closeEcoLog()">
     <div class="aqi-card" id="ecoInfoCard"></div>
   </div>
 
-  <div class="reeffull" id="reefFull">
-    <div class="tank reeffull-tank" id="reefFullTank"></div>
-    <button class="reeffull-close" onclick="closeReefFull()" aria-label="Fermer">✕</button>
-    <div class="reeffull-hint">🪸 Ton récif en immersion · touche ✕ pour sortir</div>
-  </div>
 
   <div class="confetti" id="confetti"></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 
+<script src="photo-catalog.js"></script>
+<script src="trip-model.js"></script>
 <script src="app.js"></script>
 <script src="design.js"></script>
+<script src="trips.js"></script>
 </body>
 </html>
