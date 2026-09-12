@@ -72,7 +72,7 @@
   const credits=document.createElement('a');credits.className='photo-credits';credits.href='photos.html';credits.target='_blank';credits.rel='noopener';credits.textContent='Photographies & crédits ↗';$('#worldPick').append(credits);
   const photoNote=document.createElement('a');photoNote.className='hero-photo-credit';photoNote.href='photos.html';photoNote.target='_blank';photoNote.rel='noopener';photoNote.textContent='Photo · byronetmedia';$('#homeTop').append(photoNote);
   const homeStats=document.createElement('div');homeStats.className='hero-stats';homeStats.innerHTML='<span><b>'+SPOTS.length+'</b> spots</span><span><b>9</b> activités</span><span><b>1</b> océan à protéger</span>';$('#homeTop').append(homeStats);
-  const worldsSync=syncWorldUI;syncWorldUI=function(){worldsSync();document.body.classList.toggle('is-world-picker',!spotWorld)};syncWorldUI();
+  const worldsSync=syncWorldUI;syncWorldUI=function(){worldsSync();document.body.classList.toggle('is-world-picker',!spotWorld);window.OceanPoulpy?.refresh()};syncWorldUI();
 
   // Give the ecology challenges their own prominent section before the optional circuit.
   const events=$('#cmpEvents');const eventBox=events.parentElement;

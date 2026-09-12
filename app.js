@@ -561,7 +561,8 @@ function octoTag(){
        + poulpySVG() + '</svg>';
 }
 function poulpySVG(){
-  return '<image href="assets/design/poulpy.webp" x="0" y="0" width="140" height="140" preserveAspectRatio="xMidYMid meet"/>';
+  const asset=window.OceanPoulpy?window.OceanPoulpy.src(window.OceanPoulpy.context()):'assets/design/poulpy.webp';
+  return '<image href="'+asset+'" x="0" y="0" width="140" height="140" preserveAspectRatio="xMidYMid meet"/>';
 }
 
 /* ================= OCEAN SCENE (rich) ================= */
@@ -1483,6 +1484,7 @@ function setDetailSport(id){
   var lb=document.getElementById('dLogBtn');
   if(lb)lb.innerHTML=ctaLabel(act);
   realForecastDetail(s,act);
+  window.OceanPoulpy?.refresh();
 }
 function renderDetailFacts(s,act){
   /* Trois reperes d'identite, pas de conditions : celles-ci ont leur onglet. */
@@ -2119,7 +2121,7 @@ function renderWelcome(){
   if(window.__obHello){ b.innerHTML=window.__obHello; window.__obHello=null; return; }
   b.innerHTML=welcomeText();
 }
-function renderHome(){renderWelcome();renderActivityBar();renderToday();renderForecast();renderProg();renderLiveTop();renderHomeStats();}
+function renderHome(){renderWelcome();renderActivityBar();renderToday();renderForecast();renderProg();renderLiveTop();renderHomeStats();window.OceanPoulpy?.refresh();}
 
 /* ================= CREATURES ================= */
 function cShoeShark(){return `<svg viewBox="0 0 64 64"><defs><linearGradient id="ssk" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#9fb4c7"/><stop offset="100%" stop-color="#56707f"/></linearGradient></defs>
@@ -2323,10 +2325,11 @@ function renderSportGuide(){
   let h=SPORTS.map(s=>`<div class="sport-card" data-sp="${s.id}" onclick="pickSport(this,'${s.id}')"><div class="se" style="background:linear-gradient(135deg,${s.color}33,${s.color}1a);box-shadow:inset 0 0 0 2px ${s.color}4d">${sportIcon(s.id)}</div><h4>${s.label}</h4><p>${s.desc}</p></div>`).join('');
   h+=`<div class="sport-card" data-sp="all" onclick="pickSport(this,'all')"><div class="se" style="background:linear-gradient(135deg,#bfe9f733,#bfe9f71a);box-shadow:inset 0 0 0 2px #9fd6ee4d">🌊</div><h4>Tout voir</h4><p>Tous les sports</p></div>`;
   g.innerHTML=h;
+  window.OceanPoulpy?.decorateOnboarding();
 }
 function pickSport(el,id){document.querySelectorAll('#sportGrid .sport-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');chosenSport=id;}
 function onbBubbles(){let h='';for(let i=0;i<14;i++){const s=4+Math.random()*16;h+=`<i class="obub" style="left:${Math.random()*100}%;bottom:-30px;width:${s}px;height:${s}px;animation-duration:${5+Math.random()*6}s;animation-delay:${Math.random()*6}s"></i>`;}document.getElementById('onbBubbles').innerHTML=h;}
-function showStep(n){document.querySelectorAll('.onb-step').forEach(s=>s.classList.toggle('active',+s.dataset.step===n));onbStep=n;}
+function showStep(n){document.querySelectorAll('.onb-step').forEach(s=>s.classList.toggle('active',+s.dataset.step===n));onbStep=n;window.OceanPoulpy?.focusOnboarding();}
 function onbNext(){
   if(onbStep===1&&!chosenSport){toast('Choisis une activité 🐙');return;}
   if(quickGate&&onbStep===1){finishOnb();return;}
@@ -2426,6 +2429,7 @@ function go(s){
     resetScreenLive(target);
     target.classList.add('active');
     wrap.scrollTop=0;
+    wrap.focus({preventScroll:true});
     if(s==='home')animateCounts();
     if(s==='profile')renderProfile();
     return;
@@ -2452,6 +2456,8 @@ function go(s){
     cur.classList.remove('active');
     resetScreenLive(cur);resetScreenLive(target);
     wrap.style.minHeight='';wrap.classList.remove('transitioning');
+    wrap.scrollTop=0;
+    wrap.focus({preventScroll:true});
     if(s==='home')animateCounts();
     if(s==='profile')renderProfile();
   },420);

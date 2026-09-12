@@ -11,6 +11,8 @@ L’utilisateur demande que chaque modification terminée et vérifiée de cette
 
 ## À la fin d’une modification
 
+Après la dernière modification JavaScript ou CSS, exécuter `python3 scripts/version-assets.py` avant les vérifications finales et le commit. Ce script met à jour les URL des ressources dans `index.html` pour que les visiteurs reçoivent bien la nouvelle version, même si leur navigateur a conservé les anciens fichiers en cache.
+
 1. Vérifier les changements avec les contrôles adaptés. Pour une modification fonctionnelle du modèle de voyage, lancer `node --test tests/trip-model.test.js`. Pour une modification visuelle, vérifier les écrans concernés dans le navigateur, sur mobile et sur ordinateur selon la portée.
 2. Inspecter les changements et l’état Git. Préserver le travail existant de l’utilisateur ; ne pas publier une modification étrangère à la tâche ou inachevée. Ne pas inclure de secrets ou de configuration locale.
 3. Enregistrer les changements terminés dans un commit. Récupérer l’état du dépôt distant et intégrer les éventuelles nouveautés sans écraser leur historique.
