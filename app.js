@@ -719,6 +719,7 @@ function spotCard(s){
     <div class="spot-info">
       <div class="spot-meta">${L.live?`<span>${icoWind()} ${L.wind||'—'}</span><span>${icoSwell()} ${L.swell||'—'}</span><span>${icoTemp()} ${L.temp||'—'}</span><span class="live-dot" title="Prévisions Open-Meteo"></span>`:'<span class="spot-preview">'+spotSports(s).slice(0,3).map(id=>SPORTMAP[id].label).join(' · ')+'</span>'}</div>
       <div class="spot-sports">${sp}</div>
+      ${window.OceanNotebook?.button(s.id)||''}
       <div class="danger-dots" title="Danger">${dots}</div>
     </div>
   </article>`;
@@ -1269,7 +1270,7 @@ function countryEmergency(loc){
   if(has('irlande')) return {emergency:'112',sea:'Garde-côtes : 112 / VHF 16',call:'112'};
   if(has('france')||has('tahiti')||has('corse')||has('réunion')) return {emergency:'112',sea:'Secours en mer : 196 (ou VHF 16)',call:'112'};
   if(has('portugal')||has('espagne')||has('italie')||has('grèce')||has('grece')||has('islande')||has('norvège')||has('norvege')) return {emergency:'112',sea:'Secours en mer : 112 / VHF 16',call:'112'};
-  return {emergency:'112',sea:'112 fonctionne depuis un mobile dans la plupart des pays',call:'112'};
+  return {emergency:'À confirmer',sea:'Repère le numéro des secours locaux avant ta sortie.',call:null};
 }
 var SPORT_VERB={surf:'surfé',bodyboard:'ridé',baignade:'nagé',paddle:'pagayé',kayak:'pagayé',snorkeling:'fait du snorkeling',plongee:'plongé',kitesurf:'kité',windsurf:'navigué'};
 
@@ -1410,7 +1411,7 @@ function showHomeCat(cat){
   });
   var w=document.getElementById('screenWrap'); if(w) w.scrollTop=0;
 }
-function showDetailCat(cat){
+function showDetailCat(cat,shouldScroll=true){
   /* « Conditions » porte deux panneaux : la météo et la sécurité. Les deux
      répondent à la même question avant d'entrer dans l'eau. */
   document.querySelectorAll('#detail .dcat').forEach(function(d){
@@ -1426,7 +1427,12 @@ function showDetailCat(cat){
   },0);
   document.querySelectorAll('#dTabs .dtab').forEach(function(b){b.classList.toggle('active',b.dataset.cat===cat);});
   var tabs=document.getElementById('dTabs');
-  if(tabs)tabs.scrollIntoView({block:'start',behavior:'smooth'});
+  if(tabs&&shouldScroll){
+    var anchor=document.getElementById('detailTabsAnchor');
+    if(!anchor){anchor=document.createElement('div');anchor.id='detailTabsAnchor';tabs.before(anchor);}
+    var wrap=document.getElementById('screenWrap');
+    wrap.scrollTo({top:wrap.scrollTop+anchor.getBoundingClientRect().top-wrap.getBoundingClientRect().top,behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'});
+  }
 }
 function worldLab(sid){
   if(typeof SPOT_WORLD==='undefined'||typeof WORLDS==='undefined')return '';
@@ -1459,6 +1465,7 @@ function setHeroPhoto(s){
   if(more)more.onclick=function(){
     window.open('https://www.google.com/search?tbm=isch&q='
       +encodeURIComponent(s.name.split(' — ')[0]+' '+s.loc),'_blank');};
+  window.OceanGallery?.update(s);
 }
 /* L'activite choisie ici ne vaut QUE pour la fiche ouverte : changer de sport
    sur un spot ne doit pas reconfigurer le filtre de toute l'app, qui se regle
@@ -1537,8 +1544,9 @@ function openSpot(id){
   document.getElementById('dLogBtn').innerHTML=ctaLabel(sp0);
   var em=countryEmergency(s.loc);
   document.getElementById('dEmerg').textContent=em.emergency;
-  document.getElementById('dSea').textContent=em.sea;
-  document.getElementById('dCall').href='tel:'+em.call;
+  document.getElementById('dSea').textContent=isInland(s)?(em.call?'Secours : '+em.emergency:'Numéro local à confirmer avant la sortie.'):em.sea;
+  const callButton=document.getElementById('dCall');callButton.hidden=!em.call;
+  if(em.call)callButton.href='tel:'+em.call;else callButton.removeAttribute('href');
   document.getElementById('dRescue').onclick=function(){mapsSearch('poste de secours plage sauveteurs '+near,cc);};
   document.getElementById('dGuide').innerHTML=renderGuide(s,act);
   renderGuideSub(s,act);
@@ -1560,7 +1568,7 @@ function openSpot(id){
   renderConditions(s,null);fetchConditions(s);
   try{renderFaune(s);}catch(e){}
   document.getElementById('dDangers').innerHTML=s.dangers.map(d=>{var m=DANGER_MAP[d[0]]||['pin','#eef4f7','#7c98a8'];return `<div class="danger-item"><span class="di" style="background:${m[1]};color:${m[2]}">${uic(m[0])}</span><span>${d[1]}</span></div>`;}).join('');
-  showDetailCat('infos');
+  showDetailCat('infos',false);
   go('detail');
 }
 function renderChallenges(){
@@ -1650,7 +1658,8 @@ function renderToday(){
   const s=recommendedSpot();
   const conditions=LIVE[s.id]||{};
   const dateStr=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
-  const actLab=`${sportIcon(activeSport||'surf')} ${activeSport?SPORTMAP[activeSport].label:'Surf'}`;
+  const todaySport=activeSport||spotSports(s)[0];
+  const actLab=`${sportIcon(todaySport)} ${SPORTMAP[todaySport].label}`;
   document.getElementById('todayCard').innerHTML=`
     <div class="today-head"><span class="t"><span class="th"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.2 5.2l1.8 1.8M17 17l1.8 1.8M18.8 5.2 17 7M7 17l-1.8 1.8"/></svg> Le spot du jour</span></span><span class="d">${dateStr}</span></div>
     <div class="today-hero" onclick="openSpot('${s.id}')">
@@ -1687,15 +1696,16 @@ function renderForecast(){
   document.getElementById('fcBars').innerHTML='<p class="field-forecast-empty">La houle s’affichera lorsque les données du modèle seront disponibles.</p>';
 }
 function cardinal(deg){if(deg==null||isNaN(deg))return '';return ['N','NE','E','SE','S','SO','O','NO'][Math.round(deg/45)%8];}
+function isInland(s){return s?.waterType==='lake'||['annecy','verdon','gardalake','hoodriver','silfra','cenote_dosojos'].includes(s?.id);}
 function renderConditions(s,live){
   const wind=live?.wind||'—',swell=live?.swell||'—',temp=live?.temp||'—',tide=live?.tide||'—';
   document.getElementById('dWeather').innerHTML=`
     <div class="wc">${icoWind()}<div class="v" style="font-size:12px">${wind}</div><div class="l">Vent</div></div>
-    <div class="wc">${icoSwell()}<div class="v">${swell}</div><div class="l">Houle</div></div>
-    <div class="wc">${icoTemp()}<div class="v">${temp}</div><div class="l">Eau</div></div>
-    <div class="wc">${icoTide()}<div class="v" style="font-size:10.5px;">${tide}</div><div class="l">Marée</div></div>`;
+    <div class="wc">${icoSwell()}<div class="v">${isInland(s)?'—':swell}</div><div class="l">${isInland(s)?'Houle marine non applicable':'Houle'}</div></div>
+    <div class="wc">${icoTemp()}<div class="v">${isInland(s)?'—':temp}</div><div class="l">${isInland(s)?'Température de l’eau non disponible':'Eau'}</div></div>
+    <div class="wc">${icoTide()}<div class="v" style="font-size:10.5px;">${isInland(s)?'—':tide}</div><div class="l">${isInland(s)?'Sans marée océanique':'Marée'}</div></div>`;
   const head=document.getElementById('dCondHead');
-  if(head)head.textContent=live?'Prévisions du modèle · Open-Meteo':'Prévisions du modèle indisponibles pour le moment';
+  if(head)head.textContent=live?(isInland(s)?'Eau douce · prévisions de vent Open-Meteo':'Prévisions du modèle · Open-Meteo'):'Prévisions du modèle indisponibles pour le moment';
 }
 function tideFromMarine(mar){
   const hh=(mar&&mar.hourly)||{};const t=hh.time||[],lv=hh.sea_level_height_msl||[];
@@ -1716,7 +1726,7 @@ async function fetchConditions(s){
   try{
     const [w,mar]=await Promise.all([
       fetch(`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto`).then(r=>r.json()).catch(()=>({})),
-      fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&current=wave_height,sea_surface_temperature&hourly=sea_level_height_msl&forecast_days=2&timezone=auto`).then(r=>r.json()).catch(()=>({}))
+      isInland(s)?Promise.resolve({}):fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&current=wave_height,sea_surface_temperature&hourly=sea_level_height_msl&forecast_days=2&timezone=auto`).then(r=>r.json()).catch(()=>({}))
     ]);
     if(currentSpot!==s.id)return;
     const wc=w.current||{},mc=mar.current||{};
@@ -1731,7 +1741,7 @@ async function fetchConditions(s){
     };
     LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);
     renderConditions(s,o);
-    renderTideChart(mar);
+    if(!isInland(s))renderTideChart(mar);else document.getElementById('dTideBlock').style.display='none';
   }catch(e){}
 }
 var _tideSeq=0;
@@ -1936,14 +1946,15 @@ async function fetchAllConditions(){
   for(let i=0;i<spots.length;i+=chunk){
     const part=spots.slice(i,i+chunk);
     const lats=part.map(s=>COORDS[s.id].lat).join(','),lons=part.map(s=>COORDS[s.id].lon).join(',');
+    const marinePart=part.filter(s=>!isInland(s)),marineIndex=new Map(marinePart.map((s,i)=>[s.id,i])),mlats=marinePart.map(s=>COORDS[s.id].lat).join(','),mlons=marinePart.map(s=>COORDS[s.id].lon).join(',');
     try{
       const [w,m]=await Promise.all([
         fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto`).then(r=>r.json()).catch(()=>null),
-        fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${lats}&longitude=${lons}&current=wave_height,sea_surface_temperature&timezone=auto`).then(r=>r.json()).catch(()=>null)
+        marinePart.length?fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${mlats}&longitude=${mlons}&current=wave_height,sea_surface_temperature&timezone=auto`).then(r=>r.json()).catch(()=>null):Promise.resolve([])
       ]);
       const wa=w?(Array.isArray(w)?w:[w]):[],ma=m?(Array.isArray(m)?m:[m]):[];
       part.forEach((s,idx)=>{
-        const wc=(wa[idx]||{}).current||{},mc=(ma[idx]||{}).current||{};const o={};
+        const wc=(wa[idx]||{}).current||{},mc=(ma[marineIndex.get(s.id)]||{}).current||{};const o={};
         if(wc.wind_speed_10m!=null){o.wind=(`${Math.round(wc.wind_speed_10m)} km/h ${cardinal(wc.wind_direction_10m)}`).trim();o.windK=Math.round(wc.wind_speed_10m);}
         if(mc.wave_height!=null){o.swell=`${(+mc.wave_height).toFixed(1)} m`;o.waveM=+mc.wave_height;}
         if(mc.sea_surface_temperature!=null)o.temp=`${Math.round(mc.sea_surface_temperature)}°C`;
@@ -1986,6 +1997,7 @@ async function fetchWindDaily(id,n){
   return {days:t.slice(0,n).map((iso,i)=>dayLabel(iso,i)),vals:v.slice(0,n).map(x=>Math.max(0,Math.round(+x)))};
 }
 async function fetchWaves(id,n){
+  if(isInland(SPOTS.find(s=>s.id===id)))throw new Error('Marine forecast not applicable');
   const c=COORDS[id];if(!c)throw 0;
   const url=`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&daily=wave_height_max&timezone=auto&forecast_days=${n}`;
   const r=await fetch(url);const j=await r.json();
@@ -2002,13 +2014,13 @@ var CAL_ICO='<svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentCol
 var detailForecastRequest=0;
 async function realForecastDetail(s,act){
   const request=++detailForecastRequest;
-  var wind=(act==='kitesurf'||act==='windsurf');
+  var wind=(isInland(s)||act==='kitesurf'||act==='windsurf');
   var calm=(act==='baignade'||act==='snorkeling'||act==='plongee'||act==='paddle'||act==='kayak');
   var head=document.getElementById('dFcHead');
   if(head)head.innerHTML=CAL_ICO+(wind?'Prévisions vent · 5 jours':(calm?'État de la mer · 5 jours':'Prévisions houle · 5 jours'));
   showForecastSkeleton('dForecast','dFcBest');
   try{
-    if(wind){var fw=await fetchWindDaily(s.id,5);if(currentSpot!==s.id||request!==detailForecastRequest)return;renderForecastBars('dForecast','dFcBest',fw.days,fw.vals,{unit:'km/h',liveOn:true,badge:'Modèle Open-Meteo',bestLabel:'Le plus venté'});}
+    if(wind){var fw=await fetchWindDaily(s.id,5);if(currentSpot!==s.id||request!==detailForecastRequest)return;renderForecastBars('dForecast','dFcBest',fw.days,fw.vals,{unit:'km/h',liveOn:true,badge:'Modèle Open-Meteo',best:calm?'min':'max',bestLabel:calm?'Vent le plus faible':'Le plus venté'});}
     else{var f=await fetchWaves(s.id,5);if(currentSpot!==s.id||request!==detailForecastRequest)return;renderForecastBars('dForecast','dFcBest',f.days,f.vals,{unit:'m',liveOn:true,badge:'Modèle Open-Meteo',best:calm?'min':'max',bestLabel:calm?'Houle la plus basse':'Houle la plus haute'});}
   }catch(e){if(currentSpot===s.id&&request===detailForecastRequest)renderMiniForecast(s,calm);}
 }
@@ -2491,43 +2503,11 @@ function showTyping(){const c=document.getElementById('chatMsgs');const m=docume
 function hideTyping(){const t=document.getElementById('typingMsg');if(t)t.remove();}
 function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
 function pick(a){return a[Math.floor(Math.random()*a.length)];}
-/* ===== Poulpy IA (backend optionnel) + repli local ===== */
-const POULPY_API='/.netlify/functions/poulpy';
-let aiState='unknown';            // 'unknown' | 'on' | 'off'
-let chatHistory=[];               // {role,content}
-function setChatStatus(){const el=document.getElementById('chatStatus');if(!el)return;
-  el.innerHTML=aiState==='on'?'<span class="dot-on"></span> IA en ligne':'<span class="dot-on" style="background:#ffd23e;box-shadow:0 0 7px #ffd23e"></span> Mode local';}
-function aiSpotsIndex(){return SPOTS.map(function(s){return s.name.split(' — ')[0]+' ('+s.loc+') · '+lvlLabel[s.level].replace(/<[^>]+>/g,'')+' · '+spotSports(s).map(function(id){return SPORTMAP[id].label;}).join('/');}).join('\n');}
-function aiContext(){
-  var c='Utilisateur : niveau '+(chosenLevel||'non défini')+', activité choisie '+(activeSport?SPORTMAP[activeSport].label:'toutes')+'.';
-  if(currentSpot&&document.getElementById('detail').classList.contains('active')){
-    var s=SPOTS.find(function(x){return x.id===currentSpot;});
-    if(s){c+='\nFiche ouverte : '+s.name+' — '+s.loc+' ('+lvlLabel[s.level].replace(/<[^>]+>/g,'')+'). '+s.desc;
-      if(FAUNA[s.id])c+=' Faune : '+FAUNA[s.id];
-      if(typeof ZONES!=='undefined'&&ZONES[s.id])c+=' Zones : '+ZONES[s.id].map(function(z){return z.n+' ('+z.d+')';}).join(' ; ')+'.';}
-  }
-  return c;
-}
-async function askPoulpyAI(text){
-  var res=await fetch(POULPY_API,{method:'POST',headers:{'content-type':'application/json'},
-    body:JSON.stringify({message:text,history:chatHistory.slice(-8),context:aiContext(),spots:aiSpotsIndex()})});
-  if(!res.ok)throw new Error('http '+res.status);
-  var data=await res.json();
-  if(!data.reply)throw new Error('no reply');
-  return data.reply;
-}
+/* The connected assistant is installed by poulpy-assistant.js. */
+let chatHistory=[];
+function setChatStatus(){const el=document.getElementById('chatStatus');if(el)el.textContent='Guide intégré · IA non connectée';}
 function aiFormat(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');}
-function chatSend(text){text=(text||'').trim();if(!text)return;addMsg('user',esc(text));showTyping();
-  if(aiState==='off'){setTimeout(function(){hideTyping();var r=poulpyReply(text);addMsg('bot',r.html,r.btn);chatHistory.push({role:'user',content:text});},600+Math.random()*400);return;}
-  askPoulpyAI(text).then(function(reply){
-    hideTyping();aiState='on';setChatStatus();
-    addMsg('bot',aiFormat(reply));
-    chatHistory.push({role:'user',content:text});chatHistory.push({role:'assistant',content:reply});
-  }).catch(function(){
-    aiState='off';setChatStatus();hideTyping();
-    var r=poulpyReply(text);addMsg('bot',r.html,r.btn);chatHistory.push({role:'user',content:text});
-  });
-}
+function chatSend(text){text=String(text||'').trim();if(!text)return;addMsg('user',esc(text));const reply=poulpyReply(text);addMsg('bot',reply.html,reply.btn);}
 function chatSendInput(){const i=document.getElementById('chatInput');chatSend(i.value);i.value='';}
 function quick(t){const map={spot:"Quel spot tu me conseilles aujourd'hui ?",secu:"Donne-moi un conseil de sécurité",eco:"Un geste écolo à faire ?",prog:"Où en est ma progression ?"};chatSend(map[t]);}
 function openFromChat(s){closeChat();go(s);}
@@ -2888,7 +2868,7 @@ const QUIZ_BANK=[
  {c:'faune',q:'Quel animal a inspiré les légendes de sirènes ?',a:['Le dauphin','Le lamantin / dugong','Le phoque','La raie'],k:1,e:'Les « vaches de mer » brouteuses d’herbiers.'},
  {c:'secu',q:'Pris dans une baïne (courant), il faut…',a:['nager droit vers la plage','nager parallèlement à la plage','paniquer','plonger au fond'],k:1,e:'On nage parallèlement pour sortir du courant.'},
  {c:'secu',q:'Quel drapeau signifie « baignade interdite » ?',a:['Vert','Orange','Rouge','Bleu'],k:2,e:'Rouge = interdit ; violet = animaux dangereux.'},
- {c:'secu',q:'Le numéro d’urgence qui marche sur mobile presque partout ?',a:['911','112','15','18'],k:1,e:'Le 112 fonctionne dans la plupart des pays.'},
+ {c:'secu',q:'Quel numéro permet de joindre les secours dans toute l’Union européenne ?',a:['911','112','15','18'],k:1,e:'Le 112 est le numéro d’urgence commun aux pays de l’Union européenne, joignable depuis un téléphone fixe ou mobile.'},
  {c:'secu',q:'Piqûre de vive (poisson du sable) : on trempe le pied dans…',a:['de la glace','de l’eau chaude','du vinaigre','du sable'],k:1,e:'Le venin de la vive craint la chaleur.'},
  {c:'secu',q:'En surf, le surfeur prioritaire sur la vague est…',a:['le plus loin','le plus proche du pic','le plus rapide','le plus âgé'],k:1,e:'Le plus proche du pic a la priorité.'},
  {c:'secu',q:'Dans une eau dont on ignore la profondeur, on entre…',a:['tête la première','par les pieds','en courant','en sautant'],k:1,e:'Jamais tête la première — risque de blessure au cou.'},

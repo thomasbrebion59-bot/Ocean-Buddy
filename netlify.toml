@@ -1,0 +1,6 @@
+[build]
+  publish = ".netlify/publish"
+  command = "node scripts/build-ai-catalog.cjs && node scripts/build-static.cjs"
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"

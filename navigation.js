@@ -110,6 +110,7 @@
     pending=null;entry=event.state;restore(entry.route);
   });
   wrap.addEventListener('scroll',remember,{passive:true});
+  wrap.addEventListener('click',remember);
   wrap.addEventListener('input',remember);wrap.addEventListener('change',remember);
   window.addEventListener('pagehide',()=>{if(!restoring){entry={...entry,route:capture()};write();}});
   window.OceanNavigation={begin,settled,back};

@@ -12,8 +12,8 @@ const extra=sandbox.window.OCEAN_SPOT_EXPANSION;
 const all=[...base,...extra];
 const photos=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/sources.json'),'utf8'));
 const sports=new Set(['surf','bodyboard','plongee','snorkeling','paddle','kayak','baignade','kitesurf','windsurf']);
-test('240 distinct spots, including 72 new sourced destinations across all seven regions',()=>{
- assert.equal(base.length,168);assert.equal(extra.length,72);assert.equal(all.length,240);
+test('280 distinct spots, including 112 sourced additions across all seven regions',()=>{
+ assert.equal(base.length,168);assert.equal(extra.length,112);assert.equal(all.length,280);
  assert.equal(new Set(all.map(s=>s.id)).size,all.length);
  assert.deepEqual([...new Set(extra.map(s=>s.world))].sort(),['af','as','eu','fr','na','oc','sa']);
  for(const s of extra){
@@ -21,7 +21,7 @@ test('240 distinct spots, including 72 new sourced destinations across all seven
   assert.ok(s.sports.every(x=>sports.has(x)),s.id);
   assert.ok(Number.isFinite(s.coords.lat)&&Math.abs(s.coords.lat)<=90,s.id);
   assert.ok(Number.isFinite(s.coords.lon)&&Math.abs(s.coords.lon)<=180,s.id);
-  assert.equal(s.coordinatePrecision,'coastal-sector',s.id);
+  assert.ok(['coastal-sector','lake-sector'].includes(s.coordinatePrecision),s.id);
   assert.equal(new URL(s.source.url).protocol,'https:',s.id);assert.ok(s.source.label,s.id);
   assert.equal(s.reviewed,data.reviewed,s.id);
  }
@@ -46,9 +46,30 @@ test('search matches accents consistently',()=>{
 });
 test('marine forecasts preserve zero values and reject missing values',async()=>{
  let daily={time:['2026-09-13'],wave_height_max:[0]};
- const ctx={COORDS:{baleal:{lat:39,lon:-9}},dayLabel:()=> 'Auj',fetch:async()=>({json:async()=>({daily})})};
+ const ctx={isInland:()=>false,SPOTS:[{id:'baleal'}],COORDS:{baleal:{lat:39,lon:-9}},dayLabel:()=> 'Auj',fetch:async()=>({json:async()=>({daily})})};
  vm.runInNewContext(functionSource('async function fetchWaves','function showForecastSkeleton')+';this.waves=fetchWaves;',ctx);
  assert.equal((await ctx.waves('baleal',1)).vals[0],0);
  daily.wave_height_max=[null];await assert.rejects(()=>ctx.waves('baleal',1));
  daily.wave_height_max=[];await assert.rejects(()=>ctx.waves('baleal',1));
+});
+test('freshwater destinations never request marine forecasts',async()=>{
+ let calls=0;
+ const ctx={SPOTS:[{id:'bourget',waterType:'lake'}],COORDS:{bourget:{lat:45.7,lon:5.9}},fetch:async()=>{calls++;}};
+ vm.runInNewContext(functionSource('function isInland','function renderConditions')+functionSource('async function fetchWaves','function showForecastSkeleton')+';this.waves=fetchWaves;',ctx);
+ await assert.rejects(()=>ctx.waves('bourget',7));assert.equal(calls,0);
+});
+test('batch weather keeps marine values aligned when lakes appear between coasts',async()=>{
+ const urls=[],spots=[{id:'sea1'},{id:'lake',waterType:'lake'},{id:'sea2'}];
+ const ctx={SPOTS:spots,COORDS:{sea1:{lat:1,lon:11},lake:{lat:2,lon:12},sea2:{lat:3,lon:13}},LIVE:{},currentFilter:'all',window:{},renderSpots(){},renderLiveTop(){},renderToday(){},cardinal:()=> 'N',fetch:async url=>{urls.push(new URL(url));return {json:async()=>url.includes('marine-api')?[{current:{wave_height:0}},{current:{wave_height:2}}]:[1,2,3].map(x=>({current:{wind_speed_10m:x}}))};}};
+ vm.runInNewContext(functionSource('function isInland','function renderConditions')+functionSource('async function fetchAllConditions','function renderLiveTop')+';this.run=fetchAllConditions;',ctx);
+ await ctx.run();assert.equal(urls.find(u=>u.hostname==='marine-api.open-meteo.com').searchParams.get('latitude'),'1,3');assert.equal(ctx.LIVE.sea1.swell,'0.0 m');assert.equal(ctx.LIVE.sea2.swell,'2.0 m');assert.equal(ctx.LIVE.lake.swell,undefined);assert.equal(ctx.LIVE.lake.wind,'2 km/h N');
+});
+test('gallery images are local, credited and attached to existing destinations',()=>{
+ const galleries=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/gallery-sources.json'),'utf8'));
+ assert.equal(Object.values(galleries).flat().length,12);assert.equal(extra.filter(s=>s.catalogNew).length,40);
+ for(const [id,rows] of Object.entries(galleries)){assert.ok(all.some(s=>s.id===id),id);for(const p of rows){assert.ok(fs.statSync(path.join(root,p.src)).size>1000);assert.ok(p.author&&p.license);assert.equal(new URL(p.source).protocol,'https:');}}
+});
+test('an unrecognised country does not invent an emergency phone number',()=>{
+ const ctx={};vm.runInNewContext(functionSource('function countryEmergency','var SPORT_VERB')+';this.emergency=countryEmergency;',ctx);
+ assert.equal(ctx.emergency('Lieu non identifié').call,null);assert.equal(ctx.emergency('Savoie, France').call,'112');
 });

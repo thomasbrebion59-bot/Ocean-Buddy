@@ -124,6 +124,166 @@
     "renaca": {
       "label": "Chile Travel",
       "url": "https://chile.travel/en/attractions/renaca/"
+    },
+    "labaule": {
+      "label": "France.fr",
+      "url": "https://www.france.fr/fr/article/cote-atlantique-que-faire-que-voir/"
+    },
+    "hendaye": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Hendaye"
+    },
+    "morgat": {
+      "label": "Crozon Bretagne",
+      "url": "https://www.crozon-bretagne.com/loisirs/sports/nautiques/kayak-presquile.php"
+    },
+    "saintjeandeluz": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Saint-Jean-de-Luz"
+    },
+    "bourget": {
+      "label": "Préfecture de la Savoie",
+      "url": "https://www.savoie.gouv.fr/Actions-de-l-Etat/Paysages-environnement-risques-naturels-et-technologiques/Environnement/Eau-foret-biodiversite/Navigation/La-navigation-sur-le-lac-du-Bourget"
+    },
+    "serreponcon": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Lac_de_Serre-Pon%C3%A7on"
+    },
+    "saintecroix": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Lake_of_Sainte-Croix"
+    },
+    "donnant": {
+      "label": "Surfin’ Belle-Île",
+      "url": "https://www.surfinbelleile.fr/les-cours/"
+    },
+    "laconcha": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Beach_of_La_Concha"
+    },
+    "macarella": {
+      "label": "Tourisme des Îles Baléares",
+      "url": "https://www.illesbalears.travel/index.php/es/menorca/cala-macarella"
+    },
+    "arrabida": {
+      "label": "Visit Portugal",
+      "url": "https://www.visitportugal.com/en/node/141693"
+    },
+    "maspalomas": {
+      "label": "Office du tourisme espagnol",
+      "url": "https://www.spain.info/es/destino/maspalomas/"
+    },
+    "balos": {
+      "label": "Visit Chania",
+      "url": "https://visitchania.gr/en/places-to-visit/lagoon-of-balos/"
+    },
+    "brela": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Brela"
+    },
+    "diani": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Diani_Beach"
+    },
+    "tofo": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Tofo"
+    },
+    "paje": {
+      "label": "Paje Kitesurf",
+      "url": "https://pajekitesurf.com/"
+    },
+    "anselazio": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Anse_Lazio"
+    },
+    "balandra": {
+      "label": "Office du tourisme de La Paz",
+      "url": "https://www.golapaz.com/things-to-do/water-activities/kayaking/"
+    },
+    "lajolla": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/La_Jolla_Shores"
+    },
+    "cabopulmo": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Cabo_Pulmo_National_Park"
+    },
+    "akumal": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Akumal"
+    },
+    "cozumel": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Cozumel"
+    },
+    "holbox": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Isla_Holbox"
+    },
+    "buzios": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Arma%C3%A7%C3%A3o_dos_B%C3%BAzios"
+    },
+    "arraialdocabo": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Arraial_do_Cabo"
+    },
+    "ilhagrande": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Ilha_Grande"
+    },
+    "sanandres": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/San_Andr%C3%A9s_%28island%29"
+    },
+    "amed": {
+      "label": "Indonesia Travel",
+      "url": "https://www.indonesia.travel/uk/en/destination/bali-nusa-tenggara/bali/snorkeling-amed"
+    },
+    "nusapenida": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Nusa_Penida"
+    },
+    "pemuteran": {
+      "label": "Indonesia Travel",
+      "url": "https://www.indonesia.travel/de/en/destination/bali-nusa-tenggara/bali/kuta---pemuteran-beach"
+    },
+    "nusalembongan": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Nusa_Lembongan"
+    },
+    "elnido": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/El_Nido%2C_Palawan"
+    },
+    "phuquoc": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Ph%C3%BA_Qu%E1%BB%91c"
+    },
+    "abeltasman": {
+      "label": "Tourism New Zealand",
+      "url": "https://www.newzealand.com/au/feature/national-parks-abel-tasman/"
+    },
+    "cathedralcove": {
+      "label": "Department of Conservation",
+      "url": "https://www.doc.govt.nz/cathedral-cove-walk"
+    },
+    "rottnest": {
+      "label": "Tourism Australia",
+      "url": "https://www.australia.com/en/places/perth-and-surrounds/guide-to-rottnest-island.html"
+    },
+    "cablebeach": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Cable_Beach"
+    },
+    "herveybay": {
+      "label": "Wikipédia · géographie du lieu",
+      "url": "https://en.wikipedia.org/wiki/Hervey_Bay"
+    },
+    "noumea": {
+      "label": "Nouvelle-Calédonie Tourisme",
+      "url": "https://www.newcaledonia.travel/activities/heavenly-lagoon/boardsports/windsurfing-sup-and-wakeboarding/"
     }
   },
   "spots": [
@@ -143,7 +303,8 @@
       "level": "variable",
       "desc": "Une grande plage landaise, entre les dunes et l’Atlantique. Une étape pour prolonger un voyage sur la côte aquitaine.",
       "sourceKey": "fr",
-      "photoQuery": "\"Biscarrosse\" \"ocean\""
+      "photoQuery": "\"Biscarrosse\" \"ocean\"",
+      "edition": "catalogue-240"
     },
     {
       "id": "carcans",
@@ -161,7 +322,8 @@
       "level": "variable",
       "desc": "La façade océanique de Carcans, à l’ouest des lacs médocains. Le surf se pratique le long du cordon de dunes.",
       "sourceKey": "fr",
-      "photoQuery": "Carcans plage"
+      "photoQuery": "Carcans plage",
+      "edition": "catalogue-240"
     },
     {
       "id": "hourtin",
@@ -179,7 +341,8 @@
       "level": "variable",
       "desc": "À Hourtin, la plage océanique complète les paysages du lac. Un arrêt sur la côte de sable du Médoc.",
       "sourceKey": "fr",
-      "photoQuery": "Hourtin plage"
+      "photoQuery": "Hourtin plage",
+      "edition": "catalogue-240"
     },
     {
       "id": "montalivet",
@@ -197,7 +360,8 @@
       "level": "variable",
       "desc": "Une station posée derrière les dunes, avec l’Atlantique en ligne d’horizon. Le surf fait partie des activités de cette côte.",
       "sourceKey": "fr",
-      "photoQuery": "Montalivet plage"
+      "photoQuery": "Montalivet plage",
+      "edition": "catalogue-240"
     },
     {
       "id": "soulac",
@@ -215,7 +379,8 @@
       "level": "variable",
       "desc": "La pointe nord du littoral médocain, entre villas balnéaires et plages atlantiques. Une porte d’entrée pour explorer la Gironde.",
       "sourceKey": "fr",
-      "photoQuery": "Soulac plage"
+      "photoQuery": "Soulac plage",
+      "edition": "catalogue-240"
     },
     {
       "id": "penermalo",
@@ -236,7 +401,8 @@
       "level": "variable",
       "desc": "Une longue plage de sable sur le littoral de Guidel, face à l’Atlantique. Surf et sports de vent se partagent ce secteur côtier.",
       "sourceKey": "guidel",
-      "photoQuery": "\"Pen er Malo\""
+      "photoQuery": "\"Pen er Malo\"",
+      "edition": "catalogue-240"
     },
     {
       "id": "porscarn",
@@ -254,7 +420,8 @@
       "level": "variable",
       "desc": "La baie de Pors Carn, près de Penmarc’h, fait face à la pointe de La Torche. Une autre escale sur la côte bigoudène.",
       "sourceKey": "porscarn",
-      "photoQuery": "Pors Carn beach"
+      "photoQuery": "Pors Carn beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "tanchet",
@@ -273,7 +440,8 @@
       "desc": "Au sud des Sables-d’Olonne, Tanchet borde le lac du même nom. Une plage de surf proche de la ville.",
       "sourceKey": "tanchet",
       "photoQuery": "\"Tanchet\"",
-      "photoContext": "Littoral des Sables-d’Olonne"
+      "photoContext": "Littoral des Sables-d’Olonne",
+      "edition": "catalogue-240"
     },
     {
       "id": "baleal",
@@ -291,7 +459,8 @@
       "level": "variable",
       "desc": "Des plages de part et d’autre d’une petite péninsule. Une étape de surf voisine de Peniche.",
       "sourceKey": "pt",
-      "photoQuery": "Baleal beach"
+      "photoQuery": "Baleal beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "arrifana",
@@ -309,7 +478,8 @@
       "level": "variable",
       "desc": "Une baie de l’Algarve encadrée de falaises. Arrifana figure parmi les plages de surf de la côte ouest.",
       "sourceKey": "pt",
-      "photoQuery": "Arrifana beach"
+      "photoQuery": "Arrifana beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "amado",
@@ -327,7 +497,8 @@
       "level": "variable",
       "desc": "Une plage atlantique près de Carrapateira, dans le sud-ouest portugais. Un arrêt pour un itinéraire de surf en Algarve.",
       "sourceKey": "pt",
-      "photoQuery": "Praia do Amado"
+      "photoQuery": "Praia do Amado",
+      "edition": "catalogue-240"
     },
     {
       "id": "bordeira",
@@ -345,7 +516,8 @@
       "level": "variable",
       "desc": "Une vaste plage près de Carrapateira. Bordeira associe paysage dunaire et côte ouverte sur l’Atlantique.",
       "sourceKey": "pt",
-      "photoQuery": "Praia da Bordeira"
+      "photoQuery": "Praia da Bordeira",
+      "edition": "catalogue-240"
     },
     {
       "id": "carcavelos",
@@ -363,7 +535,8 @@
       "level": "variable",
       "desc": "Une plage de surf proche de Lisbonne, sur la côte de Cascais. Une escale accessible dans un voyage autour de la capitale.",
       "sourceKey": "pt",
-      "photoQuery": "\"Carcavelos\" beach -sunset"
+      "photoQuery": "\"Carcavelos\" beach -sunset",
+      "edition": "catalogue-240"
     },
     {
       "id": "matosinhos",
@@ -381,7 +554,8 @@
       "level": "variable",
       "desc": "La plage urbaine de Matosinhos, à côté de Porto. Le tourisme portugais la cite parmi les destinations de surf du nord.",
       "sourceKey": "pt",
-      "photoQuery": "\"Matosinhos beach\" -seagulls -Memória"
+      "photoQuery": "\"Matosinhos beach\" -seagulls -Memória",
+      "edition": "catalogue-240"
     },
     {
       "id": "espinho",
@@ -399,7 +573,8 @@
       "level": "variable",
       "desc": "Le front de mer d’Espinho, au sud de Porto. Une adresse de surf de la côte nord portugaise.",
       "sourceKey": "pt",
-      "photoQuery": "Espinho beach"
+      "photoQuery": "Espinho beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "buarcos",
@@ -417,7 +592,8 @@
       "level": "variable",
       "desc": "Le rivage de Buarcos prolonge Figueira da Foz. Le spot est connu pour ses longues vagues.",
       "sourceKey": "pt",
-      "photoQuery": "Buarcos beach"
+      "photoQuery": "Buarcos beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "saotorpes",
@@ -435,7 +611,8 @@
       "level": "variable",
       "desc": "Une plage de surf au sud de Sines. Un arrêt sur la route du littoral de l’Alentejo.",
       "sourceKey": "pt",
-      "photoQuery": "Sao Torpes beach"
+      "photoQuery": "Sao Torpes beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "cordoama",
@@ -453,7 +630,8 @@
       "level": "variable",
       "desc": "Une plage de la côte ouest de l’Algarve, près de Vila do Bispo. L’Atlantique s’étend au pied des falaises.",
       "sourceKey": "pt",
-      "photoQuery": "Praia da Cordoama"
+      "photoQuery": "Praia da Cordoama",
+      "edition": "catalogue-240"
     },
     {
       "id": "elpalmar",
@@ -471,7 +649,8 @@
       "level": "variable",
       "desc": "Une plage de surf de la côte de Cadix. Un arrêt au bord de l’Atlantique andalou.",
       "sourceKey": "es",
-      "photoQuery": "El Palmar Vejer beach"
+      "photoQuery": "El Palmar Vejer beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "hierbabuena",
@@ -489,7 +668,8 @@
       "level": "variable",
       "desc": "À Barbate, cette plage fait partie des destinations de surf citées par l’office du tourisme espagnol.",
       "sourceKey": "es",
-      "photoQuery": "Playa de la Hierbabuena"
+      "photoQuery": "Playa de la Hierbabuena",
+      "edition": "catalogue-240"
     },
     {
       "id": "salinas",
@@ -507,7 +687,8 @@
       "level": "variable",
       "desc": "Une plage asturienne tournée vers le golfe de Gascogne. Salinas est une escale de surf du nord de l’Espagne.",
       "sourceKey": "es",
-      "photoQuery": "\"Playa de Salinas\" -Cousteau -busto"
+      "photoQuery": "\"Playa de Salinas\" -Cousteau -busto",
+      "edition": "catalogue-240"
     },
     {
       "id": "loslocos",
@@ -525,7 +706,8 @@
       "level": "variable",
       "desc": "Une plage cantabrique entourée de falaises, à Suances. Le surf fait partie de l’identité du lieu.",
       "sourceKey": "es",
-      "photoQuery": "Playa de los Locos Suances"
+      "photoQuery": "Playa de los Locos Suances",
+      "edition": "catalogue-240"
     },
     {
       "id": "canallave",
@@ -543,7 +725,8 @@
       "level": "variable",
       "desc": "Un spot dans le parc naturel des dunes de Liencres. La plage donne sur la côte cantabrique.",
       "sourceKey": "es",
-      "photoQuery": "Playa de Canallave"
+      "photoQuery": "Playa de Canallave",
+      "edition": "catalogue-240"
     },
     {
       "id": "loredo",
@@ -561,7 +744,8 @@
       "level": "variable",
       "desc": "Loredo prolonge le littoral de surf de Somo, dans la commune de Ribamontán al Mar.",
       "sourceKey": "es",
-      "photoQuery": "Playa de Loredo"
+      "photoQuery": "Playa de Loredo",
+      "edition": "catalogue-240"
     },
     {
       "id": "fistral",
@@ -579,7 +763,8 @@
       "level": "variable",
       "desc": "La plage de surf emblématique de Newquay. Un point de départ pour découvrir la côte nord des Cornouailles.",
       "sourceKey": "uk",
-      "photoQuery": "Fistral Beach"
+      "photoQuery": "Fistral Beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "polzeath",
@@ -597,7 +782,8 @@
       "level": "variable",
       "desc": "Une baie des Cornouailles fréquentée par les surfeurs. Le village se rassemble au bord de la plage.",
       "sourceKey": "uk",
-      "photoQuery": "Polzeath beach"
+      "photoQuery": "Polzeath beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "perranporth",
@@ -615,7 +801,8 @@
       "level": "variable",
       "desc": "Une longue plage de la côte nord des Cornouailles. Plusieurs secteurs permettent de répartir les sessions le long du rivage.",
       "sourceKey": "uk",
-      "photoQuery": "Perranporth beach"
+      "photoQuery": "Perranporth beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "gwithian",
@@ -633,7 +820,8 @@
       "level": "variable",
       "desc": "Les dunes de la baie de St Ives bordent ce spot de surf. Un grand paysage côtier à découvrir depuis Hayle.",
       "sourceKey": "uk",
-      "photoQuery": "Gwithian beach"
+      "photoQuery": "Gwithian beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "sidiifni",
@@ -651,7 +839,8 @@
       "level": "variable",
       "desc": "Une étape de surf au sud du littoral marocain. La ville domine l’Atlantique depuis son plateau côtier.",
       "sourceKey": "ma",
-      "photoQuery": "Sidi Ifni beach"
+      "photoQuery": "Sidi Ifni beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "mirleft",
@@ -669,7 +858,8 @@
       "level": "variable",
       "desc": "Plusieurs plages entourent le village de Mirleft. Le choix du secteur fait partie de la préparation d’une session ici.",
       "sourceKey": "ma",
-      "photoQuery": "Mirleft beach"
+      "photoQuery": "Mirleft beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "tamraght",
@@ -688,7 +878,8 @@
       "desc": "Au sud de Taghazout, Tamraght offre un point de départ pour explorer le littoral et ses spots de surf avec les écoles locales.",
       "sourceKey": "tamraght",
       "photoQuery": "\"Tamraght\" -dog -chien",
-      "photoContext": "Village de Tamraght"
+      "photoContext": "Village de Tamraght",
+      "edition": "catalogue-240"
     },
     {
       "id": "durban",
@@ -706,7 +897,8 @@
       "level": "variable",
       "desc": "Une plage de la Golden Mile de Durban. Le surf se pratique au pied du front de mer urbain.",
       "sourceKey": "za",
-      "photoQuery": "\"Durban\" beach -hotel"
+      "photoQuery": "\"Durban\" beach -hotel",
+      "edition": "catalogue-240"
     },
     {
       "id": "ballito",
@@ -724,7 +916,8 @@
       "level": "variable",
       "desc": "Une étape de surf de la côte nord du KwaZulu-Natal, au nord de Durban.",
       "sourceKey": "za",
-      "photoQuery": "Ballito beach"
+      "photoQuery": "Ballito beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "umhlanga",
@@ -742,7 +935,8 @@
       "level": "variable",
       "desc": "Au nord de Durban, Umhlanga mêle plage, promenade et surf sur la côte du KwaZulu-Natal. Une étape pour explorer la région depuis le bord de mer.",
       "sourceKey": "za",
-      "photoQuery": "\"Umhlanga\" beach"
+      "photoQuery": "\"Umhlanga\" beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "umdloti",
@@ -760,7 +954,8 @@
       "level": "variable",
       "desc": "Un village côtier au nord de Durban, avec une plage tournée vers l’océan Indien.",
       "sourceKey": "za",
-      "photoQuery": "Umdloti beach"
+      "photoQuery": "Umdloti beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "capestfrancis",
@@ -778,7 +973,8 @@
       "level": "variable",
       "desc": "Le cap et son phare marquent ce secteur de surf du Cap-Oriental. Une étape voisine de St Francis Bay.",
       "sourceKey": "francis",
-      "photoQuery": "\"Cape St Francis\""
+      "photoQuery": "\"Cape St Francis\"",
+      "edition": "catalogue-240"
     },
     {
       "id": "jaco",
@@ -796,7 +992,8 @@
       "level": "variable",
       "desc": "Une plage de surf au cœur d’une station de la côte Pacifique. Jacó offre une base pour explorer le littoral central.",
       "sourceKey": "cr",
-      "photoQuery": "Jaco beach"
+      "photoQuery": "Jaco beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "dominical",
@@ -814,7 +1011,8 @@
       "level": "variable",
       "desc": "Une plage de surf de la côte Pacifique centrale, au sud de Jacó. La végétation rejoint le bord de mer.",
       "sourceKey": "cr",
-      "photoQuery": "Dominical beach"
+      "photoQuery": "Dominical beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "playagrande",
@@ -832,7 +1030,8 @@
       "level": "variable",
       "desc": "Une plage de surf du Guanacaste, au nord de Tamarindo. Un arrêt sur la péninsule de Nicoya.",
       "sourceKey": "cr",
-      "photoQuery": "Playa Grande Costa Rica"
+      "photoQuery": "Playa Grande Costa Rica",
+      "edition": "catalogue-240"
     },
     {
       "id": "langosta",
@@ -850,7 +1049,8 @@
       "level": "variable",
       "desc": "Une plage de la région de Tamarindo, identifiée comme destination de surf par Visit Costa Rica.",
       "sourceKey": "cr",
-      "photoQuery": "Playa Langosta Costa Rica"
+      "photoQuery": "Playa Langosta Costa Rica",
+      "edition": "catalogue-240"
     },
     {
       "id": "avellanas",
@@ -868,7 +1068,8 @@
       "level": "variable",
       "desc": "Une plage de surf sur la côte du Guanacaste. À intégrer dans un itinéraire autour de Tamarindo.",
       "sourceKey": "cr",
-      "photoQuery": "Playa Avellanas"
+      "photoQuery": "Playa Avellanas",
+      "edition": "catalogue-240"
     },
     {
       "id": "junquillal",
@@ -886,7 +1087,8 @@
       "level": "variable",
       "desc": "Au sud de Tamarindo, une autre plage de surf du Guanacaste. Un point sur la route côtière de Nicoya.",
       "sourceKey": "cr",
-      "photoQuery": "Playa Junquillal Guanacaste"
+      "photoQuery": "Playa Junquillal Guanacaste",
+      "edition": "catalogue-240"
     },
     {
       "id": "nosara",
@@ -904,7 +1106,8 @@
       "level": "variable",
       "desc": "La plage de Guiones, à Nosara, est une escale du littoral de Nicoya. Un séjour tourné vers le Pacifique.",
       "sourceKey": "cr",
-      "photoQuery": "Playa Guiones"
+      "photoQuery": "Playa Guiones",
+      "edition": "catalogue-240"
     },
     {
       "id": "esterillos",
@@ -922,7 +1125,8 @@
       "level": "variable",
       "desc": "Un ensemble de plages de la côte Pacifique centrale. Esterillos figure parmi les secteurs de surf du Costa Rica.",
       "sourceKey": "cr",
-      "photoQuery": "Esterillos beach"
+      "photoQuery": "Esterillos beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "bejuco",
@@ -940,7 +1144,8 @@
       "level": "variable",
       "desc": "Une plage du Pacifique central, entre les secteurs de Jacó et de Quepos. Une escale pour les amateurs de surf.",
       "sourceKey": "cr",
-      "photoQuery": "Playa Bejuco Puntarenas"
+      "photoQuery": "Playa Bejuco Puntarenas",
+      "edition": "catalogue-240"
     },
     {
       "id": "huntington",
@@ -958,7 +1163,8 @@
       "level": "variable",
       "desc": "Une grande plage californienne gérée par les State Parks. Le surf occupe une place centrale sur ce littoral d’Orange County.",
       "sourceKey": "huntington",
-      "photoQuery": "Huntington State Beach"
+      "photoQuery": "Huntington State Beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "oceanbeachsf",
@@ -976,7 +1182,8 @@
       "level": "expert",
       "desc": "La longue façade Pacifique de San Francisco. Une plage ouverte aux fortes houles, à aborder avec une solide expérience de l’océan.",
       "sourceKey": "oceanbeach",
-      "photoQuery": "Ocean Beach San Francisco surf"
+      "photoQuery": "Ocean Beach San Francisco surf",
+      "edition": "catalogue-240"
     },
     {
       "id": "steamerlane",
@@ -994,7 +1201,8 @@
       "level": "variable",
       "desc": "Un spot de Santa Cruz sous le phare de Lighthouse Point. L’histoire du surf local se raconte aussi dans le musée voisin.",
       "sourceKey": "steamer",
-      "photoQuery": "Steamer Lane"
+      "photoQuery": "Steamer Lane",
+      "edition": "catalogue-240"
     },
     {
       "id": "lapuntilla",
@@ -1012,7 +1220,8 @@
       "level": "variable",
       "desc": "Un spot proche du centre de Pichilemu, face au parc Ross. Une porte d’entrée dans la culture surf de la ville.",
       "sourceKey": "cl",
-      "photoQuery": "Pichilemu La Puntilla"
+      "photoQuery": "Pichilemu La Puntilla",
+      "edition": "catalogue-240"
     },
     {
       "id": "infiernillo",
@@ -1030,7 +1239,8 @@
       "level": "variable",
       "desc": "Une plage de Pichilemu, au sud du centre. Une autre étape de surf sur ce rivage du Chili central.",
       "sourceKey": "cl",
-      "photoQuery": "Infiernillo beach"
+      "photoQuery": "Infiernillo beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "matanzas",
@@ -1050,7 +1260,8 @@
       "level": "variable",
       "desc": "Une station côtière de la commune de Navidad. Surf, windsurf et kitesurf font partie des pratiques de la région.",
       "sourceKey": "cl2",
-      "photoQuery": "\"Matanzas\" \"Chile\""
+      "photoQuery": "\"Matanzas\" \"Chile\"",
+      "edition": "catalogue-240"
     },
     {
       "id": "puertecillo",
@@ -1068,7 +1279,8 @@
       "level": "variable",
       "desc": "Un village de surf sur la côte de Navidad. Une escale entre les collines littorales et le Pacifique.",
       "sourceKey": "cl2",
-      "photoQuery": "Puertecillo beach"
+      "photoQuery": "Puertecillo beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "renaca",
@@ -1088,7 +1300,8 @@
       "desc": "Sur la côte de Viña del Mar, Reñaca associe plage, surf et vie de bord de mer. Une étape urbaine face au Pacifique.",
       "sourceKey": "renaca",
       "photoQuery": "\"Reñaca\" beach",
-      "photoContext": "Littoral de Reñaca"
+      "photoContext": "Littoral de Reñaca",
+      "edition": "catalogue-240"
     },
     {
       "id": "elabanico",
@@ -1107,7 +1320,8 @@
       "desc": "Une plage de Maitencillo dans la région de Valparaíso. El Abanico est un point de rencontre des surfeurs du secteur.",
       "sourceKey": "cl2",
       "photoQuery": "\"Maitencillo\"",
-      "photoContext": "Baie de Maitencillo"
+      "photoContext": "Baie de Maitencillo",
+      "edition": "catalogue-240"
     },
     {
       "id": "canggu",
@@ -1125,7 +1339,8 @@
       "level": "variable",
       "desc": "Une côte de sable sombre dans le nord de Kuta. Canggu rassemble plusieurs vagues et une importante communauté de surf.",
       "sourceKey": "canggu",
-      "photoQuery": "Canggu beach"
+      "photoQuery": "Canggu beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "kuta",
@@ -1143,7 +1358,8 @@
       "level": "variable",
       "desc": "Le front de mer de Kuta, dans le sud de Bali. Une plage associée depuis longtemps au développement du surf sur l’île.",
       "sourceKey": "bali",
-      "photoQuery": "\"Kuta Beach\" Bali -fisherman -Jerman"
+      "photoQuery": "\"Kuta Beach\" Bali -fisherman -Jerman",
+      "edition": "catalogue-240"
     },
     {
       "id": "medewi",
@@ -1161,7 +1377,8 @@
       "level": "intermediaire",
       "desc": "Un point de surf sur la côte ouest de Bali. Indonesia Travel le présente comme un spot de niveau intermédiaire.",
       "sourceKey": "medewi",
-      "photoQuery": "Medewi beach"
+      "photoQuery": "Medewi beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "selongbelanak",
@@ -1179,7 +1396,8 @@
       "level": "variable",
       "desc": "Une baie du sud de Lombok où se sont développés des cours de surf. Une escale distincte du littoral balinais.",
       "sourceKey": "selong",
-      "photoQuery": "Selong Belanak beach"
+      "photoQuery": "Selong Belanak beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "kohtao",
@@ -1198,7 +1416,8 @@
       "level": "variable",
       "desc": "Une île du golfe de Thaïlande tournée vers la plongée. Les sorties se répartissent entre différents sites autour de l’île.",
       "sourceKey": "th",
-      "photoQuery": "Koh Tao bay"
+      "photoQuery": "Koh Tao bay",
+      "edition": "catalogue-240"
     },
     {
       "id": "kohlipe",
@@ -1217,7 +1436,8 @@
       "level": "variable",
       "desc": "Une île du sud de la mer d’Andaman bordée de récifs. Le snorkeling fait partie des activités mises en avant par le tourisme thaïlandais.",
       "sourceKey": "th",
-      "photoQuery": "Ko Lipe beach"
+      "photoQuery": "Ko Lipe beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "moalboal",
@@ -1236,7 +1456,8 @@
       "level": "variable",
       "desc": "Sur la côte ouest de Cebu, Moalboal est une destination de plongée connue pour ses bancs de sardines.",
       "sourceKey": "ph",
-      "photoQuery": "Moalboal Panagsama"
+      "photoQuery": "Moalboal Panagsama",
+      "edition": "catalogue-240"
     },
     {
       "id": "malapascua",
@@ -1254,7 +1475,8 @@
       "level": "variable",
       "desc": "Une île au nord de Cebu, point de départ de sorties de plongée. Le site précis se choisit avec le centre local.",
       "sourceKey": "ph",
-      "photoQuery": "Malapascua island beach"
+      "photoQuery": "Malapascua island beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "apoisland",
@@ -1273,7 +1495,8 @@
       "level": "variable",
       "desc": "Une île au large de Negros Oriental, reconnue pour son sanctuaire marin. Une destination pour découvrir les récifs philippins.",
       "sourceKey": "apo",
-      "photoQuery": "Apo Island"
+      "photoQuery": "Apo Island",
+      "edition": "catalogue-240"
     },
     {
       "id": "coron",
@@ -1291,7 +1514,8 @@
       "level": "variable",
       "desc": "Un secteur de Palawan marqué par les falaises calcaires et les épaves. Chaque sortie se prépare selon le site choisi.",
       "sourceKey": "coron",
-      "photoQuery": "Coron island bay"
+      "photoQuery": "Coron island bay",
+      "edition": "catalogue-240"
     },
     {
       "id": "bondi",
@@ -1309,7 +1533,8 @@
       "level": "variable",
       "desc": "Une plage au cœur de la vie côtière de Sydney. Le surf se mêle ici aux promenades du front de mer.",
       "sourceKey": "au",
-      "photoQuery": "Bondi Beach"
+      "photoQuery": "Bondi Beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "freshwater",
@@ -1327,7 +1552,8 @@
       "level": "variable",
       "desc": "Une plage au nord de Manly, liée à l’histoire du surf australien. Le rivage est encadré par deux promontoires.",
       "sourceKey": "au",
-      "photoQuery": "Freshwater Beach Sydney"
+      "photoQuery": "Freshwater Beach Sydney",
+      "edition": "catalogue-240"
     },
     {
       "id": "noosa",
@@ -1345,7 +1571,8 @@
       "level": "variable",
       "desc": "Une plage de la Sunshine Coast, à proximité de Noosa Heads. Une étape de surf dans un cadre de baie.",
       "sourceKey": "au",
-      "photoQuery": "Noosa Main Beach"
+      "photoQuery": "Noosa Main Beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "cottesloe",
@@ -1363,7 +1590,8 @@
       "level": "variable",
       "desc": "La plage de Cottesloe fait partie de l’histoire du surf en Australie-Occidentale. Le front de mer regarde l’océan Indien.",
       "sourceKey": "cottesloe",
-      "photoQuery": "Cottesloe Beach"
+      "photoQuery": "Cottesloe Beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "whangamata",
@@ -1381,7 +1609,8 @@
       "level": "variable",
       "desc": "Une ville de surf de la péninsule de Coromandel. Une escale balnéaire sur un itinéraire de la côte est.",
       "sourceKey": "nz",
-      "photoQuery": "Whangamata beach"
+      "photoQuery": "Whangamata beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "mountmaunganui",
@@ -1399,7 +1628,8 @@
       "level": "variable",
       "desc": "Une longue plage au pied du mont Maunganui. Un arrêt côtier autour de Tauranga, dans la Bay of Plenty.",
       "sourceKey": "nz",
-      "photoQuery": "Mount Maunganui main beach"
+      "photoQuery": "Mount Maunganui main beach",
+      "edition": "catalogue-240"
     },
     {
       "id": "kealakekua",
@@ -1419,7 +1649,8 @@
       "level": "variable",
       "desc": "Une baie historique du sud de Kona, classée en zone de conservation marine. On y organise des sorties de snorkeling, de plongée et de kayak.",
       "sourceKey": "kealakekua",
-      "photoQuery": "Kealakekua Bay"
+      "photoQuery": "Kealakekua Bay",
+      "edition": "catalogue-240"
     },
     {
       "id": "poipu",
@@ -1439,7 +1670,825 @@
       "level": "variable",
       "desc": "Une plage du sud de Kauaʻi avec plusieurs secteurs de pratique. Les zones de snorkeling, de bodyboard et de surf demandent des choix distincts.",
       "sourceKey": "poipu",
-      "photoQuery": "Poipu Beach Park"
+      "photoQuery": "Poipu Beach Park",
+      "edition": "catalogue-240"
+    },
+    {
+      "id": "labaule",
+      "name": "La Baule",
+      "loc": "Loire-Atlantique, France",
+      "world": "fr",
+      "coords": {
+        "lat": 47.276,
+        "lon": -2.392
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "paddle",
+        "windsurf",
+        "baignade"
+      ],
+      "level": "variable",
+      "sourceKey": "labaule",
+      "desc": "Une longue plage en arc de cercle sur la côte de Loire-Atlantique. La baie réunit plusieurs clubs nautiques pour une sortie en paddle ou en planche à voile.",
+      "photoQuery": "La Baule-Escoublac coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "hendaye",
+      "name": "Hendaye",
+      "loc": "Pays basque, France",
+      "world": "fr",
+      "coords": {
+        "lat": 43.374,
+        "lon": -1.774
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "surf",
+        "bodyboard",
+        "baignade"
+      ],
+      "level": "variable",
+      "sourceKey": "hendaye",
+      "desc": "À la frontière espagnole, une grande plage ouvre la baie sur l’Atlantique. Le surf se pratique sur le front de mer ; les secteurs et les conditions se choisissent avec les écoles locales.",
+      "photoQuery": "Hendaye coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "morgat",
+      "name": "Morgat",
+      "loc": "Presqu’île de Crozon, France",
+      "world": "fr",
+      "coords": {
+        "lat": 48.226,
+        "lon": -4.501
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kayak",
+        "paddle"
+      ],
+      "level": "variable",
+      "sourceKey": "morgat",
+      "desc": "La plage de Morgat s’étire au fond d’une baie de la presqu’île de Crozon. Depuis le village, les sorties en kayak suivent un littoral de falaises et de criques.",
+      "photoQuery": "Morgat coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "saintjeandeluz",
+      "name": "Saint-Jean-de-Luz — Grande Plage",
+      "loc": "Pays basque, France",
+      "world": "fr",
+      "coords": {
+        "lat": 43.392,
+        "lon": -1.665
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "paddle",
+        "baignade"
+      ],
+      "level": "variable",
+      "sourceKey": "saintjeandeluz",
+      "desc": "Une plage urbaine au cœur du Pays basque, bordée de maisons et de promenades. La Grande Plage donne sur la baie de Saint-Jean-de-Luz, entre les digues et le port.",
+      "photoQuery": "Saint-Jean-de-Luz coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "bourget",
+      "name": "Lac du Bourget",
+      "loc": "Savoie, France",
+      "world": "fr",
+      "coords": {
+        "lat": 45.74,
+        "lon": 5.86
+      },
+      "coordinatePrecision": "lake-sector",
+      "sports": [
+        "paddle",
+        "kayak",
+        "baignade"
+      ],
+      "level": "variable",
+      "sourceKey": "bourget",
+      "desc": "Entre Aix-les-Bains et la rive du mont du Chat, le lac du Bourget offre un décor de montagnes. Plusieurs plages et bases nautiques permettent d’organiser une sortie en eau douce.",
+      "photoQuery": "Lac du Bourget coast",
+      "edition": "catalogue-280",
+      "waterType": "lake"
+    },
+    {
+      "id": "serreponcon",
+      "name": "Lac de Serre-Ponçon",
+      "loc": "Hautes-Alpes, France",
+      "world": "fr",
+      "coords": {
+        "lat": 44.518,
+        "lon": 6.363
+      },
+      "coordinatePrecision": "lake-sector",
+      "sports": [
+        "paddle",
+        "kayak",
+        "windsurf"
+      ],
+      "level": "variable",
+      "sourceKey": "serreponcon",
+      "desc": "La Durance et l’Ubaye se rejoignent dans cette grande retenue alpine. Des baies, des montagnes et plusieurs bases nautiques composent une étape très différente de la côte.",
+      "photoQuery": "Lac de Serre-Ponçon coast",
+      "edition": "catalogue-280",
+      "waterType": "lake"
+    },
+    {
+      "id": "saintecroix",
+      "name": "Lac de Sainte-Croix",
+      "loc": "Verdon, France",
+      "world": "fr",
+      "coords": {
+        "lat": 43.78,
+        "lon": 6.173
+      },
+      "coordinatePrecision": "lake-sector",
+      "sports": [
+        "paddle",
+        "kayak",
+        "baignade"
+      ],
+      "level": "variable",
+      "sourceKey": "saintecroix",
+      "desc": "Au débouché du Verdon, un vaste lac s’étend entre le Var et les Alpes-de-Haute-Provence. Ses rives permettent de préparer des balades en kayak ou en paddle, depuis les accès autorisés.",
+      "photoQuery": "Lake of Sainte-Croix coast",
+      "edition": "catalogue-280",
+      "waterType": "lake"
+    },
+    {
+      "id": "donnant",
+      "name": "Donnant",
+      "loc": "Belle-Île-en-Mer, France",
+      "world": "fr",
+      "coords": {
+        "lat": 47.309,
+        "lon": -3.235
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "surf",
+        "bodyboard"
+      ],
+      "level": "variable",
+      "sourceKey": "donnant",
+      "desc": "Une plage encaissée entre les reliefs de la côte ouest de Belle-Île. Donnant est un rendez-vous du surf insulaire, avec des écoles pour choisir sa session selon les conditions.",
+      "photoQuery": "Donnant coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "laconcha",
+      "name": "La Concha",
+      "loc": "Saint-Sébastien, Espagne",
+      "world": "eu",
+      "coords": {
+        "lat": 43.315,
+        "lon": -1.99
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "paddle",
+        "kayak",
+        "baignade"
+      ],
+      "level": "variable",
+      "sourceKey": "laconcha",
+      "desc": "Une baie en croissant, l’île de Santa Clara et les façades de Saint-Sébastien en arrière-plan. La Concha permet de combiner une étape en ville avec une sortie sur l’eau.",
+      "photoQuery": "Beach of La Concha coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "macarella",
+      "name": "Cala Macarella",
+      "loc": "Minorque, Espagne",
+      "world": "eu",
+      "coords": {
+        "lat": 39.938,
+        "lon": 3.937
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "snorkeling",
+        "baignade"
+      ],
+      "level": "variable",
+      "sourceKey": "macarella",
+      "desc": "Sur la côte sud de Minorque, une crique de sable encadrée de pins et de falaises calcaires. Macarella et la petite Macarelleta voisine se découvrent aussi depuis le sentier côtier.",
+      "photoQuery": "Cala Macarella coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "arrabida",
+      "name": "Portinho da Arrábida",
+      "loc": "Setúbal, Portugal",
+      "world": "eu",
+      "coords": {
+        "lat": 38.478,
+        "lon": -8.982
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kayak",
+        "snorkeling"
+      ],
+      "level": "variable",
+      "sourceKey": "arrabida",
+      "desc": "Au pied de la Serra da Arrábida, une petite baie s’ouvre entre les collines boisées et la mer. Le littoral appartient à un espace protégé : prépare l’accès et la sortie avec les opérateurs locaux.",
+      "photoQuery": "Portinho da Arrábida coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "maspalomas",
+      "name": "Maspalomas",
+      "loc": "Grande Canarie, Espagne",
+      "world": "eu",
+      "coords": {
+        "lat": 27.737,
+        "lon": -15.586
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "surf",
+        "bodyboard",
+        "baignade"
+      ],
+      "level": "variable",
+      "sourceKey": "maspalomas",
+      "desc": "Au sud de Grande Canarie, la plage longe un paysage de dunes et le phare de Maspalomas. Les zones de baignade et de glisse se répartissent le long de ce littoral très fréquenté.",
+      "photoQuery": "Maspalomas coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "balos",
+      "name": "Balos",
+      "loc": "Crète, Grèce",
+      "world": "eu",
+      "coords": {
+        "lat": 35.583,
+        "lon": 23.589
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "baignade",
+        "snorkeling"
+      ],
+      "level": "variable",
+      "sourceKey": "balos",
+      "desc": "À l’extrémité de la péninsule de Gramvousa, le lagon de Balos s’étend face au cap Tigani. Une destination pour découvrir le littoral crétois, en respectant les accès et les zones protégées.",
+      "photoQuery": "Balos coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "brela",
+      "name": "Brela — Punta Rata",
+      "loc": "Dalmatie, Croatie",
+      "world": "eu",
+      "coords": {
+        "lat": 43.369,
+        "lon": 16.922
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kayak",
+        "snorkeling",
+        "baignade"
+      ],
+      "level": "variable",
+      "sourceKey": "brela",
+      "desc": "La côte de Brela se déroule sous le massif du Biokovo. Autour de Punta Rata, les plages de galets et les pins bordent l’Adriatique.",
+      "photoQuery": "Brela coast",
+      "edition": "catalogue-280",
+      "photoContext": "Littoral de Brela"
+    },
+    {
+      "id": "diani",
+      "name": "Diani Beach",
+      "loc": "Côte sud, Kenya",
+      "world": "af",
+      "coords": {
+        "lat": -4.3,
+        "lon": 39.588
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kitesurf",
+        "snorkeling",
+        "plongee"
+      ],
+      "level": "variable",
+      "sourceKey": "diani",
+      "desc": "Une longue côte de sable au sud de Mombasa, tournée vers l’océan Indien. Les centres de Diani proposent des sorties sous l’eau et des activités de glisse selon les conditions du jour.",
+      "photoQuery": "Diani Beach coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "tofo",
+      "name": "Tofo",
+      "loc": "Inhambane, Mozambique",
+      "world": "af",
+      "coords": {
+        "lat": -23.855,
+        "lon": 35.547
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "plongee",
+        "surf"
+      ],
+      "level": "variable",
+      "sourceKey": "tofo",
+      "desc": "Près d’Inhambane, la plage de Tofo fait face à l’océan Indien. Le village rassemble des centres de plongée ; le surf se pratique également sur ce littoral mozambicain.",
+      "photoQuery": "Tofo coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "paje",
+      "name": "Paje",
+      "loc": "Zanzibar, Tanzanie",
+      "world": "af",
+      "coords": {
+        "lat": -6.267,
+        "lon": 39.535
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kitesurf"
+      ],
+      "level": "variable",
+      "sourceKey": "paje",
+      "desc": "Sur la côte est de Zanzibar, la plage de Paje accueille de nombreuses écoles de kitesurf. Le plan d’eau change avec la marée : fixe ton créneau avec l’école avant d’arriver.",
+      "photoQuery": "Paje coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "anselazio",
+      "name": "Anse Lazio",
+      "loc": "Praslin, Seychelles",
+      "world": "af",
+      "coords": {
+        "lat": -4.293,
+        "lon": 55.704
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "snorkeling",
+        "baignade"
+      ],
+      "level": "variable",
+      "sourceKey": "anselazio",
+      "desc": "Au nord-ouest de Praslin, une plage bordée de végétation et de rochers granitiques. Anse Lazio est une escale des Seychelles pour profiter du bord de mer et découvrir les fonds proches du rivage.",
+      "photoQuery": "Anse Lazio coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "balandra",
+      "name": "Balandra",
+      "loc": "La Paz, Mexique",
+      "world": "na",
+      "coords": {
+        "lat": 24.322,
+        "lon": -110.325
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kayak",
+        "paddle"
+      ],
+      "level": "variable",
+      "sourceKey": "balandra",
+      "desc": "Au nord de La Paz, Balandra réunit une baie, des plages et un paysage de collines désertiques. Une étape de kayak dans un espace naturel protégé, dont les modalités d’accès sont à vérifier avant la visite.",
+      "photoQuery": "Balandra Beach coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "lajolla",
+      "name": "La Jolla Shores",
+      "loc": "San Diego, États-Unis",
+      "world": "na",
+      "coords": {
+        "lat": 32.858,
+        "lon": -117.257
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kayak",
+        "surf",
+        "plongee"
+      ],
+      "level": "variable",
+      "sourceKey": "lajolla",
+      "desc": "À San Diego, La Jolla Shores longe un quartier de bord de mer jusqu’aux abords du ponton Scripps. Kayak, surf et plongée se préparent depuis les opérateurs du secteur.",
+      "photoQuery": "La Jolla Shores coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "cabopulmo",
+      "name": "Cabo Pulmo",
+      "loc": "Basse-Californie du Sud, Mexique",
+      "world": "na",
+      "coords": {
+        "lat": 23.438,
+        "lon": -109.426
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "plongee",
+        "snorkeling"
+      ],
+      "level": "variable",
+      "sourceKey": "cabopulmo",
+      "desc": "Sur la côte est de la Basse-Californie du Sud, Cabo Pulmo abrite un parc national marin. La plongée et le snorkeling permettent de découvrir ses récifs avec les opérateurs autorisés.",
+      "photoQuery": "Cabo Pulmo National Park coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "akumal",
+      "name": "Akumal",
+      "loc": "Quintana Roo, Mexique",
+      "world": "na",
+      "coords": {
+        "lat": 20.395,
+        "lon": -87.313
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "snorkeling",
+        "plongee"
+      ],
+      "level": "variable",
+      "sourceKey": "akumal",
+      "desc": "Entre Playa del Carmen et Tulum, Akumal s’organise autour de plusieurs baies. Pour une sortie en snorkeling, renseigne-toi sur les parcours autorisés et les règles de protection de la faune.",
+      "photoQuery": "Akumal coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "cozumel",
+      "name": "Cozumel",
+      "loc": "Quintana Roo, Mexique",
+      "world": "na",
+      "coords": {
+        "lat": 20.447,
+        "lon": -86.99
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "plongee",
+        "snorkeling"
+      ],
+      "level": "variable",
+      "sourceKey": "cozumel",
+      "desc": "Face à Playa del Carmen, cette île mexicaine ouvre sur la mer des Caraïbes. Les centres de plongée y organisent des sorties vers les récifs, avec des sites à choisir selon ton expérience.",
+      "photoQuery": "Cozumel coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "holbox",
+      "name": "Holbox",
+      "loc": "Quintana Roo, Mexique",
+      "world": "na",
+      "coords": {
+        "lat": 21.525,
+        "lon": -87.378
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kayak",
+        "kitesurf"
+      ],
+      "level": "variable",
+      "sourceKey": "holbox",
+      "desc": "Au nord du Yucatán, Holbox sépare le golfe du Mexique d’une lagune côtière. L’île se prête à un séjour autour de la plage, du kayak et du kitesurf avec les prestataires locaux.",
+      "photoQuery": "Holbox coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "buzios",
+      "name": "Búzios — Geribá",
+      "loc": "Rio de Janeiro, Brésil",
+      "world": "sa",
+      "coords": {
+        "lat": -22.778,
+        "lon": -41.913
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "surf",
+        "bodyboard"
+      ],
+      "level": "variable",
+      "sourceKey": "buzios",
+      "desc": "Sur la péninsule de Búzios, Geribá est l’une des plages consacrées au surf. Une étape de glisse dans la région de Rio de Janeiro, entre plage ouverte et quartiers de bord de mer.",
+      "photoQuery": "Armação dos Búzios coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "arraialdocabo",
+      "name": "Arraial do Cabo",
+      "loc": "Rio de Janeiro, Brésil",
+      "world": "sa",
+      "coords": {
+        "lat": -22.971,
+        "lon": -42.024
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "plongee",
+        "snorkeling"
+      ],
+      "level": "variable",
+      "sourceKey": "arraialdocabo",
+      "desc": "Des baies découpent le littoral d’Arraial do Cabo, à l’est de Rio de Janeiro. Le port sert de point de départ aux sorties de plongée et aux excursions vers les plages.",
+      "photoQuery": "Arraial do Cabo coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "ilhagrande",
+      "name": "Ilha Grande",
+      "loc": "Rio de Janeiro, Brésil",
+      "world": "sa",
+      "coords": {
+        "lat": -23.142,
+        "lon": -44.167
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kayak",
+        "snorkeling"
+      ],
+      "level": "variable",
+      "sourceKey": "ilhagrande",
+      "desc": "Une île boisée au large d’Angra dos Reis, sur la côte de Rio de Janeiro. Les criques et les villages du littoral composent un itinéraire à préparer en bateau ou en kayak accompagné.",
+      "photoQuery": "Ilha Grande coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "sanandres",
+      "name": "San Andrés",
+      "loc": "Archipel de San Andrés, Colombie",
+      "world": "sa",
+      "coords": {
+        "lat": 12.579,
+        "lon": -81.691
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "plongee",
+        "snorkeling"
+      ],
+      "level": "variable",
+      "sourceKey": "sanandres",
+      "desc": "Une île colombienne de la mer des Caraïbes, au sein de l’archipel de San Andrés. Les excursions de snorkeling et de plongée rejoignent différents secteurs récifaux autour de l’île.",
+      "photoQuery": "San Andrés (island) coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "amed",
+      "name": "Amed",
+      "loc": "Bali, Indonésie",
+      "world": "as",
+      "coords": {
+        "lat": -8.336,
+        "lon": 115.648
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "snorkeling",
+        "plongee"
+      ],
+      "level": "variable",
+      "sourceKey": "amed",
+      "desc": "Au nord-est de Bali, Amed désigne un ensemble de villages côtiers, dont Jemeluk et Lipah. Le snorkeling et la plongée se préparent baie par baie avec les centres locaux.",
+      "photoQuery": "Amed (Bali) coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "nusapenida",
+      "name": "Nusa Penida",
+      "loc": "Bali, Indonésie",
+      "world": "as",
+      "coords": {
+        "lat": -8.679,
+        "lon": 115.496
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "plongee",
+        "snorkeling"
+      ],
+      "level": "variable",
+      "sourceKey": "nusapenida",
+      "desc": "Au sud-est de Bali, Nusa Penida alterne falaises et baies. Les sites de plongée et de snorkeling se rejoignent avec les centres locaux ; la photo de Broken Beach montre le paysage côtier, pas une mise à l’eau.",
+      "photoQuery": "Nusa Penida coast",
+      "edition": "catalogue-280",
+      "photoContext": "Broken Beach · vue du littoral"
+    },
+    {
+      "id": "pemuteran",
+      "name": "Pemuteran",
+      "loc": "Bali, Indonésie",
+      "world": "as",
+      "coords": {
+        "lat": -8.142,
+        "lon": 114.657
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "snorkeling",
+        "plongee"
+      ],
+      "level": "variable",
+      "sourceKey": "pemuteran",
+      "desc": "Sur la côte nord-ouest de Bali, Pemuteran est un village tourné vers la plongée. La baie accueille un projet de restauration corallienne et sert aussi de base pour des sorties vers Menjangan.",
+      "photoQuery": "Pemuteran coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "nusalembongan",
+      "name": "Nusa Lembongan",
+      "loc": "Bali, Indonésie",
+      "world": "as",
+      "coords": {
+        "lat": -8.673,
+        "lon": 115.448
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "surf",
+        "snorkeling",
+        "plongee"
+      ],
+      "level": "variable",
+      "sourceKey": "nusalembongan",
+      "desc": "Une petite île au sud-est de Bali, voisine de Nusa Ceningan et de Nusa Penida. Entre les plages et les départs en bateau, plusieurs centres permettent de préparer une session de surf ou une sortie sous l’eau.",
+      "photoQuery": "Nusa Lembongan coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "elnido",
+      "name": "El Nido",
+      "loc": "Palawan, Philippines",
+      "world": "as",
+      "coords": {
+        "lat": 11.179,
+        "lon": 119.39
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kayak",
+        "snorkeling",
+        "plongee"
+      ],
+      "level": "variable",
+      "sourceKey": "elnido",
+      "desc": "Au nord de Palawan, El Nido ouvre sur l’archipel de Bacuit. Les falaises calcaires, les baies et les lagons se découvrent notamment lors de sorties en bateau, en kayak ou avec masque et tuba.",
+      "photoQuery": "El Nido, Palawan coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "phuquoc",
+      "name": "Phú Quốc",
+      "loc": "Vietnam",
+      "world": "as",
+      "coords": {
+        "lat": 10.034,
+        "lon": 104.017
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "snorkeling",
+        "plongee"
+      ],
+      "level": "variable",
+      "sourceKey": "phuquoc",
+      "desc": "Au large du sud du Vietnam, Phú Quốc réunit des plages et des îlots voisins. Les sorties de snorkeling et de plongée se choisissent auprès des centres, selon le secteur et la météo.",
+      "photoQuery": "Phú Quốc coast",
+      "edition": "catalogue-280",
+      "photoContext": "Plage de Bãi Sao, Phú Quốc"
+    },
+    {
+      "id": "abeltasman",
+      "name": "Abel Tasman",
+      "loc": "Tasman, Nouvelle-Zélande",
+      "world": "oc",
+      "coords": {
+        "lat": -40.95,
+        "lon": 173.053
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kayak"
+      ],
+      "level": "variable",
+      "sourceKey": "abeltasman",
+      "desc": "Au nord de l’île du Sud, le parc national Abel Tasman borde une succession de baies boisées. Les sorties en kayak permettent de relier certaines plages et d’associer navigation et marche côtière.",
+      "photoQuery": "Abel Tasman National Park coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "cathedralcove",
+      "name": "Cathedral Cove",
+      "loc": "Coromandel, Nouvelle-Zélande",
+      "world": "oc",
+      "coords": {
+        "lat": -36.828,
+        "lon": 175.789
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "kayak"
+      ],
+      "level": "variable",
+      "sourceKey": "cathedralcove",
+      "desc": "Sur la péninsule de Coromandel, une arche rocheuse marque la plage de Cathedral Cove. Les sorties en kayak partent notamment de Hahei ; vérifie les accès et les conditions avec le gestionnaire ou le guide.",
+      "photoQuery": "Cathedral Cove coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "rottnest",
+      "name": "Rottnest Island — Wadjemup",
+      "loc": "Australie-Occidentale",
+      "world": "oc",
+      "coords": {
+        "lat": -32.005,
+        "lon": 115.515
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "snorkeling",
+        "plongee",
+        "kayak"
+      ],
+      "level": "variable",
+      "sourceKey": "rottnest",
+      "desc": "Au large de Perth, Wadjemup — Rottnest Island — rassemble plages, baies et récifs. Une escale australienne à préparer autour du snorkeling, de la plongée ou du kayak.",
+      "photoQuery": "Rottnest Island coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "cablebeach",
+      "name": "Cable Beach",
+      "loc": "Broome, Australie",
+      "world": "oc",
+      "coords": {
+        "lat": -17.93,
+        "lon": 122.21
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "surf",
+        "baignade"
+      ],
+      "level": "variable",
+      "sourceKey": "cablebeach",
+      "desc": "À Broome, une longue plage de sable s’étire face à l’océan Indien. Cable Beach change de visage avec la marée ; renseigne-toi sur les zones ouvertes et les consignes locales avant d’entrer dans l’eau.",
+      "photoQuery": "Cable Beach coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "herveybay",
+      "name": "Hervey Bay",
+      "loc": "Queensland, Australie",
+      "world": "oc",
+      "coords": {
+        "lat": -25.278,
+        "lon": 152.873
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "paddle",
+        "kayak"
+      ],
+      "level": "variable",
+      "sourceKey": "herveybay",
+      "desc": "Sur la Fraser Coast, Hervey Bay fait face à K’gari. Les plages et les opérateurs nautiques du front de mer permettent d’organiser une balade en paddle ou en kayak.",
+      "photoQuery": "Hervey Bay coast",
+      "edition": "catalogue-280"
+    },
+    {
+      "id": "noumea",
+      "name": "Nouméa — Anse Vata",
+      "loc": "Nouvelle-Calédonie",
+      "world": "oc",
+      "coords": {
+        "lat": -22.306,
+        "lon": 166.443
+      },
+      "coordinatePrecision": "coastal-sector",
+      "sports": [
+        "windsurf",
+        "paddle"
+      ],
+      "level": "variable",
+      "sourceKey": "noumea",
+      "desc": "Au sud de Nouméa, la baie de l’Anse Vata est un rendez-vous de la planche à voile. Le front de mer donne sur le lagon et l’îlot Canard ; prépare ton parcours avec les clubs locaux.",
+      "photoQuery": "Anse Vata coast",
+      "edition": "catalogue-280"
     }
-  ]
+  ],
+  "latestEdition": "catalogue-280"
 }
