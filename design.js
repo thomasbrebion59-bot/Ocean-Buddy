@@ -35,12 +35,20 @@
   $('.phone').insertBefore(chrome,$('#screenWrap'));
   $('.chrome-user').onclick = () => go('profile');
   $('.chrome-user').insertAdjacentHTML('beforebegin',`<button class="mobile-search" aria-label="Rechercher un spot">${icon('search')}</button>`);
-  $('.mobile-search').onclick = () => {go('spots');openWorld('all');setView('list');$('#spotSearch').focus()};
+  function searchEverywhere(query=''){
+    window.OceanNavigation?.begin();
+    activeSport=null;currentFilter='all';favOnly=false;nearMode=false;currentSearch='';
+    $('#favChip').classList.remove('active');$('#nearBtn').classList.remove('on');
+    document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
+    renderSportFilters();renderWorlds();
+    go('spots');openWorld('all');setView('list');$('#spotSearch').value=query;searchSpots(query);$('#spotSearch').focus();
+  }
+  $('.mobile-search').onclick = () => searchEverywhere();
   $('.chrome-user').insertAdjacentHTML('afterend','<button class="mobile-poulpy" aria-label="Discuter avec Poulpy"><img src="assets/poulpy/scenes/travel-v2.webp" alt=""></button>');
   $('.mobile-poulpy').onclick = openChat;
   $('.chrome-search').onsubmit = event => {
     event.preventDefault();const query=$('#globalSearch').value.trim();
-    go('spots');openWorld('all');setView('list');$('#spotSearch').value=query;searchSpots(query);$('#spotSearch').focus();
+    searchEverywhere(query);
   };
   const identity = () => {
     const name = typeof userName === 'string' ? userName : 'Explorateur';

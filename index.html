@@ -19,6 +19,7 @@
 <link rel="stylesheet" href="trips.css?v=f24eb933bdb8">
 <link rel="stylesheet" href="poulpy.css?v=7e71afd7e7b1">
 <link rel="stylesheet" href="navigation.css?v=1ad9b43229b1">
+<link rel="stylesheet" href="field-guide.css?v=e755ada257f3">
 </head>
 <body class="ocean-v2" data-screen="home">
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
@@ -211,9 +212,9 @@
       </div>
       <div class="detail-body">
         <div class="dtabs" id="dTabs">
-          <button class="dtab active" data-cat="infos" onclick="showDetailCat('infos')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2.6"/><path d="M9.2 3.2h5.6v3H9.2z"/><path d="M9 11h6M9 15h6"/></svg> Infos</button>
+          <button class="dtab active" data-cat="infos" onclick="showDetailCat('infos')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2.6"/><path d="M9.2 3.2h5.6v3H9.2z"/><path d="M9 11h6M9 15h6"/></svg> Le spot</button>
           <button class="dtab" data-cat="meteo" onclick="showDetailCat('meteo')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3.2"/><path d="M3 9.5h18M8 3v4M16 3v4"/></svg> Conditions</button>
-          <button class="dtab" data-cat="activites" onclick="showDetailCat('activites')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 18.5C3 16 6 8.5 11 4.5s9-1.5 7.5 1.5"/><path d="M5.5 18.5c2.5 2.5 9-.5 13-5.5"/><path d="M8 16 16 7.5"/></svg> Activités</button>
+          <button class="dtab" data-cat="activites" onclick="showDetailCat('activites')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 18.5C3 16 6 8.5 11 4.5s9-1.5 7.5 1.5"/><path d="M5.5 18.5c2.5 2.5 9-.5 13-5.5"/><path d="M8 16 16 7.5"/></svg> Préparer</button>
           <button class="dtab" data-cat="faune" onclick="showDetailCat('faune')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="10.5" cy="12" rx="7.5" ry="4.6"/><path d="M18 12 22 8.6v6.8z"/><path d="M14.4 9.4 15.6 12l-1.2 2.6"/><circle cx="6.5" cy="11.2" r=".9" fill="currentColor"/></svg> Faune</button>
           <button class="dtab" data-cat="preserver" onclick="showDetailCat('preserver')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 3.8C10.4 4.4 4.6 9.4 4.6 16.6c0 1.3.2 2.4.6 3.2 7.6.5 13.1-4.6 14.4-11.6.4-2.2.6-3.4.6-4.4z"/><path d="M4.2 20.4C6 15 9.8 11.2 15.4 9"/></svg> Préserver</button>
         </div>
@@ -397,12 +398,14 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 
-<script src="photo-catalog.js?v=182de268842e"></script>
+<script src="photo-catalog.js?v=634ac4424660"></script>
 <script src="trip-model.js?v=887d94bb3e8a"></script>
-<script src="app.js?v=eac156d88072"></script>
-<script src="design.js?v=5870db6d04d0"></script>
+<script src="catalog-expansion.js?v=01342ba934e2"></script>
+<script src="app.js?v=d099c7ca0c50"></script>
+<script src="design.js?v=3adae9c7aeab"></script>
 <script src="trips.js?v=200562ec4584"></script>
 <script src="poulpy.js?v=37b49b7d162a"></script>
-<script src="navigation.js?v=e4b0948a1b21"></script>
+<script src="field-guide.js?v=3989b872b244"></script>
+<script src="navigation.js?v=1c358c2fe626"></script>
 </body>
 </html>

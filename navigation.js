@@ -18,7 +18,7 @@
       else if(focus.matches('#worldGrid button'))focusSelector='#worldGrid .'+[...focus.classList].find(c=>c.startsWith('world-'));
       else if(focus.id)focusSelector='#'+CSS.escape(focus.id);
     }
-    return {screen:document.body.dataset.screen||'home',world:spotWorld,sport:activeSport,filter:currentFilter,search:currentSearch,favorites:favOnly,near:nearMode,shown:spotShown,view:$('#mapView').style.display==='none'?'list':'map',spot:currentSpot,detailSport,detailTab:$('#dTabs .dtab.active')?.dataset.cat||'info',homeTab:$('#homeTabs .htab.active')?.dataset.hcat||'jour',trip:window.OceanTrips.route(),scroll:wrap.scrollTop,focusSelector};
+    return {screen:document.body.dataset.screen||'home',world:spotWorld,sport:activeSport,filter:currentFilter,search:currentSearch,favorites:favOnly,near:nearMode,shown:spotShown,view:$('#mapView').style.display==='none'?'list':'map',spot:currentSpot,detailSport,detailTab:$('#dTabs .dtab.active')?.dataset.cat||'infos',homeTab:$('#homeTabs .htab.active')?.dataset.hcat||'jour',trip:window.OceanTrips.route(),scroll:wrap.scrollTop,focusSelector};
   }
   function routeKey(r){return JSON.stringify([r.screen,r.screen==='spots'?[r.world,r.sport]:r.screen==='detail'?r.spot:r.screen==='trips'?r.trip?.selected:null]);}
   function label(r){
@@ -81,7 +81,7 @@
     restoring=true;applying=true;restoreTarget=route;
     activeSport=SPORTMAP[route.sport]?route.sport:null;
     spotWorld=route.world==='all'||worldOf(route.world)?route.world:null;
-    currentFilter=['all','debutant','intermediaire','expert'].includes(route.filter)?route.filter:'all';
+    currentFilter=['all','new','debutant','intermediaire','expert'].includes(route.filter)?route.filter:'all';
     currentSearch=typeof route.search==='string'?route.search:'';favOnly=!!route.favorites;nearMode=!!route.near&&!!userPos;
     spotShown=Math.max(SPOT_PAGE,Number(route.shown)||SPOT_PAGE);
     $('#spotSearch').value=currentSearch;$('#favChip').classList.toggle('active',favOnly);$('#nearBtn').classList.toggle('on',nearMode);

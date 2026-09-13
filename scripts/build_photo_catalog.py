@@ -6,6 +6,7 @@ meta = json.loads((ROOT/'assets/spots/sources.json').read_text())
 old = json.loads((ROOT/'assets/photos/sources.json').read_text())
 app = (ROOT/'app.js').read_text()
 spots = json.loads(subprocess.check_output(['node','-e',"const fs=require('fs'),vm=require('vm');const s=fs.readFileSync('app.js','utf8');console.log(JSON.stringify(vm.runInNewContext(s.slice(s.indexOf('const SPOTS='),s.indexOf('const SCORES='))+';SPOTS')))"] ,cwd=ROOT))
+spots.extend(json.loads((ROOT/'data/catalog-expansion.json').read_text())['spots'])
 names = {s['id']:s['name'] for s in spots}
 worlds = {
  'fr':('calanques','Calanque d’En-Vau, France'),

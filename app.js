@@ -423,7 +423,7 @@ const SPOTS=[
 ];
 
 const SCORES={imsouane:4.4,safi:4.7,sidikaouki:3.9,ngor:4.3,ouakam:4.4,elandsbay:4.2,muizenberg:3.8,dahab:4.5,nosybe:4.4,watamu:4.0,keramas:4.6,nias:4.7,gland:4.6,komodo:4.8,bunaken:4.5,similan:4.4,weligama:3.9,ichinomiya:4.0,kerama:4.5,rincon:4.5,pavones:4.4,tamarindo:3.7,sayulita:3.8,todossantos:4.6,islamujeres:4.2,tofino:4.1,newsmyrna:3.6,montauk:3.9,mancora:4.1,huanchaco:3.8,iquique:4.4,praiadorosa:4.3,noronha:4.8,ilhabela:4.0,puntadeleste:3.9,ayampe:3.8,burleigh:4.5,byronbay:4.3,manly:4.0,ningaloo:4.8,piha:4.2,shipwreck:4.1,restaurants:4.6,borabora:4.7,jardimdomar:4.4,santabarbara:4.1,capomannu:4.0,isolabella:4.2,zlatnirat:4.1,naxos:4.2,hossegor:4.6,lacanau:4.2,latorche:3.8,biarritz:4.0,anglet:4.5,quiberon:3.5,seignosse:4.3,capbreton:4.4,lafitenia:4.1,guethary:4.4,sauveterre:3.9,latranche:3.6,lapalue:4.3,penhors:3.9,lapalmyre:3.4,mimizan:4.0,capferret:4.5,bidart:4.2,nazare:4.8,supertubos:4.6,ericeira:4.4,mundaka:4.6,thurso:4.4,bundoran:4,rodiles:4.3,somo:3.9,zarautz:4,pantin:4.2,lasanta:4.5,anchorpoint:4.3,pipeline:4.9,mavericks:4.7,trestles:4.5,malibu:4.2,puerto:4.6,santateresa:4.2,chicama:4.4,puntadelobos:4.4,jbay:4.7,bells:4.3,snapper:4.5,margaret:4.4,uluwatu:4.7,padang:4.5,cloudbreak:4.8,teahupoo:4.9,floripa:4.1,puntaroca:4.2,raglan:4.4,saquarema:4.3,montanita:4,lobitos:4.3,mardelplata:3.8,arica:4.4,itacare:3.8,shonan:3.7,arugam:4.2,cloud9:4.5,waikiki:4,unstad:4.1,skeletonbay:4.6,mentawai:4.7,dungeons:4.4,bluehole_belize:4.8,sipadan:4.8,rasmohammed:4.7,thistlegorm:4.8,tulamben:4.5,greatbarrier:4.8,silfra:4.7,cenote_dosojos:4.6,medes:4.5,portcros:4.4,calanques:4.5,richelieu:4.6,rajaampat:4.9,galapagos:4.9,maldives:4.7,hanauma:4.5,bonaire:4.5,tarifa:4.6,dakhla:4.6,cabarete:4.4,lemorne:4.6,cumbuco:4.5,essaouira:4.3,lafranqui:4.4,jericoacoara:4.6,hookipa:4.7,pozo:4.5,gardalake:4.3,hoodriver:4.4,annecy:4.4,verdon:4.5,glenan:4.4,capri:4.3,palombaggia:4.5,praia_marinha:4.5,navagio:4.4,anse_source:4.7,whitehaven:4.7,wissant:4.2,letouquet:4,hardelot:3.9,wimereux:3.7,berck:3.9,malolesbains:3.6,lehavre:3.8,etretat:4.3,dieppe:3.7,siouville:4.2,vauville:4,hauteville:3.7,granville:3.8,saintmalo:4.1,saintlunaire:3.9,erquy:4,perros:4.1};
-const FORECAST=[{d:'Lun',v:1.0},{d:'Mar',v:1.4},{d:'Mer',v:1.1},{d:'Jeu',v:1.9,best:true},{d:'Ven',v:1.6},{d:'Sam',v:0.9},{d:'Dim',v:1.2}];
+
 const ANEC={
   hossegor:"Hossegor accueille chaque année une étape du championnat du monde de surf (WSL). Son secret : le Gouf de Capbreton, un canyon sous-marin qui concentre la houle et muscle les vagues.",
   lacanau:"Lacanau a accueilli les premiers grands championnats de surf français et vibre chaque été au rythme du Lacanau Pro, l'une des compétitions les plus populaires du pays.",
@@ -660,7 +660,7 @@ function icoTemp(){var _i='_i'+(++_icoSeq);return `<svg viewBox="0 0 24 24"><def
 function icoTide(){var _i='_i'+(++_icoSeq);return `<svg viewBox="0 0 24 24"><defs><linearGradient id="gd${_i}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#b89be0"/><stop offset="100%" stop-color="#8a5cc7"/></linearGradient></defs><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8z" fill="url(#gd${_i})"/><circle cx="9" cy="9.5" r="1" fill="#fff" opacity=".7"/></svg>`;}
 
 /* ================= RENDER ================= */
-const lvlLabel={debutant:'🟢 Débutant',intermediaire:'🟡 Intermédiaire',expert:'🔴 Expert'};
+const lvlLabel={debutant:'Débutant',intermediaire:'Intermédiaire',expert:'Expert',variable:'Niveau à évaluer'};
 /* ====== SPORTS NAUTIQUES ====== */
 const SPORTS=[
   {id:'surf',label:'Surf',emoji:'🏄',color:'#1f8fd6',desc:'Glisser sur les vagues'},
@@ -701,10 +701,9 @@ function spotSports(s){
 }
 function spotCard(s){
   let dots='';for(let i=0;i<4;i++)dots+=`<span class="dot ${i<s.danger?'on':''}"></span>`;
-  const L=LIVE[s.id]||{};const wind=L.wind||s.wind,swell=L.swell||s.swell,temp=L.temp||s.temp;
+  const L=LIVE[s.id]||{};
   const sp=spotSports(s).slice(0,6).map(id=>`<span title="${SPORTMAP[id].label}">${sportIcon(id)}</span>`).join('');
   const dist=(nearMode&&userPos)?spotDist(s):null;
-  const sc=(SCORES[s.id]||0).toFixed(1);
   const photo=spotPhotoUrl(s.id,480);
   return `<article class="spot" data-spot-id="${s.id}" tabindex="0" role="button" aria-label="Découvrir ${s.name}" onclick="openSpot('${s.id}')">
     <div class="spot-banner">${scene(s,false)}
@@ -712,13 +711,13 @@ function spotCard(s){
       <div class="spot-shade"></div>
       <button class="fav" aria-label="${favs.has(s.id)?'Retirer des favoris':'Ajouter aux favoris'}" aria-pressed="${favs.has(s.id)}" onclick="toggleFav('${s.id}',event)">${favs.has(s.id)?FAV_ON:FAV_OFF}</button>
       ${dist!=null?`<span class="dist-tag"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${fmtDist(dist)}</span>`:''}
-      <span class="lvl-tag lvl-${s.level}">${lvlLabel[s.level]}</span>
-      <span class="score-chip">★ ${sc}</span>
+      <span class="lvl-tag lvl-${s.level}">${s.level==='variable'?SPORTMAP[spotSports(s)[0]].label:lvlLabel[s.level]}</span>
+      ${s.catalogNew?'<span class="catalog-new">Nouveau</span>':''}
       <div class="glass-name"><h3>${s.name}</h3><div class="gn-loc"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${s.loc}</div></div>
       <span class="spot-go">Voir →</span>
     </div>
     <div class="spot-info">
-      <div class="spot-meta"><span>${icoWind()} ${wind}</span><span>${icoSwell()} ${swell}</span><span>${icoTemp()} ${temp}</span>${L.live?'<span class="live-dot" title="Données en direct"></span>':''}</div>
+      <div class="spot-meta">${L.live?`<span>${icoWind()} ${L.wind||'—'}</span><span>${icoSwell()} ${L.swell||'—'}</span><span>${icoTemp()} ${L.temp||'—'}</span><span class="live-dot" title="Prévisions Open-Meteo"></span>`:'<span class="spot-preview">'+spotSports(s).slice(0,3).map(id=>SPORTMAP[id].label).join(' · ')+'</span>'}</div>
       <div class="spot-sports">${sp}</div>
       <div class="danger-dots" title="Danger">${dots}</div>
     </div>
@@ -877,8 +876,10 @@ function syncWorldUI(){
 function renderSpots(filter=currentFilter,keep){
   currentFilter=filter;const q=currentSearch;
   if(!keep) spotShown=SPOT_PAGE;
-  let list=SPOTS.filter(s=>inWorld(s)&&(filter==='all'||s.level===filter)&&(!activeSport||spotSports(s).includes(activeSport))&&(!favOnly||favs.has(s.id))&&(!q||(s.name+' '+s.loc).toLowerCase().includes(q)));
+  let list=SPOTS.filter(s=>inWorld(s)&&(filter==='all'||(filter==='new'?s.catalogNew:s.level===filter))&&(!activeSport||spotSports(s).includes(activeSport))&&(!favOnly||favs.has(s.id))&&(!q||searchable(s.name+' '+s.loc).includes(searchable(q))));
   if(nearMode&&userPos)list=list.slice().sort((a,b)=>(spotDist(a)??9e9)-(spotDist(b)??9e9));
+  const resultCount=document.getElementById('spotResultCount');
+  if(resultCount)resultCount.textContent=list.length+(filter==='new'?(list.length===1?' nouveau spot':' nouveaux spots'):(list.length===1?' spot':' spots'))+(q?(list.length===1?' trouvé':' trouvés'):' à explorer');
   var _h;
   if(!list.length){
     _h='<div class="nospot">Aucun spot ici.'+((spotWorld&&spotWorld!=='all'&&currentSearch)?'<button onclick="openWorld(\'all\')">Chercher dans tous les spots</button>':'')+'</div>';
@@ -898,6 +899,7 @@ function renderSpots(filter=currentFilter,keep){
   document.getElementById('homeSpots').innerHTML=home.map(spotCard).join('');
 }
 function filterSpots(el,f){document.querySelectorAll('#filters .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderSpots(f);}
+function searchable(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();}
 function searchSpots(q){currentSearch=(q||'').toLowerCase().trim();renderSpots();if(document.getElementById('mapView').style.display!=='none')renderMap(true);}
 function toggleFav(id,ev){if(ev)ev.stopPropagation();
   if(favs.has(id))favs.delete(id);else favs.add(id);
@@ -1021,12 +1023,12 @@ function renderMap(refresh){
   }
   if(!leafMap._built||refresh){
     leafMap._built=true;leafMarkers.clearLayers();
-    const col={debutant:'#2faf72',intermediaire:'#f5a623',expert:'#e8503f'};
+    const col={debutant:'#2faf72',intermediaire:'#f5a623',expert:'#e8503f',variable:'#2154dc'};
     const pts=[];
     SPOTS.forEach(s=>{const c=COORDS[s.id];if(!c)return;
       if(!inWorld(s))return;
-      if(currentFilter!=='all'&&s.level!==currentFilter)return;
-      if(currentSearch&&!(s.name+' '+s.loc).toLowerCase().includes(currentSearch))return;
+      if(currentFilter!=='all'&&(currentFilter==='new'?!s.catalogNew:s.level!==currentFilter))return;
+      if(currentSearch&&!searchable(s.name+' '+s.loc).includes(searchable(currentSearch)))return;
       const ssp=spotSports(s);
       if(activeSport&&!ssp.includes(activeSport))return;
       if(favOnly&&!favs.has(s.id))return;
@@ -1035,7 +1037,7 @@ function renderMap(refresh){
       const icon=L.divIcon({className:'lpin-wrap',html:'<div class="lpin" style="background:'+col[s.level]+'"><span>'+emo+'</span></div>',iconSize:[30,30],iconAnchor:[15,30],popupAnchor:[0,-28]});
       const sh=ssp.map(id=>sportIcon(id)).join(' ');
       L.marker([c.lat,c.lon],{icon,title:s.name,alt:s.name}).addTo(leafMarkers)
-        .bindPopup('<div class="lpop"><b>'+s.name.split(' — ')[0]+'</b><em>'+lvlLabel[s.level]+' · '+(SCORES[s.id]||0).toFixed(1)+'/5</em><div class="lpop-sp">'+sh+'</div><button onclick="openSpot(\''+s.id+'\')">Voir la fiche 🏄</button></div>');
+        .bindPopup('<div class="lpop"><b>'+s.name.split(' — ')[0]+'</b><em>'+lvlLabel[s.level]+'</em><div class="lpop-sp">'+sh+'</div><button onclick="openSpot(\''+s.id+'\')">Voir la fiche 🏄</button></div>');
     });
     leafMap._pts=pts;
     if(pts.length&&(refresh||!leafMap._fit)){leafMap._fit=true;setTimeout(fitMapToSpots,0);}
@@ -1340,7 +1342,7 @@ function renderPreserve(s){
 function renderFaune(s){
   var host=document.getElementById('dFaune'); if(!host) return;
   var z=BIOZONE[SPOT_ZONE[s.id]];
-  if(!z){ host.innerHTML=''; return; }
+  if(!z){host.innerHTML='<p class="field-empty">Pour identifier les espèces de ce secteur, renseigne-toi auprès d’un centre local ou du gestionnaire de l’espace naturel.</p>';document.getElementById('dPreserve').innerHTML='<div class="field-empty"><h3>Un lieu à respecter.</h3><p>Reste sur les accès autorisés, rapporte tes déchets et observe les animaux à distance.</p></div>';return;}
   var warn=[], flore=[], faune=[];
   z.sp.forEach(function(sp){
     if(sp[3]==='!') warn.push(sp);
@@ -1482,10 +1484,7 @@ function renderDetailSports(s,act){
 }
 function renderGuideSub(s,act){
   var e=document.getElementById('dGuideSub'); if(!e)return;
-  var lab=SPORTMAP[act]?SPORTMAP[act].label.replace(/\s*\(.*\)/,''):'la session';
-  e.innerHTML=(spotSports(s).length<2)
-    ? 'Repères pour <b>'+lab+'</b> sur ce spot.'
-    : 'Repères pour <b>'+lab+'</b> — touche une autre activité pour les changer.';
+  e.textContent=spotSports(s).length<2?'Quelques points à vérifier pour préparer ta sortie.':'Choisis ton activité pour adapter ta préparation.';
 }
 function setDetailSport(id){
   var s=SPOTS.find(function(x){return x.id===currentSpot;}); if(!s)return;
@@ -1504,14 +1503,14 @@ function setDetailSport(id){
 function renderDetailFacts(s,act){
   /* Trois reperes d'identite, pas de conditions : celles-ci ont leur onglet. */
   var e=document.getElementById('dFacts'); if(!e)return;
-  var sc=(typeof SCORES!=='undefined'&&SCORES[s.id])?SCORES[s.id]:null;
   var lvl=(typeof LVLTXT!=='undefined'&&LVLTXT[s.level])||s.level;
   var lab=SPORTMAP[act]?SPORTMAP[act].label.replace(/\s*\(.*\)/,''):'';
   var h='';
-  if(sc)h+='<span class="dfact note">'+uic('etoile')+' '+sc.toFixed(1)+'<span class="dfl">/ 5</span></span>';
+
   h+='<span class="dfact lv-'+s.level+'">'+lvl+'</span>';
   if(lab)h+='<span class="dfact">'+sportIcon(act)+' '+lab+'</span>';
   e.innerHTML=h;
+  window.OceanFieldGuide?.update(s,act);
 }
 function openSpot(id){
   const s=SPOTS.find(x=>x.id===id);if(!s)return;
@@ -1629,7 +1628,7 @@ function recommendedSpot(){
   let pool=SPOTS.filter(s=>bySport(s)&&(!chosenLevel||s.level===chosenLevel));
   if(!pool.length)pool=SPOTS.filter(bySport);
   if(!pool.length)pool=SPOTS;
-  return pool.slice().sort((a,b)=>SCORES[b.id]-SCORES[a.id])[0];
+  return pool.slice().sort((a,b)=>(SCORES[b.id]||0)-(SCORES[a.id]||0))[0];
 }
 function setTodayPhoto(s){
   /* Meme principe que le hero de la fiche : la photo arrive en fondu PAR-DESSUS
@@ -1648,9 +1647,8 @@ function setTodayPhoto(s){
   if(cr)cr.textContent=(typeof spotPhotoCredit==='function'&&pu)?spotPhotoCredit(s.id):'';
 }
 function renderToday(){
-  const s=recommendedSpot(),sc=SCORES[s.id];
-  const full=Math.round(sc);
-  const stars='★★★★★'.slice(0,full)+'☆☆☆☆☆'.slice(0,5-full);
+  const s=recommendedSpot();
+  const conditions=LIVE[s.id]||{};
   const dateStr=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
   const actLab=`${sportIcon(activeSport||'surf')} ${activeSport?SPORTMAP[activeSport].label:'Surf'}`;
   document.getElementById('todayCard').innerHTML=`
@@ -1659,17 +1657,17 @@ function renderToday(){
       ${scene(s,false)}
       <img class="th-photo" id="todayPhoto" alt="" decoding="async">
       <div class="th-shade"></div>
-      <div class="th-note">${sc.toFixed(1)} ★</div>
+      <div class="th-note">À découvrir</div>
       <div class="th-credit" id="todayCredit"></div>
       <div class="th-cap">
         <div class="nm">${s.name.split(' — ')[0]}</div>
         <div class="rc">${actLab} · ${(typeof LVLTXT!=='undefined'&&LVLTXT[s.level])||s.level}</div>
       </div>
       <div class="cond-row">
-        <div class="cond">${icoWind()}<div class="cv">${s.wind.split(' ')[0]}</div><div class="cl">Vent</div></div>
-        <div class="cond">${icoSwell()}<div class="cv">${s.swell}</div><div class="cl">Houle</div></div>
-        <div class="cond">${icoTemp()}<div class="cv">${s.temp}</div><div class="cl">Eau</div></div>
-        <div class="cond">${icoTide()}<div class="cv small">${s.tide}</div><div class="cl">Marée</div></div>
+        <div class="cond">${icoWind()}<div class="cv">${conditions.wind||'—'}</div><div class="cl">Vent</div></div>
+        <div class="cond">${icoSwell()}<div class="cv">${conditions.swell||'—'}</div><div class="cl">Houle</div></div>
+        <div class="cond">${icoTemp()}<div class="cv">${conditions.temp||'—'}</div><div class="cl">Eau</div></div>
+        <div class="cond">${icoTide()}<div class="cv small">${conditions.tide||'—'}</div><div class="cl">Marée</div></div>
       </div>
     </div>
     <div class="today-why" onclick="popPoulpy()">
@@ -1681,36 +1679,23 @@ function renderToday(){
   var _o=document.getElementById('octo');
   if(_o)_o.innerHTML=poulpySVG();
   var _ob=document.getElementById('octoBubble');
-  if(_ob){
-    {
-      var _w=String(s.wind||''), _why=[];
-      _why.push(/offshore|terre/i.test(_w) ? '<b>vent de terre</b>' : ('vent ' + _w.toLowerCase()));
-      if(s.swell)_why.push('houle de ' + String(s.swell).replace(/ /g,'\u00a0'));
-      if(s.temp)_why.push(s.temp + ' dans l\'eau');
-      _ob.innerHTML = 'Pourquoi lui : ' + _why.join(', ') + '.';
-    }
-  }
+  if(_ob)_ob.textContent='Un lieu à découvrir et à garder dans ton prochain voyage. Consulte les conditions avant ta sortie.';
   window.__obKeep=false;
 }
 function renderForecast(){
-  const max=Math.max(...FORECAST.map(f=>f.v));
-  const best=FORECAST.find(f=>f.best);
-  document.getElementById('fcBest').innerHTML=`🤙 Meilleur créneau : <b>${best.d} matin</b> · houle ${best.v.toFixed(1)} m`;
-  document.getElementById('fcBars').innerHTML=FORECAST.map(f=>{
-    const h=Math.round(26+(f.v/max)*74);
-    return `<div class="fc-col ${f.best?'best':''}"><div class="fc-val">${f.v.toFixed(1)}</div><div class="fc-bar" style="height:${h}%"></div><div class="fc-day">${f.d}</div></div>`;
-  }).join('');
+  document.getElementById('fcBest').textContent='Prévisions indisponibles pour le moment';
+  document.getElementById('fcBars').innerHTML='<p class="field-forecast-empty">La houle s’affichera lorsque les données du modèle seront disponibles.</p>';
 }
 function cardinal(deg){if(deg==null||isNaN(deg))return '';return ['N','NE','E','SE','S','SO','O','NO'][Math.round(deg/45)%8];}
 function renderConditions(s,live){
-  const wind=live&&live.wind?live.wind:s.wind,swell=live&&live.swell?live.swell:s.swell,temp=live&&live.temp?live.temp:s.temp,tide=live&&live.tide?live.tide:s.tide;
+  const wind=live?.wind||'—',swell=live?.swell||'—',temp=live?.temp||'—',tide=live?.tide||'—';
   document.getElementById('dWeather').innerHTML=`
     <div class="wc">${icoWind()}<div class="v" style="font-size:12px">${wind}</div><div class="l">Vent</div></div>
     <div class="wc">${icoSwell()}<div class="v">${swell}</div><div class="l">Houle</div></div>
     <div class="wc">${icoTemp()}<div class="v">${temp}</div><div class="l">Eau</div></div>
     <div class="wc">${icoTide()}<div class="v" style="font-size:10.5px;">${tide}</div><div class="l">Marée</div></div>`;
   const head=document.getElementById('dCondHead');
-  if(head)head.innerHTML=live?'Conditions du moment <span class="live-badge"><i></i>En direct</span>':'Conditions du moment';
+  if(head)head.textContent=live?'Prévisions du modèle · Open-Meteo':'Prévisions du modèle indisponibles pour le moment';
 }
 function tideFromMarine(mar){
   const hh=(mar&&mar.hourly)||{};const t=hh.time||[],lv=hh.sea_level_height_msl||[];
@@ -1739,10 +1724,10 @@ async function fetchConditions(s){
     const tide=tideFromMarine(mar);
     if(ws==null&&wv==null&&sst==null&&!tide)return;
     const o={
-      wind:ws!=null?(`${Math.round(ws)} km/h ${cardinal(wd)}`).trim():s.wind,
-      swell:wv!=null?`${(+wv).toFixed(1)} m`:s.swell,
-      temp:sst!=null?`${Math.round(sst)}°C`:s.temp,
-      tide:tide||s.tide,live:true
+      wind:ws!=null?(`${Math.round(ws)} km/h ${cardinal(wd)}`).trim():'—',
+      swell:wv!=null?`${(+wv).toFixed(1)} m`:'—',
+      temp:sst!=null?`${Math.round(sst)}°C`:'—',
+      tide:tide||'—',live:true
     };
     LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);
     renderConditions(s,o);
@@ -1964,104 +1949,75 @@ async function fetchAllConditions(){
         if(mc.sea_surface_temperature!=null)o.temp=`${Math.round(mc.sea_surface_temperature)}°C`;
         if(Object.keys(o).length){o.live=true;LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);}
       });
-      renderSpots();renderLiveTop();
+      renderSpots(currentFilter,true);renderLiveTop();renderToday();window.OceanPoulpy?.refresh();
     }catch(e){}
   }
 }
-function liveScore(s){
-  var L=LIVE[s.id];if(!L||(L.waveM==null&&L.windK==null))return null;
-  var sp=(activeSport&&spotSports(s).includes(activeSport))?activeSport:spotSports(s)[0];
-  var wave=L.waveM!=null?L.waveM:1,wind=L.windK!=null?L.windK:12,sc;
-  if(sp==='kitesurf'||sp==='windsurf'){sc=100-Math.abs(26-wind)*2.6-Math.max(0,wave-1.6)*9;}
-  else if(sp==='baignade'||sp==='snorkeling'||sp==='plongee'||sp==='paddle'||sp==='kayak'){sc=100-wave*24-Math.max(0,wind-12)*2.6;}
-  else{var ideal=s.level==='debutant'?0.9:(s.level==='expert'?2.4:1.5);sc=100-Math.abs(wave-ideal)*30-Math.max(0,wind-15)*2.2;}
-  return Math.max(0,Math.min(100,Math.round(sc)));
-}
-function liveLabel(sc){return sc>=75?{t:'Excellent',c:'#2faf72'}:(sc>=55?{t:'Bon',c:'#1f9bbf'}:(sc>=35?{t:'Correct',c:'#f5a623'}:{t:'Calme',c:'#9fb4c0'}));}
-/* Repli quand aucune mesure n'est encore arrivee (hors connexion, apercu
-   artifact, ou requetes en cours). On montre les valeurs de REFERENCE deja
-   embarquees avec chaque spot, et on le dit : les presenter comme des mesures
-   du moment serait faux. La pastille porte donc la note de l'appli, pas un
-   label "Excellent/Bon" qui, lui, se calcule sur des mesures reelles. */
-function liveTopTitle(live){
-  var t=document.getElementById('liveTopTitle');
-  if(t)t.textContent=live?'Conditions du moment':'Spots les mieux notés';
-}
-function refTopHTML(){
-  var list=SPOTS.filter(function(s){return !activeSport||spotSports(s).includes(activeSport);});
-  list=list.map(function(s){
-        return {s:s,sc:(typeof SCORES!=='undefined'&&SCORES[s.id])||0};})
-      .sort(function(a,b){return b.sc-a.sc;}).slice(0,3);
-  if(!list.length)return '<div class="lt-empty">Aucun spot pour cette activité.</div>';
-  return list.map(function(o){
-    var s=o.s,cond=[s.swell,String(s.wind).split(' ').slice(0,2).join(' '),s.temp]
-      .filter(Boolean).join(' · ');
-    return '<div class="lt-row" onclick="openSpot(\''+s.id+'\')">'
-         + '<div class="lt-info"><b>'+s.name.split(' — ')[0]+'</b><span>'+cond+'</span></div>'
-         + '<span class="lt-badge lt-ref">'+o.sc.toFixed(1)+' ★</span></div>';
-  }).join('')
-  + '<div class="lt-note">Valeurs de référence du spot. Les mesures du moment '
-  + 's’affichent dès qu’elles arrivent.</div>';
-}
 function renderLiveTop(){
-  var el=document.getElementById('liveTop');if(!el)return;
-  var list=SPOTS.filter(function(s){return (!activeSport||spotSports(s).includes(activeSport))&&liveScore(s)!=null;});
-  list=list.map(function(s){return {s:s,sc:liveScore(s)};}).sort(function(a,b){return b.sc-a.sc;}).slice(0,3);
-  if(!list.length){ liveTopTitle(false); el.innerHTML=refTopHTML(); return; }
-  liveTopTitle(true);
-  el.innerHTML=list.map(function(o){var s=o.s,L=LIVE[s.id]||{},lab=liveLabel(o.sc);
-    var cond=[(L.swell?L.swell:''),(L.wind?L.wind.split(' ').slice(0,2).join(' '):''),(L.temp||'')].filter(Boolean).join(' · ');
-    return '<div class="lt-row" onclick="openSpot(\''+s.id+'\')"><div class="lt-info"><b>'+s.name.split(' — ')[0]+'</b><span>'+cond+'</span></div><span class="lt-badge" style="background:'+lab.c+'">'+lab.t+'</span></div>';}).join('');
+  const el=document.getElementById('liveTop');if(!el)return;
+  const candidates=SPOTS.filter(s=>!activeSport||spotSports(s).includes(activeSport));
+  const available=candidates.filter(s=>LIVE[s.id]?.live);
+  const list=(available.length?available:candidates).slice(0,3);
+  document.getElementById('liveTopTitle').textContent=available.length?'La mer en chiffres':'À découvrir';
+  el.innerHTML=list.map(s=>{
+    const L=LIVE[s.id]||{};
+    const detail=available.length?[L.swell,L.wind,L.temp].filter(Boolean).join(' · '):s.loc;
+    return `<button class="lt-row" onclick="openSpot('${s.id}')"><span class="lt-info"><b>${s.name.split(' — ')[0]}</b><span>${detail}</span></span><span class="lt-badge lt-ref">Voir →</span></button>`;
+  }).join('')+(available.length?'<p class="lt-note">Prévisions du modèle Open-Meteo.</p>':'');
 }
 function dayLabel(iso,i){if(i===0)return 'Auj';const d=new Date(iso);return ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'][d.getDay()]||'J+'+i;}
 function renderForecastBars(barsId,bestId,days,vals,opt){
   opt=opt||{};var unit=opt.unit||'m',dec=unit==='km/h'?0:1;
   var max=Math.max.apply(null,vals)||1;
   var bi=opt.best==='min'?vals.indexOf(Math.min.apply(null,vals)):vals.indexOf(Math.max.apply(null,vals));
-  if(bestId)document.getElementById(bestId).innerHTML=(opt.liveOn?'<span class="live-badge"><i></i>'+(opt.badge||'En direct')+'</span>':'🤙 ')+(opt.bestLabel||'Meilleur jour')+' : <b>'+days[bi]+'</b> · '+vals[bi].toFixed(dec)+' '+unit;
+  if(bestId)document.getElementById(bestId).innerHTML=(opt.liveOn?'<span class="live-badge"><i></i>'+(opt.badge||'Modèle Open-Meteo')+'</span>':'🤙 ')+(opt.bestLabel||'Houle la plus haute')+' : <b>'+days[bi]+'</b> · '+vals[bi].toFixed(dec)+' '+unit;
   document.getElementById(barsId).innerHTML=vals.map(function(v,i){var h=Math.round(26+(v/max)*74);return '<div class="fc-col '+(i===bi?'best':'')+'"><div class="fc-val">'+v.toFixed(dec)+'</div><div class="fc-bar" style="height:'+h+'%"></div><div class="fc-day">'+days[i]+'</div></div>';}).join('');
 }
 function renderMiniForecast(s,calm){
-  const base=parseFloat(String(s.swell).replace(',','.'))||1.2;
-  const days=['Auj','Dem','J+2','J+3','J+4'],mult=[1,0.85,1.15,1.3,0.95];
-  renderForecastBars('dForecast','dFcBest',days,mult.map(m=>Math.max(0.4,+(base*m).toFixed(1))),{unit:'m',badge:'Houle estimée',best:calm?'min':'max',bestLabel:calm?'Mer la plus calme':'Meilleur jour'});
+  document.getElementById('dForecast').innerHTML='<p class="field-forecast-empty">Les prévisions ne sont pas disponibles pour ce lieu pour le moment.</p>';
+  document.getElementById('dFcBest').textContent='';
 }
+
 async function fetchWindDaily(id,n){
   const c=COORDS[id];if(!c)throw 0;
   const url='https://api.open-meteo.com/v1/forecast?latitude='+c.lat+'&longitude='+c.lon+'&daily=wind_speed_10m_max&wind_speed_unit=kmh&timezone=auto&forecast_days='+n;
   const r=await fetch(url);const j=await r.json();const t=(j.daily||{}).time,v=(j.daily||{}).wind_speed_10m_max;
-  if(!v||!v.length)throw 0;
-  return {days:t.slice(0,n).map((iso,i)=>dayLabel(iso,i)),vals:v.slice(0,n).map(x=>Math.max(1,Math.round(+x)))};
+  if(!v?.length||v.slice(0,n).some(x=>x==null||!Number.isFinite(+x)))throw new Error('Forecast unavailable');
+  return {days:t.slice(0,n).map((iso,i)=>dayLabel(iso,i)),vals:v.slice(0,n).map(x=>Math.max(0,Math.round(+x)))};
 }
 async function fetchWaves(id,n){
   const c=COORDS[id];if(!c)throw 0;
   const url=`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&daily=wave_height_max&timezone=auto&forecast_days=${n}`;
   const r=await fetch(url);const j=await r.json();
   const t=j.daily.time,v=j.daily.wave_height_max;
-  if(!v||!v.length)throw 0;
-  return {days:t.slice(0,n).map((iso,i)=>dayLabel(iso,i)),vals:v.slice(0,n).map(x=>Math.max(0.1,+(+x).toFixed(1)))};
+  if(!v?.length||v.slice(0,n).some(x=>x==null||!Number.isFinite(+x)))throw new Error('Forecast unavailable');
+  return {days:t.slice(0,n).map((iso,i)=>dayLabel(iso,i)),vals:v.slice(0,n).map(x=>Math.max(0,+(+x).toFixed(1)))};
 }
 function showForecastSkeleton(barsId,bestId){
-  if(bestId)document.getElementById(bestId).innerHTML='<span class="live-badge"><i></i>Houle réelle</span> chargement…';
+  if(bestId)document.getElementById(bestId).innerHTML='<span class="live-badge"><i></i>Prévisions du modèle</span> chargement…';
   const hs=[55,78,62,90,70];
   document.getElementById(barsId).innerHTML=hs.map(h=>`<div class="fc-col"><div class="fc-bar skel" style="height:${h}%"></div><div class="fc-day skel" style="width:20px;height:9px;border-radius:4px">&nbsp;</div></div>`).join('');
 }
 var CAL_ICO='<svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3.2"/><path d="M3 9.5h18M8 3v4M16 3v4"/></svg> ';
+var detailForecastRequest=0;
 async function realForecastDetail(s,act){
+  const request=++detailForecastRequest;
   var wind=(act==='kitesurf'||act==='windsurf');
   var calm=(act==='baignade'||act==='snorkeling'||act==='plongee'||act==='paddle'||act==='kayak');
   var head=document.getElementById('dFcHead');
   if(head)head.innerHTML=CAL_ICO+(wind?'Prévisions vent · 5 jours':(calm?'État de la mer · 5 jours':'Prévisions houle · 5 jours'));
   showForecastSkeleton('dForecast','dFcBest');
   try{
-    if(wind){var fw=await fetchWindDaily(s.id,5);if(currentSpot!==s.id)return;renderForecastBars('dForecast','dFcBest',fw.days,fw.vals,{unit:'km/h',liveOn:true,badge:'Vent réel',bestLabel:'Le plus venté'});}
-    else{var f=await fetchWaves(s.id,5);if(currentSpot!==s.id)return;renderForecastBars('dForecast','dFcBest',f.days,f.vals,{unit:'m',liveOn:true,badge:'Houle réelle',best:calm?'min':'max',bestLabel:calm?'Mer la plus calme':'Meilleur jour'});}
-  }catch(e){if(currentSpot===s.id)renderMiniForecast(s,calm);}
+    if(wind){var fw=await fetchWindDaily(s.id,5);if(currentSpot!==s.id||request!==detailForecastRequest)return;renderForecastBars('dForecast','dFcBest',fw.days,fw.vals,{unit:'km/h',liveOn:true,badge:'Modèle Open-Meteo',bestLabel:'Le plus venté'});}
+    else{var f=await fetchWaves(s.id,5);if(currentSpot!==s.id||request!==detailForecastRequest)return;renderForecastBars('dForecast','dFcBest',f.days,f.vals,{unit:'m',liveOn:true,badge:'Modèle Open-Meteo',best:calm?'min':'max',bestLabel:calm?'Houle la plus basse':'Houle la plus haute'});}
+  }catch(e){if(currentSpot===s.id&&request===detailForecastRequest)renderMiniForecast(s,calm);}
 }
+var homeForecastRequest=0;
 async function realHomeForecast(){
+  const request=++homeForecastRequest;
   showForecastSkeleton('fcBars','fcBest');
-  try{const s=recommendedSpot();const f=await fetchWaves(s.id,7);renderForecastBars('fcBars','fcBest',f.days,f.vals,{unit:'m',liveOn:true,badge:'Houle réelle'});}
-  catch(e){renderForecast();}
+  try{const s=recommendedSpot();const f=await fetchWaves(s.id,7);if(request!==homeForecastRequest)return;renderForecastBars('fcBars','fcBest',f.days,f.vals,{unit:'m',liveOn:true,badge:'Modèle Open-Meteo'});}
+  catch(e){if(request===homeForecastRequest)renderForecast();}
 }
 function renderProg(){
   const pct=Math.min(100,Math.round(xp/LVL*100));
@@ -2124,8 +2080,7 @@ function welcomeText(){
     if(ges)b.push(ges + (ges>1?' gestes':' geste') + ' pour l’océan');
     ctx = ' ' + b.join(' et ') + ' à ton carnet.';
   } else {
-    ctx = ' Je connais les ' + nb + ' spots de l’appli : qui y vit, et comment'
-        + ' les protéger.';
+    ctx = ' Explore les ' + nb + ' spots du catalogue et prépare ton prochain voyage avec moi.';
   }
   return tete + ctx + '<span class="bub-cta">Pose-moi une question →</span>';
 }
@@ -2137,7 +2092,7 @@ function renderWelcome(){
   if(window.__obHello){ b.innerHTML=window.__obHello; window.__obHello=null; return; }
   b.innerHTML=welcomeText();
 }
-function renderHome(){renderWelcome();renderActivityBar();renderToday();renderForecast();renderProg();renderLiveTop();renderHomeStats();window.OceanPoulpy?.refresh();}
+function renderHome(){renderWelcome();renderActivityBar();renderToday();realHomeForecast();renderProg();renderLiveTop();renderHomeStats();window.OceanPoulpy?.refresh();}
 
 /* ================= CREATURES ================= */
 function cShoeShark(){return `<svg viewBox="0 0 64 64"><defs><linearGradient id="ssk" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#9fb4c7"/><stop offset="100%" stop-color="#56707f"/></linearGradient></defs>
@@ -2597,50 +2552,9 @@ const ZONES={
   anglet:[{n:'Les Cavaliers',l:'intermediaire',d:'beach break réputé'},{n:'La Madrague',l:'debutant',d:'plus abritée'}]
 };
 function spotGuide(s,act){
-  var c=COORDS[s.id]||{lat:45,lon:0},lat=c.lat,ab=Math.abs(lat);
-  var reef=/(récif|recif|reef|dalle|rocher|corallien|lagon|point|pointe)/i.test(s.desc||'');
-  var saison;
-  if(ab<=23)saison="Toute l'année · plus marquée nov. → mars";
-  else if(lat>0)saison='Sept. → mars';
-  else saison='Avril → sept. · hiver austral';
-  var sc=SCORES[s.id]||0,crowd=sc>=4.6?'Souvent du monde':(sc>=4?'Fréquentation moyenne':'Plutôt tranquille');
-  var faun;
-  if(typeof FAUNA!=='undefined'&&FAUNA[s.id]){var p=FAUNA[s.id].split(':');faun=((p[1]||p[0])||'').trim().replace(/\s*🐢|🐋|🦦|🐬/g,'');if(faun.length>62)faun=faun.slice(0,60)+'…';}
-  else{var tt=parseInt(s.temp)||16;faun=tt>=22?'poissons tropicaux, raies, tortues':(tt<15?'phoques, poissons, forêts d’algues':'bars, dauphins, bancs de poissons');}
-  if(faun)faun=faun.charAt(0).toUpperCase()+faun.slice(1);
-  var rows=[];
-  if(act==='kitesurf'||act==='windsurf'){
-    rows.push(["Plan d'eau",reef?'Vagues sur récif · avancé':'Plat à clapoteux · accessible']);
-    rows.push(['Vent idéal','15–35 km/h, régulier']);
-    if(s.wind)rows.push(['Vent dominant',s.wind]);
-    rows.push(['Matériel',act==='kitesurf'?'Aile 7–12 m² selon le vent':'Voile 4–6 m² selon le vent']);
-    rows.push(['Meilleure période',saison]);
-  }else if(act==='plongee'||act==='snorkeling'){
-    rows.push(["Température de l'eau",s.temp]);
-    rows.push(['Visibilité',reef?'Souvent bonne, eaux claires':'Variable selon la houle']);
-    rows.push(['À observer',faun]);
-    rows.push(['Profondeur',act==='snorkeling'?'En surface':'Variable selon le site']);
-  }else if(act==='baignade'){
-    rows.push(["Température de l'eau",s.temp]);
-    rows.push(['Type de plage',reef?'Récif et rochers, prudence':'Sable']);
-    rows.push(['Surveillance',"Souvent surveillée l'été — suis les drapeaux"]);
-    rows.push(['Marée',s.tide]);
-  }else if(act==='paddle'||act==='kayak'){
-    rows.push(['Conditions idéales','Mer plate, vent faible']);
-    rows.push(['Vigilance','Évite le vent de terre, dit offshore']);
-    rows.push(["Température de l'eau",s.temp]);
-    rows.push(['Marée',s.tide]);
-  }else{
-    rows.push(['Type de fond',reef?'Reef · fond dur':'Beach break · sable']);
-    if(s.wind)rows.push(['Vent dominant',s.wind]);
-    rows.push(['Marée',s.tide]);
-    rows.push(['Planche conseillée', act==='bodyboard' ? 'Bodyboard + palmes' : {debutant:"Mousse / mini-malibu 7'–8'",intermediaire:"Funboard 6'6\"–7'2\"",expert:"Shortboard 5'8\"–6'2\""}[s.level]]);
-    rows.push(['Meilleure période',saison]);
-  }
-  if(LVLTXT[s.level])rows.push(['Niveau du spot',LVLTXT[s.level]]);
-  rows.push(['Affluence',crowd]);
-  return rows;
+  return window.OceanFieldGuide?OceanFieldGuide.facts(s,act):[];
 }
+
 var ICON={
 fond:'<path d="M3 18c2-1 4-1 6 0s4 1 6 0 4-1 6 0"/><path d="M3 13c2-1 4-1 6 0s4 1 6 0 4-1 6 0"/><path d="M3 8c2-1 4-1 6 0s4 1 6 0 4-1 6 0"/>',
 wave:'<path d="M2 9c2.2 0 2.2-2.4 4.4-2.4S8.6 9 10.8 9 13 6.6 15.2 6.6 17.4 9 19.6 9"/><path d="M2 14c2.2 0 2.2-2.4 4.4-2.4S8.6 14 10.8 14 13 11.6 15.2 11.6 17.4 14 19.6 14"/><path d="M2 19c2.2 0 2.2-2.4 4.4-2.4S8.6 19 10.8 19 13 16.6 15.2 16.6 17.4 19 19.6 19"/>',
@@ -2732,16 +2646,10 @@ function gline(k,v,wide){
        + '<div class="gv">'+v+'</div></div>';
 }
 function renderGuide(s,act){
-  /* On suit la colonne pour ne jamais laisser une tuile seule en bas de grille. */
-  var rows=spotGuide(s,act),w=[],col=0;
-  for(var i=0;i<rows.length;i++){
-    var wide=String(rows[i][1]||'').length>32;
-    w.push(wide); col=wide?0:(col+1)%2;
-  }
-  if(col===1)w[w.length-1]=true;
-  return rows.map(function(r,i){return gline(r[0],r[1],w[i]);}).join('');
+  return window.OceanFieldGuide?OceanFieldGuide.render(s,act):'';
 }
-var LVLTXT={debutant:'Débutant',intermediaire:'Intermédiaire',expert:'Expert'};
+
+var LVLTXT={debutant:'Débutant',intermediaire:'Intermédiaire',expert:'Expert',variable:'Niveau à évaluer'};
 var DANGER_MAP={
   '\ud83c\udf00':['spirale','#e6f2fb','#1583cb'],
   '\u26a1':['eclair','#fdf1d8','#c9902e'],
@@ -2765,8 +2673,8 @@ var DANGER_MAP={
 function spotTokens(s){const t=[s.id];s.name.split('—')[0].toLowerCase().split(/[^a-zà-ÿ0-9]+/).forEach(function(w){if(w.length>=5)t.push(w);});(ALIAS[s.id]||[]).forEach(function(a){t.push(a);});return t;}
 function findSpotInQuery(q){for(const s of SPOTS){const tk=spotTokens(s);for(const k of tk){if(k.length>=4&&q.indexOf(k)>=0)return s;}}return null;}
 function bestSpotsByLevel(level){const lab={debutant:'débutant',intermediaire:'intermédiaire',expert:'expert'}[level];const list=SPOTS.filter(function(s){return s.level===level;}).sort(function(a,b){return (SCORES[b.id]||0)-(SCORES[a.id]||0);}).slice(0,5);const items=list.map(function(s){return '• <b>'+s.name.split(' — ')[0]+'</b> <span style="opacity:.65">('+s.loc+')</span> · '+(SCORES[s.id]||0).toFixed(1)+'/5';}).join('<br>');return {html:'🏄 Mes meilleurs spots <b>'+lab+'</b> :<br>'+items,btn:{label:'Ouvrir la carte 🗺️',onclick:"openFromChat('spots')"}};}
-function spotFauna(s){const t=parseInt(s.temp)||18;let f;if(FAUNA[s.id])f=FAUNA[s.id];else if(t>=24)f="eaux chaudes : tortues 🐢, poissons tropicaux colorés, raies, dauphins, et parfois des requins de récif.";else if(t>=18)f="eaux tempérées : bancs de poissons (bars, maquereaux), dauphins 🐬, parfois des phoques, et une vie côtière riche.";else f="eaux froides et vivantes : phoques, dauphins, oiseaux marins, bancs de poissons et forêts d'algues (kelp).";return {html:'🐠 La faune à <b>'+s.name.split(' — ')[0]+'</b> ('+s.loc+') : '+f,btn:{label:'Voir le spot 🏄',onclick:"openSpotFromChat('"+s.id+"')"}};}
-function spotInfo(s){const hist=ANEC[s.id]||FUN[s.id]||'';return {html:'📍 <b>'+s.name.split(' — ')[0]+'</b> — '+s.loc+'<br>'+lvlLabel[s.level]+' · note '+(SCORES[s.id]||0).toFixed(1)+'/5 · 🌊 '+s.swell+' · 🌡️ '+s.temp+'<br><br>'+s.desc+(hist?'<br><br>💡 '+hist:''),btn:{label:'Voir la fiche 🏄',onclick:"openSpotFromChat('"+s.id+"')"}};}
+function spotFauna(s){const f=FAUNA[s.id]||'Les observations locales ne sont pas encore documentées dans le catalogue. Renseigne-toi auprès d’un club ou du gestionnaire du site.';return {html:'La faune à <b>'+s.name.split(' — ')[0]+'</b> ('+s.loc+') : '+f,btn:{label:'Voir la fiche',onclick:"openSpotFromChat('"+s.id+"')"}};}
+function spotInfo(s){return {html:'<b>'+s.name.split(' — ')[0]+'</b> — '+s.loc+'<br><br>'+s.desc,btn:{label:'Voir la fiche',onclick:"openSpotFromChat('"+s.id+"')"}};}
 function boardReco(level){if(level==='expert')return {html:"Pour un niveau <b>expert</b> 🛹 : un <b>shortboard</b> performant (5'8\"–6'2\") pour le surf radical, et un <b>gun</b> pour les grosses vagues. Faible volume, réactivité max."};if(level==='intermediaire')return {html:"En <b>intermédiaire</b> 🛹 : un <b>funboard / évolutive</b> (6'6\"–7'2\") ou un shortboard un peu volumineux — manœuvrabilité tout en gardant de la rame."};if(level==='debutant')return {html:"Pour <b>débuter</b> 🛹 : une <b>planche en mousse</b> ou un <b>mini-malibu (7'–8')</b>, large et volumineuse : ça rame tout seul et ça stabilise."};return {html:"Le bon choix dépend de ton niveau 🛹 :<br>• <b>Débutant</b> : mousse / mini-malibu 7'–8'<br>• <b>Intermédiaire</b> : funboard 6'6\"–7'2\"<br>• <b>Confirmé</b> : shortboard 5'8\"–6'2\"<br>Plus tu progresses, moins tu mets de volume."};}
 function smartReply(q){
   const spot=findSpotInQuery(q);
@@ -2781,7 +2689,7 @@ function poulpyReply(q){
   q=q.toLowerCase();
   if(/(surf.?trip|voyage|itinéraire|itineraire|préparer.*séjour|preparer.*sejour)/i.test(q))return {html:'Prépare ton aventure dans <b>Surf trips</b> : choisis tes spots, organise les étapes, ajoute tes dates et ta checklist.',btn:{label:'Préparer mon voyage',onclick:"openFromChat('trips')"}};
   const sr=smartReply(q);if(sr)return sr;
-  const spotReco=()=>{const s=recommendedSpot(),sc=SCORES[s.id],best=FORECAST.find(f=>f.best);return {html:`Vu ton niveau, je te conseille <b>${s.name.split(' — ')[0]}</b> 🤙<br>${lvlLabel[s.level]} · 💨 ${s.wind} · 🌊 ${s.swell} · 🌡️ ${s.temp} · note <b>${sc}/5</b>.<br>Meilleur créneau de la semaine : <b>${best.d}</b> !`,btn:{label:'Voir le spot 🏄',onclick:`openSpotFromChat('${s.id}')`}};};
+  const spotReco=()=>{const s=recommendedSpot();return {html:`Une idée pour ton prochain voyage : <b>${s.name.split(' — ')[0]}</b>, ${s.loc}.<br>Retrouve sa photo, les prévisions disponibles et ta liste de préparation sur sa fiche.`,btn:{label:'Découvrir le spot',onclick:`openSpotFromChat('${s.id}')`}};};
   const prog=()=>({html:`Tu as <b>${xp} XP</b>. Continue à explorer, pratiquer et protéger l’océan pour progresser.`,btn:{label:'Voir mes défis',onclick:"openFromChat('challenges')"}});
   const eco=()=>({html:'🌱 '+pick(ECO_T),btn:{label:'Voir les défis écolo 🌊',onclick:"openFromChat('challenges')"}});
   const KB=[
@@ -3114,6 +3022,11 @@ function renderQuizResult(){
   if(pct>=0.66&&typeof spawnConfetti==='function')spawnConfetti();
 }
 
+/* Expanded catalogue joins every existing journey before the first render. */
+(window.OCEAN_SPOT_EXPANSION||[]).forEach(s=>{
+  if(SPOTS.some(existing=>existing.id===s.id))throw new Error('Duplicate spot: '+s.id);
+  SPOTS.push(s);COORDS[s.id]=s.coords;SPOT_WORLD[s.id]=s.world;
+});
 /* ================= INIT ================= */
 var _oi=document.getElementById('octo');if(_oi)_oi.innerHTML=poulpySVG();/* #octo est rendu par renderToday : il peut ne pas exister ici */
 document.getElementById('octoProfile').innerHTML=poulpySVG();
@@ -3131,7 +3044,7 @@ try{
 }catch(e){}
 document.body.classList.add('motion-pref-checked');
 applyName();
-ambient();renderSportGuide();renderSportFilters();renderSpots();try{renderWorlds();syncWorldUI();}catch(e){}renderChallenges();renderBadges();renderQuizBadges();renderSessions();renderHome();renderProfile();renderQuick();chatDragInit();bubbles('hb');bubbles('pb');bubbles('sb');bubbles('cb');onbBubbles();animateCounts();realHomeForecast();fetchAllConditions();
+ambient();renderSportGuide();renderSportFilters();renderSpots();try{renderWorlds();syncWorldUI();}catch(e){}renderChallenges();renderBadges();renderQuizBadges();renderSessions();renderHome();renderProfile();renderQuick();chatDragInit();bubbles('hb');bubbles('pb');bubbles('sb');bubbles('cb');onbBubbles();animateCounts();fetchAllConditions();
 requestAnimationFrame(()=>requestAnimationFrame(()=>updateNavPill('home')));
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{const ab=document.querySelector('.nav button.active:not(.center)');updateNavPill(ab?ab.dataset.s:'home');}).catch(()=>{});
 window.addEventListener('resize',()=>{const ab=document.querySelector('.nav button.active:not(.center)');if(ab)updateNavPill(ab.dataset.s);});
