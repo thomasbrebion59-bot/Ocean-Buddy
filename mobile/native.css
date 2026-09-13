@@ -1,0 +1,8 @@
+html.native-app,html.native-app body{background:#174bd3;overscroll-behavior:none}
+html.native-app body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset-top);background:#174bd3;z-index:100000;pointer-events:none}
+.native-app .app-chrome{padding-top:env(safe-area-inset-top);min-height:calc(64px + env(safe-area-inset-top));height:auto;flex-shrink:0}
+.native-app .screen-wrap{overscroll-behavior-y:contain}
+.native-app .onb{padding-top:calc(40px + env(safe-area-inset-top))}
+.native-app .chat-sheet{padding-bottom:env(safe-area-inset-bottom)}
+.native-load-error{padding:100px 26px;background:#174bd3;color:white;min-height:100vh;font-family:system-ui}
+.native-load-error button{padding:14px 24px;background:#e0ff91;border:0;border-radius:18px;margin-top:20px}

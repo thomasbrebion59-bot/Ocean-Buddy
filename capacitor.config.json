@@ -1,0 +1,12 @@
+{
+  "appId": "io.github.thomasbrebion59bot.oceanbuddy",
+  "appName": "Ocean Buddy",
+  "webDir": "mobile/www",
+  "backgroundColor": "#174bd3",
+  "server": { "hostname": "oceanbuddy.localhost" },
+  "ios": { "contentInset": "never", "backgroundColor": "#174bd3" },
+  "android": { "backgroundColor": "#174bd3", "allowMixedContent": false },
+  "plugins": {
+    "SplashScreen": { "launchAutoHide": true, "launchShowDuration": 500, "backgroundColor": "#174bd3", "showSpinner": false }
+  }
+}

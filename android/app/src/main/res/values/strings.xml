@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Ocean Buddy</string>
+    <string name="title_activity_main">Ocean Buddy</string>
+    <string name="package_name">io.github.thomasbrebion59bot.oceanbuddy</string>
+    <string name="custom_url_scheme">io.github.thomasbrebion59bot.oceanbuddy</string>
+</resources>

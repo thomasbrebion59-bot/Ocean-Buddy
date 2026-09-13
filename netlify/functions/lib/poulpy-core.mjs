@@ -19,7 +19,7 @@ Pour suggérer une fiche du catalogue, insère [[spot:IDENTIFIANT]] en utilisant
 export function createPoulpyHandler({env=process.env,fetcher=fetch,clock=Date.now}={}){
   const buckets=new Map();
   return async function(request,platform={}){
-    const allowed=(env.POULPY_ALLOWED_ORIGINS||'https://thomasbrebion59-bot.github.io,https://exquisite-choux-61c0d9.netlify.app').split(',').map(x=>x.trim());
+    const allowed=(env.POULPY_ALLOWED_ORIGINS||'https://thomasbrebion59-bot.github.io,https://exquisite-choux-61c0d9.netlify.app,capacitor://oceanbuddy.localhost,https://oceanbuddy.localhost').split(',').map(x=>x.trim());
     const origin=request.headers.get('origin');
     const headers={'content-type':'application/json; charset=utf-8','cache-control':'no-store','vary':'Origin','x-content-type-options':'nosniff'};
     if(origin&&allowed.includes(origin))headers['access-control-allow-origin']=origin;

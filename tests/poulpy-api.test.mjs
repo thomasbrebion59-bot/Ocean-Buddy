@@ -17,3 +17,8 @@ test('long follow-up conversations are bounded without losing the latest questio
  const x=validate({message:'Et le trajet depuis Paris ?',history:Array.from({length:20},(_,i)=>({role:i%2?'assistant':'user',content:String(i)+':'+ 'a'.repeat(5000)}))});
  assert.equal(x.history.length,10);assert.equal(x.history[0].content.startsWith('10:'),true);assert.ok(x.history.every(h=>h.content.length<=900));assert.equal(x.message,'Et le trajet depuis Paris ?');
 });
+test('native Apple and Android origins get CORS while other local apps are rejected',async()=>{
+ const h=createPoulpyHandler({env:{},fetcher:()=>{throw Error('health must not call AI')}});
+ for(const origin of ['capacitor://oceanbuddy.localhost','https://oceanbuddy.localhost']){const r=await h(req({},'OPTIONS',origin));assert.equal(r.status,204);assert.equal(r.headers.get('access-control-allow-origin'),origin)}
+ for(const origin of ['capacitor://localhost','https://other.localhost','https://oceanbuddy.localhost.attacker.test'])assert.equal((await h(req({},'GET',origin))).status,403);
+});

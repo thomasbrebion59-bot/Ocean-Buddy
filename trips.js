@@ -143,6 +143,7 @@
         }
       }catch(error){toast(error.message)}
     }
+    if(a==='export'&&window.OceanMobile?.native){const t=current();window.OceanMobile.shareJSON(t.name,{application:'Ocean Buddy',version:1,trip:t}).catch(()=>toast('Le partage est indisponible. Ton voyage reste enregistré.'));return;}
     if(a==='export'){const t=current(),blob=new Blob([JSON.stringify({application:'Ocean Buddy',version:1,trip:t},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=(t.name.replace(/[^a-zA-Z0-9À-ÿ -]/g,'').slice(0,60)||'surf-trip')+'.json';link.click();setTimeout(()=>URL.revokeObjectURL(url),2000);}
   });
   function showUndo(fn){const b=document.createElement('button');b.className='trip-undo';b.textContent='Annuler le retrait';b.onclick=()=>{fn();b.remove()};$('#tripContent').append(b);setTimeout(()=>b.remove(),12000);}

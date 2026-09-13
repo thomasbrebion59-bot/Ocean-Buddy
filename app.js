@@ -452,22 +452,12 @@ const FUN={
 };
 const MAPPOS={lapalue:{x:48.9,y:12.5},latorche:{x:50.6,y:16.1},penhors:{x:53.3,y:17.9},quiberon:{x:59.4,y:22.9},sauveterre:{x:59.4,y:35.7},latranche:{x:59.7,y:38.6},lapalmyre:{x:60,y:53.6},lacanau:{x:61.4,y:59.3},capferret:{x:60.8,y:63.6},mimizan:{x:61.4,y:69.3},seignosse:{x:61.7,y:76.8},hossegor:{x:61.9,y:78.2},capbreton:{x:62.2,y:79.3},anglet:{x:63.9,y:83.9},biarritz:{x:64.4,y:85.4},bidart:{x:65.3,y:87.1},guethary:{x:65.6,y:88.6},lafitenia:{x:66.4,y:90.7}};
 const favs=new Set();
-const sessions=[{spot:'Hossegor',date:'5 juin',act:'surf'},{spot:'La Côte des Basques',date:'2 juin',act:'surf'},{spot:'Lacanau Océan',date:'29 mai',act:'baignade'}];
-let userName='Thomas';
+const sessions=[];
+let userName='Explorateur';
 /* Le compteur de gestes écolo était une décoration : 23, écrit en dur,
    relié à rien. C'est maintenant un carnet, comme celui des sessions —
    on peut le toucher et voir ce qu'on a fait. */
-var ecoLog=[
-  {t:'Beach Clean Express',l:'Hossegor',d:'5 juin'},
-  {t:'Éco-mobilité',l:'Hossegor',d:'5 juin'},
-  {t:'Zéro plastique',l:'La Côte des Basques',d:'2 juin'},
-  {t:'Tri sélectif',l:'La Côte des Basques',d:'2 juin'},
-  {t:'Beach Clean Express',l:'Lacanau Océan',d:'31 mai'},
-  {t:'Zéro plastique',l:'Lacanau Océan',d:'29 mai'},
-  {t:'Éco-mobilité',l:'Lacanau Océan',d:'29 mai'},
-  {t:'Gardien du récif',l:'Lacanau Océan',d:'24 mai'},
-  {t:'Tri sélectif',l:'',d:'21 mai'}
-];
+var ecoLog=[];
 function ecoAdd(titre,lieu,cle){
   ecoLog.unshift({t:titre,l:lieu||'',k:cle||'',
     d:new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'short'})});
@@ -517,7 +507,7 @@ function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify({xp:xp,fa
 function loadState(){try{const d=JSON.parse(localStorage.getItem(STORE_KEY)||'null');if(!d)return false;
   if(typeof d.xp==='number')xp=d.xp;
   if(Array.isArray(d.favs))d.favs.forEach(f=>favs.add(f));
-  if(Array.isArray(d.sessions)&&d.sessions.length){sessions.length=0;d.sessions.forEach(s=>sessions.push(s));}
+  if(Array.isArray(d.sessions)){sessions.length=0;d.sessions.forEach(s=>sessions.push(s));}
   if(d.level)chosenLevel=d.level;
   if(d.sport){chosenSport=d.sport;activeSport=(d.sport!=='all')?d.sport:null;}
   if(d.name)userName=d.name;
@@ -741,13 +731,13 @@ function distKm(la1,lo1,la2,lo2){const R=6371,r=Math.PI/180;const dLa=(la2-la1)*
 function spotDist(s){const c=COORDS[s.id];if(!c||!userPos)return null;return distKm(userPos.lat,userPos.lon,c.lat,c.lon);}
 function fmtDist(d){if(d==null)return '';return d<1?Math.round(d*1000)+' m':(d<20?d.toFixed(1):Math.round(d))+' km';}
 function requestGeo(ok,fail){
-  if(!navigator.geolocation){fail&&fail();return;}
+  if(!window.OceanMobile?.native&&!navigator.geolocation){fail&&fail();return;}
   toast('📍 Localisation en cours…');
-  navigator.geolocation.getCurrentPosition(
+  (window.OceanMobile?.native?window.OceanMobile:navigator.geolocation).getCurrentPosition(
     p=>{userPos={lat:p.coords.latitude,lon:p.coords.longitude};ok&&ok();},
     e=>{fail&&fail(e);},{enableHighAccuracy:true,timeout:9000,maximumAge:60000});
 }
-function mapsSearch(q,c){const u='https://www.google.com/maps/search/'+encodeURIComponent(q)+((c&&c.lat)?('/@'+c.lat+','+c.lon+',12z'):'');window.open(u,'_blank');}
+function mapsSearch(q,c){const u='https://www.google.com/maps/search/'+encodeURIComponent(q)+((c&&c.lat)?('/@'+c.lat+','+c.lon+',12z'):'');if(window.OceanMobile?.native)window.OceanMobile.openExternal(u);else window.open(u,'_blank');}
 function centerOnUser(){
   if(!userPos)return;renderMap(true);if(!leafMap)return;
   if(userMarker){try{leafMap.removeLayer(userMarker);}catch(e){}}
@@ -1561,7 +1551,7 @@ function pstatTile(svg,bg,color,v,l,on){return '<div class="pstat"'+(on?' onclic
 function renderProfile(){
   var pct=Math.min(100,Math.round(xp/LVL*100));
   var fill=document.getElementById('profXpFill');if(fill)fill.style.width=pct+'%';
-  var xt=document.getElementById('profXpText');if(xt)xt.textContent=xp+' / '+LVL+' XP · plus que '+Math.max(0,LVL-xp)+' avant Niv. 5';
+  var xt=document.getElementById('profXpText');if(xt)xt.textContent=xp+' XP · '+(xp>=LVL?'objectif de '+LVL+' XP atteint':Math.max(0,LVL-xp)+' XP pour l’objectif de '+LVL);
   var rt=document.getElementById('profTrips');if(rt)rt.textContent=window.OceanTrips?OceanTrips.count():0;
   var appB=(typeof BADGES!=='undefined')?BADGES.filter(function(b){return !b.locked;}).length:0;
   var quizB=0;try{quizB=quizLoad().badges.length;}catch(e){}
@@ -1591,7 +1581,7 @@ function openSettings(){var i=document.getElementById('setName');if(i)i.value=us
 function closeSettings(){document.getElementById('settingsModal').classList.remove('open');}
 function saveName(){var v=(document.getElementById('setName').value||'').trim();if(!v){toast('Entre un prénom 🐙');return;}userName=v.slice(0,18);applyName();saveState();toast('Prénom enregistré ✅');closeSettings();}
 function toggleReduceMotion(on){document.body.classList.toggle('reduce-motion',!!on);try{localStorage.setItem('oceanbuddy_reduce',on?'1':'0');}catch(e){}}
-function resetProgress(){if(!window.confirm('Réinitialiser toute ta progression (XP, favoris, sessions, quiz) ?'))return;try{localStorage.removeItem(STORE_KEY);localStorage.removeItem('oceanbuddy_quiz_v1');}catch(e){}location.reload();}
+async function resetProgress(){if(!window.confirm('Réinitialiser toute ta progression (XP, favoris, sessions, quiz) ?'))return;try{localStorage.removeItem(STORE_KEY);localStorage.removeItem('oceanbuddy_quiz_v1');}catch(e){}await window.OceanMobile?.persist();location.reload();}
 
 /* ================= HOME DASHBOARD ================= */
 function recommendedSpot(){
@@ -2293,7 +2283,7 @@ function finishOnb(){
 }
 
 /* ================= XP ================= */
-let xp=320;const LVL=500;
+let xp=0;const LVL=500;
 function popPoulpy(){['octo','octoHi'].forEach(function(id){var o=document.getElementById(id);if(!o)return;o.classList.remove('pop');void o.offsetWidth;o.classList.add('pop');});}
 function addXP(n,msg){
   const before=xp;xp+=n;let pct=Math.min(100,Math.round(xp/LVL*100));

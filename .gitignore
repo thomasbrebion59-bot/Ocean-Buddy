@@ -3,3 +3,16 @@
 .env.*
 node_modules/
 .DS_Store
+mobile/www/
+mobile/build/
+*.xcarchive
+*.ipa
+*.aab
+*.apk
+*.jks
+*.keystore
+android/local.properties
+android/.gradle/
+android/**/build/
+ios/App/build/
+ios/**/xcuserdata/
