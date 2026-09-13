@@ -21,6 +21,7 @@
 <link rel="stylesheet" href="navigation.css?v=1ad9b43229b1">
 <link rel="stylesheet" href="field-guide.css?v=2ee7e5f02556">
 <link rel="stylesheet" href="spot-immersion.css?v=51682a6c42de">
+<link rel="stylesheet" href="ocean-explore.css?v=00aaf5ed7431">
 </head>
 <body class="ocean-v2" data-screen="home">
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
@@ -171,7 +172,7 @@
       <div id="worldPick">
         <div class="w-intro"><span id="worldTotal"></span></div>
         <div id="worldGrid"></div>
-        <button class="w-all" onclick="openWorld('all')">
+        <button class="w-all" onclick="openWorld('all');setView('map')">
           <span class="w-all-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 3 4 5.9 4 9s-1.4 6-4 9c-2.6-3-4-5.9-4-9s1.4-6 4-9z"/></svg></span>
           <span class="w-all-tx"><b>Tout un monde à explorer</b><i>Tous les spots, sur une seule carte</i></span>
           <svg class="w-all-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="M12.5 6 19 12l-6.5 6"/></svg>
@@ -394,11 +395,14 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 
-<script src="photo-catalog.js?v=8815d929b093"></script>
+<script src="photo-catalog.js?v=ba31a74c9cce"></script>
 <script src="trip-model.js?v=462b06a91fc7"></script>
 <script src="catalog-expansion.js?v=bf46c2207d2f"></script>
 <script src="poulpy-icons.js?v=e99f8fb70a2a"></script>
-<script src="app.js?v=1dfbbb463615"></script>
+<script src="ocean-map-model.js?v=b1b05a050593"></script>
+<script src="ocean-map.js?v=167c4717ede5"></script>
+<script src="spot-photos.js?v=7db07d494e54"></script>
+<script src="app.js?v=b4c5059c35a0"></script>
 <script src="design.js?v=3adae9c7aeab"></script>
 <script src="trips.js?v=fc8b8a2fa4a7"></script>
 <script src="poulpy-config.js?v=a083c1cf346b"></script>
@@ -406,10 +410,10 @@
 <script src="poulpy.js?v=09660b99b3b8"></script>
 <script src="spot-notebook-model.js?v=8982c4683ab8"></script>
 <script src="spot-notebook.js?v=142590c3e408"></script>
-<script src="spot-gallery.js?v=f9d1fe8c6ff3"></script>
-<script src="field-guide.js?v=77aafcb5335c"></script>
+<script src="spot-gallery.js?v=925819b181f2"></script>
+<script src="field-guide.js?v=95418564e3d4"></script>
 <script src="spot-immersion-model.js?v=8c6489617564"></script>
-<script src="spot-immersion.js?v=0d33f881e62b"></script>
-<script src="navigation.js?v=0cb0bece7a17"></script>
+<script src="spot-immersion.js?v=086fbdf60160"></script>
+<script src="navigation.js?v=715c90486fa2"></script>
 </body>
 </html>

@@ -48,8 +48,8 @@
   }
   function choices(items,key,current){return `<div class="im-choices" role="group" aria-label="${key==='wind'?'Direction du vent dans l’exemple':key==='wave'?'Caractéristique de la vague':'Repère d’expérience'}">${items.map(([id,label])=>`<button type="button" data-im-${key}="${id}" aria-pressed="${id===current}">${key==='level'?icon(id):''}${label}</button>`).join('')}</div>`;}
   function terrain(){
-    const a=M.activity(act),p=SPOT_PHOTOS[spot.id];
-    return `<div class="im-terrain"><button class="im-postcard" data-im-gallery aria-label="S’immerger dans les photos de ${esc(spot.name)}"><img src="${esc(p.src)}" alt="${esc(spot.photoContext||spot.name+' · '+spot.loc)}" loading="lazy"><span><small>${esc(spot.loc)}</small><b>Tu t’y vois déjà ?</b><span>Ouvrir les photos ↗</span></span></button><div class="im-terrain-copy">${head(SPORTMAP[act].label.toUpperCase(),a.title)}<ol>${a.points.map(([t,c],i)=>`<li><span>${i+1}</span><div><b>${t}</b><p>${c}</p></div></li>`).join('')}</ol><button class="im-link" data-im-prepare>Préparer cette sortie →</button></div></div>`;
+    const a=M.activity(act),p=OceanPhotos.lead(spot.id,act);
+    return `<div class="im-terrain"><button class="im-postcard" data-im-gallery aria-label="S’immerger dans les photos de ${esc(spot.name)}"><img src="${esc(p.src)}" alt="${esc(p.caption||spot.photoContext||spot.name+' · '+spot.loc)}" loading="lazy"><span><small>${esc(spot.loc)}</small><b>Tu t’y vois déjà ?</b><span>Ouvrir les photos ↗</span></span></button><div class="im-terrain-copy">${head(SPORTMAP[act].label.toUpperCase(),a.title)}<ol>${a.points.map(([t,c],i)=>`<li><span>${i+1}</span><div><b>${t}</b><p>${c}</p></div></li>`).join('')}</ol><button class="im-link" data-im-prepare>Préparer cette sortie →</button></div></div>`;
   }
   function panel(){
     if(topic==='terrain')return terrain();

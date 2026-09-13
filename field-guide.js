@@ -50,8 +50,8 @@
     $('#fieldAtAGlance').innerHTML=[['activity','Ton activité',SPORTMAP[act]?.label||'À choisir',sportIcon(act)],['water','Le cadre',isInland(s)?'Eau douce':'Mer & océan',sportIcon(isInland(s)?'kayak':'snorkeling')],['level','Repère de niveau',level,levelIcon(s.level)]].map(([key,label,value,art])=>`<button type="button" class="field-fact-card fact-${key}" data-im-open="${{activity:'terrain',water:'eau',level:'niveau'}[key]}"><span class="field-fact-icon">${art}</span><div><small>${label}</small><b>${esc(value)}</b></div></button>`).join('');
     window.OceanNotebook?.sync();
     $('#fieldLocalSource').innerHTML=source(s);
-    const photo=SPOT_PHOTOS[s.id];
-    $('#fieldPhotoLink').href=photo?.source||'photos.html';$('#fieldPhotoLink').textContent=photo?(s.photoContext?s.photoContext+' · ':'')+'Photographie : '+photo.author+' ↗':'Crédits photographiques ↗';
+    const photo=OceanPhotos.lead(s.id,act);
+    $('#fieldPhotoLink').href=photo?.source||'photos.html';$('#fieldPhotoLink').textContent=photo?(photo.caption?photo.caption+' · ':s.photoContext?s.photoContext+' · ':'')+'Photographie : '+photo.author+' ↗':'Crédits photographiques ↗';
     $('#fieldSchoolLink').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('école '+activity+' '+name);
     $('#fieldShopLink').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('location matériel '+activity+' '+name);
     const near=SPOTS.filter(x=>x.id!==s.id&&SPOT_WORLD[x.id]===SPOT_WORLD[s.id]&&spotSports(x).includes(act)&&c&&COORDS[x.id]&&distKm(c.lat,c.lon,COORDS[x.id].lat,COORDS[x.id].lon)<=200).sort((a,b)=>{

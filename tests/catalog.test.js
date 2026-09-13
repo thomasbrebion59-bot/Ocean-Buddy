@@ -75,7 +75,7 @@ test('batch weather keeps marine values aligned when lakes appear between coasts
 });
 test('gallery images are local, credited and attached to existing destinations',()=>{
  const galleries=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/gallery-sources.json'),'utf8'));
- assert.equal(Object.values(galleries).flat().length,12);assert.equal(extra.filter(s=>s.catalogNew).length,40);
+ assert.equal(Object.values(galleries).flat().length,29);assert.equal(extra.filter(s=>s.catalogNew).length,40);
  for(const [id,rows] of Object.entries(galleries)){assert.ok(all.some(s=>s.id===id),id);for(const p of rows){assert.ok(fs.statSync(path.join(root,p.src)).size>1000);assert.ok(p.author&&p.license);assert.equal(new URL(p.source).protocol,'https:');}}
 });
 test('an unrecognised country does not invent an emergency phone number',()=>{

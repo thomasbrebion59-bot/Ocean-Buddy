@@ -75,6 +75,22 @@
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b0/Cozumel_beach_from_lighthouse.jpg/1280px-Cozumel_beach_from_lighthouse.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "width": 1280,
       "height": 960
+    },
+    {
+      "file": "Arrecifes de Cozumel National Park.jpg",
+      "src": "assets/spots/cozumel-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Arrecifes_de_Cozumel_National_Park.jpg",
+      "author": "Matthew T Rader",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/63/Arrecifes_de_Cozumel_National_Park.jpg/1920px-Arrecifes_de_Cozumel_National_Park.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1440,
+      "view": "underwater",
+      "label": "Le récif des Caraïbes",
+      "caption": "Coraux et poissons dans le parc national Arrecifes de Cozumel, au Mexique.",
+      "featured": true,
+      "thumb": "assets/spots/cozumel-underwater-01-thumb.webp"
     }
   ],
   "cathedralcove": [
@@ -153,6 +169,287 @@
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/96/Little_Salmon_Bay%2C_Rottnest_Island%2C_April_2026_04.jpg/1280px-Little_Salmon_Bay%2C_Rottnest_Island%2C_April_2026_04.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
       "width": 1280,
       "height": 960
+    }
+  ],
+  "rajaampat": [
+    {
+      "file": "Coral table in Raja Ampat, Papua; November 2014.jpg",
+      "src": "assets/spots/rajaampat-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Coral_table_in_Raja_Ampat,_Papua;_November_2014.jpg",
+      "author": "Ratha Grimes from Seattle, WA, United States",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/21/Coral_table_in_Raja_Ampat%2C_Papua%3B_November_2014.jpg/1920px-Coral_table_in_Raja_Ampat%2C_Papua%3B_November_2014.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1276,
+      "view": "underwater",
+      "label": "Le jardin de corail",
+      "caption": "Corail tabulaire et poissons photographiés dans les récifs de Raja Ampat.",
+      "featured": true,
+      "thumb": "assets/spots/rajaampat-underwater-01-thumb.webp"
+    },
+    {
+      "file": "Coral in Raja Ampat.jpg",
+      "src": "assets/spots/rajaampat-underwater-02.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Coral_in_Raja_Ampat.jpg",
+      "author": "Akbar raf",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Coral_in_Raja_Ampat.jpg/1920px-Coral_in_Raja_Ampat.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1440,
+      "view": "underwater",
+      "label": "Juste sous la surface",
+      "caption": "Coraux et poissons sous le ponton de l’île d’Arborek, dans l’archipel de Raja Ampat.",
+      "featured": false,
+      "thumb": "assets/spots/rajaampat-underwater-02-thumb.webp"
+    },
+    {
+      "file": "Soft corals between Gam and Waigeo, Raja Ampat.jpg",
+      "src": "assets/spots/rajaampat-underwater-03.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Soft_corals_between_Gam_and_Waigeo,_Raja_Ampat.jpg",
+      "author": "Fabian Lambeck",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/Soft_corals_between_Gam_and_Waigeo%2C_Raja_Ampat.jpg/1920px-Soft_corals_between_Gam_and_Waigeo%2C_Raja_Ampat.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1440,
+      "view": "underwater",
+      "label": "Le passage",
+      "caption": "Coraux mous dans le passage entre les îles Gam et Waigeo, à Raja Ampat.",
+      "featured": false,
+      "thumb": "assets/spots/rajaampat-underwater-03-thumb.webp"
+    }
+  ],
+  "rasmohammed": [
+    {
+      "file": "Coral (Annella mollis), parque nacional Ras Muhammad, Egipto, 2022-03-28, DD 108.jpg",
+      "src": "assets/spots/rasmohammed-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Coral_(Annella_mollis),_parque_nacional_Ras_Muhammad,_Egipto,_2022-03-28,_DD_108.jpg",
+      "author": "Diego Delso",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/42/Coral_%28Annella_mollis%29%2C_parque_nacional_Ras_Muhammad%2C_Egipto%2C_2022-03-28%2C_DD_108.jpg/1920px-Coral_%28Annella_mollis%29%2C_parque_nacional_Ras_Muhammad%2C_Egipto%2C_2022-03-28%2C_DD_108.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1920,
+      "view": "underwater",
+      "label": "Les grandes gorgones",
+      "caption": "Une gorgone Annella mollis dans le parc national de Ras Muhammad, en mer Rouge.",
+      "featured": true,
+      "thumb": "assets/spots/rasmohammed-underwater-01-thumb.webp"
+    },
+    {
+      "file": "Pez ángel real (Pygoplites diacanthus), parque nacional Ras Muhammad, Egipto, 2022-03-26, DD 155.jpg",
+      "src": "assets/spots/rasmohammed-underwater-02.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Pez_%C3%A1ngel_real_(Pygoplites_diacanthus),_parque_nacional_Ras_Muhammad,_Egipto,_2022-03-26,_DD_155.jpg",
+      "author": "Diego Delso",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0a/Pez_%C3%A1ngel_real_%28Pygoplites_diacanthus%29%2C_parque_nacional_Ras_Muhammad%2C_Egipto%2C_2022-03-26%2C_DD_155.jpg/1920px-Pez_%C3%A1ngel_real_%28Pygoplites_diacanthus%29%2C_parque_nacional_Ras_Muhammad%2C_Egipto%2C_2022-03-26%2C_DD_155.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1280,
+      "view": "underwater",
+      "label": "Les couleurs du récif",
+      "caption": "Un poisson-ange royal photographié parmi les coraux de Ras Muhammad.",
+      "featured": false,
+      "thumb": "assets/spots/rasmohammed-underwater-02-thumb.webp"
+    }
+  ],
+  "bunaken": [
+    {
+      "file": "Corals (31104498462).jpg",
+      "src": "assets/spots/bunaken-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Corals_(31104498462).jpg",
+      "author": "Christian Gloor from Wakatobi Dive Resort, Indonesia",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Corals_%2831104498462%29.jpg/1920px-Corals_%2831104498462%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1280,
+      "view": "underwater",
+      "label": "Dans le grand bleu",
+      "caption": "Un plongeur au-dessus du récif de Bunaken, sous la lumière qui traverse la surface.",
+      "featured": true,
+      "thumb": "assets/spots/bunaken-underwater-01-thumb.webp",
+      "position": "65% center"
+    }
+  ],
+  "ningaloo": [
+    {
+      "file": "Sea turtle swimming.jpg",
+      "src": "assets/spots/ningaloo-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Sea_turtle_swimming.jpg",
+      "author": "Simonverhamme",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Sea_turtle_swimming.jpg/1920px-Sea_turtle_swimming.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1920,
+      "view": "underwater",
+      "label": "À hauteur de tortue",
+      "caption": "Une tortue marine près de la surface, à Coral Bay, sur le récif de Ningaloo.",
+      "featured": true,
+      "thumb": "assets/spots/ningaloo-underwater-01-thumb.webp"
+    }
+  ],
+  "tulamben": [
+    {
+      "file": "Remains Of Liberty (219256557).jpeg",
+      "src": "assets/spots/tulamben-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Remains_Of_Liberty_(219256557).jpeg",
+      "author": "Tilonaut",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/13/Remains_Of_Liberty_%28219256557%29.jpeg/1920px-Remains_Of_Liberty_%28219256557%29.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1280,
+      "view": "underwater",
+      "label": "L’épave du Liberty",
+      "caption": "Vue à travers la soute ouverte de l’USAT Liberty, au large de Tulamben, à Bali.",
+      "featured": true,
+      "thumb": "assets/spots/tulamben-underwater-01-thumb.webp"
+    }
+  ],
+  "silfra": [
+    {
+      "file": "Silfra TectonicPlates.jpg",
+      "src": "assets/spots/silfra-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Silfra_TectonicPlates.jpg",
+      "author": "Ex nihil",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4a/Silfra_TectonicPlates.jpg/1920px-Silfra_TectonicPlates.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1440,
+      "height": 1920,
+      "view": "underwater",
+      "label": "Entre les parois",
+      "caption": "Des plongeurs entre les parois rocheuses de la faille de Silfra, en Islande.",
+      "featured": true,
+      "thumb": "assets/spots/silfra-underwater-01-thumb.webp"
+    }
+  ],
+  "komodo": [
+    {
+      "file": "Soft coral peach komodo.jpg",
+      "src": "assets/spots/komodo-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Soft_coral_peach_komodo.jpg",
+      "author": "Nhobgood Nick Hobgood",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://upload.wikimedia.org/wikipedia/commons/1/15/Soft_coral_peach_komodo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "width": 1440,
+      "height": 1920,
+      "view": "underwater",
+      "label": "Le corail en détail",
+      "caption": "Corail mou Dendronephthya photographié dans le parc national de Komodo.",
+      "featured": true,
+      "thumb": "assets/spots/komodo-underwater-01-thumb.webp"
+    }
+  ],
+  "amed": [
+    {
+      "file": "Soft coral (Bali) 1.jpg",
+      "src": "assets/spots/amed-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Soft_coral_(Bali)_1.jpg",
+      "author": "AlexeiAVA",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d3/Soft_coral_%28Bali%29_1.jpg/1920px-Soft_coral_%28Bali%29_1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1440,
+      "view": "underwater",
+      "label": "La dentelle du récif",
+      "caption": "Un corail en éventail photographié près d’Amed, sur la côte de Bali.",
+      "featured": true,
+      "thumb": "assets/spots/amed-underwater-01-thumb.webp"
+    }
+  ],
+  "portcros": [
+    {
+      "file": "Plongée sur la Gabinière.jpg",
+      "src": "assets/spots/portcros-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Plong%C3%A9e_sur_la_Gabini%C3%A8re.jpg",
+      "author": "Waielbi",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f5/Plong%C3%A9e_sur_la_Gabini%C3%A8re.jpg/1920px-Plong%C3%A9e_sur_la_Gabini%C3%A8re.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 1920,
+      "view": "underwater",
+      "label": "La Gabinière",
+      "caption": "Un plongeur face à un mérou, dans la réserve de la Gabinière du parc national de Port-Cros.",
+      "featured": true,
+      "thumb": "assets/spots/portcros-underwater-01-thumb.webp"
+    },
+    {
+      "file": "SarPortCrosMFaurie.jpg",
+      "src": "assets/spots/portcros-underwater-02.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:SarPortCrosMFaurie.jpg",
+      "author": "Margaux Faurie",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/SarPortCrosMFaurie.jpg/1920px-SarPortCrosMFaurie.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1440,
+      "view": "underwater",
+      "label": "Sous la lumière",
+      "caption": "Des sars photographiés près de la surface, à Port-Cros.",
+      "featured": false,
+      "thumb": "assets/spots/portcros-underwater-02-thumb.webp"
+    }
+  ],
+  "maldives": [
+    {
+      "file": "Reef Manta with cleaner fish.JPG",
+      "src": "assets/spots/maldives-underwater-02.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Reef_Manta_with_cleaner_fish.JPG",
+      "author": "Peter Geymayer",
+      "license": "Public domain",
+      "licenseUrl": "",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/81/Reef_Manta_with_cleaner_fish.JPG/1920px-Reef_Manta_with_cleaner_fish.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1440,
+      "view": "underwater",
+      "label": "Face à une manta",
+      "caption": "Une raie manta photographiée près de Fesdu, dans l’atoll d’Ari. Photographie de 1990.",
+      "featured": false,
+      "thumb": "assets/spots/maldives-underwater-02-thumb.webp"
+    }
+  ],
+  "apoisland": [
+    {
+      "file": "Sea Turtle in Apo Island.jpg",
+      "src": "assets/spots/apoisland-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Sea_Turtle_in_Apo_Island.jpg",
+      "author": "Anna Varona",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/17/Sea_Turtle_in_Apo_Island.jpg/1920px-Sea_Turtle_in_Apo_Island.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1280,
+      "view": "underwater",
+      "label": "Une pause sur le récif",
+      "caption": "Une tortue marine photographiée dans le sanctuaire marin d’Apo Island, aux Philippines.",
+      "featured": true,
+      "thumb": "assets/spots/apoisland-underwater-01-thumb.webp"
+    }
+  ],
+  "medes": [
+    {
+      "file": "Dusky grouper (Epinephelus marginatus), Tasco Petit, Medes Islands, Spain.jpg",
+      "src": "assets/spots/medes-underwater-01.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Dusky_grouper_(Epinephelus_marginatus),_Tasco_Petit,_Medes_Islands,_Spain.jpg",
+      "author": "Jouni Kuisma, DiveCodex",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/Dusky_grouper_%28Epinephelus_marginatus%29%2C_Tasco_Petit%2C_Medes_Islands%2C_Spain.jpg/1920px-Dusky_grouper_%28Epinephelus_marginatus%29%2C_Tasco_Petit%2C_Medes_Islands%2C_Spain.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1280,
+      "view": "underwater",
+      "label": "Rencontre à Tascó Petit",
+      "caption": "Un mérou brun au-dessus du récif de Tascó Petit, dans la réserve marine des îles Medes.",
+      "featured": true,
+      "thumb": "assets/spots/medes-underwater-01-thumb.webp"
     }
   ]
 }

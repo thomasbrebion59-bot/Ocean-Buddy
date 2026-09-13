@@ -1560,16 +1560,20 @@
     "height": 880
   },
   "maldives": {
-    "file": "Sunset at Lagoon, Emboodhoo, Male, Maldives.jpg",
-    "src": "assets/spots/maldives.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Sunset_at_Lagoon,_Emboodhoo,_Male,_Maldives.jpg",
-    "author": "Alexandre Hadrien Denis Faux",
-    "license": "CC0",
-    "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
-    "credit": "<a rel=\"nofollow\" class=\"external text\" href=\"https://www.flickr.com/photos/36863745@N08/55223181356/\">R5AF6091</a>",
-    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d5/Sunset_at_Lagoon%2C_Emboodhoo%2C_Male%2C_Maldives.jpg/1280px-Sunset_at_Lagoon%2C_Emboodhoo%2C_Male%2C_Maldives.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "width": 1280,
-    "height": 854
+    "file": "Moofushi Kandu fish.jpg",
+    "src": "assets/spots/maldives-underwater-01.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Moofushi_Kandu_fish.jpg",
+    "author": "Bruno de Giusti",
+    "license": "CC BY-SA 2.5 it",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5/it/deed.en",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/3/32/Moofushi_Kandu_fish.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "width": 1920,
+    "height": 1440,
+    "view": "underwater",
+    "label": "Le ballet des poissons",
+    "caption": "Carangues et banc d’anchois à Moofushi Kandu, dans l’atoll d’Ari.",
+    "featured": true,
+    "thumb": "assets/spots/maldives-underwater-01-thumb.webp"
   },
   "hanauma": {
     "file": "Hanauma Bay, Oahu, Hawaii, USA2.jpg",

@@ -800,7 +800,7 @@ function worldCount(id){
   return n;
 }
 /* Photographies de destinations réelles, créditées dans photos.html. */
-var WORLD_PHOTOS={"fr": {"src": "assets/spots/sugiton.jpg", "source": "https://commons.wikimedia.org/wiki/File:Panorama_calanque_de_Sugiton.jpg", "author": "Paco de la trillade", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Calanque de Sugiton, France"}, "eu": {"src": "assets/spots/navagio.jpg", "source": "https://commons.wikimedia.org/wiki/File:Aerial_of_Navagio_Shipwreck_Beach_(46470701841).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "place": "Navagio, Grèce"}, "af": {"src": "assets/spots/anse_source.jpg", "source": "https://commons.wikimedia.org/wiki/File:Anse_source_dagent_beach_la_digue.jpg", "author": "Svein-Magne Tunli - tunliweb.no", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Anse Source d’Argent, Seychelles"}, "na": {"src": "assets/spots/islamujeres.jpg", "source": "https://commons.wikimedia.org/wiki/File:Playa_Norte,_Isla_Mujeres_(42695470885).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "place": "Isla Mujeres, Mexique"}, "sa": {"src": "assets/spots/noronha.jpg", "source": "https://commons.wikimedia.org/wiki/File:Baia_dos_Porcos,_Fernando_de_Noronha.jpg", "author": "Marcia Luppi", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Fernando de Noronha, Brésil"}, "as": {"src": "assets/spots/rajaampat.jpg", "source": "https://commons.wikimedia.org/wiki/File:Wayag_Island.jpg", "author": "Rolandandika", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Raja Ampat, Indonésie"}, "oc": {"src": "assets/spots/whitehaven.jpg", "source": "https://commons.wikimedia.org/wiki/File:Whitehaven_Beach_-_Northern_End.jpg", "author": "Hush Neo", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Whitehaven, Australie"}};
+var WORLD_PHOTOS={"fr": {"src": "assets/spots/sugiton.jpg", "source": "https://commons.wikimedia.org/wiki/File:Panorama_calanque_de_Sugiton.jpg", "author": "Paco de la trillade", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 717, "place": "Calanque de Sugiton, France"}, "eu": {"src": "assets/spots/navagio.jpg", "source": "https://commons.wikimedia.org/wiki/File:Aerial_of_Navagio_Shipwreck_Beach_(46470701841).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "width": 1280, "height": 853, "place": "Navagio, Grèce"}, "af": {"src": "assets/spots/anse_source.jpg", "source": "https://commons.wikimedia.org/wiki/File:Anse_source_dagent_beach_la_digue.jpg", "author": "Svein-Magne Tunli - tunliweb.no", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 853, "place": "Anse Source d’Argent, Seychelles"}, "na": {"src": "assets/spots/islamujeres.jpg", "source": "https://commons.wikimedia.org/wiki/File:Playa_Norte,_Isla_Mujeres_(42695470885).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "width": 1280, "height": 719, "place": "Isla Mujeres, Mexique"}, "sa": {"src": "assets/spots/noronha.jpg", "source": "https://commons.wikimedia.org/wiki/File:Baia_dos_Porcos,_Fernando_de_Noronha.jpg", "author": "Marcia Luppi", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 853, "place": "Fernando de Noronha, Brésil"}, "as": {"src": "assets/spots/rajaampat.jpg", "source": "https://commons.wikimedia.org/wiki/File:Wayag_Island.jpg", "author": "Rolandandika", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 854, "place": "Raja Ampat, Indonésie"}, "oc": {"src": "assets/spots/whitehaven.jpg", "source": "https://commons.wikimedia.org/wiki/File:Whitehaven_Beach_-_Northern_End.jpg", "author": "Hush Neo", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 852, "place": "Whitehaven, Australie"}};
 function worldVisited(id){
   /* la progression vient du carnet de sessions, pas d'un score décoratif */
   var seen={}; sessions.forEach(function(s){ seen[s.spot]=1; });
@@ -852,7 +852,7 @@ function syncWorldUI(){
   });
   var wp=document.getElementById('worldPick'); if(wp) wp.style.display=on?'none':'';
   var lv=document.getElementById('listView'), mv=document.getElementById('mapView');
-  if(!on){ if(lv)lv.style.display='none'; if(mv)mv.style.display='none'; }
+  if(!on){ document.getElementById('spots').classList.remove('map-mode'); if(lv)lv.style.display='none'; if(mv)mv.style.display='none'; }
   else { setView('list'); }
   var w=on?worldOf(spotWorld):null;
   var top=document.getElementById('spotsTop');
@@ -908,6 +908,7 @@ function syncViewBtn(v){
   b.classList.toggle('on', onMap);
 }
 function setView(v){
+  document.getElementById('spots').classList.toggle('map-mode',v==='map'&&!!spotWorld);
   if(!spotWorld){document.getElementById('listView').style.display='none';document.getElementById('mapView').style.display='none';return;}
   syncViewBtn(v);
   if(v!=='map'&&typeof setMapFull==='function')setMapFull(false);
@@ -962,6 +963,7 @@ function mapFullIcon(on){
 function setMapFull(on,fromPop){
   var wrap=document.getElementById('spotMapWrap'); if(!wrap)return;
   if(on===mapFull)return;
+  if(!fromPop)window.OceanNavigation?.begin();
   mapFull=on;
   wrap.classList.toggle('full',on);
   document.body.classList.toggle('mapfull',on);
@@ -983,8 +985,10 @@ function setMapFull(on,fromPop){
   setTimeout(fitMapToSpots,340);
   /* le bouton retour du telephone doit fermer le plein ecran, pas quitter l'appli */
   try{
-    if(on) history.pushState({mapFull:1},'');
-    else if(!fromPop&&history.state&&history.state.mapFull) history.back();
+    if(!window.OceanNavigation){
+      if(on) history.pushState({mapFull:1},'');
+      else if(!fromPop&&history.state&&history.state.mapFull) history.back();
+    }
   }catch(e){}
 }
 function toggleMapFull(){ setMapFull(!mapFull); }
@@ -995,46 +999,13 @@ function fitMapToSpots(){
      conteneur perimee, et le zoom reste faux une fois la taille corrigee.
      maxZoom : un seul point donne des bornes nulles et enverrait au zoom 18. */
   if(!leafMap||!leafMap._pts||!leafMap._pts.length)return;
-  try{ leafMap.invalidateSize(); }catch(e){}
+  try{ leafMap.invalidateSize();window.OceanMap?.revealActivity(); }catch(e){}
   try{
     if(leafMap._pts.length===1) leafMap.setView(leafMap._pts[0],11);
     else leafMap.fitBounds(leafMap._pts,{padding:[34,34],maxZoom:11});
   }catch(e){}
 }
-function renderMap(refresh){
-  const el=document.getElementById('spotMap');if(!el)return;
-  if(typeof L==='undefined'){el.innerHTML='<div style="padding:46px 22px;text-align:center;color:#5a7384;font-size:13px;font-weight:600;line-height:1.6">🌊 La carte a besoin d\'une connexion internet.<br>Ouvre l\'appli en ligne pour la voir.</div>';return;}
-  if(!leafMap){
-    /* une vue explicite des le depart : sans elle, la carte reste dans un
-       etat indefini jusqu'au premier fitBounds, et un fitBounds calcule sur
-       un conteneur pas encore dimensionne part au zoom maximum. */
-    leafMap=L.map(el,{zoomControl:true,attributionControl:true}).setView([22,0],2);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,minZoom:2,worldCopyJump:true,attribution:'&copy; OpenStreetMap'}).addTo(leafMap);
-    leafMarkers=L.layerGroup().addTo(leafMap);
-  }
-  if(!leafMap._built||refresh){
-    leafMap._built=true;leafMarkers.clearLayers();
-    const col={debutant:'#2faf72',intermediaire:'#f5a623',expert:'#e8503f',variable:'#2154dc'};
-    const pts=[];
-    SPOTS.forEach(s=>{const c=COORDS[s.id];if(!c)return;
-      if(!inWorld(s))return;
-      if(currentFilter!=='all'&&(currentFilter==='new'?!s.catalogNew:s.level!==currentFilter))return;
-      if(currentSearch&&!searchable(s.name+' '+s.loc).includes(searchable(currentSearch)))return;
-      const ssp=spotSports(s);
-      if(activeSport&&!ssp.includes(activeSport))return;
-      if(favOnly&&!favs.has(s.id))return;
-      pts.push([c.lat,c.lon]);
-      const emo=sportIcon(activeSport||ssp[0]||'surf','#fff');
-      const icon=L.divIcon({className:'lpin-wrap',html:'<div class="lpin" style="background:'+col[s.level]+'"><span>'+emo+'</span></div>',iconSize:[30,30],iconAnchor:[15,30],popupAnchor:[0,-28]});
-      const sh=ssp.map(id=>sportIcon(id)).join(' ');
-      L.marker([c.lat,c.lon],{icon,title:s.name,alt:s.name}).addTo(leafMarkers)
-        .bindPopup('<div class="lpop"><b>'+s.name.split(' — ')[0]+'</b><em>'+levelIcon(s.level)+lvlLabel[s.level]+'</em><div class="lpop-sp">'+sh+'</div><button onclick="openSpot(\''+s.id+'\')">Voir la fiche →</button></div>');
-    });
-    leafMap._pts=pts;
-    if(pts.length&&(refresh||!leafMap._fit)){leafMap._fit=true;setTimeout(fitMapToSpots,0);}
-  }
-  setTimeout(function(){try{leafMap.invalidateSize();}catch(e){}},80);
-}
+function renderMap(refresh){window.OceanMap?.render(refresh);}
 /* photos : paysages variés selon le climat du spot (pas que des surfeurs en gros plan) */
 const PHOTO_TAGS={anglet:'coast,cliffs,ocean',biarritz:'beach,coastline,sea'};
 const PHOTO_LOCK={anglet:307,biarritz:118};
@@ -1209,9 +1180,9 @@ saintmalo:['View of Saint-Malo Beach 04.jpg','Jsamwrites','CC BY-SA 4.0'],
 saintlunaire:['StLunairePlage.JPG','LeCardinal','CC BY 3.0'],
 erquy:['Cotes-D\'Armor Erquy Plage - panoramio.jpg','René Boulay','CC BY-SA 3.0'],
 perros:['Plage de Trestraou - Perros-Guirec, France - August 16, 2018.jpg','Giorgio Galeotti','CC BY 4.0']};
-function spotPhotoUrl(id,w){if(window.SPOT_PHOTOS&&SPOT_PHOTOS[id])return SPOT_PHOTOS[id].src;var p=WPHOTO[id];if(!p)return null;
+function spotPhotoUrl(id,w){if(window.OceanPhotos?.lead(id,activeSport)){const p=OceanPhotos.lead(id,activeSport);return w<=480&&p.thumb?p.thumb:p.src;}if(window.SPOT_PHOTOS&&SPOT_PHOTOS[id])return SPOT_PHOTOS[id].src;var p=WPHOTO[id];if(!p)return null;
   return 'https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(p[0].replace(/ /g,'_'))+'?width='+(w||480);}
-function spotPhotoCredit(id){if(window.SPOT_PHOTOS&&SPOT_PHOTOS[id]){var local=SPOT_PHOTOS[id];return local.author+' · '+local.license+' — Wikimedia Commons';}var p=WPHOTO[id];
+function spotPhotoCredit(id){if(window.OceanPhotos?.lead(id,activeSport)){const p=OceanPhotos.lead(id,activeSport);return p.author+' · '+p.license+' — Wikimedia Commons';}if(window.SPOT_PHOTOS&&SPOT_PHOTOS[id]){var local=SPOT_PHOTOS[id];return local.author+' · '+local.license+' — Wikimedia Commons';}var p=WPHOTO[id];
   return p?(p[1]+' · '+p[2]+' — Wikimedia Commons'):'';}
 
 const SCENIC={
@@ -1492,6 +1463,7 @@ function setDetailSport(id){
   renderGuideSub(s,act);
   document.getElementById('dGuide').innerHTML=renderGuide(s,act);
   renderDetailFacts(s,act);
+  window.OceanGallery?.update(s);
   var lb=document.getElementById('dLogBtn');
   if(lb)lb.innerHTML=ctaLabel(act);
   realForecastDetail(s,act);
