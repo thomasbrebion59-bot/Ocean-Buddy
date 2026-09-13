@@ -91,7 +91,7 @@
 .ocean-v2 #detail .pres,.ocean-v2 #detail .bio-card{border-radius:9px;box-shadow:none}
 .ocean-v2 #detail .safety-call{background:#f7f8fa;border:1px solid #e0e6ee;border-radius:8px}
 .ocean-v2 #detail .sc-btn{border-radius:6px;background:#214eb8}.ocean-v2 #detail .sc-num{color:#173b84}
-.ocean-v2 #detail .fc-bar{background:#2154dc}.ocean-v2 #detail .fc-bar.best{background:#fc7955}
+.ocean-v2 .fc-col{display:grid;grid-template-rows:15px minmax(0,1fr) 15px;grid-template-columns:minmax(0,1fr);justify-items:center;align-items:end}.ocean-v2 .fc-bar{align-self:end}.ocean-v2 #detail .fc-bar{background:#2154dc}.ocean-v2 .fc-col.best .fc-bar,.ocean-v2 #detail .fc-col.best .fc-bar{background:#fc7955;box-shadow:none}
 .catalog-new{position:absolute;right:15px;top:64px;background:#fff;color:#2154dc;border-radius:5px;padding:6px 9px;font-size:9px;font-weight:800;z-index:5}
 .ocean-v2 .lvl-variable{background:#fff;color:#355570}.ocean-v2 .spot-preview{font-size:11px;color:#5d748c}
 .ocean-v2 .spot .danger-dots{display:none}.ocean-v2 .spot-banner .lvl-tag{font-size:9px;border-radius:5px}

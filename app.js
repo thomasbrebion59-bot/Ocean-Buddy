@@ -1982,7 +1982,7 @@ function renderForecastBars(barsId,bestId,days,vals,opt){
   var max=Math.max.apply(null,vals)||1;
   var bi=opt.best==='min'?vals.indexOf(Math.min.apply(null,vals)):vals.indexOf(Math.max.apply(null,vals));
   if(bestId)document.getElementById(bestId).innerHTML=(opt.liveOn?'<span class="live-badge"><i></i>'+(opt.badge||'Modèle Open-Meteo')+'</span>':'🤙 ')+(opt.bestLabel||'Houle la plus haute')+' : <b>'+days[bi]+'</b> · '+vals[bi].toFixed(dec)+' '+unit;
-  document.getElementById(barsId).innerHTML=vals.map(function(v,i){var h=Math.round(26+(v/max)*74);return '<div class="fc-col '+(i===bi?'best':'')+'"><div class="fc-val">'+v.toFixed(dec)+'</div><div class="fc-bar" style="height:'+h+'%"></div><div class="fc-day">'+days[i]+'</div></div>';}).join('');
+  document.getElementById(barsId).innerHTML=vals.map(function(v,i){var h=Math.round((v/max)*100);return '<div class="fc-col '+(i===bi?'best':'')+'"><div class="fc-val">'+v.toFixed(dec)+'</div><div class="fc-bar" style="height:'+h+'%"></div><div class="fc-day">'+days[i]+'</div></div>';}).join('');
 }
 function renderMiniForecast(s,calm){
   document.getElementById('dForecast').innerHTML='<p class="field-forecast-empty">Les prévisions ne sont pas disponibles pour ce lieu pour le moment.</p>';

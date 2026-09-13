@@ -40,6 +40,15 @@ test('new places never fabricate weather, reviews or hazard detail',()=>{
  for(const s of extra){for(const k of ['wind','swell','temp','tide'])assert.equal(s[k],'—',s.id+':'+k);assert.equal(s.dangers.length,0,s.id);assert.equal(s.rating,undefined);assert.equal(s.score,undefined);}
 });
 function functionSource(start,end){return app.slice(app.indexOf(start),app.indexOf(end,app.indexOf(start)));}
+test('forecast bar heights preserve ratios and zero, with the calmest day highlighted',()=>{
+ const elements={bars:{},best:{}};
+ const ctx={document:{getElementById:id=>elements[id]}};
+ vm.runInNewContext(functionSource('function renderForecastBars','function renderMiniForecast')+';this.render=renderForecastBars;',ctx);
+ ctx.render('bars','best',['Auj','Lun','Mar'],[0,7,14],{unit:'km/h',best:'min',bestLabel:'Vent le plus faible'});
+ assert.deepEqual([...elements.bars.innerHTML.matchAll(/height:(\d+)%/g)].map(m=>Number(m[1])),[0,50,100]);
+ assert.match(elements.bars.innerHTML,/^<div class="fc-col best">/);
+ assert.match(elements.best.innerHTML,/Vent le plus faible : <b>Auj<\/b> · 0 km\/h/);
+});
 test('search matches accents consistently',()=>{
  const ctx={};vm.runInNewContext(functionSource('function searchable','function searchSpots')+';this.normalize=searchable;',ctx);
  assert.equal(ctx.normalize(' Reñaca '),'renaca');assert.equal(ctx.normalize('São Torpes'),'sao torpes');
