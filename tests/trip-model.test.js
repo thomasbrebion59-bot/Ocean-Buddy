@@ -63,3 +63,47 @@ test('corrupt storage remains untouched and quota errors propagate to UI', () =>
   assert.throws(()=>M.load(s,ids));assert.equal(s.getItem(M.KEY),'{unreadable');
   assert.throws(()=>M.save({setItem(){throw Error('quota exceeded')}},[M.create()]),/quota/);
 });
+
+test('deletion removes only the selected trip from the active list and survives reload',()=>{
+  const saved=storage();
+  let target=M.create({name:'Voyage à retirer'},['biarritz','anglet']);
+  target=M.edit(target,{notes:'Adresse à garder',transport:'Train',budget:'450'});
+  target=M.editStep(target,target.steps[0].id,{date:'2026-10-12',notes:'Départ du matin'});
+  target.checklist[0].done=true;
+  const other=M.create({name:'À conserver'},['hossegor']);
+  const before=[target,other],next=M.removeTrip(before,target.id);
+  assert.equal(before[0].deleted,false,'does not mutate existing data before saving');
+  assert.equal(next[1],other,'leaves the other trip unchanged');
+  assert.deepEqual(next.filter(t=>!t.archived&&!t.deleted),[other]);
+  M.save(saved,next);
+  const reloaded=M.load(saved,ids);
+  assert.equal(reloaded[0].deleted,true);
+  assert.deepEqual(M.restoreTrip(reloaded,target.id),before,'restores every field, step and checklist item');
+});
+
+test('an archived trip returns to the archives when restored from the bin',()=>{
+  const archived={...M.create({name:'Voyage passé'},['anglet']),archived:true};
+  const removed=M.removeTrip([archived],archived.id);
+  assert.equal(removed.filter(t=>t.archived&&!t.deleted).length,0);
+  assert.equal(removed[0].archived,true);
+  assert.deepEqual(M.restoreTrip(removed,archived.id),[archived]);
+  assert.throws(()=>M.removeTrip(removed,archived.id),/corbeille/);
+  assert.throws(()=>M.removeTrip([archived],'unknown'),/introuvable/);
+  assert.throws(()=>M.restoreTrip([archived],archived.id),/corbeille/);
+});
+
+test('existing notebooks without a deletion flag keep their trips after migration',()=>{
+  const saved=storage(),legacy=M.create({name:'Ancien carnet'},ids);
+  delete legacy.deleted;
+  M.save(saved,[legacy]);
+  assert.deepEqual(M.load(saved,ids),[{...legacy,deleted:false}]);
+});
+
+test('failed deletion persistence leaves the saved trip intact',()=>{
+  const saved=storage(),trip=M.create({name:'Important'},ids);
+  M.save(saved,[trip]);
+  const failing={getItem:saved.getItem,setItem(){throw Error('storage unavailable')}};
+  assert.throws(()=>M.save(failing,M.removeTrip([trip],trip.id)),/unavailable/);
+  assert.deepEqual(M.load(saved,ids),[trip]);
+  assert.equal(trip.deleted,false);
+});
