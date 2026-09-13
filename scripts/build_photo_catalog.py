@@ -10,7 +10,7 @@ spots = json.loads(subprocess.check_output(['node','-e',"const fs=require('fs'),
 spots.extend(json.loads((ROOT/'data/catalog-expansion.json').read_text())['spots'])
 names = {s['id']:s['name'] for s in spots}
 worlds = {
- 'fr':('calanques','Calanque d’En-Vau, France'),
+ 'fr':('calanques','Calanque de Sugiton, France'),
  'eu':('navagio','Navagio, Grèce'),
  'af':('anse_source','Anse Source d’Argent, Seychelles'),
  'na':('islamujeres','Isla Mujeres, Mexique'),

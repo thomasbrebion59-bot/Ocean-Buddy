@@ -674,19 +674,9 @@ const SPORTS=[
   {id:'windsurf',label:'Windsurf',emoji:'⛵',color:'#9b6fd0',desc:'Planche à voile'}
 ];
 const SPORTMAP={};SPORTS.forEach(x=>SPORTMAP[x.id]=x);
-/* --- icônes vectorielles maison (remplacent les emojis d'activité) --- */
-const SPORT_ICONS={
-  surf:'<path d="M5.5 18.5C3 16 6 8.5 11 4.5s9-1.5 7.5 1.5"/><path d="M5.5 18.5c2.5 2.5 9-.5 13-5.5"/><path d="M8 16 16 7.5"/>',
-  bodyboard:'<rect x="7" y="3.5" width="10" height="17" rx="5"/><path d="M12 6.5v11"/>',
-  baignade:'<circle cx="8.5" cy="6.5" r="2"/><path d="M6 12l4-2 3 2 3-1"/><path d="M3 16.5c1.7-1.6 3.3 1.4 5 0s3.3 1.4 5 0 3.3 1.4 5 0"/><path d="M3 19.5c1.7-1.6 3.3 1.4 5 0s3.3 1.4 5 0 3.3 1.4 5 0"/>',
-  paddle:'<ellipse cx="11.5" cy="19" rx="8" ry="1.8"/><path d="M7.5 18 16 5"/><path d="M14 3.5 18 6l-2.2 2.4z"/>',
-  kayak:'<path d="M2 14 Q12 11 22 14 Q12 17 2 14Z"/><path d="M12 4.5V19.5"/><path d="M9.5 5h5M9.5 19h5"/>',
-  snorkeling:'<rect x="4.5" y="8" width="11" height="7" rx="3"/><path d="M15.5 9.5c2 0 3 1 3 3v6.5"/><circle cx="18.5" cy="19.5" r="1.3"/>',
-  plongee:'<path d="M8.5 3.2c-1.4 4-1.4 9 0 13 3 2.2 6 1.6 7.2-1.4 1.2-4 .2-9.4-2-11.4-1.8-1.2-4-1-5.2-.2z"/><path d="M9 7c2 .5 4 .5 6 0"/>',
-  kitesurf:'<path d="M3.5 6.5c5.5-3.5 11.5-3.5 17 0-3.5 2.3-13.5 2.3-17 0z"/><path d="M6.5 7 11 18M17.5 7 13 18"/><path d="M9.5 19h5"/>',
-  windsurf:'<path d="M12 3.5 17.5 16H10z"/><path d="M12 3.5V20"/><ellipse cx="12" cy="20" rx="7" ry="1.7"/>'
-};
-function sportIcon(id,color){var c=color||(SPORTMAP[id]&&SPORTMAP[id].color)||'#1175bd';return '<svg class="spico" viewBox="0 0 24 24" fill="none" stroke="'+c+'" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">'+(SPORT_ICONS[id]||'')+'</svg>';}
+/* Activity and experience are represented by Poulpy, with explicit text labels. */
+function sportIcon(id,color){return window.PoulpyIcons.html(id,'spico');}
+function levelIcon(level){return window.PoulpyIcons.html(level,'level-poulpy');}
 const WINDY=new Set(['latranche','lacanau','capferret','mimizan','quiberon','penhors','somo','zarautz','mardelplata','floripa','raglan','pantin']);
 function spotSports(s){
   if(Array.isArray(s.sports)&&s.sports.length)return s.sports.filter(x=>SPORTMAP[x]);
@@ -711,7 +701,7 @@ function spotCard(s){
       <div class="spot-shade"></div>
       <button class="fav" aria-label="${favs.has(s.id)?'Retirer des favoris':'Ajouter aux favoris'}" aria-pressed="${favs.has(s.id)}" onclick="toggleFav('${s.id}',event)">${favs.has(s.id)?FAV_ON:FAV_OFF}</button>
       ${dist!=null?`<span class="dist-tag"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${fmtDist(dist)}</span>`:''}
-      <span class="lvl-tag lvl-${s.level}">${s.level==='variable'?SPORTMAP[spotSports(s)[0]].label:lvlLabel[s.level]}</span>
+      <span class="lvl-tag lvl-${s.level}">${s.level==='variable'?sportIcon(spotSports(s)[0]):levelIcon(s.level)}${s.level==='variable'?SPORTMAP[spotSports(s)[0]].label:lvlLabel[s.level]}</span>
       ${s.catalogNew?'<span class="catalog-new">Nouveau</span>':''}
       <div class="glass-name"><h3>${s.name}</h3><div class="gn-loc"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${s.loc}</div></div>
       <span class="spot-go">Voir →</span>
@@ -730,7 +720,7 @@ var FAV_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-w
 function toggleFavFilter(){favOnly=!favOnly;const c=document.getElementById('favChip');if(c)c.classList.toggle('active',favOnly);renderSpots();renderMap(true);if(favOnly&&!favs.size)toast('Touche le ❤️ d’un spot pour l’ajouter');}
 function renderSportFilters(){
   const el=document.getElementById('sportFilters');if(!el)return;
-  let h='<div class="chip sp-chip'+(activeSport?'':' active')+'" onclick="setSport(null)">🌊 Tous</div>';
+  let h='<div class="chip sp-chip'+(activeSport?'':' active')+'" onclick="setSport(null)">'+sportIcon('all')+' Tous</div>';
   h+=SPORTS.map(s=>{const a=activeSport===s.id;return `<div class="chip sp-chip${a?' active':''}" ${a?`style="background:linear-gradient(135deg,${s.color},${s.color}cc);border-color:transparent;box-shadow:0 8px 18px ${s.color}55"`:''} data-sp="${s.id}" onclick="setSport('${s.id}')">${sportIcon(s.id,a?'#fff':null)} ${s.label}</div>`;}).join('');
   el.innerHTML=h;
 }
@@ -810,7 +800,7 @@ function worldCount(id){
   return n;
 }
 /* Photographies de destinations réelles, créditées dans photos.html. */
-var WORLD_PHOTOS={"fr": {"src": "assets/spots/calanques.jpg", "source": "https://commons.wikimedia.org/wiki/File:Vue_de_la_calanque_d%27En-Vau.jpg", "author": "Bastien Guigue", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Calanque d’En-Vau, France"}, "eu": {"src": "assets/spots/navagio.jpg", "source": "https://commons.wikimedia.org/wiki/File:Aerial_of_Navagio_Shipwreck_Beach_(46470701841).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "place": "Navagio, Grèce"}, "af": {"src": "assets/spots/anse_source.jpg", "source": "https://commons.wikimedia.org/wiki/File:Anse_source_dagent_beach_la_digue.jpg", "author": "Svein-Magne Tunli - tunliweb.no", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Anse Source d’Argent, Seychelles"}, "na": {"src": "assets/spots/islamujeres.jpg", "source": "https://commons.wikimedia.org/wiki/File:Playa_Norte,_Isla_Mujeres_(42695470885).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "place": "Isla Mujeres, Mexique"}, "sa": {"src": "assets/spots/noronha.jpg", "source": "https://commons.wikimedia.org/wiki/File:Baia_dos_Porcos,_Fernando_de_Noronha.jpg", "author": "Marcia Luppi", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Fernando de Noronha, Brésil"}, "as": {"src": "assets/spots/rajaampat.jpg", "source": "https://commons.wikimedia.org/wiki/File:Wayag_Island.jpg", "author": "Rolandandika", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Raja Ampat, Indonésie"}, "oc": {"src": "assets/spots/whitehaven.jpg", "source": "https://commons.wikimedia.org/wiki/File:Whitehaven_Beach_-_Northern_End.jpg", "author": "Hush Neo", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Whitehaven, Australie"}};
+var WORLD_PHOTOS={"fr": {"src": "assets/spots/sugiton.jpg", "source": "https://commons.wikimedia.org/wiki/File:Panorama_calanque_de_Sugiton.jpg", "author": "Paco de la trillade", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Calanque de Sugiton, France"}, "eu": {"src": "assets/spots/navagio.jpg", "source": "https://commons.wikimedia.org/wiki/File:Aerial_of_Navagio_Shipwreck_Beach_(46470701841).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "place": "Navagio, Grèce"}, "af": {"src": "assets/spots/anse_source.jpg", "source": "https://commons.wikimedia.org/wiki/File:Anse_source_dagent_beach_la_digue.jpg", "author": "Svein-Magne Tunli - tunliweb.no", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Anse Source d’Argent, Seychelles"}, "na": {"src": "assets/spots/islamujeres.jpg", "source": "https://commons.wikimedia.org/wiki/File:Playa_Norte,_Isla_Mujeres_(42695470885).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "place": "Isla Mujeres, Mexique"}, "sa": {"src": "assets/spots/noronha.jpg", "source": "https://commons.wikimedia.org/wiki/File:Baia_dos_Porcos,_Fernando_de_Noronha.jpg", "author": "Marcia Luppi", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Fernando de Noronha, Brésil"}, "as": {"src": "assets/spots/rajaampat.jpg", "source": "https://commons.wikimedia.org/wiki/File:Wayag_Island.jpg", "author": "Rolandandika", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Raja Ampat, Indonésie"}, "oc": {"src": "assets/spots/whitehaven.jpg", "source": "https://commons.wikimedia.org/wiki/File:Whitehaven_Beach_-_Northern_End.jpg", "author": "Hush Neo", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "place": "Whitehaven, Australie"}};
 function worldVisited(id){
   /* la progression vient du carnet de sessions, pas d'un score décoratif */
   var seen={}; sessions.forEach(function(s){ seen[s.spot]=1; });
@@ -1038,7 +1028,7 @@ function renderMap(refresh){
       const icon=L.divIcon({className:'lpin-wrap',html:'<div class="lpin" style="background:'+col[s.level]+'"><span>'+emo+'</span></div>',iconSize:[30,30],iconAnchor:[15,30],popupAnchor:[0,-28]});
       const sh=ssp.map(id=>sportIcon(id)).join(' ');
       L.marker([c.lat,c.lon],{icon,title:s.name,alt:s.name}).addTo(leafMarkers)
-        .bindPopup('<div class="lpop"><b>'+s.name.split(' — ')[0]+'</b><em>'+lvlLabel[s.level]+'</em><div class="lpop-sp">'+sh+'</div><button onclick="openSpot(\''+s.id+'\')">Voir la fiche 🏄</button></div>');
+        .bindPopup('<div class="lpop"><b>'+s.name.split(' — ')[0]+'</b><em>'+levelIcon(s.level)+lvlLabel[s.level]+'</em><div class="lpop-sp">'+sh+'</div><button onclick="openSpot(\''+s.id+'\')">Voir la fiche →</button></div>');
     });
     leafMap._pts=pts;
     if(pts.length&&(refresh||!leafMap._fit)){leafMap._fit=true;setTimeout(fitMapToSpots,0);}
@@ -1514,10 +1504,11 @@ function renderDetailFacts(s,act){
   var lab=SPORTMAP[act]?SPORTMAP[act].label.replace(/\s*\(.*\)/,''):'';
   var h='';
 
-  h+='<span class="dfact lv-'+s.level+'">'+lvl+'</span>';
+  h+='<span class="dfact lv-'+s.level+'">'+levelIcon(s.level)+lvl+'</span>';
   if(lab)h+='<span class="dfact">'+sportIcon(act)+' '+lab+'</span>';
   e.innerHTML=h;
   window.OceanFieldGuide?.update(s,act);
+  window.OceanImmersion?.update(s,act);
 }
 function openSpot(id){
   const s=SPOTS.find(x=>x.id===id);if(!s)return;
@@ -1605,7 +1596,7 @@ function renderProfile(){
   var bt=document.getElementById('profBadges');if(bt)bt.textContent=(appB+quizB);
   var spotsSet={};sessions.forEach(function(s){spotsSet[s.spot]=1;});
   var grid=document.getElementById('profStats');
-  if(grid)grid.innerHTML=pstatTile(SURF_ICON,'#e3f1fb','#1f9bbf',sessions.length,'Sessions')+pstatTile(PIN_ICON,'#e2f0f8','#2f8fb8',Object.keys(spotsSet).length,'Spots visités')+pstatTile(LEAF_ICON,'#e7f7ef','#2faf72',ecoLog.length,'Gestes écolo','showEcoLog()')+pstatTile(HEART_ICON,'#fdeaf0','#eb5b83',favs.size,'Favoris');
+  if(grid)grid.innerHTML=pstatTile(sportIcon(activeSport||'surf'),'#e3f1fb','#1f9bbf',sessions.length,'Sessions')+pstatTile(PIN_ICON,'#e2f0f8','#2f8fb8',Object.keys(spotsSet).length,'Spots visités')+pstatTile(LEAF_ICON,'#e7f7ef','#2faf72',ecoLog.length,'Gestes écolo','showEcoLog()')+pstatTile(HEART_ICON,'#fdeaf0','#eb5b83',favs.size,'Favoris');
 }
 function renderQuizBadges(){var el=document.getElementById('quizBadgesProfile');if(!el||typeof QUIZ_CATS==='undefined')return;var d=quizLoad();
   el.innerHTML=QUIZ_CATS.filter(function(c){return c.id!=='tout';}).map(function(c){var got=d.badges.indexOf(c.id)>=0;return '<div class="qb '+(got?'got':'')+'"><div class="qb-e">'+(got?'🏅':c.emoji)+'</div><div class="qb-n">Expert '+c.label+'</div><div class="qb-s">'+(got?'Débloqué ✓':'Sans-faute requis')+'</div></div>';}).join('');}
@@ -1704,6 +1695,7 @@ function renderConditions(s,live){
     <div class="wc">${icoSwell()}<div class="v">${isInland(s)?'—':swell}</div><div class="l">${isInland(s)?'Houle marine non applicable':'Houle'}</div></div>
     <div class="wc">${icoTemp()}<div class="v">${isInland(s)?'—':temp}</div><div class="l">${isInland(s)?'Température de l’eau non disponible':'Eau'}</div></div>
     <div class="wc">${icoTide()}<div class="v" style="font-size:10.5px;">${isInland(s)?'—':tide}</div><div class="l">${isInland(s)?'Sans marée océanique':'Marée'}</div></div>`;
+  window.OceanImmersion?.refreshConditions(s,live);
   const head=document.getElementById('dCondHead');
   if(head)head.textContent=live?(isInland(s)?'Eau douce · prévisions de vent Open-Meteo':'Prévisions du modèle · Open-Meteo'):'Prévisions du modèle indisponibles pour le moment';
 }
@@ -2047,7 +2039,7 @@ var WAVE_ICON='<svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentC
 function renderActivityBar(){
   const el=document.getElementById('homeActivity');if(!el)return;
   const a=activeSport?SPORTMAP[activeSport]:{emoji:'🌊',label:'Tous les sports'};
-  el.innerHTML=`<span class="ab-l"><span class="th"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg> Ton activité</span></span><span class="ab-v">${activeSport?sportIcon(activeSport):WAVE_ICON} ${a.label}</span><span class="ab-c">changer <svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9.5 12 15l5.5-5.5"/></svg></span>`;
+  el.innerHTML=`<span class="ab-l"><span class="th"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg> Ton activité</span></span><span class="ab-v">${sportIcon(activeSport||'all')} ${a.label}</span><span class="ab-c">changer <svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9.5 12 15l5.5-5.5"/></svg></span>`;
 }
 function openActivityGate(){
   quickGate=true;chosenSport=activeSport||'all';
@@ -2306,7 +2298,7 @@ let onbStep=0,chosenLevel=null,chosenSport=null,quickGate=false;
 function renderSportGuide(){
   const g=document.getElementById('sportGrid');if(!g)return;
   let h=SPORTS.map(s=>`<div class="sport-card" data-sp="${s.id}" onclick="pickSport(this,'${s.id}')"><div class="se" style="background:linear-gradient(135deg,${s.color}33,${s.color}1a);box-shadow:inset 0 0 0 2px ${s.color}4d">${sportIcon(s.id)}</div><h4>${s.label}</h4><p>${s.desc}</p></div>`).join('');
-  h+=`<div class="sport-card" data-sp="all" onclick="pickSport(this,'all')"><div class="se" style="background:linear-gradient(135deg,#bfe9f733,#bfe9f71a);box-shadow:inset 0 0 0 2px #9fd6ee4d">🌊</div><h4>Tout voir</h4><p>Tous les sports</p></div>`;
+  h+=`<div class="sport-card" data-sp="all" onclick="pickSport(this,'all')"><div class="se" style="background:linear-gradient(135deg,#bfe9f733,#bfe9f71a);box-shadow:inset 0 0 0 2px #9fd6ee4d">${sportIcon('all')}</div><h4>Tout voir</h4><p>Tous les sports</p></div>`;
   g.innerHTML=h;
   window.OceanPoulpy?.decorateOnboarding();
 }

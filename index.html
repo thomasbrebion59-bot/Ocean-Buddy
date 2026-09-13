@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="poulpy.css?v=7e71afd7e7b1">
 <link rel="stylesheet" href="navigation.css?v=1ad9b43229b1">
 <link rel="stylesheet" href="field-guide.css?v=2ee7e5f02556">
+<link rel="stylesheet" href="spot-immersion.css?v=51682a6c42de">
 </head>
 <body class="ocean-v2" data-screen="home">
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
@@ -46,11 +47,11 @@
     </div>
     <div class="onb-step" data-step="2">
       <h2>Quel est ton niveau ?</h2>
-      <div class="tag" style="margin-top:2px">Poulpy adaptera les spots à ton niveau.</div>
+      <div class="tag" style="margin-top:2px">Un repère pour explorer. Les conditions et l’encadrement comptent aussi.</div>
       <div class="lvl-cards" id="lvlCards">
-        <div class="lvl-card" data-lvl="debutant" onclick="pickLevel(this)"><div class="lc-ic"><svg viewBox="0 0 24 24"><ellipse cx="10.3" cy="12.5" rx="6.3" ry="4.9" fill="currentColor"/><circle cx="18.2" cy="12.2" r="2" fill="currentColor"/><ellipse cx="7.6" cy="7.6" rx="1.7" ry="1.1" fill="currentColor" transform="rotate(-25 7.6 7.6)"/><ellipse cx="7.6" cy="17.4" rx="1.7" ry="1.1" fill="currentColor" transform="rotate(25 7.6 17.4)"/><ellipse cx="3.2" cy="12.5" rx="1.5" ry=".9" fill="currentColor"/></svg></div><div><h4>Débutant</h4><p>Je découvre, je veux des conditions douces.</p></div></div>
-        <div class="lvl-card" data-lvl="intermediaire" onclick="pickLevel(this)"><div class="lc-ic"><svg viewBox="0 0 24 24"><path d="M3 15c3-6 9-10 15-8-1 1-1 2 0 3 2 .5 3 2 2 4-3 3-8 3-11 1-2 1-4 1-6 0z" fill="currentColor"/><circle cx="16" cy="9" r=".9" fill="#fff"/></svg></div><div><h4>Intermédiaire</h4><p>Je gère les bases, je progresse.</p></div></div>
-        <div class="lvl-card" data-lvl="expert" onclick="pickLevel(this)"><div class="lc-ic"><svg viewBox="0 0 24 24"><path d="M2.5 15c4-5.5 11-8 17-4.5-1.6.4-2.8 1.4-3.4 2.8 1.7 1.6 4 1.9 6 .9-1.7 2.4-4.6 3.4-7.3 2.5-2.7 2.6-6.7 3.1-10 1.3 2-.6 3.5-2 4.2-3.8-2.2.2-4.4.1-6.5-.2z" fill="currentColor"/><path d="M12.8 9.6c.3-1.6 1.4-2.9 2.9-3.5-.1 1.5.4 2.9 1.4 4-1.5.2-3-.1-4.3-.5z" fill="currentColor"/></svg></div><div><h4>Expert</h4><p>Conditions engagées, je suis prêt.</p></div></div>
+        <div class="lvl-card" data-lvl="debutant" onclick="pickLevel(this)"><div class="lc-ic"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/debutant.jpg" alt="" width="80" height="80"></div><div><h4>Débutant</h4><p>Je découvre, je veux des conditions douces.</p></div></div>
+        <div class="lvl-card" data-lvl="intermediaire" onclick="pickLevel(this)"><div class="lc-ic"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/intermediaire.jpg" alt="" width="80" height="80"></div><div><h4>Intermédiaire</h4><p>Je gère les bases, je progresse.</p></div></div>
+        <div class="lvl-card" data-lvl="expert" onclick="pickLevel(this)"><div class="lc-ic"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/expert.jpg" alt="" width="80" height="80"></div><div><h4>Expert</h4><p>Je suis expérimenté et j’adapte chaque sortie.</p></div></div>
       </div>
       <div class="dots"><span></span><span></span><span class="on"></span><span></span></div>
       <button class="onb-btn" onclick="onbNext()">Continuer</button>
@@ -187,10 +188,10 @@
       <button id="vtMap" onclick="setView('map')" style="display:none"></button>
       <div id="listView">
         <div class="filters" id="filters">
-          <div class="chip active" data-f="all" onclick="filterSpots(this,'all')"><svg viewBox="0 0 24 24" fill="none" stroke="#1f9bbf" stroke-width="2.4" stroke-linecap="round"><path d="M2 8c2 0 2-2.2 4-2.2S8 8 10 8s2-2.2 4-2.2S18 8 20 8"/><path d="M2 14c2 0 2-2.2 4-2.2S8 14 10 14s2-2.2 4-2.2S18 14 20 14"/></svg>Tous</div>
-          <div class="chip" data-f="debutant" onclick="filterSpots(this,'debutant')"><svg viewBox="0 0 24 24"><rect x="3" y="13" width="5" height="8" rx="1.5" fill="#2faf72"/><rect x="9.5" y="9" width="5" height="12" rx="1.5" fill="#d7e2e8"/><rect x="16" y="5" width="5" height="16" rx="1.5" fill="#d7e2e8"/></svg>Débutant</div>
-          <div class="chip" data-f="intermediaire" onclick="filterSpots(this,'intermediaire')"><svg viewBox="0 0 24 24"><rect x="3" y="13" width="5" height="8" rx="1.5" fill="#f5a623"/><rect x="9.5" y="9" width="5" height="12" rx="1.5" fill="#f5a623"/><rect x="16" y="5" width="5" height="16" rx="1.5" fill="#d7e2e8"/></svg>Intermédiaire</div>
-          <div class="chip" data-f="expert" onclick="filterSpots(this,'expert')"><svg viewBox="0 0 24 24"><rect x="3" y="13" width="5" height="8" rx="1.5" fill="#ec5a4b"/><rect x="9.5" y="9" width="5" height="12" rx="1.5" fill="#ec5a4b"/><rect x="16" y="5" width="5" height="16" rx="1.5" fill="#ec5a4b"/></svg>Expert</div>
+          <div class="chip active" data-f="all" onclick="filterSpots(this,'all')"><img class="poulpy-mini" src="assets/poulpy/scenes/travel-v2.webp" alt="" width="80" height="80">Tous</div>
+          <div class="chip" data-f="debutant" onclick="filterSpots(this,'debutant')"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/debutant.jpg" alt="" width="80" height="80">Débutant</div>
+          <div class="chip" data-f="intermediaire" onclick="filterSpots(this,'intermediaire')"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/intermediaire.jpg" alt="" width="80" height="80">Intermédiaire</div>
+          <div class="chip" data-f="expert" onclick="filterSpots(this,'expert')"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/expert.jpg" alt="" width="80" height="80">Expert</div>
           <div class="chip fav-chip" id="favChip" onclick="toggleFavFilter()"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.5-4.6-9.7-9.2C.6 7.6 2.3 4 5.8 3.4c2-.3 3.8.7 5 2.3l1.2 1.6 1.2-1.6c1.2-1.6 3-2.6 5-2.3 3.5.6 5.2 4.2 3.5 7.6-2.2 4.6-9.7 9.2-9.7 9.2z"/></svg> Favoris</div>
         </div>
         <div class="spot-list" id="spotList"></div>
@@ -393,19 +394,22 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 
-<script src="photo-catalog.js?v=408e60f76a19"></script>
+<script src="photo-catalog.js?v=8815d929b093"></script>
 <script src="trip-model.js?v=887d94bb3e8a"></script>
 <script src="catalog-expansion.js?v=bf46c2207d2f"></script>
-<script src="app.js?v=e514114e2474"></script>
+<script src="poulpy-icons.js?v=077af7771d61"></script>
+<script src="app.js?v=1dfbbb463615"></script>
 <script src="design.js?v=3adae9c7aeab"></script>
-<script src="trips.js?v=200562ec4584"></script>
+<script src="trips.js?v=dc32302db254"></script>
 <script src="poulpy-config.js?v=a083c1cf346b"></script>
 <script src="poulpy-assistant.js?v=ab9b88361c64"></script>
-<script src="poulpy.js?v=37b49b7d162a"></script>
+<script src="poulpy.js?v=09660b99b3b8"></script>
 <script src="spot-notebook-model.js?v=8982c4683ab8"></script>
-<script src="spot-notebook.js?v=049fb7c3438b"></script>
+<script src="spot-notebook.js?v=142590c3e408"></script>
 <script src="spot-gallery.js?v=f9d1fe8c6ff3"></script>
-<script src="field-guide.js?v=b70cc71c6157"></script>
+<script src="field-guide.js?v=77aafcb5335c"></script>
+<script src="spot-immersion-model.js?v=8c6489617564"></script>
+<script src="spot-immersion.js?v=0d33f881e62b"></script>
 <script src="navigation.js?v=0cb0bece7a17"></script>
 </body>
 </html>

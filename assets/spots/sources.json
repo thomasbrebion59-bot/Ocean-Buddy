@@ -120,16 +120,16 @@
     "height": 720
   },
   "calanques": {
-    "file": "Vue de la calanque d'En-Vau.jpg",
-    "src": "assets/spots/calanques.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Vue_de_la_calanque_d%27En-Vau.jpg",
-    "author": "Bastien Guigue",
+    "file": "Panorama calanque de Sugiton.jpg",
+    "src": "assets/spots/sugiton.jpg",
+    "source": "https://commons.wikimedia.org/wiki/File:Panorama_calanque_de_Sugiton.jpg",
+    "author": "Paco de la trillade",
     "license": "CC BY-SA 4.0",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
-    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/79/Vue_de_la_calanque_d%27En-Vau.jpg/1280px-Vue_de_la_calanque_d%27En-Vau.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "credit": "Own work",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/thumb/8/83/Panorama_calanque_de_Sugiton.jpg/1280px-Panorama_calanque_de_Sugiton.jpg",
     "width": 1280,
-    "height": 853
+    "height": 717
   },
   "navagio": {
     "file": "Aerial of Navagio Shipwreck Beach (46470701841).jpg",

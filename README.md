@@ -24,6 +24,10 @@ Les sept couvertures de destinations et les 280 photographies principales sont l
 
 Les fiches proposent des repères colorés, une checklist adaptée à l’activité, un carnet personnel et un comparateur de trois lieux. Les notes sont privées au navigateur ; elles ne sont pas envoyées à l’assistant. Les conditions proviennent du modèle Open-Meteo quand il est disponible ; les lacs ne reçoivent pas de données de houle ou de marée océanique. Les coordonnées situent un secteur, pas une mise à l’eau validée.
 
+Douze petits Poulpy illustrent maintenant les neuf activités et les trois niveaux dans les filtres, les fiches, la carte, les voyages et le choix initial. Les illustrations et leurs prompts sont documentés dans [assets/poulpy/icons/README.md](assets/poulpy/icons/README.md).
+
+Dans chaque fiche, **Prends tes repères** associe une photographie ouvrable en grand, trois repères adaptés à l’activité et des explications sur le vent, les vagues, la marée, l’eau et le niveau. Les schémas interactifs sont pédagogiques : ils ne représentent ni la géographie du spot, ni une mesure locale. Les prévisions disponibles sont identifiées séparément. Le contenu est adapté aux plans d’eau intérieurs ; les sources RNLI, NOAA et Open-Meteo sont liées auprès des explications. Les onglets et le curseur de marée fonctionnent au clavier.
+
 L’intégration conversationnelle de Poulpy utilise une fonction Netlify et l’API Responses d’OpenAI. Son activation et sa configuration sont décrites dans [backend/README.md](backend/README.md). Si aucune URL de serveur n’est configurée, l’interface identifie explicitement le guide intégré.
 
 ## Fichiers principaux
@@ -35,6 +39,7 @@ L’intégration conversationnelle de Poulpy utilise une fonction Netlify et l�
 - `design.js` : navigation, recherche globale et accès au clavier.
 - `trip-model.js`, `trips.js` : données et interface des voyages.
 - `field-guide.js`, `field-guide.css` : fiches immersives, préparation et repères pratiques.
+- `poulpy-icons.js`, `spot-immersion-model.js`, `spot-immersion.js`, `spot-immersion.css` : petits Poulpy et explications interactives des caractéristiques.
 - `spot-gallery.js`, `spot-notebook-model.js`, `spot-notebook.js` : galerie, comparaison et notes personnelles.
 - `poulpy-assistant.js`, `poulpy-config.js`, `netlify/functions/` : client et serveur de discussion.
 - `photo-catalog.js`, `photos.html`, `assets/spots/` : photographies locales et provenance.

@@ -88,11 +88,12 @@
   document.querySelectorAll('.chrome-user,.sidebar-user').forEach(button=>button.insertAdjacentHTML('afterbegin',image('travel','personal-poulpy',false)));
 
   // Illustrate the existing onboarding controls without changing their behaviour.
-  function decorateOnboarding(){for(const [sport,key] of Object.entries({surf:'surf',plongee:'dive',paddle:'paddle',snorkeling:'dive'})){
-    const card=$(`#sportGrid [data-sp="${sport}"]`);if(!card)continue;
-    if($('.sport-poulpy',card))continue;
-    card.classList.add('has-poulpy');card.insertAdjacentHTML('afterbegin',image(key,'sport-poulpy'));
-  }}
+  function decorateOnboarding(){
+    document.querySelectorAll('#sportGrid .sport-card').forEach(card=>{
+      card.classList.remove('has-poulpy');
+      card.querySelector('.sport-poulpy')?.remove();
+    });
+  }
   decorateOnboarding();
   setSvg('#logoOcto','travel');setSvg('#logoOcto2','celebrate');
 
