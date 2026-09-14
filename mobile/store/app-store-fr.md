@@ -1,6 +1,6 @@
 # Fiche App Store — brouillon de soumission
 
-État : préparation locale. Aucun envoi à App Store Connect.
+État : build 1 chargé dans App Store Connect ; captures iPhone préparées pour la soumission.
 
 - Nom : Ocean Buddy
 - Sous-titre : Spots nautiques et voyages
@@ -14,8 +14,8 @@
 - Assistance : https://thomasbrebion59-bot.github.io/Ocean-Buddy/support.html
 - Confidentialité : https://thomasbrebion59-bot.github.io/Ocean-Buddy/privacy.html
 - Contact public autorisé : thomas.brebion59@icloud.com
-- Prix : à confirmer par le titulaire ; l’application actuelle ne contient pas d’achat intégré.
-- Disponibilité/pays : à définir dans App Store Connect.
+- Prix : gratuite ; l’application actuelle ne contient pas d’achat intégré.
+- Disponibilité/pays : tous les territoires proposés par App Store Connect, sous réserve des obligations réglementaires du compte.
 
 ## Description
 
