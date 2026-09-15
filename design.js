@@ -7,14 +7,15 @@
     challenges:'M8 4h8v4a4 4 0 0 1-8 0V4zM8 5H4v2a4 4 0 0 0 4 4m8-6h4v2a4 4 0 0 1-4 4m-4 1v5m-4 3h8m-7-3h6',
     trips:'M3 5l6-2 6 2 6-2v16l-6 2-6-2-6 2V5zm6-2v16m6-14v16M5 11l2 1m4 1 2 1m4-1 2-2',
     profile:'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0M4 21v-3a8 8 0 0 1 16 0v3',
+    community:'M4 5h16v11H9l-5 4v-4H4zM8 9h8M8 13h5',
     search:'M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0m-2 5 6 6',
     settings:'m12 3 2 3 4-.1.1 4 2.9 2-2.9 2-.1 4-4-.1-2 3-2-3-4 .1-.1-4L3 12l2.9-2 .1-4 4 .1 2-3zm3 9a3 3 0 1 1-6 0 3 3 0 0 1 6 0',
     arrow:'M5 12h14m-6-6 6 6-6 6',
     wave:'M2 9c3 0 3-3 6-3s3 3 6 3 3-3 6-3M2 16c3 0 3-3 6-3s3 3 6 3 3-3 6-3'
   };
   const icon = key => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[key] || paths.wave}"/></svg>`;
-  const labels = {home:'Accueil',spots:'Explorer',challenges:'Défis',profile:'Mon profil',trips:'Surf trips',detail:'Le spot'};
-  const short = {home:'Accueil',spots:'Spots',challenges:'Défis',profile:'Profil',trips:'Voyages'};
+  const labels = {home:'Accueil',spots:'Explorer',challenges:'Défis',community:'Communauté',profile:'Mon profil',trips:'Surf trips',detail:'Le spot'};
+  const short = {home:'Accueil',spots:'Spots',challenges:'Défis',community:'Communauté',profile:'Profil',trips:'Voyages'};
   const nav = $('.nav');
   nav.insertAdjacentHTML('afterbegin', `<a class="sidebar-brand" href="#home" aria-label="Ocean Buddy — Accueil"><img src="assets/poulpy/scenes/travel-v2.webp" alt=""><span>OCEAN <b>BUDDY</b><small>L’OCÉAN, À TES CÔTÉS.</small></span></a><div class="sidebar-label">TON TERRAIN DE JEU</div>`);
   $('.sidebar-brand').addEventListener('click', e => {e.preventDefault();go('home')});

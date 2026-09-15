@@ -1561,6 +1561,7 @@ function openSpot(id){
   try{renderFaune(s);}catch(e){}
   document.getElementById('dDangers').innerHTML=s.dangers.map(d=>{var m=DANGER_MAP[d[0]]||['pin','#eef4f7','#7c98a8'];return `<div class="danger-item"><span class="di" style="background:${m[1]};color:${m[2]}">${uic(m[0])}</span><span>${d[1]}</span></div>`;}).join('');
   showDetailCat('infos',false);
+  window.OceanCommunity?.mountSpot(id);
   go('detail');
 }
 function renderChallenges(){
@@ -2363,9 +2364,9 @@ function logSession(){
 /* ================= UI ================= */
 let tt;
 function toast(msg){const t=document.getElementById('toast');t.innerHTML='🐙 '+msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600);}
-const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',trips:'tb'};
+const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',community:'cb',trips:'tb'};
 function vibrate(pattern){try{if(navigator.vibrate)navigator.vibrate(pattern);}catch(e){}}
-const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,profile:4,trips:2};
+const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,community:3,profile:4,trips:2};
 function resetScreenLive(el){el.classList.remove('sw-live');el.style.top='';el.style.left='';el.style.right='';el.style.transform='';el.style.opacity='';el.style.transition='';}
 function updateNavPill(s){
   const pill=document.getElementById('navPill');if(!pill)return;

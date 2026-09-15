@@ -9,7 +9,7 @@
   backButton.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg><span>Retour</span>';
   $('.app-chrome').prepend(backButton);
   const mobileTitle=document.createElement('span');mobileTitle.className='app-page-title';$('.chrome-title').append(mobileTitle);
-  const screens=['home','spots','detail','trips','challenges','profile'];
+  const screens=['home','spots','detail','trips','challenges','community','profile'];
   function capture(){
     const focus=document.activeElement?.closest('[data-spot-id],#worldGrid button,[id]');
     let focusSelector=null;
@@ -25,7 +25,7 @@
     if(r.screen==='spots')return r.country|| (r.world?(worldOf(r.world)?.lab||'les spots'):'les continents');
     if(r.screen==='detail')return SPOTS.find(s=>s.id===r.spot)?.name||'la fiche du spot';
     if(r.screen==='trips'&&r.trip?.selected)return 'ton voyage';
-    return {home:'l’accueil',profile:'ton profil',challenges:'les défis',trips:'tes voyages'}[r.screen]||'l’accueil';
+    return {home:'l’accueil',profile:'ton profil',challenges:'les défis',community:'la communauté',trips:'tes voyages'}[r.screen]||'l’accueil';
   }
   function valid(entry){return entry?.owner===marker&&screens.includes(entry.route?.screen)&&Number.isInteger(entry.index)&&entry.index>=0;}
   let entry=valid(history.state)?history.state:{owner:marker,index:0,from:null,route:capture()};
@@ -35,7 +35,7 @@
     backButton.hidden=!hasBack;document.body.classList.toggle('has-app-back',hasBack);
     const backLabel='Retour vers '+(entry.from||'l’accueil');backButton.setAttribute('aria-label',backLabel);backButton.title=backLabel;
     $('#detail .back-btn').setAttribute('aria-label',backLabel);
-    mobileTitle.textContent={home:'Accueil',spots:'Explorer',detail:'Le spot',trips:'Voyages',challenges:'Défis',profile:'Profil'}[document.body.dataset.screen];
+    mobileTitle.textContent={home:'Accueil',spots:'Explorer',detail:'Le spot',trips:'Voyages',challenges:'Défis',community:'Communauté',profile:'Profil'}[document.body.dataset.screen];
     const world=worldOf(spotWorld),sportName=activeSport?SPORTMAP[activeSport].label:'Toutes les activités';
     $('#exploreSportLabel').textContent=sportName;
     $('#exploreActivity').setAttribute('aria-label','Changer d’activité : '+sportName);
@@ -97,7 +97,7 @@
       if(route.detailSport)setDetailSport(route.detailSport);
       document.querySelectorAll('#detail .dcat').forEach(el=>{el.style.display=el.dataset.cat===route.detailTab||(route.detailTab==='meteo'&&el.dataset.cat==='securite')?'':'none';});
       document.querySelectorAll('#dTabs .dtab').forEach(el=>el.classList.toggle('active',el.dataset.cat===route.detailTab));
-    }else go(route.screen==='detail'?'home':route.screen);
+    }else { if(route.screen==='community')window.OceanCommunity?.render(); go(route.screen==='detail'?'home':route.screen); }
     applying=false;update();
   }
   function back(){
