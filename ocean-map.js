@@ -37,7 +37,9 @@
   function draw(){
     if(!leafMap||!leafMarkers)return;leafMarkers.clearLayers();
     const zoom=leafMap.getZoom(),points=rows.map(s=>{const c=COORDS[s.id],p=leafMap.project([c.lat,c.lon],zoom);return {s,x:p.x,y:p.y};});
-    const groups=OceanMapModel.group(points,zoom<8?112:130,62);
+    /* Des grappes plus compactes gardent la carte lisible : les repères se
+       séparent plus tôt au zoom et chaque clic permet d'ouvrir le secteur. */
+    const groups=OceanMapModel.group(points,zoom<5?78:zoom<8?92:112,zoom<5?46:54);
     for(const g of groups){
       const many=g.items.length>1,s=g.items[0].s,acts=spotSports(s),primary=activeSport||acts[0],pos=leafMap.unproject([g.x,g.y],zoom);
       const label=many?'spots':(zoom>=9?s.name.split(' — ')[0]:SPORTMAP[primary].label);
@@ -57,7 +59,7 @@
   function render(refresh){
     const el=document.getElementById('spotMap');if(!el)return;
     if(typeof L==='undefined'){el.innerHTML='<p class="map-offline">La carte nécessite une connexion. Tu peux continuer à parcourir les spots dans la liste.</p>';return;}
-    if(!leafMap){leafMap=L.map(el,{zoomControl:true,attributionControl:true,worldCopyJump:true}).setView([22,0],2);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,minZoom:2,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(leafMap);leafMarkers=L.layerGroup().addTo(leafMap);leafMap.on('zoomend',draw);}
+    if(!leafMap){leafMap=L.map(el,{zoomControl:true,attributionControl:true,worldCopyJump:true,scrollWheelZoom:true,dragging:true,touchZoom:true,doubleClickZoom:true,boxZoom:true,keyboard:true,inertia:true,zoomSnap:.25,zoomDelta:.5}).setView([22,0],2);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,minZoom:2,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(leafMap);leafMarkers=L.layerGroup().addTo(leafMap);leafMap.on('zoomend moveend',draw);}
     rows=candidates().filter(s=>!activeSport||spotSports(s).includes(activeSport));leafMap._pts=rows.map(s=>[COORDS[s.id].lat,COORDS[s.id].lon]);controls();draw();
     requestAnimationFrame(()=>{leafMap.invalidateSize();if(refresh&&rows.length)fitMapToSpots();});
   }

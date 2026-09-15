@@ -782,13 +782,32 @@ function moreSpots(){ spotShown+=SPOT_PAGE; renderSpots(currentFilter,true); }
    silhouette. La répartition vient du champ `loc` de chaque spot. */
 var WORLDS=[{"id":"fr","lab":"France","sub":"Landes · Bretagne · Méditerranée","c":["#c6e2f8","#7ab8e0","#2b86c0","#12608f","#ffffff","#c2d4e1"],"sun":[214,28,17],"art":"<path fill=\"url(#wsh-fr)\" d=\"M40 78V34Q62 25 98 30L112 36L166 46L170 78H150V60Q150 51 139 51Q128 51 128 60V78Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".20\" d=\"M112 36L166 46L170 78H150V60Q150 51 139 51Z\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M186 78l8-36 8 36Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".20\" d=\"M194 42l8 36h-4Z\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M0 78V60q18-7 34-2v20Z\" opacity=\".8\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M300 78V68q28-9 60-4v14Z\" opacity=\".75\"/>"},{"id":"eu","lab":"Europe","sub":"Portugal · Espagne · Norvège","c":["#e3ecf3","#a8c4d6","#22759c","#0d4767","#9db6c7","#4d6779"],"sun":[176,24,15],"art":"<g fill=\"url(#wsh-eu)\">\n      <path d=\"M0 78V56q44-16 86-6l24 8v20Z\"/>\n      <path d=\"M250 78V68q36-13 72-8l38 6v12Z\"/>\n    </g>\n    <g fill=\"#f8fbfd\">\n      <path d=\"M50 64l4-28h18l4 28Z\"/>\n      <rect x=\"48\" y=\"31\" width=\"30\" height=\"5\" rx=\"2\"/>\n      <rect x=\"55\" y=\"21\" width=\"16\" height=\"10\"/>\n      <path d=\"M52 21h22l-11-9Z\"/>\n    </g>\n    <circle cx=\"63\" cy=\"26\" r=\"3.6\" fill=\"#ffd35e\"/>\n    <g fill=\"#e05a49\"><rect x=\"55\" y=\"40\" width=\"16\" height=\"5\"/><rect x=\"53\" y=\"52\" width=\"20\" height=\"5\"/></g>"},{"id":"af","lab":"Afrique","sub":"Maroc · Mer Rouge · Maurice","c":["#ffeccb","#ffbe86","#1cadc2","#0f7b98","#f1d29c","#cb9c5e"],"sun":[58,32,19],"art":"<path fill=\"url(#wsh-af)\" d=\"M0 78V62q66-26 138-12 60 12 118-6 52-15 104 4v30Z\"/>\n    <path fill=\"#ffffff\" opacity=\".22\" d=\"M0 78V62q66-26 138-12l-52 28Z\"/>\n    <path stroke=\"#6b5334\" stroke-width=\"4.5\" fill=\"none\" stroke-linecap=\"round\" d=\"M118 74q1-18 11-30\"/>\n    <g fill=\"#3f7a52\">\n      <path d=\"M129 44q-18-3-24 7 13-3 24-3Z\"/>\n      <path d=\"M129 44q17-6 25 4-13-2-25-1Z\"/>\n      <path d=\"M129 44q-10-14-24-13 10 5 24 15Z\"/>\n      <path d=\"M129 44q10-15 25-13-11 5-25 15Z\"/>\n    </g>"},{"id":"na","lab":"Amérique du Nord","sub":"Californie · Mexique · Caraïbes","c":["#ffdcc6","#f79a86","#2f8dc6","#175f8d","#829584","#42574a"],"sun":[212,32,20],"art":"<path fill=\"url(#wsh-na)\" d=\"M0 78V48q34-16 74-8l92 14v24Z\"/>\n    <g fill=\"#2c4b3f\">\n      <path d=\"M28 44l8-18 8 18Z\"/><path d=\"M30 36l6-14 6 14Z\"/>\n      <path d=\"M64 41l9-20 9 20Z\"/><path d=\"M66 32l7-15 7 15Z\"/>\n      <path d=\"M104 45l7-16 7 16Z\"/>\n    </g>\n    <path fill=\"url(#wsh-na)\" opacity=\".6\" d=\"M262 78V68q34-12 66-5l32 6v9Z\"/>"},{"id":"sa","lab":"Amérique du Sud","sub":"Pérou · Brésil · Chili","c":["#ffeac6","#f6b06d","#2091ba","#0d5f81","#c68f68","#83583c"],"sun":[214,30,18],"art":"<path fill=\"url(#wsh-sa)\" d=\"M0 78V52q56-15 108-2 56 14 110 4 60-10 142-16v40Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".13\" d=\"M0 78V52q56-15 108-2l-64 28Z\"/>\n    <g fill=\"#3d7a4f\">\n      <path d=\"M152 78V36q0-7 6-7t6 7v42Z\"/>\n      <path d=\"M140 78V54q0-9 9-9v33Z\"/>\n      <path d=\"M176 78V48q0-9-9-9v39Z\"/>\n      <path d=\"M206 78V58q0-5 4-5t4 5v20Z\"/>\n      <path d=\"M198 78V66q0-6 6-6v18Z\"/>\n    </g>"},{"id":"as","lab":"Asie","sub":"Indonésie · Maldives · Japon","c":["#e2f6f2","#a8e3dd","#19bbb0","#0c7b81","#b9cdc2","#5e7d72"],"sun":[64,30,16],"art":"<g fill=\"url(#wsh-as)\">\n      <path d=\"M22 78V52q0-12 10-12t10 12v26Z\"/>\n      <path d=\"M62 78V28q0-18 16-18t16 18v50Z\"/>\n      <path d=\"M112 78V46q0-13 11-13t11 13v32Z\"/>\n      <path d=\"M244 78V56q0-11 9-11t9 11v22Z\"/>\n    </g>\n    <g fill=\"#1b4a6b\" opacity=\".16\">\n      <path d=\"M78 10q16 0 16 18v50h-10V28q0-14-6-18Z\"/>\n      <path d=\"M123 33q11 0 11 13v32h-7V46q0-10-4-13Z\"/>\n    </g>\n    <g fill=\"#2f5245\">\n      <path d=\"M62 30q16-13 32 0-16-5-32 0Z\"/>\n      <path d=\"M22 53q10-8 20 0-10-3-20 0Z\"/>\n      <path d=\"M112 47q11-9 22 0-11-3-22 0Z\"/>\n      <path d=\"M244 57q9-7 18 0-9-3-18 0Z\"/>\n    </g>"},{"id":"oc","lab":"Océanie","sub":"Hawaï · Australie · Tahiti","c":["#d5edf9","#84c8e9","#1599d8","#0a5288","#7c92a8","#3a4c63"],"sun":[66,28,15],"art":"<path fill=\"url(#wsh-oc)\" d=\"M92 78l58-44q10-8 20 0l62 44Z\"/>\n    <path fill=\"#ffffff\" opacity=\".20\" d=\"M92 78l58-44q10-8 20 0l-26 44Z\"/>\n    <path fill=\"#16283c\" opacity=\".20\" d=\"M170 34l62 44h-38Z\"/>\n    <path fill=\"#f6fafc\" opacity=\".78\" d=\"M149 35q11-7 22 0-5-7-11-7t-11 7Z\"/>\n    <path fill=\"url(#wsh-oc)\" opacity=\".5\" d=\"M282 78V70q30-10 60-4l18 4v8Z\"/>"}];
 var SPOT_WORLD={"imsouane":"af","safi":"af","sidikaouki":"af","ngor":"af","ouakam":"af","elandsbay":"af","muizenberg":"af","dahab":"af","nosybe":"af","watamu":"af","keramas":"as","nias":"as","gland":"as","komodo":"as","bunaken":"as","similan":"as","weligama":"as","ichinomiya":"as","kerama":"as","rincon":"na","pavones":"na","tamarindo":"na","sayulita":"na","todossantos":"na","islamujeres":"na","tofino":"na","newsmyrna":"na","montauk":"na","mancora":"sa","huanchaco":"sa","iquique":"sa","praiadorosa":"sa","noronha":"sa","ilhabela":"sa","puntadeleste":"sa","ayampe":"sa","burleigh":"oc","byronbay":"oc","manly":"oc","ningaloo":"oc","piha":"oc","shipwreck":"oc","restaurants":"oc","borabora":"oc","jardimdomar":"eu","santabarbara":"eu","capomannu":"eu","isolabella":"eu","zlatnirat":"eu","naxos":"eu","hossegor":"fr","lacanau":"fr","latorche":"fr","biarritz":"fr","anglet":"fr","quiberon":"fr","seignosse":"fr","capbreton":"fr","lafitenia":"fr","guethary":"fr","sauveterre":"fr","latranche":"fr","lapalue":"fr","penhors":"fr","lapalmyre":"fr","mimizan":"fr","capferret":"fr","bidart":"fr","lafranqui":"fr","portcros":"fr","calanques":"fr","annecy":"fr","verdon":"fr","glenan":"fr","palombaggia":"fr","wissant":"fr","letouquet":"fr","hardelot":"fr","wimereux":"fr","berck":"fr","malolesbains":"fr","lehavre":"fr","etretat":"fr","dieppe":"fr","siouville":"fr","vauville":"fr","hauteville":"fr","granville":"fr","saintmalo":"fr","saintlunaire":"fr","erquy":"fr","perros":"fr","nazare":"eu","supertubos":"eu","ericeira":"eu","mundaka":"eu","thurso":"eu","bundoran":"eu","rodiles":"eu","somo":"eu","zarautz":"eu","pantin":"eu","lasanta":"eu","unstad":"eu","silfra":"eu","medes":"eu","tarifa":"eu","pozo":"eu","gardalake":"eu","capri":"eu","praia_marinha":"eu","navagio":"eu","anchorpoint":"af","jbay":"af","dungeons":"af","skeletonbay":"af","rasmohammed":"af","thistlegorm":"af","dakhla":"af","essaouira":"af","lemorne":"af","anse_source":"af","mavericks":"na","trestles":"na","malibu":"na","hoodriver":"na","puerto":"na","cenote_dosojos":"na","santateresa":"na","puntaroca":"na","bluehole_belize":"na","bonaire":"na","cabarete":"na","chicama":"sa","lobitos":"sa","puntadelobos":"sa","arica":"sa","floripa":"sa","saquarema":"sa","itacare":"sa","cumbuco":"sa","jericoacoara":"sa","montanita":"sa","galapagos":"sa","mardelplata":"sa","uluwatu":"as","padang":"as","mentawai":"as","tulamben":"as","rajaampat":"as","sipadan":"as","shonan":"as","arugam":"as","cloud9":"as","richelieu":"as","maldives":"as","bells":"oc","snapper":"oc","margaret":"oc","greatbarrier":"oc","whitehaven":"oc","raglan":"oc","cloudbreak":"oc","teahupoo":"oc","pipeline":"oc","waikiki":"oc","hanauma":"oc","hookipa":"oc"};
-var spotWorld=null;
-function inWorld(s){ return !spotWorld||spotWorld==='all'||SPOT_WORLD[s.id]===spotWorld; }
+var spotWorld=null,spotCountry=null;
+/* Pays dérivé du catalogue : cette étape garde les données locales et évite
+   de charger une carte mondiale illisible avant que l'utilisateur ait choisi
+   sa zone précise. */
+var COUNTRY_RULES=[
+  ['france','France'],['portugal','Portugal'],['espagne','Espagne'],['\u00e9cosse|uk|irlande','Royaume-Uni / Irlande'],
+  ['maroc','Maroc'],['\u00e9gypte','Égypte'],['s\u00e9n\u00e9gal','Sénégal'],['afrique du sud','Afrique du Sud'],['kenya','Kenya'],['seychelles|maurice|r\u00e9union','Îles de l’océan Indien'],
+  ['usa|californie|hawa\u00ef','États-Unis'],['mexique','Mexique'],['canada','Canada'],['costa rica','Costa Rica'],['belize','Belize'],['r\u00e9publique dominicaine','République dominicaine'],
+  ['br\u00e9sil','Brésil'],['p\u00e9rou','Pérou'],['chili','Chili'],['\u00e9quateur|galapagos','Équateur'],['uruguay|argentine','Río de la Plata'],
+  ['indon\u00e9sie|bali|java','Indonésie'],['japon|okinawa','Japon'],['philippines','Philippines'],['maldives','Maldives'],['malaisie','Malaisie'],['sri lanka','Sri Lanka'],
+  ['australie','Australie'],['nouvelle-z\u00e9lande','Nouvelle-Zélande'],['tahiti|polyn\u00e9sie|fidji|hawa\u00ef','Pacifique insulaire']
+];
+function countryOf(s){
+  if(SPOT_WORLD[s.id]==='fr')return 'France';
+  var text=String(s.loc||'').toLowerCase();
+  for(var i=0;i<COUNTRY_RULES.length;i++)if(new RegExp(COUNTRY_RULES[i][0],'i').test(text))return COUNTRY_RULES[i][1];
+  return 'Autres destinations';
+}
+function countryId(label){return searchable(label).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
+function inWorld(s){ return (!spotWorld||spotWorld==='all'||SPOT_WORLD[s.id]===spotWorld) && (!spotCountry||countryOf(s)===spotCountry); }
 function worldOf(id){ for(var i=0;i<WORLDS.length;i++) if(WORLDS[i].id===id) return WORLDS[i]; return null; }
 function worldCount(id){
   var n=0; for(var i=0;i<SPOTS.length;i++) if(SPOT_WORLD[SPOTS[i].id]===id&&(!activeSport||spotSports(SPOTS[i]).includes(activeSport))) n++;
   return n;
 }
+function countryCount(label){var n=0;for(var i=0;i<SPOTS.length;i++)if((!activeSport||spotSports(SPOTS[i]).includes(activeSport))&&countryOf(SPOTS[i])===label)n++;return n;}
 /* Photographies de destinations réelles, créditées dans photos.html. */
 var WORLD_PHOTOS={"fr": {"src": "assets/spots/sugiton.jpg", "source": "https://commons.wikimedia.org/wiki/File:Panorama_calanque_de_Sugiton.jpg", "author": "Paco de la trillade", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 717, "place": "Calanque de Sugiton, France"}, "eu": {"src": "assets/spots/navagio.jpg", "source": "https://commons.wikimedia.org/wiki/File:Aerial_of_Navagio_Shipwreck_Beach_(46470701841).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "width": 1280, "height": 853, "place": "Navagio, Grèce"}, "af": {"src": "assets/spots/anse_source.jpg", "source": "https://commons.wikimedia.org/wiki/File:Anse_source_dagent_beach_la_digue.jpg", "author": "Svein-Magne Tunli - tunliweb.no", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 853, "place": "Anse Source d’Argent, Seychelles"}, "na": {"src": "assets/spots/islamujeres.jpg", "source": "https://commons.wikimedia.org/wiki/File:Playa_Norte,_Isla_Mujeres_(42695470885).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "width": 1280, "height": 719, "place": "Isla Mujeres, Mexique"}, "sa": {"src": "assets/spots/noronha.jpg", "source": "https://commons.wikimedia.org/wiki/File:Baia_dos_Porcos,_Fernando_de_Noronha.jpg", "author": "Marcia Luppi", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 853, "place": "Fernando de Noronha, Brésil"}, "as": {"src": "assets/spots/rajaampat.jpg", "source": "https://commons.wikimedia.org/wiki/File:Wayag_Island.jpg", "author": "Rolandandika", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 854, "place": "Raja Ampat, Indonésie"}, "oc": {"src": "assets/spots/whitehaven.jpg", "source": "https://commons.wikimedia.org/wiki/File:Whitehaven_Beach_-_Northern_End.jpg", "author": "Hush Neo", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 852, "place": "Whitehaven, Australie"}};
 function worldVisited(id){
@@ -817,17 +836,33 @@ function renderWorlds(){
   const allLabel=document.querySelector('.w-all-tx i');if(allLabel)allLabel.textContent='Ouvre la carte et trouve ton prochain terrain de jeu.';
 }
 
+function renderCountries(){
+  const host=document.getElementById('worldGrid');if(!host||!spotWorld||spotWorld==='all')return;
+  const names=[...new Set(SPOTS.filter(s=>SPOT_WORLD[s.id]===spotWorld).map(countryOf))].sort((a,b)=>a.localeCompare(b,'fr'));
+  host.innerHTML=names.map((name,index)=>{
+    const sample=SPOTS.find(s=>SPOT_WORLD[s.id]===spotWorld&&countryOf(s)===name), photo=sample?spotPhotoUrl(sample.id,1280):WORLD_PHOTOS[spotWorld].src;
+    return `<button class="isl country-card" onclick="openCountry('${esc(name)}')" aria-label="Explorer ${esc(name)}, ${countryCount(name)} spots"><img class="isl-img" src="${esc(photo)}" alt="" loading="lazy"><span class="world-num" aria-hidden="true">0${index+1}</span><span class="world-count">${countryCount(name)} spots</span><span class="isl-plate"><span class="world-place">${esc(worldOf(spotWorld)?.lab||'Destination')}</span><b>${esc(name)}</b><span class="world-sub">Spots et activités du pays</span><span class="world-open">Explorer <span aria-hidden="true">↗</span></span></span></button>`;
+  }).join('');
+  const total=document.getElementById('worldTotal');if(total)total.innerHTML='<b>'+names.reduce((n,x)=>n+countryCount(x),0)+' spots</b> répartis dans '+names.length+' destinations. Choisis un pays.';
+}
+
 function openWorld(id){
   window.OceanNavigation?.begin();
   spotWorld=id;
+  spotCountry=null;
+  if(id!=='all'){renderCountries(); syncWorldUI(); return;}
   syncWorldUI();
   renderSpots();
   try{ renderMap(true); }catch(e){}
   var w=document.getElementById('screenWrap'); if(w) w.scrollTop=0;
 }
+function openCountry(name){
+  window.OceanNavigation?.begin(); spotCountry=name; syncWorldUI(); renderSpots(); try{renderMap(true)}catch(e){}; var w=document.getElementById('screenWrap');if(w)w.scrollTop=0;
+}
 function backToWorlds(){
   window.OceanNavigation?.begin();
   spotWorld=null;
+  spotCountry=null;
   renderWorlds();
   currentSearch=''; favOnly=false;
   var si=document.getElementById('spotSearch'); if(si) si.value='';
@@ -835,8 +870,12 @@ function backToWorlds(){
   syncWorldUI();
   var w=document.getElementById('screenWrap'); if(w) w.scrollTop=0;
 }
+function backToDestination(){
+  if(spotCountry){window.OceanNavigation?.begin();spotCountry=null;renderCountries();syncWorldUI();var w=document.getElementById('screenWrap');if(w)w.scrollTop=0;return;}
+  backToWorlds();
+}
 function syncWorldUI(){
-  var on=!!spotWorld;
+  var on=!!spotWorld&&(!spotWorld||spotWorld==='all'||!!spotCountry);
   ['spotTools','sportFilters','wBack'].forEach(function(id){
     var e=document.getElementById(id); if(e) e.style.display=on?'':'none';
   });
@@ -844,14 +883,14 @@ function syncWorldUI(){
   var lv=document.getElementById('listView'), mv=document.getElementById('mapView');
   if(!on){ document.getElementById('spots').classList.remove('map-mode'); if(lv)lv.style.display='none'; if(mv)mv.style.display='none'; }
   else { setView('list'); }
-  var w=on?worldOf(spotWorld):null;
+  var w=spotWorld?worldOf(spotWorld):null;
   var top=document.getElementById('spotsTop');
   if(top)top.style.setProperty('--region-photo',`url("${w?WORLD_PHOTOS[w.id].src:'assets/photos/hero.jpg'}")`);
   var ttl=document.getElementById('spotsTitle'), sub=document.getElementById('spotsSub');
-  if(ttl) ttl.textContent = w?w.lab : (spotWorld==='all'?'Trouve ton spot.':'Le monde est à toi.');
+  if(ttl) ttl.textContent = spotCountry||w?.lab || (spotWorld==='all'?'Trouve ton spot.':'Le monde est à toi.');
   if(ttl&&!on)ttl.innerHTML='Le monde<br> <span>est à toi.</span>';
   if(sub) sub.textContent = on
-    ? (w? worldCount(w.id)+' spots à explorer' : SPOTS.length+' spots, partout dans le monde')
+    ? (spotCountry?countryCount(spotCountry)+' spots à explorer dans ce pays':w? worldCount(w.id)+' spots à explorer' : SPOTS.length+' spots, partout dans le monde')
     : 'Choisis un horizon. Prépare ta session. Vis ton aventure.';
 }
 function renderSpots(filter=currentFilter,keep){

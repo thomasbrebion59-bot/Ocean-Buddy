@@ -18,11 +18,11 @@
       else if(focus.matches('#worldGrid button'))focusSelector='#worldGrid .'+[...focus.classList].find(c=>c.startsWith('world-'));
       else if(focus.id)focusSelector='#'+CSS.escape(focus.id);
     }
-    return {screen:document.body.dataset.screen||'home',world:spotWorld,sport:activeSport,filter:currentFilter,search:currentSearch,favorites:favOnly,near:nearMode,shown:spotShown,view:$('#mapView').style.display==='none'?'list':'map',mapFull,spot:currentSpot,detailSport,detailTab:$('#dTabs .dtab.active')?.dataset.cat||'infos',homeTab:$('#homeTabs .htab.active')?.dataset.hcat||'jour',trip:window.OceanTrips.route(),scroll:wrap.scrollTop,focusSelector};
+    return {screen:document.body.dataset.screen||'home',world:spotWorld,country:spotCountry,sport:activeSport,filter:currentFilter,search:currentSearch,favorites:favOnly,near:nearMode,shown:spotShown,view:$('#mapView').style.display==='none'?'list':'map',mapFull,spot:currentSpot,detailSport,detailTab:$('#dTabs .dtab.active')?.dataset.cat||'infos',homeTab:$('#homeTabs .htab.active')?.dataset.hcat||'jour',trip:window.OceanTrips.route(),scroll:wrap.scrollTop,focusSelector};
   }
-  function routeKey(r){return JSON.stringify([r.screen,!!r.mapFull,r.screen==='spots'?[r.world,r.sport]:r.screen==='detail'?r.spot:r.screen==='trips'?r.trip?.selected:null]);}
+  function routeKey(r){return JSON.stringify([r.screen,!!r.mapFull,r.screen==='spots'?[r.world,r.country,r.sport]:r.screen==='detail'?r.spot:r.screen==='trips'?r.trip?.selected:null]);}
   function label(r){
-    if(r.screen==='spots')return r.world?(worldOf(r.world)?.lab||'les spots'):'les continents';
+    if(r.screen==='spots')return r.country|| (r.world?(worldOf(r.world)?.lab||'les spots'):'les continents');
     if(r.screen==='detail')return SPOTS.find(s=>s.id===r.spot)?.name||'la fiche du spot';
     if(r.screen==='trips'&&r.trip?.selected)return 'ton voyage';
     return {home:'l’accueil',profile:'ton profil',challenges:'les défis',trips:'tes voyages'}[r.screen]||'l’accueil';
@@ -39,7 +39,7 @@
     const world=worldOf(spotWorld),sportName=activeSport?SPORTMAP[activeSport].label:'Toutes les activités';
     $('#exploreSportLabel').textContent=sportName;
     $('#exploreActivity').setAttribute('aria-label','Changer d’activité : '+sportName);
-    $('#exploreWorldLabel').textContent=world?.lab||(spotWorld?'Le monde entier':'Les continents');
+    $('#exploreWorldLabel').textContent=spotCountry||world?.lab||(spotWorld?'Le monde entier':'Les continents');
     $('#exploreDestination').setAttribute('aria-current',!spotWorld?'step':'false');
     $('.path-final').classList.toggle('current',!!spotWorld);
     if(spotWorld)$('.path-final').setAttribute('aria-current','step');else $('.path-final').removeAttribute('aria-current');
@@ -81,12 +81,13 @@
     restoring=true;applying=true;restoreTarget=route;
     activeSport=SPORTMAP[route.sport]?route.sport:null;
     spotWorld=route.world==='all'||worldOf(route.world)?route.world:null;
+    spotCountry=typeof route.country==='string'&&route.country?route.country:null;
     currentFilter=['all','new','debutant','intermediaire','expert'].includes(route.filter)?route.filter:'all';
     currentSearch=typeof route.search==='string'?route.search:'';favOnly=!!route.favorites;nearMode=!!route.near&&!!userPos;
     spotShown=Math.max(SPOT_PAGE,Number(route.shown)||SPOT_PAGE);
     $('#spotSearch').value=currentSearch;$('#favChip').classList.toggle('active',favOnly);$('#nearBtn').classList.toggle('on',nearMode);
     document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f===currentFilter));
-    renderSportFilters();renderWorlds();syncWorldUI();renderSpots(currentFilter,true);
+    renderSportFilters();if(spotCountry&&spotWorld&&spotWorld!=='all')renderCountries();else renderWorlds();syncWorldUI();renderSpots(currentFilter,true);
     if(spotWorld)setView(route.view==='map'?'map':'list');
     setMapFull(!!route.mapFull&&route.screen==='spots'&&route.view==='map',true);
     showHomeCat(['jour','explorer','progres'].includes(route.homeTab)?route.homeTab:'jour');renderHome();
