@@ -788,11 +788,11 @@ var spotWorld=null,spotCountry=null;
    sa zone précise. */
 var COUNTRY_RULES=[
   ['france','France'],['portugal','Portugal'],['espagne','Espagne'],['\u00e9cosse|uk','Royaume-Uni'],['irlande','Irlande'],
-  ['maroc','Maroc'],['\u00e9gypte','Égypte'],['s\u00e9n\u00e9gal','Sénégal'],['afrique du sud','Afrique du Sud'],['kenya','Kenya'],['seychelles','Seychelles'],['maurice','Maurice'],['r\u00e9union','La Réunion'],
-  ['usa|californie|hawa\u00ef','États-Unis'],['mexique','Mexique'],['canada','Canada'],['costa rica','Costa Rica'],['belize','Belize'],['r\u00e9publique dominicaine','République dominicaine'],
+  ['maroc','Maroc'],['\u00e9gypte','Égypte'],['s\u00e9n\u00e9gal','Sénégal'],['afrique du sud','Afrique du Sud'],['kenya','Kenya'],['seychelles','Seychelles'],['maurice','Maurice'],['r\u00e9union','La Réunion'],['cap-vert','Cap-Vert'],['mozambique','Mozambique'],['grenadines','Grenadines'],
+  ['usa|californie|hawa\u00ef|\u00e9tats-unis','États-Unis'],['mexique','Mexique'],['canada','Canada'],['costa rica','Costa Rica'],['belize','Belize'],['panama','Panama'],['r\u00e9publique dominicaine','République dominicaine'],
   ['br\u00e9sil','Brésil'],['p\u00e9rou','Pérou'],['chili','Chili'],['\u00e9quateur|galapagos','Équateur'],['uruguay','Uruguay'],['argentine','Argentine'],
-  ['indon\u00e9sie|bali|java','Indonésie'],['japon|okinawa','Japon'],['philippines','Philippines'],['maldives','Maldives'],['malaisie','Malaisie'],['sri lanka','Sri Lanka'],
-  ['australie','Australie'],['nouvelle-z\u00e9lande','Nouvelle-Zélande'],['tahiti|polyn\u00e9sie|fidji|hawa\u00ef','Pacifique insulaire']
+  ['indon\u00e9sie|bali|java','Indonésie'],['japon|okinawa','Japon'],['philippines','Philippines'],['maldives','Maldives'],['malaisie','Malaisie'],['sri lanka','Sri Lanka'],['thaïlande|thailande','Thaïlande'],
+  ['australie','Australie'],['nouvelle-z\u00e9lande','Nouvelle-Zélande'],['tahiti|polyn\u00e9sie|fidji','Pacifique insulaire'],['\u00eeles cook','Îles Cook']
 ];
 function countryOf(s){
   if(SPOT_WORLD[s.id]==='fr')return 'France';
