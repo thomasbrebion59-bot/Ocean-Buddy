@@ -787,10 +787,10 @@ var spotWorld=null,spotCountry=null;
    de charger une carte mondiale illisible avant que l'utilisateur ait choisi
    sa zone précise. */
 var COUNTRY_RULES=[
-  ['france','France'],['portugal','Portugal'],['espagne','Espagne'],['\u00e9cosse|uk|irlande','Royaume-Uni / Irlande'],
-  ['maroc','Maroc'],['\u00e9gypte','Égypte'],['s\u00e9n\u00e9gal','Sénégal'],['afrique du sud','Afrique du Sud'],['kenya','Kenya'],['seychelles|maurice|r\u00e9union','Îles de l’océan Indien'],
+  ['france','France'],['portugal','Portugal'],['espagne','Espagne'],['\u00e9cosse|uk','Royaume-Uni'],['irlande','Irlande'],
+  ['maroc','Maroc'],['\u00e9gypte','Égypte'],['s\u00e9n\u00e9gal','Sénégal'],['afrique du sud','Afrique du Sud'],['kenya','Kenya'],['seychelles','Seychelles'],['maurice','Maurice'],['r\u00e9union','La Réunion'],
   ['usa|californie|hawa\u00ef','États-Unis'],['mexique','Mexique'],['canada','Canada'],['costa rica','Costa Rica'],['belize','Belize'],['r\u00e9publique dominicaine','République dominicaine'],
-  ['br\u00e9sil','Brésil'],['p\u00e9rou','Pérou'],['chili','Chili'],['\u00e9quateur|galapagos','Équateur'],['uruguay|argentine','Río de la Plata'],
+  ['br\u00e9sil','Brésil'],['p\u00e9rou','Pérou'],['chili','Chili'],['\u00e9quateur|galapagos','Équateur'],['uruguay','Uruguay'],['argentine','Argentine'],
   ['indon\u00e9sie|bali|java','Indonésie'],['japon|okinawa','Japon'],['philippines','Philippines'],['maldives','Maldives'],['malaisie','Malaisie'],['sri lanka','Sri Lanka'],
   ['australie','Australie'],['nouvelle-z\u00e9lande','Nouvelle-Zélande'],['tahiti|polyn\u00e9sie|fidji|hawa\u00ef','Pacifique insulaire']
 ];
