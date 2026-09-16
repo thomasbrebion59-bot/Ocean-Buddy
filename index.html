@@ -24,6 +24,7 @@
 <link rel="stylesheet" href="ocean-explore.css?v=00aaf5ed7431">
 <link rel="stylesheet" href="privacy.css?v=830a9770de4b">
 <link rel="stylesheet" href="community.css?v=0730caa6391e">
+<link rel="stylesheet" href="spot-experience.css?v=905c8a2fd4ff">
 </head>
 <body class="ocean-v2" data-screen="home">
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
@@ -213,6 +214,7 @@
         <div class="htxt"><div class="eyebrow" id="dEyebrow"></div><h2 id="dName"></h2><div class="loc" id="dLoc"></div><div class="hero-credit" id="dHeroCred"></div></div>
         <div class="dfacts" id="dFacts"></div>
         <button class="hero-more" id="dHeroMore" type="button" aria-label="Voir plus de photos du spot" title="Voir plus de photos du spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="3.2"/><circle cx="12" cy="13.5" r="3.4"/><path d="M8 7l1.4-2.4h5L16 7"/></svg></button>
+        <button class="hero-immersion" id="dImmersionBtn" type="button" aria-label="Ouvrir le mode immersion">Mode immersion <span aria-hidden="true">↗</span></button>
       </div>
       <div class="detail-body">
         <div class="dtabs" id="dTabs">
@@ -232,6 +234,7 @@
         <div class="dcat" data-cat="meteo" style="display:none">
           <div class="cond-head" id="dCondHead">Conditions du moment</div>
         <div class="wcond" id="dWeather"></div>
+          <section class="spot-week" id="spotWeek" aria-live="polite"></section>
           <div class="block"><h4 id="dFcHead"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3.2"/><path d="M3 9.5h18M8 3v4M16 3v4"/></svg> Prévisions houle · 5 jours</h4><div class="fc-best" id="dFcBest"></div><div class="fc-bars" id="dForecast"></div></div>
           <div class="block" id="dTideBlock" style="display:none"><h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9c2.2 0 2.2-2.4 4.4-2.4S8.6 9 10.8 9 13 6.6 15.2 6.6 17.4 9 19.6 9"/><path d="M2 14c2.2 0 2.2-2.4 4.4-2.4S8.6 14 10.8 14 13 11.6 15.2 11.6 17.4 14 19.6 14"/><path d="M2 19c2.2 0 2.2-2.4 4.4-2.4S8.6 19 10.8 19 13 16.6 15.2 16.6 17.4 19 19.6 19"/></svg> Courbe de marée · 24 h</h4><div id="dTideHead"></div><div id="dTideChart"></div><div class="tide-read off" id="dTideRead">Glisse sur la courbe pour lire une heure.</div><div class="tide-list" id="dTideList"></div><p class="tide-cap">Niveau d'eau modélisé, en écart au niveau moyen de la mer (modèle marin Open-Meteo). PM = pleine mer · BM = basse mer.</p></div>
         </div>
@@ -255,6 +258,7 @@
 
         <div class="dcat" data-cat="securite" style="display:none">
           <div class="block band" style="--b1:#d8574b;--b2:#f0906f"><h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 2.5 20.5h19z"/><path d="M12 9.5v5M12 17.5h.01"/></svg> Dangers & vigilance</h4><div id="dDangers"></div></div>
+          <section class="spot-safety-live" id="spotSafetyLive" aria-live="polite"></section>
           <div class="block safety-block band" style="--b1:#0a3f68;--b2:#14669b">
           <h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3.5v5M12 15.5v5M3.5 12h5M15.5 12h5"/></svg> Sécurité & secours</h4>
           <div class="safety-call">
@@ -411,7 +415,7 @@
 <script src="ocean-map-model.js?v=b1b05a050593"></script>
 <script src="ocean-map.js?v=8aacc62a6ad0"></script>
 <script src="spot-photos.js?v=7db07d494e54"></script>
-<script src="app.js?v=8956d348ee6a"></script>
+<script src="app.js?v=c6d0b53edd52"></script>
 <script src="design.js?v=d9e35daa15ce"></script>
 <script src="trips.js?v=9430f58b5a95"></script>
 <script src="poulpy-config.js?v=a083c1cf346b"></script>
@@ -424,6 +428,7 @@
 <script src="field-guide.js?v=95418564e3d4"></script>
 <script src="spot-immersion-model.js?v=8c6489617564"></script>
 <script src="spot-immersion.js?v=086fbdf60160"></script>
+<script src="spot-experience.js?v=d17ba772ef04"></script>
 <script src="community.js?v=17ef0d667ceb"></script>
 <script src="navigation.js?v=dca5fbbf759d"></script>
 </body>

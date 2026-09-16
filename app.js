@@ -1496,6 +1496,7 @@ function setDetailSport(id){
   var lb=document.getElementById('dLogBtn');
   if(lb)lb.innerHTML=ctaLabel(act);
   realForecastDetail(s,act);
+  window.OceanExperience?.update(s,act);
   window.OceanPoulpy?.refresh();
 }
 function renderDetailFacts(s,act){
@@ -1510,6 +1511,7 @@ function renderDetailFacts(s,act){
   e.innerHTML=h;
   window.OceanFieldGuide?.update(s,act);
   window.OceanImmersion?.update(s,act);
+  window.OceanExperience?.update(s,act);
 }
 function openSpot(id){
   const s=SPOTS.find(x=>x.id===id);if(!s)return;
@@ -1720,7 +1722,7 @@ async function fetchConditions(s){
   try{
     const [w,mar]=await Promise.all([
       fetch(`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto`).then(r=>r.json()).catch(()=>({})),
-      isInland(s)?Promise.resolve({}):fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&current=wave_height,sea_surface_temperature&hourly=sea_level_height_msl&forecast_days=2&timezone=auto`).then(r=>r.json()).catch(()=>({}))
+      isInland(s)?Promise.resolve({}):fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&current=wave_height,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&hourly=sea_level_height_msl&forecast_days=2&timezone=auto`).then(r=>r.json()).catch(()=>({}))
     ]);
     if(currentSpot!==s.id)return;
     const wc=w.current||{},mc=mar.current||{};
@@ -1731,10 +1733,13 @@ async function fetchConditions(s){
       wind:ws!=null?(`${Math.round(ws)} km/h ${cardinal(wd)}`).trim():'—',
       swell:wv!=null?`${(+wv).toFixed(1)} m`:'—',
       temp:sst!=null?`${Math.round(sst)}°C`:'—',
+      current:mc.ocean_current_velocity!=null?`${(+mc.ocean_current_velocity).toFixed(1)} km/h ${cardinal(mc.ocean_current_direction)}`:'—',
+      currentK:mc.ocean_current_velocity!=null?+mc.ocean_current_velocity:null,
       tide:tide||'—',live:true
     };
     LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);
     renderConditions(s,o);
+    window.OceanExperience?.refreshConditions(s,o,mar);
     if(!isInland(s))renderTideChart(mar);else document.getElementById('dTideBlock').style.display='none';
   }catch(e){}
 }
