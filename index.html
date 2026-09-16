@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="adventure.css?v=357f1e2d871b">
 <link rel="stylesheet" href="coastal.css?v=570b830ef7af">
 <link rel="stylesheet" href="trips.css?v=0f2e7eff87b2">
-<link rel="stylesheet" href="poulpy.css?v=7e71afd7e7b1">
+<link rel="stylesheet" href="poulpy.css?v=0844b1343b29">
 <link rel="stylesheet" href="navigation.css?v=1ad9b43229b1">
 <link rel="stylesheet" href="field-guide.css?v=2ee7e5f02556">
 <link rel="stylesheet" href="spot-immersion.css?v=51682a6c42de">
@@ -91,6 +91,16 @@
           <span class="poulpy-action">Explorer le monde <span aria-hidden="true">↗</span></span>
         </div>
       </div>
+
+      <section class="poulpy-spotlight" id="poulpySpotlight" aria-labelledby="poulpySpotlightTitle">
+        <div class="poulpy-spotlight-art" aria-hidden="true"><svg id="spotlightOcto" viewBox="0 0 140 140"></svg></div>
+        <div class="poulpy-spotlight-copy">
+          <span class="poulpy-spotlight-kicker">POULPY IA · TON COPILOTE</span>
+          <h2 id="poulpySpotlightTitle">Une question&nbsp;? <span>Poulpy sait t’aider.</span></h2>
+          <p>Spots, météo, marées, sécurité, matériel, voyage, faune ou écologie : écris-lui comme à un vrai compagnon de session.</p>
+          <div class="poulpy-spotlight-actions"><button type="button" onclick="openChat()">Parler à Poulpy <span aria-hidden="true">↗</span></button><small>IA facultative · guide intégré toujours disponible</small></div>
+        </div>
+      </section>
 
       <div class="htabs" id="homeTabs">
         <button class="htab active" data-hcat="jour" onclick="showHomeCat('jour')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.3 5.3 7 7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg> Aujourd'hui</button>
@@ -366,6 +376,7 @@
     <button class="n-community" data-s="community" onclick="go('community')">Communauté</button>
   </nav>
 
+  <button class="poulpy-launch-pill" id="poulpyLaunchPill" onclick="openChat()" aria-label="Parler à Poulpy IA"><span aria-hidden="true">🐙</span><b>Poulpy IA</b><small>Pose ta question</small></button>
   <button class="fab" id="poulpyFab" onclick="openChat()" aria-label="Ouvrir Poulpy"><svg id="fabOcto" viewBox="0 0 140 140"></svg></button>
 
   <div class="chat-sheet" id="chatSheet">
@@ -393,7 +404,7 @@
       <div class="set-row"><input id="setName" class="set-input" maxlength="18" placeholder="Ton prénom"><button class="set-save" onclick="saveName()">OK</button></div>
       <label class="set-toggle"><span>🎬 Réduire les animations</span><input type="checkbox" id="setReduce" onchange="toggleReduceMotion(this.checked)"></label>
       <button class="set-reset" onclick="resetProgress()">♻️ Réinitialiser ma progression</button>
-      <div class="set-about"><b>Ocean Buddy</b><br>Explore. Progresse. Protège.<br><br>Météo & marées : Open-Meteo.<br>Carte : OpenStreetMap. Photos : Wikimedia Commons et Unsplash.<br><a href="photos.html" target="_blank" rel="noopener">Photographes et licences</a><br><a href="privacy.html" target="_blank" rel="noopener">Confidentialité</a> · <a href="support.html" target="_blank" rel="noopener">Assistance</a><br>Poulpy utilise un guide intégré lorsque le service de discussion est indisponible.</div>
+      <div class="set-about"><b>Ocean Buddy</b><br>Explore. Progresse. Protège.<br><br>Météo & marées : Open-Meteo.<br>Carte : OpenStreetMap. Photos : Wikimedia Commons et Unsplash.<br><a href="photos.html" target="_blank" rel="noopener">Photographes et licences</a><br><a href="privacy.html" target="_blank" rel="noopener">Confidentialité</a> · <a href="support.html" target="_blank" rel="noopener">Assistance</a><br><b>Poulpy IA</b> répond à tes questions ; son guide intégré prend le relais hors connexion.</div>
     </div>
   </div>
 
@@ -416,11 +427,12 @@
 <script src="ocean-map.js?v=8aacc62a6ad0"></script>
 <script src="spot-photos.js?v=7db07d494e54"></script>
 <script src="app.js?v=c6d0b53edd52"></script>
+<script src="poulpy-knowledge.js?v=73e17619e45e"></script>
 <script src="design.js?v=d9e35daa15ce"></script>
 <script src="trips.js?v=9430f58b5a95"></script>
 <script src="poulpy-config.js?v=a083c1cf346b"></script>
-<script src="privacy.js?v=1d5ed8032b76"></script>
-<script src="poulpy-assistant.js?v=090db74b49a5"></script>
+<script src="privacy.js?v=04ed454dfc66"></script>
+<script src="poulpy-assistant.js?v=bedb7eb6a39d"></script>
 <script src="poulpy.js?v=09660b99b3b8"></script>
 <script src="spot-notebook-model.js?v=8982c4683ab8"></script>
 <script src="spot-notebook.js?v=142590c3e408"></script>

@@ -22,7 +22,7 @@ test('Poulpy sends nothing before a choice or after the local guide is selected'
 });
 test('AI opt-in unlocks only the intended question and bounded context, and duplicate sends wait',async()=>{
  const a=assistant();const reply=a.context.chatSend('Une idée de voyage ?');await a.context.chatSend('doublon');assert.equal(a.calls.length,0);a.choose('ai');await reply;
- const posts=a.calls.filter(c=>c.options?.method==='POST');assert.equal(posts.length,1);const body=JSON.parse(posts[0].options.body);assert.equal(body.message,'Une idée de voyage ?');assert.deepEqual(Object.keys(body).sort(),['activity','history','level','message','spotId']);assert.equal(a.context.OceanPrivacy.getMode(),'ai');
+ const posts=a.calls.filter(c=>c.options?.method==='POST');assert.equal(posts.length,1);const body=JSON.parse(posts[0].options.body);assert.equal(body.message,'Une idée de voyage ?');assert.deepEqual(Object.keys(body).sort(),['activity','conditions','history','level','message','spotId']);assert.equal(body.conditions,null);assert.equal(a.context.OceanPrivacy.getMode(),'ai');
 });
 test('saved local choice survives relaunch without any AI request',async()=>{const a=assistant('local');a.context.openChat();await a.context.chatSend('Bonjour');assert.equal(a.calls.length,0)});
 
