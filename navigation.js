@@ -79,6 +79,7 @@
   }
   function restore(route){
     restoring=true;applying=true;restoreTarget=route;
+    window.OceanExperience?.init();
     activeSport=SPORTMAP[route.sport]?route.sport:null;
     spotWorld=route.world==='all'||worldOf(route.world)?route.world:null;
     spotCountry=typeof route.country==='string'&&route.country?route.country:null;

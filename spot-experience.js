@@ -15,16 +15,52 @@
 
   function ensureExperiencePanel() {
     const infos = $('#detail .dcat[data-cat="infos"]');
-    if (!infos || $('#spotVideoPanel')) return;
-    const section = document.createElement('section');
-    section.id = 'spotVideoPanel';
-    infos.append(section);
+    if (!infos) return;
+    if (!$('#spotVideoPanel')) { const section=document.createElement('section');section.id='spotVideoPanel';infos.append(section); }
+    if (!$('#spotAreaMap')) {
+      const section=document.createElement('section');section.id='spotAreaMap';section.className='spot-area-map';
+      section.innerHTML='<div class="area-map-heading"><div><small>REPÈRE 2D</small><h3>Explore le secteur</h3><p class="area-map-copy"></p></div><button type="button" data-area-map-toggle aria-expanded="false">Ouvrir la carte</button></div><div class="area-map-canvas" data-area-map hidden role="region" aria-label="Carte approximative du secteur"><div class="area-map-leaflet"></div></div><div class="area-map-footer"><span>Glisse et zoome pour regarder les alentours.</span><a data-area-map-link target="_blank" rel="noopener noreferrer">Ouvrir dans OpenStreetMap ↗</a></div>';
+      infos.append(section);
+      section.addEventListener('click',event=>{
+        const button=event.target.closest('[data-area-map-toggle]');if(!button)return;
+        const canvas=section.querySelector('[data-area-map]'),show=canvas.hidden;
+        canvas.hidden=!show;button.setAttribute('aria-expanded',String(show));button.textContent=show?'Masquer la carte':'Ouvrir la carte';
+        if(show)requestAnimationFrame(()=>openAreaMap(activeSpot));
+      });
+    }
+  }
+
+  function init() {
+    ensureExperiencePanel();
+    const panel=$('#spotVideoPanel');
+    if(panel){panel.innerHTML='<div class="experience-placeholder"><small>LE SPOT EN IMAGES</small><b>Explore les images et les repères du lieu</b><span>Ouvre une fiche de spot pour afficher ses photos, sa carte et les vidéos disponibles.</span></div>';}
   }
 
   function videoPanel(s, act) {
     const image=photo(s);
-    if(!image)return '';
-    return `<div class="experience-heading"><span><small>LE SPOT EN IMAGES</small><b>Approche-toi du lieu.</b></span><i>${window.OceanPhotos?.list(s.id,act)?.length||1} photographie(s) du secteur</i></div><button type="button" class="experience-photo-open" data-experience-open><img src="${esc(image.thumb||image.src)}" alt="" loading="lazy"><span><b>Explorer ${esc(s.name)}</b><small>Photos attribuées · ambiance sonore illustrative à activer sur demande</small><strong>Entrer dans le décor ↗</strong></span></button>`;
+    const count=window.OceanPhotos?.list(s.id,act)?.length||0;
+    const query=encodeURIComponent([s.name,s.loc,act,'spot'].filter(Boolean).join(' '));
+    return `<div class="experience-heading"><span><small>LE SPOT EN IMAGES</small><b>Approche-toi du lieu.</b></span><i>${count?count+' photo(s) locale(s)':'Aucune photo locale'}</i></div><button type="button" class="experience-photo-open ${image?'':'no-image'}" data-experience-open>${image?`<img src="${esc(image.thumb||image.src)}" alt="" loading="lazy">`:'<span class="experience-photo-symbol" aria-hidden="true">◎</span>'}<span><b>${image?'Explorer '+esc(s.name):'Découvrir '+esc(s.name)+' en images'}</b><small>${image?'Photos créditées · tu peux en chercher d’autres dans la galerie.':'Aucune image locale pour ce lieu. Cherche des photos réutilisables avec leurs crédits.'}</small><strong>${image?'Entrer dans le décor':'Trouver des photos'} ↗</strong></span></button><a class="experience-video-search" href="https://www.youtube.com/results?search_query=${query}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span><span><b>Voir des vidéos du spot</b><small>Ouvre les vidéos proposées sur YouTube · lecture à la demande</small></span><span aria-hidden="true">↗</span></a>`;
+  }
+
+  let areaMap=null,areaMarker=null,areaSpotId=null;
+  function updateAreaMap(s){
+    const panel=$('#spotAreaMap'),toggle=panel?.querySelector('[data-area-map-toggle]'),copy=panel?.querySelector('.area-map-copy'),link=panel?.querySelector('[data-area-map-link]');
+    if(!panel||!toggle||!copy||!link)return;
+    const point=typeof COORDS!=='undefined'?COORDS[s.id]:null;
+    if(!point){copy.textContent='Aucune coordonnée de secteur vérifiée pour ce lieu.';toggle.disabled=true;link.hidden=true;panel.querySelector('[data-area-map]').hidden=true;toggle.setAttribute('aria-expanded','false');toggle.textContent='Repère indisponible';if(areaMap){areaMap.remove();areaMap=null;areaMarker=null;areaSpotId=null;}return;}
+    const lat=Number(point.lat),lon=Number(point.lon);if(!Number.isFinite(lat)||!Number.isFinite(lon)){copy.textContent='Coordonnées indisponibles pour ce lieu.';toggle.disabled=true;link.hidden=true;panel.querySelector('[data-area-map]').hidden=true;toggle.setAttribute('aria-expanded','false');toggle.textContent='Repère indisponible';if(areaMap){areaMap.remove();areaMap=null;areaMarker=null;areaSpotId=null;}return;}
+    toggle.disabled=false;copy.textContent='Repère approximatif du secteur. Il ne marque ni un point de courant en direct ni un point de mise à l’eau validé.';
+    link.hidden=false;link.href=`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=13/${lat}/${lon}`;
+    panel.dataset.lat=String(lat);panel.dataset.lon=String(lon);panel.dataset.spotName=s.name;panel.dataset.spotId=s.id;
+    if(areaMap&&areaSpotId!==s.id){areaMap.setView([lat,lon],13,{animate:false});areaMarker?.setLatLng([lat,lon]);areaMarker?.setTooltipContent(s.name);areaSpotId=s.id;}
+  }
+  function openAreaMap(s){
+    const host=$('#spotAreaMap .area-map-leaflet'),panel=$('#spotAreaMap');if(!host||!panel||!s)return;
+    if(typeof L==='undefined'){host.innerHTML='<p class="area-map-fallback">La carte interactive est indisponible. Tu peux ouvrir le secteur dans OpenStreetMap.</p>';return;}
+    const lat=Number(panel.dataset.lat),lon=Number(panel.dataset.lon);if(!Number.isFinite(lat)||!Number.isFinite(lon))return;
+    if(!areaMap){areaMap=L.map(host,{zoomControl:true,attributionControl:true,scrollWheelZoom:false,keyboard:true}).setView([lat,lon],13);L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(areaMap);areaMarker=L.circleMarker([lat,lon],{radius:9,color:'#fff',weight:3,fillColor:'#164bd6',fillOpacity:.95}).addTo(areaMap);areaMarker.bindTooltip(panel.dataset.spotName);areaSpotId=s.id;}
+    areaMap.invalidateSize({pan:false});
   }
 
   function drawSafety(s, live, marine) {
@@ -88,10 +124,12 @@
   function update(s, act) {
     activeSpot=s;activeAct=act;ensureExperiencePanel();
     const hasPhoto=!!photo(s),btn=$('#dImmersionBtn'),panel=$('#spotVideoPanel');
-    if(btn){btn.hidden=!hasPhoto;btn.disabled=!hasPhoto;btn.onclick=hasPhoto?()=>openImmersion(s):null;}
-    if(panel){panel.hidden=!hasPhoto;panel.innerHTML=hasPhoto?videoPanel(s,act):'';panel.querySelector('[data-experience-open]')?.addEventListener('click',()=>openImmersion(s));}
+    if(btn){btn.hidden=false;btn.disabled=false;btn.onclick=()=>openImmersion(s);}
+    if(panel){panel.hidden=false;panel.innerHTML=videoPanel(s,act);panel.querySelector('[data-experience-open]')?.addEventListener('click',()=>openImmersion(s));}
+    updateAreaMap(s);
     drawSafety(s,window.LIVE?.[s.id]);loadWeek(s,act);
   }
   function refreshConditions(s, live, marine) { if (activeSpot?.id !== s.id) return; drawSafety(s, live, marine); }
-  window.OceanExperience = {update, refreshConditions};
+  window.OceanExperience = {init, update, refreshConditions};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
