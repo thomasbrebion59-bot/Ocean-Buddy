@@ -1,16 +1,18 @@
-# Vérification de la préparation mobile — 13 septembre 2026
+# Vérification de la version iPhone 1.1.0 (2) — 23 septembre 2026
 
-- Construction du contenu embarqué : réussie ; 22 scripts locaux, polices et moteur Leaflet inclus ; aucun fichier référencé manquant ni dossier de secrets dans `mobile/www`.
-- Tests JavaScript : 52 réussis, 0 échec. Ils couvrent notamment le consentement IA, l’absence d’envoi en mode guide, le contexte transmis, les origines natives autorisées, la restauration et l’effacement de la copie native.
-- Dépendances de production : `npm audit --omit=dev` n’a signalé aucune vulnérabilité lors de cette préparation.
-- Compilation Xcode Debug pour simulateur : réussie avec SDK iOS 26.5 ; application 1.0.0 (1), cible minimale iOS 16.4.
-- Archive Xcode Release pour iPhone/iPad (arm64) : réussie, version 1.0.0 (1). L’archive locale `mobile/build/OceanBuddy-unsigned.xcarchive` est volontairement non signée ; elle ne peut pas être envoyée telle quelle à l’App Store.
-- Simulateur iPhone 17 Pro : lancement de l’application, affichage de Poulpy, du premier écran et de Voyages observés. Le premier démarrage du simulateur a été particulièrement lent sur ce Mac. Les accès Preferences et StatusBar ont répondu depuis le code natif.
-- Navigateur de test séparé : parcours de première ouverture, choix plongée/niveau, continents, ouverture de Poulpy, consentement et réponse du guide intégré vérifiés. Pages de confidentialité et d’assistance inspectées sur ordinateur et au format téléphone.
-- Projet Android créé et configuré, sans compilation : Android Studio et le SDK ne sont pas installés sur ce Mac.
+- Catalogue : 280 identifiants uniques, photographies locales avec crédits et vignettes. L’audit ne trouve aucun fichier ou crédit manquant ; 16 originaux panoramiques ont encore un côté inférieur à 600 px et demandent une meilleure photo du même lieu avant de prétendre à une galerie haute définition partout.
+- Parcours Web contrôlés au format iPhone 390 × 844 et sur ordinateur : exploration, filtres cohérents entre liste et carte, fiche, galerie, création d’un voyage privé et état de la communauté. La galerie et le relief ont aussi été vérifiés au clavier, avec retour du focus et mouvement réduit.
+- Tests : `npm test` réussit, 72 sur 72. L’audit des dépendances de production ne signale aucune vulnérabilité. Construction statique Netlify et assemblage de la fonction communautaire réussis.
+- Contenu iPhone : `npm run sync:mobile` réussit ; 28 scripts locaux, polices, photographies, Leaflet et moteur MapLibre inclus dans l’application. Le relief 3D demande toujours des tuiles réseau ; le catalogue et le carnet local restent accessibles sans ces services.
+- Signature : certificat Apple Distribution et profil « Ocean Buddy App Store » de l’équipe `P4BWG6BLVL` présents ; profil valable jusqu’au 14 septembre 2027. La signature automatique cherchait un profil de développement lié à un appareil et a échoué. Une archive Release arm64 a ensuite été créée avec la signature manuelle de distribution : `mobile/build/OceanBuddy-1.1.0.xcarchive`, version 1.1.0 (2). `codesign --verify --deep --strict` confirme que l’application est valide sur ce Mac.
+- Export local App Store Connect réussi : `mobile/build/OceanBuddy-1.1.0-export/App.ipa` (environ 111 Mo). Ces fichiers sont ignorés par Git et ne sont pas publiés sur GitHub Pages. Aucun chargement à App Store Connect n’a été effectué.
 
-## Ce que ces vérifications ne remplacent pas
+## À terminer avant soumission
 
-Le binaire n’est pas signé pour la distribution et n’a pas été envoyé à App Store Connect. La version finale doit encore être testée sur un iPhone physique, notamment pour la localisation, le partage réel de fichiers, les interruptions, la persistance après fermeture, le clavier et le fonctionnement hors connexion. Les captures App Store doivent être faites depuis ce binaire final.
+- App Store Connect n’était pas connecté dans le navigateur de vérification : l’existence et l’état de la fiche, les déclarations de confidentialité, les informations de revue et les captures ne peuvent pas être confirmés à distance.
+- Les captures conservées dans `mobile/store/screenshots/` datent d’une version précédente. Les refaire depuis le binaire final sur iPhone et iPad, en ne montrant que les fonctions réellement actives.
+- La communauté reste désactivée tant que Supabase, le SMTP Brevo et la fonction Netlify n’ont pas été configurés puis testés de bout en bout avec un compte membre et le compte propriétaire. Les règles, la modération, le signalement, le blocage et la suppression de compte sont implémentés et testés au niveau du code.
+- Tester ce binaire sur un iPhone physique : connexion et interruptions, localisation avec consentement, clavier, partage, conservation et suppression des données, retour au premier plan, réseau lent et panne complète. Répéter la revue avec VoiceOver sur l’appareil.
+- Revoir les 168 textes historiques marqués non vérifiés et les 16 photos panoramiques avant d’affirmer que toutes les fiches sont intégralement documentées et en haute définition.
 
-La publication Apple reste conditionnée à l’activation de l’adhésion Apple Developer Program, puis à la configuration de l’équipe et de la signature de distribution dans Xcode. Google Play nécessite aussi un compte développeur, une compilation signée et ses vérifications propres.
+La soumission définitive au Store est une étape distincte. L’archive et l’IPA attestent de la compilation et de l’export local, pas d’une acceptation par Apple.

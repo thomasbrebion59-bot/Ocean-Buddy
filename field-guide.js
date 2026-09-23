@@ -22,7 +22,25 @@
   const storageKey='oceanbuddy_visit_checklist_v1';
   let completed={};try{const saved=JSON.parse(localStorage.getItem(storageKey)||'{}');if(saved&&typeof saved==='object'&&!Array.isArray(saved))completed=saved;}catch(_){}
   const preparationKey=(s,act,i)=>s.id+':'+act+':'+i;
-  function source(s){return s.source?`<a class="field-source" href="${esc(s.source.url)}" target="_blank" rel="noopener"><span><small>POUR ALLER PLUS LOIN</small><b>${esc(s.source.label)}</b></span>${external}</a>`:'';}
+  function source(s){
+    const record=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
+    return record?.url&&/^https:\/\//i.test(record.url)?`<a class="field-source" href="${esc(record.url)}" target="_blank" rel="noopener noreferrer"><span><small>SOURCE DU CATALOGUE</small><b>${esc(record.label)}</b></span>${external}</a>`:'<p class="field-source-pending">Informations éditoriales à confirmer auprès de sources locales.</p>';
+  }
+  function visitRows(s){
+    const record=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
+    const grounded=s.editorialStatus==='reviewed'&&/^https:\/\//i.test(record?.url||'')&&/^\d{4}-\d{2}-\d{2}$/.test(s.visit?.reviewed||'');
+    return [['Accès','access'],['Meilleure période','bestPeriod'],['Règles locales','localRules']].map(([label,key])=>{
+      const value=grounded&&typeof s.visit[key]==='string'?s.visit[key].trim():'';
+      return {label,value:value||'À vérifier localement',verified:!!value};
+    });
+  }
+  function visitGuide(s){
+    const rows=visitRows(s);
+    const record=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
+    const hasFacts=rows.some(row=>row.verified);
+    const date=s.visit?.reviewed?.split('-').reverse().join('/');
+    return `<span class="field-eyebrow">REPÈRES PRATIQUES</span><h3 id="fieldVisitTitle">Préparer la visite</h3><dl>${rows.map(row=>`<div class="field-visit-row${row.verified?'':' is-pending'}"><dt>${esc(row.label)}</dt><dd>${esc(row.value)}</dd></div>`).join('')}</dl>${hasFacts?`<a class="field-visit-source" href="${esc(record.url)}" target="_blank" rel="noopener noreferrer">Source : ${esc(record.label)} · consultée le ${esc(date)} ${external}</a>`:'<p class="field-visit-pending">Aucune indication pratique vérifiée pour ce spot. Consulte les informations du gestionnaire local avant le départ.</p>'}<p class="field-visit-caution">Les accès, conditions et règles peuvent changer. Vérifie les consignes en vigueur sur place.</p>`;
+  }
   function mapURL(s){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.name+' '+s.loc);}
   function facts(s,act){
     const values=[['Destination',s.loc],['Activité',SPORTMAP[act]?.label||'À choisir']];
@@ -32,7 +50,7 @@
   function render(s,act){
     const items=(checks[act]||checks.surf).map(item=>isInland(s)?item.map(copy=>copy.replace('la marée et l’état du plan d’eau','les conditions du plan d’eau').replace('l’évolution de la mer','l’évolution du plan d’eau')):item);
     const done=items.filter((_,i)=>completed[preparationKey(s,act,i)]).length;
-    return `<div class="field-checklist"><div class="field-check-cover"><span class="field-check-emblem">${levelIcon('expert')}</span><span><small>LE DÉPART SE PRÉPARE ICI</small><b>Prêt pour la session ?</b></span></div><div class="field-list-head"><h3>Avant de partir</h3><span id="fieldProgress">${done} / ${items.length}</span></div><div class="field-progress-track" role="progressbar" aria-label="Préparation de la sortie" aria-valuemin="0" aria-valuemax="${items.length}" aria-valuenow="${done}"><i style="width:${done/items.length*100}%"></i></div>${items.map(([label,copy],i)=>`<label class="field-check"><input type="checkbox" data-visit-check="${preparationKey(s,act,i)}" ${completed[preparationKey(s,act,i)]?'checked':''}><span><b>${esc(label)}</b><small>${esc(copy)}</small></span></label>`).join('')}<button class="field-text-button" data-field-action="conditions">Consulter les conditions ${arrow}</button></div>
+    return `<div class="field-checklist"><div class="field-check-cover"><span class="field-check-emblem">${levelIcon('expert')}</span><span><small>LE DÉPART SE PRÉPARE ICI</small><b>Prêt pour la session ?</b></span></div><div class="field-list-head"><h3>Avant de partir</h3><span id="fieldProgress">${done} / ${items.length}</span></div><div class="field-progress-track" role="progressbar" aria-label="Préparation de la sortie" aria-valuemin="0" aria-valuemax="${items.length}" aria-valuenow="${done}"><i style="width:${done/items.length*100}%"></i></div>${items.map(([label,copy],i)=>`<label class="field-check"><input type="checkbox" data-visit-check="${esc(preparationKey(s,act,i))}" ${completed[preparationKey(s,act,i)]?'checked':''}><span><b>${esc(label)}</b><small>${esc(copy)}</small></span></label>`).join('')}<button class="field-text-button" data-field-action="conditions">Consulter les conditions ${arrow}</button></div>
       <aside class="field-address"><span class="field-address-mark">${sportIcon('all')}</span><span class="field-eyebrow">TON POINT DE DÉPART</span><h3>${esc(s.name.split(' — ')[0])}</h3><dl>${facts(s,act).map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>${s.level==='variable'?'<p class="field-level-note">Choisis un secteur adapté à ton expérience avec un encadrant local.</p>':'<p class="field-level-note">Le niveau indiqué reste à confronter aux conditions et au secteur choisis.</p>'}<a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu ${external}</a>${source(s)}</aside>${window.OceanNotebook?.note(s)||''}`;
   }
   function update(s,act){
@@ -48,6 +66,7 @@
     overview.innerHTML=`${voyageArt}<span class="field-eyebrow">UNE ENVIE DE DÉPART ?</span><h3>Fais-en<br>une étape.</h3><p>Garde ce lieu dans ton itinéraire et retrouve-le au moment de partir.</p><button class="field-primary" data-field-action="trip">Ajouter à mon voyage ${arrow}</button><a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu sur la carte ${external}</a><div class="field-compare-slot">${window.OceanNotebook?.button(s.id)||''}</div>`;
     const level=s.level==='variable'?'À définir sur place':(LVLTXT[s.level]||'À confirmer');
     $('#fieldAtAGlance').innerHTML=[['activity','Ton activité',SPORTMAP[act]?.label||'À choisir',sportIcon(act)],['water','Le cadre',isInland(s)?'Eau douce':'Mer & océan',sportIcon(isInland(s)?'kayak':'snorkeling')],['level','Repère de niveau',level,levelIcon(s.level)]].map(([key,label,value,art])=>`<button type="button" class="field-fact-card fact-${key}" data-im-open="${{activity:'terrain',water:'eau',level:'niveau'}[key]}"><span class="field-fact-icon">${art}</span><div><small>${label}</small><b>${esc(value)}</b></div></button>`).join('');
+    $('#fieldVisit').innerHTML=visitGuide(s);
     window.OceanNotebook?.sync();
     $('#fieldLocalSource').innerHTML=source(s);
     const photo=OceanPhotos.lead(s.id,act);
@@ -58,20 +77,21 @@
       const ca=COORDS[a.id],cb=COORDS[b.id];if(!c||!ca||!cb)return 0;
       return distKm(c.lat,c.lon,ca.lat,ca.lon)-distKm(c.lat,c.lon,cb.lat,cb.lon);
     }).slice(0,3);
-    $('#fieldNearby').innerHTML=near.map(x=>`<button class="field-nearby-card" data-field-spot="${x.id}"><img src="${esc(spotPhotoUrl(x.id,480)||WORLD_PHOTOS[SPOT_WORLD[x.id]].src)}" alt="" loading="lazy"><span><small>${esc(x.loc)}</small><b>${esc(x.name.split(' — ')[0])}</b></span>${arrow}</button>`).join('');
+    $('#fieldNearby').innerHTML=near.map(x=>`<button class="field-nearby-card" data-field-spot="${esc(x.id)}"><img src="${esc(spotPhotoUrl(x.id,480)||WORLD_PHOTOS[SPOT_WORLD[x.id]].src)}" alt="" loading="lazy"><span><small>${esc(x.loc)}</small><b>${esc(x.name.split(' — ')[0])}</b></span>${arrow}</button>`).join('');
     $('#fieldNearbyBlock').hidden=!near.length;
-    $('#dDangers').closest('.block').hidden=!s.dangers.length;
+    $('#dDangers').closest('.block').hidden=false;
   }
-  window.OceanFieldGuide={facts,render,update};
+  window.OceanFieldGuide={facts,render,update,visitRows,visitGuide};
   // Keep the existing render targets while replacing the ornamental wrappers.
   const infos=$('#detail .dcat[data-cat="infos"]');infos.classList.add('field-overview');
   const intro=$('#dDesc').closest('.block');intro.className='block field-story';
   intro.querySelector('h4').innerHTML='<span class="field-eyebrow" id="fieldLocation"></span><span id="fieldIntroTitle"></span>';
   intro.insertAdjacentHTML('beforeend','<div id="fieldAtAGlance" class="field-at-a-glance" aria-label="Caractéristiques du spot"></div>');
+  intro.insertAdjacentHTML('beforeend','<section id="fieldVisit" class="field-visit" aria-labelledby="fieldVisitTitle"></section>');
   intro.insertAdjacentHTML('afterbegin','<div class="field-coordinates" id="fieldCoordinates"></div>');
-  infos.querySelectorAll('.block').forEach(b=>{if(b!==intro){b.hidden=true;b.classList.add('field-retired');}});
+  infos.querySelectorAll('.block').forEach(b=>{if(b!==intro)b.classList.add('field-extra');});
   infos.insertAdjacentHTML('beforeend','<aside id="fieldOverview" class="field-trip"></aside><div class="field-reference"><div id="fieldLocalSource"></div><a id="fieldPhotoLink" target="_blank" rel="noopener"></a></div><section id="fieldNearbyBlock" class="field-nearby"><div class="field-section-heading"><div><span class="field-eyebrow">PROLONGER L’ESCAPADE</span><h3>Dans les environs</h3></div><span>Même activité · rayon de 200 km</span></div><div id="fieldNearby"></div></section>');
-  $('#dZonesBlock').classList.add('field-retired');
+  $('#dZonesBlock').classList.add('field-zones');
   const guide=$('#dGuide').closest('.block');guide.className='block field-preparation';guide.removeAttribute('style');
   guide.querySelector('h4').innerHTML='<span class="field-eyebrow" id="fieldActivityName">TA SESSION</span><span>Préparer ta session.</span>';
   $('#dGuide').className='field-guide-layout';

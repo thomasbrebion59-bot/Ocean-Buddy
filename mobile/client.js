@@ -47,7 +47,7 @@ async function boot(){
     if(url.origin===location.origin&&anchor.target==='_blank'){
       // A system browser cannot open the private capacitor:// origin. Use the
       // matching public document for credits, support and the privacy policy.
-      if(['/privacy.html','/support.html','/photos.html'].includes(url.pathname)){
+      if(['/privacy.html','/support.html','/photos.html','/community-rules.html'].includes(url.pathname)){
         event.preventDefault();openExternal('https://thomasbrebion59-bot.github.io/Ocean-Buddy'+url.pathname+url.hash).catch(()=>window.toast?.('Le lien ne peut pas être ouvert pour le moment.'));
       }
     }else if(['https:','http:'].includes(url.protocol)&&url.origin!==location.origin){event.preventDefault();openExternal(url.href).catch(()=>window.toast?.('Le lien ne peut pas être ouvert pour le moment.'));}

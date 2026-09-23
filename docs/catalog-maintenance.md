@@ -1,0 +1,22 @@
+# Catalogue et photographies
+
+`data/catalog.json` est la **source unique des 280 spots** : identifiant, nom, région, coordonnées, activités, niveau, description, guide, palette, photo et provenance. Les 168 fiches historiques et les 112 ajouts sourcés y sont réunis. `node scripts/build-ai-catalog.cjs` valide ce fichier et génère `catalog-runtime.js` pour l'application, `assets/spots/sources.json` pour les crédits et `netlify/functions/lib/catalog.json` pour les fonctions serveur. Les tests vérifient l'égalité des identités et des champs dérivés. Modifier uniquement la source canonique, jamais ces vues générées.
+
+Les textes supplémentaires qui existaient dans des listes séparées sont aussi dans chaque fiche concernée : `anecdote`, `funFact`, `fauna` et `zones`. Ces champs sont facultatifs. L'absence de champ signifie qu'aucun texte spécifique n'a été fourni pour cette rubrique ; les textes historiques présents gardent leur statut éditorial non vérifié.
+
+Les 168 descriptions historiques n'ont pas de vérification externe documentée : chacune porte `editorialStatus: "unverified"` et un libellé d'avertissement. Les 112 autres fiches ont une source et une date de revue. Une source de photographie ne valide pas les affirmations sur la sécurité, la saison ou la pratique. Les anciennes valeurs statiques de vent, température et houle restent dans certains objets pour compatibilité d'affichage et ne sont pas des observations actuelles.
+
+Le bloc « Préparer la visite » montre sur les 280 fiches trois rubriques : accès, meilleure période et règles locales. Les indications présentes dans l'objet facultatif `visit` (`access`, `bestPeriod`, `localRules`, `reviewed`) sont reprises uniquement lorsque la fiche a une source éditoriale HTTPS et une date de consultation. Chaque rubrique absente affiche « À vérifier localement ». Sept fiches possèdent actuellement des indications pratiques tirées de leur source liée ; cela ne dispense pas de revérifier horaires, accès, météo et réglementation avant une sortie. Pour en ajouter, lire la source de la fiche, consigner seulement ce qu'elle atteste et dater la consultation.
+
+Les 44 anciennes fiches bonus ont disparu de la recherche publique. `data/legacy-bonus-spots.json` conserve leurs identifiants et libellés pour les favoris et voyages existants. Seuls les lieux correspondant avec certitude à une fiche du catalogue ont un `canonicalId` ; les autres restent des étapes archivées que l'utilisateur peut remplacer sans perdre ses notes.
+
+## Mise à jour
+
+1. Modifier `data/catalog.json`. Pour une nouvelle photographie, vérifier le lieu, l'auteur et la licence, ajouter le fichier local et actualiser l'objet `photo` de la fiche.
+2. Avec Pillow, exécuter `python3 scripts/build_photo_variants.py` pour créer les variantes légères définies dans les objets `photo`.
+3. Exécuter `node scripts/build-ai-catalog.cjs` pour régénérer les vues navigateur, photo et serveur, puis `python3 scripts/build_photo_catalog.py` pour la page de crédits. Le premier script refuse les doublons, données essentielles manquantes, médias absents et crédits incomplets.
+4. Exécuter `python3 scripts/audit_spot_photos.py` et les tests. Actualiser les versions d'actifs après les derniers changements JavaScript ou CSS.
+
+Les anciennes copies séparées du catalogue et leurs scripts ont été retirés afin d'éviter toute dérive. `data/legacy-bonus-spots.json` reste la source de la migration des anciennes données privées ; après une édition, exécuter `python3 scripts/build_legacy_spots.py`.
+
+L'audit initial a rectifié la photo du Great Blue Hole, qui montrait auparavant Half Moon Caye, et remplacé des images trop panoramiques ou peu nettes à La Baule, La Palue et Hourtin par des photographies de 1280 px. Les vues de Hauteville-sur-Mer, Sorake/Nias et Pantín ont été recadrées depuis leurs originaux Commons à haute définition, sans agrandissement, en conservant les crédits et licences. Six dimensions de manifeste étaient inexactes. **Seize autres originaux panoramiques ont encore un côté inférieur à 600 px** ; leurs petites variantes accélèrent les listes mais ne créent aucun détail absent de la source. Ils restent à remplacer par des photographies plus adaptées après vérification du lieu et des droits.

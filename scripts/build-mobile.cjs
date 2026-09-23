@@ -7,6 +7,7 @@ async function main(){
   fs.cpSync(path.join(root,'assets'),path.join(dest,'assets'),{recursive:true});
   fs.mkdirSync(path.join(dest,'vendor'),{recursive:true});
   fs.cpSync(path.join(root,'node_modules/leaflet/dist'),path.join(dest,'vendor/leaflet'),{recursive:true});
+  fs.cpSync(path.join(root,'vendor/maplibre'),path.join(dest,'vendor/maplibre'),{recursive:true});
   const fonts=[['barlow-condensed','Barlow Condensed',[600,700,800,900]],['manrope','Manrope',[400,500,600,700,800]],['dm-sans','DM Sans',[400,500,600,700]]];
   let css='';
   fs.mkdirSync(path.join(dest,'vendor/fonts'),{recursive:true});

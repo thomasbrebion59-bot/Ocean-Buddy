@@ -1,0 +1,456 @@
+{
+  "sourceNote": "Anciennes fiches bonus retirées du catalogue public ; utilisées uniquement pour restaurer favoris et étapes enregistrés.",
+  "spots": [
+    {
+      "id": "bonus-0",
+      "name": "Peniche — Baleal",
+      "loc": "Peniche, Portugal",
+      "world": "eu",
+      "coords": {
+        "lat": 39.374,
+        "lon": -9.337
+      },
+      "canonicalId": "baleal"
+    },
+    {
+      "id": "bonus-1",
+      "name": "Praia do Guincho",
+      "loc": "Cascais, Portugal",
+      "world": "eu",
+      "coords": {
+        "lat": 38.733,
+        "lon": -9.473
+      }
+    },
+    {
+      "id": "bonus-2",
+      "name": "Foz do Douro",
+      "loc": "Porto, Portugal",
+      "world": "eu",
+      "coords": {
+        "lat": 41.147,
+        "lon": -8.676
+      }
+    },
+    {
+      "id": "bonus-3",
+      "name": "Zavial",
+      "loc": "Algarve, Portugal",
+      "world": "eu",
+      "coords": {
+        "lat": 37.06,
+        "lon": -8.88
+      }
+    },
+    {
+      "id": "bonus-4",
+      "name": "El Cotillo",
+      "loc": "Fuerteventura, Espagne",
+      "world": "eu",
+      "coords": {
+        "lat": 28.682,
+        "lon": -14.015
+      }
+    },
+    {
+      "id": "bonus-5",
+      "name": "Famara",
+      "loc": "Lanzarote, Espagne",
+      "world": "eu",
+      "coords": {
+        "lat": 29.118,
+        "lon": -13.56
+      }
+    },
+    {
+      "id": "bonus-6",
+      "name": "Las Canteras",
+      "loc": "Grande Canarie, Espagne",
+      "world": "eu",
+      "coords": {
+        "lat": 28.14,
+        "lon": -15.433
+      }
+    },
+    {
+      "id": "bonus-7",
+      "name": "El Médano",
+      "loc": "Tenerife, Espagne",
+      "world": "eu",
+      "coords": {
+        "lat": 28.045,
+        "lon": -16.536
+      }
+    },
+    {
+      "id": "bonus-8",
+      "name": "Sidi Ifni",
+      "loc": "Souss-Massa, Maroc",
+      "world": "af",
+      "coords": {
+        "lat": 29.38,
+        "lon": -10.17
+      },
+      "canonicalId": "sidiifni"
+    },
+    {
+      "id": "bonus-9",
+      "name": "Imsouane — Cathedral",
+      "loc": "Maroc",
+      "world": "af",
+      "coords": {
+        "lat": 30.84,
+        "lon": -9.82
+      },
+      "canonicalId": "imsouane"
+    },
+    {
+      "id": "bonus-10",
+      "name": "Dakhla Lagoon",
+      "loc": "Dakhla, Maroc",
+      "world": "af",
+      "coords": {
+        "lat": 23.72,
+        "lon": -15.94
+      }
+    },
+    {
+      "id": "bonus-11",
+      "name": "Le Morne",
+      "loc": "Maurice",
+      "world": "af",
+      "coords": {
+        "lat": -20.46,
+        "lon": 57.31
+      },
+      "canonicalId": "lemorne"
+    },
+    {
+      "id": "bonus-12",
+      "name": "Ponta Preta",
+      "loc": "Sal, Cap-Vert",
+      "world": "af",
+      "coords": {
+        "lat": 16.74,
+        "lon": -22.97
+      }
+    },
+    {
+      "id": "bonus-13",
+      "name": "Tofo",
+      "loc": "Inhambane, Mozambique",
+      "world": "af",
+      "coords": {
+        "lat": -23.85,
+        "lon": 35.54
+      },
+      "canonicalId": "tofo"
+    },
+    {
+      "id": "bonus-14",
+      "name": "Sodwana Bay",
+      "loc": "KwaZulu-Natal, Afrique du Sud",
+      "world": "af",
+      "coords": {
+        "lat": -27.53,
+        "lon": 32.68
+      }
+    },
+    {
+      "id": "bonus-15",
+      "name": "Tobago Cays",
+      "loc": "Grenadines",
+      "world": "af",
+      "coords": {
+        "lat": 12.63,
+        "lon": -61.35
+      }
+    },
+    {
+      "id": "bonus-16",
+      "name": "Ribeira d’Ilhas",
+      "loc": "Ericeira, Portugal",
+      "world": "eu",
+      "coords": {
+        "lat": 39,
+        "lon": -9.42
+      }
+    },
+    {
+      "id": "bonus-17",
+      "name": "Porthcurno",
+      "loc": "Cornouailles, Royaume-Uni",
+      "world": "eu",
+      "coords": {
+        "lat": 50.04,
+        "lon": -5.66
+      }
+    },
+    {
+      "id": "bonus-18",
+      "name": "Newquay — Fistral",
+      "loc": "Cornouailles, Royaume-Uni",
+      "world": "eu",
+      "coords": {
+        "lat": 50.416,
+        "lon": -5.1
+      },
+      "canonicalId": "fistral"
+    },
+    {
+      "id": "bonus-19",
+      "name": "Hossegor — Les Estagnots",
+      "loc": "Landes, France",
+      "world": "fr",
+      "coords": {
+        "lat": 43.69,
+        "lon": -1.45
+      }
+    },
+    {
+      "id": "bonus-20",
+      "name": "Cala d’Hort",
+      "loc": "Ibiza, Espagne",
+      "world": "eu",
+      "coords": {
+        "lat": 38.89,
+        "lon": 1.21
+      }
+    },
+    {
+      "id": "bonus-21",
+      "name": "La Gravière Sud",
+      "loc": "Landes, France",
+      "world": "fr",
+      "coords": {
+        "lat": 43.66,
+        "lon": -1.44
+      }
+    },
+    {
+      "id": "bonus-22",
+      "name": "Mimizan — Courant",
+      "loc": "Landes, France",
+      "world": "fr",
+      "coords": {
+        "lat": 44.2,
+        "lon": -1.29
+      }
+    },
+    {
+      "id": "bonus-23",
+      "name": "Annecy — Talloires",
+      "loc": "Haute-Savoie, France",
+      "world": "fr",
+      "coords": {
+        "lat": 45.84,
+        "lon": 6.21
+      }
+    },
+    {
+      "id": "bonus-24",
+      "name": "La Jolla Cove",
+      "loc": "Californie, États-Unis",
+      "world": "na",
+      "coords": {
+        "lat": 32.85,
+        "lon": -117.27
+      }
+    },
+    {
+      "id": "bonus-25",
+      "name": "Huntington Beach",
+      "loc": "Californie, États-Unis",
+      "world": "na",
+      "coords": {
+        "lat": 33.66,
+        "lon": -118
+      }
+    },
+    {
+      "id": "bonus-26",
+      "name": "Outer Banks — Avon",
+      "loc": "Caroline du Nord, États-Unis",
+      "world": "na",
+      "coords": {
+        "lat": 35.35,
+        "lon": -75.51
+      }
+    },
+    {
+      "id": "bonus-27",
+      "name": "Tulum — Casa Cenote",
+      "loc": "Quintana Roo, Mexique",
+      "world": "na",
+      "coords": {
+        "lat": 20.3,
+        "lon": -87.36
+      }
+    },
+    {
+      "id": "bonus-28",
+      "name": "Akumal Bay",
+      "loc": "Yucatán, Mexique",
+      "world": "na",
+      "coords": {
+        "lat": 20.39,
+        "lon": -87.31
+      },
+      "canonicalId": "akumal"
+    },
+    {
+      "id": "bonus-29",
+      "name": "Punta Mita",
+      "loc": "Nayarit, Mexique",
+      "world": "na",
+      "coords": {
+        "lat": 20.77,
+        "lon": -105.53
+      }
+    },
+    {
+      "id": "bonus-30",
+      "name": "Bocas del Toro",
+      "loc": "Panama",
+      "world": "na",
+      "coords": {
+        "lat": 9.34,
+        "lon": -82.24
+      }
+    },
+    {
+      "id": "bonus-31",
+      "name": "Caye Caulker",
+      "loc": "Belize",
+      "world": "na",
+      "coords": {
+        "lat": 17.74,
+        "lon": -88.03
+      }
+    },
+    {
+      "id": "bonus-32",
+      "name": "Punta de Lobos",
+      "loc": "Pichilemu, Chili",
+      "world": "sa",
+      "coords": {
+        "lat": -34.4,
+        "lon": -72.02
+      },
+      "canonicalId": "puntadelobos"
+    },
+    {
+      "id": "bonus-33",
+      "name": "Máncora — Las Pocitas",
+      "loc": "Pérou",
+      "world": "sa",
+      "coords": {
+        "lat": -4.1,
+        "lon": -81.07
+      }
+    },
+    {
+      "id": "bonus-34",
+      "name": "Montañita — Olón",
+      "loc": "Équateur",
+      "world": "sa",
+      "coords": {
+        "lat": -1.8,
+        "lon": -80.75
+      }
+    },
+    {
+      "id": "bonus-35",
+      "name": "Ilha Grande",
+      "loc": "Rio de Janeiro, Brésil",
+      "world": "sa",
+      "coords": {
+        "lat": -23.14,
+        "lon": -44.17
+      },
+      "canonicalId": "ilhagrande"
+    },
+    {
+      "id": "bonus-36",
+      "name": "Nusa Dua",
+      "loc": "Bali, Indonésie",
+      "world": "as",
+      "coords": {
+        "lat": -8.8,
+        "lon": 115.23
+      }
+    },
+    {
+      "id": "bonus-37",
+      "name": "Amed",
+      "loc": "Bali, Indonésie",
+      "world": "as",
+      "coords": {
+        "lat": -8.35,
+        "lon": 115.67
+      },
+      "canonicalId": "amed"
+    },
+    {
+      "id": "bonus-38",
+      "name": "Koh Tao — Shark Bay",
+      "loc": "Thaïlande",
+      "world": "as",
+      "coords": {
+        "lat": 10.07,
+        "lon": 99.83
+      }
+    },
+    {
+      "id": "bonus-39",
+      "name": "Nacpan Beach",
+      "loc": "Palawan, Philippines",
+      "world": "as",
+      "coords": {
+        "lat": 11.28,
+        "lon": 119.4
+      }
+    },
+    {
+      "id": "bonus-40",
+      "name": "Ningaloo — Turquoise Bay",
+      "loc": "Australie",
+      "world": "oc",
+      "coords": {
+        "lat": -22.08,
+        "lon": 113.89
+      }
+    },
+    {
+      "id": "bonus-41",
+      "name": "Noosa Main Beach",
+      "loc": "Queensland, Australie",
+      "world": "oc",
+      "coords": {
+        "lat": -26.39,
+        "lon": 153.09
+      },
+      "canonicalId": "noosa"
+    },
+    {
+      "id": "bonus-42",
+      "name": "Sandy Bay",
+      "loc": "Rarotonga, Îles Cook",
+      "world": "oc",
+      "coords": {
+        "lat": -21.25,
+        "lon": -159.82
+      }
+    },
+    {
+      "id": "bonus-43",
+      "name": "Muri Lagoon",
+      "loc": "Rarotonga, Îles Cook",
+      "world": "oc",
+      "coords": {
+        "lat": -21.24,
+        "lon": -159.77
+      }
+    }
+  ]
+}

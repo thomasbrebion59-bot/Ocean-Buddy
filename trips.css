@@ -74,6 +74,17 @@ button.trip-delete-action{display:inline-flex;align-items:center;justify-content
 .trip-no-steps-actions{display:flex;flex-wrap:wrap;gap:10px;justify-content:center}
 .trip-ghost{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:14px 19px;background:#fff;border:1px solid #c3d5e8;border-radius:10px;font:700 12px var(--body);color:#2154dc;cursor:pointer}
 .trip-ghost:hover{background:#f4f7fd;border-color:#2154dc}
+.trip-step-archived{border-style:dashed;background:#f8fafc}
+.trip-step-archived .trip-step-photo{display:grid;place-items:center;background:linear-gradient(145deg,#dce9ef,#f5f8fb);color:#5a7897}
+.trip-step-archived .trip-step-photo svg{width:42px;height:42px}
+.trip-step-archived .trip-primary{margin-top:12px;padding:9px 12px;min-height:38px;white-space:normal;text-align:center;font-size:10px}
+.trip-step-logistics{margin-top:11px;padding:9px 11px;border:1px solid #e1e8ef;border-radius:8px;background:#f7f9fc}
+.trip-step-logistics summary{cursor:pointer;color:#305878;font:700 11px var(--body);line-height:1.45}
+.trip-step-logistics summary small{margin-left:4px;color:#70899e;font-size:10px;font-weight:400}
+.trip-step-logistics-fields{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:9px;margin-top:11px}
+.trip-step-logistics-fields label{display:flex;flex-direction:column;gap:4px;color:#617d95;font-size:10px}
+.trip-step-logistics-fields input{box-sizing:border-box;min-width:0;width:100%;min-height:35px;padding:8px;border:1px solid #dce6ef;border-radius:6px;background:#fff;color:#304f70;font:11px var(--body)}
+.trip-step-logistics-fields input:focus-visible,.trip-step-logistics summary:focus-visible{outline:2px solid #2154dc;outline-offset:2px}
 @media(max-width:479px){.trip-map-bar select{max-width:none;width:100%}.trip-map-count{margin-left:0}}
 .trip-map-group-wrap{background:none;border:0}
 .trip-map-group{display:grid;place-items:center;width:28px;height:28px;border-radius:50%;background:#fc7955;border:2px solid #fff;box-shadow:0 2px 8px #14357633;font:700 12px/1 var(--body);font-style:normal;color:#fff;cursor:pointer}

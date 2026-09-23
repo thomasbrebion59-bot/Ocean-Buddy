@@ -93,6 +93,7 @@
 .ocean-v2 #detail .sc-btn{border-radius:6px;background:#214eb8}.ocean-v2 #detail .sc-num{color:#173b84}
 .ocean-v2 .fc-col{display:grid;grid-template-rows:15px minmax(0,1fr) 15px;grid-template-columns:minmax(0,1fr);justify-items:center;align-items:end}.ocean-v2 .fc-bar{align-self:end}.ocean-v2 #detail .fc-bar{background:#2154dc}.ocean-v2 .fc-col.best .fc-bar,.ocean-v2 #detail .fc-col.best .fc-bar{background:#fc7955;box-shadow:none}
 .catalog-new{position:absolute;right:15px;top:64px;background:#fff;color:#2154dc;border-radius:5px;padding:6px 9px;font-size:9px;font-weight:800;z-index:5}
+.spot-private{position:absolute;right:15px;top:64px;background:#fff;color:#174a62;border-radius:5px;padding:6px 9px;font-size:9px;font-weight:800;z-index:5}
 .ocean-v2 .lvl-variable{background:#fff;color:#355570}.ocean-v2 .spot-preview{font-size:11px;color:#5d748c}
 .ocean-v2 .spot .danger-dots{display:none}.ocean-v2 .spot-banner .lvl-tag{font-size:9px;border-radius:5px}
 @media(max-width:959px){.field-guide-layout{gap:23px;grid-template-columns:minmax(0,1.25fr) minmax(230px,1fr)}.ocean-v2 #detail .field-overview:not([style*="none"]){gap:0 25px;grid-template-columns:1.3fr 1fr}.field-address{padding:21px}.field-nearby-card img{height:130px}}
@@ -147,6 +148,16 @@
 .field-fact-icon{display:flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:50%;background:#ffffffa8;margin-bottom:14px}
 .field-fact-icon svg{height:25px;width:25px;stroke:currentColor}
 .field-fact-card small{display:block;font-size:9px;line-height:1.4;margin-bottom:6px}.field-fact-card b{display:block;font-size:12px;line-height:1.5}
+.field-visit{margin-top:28px;padding:25px 26px;border:1px solid #d6e2eb;border-radius:13px;background:#f7fafc;color:#17355d}
+.field-visit h3{font:700 21px/1.25 var(--display);letter-spacing:-.3px;margin:6px 0 17px}
+.field-visit dl{margin:0}.field-visit-row{display:grid;grid-template-columns:minmax(100px,145px) minmax(0,1fr);gap:16px;border-top:1px solid #dce6ed;padding:13px 0}
+.field-visit-row dt{font-size:11px;line-height:1.6;font-weight:750;color:#294b73}.field-visit-row dd{margin:0;font-size:12px;line-height:1.7;color:#38546f;overflow-wrap:anywhere}
+.field-visit-row.is-pending dd{color:#687e91;font-style:italic}
+.field-visit-source{display:inline-flex;align-items:center;gap:6px;max-width:100%;font-size:11px;line-height:1.6;color:#2154dc;text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+.field-visit-source svg{width:15px;height:15px;flex:0 0 auto}
+.ocean-v2 #detail .field-visit-pending,.ocean-v2 #detail .field-visit-caution{font-size:11px;line-height:1.7;margin:12px 0 0;color:#647b8f}
+.ocean-v2 #detail .field-visit-caution{margin-top:14px}
+@media(max-width:639px){.field-visit{margin-top:22px;padding:20px 17px}.field-visit h3{font-size:19px}.field-visit-row{grid-template-columns:1fr;gap:2px;padding:12px 0}.field-visit-row dt,.field-visit-row dd{font-size:11px}}
 .field-trip{position:relative;background:#1d4dc9;padding-top:95px;overflow:hidden}.field-trip .field-eyebrow{color:#b8d9ff}.field-trip h3{color:#fff}.field-trip p{color:#d1dffc}.field-trip .field-primary{background:#fff;color:#194abb}.field-trip .field-primary:hover{background:#e6f1ff}.field-trip .field-map-link{color:#d1e6ff;font-size:11px}
 .field-voyage-art{position:absolute;right:0;top:0;width:250px;height:120px;pointer-events:none}
 .field-compare-slot{margin-top:16px;padding-top:15px;border-top:1px solid #ffffff36}.field-compare-slot .spot-compare-button{background:transparent;color:white;border-color:#ffffff66;min-height:44px}.field-compare-slot .spot-compare-button.selected{color:#1b4388;background:#dceaff}

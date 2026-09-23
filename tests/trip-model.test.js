@@ -1,5 +1,8 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const vm = require('node:vm');
 const M = require('../trip-model.js');
 const ids = ['biarritz', 'anglet', 'hossegor'];
 const storage = () => { const data = new Map(); return { getItem:k=>data.get(k)??null, setItem:(k,v)=>data.set(k,v) }; };
@@ -52,11 +55,51 @@ test('reload retains itinerary, accents, notes, dates, checklist and archives', 
   M.save(s,[t]);
   assert.deepEqual(M.load(s,ids),[t]);
 });
-test('unavailable catalogue entries are removed on load without losing the trip', () => {
-  const s=storage(),t=M.create({},['biarritz','old-spot']);
-  M.save(s,[t]);const loaded=M.load(s,ids);
+test('removed bonus places keep dates and notes, while precise duplicates move to catalogue spots', () => {
+  const s=storage(),t=M.create({},['biarritz','bonus-0','bonus-1']);
+  const withNotes=M.editStep(t,t.steps[2].id,{date:'2026-10-12',notes:'Hébergement réservé'});
+  M.save(s,[withNotes]);const loaded=M.load(s,[...ids,'baleal']);
   assert.equal(loaded[0].id,t.id);
-  assert.deepEqual(loaded[0].steps.map(x=>x.spotId),['biarritz']);
+  assert.deepEqual(loaded[0].steps.map(x=>x.spotId),['biarritz','baleal','bonus-1']);
+  assert.equal(loaded[0].steps[2].legacy.name,'Praia do Guincho');
+  assert.equal(loaded[0].steps[2].date,'2026-10-12');
+  assert.equal(loaded[0].steps[2].notes,'Hébergement réservé');
+  assert.equal(loaded[0].steps[2].id,t.steps[2].id);
+  assert.equal(loaded[0].steps[1].legacy,undefined);
+});
+test('archived stage can be replaced without losing its date, notes, or order',()=>{
+  const s=storage(),trip=M.create({},['bonus-1','biarritz']);
+  M.save(s,[M.editStep(trip,trip.steps[0].id,{date:'2026-11-02',notes:'Train du matin',budget:'42,50',accommodation:'Chez Léa',transport:'Train'})]);
+  const loaded=M.load(s,ids)[0];
+  const next=M.replaceStep(loaded,loaded.steps[0].id,'anglet',ids);
+  assert.deepEqual(next.steps[0],{id:loaded.steps[0].id,spotId:'anglet',date:'2026-11-02',notes:'Train du matin',budget:'42,50',accommodation:'Chez Léa',transport:'Train'});
+  assert.equal(next.steps[1].spotId,'biarritz');
+  assert.throws(()=>M.replaceStep(loaded,loaded.steps[0].id,'bonus-1',ids),/catalogue/);
+});
+test('older notebooks receive private step logistics without losing their notes',()=>{
+  const s=storage(),trip=M.create({},['biarritz']);
+  const old={...trip,steps:[{id:trip.steps[0].id,spotId:'biarritz',date:'2026-11-03',notes:'Leash'}]};
+  M.save(s,[old]);const loaded=M.load(s,ids)[0];
+  assert.deepEqual(loaded.steps[0],{...old.steps[0],budget:'',accommodation:'',transport:''});
+  const changed=M.editStep(loaded,loaded.steps[0].id,{accommodation:'Chambre au port'});
+  assert.equal(changed.steps[0].notes,'Leash');
+  assert.equal(changed.steps[0].accommodation,'Chambre au port');
+  assert.throws(()=>M.editStep(loaded,loaded.steps[0].id,{budget:'-42'}),/budget/);
+});
+test('unknown former spots remain visible as placeholders', () => {
+  const s=storage(),t=M.create({},['old-spot']);
+  M.save(s,[t]);const loaded=M.load(s,ids);
+  assert.equal(loaded[0].steps[0].spotId,'old-spot');
+  assert.equal(loaded[0].steps[0].legacy.name,'Spot indisponible');
+});
+test('archived stages break map distance instead of inventing a direct leg', () => {
+  const source=fs.readFileSync(path.join(__dirname,'../trips.js'),'utf8');
+  const utility=source.slice(source.indexOf('const distanceKm='),source.indexOf('const region='));
+  const ctx={COORDS:{a:{lat:0,lon:0},b:{lat:0,lon:1},c:{lat:0,lon:2}}};
+  vm.runInNewContext(utility+';this.distance=routeDistance;',ctx);
+  assert.equal(ctx.distance({steps:[{spotId:'a'},{spotId:'legacy'},{spotId:'b'}]}),null);
+  const known=ctx.distance({steps:[{spotId:'a'},{spotId:'b'},{spotId:'legacy'},{spotId:'c'}]});
+  assert.ok(known>100&&known<120);
 });
 test('corrupt storage remains untouched and quota errors propagate to UI', () => {
   const s=storage();s.setItem(M.KEY,'{unreadable');

@@ -6,4 +6,5 @@ for(const item of fs.readdirSync(root,{withFileTypes:true})){
   if(item.isFile()&&(/\.(html|css|js|ico)$/.test(item.name)||item.name==='.nojekyll'))fs.copyFileSync(path.join(root,item.name),path.join(dest,item.name));
 }
 fs.cpSync(path.join(root,'assets'),path.join(dest,'assets'),{recursive:true});
+fs.cpSync(path.join(root,'vendor/maplibre'),path.join(dest,'vendor/maplibre'),{recursive:true});
 console.log('Static application ready in .netlify/publish');

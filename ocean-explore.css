@@ -35,3 +35,102 @@
 .map-preview{position:relative}.map-photo-credit{display:block;background:#eaf2fb;color:#446991!important;padding:5px 12px;font:500 8px var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ocean-v2 #spotMapWrap.full{margin:0;border:0;border-radius:0}
 .spot-gallery figure{touch-action:pan-y}
+
+/* The visit sheet gives the photograph room, with clear source context. */
+.ocean-v2 #detail #detailHero{min-height:clamp(440px,62vh,690px);background-color:#092f3a}
+.ocean-v2 #detail #detailHero:after{background:linear-gradient(180deg,#061f2f8c 0%,transparent 36%,#041f2acc 100%)}
+.ocean-v2 #detail #detailHero h2{font-size:clamp(39px,5.5vw,76px);line-height:.98;max-width:880px;letter-spacing:-.04em;text-wrap:balance}
+.ocean-v2 #detail #detailHero .htxt{padding:clamp(25px,4vw,60px)}
+.ocean-v2 #detail #detailHero .dfacts{padding:0 clamp(25px,4vw,60px) 28px}
+.ocean-v2 #detail .hero-more{background:#f7f1e9e8;border-color:#fff8;padding:11px 15px;border-radius:11px;color:#123b46}
+.ocean-v2 #detail .hero-more[hidden]{display:none!important}
+.ocean-v2 #detail .hero-credit{color:#e6eee9;text-shadow:0 1px 7px #092938}
+.ocean-v2 .spot-photo-strip{background:linear-gradient(120deg,#092f3b,#0c5259);border-radius:20px;box-shadow:0 18px 44px #0828391c}
+.ocean-v2 .spot-photo-strip .photo-strip-intro small{color:#b5ead7}
+.ocean-v2 .photo-strip-views button{border-radius:13px;overflow:hidden;box-shadow:0 8px 20px #001e2955}
+.ocean-v2 .photo-strip-views img{filter:none}
+.spot-provenance{display:block;margin:18px 0 0!important;padding:12px 14px;border-left:3px solid #42988e;border-radius:0 9px 9px 0;background:#eef6f3;color:#2d555c!important;font:600 11px/1.65 var(--body)}
+.spot-provenance a{color:#075f67;text-decoration:underline;text-underline-offset:3px}
+.spot-provenance a:focus-visible{outline:3px solid #ffb979;outline-offset:3px}
+.ocean-v2 #detail .field-extra,.ocean-v2 #detail .field-zones{margin-block:18px 24px}
+
+/* A local, optional MapLibre renderer sits over the reliable Leaflet map. */
+.ocean-v2 #spotMapWrap{border-radius:19px;background:#dce9e8;border-color:#bfd4d5;box-shadow:0 18px 45px #143f4c18}
+#mapActivityToolbar{background:#f9fbf8;border-color:#d5e5df;color:#143e46}
+.map-heading small{color:#146a6c}.map-heading b{color:#173d43}.map-heading b span{color:#5c7a7b}
+.map-activities button{background:#fff;border-color:#d5e4de;color:#17494f}.map-activities button:hover{background:#eef7f3}
+.map-key{color:#41666c;flex-wrap:wrap}
+.map-key [data-map-terrain]{max-width:none!important;padding:8px 13px;border:1px solid #0c6568;border-radius:999px;background:#e3f4ef;color:#07595d;text-decoration:none;font-weight:750;white-space:nowrap}
+.map-key [data-map-terrain]:hover{background:#cbeddf}.map-key [data-map-terrain]:disabled{opacity:.45;cursor:not-allowed}
+.map-preview{color:#143d43}
+.map-preview-no-photo{display:grid;place-items:center;background:linear-gradient(145deg,#0c4753,#1a7480);color:#eff9f6;font:700 13px var(--body)}
+.map-preview-actions{display:flex;gap:7px}.map-preview-actions .map-visit{flex:1;width:auto;min-width:0;background:#0b6268}
+.map-preview-actions .map-relief{flex:0 0 auto;min-height:44px;padding:8px 10px;border:1px solid #a6d6cd;border-radius:9px;background:#e9f7f2;color:#075b5f;font:750 10px var(--body);cursor:pointer}
+.map-preview-actions button:focus-visible,.map-key [data-map-terrain]:focus-visible{outline:3px solid #ffb979;outline-offset:3px}
+.terrain-overlay{position:absolute;inset:0;z-index:2000;overflow:hidden;background:#a7cfd0}.terrain-overlay .terrain-canvas{position:absolute;inset:0;width:100%;height:100%}
+.terrain-guide{position:absolute;z-index:2;left:16px;top:16px;width:min(330px,calc(100% - 82px));padding:15px 17px;border:1px solid #e6faf3a8;border-radius:14px;background:#06343bdc;backdrop-filter:blur(13px);color:#fff;box-shadow:0 12px 34px #032d3755}
+.terrain-guide span{font:800 9px/1.5 var(--body);letter-spacing:1px}.terrain-guide p{font:500 10px/1.55 var(--body);color:#e0f2ec;margin:7px 0 12px}
+.terrain-guide button{min-height:44px;border:1px solid #ceeade;border-radius:999px;padding:8px 14px;background:#ecf8ef;color:#114c4f;font:750 11px var(--body);cursor:pointer}
+.terrain-guide button:focus-visible,.terrain-spot-pin:focus-visible{outline:3px solid #ffb979;outline-offset:3px}
+.terrain-overlay .maplibregl-ctrl button:focus-visible,.terrain-overlay .maplibregl-canvas:focus-visible{outline:3px solid #ffb979;outline-offset:2px}
+.terrain-loading{position:absolute;z-index:3;left:50%;top:50%;transform:translate(-50%,-50%);padding:13px 18px;border-radius:10px;background:#073b45;color:#fff;font:700 12px var(--body);white-space:nowrap;box-shadow:0 8px 28px #073b4555}
+.terrain-spot-pin{border:2px solid #0d686a;border-radius:999px;background:#fff;color:#17494b;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:7px 10px;font:750 10px var(--body);box-shadow:0 5px 16px #092f3a66;cursor:pointer}
+.terrain-spot-pin:after{content:'';position:absolute;left:calc(50% - 5px);bottom:-7px;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid #0d686a}
+.terrain-overlay .maplibregl-ctrl-attrib{background:#f7fcf0e8;color:#294348}.terrain-overlay .maplibregl-ctrl-attrib a{color:#155f65}
+
+/* Still images, immersion and opt-in sound share a single dialog. */
+.spot-gallery{background:#061c28}.spot-gallery figure:after{background:linear-gradient(180deg,#061c28a8 0%,transparent 26%,transparent 49%,#061c2899 69%,#061c28f5 100%)}
+.spot-gallery header small,.gallery-place{color:#b6ebdb}.spot-gallery header b{color:#fff9ed}
+.spot-gallery figcaption h2{font-weight:750;letter-spacing:-.03em;text-wrap:balance}.spot-gallery figcaption a{color:#d9f2e9}
+.spot-gallery footer{display:grid;grid-template-columns:minmax(0,1fr) auto;grid-template-areas:'thumbs controls' 'note note';align-items:end;gap:9px 20px;background:linear-gradient(transparent,#051f2cf5)}
+.spot-gallery .gallery-thumbs{grid-area:thumbs;max-width:none}.spot-gallery .gallery-controls{grid-area:controls;justify-content:flex-end;flex-wrap:wrap;max-width:520px}
+.spot-gallery .gallery-sound-note{grid-area:note;margin:0;color:#c4d9d1;font:500 9px/1.5 var(--body)}
+.spot-gallery button{background:#0b3d49d9;border-color:#c9e9da80}.spot-gallery button:hover{background:#0d6266}
+.spot-gallery [data-gallery-sound]{padding:0 15px;border-color:#d5eee2;background:#edf5e9;color:#124248;font:750 11px var(--body);white-space:nowrap}
+.spot-gallery [data-gallery-sound]:hover,.spot-gallery [data-gallery-sound][aria-pressed=true]{background:#b7e8d8;color:#073d43}.spot-gallery [data-gallery-sound]:disabled{opacity:.55}
+.spot-gallery.is-immersive:not(.show-whole) .gallery-scene{animation:gallery-breathe 24s ease-in-out infinite alternate}
+@keyframes gallery-breathe{from{transform:scale(1)}to{transform:scale(1.045)}}
+@media(max-width:639px){
+ .ocean-v2 #detail #detailHero{min-height:450px}.ocean-v2 #detail #detailHero h2{font-size:clamp(36px,11vw,50px)}.ocean-v2 #detail #detailHero .htxt{padding:22px}.ocean-v2 #detail #detailHero .dfacts{padding:0 22px 26px}
+ .ocean-v2 #spotMapWrap{border-radius:14px}.terrain-guide{left:10px;top:10px;width:min(260px,calc(100% - 70px));padding:11px 12px}.terrain-guide p{font-size:9px}.terrain-guide span{font-size:8px}
+ .spot-gallery footer{grid-template-columns:1fr;grid-template-areas:'thumbs' 'controls' 'note';gap:7px;padding-bottom:calc(12px + env(safe-area-inset-bottom))}.spot-gallery .gallery-controls{max-width:none;justify-content:center;gap:6px}.spot-gallery .gallery-thumbs{width:100%;max-width:100%}.spot-gallery .gallery-sound-note{text-align:center;font-size:8px}.spot-gallery figcaption{bottom:230px}.spot-gallery figcaption h2{font-size:clamp(30px,10vw,43px)}.spot-gallery [data-gallery-fit],.spot-gallery [data-gallery-sound]{margin-left:0;padding:0 9px;font-size:9px}
+}
+@media(max-height:600px){.spot-gallery footer{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:'thumbs controls' 'note note'}.spot-gallery figcaption{bottom:140px}}
+@media(prefers-reduced-motion:reduce){.spot-gallery.is-immersive .gallery-scene{animation:none!important}}
+.reduce-motion .spot-gallery.is-immersive .gallery-scene{animation:none!important}
+.archived-favorites{margin:20px 0 30px;padding:21px;border:1px solid #c8ddd8;border-radius:16px;background:#f6faf7;color:#1b4650}
+.archived-favorites[hidden]{display:none!important}
+.archived-favorites h2{font:750 21px/1.2 var(--display);margin:0 0 7px}
+.archived-favorites>p{font:500 11px/1.6 var(--body);color:#547476;margin:0 0 17px}
+.archived-favorite{display:flex;align-items:center;justify-content:space-between;gap:15px;padding:12px 0;border-top:1px solid #d9e7e1}
+.archived-favorite span{min-width:0}.archived-favorite b{display:block;font:750 12px/1.4 var(--body);color:#143d43}.archived-favorite small{display:block;font:500 10px/1.5 var(--body);color:#647d7c;margin-top:3px}
+.archived-favorite button{flex:0 0 auto;min-height:44px;padding:9px 13px;border:1px solid #bdd7d0;border-radius:9px;background:#fff;color:#0b6264;font:700 10px var(--body);cursor:pointer}
+.archived-favorite button:hover{background:#e7f4ee}.archived-favorite button:focus-visible{outline:3px solid #ffb979;outline-offset:2px}
+
+/* Shared ocean palette across navigation and exploration screens. */
+.ocean-v2{background:#f7f8f3;color:#173b43}
+.app-chrome{background:#f9faf5;border-color:#d9e7df;color:#173b43}
+.chrome-mobile-brand,.chrome-breadcrumb b{color:#103f48}.chrome-mobile-brand b,.mobile-search{color:#0f7472}
+.ocean-v2 .nav{background:#082f3b;border-color:#082f3b;box-shadow:0 8px 30px #062b3821}
+.ocean-v2 .nav>button[data-s]{color:#c1d8d6}
+.ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{background:#b7e8d5;color:#073f43;box-shadow:none}
+.ocean-v2 .nav>button[data-s]:hover{background:#12515a;color:#fff}
+.ocean-v2 .nav>button[data-s].active:hover{background:#d3f1df;color:#073f43}
+.ocean-v2 .nav .sidebar-poulpy{background:#124956;border-color:#35727a}
+.ocean-v2 #home #homeTop{background-image:linear-gradient(90deg,#072f3fea 0%,#0b4255a1 52%,#0b42552b),url('assets/photos/hero.jpg');border-radius:22px}
+.ocean-v2 #homeTop h1 span,.hero-kicker{color:#c1f1d9}.hero-description{color:#eef6ef}
+.hero-cta{background:#f3b98e;color:#173d42}.hero-cta:hover{background:#ffd2ab}
+.ocean-v2 #spotsTop{background-image:linear-gradient(90deg,#0a3946df,#11495469),var(--region-photo)}
+.ocean-v2 #spotsTop .page-eyebrow{color:#c5f0d7}
+.ocean-v2 #spots #explorePath{margin-bottom:14px}
+.ocean-v2 .spot{border-color:#d5e4dd;border-radius:18px;box-shadow:0 9px 24px #113b3d0b}
+.ocean-v2 .spot:hover{box-shadow:0 18px 35px #113b3d20}
+.ocean-v2 .spot-shade{background:linear-gradient(transparent 38%,#051e29cb)}
+.ocean-v2 .spot-meta svg{color:#12807d}
+.ocean-v2 .chip.active,.ocean-v2 .dtab.active,.ocean-v2 .sp-chip.active,.ocean-v2 .dsports .sp.active{background:#0c686b!important;border-color:#0c686b!important;color:#fff}
+.ocean-v2 .block h4,.ocean-v2 .block.band>h4{color:#123f4b}
+.ocean-v2 #dWeather{background:#0c6570;border-color:#0c6570}
+.ocean-v2 .fc-bar{background:#0b7778}.ocean-v2 .fc-bar.best{background:#ef9b73}
+.ocean-v2 .cta,.ocean-v2 .set-save,.ocean-v2 .chal-btn{background:#0c686b!important;color:#fff}
+.ocean-v2 #profTop{background:#0c4f5b}
+@media(max-width:959px){.ocean-v2 .nav{background:#082f3bf4;border-color:#2c626a}.ocean-v2 .nav>button[data-s]{color:#c1d8d6}.ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{background:#b7e8d5;color:#073f43}}

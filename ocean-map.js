@@ -5,18 +5,20 @@
   const total=n=>n+' spot'+(n>1?'s':'');
   const colors={surf:'#1754d1',bodyboard:'#3153b5',baignade:'#007aa1',paddle:'#007b75',kayak:'#a24d1c',snorkeling:'#007a92',plongee:'#4149b8',kitesurf:'#a33767',windsurf:'#88532a'};
   let rows=[],toolbar=null,empty=null;
-  function candidates(){return SPOTS.filter(s=>COORDS[s.id]&&inWorld(s)&&(currentFilter==='all'||(currentFilter==='new'?s.catalogNew:s.level===currentFilter))&&(!currentSearch||searchable(s.name+' '+s.loc).includes(searchable(currentSearch)))&&(!favOnly||favs.has(s.id)));}
+  let terrainMap=null,terrainOverlay=null,terrainTarget=null,terrainGeneration=0,terrainEngine=null;
+  let terrainOpener=null,terrainUnderlying=[],terrainHostTabIndex=null;
+  function candidates(options={}){const found=typeof exploreSpots==='function'?exploreSpots(currentFilter,options):SPOTS.filter(s=>inWorld(s)&&(currentFilter==='all'||(currentFilter==='new'?s.catalogNew:s.level===currentFilter))&&(!currentSearch||searchable(s.name+' '+s.loc).includes(searchable(currentSearch)))&&(!favOnly||favs.has(s.id)));return found.filter(s=>COORDS[s.id]);}
   function controls(){
     if(!toolbar){
       toolbar=document.createElement('div');toolbar.id='mapActivityToolbar';document.getElementById('spotMapWrap').prepend(toolbar);
-      toolbar.addEventListener('click',e=>{const b=e.target.closest('[data-map-sport]');if(b)choose(b.dataset.mapSport||null);if(e.target.closest('[data-map-reset]'))reset();});
+      toolbar.addEventListener('click',e=>{const b=e.target.closest('[data-map-sport]');if(b)choose(b.dataset.mapSport||null);if(e.target.closest('[data-map-reset]'))reset();if(e.target.closest('[data-map-terrain]'))startTerrain();});
       toolbar.addEventListener('change',e=>{if(e.target.matches('[data-map-level]')){window.OceanNavigation?.begin();currentFilter=e.target.value;document.querySelectorAll('#filters [data-f]').forEach(b=>b.classList.toggle('active',b.dataset.f===currentFilter));renderSpots();renderMap(true);toolbar.querySelector('select').focus({preventScroll:true});}});
       empty=document.createElement('div');empty.className='map-empty';empty.hidden=true;document.getElementById('spotMapWrap').append(empty);
       empty.innerHTML='<b>Aucun spot avec ces filtres</b><p>Essaie une autre activité ou élargis ta recherche.</p><button type="button">Réinitialiser les filtres</button>';empty.querySelector('button').onclick=reset;
     }
-    const base=candidates(),count=id=>base.filter(s=>!id||spotSports(s).includes(id)).length;
+    const base=candidates({sport:null}),count=id=>base.filter(s=>!id||spotSports(s).includes(id)).length;
     const scroll=toolbar.querySelector('.map-activities')?.scrollLeft||0;
-    toolbar.innerHTML=`<div class="map-heading"><div><small>TA CARTE, TON ACTIVITÉ</small><b>${esc(activeSport?SPORTMAP[activeSport].label:'Toutes les activités')} <span>· ${total(rows.length)}</span></b></div><label>Niveau<select data-map-level aria-label="Filtrer la carte par niveau"><option value="all">Tous les niveaux</option><option value="debutant">Débutant</option><option value="intermediaire">Intermédiaire</option><option value="expert">Expert</option><option value="variable">À préciser</option><option value="new">Nouveaux spots</option></select></label></div><div class="map-activities" role="group" aria-label="Activités sur la carte">${[{id:'',label:'Tout explorer'},...SPORTS].map(s=>`<button type="button" data-map-sport="${s.id}" aria-pressed="${(activeSport||'')===s.id}" style="--activity-color:${colors[s.id]||'#164bd6'}">${PoulpyIcons.html(s.id||'all')}<span>${esc(s.label)}<small>${total(count(s.id))}</small></span></button>`).join('')}</div><div class="map-key"><span>${activeSport?'Chaque repère correspond à cette activité.':'Le nom sur le repère indique une activité ; + indique les autres.'} Les nombres regroupent des spots proches.</span>${currentSearch||favOnly||currentFilter!=='all'?'<button type="button" data-map-reset>Effacer les filtres</button>':''}</div>`;
+    toolbar.innerHTML=`<div class="map-heading"><div><small>ATLAS DES SPOTS</small><b>${esc(activeSport?SPORTMAP[activeSport].label:'Toutes les activités')} <span>· ${total(rows.length)}</span></b></div><label>Niveau<select data-map-level aria-label="Filtrer la carte par niveau"><option value="all">Tous les niveaux</option><option value="debutant">Débutant</option><option value="intermediaire">Intermédiaire</option><option value="expert">Expert</option><option value="variable">À préciser</option><option value="new">Nouveaux spots</option></select></label></div><div class="map-activities" role="group" aria-label="Activités sur la carte">${[{id:'',label:'Tout explorer'},...SPORTS].map(s=>`<button type="button" data-map-sport="${s.id}" aria-pressed="${(activeSport||'')===s.id}" style="--activity-color:${colors[s.id]||'#164bd6'}">${PoulpyIcons.html(s.id||'all')}<span>${esc(s.label)}<small>${total(count(s.id))}</small></span></button>`).join('')}</div><div class="map-key"><span>${activeSport?'Chaque repère correspond à cette activité.':'Le nom sur le repère indique une activité ; + indique les autres.'} Les nombres regroupent des spots proches.</span><button type="button" data-map-terrain ${rows.length?'':'disabled'}>Relief terrestre 3D ↗</button>${currentSearch||favOnly||currentFilter!=='all'?'<button type="button" data-map-reset>Effacer les filtres</button>':''}</div>`;
     toolbar.querySelector('select').value=currentFilter;toolbar.querySelector('.map-activities').scrollLeft=scroll;
     revealActivity();
     empty.hidden=rows.length>0;
@@ -28,11 +30,99 @@
   }
   function choose(id){window.OceanNavigation?.begin();activeSport=id&&SPORTMAP[id]?id:null;chosenSport=activeSport||'all';renderSportFilters();renderWorlds();renderSpots();renderMap(true);saveState();renderHome();toolbar.querySelector(`[data-map-sport="${id||''}"]`)?.focus({preventScroll:true});}
   function reset(){window.OceanNavigation?.begin();currentFilter='all';currentSearch='';favOnly=false;document.getElementById('spotSearch').value='';document.getElementById('favChip').classList.remove('active');document.querySelectorAll('#filters [data-f]').forEach(b=>b.classList.toggle('active',b.dataset.f==='all'));choose(null);}
+  function closeTerrain(message,restoreFocus=true){
+    terrainGeneration++;
+    const opener=terrainOpener,hadOverlay=!!terrainOverlay,host=document.getElementById('spotMap');
+    if(terrainMap){terrainMap.remove();terrainMap=null;}
+    terrainOverlay?.remove();terrainOverlay=null;terrainTarget=null;
+    for(const {element,inert,ariaHidden} of terrainUnderlying){element.inert=inert;if(ariaHidden===null)element.removeAttribute('aria-hidden');else element.setAttribute('aria-hidden',ariaHidden);}
+    terrainUnderlying=[];
+    if(host&&hadOverlay){if(terrainHostTabIndex===null)host.removeAttribute('tabindex');else host.setAttribute('tabindex',terrainHostTabIndex);}
+    terrainHostTabIndex=null;terrainOpener=null;
+    if(message&&typeof toast==='function')toast(message);
+    if(leafMap)requestAnimationFrame(()=>leafMap.invalidateSize());
+    if(restoreFocus&&hadOverlay&&opener?.isConnected)opener.focus({preventScroll:true});
+  }
+  function distance(a,b){
+    const dLat=(a.lat-b.lat)*Math.PI/180,dLon=(a.lon-b.lon)*Math.PI/180;
+    return 12742*Math.asin(Math.min(1,Math.sqrt(Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLon/2)**2)));
+  }
+  function nearestSpot(){
+    const center=leafMap?.getCenter();
+    return center?rows.slice().sort((a,b)=>distance(COORDS[a.id],center)-distance(COORDS[b.id],center))[0]:rows[0];
+  }
+  async function loadTerrainEngine(){
+    if(!terrainEngine){
+      if(!document.querySelector('link[data-terrain-style]')){const stylesheet=document.createElement('link');stylesheet.rel='stylesheet';stylesheet.href='vendor/maplibre/maplibre-gl.css';stylesheet.dataset.terrainStyle='';document.head.append(stylesheet);}
+      terrainEngine=import(new URL('vendor/maplibre/maplibre-gl.mjs',document.baseURI).href).catch(error=>{terrainEngine=null;throw error;});
+    }
+    return terrainEngine;
+  }
+  async function startTerrain(spot){
+    const selected=spot||nearestSpot(),point=selected&&COORDS[selected.id];
+    if(!point)return;
+    const opener=document.activeElement;
+    closeTerrain('',false);
+    const generation=terrainGeneration,host=document.getElementById('spotMap');
+    terrainOpener=opener;
+    terrainTarget=selected;
+    terrainOverlay=document.createElement('section');terrainOverlay.className='terrain-overlay';terrainOverlay.setAttribute('role','region');terrainOverlay.setAttribute('aria-label',`Relief terrestre autour de ${selected.name}`);terrainOverlay.setAttribute('aria-describedby','terrainExplanation');
+    terrainOverlay.innerHTML=`<div class="terrain-canvas"></div><div class="terrain-guide"><span>RELIEF TERRESTRE · ${esc(selected.name)}</span><p id="terrainExplanation">Vue indicative du terrain côtier. Aucune profondeur marine ni condition de sécurité n’est représentée.</p><button type="button" data-terrain-close aria-describedby="terrainExplanation">Retour à la carte 2D</button></div><p class="terrain-loading" role="status">Préparation du relief 3D…</p>`;
+    terrainOverlay.querySelector('[data-terrain-close]').onclick=()=>closeTerrain();
+    terrainOverlay.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();closeTerrain();}});
+    host.append(terrainOverlay);
+    terrainOverlay.querySelector('[data-terrain-close]').focus({preventScroll:true});
+    terrainHostTabIndex=host.getAttribute('tabindex');host.tabIndex=-1;
+    terrainUnderlying=[...host.children].filter(element=>element!==terrainOverlay).map(element=>({element,inert:element.inert,ariaHidden:element.getAttribute('aria-hidden')}));
+    for(const {element} of terrainUnderlying){element.inert=true;element.setAttribute('aria-hidden','true');}
+    try{
+      const canvas=document.createElement('canvas');
+      if(!canvas.getContext('webgl2'))throw Error('WebGL 2 indisponible');
+      const maplibre=await loadTerrainEngine();
+      if(generation!==terrainGeneration)return;
+      const map=new maplibre.Map({
+        container:terrainOverlay.querySelector('.terrain-canvas'),
+        style:{version:8,sources:{
+          osm:{type:'raster',tiles:['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],tileSize:256,maxzoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'},
+          terrain:{type:'raster-dem',url:'https://tiles.mapterhorn.com/tilejson.json',attribution:'Relief : <a href="https://mapterhorn.com/attribution/">Mapterhorn</a>'}
+        },layers:[{id:'ocean-base',type:'raster',source:'osm'}],terrain:{source:'terrain',exaggeration:1}},
+        center:[point.lon,point.lat],zoom:10.2,pitch:62,bearing:-20,maxPitch:78,maxZoom:17,canvasContextAttributes:{antialias:true}
+      });
+      terrainMap=map;
+      map.addControl(new maplibre.NavigationControl({visualizePitch:true}),'top-right');
+      const canvasElement=terrainOverlay.querySelector('.maplibregl-canvas');
+      canvasElement?.setAttribute('aria-label',`Carte en relief terrestre autour de ${selected.name}`);
+      for(const [selector,label] of [['.maplibregl-ctrl-zoom-in','Zoom avant'],['.maplibregl-ctrl-zoom-out','Zoom arrière'],['.maplibregl-ctrl-compass','Orienter la carte vers le nord']])terrainOverlay.querySelector(selector)?.setAttribute('aria-label',label);
+      const timer=setTimeout(()=>{if(generation===terrainGeneration&&terrainOverlay?.querySelector('.terrain-loading'))closeTerrain('Relief indisponible. Carte 2D rétablie.');},18000);
+      map.once('load',()=>{
+        clearTimeout(timer);
+        if(generation!==terrainGeneration)return;
+        terrainOverlay?.querySelector('.terrain-loading')?.remove();
+        const nearby=rows.filter(s=>distance(COORDS[s.id],point)<55).sort((a,b)=>distance(COORDS[a.id],point)-distance(COORDS[b.id],point)).slice(0,20);
+        if(!nearby.some(s=>s.id===selected.id))nearby.unshift(selected);
+        nearby.forEach(s=>{
+          const marker=document.createElement('button');marker.type='button';marker.className='terrain-spot-pin';marker.textContent=s.name.split(' — ')[0];marker.setAttribute('aria-label',`Ouvrir la fiche de ${s.name}`);
+          marker.onclick=()=>{closeTerrain('',false);if(mapFull)setMapFull(false,true);openSpot(s.id);};
+          new maplibre.Marker({element:marker,anchor:'bottom'}).setLngLat([COORDS[s.id].lon,COORDS[s.id].lat]).addTo(map);
+        });
+        map.resize();
+      });
+      map.on('error',event=>{
+        const detail=String(event.error?.message||'');
+        if(generation===terrainGeneration&&/mapterhorn|terrain|raster.?dem|tilejson/i.test(detail))closeTerrain('Relief indisponible. Carte 2D rétablie.');
+      });
+    }catch(_){if(generation===terrainGeneration)closeTerrain('Relief non pris en charge ici. Carte 2D rétablie.');}
+  }
   function preview(s){
     const el=document.createElement('article');el.className='map-preview';
-    const acts=spotSports(s),photo=window.OceanPhotos?.lead(s.id,activeSport)||SPOT_PHOTOS[s.id];
-    el.innerHTML=`<img class="map-preview-photo" src="${esc(photo.thumb||photo.src)}" alt="${esc(photo.caption||s.photoContext||s.name)}"><a class="map-photo-credit" href="${esc(photo.source)}" target="_blank" rel="noopener" title="${esc(photo.author+' · '+photo.license)}">Photo : ${esc(photo.author)} ↗</a><div class="map-preview-body"><small>${esc(s.loc)}</small><h3>${esc(s.name)}</h3><p class="map-preview-label">À faire ici</p><div class="map-preview-sports">${acts.map(id=>`<span class="${activeSport===id?'selected':''}">${sportIcon(id)}${esc(SPORTMAP[id].label)}</span>`).join('')}</div><p class="map-preview-level">${levelIcon(s.level)} ${esc(lvlLabel[s.level])}</p><button type="button" class="map-visit">Découvrir le spot <span>→</span></button></div>`;
-    el.querySelector('button').onclick=()=>{leafMap.closePopup();window.OceanNavigation?.begin();if(mapFull)setMapFull(false,true);openSpot(s.id);};return el;
+    const acts=spotSports(s),photo=window.OceanPhotos?.lead(s.id,activeSport)||window.SPOT_PHOTOS?.[s.id];
+    const image=photo?.src?`<img class="map-preview-photo" src="${esc(photo.thumb||photo.src)}" alt="${esc(photo.caption||s.photoContext||s.name)}">`:'<div class="map-preview-photo map-preview-no-photo" role="img" aria-label="Photographie du lieu non disponible">Photographie à venir</div>';
+    const credit=photo?.source&&/^https:\/\//i.test(photo.source)?`<a class="map-photo-credit" href="${esc(photo.source)}" target="_blank" rel="noopener noreferrer" title="${esc((photo.author||'Auteur non indiqué')+' · '+(photo.license||''))}">Photo : ${esc(photo.author||'Auteur non indiqué')} ↗</a>`:'';
+    el.innerHTML=`${image}${credit}<div class="map-preview-body"><small>${esc(s.loc)}</small><h3>${esc(s.name)}</h3><p class="map-preview-label">À faire ici</p><div class="map-preview-sports">${acts.map(id=>`<span class="${activeSport===id?'selected':''}">${sportIcon(id)}${esc(SPORTMAP[id].label)}</span>`).join('')}</div><p class="map-preview-level">${levelIcon(s.level)} ${esc(lvlLabel[s.level]||'À préciser')}</p><div class="map-preview-actions"><button type="button" class="map-visit">Découvrir le spot <span>→</span></button><button type="button" class="map-relief" data-map-relief>Relief 3D</button></div></div>`;
+    el.querySelector('.map-visit').onclick=()=>{leafMap.closePopup();window.OceanNavigation?.begin();if(mapFull)setMapFull(false,true);openSpot(s.id);};
+    el.querySelector('[data-map-relief]').onclick=()=>startTerrain(s);
+    el.querySelector('img')?.addEventListener('error',event=>{event.target.replaceWith(Object.assign(document.createElement('div'),{className:'map-preview-photo map-preview-no-photo',textContent:'Photographie indisponible'}));});
+    return el;
   }
   function draw(){
     if(!leafMap||!leafMarkers)return;leafMarkers.clearLayers();
@@ -58,10 +148,13 @@
   }
   function render(refresh){
     const el=document.getElementById('spotMap');if(!el)return;
+    if(terrainOverlay)closeTerrain('',false);
     if(typeof L==='undefined'){el.innerHTML='<p class="map-offline">La carte nécessite une connexion. Tu peux continuer à parcourir les spots dans la liste.</p>';return;}
-    if(!leafMap){leafMap=L.map(el,{zoomControl:true,attributionControl:true,worldCopyJump:true,scrollWheelZoom:true,dragging:true,touchZoom:true,doubleClickZoom:true,boxZoom:true,keyboard:true,inertia:true,zoomSnap:.25,zoomDelta:.5}).setView([22,0],2);L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,minZoom:2,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>'}).addTo(leafMap);leafMarkers=L.layerGroup().addTo(leafMap);leafMap.on('zoomend moveend',draw);}
+    if(!leafMap){leafMap=L.map(el,{zoomControl:true,attributionControl:true,worldCopyJump:true,scrollWheelZoom:true,dragging:true,touchZoom:true,doubleClickZoom:true,boxZoom:true,keyboard:true,inertia:true,zoomSnap:.25,zoomDelta:.5}).setView([22,0],2);L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,minZoom:2,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(leafMap);leafMarkers=L.layerGroup().addTo(leafMap);leafMap.on('zoomend moveend',draw);}
     rows=candidates().filter(s=>!activeSport||spotSports(s).includes(activeSport));leafMap._pts=rows.map(s=>[COORDS[s.id].lat,COORDS[s.id].lon]);controls();draw();
     requestAnimationFrame(()=>{leafMap.invalidateSize();if(refresh&&rows.length)fitMapToSpots();});
   }
-  window.OceanMap={render,revealActivity};
+  document.addEventListener('visibilitychange',()=>{if(document.hidden&&terrainOverlay)closeTerrain('',false);});
+  window.addEventListener('pagehide',()=>{if(terrainOverlay)closeTerrain('',false);});
+  window.OceanMap={render,revealActivity,startTerrain,closeTerrain};
 })();

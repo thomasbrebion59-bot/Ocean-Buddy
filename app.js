@@ -1,455 +1,9 @@
 /* ================= DATA ================= */
-const SPOTS=[
-  {id:'hossegor',name:'Hossegor — La Gravière',loc:'Landes, France',level:'expert',sky:'#ffd29a',sky2:'#ff926a',sea:'#1f6fa8',sea2:'#0b4068',
-   wind:'Offshore E',swell:'1,8 m',temp:'18°C',tide:'Mi-marée',danger:4,
-   desc:"Beach break mythique des Landes, réputé pour ses tubes puissants et rapides. Vague de classe mondiale qui accueille le championnat du monde. Réservée aux surfeurs confirmés.",
-   dangers:[['🌀',"Courants de baïne très forts, surtout à marée descendante."],['⚡',"Vagues creuses et puissantes qui ferment vite."],['🏖️',"Fonds qui changent vite, attention aux bancs de sable."]],
-   tip:"Vérifie bien les baïnes avant d'entrer ! Reste toujours entre les drapeaux et n'y va jamais seul si la houle dépasse 2 m."},
-  {id:'lacanau',name:'Lacanau Océan',loc:'Gironde, France',level:'intermediaire',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#2a9bc4',sea2:'#0f659f',
-   wind:'Cross-shore',swell:'1,2 m',temp:'19°C',tide:'Marée montante',danger:2,
-   desc:"Spot polyvalent très populaire avec de nombreux pics. Idéal pour progresser : vagues régulières, ambiance détendue et écoles de surf à proximité.",
-   dangers:[['🌀',"Baïnes présentes, repère les zones de courant."],['👥',"Affluence élevée l'été, attention aux collisions."]],
-   tip:"Spot parfait pour passer du niveau débutant à intermédiaire. Surfe le matin pour éviter la foule !"},
-  {id:'latorche',name:'La Torche',loc:'Finistère, France',level:'intermediaire',sky:'#d6eef5',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore SE',swell:'1,5 m',temp:'15°C',tide:'Toutes marées',danger:3,
-   desc:"Longue plage exposée à la houle de l'Atlantique, fonctionne quasiment toute l'année. Spot de référence en Bretagne pour le surf et le kitesurf.",
-   dangers:[['💨',"Vent souvent fort, peut rendre la mer hachée."],['🌊',"Houle puissante quand l'Atlantique se réveille."],['🥶',"Eau froide : combinaison indispensable."]],
-   tip:"Mets une bonne combi (4/3 mini) ! La Torche reçoit toute la houle, regarde la taille annoncée avant d'y aller."},
-  {id:'biarritz',name:'La Côte des Basques',loc:'Biarritz, France',level:'debutant',sky:'#ffe7b6',sky2:'#ffc46e',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Léger offshore',swell:'0,8 m',temp:'20°C',tide:'Marée basse',danger:1,
-   desc:"Le berceau du surf européen ! Vagues douces et déroulantes à marée basse, parfaites pour les débutants et le longboard. Cadre splendide au pied des falaises.",
-   dangers:[['🪨',"Quelques rochers à marée basse, repère-les."],['👥',"Très fréquenté, surtout l'été."]],
-   tip:"Le spot idéal pour ta première vague 🐙 ! Va-y à marée basse, l'eau est calme et l'ambiance super accueillante."},
-  {id:'anglet',name:'Les Cavaliers — Anglet',loc:'Pyrénées-Atlantiques',level:'expert',sky:'#d3c0f5',sky2:'#9b6bd1',sea:'#3a6fb0',sea2:'#1c3d75',
-   wind:'Offshore',swell:'2,0 m',temp:'19°C',tide:'Mi-marée',danger:4,
-   desc:"Beach break puissant et creux, le spot le plus réputé d'Anglet. Tubes rapides quand la houle rentre, terrain de jeu des surfeurs aguerris.",
-   dangers:[['⚡',"Vagues très puissantes, fermetures fréquentes."],['🌀',"Courants latéraux importants."],['🪨',"Digues à proximité, garde tes distances."]],
-   tip:"Spot costaud ! N'y va que si tu maîtrises le take-off rapide et le canard dans la mousse épaisse."},
-  {id:'quiberon',name:'Port Blanc — Quiberon',loc:'Morbihan, France',level:'debutant',sky:'#c7f0ff',sky2:'#7fd6f0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore N',swell:'0,6 m',temp:'16°C',tide:'Marée montante',danger:1,
-   desc:"Petite vague abritée idéale pour apprendre dans une eau souvent calme. Cadre breton magnifique, parfait pour les familles et les premières sessions.",
-   dangers:[['🪨',"Quelques rochers sur les bords du spot."],['🥶',"Eau fraîche selon la saison."]],
-   tip:"Super spot d'initiation ! Reste au milieu de la plage, loin des rochers, et profite 🐙"},
-  {id:'seignosse',name:'Les Bourdaines — Seignosse',loc:'Landes, France',level:'intermediaire',sky:'#ffe0a8',sky2:'#ffb866',sea:'#2a8fb8',sea2:'#11608a',
-   wind:'Cross-offshore',swell:'1,4 m',temp:'19°C',tide:'Mi-marée montante',danger:3,
-   desc:"Beach break de qualité, l'un des plus consistants des Landes. Pics variés qui conviennent aux intermédiaires cherchant à muscler leur surf.",
-   dangers:[['🌀',"Baïnes typiques des Landes."],['🌊',"Peut grossir vite avec la houle."]],
-   tip:"Excellent terrain de progression. Repère le sens du courant en regardant la dérive de l'écume avant d'entrer."},
-  {id:'capbreton',name:'La Piste — Capbreton',loc:'Landes, France',level:'expert',sky:'#ffc89a',sky2:'#ff8e64',sea:'#1f6fa8',sea2:'#0b4068',
-   wind:'Offshore E',swell:'1,9 m',temp:'18°C',tide:'Marée basse',danger:4,
-   desc:"Spot puissant bordé par la forêt, l'un des beach breaks les plus creux des Landes. Tubes rapides quand la houle entre, très prisé des surfeurs confirmés.",
-   dangers:[['⚡',"Vagues creuses et puissantes."],['🌀',"Baïnes et courants forts."],['🏖️',"Bancs de sable changeants."]],
-   tip:"Spot sérieux ! Privilégie une houle modérée et repère les courants avant d'entrer."},
-  {id:'lafitenia',name:'Lafitenia — St-Jean-de-Luz',loc:'Pays Basque, France',level:'intermediaire',sky:'#bfe7f2',sky2:'#7fc9e2',sea:'#2a93bf',sea2:'#136a96',
-   wind:'Offshore S',swell:'1,3 m',temp:'19°C',tide:'Mi-marée',danger:2,
-   desc:"Magnifique vague droite dans une baie abritée, l'une des plus belles du Pays Basque. Déroule longuement, idéale pour travailler ses courbes.",
-   dangers:[['🪨',"Fond de rochers, attention à marée basse."],['👥',"Spot populaire, souvent chargé."]],
-   tip:"Belle droite à rallonge ! Repère le pic principal et respecte les priorités."},
-  {id:'guethary',name:'Parlementia — Guéthary',loc:'Pays Basque, France',level:'expert',sky:'#cdbcf2',sky2:'#9b6bd1',sea:'#356bb0',sea2:'#1c3d75',
-   wind:'Offshore E',swell:'2,2 m',temp:'18°C',tide:'Toutes marées',danger:4,
-   desc:"Spot de grosse houle qui se réveille quand l'Atlantique gronde. Vague de reef pour surfeurs aguerris, réputée pour le gros.",
-   dangers:[['🌊',"Grosses vagues, longue rame jusqu'au pic."],['🪨',"Fond rocheux."],['🌀',"Courants importants."]],
-   tip:"Réservé aux surfeurs expérimentés et en bonne forme physique. N'y va jamais seul."},
-  {id:'sauveterre',name:'Sauveterre — Olonne',loc:'Vendée, France',level:'intermediaire',sky:'#ffe0a8',sky2:'#ffb866',sea:'#2a8fb8',sea2:'#11608a',
-   wind:'Cross-offshore',swell:'1,2 m',temp:'18°C',tide:'Mi-marée',danger:3,
-   desc:"Long beach break sauvage bordé de dunes et de forêt. Plusieurs pics, bonne consistance et ambiance nature en Vendée.",
-   dangers:[['🌀',"Baïnes et courants."],['🏖️',"Plage sauvage, peu surveillée."]],
-   tip:"Spot nature superbe. Comme c'est peu surveillé, surfe accompagné."},
-  {id:'latranche',name:'La Tranche-sur-Mer',loc:'Vendée, France',level:'debutant',sky:'#c7f0ff',sky2:'#7fd6f0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Léger',swell:'0,7 m',temp:'19°C',tide:'Marée montante',danger:1,
-   desc:"Plage familiale aux vagues douces, parfaite pour apprendre. Eau souvent calme et écoles de surf à proximité.",
-   dangers:[['👥',"Plage fréquentée l'été."],['🌀',"Quelques courants par endroits."]],
-   tip:"Top pour débuter 🐙 ! Reste dans les zones surveillées et profite des petites vagues."},
-  {id:'lapalue',name:'La Palue',loc:'Finistère, France',level:'expert',sky:'#cfe0e8',sky2:'#9fbccb',sea:'#2f7a92',sea2:'#134f68',
-   wind:'Offshore E',swell:'1,8 m',temp:'15°C',tide:'Mi-marée',danger:4,
-   desc:"Plage sauvage et splendide de la presqu'île de Crozon, exposée plein ouest. Vague puissante dans un cadre totalement préservé, sans aucune construction.",
-   dangers:[['🌊',"Houle puissante et courants forts."],['🚫',"Aucune surveillance, spot isolé."],['🥶',"Eau froide toute l'année."]],
-   tip:"Spot d'engagement : seul le large encaisse. Va-y accompagné et par conditions raisonnables."},
-  {id:'penhors',name:'Penhors',loc:'Finistère, France',level:'intermediaire',sky:'#d6eef5',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore SE',swell:'1,4 m',temp:'15°C',tide:'Toutes marées',danger:3,
-   desc:"Beach break breton consistant qui fonctionne par de nombreuses conditions, dans la baie d'Audierne. Bon spot pour progresser.",
-   dangers:[['💨',"Vent parfois fort."],['🌀',"Courants présents."]],
-   tip:"Spot fiable pour enchaîner les sessions. Combinaison épaisse conseillée."},
-  {id:'lapalmyre',name:'Pontaillac — Royan',loc:'Charente-Maritime, France',level:'debutant',sky:'#ffe7b6',sky2:'#ffc46e',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Léger',swell:'0,7 m',temp:'19°C',tide:'Marée montante',danger:1,
-   desc:"Petite baie abritée près de Royan, vagues douces idéales pour l'apprentissage. Ambiance balnéaire et eau souvent calme.",
-   dangers:[['👥',"Plage très fréquentée l'été."],['🪨',"Quelques rochers en bord de baie."]],
-   tip:"Parfait pour débuter en douceur 🐙. Reste au centre de la baie."},
-  {id:'mimizan',name:'Mimizan Plage',loc:'Landes, France',level:'intermediaire',sky:'#ffe0a8',sky2:'#ffb866',sea:'#2a8fb8',sea2:'#11608a',
-   wind:'Cross-shore',swell:'1,3 m',temp:'19°C',tide:'Mi-marée',danger:3,
-   desc:"Beach break landais agréable encadré par deux digues, avec des pics réguliers. Bon compromis pour les intermédiaires.",
-   dangers:[['🌀',"Baïnes typiques des Landes."],['🏖️',"Bancs de sable changeants."]],
-   tip:"Surfe près des zones surveillées et repère les courants le long des digues."},
-  {id:'capferret',name:'Cap Ferret — La Pointe',loc:'Gironde, France',level:'expert',sky:'#ffc89a',sky2:'#ff8e64',sea:'#1f6fa8',sea2:'#0b4068',
-   wind:'Offshore E',swell:'2,0 m',temp:'19°C',tide:'Mi-marée',danger:4,
-   desc:"Spot puissant à la pointe du Cap Ferret, à l'entrée du bassin d'Arcachon. Vagues creuses et courants marqués, réservé aux confirmés.",
-   dangers:[['🌊',"Vagues puissantes."],['🌀',"Courants très forts près des passes."],['🏖️',"Bancs de sable mouvants."]],
-   tip:"Méfie-toi des courants de la passe : reste prudent et évite les gros jours en beach break costaud."},
-  {id:'bidart',name:'Pavillon Royal — Bidart',loc:'Pays Basque, France',level:'intermediaire',sky:'#bfe7f2',sky2:'#7fc9e2',sea:'#2a93bf',sea2:'#136a96',
-   wind:'Offshore S',swell:'1,4 m',temp:'19°C',tide:'Marée basse',danger:3,
-   desc:"Beach break réputé du Pays Basque devant l'embouchure, vague de qualité quand les bancs de sable sont bien placés.",
-   dangers:[['🌀',"Courant de la rivière à proximité."],['🪨',"Quelques rochers."]],
-   tip:"Surfe à marée basse pour les meilleurs bancs et garde tes distances avec l'embouchure."},
-  {id:'nazare',name:"Nazaré — Praia do Norte",loc:"Portugal",level:'expert',sky:'#ffd29a',sky2:'#ff926a',sea:'#1f6fa8',sea2:'#0b4068',
-   wind:'Offshore',swell:'6,0 m',temp:'17°C',tide:'Toutes marées',danger:4,
-   desc:"LE spot de vagues géantes : un canyon sous-marin propulse des murs d'eau pouvant dépasser 20 m, théâtre des records mondiaux de big wave.",
-   dangers:[['⚡',"Vagues XXL réservées au tow-in."],['🌀',"Courants extrêmes."]],
-   tip:"Spot de très gros : à admirer depuis le phare, le surf y est réservé à l'élite mondiale."},
-  {id:'supertubos',name:"Supertubos — Peniche",loc:"Portugal",level:'expert',sky:'#ffc89a',sky2:'#ff8e64',sea:'#356bb0',sea2:'#1c3d75',
-   wind:'Offshore',swell:'2,0 m',temp:'17°C',tide:'Mi-marée',danger:4,
-   desc:"Le beach break le plus puissant d'Europe, surnommé la « Pipeline européenne » pour ses tubes parfaits et creux.",
-   dangers:[['⚡',"Tubes rapides et puissants."],['🏖️',"Fonds peu profonds."]],
-   tip:"Réservé aux confirmés du tube : take-off engagé sur un fond de sable peu profond."},
-  {id:'ericeira',name:"Coxos — Ericeira",loc:"Portugal",level:'intermediaire',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore E',swell:'1,8 m',temp:'17°C',tide:'Mi-marée',danger:3,
-   desc:"Réserve mondiale de surf, Ericeira aligne des droites de classe mondiale comme Coxos sur fond de rochers.",
-   dangers:[['🪨',"Fond rocheux."],['🌊',"Houle puissante."]],
-   tip:"Belle droite à rallonge ; chausse des bottillons et respecte les locaux."},
-  {id:'mundaka',name:"Mundaka",loc:"Espagne (Pays Basque)",level:'expert',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore S',swell:'2,0 m',temp:'16°C',tide:'Marée descendante',danger:4,
-   desc:"La gauche la plus célèbre d'Europe : une vague tubulaire parfaite qui se forme à l'embouchure de la ria de Mundaka.",
-   dangers:[['🌀',"Courants de la ria."],['👥',"Spot très convoité."]],
-   tip:"Marche surtout à marée descendante avec une bonne houle ; niveau confirmé requis."},
-  {id:'thurso',name:"Thurso East",loc:"Écosse (UK)",level:'expert',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore',swell:'2,2 m',temp:'9°C',tide:'Mi-marée',danger:4,
-   desc:"Un reef break glacial et parfait tout au nord de l'Écosse : des tubes de droite dans une eau à faire pâlir.",
-   dangers:[['🥶',"Eau glaciale, combi épaisse."],['🪨',"Reef peu profond."]],
-   tip:"Combi 5/4 + bottes + gants + cagoule obligatoires : c'est froid mais parfait."},
-  {id:'bundoran',name:"Bundoran — The Peak",loc:"Irlande",level:'intermediaire',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore',swell:'1,6 m',temp:'11°C',tide:'Mi-marée',danger:3,
-   desc:"Le spot phare de l'Irlande : un reef qui offre gauche et droite dans une ambiance celtique.",
-   dangers:[['🥶',"Eau froide."],['🪨',"Reef."]],
-   tip:"Houle régulière de l'Atlantique nord ; combinaison épaisse indispensable."},
-  {id:'rodiles',name:"Rodiles",loc:"Asturies, Espagne",level:'intermediaire',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore',swell:'1,6 m',temp:'16°C',tide:'Marée descendante',danger:3,
-   desc:"L'une des plus belles droites d'Espagne, à l'embouchure d'une ria asturienne bordée de pins.",
-   dangers:[['🌀',"Courants de la ria."],['🥶',"Eau fraîche."]],
-   tip:"Marche surtout à marée descendante ; cadre superbe entre ria et forêt."},
-  {id:'somo',name:"Somo — Santander",loc:"Cantabrie, Espagne",level:'debutant',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Léger',swell:'1,0 m',temp:'17°C',tide:'Toutes marées',danger:1,
-   desc:"Grande plage de sable face à Santander, idéale pour apprendre avec ses vagues douces et ses écoles de surf.",
-   dangers:[['👥',"Affluence l'été."],['🌀',"Quelques courants."]],
-   tip:"Spot parfait pour débuter ; nombreuses écoles et vagues accueillantes."},
-  {id:'zarautz',name:"Zarautz",loc:"Pays Basque, Espagne",level:'intermediaire',sky:'#ffe1a8',sky2:'#ffc46e',sea:'#2a9bc4',sea2:'#0f659f',
-   wind:'Cross-shore',swell:'1,3 m',temp:'17°C',tide:'Mi-marée',danger:2,
-   desc:"La plus longue plage du Pays Basque espagnol, beach break régulier et animé.",
-   dangers:[['👥',"Très fréquenté."],['🌀',"Baïnes."]],
-   tip:"Bon spot de progression ; surfe le matin pour éviter la foule."},
-  {id:'pantin',name:"Playa de Pantín",loc:"Galice, Espagne",level:'intermediaire',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore',swell:'1,6 m',temp:'16°C',tide:'Mi-marée',danger:3,
-   desc:"Spot galicien de référence qui accueille une étape du circuit mondial, beach break puissant et régulier.",
-   dangers:[['🌊',"Houle puissante."],['🥶',"Eau fraîche."]],
-   tip:"Vagues consistantes de l'Atlantique galicien ; combinaison conseillée."},
-  {id:'lasanta',name:"La Santa — Lanzarote",loc:"Canaries, Espagne",level:'expert',sky:'#ffe1a8',sky2:'#ffc46e',sea:'#2a9bc4',sea2:'#0f659f',
-   wind:'Offshore',swell:'2,0 m',temp:'21°C',tide:'Mi-marée',danger:4,
-   desc:"Vague de reef puissante des Canaries, l'un des spots les plus réputés et lourds d'Espagne.",
-   dangers:[['🪨',"Reef volcanique tranchant."],['🌊',"Vague lourde."]],
-   tip:"Reef costaud sur fond de lave ; réservé aux surfeurs confirmés, chausse-toi."},
-  {id:'anchorpoint',name:"Anchor Point — Taghazout",loc:"Maroc",level:'intermediaire',sky:'#ffe1a8',sky2:'#ffc46e',sea:'#2a9bc4',sea2:'#0f659f',
-   wind:'Offshore',swell:'1,8 m',temp:'19°C',tide:'Mi-marée',danger:3,
-   desc:"La droite mythique du Maroc : une vague longue qui déroule sur les rochers devant le village de surf de Taghazout.",
-   dangers:[['🪨',"Entrée rocheuse."],['☀️',"Soleil intense, hydrate-toi."]],
-   tip:"Longue droite idéale pour enchaîner les manœuvres ; repère le passage dans les rochers."},
-  {id:'pipeline',name:"Banzai Pipeline — Oahu",loc:"Hawaï (USA)",level:'expert',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'2,5 m',temp:'25°C',tide:'Toutes marées',danger:4,
-   desc:"La vague la plus célèbre du monde : un tube parfait mais redoutable qui déferle sur un récif de corail tranchant.",
-   dangers:[['⚠️',"Récif de corail dangereux."],['⚡',"Vague très puissante."]],
-   tip:"Spot le plus exigeant du monde : à réserver aux experts confirmés du tube."},
-  {id:'mavericks',name:"Mavericks",loc:"Californie (USA)",level:'expert',sky:'#ffd29a',sky2:'#ff926a',sea:'#1f6fa8',sea2:'#0b4068',
-   wind:'Offshore',swell:'5,0 m',temp:'13°C',tide:'Toutes marées',danger:4,
-   desc:"Un spot de grosses vagues où des murs d'eau de 15 m déferlent dans une eau froide réputée pour ses requins.",
-   dangers:[['🦈',"Eaux froides à requins."],['🌊',"Vagues géantes."]],
-   tip:"Big wave extrême : tow-in et gilet de sécurité, réservé à une poignée de pros."},
-  {id:'trestles',name:"Lower Trestles",loc:"Californie (USA)",level:'intermediaire',sky:'#ffe1a8',sky2:'#ffc46e',sea:'#2a9bc4',sea2:'#0f659f',
-   wind:'Cross-shore',swell:'1,4 m',temp:'18°C',tide:'Mi-marée',danger:2,
-   desc:"La vague parfaite de la Californie du Sud : des pics réguliers et maniables, terrain d'entraînement des pros.",
-   dangers:[['👥',"Très fréquenté."],['🚶',"Longue marche d'accès."]],
-   tip:"Vague-école des pros pour le high-performance ; arrive tôt, c'est bondé."},
-  {id:'malibu',name:"Malibu — First Point",loc:"Californie (USA)",level:'debutant',sky:'#ffe1a8',sky2:'#ffc46e',sea:'#2a9bc4',sea2:'#0f659f',
-   wind:'Léger',swell:'1,0 m',temp:'19°C',tide:'Marée montante',danger:1,
-   desc:"La vague de longboard la plus iconique du monde : une droite douce et interminable popularisée dès les années 50.",
-   dangers:[['👥',"Foule et localisme."],['🪨',"Quelques galets."]],
-   tip:"Le paradis du longboard et des débutants confirmés ; déroule à l'infini."},
-  {id:'puerto',name:"Zicatela — Puerto Escondido",loc:"Mexique",level:'expert',sky:'#ffe1a8',sky2:'#ffc46e',sea:'#2a9bc4',sea2:'#0f659f',
-   wind:'Offshore',swell:'2,5 m',temp:'28°C',tide:'Toutes marées',danger:4,
-   desc:"La « Mexican Pipeline » : un beach break surpuissant qui balance des tubes énormes sur le sable.",
-   dangers:[['⚡',"Vagues très puissantes."],['🌀',"Courants forts."]],
-   tip:"Beach break costaud et lourd ; travaille ton canard avant d'y aller."},
-  {id:'santateresa',name:"Santa Teresa",loc:"Costa Rica",level:'intermediaire',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'1,5 m',temp:'28°C',tide:'Mi-marée',danger:2,
-   desc:"Plage tropicale décontractée du Pacifique costaricien, avec des beach breaks réguliers et une ambiance pura vida.",
-   dangers:[['🌀',"Courants par endroits."],['☀️',"Soleil intense."]],
-   tip:"Spot idéal pour progresser au chaud ; plusieurs pics le long de la plage."},
-  {id:'chicama',name:"Chicama",loc:"Pérou",level:'intermediaire',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore',swell:'1,5 m',temp:'18°C',tide:'Toutes marées',danger:2,
-   desc:"La gauche la plus longue du monde : on peut y surfer une vague sur plus de 2 km sans s'arrêter.",
-   dangers:[['🥶',"Eau fraîche (Humboldt)."],['🦵',"Vague épuisante."]],
-   tip:"Prends un bateau pour remonter : la rame est interminable sinon !"},
-  {id:'puntadelobos',name:"Punta de Lobos — Pichilemu",loc:"Chili",level:'expert',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore',swell:'2,5 m',temp:'16°C',tide:'Mi-marée',danger:4,
-   desc:"Spot emblématique du Chili : une gauche puissante sous des falaises spectaculaires, sanctuaire de surf protégé.",
-   dangers:[['🌊',"Houle puissante."],['🪨',"Rochers et falaises."]],
-   tip:"Belle gauche de gros ; eau froide et entrée technique par les rochers."},
-  {id:'jbay',name:"Jeffreys Bay (J-Bay)",loc:"Afrique du Sud",level:'expert',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore',swell:'2,0 m',temp:'18°C',tide:'Mi-marée',danger:3,
-   desc:"Supertubes à J-Bay : l'une des droites les plus parfaites et rapides de la planète, étape du championnat du monde.",
-   dangers:[['🦈',"Présence de requins."],['🌊',"Vague très rapide."]],
-   tip:"Droite de rêve mais rapide ; reste vigilant, le coin est connu pour les requins."},
-  {id:'bells',name:"Bells Beach",loc:"Australie",level:'intermediaire',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore',swell:'2,0 m',temp:'17°C',tide:'Mi-marée',danger:3,
-   desc:"Temple du surf australien : un point break puissant qui accueille la plus ancienne compétition pro du monde (depuis 1962).",
-   dangers:[['🌊',"Houle puissante."],['🪨',"Reef."]],
-   tip:"Vague de caractère ; combinaison conseillée, l'eau du détroit de Bass est fraîche."},
-  {id:'snapper',name:"Snapper Rocks — Superbank",loc:"Australie",level:'intermediaire',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'1,5 m',temp:'23°C',tide:'Mi-marée',danger:2,
-   desc:"La « Superbank » de la Gold Coast : une droite de sable interminable qui peut relier plusieurs spots d'un seul ride.",
-   dangers:[['👥',"Foule record."],['🌀',"Courant fort au take-off."]],
-   tip:"Affluence énorme mais vague magique ; place-toi bien et sois patient."},
-  {id:'margaret',name:"Margaret River — Main Break",loc:"Australie",level:'expert',sky:'#ffd29a',sky2:'#ff926a',sea:'#1f6fa8',sea2:'#0b4068',
-   wind:'Offshore',swell:'2,4 m',temp:'19°C',tide:'Mi-marée',danger:4,
-   desc:"Vague de reef puissante de l'ouest australien, qui marche par grosse houle dans un cadre sauvage.",
-   dangers:[['🌊',"Grosses vagues."],['🦈',"Zone à requins."]],
-   tip:"Spot costaud pour grosse houle ; reste sur tes gardes et vise tes jours."},
-  {id:'uluwatu',name:"Uluwatu — Bali",loc:"Indonésie",level:'expert',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'2,0 m',temp:'28°C',tide:'Mi-marée',danger:3,
-   desc:"La gauche mythique de Bali : des murs et tubes parfaits au pied de falaises couronnées d'un temple hindou.",
-   dangers:[['🪨',"Récif tranchant."],['🕳️',"Sortie par la grotte."]],
-   tip:"Entrée et sortie par la grotte selon la marée ; récif peu profond, prudence."},
-  {id:'padang',name:"Padang Padang — Bali",loc:"Indonésie",level:'expert',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'1,8 m',temp:'28°C',tide:'Marée haute',danger:4,
-   desc:"La « Balinese Pipeline » : un tube de gauche court mais parfait sur un récif très peu profond.",
-   dangers:[['⚠️',"Récif très peu profond."],['⚡',"Tube creux."]],
-   tip:"Marche surtout à marée haute avec de la houle ; engagement maximal."},
-  {id:'cloudbreak',name:"Cloudbreak — Tavarua",loc:"Fidji",level:'expert',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'2,5 m',temp:'28°C',tide:'Mi-marée',danger:4,
-   desc:"L'une des plus belles gauches du monde, au large d'un récif fidjien, longue, creuse et puissante.",
-   dangers:[['🪨',"Récif au large."],['🚤',"Accès en bateau."]],
-   tip:"Spot de récif au large : accès en bateau et niveau expert indispensables."},
-  {id:'teahupoo',name:"Teahupo'o",loc:"Tahiti",level:'expert',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'2,0 m',temp:'27°C',tide:'Mi-marée',danger:4,
-   desc:"La vague la plus lourde du monde : un tube épais et monstrueux qui déferle sur un récif corallien affleurant.",
-   dangers:[['⚠️',"Récif affleurant."],['⚡',"Vague extrêmement lourde."]],
-   tip:"L'une des vagues les plus dangereuses au monde ; à voir absolument, à surfer si tu es pro."},
-  {id:'floripa',name:"Joaquina — Florianópolis",loc:"Brésil",level:'intermediaire',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Cross-shore',swell:'1,4 m',temp:'23°C',tide:'Mi-marée',danger:2,
-   desc:"Le spot phare de l'île de Florianópolis, beach break animé au cœur de la capitale brésilienne du surf.",
-   dangers:[['🌀',"Baïnes."],['👥',"Affluence l'été."]],
-   tip:"Bon spot de progression dans une ambiance festive ; attention aux courants."},
-  {id:'puntaroca',name:"Punta Roca — La Libertad",loc:"Salvador",level:'intermediaire',sky:'#ffe1a8',sky2:'#ffc46e',sea:'#2a9bc4',sea2:'#0f659f',
-   wind:'Offshore',swell:'1,6 m',temp:'28°C',tide:'Mi-marée',danger:3,
-   desc:"La droite de référence d'Amérique centrale : un point break rapide qui déroule sur les rochers de La Libertad.",
-   dangers:[['🪨',"Fond rocheux."],['🌊',"Vague rapide."]],
-   tip:"Belle droite de pointe ; entrée par les rochers, chausse-toi bien."},
-  {id:'raglan',name:"Raglan — Manu Bay",loc:"Nouvelle-Zélande",level:'intermediaire',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore',swell:'1,8 m',temp:'17°C',tide:'Mi-marée',danger:3,
-   desc:"L'une des plus longues gauches du monde, point break parfait popularisé par le film « Endless Summer ».",
-   dangers:[['🪨',"Fond rocheux."],['🥶',"Eau fraîche."]],
-   tip:"Gauche interminable et régulière ; combinaison conseillée."},
-  {id:'saquarema',name:"Saquarema",loc:"Brésil",level:'intermediaire',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'1,6 m',temp:'23°C',tide:'Mi-marée',danger:3,
-   desc:"Le « Maracanã du surf » brésilien : un beach break puissant qui accueille une étape du championnat du monde.",
-   dangers:[['🌊',"Beach break puissant."],['🌀',"Courants."]],
-   tip:"Vague de compétition ; bonne condition physique recommandée."},
-  {id:'montanita',name:"Montañita",loc:"Équateur",level:'intermediaire',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'1,4 m',temp:'25°C',tide:'Mi-marée',danger:2,
-   desc:"Village de surf bohème de la côte équatorienne, point break sympa et ambiance festive.",
-   dangers:[['🌀',"Courants."],['👥',"Affluence."]],
-   tip:"Bon spot de progression au chaud ; ambiance détendue."},
-  {id:'lobitos',name:"Lobitos",loc:"Pérou",level:'intermediaire',sky:'#ffe1a8',sky2:'#ffc46e',sea:'#2a9bc4',sea2:'#0f659f',
-   wind:'Offshore',swell:'1,6 m',temp:'20°C',tide:'Mi-marée',danger:3,
-   desc:"Gauches multiples et tubulaires dans un ancien village pétrolier du nord péruvien.",
-   dangers:[['🥶',"Eau fraîche."],['🪨',"Fond par endroits."]],
-   tip:"Plusieurs gauches de qualité ; eau plus fraîche que les tropiques."},
-  {id:'mardelplata',name:"Mar del Plata",loc:"Argentine",level:'intermediaire',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Cross-shore',swell:'1,2 m',temp:'17°C',tide:'Mi-marée',danger:2,
-   desc:"Le principal spot de surf d'Argentine, beach breaks variés le long de la grande station balnéaire.",
-   dangers:[['🌀',"Baïnes."],['🥶',"Eau fraîche."]],
-   tip:"Spot urbain animé ; plusieurs plages selon le vent."},
-  {id:'arica',name:"El Gringo — Arica",loc:"Chili",level:'expert',sky:'#ffe1a8',sky2:'#ffc46e',sea:'#2a9bc4',sea2:'#0f659f',
-   wind:'Offshore',swell:'2,2 m',temp:'19°C',tide:'Marée basse',danger:4,
-   desc:"Tube de reef puissant dans le désert d'Atacama, l'une des vagues les plus creuses du Chili.",
-   dangers:[['🪨',"Reef peu profond."],['⚡',"Tube creux."]],
-   tip:"Tube sérieux sur reef ; réservé aux confirmés, à marée basse."},
-  {id:'itacare',name:"Itacaré",loc:"Brésil",level:'debutant',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'1,0 m',temp:'25°C',tide:'Mi-marée',danger:1,
-   desc:"Plages tropicales bordées de forêt atlantique à Bahia, vagues douces idéales pour apprendre.",
-   dangers:[['👥',"Affluence."],['🌀',"Quelques courants."]],
-   tip:"Cadre paradisiaque pour débuter dans une eau chaude."},
-  {id:'shonan',name:"Shonan — Kamakura",loc:"Japon",level:'debutant',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Cross-shore',swell:'0,9 m',temp:'19°C',tide:'Mi-marée',danger:1,
-   desc:"La plage de surf la plus populaire du Japon, près de Tokyo, avec des vagues douces et une grande communauté.",
-   dangers:[['👥',"Très fréquenté."],['🌀',"Vagues parfois molles."]],
-   tip:"Spot d'initiation animé près de Tokyo ; le mont Fuji en toile de fond par temps clair."},
-  {id:'arugam',name:"Arugam Bay",loc:"Sri Lanka",level:'intermediaire',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'1,4 m',temp:'28°C',tide:'Mi-marée',danger:2,
-   desc:"Le spot phare du Sri Lanka : une droite de pointe qui déroule sur le sable dans une ambiance tropicale décontractée.",
-   dangers:[['🌀',"Courants."],['☀️',"Soleil intense."]],
-   tip:"Belle droite facile à lire ; parfait pour progresser au chaud."},
-  {id:'cloud9',name:"Cloud 9 — Siargao",loc:"Philippines",level:'expert',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'1,8 m',temp:'28°C',tide:'Mi-marée',danger:4,
-   desc:"Le tube de droite légendaire des Philippines, sur un récif au bout d'un ponton de bois.",
-   dangers:[['⚠️',"Récif peu profond."],['⚡',"Tube puissant."]],
-   tip:"Tube parfait mais sur reef ; niveau confirmé requis."},
-  {id:'waikiki',name:"Waikiki — Honolulu",loc:"Hawaï (USA)",level:'debutant',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Léger',swell:'0,8 m',temp:'26°C',tide:'Toutes marées',danger:1,
-   desc:"Le berceau du surf moderne : de longues vagues douces parfaites pour apprendre, face aux gratte-ciels d'Honolulu.",
-   dangers:[['👥',"Très fréquenté."],['🪨',"Récif par endroits."]],
-   tip:"LE spot pour apprendre dans une eau chaude ; déroule en douceur."},
-  {id:'unstad',name:"Unstad — Lofoten",loc:"Norvège",level:'intermediaire',sky:'#cfe9f2',sky2:'#9fd4e6',sea:'#2f88a8',sea2:'#13567c',
-   wind:'Offshore',swell:'1,6 m',temp:'8°C',tide:'Mi-marée',danger:3,
-   desc:"Le surf au-dessus du cercle polaire : des vagues entourées de montagnes enneigées dans les îles Lofoten.",
-   dangers:[['🥶',"Eau glaciale."],['❄️',"Conditions arctiques."]],
-   tip:"Surf arctique d'exception ; combinaison 6/5 + gants + cagoule indispensables."},
-  {id:'skeletonbay',name:"Skeleton Bay",loc:"Namibie",level:'expert',sky:'#ffe1a8',sky2:'#ffc46e',sea:'#2a9bc4',sea2:'#0f659f',
-   wind:'Offshore',swell:'2,0 m',temp:'16°C',tide:'Mi-marée',danger:4,
-   desc:"Le plus long tube de gauche du monde : une vague de sable parfaite dans le désert de la Skeleton Coast.",
-   dangers:[['🏜️',"Spot isolé et désertique."],['🌀',"Courant très fort."]],
-   tip:"Tube interminable mais rapide et épuisant ; spot reculé, viens préparé."},
-  {id:'mentawai',name:"Lance's Right — Mentawai",loc:"Indonésie",level:'expert',sky:'#aee6f4',sky2:'#5cc4e0',sea:'#41c9d8',sea2:'#1f97bd',
-   wind:'Offshore',swell:'2,0 m',temp:'28°C',tide:'Mi-marée',danger:4,
-   desc:"L'archipel aux vagues parfaites : des tubes de récif de classe mondiale accessibles en bateau (boat trip).",
-   dangers:[['🪨',"Récifs tranchants."],['🚤',"Accès en bateau."]],
-   tip:"Paradis du surf en boat trip ; récifs peu profonds, expérience requise."},
-  {id:'dungeons',name:"Dungeons — Cape Town",loc:"Afrique du Sud",level:'expert',sky:'#ffd29a',sky2:'#ff926a',sea:'#1f6fa8',sea2:'#0b4068',
-   wind:'Offshore',swell:'4,0 m',temp:'15°C',tide:'Toutes marées',danger:4,
-   desc:"Spot de grosses vagues près de Cape Town, des murs froids qui déferlent sous la Sentinelle.",
-   dangers:[['🦈',"Eaux à requins."],['🌊',"Très grosses vagues."]],
-   tip:"Big wave froid et sérieux ; tow-in et sécurité, élite uniquement."},
-  {"id":"bluehole_belize","name":"Great Blue Hole","loc":"Belize","level":"expert","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Calme","swell":"0,3 m","temp":"27°C","tide":"—","danger":4,"desc":"Gouffre marin circulaire de 124 m de profondeur classé à l'UNESCO. Plongée mythique parmi stalactites et requins, réservée aux confirmés.","dangers":[["🕳️","Profondeur extrême : narcose et paliers obligatoires."],["🦈","Requins de récif en profondeur."]],"tip":"Plongée technique : brevet avancé et centre encadrant indispensables.","sports":["plongee"]},
-  {"id":"sipadan","name":"Sipadan","loc":"Bornéo, Malaisie","level":"intermediaire","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Calme","swell":"0,4 m","temp":"28°C","tide":"—","danger":3,"desc":"Île volcanique cernée d'un tombant vertigineux, célèbre pour ses tornades de barracudas et ses tortues vertes.","dangers":[["🌀","Courants forts le long du tombant."],["🐢","Faune protégée : ne rien toucher."]],"tip":"Permis d'accès limité chaque jour : réserve bien à l'avance.","sports":["plongee","snorkeling"]},
-  {"id":"rasmohammed","name":"Ras Muhammad","loc":"Charm el-Cheikh, Égypte","level":"intermediaire","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Calme","swell":"0,4 m","temp":"26°C","tide":"—","danger":2,"desc":"Parc national à la pointe du Sinaï : jardins de corail éclatants et murs de poissons en mer Rouge.","dangers":[["🌊","Courant possible aux pointes."],["🪸","Coraux fragiles, garde tes distances."]],"tip":"Shark & Yolanda Reef est le tombant incontournable.","sports":["plongee","snorkeling"]},
-  {"id":"thistlegorm","name":"Épave du Thistlegorm","loc":"Mer Rouge, Égypte","level":"expert","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Calme","swell":"0,4 m","temp":"25°C","tide":"—","danger":4,"desc":"Cargo britannique coulé en 1941, l'une des plus belles épaves du monde : motos, camions et wagons figés sous l'eau.","dangers":[["🚢","Pénétration d'épave réservée aux confirmés."],["🌀","Courant et profondeur (~30 m)."]],"tip":"Formation plongée épave (wreck) fortement recommandée.","sports":["plongee"]},
-  {"id":"tulamben","name":"USAT Liberty — Tulamben","loc":"Bali, Indonésie","level":"debutant","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Calme","swell":"0,3 m","temp":"28°C","tide":"—","danger":1,"desc":"Épave accessible depuis la plage, posée à quelques mètres et couverte de corail : parfaite pour débuter ou faire du snorkeling.","dangers":[["🪨","Entrée sur galets glissants."],["🐠","Forte affluence le matin."]],"tip":"Plonge tôt le matin pour éviter le monde.","sports":["plongee","snorkeling"]},
-  {"id":"greatbarrier","name":"Grande Barrière de corail","loc":"Cairns, Australie","level":"debutant","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Alizés","swell":"0,6 m","temp":"26°C","tide":"Variable","danger":2,"desc":"Le plus grand récif corallien du monde, visible depuis l'espace. Snorkeling et plongée dans une biodiversité unique.","dangers":[["🪼","Méduses-boîtes en saison (combinaison)."],["☀️","Soleil intense, protège-toi."]],"tip":"En saison méduses, porte une combinaison intégrale (lycra).","sports":["plongee","snorkeling","baignade"]},
-  {"id":"silfra","name":"Faille de Silfra","loc":"Þingvellir, Islande","level":"intermediaire","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Froid","swell":"0 m","temp":"3°C","tide":"—","danger":3,"desc":"Plongée entre les plaques tectoniques Amérique–Europe, dans une eau de source à la visibilité de plus de 100 m.","dangers":[["🥶","Eau glaciale : combinaison étanche obligatoire."],["🧊","Encadrement spécialisé requis."]],"tip":"Brevet drysuit nécessaire ; accompagnement obligatoire.","sports":["plongee","snorkeling"]},
-  {"id":"cenote_dosojos","name":"Cenote Dos Ojos","loc":"Tulum, Mexique","level":"debutant","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Calme","swell":"0 m","temp":"25°C","tide":"—","danger":2,"desc":"Cénote d'eau douce cristalline relié à un réseau de grottes, idéal pour le snorkeling et la plongée souterraine encadrée.","dangers":[["🕯️","Plongée souterraine = brevet spéléo strict."],["💧","Eau fraîche, prévois une combinaison."]],"tip":"Pour le snorkeling, reste dans la zone éclairée (les 'ojos').","sports":["plongee","snorkeling","baignade"]},
-  {"id":"medes","name":"Îles Medes","loc":"Costa Brava, Espagne","level":"debutant","sky":"#bfe9f7","sky2":"#79cdeb","sea":"#1f9fc6","sea2":"#0d6a9e","wind":"Calme","swell":"0,4 m","temp":"21°C","tide":"—","danger":2,"desc":"Réserve marine protégée au large de l'Estartit : mérous curieux et grottes, référence de la plongée en Méditerranée.","dangers":[["🚤","Trafic de bateaux en surface."],["🪨","Grottes : reste avec un guide."]],"tip":"Réserve protégée : nombre de plongeurs limité, réserve tôt.","sports":["plongee","snorkeling"]},
-  {"id":"portcros","name":"Port-Cros","loc":"Var, France","level":"debutant","sky":"#bfe9f7","sky2":"#79cdeb","sea":"#1f9fc6","sea2":"#0d6a9e","wind":"Calme","swell":"0,3 m","temp":"22°C","tide":"Faible","danger":1,"desc":"Premier parc national marin d'Europe : un sentier sous-marin balisé fait découvrir herbiers et poissons en snorkeling.","dangers":[["🚤","Zones de mouillage réglementées."],["🌿","Herbiers de posidonie protégés."]],"tip":"Suis le sentier sous-marin depuis la plage de la Palud.","sports":["plongee","snorkeling","baignade"]},
-  {"id":"calanques","name":"Calanque de Sugiton","loc":"Marseille, France","level":"intermediaire","sky":"#bfe9f7","sky2":"#79cdeb","sea":"#1f9fc6","sea2":"#0d6a9e","wind":"Mistral possible","swell":"0,4 m","temp":"21°C","tide":"Faible","danger":2,"desc":"Criques calcaires aux eaux turquoise entre Marseille et Cassis : plongée, snorkeling et kayak dans un parc national.","dangers":[["☀️","Chaleur et longue marche d'accès."],["🚤","Bateaux nombreux l'été."]],"tip":"Réservation d'accès parfois obligatoire l'été à Sugiton.","sports":["plongee","snorkeling","kayak","baignade"]},
-  {"id":"richelieu","name":"Richelieu Rock","loc":"Andaman, Thaïlande","level":"intermediaire","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Calme","swell":"0,5 m","temp":"28°C","tide":"—","danger":2,"desc":"Pinacle isolé en mer d'Andaman : explosion de couleurs et requins-baleines de passage, top spot thaïlandais.","dangers":[["🌀","Courants changeants autour du pinacle."],["🛥️","Accès en croisière plongée."]],"tip":"Meilleure saison : février–avril pour les requins-baleines.","sports":["plongee","snorkeling"]},
-  {"id":"rajaampat","name":"Raja Ampat","loc":"Papouasie, Indonésie","level":"intermediaire","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Calme","swell":"0,5 m","temp":"29°C","tide":"Variable","danger":2,"desc":"L'épicentre mondial de la biodiversité marine : récifs intacts et nuées de poissons au cœur du Triangle de corail.","dangers":[["🌀","Courants soutenus (plongées dérivantes)."],["🛥️","Site isolé, accès en liveaboard."]],"tip":"Niveau dérivante conseillé ; suis ton guide de près.","sports":["plongee","snorkeling"]},
-  {"id":"galapagos","name":"Darwin & Wolf","loc":"Galápagos, Équateur","level":"expert","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Vent","swell":"1,2 m","temp":"23°C","tide":"Variable","danger":4,"desc":"Plongées de légende au milieu des bancs de requins-marteaux, otaries et raies mantas.","dangers":[["🌀","Courants violents et houle."],["🦈","Grande faune pélagique."]],"tip":"Réservé aux plongeurs expérimentés, en croisière.","sports":["plongee"]},
-  {"id":"maldives","name":"Atoll d'Ari","loc":"Maldives","level":"debutant","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Alizés","swell":"0,5 m","temp":"29°C","tide":"Variable","danger":1,"desc":"Lagons turquoise et tombants : raies mantas, requins-baleines et jardins de corail, du snorkeling à la plongée.","dangers":[["🌀","Courants dans les passes (channels)."],["☀️","Soleil très fort."]],"tip":"Le snorkeling depuis le lagon convient à toute la famille.","sports":["plongee","snorkeling","baignade"]},
-  {"id":"hanauma","name":"Hanauma Bay","loc":"Oahu, Hawaï","level":"debutant","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Alizés","swell":"0,4 m","temp":"26°C","tide":"Variable","danger":1,"desc":"Baie volcanique en croissant, réserve marine protégée : le spot snorkeling le plus célèbre d'Hawaï.","dangers":[["🪸","Récif fragile : ne marche pas dessus."],["👥","Quota de visiteurs, réserve en ligne."]],"tip":"Arrive tôt : l'accès est limité chaque jour.","sports":["snorkeling","baignade"]},
-  {"id":"bonaire","name":"Lac Bay","loc":"Bonaire","level":"debutant","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Alizés 25 km/h","swell":"0,2 m","temp":"28°C","tide":"Faible","danger":1,"desc":"Lagon plat et peu profond balayé par les alizés : paradis de l'apprentissage du windsurf, et récifs réputés pour la plongée.","dangers":[["💨","Vent constant, attention à la dérive."],["🪸","Coraux protégés tout autour de l'île."]],"tip":"Côté lagon pour débuter, côté océan pour les confirmés.","sports":["windsurf","kitesurf","plongee","snorkeling"]},
-  {"id":"tarifa","name":"Tarifa","loc":"Andalousie, Espagne","level":"intermediaire","sky":"#bfe9f7","sky2":"#79cdeb","sea":"#1f9fc6","sea2":"#0d6a9e","wind":"Levante 30 km/h","swell":"0,8 m","temp":"19°C","tide":"Variable","danger":2,"desc":"Capitale européenne du kite et du windsurf, entre Atlantique et Méditerranée, balayée par le Levante et le Poniente.","dangers":[["💨","Vent fort et rafaleux (Levante)."],["👥","Plan d'eau très fréquenté."]],"tip":"Débutants : choisis les jours de Poniente, plus régulier.","sports":["kitesurf","windsurf","surf"]},
-  {"id":"dakhla","name":"Lagune de Dakhla","loc":"Maroc","level":"debutant","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Onshore 28 km/h","swell":"0,2 m","temp":"20°C","tide":"Variable","danger":1,"desc":"Immense lagune plate et peu profonde, vent thermique quasi quotidien : l'un des meilleurs spots d'apprentissage du kite au monde.","dangers":[["💨","Marée qui découvre des bancs de sable."],["🏜️","Site isolé en plein désert."]],"tip":"Plan d'eau plat idéal pour les premières sessions.","sports":["kitesurf","windsurf"]},
-  {"id":"cabarete","name":"Cabarete","loc":"Rép. Dominicaine","level":"intermediaire","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Thermique 25 km/h","swell":"1,0 m","temp":"27°C","tide":"Faible","danger":2,"desc":"Baie animée des Caraïbes : vent thermique l'après-midi pour le kite, vagues le matin pour le surf.","dangers":[["🪸","Récif à l'entrée de la baie."],["💨","Vent qui se lève en milieu de journée."]],"tip":"Surf le matin, kite l'après-midi quand le thermique entre.","sports":["kitesurf","windsurf","surf"]},
-  {"id":"lemorne","name":"Le Morne","loc":"Maurice","level":"intermediaire","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Alizés 25 km/h","swell":"1,2 m","temp":"26°C","tide":"Variable","danger":3,"desc":"Lagon turquoise au pied d'une montagne classée : flat dans le lagon et la célèbre vague 'One Eye' pour les experts.","dangers":[["🪸","Récif coupant (One Eye) pour confirmés."],["🌀","Passe avec courant vers le large."]],"tip":"Reste dans le lagon pour débuter, One Eye = experts.","sports":["kitesurf","windsurf","snorkeling"]},
-  {"id":"cumbuco","name":"Cumbuco","loc":"Ceará, Brésil","level":"intermediaire","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Alizés 30 km/h","swell":"0,8 m","temp":"28°C","tide":"Variable","danger":2,"desc":"Spot brésilien réputé : vent puissant et régulier, lagunes d'eau douce et longues sessions downwind.","dangers":[["💨","Vent fort soutenu plusieurs heures."],["🏖️","Buggys et baigneurs sur la plage."]],"tip":"Profite des lagunes (Cumbuco, Lagoinha) pour le flat.","sports":["kitesurf","windsurf"]},
-  {"id":"essaouira","name":"Essaouira","loc":"Maroc","level":"intermediaire","sky":"#bfe9f7","sky2":"#79cdeb","sea":"#1f9fc6","sea2":"#0d6a9e","wind":"Alizés 30 km/h","swell":"1,2 m","temp":"19°C","tide":"Variable","danger":2,"desc":"La 'ville du vent' : baie ventée idéale pour le windsurf et le kite, ambiance médina et longues plages.","dangers":[["💨","Vent fort l'après-midi (alizés)."],["🌊","Clapot formé dans la baie."]],"tip":"Matinées plus calmes pour débuter, vent musclé l'après-midi.","sports":["windsurf","kitesurf","surf"]},
-  {"id":"lafranqui","name":"La Franqui","loc":"Leucate, France","level":"intermediaire","sky":"#bfe9f7","sky2":"#79cdeb","sea":"#1f9fc6","sea2":"#0d6a9e","wind":"Tramontane 35 km/h","swell":"0,9 m","temp":"18°C","tide":"Faible","danger":2,"desc":"Spot phare du Languedoc balayé par la tramontane, théâtre du Mondial du Vent : kite et windsurf de haut niveau.","dangers":[["💨","Tramontane offshore très puissante."],["🌬️","Vent de terre : risque de dérive au large."]],"tip":"Vent offshore : ne pars jamais seul, reste près du bord.","sports":["kitesurf","windsurf"]},
-  {"id":"jericoacoara","name":"Jericoacoara","loc":"Ceará, Brésil","level":"intermediaire","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Alizés 32 km/h","swell":"0,8 m","temp":"28°C","tide":"Variable","danger":2,"desc":"Village de dunes classé, vent quasi quotidien et lagunes : l'un des spots de kite les plus célèbres du Brésil.","dangers":[["💨","Vent fort et longues distances."],["🏜️","Accès en 4x4 à travers les dunes."]],"tip":"Idéal pour le downwind ; hydrate-toi, le vent dessèche.","sports":["kitesurf","windsurf"]},
-  {"id":"hookipa","name":"Ho'okipa","loc":"Maui, Hawaï","level":"expert","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Alizés 30 km/h","swell":"2,5 m","temp":"25°C","tide":"Variable","danger":4,"desc":"Mecque mondiale du windsurf de vagues : alizés puissants et houle solide, pour riders confirmés uniquement.","dangers":[["🪨","Récif peu profond et coupant."],["🌊","Grosses vagues + vent fort."]],"tip":"Spot d'experts ; observe les locaux avant d'aller à l'eau.","sports":["windsurf","surf","kitesurf"]},
-  {"id":"pozo","name":"Pozo Izquierdo","loc":"Gran Canaria, Espagne","level":"expert","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Alizés 40 km/h","swell":"1,4 m","temp":"21°C","tide":"Variable","danger":3,"desc":"Spot de coupe du monde de windsurf : parmi les alizés les plus forts d'Europe et des sauts spectaculaires.","dangers":[["💨","Vent très violent (40+ km/h)."],["🪨","Entrée sur rochers."]],"tip":"Réservé aux windsurfeurs confirmés, gréements très réduits.","sports":["windsurf","kitesurf"]},
-  {"id":"gardalake","name":"Lac de Garde — Torbole","loc":"Italie","level":"debutant","sky":"#cdeef0","sky2":"#8fd8d2","sea":"#2b8f96","sea2":"#15616a","wind":"Ora & Pelèr 20 km/h","swell":"0 m","temp":"20°C","tide":"—","danger":1,"desc":"Plus grand lac d'Italie, encadré de montagnes : vents thermiques fiables (Pelèr le matin, Ora l'après-midi), parfaits pour windsurf et paddle.","dangers":[["💨","Vent qui force l'après-midi (Ora)."],["🏔️","Eau fraîche en profondeur."]],"tip":"Matin pour apprendre, après-midi pour le vent musclé.","sports":["windsurf","paddle","kayak"]},
-  {"id":"hoodriver","name":"Hood River — Columbia Gorge","loc":"Oregon, USA","level":"intermediaire","sky":"#cdeef0","sky2":"#8fd8d2","sea":"#2b8f96","sea2":"#15616a","wind":"Onshore 35 km/h","swell":"0,4 m","temp":"16°C","tide":"—","danger":2,"desc":"Le 'Gorge' : couloir venté le long du fleuve Columbia, capitale américaine du windsurf et du kite en eau plane à clapoteuse.","dangers":[["💨","Vent fort canalisé par la gorge."],["🚢","Trafic fluvial (barges)."]],"tip":"Eau froide : combinaison conseillée même l'été.","sports":["windsurf","kitesurf","paddle"]},
-  {"id":"annecy","name":"Lac d'Annecy","loc":"Haute-Savoie, France","level":"debutant","sky":"#cdeef0","sky2":"#8fd8d2","sea":"#2b8f96","sea2":"#15616a","wind":"Brise 12 km/h","swell":"0 m","temp":"22°C","tide":"—","danger":1,"desc":"L'un des lacs les plus purs d'Europe, eau émeraude au pied des Alpes : paddle, kayak et baignade en eau calme.","dangers":[["🚣","Trafic de bateaux l'été."],["🌬️","Brise thermique l'après-midi."]],"tip":"Pars le matin : l'eau est un miroir parfait pour le paddle.","sports":["paddle","kayak","baignade"]},
-  {"id":"verdon","name":"Gorges du Verdon","loc":"Lac de Sainte-Croix, France","level":"debutant","sky":"#cdeef0","sky2":"#8fd8d2","sea":"#2b8f96","sea2":"#15616a","wind":"Brise","swell":"0 m","temp":"23°C","tide":"—","danger":1,"desc":"Canyon turquoise spectaculaire : on remonte les gorges en paddle ou en kayak depuis le lac de Sainte-Croix.","dangers":[["☀️","Forte chaleur, peu d'ombre."],["🚣","Affluence l'été, location limitée."]],"tip":"Loue tôt le matin, les embarcations partent vite l'été.","sports":["kayak","paddle","baignade"]},
-  {"id":"glenan","name":"Archipel des Glénan","loc":"Finistère, France","level":"debutant","sky":"#bfe9f7","sky2":"#79cdeb","sea":"#1f9fc6","sea2":"#0d6a9e","wind":"Brise marine","swell":"0,4 m","temp":"18°C","tide":"Variable","danger":2,"desc":"Petit archipel breton aux eaux translucides surnommé 'les Caraïbes bretonnes' : paddle, snorkeling et baignade.","dangers":[["🌊","Courants entre les îlots."],["🚤","Accès en bateau seulement."]],"tip":"Vérifie l'horaire des navettes pour le retour.","sports":["paddle","kayak","snorkeling","baignade"]},
-  {"id":"capri","name":"Capri","loc":"Italie","level":"debutant","sky":"#bfe9f7","sky2":"#79cdeb","sea":"#1f9fc6","sea2":"#0d6a9e","wind":"Brise","swell":"0,4 m","temp":"24°C","tide":"Faible","danger":1,"desc":"Île célèbre du golfe de Naples : eaux bleues, Grotte Bleue et criques à explorer en kayak ou en snorkeling.","dangers":[["🚤","Beaucoup de bateaux l'été."],["🪨","Entrées rocheuses."]],"tip":"Tôt le matin pour la Grotte Bleue, avant la foule.","sports":["kayak","snorkeling","baignade"]},
-  {"id":"palombaggia","name":"Palombaggia","loc":"Corse, France","level":"debutant","sky":"#bfe9f7","sky2":"#79cdeb","sea":"#1f9fc6","sea2":"#0d6a9e","wind":"Brise","swell":"0,4 m","temp":"23°C","tide":"Faible","danger":1,"desc":"Plage de sable blanc et pins parasols aux eaux turquoise, l'une des plus belles de Corse : baignade et snorkeling.","dangers":[["☀️","Soleil intense, ombre rare."],["👥","Très fréquentée en haute saison."]],"tip":"Arrive tôt pour la place et l'eau calme.","sports":["baignade","snorkeling","paddle"]},
-  {"id":"praia_marinha","name":"Praia da Marinha","loc":"Algarve, Portugal","level":"debutant","sky":"#bfe9f7","sky2":"#79cdeb","sea":"#1f9fc6","sea2":"#0d6a9e","wind":"Brise","swell":"0,6 m","temp":"21°C","tide":"Variable","danger":1,"desc":"Falaises ocre et arches naturelles au-dessus d'une eau cristalline : joyau de l'Algarve pour la baignade et le kayak.","dangers":[["🪨","Accès par un escalier raide."],["🌊","Houle possible près des arches."]],"tip":"Va voir les arches en kayak quand la mer est calme.","sports":["baignade","snorkeling","kayak"]},
-  {"id":"navagio","name":"Navagio","loc":"Zakynthos, Grèce","level":"intermediaire","sky":"#bfe9f7","sky2":"#79cdeb","sea":"#1f9fc6","sea2":"#0d6a9e","wind":"Brise","swell":"0,5 m","temp":"23°C","tide":"Faible","danger":2,"desc":"Crique de l'épave, accessible uniquement par bateau, encadrée de falaises blanches et d'une eau bleu électrique.","dangers":[["🪨","Chutes de pierres au pied de la falaise."],["🚤","Accès bateau, mer parfois agitée."]],"tip":"Pars tôt : l'après-midi la crique est bondée.","sports":["baignade","snorkeling","kayak"]},
-  {"id":"anse_source","name":"Anse Source d'Argent","loc":"La Digue, Seychelles","level":"debutant","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Alizés","swell":"0,3 m","temp":"28°C","tide":"Variable","danger":1,"desc":"Plage iconique aux blocs de granit rose et lagon peu profond protégé par le récif : baignade et snorkeling de carte postale.","dangers":[["🪸","Récif proche : attention aux coraux."],["☀️","Soleil équatorial très fort."]],"tip":"Marée haute pour mieux nager au-dessus du lagon.","sports":["baignade","snorkeling","paddle"]},
-  {"id":"whitehaven","name":"Whitehaven Beach","loc":"Whitsundays, Australie","level":"debutant","sky":"#bfeffb","sky2":"#74d4ee","sea":"#15bcd0","sea2":"#0a7d96","wind":"Alizés","swell":"0,4 m","temp":"25°C","tide":"Variable","danger":1,"desc":"Sable de silice d'un blanc pur et eaux tourbillonnantes turquoise au cœur des Whitsundays : baignade et paddle de rêve.","dangers":[["🪼","Méduses en saison (combinaison)."],["🚤","Accès en bateau ou hydravion."]],"tip":"En saison méduses, porte un lycra intégral.","sports":["baignade","snorkeling","paddle"]},
-  {"id":"wissant","name":"Wissant","loc":"Pas-de-Calais, France","level":"intermediaire","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Onshore 30 km/h","swell":"1,0 m","temp":"16°C","tide":"Variable","danger":3,"desc":"Grande baie ventée entre le cap Gris-Nez et le cap Blanc-Nez : l'un des meilleurs spots de kite et windsurf du nord, avec un peu de vague.","dangers":[["💨","Vent fort et marées de grande amplitude."],["🌊","Forts courants à marée descendante."]],"tip":"Repère l'horaire des marées : le plan d'eau change énormément.","sports":["kitesurf","windsurf","surf","baignade"]},
-  {"id":"letouquet","name":"Le Touquet — Paris-Plage","loc":"Pas-de-Calais, France","level":"debutant","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Onshore 25 km/h","swell":"0,6 m","temp":"16°C","tide":"Variable","danger":2,"desc":"Immense plage de sable fin, mythique pour le kitesurf et le char à voile : eau peu profonde, idéale pour débuter par vent thermique.","dangers":[["🌊","Marée qui monte vite sur l'estran plat."],["💨","Zone partagée avec chars à voile et baigneurs."]],"tip":"Reste près du bord à marée montante, elle remonte très vite.","sports":["kitesurf","baignade","paddle","bodyboard"]},
-  {"id":"hardelot","name":"Hardelot-Plage","loc":"Pas-de-Calais, France","level":"debutant","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Onshore 26 km/h","swell":"0,7 m","temp":"16°C","tide":"Variable","danger":2,"desc":"Longue plage entre dunes et forêt, spot familial réputé pour le kite et le windsurf à marée basse.","dangers":[["🌊","Estran très plat, marée rapide."],["💨","Vent souvent onshore soutenu."]],"tip":"Le meilleur plan d'eau se forme autour de la marée basse.","sports":["kitesurf","windsurf","baignade","surf"]},
-  {"id":"wimereux","name":"Wimereux","loc":"Pas-de-Calais, France","level":"debutant","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Onshore 24 km/h","swell":"0,6 m","temp":"15°C","tide":"Variable","danger":2,"desc":"Petite station balnéaire Belle Époque proche de Boulogne, plage de galets et sable, sympa pour le kite et la baignade surveillée.","dangers":[["🪨","Galets glissants à l'entrée."],["🌊","Courants par fort coefficient."]],"tip":"Baignade surveillée l'été : reste entre les drapeaux.","sports":["kitesurf","baignade","bodyboard"]},
-  {"id":"berck","name":"Berck-sur-Mer","loc":"Pas-de-Calais, France","level":"intermediaire","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Onshore 28 km/h","swell":"0,7 m","temp":"16°C","tide":"Variable","danger":2,"desc":"Plage immense balayée par le vent, haut lieu du cerf-volant et du kite, avec des phoques en baie d'Authie à proximité.","dangers":[["🌊","Estran plat : marée montante très rapide."],["💨","Vent fréquent et soutenu."]],"tip":"Va observer les phoques de la baie d'Authie (à distance).","sports":["kitesurf","windsurf","baignade"]},
-  {"id":"malolesbains","name":"Malo-les-Bains — Dunkerque","loc":"Nord, France","level":"debutant","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Onshore 26 km/h","swell":"0,5 m","temp":"16°C","tide":"Variable","danger":2,"desc":"La plage de Dunkerque, large et plate : digue animée, baignade familiale et bon spot de kite par vent de nord-ouest.","dangers":[["🚢","Proximité du port et du trafic maritime."],["🌊","Estran plat, marée rapide."]],"tip":"Évite la zone du chenal portuaire à l'est.","sports":["kitesurf","baignade","paddle"]},
-  {"id":"lehavre","name":"Le Havre — Plage","loc":"Seine-Maritime, France","level":"intermediaire","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Onshore 28 km/h","swell":"0,8 m","temp":"15°C","tide":"Variable","danger":2,"desc":"Plage de galets en plein cœur de la ville, spot de kite réputé et petites vagues par houle de sud-ouest.","dangers":[["🪨","Galets : chaussons conseillés."],["🚢","Proximité de l'entrée du port."]],"tip":"Galets glissants : protège tes pieds à l'entrée.","sports":["kitesurf","surf","bodyboard"]},
-  {"id":"etretat","name":"Étretat","loc":"Seine-Maritime, France","level":"debutant","sky":"#cfeaf0","sky2":"#9bd6dd","sea":"#2a8fa0","sea2":"#14606e","wind":"Brise","swell":"0,5 m","temp":"15°C","tide":"Variable","danger":2,"desc":"Célèbres falaises et arches de craie au-dessus d'une plage de galets : kayak au pied des aiguilles et baignade par mer calme.","dangers":[["🪨","Chutes de pierres au pied des falaises."],["🌊","Courants sous les arches."]],"tip":"Sors en kayak voir l'Aiguille seulement par mer calme.","sports":["kayak","baignade","snorkeling"]},
-  {"id":"dieppe","name":"Dieppe","loc":"Seine-Maritime, France","level":"debutant","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Onshore 24 km/h","swell":"0,6 m","temp":"15°C","tide":"Variable","danger":2,"desc":"Grande plage de galets dominée par son château, baignade surveillée et spot de kite face aux falaises.","dangers":[["🪨","Galets et entrée d'eau abrupte."],["🚢","Trafic du port à l'est de la plage."]],"tip":"Baignade surveillée l'été ; le kite se pratique à l'ouest.","sports":["baignade","kayak","kitesurf"]},
-  {"id":"siouville","name":"Siouville-Hague","loc":"Manche, France","level":"intermediaire","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Offshore SE","swell":"1,3 m","temp":"15°C","tide":"Variable","danger":3,"desc":"LE spot de surf de Normandie, sur la côte ouest du Cotentin : beach break exposé qui capte bien la houle atlantique.","dangers":[["🌀","Courants forts par gros coefficient."],["🌊","Houle qui grossit vite."]],"tip":"Surf plus consistant à mi-marée ; gare aux courants de bord.","sports":["surf","bodyboard","kitesurf"]},
-  {"id":"vauville","name":"Vauville","loc":"Manche, France","level":"intermediaire","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Offshore E","swell":"1,2 m","temp":"15°C","tide":"Variable","danger":3,"desc":"Longue baie sauvage du Cotentin face au nez de Jobourg : houle puissante et vent, pour surfeurs et kiteurs aguerris.","dangers":[["🌀","Courants violents (raz Blanchard proche)."],["🌊","Spot exposé, conditions changeantes."]],"tip":"Site exposé : vérifie bien la météo et n'y va pas seul.","sports":["surf","bodyboard","kitesurf"]},
-  {"id":"hauteville","name":"Hauteville-sur-Mer","loc":"Manche, France","level":"debutant","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Onshore 25 km/h","swell":"0,6 m","temp":"16°C","tide":"Variable","danger":2,"desc":"Grande plage plate de la côte des Havres, paradis du char à voile et du kite à marée basse, baignade familiale.","dangers":[["🌊","Estran immense : marée montante très rapide."],["💨","Vent partagé avec les chars à voile."]],"tip":"À marée basse l'eau est loin : surveille bien le flot.","sports":["kitesurf","baignade","paddle"]},
-  {"id":"granville","name":"Granville — Plat Gousset","loc":"Manche, France","level":"debutant","sky":"#cfeaf0","sky2":"#9bd6dd","sea":"#2a8fa0","sea2":"#14606e","wind":"Brise","swell":"0,5 m","temp":"16°C","tide":"Variable","danger":2,"desc":"Cité corsaire face aux îles Chausey : kayak vers l'archipel et baignade, dans l'une des plus grandes marées d'Europe.","dangers":[["🌊","Marnage parmi les plus forts d'Europe."],["🚤","Trafic vers Chausey et Jersey."]],"tip":"Traversée vers Chausey en kayak : uniquement encadrée.","sports":["kayak","baignade","paddle"]},
-  {"id":"saintmalo","name":"Saint-Malo — Le Sillon","loc":"Ille-et-Vilaine, France","level":"debutant","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Onshore 22 km/h","swell":"0,7 m","temp":"16°C","tide":"Variable","danger":2,"desc":"La grande plage du Sillon face à la cité corsaire : baignade, paddle, kite et petites vagues, sous l'une des plus fortes marées du monde.","dangers":[["🌊","Marnage énorme, courants en bord de digue."],["🪨","Brise-lames et rochers (Grand Bé)."]],"tip":"Va au Grand Bé à pied seulement à marée basse, surveille l'heure.","sports":["baignade","kayak","paddle","kitesurf","surf"]},
-  {"id":"saintlunaire","name":"Saint-Lunaire","loc":"Ille-et-Vilaine, France","level":"debutant","sky":"#d3e3ea","sky2":"#a4c3d2","sea":"#2f6f86","sea2":"#173f52","wind":"Onshore 22 km/h","swell":"0,8 m","temp":"16°C","tide":"Variable","danger":2,"desc":"Station balnéaire de la Côte d'Émeraude avec une plage exposée qui prend la houle : bon spot d'initiation au surf.","dangers":[["🪨","Rochers en bord de plage à marée basse."],["🌊","Courants par fort coefficient."]],"tip":"Idéal pour débuter le surf à mi-marée montante.","sports":["surf","baignade","bodyboard","paddle"]},
-  {"id":"erquy","name":"Erquy — Cap d'Erquy","loc":"Côtes-d'Armor, France","level":"debutant","sky":"#cfeaf0","sky2":"#9bd6dd","sea":"#2a8fa0","sea2":"#14606e","wind":"Brise","swell":"0,5 m","temp":"16°C","tide":"Variable","danger":1,"desc":"Eaux claires et landes de grès rose du cap d'Erquy : criques sauvages parfaites pour le kayak, le snorkeling et la baignade.","dangers":[["🪨","Rochers et plateaux découvrants."],["🌊","Courants entre les criques."]],"tip":"Explore les criques du cap en kayak par mer calme.","sports":["kayak","snorkeling","baignade","paddle"]},
-  {"id":"perros","name":"Perros-Guirec — Trestraou","loc":"Côtes-d'Armor, France","level":"debutant","sky":"#cfeaf0","sky2":"#9bd6dd","sea":"#2a8fa0","sea2":"#14606e","wind":"Brise","swell":"0,5 m","temp":"16°C","tide":"Variable","danger":1,"desc":"Porte de la Côte de Granit Rose : plage de Trestraou et sentier des douaniers vers Ploumanac'h, idéal kayak, paddle et baignade.","dangers":[["🪨","Chaos de rochers roses, attention à marée basse."],["🚤","Navettes vers les Sept-Îles."]],"tip":"En kayak, longe le granit rose jusqu'à Ploumanac'h.","sports":["baignade","kayak","paddle","snorkeling"]},
-  {"id":"imsouane","name":"Imsouane — La Cathédrale","loc":"Maroc","level":"debutant","sky":"#ffe8c4","sky2":"#ffbe86","sea":"#1fa8c0","sea2":"#0d6f8c","wind":"Offshore","swell":"1,0 m","temp":"19°C","tide":"Mi-marée","danger":1,"desc":"Une droite qui déroule interminablement au fond d'une baie de pêcheurs. Vague lente et docile : c'est le spot où l'on apprend à tenir une vague longtemps.","dangers":[["👥","Très fréquentée : respecte la priorité et la file d'attente au pic."],["🚤","Port de pêche actif, ne coupe pas la route des barques."]],"tip":"Rame jusqu'au bout de la baie et laisse-toi porter : la vague fait le travail.","sports":["surf","paddle","baignade"]},
-  {"id":"safi","name":"Safi — Ras Lafaa","loc":"Maroc","level":"expert","sky":"#ffe8c4","sky2":"#ffbe86","sea":"#1fa8c0","sea2":"#0d6f8c","wind":"Offshore","swell":"2,2 m","temp":"18°C","tide":"Mi-marée","danger":4,"desc":"Une des droites tubulaires les plus rapides d'Afrique, sur un fond de dalle rocheuse. Elle ne marche que quelques jours par an, avec une grosse houle et le bon vent.","dangers":[["🪨","Fond rocheux peu profond, chute risquée."],["⚡","Vague très rapide qui ferme sur la fin."],["🌊","Ne se déclenche que par forte houle : conditions sérieuses."]],"tip":"Regarde longuement depuis la falaise avant d'y aller. Si tu hésites, c'est non.","sports":["surf","bodyboard"]},
-  {"id":"sidikaouki","name":"Sidi Kaouki","loc":"Essaouira, Maroc","level":"intermediaire","sky":"#ffe8c4","sky2":"#ffbe86","sea":"#1fa8c0","sea2":"#0d6f8c","wind":"Onshore fort","swell":"1,4 m","temp":"18°C","tide":"Variable","danger":2,"desc":"Longue plage battue par l'alizé, au sud d'Essaouira. Le vent y est presque quotidien l'après-midi : les voiles prennent le relais des planches de surf.","dangers":[["💨","Vent thermique très fort l'après-midi."],["🌀","Courant latéral le long de la plage."]],"tip":"Surfe le matin, navigue l'après-midi : c'est le rythme du spot.","sports":["surf","kitesurf","windsurf","baignade"]},
-  {"id":"ngor","name":"Ngor Right","loc":"Dakar, Sénégal","level":"intermediaire","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Offshore","swell":"1,5 m","temp":"24°C","tide":"Mi-marée","danger":3,"desc":"La droite de récif rendue célèbre par le film The Endless Summer, en face de l'île de Ngor. Elle s'atteint en pirogue depuis la plage.","dangers":[["🪨","Récif peu profond à marée basse."],["🚤","Trafic de pirogues entre l'île et la côte."]],"tip":"Prends la pirogue avec les locaux plutôt que de ramer : le courant du chenal est fort.","sports":["surf","bodyboard","snorkeling"]},
-  {"id":"ouakam","name":"Ouakam","loc":"Dakar, Sénégal","level":"expert","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Offshore","swell":"1,8 m","temp":"24°C","tide":"Marée haute","danger":4,"desc":"Une gauche puissante qui casse sur le récif au pied de la mosquée de la Divinité, dans une baie encaissée de Dakar.","dangers":[["🪨","Récif tranchant, très peu d'eau à marée basse."],["🌀","Courant de sortie dans la baie."],["⚡","Vague creuse dès que la houle monte."]],"tip":"Entre et sors par le côté droit de la baie, là où le courant t'aide.","sports":["surf","bodyboard"]},
-  {"id":"elandsbay","name":"Elands Bay","loc":"Afrique du Sud","level":"intermediaire","sky":"#dbe7ef","sky2":"#a3c0d4","sea":"#1c6d95","sea2":"#0a3d5c","wind":"Offshore SE","swell":"1,6 m","temp":"14°C","tide":"Mi-marée","danger":3,"desc":"Une longue gauche de pointe sur la côte ouest, dans une eau très froide remontée par le courant de Benguela. Spot de bout du monde, peu de monde à l'eau.","dangers":[["🥶","Eau souvent sous 15°C : combinaison épaisse obligatoire."],["🪨","Rochers à l'entrée du pic."],["🌀","Courant qui pousse le long de la pointe."]],"tip":"Combinaison 4/3 minimum, cagoule utile. Entre par les rochers du haut de la pointe.","sports":["surf","bodyboard"]},
-  {"id":"muizenberg","name":"Muizenberg","loc":"Le Cap, Afrique du Sud","level":"debutant","sky":"#dbe7ef","sky2":"#a3c0d4","sea":"#1c6d95","sea2":"#0a3d5c","wind":"Variable","swell":"0,9 m","temp":"16°C","tide":"Variable","danger":2,"desc":"La plage-école du Cap, avec ses cabanes de plage colorées et une mousse douce qui déroule longtemps. Tout le monde commence ici.","dangers":[["👥","Très fréquentée le week-end."],["🦈","Baie de False Bay : respecte les consignes de la surveillance requins."],["🥶","Eau fraîche toute l'année."]],"tip":"Regarde le drapeau de la vigie avant d'entrer, et reste dans la zone surveillée.","sports":["surf","bodyboard","baignade","paddle"]},
-  {"id":"dahab","name":"Blue Hole — Dahab","loc":"Mer Rouge, Égypte","level":"expert","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Brise","swell":"0,2 m","temp":"25°C","tide":"Sans objet","danger":4,"desc":"Un puits circulaire ouvert dans le récif, bordé de corail intact. Site magnifique en surface — et l'un des plus meurtriers du monde en profondeur, à cause de l'arche.","dangers":[["🕳️","L'arche profonde a fait de nombreuses victimes : elle n'est pas un objectif de loisir."],["⚠️","Profondeur trompeuse, l'eau très claire fait sous-estimer la descente."],["🚫","Ne plonge qu'avec un centre local et dans tes limites de brevet."]],"tip":"Le snorkeling sur le bord du trou est splendide et sans danger : il suffit largement.","sports":["plongee","snorkeling"]},
-  {"id":"nosybe","name":"Nosy Tanikely","loc":"Nosy Be, Madagascar","level":"debutant","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Brise","swell":"0,3 m","temp":"27°C","tide":"Variable","danger":1,"desc":"Une réserve marine autour d'un îlot : tortues, poissons de récif et coraux à quelques mètres du bord. L'un des meilleurs sites de snorkeling de l'océan Indien.","dangers":[["🚤","Navettes et pirogues autour de l'îlot."],["☀️","Aucune ombre sur la plage, soleil équatorial."]],"tip":"Un lycra plutôt que de la crème : le récif est protégé, et tu bronzes moins bêtement.","sports":["snorkeling","plongee","baignade"]},
-  {"id":"watamu","name":"Watamu","loc":"Kenya","level":"debutant","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Alizé","swell":"0,4 m","temp":"27°C","tide":"Marée basse","danger":2,"desc":"Un parc marin national protégé depuis les années 1960 : lagon peu profond, patates de corail et tortues qui viennent pondre sur la plage.","dangers":[["🌀","Courants forts dans les passes du récif à marée descendante."],["☀","Soleil équatorial, insolation rapide."],["🚫","Parc marin : ne prélève rien, ne touche pas le corail."]],"tip":"Reste dans le lagon à marée basse : les passes se vident très vite.","sports":["snorkeling","kitesurf","baignade","paddle"]},
-  {"id":"keramas","name":"Keramas","loc":"Bali, Indonésie","level":"expert","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Offshore","swell":"1,7 m","temp":"28°C","tide":"Marée montante","danger":4,"desc":"Droite courte et très creuse sur la côte est de Bali, réputée pour ses sections de manœuvres. Elle marche le matin, quand le vent de terre lisse la houle.","dangers":[["🪨","Fond de récif proche de la surface."],["⚡","Vague qui ferme brutalement sur la fin."],["👥","Pic étroit et très disputé."]],"tip":"Session à l'aube : après 9 h le vent tourne et la vague se hache.","sports":["surf","bodyboard"]},
-  {"id":"nias","name":"Lagundri Bay — Nias","loc":"Indonésie","level":"expert","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Offshore","swell":"2,0 m","temp":"28°C","tide":"Marée haute","danger":4,"desc":"Une droite de récif d'une régularité rare, dans une baie ouverte à la houle de l'océan Indien. Un tube long et lisible, mais sur un platier corallien très peu profond.","dangers":[["🪨","Corail affleurant, blessures fréquentes."],["⚡","Section de bowl très creuse à la fin."],["⚠️","Île isolée, secours médicaux éloignés."]],"tip":"Chaussons de récif et trousse de soin : ici, une coupure de corail s'infecte vite.","sports":["surf"]},
-  {"id":"gland","name":"G-Land — Plengkung","loc":"Java, Indonésie","level":"expert","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Offshore","swell":"2,0 m","temp":"28°C","tide":"Marée montante","danger":4,"desc":"Une gauche interminable qui déroule le long d'un récif, au bord d'un parc national où la jungle descend jusqu'à la plage. On n'y accède que par bateau.","dangers":[["🪨","Récif peu profond sur toute la longueur."],["⚠️","Site isolé dans un parc national, pas de secours immédiats."],["🌊","Sections très rapides par grosse houle."]],"tip":"Repère les trois sections depuis la plage avant de ramer : elles ne se surfent pas pareil.","sports":["surf"]},
-  {"id":"komodo","name":"Komodo","loc":"Indonésie","level":"expert","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Brise","swell":"0,4 m","temp":"27°C","tide":"Fort marnage","danger":4,"desc":"Des courants puissants entre les îles y concentrent une vie marine spectaculaire : raies manta, bancs serrés et tombants couverts de coraux mous.","dangers":[["🌀","Courants parmi les plus forts d'Indonésie, y compris descendants."],["🚤","Navigation dense entre les sites."],["⚠️","Plongée en dérive réservée aux plongeurs expérimentés."]],"tip":"Ne plonge qu'avec un guide local : ici, la lecture des courants est un métier.","sports":["plongee","snorkeling"]},
-  {"id":"bunaken","name":"Bunaken","loc":"Sulawesi, Indonésie","level":"intermediaire","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Brise","swell":"0,3 m","temp":"28°C","tide":"Variable","danger":2,"desc":"Des murs de corail qui plongent à la verticale dès quelques mètres, dans un parc marin national. Tortues et bancs de fusiliers le long du tombant.","dangers":[["🌀","Courant le long du tombant, variable selon la marée."],["⚠️","Le vide donne le vertige : surveille ton profondimètre."]],"tip":"Longe le tombant en gardant le mur à ta droite : tu ne te perdras pas.","sports":["plongee","snorkeling"]},
-  {"id":"similan","name":"Îles Similan","loc":"Thaïlande","level":"intermediaire","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Brise","swell":"0,3 m","temp":"28°C","tide":"Variable","danger":2,"desc":"Des blocs de granit posés sur le sable blanc, des gorgones et une eau très claire. Le parc national ferme une partie de l'année pour laisser le récif souffler.","dangers":[["🚫","Parc national : période de fermeture annuelle, renseigne-toi."],["🌀","Courant modéré entre les blocs."]],"tip":"Vérifie les dates d'ouverture du parc avant de réserver quoi que ce soit.","sports":["plongee","snorkeling","baignade"]},
-  {"id":"weligama","name":"Weligama","loc":"Sri Lanka","level":"debutant","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Onshore léger","swell":"0,8 m","temp":"28°C","tide":"Variable","danger":1,"desc":"Une baie sablonneuse peu profonde où la mousse déroule doucement sur des centaines de mètres. Le spot d'apprentissage de la côte sud.","dangers":[["👥","Beaucoup d'écoles de surf au même endroit."],["🏖️","Quelques rochers isolés côté est de la baie."]],"tip":"Reste sur la moitié ouest de la baie : le fond y est propre et régulier.","sports":["surf","bodyboard","baignade","paddle"]},
-  {"id":"ichinomiya","name":"Ichinomiya — Chiba","loc":"Japon","level":"intermediaire","sky":"#cfe6f5","sky2":"#8fc6e6","sea":"#2a86bf","sea2":"#0e4f7d","wind":"Offshore","swell":"1,2 m","temp":"21°C","tide":"Mi-marée","danger":2,"desc":"La plage de surf de la région de Tokyo, choisie pour les épreuves olympiques de 2021. Beach break régulier, très fréquenté le week-end.","dangers":[["👥","Affluence forte, priorité respectée à la japonaise."],["🌀","Courants de retour entre les bancs."],["⚠️","Saison des typhons en fin d'été : houle et vent brutaux."]],"tip":"Le matin en semaine, tu as la plage presque pour toi.","sports":["surf","bodyboard"]},
-  {"id":"kerama","name":"Îles Kerama","loc":"Okinawa, Japon","level":"debutant","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Brise","swell":"0,3 m","temp":"26°C","tide":"Variable","danger":1,"desc":"Un archipel de parc national à une heure de Naha, connu pour la transparence de son eau — le « bleu Kerama » — et pour ses tortues vertes qui broutent l'herbier.","dangers":[["🚤","Ferries et bateaux de plongée dans les passes."],["🌀","Courant entre les îlots."],["🚫","Parc national : garde tes distances avec les tortues."]],"tip":"Palme au-dessus de l'herbier sans t'y poser : c'est le garde-manger des tortues.","sports":["snorkeling","plongee","baignade","kayak"]},
-  {"id":"rincon","name":"Rincón — Tres Palmas","loc":"Porto Rico","level":"expert","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Offshore","swell":"2,0 m","temp":"27°C","tide":"Variable","danger":4,"desc":"La grosse droite des Caraïbes, qui ne se réveille qu'avec les houles d'hiver de l'Atlantique nord. Le spot est aussi une réserve marine de corail corne d'élan.","dangers":[["🌊","Ne marche que par grosse houle : puissance élevée."],["🪨","Récif de corail vivant, à ne pas toucher."],["🌀","Courant de sortie le long du récif."]],"tip":"Hors houle, c'est un site de snorkeling remarquable : le corail corne d'élan y est protégé.","sports":["surf","snorkeling"]},
-  {"id":"pavones","name":"Pavones","loc":"Costa Rica","level":"intermediaire","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Offshore","swell":"1,5 m","temp":"28°C","tide":"Marée montante","danger":3,"desc":"Une gauche de galets réputée pour sa longueur : par bonne houle du sud, une seule vague peut durer plus d'une minute.","dangers":[["🪨","Fond de galets roulants à l'entrée."],["🌀","Courant qui pousse vers l'embouchure de la rivière."],["⚠️","Village isolé, accès long par la route."]],"tip":"Marche jusqu'au haut de la pointe et rentre à pied : ramer contre le courant t'épuisera.","sports":["surf"]},
-  {"id":"tamarindo","name":"Tamarindo","loc":"Costa Rica","level":"debutant","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Onshore léger","swell":"0,9 m","temp":"28°C","tide":"Variable","danger":2,"desc":"Une baie large et sableuse, chaude toute l'année, avec des vagues d'école au centre et un estuaire bordé de mangrove à une extrémité.","dangers":[["🌀","Fort courant dans l'estuaire, surtout à marée descendante."],["👥","Nombreuses écoles de surf sur le même pic."],["⚠️","Crocodiles signalés dans l'estuaire : on n'y nage pas."]],"tip":"Reste sur la plage principale et évite complètement l'embouchure de la rivière.","sports":["surf","bodyboard","baignade","paddle"]},
-  {"id":"sayulita","name":"Sayulita","loc":"Mexique","level":"debutant","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Onshore léger","swell":"0,8 m","temp":"27°C","tide":"Variable","danger":1,"desc":"Un village de la côte Pacifique devenu spot d'apprentissage : vague molle, eau tiède, et des baleines à bosse au large en hiver.","dangers":[["👥","Baie petite et très fréquentée."],["🪨","Quelques rochers côté nord de la baie."]],"tip":"Le pic de gauche, à droite de la baie, est plus calme que le pic central.","sports":["surf","paddle","baignade","snorkeling"]},
-  {"id":"todossantos","name":"Todos Santos — Killers","loc":"Basse-Californie, Mexique","level":"expert","sky":"#ffd7c2","sky2":"#f79a86","sea":"#2a86bf","sea2":"#14547f","wind":"Offshore","swell":"3,5 m","temp":"17°C","tide":"Variable","danger":4,"desc":"Un haut-fond au large d'une île déserte, où la houle du Pacifique nord se dresse en murs énormes. Spot de très grosses vagues, accessible seulement en bateau.","dangers":[["🌊","Vagues de grande taille : matériel et expérience spécifiques."],["🚤","Accès uniquement par bateau, à une heure de la côte."],["⚠️","Aucun secours sur place."]],"tip":"Ce n'est pas un spot où l'on se teste. On y va accompagné, ou on regarde.","sports":["surf"]},
-  {"id":"islamujeres","name":"Isla Mujeres","loc":"Mexique","level":"debutant","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Alizé","swell":"0,4 m","temp":"28°C","tide":"Variable","danger":2,"desc":"Eaux calmes et claires au nord du Yucatán. En été, les requins-baleines se rassemblent au large pour filtrer le plancton — une sortie très encadrée.","dangers":[["🚤","Trafic de bateaux d'excursion dense en saison."],["🚫","Approche des requins-baleines réglementée : suis l'opérateur à la lettre."],["☀","Soleil intense sur le bateau."]],"tip":"Choisis un opérateur qui limite le nombre de nageurs à l'eau : c'est le vrai critère.","sports":["snorkeling","baignade","plongee","paddle"]},
-  {"id":"tofino","name":"Tofino — Cox Bay","loc":"Colombie-Britannique, Canada","level":"intermediaire","sky":"#dbe7ef","sky2":"#a3c0d4","sea":"#1c6d95","sea2":"#0a3d5c","wind":"Variable","swell":"1,6 m","temp":"11°C","tide":"Mi-marée","danger":3,"desc":"Une plage de sable au pied de la forêt pluviale, ouverte à la houle du Pacifique nord. On y surfe toute l'année, en combinaison épaisse.","dangers":[["🥶","Eau autour de 10°C : combinaison 5/4, cagoule, gants."],["🌀","Courants de retour marqués aux extrémités de la baie."],["🪨","Rochers et troncs flottants après les tempêtes."]],"tip":"Entre par le milieu de la plage : les bords creusent des courants de retour.","sports":["surf","bodyboard","kayak"]},
-  {"id":"newsmyrna","name":"New Smyrna Beach","loc":"Floride, USA","level":"debutant","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Onshore léger","swell":"0,8 m","temp":"26°C","tide":"Variable","danger":3,"desc":"Une plage à vagues courtes et fréquentes, très accessible — et le lieu qui concentre le plus de morsures de requins au monde, presque toutes bénignes et liées à l'eau trouble.","dangers":[["🦈","Morsures fréquentes près de l'embouchure : ne surfe pas dans l'eau trouble."],["🌀","Courants dans la passe de Ponce Inlet."],["👥","Plage très fréquentée."]],"tip":"Éloigne-toi de la jetée et de l'embouchure, et évite l'eau trouble et les bancs de poissons.","sports":["surf","bodyboard","baignade"]},
-  {"id":"montauk","name":"Montauk — Ditch Plains","loc":"New York, USA","level":"intermediaire","sky":"#dbe7ef","sky2":"#a3c0d4","sea":"#1c6d95","sea2":"#0a3d5c","wind":"Offshore NO","swell":"1,2 m","temp":"18°C","tide":"Mi-marée","danger":2,"desc":"La pointe de Long Island, où une houle d'Atlantique nord rencontre un fond de galets. Vague de longboard l'été, plus sérieuse à l'automne quand les tempêtes arrivent.","dangers":[["🪨","Fond de galets et blocs à marée basse."],["👥","Pic très fréquenté le week-end en saison."],["🥶","Eau froide hors été."]],"tip":"L'automne est la meilleure saison : houle plus longue et beaucoup moins de monde.","sports":["surf","bodyboard","paddle"]},
-  {"id":"mancora","name":"Máncora","loc":"Pérou","level":"intermediaire","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Offshore","swell":"1,2 m","temp":"24°C","tide":"Variable","danger":2,"desc":"La côte nord du Pérou échappe au courant froid de Humboldt : ici l'eau est tiède et la gauche de pointe déroule longtemps sur le sable.","dangers":[["👥","Pic unique, beaucoup de monde en haute saison."],["🌀","Courant qui longe la pointe vers le sud."]],"tip":"Entre par la plage au sud du pic et laisse le courant te remonter au bon endroit.","sports":["surf","kitesurf","baignade","paddle"]},
-  {"id":"huanchaco","name":"Huanchaco","loc":"Pérou","level":"debutant","sky":"#dbe7ef","sky2":"#a3c0d4","sea":"#1c6d95","sea2":"#0a3d5c","wind":"Onshore","swell":"1,0 m","temp":"18°C","tide":"Variable","danger":2,"desc":"Un village de pêcheurs où l'on rame encore sur des caballitos de totora, embarcations de roseau utilisées depuis des siècles. Longue gauche douce, idéale pour progresser.","dangers":[["🥶","Courant de Humboldt : eau fraîche toute l'année."],["🚤","Pêcheurs en caballitos et filets près du rivage."],["🌀","Courant longitudinal constant."]],"tip":"Regarde les pêcheurs entrer et sortir : ils connaissent le chenal par cœur.","sports":["surf","bodyboard","paddle"]},
-  {"id":"iquique","name":"Iquique — El Colegio","loc":"Chili","level":"expert","sky":"#dbe7ef","sky2":"#a3c0d4","sea":"#1c6d95","sea2":"#0a3d5c","wind":"Offshore","swell":"2,0 m","temp":"17°C","tide":"Marée basse","danger":4,"desc":"Une gauche de récif très creuse qui casse en pleine ville, sur un platier peu profond. Le désert d'Atacama descend jusqu'à la plage.","dangers":[["🪨","Récif à fleur d'eau à marée basse."],["⚡","Vague creuse qui ferme vite."],["🥶","Eau froide malgré la latitude."]],"tip":"Ce spot se surfe à marée haute quand on découvre : à marée basse il n'y a plus d'eau.","sports":["surf","bodyboard"]},
-  {"id":"praiadorosa","name":"Praia do Rosa","loc":"Santa Catarina, Brésil","level":"intermediaire","sky":"#cfe6f5","sky2":"#8fc6e6","sea":"#2a86bf","sea2":"#0e4f7d","wind":"Offshore","swell":"1,3 m","temp":"22°C","tide":"Variable","danger":2,"desc":"Une baie en fer à cheval bordée de collines. De juin à novembre, les baleines franches australes viennent y mettre bas — on les voit depuis la plage.","dangers":[["🌀","Courant au nord de la baie."],["🚫","Zone de reproduction des baleines : distances d'approche réglementées."]],"tip":"En saison, monte sur la colline plutôt que d'aller vers elles : la vue est meilleure et elles restent tranquilles.","sports":["surf","bodyboard","baignade","paddle"]},
-  {"id":"noronha","name":"Fernando de Noronha","loc":"Brésil","level":"intermediaire","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Alizé","swell":"1,0 m","temp":"27°C","tide":"Variable","danger":2,"desc":"Un archipel volcanique classé, à 350 km de la côte : eau limpide, tortues, et une baie où des centaines de dauphins à long bec viennent se reposer chaque matin.","dangers":[["🚫","Parc national marin : accès limité, taxe environnementale, zones interdites."],["🌀","Courants forts hors des baies abritées."],["🪨","Rochers volcaniques coupants."]],"tip":"La baie des Dauphins s'observe depuis le belvédère : on n'y entre pas à l'eau, et c'est très bien ainsi.","sports":["snorkeling","plongee","surf","baignade"]},
-  {"id":"ilhabela","name":"Ilhabela","loc":"São Paulo, Brésil","level":"debutant","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Thermique","swell":"0,4 m","temp":"24°C","tide":"Variable","danger":1,"desc":"Une grande île couverte de forêt atlantique, face au continent. Le canal abrité en fait un terrain de voile et de pagaie réputé, avec des criques accessibles seulement par l'eau.","dangers":[["🚤","Canal très fréquenté par la navigation de plaisance."],["💨","Vent thermique soutenu l'après-midi dans le canal."],["⚠️","Moustiques borrachudos sur les plages boisées."]],"tip":"Pars en kayak le matin : le canal est lisse avant que le vent ne se lève.","sports":["kayak","paddle","baignade","snorkeling","windsurf"]},
-  {"id":"puntadeleste","name":"Punta del Este — La Barra","loc":"Uruguay","level":"intermediaire","sky":"#cfe6f5","sky2":"#8fc6e6","sea":"#2a86bf","sea2":"#0e4f7d","wind":"Offshore","swell":"1,2 m","temp":"19°C","tide":"Variable","danger":2,"desc":"La plage la plus surfée d'Uruguay, à la limite entre le Río de la Plata et l'Atlantique. L'eau change de couleur selon les vents, du brun fluvial au bleu océanique.","dangers":[["🌀","Courants à l'embouchure de l'arroyo."],["👥","Très fréquentée en janvier et février."]],"tip":"Après plusieurs jours de vent d'est, l'eau redevient claire et la vague se range.","sports":["surf","bodyboard","baignade"]},
-  {"id":"ayampe","name":"Ayampe","loc":"Équateur","level":"debutant","sky":"#ffe3b8","sky2":"#ffb07a","sea":"#17b3c9","sea2":"#0b6f92","wind":"Onshore léger","swell":"1,0 m","temp":"24°C","tide":"Variable","danger":2,"desc":"Un village minuscule entre deux collines vertes, avec une plage de sable ouverte et une vague de gauche facile. Les baleines à bosse passent au large de juin à septembre.","dangers":[["🌀","Courant de retour au centre de la plage."],["🪨","Rochers aux deux extrémités."]],"tip":"Prends le pic du milieu : les bords de la plage cachent des rochers à marée basse.","sports":["surf","baignade","paddle"]},
-  {"id":"burleigh","name":"Burleigh Heads","loc":"Gold Coast, Australie","level":"expert","sky":"#cfe6f5","sky2":"#8fc6e6","sea":"#2a86bf","sea2":"#0e4f7d","wind":"Offshore SO","swell":"1,6 m","temp":"23°C","tide":"Mi-marée","danger":3,"desc":"Une droite de pointe qui s'enroule au pied d'un promontoire boisé, en plein cœur de la Gold Coast. Vague rapide et très disputée.","dangers":[["👥","Un des pics les plus compétitifs d'Australie."],["🪨","Rochers à l'entrée en haut de la pointe."],["🌀","Courant fort qui remonte le long du promontoire."]],"tip":"Entre par les rochers du haut de la pointe et attends ton tour : ici la priorité se respecte.","sports":["surf","bodyboard"]},
-  {"id":"byronbay","name":"Byron Bay — The Pass","loc":"Australie","level":"debutant","sky":"#cfe6f5","sky2":"#8fc6e6","sea":"#2a86bf","sea2":"#0e4f7d","wind":"Offshore O","swell":"1,0 m","temp":"23°C","tide":"Marée montante","danger":2,"desc":"Une droite longue et douce qui contourne le point le plus à l'est de l'Australie. Vague de longboard par excellence ; dauphins et tortues au line-up.","dangers":[["👥","Extrêmement fréquentée toute l'année."],["🌀","Courant qui pousse vers l'intérieur de la baie."],["🪨","Rochers affleurants près de la pointe."]],"tip":"Marche jusqu'au bout du sentier et entre à la pointe : ramer depuis la plage est long.","sports":["surf","paddle","baignade","snorkeling"]},
-  {"id":"manly","name":"Manly Beach","loc":"Sydney, Australie","level":"debutant","sky":"#cfe6f5","sky2":"#8fc6e6","sea":"#2a86bf","sea2":"#0e4f7d","wind":"Variable","swell":"1,1 m","temp":"21°C","tide":"Variable","danger":2,"desc":"La plage de surf historique de Sydney, à vingt minutes de ferry du centre. Vagues régulières, sauveteurs présents, et une réserve marine à l'extrémité nord.","dangers":[["👥","Très fréquentée, zones de baignade et de surf séparées."],["🌀","Courants de retour signalés par les drapeaux."],["☀","Soleil très fort, indice UV élevé."]],"tip":"Surfe en dehors des drapeaux rouges et jaunes : ces couloirs sont réservés aux nageurs.","sports":["surf","bodyboard","baignade","paddle","snorkeling"]},
-  {"id":"ningaloo","name":"Ningaloo Reef","loc":"Australie","level":"debutant","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Alizé","swell":"0,4 m","temp":"25°C","tide":"Variable","danger":2,"desc":"Un récif frangeant de plus de 250 km, accessible depuis la plage : on entre à pied dans le lagon et le corail commence à quelques brasses. Requins-baleines de mars à juillet.","dangers":[["🌀","Courant sortant dans les passes du récif."],["🚫","Site classé : ne pose jamais le pied sur le corail."],["☀","Soleil extrême, aucune ombre."]],"tip":"Entre par les chenaux de sable : marcher sur le platier tue le corail et t'entaille les pieds.","sports":["snorkeling","plongee","baignade","kayak"]},
-  {"id":"piha","name":"Piha","loc":"Nouvelle-Zélande","level":"expert","sky":"#dbe7ef","sky2":"#a3c0d4","sea":"#1c6d95","sea2":"#0a3d5c","wind":"Offshore E","swell":"1,8 m","temp":"17°C","tide":"Mi-marée","danger":4,"desc":"Une plage de sable noir volcanique au pied d'une forêt, sur la côte ouest d'Auckland. Beauté brute et courants parmi les plus traîtres du pays.","dangers":[["🌀","Courants de retour très puissants, sauvetages fréquents."],["🌊","Houle de Tasman souvent grosse et désordonnée."],["🪨","Rochers du Lion Rock et de la pointe sud."]],"tip":"Ne te baigne jamais hors des drapeaux : c'est la plage la plus secourue de Nouvelle-Zélande.","sports":["surf","bodyboard"]},
-  {"id":"shipwreck","name":"Shipwreck Bay — Ahipara","loc":"Nouvelle-Zélande","level":"intermediaire","sky":"#dbe7ef","sky2":"#a3c0d4","sea":"#1c6d95","sea2":"#0a3d5c","wind":"Offshore SE","swell":"1,5 m","temp":"18°C","tide":"Marée montante","danger":3,"desc":"À l'extrémité sud de Ninety Mile Beach, une série de pointes rocheuses enchaîne des gauches qui peuvent se relier sur des centaines de mètres.","dangers":[["🪨","Fond rocheux irrégulier, plateaux découvrants."],["🌀","Courant qui longe les pointes."],["⚠️","Région isolée, peu de monde en cas de problème."]],"tip":"Commence par la pointe la plus au sud : c'est la plus indulgente des trois.","sports":["surf","bodyboard"]},
-  {"id":"restaurants","name":"Restaurants — Namotu","loc":"Fidji","level":"expert","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Offshore SE","swell":"1,8 m","temp":"28°C","tide":"Marée haute","danger":4,"desc":"Une gauche courte et parfaitement tubulaire qui casse sur un récif au bord d'une passe, en face de l'île de Namotu. On y accède en bateau.","dangers":[["🪨","Corail très peu profond, surtout à marée basse."],["🌀","Courant fort dans la passe voisine."],["⚠️","Récif isolé : blessures à soigner immédiatement."]],"tip":"Ne surfe qu'à marée haute tant que tu ne connais pas le récif.","sports":["surf"]},
-  {"id":"borabora","name":"Bora Bora","loc":"Polynésie française","level":"debutant","sky":"#d9f4f2","sky2":"#9fe3dd","sea":"#19c0b4","sea2":"#0a7f86","wind":"Alizé","swell":"0,3 m","temp":"28°C","tide":"Variable","danger":1,"desc":"Un lagon fermé par une couronne de motus, autour d'un piton volcanique. Eau tiède et peu profonde, raies pastenagues et raies aigles dans les passes.","dangers":[["🚤","Trafic de navettes et d'excursions dans le lagon."],["🌀","Courant sortant dans la passe de Teavanui."],["🚫","Nourrissage des raies déconseillé : il modifie leur comportement."]],"tip":"Fais le tour du lagon en pagaie tôt le matin, avant que les bateaux ne le réveillent.","sports":["snorkeling","plongee","paddle","kayak","baignade"]},
-  {"id":"jardimdomar","name":"Jardim do Mar","loc":"Madère, Portugal","level":"expert","sky":"#cfe6f5","sky2":"#8fc6e6","sea":"#2a86bf","sea2":"#0e4f7d","wind":"Offshore N","swell":"2,2 m","temp":"20°C","tide":"Mi-marée","danger":4,"desc":"Une droite de galets au pied de falaises vertigineuses, sur la côte sud-ouest de Madère. Vague longue et puissante, qui ne se réveille que par grosse houle d'Atlantique nord.","dangers":[["🪨","Entrée et sortie sur des galets roulants."],["🌊","Puissance élevée dès que la houle dépasse 2 m."],["⚠️","Falaises : chutes de pierres possibles après la pluie."]],"tip":"Repère le point de sortie avant d'entrer : sur les galets, sortir est plus dur qu'entrer.","sports":["surf"]},
-  {"id":"santabarbara","name":"Santa Bárbara — Ribeira Grande","loc":"Açores, Portugal","level":"intermediaire","sky":"#cfe6f5","sky2":"#8fc6e6","sea":"#2a86bf","sea2":"#0e4f7d","wind":"Offshore S","swell":"1,5 m","temp":"19°C","tide":"Mi-marée","danger":2,"desc":"Une plage de sable volcanique sur la côte nord de São Miguel, ouverte à toutes les houles de l'Atlantique. Les Açores captent la houle avant l'Europe continentale.","dangers":[["🌀","Courants de retour marqués."],["🌊","Houle qui monte très vite, exposition totale."],["🥶","Eau autour de 18°C, vent frais."]],"tip":"Consulte la houle la veille : ici elle peut doubler de taille en une nuit.","sports":["surf","bodyboard","baignade"]},
-  {"id":"capomannu","name":"Capo Mannu","loc":"Sardaigne, Italie","level":"intermediaire","sky":"#e2f0fb","sky2":"#a9d8ef","sea":"#1f97c4","sea2":"#0b5e86","wind":"Mistral","swell":"1,4 m","temp":"20°C","tide":"Sans objet","danger":3,"desc":"La pointe ouest de la Sardaigne, la plus exposée au mistral : quand il souffle plusieurs jours, la Méditerranée y produit une vraie houle et une droite de récif se met en place.","dangers":[["🪨","Récif calcaire coupant, peu profond."],["💨","Mistral violent, mer désordonnée les premiers jours."],["🌀","Courant le long de la pointe."]],"tip":"Attends le deuxième ou le troisième jour de mistral : la mer se range enfin.","sports":["surf","bodyboard","windsurf"]},
-  {"id":"isolabella","name":"Isola Bella — Taormine","loc":"Sicile, Italie","level":"debutant","sky":"#e2f0fb","sky2":"#a9d8ef","sea":"#1f97c4","sea2":"#0b5e86","wind":"Brise","swell":"0,3 m","temp":"24°C","tide":"Sans objet","danger":1,"desc":"Un îlot relié à la plage par un cordon de galets, classé en réserve naturelle, au pied de Taormine et face à l'Etna. Fonds rocheux clairs et grottes marines.","dangers":[["🪨","Galets glissants et fonds rocheux."],["🚤","Bateaux d'excursion nombreux en été."],["🚫","Réserve naturelle : accès réglementé à l'îlot."]],"tip":"Longe la côte en kayak vers le nord : les grottes bleues se visitent par mer calme.","sports":["snorkeling","baignade","kayak","paddle"]},
-  {"id":"zlatnirat","name":"Zlatni Rat — Bol","loc":"Croatie","level":"intermediaire","sky":"#e2f0fb","sky2":"#a9d8ef","sea":"#1f97c4","sea2":"#0b5e86","wind":"Maestral","swell":"0,4 m","temp":"24°C","tide":"Sans objet","danger":2,"desc":"Une langue de galets qui avance dans l'Adriatique et change de forme avec les courants. Le maestral s'y lève chaque après-midi d'été : c'est le spot de voile de la Dalmatie.","dangers":[["💨","Vent thermique fort et régulier l'après-midi."],["🪨","Galets glissants, chaussons conseillés."],["👥","Plage très fréquentée en août."]],"tip":"Navigue côté est de la pointe le matin, côté ouest quand le maestral s'installe.","sports":["windsurf","kitesurf","baignade","paddle"]},
-  {"id":"naxos","name":"Mikri Vigla — Naxos","loc":"Grèce","level":"intermediaire","sky":"#e2f0fb","sky2":"#a9d8ef","sea":"#1f97c4","sea2":"#0b5e86","wind":"Meltem","swell":"0,5 m","temp":"24°C","tide":"Sans objet","danger":2,"desc":"Deux baies séparées par un promontoire : l'une pour le vent, l'autre pour se baigner. Le meltem souffle du nord tout l'été et fait de Naxos un repère de la voile en Égée.","dangers":[["💨","Meltem parfois très fort, jusqu'à plusieurs jours d'affilée."],["🌀","Courant entre les deux baies."],["🪨","Rochers au pied du promontoire."]],"tip":"Baie nord pour naviguer, baie sud pour nager : le promontoire sépare vraiment les deux mondes.","sports":["kitesurf","windsurf","baignade","paddle"]}
-];
+const SPOTS=window.OCEAN_CATALOG;
+if(!Array.isArray(SPOTS)||SPOTS.length!==280)throw new Error('Catalogue Ocean Buddy indisponible');
 
-const SCORES={imsouane:4.4,safi:4.7,sidikaouki:3.9,ngor:4.3,ouakam:4.4,elandsbay:4.2,muizenberg:3.8,dahab:4.5,nosybe:4.4,watamu:4.0,keramas:4.6,nias:4.7,gland:4.6,komodo:4.8,bunaken:4.5,similan:4.4,weligama:3.9,ichinomiya:4.0,kerama:4.5,rincon:4.5,pavones:4.4,tamarindo:3.7,sayulita:3.8,todossantos:4.6,islamujeres:4.2,tofino:4.1,newsmyrna:3.6,montauk:3.9,mancora:4.1,huanchaco:3.8,iquique:4.4,praiadorosa:4.3,noronha:4.8,ilhabela:4.0,puntadeleste:3.9,ayampe:3.8,burleigh:4.5,byronbay:4.3,manly:4.0,ningaloo:4.8,piha:4.2,shipwreck:4.1,restaurants:4.6,borabora:4.7,jardimdomar:4.4,santabarbara:4.1,capomannu:4.0,isolabella:4.2,zlatnirat:4.1,naxos:4.2,hossegor:4.6,lacanau:4.2,latorche:3.8,biarritz:4.0,anglet:4.5,quiberon:3.5,seignosse:4.3,capbreton:4.4,lafitenia:4.1,guethary:4.4,sauveterre:3.9,latranche:3.6,lapalue:4.3,penhors:3.9,lapalmyre:3.4,mimizan:4.0,capferret:4.5,bidart:4.2,nazare:4.8,supertubos:4.6,ericeira:4.4,mundaka:4.6,thurso:4.4,bundoran:4,rodiles:4.3,somo:3.9,zarautz:4,pantin:4.2,lasanta:4.5,anchorpoint:4.3,pipeline:4.9,mavericks:4.7,trestles:4.5,malibu:4.2,puerto:4.6,santateresa:4.2,chicama:4.4,puntadelobos:4.4,jbay:4.7,bells:4.3,snapper:4.5,margaret:4.4,uluwatu:4.7,padang:4.5,cloudbreak:4.8,teahupoo:4.9,floripa:4.1,puntaroca:4.2,raglan:4.4,saquarema:4.3,montanita:4,lobitos:4.3,mardelplata:3.8,arica:4.4,itacare:3.8,shonan:3.7,arugam:4.2,cloud9:4.5,waikiki:4,unstad:4.1,skeletonbay:4.6,mentawai:4.7,dungeons:4.4,bluehole_belize:4.8,sipadan:4.8,rasmohammed:4.7,thistlegorm:4.8,tulamben:4.5,greatbarrier:4.8,silfra:4.7,cenote_dosojos:4.6,medes:4.5,portcros:4.4,calanques:4.5,richelieu:4.6,rajaampat:4.9,galapagos:4.9,maldives:4.7,hanauma:4.5,bonaire:4.5,tarifa:4.6,dakhla:4.6,cabarete:4.4,lemorne:4.6,cumbuco:4.5,essaouira:4.3,lafranqui:4.4,jericoacoara:4.6,hookipa:4.7,pozo:4.5,gardalake:4.3,hoodriver:4.4,annecy:4.4,verdon:4.5,glenan:4.4,capri:4.3,palombaggia:4.5,praia_marinha:4.5,navagio:4.4,anse_source:4.7,whitehaven:4.7,wissant:4.2,letouquet:4,hardelot:3.9,wimereux:3.7,berck:3.9,malolesbains:3.6,lehavre:3.8,etretat:4.3,dieppe:3.7,siouville:4.2,vauville:4,hauteville:3.7,granville:3.8,saintmalo:4.1,saintlunaire:3.9,erquy:4,perros:4.1};
-
-const ANEC={
-  hossegor:"Hossegor accueille chaque année une étape du championnat du monde de surf (WSL). Son secret : le Gouf de Capbreton, un canyon sous-marin qui concentre la houle et muscle les vagues.",
-  lacanau:"Lacanau a accueilli les premiers grands championnats de surf français et vibre chaque été au rythme du Lacanau Pro, l'une des compétitions les plus populaires du pays.",
-  latorche:"La Torche est si exposée au vent qu'elle est devenue l'un des spots de kitesurf et de windsurf les plus réputés d'Europe, avec des coupes du monde à son palmarès.",
-  biarritz:"C'est sur la Côte des Basques qu'est né le surf en Europe, en 1957 : on la considère comme le berceau du surf du Vieux Continent.",
-  anglet:"Anglet aligne onze plages de surf sur quelques kilomètres, séparées par des digues : un vrai terrain de jeu où chaque plage a son ambiance.",
-  quiberon:"La presqu'île de Quiberon tient au continent par un isthme parfois large de seulement 22 mètres, que la mer menace lors des grosses tempêtes.",
-  seignosse:"Seignosse est bordée par l'une des plus grandes forêts plantées d'Europe, créée au 19e siècle pour fixer les dunes : ici, on surfe au milieu des pins.",
-  capbreton:"Au large de Capbreton s'ouvre le Gouf, un canyon sous-marin de plus de 3000 m de profondeur qui démarre à quelques centaines de mètres du bord.",
-  lafitenia:"Lafitenia est l'une des plus belles droites du Pays Basque : elle déroule si longuement dans sa baie qu'on la surnomme le petit point break basque.",
-  guethary:"Parlementia fut l'un des premiers spots de grosses vagues domptés en France, dès les années 1960, bien avant l'ère moderne du surf de gros.",
-  sauveterre:"La plage de Sauveterre est nichée dans une réserve naturelle : on peut y croiser des chevreuils dans la forêt juste avant d'enfiler la combinaison.",
-  latranche:"La Tranche-sur-Mer est surnommée la petite Californie vendéenne pour son microclimat ensoleillé et ses champs de fleurs derrière les dunes.",
-  lapalue:"La Palue est l'une des rares plages totalement sauvages de Bretagne : aucune construction à l'horizon, et une baignade réputée à vos risques et périls.",
-  penhors:"Penhors est célèbre pour son pardon, une procession bretonne séculaire sur la plage : un mélange unique de tradition et de surf.",
-  lapalmyre:"Pontaillac, à Royan, est l'un des plus vieux spots de la côte atlantique : on y surfe une vague formée par les rochers, au cœur d'une station Belle Époque.",
-  mimizan:"Mimizan abrite l'un des plus anciens phares des Landes ; la ville qui sentait jadis la papeterie sent aujourd'hui l'iode et la wax.",
-  capferret:"Au Cap Ferret, on surfe l'océan le matin et on rejoint le Bassin d'Arcachon l'après-midi : une langue de sable parmi les plus mouvantes de France.",
-  bidart:"Le spot du Pavillon Royal doit son nom à un ancien casino-hôtel de luxe fréquenté au début du 20e siècle par des têtes couronnées d'Europe."
-};
-const FUN={
-  biarritz:"Le surf est arrivé ici en 1956, pendant le tournage du film « Le soleil se lève aussi » : Peter Viertel, scénariste hollywoodien qui n'avait jamais surfé, reçoit une planche et tente ses premières vagues sur la Côte des Basques. Dès 1957, on ne comptait que quatre surfeurs dans toute la France — et le premier club de surf français naîtra ici en 1959.",
-  lacanau:"Le Lacanau Pro (1979) est la plus vieille compétition de surf d'Europe. Pour la toute première édition, le budget a été bouclé… grâce à une tombola et à la vente de sandwichs-merguez sur la plage ! 🌭",
-  latorche:"En 1986, La Torche a accueilli une épreuve de la Coupe du monde de windsurf dans des conditions dantesques (40 nœuds de vent). La légende Robby Naish y a brillé — tout en classant quand même le spot comme « vraiment difficile ».",
-  lafitenia:"Au large de Saint-Jean-de-Luz, la vague géante de Belharra a été surfée pour la première fois le 22 novembre 2002 par une poignée de surfeurs (dont Peyo Lizarazu). Déferlant à environ 2,5 km du bord et pouvant atteindre 8 à 15 m, elle a placé le Pays Basque sur la carte mondiale des grosses vagues."
-};
+const ANEC=Object.fromEntries(SPOTS.filter(s=>s.anecdote).map(s=>[s.id,s.anecdote]));
+const FUN=Object.fromEntries(SPOTS.filter(s=>s.funFact).map(s=>[s.id,s.funFact]));
 const MAPPOS={lapalue:{x:48.9,y:12.5},latorche:{x:50.6,y:16.1},penhors:{x:53.3,y:17.9},quiberon:{x:59.4,y:22.9},sauveterre:{x:59.4,y:35.7},latranche:{x:59.7,y:38.6},lapalmyre:{x:60,y:53.6},lacanau:{x:61.4,y:59.3},capferret:{x:60.8,y:63.6},mimizan:{x:61.4,y:69.3},seignosse:{x:61.7,y:76.8},hossegor:{x:61.9,y:78.2},capbreton:{x:62.2,y:79.3},anglet:{x:63.9,y:83.9},biarritz:{x:64.4,y:85.4},bidart:{x:65.3,y:87.1},guethary:{x:65.6,y:88.6},lafitenia:{x:66.4,y:90.7}};
 const favs=new Set();
 const sessions=[];
@@ -476,8 +30,8 @@ function showEcoLog(){
       + '<div class="eco-hd">'+uic('feuille')+'<div><h4>'+ecoLog.length+' gestes</h4>'
       + '<p>Ton carnet écolo, geste par geste.</p></div></div><div class="eco-l">';
   h+= ecoLog.length ? ecoLog.map(function(g){
-        return '<div class="eco-g"><div class="eco-t">'+g.t+'</div>'
-             + '<div class="eco-m">'+(g.l?g.l+' · ':'')+g.d+'</div></div>';
+        return '<div class="eco-g"><div class="eco-t">'+esc(g.t)+'</div>'
+             + '<div class="eco-m">'+(g.l?esc(g.l)+' · ':'')+esc(g.d)+'</div></div>';
       }).join('')
     : '<p class="eco-empty">Aucun geste enregistré pour l\'instant. Les défis écolo et les gestes des fiches spots viennent ici.</p>';
   h+='</div>';
@@ -488,25 +42,13 @@ function closeEcoLog(){
   var o=document.getElementById('ecoInfo'); if(o)o.classList.remove('open');
 }
 function applyName(){var hh=document.getElementById('homeHello');if(hh)hh.textContent='Salut '+userName;var pn=document.getElementById('profName');if(pn)pn.textContent=userName;var rt=document.getElementById('readyTitle');if(rt)rt.textContent='C’est parti, '+userName+' !';}
-const COORDS={
-  imsouane:{lat:30.84,lon:-9.82},safi:{lat:32.3,lon:-9.27},sidikaouki:{lat:31.36,lon:-9.8},ngor:{lat:14.76,lon:-17.51},ouakam:{lat:14.72,lon:-17.49},elandsbay:{lat:-32.31,lon:18.33},muizenberg:{lat:-34.11,lon:18.47},dahab:{lat:28.57,lon:34.54},nosybe:{lat:-13.48,lon:48.24},watamu:{lat:-3.36,lon:40.02},keramas:{lat:-8.59,lon:115.35},nias:{lat:0.58,lon:97.75},gland:{lat:-8.72,lon:114.35},komodo:{lat:-8.55,lon:119.48},bunaken:{lat:1.62,lon:124.76},similan:{lat:8.65,lon:97.64},weligama:{lat:5.97,lon:80.43},ichinomiya:{lat:35.37,lon:140.38},kerama:{lat:26.2,lon:127.35},rincon:{lat:18.35,lon:-67.27},pavones:{lat:8.4,lon:-83.13},tamarindo:{lat:10.3,lon:-85.84},sayulita:{lat:20.87,lon:-105.44},todossantos:{lat:31.8,lon:-116.8},islamujeres:{lat:21.23,lon:-86.73},tofino:{lat:49.12,lon:-125.89},newsmyrna:{lat:29.02,lon:-80.9},montauk:{lat:41.04,lon:-71.92},mancora:{lat:-4.1,lon:-81.05},huanchaco:{lat:-8.08,lon:-79.12},iquique:{lat:-20.24,lon:-70.15},praiadorosa:{lat:-28.13,lon:-48.64},noronha:{lat:-3.85,lon:-32.42},ilhabela:{lat:-23.78,lon:-45.35},puntadeleste:{lat:-34.94,lon:-54.9},ayampe:{lat:-1.67,lon:-80.78},burleigh:{lat:-28.09,lon:153.45},byronbay:{lat:-28.64,lon:153.62},manly:{lat:-33.8,lon:151.29},ningaloo:{lat:-22.7,lon:113.67},piha:{lat:-36.95,lon:174.47},shipwreck:{lat:-35.17,lon:173.13},restaurants:{lat:-17.83,lon:177.19},borabora:{lat:-16.5,lon:-151.74},jardimdomar:{lat:32.74,lon:-17.2},santabarbara:{lat:37.83,lon:-25.55},capomannu:{lat:40.05,lon:8.38},isolabella:{lat:37.85,lon:15.3},zlatnirat:{lat:43.26,lon:16.63},naxos:{lat:37.02,lon:25.36},
-    hossegor:{lat:43.66,lon:-1.44},lacanau:{lat:45.00,lon:-1.20},latorche:{lat:47.84,lon:-4.36},
-  biarritz:{lat:43.48,lon:-1.57},anglet:{lat:43.51,lon:-1.53},quiberon:{lat:47.49,lon:-3.12},
-  seignosse:{lat:43.70,lon:-1.43},capbreton:{lat:43.64,lon:-1.45},lafitenia:{lat:43.40,lon:-1.66},
-  guethary:{lat:43.42,lon:-1.61},sauveterre:{lat:46.53,lon:-1.80},latranche:{lat:46.34,lon:-1.43},
-  lapalue:{lat:48.21,lon:-4.59},penhors:{lat:47.90,lon:-4.40},lapalmyre:{lat:45.62,lon:-1.04},
-  mimizan:{lat:44.21,lon:-1.30},capferret:{lat:44.63,lon:-1.25},bidart:{lat:43.44,lon:-1.59}
-,nazare:{lat:39.605,lon:-9.085},supertubos:{lat:39.345,lon:-9.366},ericeira:{lat:38.99,lon:-9.42},mundaka:{lat:43.407,lon:-2.699},thurso:{lat:58.595,lon:-3.515},bundoran:{lat:54.476,lon:-8.289}
-,rodiles:{lat:43.527,lon:-5.39},somo:{lat:43.44,lon:-3.76},zarautz:{lat:43.285,lon:-2.17},pantin:{lat:43.625,lon:-8.085},lasanta:{lat:29.115,lon:-13.665}
-,anchorpoint:{lat:30.544,lon:-9.728},pipeline:{lat:21.665,lon:-158.053},mavericks:{lat:37.495,lon:-122.501},trestles:{lat:33.385,lon:-117.593},malibu:{lat:34.036,lon:-118.679},puerto:{lat:15.834,lon:-97.072},santateresa:{lat:9.643,lon:-85.169},chicama:{lat:-7.696,lon:-79.443},puntadelobos:{lat:-34.418,lon:-72.043},jbay:{lat:-34.049,lon:24.909},bells:{lat:-38.371,lon:144.283},snapper:{lat:-28.162,lon:153.549},margaret:{lat:-33.965,lon:114.992},uluwatu:{lat:-8.815,lon:115.089},padang:{lat:-8.81,lon:115.103},cloudbreak:{lat:-17.85,lon:177.19},teahupoo:{lat:-17.847,lon:-149.267},floripa:{lat:-27.628,lon:-48.451},puntaroca:{lat:13.487,lon:-89.323},raglan:{lat:-37.82,lon:174.79},saquarema:{lat:-22.92,lon:-42.5},montanita:{lat:-1.829,lon:-80.752},lobitos:{lat:-4.452,lon:-81.279},mardelplata:{lat:-38,lon:-57.53},arica:{lat:-18.476,lon:-70.323},itacare:{lat:-14.28,lon:-38.996}
-,shonan:{lat:35.31,lon:139.48},arugam:{lat:6.84,lon:81.836},cloud9:{lat:9.81,lon:126.17},waikiki:{lat:21.276,lon:-157.826},unstad:{lat:68.13,lon:13.52},skeletonbay:{lat:-23,lon:14.46},mentawai:{lat:-2.06,lon:99.57},dungeons:{lat:-34.05,lon:18.34},bluehole_belize:{lat:17.316,lon:-87.535},sipadan:{lat:4.115,lon:118.628},rasmohammed:{lat:27.72,lon:34.25},thistlegorm:{lat:27.81,lon:33.92},tulamben:{lat:-8.274,lon:115.592},greatbarrier:{lat:-16,lon:145.85},silfra:{lat:64.255,lon:-21.118},cenote_dosojos:{lat:20.327,lon:-87.39},medes:{lat:42.045,lon:3.225},portcros:{lat:43.005,lon:6.39},calanques:{lat:43.21,lon:5.44},richelieu:{lat:9.36,lon:98.02},rajaampat:{lat:-0.55,lon:130.52},galapagos:{lat:1.68,lon:-91.99},maldives:{lat:3.9,lon:72.83},hanauma:{lat:21.269,lon:-157.694},bonaire:{lat:12.105,lon:-68.235},tarifa:{lat:36.01,lon:-5.61},dakhla:{lat:23.71,lon:-15.93},cabarete:{lat:19.758,lon:-70.42},lemorne:{lat:-20.46,lon:57.31},cumbuco:{lat:-3.62,lon:-38.73},essaouira:{lat:31.51,lon:-9.77},lafranqui:{lat:42.95,lon:3.04},jericoacoara:{lat:-2.793,lon:-40.512},hookipa:{lat:20.934,lon:-156.357},pozo:{lat:27.8,lon:-15.42},gardalake:{lat:45.87,lon:10.87},hoodriver:{lat:45.71,lon:-121.51},annecy:{lat:45.85,lon:6.17},verdon:{lat:43.76,lon:6.22},glenan:{lat:47.72,lon:-3.99},capri:{lat:40.55,lon:14.24},palombaggia:{lat:41.55,lon:9.34},praia_marinha:{lat:37.09,lon:-8.41},navagio:{lat:37.86,lon:20.625},anse_source:{lat:-4.38,lon:55.83},whitehaven:{lat:-20.28,lon:149.04},wissant:{lat:50.885,lon:1.659},letouquet:{lat:50.524,lon:1.583},hardelot:{lat:50.633,lon:1.585},wimereux:{lat:50.766,lon:1.608},berck:{lat:50.404,lon:1.56},malolesbains:{lat:51.055,lon:2.395},lehavre:{lat:49.493,lon:0.095},etretat:{lat:49.707,lon:0.204},dieppe:{lat:49.927,lon:1.078},siouville:{lat:49.564,lon:-1.844},vauville:{lat:49.628,lon:-1.835},hauteville:{lat:48.948,lon:-1.567},granville:{lat:48.838,lon:-1.598},saintmalo:{lat:48.652,lon:-2.018},saintlunaire:{lat:48.632,lon:-2.11},erquy:{lat:48.633,lon:-2.466},perros:{lat:48.82,lon:-3.448}
-};
+const COORDS=Object.fromEntries(SPOTS.map(spot=>[spot.id,spot.coords]));
 /* ---- persistance (localStorage) ---- */
 const STORE_KEY='oceanbuddy_v1';
 function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify({xp:xp,favs:[...favs],sessions:sessions,level:chosenLevel,sport:chosenSport,name:userName,eco:ecoLog}));}catch(e){}}
 function loadState(){try{const d=JSON.parse(localStorage.getItem(STORE_KEY)||'null');if(!d)return false;
   if(typeof d.xp==='number')xp=d.xp;
-  if(Array.isArray(d.favs))d.favs.forEach(f=>favs.add(f));
+  if(Array.isArray(d.favs))d.favs.forEach(f=>favs.add(window.OceanLegacySpots?.canonicalId(f)||f));
   if(Array.isArray(d.sessions)){sessions.length=0;d.sessions.forEach(s=>sessions.push(s));}
   if(d.level)chosenLevel=d.level;
   if(d.sport){chosenSport=d.sport;activeSport=(d.sport!=='all')?d.sport:null;}
@@ -564,13 +106,15 @@ function scene(s,big){
   /* un meme spot peut etre rendu deux fois (accueil + liste) : sans compteur,
      la seconde copie pointe sur les degrades de la premiere, qui est sur un
      ecran masque — et Chromium ne peint alors ni ciel ni mer. */
-  const u=s.id+(big?'-b':'-s')+'_'+(++_sceneSeq);
+  const u='scene-'+(++_sceneSeq);
+  const color=(value,fallback)=>/^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(String(value))?value:fallback;
+  const sky=color(s.sky,'#9bd8ec'),sky2=color(s.sky2,'#4b9dc4'),sea=color(s.sea,'#1984a8'),sea2=color(s.sea2,'#13516f');
   const a=big?1:(H/240);
   const wy=v=>Math.round(v*a);
   return `<svg class="scene" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <defs>
-      <linearGradient id="sky-${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${s.sky}"/><stop offset="100%" stop-color="${s.sky2}"/></linearGradient>
-      <linearGradient id="sea-${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${s.sea}"/><stop offset="100%" stop-color="${s.sea2}"/></linearGradient>
+      <linearGradient id="sky-${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${sky}"/><stop offset="100%" stop-color="${sky2}"/></linearGradient>
+      <linearGradient id="sea-${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${sea}"/><stop offset="100%" stop-color="${sea2}"/></linearGradient>
       <radialGradient id="sun-${u}" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#fffaee"/><stop offset="45%" stop-color="#ffe6ab" stop-opacity=".9"/><stop offset="100%" stop-color="rgba(255,224,154,0)"/></radialGradient>
       <radialGradient id="sund-${u}" cx="50%" cy="42%" r="55%"><stop offset="0%" stop-color="#fffdf5"/><stop offset="100%" stop-color="#ffdf8e"/></radialGradient>
       <linearGradient id="wf-${u}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffffff"/><stop offset="100%" stop-color="#ffffff" stop-opacity=".25"/></linearGradient>
@@ -591,9 +135,9 @@ function scene(s,big){
       <path d="M44 ${wy(44)} q5 -6 9 0 q4 -6 9 0"/><path d="M96 ${wy(32)} q4 -5 7 0 q3 -5 7 0"/>
     </g>
     <!-- clouds (shaded) -->
-    <g><ellipse cx="86" cy="${wy(40)}" rx="30" ry="10" fill="#ffffff" opacity=".55"/><ellipse cx="112" cy="${wy(35)}" rx="19" ry="7" fill="#ffffff" opacity=".5"/><ellipse cx="90" cy="${wy(45)}" rx="28" ry="6" fill="${s.sky2}" opacity=".25"/></g>
+    <g><ellipse cx="86" cy="${wy(40)}" rx="30" ry="10" fill="#ffffff" opacity=".55"/><ellipse cx="112" cy="${wy(35)}" rx="19" ry="7" fill="#ffffff" opacity=".5"/><ellipse cx="90" cy="${wy(45)}" rx="28" ry="6" fill="${sky2}" opacity=".25"/></g>
     <!-- distant cliff -->
-    <path d="M0 ${hz} L0 ${hz-wy(34)} Q26 ${hz-wy(48)} 52 ${hz-wy(30)} Q72 ${hz-wy(18)} 96 ${hz} Z" fill="${s.sea2}" opacity=".35"/>
+    <path d="M0 ${hz} L0 ${hz-wy(34)} Q26 ${hz-wy(48)} 52 ${hz-wy(30)} Q72 ${hz-wy(18)} 96 ${hz} Z" fill="${sea2}" opacity=".35"/>
     <!-- sea -->
     <path d="M0 ${hz} H${W} V${H} H0Z" fill="url(#sea-${u})"/>
     <!-- sun glitter -->
@@ -602,10 +146,10 @@ function scene(s,big){
       <rect x="${cx-15}" y="${hz+20}" width="30" height="3" rx="1.5"/><rect x="${cx-9}" y="${hz+28}" width="18" height="3" rx="1.5"/>
     </g>
     <!-- back swell -->
-    <path d="M-20 ${wy(150)} Q90 ${wy(132)} 200 ${wy(150)} T420 ${wy(150)} L420 ${H} L-20 ${H} Z" fill="${s.sea2}" opacity=".55"/>
+    <path d="M-20 ${wy(150)} Q90 ${wy(132)} 200 ${wy(150)} T420 ${wy(150)} L420 ${H} L-20 ${H} Z" fill="${sea2}" opacity=".55"/>
     <!-- breaking wave: shadow, face, lip foam, curl -->
-    <path d="M-20 ${wy(178)} C70 ${wy(122)} 150 ${wy(220)} 250 ${wy(156)} C300 ${wy(134)} 340 ${wy(156)} 380 ${wy(148)} L380 ${H} L-20 ${H} Z" fill="${s.sea2}" opacity=".9"/>
-    <path d="M-20 ${wy(192)} C80 ${wy(144)} 160 ${wy(230)} 260 ${wy(170)} C310 ${wy(146)} 350 ${wy(168)} 380 ${wy(160)} L380 ${H} L-20 ${H} Z" fill="${s.sea}"/>
+    <path d="M-20 ${wy(178)} C70 ${wy(122)} 150 ${wy(220)} 250 ${wy(156)} C300 ${wy(134)} 340 ${wy(156)} 380 ${wy(148)} L380 ${H} L-20 ${H} Z" fill="${sea2}" opacity=".9"/>
+    <path d="M-20 ${wy(192)} C80 ${wy(144)} 160 ${wy(230)} 260 ${wy(170)} C310 ${wy(146)} 350 ${wy(168)} 380 ${wy(160)} L380 ${H} L-20 ${H} Z" fill="${sea}"/>
     <path d="M30 ${wy(168)} C70 ${wy(132)} 120 ${wy(150)} 150 ${wy(186)} C120 ${wy(172)} 80 ${wy(168)} 50 ${wy(190)} Z" fill="url(#wf-${u})" opacity=".5"/>
     <path d="M-20 ${wy(178)} C70 ${wy(122)} 150 ${wy(220)} 250 ${wy(156)}" stroke="#ffffff" stroke-width="${big?8:5.5}" fill="none" stroke-linecap="round"/>
     <path d="M-20 ${wy(184)} C70 ${wy(130)} 150 ${wy(224)} 250 ${wy(162)}" stroke="#ffffff" stroke-width="${big?3:2}" fill="none" stroke-linecap="round" opacity=".6"/>
@@ -667,37 +211,37 @@ const SPORTMAP={};SPORTS.forEach(x=>SPORTMAP[x.id]=x);
 /* Activity and experience are represented by Poulpy, with explicit text labels. */
 function sportIcon(id,color){return window.PoulpyIcons.html(id,'spico');}
 function levelIcon(level){return window.PoulpyIcons.html(level,'level-poulpy');}
-const WINDY=new Set(['latranche','lacanau','capferret','mimizan','quiberon','penhors','somo','zarautz','mardelplata','floripa','raglan','pantin']);
 function spotSports(s){
-  if(Array.isArray(s.sports)&&s.sports.length)return s.sports.filter(x=>SPORTMAP[x]);
-  const t=parseInt(s.temp)||16,lvl=s.level,dg=s.danger||0;
-  const out=['surf','bodyboard'];
-  if(lvl!=='expert'&&dg<=3){out.push('baignade');out.push('paddle');}
-  if(lvl==='debutant'&&dg<=2)out.push('kayak');
-  const reef=/(récif|recif|corallien|corail|lagon|reef)/i.test((s.desc||'')+' '+((typeof FAUNA!=='undefined'&&FAUNA[s.id])||''));
-  if(t>=21||reef){out.push('snorkeling');if(reef||dg>=3)out.push('plongee');}
-  if(WINDY.has(s.id)){out.push('windsurf');out.push('kitesurf');}
-  return out.filter((v,i,a)=>a.indexOf(v)===i);
+  return Array.isArray(s.sports)?s.sports.filter((id,index,all)=>SPORTMAP[id]&&all.indexOf(id)===index):[];
+}
+function spotCardMeta(s){
+  const live=LIVE[s.id]||{};
+  if(!live.live)return '<span class="spot-preview">'+spotSports(s).slice(0,3).map(id=>SPORTMAP[id].label).join(' · ')+'</span>';
+  const checked=live.fetchedAt?new Date(live.fetchedAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):'';
+  return `<span>${icoWind()} ${esc(live.wind||'—')}</span><span>${icoSwell()} ${esc(live.swell||'—')}</span><span>${icoTemp()} ${esc(live.temp||'—')}</span><span class="live-dot" title="Modèle Open-Meteo${checked?' · consulté à '+checked:''}"></span>`;
 }
 function spotCard(s){
-  let dots='';for(let i=0;i<4;i++)dots+=`<span class="dot ${i<s.danger?'on':''}"></span>`;
-  const L=LIVE[s.id]||{};
-  const sp=spotSports(s).slice(0,6).map(id=>`<span title="${SPORTMAP[id].label}">${sportIcon(id)}</span>`).join('');
+  let dots='';for(let i=0;i<4;i++)dots+=`<span class="dot ${i<Math.min(4,Math.max(0,Number(s.danger)||0))?'on':''}"></span>`;
+  const sports=spotSports(s),sp=sports.slice(0,6).map(id=>`<span title="${esc(SPORTMAP[id].label)}">${sportIcon(id)}</span>`).join('');
   const dist=(nearMode&&userPos)?spotDist(s):null;
   const photo=spotPhotoUrl(s.id,480);
-  return `<article class="spot" data-spot-id="${s.id}" tabindex="0" role="button" aria-label="Découvrir ${s.name}" onclick="openSpot('${s.id}')">
+  const idArg=esc(JSON.stringify(String(s.id))),level=['debutant','intermediaire','expert','variable'].includes(s.level)?s.level:'variable';
+  const levelMark=level==='variable'&&sports[0]?sportIcon(sports[0]):levelIcon(level);
+  const levelText=level==='variable'&&sports[0]?SPORTMAP[sports[0]].label:lvlLabel[level];
+  return `<article class="spot" data-spot-id="${esc(s.id)}" tabindex="0" role="button" aria-label="Découvrir ${esc(s.name)}" onclick="openSpot(${idArg})" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openSpot(${idArg})}">
     <div class="spot-banner">${scene(s,false)}
-      ${photo?`<img class="spot-photo" src="${photo}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">`:''}
+      ${photo?`<img class="spot-photo" src="${esc(photo)}" alt="" loading="lazy" decoding="async" onerror="this.style.display='none'">`:''}
       <div class="spot-shade"></div>
-      <button class="fav" aria-label="${favs.has(s.id)?'Retirer des favoris':'Ajouter aux favoris'}" aria-pressed="${favs.has(s.id)}" onclick="toggleFav('${s.id}',event)">${favs.has(s.id)?FAV_ON:FAV_OFF}</button>
+      <button class="fav" aria-label="${favs.has(s.id)?'Retirer des favoris':'Ajouter aux favoris'}" aria-pressed="${favs.has(s.id)}" onclick="toggleFav(${idArg},event)">${favs.has(s.id)?FAV_ON:FAV_OFF}</button>
       ${dist!=null?`<span class="dist-tag"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${fmtDist(dist)}</span>`:''}
-      <span class="lvl-tag lvl-${s.level}">${s.level==='variable'?sportIcon(spotSports(s)[0]):levelIcon(s.level)}${s.level==='variable'?SPORTMAP[spotSports(s)[0]].label:lvlLabel[s.level]}</span>
+      <span class="lvl-tag lvl-${level}">${levelMark}${esc(levelText)}</span>
       ${s.catalogNew?'<span class="catalog-new">Nouveau</span>':''}
-      <div class="glass-name"><h3>${s.name}</h3><div class="gn-loc"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${s.loc}</div></div>
+      ${s.custom?'<span class="spot-private">Spot privé</span>':''}
+      <div class="glass-name"><h3>${esc(s.name)}</h3><div class="gn-loc"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${esc(s.loc)}</div></div>
       <span class="spot-go">Voir →</span>
     </div>
     <div class="spot-info">
-      <div class="spot-meta">${L.live?`<span>${icoWind()} ${L.wind||'—'}</span><span>${icoSwell()} ${L.swell||'—'}</span><span>${icoTemp()} ${L.temp||'—'}</span><span class="live-dot" title="Prévisions Open-Meteo"></span>`:'<span class="spot-preview">'+spotSports(s).slice(0,3).map(id=>SPORTMAP[id].label).join(' · ')+'</span>'}</div>
+      <div class="spot-meta">${spotCardMeta(s)}</div>
       <div class="spot-sports">${sp}</div>
       ${window.OceanNotebook?.button(s.id)||''}
       <div class="danger-dots" title="Danger">${dots}</div>
@@ -705,6 +249,9 @@ function spotCard(s){
   </article>`;
 }
 let currentFilter='all',currentSpot=null,currentSearch='';const LIVE={};let activeSport=null,favOnly=false;
+const CONDITION_TTL=30*60*1000;
+const conditionQueue=new Set(),conditionPending=new Set(),conditionAttempted=new Map();
+let conditionObserver=null,conditionTimer=null;
 var FAV_ON='<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 20.4S3.8 14.9 3.8 9.4A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.2 2.8c0 5.5-8.2 11-8.2 11z"/></svg>';
 var FAV_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.4S3.8 14.9 3.8 9.4A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.2 2.8c0 5.5-8.2 11-8.2 11z"/></svg>';
 function toggleFavFilter(){favOnly=!favOnly;const c=document.getElementById('favChip');if(c)c.classList.toggle('active',favOnly);renderSpots();renderMap(true);if(favOnly&&!favs.size)toast('Touche le ❤️ d’un spot pour l’ajouter');}
@@ -781,7 +328,7 @@ function moreSpots(){ spotShown+=SPOT_PAGE; renderSpots(currentFilter,true); }
    On entre par une page de sélection, chaque monde avec sa lumière et sa
    silhouette. La répartition vient du champ `loc` de chaque spot. */
 var WORLDS=[{"id":"fr","lab":"France","sub":"Landes · Bretagne · Méditerranée","c":["#c6e2f8","#7ab8e0","#2b86c0","#12608f","#ffffff","#c2d4e1"],"sun":[214,28,17],"art":"<path fill=\"url(#wsh-fr)\" d=\"M40 78V34Q62 25 98 30L112 36L166 46L170 78H150V60Q150 51 139 51Q128 51 128 60V78Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".20\" d=\"M112 36L166 46L170 78H150V60Q150 51 139 51Z\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M186 78l8-36 8 36Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".20\" d=\"M194 42l8 36h-4Z\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M0 78V60q18-7 34-2v20Z\" opacity=\".8\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M300 78V68q28-9 60-4v14Z\" opacity=\".75\"/>"},{"id":"eu","lab":"Europe","sub":"Portugal · Espagne · Norvège","c":["#e3ecf3","#a8c4d6","#22759c","#0d4767","#9db6c7","#4d6779"],"sun":[176,24,15],"art":"<g fill=\"url(#wsh-eu)\">\n      <path d=\"M0 78V56q44-16 86-6l24 8v20Z\"/>\n      <path d=\"M250 78V68q36-13 72-8l38 6v12Z\"/>\n    </g>\n    <g fill=\"#f8fbfd\">\n      <path d=\"M50 64l4-28h18l4 28Z\"/>\n      <rect x=\"48\" y=\"31\" width=\"30\" height=\"5\" rx=\"2\"/>\n      <rect x=\"55\" y=\"21\" width=\"16\" height=\"10\"/>\n      <path d=\"M52 21h22l-11-9Z\"/>\n    </g>\n    <circle cx=\"63\" cy=\"26\" r=\"3.6\" fill=\"#ffd35e\"/>\n    <g fill=\"#e05a49\"><rect x=\"55\" y=\"40\" width=\"16\" height=\"5\"/><rect x=\"53\" y=\"52\" width=\"20\" height=\"5\"/></g>"},{"id":"af","lab":"Afrique","sub":"Maroc · Mer Rouge · Maurice","c":["#ffeccb","#ffbe86","#1cadc2","#0f7b98","#f1d29c","#cb9c5e"],"sun":[58,32,19],"art":"<path fill=\"url(#wsh-af)\" d=\"M0 78V62q66-26 138-12 60 12 118-6 52-15 104 4v30Z\"/>\n    <path fill=\"#ffffff\" opacity=\".22\" d=\"M0 78V62q66-26 138-12l-52 28Z\"/>\n    <path stroke=\"#6b5334\" stroke-width=\"4.5\" fill=\"none\" stroke-linecap=\"round\" d=\"M118 74q1-18 11-30\"/>\n    <g fill=\"#3f7a52\">\n      <path d=\"M129 44q-18-3-24 7 13-3 24-3Z\"/>\n      <path d=\"M129 44q17-6 25 4-13-2-25-1Z\"/>\n      <path d=\"M129 44q-10-14-24-13 10 5 24 15Z\"/>\n      <path d=\"M129 44q10-15 25-13-11 5-25 15Z\"/>\n    </g>"},{"id":"na","lab":"Amérique du Nord","sub":"Californie · Mexique · Caraïbes","c":["#ffdcc6","#f79a86","#2f8dc6","#175f8d","#829584","#42574a"],"sun":[212,32,20],"art":"<path fill=\"url(#wsh-na)\" d=\"M0 78V48q34-16 74-8l92 14v24Z\"/>\n    <g fill=\"#2c4b3f\">\n      <path d=\"M28 44l8-18 8 18Z\"/><path d=\"M30 36l6-14 6 14Z\"/>\n      <path d=\"M64 41l9-20 9 20Z\"/><path d=\"M66 32l7-15 7 15Z\"/>\n      <path d=\"M104 45l7-16 7 16Z\"/>\n    </g>\n    <path fill=\"url(#wsh-na)\" opacity=\".6\" d=\"M262 78V68q34-12 66-5l32 6v9Z\"/>"},{"id":"sa","lab":"Amérique du Sud","sub":"Pérou · Brésil · Chili","c":["#ffeac6","#f6b06d","#2091ba","#0d5f81","#c68f68","#83583c"],"sun":[214,30,18],"art":"<path fill=\"url(#wsh-sa)\" d=\"M0 78V52q56-15 108-2 56 14 110 4 60-10 142-16v40Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".13\" d=\"M0 78V52q56-15 108-2l-64 28Z\"/>\n    <g fill=\"#3d7a4f\">\n      <path d=\"M152 78V36q0-7 6-7t6 7v42Z\"/>\n      <path d=\"M140 78V54q0-9 9-9v33Z\"/>\n      <path d=\"M176 78V48q0-9-9-9v39Z\"/>\n      <path d=\"M206 78V58q0-5 4-5t4 5v20Z\"/>\n      <path d=\"M198 78V66q0-6 6-6v18Z\"/>\n    </g>"},{"id":"as","lab":"Asie","sub":"Indonésie · Maldives · Japon","c":["#e2f6f2","#a8e3dd","#19bbb0","#0c7b81","#b9cdc2","#5e7d72"],"sun":[64,30,16],"art":"<g fill=\"url(#wsh-as)\">\n      <path d=\"M22 78V52q0-12 10-12t10 12v26Z\"/>\n      <path d=\"M62 78V28q0-18 16-18t16 18v50Z\"/>\n      <path d=\"M112 78V46q0-13 11-13t11 13v32Z\"/>\n      <path d=\"M244 78V56q0-11 9-11t9 11v22Z\"/>\n    </g>\n    <g fill=\"#1b4a6b\" opacity=\".16\">\n      <path d=\"M78 10q16 0 16 18v50h-10V28q0-14-6-18Z\"/>\n      <path d=\"M123 33q11 0 11 13v32h-7V46q0-10-4-13Z\"/>\n    </g>\n    <g fill=\"#2f5245\">\n      <path d=\"M62 30q16-13 32 0-16-5-32 0Z\"/>\n      <path d=\"M22 53q10-8 20 0-10-3-20 0Z\"/>\n      <path d=\"M112 47q11-9 22 0-11-3-22 0Z\"/>\n      <path d=\"M244 57q9-7 18 0-9-3-18 0Z\"/>\n    </g>"},{"id":"oc","lab":"Océanie","sub":"Hawaï · Australie · Tahiti","c":["#d5edf9","#84c8e9","#1599d8","#0a5288","#7c92a8","#3a4c63"],"sun":[66,28,15],"art":"<path fill=\"url(#wsh-oc)\" d=\"M92 78l58-44q10-8 20 0l62 44Z\"/>\n    <path fill=\"#ffffff\" opacity=\".20\" d=\"M92 78l58-44q10-8 20 0l-26 44Z\"/>\n    <path fill=\"#16283c\" opacity=\".20\" d=\"M170 34l62 44h-38Z\"/>\n    <path fill=\"#f6fafc\" opacity=\".78\" d=\"M149 35q11-7 22 0-5-7-11-7t-11 7Z\"/>\n    <path fill=\"url(#wsh-oc)\" opacity=\".5\" d=\"M282 78V70q30-10 60-4l18 4v8Z\"/>"}];
-var SPOT_WORLD={"imsouane":"af","safi":"af","sidikaouki":"af","ngor":"af","ouakam":"af","elandsbay":"af","muizenberg":"af","dahab":"af","nosybe":"af","watamu":"af","keramas":"as","nias":"as","gland":"as","komodo":"as","bunaken":"as","similan":"as","weligama":"as","ichinomiya":"as","kerama":"as","rincon":"na","pavones":"na","tamarindo":"na","sayulita":"na","todossantos":"na","islamujeres":"na","tofino":"na","newsmyrna":"na","montauk":"na","mancora":"sa","huanchaco":"sa","iquique":"sa","praiadorosa":"sa","noronha":"sa","ilhabela":"sa","puntadeleste":"sa","ayampe":"sa","burleigh":"oc","byronbay":"oc","manly":"oc","ningaloo":"oc","piha":"oc","shipwreck":"oc","restaurants":"oc","borabora":"oc","jardimdomar":"eu","santabarbara":"eu","capomannu":"eu","isolabella":"eu","zlatnirat":"eu","naxos":"eu","hossegor":"fr","lacanau":"fr","latorche":"fr","biarritz":"fr","anglet":"fr","quiberon":"fr","seignosse":"fr","capbreton":"fr","lafitenia":"fr","guethary":"fr","sauveterre":"fr","latranche":"fr","lapalue":"fr","penhors":"fr","lapalmyre":"fr","mimizan":"fr","capferret":"fr","bidart":"fr","lafranqui":"fr","portcros":"fr","calanques":"fr","annecy":"fr","verdon":"fr","glenan":"fr","palombaggia":"fr","wissant":"fr","letouquet":"fr","hardelot":"fr","wimereux":"fr","berck":"fr","malolesbains":"fr","lehavre":"fr","etretat":"fr","dieppe":"fr","siouville":"fr","vauville":"fr","hauteville":"fr","granville":"fr","saintmalo":"fr","saintlunaire":"fr","erquy":"fr","perros":"fr","nazare":"eu","supertubos":"eu","ericeira":"eu","mundaka":"eu","thurso":"eu","bundoran":"eu","rodiles":"eu","somo":"eu","zarautz":"eu","pantin":"eu","lasanta":"eu","unstad":"eu","silfra":"eu","medes":"eu","tarifa":"eu","pozo":"eu","gardalake":"eu","capri":"eu","praia_marinha":"eu","navagio":"eu","anchorpoint":"af","jbay":"af","dungeons":"af","skeletonbay":"af","rasmohammed":"af","thistlegorm":"af","dakhla":"af","essaouira":"af","lemorne":"af","anse_source":"af","mavericks":"na","trestles":"na","malibu":"na","hoodriver":"na","puerto":"na","cenote_dosojos":"na","santateresa":"na","puntaroca":"na","bluehole_belize":"na","bonaire":"na","cabarete":"na","chicama":"sa","lobitos":"sa","puntadelobos":"sa","arica":"sa","floripa":"sa","saquarema":"sa","itacare":"sa","cumbuco":"sa","jericoacoara":"sa","montanita":"sa","galapagos":"sa","mardelplata":"sa","uluwatu":"as","padang":"as","mentawai":"as","tulamben":"as","rajaampat":"as","sipadan":"as","shonan":"as","arugam":"as","cloud9":"as","richelieu":"as","maldives":"as","bells":"oc","snapper":"oc","margaret":"oc","greatbarrier":"oc","whitehaven":"oc","raglan":"oc","cloudbreak":"oc","teahupoo":"oc","pipeline":"oc","waikiki":"oc","hanauma":"oc","hookipa":"oc"};
+var SPOT_WORLD=Object.fromEntries(SPOTS.map(spot=>[spot.id,spot.world]));
 var spotWorld=null,spotCountry=null;
 /* Pays dérivé du catalogue : cette étape garde les données locales et évite
    de charger une carte mondiale illisible avant que l'utilisateur ait choisi
@@ -803,11 +350,21 @@ function countryOf(s){
 function countryId(label){return searchable(label).replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'')}
 function inWorld(s){ return (!spotWorld||spotWorld==='all'||SPOT_WORLD[s.id]===spotWorld) && (!spotCountry||countryOf(s)===spotCountry); }
 function worldOf(id){ for(var i=0;i<WORLDS.length;i++) if(WORLDS[i].id===id) return WORLDS[i]; return null; }
-function worldCount(id){
-  var n=0; for(var i=0;i<SPOTS.length;i++) if(SPOT_WORLD[SPOTS[i].id]===id&&(!activeSport||spotSports(SPOTS[i]).includes(activeSport))) n++;
-  return n;
+function exploreSpots(filter=currentFilter,options={}){
+  const value=(key,fallback)=>Object.prototype.hasOwnProperty.call(options,key)?options[key]:fallback;
+  const world=value('world',spotWorld),country=value('country',spotCountry),sport=value('sport',activeSport);
+  const search=searchable(value('search',currentSearch)),favorite=value('favorite',favOnly);
+  return SPOTS.filter(s=>(!world||world==='all'||SPOT_WORLD[s.id]===world)
+    &&(!country||countryOf(s)===country)
+    &&(!sport||spotSports(s).includes(sport))
+    &&(filter==='all'||(filter==='new'?s.catalogNew:s.level===filter))
+    &&(!favorite||favs.has(s.id))
+    &&(!search||searchable(s.name+' '+s.loc).includes(search)));
 }
-function countryCount(label){var n=0;for(var i=0;i<SPOTS.length;i++)if((!activeSport||spotSports(SPOTS[i]).includes(activeSport))&&countryOf(SPOTS[i])===label)n++;return n;}
+function worldCount(id){
+  return exploreSpots('all',{world:id,country:null,search:'',favorite:false}).length;
+}
+function countryCount(label){return exploreSpots('all',{world:spotWorld,country:label,search:'',favorite:false}).length;}
 /* Photographies de destinations réelles, créditées dans photos.html. */
 var WORLD_PHOTOS={"fr": {"src": "assets/spots/sugiton.jpg", "source": "https://commons.wikimedia.org/wiki/File:Panorama_calanque_de_Sugiton.jpg", "author": "Paco de la trillade", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 717, "place": "Calanque de Sugiton, France"}, "eu": {"src": "assets/spots/navagio.jpg", "source": "https://commons.wikimedia.org/wiki/File:Aerial_of_Navagio_Shipwreck_Beach_(46470701841).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "width": 1280, "height": 853, "place": "Navagio, Grèce"}, "af": {"src": "assets/spots/anse_source.jpg", "source": "https://commons.wikimedia.org/wiki/File:Anse_source_dagent_beach_la_digue.jpg", "author": "Svein-Magne Tunli - tunliweb.no", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 853, "place": "Anse Source d’Argent, Seychelles"}, "na": {"src": "assets/spots/islamujeres.jpg", "source": "https://commons.wikimedia.org/wiki/File:Playa_Norte,_Isla_Mujeres_(42695470885).jpg", "author": "dronepicr", "license": "CC BY 2.0", "licenseUrl": "https://creativecommons.org/licenses/by/2.0", "width": 1280, "height": 719, "place": "Isla Mujeres, Mexique"}, "sa": {"src": "assets/spots/noronha.jpg", "source": "https://commons.wikimedia.org/wiki/File:Baia_dos_Porcos,_Fernando_de_Noronha.jpg", "author": "Marcia Luppi", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 853, "place": "Fernando de Noronha, Brésil"}, "as": {"src": "assets/spots/rajaampat.jpg", "source": "https://commons.wikimedia.org/wiki/File:Wayag_Island.jpg", "author": "Rolandandika", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 854, "place": "Raja Ampat, Indonésie"}, "oc": {"src": "assets/spots/whitehaven.jpg", "source": "https://commons.wikimedia.org/wiki/File:Whitehaven_Beach_-_Northern_End.jpg", "author": "Hush Neo", "license": "CC BY-SA 4.0", "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0", "width": 1280, "height": 852, "place": "Whitehaven, Australie"}};
 function worldVisited(id){
@@ -823,33 +380,43 @@ function worldVisited(id){
 }
 function renderWorlds(){
   const host=document.getElementById('worldGrid');if(!host)return;
-  host.innerHTML=WORLDS.map((w,index)=>{
-    const photo=WORLD_PHOTOS[w.id],total=worldCount(w.id);
+  host.innerHTML=WORLDS.filter(w=>worldCount(w.id)>0).map((w,index)=>{
+    const total=worldCount(w.id),sample=activeSport?exploreSpots('all',{world:w.id,country:null,search:'',favorite:false})[0]:null;
+    const photo=sample?{src:spotPhotoUrl(sample.id,720),place:sample.name.split(' — ')[0]+', '+sample.loc}:WORLD_PHOTOS[w.id];
     return `<button class="isl world-${w.id}" onclick="openWorld('${w.id}')" aria-label="Explorer ${w.lab}, ${total} spots">
-      <img class="isl-img" src="${photo.src}" alt="" loading="lazy" decoding="async">
+      <img class="isl-img" src="${esc(photo.src)}" alt="" loading="lazy" decoding="async">
       <span class="world-num" aria-hidden="true">0${index+1}</span>
       <span class="world-count">${total} spots</span>
-      <span class="isl-plate"><span class="world-place">${photo.place}</span><b>${w.lab}</b><span class="world-sub">${w.sub}</span><span class="world-open">Explorer <span aria-hidden="true">↗</span></span></span>
+      <span class="isl-plate"><span class="world-place">${esc(photo.place)}</span><b>${esc(w.lab)}</b><span class="world-sub">${esc(w.sub)}</span><span class="world-open">Explorer <span aria-hidden="true">↗</span></span></span>
     </button>`;
   }).join('');
-  const total=document.getElementById('worldTotal');if(total){const count=SPOTS.filter(s=>!activeSport||spotSports(s).includes(activeSport)).length;total.innerHTML='<b>'+count+' spots'+(activeSport?' de '+SPORTMAP[activeSport].label.toLowerCase():'')+'.</b> Choisis ta destination.';}
+  const total=document.getElementById('worldTotal');if(total){const count=exploreSpots('all',{world:'all',country:null,search:'',favorite:false}).length;total.innerHTML='<b>'+count+' spots'+(activeSport?' de '+SPORTMAP[activeSport].label.toLowerCase():'')+'.</b> Choisis ta destination.';}
   const allLabel=document.querySelector('.w-all-tx i');if(allLabel)allLabel.textContent='Ouvre la carte et trouve ton prochain terrain de jeu.';
 }
 
 function renderCountries(){
   const host=document.getElementById('worldGrid');if(!host||!spotWorld||spotWorld==='all')return;
-  const names=[...new Set(SPOTS.filter(s=>SPOT_WORLD[s.id]===spotWorld).map(countryOf))].sort((a,b)=>a.localeCompare(b,'fr'));
+  const scoped=exploreSpots('all',{world:spotWorld,country:null,search:'',favorite:false});
+  const names=[...new Set(scoped.map(countryOf))].sort((a,b)=>a.localeCompare(b,'fr'));
   host.innerHTML=names.map((name,index)=>{
-    const sample=SPOTS.find(s=>SPOT_WORLD[s.id]===spotWorld&&countryOf(s)===name), photo=sample?spotPhotoUrl(sample.id,1280):WORLD_PHOTOS[spotWorld].src;
-    return `<button class="isl country-card" onclick="openCountry('${esc(name)}')" aria-label="Explorer ${esc(name)}, ${countryCount(name)} spots"><img class="isl-img" src="${esc(photo)}" alt="" loading="lazy"><span class="world-num" aria-hidden="true">0${index+1}</span><span class="world-count">${countryCount(name)} spots</span><span class="isl-plate"><span class="world-place">${esc(worldOf(spotWorld)?.lab||'Destination')}</span><b>${esc(name)}</b><span class="world-sub">Spots et activités du pays</span><span class="world-open">Explorer <span aria-hidden="true">↗</span></span></span></button>`;
+    const sample=scoped.find(s=>countryOf(s)===name), photo=(sample&&spotPhotoUrl(sample.id,720))||WORLD_PHOTOS[spotWorld].src;
+    return `<button class="isl country-card" onclick="openCountry(${esc(JSON.stringify(name))})" aria-label="Explorer ${esc(name)}, ${countryCount(name)} spots"><img class="isl-img" src="${esc(photo)}" alt="" loading="lazy" decoding="async"><span class="world-num" aria-hidden="true">0${index+1}</span><span class="world-count">${countryCount(name)} spots</span><span class="isl-plate"><span class="world-place">${esc(worldOf(spotWorld)?.lab||'Destination')}</span><b>${esc(name)}</b><span class="world-sub">Spots et activités du pays</span><span class="world-open">Explorer <span aria-hidden="true">↗</span></span></span></button>`;
   }).join('');
-  const total=document.getElementById('worldTotal');if(total)total.innerHTML='<b>'+names.reduce((n,x)=>n+countryCount(x),0)+' spots</b> répartis dans '+names.length+' destinations. Choisis un pays.';
+  const total=document.getElementById('worldTotal');if(total)total.innerHTML='<b>'+names.reduce((n,x)=>n+countryCount(x),0)+' spots</b> répartis dans '+names.length+(names.length===1?' destination.':' destinations.')+' Choisis un pays.';
 }
 
 function openWorld(id){
   window.OceanNavigation?.begin();
   spotWorld=id;
   spotCountry=null;
+  if(id==='fr'){
+    spotCountry='France';
+    syncWorldUI();
+    renderSpots();
+    try{renderMap(true)}catch(e){}
+    const wrap=document.getElementById('screenWrap');if(wrap)wrap.scrollTop=0;
+    return;
+  }
   if(id!=='all'){renderCountries(); syncWorldUI(); return;}
   syncWorldUI();
   renderSpots();
@@ -871,6 +438,7 @@ function backToWorlds(){
   var w=document.getElementById('screenWrap'); if(w) w.scrollTop=0;
 }
 function backToDestination(){
+  if(spotWorld==='fr'){backToWorlds();return;}
   if(spotCountry){window.OceanNavigation?.begin();spotCountry=null;renderCountries();syncWorldUI();var w=document.getElementById('screenWrap');if(w)w.scrollTop=0;return;}
   backToWorlds();
 }
@@ -885,24 +453,29 @@ function syncWorldUI(){
   else { setView('list'); }
   var w=spotWorld?worldOf(spotWorld):null;
   var top=document.getElementById('spotsTop');
-  if(top)top.style.setProperty('--region-photo',`url("${w?WORLD_PHOTOS[w.id].src:'assets/photos/hero.jpg'}")`);
+  if(top){
+    const sample=w&&activeSport?exploreSpots('all',{world:w.id,country:spotCountry||null,search:'',favorite:false})[0]:null;
+    const photo=sample&&spotPhotoUrl(sample.id,720)||w&&WORLD_PHOTOS[w.id].src||'assets/photos/hero.jpg';
+    top.style.setProperty('--region-photo',`url("${photo}")`);
+  }
   var ttl=document.getElementById('spotsTitle'), sub=document.getElementById('spotsSub');
   if(ttl) ttl.textContent = spotCountry||w?.lab || (spotWorld==='all'?'Trouve ton spot.':'Le monde est à toi.');
   if(ttl&&!on)ttl.innerHTML='Le monde<br> <span>est à toi.</span>';
   if(sub) sub.textContent = on
-    ? (spotCountry?countryCount(spotCountry)+' spots à explorer dans ce pays':w? worldCount(w.id)+' spots à explorer' : SPOTS.length+' spots, partout dans le monde')
+    ? (spotCountry?countryCount(spotCountry)+' spots à explorer dans ce pays':w? worldCount(w.id)+' spots à explorer' : exploreSpots('all',{world:'all',country:null,search:'',favorite:false}).length+' spots, partout dans le monde')
     : 'Choisis un horizon. Prépare ta session. Vis ton aventure.';
 }
 function renderSpots(filter=currentFilter,keep){
   currentFilter=filter;const q=currentSearch;
   if(!keep) spotShown=SPOT_PAGE;
-  let list=SPOTS.filter(s=>inWorld(s)&&(filter==='all'||(filter==='new'?s.catalogNew:s.level===filter))&&(!activeSport||spotSports(s).includes(activeSport))&&(!favOnly||favs.has(s.id))&&(!q||searchable(s.name+' '+s.loc).includes(searchable(q))));
+  let list=exploreSpots(filter);
   if(nearMode&&userPos)list=list.slice().sort((a,b)=>(spotDist(a)??9e9)-(spotDist(b)??9e9));
   const resultCount=document.getElementById('spotResultCount');
   if(resultCount)resultCount.textContent=list.length+(filter==='new'?(list.length===1?' nouveau spot':' nouveaux spots'):(list.length===1?' spot':' spots'))+(q?(list.length===1?' trouvé':' trouvés'):' à explorer');
   var _h;
   if(!list.length){
-    _h='<div class="nospot">Aucun spot ici.'+((spotWorld&&spotWorld!=='all'&&currentSearch)?'<button onclick="openWorld(\'all\')">Chercher dans tous les spots</button>':'')+'</div>';
+    const oldFavorites=favOnly&&[...favs].some(id=>window.OceanLegacySpots?.archive(id)&&!window.OceanLegacySpots?.canonicalId(id));
+    _h='<div class="nospot">Aucun spot ici.'+(oldFavorites?'<button onclick="go(\'profile\')">Voir mes favoris archivés</button>':'')+((spotWorld&&spotWorld!=='all'&&currentSearch)?'<button onclick="openWorld(\'all\')">Chercher dans tous les spots</button>':'')+'</div>';
   }else{
     var _v=list.slice(0,spotShown);
     _h=_v.map(spotCard).join('');
@@ -917,6 +490,7 @@ function renderSpots(filter=currentFilter,keep){
   document.getElementById('spotList').innerHTML=_h;
   const home=(nearMode&&userPos)?SPOTS.slice().sort((a,b)=>(spotDist(a)??9e9)-(spotDist(b)??9e9)).slice(0,3):SPOTS.slice(0,3);
   document.getElementById('homeSpots').innerHTML=home.map(spotCard).join('');
+  watchConditionCards();
 }
 function filterSpots(el,f){document.querySelectorAll('#filters .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderSpots(f);}
 function searchable(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();}
@@ -1035,201 +609,15 @@ function fitMapToSpots(){
   }catch(e){}
 }
 function renderMap(refresh){window.OceanMap?.render(refresh);}
-/* photos : paysages variés selon le climat du spot (pas que des surfeurs en gros plan) */
-const PHOTO_TAGS={anglet:'coast,cliffs,ocean',biarritz:'beach,coastline,sea'};
-const PHOTO_LOCK={anglet:307,biarritz:118};
-
-/* ===== PHOTOS RÉELLES DES SPOTS (Wikimedia Commons) ===== */
-const WPHOTO={
-imsouane:['Imswinne surfeus so plantche.jpg','Lucyin','CC BY-SA 4.0'],
-safi:['The beauty of lalla fatna beach in Safi city morocco the blue water 14.jpg','Fatimaezzahra88','CC BY-SA 4.0'],
-sidikaouki:['Beach, Sidi Kaouki, Morocco.jpg','Goldfinchshuffle','CC BY-SA 4.0'],
-ngor:['Plage de Ngor.jpg','Tbo47','CC0'],
-ouakam:['Hundreds of Senegalese traditional canoes ("pirogues") at Ouakam beach.jpg','Ruth Zurielly Jennings','CC BY-SA 4.0'],
-elandsbay:['Mussel Point (Mike Taylor\'s Midden), Elands Bay, South Africa.jpg','Andrew Hall','CC BY-SA 3.0'],
-muizenberg:['Surfers at Muizenberg Beach (2).jpg','Husskeyy','CC BY-SA 4.0'],
-dahab:['Blue Whole, Dahab.jpg','Petar Milošević','CC BY-SA 4.0'],
-nosybe:['La piroga a Tanikely - panoramio.jpg','patano','CC BY-SA 3.0'],
-watamu:['Watamu Beach, Kenya 11.jpg','Jenny Kellett','CC BY-SA 4.0'],
-keramas:['Pagi di Keramas.jpg','Arthamade','CC BY-SA 4.0'],
-nias:['Sorake Beach - panoramio.jpg','hotmahtg','CC BY-SA 3.0'],
-gland:['Plengkung Bay Java Indonesia (110396489).jpeg','Ullasa Kodandaramaiah','CC BY-SA 3.0'],
-komodo:['Pink Beach 01.jpg','Hotel Kaesong','CC BY-SA 2.0'],
-bunaken:['Mangrove Beach, Pulau Bunaken, Sulawesi (15216058132).jpg','Fabio Achilli from Milano, Italy','CC BY 2.0'],
-similan:['Similan Island 01 (MK).jpg','Mathias Krumbholz','CC BY-SA 3.0'],
-weligama:['Weligama beach (2).jpg','PIERRE ANDRE LECLERCQ','CC BY-SA 4.0'],
-ichinomiya:['初日の出Surfing - panoramio.jpg','Mr Montarou','CC BY 3.0'],
-kerama:['Tokashiku Beach On Tokashiki Island 2009 (7372).JPG','TomazVajngerl','CC BY-SA 3.0'],
-rincon:['Rincon - Beach view.jpg','P. Hughes','CC BY 4.0'],
-pavones:['Golfito - Pacific Coast of Costa Rico - panoramio.jpg','David Broad','CC BY 3.0'],
-tamarindo:['Parque Marino Las Baulas Playa Grande Costa Rica 2016-10.jpg','Jorge Antonio Leoni de León','CC BY-SA 4.0'],
-sayulita:['Beach in Sayulita, Mexico.jpg','Peon In Politics','CC BY-SA 4.0'],
-todossantos:['Isla de Todos Santos - from boat.jpg','Alan Islas','CC BY-SA 4.0'],
-islamujeres:['Mexican island Isla Mujeres (42882051294).jpg','dronepicr','CC BY 2.0'],
-tofino:['Cox Bay Tofino Surfer Decision Time 2475.jpg','ImagePerson','CC BY 4.0'],
-newsmyrna:['Surf at New Smyrna Beach Florida.jpg','Lbeaumont','CC BY-SA 4.0'],
-montauk:['South Edison Beach - Montauk, New York, USA - October 2, 2023 02.jpg','Giorgio Galeotti','CC BY-SA 4.0'],
-mancora:['Máncora Beach.jpg','Melissamarzo','CC BY-SA 4.0'],
-huanchaco:['Surfista de Huanchaco.jpg','Yanavictoria','CC BY-SA 4.0'],
-iquique:['Playa Cavancha - panoramio.jpg','Jorge Manriquez P.','CC BY-SA 3.0'],
-praiadorosa:['Praia do Rosa, Imbutuba, março de 2023 (6).jpg','Fronteira','CC BY-SA 4.0'],
-noronha:['Praia do Leão localizada em Fernando de Noronha.jpg','Rosana Antunes','CC0'],
-ilhabela:['Fotos da praia grande em ilhabela.jpg','Clonefox19','CC BY-SA 4.0'],
-puntadeleste:['Playa Mansa, Punta del Este.JPG','Rosina Peixoto','CC BY-SA 4.0'],
-ayampe:['Ayampe ecuador.jpg','Andrawaag','CC0'],
-burleigh:['Palm Beach Qld Surf Life Saving Club - Burleigh Heads National Park from Palm Beach Surf Life Saving Club 7th Avenue Palm Beach Queensland - photo John McPherson.jpg','John Robert McPherson','CC BY-SA 4.0'],
-byronbay:['Wategos Beach panorama.jpg','BobTanGo','CC BY 4.0'],
-manly:['Manly Beach, Sydney, March 2023, 01.jpg','Kgbo','CC BY-SA 4.0'],
-ningaloo:['00 0865 Ningaloo Reef, Western Australia.jpg','W. Bulach','CC BY-SA 4.0'],
-piha:['Surfers at Piha Beach (7187483494).jpg','Simon_sees from Australia','CC BY 2.0'],
-shipwreck:['Shipwreck Bay.JPG','Gadfium','Domaine public'],
-restaurants:['Malolo Barrier Reef 3.jpg','Maksym Kozlenko','CC BY-SA 4.0'],
-borabora:['DL2A Four Seasons Bora Bora 20.jpg','Didierlefort','CC BY-SA 3.0'],
-jardimdomar:['Madeira-Paul do Mar-view to Jardin do Mar-01ASD.jpg','Asurnipal','CC BY-SA 4.0'],
-santabarbara:['Praia de Santa Barbara - panoramio.jpg','JCNazza','CC BY 3.0'],
-capomannu:['Surfing in Capo Mannu.png','Japs 88','CC BY-SA 3.0'],
-isolabella:['Isola Bella, Taormina, Sicily, Italy (4894718318).jpg','Michal Osmenda','CC BY-SA 2.0'],
-zlatnirat:['Famous beach on Brac island near the town of Bol (20125195098).jpg','Jeroen Komen','CC BY-SA 2.0'],
-naxos:['Naxos Mikri Vigla 2025-06-18 0824 wing surfing kitesurfing.jpg','Tsui','CC BY-SA 4.0'],
-hossegor:['Surf at Hossegor.jpg','MarkYourWaves Surf','CC BY-SA 2.0'],
-latorche:['Pointe de la Torche, Kitsurf et éoliennes (9600567164).jpg','Jeanne Menjoulet','CC BY 2.0'],
-lacanau:['Lacanau-ocean plage 2013(02).JPG','Azotte','CC BY-SA 3.0'],
-quiberon:['Quiberon - Plage (1).jpg','Remi Jouan','CC BY-SA 3.0'],
-biarritz:['Surfeurs à Biarritz.jpg','Vorlod','CC BY-SA 4.0'],
-anglet:['Plage de Marinella.jpg','Christian David','CC BY-SA 4.0'],
-seignosse:['Plage des Estagnots.jpg','Seignossetourism','CC BY-SA 4.0'],
-capbreton:['Coastal dune of Capbreton protected by herbs.jpg','Tangopaso','Domaine public'],
-lafitenia:['Saint-Jean-de-Luz - Colline Sainte-Barbe - Vue sur les plages.jpg','Romainbehar','CC0'],
-sauveterre:['Plage de Sauveterre (Olonne-sur-Mer).JPG','Florian Pépellin','CC BY-SA 3.0'],
-guethary:['Plage de Parlementia.jpg','Txapisotegi','CC BY-SA 4.0'],
-latranche:['Img-5399 - La Tranche-sur-mer - L\'Embarcadère (spot de surf).jpg','Eggvert','CC BY-SA 4.0'],
-lapalue:['Pano baie Pen Hir.jpg','Berrucomons','CC BY-SA 3.0'],
-lapalmyre:['Plage de Pontaillac.jpg','Patrice78500','CC BY-SA 4.0'],
-penhors:['Vagues de penhors.jpg','RLaennec6','CC BY-SA 4.0'],
-mimizan:['Mimizan les plages (7).jpg','Pierre-André Leclercq','CC BY-SA 4.0'],
-capferret:['Sunrise Cap Ferret Banc du Toulinguet - Arcachon - Océan Atlantique - Picture Image Photography - Sunset - Coucher de soleil - Dune du pilat pyla - Banc d\'arguin water eau vagues waves beach plage sky colors red yellow (14501089751).jpg','Grand Parc Bordeaux','CC BY 2.0'],
-bidart:['Plage de Bidart.jpg','Anne-Liam','CC BY-SA 4.0'],
-nazare:['Praia do Norte beach - High waves - Nazaré - Portugal (27553300758).jpg','Luis Ascenso','CC BY 2.0'],
-supertubos:['Surfer in Supertubos.JPG','Jpjorge','CC BY-SA 3.0'],
-ericeira:['Surf - Flickr - Mario Bertocchi.jpg','Mario Bertocchi','CC BY 2.0'],
-mundaka:['Ría de Mundaka.jpg','Bambarin77','CC BY-SA 4.0'],
-thurso:['Surf in Thurso East.jpg','Wikimedia Commons','CC0'],
-bundoran:['Atlantic waves, Tullan Strand - geograph.org.uk - 7116089.jpg','N Chadwick','CC BY-SA 2.0'],
-rodiles:['Playa de Rodiles y Ría de Villaviciosa desde el Monte Rodiles en Asturias.jpg','Bermiego','CC BY-SA 4.0'],
-somo:['Playa de El Puntal 04.jpg','Luis Fermín Turiel Peredo','CC BY-SA 4.0'],
-zarautz:['Zarautzko surf sunset.JPG','ElviraOliver','CC BY-SA 3.0'],
-pantin:['Praia de Pantín, Valdoviño 02.jpg','Amador Loureiro','CC BY-SA 2.0'],
-anchorpoint:['Sunset on the Taghazout beach.jpg','Darymaister','CC BY-SA 4.0'],
-lasanta:['Blick vom Mirador de El Risco de Famara auf den Playa de Famara und die Urbanización Famara, Lanzarote.jpg','GerritR','CC BY-SA 4.0'],
-mavericks:['Mavericks Surf Contest 2010.jpg','Jacobovs','CC BY-SA 3.0'],
-pipeline:['Surfing At Pipeline (52976752).jpeg','Andreas Winter','CC BY 3.0'],
-trestles:['Distant surfer watched from the rocks (Unsplash).jpg','Jeremy Bishop','CC0'],
-santateresa:['Fishermen at Sunset, Playa Santa Teresa, Costa Rica.jpg','Christopher Crouzet','CC BY-SA 4.0'],
-puerto:['Surf at Sunset - Zicatela Beach - Puerto Escondido - Oaxaca - Mexico (6533419239).jpg','Adam Jones','CC BY-SA 2.0'],
-malibu:['Beach Scene at Malibu Lagoon - Greater Los Angeles, CA - USA - 03 (6930664221).jpg','Adam Jones','CC BY-SA 2.0'],
-jbay:['JBay-Surfing at supertubes-001.jpg','NJR ZA','CC BY-SA 3.0'],
-chicama:['Puerto Chicama, Peru - waves.jpg','Henry Spencer','CC BY 2.0'],
-puntadelobos:['Surfer at Punta de Lobos beach, Pichilemu.jpg','Gaspar Abrilot','CC BY-SA 2.0'],
-bells:['Bells beach surfers.JPG','Chensiyuan','CC BY-SA 4.0'],
-margaret:['2016 Margaret River Australia. Coastal view.jpg','Lasthib','CC BY-SA 4.0'],
-snapper:['Rainbow Bay Surf Life Saving Club, Greenmount Beach, Rainbow Bay, Queensland.jpg','Chris Olszewski','CC BY-SA 4.0'],
-uluwatu:['Nyangnyangbeach.jpg','Burmesedays','CC BY-SA 4.0'],
-cloudbreak:['Malolo Barrier Reef 1.jpg','Maksym Kozlenko','CC BY-SA 4.0'],
-padang:['Quiet Water of Padang Beach, Bali.jpg','Christine Anggeline','CC BY-SA 4.0'],
-floripa:['Joaquina Surfing Beach, Florianópolis, Santa Catarina (03 janeiro 2004).jpg','Wikimedia Commons','CC BY-SA 2.5'],
-teahupoo:['La horde - Surfers riding a wave in Paea, Tahiti.jpg','Brigitte Bourger','CC BY-SA 4.0'],
-puntaroca:['PLAYA SAN DIEGO, LA LIBERTAD, EL SALVADOR. - panoramio.jpg','feinteriano','CC BY-SA 3.0'],
-montanita:['PlayaDeMontañita.jpg','Andrew Magill','CC BY 2.0'],
-saquarema:['Saquarema - Paraíso do Surf - Rio de Janeiro (15122235327).jpg','Marinelson Almeida','CC BY 2.0'],
-raglan:['View west towards Manu Bay, Raglan.jpg','Pseudopanax','Domaine public'],
-mardelplata:['Surf en Mardel - panoramio.jpg','Marcelo Raidan','CC BY-SA 3.0'],
-arica:['Playa Lisera.JPG','Andrea021','CC BY-SA 3.0'],
-lobitos:['Henry Espinoza Panta smashing a wave at Lobitos.jpg','Freddy Sinarahua','CC BY-SA 4.0'],
-shonan:['Sunny December 2023, Katase Nishihama beach, seen from Enoshima Aquarium.jpg','Syced','CC0'],
-arugam:['Arugam Waves (238816201).jpeg','Etienne Boulanger','CC BY 3.0'],
-itacare:['Itacaré praia.JPG','LíviaBuhring','CC BY-SA 3.0'],
-waikiki:['Waikiki Beach View From Diamond Head (15544503191).jpg','Prayitno','CC BY 2.0'],
-cloud9:['Catching the Wave.jpg','Michael Angelo Luna','CC BY-SA 4.0'],
-unstad:['Wave Lofoten Island.jpg','Scosse','CC BY 4.0'],
-skeletonbay:['Pobřeží koster, Atlantický oceán, Skeleton Coast - Namibia - panoramio.jpg','Pavel Špindler','CC BY 3.0'],
-mentawai:['Surfers explore the mentawai islands.jpg','Colm Surf','CC BY 2.0'],
-dungeons:['Hout Bay views (33514449038).jpg','Raita Futo','CC BY 2.0'],
-bluehole_belize:['Half moon caye im Lighthouse Reef, Belize (21628239563).jpg','dronepicr','CC BY 2.0'],
-sipadan:['Barrel Sponge (Xestospongia testudinaria) (8500727224).jpg','Bernard Dupont','CC BY-SA 2.0'],
-rasmohammed:['Shark Observatory Bay 2024-08-31.jpg','The Cosmonaut','CC BY-SA 2.5'],
-thistlegorm:['Thistlegorm-red-sea-mar-rojo-mer-rouge (3).jpg','Wikicomman','CC BY-SA 4.0'],
-tulamben:['Magnificent Sea Anemone, USAT Liberty Wreck, Tulamben, Bali, Indonesia imported from iNaturalist photo 428500231.jpg','Bernard Dupont','CC BY-SA 4.0'],
-greatbarrier:['Coral Outcrop Flynn Reef.jpg','Toby Hudson','CC BY-SA 3.0'],
-silfra:['SCUBA Silfra.jpg','Thomei08','Domaine public'],
-cenote_dosojos:['Diving the Cenotes in Yucatan, Mexico (41791832870).jpg','dronepicr','CC BY 2.0'],
-medes:['Violescent sea-whip (Paramuricea clavata), Ferranelles, Medes Islands, Spain.jpg','Jouni Kuisma','CC BY-SA 4.0'],
-portcros:['A view of one of the famous beach of Port-Cros island.jpg','Audric B.','CC BY-SA 4.0'],
-calanques:['Cap Morgiou-Calanques de Cassis.jpg','Tobi 87','CC BY-SA 3.0'],
-richelieu:['African Lionfish, Richelieu Rock, Andaman Sea, Thailand imported from iNaturalist photo 177289494.jpg','jeyre','CC BY 4.0'],
-rajaampat:['20170909 Kri island beach.jpg','Lasthib','CC BY-SA 4.0'],
-galapagos:['Galápagos sealion- underwater (35566878280).jpg','Derek Keats','CC BY 2.0'],
-maldives:['Sunset at Lagoon, Emboodhoo, Male, Maldives.jpg','Alexandre Faux','CC0'],
-hanauma:['Hanauma Bay, Oahu, Hawaii, USA2.jpg','Diego Delso','CC BY-SA 3.0'],
-bonaire:['Bonaire-sorob-surf.jpg','Balou46','CC BY-SA 4.0'],
-tarifa:['Kite surf al final de playa los Lances ,Tarifa.jpg','Juan Vladimir Paraschuk','CC BY-SA 4.0'],
-dakhla:['Kitesurf-Dakhla-Morocco (1).JPG','Nomadz','CC BY-SA 3.0'],
-cabarete:['Cabarete beach - panoramio.jpg','Maris Teteris','CC BY 3.0'],
-lemorne:['Le Morne Beach in Mauritius, a view from the southwest (53698123904).jpg','dronepicr','CC BY 2.0'],
-cumbuco:['Kites Surfes na Barra do Cauípe Caucaia-CE.jpg','Leonardo Ibiapina Paz','CC BY-SA 4.0'],
-essaouira:['Kite surfing, Essaouira, Morocco.jpg','Goldfinchshuffle','CC BY-SA 4.0'],
-lafranqui:['Leucate-La Franqui (Aude), view from the cliffs.jpg','Gerbil','CC BY-SA 3.0'],
-jericoacoara:['Wind Surf em Jericoacoara.jpg','Bernardino F. Palheta Dacio','CC BY-SA 4.0'],
-hookipa:['Garrett Lisi surfing.jpg','Cjean42','CC BY-SA 3.0'],
-pozo:['Windsurfer in Pozo Izquierdo.jpg','Nathalie Cools','CC BY-SA 4.0'],
-gardalake:['Gardasee-Surfer.jpg','Otto Domes','CC BY-SA 4.0'],
-hoodriver:['Windsurfing at Hood River, Columbia River Gorge National Scenic Area - 88.jpg','USDA Forest Service','Domaine public'],
-annecy:['Swans @ Albigny beach @ Lac d\'Annecy (36676306426).jpg','Guilhem Vellut','CC BY 2.0'],
-verdon:['Aiguines Gorges du Verdon Vue du Lac de Sainte-Croix 01.jpg','Zairon','CC BY 4.0'],
-glenan:['Glénans 025.jpg','Ackles29','CC BY-SA 3.0'],
-capri:['Marina Piccola Beach.jpg','Abxbay','CC BY-SA 4.0'],
-palombaggia:['Aerial view of the Tyrrhenian Sea at Palombaggia Beach, Corsica, France (52723806786).jpg','dronepicr','CC BY 2.0'],
-praia_marinha:['Praia da Marinha-Algarve-Portugal.jpg','Tobi 87','CC BY-SA 3.0'],
-navagio:['Navagio Beach aerial Zakynthos Greece (46470564281).jpg','dronepicr','CC BY 2.0'],
-anse_source:['Beach Anse Source d\'Argent aerial La Digue Seychelles (39616965691).jpg','dronepicr','CC BY 2.0'],
-whitehaven:['Whitehaven Beach - panoramio.jpg','dnatheist','CC BY 3.0'],
-wissant:['Wissant, Eté2016 la plage.jpg','Pierre-André Leclercq','CC BY-SA 4.0'],
-letouquet:['Le Touquet-Paris-Plage - Panorama2.JPG','Wikimedia Commons','CC BY-SA 3.0'],
-hardelot:['Hardelot plage2014.jpg','Bateloupreaut','CC BY-SA 3.0'],
-wimereux:['Splashing water wavesin Wimereux 2014 12 25 vague 4722.JPG','Lamiot','CC BY-SA 4.0'],
-berck:['Berck-sur-Mer.jpg','Glaurent','CC BY 3.0'],
-malolesbains:['Malo-les-Bains plage R01.jpg','Marc Ryckaert','CC BY 3.0'],
-lehavre:['Wave on the beach of Le Havre (France).jpg','Philippe Alès','CC BY-SA 3.0'],
-etretat:['Étretat, falaise et porte d\'Aval, arche et aiguille, plage, août 2015.jpg','Jbdeparis','CC BY-SA 4.0'],
-dieppe:['LA PLAGE DE DIEPPE (6203071130).jpg','Patrick Janicek','CC BY 2.0'],
-siouville:['Siouville surf.jpg','Clément Pillot','CC BY-SA 3.0'],
-vauville:['Vauville - Panorama depuis le site des Pierres Pouquelées (Vue sur les dunes de Biville).jpg','Xfigpower','CC BY 4.0'],
-hauteville:['Hauteville-sur-Mer - Panorama de la plage.jpg','Xfigpower','CC BY-SA 4.0'],
-granville:['Vagues sur le Plat Gousset, Granville lors de la tempête Miguel 02.jpg','Agnès Téziste','CC0'],
-saintmalo:['View of Saint-Malo Beach 04.jpg','Jsamwrites','CC BY-SA 4.0'],
-saintlunaire:['StLunairePlage.JPG','LeCardinal','CC BY 3.0'],
-erquy:['Cotes-D\'Armor Erquy Plage - panoramio.jpg','René Boulay','CC BY-SA 3.0'],
-perros:['Plage de Trestraou - Perros-Guirec, France - August 16, 2018.jpg','Giorgio Galeotti','CC BY 4.0']};
-function spotPhotoUrl(id,w){if(window.OceanPhotos?.lead(id,activeSport)){const p=OceanPhotos.lead(id,activeSport);return w<=480&&p.thumb?p.thumb:p.src;}if(window.SPOT_PHOTOS&&SPOT_PHOTOS[id])return SPOT_PHOTOS[id].src;var p=WPHOTO[id];if(!p)return null;
-  return 'https://commons.wikimedia.org/wiki/Special:FilePath/'+encodeURIComponent(p[0].replace(/ /g,'_'))+'?width='+(w||480);}
-function spotPhotoCredit(id){if(window.OceanPhotos?.lead(id,activeSport)){const p=OceanPhotos.lead(id,activeSport);return p.author+' · '+p.license+' — Wikimedia Commons';}if(window.SPOT_PHOTOS&&SPOT_PHOTOS[id]){var local=SPOT_PHOTOS[id];return local.author+' · '+local.license+' — Wikimedia Commons';}var p=WPHOTO[id];
-  return p?(p[1]+' · '+p[2]+' — Wikimedia Commons'):'';}
-
-const SCENIC={
-  tropical:['tropical,beach,lagoon','island,beach,palmtrees','turquoise,sea,coast','coralreef,island','lagoon,ocean,tropical','beach,palms,sunset','paradise,beach,sea'],
-  temperate:['beach,coastline,ocean','seascape,coast,sea','coast,cliffs,ocean','beach,dunes,sea','ocean,horizon,beach','coastline,sunset,sea','surf,beach,landscape','bay,coast,sea'],
-  cold:['rugged,coast,sea','cliffs,ocean,wild','rocky,coastline,sea','wild,beach,coast','sea,cliffs,clouds','coast,storm,waves','fjord,sea,coast']
-};
-function spotPhotoTags(s){
-  if(PHOTO_TAGS[s.id])return PHOTO_TAGS[s.id];
-  var sp=spotSports(s)[0];
-  var reef=/(récif|recif|reef|corallien|corail|lagon|lagoon)/i.test((s.desc||'')+' '+((typeof FAUNA!=='undefined'&&FAUNA[s.id])||''));
-  var t=parseInt(s.temp)||16;
-  var bucket=(sp==='snorkeling'||sp==='plongee'||t>=23||reef)?'tropical':(t<15?'cold':'temperate');
-  var arr=SCENIC[bucket];
-  return arr[spotHash(s.id)%arr.length];
+/* Photograph paths and credits come from the canonical 280 spot records. */
+function spotPhotoUrl(id,w){
+  const photo=window.OceanPhotos?.lead(id,activeSport)||window.SPOT_PHOTOS?.[id]||SPOTS.find(s=>s.id===id)?.photo;
+  return photo?(w<=480&&photo.thumb?photo.thumb:photo.src):null;
 }
-function spotHash(id){var n=0;for(var i=0;i<id.length;i++)n=(n*31+id.charCodeAt(i))%100000;return n;}
-function spotLock(id){return (PHOTO_LOCK[id]!=null)?PHOTO_LOCK[id]:spotHash(id);}
+function spotPhotoCredit(id){
+  const photo=window.OceanPhotos?.lead(id,activeSport)||window.SPOT_PHOTOS?.[id]||SPOTS.find(s=>s.id===id)?.photo;
+  return photo?photo.author+' · '+photo.license+' — Wikimedia Commons':'';
+}
 function countryEmergency(loc){
   loc=loc.toLowerCase();var has=function(k){return loc.indexOf(k)>=0;};
   if(has('hawa')||has('usa')||has('états-unis')||has('etats-unis')||has('californie')||has('oregon')) return {emergency:'911',sea:'US Coast Guard : 911 / VHF 16',call:'911'};
@@ -1502,11 +890,12 @@ function setDetailSport(id){
 function renderDetailFacts(s,act){
   /* Trois reperes d'identite, pas de conditions : celles-ci ont leur onglet. */
   var e=document.getElementById('dFacts'); if(!e)return;
-  var lvl=(typeof LVLTXT!=='undefined'&&LVLTXT[s.level])||s.level;
+  var safeLevel=Object.prototype.hasOwnProperty.call(LVLTXT,s.level)?s.level:'variable';
+  var lvl=LVLTXT[safeLevel];
   var lab=SPORTMAP[act]?SPORTMAP[act].label.replace(/\s*\(.*\)/,''):'';
   var h='';
 
-  h+='<span class="dfact lv-'+s.level+'">'+levelIcon(s.level)+lvl+'</span>';
+  h+='<span class="dfact lv-'+safeLevel+'">'+levelIcon(safeLevel)+lvl+'</span>';
   if(lab)h+='<span class="dfact">'+sportIcon(act)+' '+lab+'</span>';
   e.innerHTML=h;
   window.OceanFieldGuide?.update(s,act);
@@ -1522,12 +911,13 @@ function openSpot(id){
   var _df=document.getElementById('dFav');_df.innerHTML=favs.has(id)?FAV_ON:FAV_OFF;_df.classList.toggle('on',favs.has(id));
   renderMiniForecast(s);realForecastDetail(s,act);
   document.getElementById('dName').textContent=s.name;
-  document.getElementById('dLoc').innerHTML=uic('pin')+' '+s.loc;
+  document.getElementById('dLoc').innerHTML=uic('pin')+' '+esc(s.loc);
   var _eb=document.getElementById('dEyebrow');
   if(_eb)_eb.textContent=worldLab(s.id);
   document.getElementById('detailHero').querySelectorAll('svg.scene').forEach(e=>e.remove());
   document.getElementById('detailHero').insertAdjacentHTML('afterbegin',scene(s,true));
   document.getElementById('dDesc').textContent=s.desc;
+  renderSpotSource(s);
   renderDetailSports(s,act);
   const sp0=act;
   const spLab=SPORTMAP[sp0]?SPORTMAP[sp0].label.replace(/\s*\(.*\)/,'').toLowerCase():'sports nautiques';
@@ -1559,12 +949,26 @@ function openSpot(id){
   if(_to&&!_to.innerHTML)_to.innerHTML=octoTag();
   renderDetailFacts(s,act);
   var _tb=document.getElementById('dTideBlock');if(_tb)_tb.style.display='none';
-  renderConditions(s,null);fetchConditions(s);
+  renderConditions(s,LIVE[s.id]?.live?LIVE[s.id]:null);fetchConditions(s);
   try{renderFaune(s);}catch(e){}
-  document.getElementById('dDangers').innerHTML=s.dangers.map(d=>{var m=DANGER_MAP[d[0]]||['pin','#eef4f7','#7c98a8'];return `<div class="danger-item"><span class="di" style="background:${m[1]};color:${m[2]}">${uic(m[0])}</span><span>${d[1]}</span></div>`;}).join('');
+  document.getElementById('dDangers').innerHTML=(Array.isArray(s.dangers)?s.dangers:[]).map(d=>{var m=DANGER_MAP[d[0]]||['pin','#eef4f7','#7c98a8'];return `<div class="danger-item"><span class="di" style="background:${m[1]};color:${m[2]}">${uic(m[0])}</span><span>${esc(d[1])}</span></div>`;}).join('')||'<p>Vérifie les consignes locales avant ta sortie.</p>';
   showDetailCat('infos',false);
   window.OceanCommunity?.mountSpot(id);
   go('detail');
+}
+function renderSpotSource(s){
+  const host=document.getElementById('dSource');if(!host)return;
+  host.replaceChildren();
+  const source=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
+  const checked=s.reviewed||source?.reviewed;
+  if(!source?.url||!/^https:\/\//i.test(source.url)){
+    host.textContent=s.custom?'Spot privé enregistré sur cet appareil · informations non vérifiées.':'Informations éditoriales à confirmer auprès de sources locales.';
+    return;
+  }
+  host.append('Source : ');
+  const link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.label||'Consulter la source';
+  host.append(link);
+  if(checked)host.append(' · Vérifié le '+new Date(checked+'T12:00:00Z').toLocaleDateString('fr-FR'));
 }
 function renderChallenges(){
   const c=ch=>`<div class="chal">
@@ -1601,12 +1005,21 @@ function renderProfile(){
   var spotsSet={};sessions.forEach(function(s){spotsSet[s.spot]=1;});
   var grid=document.getElementById('profStats');
   if(grid)grid.innerHTML=pstatTile(sportIcon(activeSport||'surf'),'#e3f1fb','#1f9bbf',sessions.length,'Sessions')+pstatTile(PIN_ICON,'#e2f0f8','#2f8fb8',Object.keys(spotsSet).length,'Spots visités')+pstatTile(LEAF_ICON,'#e7f7ef','#2faf72',ecoLog.length,'Gestes écolo','showEcoLog()')+pstatTile(HEART_ICON,'#fdeaf0','#eb5b83',favs.size,'Favoris');
+  renderArchivedFavorites();
+}
+function renderArchivedFavorites(){
+  const host=document.getElementById('archivedFavorites');if(!host)return;
+  const rows=[...favs].map(id=>window.OceanLegacySpots?.archive(id)).filter(row=>row&&!window.OceanLegacySpots?.canonicalId(row.id));
+  host.hidden=!rows.length;
+  host.innerHTML=rows.length?'<h2>Favoris archivés</h2><p>Ces lieux ne figurent plus dans le catalogue vérifié. Tu peux retrouver leur nom ici.</p>'
+    +rows.map(row=>`<div class="archived-favorite"><span><b>${esc(row.name)}</b><small>${esc(row.loc)}</small></span><button type="button" data-archived-favorite="${esc(row.id)}" aria-label="Retirer ${esc(row.name)} des favoris">Retirer</button></div>`).join(''):'';
+  if(!host.dataset.bound){host.dataset.bound='1';host.addEventListener('click',event=>{const button=event.target.closest('[data-archived-favorite]');if(!button)return;favs.delete(button.dataset.archivedFavorite);saveState();renderProfile();toast('Favori archivé retiré');});}
 }
 function renderQuizBadges(){var el=document.getElementById('quizBadgesProfile');if(!el||typeof QUIZ_CATS==='undefined')return;var d=quizLoad();
   el.innerHTML=QUIZ_CATS.filter(function(c){return c.id!=='tout';}).map(function(c){var got=d.badges.indexOf(c.id)>=0;return '<div class="qb '+(got?'got':'')+'"><div class="qb-e">'+(got?'🏅':c.emoji)+'</div><div class="qb-n">Expert '+c.label+'</div><div class="qb-s">'+(got?'Débloqué ✓':'Sans-faute requis')+'</div></div>';}).join('');}
 function renderSessions(){
   const el=document.getElementById('sessions');if(!el)return;
-  el.innerHTML=sessions.length?sessions.slice(0,8).map(function(s){var em=(s.act&&typeof SPORTMAP!=='undefined'&&SPORTMAP[s.act])?sportIcon(s.act):sportIcon('surf');return '<div class="sess"><div class="si">'+em+'</div><div class="sn">'+s.spot+'</div><div class="sd">'+s.date+'</div></div>';}).join(''):'<div style="font-size:12.5px;color:#7a93a3;padding:2px 2px 6px">Aucune session encore. Enregistre ta première !</div>';
+  el.innerHTML=sessions.length?sessions.slice(0,8).map(function(s){var em=(s.act&&typeof SPORTMAP!=='undefined'&&SPORTMAP[s.act])?sportIcon(s.act):sportIcon('surf');return '<div class="sess"><div class="si">'+em+'</div><div class="sn">'+esc(s.spot)+'</div><div class="sd">'+esc(s.date)+'</div></div>';}).join(''):'<div style="font-size:12.5px;color:#7a93a3;padding:2px 2px 6px">Aucune session encore. Enregistre ta première !</div>';
   renderSessionStats();
 }
 function renderSessionStats(){
@@ -1631,7 +1044,10 @@ function recommendedSpot(){
   let pool=SPOTS.filter(s=>bySport(s)&&(!chosenLevel||s.level===chosenLevel));
   if(!pool.length)pool=SPOTS.filter(bySport);
   if(!pool.length)pool=SPOTS;
-  return pool.slice().sort((a,b)=>(SCORES[b.id]||0)-(SCORES[a.id]||0))[0];
+  const reviewed=pool.filter(s=>s.editorialStatus==='reviewed');
+  if(reviewed.length)pool=reviewed;
+  const day=Math.floor(Date.now()/86400000);
+  return pool[day%pool.length];
 }
 function setTodayPhoto(s){
   /* Meme principe que le hero de la fiche : la photo arrive en fondu PAR-DESSUS
@@ -1651,20 +1067,21 @@ function setTodayPhoto(s){
 }
 function renderToday(){
   const s=recommendedSpot();
+  queuePreviewCondition(s.id);
   const conditions=LIVE[s.id]||{};
   const dateStr=new Date().toLocaleDateString('fr-FR',{weekday:'long',day:'numeric',month:'long'});
   const todaySport=activeSport||spotSports(s)[0];
   const actLab=`${sportIcon(todaySport)} ${SPORTMAP[todaySport].label}`;
   document.getElementById('todayCard').innerHTML=`
     <div class="today-head"><span class="t"><span class="th"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.3"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.2 5.2l1.8 1.8M17 17l1.8 1.8M18.8 5.2 17 7M7 17l-1.8 1.8"/></svg> Le spot du jour</span></span><span class="d">${dateStr}</span></div>
-    <div class="today-hero" onclick="openSpot('${s.id}')">
+    <div class="today-hero" onclick="openSpot(${esc(JSON.stringify(String(s.id)))})">
       ${scene(s,false)}
       <img class="th-photo" id="todayPhoto" alt="" decoding="async">
       <div class="th-shade"></div>
       <div class="th-note">À découvrir</div>
       <div class="th-credit" id="todayCredit"></div>
       <div class="th-cap">
-        <div class="nm">${s.name.split(' — ')[0]}</div>
+        <div class="nm">${esc(s.name.split(' — ')[0])}</div>
         <div class="rc">${actLab} · ${(typeof LVLTXT!=='undefined'&&LVLTXT[s.level])||s.level}</div>
       </div>
       <div class="cond-row">
@@ -1701,7 +1118,10 @@ function renderConditions(s,live){
     <div class="wc">${icoTide()}<div class="v" style="font-size:10.5px;">${isInland(s)?'—':tide}</div><div class="l">${isInland(s)?'Sans marée océanique':'Marée'}</div></div>`;
   window.OceanImmersion?.refreshConditions(s,live);
   const head=document.getElementById('dCondHead');
-  if(head)head.textContent=live?(isInland(s)?'Eau douce · prévisions de vent Open-Meteo':'Prévisions du modèle · Open-Meteo'):'Prévisions du modèle indisponibles pour le moment';
+  if(head){
+    const stamp=live?.fetchedAt?new Date(live.fetchedAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):null;
+    head.textContent=live?(isInland(s)?'Eau douce · vent Open-Meteo':'Prévisions du modèle · Open-Meteo')+(stamp?' · consultées à '+stamp:''):'Prévisions du modèle indisponibles pour le moment';
+  }
 }
 function tideFromMarine(mar){
   const hh=(mar&&mar.hourly)||{};const t=hh.time||[],lv=hh.sea_level_height_msl||[];
@@ -1735,7 +1155,7 @@ async function fetchConditions(s){
       temp:sst!=null?`${Math.round(sst)}°C`:'—',
       current:mc.ocean_current_velocity!=null?`${(+mc.ocean_current_velocity).toFixed(1)} km/h ${cardinal(mc.ocean_current_direction)}`:'—',
       currentK:mc.ocean_current_velocity!=null?+mc.ocean_current_velocity:null,
-      tide:tide||'—',live:true
+      tide:tide||'—',live:true,fetchedAt:Date.now()
     };
     LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);
     renderConditions(s,o);
@@ -1940,28 +1360,61 @@ function renderTideChart(mar){
   }
   block.style.display='';
 }
-async function fetchAllConditions(){
-  const spots=SPOTS.filter(s=>COORDS[s.id]);const chunk=40;
-  for(let i=0;i<spots.length;i+=chunk){
-    const part=spots.slice(i,i+chunk);
-    const lats=part.map(s=>COORDS[s.id].lat).join(','),lons=part.map(s=>COORDS[s.id].lon).join(',');
-    const marinePart=part.filter(s=>!isInland(s)),marineIndex=new Map(marinePart.map((s,i)=>[s.id,i])),mlats=marinePart.map(s=>COORDS[s.id].lat).join(','),mlons=marinePart.map(s=>COORDS[s.id].lon).join(',');
-    try{
-      const [w,m]=await Promise.all([
-        fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto`).then(r=>r.json()).catch(()=>null),
-        marinePart.length?fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${mlats}&longitude=${mlons}&current=wave_height,sea_surface_temperature&timezone=auto`).then(r=>r.json()).catch(()=>null):Promise.resolve([])
-      ]);
-      const wa=w?(Array.isArray(w)?w:[w]):[],ma=m?(Array.isArray(m)?m:[m]):[];
-      part.forEach((s,idx)=>{
-        const wc=(wa[idx]||{}).current||{},mc=(ma[marineIndex.get(s.id)]||{}).current||{};const o={};
-        if(wc.wind_speed_10m!=null){o.wind=(`${Math.round(wc.wind_speed_10m)} km/h ${cardinal(wc.wind_direction_10m)}`).trim();o.windK=Math.round(wc.wind_speed_10m);}
-        if(mc.wave_height!=null){o.swell=`${(+mc.wave_height).toFixed(1)} m`;o.waveM=+mc.wave_height;}
-        if(mc.sea_surface_temperature!=null)o.temp=`${Math.round(mc.sea_surface_temperature)}°C`;
-        if(Object.keys(o).length){o.live=true;LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);}
-      });
-      renderSpots(currentFilter,true);renderLiveTop();renderToday();window.OceanPoulpy?.refresh();
-    }catch(e){}
+function watchConditionCards(){
+  if(conditionObserver)conditionObserver.disconnect();
+  const cards=document.querySelectorAll('#spotList .spot[data-spot-id],#homeSpots .spot[data-spot-id]');
+  if(!('IntersectionObserver' in window)){
+    [...cards].slice(0,4).forEach(card=>queuePreviewCondition(card.dataset.spotId));
+    return;
   }
+  conditionObserver=new IntersectionObserver(entries=>{
+    entries.forEach(entry=>{if(entry.isIntersecting){conditionObserver.unobserve(entry.target);queuePreviewCondition(entry.target.dataset.spotId);}});
+  },{rootMargin:'240px'});
+  cards.forEach(card=>conditionObserver.observe(card));
+}
+function queuePreviewCondition(id){
+  if(!COORDS[id]||conditionPending.has(id))return;
+  const now=Date.now();
+  if(LIVE[id]?.fetchedAt&&now-LIVE[id].fetchedAt<CONDITION_TTL)return;
+  if(now-(conditionAttempted.get(id)||0)<5*60*1000)return;
+  conditionQueue.add(id);
+  if(!conditionTimer)conditionTimer=setTimeout(flushPreviewConditions,120);
+}
+async function flushPreviewConditions(){
+  conditionTimer=null;
+  const ids=[...conditionQueue].slice(0,8);
+  ids.forEach(id=>{conditionQueue.delete(id);conditionPending.add(id);conditionAttempted.set(id,Date.now());});
+  if(!ids.length)return;
+  try{await fetchPreviewConditions(ids.map(id=>SPOTS.find(s=>s.id===id)).filter(Boolean));}
+  catch(_){/* Forecasts are optional; the catalogue remains usable offline. */}
+  finally{
+    ids.forEach(id=>conditionPending.delete(id));
+    if(conditionQueue.size)conditionTimer=setTimeout(flushPreviewConditions,200);
+  }
+}
+async function fetchPreviewConditions(spots){
+  if(!spots.length)return;
+  const lats=spots.map(s=>COORDS[s.id].lat).join(','),lons=spots.map(s=>COORDS[s.id].lon).join(',');
+  const marine=spots.filter(s=>!isInland(s)),marineIndex=new Map(marine.map((s,i)=>[s.id,i]));
+  const mlats=marine.map(s=>COORDS[s.id].lat).join(','),mlons=marine.map(s=>COORDS[s.id].lon).join(',');
+  const load=url=>fetch(url).then(r=>{if(!r.ok)throw Error('Conditions indisponibles');return r.json();}).catch(()=>null);
+  const [weather,sea]=await Promise.all([
+    load(`https://api.open-meteo.com/v1/forecast?latitude=${lats}&longitude=${lons}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto`),
+    marine.length?load(`https://marine-api.open-meteo.com/v1/marine?latitude=${mlats}&longitude=${mlons}&current=wave_height,sea_surface_temperature&timezone=auto`):Promise.resolve([])
+  ]);
+  const wa=weather?(Array.isArray(weather)?weather:[weather]):[],ma=sea?(Array.isArray(sea)?sea:[sea]):[];
+  let updated=false;
+  spots.forEach((s,index)=>{
+    const wc=(wa[index]||{}).current||{},mc=(ma[marineIndex.get(s.id)]||{}).current||{},data={};
+    if(wc.wind_speed_10m!=null){data.wind=(`${Math.round(wc.wind_speed_10m)} km/h ${cardinal(wc.wind_direction_10m)}`).trim();data.windK=Math.round(wc.wind_speed_10m);}
+    if(mc.wave_height!=null){data.swell=`${(+mc.wave_height).toFixed(1)} m`;data.waveM=+mc.wave_height;}
+    if(mc.sea_surface_temperature!=null)data.temp=`${Math.round(mc.sea_surface_temperature)}°C`;
+    if(!Object.keys(data).length)return;
+    LIVE[s.id]=Object.assign(LIVE[s.id]||{},data,{live:true,fetchedAt:Date.now()});
+    document.querySelectorAll('.spot[data-spot-id]').forEach(card=>{if(card.dataset.spotId===s.id){const meta=card.querySelector('.spot-meta');if(meta)meta.innerHTML=spotCardMeta(s);}});
+    updated=true;
+  });
+  if(updated){renderLiveTop();renderToday();window.OceanPoulpy?.refresh();}
 }
 function renderLiveTop(){
   const el=document.getElementById('liveTop');if(!el)return;
@@ -1972,7 +1425,7 @@ function renderLiveTop(){
   el.innerHTML=list.map(s=>{
     const L=LIVE[s.id]||{};
     const detail=available.length?[L.swell,L.wind,L.temp].filter(Boolean).join(' · '):s.loc;
-    return `<button class="lt-row" onclick="openSpot('${s.id}')"><span class="lt-info"><b>${s.name.split(' — ')[0]}</b><span>${detail}</span></span><span class="lt-badge lt-ref">Voir →</span></button>`;
+    return `<button class="lt-row" onclick="openSpot(${esc(JSON.stringify(String(s.id)))})"><span class="lt-info"><b>${esc(s.name.split(' — ')[0])}</b><span>${esc(detail)}</span></span><span class="lt-badge lt-ref">Voir →</span></button>`;
   }).join('')+(available.length?'<p class="lt-note">Prévisions du modèle Open-Meteo.</p>':'');
 }
 function dayLabel(iso,i){if(i===0)return 'Auj';const d=new Date(iso);return ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'][d.getDay()]||'J+'+i;}
@@ -2368,7 +1821,7 @@ function logSession(){
 
 /* ================= UI ================= */
 let tt;
-function toast(msg){const t=document.getElementById('toast');t.innerHTML='🐙 '+msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600);}
+function toast(msg){const t=document.getElementById('toast');t.textContent='🐙 '+msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600);}
 const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',community:'cb',trips:'tb'};
 function vibrate(pattern){try{if(navigator.vibrate)navigator.vibrate(pattern);}catch(e){}}
 const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,community:3,profile:4,trips:2};
@@ -2500,7 +1953,7 @@ function addMsg(who,html,btn){
 }
 function showTyping(){const c=document.getElementById('chatMsgs');const m=document.createElement('div');m.className='msg bot typing';m.id='typingMsg';m.innerHTML=`<div class="msg-av">${octoTag()}</div><div class="bubble2"><i></i><i></i><i></i></div>`;c.appendChild(m);c.scrollTop=c.scrollHeight;}
 function hideTyping(){const t=document.getElementById('typingMsg');if(t)t.remove();}
-function esc(s){return s.replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function pick(a){return a[Math.floor(Math.random()*a.length)];}
 /* The connected assistant is installed by poulpy-assistant.js. */
 let chatHistory=[];
@@ -2513,23 +1966,8 @@ function openFromChat(s){closeChat();go(s);}
 function openSpotFromChat(id){closeChat();openSpot(id);}
 /* ---- Poulpy : connaissances spots, faune & planches ---- */
 const ALIAS={jbay:['j-bay','jeffreys'],teahupoo:['teahupo'],pipeline:['banzai','oahu'],puerto:['escondido','zicatela'],lapalmyre:['royan','pontaillac'],capferret:['ferret'],lafitenia:['jean-de-luz','luz'],guethary:['parlementia'],anchorpoint:['taghazout','anchor'],cloud9:['siargao'],skeletonbay:['skeleton'],dungeons:['cape town','sentinelle'],mavericks:['maverick'],snapper:['superbank'],mardelplata:['mar del'],puntadelobos:['pichilemu'],puntaroca:['libertad'],waikiki:['honolulu'],nazare:['nazaré'],biarritz:['basques'],floripa:['florianopolis'],supertubos:['peniche']};
-const FAUNA={pipeline:"récif corallien d'Oahu : tortues vertes (honu) 🐢, poissons-perroquets, raies, dauphins à long bec et requins de récif.",teahupoo:"lagon corallien tahitien : poissons tropicaux multicolores, raies, tortues 🐢 et requins de récif à pointes noires.",uluwatu:"récif balinais : poissons tropicaux, raies, tortues et parfois des requins de récif.",padang:"récif balinais grouillant de poissons coralliens, de raies et de tortues 🐢.",jbay:"côte sud-africaine : dauphins par centaines, otaries du Cap, baleines en saison 🐋… et des requins blancs au large.",dungeons:"eaux froides du Cap : otaries, dauphins, baleines de passage et requins blancs.",nazare:"au-dessus d'un canyon profond : dauphins, thons et faune de pleine mer.",chicama:"courant froid de Humboldt : otaries, pélicans et immenses bancs d'anchois.",mavericks:"Californie froide (le « Triangle rouge ») : otaries, loutres de mer 🦦 et requins blancs.",skeletonbay:"désert côtier namibien : des milliers d'otaries à fourrure et une eau riche en poissons.",cloudbreak:"récif fidjien : poissons tropicaux, raies, tortues et requins de récif.",mentawai:"archipel indonésien : récifs grouillant de poissons, de raies et de tortues.",hossegor:"côte landaise : bars, dorades, dauphins 🐬 et de nombreux oiseaux marins.",biarritz:"Pays Basque : dauphins, bars, et parfois des globicéphales au large."};
-const ZONES={
-  hossegor:[{n:'La Gravière',l:'expert',d:'tubes puissants et rapides'},{n:'La Centrale / La Nord',l:'intermediaire',d:'pics plus ouverts'},{n:'Les Culs Nus',l:'intermediaire',d:'plage moins dense'}],
-  pipeline:[{n:'First Reef',l:'expert',d:'la gauche tubulaire principale'},{n:'Backdoor',l:'expert',d:'la droite qui part du même pic'},{n:'Second Reef',l:'expert',d:'au large par gros swell'}],
-  teahupoo:[{n:'Le pic (End of the Road)',l:'expert',d:'gauche surpuissante sur récif peu profond'},{n:'Le channel',l:'intermediaire',d:"zone d'observation, accès bateau"}],
-  nazare:[{n:'Praia do Norte',l:'expert',d:'vagues géantes (canyon sous-marin)'},{n:'Praia da Vila',l:'debutant',d:'plage abritée pour débuter'}],
-  uluwatu:[{n:'The Peak',l:'expert',d:'pic principal'},{n:'Racetracks',l:'expert',d:'section rapide à marée basse'},{n:'Temples',l:'intermediaire',d:'épaule plus accessible'}],
-  mundaka:[{n:'La gauche du río',l:'expert',d:'gauche tubulaire de classe mondiale'}],
-  lacanau:[{n:'La Nord',l:'intermediaire',d:'pics variés'},{n:'La Sud / Super Sud',l:'debutant',d:'plus accessible, écoles'}],
-  biarritz:[{n:'La Côte des Basques',l:'debutant',d:"spot d'apprentissage, longboard"},{n:'La Grande Plage',l:'intermediaire',d:'beach break central'}],
-  latorche:[{n:'La pointe',l:'intermediaire',d:'droites et gauches, vent'},{n:'Pors Carn',l:'debutant',d:'plage abritée'}],
-  jbay:[{n:'Supertubes',l:'expert',d:'la section star, longue droite'},{n:'Kitchen Windows',l:'intermediaire',d:'plus accessible'},{n:'Point',l:'intermediaire',d:'épaule longue'}],
-  snapper:[{n:'Snapper Rocks',l:'expert',d:'départ de la Superbank'},{n:'Rainbow Bay',l:'intermediaire',d:'section suivante'},{n:'Greenmount',l:'intermediaire',d:'épaule finale'}],
-  mavericks:[{n:'The Bowl',l:'expert',d:'pic de grosses vagues (tow/rame)'}],
-  supertubos:[{n:'Supertubos',l:'expert',d:'beach break tubulaire'},{n:'Baleal',l:'debutant',d:'baie voisine pour progresser'}],
-  anglet:[{n:'Les Cavaliers',l:'intermediaire',d:'beach break réputé'},{n:'La Madrague',l:'debutant',d:'plus abritée'}]
-};
+const FAUNA=Object.fromEntries(SPOTS.filter(s=>s.fauna).map(s=>[s.id,s.fauna]));
+const ZONES=Object.fromEntries(SPOTS.filter(s=>s.zones).map(s=>[s.id,s.zones]));
 function spotGuide(s,act){
   return window.OceanFieldGuide?OceanFieldGuide.facts(s,act):[];
 }
@@ -2651,9 +2089,9 @@ var DANGER_MAP={
 };
 function spotTokens(s){const t=[s.id];s.name.split('—')[0].toLowerCase().split(/[^a-zà-ÿ0-9]+/).forEach(function(w){if(w.length>=5)t.push(w);});(ALIAS[s.id]||[]).forEach(function(a){t.push(a);});return t;}
 function findSpotInQuery(q){for(const s of SPOTS){const tk=spotTokens(s);for(const k of tk){if(k.length>=4&&q.indexOf(k)>=0)return s;}}return null;}
-function bestSpotsByLevel(level){const lab={debutant:'débutant',intermediaire:'intermédiaire',expert:'expert'}[level];const list=SPOTS.filter(function(s){return s.level===level;}).sort(function(a,b){return (SCORES[b.id]||0)-(SCORES[a.id]||0);}).slice(0,5);const items=list.map(function(s){return '• <b>'+s.name.split(' — ')[0]+'</b> <span style="opacity:.65">('+s.loc+')</span> · '+(SCORES[s.id]||0).toFixed(1)+'/5';}).join('<br>');return {html:'🏄 Mes meilleurs spots <b>'+lab+'</b> :<br>'+items,btn:{label:'Ouvrir la carte 🗺️',onclick:"openFromChat('spots')"}};}
-function spotFauna(s){const f=FAUNA[s.id]||'Les observations locales ne sont pas encore documentées dans le catalogue. Renseigne-toi auprès d’un club ou du gestionnaire du site.';return {html:'La faune à <b>'+s.name.split(' — ')[0]+'</b> ('+s.loc+') : '+f,btn:{label:'Voir la fiche',onclick:"openSpotFromChat('"+s.id+"')"}};}
-function spotInfo(s){return {html:'<b>'+s.name.split(' — ')[0]+'</b> — '+s.loc+'<br><br>'+s.desc,btn:{label:'Voir la fiche',onclick:"openSpotFromChat('"+s.id+"')"}};}
+function bestSpotsByLevel(level){const lab={debutant:'débutant',intermediaire:'intermédiaire',expert:'expert'}[level];const pool=SPOTS.filter(s=>s.level===level&&(!activeSport||spotSports(s).includes(activeSport)));const list=pool.filter(s=>s.editorialStatus==='reviewed').concat(pool.filter(s=>s.editorialStatus!=='reviewed')).slice(0,5);const items=list.map(s=>'• <b>'+esc(s.name.split(' — ')[0])+'</b> <span style="opacity:.65">('+esc(s.loc)+')</span>').join('<br>');return {html:'Quelques spots pour un niveau <b>'+lab+'</b> :<br>'+items+'<br><small>Le niveau dépend des conditions du jour et du secteur choisi.</small>',btn:{label:'Ouvrir la carte 🗺️',onclick:"openFromChat('spots')"}};}
+function spotFauna(s){const f=FAUNA[s.id]||'Les observations locales ne sont pas encore documentées dans le catalogue. Renseigne-toi auprès d’un club ou du gestionnaire du site.';return {html:'La faune à <b>'+esc(s.name.split(' — ')[0])+'</b> ('+esc(s.loc)+') : '+esc(f),btn:{label:'Voir la fiche',onclick:'openSpotFromChat('+JSON.stringify(String(s.id))+')'}};}
+function spotInfo(s){return {html:'<b>'+esc(s.name.split(' — ')[0])+'</b> — '+esc(s.loc)+'<br><br>'+esc(s.desc),btn:{label:'Voir la fiche',onclick:'openSpotFromChat('+JSON.stringify(String(s.id))+')'}};}
 function boardReco(level){if(level==='expert')return {html:"Pour un niveau <b>expert</b> 🛹 : un <b>shortboard</b> performant (5'8\"–6'2\") pour le surf radical, et un <b>gun</b> pour les grosses vagues. Faible volume, réactivité max."};if(level==='intermediaire')return {html:"En <b>intermédiaire</b> 🛹 : un <b>funboard / évolutive</b> (6'6\"–7'2\") ou un shortboard un peu volumineux — manœuvrabilité tout en gardant de la rame."};if(level==='debutant')return {html:"Pour <b>débuter</b> 🛹 : une <b>planche en mousse</b> ou un <b>mini-malibu (7'–8')</b>, large et volumineuse : ça rame tout seul et ça stabilise."};return {html:"Le bon choix dépend de ton niveau 🛹 :<br>• <b>Débutant</b> : mousse / mini-malibu 7'–8'<br>• <b>Intermédiaire</b> : funboard 6'6\"–7'2\"<br>• <b>Confirmé</b> : shortboard 5'8\"–6'2\"<br>Plus tu progresses, moins tu mets de volume."};}
 function smartReply(q){
   const spot=findSpotInQuery(q);
@@ -2668,7 +2106,7 @@ function poulpyReply(q){
   q=q.toLowerCase();
   if(/(surf.?trip|voyage|itinéraire|itineraire|préparer.*séjour|preparer.*sejour)/i.test(q))return {html:'Prépare ton aventure dans <b>Surf trips</b> : choisis tes spots, organise les étapes, ajoute tes dates et ta checklist.',btn:{label:'Préparer mon voyage',onclick:"openFromChat('trips')"}};
   const sr=smartReply(q);if(sr)return sr;
-  const spotReco=()=>{const s=recommendedSpot();return {html:`Une idée pour ton prochain voyage : <b>${s.name.split(' — ')[0]}</b>, ${s.loc}.<br>Retrouve sa photo, les prévisions disponibles et ta liste de préparation sur sa fiche.`,btn:{label:'Découvrir le spot',onclick:`openSpotFromChat('${s.id}')`}};};
+  const spotReco=()=>{const s=recommendedSpot();return {html:`Une idée pour ton prochain voyage : <b>${esc(s.name.split(' — ')[0])}</b>, ${esc(s.loc)}.<br>Retrouve sa photo, les prévisions disponibles et ta liste de préparation sur sa fiche.`,btn:{label:'Découvrir le spot',onclick:'openSpotFromChat('+JSON.stringify(String(s.id))+')'}};};
   const prog=()=>({html:`Tu as <b>${xp} XP</b>. Continue à explorer, pratiquer et protéger l’océan pour progresser.`,btn:{label:'Voir mes défis',onclick:"openFromChat('challenges')"}});
   const eco=()=>({html:'🌱 '+pick(ECO_T),btn:{label:'Voir les défis écolo 🌊',onclick:"openFromChat('challenges')"}});
   const KB=[
@@ -3001,11 +2439,6 @@ function renderQuizResult(){
   if(pct>=0.66&&typeof spawnConfetti==='function')spawnConfetti();
 }
 
-/* Expanded catalogue joins every existing journey before the first render. */
-(window.OCEAN_SPOT_EXPANSION||[]).forEach(s=>{
-  if(SPOTS.some(existing=>existing.id===s.id))throw new Error('Duplicate spot: '+s.id);
-  SPOTS.push(s);COORDS[s.id]=s.coords;SPOT_WORLD[s.id]=s.world;
-});
 /* ================= INIT ================= */
 var _oi=document.getElementById('octo');if(_oi)_oi.innerHTML=poulpySVG();/* #octo est rendu par renderToday : il peut ne pas exister ici */
 document.getElementById('octoProfile').innerHTML=poulpySVG();
@@ -3023,7 +2456,7 @@ try{
 }catch(e){}
 document.body.classList.add('motion-pref-checked');
 applyName();
-ambient();renderSportGuide();renderSportFilters();renderSpots();try{renderWorlds();syncWorldUI();}catch(e){}renderChallenges();renderBadges();renderQuizBadges();renderSessions();renderHome();renderProfile();renderQuick();chatDragInit();bubbles('hb');bubbles('pb');bubbles('sb');bubbles('cb');onbBubbles();animateCounts();fetchAllConditions();
+ambient();renderSportGuide();renderSportFilters();renderSpots();try{renderWorlds();syncWorldUI();}catch(e){}renderChallenges();renderBadges();renderQuizBadges();renderSessions();renderHome();renderProfile();renderQuick();chatDragInit();bubbles('hb');bubbles('pb');bubbles('sb');bubbles('cb');onbBubbles();animateCounts();
 requestAnimationFrame(()=>requestAnimationFrame(()=>updateNavPill('home')));
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{const ab=document.querySelector('.nav button.active:not(.center)');updateNavPill(ab?ab.dataset.s:'home');}).catch(()=>{});
 window.addEventListener('resize',()=>{const ab=document.querySelector('.nav button.active:not(.center)');if(ab)updateNavPill(ab.dataset.s);});

@@ -1,8 +1,8 @@
 # Ocean Buddy sur iOS et Android
 
-Version préparée : 1.0.0 (build 1). Identifiant proposé : `io.github.thomasbrebion59bot.oceanbuddy`.
+Version du projet : 1.1.0 (build 2). Identifiant : `io.github.thomasbrebion59bot.oceanbuddy`.
 
-Le site conserve son interface bleue. Capacitor embarque le catalogue, les photographies, les polices et Leaflet dans l’application. La météo, le fond de carte et Poulpy IA nécessitent internet. Les données du site et celles de chaque installation mobile sont séparées.
+Capacitor embarque le catalogue, les photographies, les polices, Leaflet et le moteur de relief dans l’application. La météo, les tuiles cartographiques, Poulpy IA et la communauté nécessitent internet. La galerie, le son et le relief restent facultatifs. Les données du site et celles de chaque installation mobile sont séparées.
 
 ## Construire
 
@@ -24,17 +24,20 @@ Node 22+ et Xcode 26+ sont requis. La version iOS cible iOS 16.4 minimum (dialog
 - Ouverture des liens externes dans le navigateur du système et bouton Retour Android.
 - Choix explicite entre guide intégré et IA avant tout envoi de message. Les questions et leur contexte passent par Netlify puis OpenAI ; aucun secret fournisseur n’est présent dans le binaire.
 - Effacement des données locales dans les réglages, avec confirmation.
+- Lecture publique des contributions approuvées lorsque le service communautaire est disponible. Un courriel vérifié est nécessaire pour publier ; chaque contribution reste en attente de modération. Les anciens messages locaux ne sont jamais transférés automatiquement.
+- Création d’une copie distincte d’un voyage pour la communauté, après aperçu et choix explicite de chaque détail privé.
 
 ## Avant l’envoi à Apple
 
-L’application n’a pas encore été publiée sur un store. La compilation locale ne vaut ni signature de distribution ni validation d’Apple.
+L’application n’a pas encore été publiée sur un store. L’archive 1.1.0 (2) a été signée avec le profil App Store présent sur ce Mac, puis exportée localement en IPA ; voir `store/verification.md`. Aucun chargement sur App Store Connect ni test sur iPhone physique n’est confirmé.
 
-1. Activer l’adhésion Apple Developer Program (le compte actuellement connecté est gratuit), puis ajouter ce compte dans Xcode → Settings → Apple Accounts.
-2. Sélectionner la bonne équipe dans Signing & Capabilities ; réserver/vérifier l’identifiant dans App Store Connect avant de signer.
+1. Vérifier l’adhésion Apple Developer Program, l’équipe et l’état réel de l’application dans App Store Connect avec le compte titulaire.
+2. Vérifier dans App Store Connect que l’identifiant de l’archive signée correspond bien à la fiche de l’app.
 3. Vérifier les pages `privacy.html` et `support.html` publiées avec le contact public autorisé par le titulaire : thomas.brebion59@icloud.com.
-4. Contrôler les déclarations de confidentialité dans `store/app-store-fr.md`, choisir les pays de distribution et compléter les déclarations de statut du vendeur avec les informations exactes du titulaire.
-5. Tester sur un iPhone physique : localisation refusée/autorisée, export, relance, hors connexion, suppression et changements d’orientation ; capturer les écrans définitifs depuis la version signée.
-6. Product → Archive pour appareil iOS, puis Distribute App → App Store Connect. Passer par TestFlight avant la soumission publique.
+4. Configurer puis tester Supabase, Netlify et l’envoi des codes par Brevo ; vérifier la modération humaine, les signalements, le blocage et la suppression de compte avant de rendre la communauté disponible dans l’app publiée.
+5. Contrôler les déclarations de confidentialité dans `store/app-store-fr.md`, choisir les pays de distribution et compléter les déclarations de statut du vendeur avec les informations exactes du titulaire.
+6. Tester sur un iPhone physique : localisation refusée/autorisée, export, relance, hors connexion, suppression, clavier, lecteur d’écran et interruption du son ; capturer les écrans définitifs depuis la version signée.
+7. Envoyer l’IPA vérifiée à App Store Connect lorsque la fiche, la confidentialité, les captures et la communauté seront prêtes. Passer par TestFlight avant la soumission publique.
 
 ## Android
 
@@ -42,6 +45,6 @@ Le projet natif se trouve dans `android/` : `npm run open:android`. Android Stud
 
 ## Confidentialité et licences
 
-Le manifeste iOS déclare les accès UserDefaults (CA92.1) et FileTimestamp (C617.1) utilisés par Preferences et Filesystem. Il déclare aussi le contenu envoyé volontairement à l’IA, sans suivi publicitaire. Revoir ces déclarations si un fournisseur, un SDK ou un traitement change. La désactivation de la sauvegarde Android par l’app ne contrôle pas tous les mécanismes de transfert gérés par les fabricants.
+Le manifeste iOS déclare les accès UserDefaults (CA92.1) et FileTimestamp (C617.1) utilisés par Preferences et Filesystem. Il déclare l’adresse e-mail, l’identifiant de compte et les contributions liées au membre lorsque la communauté est activée, ainsi que le contenu envoyé volontairement à l’IA. Aucun suivi publicitaire n’est implémenté. Vérifier les déclarations App Store Connect contre le comportement du binaire final et les prestataires réellement configurés. La désactivation de la sauvegarde Android par l’app ne contrôle pas tous les mécanismes de transfert gérés par les fabricants.
 
 Les photographies sont créditées dans `photos.html` et les licences de Leaflet et des polices sont copiées dans le bundle. L’app ne fait ni réservation, ni navigation maritime, ni calcul d’ordinateur de plongée.
