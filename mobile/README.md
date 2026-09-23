@@ -12,7 +12,7 @@ npm run sync:mobile
 npm run open:ios
 ```
 
-Node 22+ et Xcode 26+ sont requis. La version iOS cible iOS 16.4 minimum (dialogues et API JavaScript utilisées par l’interface). Le projet Xcode utilise Swift Package Manager ; CocoaPods n’est pas nécessaire. Les dépendances sont verrouillées dans package-lock.json et le fichier Package.resolved généré par Xcode. Ne jamais copier `.tools`, les identifiants de connexion ou les fichiers `.env` dans une application distribuée.
+Node 22+ et Xcode 26+ sont requis. La première version native cible l’iPhone avec iOS 16.4 minimum (dialogues et API JavaScript utilisées par l’interface). Le projet Xcode utilise Swift Package Manager ; CocoaPods n’est pas nécessaire. Les dépendances sont verrouillées dans package-lock.json et le fichier Package.resolved généré par Xcode. Ne jamais copier `.tools`, les identifiants de connexion ou les fichiers `.env` dans une application distribuée.
 
 `mobile/www` et les copies natives `public` sont générées et ignorées par Git. Relancer `npm run sync:mobile` après toute modification du site. Les visuels de lancement et l’icône utilisent le Poulpy corrigé déjà validé dans le projet.
 
@@ -29,7 +29,7 @@ Node 22+ et Xcode 26+ sont requis. La version iOS cible iOS 16.4 minimum (dialog
 
 ## Avant l’envoi à Apple
 
-L’application n’a pas encore été publiée sur un store. L’archive 1.1.0 (2) a été signée avec le profil App Store présent sur ce Mac, puis exportée localement en IPA ; voir `store/verification.md`. Aucun chargement sur App Store Connect ni test sur iPhone physique n’est confirmé.
+L’application n’a pas encore été publiée sur un store. Une archive 1.1.0 (2) antérieure a été signée et exportée localement, mais elle ne contient pas les derniers médias et correctifs ; ne pas l’envoyer à Apple. La reconstruction actuelle est bloquée par le service CoreSimulator de ce Mac ; voir `store/verification.md`. Aucun chargement sur App Store Connect ni test sur iPhone physique n’est confirmé.
 
 1. Vérifier l’adhésion Apple Developer Program, l’équipe et l’état réel de l’application dans App Store Connect avec le compte titulaire.
 2. Vérifier dans App Store Connect que l’identifiant de l’archive signée correspond bien à la fiche de l’app.

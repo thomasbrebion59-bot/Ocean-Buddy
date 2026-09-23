@@ -1,6 +1,6 @@
 # Fiche App Store — brouillon de soumission
 
-État : brouillon pour 1.1.0 (2). L’archive est signée et l’IPA exportée localement ; aucun chargement sur App Store Connect n’a été confirmé. Les captures définitives et le parcours communautaire en production restent à vérifier.
+État : brouillon pour 1.1.0 (2). L’archive et l’IPA signées conservées localement précèdent les dernières modifications et doivent être reconstruites avant tout envoi ; aucun chargement sur App Store Connect n’a été confirmé. Les captures définitives et le parcours communautaire en production restent à vérifier.
 
 - Nom : Ocean Buddy
 - Sous-titre : Spots nautiques et voyages
@@ -61,4 +61,4 @@ Avant l’envoi en revue, activer et vérifier la communauté en production puis
 
 ## Captures à produire depuis le binaire final
 
-Accueil avec Poulpy ; choix activité/région ; fiche immersive de plongée et galerie ; carte 2D puis relief terrestre ; itinéraire et aperçu de partage ; communauté modérée ; conversation après consentement. Vérifier les formats demandés par App Store Connect pour iPhone et iPad. Produire ces captures depuis la version finale et réelle de l’app, sans y montrer une fonction indisponible.
+Accueil avec Poulpy ; choix activité/région ; fiche immersive de plongée et galerie ; carte 2D puis relief terrestre ; itinéraire et aperçu de partage ; communauté modérée ; conversation après consentement. Cette version native cible l’iPhone ; vérifier les formats iPhone demandés par App Store Connect. Produire ces captures depuis la version finale et réelle de l’app, sans y montrer une fonction indisponible.

@@ -26,10 +26,10 @@ test('AI opt-in unlocks only the intended question and bounded context, and dupl
 });
 test('saved local choice survives relaunch without any AI request',async()=>{const a=assistant('local');a.context.openChat();await a.context.chatSend('Bonjour');assert.equal(a.calls.length,0)});
 
-async function native(seed={},saved={}){
+async function native(seed={},saved={},options={}){
  const localStorage=storage();for(const [k,v] of Object.entries(seed))localStorage.setItem(k,v);
- const writes=[];let fail=false;const context={localStorage,Storage:localStorage.constructor,URL,Promise,JSON,Date,history:{state:null},document:{documentElement:{classList:{add(){}}},querySelector:()=>null,addEventListener(){}},Capacitor:{isNativePlatform:()=>true},App:{addListener(){}},Browser:{open(){}},Geolocation:{},Share:{},Filesystem:{},Directory:{},Encoding:{},StatusBar:{setStyle:async()=>{}},Style:{Light:'LIGHT'},Preferences:{get:async()=>({value:JSON.stringify(saved)}),set:async({value})=>{if(fail)throw Error('disk unavailable');writes.push(JSON.parse(value))}}};context.window=context;
- const source=readFileSync(new URL('../mobile/client.js',import.meta.url),'utf8').replace(/^import .*;\n/gm,'');vm.createContext(context);vm.runInContext(source,context);await context.OceanMobile.boot();return {context,writes,setFailure:v=>fail=v};
+ const writes=[];let fail=false,reloads=0;const context={localStorage,Storage:localStorage.constructor,URL,Promise,JSON,Date,setTimeout:options.setTimeout||setTimeout,clearTimeout,location:{reload(){reloads++}},history:{state:null},document:{documentElement:{classList:{add(){}}},querySelector:()=>null,addEventListener(){}},Capacitor:{isNativePlatform:()=>true},App:{addListener(){}},Browser:{open(){}},Geolocation:{},Share:{},Filesystem:{},Directory:{},Encoding:{},StatusBar:{setStyle:async()=>{}},Style:{Light:'LIGHT'},Preferences:{get:options.get|| (async()=>({value:JSON.stringify(saved)})),set:async({value})=>{if(fail)throw Error('disk unavailable');writes.push(JSON.parse(value))}}};context.window=context;
+ const source=readFileSync(new URL('../mobile/client.js',import.meta.url),'utf8').replace(/^import .*;\n/gm,'');vm.createContext(context);vm.runInContext(source,context);await context.OceanMobile.boot();return {context,writes,setFailure:v=>fail=v,getReloads:()=>reloads};
 }
 test('native backup restores only app keys, keeps current data, and persists removals',async()=>{
  const a=await native({oceanbuddy_profile:'new',unrelated:'keep'},{oceanbuddy_profile:'old',oceanbuddy_trips_v1:'saved',outside:'ignore'});
@@ -38,4 +38,16 @@ test('native backup restores only app keys, keeps current data, and persists rem
 });
 test('failed native backup can retry the same data instead of silently skipping it',async()=>{
  const a=await native();a.setFailure(true);a.context.localStorage.setItem('oceanbuddy_profile','retry');await assert.rejects(a.context.OceanMobile.persist());a.setFailure(false);await a.context.OceanMobile.persist();assert.deepEqual(a.writes.at(-1),{oceanbuddy_profile:'retry'});
+});
+test('a stalled native backup cannot block launch or overwrite unsaved local data',async()=>{
+ let finishGet;
+ const a=await native({}, {}, {get:()=>new Promise(resolve=>{finishGet=resolve}),setTimeout:callback=>setTimeout(callback,0)});
+ a.context.localStorage.setItem('oceanbuddy_profile','new');
+ await a.context.OceanMobile.persist();assert.equal(a.writes.length,0);
+ finishGet({value:JSON.stringify({oceanbuddy_profile:'old',oceanbuddy_trips_v1:'restored'})});
+ await new Promise(resolve=>setTimeout(resolve,0));
+ assert.equal(a.context.localStorage.getItem('oceanbuddy_profile'),'new');
+ assert.equal(a.context.localStorage.getItem('oceanbuddy_trips_v1'),'restored');
+ assert.deepEqual(a.writes.at(-1),{oceanbuddy_profile:'new',oceanbuddy_trips_v1:'restored'});
+ assert.equal(a.getReloads(),1);
 });

@@ -10,6 +10,14 @@ import { StatusBar, Style } from '@capacitor/status-bar';
 const native=Capacitor.isNativePlatform(), backupKey='oceanbuddy_native_backup_v1';
 let ready=false, pending=Promise.resolve(), lastSnapshot='';
 const owned=key=>typeof key==='string'&&key.startsWith('oceanbuddy_');
+function restoreBackup(value){
+  if(!value)return false;
+  const data=JSON.parse(value);
+  if(!data||typeof data!=='object'||Array.isArray(data))return false;
+  let restored=false;
+  for(const [key,val] of Object.entries(data))if(owned(key)&&typeof val==='string'&&localStorage.getItem(key)===null){localStorage.setItem(key,val);restored=true;}
+  return restored;
+}
 function snapshot(){const data={};for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(owned(key))data[key]=localStorage.getItem(key);}return JSON.stringify(data);}
 function persist(){
   if(!native||!ready)return pending;
@@ -19,11 +27,17 @@ function persist(){
 }
 async function boot(){
   if(!native)return;
-  try{
-    const {value}=await Preferences.get({key:backupKey});
-    if(value){const data=JSON.parse(value);if(data&&typeof data==='object'&&!Array.isArray(data))for(const [key,val] of Object.entries(data))if(owned(key)&&typeof val==='string'&&localStorage.getItem(key)===null)localStorage.setItem(key,val);}
-  }catch(_){/* The catalogue remains usable when native persistence is unavailable. */}
-  ready=true;lastSnapshot=snapshot();
+  // A stalled native bridge must not keep the whole interface behind the splash.
+  // Until the backup answers, local data stays usable and native writes stay off.
+  const hydration=Preferences.get({key:backupKey}).then(({value})=>({restored:restoreBackup(value)})).catch(()=>({restored:false}));
+  let timer;
+  const result=await Promise.race([hydration,new Promise(resolve=>{timer=setTimeout(()=>resolve(null),5000);})]);
+  clearTimeout(timer);
+  if(result){ready=true;lastSnapshot=snapshot();}
+  else hydration.then(({restored})=>{
+    ready=true;lastSnapshot='';persist().catch(()=>{});
+    if(restored)location.reload();
+  });
   // All existing models retain their synchronous storage semantics. The native copy
   // follows writes, including removals, and is flushed before explicit app resets.
   for(const method of ['setItem','removeItem']){
@@ -31,7 +45,7 @@ async function boot(){
     Storage.prototype[method]=function(...args){const result=original.apply(this,args);if(this===localStorage&&owned(args[0]))persist().catch(()=>{});return result;};
   }
   document.documentElement.classList.add('native-app');
-  await StatusBar.setStyle({style:Style.Dark}).catch(()=>{});
+  StatusBar.setStyle({style:Style.Dark}).catch(()=>{});
   App.addListener('appStateChange',({isActive})=>{if(!isActive)persist().catch(()=>{});});
   App.addListener('backButton',()=>{
     const dialog=document.querySelector('dialog[open]');
