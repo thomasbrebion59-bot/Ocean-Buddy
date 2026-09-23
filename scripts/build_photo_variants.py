@@ -13,6 +13,8 @@ thumb_dir = ROOT / 'assets/spots/thumbs'
 thumb_dir.mkdir(exist_ok=True)
 for spot in catalog:
     spot_id, record = spot['id'], spot['photo']
+    if not record:
+        continue
     source = ROOT / record['src']
     if not source.is_file():
         raise SystemExit(f'Missing spot photograph: {source}')

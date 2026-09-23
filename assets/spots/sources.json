@@ -1102,6 +1102,7 @@
     "source": "https://commons.wikimedia.org/wiki/File:Kites_Surfes_na_Barra_do_Cau%C3%ADpe_Caucaia-CE.jpg",
     "author": "Leonardo Ibiapina Paz",
     "license": "CC BY-SA 4.0",
+    "caption": "Barra do Cauípe, dans la zone de Cumbuco ; cette vue ne montre pas la plage principale.",
     "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
     "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
     "download": "https://upload.wikimedia.org/wikipedia/commons/1/11/Kites_Surfes_na_Barra_do_Cau%C3%ADpe_Caucaia-CE.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
@@ -1584,6 +1585,7 @@
     "source": "https://commons.wikimedia.org/wiki/File:Plage_de_Ngor.jpg",
     "author": "Tbo47",
     "license": "CC0",
+    "caption": "Plage d’accès de Ngor ; le reef de Ngor Right se trouve au large.",
     "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
     "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
     "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d4/Plage_de_Ngor.jpg/1280px-Plage_de_Ngor.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -1813,19 +1815,6 @@
     "height": 950,
     "thumb": "assets/spots/thumbs/pavones.webp"
   },
-  "tamarindo": {
-    "file": "Parque Marino Las Baulas Playa Grande Costa Rica 2016-10.jpg",
-    "src": "assets/spots/tamarindo.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Parque_Marino_Las_Baulas_Playa_Grande_Costa_Rica_2016-10.jpg",
-    "author": "Jorge Antonio Leoni de León",
-    "license": "CC BY-SA 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
-    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
-    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c0/Parque_Marino_Las_Baulas_Playa_Grande_Costa_Rica_2016-10.jpg/1280px-Parque_Marino_Las_Baulas_Playa_Grande_Costa_Rica_2016-10.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "width": 1280,
-    "height": 456,
-    "thumb": "assets/spots/thumbs/tamarindo.webp"
-  },
   "sayulita": {
     "file": "Beach in Sayulita, Mexico.jpg",
     "src": "assets/spots/sayulita.jpg",
@@ -2020,19 +2009,6 @@
     "width": 1280,
     "height": 870,
     "thumb": "assets/spots/thumbs/burleigh.webp"
-  },
-  "byronbay": {
-    "file": "Wategos Beach panorama.jpg",
-    "src": "assets/spots/byronbay.jpg",
-    "source": "https://commons.wikimedia.org/wiki/File:Wategos_Beach_panorama.jpg",
-    "author": "BobTanGo",
-    "license": "CC BY 4.0",
-    "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
-    "credit": "<span class=\"int-own-work\" lang=\"en\">Own work</span>",
-    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ed/Wategos_Beach_panorama.jpg/1280px-Wategos_Beach_panorama.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
-    "width": 1280,
-    "height": 518,
-    "thumb": "assets/spots/thumbs/byronbay.webp"
   },
   "manly": {
     "file": "Manly Beach, Sydney, March 2023, 01.jpg",

@@ -1,7 +1,7 @@
 /* Surf trips — a locally saved travel notebook connected to the spot catalogue. */
 (() => {
   'use strict';
-  const M=TripModel, $=s=>document.querySelector(s), ids=SPOTS.map(s=>s.id);
+  const M=TripModel, $=s=>document.querySelector(s), knownIds=()=>SPOTS.map(s=>s.id);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const icon=(path)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg>`;
   const I={trash:icon('M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7'),plus:icon('M12 5v14M5 12h14'),route:icon('M5 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4m14 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4M5 9v4a4 4 0 0 0 4 4h4m-2-10h4a4 4 0 0 1 4 4v4'),calendar:icon('M5 5h14v16H5zM8 3v4m8-4v4M5 10h14'),bag:icon('M4 8h16v13H4zM8 8V3h8v5'),check:icon('m5 12 4 4 10-10'),arrow:icon('M5 12h14m-6-6 6 6-6 6'),close:icon('m6 6 12 12M6 18 18 6'),map:icon('m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zm6-2v16m6-14v16')};
@@ -11,7 +11,7 @@
     {name:'Bali, d’une côte à l’autre',short:'Bali',destination:'Indonésie',tag:'UNE ÎLE, MILLE HORIZONS',photo:'uluwatu',spots:['uluwatu','padang','keramas']}
   ];
   let trips=[],selected=null,view='itinerary',loadError='',tripMap=null,lastFocus=null,pendingSpot=null;
-  try{trips=M.load(localStorage,ids)}catch(e){loadError='Ton carnet ne peut pas être chargé. Les données existantes sont conservées. Réessaie après avoir rechargé la page.';}
+  try{trips=M.load(localStorage,knownIds())}catch(e){loadError='Ton carnet ne peut pas être chargé. Les données existantes sont conservées. Réessaie après avoir rechargé la page.';}
   const active=()=>trips.filter(t=>!t.archived&&!t.deleted), current=()=>trips.find(t=>t.id===selected&&!t.archived&&!t.deleted);
   const spot=id=>SPOTS.find(s=>s.id===id);
   const photo=id=>spotPhotoUrl(id,1280)||'assets/photos/hero.jpg';
@@ -112,7 +112,7 @@
       $('#tripSpotResults').innerHTML=`<p class="trip-result-count">${list.length} spot${list.length>1?'s':''}${list.length>30?' · 30 premiers résultats':''}</p>${list.slice(0,30).map(s=>`<button data-pick="${s.id}"><img src="${esc(photo(s.id))}" alt="" loading="lazy"><span><b>${esc(s.name)}</b><small>${esc(s.loc)} · ${esc(lvlLabel[s.level])}</small>${current()?.steps.some(x=>x.spotId===s.id)?'<em>Déjà prévu · ajouter une autre session</em>':''}</span>${I.plus}</button>`).join('')}${!list.length?'<p>Aucun spot trouvé. Essaie un autre lieu ou enlève un filtre.</p>':''}`;
     }
     $('#tripSpotSearch').oninput=results;$('#tripRegion').onchange=()=>{refreshCountries();results()};$('#tripCountry').onchange=results;$('#tripOnlyFavs').onchange=results;refreshCountries();
-    $('#tripSpotResults').onclick=e=>{const b=e.target.closest('[data-pick]');if(!b)return;if(update(t=>replacingStepId?M.replaceStep(t,replacingStepId,b.dataset.pick,ids):M.addStep(t,b.dataset.pick,ids))){closeDialog();toast(replacingStepId?'Étape remplacée, notes conservées':'Spot ajouté à ton itinéraire');}};results();
+    $('#tripSpotResults').onclick=e=>{const b=e.target.closest('[data-pick]');if(!b)return;if(update(t=>replacingStepId?M.replaceStep(t,replacingStepId,b.dataset.pick,knownIds()):M.addStep(t,b.dataset.pick,knownIds()))){closeDialog();toast(replacingStepId?'Étape remplacée, notes conservées':'Spot ajouté à ton itinéraire');}};results();
   }
   function fromSpot(spotId){
     if(!spot(spotId))return;
@@ -120,7 +120,7 @@
     const saved=active();
     if(!saved.length){editor(null,null,spotId);return;}
     openDialog(`<span class="page-eyebrow">GARDE CE SPOT POUR PLUS TARD</span><h2>Dans quel voyage ?</h2><p>${esc(spot(spotId).name)}</p><div class="trip-select-list">${saved.map(t=>`<button data-add-to="${esc(t.id)}"><span><b>${esc(t.name)}</b><small>${esc(range(t))}</small></span>${I.plus}</button>`).join('')}</div><button class="trip-primary" id="tripNewFromSpot">Créer un nouveau voyage ${I.plus}</button>`);
-    modal.querySelectorAll('[data-add-to]').forEach(b=>b.onclick=()=>{const t=trips.find(t=>t.id===b.dataset.addTo);if(persist(trips.map(x=>x.id===t.id?M.addStep(t,spotId,ids):x))){selected=t.id;closeDialog();toast('Ajouté à « '+t.name+' »');}});
+    modal.querySelectorAll('[data-add-to]').forEach(b=>b.onclick=()=>{const t=trips.find(t=>t.id===b.dataset.addTo);if(persist(trips.map(x=>x.id===t.id?M.addStep(t,spotId,knownIds()):x))){selected=t.id;closeDialog();toast('Ajouté à « '+t.name+' »');}});
     $('#tripNewFromSpot').onclick=()=>{closeDialog();editor(null,null,spotId)};
   }
   function drawMap(t){

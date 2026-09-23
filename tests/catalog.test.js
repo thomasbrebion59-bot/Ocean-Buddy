@@ -34,7 +34,7 @@ test('browser, media and server views match the canonical catalogue exactly',()=
  const server=JSON.parse(fs.readFileSync(path.join(root,'netlify/functions/lib/catalog.json'),'utf8'));
  assert.equal(JSON.stringify(runtime.window.OCEAN_CATALOG),JSON.stringify(all));
  assert.equal(server.length,280);
- assert.equal(JSON.stringify(photos),JSON.stringify(Object.fromEntries(all.map(s=>[s.id,s.photo]))));
+ assert.equal(JSON.stringify(photos),JSON.stringify(Object.fromEntries(all.filter(s=>s.photo).map(s=>[s.id,s.photo]))));
  for(const s of all){
   const row=server.find(x=>x.id===s.id);assert.ok(row,s.id);
   assert.equal(JSON.stringify(row.activities),JSON.stringify(s.sports),s.id);
@@ -43,8 +43,8 @@ test('browser, media and server views match the canonical catalogue exactly',()=
   assert.equal(JSON.stringify(row.coords),JSON.stringify(s.coords),s.id);
   assert.equal(row.world,s.world,s.id);
   assert.equal(row.source,s.source?.url||null,s.id);
-  assert.equal(row.photo.src,photos[s.id].src,s.id);
-  assert.equal(row.photo.thumb,photos[s.id].thumb,s.id);
+  assert.equal(row.photo?.src||null,photos[s.id]?.src||null,s.id);
+  assert.equal(row.photo?.thumb||null,photos[s.id]?.thumb||null,s.id);
   assert.equal(row.editorialStatus,s.editorialStatus,s.id);
   assert.equal(JSON.stringify(row.visit),JSON.stringify(s.visit||null),s.id);
  }
@@ -71,8 +71,16 @@ test('every spot shows access, best period and local rules without inventing mis
  assert.equal(ctx.visitRows({...historical,visit:{reviewed:'2026-09-23',access:'Text not sourced'}}).filter(row=>row.verified).length,0);
  assert.equal((ctx.visitGuide(historical).match(/À vérifier localement/g)||[]).length,3);
 });
-test('every destination has a local photograph and usable attribution',()=>{
- for(const s of all){const p=photos[s.id];assert.ok(p,s.id);assert.ok(fs.statSync(path.join(root,p.src)).size>1000,s.id);assert.ok(fs.statSync(path.join(root,p.thumb)).size>1000,s.id+' thumbnail');assert.ok(p.author&&p.license&&p.source,s.id);assert.equal(new URL(p.source).protocol,'https:',s.id);}
+test('each published photograph belongs to the destination and has usable attribution',()=>{
+ assert.equal(all.length,280);
+ assert.equal(Object.keys(photos).length,278);
+ assert.equal(all.find(s=>s.id==='tamarindo').photo,null);
+ assert.equal(all.find(s=>s.id==='byronbay').photo,null);
+ assert.equal(photos.tamarindo,undefined);
+ assert.equal(photos.byronbay,undefined);
+ assert.match(photos.cumbuco.caption,/Barra do Cauípe/);
+ assert.match(photos.ngor.caption,/reef/);
+ for(const s of all.filter(s=>s.photo)){const p=photos[s.id];assert.ok(p,s.id);assert.ok(fs.statSync(path.join(root,p.src)).size>1000,s.id);assert.ok(fs.statSync(path.join(root,p.thumb)).size>1000,s.id+' thumbnail');assert.ok(p.author&&p.license&&p.source,s.id);assert.equal(new URL(p.source).protocol,'https:',s.id);}
  for(const s of extra){assert.match(photos[s.id].license,/CC BY|CC0|Public domain/,s.id);assert.ok(photos[s.id].width>=600,s.id);}
  assert.match(photos.bluehole_belize.source,/Belize_Blue_Hole\.jpg/);
  assert.match(photos.labaule.source,/La_Baule/);

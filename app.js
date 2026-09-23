@@ -237,6 +237,7 @@ function spotCard(s){
       <span class="lvl-tag lvl-${level}">${levelMark}${esc(levelText)}</span>
       ${s.catalogNew?'<span class="catalog-new">Nouveau</span>':''}
       ${s.custom?'<span class="spot-private">Spot privé</span>':''}
+      ${!photo&&!s.custom?'<span class="spot-photo-pending">Photo du lieu à vérifier</span>':''}
       <div class="glass-name"><h3>${esc(s.name)}</h3><div class="gn-loc"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${esc(s.loc)}</div></div>
       <span class="spot-go">Voir →</span>
     </div>
@@ -382,7 +383,8 @@ function renderWorlds(){
   const host=document.getElementById('worldGrid');if(!host)return;
   host.innerHTML=WORLDS.filter(w=>worldCount(w.id)>0).map((w,index)=>{
     const total=worldCount(w.id),sample=activeSport?exploreSpots('all',{world:w.id,country:null,search:'',favorite:false})[0]:null;
-    const photo=sample?{src:spotPhotoUrl(sample.id,720),place:sample.name.split(' — ')[0]+', '+sample.loc}:WORLD_PHOTOS[w.id];
+    const samplePhoto=sample&&spotPhotoUrl(sample.id,720);
+    const photo=samplePhoto?{src:samplePhoto,place:sample.name.split(' — ')[0]+', '+sample.loc}:WORLD_PHOTOS[w.id];
     return `<button class="isl world-${w.id}" onclick="openWorld('${w.id}')" aria-label="Explorer ${w.lab}, ${total} spots">
       <img class="isl-img" src="${esc(photo.src)}" alt="" loading="lazy" decoding="async">
       <span class="world-num" aria-hidden="true">0${index+1}</span>

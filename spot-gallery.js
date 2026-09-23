@@ -76,13 +76,13 @@
     if(!first){
       if(more){more.hidden=true;more.onclick=null;}
       if(photo){photo.classList.remove('on');photo.removeAttribute('src');photo.alt='';}
-      if(credit)credit.textContent='Illustration Ocean Buddy · photo du lieu à venir';
+      if(credit)credit.textContent='Illustration Ocean Buddy · photo du lieu à vérifier';
       $('#detailHero')?.classList.remove('underwater-hero');
       strip.hidden=true;strip.replaceChildren();return;
     }
     if(more){more.hidden=false;more.setAttribute('aria-label','Ouvrir '+(all.length>1?'les '+all.length+' photos':'la photo en grand')+' de '+s.name);more.title='Ouvrir la galerie immersive';more.innerHTML='<span>Entrer dans le décor</span><b>'+all.length+' photo'+(all.length>1?'s':'')+' ↗</b>';more.onclick=()=>open(s);}
     if(photo){photo.alt=caption(first,s);photo.style.objectPosition=/^[\w\d% .-]{1,40}$/.test(first.position||'')?first.position:'center';if(photo.getAttribute('src')!==first.src){photo.classList.remove('on');photo.onload=()=>photo.classList.add('on');photo.onerror=()=>photo.classList.remove('on');photo.src=first.src;}if(photo.complete&&photo.naturalWidth)photo.classList.add('on');}
-    if(credit)credit.textContent=(first.author||'Auteur non indiqué')+' · '+(first.license||'licence à vérifier');
+    if(credit)credit.textContent=(first.caption?first.caption+' · ':'')+(first.author||'Auteur non indiqué')+' · '+(first.license||'licence à vérifier');
     $('#detailHero')?.classList.toggle('underwater-hero',first.view==='underwater');
     strip.hidden=all.length<2;strip.innerHTML=`<div class="photo-strip-intro"><small>CHANGE DE POINT DE VUE</small><b>${all.some(p=>p.view==='underwater')?'De la surface aux profondeurs.':'Un lieu, plusieurs regards.'}</b><span>${all.length} photographies du lieu</span></div><div class="photo-strip-views">${all.map((p,i)=>`<button data-gallery-index="${i}" aria-label="${esc(label(p,i))} : voir la photo ${i+1} de ${esc(s.name)}"><img src="${esc(p.thumb||p.src)}" alt="" loading="lazy"><span><small>0${i+1}</small>${esc(label(p,i))} ↗</span></button>`).join('')}</div>`;strip.onclick=e=>{const b=e.target.closest('[data-gallery-index]');if(b)open(s,+b.dataset.galleryIndex);};
   }

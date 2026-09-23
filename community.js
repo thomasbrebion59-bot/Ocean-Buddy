@@ -18,20 +18,7 @@
   try{const saved=JSON.parse(sessionStore.getItem(KEY)||'null');if(saved&&saved.access_token&&saved.refresh_token)state.session=saved}catch(_){}
   function session(value){state.session=value;try{value?sessionStore.setItem(KEY,JSON.stringify(value)):sessionStore.removeItem(KEY)}catch(_){}}
   function clearAccount(){session(null);state.me=null;state.mine=[];state.blocked=[];state.moderation=null;try{localStorage.removeItem(NAME)}catch(_){}}
-  function registerPrivateSpots(){
-    const sports=new Set((typeof SPORTS==='undefined'?[]:SPORTS).map(x=>x.id));
-    const worlds=new Set((typeof WORLDS==='undefined'?[]:WORLDS).map(x=>x.id));
-    for(const raw of readArray('oceanbuddy_custom_spots_v1')){
-      if(!raw||typeof raw.id!=='string'||!/^custom-[a-z0-9-]{3,80}$/.test(raw.id)||typeof raw.name!=='string'||!raw.name.trim()||raw.name.length>80||typeof raw.loc!=='string'||!raw.loc.trim()||raw.loc.length>100)continue;
-      const lat=raw.coords?.lat,lon=raw.coords?.lon;
-      if(typeof lat!=='number'||!Number.isFinite(lat)||lat<-90||lat>90||typeof lon!=='number'||!Number.isFinite(lon)||lon<-180||lon>180||SPOTS.some(x=>x.id===raw.id))continue;
-      const world=raw.world,sport=Array.isArray(raw.sports)?raw.sports.find(id=>sports.has(id)):null;
-      if(!worlds.has(world)||!sport)continue;
-      const s={id:raw.id,name:raw.name.trim(),loc:raw.loc.trim(),world,coords:{lat,lon},sports:[sport],level:'variable',desc:typeof raw.desc==='string'?raw.desc.slice(0,400):'Spot personnel non vérifié.',dangers:[],tip:'Vérifie les règles locales et les conditions avant toute sortie.',sky:'#c9dfed',sky2:'#8bbbd7',sea:'#2c789b',sea2:'#17486e',wind:'—',swell:'—',temp:'—',tide:'—',danger:0,custom:true};
-      SPOTS.push(s);COORDS[s.id]=s.coords;SPOT_WORLD[s.id]=world;
-    }
-  }
-  registerPrivateSpots();
+  const registerPrivateSpots=()=>window.OceanPrivateSpots?.register();
   async function auth(path,body,token){
     const response=await fetch(cfg.supabaseUrl+'/auth/v1/'+path,{method:'POST',headers:{apikey:publicKey,...(token?{authorization:'Bearer '+token}:{}),'content-type':'application/json'},body:JSON.stringify(body),signal:AbortSignal.timeout(12000)});
     const result=await response.json().catch(()=>({}));if(!response.ok)throw Error(result.error_description||'auth_failed');return result;

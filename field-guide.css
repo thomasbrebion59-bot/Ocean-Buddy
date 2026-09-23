@@ -94,6 +94,7 @@
 .ocean-v2 .fc-col{display:grid;grid-template-rows:15px minmax(0,1fr) 15px;grid-template-columns:minmax(0,1fr);justify-items:center;align-items:end}.ocean-v2 .fc-bar{align-self:end}.ocean-v2 #detail .fc-bar{background:#2154dc}.ocean-v2 .fc-col.best .fc-bar,.ocean-v2 #detail .fc-col.best .fc-bar{background:#fc7955;box-shadow:none}
 .catalog-new{position:absolute;right:15px;top:64px;background:#fff;color:#2154dc;border-radius:5px;padding:6px 9px;font-size:9px;font-weight:800;z-index:5}
 .spot-private{position:absolute;right:15px;top:64px;background:#fff;color:#174a62;border-radius:5px;padding:6px 9px;font-size:9px;font-weight:800;z-index:5}
+.spot-photo-pending{position:absolute;right:15px;top:64px;background:#fff;color:#174a62;border-radius:5px;padding:6px 9px;font-size:9px;font-weight:800;z-index:5}
 .ocean-v2 .lvl-variable{background:#fff;color:#355570}.ocean-v2 .spot-preview{font-size:11px;color:#5d748c}
 .ocean-v2 .spot .danger-dots{display:none}.ocean-v2 .spot-banner .lvl-tag{font-size:9px;border-radius:5px}
 @media(max-width:959px){.field-guide-layout{gap:23px;grid-template-columns:minmax(0,1.25fr) minmax(230px,1fr)}.ocean-v2 #detail .field-overview:not([style*="none"]){gap:0 25px;grid-template-columns:1.3fr 1fr}.field-address{padding:21px}.field-nearby-card img{height:130px}}

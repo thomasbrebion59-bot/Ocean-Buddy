@@ -1,9 +1,9 @@
 /* Compare actual destination information and keep a private note for each place. */
 (() => {
   'use strict';
-  const $=s=>document.querySelector(s),M=SpotNotebookModel,ids=SPOTS.map(s=>s.id);
+  const $=s=>document.querySelector(s),M=SpotNotebookModel,knownIds=()=>SPOTS.map(s=>s.id);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  let state=M.load(localStorage,ids),opener=null;
+  let state=M.load(localStorage,knownIds()),opener=null;
   const symbol='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" aria-hidden="true"><rect x="3" y="6" width="7" height="14" rx="2"/><rect x="14" y="3" width="7" height="17" rx="2"/></svg>';
   const dialog=document.createElement('dialog');dialog.id='spotCompareDialog';dialog.className='spot-compare-dialog';dialog.setAttribute('aria-labelledby','compareTitle');document.body.append(dialog);
   const tray=document.createElement('aside');tray.className='compare-tray';tray.setAttribute('aria-label','Sélection de spots à comparer');document.body.append(tray);
@@ -14,7 +14,7 @@
     tray.innerHTML=`<span class="compare-tray-label">${symbol}<b>${state.compare.length} / 3 <span>spots</span></b></span><span class="compare-thumbs">${state.compare.map(id=>`<img src="${esc(spotPhotoUrl(id,100))}" alt="${esc(SPOTS.find(s=>s.id===id).name)}">`).join('')}</span><button class="compare-open" data-compare-open>Comparer${state.compare.length<2?' +':''}</button><button class="compare-clear" data-compare-clear aria-label="Vider le comparateur">×</button>`;
   }
   function persist(next){try{M.save(localStorage,next);state=next;return true;}catch(_){toast('Enregistrement impossible : le stockage du navigateur est plein ou désactivé.');return false;}}
-  function toggle(id){try{if(persist(M.toggle(state,id,ids)))sync();}catch(e){toast(e.message);}}
+  function toggle(id){try{if(persist(M.toggle(state,id,knownIds())))sync();}catch(e){toast(e.message);}}
   function renderDialog(){
     const spots=state.compare.map(id=>SPOTS.find(s=>s.id===id));
     const rows=[['Activités',s=>spotSports(s).map(a=>`<span class="compare-sport">${sportIcon(a)}${esc(SPORTMAP[a].label)}</span>`).join('')],['Cadre',s=>isInland(s)?'Eau douce':'Mer & océan'],['Niveau',s=>levelIcon(s.level)+(s.level==='variable'?'À définir avec l’encadrant local':esc(LVLTXT[s.level]||'À confirmer'))],['Vent',s=>esc(LIVE[s.id]?.wind||'Donnée indisponible')],['Houle',s=>isInland(s)?'Non proposée en eau douce':esc(LIVE[s.id]?.swell||'Donnée indisponible')],['Repères',s=>esc(s.desc)],['Carnet personnel',s=>state.notes[s.id]?esc(state.notes[s.id]):'Aucune note pour le moment.'],['Préparer le départ',s=>`<button class="compare-visit" data-compare-visit="${s.id}">Ouvrir la fiche ↗</button><button class="compare-trip" data-compare-trip="${s.id}">Ajouter au voyage +</button>`]];
@@ -33,7 +33,7 @@
     const visit=e.target.closest('[data-compare-visit]');if(visit){dialog.close();openSpot(visit.dataset.compareVisit);}
     const trip=e.target.closest('[data-compare-trip]');if(trip){dialog.close();OceanTrips.fromSpot(trip.dataset.compareTrip);}
   },true);
-  document.addEventListener('input',e=>{if(!e.target.matches('[data-note-spot]'))return;const value=e.target.value;const ok=persist(M.note(state,e.target.dataset.noteSpot,value,ids));$('#spotNoteStatus').textContent=ok?'Note enregistrée dans ce navigateur.':'Note non enregistrée : stockage indisponible.';$('#spotNoteCount').textContent=value.length+' / '+M.NOTE_LIMIT;});
+  document.addEventListener('input',e=>{if(!e.target.matches('[data-note-spot]'))return;const value=e.target.value;const ok=persist(M.note(state,e.target.dataset.noteSpot,value,knownIds()));$('#spotNoteStatus').textContent=ok?'Note enregistrée dans ce navigateur.':'Note non enregistrée : stockage indisponible.';$('#spotNoteCount').textContent=value.length+' / '+M.NOTE_LIMIT;});
   window.OceanNotebook={button,note,sync,open};
   sync();renderSpots(currentFilter,true);
 })();

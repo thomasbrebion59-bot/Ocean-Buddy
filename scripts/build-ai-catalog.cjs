@@ -18,8 +18,10 @@ for(const spot of catalog){
   if(!Number.isFinite(spot.coords?.lat)||Math.abs(spot.coords.lat)>90||!Number.isFinite(spot.coords?.lon)||Math.abs(spot.coords.lon)>180)throw Error(spot.id+': invalid coordinates');
   if(!Array.isArray(spot.sports)||!spot.sports.length||spot.sports.some(s=>!allowedSports.has(s)))throw Error(spot.id+': invalid activities');
   if(!Array.isArray(spot.dangers)||typeof spot.tip!=='string')throw Error(spot.id+': incomplete guide');
-  if(!spot.photo?.src||!spot.photo?.thumb||!spot.photo?.source||!spot.photo?.author||!spot.photo?.license)throw Error(spot.id+': incomplete photograph');
-  for(const media of [spot.photo.src,spot.photo.thumb])if(!fs.existsSync(path.join(root,media)))throw Error(spot.id+': missing '+media);
+  if(spot.photo){
+    if(!spot.photo.src||!spot.photo.thumb||!spot.photo.source||!spot.photo.author||!spot.photo.license)throw Error(spot.id+': incomplete photograph');
+    for(const media of [spot.photo.src,spot.photo.thumb])if(!fs.existsSync(path.join(root,media)))throw Error(spot.id+': missing '+media);
+  }
   if(spot.editorialStatus==='reviewed'){
     if(!spot.reviewed||!spot.source?.url||!spot.source?.label)throw Error(spot.id+': reviewed without source/date');
   }else if(spot.editorialStatus!=='unverified'||spot.source?.url||spot.reviewed)throw Error(spot.id+': unverified entry has a source/date');
@@ -32,13 +34,13 @@ for(const spot of catalog){
   }
 }
 
-const photos=Object.fromEntries(catalog.map(s=>[s.id,s.photo]));
+const photos=Object.fromEntries(catalog.filter(s=>s.photo).map(s=>[s.id,s.photo]));
 const server=catalog.map(s=>({
   id:s.id,name:s.name,location:s.loc,world:s.world,coords:s.coords,
   coordinatePrecision:s.coordinatePrecision,activities:s.sports,level:s.level,
   description:s.desc,source:s.source?.url||null,sourceLabel:s.source?.label||null,
   reviewed:s.reviewed,editorialStatus:s.editorialStatus,visit:s.visit||null,
-  photo:{src:s.photo.src,thumb:s.photo.thumb,source:s.photo.source,author:s.photo.author,license:s.photo.license,width:s.photo.width,height:s.photo.height},
+  photo:s.photo?{src:s.photo.src,thumb:s.photo.thumb,source:s.photo.source,author:s.photo.author,license:s.photo.license,width:s.photo.width,height:s.photo.height}:null,
   waterType:s.waterType
 }));
 write('catalog-runtime.js','/* Generated from data/catalog.json. Edit that file, then run node scripts/build-ai-catalog.cjs. */\nwindow.OCEAN_CATALOG = '+JSON.stringify(catalog)+';\n');
