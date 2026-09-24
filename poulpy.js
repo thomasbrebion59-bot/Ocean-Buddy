@@ -65,7 +65,7 @@
   $('#worldGrid').before(worldNote);
 
   const eco=document.createElement('aside');eco.className='poulpy-eco-banner';
-  eco.innerHTML=`${image('eco')}<div><span class="section-kicker">L’OCÉAN NOUS DONNE TANT</span><h2>À nous de lui rendre.</h2><p>Un déchet ramassé, une bonne habitude partagée.<br>Avec Poulpy, chaque geste compte.</p></div><span class="eco-seal" aria-hidden="true">EXPLORE<br>PROGRESSE<br><b>PROTÈGE.</b></span>`;
+  eco.innerHTML=`${image('eco')}<div><span class="section-kicker">L’OCÉAN NOUS DONNE TANT</span><h2>À nous de lui rendre.</h2><p>Un déchet ramassé, une bonne habitude partagée. <br>Avec Poulpy, chaque geste compte.</p></div><span class="eco-seal" aria-hidden="true">EXPLORE<br>PROGRESSE<br><b>PROTÈGE.</b></span>`;
   $('#chalTop').after(eco);
 
   // Native dialog supplies focus trapping, Escape and an inert background.
@@ -100,7 +100,7 @@
   // A quick activity change can be cancelled without changing the saved preference.
   const gateClose=document.createElement('button');gateClose.type='button';gateClose.className='activity-gate-close';gateClose.textContent='Retour à l’application';gateClose.hidden=true;$('#onb').prepend(gateClose);
   let gateFocus=null,gateVisible=false;
-  function focusOnboarding(){requestAnimationFrame(()=>{const step=$('#onb .onb-step.active');($('.sport-card.sel,.lvl-card.sel',step)||$('.sport-card,.lvl-card',step)||$('button',step))?.focus({preventScroll:true});});}
+  function focusOnboarding(){requestAnimationFrame(()=>{const step=$('#onb .onb-step.active');const title=$('h1,h2',step);if(title&&!title.hasAttribute('tabindex'))title.setAttribute('tabindex','-1');/* le titre, pas la première carte : un anneau sur « Surf » ressemblait à une sélection */($('.sport-card.sel,.lvl-card.sel',step)||title||$('button',step))?.focus({preventScroll:true});});}
   function syncOnboarding(){
     const visible=!$('#onb').classList.contains('hide')&&$('#onb').style.display!=='none';
     gateClose.hidden=!quickGate;

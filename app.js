@@ -59,29 +59,33 @@ function loadState(){try{const d=JSON.parse(localStorage.getItem(STORE_KEY)||'nu
 const ECO=[
   /* chaque défi porte désormais son « pourquoi ça compte » : sans lui, on
      distribue des points, on ne sensibilise personne. */
-  {ic:'balai',bg:'#e3f7ee',color:'#2faf72',title:'Beach Clean Express',desc:'Ramasse 5 déchets sur la plage.',xp:50,prog:60,
+  {ic:'balai',bg:'#e3f7ee',color:'#2faf72',id:'beach-clean',title:'Beach Clean Express',desc:'Ramasse 5 déchets sur la plage.',xp:50,
    why:"Ramassé avant la marée, un déchet ne part pas au large. Fragmenté en microplastiques, il devient irrécupérable."},
-  {ic:'bouteille',bg:'#e3f7ee',color:'#2faf72',title:'Zéro plastique',desc:'Viens surfer avec une gourde réutilisable.',xp:30,prog:100,done:true,
+  {ic:'bouteille',bg:'#e3f7ee',color:'#2faf72',id:'zero-plastique',title:'Zéro plastique',desc:'Viens surfer avec une gourde réutilisable.',xp:30,
    why:"Bouteilles et bouchons comptent parmi les déchets les plus ramassés sur les plages européennes."},
-  {ic:'velo',bg:'#e3f7ee',color:'#2faf72',title:'Éco-mobilité',desc:'Rejoins ton spot à vélo ou en covoiturage.',xp:40,prog:0,
+  {ic:'velo',bg:'#e3f7ee',color:'#2faf72',id:'eco-mobilite',title:'Éco-mobilité',desc:'Rejoins ton spot à vélo ou en covoiturage.',xp:40,
    why:"Le trajet est le poste d'une session sur lequel tu as le plus de prise. À trois dans la voiture, il est divisé par trois."},
-  {ic:'poisson',bg:'#e3f7ee',color:'#2faf72',title:'Gardien du récif',desc:'Signale une pollution ou un animal en détresse.',xp:60,prog:0,
+  {ic:'poisson',bg:'#e3f7ee',color:'#2faf72',id:'gardien-recif',title:'Gardien du récif',desc:'Signale une pollution ou un animal en détresse.',xp:60,
    why:"Un animal échoué relève d'un réseau spécialisé — en France, le Réseau national échouages. Signaler vaut mieux que le remettre à l'eau."},
-  {ic:'recycle',bg:'#e3f7ee',color:'#2faf72',title:'Tri sélectif',desc:'Trie tes déchets après la session.',xp:35,prog:0,
+  {ic:'recycle',bg:'#e3f7ee',color:'#2faf72',id:'tri-selectif',title:'Tri sélectif',desc:'Trie tes déchets après la session.',xp:35,
    why:"Posé à côté d'une poubelle pleine, un emballage repart avec le vent. Le trier, c'est d'abord le sortir du sable."}
 ];
 const SURF=[
-  {ic:'sunrise',bg:'#fff0ee',color:'#ec5a4b',title:'Dawn Patrol',desc:'Surfe une session au lever du soleil.',xp:45,prog:0},
-  {ic:'carte',bg:'#fff0ee',color:'#ec5a4b',title:'Explorateur',desc:'Découvre 3 nouveaux spots ce mois-ci.',xp:80,prog:66},
-  {ic:'planche',bg:'#fff0ee',color:'#ec5a4b',title:'Régularité',desc:'Surfe 5 sessions cette semaine.',xp:70,prog:40},
-  {ic:'camera',bg:'#fff0ee',color:'#ec5a4b',title:'Photographe',desc:'Partage une photo de ta session.',xp:25,prog:0}
+  {ic:'sunrise',bg:'#fff0ee',color:'#ec5a4b',id:'dawn-patrol',title:'Dawn Patrol',desc:'Surfe une session au lever du soleil.',xp:45},
+  {ic:'carte',bg:'#fff0ee',color:'#ec5a4b',id:'explorateur',title:'Explorateur',desc:'Découvre 3 nouveaux spots ce mois-ci.',xp:80},
+  {ic:'planche',bg:'#fff0ee',color:'#ec5a4b',id:'regularite',title:'Régularité',desc:'Surfe 5 sessions cette semaine.',xp:70},
+  {ic:'camera',bg:'#fff0ee',color:'#ec5a4b',id:'photographe',title:'Photographe',desc:'Partage une photo de ta session.',xp:25}
 ];
-const BADGES=[
-  {e:'wave',n:'Première vague',locked:false},{e:'balai',n:'Éco-héros',locked:false},
-  {e:'carte',n:'Explorateur',locked:false},{e:'sunrise',n:'Dawn Patrol',locked:false},
-  {e:'flamme',n:'7 jours',locked:false},{e:'trophee',n:'Compétiteur',locked:true},
-  {e:'dauphin',n:'Ami dauphin',locked:true},{e:'couronne',n:'Légende',locked:true}
-];
+/* Badges calculés à partir de l'activité réelle (progression.js). */
+function progCtx(){var q=0;try{q=quizLoad().badges.length;}catch(e){}return {xp:xp,sessions:sessions,eco:ecoLog.length,quiz:q,favs:favs.size};}
+function currentBadges(){return window.OceanProgress?OceanProgress.badges(progCtx()):[];}
+function checkBadges(){
+  if(!window.OceanProgress)return;
+  var got=OceanProgress.newBadges(progCtx());
+  if(!got.length)return;
+  try{renderBadges();renderProfile();}catch(e){}
+  got.forEach(function(b,i){setTimeout(function(){toast('🏅 Badge débloqué : '+b.n+' !');vibrate([10,40,10]);},1400+i*2800);});
+}
 
 /* ================= POULPY ================= */
 var _octoSeq=0;
@@ -909,6 +913,7 @@ function openSpot(id){
   window.OceanNavigation?.begin();
   if(id!==currentSpot)detailSport=null;   /* le choix d'activite ne suit pas d'un spot a l'autre */
   currentSpot=id;
+  window.OceanProgress?.seeSpot(id);setTimeout(()=>{try{renderChallenges();checkBadges();}catch(e){}},600);
   const act=detailAct(s);
   var _df=document.getElementById('dFav');_df.innerHTML=favs.has(id)?FAV_ON:FAV_OFF;_df.classList.toggle('on',favs.has(id));
   renderMiniForecast(s);realForecastDetail(s,act);
@@ -972,36 +977,47 @@ function renderSpotSource(s){
   host.append(link);
   if(checked)host.append(' · Vérifié le '+new Date(checked+'T12:00:00Z').toLocaleDateString('fr-FR'));
 }
+function chalButton(ch,kind,i){
+  var P=window.OceanProgress,done=P&&P.chalDone(ch.id),g=P&&P.goal(ch.id,{sessions:sessions});
+  var bar='';
+  if(g&&!done){var pc=Math.min(100,Math.round(g.cur/g.max*100));bar='<div class="progressbar" role="progressbar" aria-valuemin="0" aria-valuemax="'+g.max+'" aria-valuenow="'+Math.min(g.cur,g.max)+'" aria-label="'+esc(g.unit)+'"><i style="width:'+pc+'%"></i></div><span class="chal-goal">'+Math.min(g.cur,g.max)+' / '+g.max+' '+esc(g.unit)+'</span>';}
+  var ready=!g||g.cur>=g.max;
+  var fn=kind==='eco'?'claimEco(this,'+i+')':'claimChallenge(this,'+i+')';
+  var btn='<button type="button" class="chal-btn '+(done?'done':'')+(!done&&!ready?' pending':'')+'" onclick="'+fn+'"'+(done?' aria-disabled="true"':'')+'>'+(done?'✓ Fait':(ready?'Valider':'En cours'))+'</button>';
+  return {bar:bar,btn:btn,done:done};
+}
 function renderChallenges(){
-  const c=ch=>`<div class="chal">
+  const c=(ch,i)=>{const b=chalButton(ch,'surf',i);return `<div class="chal${b.done?' is-done':''}">
     <div class="chal-ic" style="background:${ch.bg};color:${ch.color}">${uic(ch.ic)}</div>
     <div class="chal-body"><h4>${ch.title}</h4><p>${ch.desc}</p>
       <span class="chal-xp">+${ch.xp} XP</span>
-      ${ch.prog>0&&!ch.done?`<div class="progressbar"><i style="width:${ch.prog}%"></i></div>`:''}
+      ${b.bar}
     </div>
-    <button class="chal-btn ${ch.done?'done':''}" onclick="claimChallenge(this,${ch.xp})">${ch.done?'✓ Fait':'Valider'}</button>
-  </div>`;
-  const e=(ch,i)=>`<div class="chal eco">
+    ${b.btn}
+  </div>`;};
+  const e=(ch,i)=>{const b=chalButton(ch,'eco',i);return `<div class="chal eco${b.done?' is-done':''}">
     <div class="chal-ic" style="background:${ch.bg};color:${ch.color}">${uic(ch.ic)}</div>
     <div class="chal-body"><h4>${ch.title}</h4><p>${ch.desc}</p>
       <span class="chal-xp">+${ch.xp} XP</span>
-      ${ch.prog>0&&!ch.done?`<div class="progressbar"><i style="width:${ch.prog}%"></i></div>`:''}
+      ${b.bar}
     </div>
-    <button class="chal-btn ${ch.done?'done':''}" onclick="claimEco(this,${i})">${ch.done?'✓ Fait':'Valider'}</button>
+    ${b.btn}
     <div class="chal-why">${uic('feuille')}<span><b>Pourquoi ça compte —</b> ${ch.why}</span></div>
-  </div>`;
+  </div>`;};
   document.getElementById('ecoChallenges').innerHTML=ECO.map(e).join('');
   document.getElementById('surfChallenges').innerHTML=SURF.map(c).join('');
   try{chalShow(document.querySelector('#challenges .gsw button.on[data-g="b"]')?'b':'a');}catch(e){}
 }
-function renderBadges(){document.getElementById('badges').innerHTML=BADGES.map(b=>`<div class="badge ${b.locked?'locked':''}"><div class="e">${b.locked?uic('cadenas'):uic(b.e)}</div><div class="n">${b.n}</div></div>`).join('');}
+function renderBadges(){var el=document.getElementById('badges');if(!el)return;el.innerHTML=currentBadges().map(b=>`<div class="badge ${b.locked?'locked':''}" title="${esc(b.how)}"><div class="e">${b.locked?uic('cadenas'):uic(b.e)}</div><div class="n">${b.n}</div>${b.locked?`<div class="how">${esc(b.how)}</div>`:''}</div>`).join('');}
 function pstatTile(svg,bg,color,v,l,on){return '<div class="pstat"'+(on?' onclick="'+on+'" style="cursor:pointer"':'')+'><div class="pstat-ic" style="background:'+bg+';color:'+color+'">'+svg+'</div><div class="pstat-v">'+v+'</div><div class="pstat-l">'+l+'</div></div>';}
 function renderProfile(){
-  var pct=Math.min(100,Math.round(xp/LVL*100));
-  var fill=document.getElementById('profXpFill');if(fill)fill.style.width=pct+'%';
-  var xt=document.getElementById('profXpText');if(xt)xt.textContent=xp+' XP · '+(xp>=LVL?'objectif de '+LVL+' XP atteint':Math.max(0,LVL-xp)+' XP pour l’objectif de '+LVL);
+  var L=levelInfo();
+  var fill=document.getElementById('profXpFill');if(fill)fill.style.width=L.pct+'%';
+  var xt=document.getElementById('profXpText');if(xt)xt.textContent=L.title+' · '+xp+' XP'+(L.max?' · niveau maximum atteint':' — plus que '+L.remain+' XP avant le niveau '+L.next.n);
+  var pl=document.getElementById('profLevel');if(pl)pl.textContent='Niv. '+L.n;
+  var sk=window.OceanProgress?OceanProgress.streak():0;var ps=document.getElementById('profStreak');if(ps)ps.textContent=sk;var psl=document.getElementById('profStreakLab');if(psl)psl.textContent=sk>1?'jours d’affilée':'jour';
   var rt=document.getElementById('profTrips');if(rt)rt.textContent=window.OceanTrips?OceanTrips.count():0;
-  var appB=(typeof BADGES!=='undefined')?BADGES.filter(function(b){return !b.locked;}).length:0;
+  var appB=currentBadges().filter(function(b){return !b.locked;}).length;
   var quizB=0;try{quizB=quizLoad().badges.length;}catch(e){}
   var bt=document.getElementById('profBadges');if(bt)bt.textContent=(appB+quizB);
   var spotsSet={};sessions.forEach(function(s){spotsSet[s.spot]=1;});
@@ -1038,7 +1054,7 @@ function openSettings(){var i=document.getElementById('setName');if(i)i.value=us
 function closeSettings(){document.getElementById('settingsModal').classList.remove('open');}
 function saveName(){var v=(document.getElementById('setName').value||'').trim();if(!v){toast('Entre un prénom 🐙');return;}userName=v.slice(0,18);applyName();saveState();toast('Prénom enregistré ✅');closeSettings();}
 function toggleReduceMotion(on){document.body.classList.toggle('reduce-motion',!!on);try{localStorage.setItem('oceanbuddy_reduce',on?'1':'0');}catch(e){}}
-async function resetProgress(){if(!window.confirm('Réinitialiser toute ta progression (XP, favoris, sessions, quiz) ?'))return;try{localStorage.removeItem(STORE_KEY);localStorage.removeItem('oceanbuddy_quiz_v1');}catch(e){}await window.OceanMobile?.persist();location.reload();}
+async function resetProgress(){if(!window.confirm('Réinitialiser toute ta progression (XP, favoris, sessions, quiz) ?'))return;try{localStorage.removeItem(STORE_KEY);localStorage.removeItem('oceanbuddy_quiz_v1');localStorage.removeItem('oceanbuddy_progress_v1');}catch(e){}await window.OceanMobile?.persist();location.reload();}
 
 /* ================= HOME DASHBOARD ================= */
 function recommendedSpot(){
@@ -1485,17 +1501,27 @@ async function realHomeForecast(){
   try{const s=recommendedSpot();const f=await fetchWaves(s.id,7);if(request!==homeForecastRequest)return;renderForecastBars('fcBars','fcBest',f.days,f.vals,{unit:'m',liveOn:true,badge:'Modèle Open-Meteo'});}
   catch(e){if(request===homeForecastRequest)renderForecast();}
 }
+function levelInfo(){return window.OceanProgress?OceanProgress.level(xp):{n:1,title:'Moussaillon',pct:0,remain:0,max:false,next:null};}
 function renderProg(){
-  const pct=Math.min(100,Math.round(xp/LVL*100));
-  const remain=Math.max(0,LVL-xp);
-  document.getElementById('progCard').innerHTML=`
-    <div class="prog-medal"><div class="lv">4</div><div class="nv">NIVEAU</div></div>
+  const L=levelInfo();
+  const el=document.getElementById('progCard');if(!el)return;
+  el.innerHTML=`
+    <div class="prog-medal"><div class="lv">${L.n}</div><div class="nv">NIVEAU</div></div>
     <div class="prog-left">
-      <div class="pl-top"><span class="lvlnum">Niveau 4</span><span class="lvlnext">→ Niv. 5 · Surfeur</span></div>
-      <div class="progressbar" style="margin-top:9px"><i style="width:${pct}%"></i></div>
-      <div class="pl-sub">Plus que <b>${remain} XP</b> pour le niveau suivant</div>
+      <div class="pl-top"><span class="lvlnum">${esc(L.title)}</span><span class="lvlnext">${L.next?'→ Niv. '+L.next.n+' · '+esc(L.next.title):'Niveau maximum'}</span></div>
+      <div class="progressbar" style="margin-top:9px"><i style="width:${L.pct}%"></i></div>
+      <div class="pl-sub">${L.max?'Tu as tout débloqué. Continue à protéger l’océan !':'Plus que <b>'+L.remain+' XP</b> pour le niveau suivant'}</div>
     </div>
     <a class="prog-next" onclick="go('challenges')"><b>Continue à progresser</b><span>Voir mes défis →</span></a>`;
+  renderStreak();
+}
+function renderStreak(){
+  const P=window.OceanProgress;if(!P)return;
+  const n=P.streak(),days=P.week();
+  const num=document.getElementById('streakNum'),lab=document.getElementById('streakLab'),row=document.getElementById('streakDays');
+  if(num)num.textContent=n;
+  if(lab)lab.textContent=n>=7?(n>1?'jours d’affilée — série de champion, bravo !':'jour'):(n<=1?'jour avec Poulpy — reviens demain pour lancer ta série !':'jours d’affilée — encore '+(7-n)+' pour le badge 7 jours !');
+  if(row)row.innerHTML=days.map(d=>`<div class="sd${d.on?' on':''}${d.today?' today':''}"><span class="dd">${d.on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M2 12c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3"/></svg>':'·'}</span>${d.l}</div>`).join('');
 }
 var WAVE_ICON='<svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5c2.2 0 2.2-2.4 4.4-2.4S8.6 8.5 10.8 8.5 13 6.1 15.2 6.1 17.4 8.5 19.6 8.5"/><path d="M2 14c2.2 0 2.2-2.4 4.4-2.4S8.6 14 10.8 14 13 11.6 15.2 11.6 17.4 14 19.6 14"/><path d="M2 19.5c2.2 0 2.2-2.4 4.4-2.4S8.6 19.5 10.8 19.5 13 17.1 15.2 17.1 17.4 19.5 19.6 19.5"/></svg>';
 function renderActivityBar(){
@@ -1534,7 +1560,7 @@ function welcomeText(){
   var nb   = (typeof SPOTS!=='undefined')?SPOTS.length:0,
       ses  = (typeof sessions!=='undefined'&&sessions)?sessions.length:0,
       ges  = (typeof ecoLog!=='undefined'&&ecoLog)?ecoLog.length:0,
-      rest = (typeof xp==='number'&&typeof LVL==='number')?Math.max(0,LVL-xp):0;
+      rest = levelInfo().remain;
   var tete = "Moi c'est <b>Poulpy</b>, ton guide océan.";
   /* L'XP restant n'est PLUS repete ici : la barre de l'en-tete, quarante pixels
      plus haut, affiche deja « 320 / 500 XP ». Poulpy garde le carnet — ca, c'est
@@ -1558,7 +1584,7 @@ function renderWelcome(){
   if(window.__obHello){ b.innerHTML=window.__obHello; window.__obHello=null; return; }
   b.innerHTML=welcomeText();
 }
-function renderHome(){renderWelcome();renderActivityBar();renderToday();realHomeForecast();renderProg();renderLiveTop();renderHomeStats();window.OceanPoulpy?.refresh();}
+function renderHome(){renderWelcome();renderActivityBar();renderToday();realHomeForecast();renderProg();renderXpBar();renderLiveTop();renderHomeStats();window.OceanPoulpy?.refresh();}
 
 /* ================= CREATURES ================= */
 function cShoeShark(){return `<svg viewBox="0 0 64 64"><defs><linearGradient id="ssk" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#9fb4c7"/><stop offset="100%" stop-color="#56707f"/></linearGradient></defs>
@@ -1783,17 +1809,20 @@ function finishOnb(){
 }
 
 /* ================= XP ================= */
-let xp=0;const LVL=500;
+let xp=0;
 function popPoulpy(){['octo','octoHi'].forEach(function(id){var o=document.getElementById(id);if(!o)return;o.classList.remove('pop');void o.offsetWidth;o.classList.add('pop');});}
+function renderXpBar(){
+  const L=levelInfo();
+  const f=document.getElementById('xpFill');if(f)f.style.width=L.pct+'%';
+  const t=document.getElementById('xpText');if(t)t.textContent=L.max?`${xp} XP · niveau max`:`Niv. ${L.n} · ${xp - L.min} / ${L.next.min - L.min} XP`;
+}
 function addXP(n,msg){
-  const before=xp;xp+=n;let pct=Math.min(100,Math.round(xp/LVL*100));
-  document.getElementById('xpFill').style.width=pct+'%';
-  let remain=Math.max(0,LVL-xp);
-  document.getElementById('xpText').textContent=`${xp} / ${LVL} XP`;
+  const before=levelInfo().n;xp+=n;
+  const L=levelInfo();
+  renderXpBar();
   toast(msg||`+${n} XP !`);popPoulpy();
   renderProg();renderProfile();renderCompetition();saveState();
-  if(before<LVL&&xp>=LVL){spawnConfetti();vibrate([14,45,14]);}else{vibrate(12);}
-  if(xp>=LVL)setTimeout(()=>toast('🎉 Niveau 5 ! Poulpy a un nouveau chapeau !'),2600);
+  if(L.n>before){spawnConfetti();vibrate([14,45,14]);setTimeout(()=>toast(`🎉 Niveau ${L.n} : ${L.title} !`),2600);}else{vibrate(12);}
 }
 function spawnConfetti(){
   const c=document.getElementById('confetti');if(!c)return;
@@ -1804,28 +1833,33 @@ function spawnConfetti(){
   c.innerHTML=h;setTimeout(()=>{c.innerHTML='';},2800);
 }
 function completeDaily(btn){btn.textContent='✓';btn.classList.add('done');btn.style.background='linear-gradient(135deg,#4fd99a,#2faf72)';addXP(50,'Défi du jour validé ! +50 XP');}
-function claimEco(btn,i){
-  /* valider un défi écolo écrit une ligne dans le carnet : le compteur de
-     l'accueil et du profil ne peut plus mentir. */
-  if(btn.classList.contains('done'))return;
-  var ch=ECO[i]; if(!ch)return;
-  btn.textContent='✓ Fait'; btn.classList.add('done');
-  ecoAdd(ch.title,'');
+function claimFrom(list,i,btn,eco){
+  var ch=list[i];if(!ch||!window.OceanProgress)return;
+  if(OceanProgress.chalDone(ch.id)){toast('Défi déjà réussi cette semaine. Rendez-vous lundi !');return;}
+  var g=OceanProgress.goal(ch.id,{sessions:sessions});
+  if(g&&g.cur<g.max){toast('Pas encore : '+g.cur+' / '+g.max+' '+g.unit);return;}
+  OceanProgress.completeChal(ch.id);
+  if(eco)ecoAdd(ch.title,'');
   addXP(ch.xp,'Défi validé ! +'+ch.xp+' XP');
+  renderChallenges();checkBadges();
 }
-function claimChallenge(btn,xpv){if(btn.classList.contains('done'))return;btn.textContent='✓ Fait';btn.classList.add('done');addXP(xpv,`Défi validé ! +${xpv} XP`);}
+/* valider un défi écolo écrit une ligne dans le carnet : le compteur de
+   l'accueil et du profil ne peut plus mentir. Les défis se renouvellent
+   chaque lundi, on ne peut donc plus les valider en boucle. */
+function claimEco(btn,i){claimFrom(ECO,i,btn,true);}
+function claimChallenge(btn,i){claimFrom(SURF,i,btn,false);}
 function logSession(){
   const s=SPOTS.find(x=>x.id===currentSpot);
   if(s){var sp0=(activeSport&&spotSports(s).includes(activeSport))?activeSport:spotSports(s)[0];
-    sessions.unshift({spot:s.name.split(' — ')[0],date:new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'short'}),act:sp0});}
-  renderSessions();saveState();addXP(40,'Session enregistrée ! +40 XP 🏄');go('profile');
+    sessions.unshift({spot:s.name.split(' — ')[0],date:new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'short'}),act:sp0,ts:Date.now(),id:s.id});}
+  renderSessions();saveState();addXP(40,'Session enregistrée ! +40 XP 🏄');renderChallenges();checkBadges();go('profile');
 }
 
 /* ================= UI ================= */
 let tt;
 function toast(msg){const t=document.getElementById('toast');t.textContent='🐙 '+msg;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600);}
 const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',community:'cb',trips:'tb'};
-function vibrate(pattern){try{if(navigator.vibrate)navigator.vibrate(pattern);}catch(e){}}
+function vibrate(pattern){try{if(navigator.userActivation&&!navigator.userActivation.hasBeenActive)return;if(navigator.vibrate)navigator.vibrate(pattern);}catch(e){}}
 const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,community:3,profile:4,trips:2};
 function resetScreenLive(el){el.classList.remove('sw-live');el.style.top='';el.style.left='';el.style.right='';el.style.transform='';el.style.opacity='';el.style.transition='';}
 function updateNavPill(s){
@@ -2462,10 +2496,10 @@ ambient();renderSportGuide();renderSportFilters();renderSpots();try{renderWorlds
 requestAnimationFrame(()=>requestAnimationFrame(()=>updateNavPill('home')));
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{const ab=document.querySelector('.nav button.active:not(.center)');updateNavPill(ab?ab.dataset.s:'home');}).catch(()=>{});
 window.addEventListener('resize',()=>{const ab=document.querySelector('.nav button.active:not(.center)');if(ab)updateNavPill(ab.dataset.s);});
+/* Une personne qui revient arrive directement dans l'app : l'activité se
+   change depuis l'accueil ou l'étape 1 d'Explorer, sans barrière à chaque visite. */
 if(returning&&chosenLevel){
-  quickGate=true;chosenSport=chosenSport||'all';
-  const t=document.getElementById('sportStepTitle');if(t)t.textContent='Bon retour ! Quelle activité aujourd\'hui ?';
-  showStep(1);
-  document.querySelectorAll('#sportGrid .sport-card').forEach(c=>c.classList.toggle('sel',c.dataset.sp===chosenSport));
-  document.getElementById('octoBubble').innerHTML='Re-coucou 🐙 ! Content de te revoir.';
+  const o=document.getElementById('onb');o.classList.add('hide');o.style.display='none';
+  realHomeForecast();
+  setTimeout(()=>toast('Bon retour, '+userName+' ! L’océan t’attendait.'),900);
 }

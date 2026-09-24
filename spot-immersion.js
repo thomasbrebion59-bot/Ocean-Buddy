@@ -70,7 +70,7 @@
     spot=s;act=a;live=LIVE[s.id]||null;
     if(!M.topicList(isInland(s)).some(([k])=>k===topic))topic='terrain';
     const options=spotSports(s);
-    context.innerHTML=`<div class="im-context-title">${icon(a)}<span><small>ICI, TU AS ENVIE DE…</small><b>${esc(SPORTMAP[a].label)}</b></span></div><div class="im-activity-choices" role="group" aria-label="Activité sur ce spot">${options.map(id=>`<button type="button" data-im-activity="${id}" aria-pressed="${id===a}">${sportIcon(id)}<span>${esc(SPORTMAP[id].label.replace(/\s*\(.*\)/,''))}</span></button>`).join('')}</div>`;
+    context.innerHTML=`<div class="im-context-title">${icon(a)}<span><small>${options.length>1?'ICI, TU AS ENVIE DE…':'L’ACTIVITÉ DU SPOT'}</small><b>${esc(SPORTMAP[a].label)}</b></span></div>${options.length>1?`<div class="im-activity-choices" role="group" aria-label="Activité sur ce spot">${options.map(id=>`<button type="button" data-im-activity="${id}" aria-pressed="${id===a}">${sportIcon(id)}<span>${esc(SPORTMAP[id].label.replace(/\s*\(.*\)/,''))}</span></button>`).join('')}</div>`:''}`;
     draw();
     const weatherHelp=$('#imWeatherHelp');weatherHelp.innerHTML=`${icon(a)}<span><b>Ces chiffres, ça veut dire quoi ?</b><small>Poulpy t’explique le vent${isInland(s)?' et l’eau.':', les vagues et la marée.'}</small></span><span aria-hidden="true">→</span>`;
     document.querySelectorAll('#dTabs .dtab').forEach(b=>{

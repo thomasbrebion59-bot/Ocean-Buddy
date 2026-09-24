@@ -878,7 +878,7 @@
 
   /* ===== PASSE DESIGN & DÉTAILS ===== */
   *{-webkit-tap-highlight-color:transparent;}
-  #screenWrap{scroll-behavior:smooth;}
+  #screenWrap{scroll-behavior:auto;}
   /* sélecteur d'activité : badges colorés */
   .sport-card .se{width:54px;height:54px;border-radius:16px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:3px;}
   .sport-card{backdrop-filter:blur(2px);}

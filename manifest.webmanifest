@@ -1,0 +1,22 @@
+{
+  "name": "Ocean Buddy — Explore. Progresse. Protège.",
+  "short_name": "Ocean Buddy",
+  "description": "Trouve ton prochain spot nautique, prépare tes surf trips et protège l’océan avec Poulpy.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#082f3b",
+  "theme_color": "#164bd6",
+  "categories": ["sports", "travel", "lifestyle"],
+  "icons": [
+    { "src": "assets/app/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "assets/app/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "assets/app/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Explorer les spots", "short_name": "Spots", "url": "./#spots", "icons": [{ "src": "assets/app/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Mes surf trips", "short_name": "Voyages", "url": "./#trips", "icons": [{ "src": "assets/app/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

@@ -1,0 +1,102 @@
+/* Ocean Buddy — finitions : fluidité, immersion et corrections d'affichage.
+   Dernière couche de styles, chargée après toutes les autres. */
+
+/* ---------- Sensation d'application native ---------- */
+html{-webkit-text-size-adjust:100%}
+body{-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;-webkit-tap-highlight-color:transparent}
+#screenWrap{overscroll-behavior-y:contain;scroll-behavior:auto}
+button,a,[role=button],.spot,.isl,.chal-btn{touch-action:manipulation}
+
+/* En-tête : une ombre douce apparaît dès que le contenu défile dessous. */
+.app-chrome{transition:box-shadow .25s ease,background-color .25s ease;position:relative;z-index:30}
+body.is-scrolled .app-chrome{box-shadow:0 1px 0 rgba(8,47,59,.06),0 10px 28px -12px rgba(8,47,59,.22)}
+
+/* ---------- Apparition des cartes ---------- */
+.rv{opacity:0;translate:0 18px}
+.rv.rv-in{opacity:1;translate:0 0;transition:opacity .6s cubic-bezier(.2,.7,.2,1) var(--rv-delay,0ms),translate .6s cubic-bezier(.2,.7,.2,1) var(--rv-delay,0ms)}
+
+/* ---------- Images en fondu ---------- */
+img.img-wait{opacity:0}
+img.img-ready{opacity:1;transition:opacity .5s ease}
+
+/* ---------- Retour tactile ---------- */
+.spot,.isl,.activity-adventure,.trip-idea,.trip-saved-card,.field-nearby-card,.pstat,.sport-card,.lvl-card{transition:scale .18s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease,border-color .2s ease}
+.spot:active,.isl:active,.activity-adventure:active,.trip-idea:active,.trip-saved-card:active,.field-nearby-card:active,.pstat:active,.sport-card:active,.lvl-card:active{scale:.975}
+.onb-btn,.chal-btn,.set-save,.set-reset{transition:scale .15s ease,filter .2s ease,background-color .2s ease}
+.onb-btn:active,.chal-btn:active,.set-save:active,.set-reset:active{scale:.96}
+
+/* ---------- Fiche spot : panorama en parallaxe ---------- */
+#detailHero{overflow:hidden}
+#dHeroPhoto{will-change:translate;transform-origin:50% 40%}
+/* Un seul bouton retour : celui de la barre du haut suffit quand il est affiché. */
+body.has-app-back #detail .back-btn{display:none}
+/* Onglets collants de la fiche : fond opaque, le texte ne transparaît plus. */
+#dTabs{background:#f5f5f0!important;box-shadow:0 1px 0 rgba(8,47,59,.07)}
+
+/* ---------- Barre d'onglets mobile ---------- */
+.nav .mobile-label{white-space:nowrap}
+
+/* ---------- Onboarding : les neuf activités tiennent à l'écran ---------- */
+#onb h1:focus,#onb h2:focus{outline:none}
+@media (max-width:640px){
+  #onb .sport-grid{grid-template-columns:repeat(3,minmax(0,1fr))!important;gap:8px!important;max-height:none!important;overflow:visible!important}
+  #onb .sport-card{padding:10px 4px 9px!important;min-height:0!important;border-radius:18px!important}
+  #onb .sport-card .se{width:60px!important;height:60px!important;min-width:0!important;border-radius:18px!important;margin:0 auto!important}
+  #onb .sport-card .se img,#onb .sport-card .se svg{width:100%!important;height:100%!important}
+  #onb .sport-card p,#onb .sport-card small,#onb .sport-card .sp-d{display:none!important}
+  #onb .sport-card h4,#onb .sport-card b,#onb .sport-card .sp-n{font-size:12.5px!important;margin-top:6px!important;line-height:1.15!important}
+  /* « Tout voir » : une option à part, en pleine largeur */
+  #onb .sport-card[data-sp=all]{grid-column:1/-1;flex-direction:row!important;justify-content:center!important;align-items:center!important;gap:12px!important;padding:8px 14px!important}
+  #onb .sport-card[data-sp=all] .se{width:40px!important;height:40px!important;margin:0!important;border-radius:12px!important}
+  #onb .sport-card[data-sp=all] h4{margin-top:0!important;font-size:14px!important}
+}
+
+/* ---------- Défis : progression réelle ---------- */
+.chal-goal{display:block;margin-top:6px;font-size:11px;font-weight:600;color:#5d7285;letter-spacing:.01em}
+.ocean-v2 .chal-btn.pending{background:#e9eef6!important;color:#4a5d78!important;box-shadow:none!important}
+.chal.is-done .chal-body h4{text-decoration:none}
+.chal.is-done{opacity:.86}
+
+/* ---------- Badges : ce qu'il faut faire pour les obtenir ---------- */
+.badge{position:relative}
+.badge.locked{opacity:1!important}
+.badge.locked .e{opacity:.55}
+.badge.locked .n{color:#8193a3}
+.badge .how{font-size:9px;line-height:1.25;color:#8a9aa9;margin-top:4px;padding:0 4px}
+
+/* ---------- Série de jours ---------- */
+.sd.today .dd{box-shadow:0 0 0 2px #e0ff91,0 0 0 4px rgba(33,84,220,.35)}
+
+/* ---------- Réglages ---------- */
+.set-about a{color:#2154dc;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(33,84,220,.25)}
+.set-about a:hover{border-bottom-color:#2154dc}
+.settings-btn svg{display:block;margin:auto}
+
+/* ---------- Communauté : ouverture prochaine ---------- */
+.community-service-state.is-soon{display:flex;gap:16px;align-items:flex-start;border-style:solid!important;background:linear-gradient(135deg,#eef4ff,#f6fbf4)!important}
+.community-service-state.is-soon img{width:72px;height:72px;border-radius:20px;object-fit:cover;flex:none;box-shadow:0 8px 18px -8px rgba(8,47,59,.35)}
+.community-service-state.is-soon b{display:block;font-size:17px;color:#123a8f;margin-bottom:4px}
+.community-service-state.is-soon p{margin:0 0 12px}
+.community-service-state.is-soon>div{min-width:0}
+@media (max-width:520px){.community-service-state.is-soon{flex-direction:column;gap:12px}.community-service-state.is-soon img{width:56px;height:56px;border-radius:16px}}
+.community-service-state.is-soon button{background:#2154dc;color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer}
+
+/* ---------- Hors connexion ---------- */
+body.is-offline .app-chrome::after{content:'Hors connexion';position:absolute;left:50%;bottom:-11px;translate:-50% 0;background:#0b3440;color:#e0ff91;font:700 10px/1 var(--body,system-ui);letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;box-shadow:0 6px 16px -6px rgba(0,0,0,.35)}
+
+/* ---------- Moins d'animations ---------- */
+.reduce-motion .rv{opacity:1!important;translate:none!important}
+@media (prefers-reduced-motion:reduce){.rv{opacity:1!important;translate:none!important}img.img-wait{opacity:1}}
+
+/* ---------- Ambiance sonore ---------- */
+.chrome-sound{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;border:1px solid #dce6e0;background:#fff;color:#50756d;cursor:pointer;transition:background-color .2s ease,color .2s ease,scale .15s ease}
+.chrome-sound svg{width:19px;height:19px}
+.chrome-sound:active{scale:.92}
+.chrome-sound.on{background:#e0ff91;border-color:#c9ec6e;color:#0b3440;animation:obSoundPulse 2.8s ease-in-out infinite}
+@keyframes obSoundPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,255,145,.0)}50%{box-shadow:0 0 0 6px rgba(224,255,145,.45)}}
+@media (max-width:639px){.chrome-sound{margin-left:auto;width:38px;height:38px}.chrome-sound+.mobile-search{margin-left:0}}
+
+/* ---------- Partage d'un spot ---------- */
+.hero-share{position:absolute;z-index:5;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:#0b3440;box-shadow:0 6px 16px rgba(0,0,0,.18);cursor:pointer;transition:scale .15s ease}
+.hero-share svg{width:19px;height:19px}
+.hero-share:active{scale:.92}

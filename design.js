@@ -15,9 +15,9 @@
   };
   const icon = key => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[key] || paths.wave}"/></svg>`;
   const labels = {home:'Accueil',spots:'Explorer',challenges:'Défis',community:'Communauté',profile:'Mon profil',trips:'Surf trips',detail:'Le spot'};
-  const short = {home:'Accueil',spots:'Spots',challenges:'Défis',community:'Communauté',profile:'Profil',trips:'Voyages'};
+  const short = {home:'Accueil',spots:'Spots',challenges:'Défis',community:'Social',profile:'Profil',trips:'Voyages'};
   const nav = $('.nav');
-  nav.insertAdjacentHTML('afterbegin', `<a class="sidebar-brand" href="#home" aria-label="Ocean Buddy — Accueil"><img src="assets/poulpy/scenes/travel-v2.webp" alt=""><span>OCEAN <b>BUDDY</b><small>L’OCÉAN, À TES CÔTÉS.</small></span></a><div class="sidebar-label">TON TERRAIN DE JEU</div>`);
+  nav.insertAdjacentHTML('afterbegin', `<a class="sidebar-brand" href="#home" aria-label="Ocean Buddy — Accueil"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" loading="lazy" decoding="async"><span>OCEAN <b>BUDDY</b><small>L’OCÉAN, À TES CÔTÉS.</small></span></a><div class="sidebar-label">TON TERRAIN DE JEU</div>`);
   $('.sidebar-brand').addEventListener('click', e => {e.preventDefault();go('home')});
   nav.querySelectorAll('button[data-s]').forEach(button => {
     const page = button.dataset.s;
@@ -27,7 +27,7 @@
   });
   // Planning follows exploration in the main navigation.
   nav.insertBefore($('.n-trips',nav),$('.center',nav));
-  nav.insertAdjacentHTML('beforeend', `<div class="sidebar-bottom"><button class="sidebar-poulpy" type="button"><img src="assets/poulpy/scenes/travel-v2.webp" alt=""><b>Une question ?</b><span>Poulpy est là pour toi.</span><i>Discuter avec Poulpy ↗</i></button><button class="sidebar-settings" type="button">${icon('settings')} Réglages</button><button class="sidebar-user" type="button"><span class="user-initial"></span><span><b class="user-name"></b><small id="sidebarXp"></small></span>${icon('arrow')}</button><span class="sidebar-motto">Moins de traces. Plus de souvenirs.</span></div>`);
+  nav.insertAdjacentHTML('beforeend', `<div class="sidebar-bottom"><button class="sidebar-poulpy" type="button"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" loading="lazy" decoding="async"><b>Une question ?</b><span>Poulpy est là pour toi.</span><i>Discuter avec Poulpy ↗</i></button><button class="sidebar-settings" type="button">${icon('settings')} Réglages</button><button class="sidebar-user" type="button"><span class="user-initial"></span><span><b class="user-name"></b><small id="sidebarXp"></small></span>${icon('arrow')}</button><span class="sidebar-motto">Moins de traces. Plus de souvenirs.</span></div>`);
   $('.sidebar-poulpy').onclick = openChat;
   $('.sidebar-settings').onclick = openSettings;
   $('.sidebar-user').onclick = () => go('profile');
@@ -45,7 +45,7 @@
     go('spots');openWorld('all');setView('list');$('#spotSearch').value=query;searchSpots(query);$('#spotSearch').focus();
   }
   $('.mobile-search').onclick = () => searchEverywhere();
-  $('.chrome-user').insertAdjacentHTML('afterend','<button class="mobile-poulpy" aria-label="Discuter avec Poulpy"><img src="assets/poulpy/scenes/travel-v2.webp" alt=""></button>');
+  $('.chrome-user').insertAdjacentHTML('afterend','<button class="mobile-poulpy" aria-label="Discuter avec Poulpy"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" loading="lazy" decoding="async"></button>');
   $('.mobile-poulpy').onclick = openChat;
   $('.chrome-search').onsubmit = event => {
     event.preventDefault();const query=$('#globalSearch').value.trim();
@@ -55,7 +55,8 @@
     const name = typeof userName === 'string' ? userName : 'Explorateur';
     document.querySelectorAll('.user-name').forEach(el=>el.textContent=name);
     document.querySelectorAll('.user-initial').forEach(el=>el.textContent=name.slice(0,1).toUpperCase());
-    $('#sidebarXp').textContent = `${typeof xp==='number'?xp:0} XP · Explorateur`;
+    const L=window.OceanProgress?.level(typeof xp==='number'?xp:0);
+    $('#sidebarXp').textContent = L?`Niv. ${L.n} · ${L.title}`:`${typeof xp==='number'?xp:0} XP`;
   };
   identity();new MutationObserver(identity).observe($('#xpText'),{childList:true,characterData:true,subtree:true});
   new MutationObserver(identity).observe($('#profName'),{childList:true,characterData:true,subtree:true});

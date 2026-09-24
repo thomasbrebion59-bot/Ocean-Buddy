@@ -31,7 +31,10 @@
   let entry=valid(history.state)?history.state:{owner:marker,index:0,from:null,route:capture()};
   function write(){history.replaceState(entry,'');}
   function update(){
-    const hasBack=entry.index>0;
+    /* Les écrans racines ont la barre d'onglets : un « Retour » y ressemblait à un bug. */
+    const scr=document.body.dataset.screen||'home';
+    const isRoot=['home','challenges','community','profile'].includes(scr)||(scr==='spots'&&!spotWorld)||(scr==="trips"&&!window.OceanTrips?.route?.()?.selected);
+    const hasBack=entry.index>0&&!isRoot;
     backButton.hidden=!hasBack;document.body.classList.toggle('has-app-back',hasBack);
     const backLabel='Retour vers '+(entry.from||'l’accueil');backButton.setAttribute('aria-label',backLabel);backButton.title=backLabel;
     $('#detail .back-btn').setAttribute('aria-label',backLabel);

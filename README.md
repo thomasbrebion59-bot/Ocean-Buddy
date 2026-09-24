@@ -30,6 +30,15 @@ Dans chaque fiche, **Prends tes repères** associe une photographie ouvrable en 
 
 L’intégration conversationnelle de Poulpy utilise une fonction Netlify et l’API Responses d’OpenAI. Son activation et sa configuration sont décrites dans [backend/README.md](backend/README.md). Si aucune URL de serveur n’est configurée, l’interface identifie explicitement le guide intégré.
 
+## Progression, immersion et hors connexion
+
+- **Progression réelle** (`progression.js`) : dix niveaux (de Moussaillon à Légende du large), série de jours consécutifs, défis renouvelés chaque lundi et badges calculés à partir de l’activité réelle. Les défis mesurables (« Explorateur », « Régularité ») affichent leur avancement et ne se valident qu’une fois l’objectif atteint. Aucun chiffre de démonstration n’est affiché.
+- **Immersion** (`polish.js`, `polish.css`) : cartes qui apparaissent au défilement, images en fondu, panorama en parallaxe sur les fiches, en-tête réactif, retours tactiles. Tout est désactivé avec « Réduire les animations ».
+- **Ambiance sonore** (`ocean-sound.js`) : houle et déferlement synthétisés dans le navigateur, sans fichier audio. Désactivée par défaut, activable depuis la barre du haut ou les réglages.
+- **Partage** : chaque fiche propose « Partager ce spot » ; le lien `#spot=<id>` ouvre directement la fiche.
+- **Application installable** (`manifest.webmanifest`, `sw.js`) : installation sur l’écran d’accueil et consultation hors connexion des pages déjà visitées. Les prévisions et services en ligne ne sont jamais mis en cache. Le service worker n’est pas utilisé dans l’application native.
+- Les personnes qui reviennent arrivent directement dans l’application ; l’activité se change depuis l’accueil ou l’étape 1 d’Explorer.
+
 ## Fichiers principaux
 
 - `index.html` : structure des écrans.

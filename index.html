@@ -12,7 +12,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link rel="stylesheet" href="base.css?v=931c2c13cfb2">
+<link rel="stylesheet" href="base.css?v=511c990a6b14">
 <link rel="stylesheet" href="design.css?v=007436b67921">
 <link rel="stylesheet" href="adventure.css?v=357f1e2d871b">
 <link rel="stylesheet" href="coastal.css?v=570b830ef7af">
@@ -25,6 +25,20 @@
 <link rel="stylesheet" href="privacy.css?v=830a9770de4b">
 <link rel="stylesheet" href="community.css?v=dd20926101c0">
 <link rel="stylesheet" href="spot-experience.css?v=f2f48a26e1ff">
+<link rel="stylesheet" href="polish.css?v=9f0a7cb8a0ab">
+<link rel="manifest" href="manifest.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ocean Buddy">
+<meta property="og:title" content="Ocean Buddy — Explore. Progresse. Protège.">
+<meta property="og:description" content="280 spots nautiques, prévisions, surf trips et défis pour protéger l’océan, avec Poulpy.">
+<meta property="og:image" content="https://thomasbrebion59-bot.github.io/Ocean-Buddy/assets/app/icon-512.png">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary">
+<link rel="apple-touch-icon" href="assets/app/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Ocean Buddy">
 </head>
 <body class="ocean-v2" data-screen="home">
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
@@ -81,11 +95,11 @@
           <p class="hero-description">Ta prochaine session commence ici.<br>Des spots qui font vibrer. Un océan à préserver.</p>
           <button class="hero-cta" onclick="OceanPoulpy.openWorlds()">Trouver mon spot <span aria-hidden="true">↗</span></button>
           <div class="hero-foot"><span>Ton océan. À ton rythme.</span><span class="hero-coordinate" aria-hidden="true">SUR & SOUS L’EAU</span></div>
-          <div class="level-row"><div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div><span class="xp-text" id="xpText">0 / 500 XP</span></div>
+          <div class="level-row"><div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div><span class="xp-text" id="xpText">Niv. 1 · 0 / 100 XP</span></div>
         </div>
         <div class="mascot-card" id="welcomeCard" onclick="OceanPoulpy.openWorlds()" role="button" tabindex="0" aria-label="Explorer les continents avec Poulpy l’explorateur">
           <div class="poulpy-eyebrow"><i></i> POULPY L’EXPLORATEUR</div>
-          <div class="poulpy-title">On part<br>où&nbsp;?</div>
+          <div class="poulpy-title">On part <br>où&nbsp;?</div>
           <svg class="mascot-svg" id="octoHi" viewBox="0 0 140 140" role="img" aria-label="Poulpy, ton guide"></svg>
           <div class="bubble" id="welcomeBubble"></div>
           <span class="poulpy-action">Explorer le monde <span aria-hidden="true">↗</span></span>
@@ -140,17 +154,9 @@
       <div class="streak-card">
         <div class="streak-top">
           <span class="flame"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2c1 3-1 4-2.1 5.8-.9 1.5-.8 3.6.6 4.6.5-1 1-1.9 1.9-2.4.4 2 1.9 2.6 1.9 4.6a4.3 4.3 0 0 1-8.6 0c0-2.1 1.6-3.7 3.2-5.3C8 9.4 11 7.2 12 3.2z"/></svg></span>
-          <div><div class="num">5</div><div class="lab">jours d'affilée — plus que 2 jours pour le badge Régularité !</div></div>
+          <div><div class="num" id="streakNum">1</div><div class="lab" id="streakLab">jour avec Poulpy</div></div>
         </div>
-        <div class="sd-row">
-          <div class="sd on"><span class="dd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M2 12c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3"/></svg></span>L</div>
-          <div class="sd on"><span class="dd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M2 12c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3"/></svg></span>M</div>
-          <div class="sd on"><span class="dd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M2 12c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3"/></svg></span>M</div>
-          <div class="sd on"><span class="dd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M2 12c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3"/></svg></span>J</div>
-          <div class="sd on"><span class="dd"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M2 12c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3"/></svg></span>V</div>
-          <div class="sd"><span class="dd">·</span>S</div>
-          <div class="sd"><span class="dd">·</span>D</div>
-        </div>
+        <div class="sd-row" id="streakDays"></div>
       </div>
 <div class="sec"><h2><svg viewBox="0 0 24 24" fill="#1175bd"><rect x="3" y="11" width="4" height="9" rx="1.2"/><rect x="10" y="5" width="4" height="15" rx="1.2"/><rect x="17" y="13" width="4" height="7" rx="1.2"/></svg> Ton tableau de bord</h2></div>
       <div class="stats">
@@ -333,16 +339,16 @@
     <section class="screen" id="profile">
       <div class="topbar prof-hero" id="profTop" style="text-align:center;padding-bottom:22px;">
         <div class="float-bubbles" id="pb"></div>
-        <button class="settings-btn" onclick="openSettings()" aria-label="Réglages">⚙️</button>
+        <button class="settings-btn" onclick="openSettings()" aria-label="Réglages"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
         <div class="ph-avatar">
           <svg viewBox="0 0 140 140" id="octoProfile"></svg>
-          <span class="ph-lvl">Ton carnet</span>
+          <span class="ph-lvl" id="profLevel">Niv. 1</span>
         </div>
         <h1 id="profName">Explorateur</h1>
         <div class="sub" id="profSub"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 19.5c5-1 9-4 11.5-8.5S19 3.5 19 3.5s-4 .5-8 5-6.5 11-6.5 11z"/><path d="M8 15.5 4.5 19.5"/></svg> Tes spots, tes sessions, tes voyages</div>
         <div class="ph-xp"><div class="ph-xp-bar"><i id="profXpFill"></i></div><div class="ph-xp-text" id="profXpText"></div></div>
         <div class="ph-chips">
-          <div class="ph-chip"><b>5</b><span><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2c1 3-1 4-2.1 5.8-.9 1.5-.8 3.6.6 4.6.5-1 1-1.9 1.9-2.4.4 2 1.9 2.6 1.9 4.6a4.3 4.3 0 0 1-8.6 0c0-2.1 1.6-3.7 3.2-5.3C8 9.4 11 7.2 12 3.2z"/></svg> jours</span></div>
+          <div class="ph-chip"><b id="profStreak">1</b><span><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2c1 3-1 4-2.1 5.8-.9 1.5-.8 3.6.6 4.6.5-1 1-1.9 1.9-2.4.4 2 1.9 2.6 1.9 4.6a4.3 4.3 0 0 1-8.6 0c0-2.1 1.6-3.7 3.2-5.3C8 9.4 11 7.2 12 3.2z"/></svg> <i id="profStreakLab" style="font-style:normal">jour</i></span></div>
           <div class="ph-chip"><b id="profTrips">0</b><span>voyages préparés</span></div>
           <div class="ph-chip"><b id="profBadges">0</b><span><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14.5" r="5"/><path d="M8.5 10 6 3.5M15.5 10 18 3.5"/><path d="M12 12.6l.7 1.5 1.6.2-1.2 1.1.3 1.6-1.4-.8-1.4.8.3-1.6-1.2-1.1 1.6-.2z"/></svg> badges</span></div>
         </div>
@@ -399,11 +405,11 @@
 
   <div class="quiz-modal" id="settingsModal">
     <div class="quiz-card set-card"><button class="quiz-x" aria-label="Fermer les réglages" onclick="closeSettings()">✕</button>
-      <div class="set-title">⚙️ Réglages</div>
+      <div class="set-title">Réglages</div>
       <label class="set-lab" for="setName">Ton prénom</label>
       <div class="set-row"><input id="setName" class="set-input" maxlength="18" placeholder="Ton prénom"><button class="set-save" onclick="saveName()">OK</button></div>
-      <label class="set-toggle"><span>🎬 Réduire les animations</span><input type="checkbox" id="setReduce" onchange="toggleReduceMotion(this.checked)"></label>
-      <button class="set-reset" onclick="resetProgress()">♻️ Réinitialiser ma progression</button>
+      <label class="set-toggle"><span>Réduire les animations</span><input type="checkbox" id="setReduce" onchange="toggleReduceMotion(this.checked)"></label>
+      <button class="set-reset" onclick="resetProgress()">Réinitialiser ma progression</button>
       <div class="set-about"><b>Ocean Buddy</b><br>Explore. Progresse. Protège.<br><br>Météo & marées : Open-Meteo.<br>Carte : OpenStreetMap. Photos : Wikimedia Commons et Unsplash.<br><a href="photos.html" target="_blank" rel="noopener">Photographes et licences</a><br><a href="privacy.html" target="_blank" rel="noopener">Confidentialité</a> · <a href="support.html" target="_blank" rel="noopener">Assistance</a><br><b>Poulpy IA</b> répond à tes questions ; son guide intégré prend le relais hors connexion.</div>
     </div>
   </div>
@@ -426,25 +432,28 @@
 <script src="ocean-map-model.js?v=b1b05a050593"></script>
 <script src="ocean-map.js?v=5bc38623c3d4"></script>
 <script src="spot-photos.js?v=7db07d494e54"></script>
-<script src="app.js?v=4b5fb12f58d8"></script>
+<script src="progression.js?v=573fcb54b5ba"></script>
+<script src="app.js?v=40a4691fd3b4"></script>
 <script src="private-spots.js?v=683221818ade"></script>
 <script src="poulpy-knowledge.js?v=73e17619e45e"></script>
-<script src="design.js?v=d9e35daa15ce"></script>
-<script src="trips.js?v=5cbd185e65b2"></script>
+<script src="design.js?v=f68274ea8f51"></script>
+<script src="trips.js?v=f427b20e7ac1"></script>
 <script src="poulpy-config.js?v=a083c1cf346b"></script>
 <script src="privacy.js?v=f7bd6cde62b9"></script>
 <script src="poulpy-assistant.js?v=bedb7eb6a39d"></script>
-<script src="poulpy.js?v=09660b99b3b8"></script>
+<script src="poulpy.js?v=76e075618e9d"></script>
 <script src="spot-notebook-model.js?v=8982c4683ab8"></script>
 <script src="spot-notebook.js?v=4cce47fdd49f"></script>
 <script src="spot-gallery.js?v=296c63eceb05"></script>
 <script src="field-guide.js?v=a92dccde7074"></script>
 <script src="spot-immersion-model.js?v=8c6489617564"></script>
-<script src="spot-immersion.js?v=0ee5a21c1863"></script>
+<script src="spot-immersion.js?v=3db95b8cdb22"></script>
 <script src="spot-experience.js?v=e18d09d3f1de"></script>
 <script src="community-config.js?v=59d15c4cfc90"></script>
 <script src="trip-sharing.js?v=e29f4931ffd4"></script>
-<script src="community.js?v=88cb77ad1e7c"></script>
-<script src="navigation.js?v=fd8e42bb3ca7"></script>
+<script src="community.js?v=527d6f6d752d"></script>
+<script src="navigation.js?v=5586ce805fc1"></script>
+<script src="ocean-sound.js?v=7e7f5190346a"></script>
+<script src="polish.js?v=2b1110e155a4"></script>
 </body>
 </html>
