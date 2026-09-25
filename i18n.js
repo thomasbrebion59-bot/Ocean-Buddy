@@ -25,7 +25,7 @@
     'zh-Hans': '简体中文', 'zh-Hant': '繁體中文'
   };
   var RTL = { ar: 1, he: 1, ur: 1 };
-  var VERSIONS = /*VERSIONS*/{"en":"811e053ec8"}/*/VERSIONS*/;
+  var VERSIONS = /*VERSIONS*/{"ca":"c9a35bb629","da":"27e1a2815c","de":"b8d0f831ff","el":"0c687533f8","en":"811e053ec8"}/*/VERSIONS*/;
   var STORE_KEY = 'oceanbuddy_lang';
 
   function resolve(tag) {
