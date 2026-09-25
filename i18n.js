@@ -25,7 +25,7 @@
     'zh-Hans': '简体中文', 'zh-Hant': '繁體中文'
   };
   var RTL = { ar: 1, he: 1, ur: 1 };
-  var VERSIONS = /*VERSIONS*/{"ca":"c9a35bb629","da":"27e1a2815c","de":"b8d0f831ff","el":"0c687533f8","en":"811e053ec8"}/*/VERSIONS*/;
+  var VERSIONS = /*VERSIONS*/{"ar":"9d7f017206","bn":"67f048878d","ca":"ed1214099c","cs":"c8cdf7b23a","da":"9c0da22f29","de":"597f902989","el":"d96f7cb88d","en":"11853e8354","es":"1b18eced3a","fi":"162d241cf5","gu":"5a90014dde","he":"b89b910bc3","hi":"4af8a2b84b","hr":"f06ab97ccc","hu":"0ec4f7788f","id":"4f33d7437d","it":"36a1de1558","ja":"923643ca37","kn":"d2c10fd960","ko":"f7198d8523","ml":"9d6b032848","mr":"025856dfaf","ms":"cbb930b194","nb":"ad3039500e","nl":"b82ce0687f","or":"a845cc00e2","pa":"c639184f03","pl":"d20bed3523","pt-BR":"29daf02ee0","pt-PT":"bfbc69991d","ro":"3c34a9209e","ru":"b382999379","sk":"6cf9a9d475","sl":"0816527fa3","sv":"6f67e07600","ta":"47059b8205","te":"72520a65c1","th":"d8a0ebc90c","tr":"e32d7d07b8","uk":"44b80373a5","ur":"fea25690ea","vi":"35bf49f029","zh-Hans":"595aefab55","zh-Hant":"a99a3b7ccc"}/*/VERSIONS*/;
   var STORE_KEY = 'oceanbuddy_lang';
 
   function resolve(tag) {
