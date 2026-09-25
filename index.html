@@ -2,6 +2,7 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<script src="i18n.js?v=bc3aac1c6070"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
 <meta name="theme-color" content="#164bd6">
@@ -12,7 +13,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<link rel="stylesheet" href="base.css?v=511c990a6b14">
+<link rel="stylesheet" href="base.css?v=34626392cda5">
 <link rel="stylesheet" href="design.css?v=007436b67921">
 <link rel="stylesheet" href="adventure.css?v=357f1e2d871b">
 <link rel="stylesheet" href="coastal.css?v=570b830ef7af">
@@ -25,7 +26,7 @@
 <link rel="stylesheet" href="privacy.css?v=830a9770de4b">
 <link rel="stylesheet" href="community.css?v=dd20926101c0">
 <link rel="stylesheet" href="spot-experience.css?v=f2f48a26e1ff">
-<link rel="stylesheet" href="polish.css?v=9f0a7cb8a0ab">
+<link rel="stylesheet" href="polish.css?v=c3dd7c4e7c48">
 <link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ocean Buddy">
@@ -408,6 +409,8 @@
       <div class="set-title">Réglages</div>
       <label class="set-lab" for="setName">Ton prénom</label>
       <div class="set-row"><input id="setName" class="set-input" maxlength="18" placeholder="Ton prénom"><button class="set-save" onclick="saveName()">OK</button></div>
+      <label class="set-lab" for="setLang">Langue</label>
+      <select id="setLang" class="set-input set-lang" translate="no"></select>
       <label class="set-toggle"><span>Réduire les animations</span><input type="checkbox" id="setReduce" onchange="toggleReduceMotion(this.checked)"></label>
       <button class="set-reset" onclick="resetProgress()">Réinitialiser ma progression</button>
       <div class="set-about"><b>Ocean Buddy</b><br>Explore. Progresse. Protège.<br><br>Météo & marées : Open-Meteo.<br>Carte : OpenStreetMap. Photos : Wikimedia Commons et Unsplash.<br><a href="photos.html" target="_blank" rel="noopener">Photographes et licences</a><br><a href="privacy.html" target="_blank" rel="noopener">Confidentialité</a> · <a href="support.html" target="_blank" rel="noopener">Assistance</a><br><b>Poulpy IA</b> répond à tes questions ; son guide intégré prend le relais hors connexion.</div>
@@ -433,7 +436,7 @@
 <script src="ocean-map.js?v=5bc38623c3d4"></script>
 <script src="spot-photos.js?v=7db07d494e54"></script>
 <script src="progression.js?v=573fcb54b5ba"></script>
-<script src="app.js?v=40a4691fd3b4"></script>
+<script src="app.js?v=efefad75e205"></script>
 <script src="private-spots.js?v=683221818ade"></script>
 <script src="poulpy-knowledge.js?v=73e17619e45e"></script>
 <script src="design.js?v=f68274ea8f51"></script>
@@ -445,10 +448,10 @@
 <script src="spot-notebook-model.js?v=8982c4683ab8"></script>
 <script src="spot-notebook.js?v=4cce47fdd49f"></script>
 <script src="spot-gallery.js?v=296c63eceb05"></script>
-<script src="field-guide.js?v=a92dccde7074"></script>
+<script src="field-guide.js?v=dd3293268da5"></script>
 <script src="spot-immersion-model.js?v=8c6489617564"></script>
 <script src="spot-immersion.js?v=3db95b8cdb22"></script>
-<script src="spot-experience.js?v=e18d09d3f1de"></script>
+<script src="spot-experience.js?v=3250b69901e8"></script>
 <script src="community-config.js?v=59d15c4cfc90"></script>
 <script src="trip-sharing.js?v=e29f4931ffd4"></script>
 <script src="community.js?v=527d6f6d752d"></script>

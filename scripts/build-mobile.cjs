@@ -1,11 +1,13 @@
 /* Bundle local web content only: no remote website, credentials or server code. */
 const fs=require('node:fs'),path=require('node:path'),esbuild=require('esbuild');
 const root=path.resolve(__dirname,'..'),dest=path.join(root,'mobile/www');
+function copyLocales(dest){fs.mkdirSync(path.join(dest,'locales'),{recursive:true});for(const f of fs.readdirSync(path.join(root,'locales')))if(f.endsWith('.js'))fs.copyFileSync(path.join(root,'locales',f),path.join(dest,'locales',f));}
 async function main(){
   fs.rmSync(dest,{recursive:true,force:true});fs.mkdirSync(dest,{recursive:true});
   const declaredScripts=new Set([...fs.readFileSync(path.join(root,'index.html'),'utf8').matchAll(/<script src="([^\"]+)"[^>]*><\/script>/g)].map(match=>match[1].split('?')[0]).filter(src=>!src.includes('/')&&src.endsWith('.js')));
   for(const item of fs.readdirSync(root,{withFileTypes:true}))if(item.isFile()&&(/\.(html|css|ico)$/.test(item.name)||declaredScripts.has(item.name)))fs.copyFileSync(path.join(root,item.name),path.join(dest,item.name));
   fs.cpSync(path.join(root,'assets'),path.join(dest,'assets'),{recursive:true});
+  copyLocales(dest);
   fs.mkdirSync(path.join(dest,'vendor'),{recursive:true});
   fs.cpSync(path.join(root,'node_modules/leaflet/dist'),path.join(dest,'vendor/leaflet'),{recursive:true});
   fs.cpSync(path.join(root,'vendor/maplibre'),path.join(dest,'vendor/maplibre'),{recursive:true});
@@ -24,7 +26,7 @@ async function main(){
   html=html.replace(/<link[^>]+https:\/\/fonts\.(?:googleapis|gstatic)\.com[^>]*>\n?/g,'');
   html=html.replace('https://unpkg.com/leaflet@1.9.4/dist/leaflet.css','vendor/leaflet/leaflet.css').replace('https://unpkg.com/leaflet@1.9.4/dist/leaflet.js','vendor/leaflet/leaflet.js');
   html=html.replace('</head>','<link rel="stylesheet" href="vendor/fonts/fonts.css"><link rel="stylesheet" href="native.css"></head>');
-  const scripts=[];html=html.replace(/<script src="([^\"]+)"[^>]*><\/script>/g,(_,src)=>{scripts.push(src);return '';});
+  const scripts=[];html=html.replace(/<script src="([^\"]+)"[^>]*><\/script>/g,(tag,src)=>{if(src.split('?')[0]==='i18n.js')return tag;scripts.push(src);return '';});
   const loader=`<script src="native.js"></script><script>OceanMobile.boot().then(async()=>{for(const src of ${JSON.stringify(scripts)})await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.body.append(s)});}).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script>`;
   html=html.replace('</body>',loader+'</body>');fs.writeFileSync(path.join(dest,'index.html'),html);
   if(/https:\/\/(fonts\.|unpkg\.com)/.test(html))throw Error('Remote boot dependencies remain');

@@ -56,7 +56,7 @@
   function update(s,act){
     const overview=$('#fieldOverview');if(!overview)return;
     const c=COORDS[s.id];
-    $('#fieldCoordinates').textContent=c?Math.abs(c.lat).toFixed(2)+'° '+(c.lat>=0?'N':'S')+' / '+Math.abs(c.lon).toFixed(2)+'° '+(c.lon>=0?'E':'O'):s.loc;
+    $('#fieldCoordinates').textContent=c?Math.abs(c.lat).toFixed(2)+'° '+(c.lat>=0?'N':'S')+' / '+Math.abs(c.lon).toFixed(2)+'° '+(c.lon>=0?'E':((window.OB_I18N&&OB_I18N.lang!=='fr')?'W':'O')):s.loc;
     $('#fieldCoordinates').title='Repère géographique du secteur ; consulte les accès locaux.';
     $('#fieldLocation').textContent=s.loc;
     $('#fieldActivityName').textContent=SPORTMAP[act]?.label||'Ta sortie';

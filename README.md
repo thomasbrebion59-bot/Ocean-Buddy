@@ -39,9 +39,28 @@ L’intégration conversationnelle de Poulpy utilise une fonction Netlify et l�
 - **Application installable** (`manifest.webmanifest`, `sw.js`) : installation sur l’écran d’accueil et consultation hors connexion des pages déjà visitées. Les prévisions et services en ligne ne sont jamais mis en cache. Le service worker n’est pas utilisé dans l’application native.
 - Les personnes qui reviennent arrivent directement dans l’application ; l’activité se change depuis l’accueil ou l’étape 1 d’Explorer.
 
+## Langues
+
+L’application est écrite en français et traduite en 44 autres langues (toutes les langues proposées par l’App Store). La langue suit celle de l’appareil ; elle se change dans **Profil → Réglages → Langue**. Une langue sans dictionnaire affiche l’anglais. L’arabe, l’hébreu et l’ourdou s’affichent de droite à gauche.
+
+- `i18n.js` (chargé en premier) choisit la langue, charge `locales/<langue>.js` et traduit à l’affichage le texte des pages, les éléments ajoutés ensuite, les attributs (`placeholder`, `title`, `aria-label`, `alt`) et les boîtes de dialogue. Les dates et nombres suivent la langue choisie.
+- Un élément marqué `translate="no"` ou `data-no-i18n` n’est pas traduit (contenu saisi par l’utilisateur, noms de langues).
+
+Après avoir ajouté ou modifié du texte :
+
+```sh
+node scripts/i18n-extract.cjs              # met à jour locales/source/fr.json
+python3 scripts/i18n-translate.py --all    # traduit seulement les nouveaux textes (ChatGPT via Codex CLI)
+node scripts/i18n-build.cjs                # compile locales/<langue>.js et leur version dans i18n.js
+python3 scripts/version-assets.py
+```
+
+Les textes traduits sont conservés dans `locales/translations/<langue>.json` ; ils peuvent être corrigés à la main avant `i18n-build`. La fiche App Store traduite se trouve dans `mobile/store/localizations/` (`python3 scripts/store-translate.py --all`). Côté iOS, chaque langue a un dossier `ios/App/App/<langue>.lproj/InfoPlist.strings` (demande de localisation), ce qui déclare aussi les langues auprès de l’App Store.
+
 ## Fichiers principaux
 
 - `index.html` : structure des écrans.
+- `i18n.js`, `locales/` : langues et dictionnaires de traduction.
 - `base.css`, `design.css`, `adventure.css` : structure et couches historiques de styles.
 - `coastal.css`, `trips.css` : palette actuelle et carnet de voyage.
 - `app.js` : catalogue, conditions, défis, profil et progression.

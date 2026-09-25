@@ -1,0 +1,3 @@
+/* Textes système traduits : demande de localisation. */
+"NSLocationWhenInUseUsageDescription" = "Το Ocean Buddy χρησιμοποιεί την τοποθεσία σου μόνο όταν του ζητάς να ταξινομήσει τα κοντινά σημεία. Μπορείς να εξερευνήσεις τον κατάλογο χωρίς να κοινοποιήσεις την τοποθεσία σου.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Το Ocean Buddy χρησιμοποιεί την τοποθεσία σου μόνο όταν του ζητάς να ταξινομήσει τα κοντινά σημεία. Μπορείς να εξερευνήσεις τον κατάλογο χωρίς να κοινοποιήσεις την τοποθεσία σου.";

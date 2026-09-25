@@ -7,5 +7,7 @@ for(const item of fs.readdirSync(root,{withFileTypes:true})){
   if(item.isFile()&&(/\.(html|css|ico)$/.test(item.name)||declaredScripts.has(item.name)||['.nojekyll','sw.js','manifest.webmanifest'].includes(item.name)))fs.copyFileSync(path.join(root,item.name),path.join(dest,item.name));
 }
 fs.cpSync(path.join(root,'assets'),path.join(dest,'assets'),{recursive:true});
+fs.mkdirSync(path.join(dest,'locales'),{recursive:true});
+for(const f of fs.readdirSync(path.join(root,'locales')))if(f.endsWith('.js'))fs.copyFileSync(path.join(root,'locales',f),path.join(dest,'locales',f));
 fs.cpSync(path.join(root,'vendor/maplibre'),path.join(dest,'vendor/maplibre'),{recursive:true});
 console.log('Static application ready in .netlify/publish');

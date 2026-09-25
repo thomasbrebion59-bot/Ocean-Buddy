@@ -100,3 +100,9 @@ body.is-offline .app-chrome::after{content:'Hors connexion';position:absolute;le
 .hero-share{position:absolute;z-index:5;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:#0b3440;box-shadow:0 6px 16px rgba(0,0,0,.18);cursor:pointer;transition:scale .15s ease}
 .hero-share svg{width:19px;height:19px}
 .hero-share:active{scale:.92}
+
+/* Langues écrites de droite à gauche (arabe, hébreu, ourdou) : la carte Poulpy garde
+   sa composition illustrée, et les coordonnées restent lisibles de gauche à droite. */
+[dir=rtl] .mascot-card{direction:ltr}
+[dir=rtl] .mascot-card .poulpy-eyebrow,[dir=rtl] .mascot-card .poulpy-title,[dir=rtl] .mascot-card .poulpy-action,[dir=rtl] .mascot-card .bubble{unicode-bidi:plaintext}
+[dir=rtl] #fieldCoordinates,[dir=rtl] .hero-coordinate{direction:ltr;unicode-bidi:isolate}

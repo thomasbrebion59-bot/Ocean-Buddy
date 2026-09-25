@@ -1,0 +1,3 @@
+/* Textes système traduits : demande de localisation. */
+"NSLocationWhenInUseUsageDescription" = "Ocean Buddy bruker posisjonen din bare når du ber om å få sortert steder i nærheten. Du kan utforske katalogen uten å dele posisjonen din.";
+"NSLocationAlwaysAndWhenInUseUsageDescription" = "Ocean Buddy bruker posisjonen din bare når du ber om å få sortert steder i nærheten. Du kan utforske katalogen uten å dele posisjonen din.";

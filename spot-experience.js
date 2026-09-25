@@ -10,7 +10,7 @@
   const marineApi = 'https://marine-api.open-meteo.com/v1/marine';
   const days = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
   const day = (iso, i) => i === 0 ? 'Aujourd’hui' : (days[new Date(iso + 'T12:00:00').getDay()] || `J+${i}`);
-  const direction = deg => deg == null || Number.isNaN(+deg) ? '—' : ['N','NE','E','SE','S','SO','O','NO'][Math.round(+deg / 45) % 8];
+  const direction = deg => deg == null || Number.isNaN(+deg) ? '—' : ((window.OB_I18N&&OB_I18N.lang!=='fr')?['N','NE','E','SE','S','SW','W','NW']:['N','NE','E','SE','S','SO','O','NO'])[Math.round(+deg / 45) % 8];
   const photo = s => window.OceanPhotos?.lead(s.id, activeAct);
 
   function ensureExperiencePanel() {

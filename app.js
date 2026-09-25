@@ -1125,7 +1125,7 @@ function renderForecast(){
   document.getElementById('fcBest').textContent='Prévisions indisponibles pour le moment';
   document.getElementById('fcBars').innerHTML='<p class="field-forecast-empty">La houle s’affichera lorsque les données du modèle seront disponibles.</p>';
 }
-function cardinal(deg){if(deg==null||isNaN(deg))return '';return ['N','NE','E','SE','S','SO','O','NO'][Math.round(deg/45)%8];}
+function cardinal(deg){if(deg==null||isNaN(deg))return '';return ((window.OB_I18N&&OB_I18N.lang!=='fr')?['N','NE','E','SE','S','SW','W','NW']:['N','NE','E','SE','S','SO','O','NO'])[Math.round(deg/45)%8];}
 function isInland(s){return s?.waterType==='lake'||['annecy','verdon','gardalake','hoodriver','silfra','cenote_dosojos'].includes(s?.id);}
 function renderConditions(s,live){
   const wind=live?.wind||'—',swell=live?.swell||'—',temp=live?.temp||'—',tide=live?.tide||'—';

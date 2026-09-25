@@ -865,6 +865,7 @@
   .set-lab{display:block;font-size:12px;font-weight:700;color:#6a8294;margin:10px 0 6px;}
   .set-row{display:flex;gap:8px;}
   .set-input{flex:1;border:2px solid #e3eef4;border-radius:14px;padding:12px 14px;font-size:15px;font-family:var(--body);color:var(--ocean-deep);outline:none;}
+  .set-lang{display:block;width:100%;margin:0 0 14px;flex:none;}
   .set-input:focus{border-color:#7fd0e6;box-shadow:0 0 0 4px rgba(31,155,191,.14);}
   .set-save{flex-shrink:0;background:linear-gradient(135deg,#19a0e0,#0c5e9c);color:#fff;border:none;border-radius:14px;padding:0 20px;font-size:15px;font-weight:800;cursor:pointer;font-family:var(--display);}
   .set-toggle{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:16px;font-size:13.5px;font-weight:700;color:var(--ocean-deep);background:#f3f8fb;border-radius:14px;padding:12px 14px;cursor:pointer;}
