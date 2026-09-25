@@ -6,6 +6,21 @@ Cobalt `#2154dc`, bleu de navigation `#174bd3`, sable `#f5f5f0`, corail `#fc7955
 
 L’aquarium, ses modales et ses récompenses de créatures sont retirés du parcours. Les défis, XP, badges et gestes pour l’océan restent accessibles. L’espace Surf trips est relié à l’accueil et à chaque fiche de spot.
 
+## Palette unifiée (septembre 2026)
+
+Trois palettes cohabitaient : sarcelle et menthe (navigation), cobalt et citron vert (contenus), pêche (bouton principal). `ocean-hub.css`, chargée en dernier, fixe les rôles :
+
+- **Abysse** `#0a2b3e` : structure (navigation, fonds sombres).
+- **Cobalt** `#2154dc` : actions et liens.
+- **Corail** `#fc754f` : appel principal sur photo, texte sombre pour le contraste.
+- **Citron vert** `#dfff89` : état actif (onglet courant, étiquettes de statut).
+
+Sur téléphone, le bouton d’ambiance sonore quitte la barre du haut (il reste dans Réglages) sauf quand le son joue.
+
+## Poids et chargement
+
+Leaflet n’est plus chargé dans `<head>` : sa feuille de style arrive sans bloquer l’affichage et son script précède les scripts de l’application en fin de page. 216 photographies ont été recompressées sans changer de nom ni de format, à 1600 pixels de large au plus (71,8 Mo → 38,1 Mo). La photo d’accueil passe de 430 à 130 Ko. Le PNG de Capo Mannu est devenu un JPEG de 140 Ko. Les cartes de voyages et les nouveautés utilisent `srcset` pour recevoir la miniature quand elle suffit.
+
 ## Photographies
 
 Les 168 photos sont servies depuis `assets/spots/`. Le manifeste `sources.json` conserve les noms de fichiers Wikimedia, liens, auteurs, licences et tailles. Les miniatures sont demandées en largeur 1280 pixels, dans la limite de la résolution originale. La source et la licence de la vague d’accueil restent dans `assets/photos/sources.json`.

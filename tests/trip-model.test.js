@@ -150,3 +150,26 @@ test('failed deletion persistence leaves the saved trip intact',()=>{
   assert.deepEqual(M.load(saved,ids),[trip]);
   assert.equal(trip.deleted,false);
 });
+
+test('countdown distinguishes undated, upcoming, ongoing and past trips', () => {
+  assert.deepEqual(M.countdown(M.create(),'2026-09-25'),{state:'undated',days:null});
+  assert.deepEqual(M.countdown(M.create({start:'2026-10-05'}),'2026-09-25'),{state:'upcoming',days:10});
+  assert.deepEqual(M.countdown(M.create({start:'2026-09-24',end:'2026-09-30'}),'2026-09-25'),{state:'ongoing',days:2});
+  assert.deepEqual(M.countdown(M.create({start:'2026-09-25'}),'2026-09-25'),{state:'ongoing',days:1});
+  assert.equal(M.countdown(M.create({start:'2026-09-01',end:'2026-09-10'}),'2026-09-25').state,'past');
+  assert.equal(M.countdown(M.create({start:'2026-03-28'}),'2026-03-27').days,1);
+});
+test('nextTrip prefers ongoing, then soonest departure, then undated; ignores archived and past', () => {
+  const soon=M.create({name:'Soon',start:'2026-10-01'}),later=M.create({name:'Later',start:'2026-12-01'}),undated=M.create({name:'Undated'});
+  const past=M.create({name:'Past',start:'2026-01-01',end:'2026-01-05'}),archived={...M.create({name:'Arch',start:'2026-09-26'}),archived:true};
+  assert.equal(M.nextTrip([undated,later,soon,past,archived],'2026-09-25').trip.name,'Soon');
+  const now=M.create({name:'Now',start:'2026-09-20',end:'2026-09-28'});
+  assert.equal(M.nextTrip([soon,now],'2026-09-25').trip.name,'Now');
+  assert.equal(M.nextTrip([undated,past],'2026-09-25').trip.name,'Undated');
+  assert.equal(M.nextTrip([past],'2026-09-25'),null);
+});
+test('progress counts checked preparation items', () => {
+  const t=M.create();t.checklist[0].done=true;t.checklist[1].done=true;
+  assert.deepEqual(M.progress(t),{done:2,total:6,pct:33});
+  assert.deepEqual(M.progress({...t,checklist:[]}),{done:0,total:0,pct:0});
+});

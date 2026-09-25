@@ -620,6 +620,13 @@ function spotPhotoUrl(id,w){
   const photo=window.OceanPhotos?.lead(id,activeSport)||window.SPOT_PHOTOS?.[id]||SPOTS.find(s=>s.id===id)?.photo;
   return photo?(w<=480&&photo.thumb?photo.thumb:photo.src):null;
 }
+/* Laisse le navigateur choisir entre la miniature et la grande photo. */
+function spotPhotoSrcset(id){
+  const photo=window.OceanPhotos?.lead(id,activeSport)||window.SPOT_PHOTOS?.[id];
+  if(!photo||!photo.thumb||!photo.src)return '';
+  const e=v=>String(v).replace(/"/g,'&quot;');
+  return ' srcset="'+e(photo.thumb)+' 640w, '+e(photo.src)+' '+(photo.width||1280)+'w"';
+}
 function spotPhotoCredit(id){
   const photo=window.OceanPhotos?.lead(id,activeSport)||window.SPOT_PHOTOS?.[id]||SPOTS.find(s=>s.id===id)?.photo;
   return photo?photo.author+' · '+photo.license+' — Wikimedia Commons':'';
@@ -913,7 +920,7 @@ function openSpot(id){
   window.OceanNavigation?.begin();
   if(id!==currentSpot)detailSport=null;   /* le choix d'activite ne suit pas d'un spot a l'autre */
   currentSpot=id;
-  window.OceanProgress?.seeSpot(id);setTimeout(()=>{try{renderChallenges();checkBadges();}catch(e){}},600);
+  window.OceanProgress?.seeSpot(id);window.OceanHub?.visit(id);setTimeout(()=>{try{renderChallenges();checkBadges();}catch(e){}},600);
   const act=detailAct(s);
   var _df=document.getElementById('dFav');_df.innerHTML=favs.has(id)?FAV_ON:FAV_OFF;_df.classList.toggle('on',favs.has(id));
   renderMiniForecast(s);realForecastDetail(s,act);

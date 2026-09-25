@@ -30,6 +30,19 @@ Dans chaque fiche, **Prends tes repères** associe une photographie ouvrable en 
 
 L’intégration conversationnelle de Poulpy utilise une fonction Netlify et l’API Responses d’OpenAI. Son activation et sa configuration sont décrites dans [backend/README.md](backend/README.md). Si aucune URL de serveur n’est configurée, l’interface identifie explicitement le guide intégré.
 
+## Cockpit d’accueil
+
+En haut de l’accueil, `ocean-hub.js` et `ocean-hub.css` rassemblent ce qui fait revenir :
+
+- **Salut et niveau** : salutation selon l’heure, date dans la langue choisie et anneau de progression vers le niveau suivant.
+- **Ta semaine** : les jours d’ouverture de la semaine et la série en cours, avec l’invitation à revenir le lendemain.
+- **Prochain départ** : le voyage en cours, sinon le prochain départ daté, sinon un voyage sans dates. La carte affiche le compte à rebours, les étapes, l’avancement de la checklist et l’action suivante. Sans voyage, elle propose d’en créer un.
+- **Reprendre** et **Tes favoris** : les derniers spots ouverts (clé `oceanbuddy_recent_v1`, douze au plus) et les favoris.
+
+Une personne qui n’a encore rien fait voit seulement le salut et sa semaine. Les cartes de voyages affichent aussi « J-12 », « Jour 2 · en route » et une barre de préparation. Terminer la checklist déclenche une petite célébration, supprimée avec « Réduire les animations ». Sur les fiches de spot, une barre flottante garde le favori et « Ajouter à un voyage » à portée de pouce une fois le grand visuel dépassé.
+
+`TripModel.countdown`, `nextTrip` et `progress` portent cette logique et sont couverts par `tests/trip-model.test.js`.
+
 ## Progression, immersion et hors connexion
 
 - **Progression réelle** (`progression.js`) : dix niveaux (de Moussaillon à Légende du large), série de jours consécutifs, défis renouvelés chaque lundi et badges calculés à partir de l’activité réelle. Les défis mesurables (« Explorateur », « Régularité ») affichent leur avancement et ne se valident qu’une fois l’objectif atteint. Aucun chiffre de démonstration n’est affiché.
@@ -66,6 +79,7 @@ Les textes traduits sont conservés dans `locales/translations/<langue>.json` ; 
 - `app.js` : catalogue, conditions, défis, profil et progression.
 - `design.js` : navigation, recherche globale et accès au clavier.
 - `trip-model.js`, `trips.js` : données et interface des voyages.
+- `ocean-hub.js`, `ocean-hub.css` : cockpit d’accueil, barre d’action des fiches et palette unifiée (dernière couche de styles).
 - `field-guide.js`, `field-guide.css` : fiches immersives, préparation et repères pratiques.
 - `poulpy-icons.js`, `spot-immersion-model.js`, `spot-immersion.js`, `spot-immersion.css` : petits Poulpy et explications interactives des caractéristiques.
 - `spot-gallery.js`, `spot-notebook-model.js`, `spot-notebook.js` : galerie, comparaison et notes personnelles.

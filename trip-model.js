@@ -68,5 +68,21 @@
     });
   }
   function duration(t){return t.start&&t.end?Math.round((Date.parse(t.end+'T12:00:00Z')-Date.parse(t.start+'T12:00:00Z'))/86400000)+1:null;}
-  return {KEY,uid,create,edit,addStep,replaceStep,editStep,moveStep,removeTrip,restoreTrip,load,save,duration,defaultChecklist};
+  /* Où en est un voyage par rapport à aujourd’hui (date locale AAAA-MM-JJ). */
+  function countdown(t,today){
+    if(!t.start)return {state:'undated',days:null};
+    const days=Math.round((Date.parse(t.start+'T12:00:00Z')-Date.parse(today+'T12:00:00Z'))/86400000);
+    if(days>0)return {state:'upcoming',days};
+    const last=t.end||t.start;
+    if(today<=last)return {state:'ongoing',days:Math.round((Date.parse(today+'T12:00:00Z')-Date.parse(t.start+'T12:00:00Z'))/86400000)+1};
+    return {state:'past',days:null};
+  }
+  /* Le voyage à mettre en avant : en cours, puis le prochain départ, puis un voyage sans dates. */
+  function nextTrip(trips,today){
+    const live=trips.filter(t=>!t.archived&&!t.deleted).map(t=>({trip:t,when:countdown(t,today)}));
+    const rank={ongoing:0,upcoming:1,undated:2};
+    return live.filter(x=>x.when.state in rank).sort((a,b)=>rank[a.when.state]-rank[b.when.state]||(a.when.days??0)-(b.when.days??0))[0]||null;
+  }
+  function progress(t){const total=t.checklist.length,done=t.checklist.filter(c=>c.done).length;return {done,total,pct:total?Math.round(done/total*100):0};}
+  return {KEY,uid,create,edit,addStep,replaceStep,editStep,moveStep,removeTrip,restoreTrip,load,save,duration,countdown,nextTrip,progress,defaultChecklist};
 });
