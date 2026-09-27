@@ -1044,11 +1044,12 @@ function renderQuizBadges(){var el=document.getElementById('quizBadgesProfile');
   el.innerHTML=QUIZ_CATS.filter(function(c){return c.id!=='tout';}).map(function(c){var got=d.badges.indexOf(c.id)>=0;return '<div class="qb '+(got?'got':'')+'"><div class="qb-e">'+(got?'🏅':c.emoji)+'</div><div class="qb-n">Expert '+c.label+'</div><div class="qb-s">'+(got?'Débloqué ✓':'Sans-faute requis')+'</div></div>';}).join('');}
 function renderSessions(){
   const el=document.getElementById('sessions');if(!el)return;
-  el.innerHTML=sessions.length?sessions.slice(0,8).map(function(s){var em=(s.act&&typeof SPORTMAP!=='undefined'&&SPORTMAP[s.act])?sportIcon(s.act):sportIcon('surf');return '<div class="sess"><div class="si">'+em+'</div><div class="sn">'+esc(s.spot)+'</div><div class="sd">'+esc(s.date)+'</div></div>';}).join(''):'<div style="font-size:12.5px;color:#7a93a3;padding:2px 2px 6px">Aucune session encore. Enregistre ta première !</div>';
+  el.innerHTML=sessions.length?sessions.slice(0,8).map(function(s){var em=(s.act&&typeof SPORTMAP!=='undefined'&&SPORTMAP[s.act])?sportIcon(s.act):sportIcon('surf');return '<div class="sess"><div class="si">'+em+'</div><div class="sn">'+esc(s.spot)+'</div><div class="sd">'+esc(s.date)+'</div></div>';}).join(''):'<div class="sess-empty"><img src="assets/poulpy/scenes/surf-v2.webp" alt="" width="64" height="64" loading="lazy"><div><b>Ton carnet t’attend.</b><p>Sur la fiche d’un spot, touche « J’ai surfé ici » pour y noter ta première session.</p><button type="button" class="sess-empty-btn" onclick="go(\'spots\')">Choisir un spot →</button></div></div>';
   renderSessionStats();
 }
 function renderSessionStats(){
   var el=document.getElementById('sessionStats');if(!el)return;
+  el.hidden=!sessions.length;
   var total=sessions.length,spots={},acts={};
   sessions.forEach(function(s){spots[s.spot]=1;if(s.act)acts[s.act]=(acts[s.act]||0)+1;});
   var nspots=Object.keys(spots).length;
@@ -1113,7 +1114,7 @@ function renderToday(){
         <div class="cond">${icoWind()}<div class="cv">${conditions.wind||'—'}</div><div class="cl">Vent</div></div>
         <div class="cond">${icoSwell()}<div class="cv">${conditions.swell||'—'}</div><div class="cl">Houle</div></div>
         <div class="cond">${icoTemp()}<div class="cv">${conditions.temp||'—'}</div><div class="cl">Eau</div></div>
-        <div class="cond">${icoTide()}<div class="cv small">${conditions.tide||'—'}</div><div class="cl">Marée</div></div>
+        ${conditions.tide&&!/^[\s–—-]*$/.test(conditions.tide)?`<div class="cond">${icoTide()}<div class="cv small">${conditions.tide}</div><div class="cl">Marée</div></div>`:''}
       </div>
     </div>
     <div class="today-why" onclick="popPoulpy()">
@@ -1445,13 +1446,14 @@ function renderLiveTop(){
   const el=document.getElementById('liveTop');if(!el)return;
   const candidates=SPOTS.filter(s=>!activeSport||spotSports(s).includes(activeSport));
   const available=candidates.filter(s=>LIVE[s.id]?.live);
-  const list=(available.length?available:candidates).slice(0,3);
-  document.getElementById('liveTopTitle').textContent=available.length?'La mer en chiffres':'À découvrir';
+  const live=available.length>=2;
+  const list=(live?available:candidates).slice(0,3);
+  document.getElementById('liveTopTitle').textContent=live?'La mer en chiffres':'À découvrir';
   el.innerHTML=list.map(s=>{
     const L=LIVE[s.id]||{};
-    const detail=available.length?[L.swell,L.wind,L.temp].filter(Boolean).join(' · '):s.loc;
+    const detail=live?[L.swell,L.wind,L.temp].filter(Boolean).join(' · '):s.loc;
     return `<button class="lt-row" onclick="openSpot(${esc(JSON.stringify(String(s.id)))})"><span class="lt-info"><b>${esc(s.name.split(' — ')[0])}</b><span>${esc(detail)}</span></span><span class="lt-badge lt-ref">Voir →</span></button>`;
-  }).join('')+(available.length?'<p class="lt-note">Prévisions du modèle Open-Meteo.</p>':'');
+  }).join('')+(live?'<p class="lt-note">Prévisions du modèle Open-Meteo.</p>':'');
 }
 function dayLabel(iso,i){if(i===0)return 'Auj';const d=new Date(iso);return ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'][d.getDay()]||'J+'+i;}
 function renderForecastBars(barsId,bestId,days,vals,opt){
@@ -1755,7 +1757,7 @@ function renderCompetition(){
     var p=cmpPoints(),T=cmpTier(p.pts);
     var lo=T.cur.min, hi=T.next?T.next.min:T.cur.min;
     var pct=T.next?Math.max(4,Math.min(100,Math.round((p.pts-lo)/((hi-lo)||1)*100))):100;
-    var h='<div class="cmp-score"><div class="cmp-pts">'+p.pts+'<span>points océan</span></div>'
+    var h='<div class="cmp-score"><div class="cmp-pts">'+p.pts+'<span>Points Océan</span></div>'
         + '<span class="cmp-tier t-'+T.cur.k+'"><span class="dot"></span>'+T.cur.n+'</span></div>';
     h+='<div class="cmp-bar"><div class="cmp-fill" style="width:'+pct+'%"></div></div>';
     h+='<div class="cmp-next">'+(T.next
@@ -2147,7 +2149,7 @@ function smartReply(q){
 }
 function poulpyReply(q){
   q=q.toLowerCase();
-  if(/(surf.?trip|voyage|itinéraire|itineraire|préparer.*séjour|preparer.*sejour)/i.test(q))return {html:'Prépare ton aventure dans <b>Surf trips</b> : choisis tes spots, organise les étapes, ajoute tes dates et ta checklist.',btn:{label:'Préparer mon voyage',onclick:"openFromChat('trips')"}};
+  if(/(surf.?trip|voyage|itinéraire|itineraire|préparer.*séjour|preparer.*sejour)/i.test(q))return {html:'Prépare ton aventure dans <b>Voyages</b> : choisis tes spots, organise les étapes, ajoute tes dates et ta checklist.',btn:{label:'Préparer mon voyage',onclick:"openFromChat('trips')"}};
   const sr=smartReply(q);if(sr)return sr;
   const spotReco=()=>{const s=recommendedSpot();return {html:`Une idée pour ton prochain voyage : <b>${esc(s.name.split(' — ')[0])}</b>, ${esc(s.loc)}.<br>Retrouve sa photo, les prévisions disponibles et ta liste de préparation sur sa fiche.`,btn:{label:'Découvrir le spot',onclick:'openSpotFromChat('+JSON.stringify(String(s.id))+')'}};};
   const prog=()=>({html:`Tu as <b>${xp} XP</b>. Continue à explorer, pratiquer et protéger l’océan pour progresser.`,btn:{label:'Voir mes défis',onclick:"openFromChat('challenges')"}});

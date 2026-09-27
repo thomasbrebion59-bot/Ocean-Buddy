@@ -45,7 +45,7 @@
     const list=window.OceanTrips?.list?.()||[];
     const next=TripModel.nextTrip(list,todayKey());
     if(!next){
-      return `<button class="hub-trip hub-trip-empty" type="button" data-hub="new-trip"><span class="hub-trip-ic">${I.plane}</span><span><small>TON PROCHAIN DÉPART</small><b>Dessine ton prochain surf trip</b><em>Choisis tes spots, l’ordre, le sac. Poulpy s’occupe du reste.</em></span>${I.arrow}</button>`;
+      return `<button class="hub-trip hub-trip-empty" type="button" data-hub="new-trip"><span class="hub-trip-ic">${I.plane}</span><span><small>TON PROCHAIN DÉPART</small><b>Dessine ton prochain voyage</b><em>Choisis tes spots, l’ordre, le sac. Poulpy s’occupe du reste.</em></span>${I.arrow}</button>`;
     }
     const t=next.trip,w=next.when,p=TripModel.progress(t);
     const first=t.steps.find(x=>spot(x.spotId));

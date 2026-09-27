@@ -14,7 +14,7 @@
     wave:'M2 9c3 0 3-3 6-3s3 3 6 3 3-3 6-3M2 16c3 0 3-3 6-3s3 3 6 3 3-3 6-3'
   };
   const icon = key => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[key] || paths.wave}"/></svg>`;
-  const labels = {home:'Accueil',spots:'Explorer',challenges:'Défis',community:'Communauté',profile:'Mon profil',trips:'Surf trips',detail:'Le spot'};
+  const labels = {home:'Accueil',spots:'Explorer',challenges:'Défis',community:'Communauté',profile:'Mon profil',trips:'Voyages',detail:'Le spot'};
   const short = {home:'Accueil',spots:'Spots',challenges:'Défis',community:'Social',profile:'Profil',trips:'Voyages'};
   const nav = $('.nav');
   nav.insertAdjacentHTML('afterbegin', `<a class="sidebar-brand" href="#home" aria-label="Ocean Buddy — Accueil"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" loading="lazy" decoding="async"><span>OCEAN <b>BUDDY</b><small>L’OCÉAN, À TES CÔTÉS.</small></span></a><div class="sidebar-label">TON TERRAIN DE JEU</div>`);

@@ -14,27 +14,27 @@
 <link rel="preconnect" href="https://unpkg.com" crossorigin>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" media="print" onload="this.media='all'">
 <link rel="stylesheet" href="base.css?v=34626392cda5">
-<link rel="stylesheet" href="design.css?v=ca37144d5478">
+<link rel="stylesheet" href="design.css?v=23a2f5b8e5b3">
 <link rel="stylesheet" href="adventure.css?v=9566e78abcef">
 <link rel="stylesheet" href="coastal.css?v=570b830ef7af">
 <link rel="stylesheet" href="trips.css?v=9634b304f44b">
 <link rel="stylesheet" href="poulpy.css?v=3946d1d77f6f">
 <link rel="stylesheet" href="navigation.css?v=1ad9b43229b1">
-<link rel="stylesheet" href="field-guide.css?v=27bd30d398a2">
-<link rel="stylesheet" href="spot-immersion.css?v=92747df76da5">
-<link rel="stylesheet" href="ocean-explore.css?v=046ad4ad94ad">
+<link rel="stylesheet" href="field-guide.css?v=bc170ec44b1b">
+<link rel="stylesheet" href="spot-immersion.css?v=c5ebaace764a">
+<link rel="stylesheet" href="ocean-explore.css?v=676e42c0f4f5">
 <link rel="stylesheet" href="privacy.css?v=830a9770de4b">
-<link rel="stylesheet" href="community.css?v=f73ed70322c9">
-<link rel="stylesheet" href="spot-experience.css?v=5516aecb8c4f">
+<link rel="stylesheet" href="community.css?v=85b9b2b42e9e">
+<link rel="stylesheet" href="spot-experience.css?v=36951c434f25">
 <link rel="stylesheet" href="polish.css?v=057e8ce818ca">
 <link rel="stylesheet" href="ocean-hub.css?v=7b338c64fcfe">
 <link rel="stylesheet" href="spot-voyage.css?v=53ba757b24ef">
-<link rel="stylesheet" href="ocean-blue.css?v=775f914a5888">
+<link rel="stylesheet" href="ocean-blue.css?v=0c6a28ae1a1e">
 <link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ocean Buddy">
 <meta property="og:title" content="Ocean Buddy — Explore. Progresse. Protège.">
-<meta property="og:description" content="Plus de 430 spots nautiques, prévisions, surf trips et défis pour protéger l’océan, avec Poulpy.">
+<meta property="og:description" content="Plus de 430 spots nautiques, prévisions, voyages et défis pour protéger l’océan, avec Poulpy.">
 <meta property="og:image" content="https://thomasbrebion59-bot.github.io/Ocean-Buddy/assets/app/icon-512.png">
 <meta property="og:locale" content="fr_FR">
 <meta name="twitter:card" content="summary">
@@ -168,7 +168,7 @@
         <div class="stat"><div class="ic" style="background:#e2f0f8;color:#2f8fb8"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.4" fill="#fff"/></svg></div><div class="big" id="hsSpots" data-count="7">0</div><div class="lab">Spots visités</div></div>
         <div class="stat"><div class="ic" style="background:#e7f7ef;color:#2faf72"><svg viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z" fill="currentColor"/><path d="M9 15c2-3 5-5 8-6" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div><div class="big" id="hsEco" data-count="23">0</div><div class="lab">Gestes écolo</div></div>
       </div>
-<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#ec5a4b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l5-5 4 4 7-7"/><path d="M16 4h4v4"/></svg> Ta progression</h2><a onclick="go('trips')">Surf trips →</a></div>
+<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#ec5a4b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l5-5 4 4 7-7"/><path d="M16 4h4v4"/></svg> Ta progression</h2><a onclick="go('trips')">Voyages →</a></div>
       <div class="prog-card" id="progCard"></div>
 <div class="quiz-launch" onclick="openQuiz()">
         <div class="ql-ic"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-3.6 10.8c.4.3.6.8.6 1.2h6c0-.4.2-.9.6-1.2A6 6 0 0 0 12 3z"/></svg></div>
@@ -357,13 +357,13 @@
           <div class="ph-chip"><b id="profBadges">0</b><span><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14.5" r="5"/><path d="M8.5 10 6 3.5M15.5 10 18 3.5"/><path d="M12 12.6l.7 1.5 1.6.2-1.2 1.1.3 1.6-1.4-.8-1.4.8.3-1.6-1.2-1.1 1.6-.2z"/></svg> badges</span></div>
         </div>
       </div>
-      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="11" width="4.5" height="9" rx="1.2"/><rect x="9.8" y="5" width="4.5" height="15" rx="1.2"/><rect x="16.6" y="13" width="4.5" height="7" rx="1.2"/></svg> Tes statistiques</h2></div>
+      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="11" width="4.5" height="9" rx="1.2"/><rect x="9.8" y="5" width="4.5" height="15" rx="1.2"/><rect x="16.6" y="13" width="4.5" height="7" rx="1.2"/></svg> Mes statistiques</h2></div>
       <div class="prof-stats" id="profStats"></div>
       <section class="archived-favorites" id="archivedFavorites" hidden aria-label="Favoris archivés"></section>
       <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 18.5C3 16 6 8.5 11 4.5s9-1.5 7.5 1.5"/><path d="M5.5 18.5c2.5 2.5 9-.5 13-5.5"/><path d="M8 16 16 7.5"/></svg> Mon carnet de sessions</h2></div>
       <div class="sess-stats" id="sessionStats"></div>
       <div style="padding:0 18px" id="sessions"></div>
-      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14.5" r="5"/><path d="M8.5 10 6 3.5M15.5 10 18 3.5"/><path d="M12 12.6l.7 1.5 1.6.2-1.2 1.1.3 1.6-1.4-.8-1.4.8.3-1.6-1.2-1.1 1.6-.2z"/></svg> Tes badges</h2></div>
+      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14.5" r="5"/><path d="M8.5 10 6 3.5M15.5 10 18 3.5"/><path d="M12 12.6l.7 1.5 1.6.2-1.2 1.1.3 1.6-1.4-.8-1.4.8.3-1.6-1.2-1.1 1.6-.2z"/></svg> Mes badges</h2></div>
       <div class="badge-grid" id="badges"></div>
       <div class="sub-lab">Badges du Quiz</div>
       <div class="qbadges" id="quizBadgesProfile"></div>
@@ -371,7 +371,7 @@
     </section>
 
     <!-- ============ SURF TRIPS ============ -->
-    <section class="screen" id="trips" aria-label="Mes surf trips">
+    <section class="screen" id="trips" aria-label="Mes voyages">
       <div id="tripContent"></div>
     </section>
 
@@ -383,7 +383,7 @@
     <button class="n-spots" data-s="spots" onclick="go('spots')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 5.2 6.3 11.4 6.9 12a.8.8 0 0 0 1.1 0c.7-.6 7-6.8 7-12A7.5 7.5 0 0 0 12 2z"/><circle cx="12" cy="9.3" r="2.6" fill="#fff"/></svg></span>Spots</button>
     <button class="center" data-s="challenges" onclick="go('challenges')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4h10v1.5h2.5a.8.8 0 0 1 .8.9c-.2 2-1.6 3.4-3.6 3.7A5.2 5.2 0 0 1 13 13v2h2.2a.8.8 0 0 1 0 1.6H8.8a.8.8 0 0 1 0-1.6H11v-2a5.2 5.2 0 0 1-3.7-2.9C5.3 9.8 3.9 8.4 3.7 6.4a.8.8 0 0 1 .8-.9H7zM5.6 7c.2.9.8 1.6 1.5 1.9V7zm12.9 0H17v1.9c.7-.3 1.3-1 1.5-1.9z"/><rect x="8" y="18.4" width="8" height="2" rx="1"/></svg></span></button>
     <button class="n-prof" data-s="profile" onclick="go('profile')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-3.6 0-6 2.6-6 5.8 0 1.6.7 2.7 1 3.4-1 .1-2 .9-2 1.9 0 .8.7 1.2 1.5 1 .2 1 1 1.7 1.9 1.5.3.7 1 .9 1.6.7.6.2 1.3 0 1.6-.7.9.2 1.7-.5 1.9-1.5.8.2 1.5-.2 1.5-1 0-1-1-1.8-2-1.9.3-.7 1-1.8 1-3.4C18 5.6 15.6 3 12 3z"/><circle cx="10" cy="9" r="1.3" fill="#fff"/><circle cx="14" cy="9" r="1.3" fill="#fff"/></svg></span>Profil</button>
-    <button class="n-trips" data-s="trips" onclick="go('trips')">Surf trips</button>
+    <button class="n-trips" data-s="trips" onclick="go('trips')">Voyages</button>
     <button class="n-community" data-s="community" onclick="go('community')">Communauté</button>
   </nav>
 
@@ -433,39 +433,39 @@
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="photo-catalog.js?v=dcf044acd48a"></script>
 <script src="legacy-spots.js?v=a2ed015635e8"></script>
-<script src="catalog-runtime.js?v=43cf4592af32"></script>
-<script src="trip-model.js?v=ab5eb4c60824"></script>
+<script src="catalog-runtime.js?v=3f1bd91983cd"></script>
+<script src="trip-model.js?v=5221744f5a3b"></script>
 <script src="poulpy-icons.js?v=e99f8fb70a2a"></script>
 <script src="ocean-map-model.js?v=b1b05a050593"></script>
 <script src="ocean-map.js?v=5bc38623c3d4"></script>
 <script src="spot-photos.js?v=7db07d494e54"></script>
 <script src="progression.js?v=573fcb54b5ba"></script>
-<script src="app.js?v=45b2c8dba28d"></script>
+<script src="app.js?v=a8c971922043"></script>
 <script src="private-spots.js?v=683221818ade"></script>
 <script src="poulpy-knowledge.js?v=73e17619e45e"></script>
-<script src="design.js?v=f68274ea8f51"></script>
-<script src="trips.js?v=4d04da636114"></script>
-<script src="ocean-hub.js?v=cb1c447f0f23"></script>
+<script src="design.js?v=7f90dbe39d66"></script>
+<script src="trips.js?v=4226df5ee33f"></script>
+<script src="ocean-hub.js?v=6778359f45f9"></script>
 <script src="poulpy-config.js?v=a083c1cf346b"></script>
 <script src="privacy.js?v=f7bd6cde62b9"></script>
 <script src="poulpy-assistant.js?v=bedb7eb6a39d"></script>
 <script src="poulpy.js?v=76e075618e9d"></script>
 <script src="spot-notebook-model.js?v=8982c4683ab8"></script>
 <script src="spot-notebook.js?v=4cce47fdd49f"></script>
-<script src="spot-gallery.js?v=296c63eceb05"></script>
-<script src="field-guide.js?v=3465b14c84c0"></script>
+<script src="spot-gallery.js?v=d592d7c63fea"></script>
+<script src="field-guide.js?v=52f5e8f7b8bc"></script>
 <script src="spot-immersion-model.js?v=8c6489617564"></script>
 <script src="spot-immersion.js?v=3db95b8cdb22"></script>
-<script src="spot-experience.js?v=aa4d01a09f91"></script>
+<script src="spot-experience.js?v=140cd4a428b8"></script>
 <script src="community-config.js?v=59d15c4cfc90"></script>
 <script src="trip-sharing.js?v=e29f4931ffd4"></script>
-<script src="community.js?v=527d6f6d752d"></script>
+<script src="community.js?v=e21c5a9b42e3"></script>
 <script src="navigation.js?v=9b9b9e035935"></script>
 <script src="ocean-sound.js?v=7e7f5190346a"></script>
 <script src="polish.js?v=2b1110e155a4"></script>
 <script src="spot-scenes.js?v=25a02c70a351"></script>
 <script src="spot-panoramas.js?v=75a041ebb045"></script>
-<script src="spot-voyage.js?v=c5c7474f9c08"></script>
+<script src="spot-voyage.js?v=0194e4a2de79"></script>
 <script src="ocean-home.js?v=8de41dee964b"></script>
 </body>
 </html>

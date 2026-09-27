@@ -194,7 +194,8 @@
     if(!s)return;
     spot=s;scenes=build(s);index=0;paused=false;opener=document.activeElement;
     ensureRoot();root.hidden=false;document.documentElement.classList.add('voyage-open');
-    root.querySelector('[data-place]').textContent=[s.loc,window.worldOf?.(s.world)?.lab].filter(Boolean).join(' · ');
+    const worldLab=window.worldOf?.(s.world)?.lab;
+    root.querySelector('[data-place]').textContent=[s.loc,worldLab&&!String(s.loc||'').toLowerCase().includes(String(worldLab).toLowerCase())?worldLab:''].filter(Boolean).join(' · ');
     root.querySelector('[data-name]').textContent=s.name.split(' — ')[0];
     requestAnimationFrame(()=>root.classList.add('is-open'));
     soundWasOn=!!window.OceanSound?.on;

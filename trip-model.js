@@ -11,7 +11,7 @@
   function stepDate(date,trip){if(!validDate(date))throw Error('Choisis une date valide pour cette étape.');if(date&&((trip.start&&date<trip.start)||(trip.end&&date>trip.end)))throw Error('Cette étape doit être comprise dans les dates du voyage.');}
   const defaultChecklist=['Vérifier les conditions et l’accès aux spots','Préparer planche, leash et combinaison','Prévoir les transports','Choisir les hébergements','Préparer documents et assurance','Emporter gourde et protection solaire'];
   function create(fields={},spotIds=[]){
-    const trip={id:uid(),name:text(fields.name,70)||'Mon surf trip',destination:text(fields.destination,100),start:text(fields.start,10),end:text(fields.end,10),notes:'',accommodation:'',transport:'',budget:'',steps:[],checklist:defaultChecklist.map(label=>({id:uid(),label,done:false})),archived:false,deleted:false};
+    const trip={id:uid(),name:text(fields.name,70)||'Mon voyage',destination:text(fields.destination,100),start:text(fields.start,10),end:text(fields.end,10),notes:'',accommodation:'',transport:'',budget:'',steps:[],checklist:defaultChecklist.map(label=>({id:uid(),label,done:false})),archived:false,deleted:false};
     dates(trip.start,trip.end);spotIds.forEach(id=>trip.steps.push(newStep(id)));return trip;
   }
   function edit(trip,fields){

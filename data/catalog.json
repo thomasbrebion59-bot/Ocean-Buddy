@@ -168,7 +168,7 @@
     "temp": "15°C",
     "tide": "Toutes marées",
     "danger": 3,
-    "desc": "Longue plage exposée à la houle de l'Atlantique, fonctionne quasiment toute l'année. Spot de référence en Bretagne pour le surf et le kitesurf.",
+    "desc": "Longue plage exposée à la houle de l'Atlantique, fonctionne quasiment toute l'année. Spot de référence en Bretagne pour le surf, et pour le windsurf et le kitesurf les jours de vent.",
     "dangers": [
       [
         "💨",
@@ -186,6 +186,7 @@
     "tip": "Mets une bonne combi (4/3 mini) ! La Torche reçoit toute la houle, regarde la taille annoncée avant d'y aller.",
     "sports": [
       "surf",
+      "windsurf",
       "kitesurf"
     ],
     "world": "fr",
@@ -230,7 +231,8 @@
         "d": "plage abritée"
       }
     ],
-    "country": "France"
+    "country": "France",
+    "photoContext": "Pointe de la Torche, un jour de vent"
   },
   {
     "id": "biarritz",

@@ -26,6 +26,8 @@
     const record=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
     return record?.url&&/^https:\/\//i.test(record.url)?`<a class="field-source" href="${esc(record.url)}" target="_blank" rel="noopener noreferrer"><span><small>SOURCE DU CATALOGUE</small><b>${esc(record.label)}</b></span>${external}</a>`:'<p class="field-source-pending">Informations éditoriales à confirmer auprès de sources locales.</p>';
   }
+  function sourceLink(s){const html=source(s);return html.includes('field-source-pending')?'':html;}
+  const frNum=(n,d)=>n.toFixed(d).replace('.',',');
   function visitRows(s){
     const record=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
     const grounded=s.editorialStatus==='reviewed'&&/^https:\/\//i.test(record?.url||'')&&/^\d{4}-\d{2}-\d{2}$/.test(s.visit?.reviewed||'');
@@ -51,24 +53,26 @@
     const items=(checks[act]||checks.surf).map(item=>isInland(s)?item.map(copy=>copy.replace('la marée et l’état du plan d’eau','les conditions du plan d’eau').replace('l’évolution de la mer','l’évolution du plan d’eau')):item);
     const done=items.filter((_,i)=>completed[preparationKey(s,act,i)]).length;
     return `<div class="field-checklist"><div class="field-check-cover"><span class="field-check-emblem">${levelIcon('expert')}</span><span><small>LE DÉPART SE PRÉPARE ICI</small><b>Prêt pour la session ?</b></span></div><div class="field-list-head"><h3>Avant de partir</h3><span id="fieldProgress">${done} / ${items.length}</span></div><div class="field-progress-track" role="progressbar" aria-label="Préparation de la sortie" aria-valuemin="0" aria-valuemax="${items.length}" aria-valuenow="${done}"><i style="width:${done/items.length*100}%"></i></div>${items.map(([label,copy],i)=>`<label class="field-check"><input type="checkbox" data-visit-check="${esc(preparationKey(s,act,i))}" ${completed[preparationKey(s,act,i)]?'checked':''}><span><b>${esc(label)}</b><small>${esc(copy)}</small></span></label>`).join('')}<button class="field-text-button" data-field-action="conditions">Consulter les conditions ${arrow}</button></div>
-      <aside class="field-address"><span class="field-address-mark">${sportIcon('all')}</span><span class="field-eyebrow">TON POINT DE DÉPART</span><h3>${esc(s.name.split(' — ')[0])}</h3><dl>${facts(s,act).map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>${s.level==='variable'?'<p class="field-level-note">Choisis un secteur adapté à ton expérience avec un encadrant local.</p>':'<p class="field-level-note">Le niveau indiqué reste à confronter aux conditions et au secteur choisis.</p>'}<a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu ${external}</a>${source(s)}</aside>${window.OceanNotebook?.note(s)||''}`;
+      <aside class="field-address"><span class="field-address-mark">${sportIcon('all')}</span><span class="field-eyebrow">TON POINT DE DÉPART</span><h3>${esc(s.name.split(' — ')[0])}</h3><dl>${facts(s,act).map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>${s.level==='variable'?'<p class="field-level-note">Choisis un secteur adapté à ton expérience avec un encadrant local.</p>':'<p class="field-level-note">Le niveau indiqué reste à confronter aux conditions et au secteur choisis.</p>'}<a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu ${external}</a>${sourceLink(s)}</aside>${window.OceanNotebook?.note(s)||''}`;
   }
   function update(s,act){
     const overview=$('#fieldOverview');if(!overview)return;
     const c=COORDS[s.id];
-    $('#fieldCoordinates').textContent=c?Math.abs(c.lat).toFixed(2)+'° '+(c.lat>=0?'N':'S')+' / '+Math.abs(c.lon).toFixed(2)+'° '+(c.lon>=0?'E':((window.OB_I18N&&OB_I18N.lang!=='fr')?'W':'O')):s.loc;
+    $('#fieldCoordinates').textContent=c?frNum(Math.abs(c.lat),2)+'° '+(c.lat>=0?'N':'S')+' / '+frNum(Math.abs(c.lon),2)+'° '+(c.lon>=0?'E':((window.OB_I18N&&OB_I18N.lang!=='fr')?'W':'O')):s.loc;
     $('#fieldCoordinates').title='Repère géographique du secteur ; consulte les accès locaux.';
     $('#fieldLocation').textContent=s.loc;
     $('#fieldActivityName').textContent=SPORTMAP[act]?.label||'Ta sortie';
     $('#fieldIntroTitle').textContent=s.name.split(' — ')[0];
     const name=s.name+' '+s.loc;
     const activity=SPORTMAP[act]?.label||'nautique';
-    overview.innerHTML=`${voyageArt}<span class="field-eyebrow">UNE ENVIE DE DÉPART ?</span><h3>Fais-en<br>une étape.</h3><p>Garde ce lieu dans ton itinéraire et retrouve-le au moment de partir.</p><button class="field-primary" data-field-action="trip">Ajouter à mon voyage ${arrow}</button><a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu sur la carte ${external}</a><div class="field-compare-slot">${window.OceanNotebook?.button(s.id)||''}</div>`;
+    overview.innerHTML=`<span class="field-eyebrow">SITUER & COMPARER</span><a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu sur la carte ${external}</a><div class="field-compare-slot">${window.OceanNotebook?.button(s.id)||''}</div>`;
+    overview.classList.add('is-compact');
     const level=s.level==='variable'?'À définir sur place':(LVLTXT[s.level]||'À confirmer');
     $('#fieldAtAGlance').innerHTML=[['activity','Ton activité',SPORTMAP[act]?.label||'À choisir',sportIcon(act)],['water','Le cadre',isInland(s)?'Eau douce':'Mer & océan',sportIcon(isInland(s)?'kayak':'snorkeling')],['level','Repère de niveau',level,levelIcon(s.level)]].map(([key,label,value,art])=>`<button type="button" class="field-fact-card fact-${key}" data-im-open="${{activity:'terrain',water:'eau',level:'niveau'}[key]}"><span class="field-fact-icon">${art}</span><div><small>${label}</small><b>${esc(value)}</b></div></button>`).join('');
     $('#fieldVisit').innerHTML=visitGuide(s);
+    $('#fieldVisit').hidden=!visitRows(s).some(r=>r.verified);
     window.OceanNotebook?.sync();
-    $('#fieldLocalSource').innerHTML=source(s);
+    $('#fieldLocalSource').innerHTML=sourceLink(s);
     const photo=OceanPhotos.lead(s.id,act);
     $('#fieldPhotoLink').href=photo?.source||'photos.html';$('#fieldPhotoLink').textContent=photo?(photo.caption?photo.caption+' · ':s.photoContext?s.photoContext+' · ':'')+'Photographie : '+photo.author+' ↗':'Crédits photographiques ↗';
     $('#fieldSchoolLink').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('école '+activity+' '+name);

@@ -132,7 +132,7 @@
       $('#detailHero')?.classList.remove('underwater-hero');
       strip.hidden=true;strip.replaceChildren();return;
     }
-    if(more){more.hidden=false;more.setAttribute('aria-label','Ouvrir les photos de '+s.name+' ou en chercher d’autres');more.title='Ouvrir les photos et en chercher d’autres';more.innerHTML='<span>Entrer dans le décor</span><b>'+all.length+' photo'+(all.length>1?'s':'')+' · en trouver ↗</b>';more.onclick=()=>open(s);}
+    if(more){more.hidden=false;more.setAttribute('aria-label','Ouvrir les photos de '+s.name+' ou en chercher d’autres');more.title='Ouvrir les photos et en chercher d’autres';more.innerHTML='<span>'+(all.length>1?'Voir les '+all.length+' photos':'Voir la photo')+'</span><b>et en chercher d’autres ↗</b>';more.onclick=()=>open(s);}
     if(photo){photo.alt=caption(first,s);photo.style.objectPosition=/^[\w\d% .-]{1,40}$/.test(first.position||'')?first.position:'center';if(photo.getAttribute('src')!==first.src){photo.classList.remove('on');photo.onload=()=>photo.classList.add('on');photo.onerror=()=>photo.classList.remove('on');photo.src=first.src;}if(photo.complete&&photo.naturalWidth)photo.classList.add('on');}
     if(credit)credit.textContent=(first.caption?first.caption+' · ':'')+(first.author||'Auteur non indiqué')+' · '+(first.license||'licence à vérifier');
     $('#detailHero')?.classList.toggle('underwater-hero',first.view==='underwater');
