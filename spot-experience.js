@@ -58,7 +58,7 @@
   }
   function openAreaMap(s){
     const host=$('#spotAreaMap .area-map-leaflet'),panel=$('#spotAreaMap');if(!host||!panel||!s)return;
-    if(typeof L==='undefined'){host.innerHTML='<p class="area-map-fallback">La carte interactive est indisponible. Tu peux ouvrir le secteur dans OpenStreetMap.</p>';return;}
+    if(typeof L==='undefined'){const offline=()=>{host.innerHTML='<p class="area-map-fallback">La carte interactive est indisponible. Tu peux ouvrir le secteur dans OpenStreetMap.</p>';};if(window.OceanLeaflet)window.OceanLeaflet().then(()=>openAreaMap(s),offline);else offline();return;}
     const lat=Number(panel.dataset.lat),lon=Number(panel.dataset.lon);if(!Number.isFinite(lat)||!Number.isFinite(lon))return;
     if(!areaMap){areaMap=L.map(host,{zoomControl:true,attributionControl:true,scrollWheelZoom:false,keyboard:true}).setView([lat,lon],13);L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(areaMap);areaMarker=L.circleMarker([lat,lon],{radius:9,color:'#fff',weight:3,fillColor:'#164bd6',fillOpacity:.95}).addTo(areaMap);areaMarker.bindTooltip(panel.dataset.spotName);areaSpotId=s.id;}
     areaMap.invalidateSize({pan:false});

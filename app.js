@@ -293,11 +293,7 @@ function requestGeo(ok,fail){
 }
 function mapsSearch(q,c){const u='https://www.google.com/maps/search/'+encodeURIComponent(q)+((c&&c.lat)?('/@'+c.lat+','+c.lon+',12z'):'');if(window.OceanMobile?.native)window.OceanMobile.openExternal(u);else window.open(u,'_blank');}
 function centerOnUser(){
-  if(!userPos)return;renderMap(true);if(!leafMap)return;
-  if(userMarker){try{leafMap.removeLayer(userMarker);}catch(e){}}
-  const ic=L.divIcon({className:'lpin-wrap',html:'<div class="upin"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="%23ffffff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></div>',iconSize:[34,34],iconAnchor:[17,30],popupAnchor:[0,-26]});
-  userMarker=L.marker([userPos.lat,userPos.lon],{icon:ic}).addTo(leafMap).bindPopup('<b>Toi 📍</b>');
-  setTimeout(()=>{try{leafMap.setView([userPos.lat,userPos.lon],8);}catch(e){}},140);
+  if(!userPos)return;renderMap(true);window.OceanMap?.showUser(userPos);
 }
 function hideOnb(){const o=document.getElementById('onb');o.classList.add('hide');setTimeout(()=>o.style.display='none',560);}
 function goNearMe(){
@@ -595,7 +591,7 @@ function setMapFull(on,fromPop){
   var bar=document.getElementById('mapBar');
   if(bar&&on){
     var w=(typeof worldOf==='function')?worldOf(spotWorld):null;
-    var nb=(typeof leafMap!=='undefined'&&leafMap&&leafMap._pts)?leafMap._pts.length:0;
+    var nb=window.OceanMap?window.OceanMap.count():0;
     bar.innerHTML='<b>'+(w?w.lab:'Tous les spots')+'</b><span>'+(nb>1?`${nb} spots`:`${nb} spot`)+'</span>'
                 + '<button type="button" onclick="setMapFull(false)">Fermer</button>';
   }
@@ -615,17 +611,8 @@ function setMapFull(on,fromPop){
 function toggleMapFull(){ setMapFull(!mapFull); }
 window.addEventListener('popstate',function(){ if(mapFull)setMapFull(false,true); });
 window.addEventListener('keydown',function(e){ if(e.key==='Escape'&&mapFull)setMapFull(false); });
-function fitMapToSpots(){
-  /* invalidateSize() AVANT fitBounds : sinon Leaflet cadre sur une taille de
-     conteneur perimee, et le zoom reste faux une fois la taille corrigee.
-     maxZoom : un seul point donne des bornes nulles et enverrait au zoom 18. */
-  if(!leafMap||!leafMap._pts||!leafMap._pts.length)return;
-  try{ leafMap.invalidateSize();window.OceanMap?.revealActivity(); }catch(e){}
-  try{
-    if(leafMap._pts.length===1) leafMap.setView(leafMap._pts[0],11);
-    else leafMap.fitBounds(leafMap._pts,{padding:[34,34],maxZoom:11});
-  }catch(e){}
-}
+/* La carte se redimensionne ; elle ne se recadre que si la sélection de spots a changé. */
+function fitMapToSpots(){window.OceanMap?.fit();}
 function renderMap(refresh){window.OceanMap?.render(refresh);}
 /* Photograph paths and credits come from the canonical 280 spot records. */
 function spotPhotoUrl(id,w){

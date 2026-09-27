@@ -50,6 +50,8 @@ self.addEventListener('fetch',event=>{
   const url=new URL(request.url);
   if(request.mode==='navigate'&&url.origin===location.origin){event.respondWith(networkFirst(request));return;}
   if(url.origin===location.origin){
+    /* Moteur de carte local (non versionné) : réponse immédiate, rafraîchie en arrière-plan. */
+    if(url.pathname.includes('/vendor/')){event.respondWith(staleWhileRevalidate(request));return;}
     if(/\.(?:js|css)$/.test(url.pathname)&&/(?:^|&)v=/.test(url.search.slice(1))){event.respondWith(cacheFirst(request));return;}
     if(/\.(?:js|css|webmanifest|json|html)$/.test(url.pathname)){event.respondWith(networkFirst(request));return;}
     if(/\.(?:webp|png|jpe?g|svg|gif|woff2?)$/.test(url.pathname)){event.respondWith(staleWhileRevalidate(request));return;}

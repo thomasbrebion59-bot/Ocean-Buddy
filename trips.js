@@ -129,7 +129,7 @@
   }
   function drawMap(t){
     const host=$('#tripMap');if(!host)return;
-    if(typeof L==='undefined'){host.innerHTML='<p>La carte nécessite une connexion. Ton itinéraire reste disponible dans l’onglet voisin.</p>';return;}
+    if(typeof L==='undefined'){const offline=()=>{host.innerHTML='<p>La carte nécessite une connexion. Ton itinéraire reste disponible dans l’onglet voisin.</p>';};if(window.OceanLeaflet)window.OceanLeaflet().then(()=>{if(host.isConnected)drawMap(t);},offline);else offline();return;}
     const coords=t.steps.map((s,i)=>({s,i,c:COORDS[s.spotId]})).filter(x=>x.c);
     if(!coords.length){host.innerHTML='<p>Ajoute un spot pour voir ton voyage sur la carte.</p>';return;}
     tripMap=L.map(host,{scrollWheelZoom:true,dragging:true,touchZoom:true,doubleClickZoom:true,boxZoom:true,keyboard:true,inertia:true});L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:18}).addTo(tripMap);

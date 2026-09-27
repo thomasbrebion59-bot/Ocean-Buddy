@@ -21,3 +21,17 @@ test('featured underwater images take priority without changing the source catal
 test('curated underwater photographs include precise captions, local light thumbnails and credits',()=>{
  const fs=require('fs');const main=require('../assets/spots/sources.json'),galleries=require('../assets/spots/gallery-sources.json');const selected=[...Object.values(main),...Object.values(galleries).flat()].filter(p=>p.src.includes('-underwater-'));assert.equal(selected.length,18);for(const p of selected){assert.ok(p.caption&&p.label&&p.author&&p.license,p.src);assert.equal(p.view,'underwater');assert.ok(p.width>=1280,p.src);assert.ok(fs.statSync(p.thumb).size<100000,p.thumb);assert.ok(fs.statSync(p.src).size<1500000,p.src);}
 });
+
+test('map bounds take the short way across the date line and stay plain elsewhere',()=>{
+ assert.deepEqual(M.bounds([{lon:-1,lat:43},{lon:-9,lat:38},{lon:10,lat:60}]),[[-9,38],[10,60]]);
+ const pacific=M.bounds([{lon:153,lat:-28},{lon:-149.5,lat:-17.5},{lon:178,lat:-18}]);
+ assert.equal(pacific[0][0],153);assert.equal(pacific[1][0],210.5);assert.equal(pacific[0][1],-28);assert.equal(pacific[1][1],-17.5);
+ assert.deepEqual(M.bounds([{lon:5,lat:5}]),[[5,5],[5,5]]);assert.equal(M.bounds([]),null);
+});
+test('visible-area queries include world copies and sort by distance to the centre',()=>{
+ const view={west:150,east:215,south:-40,north:0};
+ assert.equal(M.inView(-149.5,-17.5,view),true);assert.equal(M.inView(-1,43,view),false);assert.equal(M.inView(170,10,view),false);
+ assert.equal(M.inView(-1,43,{west:-400,east:40,south:-80,north:80}),true);
+ assert.ok(M.distance({lon:179,lat:0},{lon:-179,lat:0})<3);
+ assert.deepEqual(M.top(['Portugal','Espagne','Portugal','Maroc','Espagne','Portugal',null]),['Portugal','Espagne','Maroc']);
+});
