@@ -1,0 +1,98 @@
+/* Voyage dans le spot : plein écran, scènes animées, carte guide. */
+.voyage-open,.voyage-open body{overflow:hidden}
+.voyage{position:fixed;inset:0;z-index:4000;background:#04163b;color:#fff;opacity:0;transform:scale(1.02);transition:opacity .28s ease,transform .38s cubic-bezier(.22,1,.36,1);font-family:"DM Sans",Manrope,sans-serif;overflow:hidden;touch-action:manipulation}
+.voyage.is-open{opacity:1;transform:none}
+.voyage[hidden]{display:none}
+.voyage button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.voyage svg{width:20px;height:20px;flex:none}
+
+.voyage-stage{position:absolute;inset:0;overflow:hidden;background:radial-gradient(120% 90% at 50% 10%,#1d5fe0 0%,#0b2d7a 45%,#04163b 100%)}
+.voyage-photo{position:absolute;inset:-6%;width:112%;height:112%;object-fit:cover;will-change:transform;animation:9.5s linear both;filter:saturate(1.12) contrast(1.04)}
+.voyage-photo.kb-a{animation-name:kbA}
+.voyage-photo.kb-b{animation-name:kbB}
+@keyframes kbA{from{transform:scale(1.02) translate3d(-2.5%,1%,0)}to{transform:scale(1.14) translate3d(2.5%,-1.5%,0)}}
+@keyframes kbB{from{transform:scale(1.14) translate3d(2%,-1%,0)}to{transform:scale(1.03) translate3d(-2.5%,1.5%,0)}}
+.voyage-wide{position:absolute;top:0;left:0;height:100%;width:auto;max-width:none;min-width:100%;object-fit:cover;will-change:transform;animation:widePan 14.4s ease-in-out both;filter:saturate(1.1)}
+@keyframes widePan{from{transform:translate3d(0,0,0) scale(1.04)}to{transform:translate3d(calc(-100% + 100vw),0,0) scale(1.04)}}
+.voyage-empty{position:absolute;inset:0;display:grid;place-items:center;background:radial-gradient(90% 70% at 50% 30%,#2a6cf0,#0b2d7a 60%,#04163b)}
+.voyage-empty::after{content:"";position:absolute;inset:auto 0 0;height:45%;background:repeating-radial-gradient(ellipse at 50% 140%,rgba(255,255,255,.08) 0 2px,transparent 3px 26px);animation:swellMove 7s ease-in-out infinite alternate}
+@keyframes swellMove{to{transform:translateY(-14px) scaleX(1.05)}}
+.voyage-pano{position:absolute;inset:0}
+.voyage-pano .pnlm-container{background:#04163b}
+.voyage-loading{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;opacity:.8}
+.voyage-walk{position:absolute;inset:0;width:100%;height:100%;border:0;background:#04163b}
+.voyage-walk-cover{position:absolute;inset:0;display:grid;place-items:center}
+.voyage-walk-cover .voyage-photo{filter:blur(6px) saturate(1.2) brightness(.7)}
+.voyage-walk-badge{position:relative;display:grid;justify-items:center;gap:6px;padding:22px 26px;border-radius:26px;background:rgba(8,32,92,.55);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.2);text-align:center;margin-bottom:22vh}
+.voyage-walk-badge svg{width:46px;height:46px;color:#e0ff91;animation:orbit 5s linear infinite}
+.voyage-walk-badge b{font-family:"Barlow Condensed",sans-serif;font-size:32px;text-transform:uppercase;letter-spacing:.01em}
+.voyage-walk-badge small{opacity:.85}
+@keyframes orbit{to{transform:rotateY(360deg)}}
+
+.voyage-spray{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
+.voyage[data-kind=pano] .voyage-spray,.voyage.is-walking .voyage-spray{display:none}
+.voyage-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(4,22,59,.72) 0%,rgba(4,22,59,0) 22%,rgba(4,22,59,0) 42%,rgba(4,22,59,.55) 64%,rgba(4,22,59,.95) 100%)}
+.voyage[data-kind=pano] .voyage-shade{background:linear-gradient(180deg,rgba(4,22,59,.6),transparent 20%,transparent 70%,rgba(4,22,59,.85))}
+.voyage.is-walking .voyage-shade{display:none}
+
+.voyage-top{position:absolute;inset:0 0 auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 0;z-index:3}
+.voyage-bars{display:flex;gap:4px}
+.voyage-bars i{flex:1;height:3px;border-radius:3px;background:rgba(255,255,255,.3);overflow:hidden}
+.voyage-bars i b{display:block;height:100%;width:0;background:#fff;border-radius:inherit}
+.voyage-bars i.done b{width:100%}
+.voyage-bars i.on b{animation:barFill linear forwards}
+@keyframes barFill{to{width:100%}}
+.voyage-head{display:flex;align-items:center;gap:8px;margin-top:12px}
+.voyage-id{flex:1;min-width:0}
+.voyage-id small{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#e0ff91;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.voyage-id b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:26px;font-weight:800;line-height:1.05;text-transform:uppercase;text-shadow:0 2px 16px rgba(0,0,0,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.voyage-btn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);background:rgba(8,32,92,.42);color:#fff;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:transform .2s,background .2s}
+.voyage-btn:hover{background:rgba(33,84,220,.7)}
+.voyage-btn:active{transform:scale(.92)}
+.voyage-btn[aria-pressed=true]{background:#e0ff91;color:#0b2d7a;border-color:#e0ff91}
+.voyage-btn[hidden]{display:none}
+
+.voyage-tap{position:absolute;top:16%;bottom:40%;width:28%;z-index:2;border:0;background:none;color:#fff;display:flex;align-items:center;opacity:0;transition:opacity .2s}
+.voyage-tap-prev{left:0;justify-content:flex-start;padding-left:14px}
+.voyage-tap-next{right:0;justify-content:flex-end;padding-right:14px}
+.voyage-tap svg{width:44px;height:44px;padding:10px;border-radius:50%;background:rgba(8,32,92,.45);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.voyage-tap:hover,.voyage-tap:focus-visible{opacity:1}
+.voyage[data-kind=pano] .voyage-tap,.voyage.is-walking .voyage-tap{top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 50%);width:auto;opacity:.9}
+
+.voyage-card{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:0 18px calc(env(safe-area-inset-bottom,0px) + 18px);max-width:720px;margin:0 auto;animation:cardIn .5s cubic-bezier(.22,1,.36,1) both}
+.voyage-card>*{animation:cardIn .55s cubic-bezier(.22,1,.36,1) both}
+.voyage-card>*:nth-child(2){animation-delay:.05s}.voyage-card>*:nth-child(3){animation-delay:.1s}.voyage-card>*:nth-child(n+4){animation-delay:.15s}
+@keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+.voyage.is-walking .voyage-card{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}
+.voyage.is-walking .voyage-card h2,.voyage.is-walking .voyage-card p,.voyage.is-walking .voyage-chips,.voyage.is-walking .voyage-live{display:none}
+.voyage.is-walking .voyage-card{pointer-events:none}
+.voyage.is-walking .voyage-card .voyage-actions,.voyage.is-walking .voyage-card .voyage-credit{pointer-events:auto}
+.voyage-kicker{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.voyage-kicker img{width:34px;height:34px;border-radius:50%;border:2px solid #e0ff91;object-fit:cover;background:#fff}
+.voyage-kicker span{flex:1;color:#e0ff91}
+.voyage-kicker em{font-style:normal;font-size:11px;opacity:.7;letter-spacing:.06em}
+.voyage-card h2{margin:10px 0 6px;font-family:"Barlow Condensed",sans-serif;font-size:clamp(30px,8vw,52px);font-weight:800;line-height:.95;text-transform:uppercase;letter-spacing:-.005em;text-shadow:0 4px 24px rgba(0,0,0,.35)}
+.voyage-card p{margin:0;font-size:15px;line-height:1.5;color:#e6edff;max-width:60ch;text-shadow:0 1px 10px rgba(0,0,0,.4)}
+.voyage-live{display:flex;gap:8px;margin-top:12px}
+.voyage-live span{flex:1;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.voyage-live small{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;font-weight:700}
+.voyage-live b{font-size:14px}
+.voyage-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.voyage-chips span{font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18)}
+.voyage-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.voyage-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:14.5px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:transform .2s}
+.voyage-cta:active{transform:scale(.96)}
+.voyage-cta-main{background:#e0ff91;border-color:#e0ff91;color:#0b2d7a}
+.voyage-credit{margin-top:10px;font-size:11px;opacity:.7}
+.voyage-credit a{color:inherit}
+.voyage-ai{display:inline-block;padding:3px 8px;border-radius:6px;background:rgba(224,255,145,.18);color:#e0ff91;font-weight:700}
+.voyage.is-paused .voyage-bars i.on b{animation-play-state:paused}
+
+@media (min-width:960px){
+  .voyage-top{padding:22px 32px 0}
+  .voyage-id b{font-size:32px}
+  .voyage-card{left:32px;right:auto;margin:0;padding:0 0 32px;max-width:560px}
+  .voyage-tap{opacity:.75}
+}
+@media (prefers-reduced-motion:reduce){.voyage-wide{animation:none!important}.voyage-photo{animation:none!important;transform:scale(1.04)}.voyage-card,.voyage-card>*{animation:none}}
+.reduce-motion .voyage-photo{animation:none!important;transform:scale(1.04)}

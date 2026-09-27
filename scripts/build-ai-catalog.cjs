@@ -9,11 +9,11 @@ const catalog=read('data/catalog.json');
 const allowedSports=new Set(['surf','bodyboard','plongee','snorkeling','paddle','kayak','baignade','kitesurf','windsurf']);
 const ids=new Set();
 
-if(!Array.isArray(catalog)||catalog.length!==280)throw Error('Canonical catalogue must contain exactly 280 spots');
+if(!Array.isArray(catalog)||catalog.length<280)throw Error('Canonical catalogue must contain at least 280 spots');
 for(const spot of catalog){
   if(typeof spot.id!=='string'||!/^[a-z0-9_]+$/.test(spot.id)||ids.has(spot.id))throw Error('Invalid or duplicate spot ID: '+spot.id);
   ids.add(spot.id);
-  for(const key of ['name','loc','world','level','desc','sky','sky2','sea','sea2'])if(typeof spot[key]!=='string'||!spot[key])throw Error(spot.id+': missing '+key);
+  for(const key of ['name','loc','country','world','level','desc','sky','sky2','sea','sea2'])if(typeof spot[key]!=='string'||!spot[key])throw Error(spot.id+': missing '+key);
   if(!['fr','eu','af','as','na','sa','oc'].includes(spot.world))throw Error(spot.id+': unknown world');
   if(!Number.isFinite(spot.coords?.lat)||Math.abs(spot.coords.lat)>90||!Number.isFinite(spot.coords?.lon)||Math.abs(spot.coords.lon)>180)throw Error(spot.id+': invalid coordinates');
   if(!Array.isArray(spot.sports)||!spot.sports.length||spot.sports.some(s=>!allowedSports.has(s)))throw Error(spot.id+': invalid activities');

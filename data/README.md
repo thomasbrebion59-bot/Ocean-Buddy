@@ -1,6 +1,6 @@
 # Données des destinations
 
-`catalog.json` est le catalogue canonique des 280 spots. Les fiches, activités, coordonnées, photographies, textes et sources y sont réunis. Les vues utilisées par le navigateur, les crédits photo et les fonctions serveur sont générées depuis ce fichier ; leur procédure de mise à jour est décrite dans `../docs/catalog-maintenance.md`.
+`catalog.json` est le catalogue canonique des 432 spots. Les fiches, activités, coordonnées, photographies, textes et sources y sont réunis. Les vues utilisées par le navigateur, les crédits photo et les fonctions serveur sont générées depuis ce fichier ; leur procédure de mise à jour est décrite dans `../docs/catalog-maintenance.md`.
 
 Les coordonnées désignent un secteur approximatif, jamais un point de mise à l'eau garanti. Les niveaux non documentés restent `variable`. Le statut `unverified` indique une description historique sans source éditoriale externe documentée ; une photo créditée ne valide pas les conseils de sécurité. Les conditions datées sont chargées séparément et ne doivent pas être inventées dans le catalogue.
 

@@ -7,7 +7,7 @@ textes, variables {0}, {1}…) avant d'être enregistré.
 
     python3 scripts/i18n-translate.py en es de        # langues choisies
     python3 scripts/i18n-translate.py --all           # toutes les langues de i18n.js
-Options : --model gpt-6-sol  --batch 300  --jobs 6
+Options : --model gpt-6-luna  --batch 300  --jobs 6
 """
 import argparse
 import concurrent.futures as cf
@@ -111,7 +111,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("langs", nargs="*")
     ap.add_argument("--all", action="store_true")
-    ap.add_argument("--model", default="gpt-6-sol")
+    ap.add_argument("--model", default="gpt-6-luna")
     ap.add_argument("--batch", type=int, default=300)
     ap.add_argument("--jobs", type=int, default=6)
     a = ap.parse_args()

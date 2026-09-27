@@ -6,7 +6,19 @@ Cobalt `#2154dc`, bleu de navigation `#174bd3`, sable `#f5f5f0`, corail `#fc7955
 
 L’aquarium, ses modales et ses récompenses de créatures sont retirés du parcours. Les défis, XP, badges et gestes pour l’océan restent accessibles. L’espace Surf trips est relié à l’accueil et à chaque fiche de spot.
 
-## Palette unifiée (septembre 2026)
+## Ocean Blue (27 septembre 2026)
+
+Retour au bleu cobalt d’origine, préféré à l’abysse vert sombre. `ocean-blue.css`, chargée en dernier, redéfinit les rôles :
+
+- **Bleu marine** `#0b2d7a` : titres, fonds profonds, voile des photos.
+- **Cobalt** `#1f55e0` → `#1440b8` : navigation (dégradé), boutons, états actifs des filtres.
+- **Citron vert** `#e0ff91` : onglet courant, repères « en direct », bouton principal sur fond bleu.
+- **Corail** `#ff7a55` : appel à l’action sur photo.
+- **Brume** `#f3f6fd` : fond de lecture légèrement bleuté.
+
+L’accueil suit l’ordre héros → « Pars en immersion » → cockpit (semaine, prochain départ, favoris) → activités. Les couvertures des continents sont toujours les photos choisies à la main, quelle que soit l’activité (auparavant l’Océanie montrait Pipeline, à Hawaï).
+
+## Palette unifiée (septembre 2026, remplacée)
 
 Trois palettes cohabitaient : sarcelle et menthe (navigation), cobalt et citron vert (contenus), pêche (bouton principal). `ocean-hub.css`, chargée en dernier, fixe les rôles :
 

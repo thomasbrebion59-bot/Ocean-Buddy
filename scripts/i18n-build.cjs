@@ -14,7 +14,7 @@ const root = path.join(__dirname, '..');
 const source = JSON.parse(fs.readFileSync(path.join(root, 'locales/source/fr.json'), 'utf8'));
 const dir = path.join(root, 'locales/translations');
 const versions = {};
-const MIN_COVERAGE = 0.99; // une langue incomplète n'est pas publiée : l'anglais la remplace
+const MIN_COVERAGE = Number(process.env.I18N_MIN_COVERAGE || 0.99); // une langue incomplète n'est pas publiée : l'anglais la remplace
 const report = [];
 
 for (const file of fs.readdirSync(dir).filter(f => f.endsWith('.json')).sort()) {

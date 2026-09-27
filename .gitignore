@@ -16,3 +16,6 @@ android/.gradle/
 android/**/build/
 ios/App/build/
 ios/**/xcuserdata/
+
+# Images ChatGPT à intégrer (scripts/add_ai_images.py)
+ai-images/

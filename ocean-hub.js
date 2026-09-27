@@ -95,7 +95,7 @@
   function mount(){
     const home=$('#home');if(!home||$('#oceanHub'))return;
     const hub=document.createElement('section');hub.id='oceanHub';hub.className='ocean-hub';hub.setAttribute('aria-label','Ton espace');
-    home.prepend(hub);
+    const intro=home.querySelector('.home-intro');if(intro)intro.after(hub);else home.prepend(hub);
     hub.addEventListener('click',e=>{
       const b=e.target.closest('button');if(!b)return;
       if(b.dataset.spot)openSpot(b.dataset.spot);

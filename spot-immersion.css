@@ -126,11 +126,11 @@
 /* Editorial ocean colors keep the guide legible beneath the visit photograph. */
 .immersion-context{border-color:#d9e7e0}.im-context-title b{color:#164750}
 .im-activity-choices button{border-color:#d5e7df;color:#3d6665}
-.im-activity-choices button[aria-pressed=true]{background:#0c686b;border-color:#0c686b;color:#fff}
+.im-activity-choices button[aria-pressed=true]{background:#1f55e0;border-color:#1f55e0;color:#fff}
 .spot-immersion{border-color:#d0e5dd;box-shadow:0 13px 32px #123f4410}
 .im-heading{background:linear-gradient(110deg,#e5f4ec,#f6faf6)}
 .im-eyebrow{color:#23696a}.im-heading h3,.im-copy h4,.im-terrain-copy h4{color:#123e49}
-.im-tabs{border-color:#dcebe3}.im-tabs button[aria-selected=true],.im-choices button[aria-pressed=true]{background:#0d686b;border-color:#0d686b;color:#fff}
+.im-tabs{border-color:#dcebe3}.im-tabs button[aria-selected=true],.im-choices button[aria-pressed=true]{background:#1f55e0;border-color:#1f55e0;color:#fff}
 .im-tabs button:hover:not([aria-selected=true]){background:#e5f4ef;color:#0b6265}
 .im-copy .im-takeaway{background:#e7f4ed;border-left-color:#43a98c;color:#2d5a55}
 .im-reading,.im-level-current{background:#eef7f2;border-color:#d4e8dd}

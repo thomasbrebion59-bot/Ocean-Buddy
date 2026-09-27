@@ -16,7 +16,7 @@ Ouvrir http://127.0.0.1:8765/. Aucun build ni installation npm n’est nécessai
 
 La palette associe cobalt, sable, corail et citron vert. Les cartes de destinations ont une photographie lumineuse et un cartouche blanc ; le lieu représenté est indiqué. La navigation reste latérale sur ordinateur et inférieure sur téléphone.
 
-L’aquarium est remplacé par **Surf trips** : plusieurs voyages, dates facultatives, étapes à choisir parmi les 280 spots ou les favoris, ordre modifiable, carte, notes par étape, checklist personnalisable, hébergements, transports et budget. Chaque fiche de spot propose « Ajouter à un voyage ». Trois idées de départ sont proposées sans créer de voyage automatiquement : côte basque, Portugal et Bali.
+L’aquarium est remplacé par **Surf trips** : plusieurs voyages, dates facultatives, étapes à choisir parmi les 432 spots ou les favoris, ordre modifiable, carte, notes par étape, checklist personnalisable, hébergements, transports et budget. Chaque fiche de spot propose « Ajouter à un voyage ». Trois idées de départ sont proposées sans créer de voyage automatiquement : côte basque, Portugal et Bali.
 
 Les voyages sont enregistrés dans le stockage du navigateur. Ils peuvent être archivés puis restaurés et exportés en JSON. Le bouton **Supprimer** est disponible sur les cartes de voyages, dans les fiches et dans les archives. Après confirmation, le voyage rejoint une **corbeille locale** : il disparaît des voyages disponibles et reste récupérable avec ses étapes, notes et préparatifs. La restauration remet un voyage archivé dans les archives. Aucune suppression définitive automatique n’est appliquée. Il n’y a pas de synchronisation entre appareils ni de moteur de réservation. La ligne de la carte relie les étapes ; elle ne calcule pas un trajet routier. Les données de profil, favoris, progression et sessions sont conservées.
 
@@ -29,6 +29,20 @@ Douze petits Poulpy illustrent maintenant les neuf activités et les trois nivea
 Dans chaque fiche, **Prends tes repères** associe une photographie ouvrable en grand, trois repères adaptés à l’activité et des explications sur le vent, les vagues, la marée, l’eau et le niveau. Les schémas interactifs sont pédagogiques : ils ne représentent ni la géographie du spot, ni une mesure locale. Les prévisions disponibles sont identifiées séparément. Le contenu est adapté aux plans d’eau intérieurs ; les sources RNLI, NOAA et Open-Meteo sont liées auprès des explications. Les onglets et le curseur de marée fonctionnent au clavier.
 
 L’intégration conversationnelle de Poulpy utilise une fonction Netlify et l’API Responses d’OpenAI. Son activation et sa configuration sont décrites dans [backend/README.md](backend/README.md). Si aucune URL de serveur n’est configurée, l’interface identifie explicitement le guide intégré.
+
+## Voyage dans le spot
+
+`spot-voyage.js` et `spot-voyage.css` ouvrent une immersion plein écran façon « stories » depuis chaque fiche (« Mode immersion », bandeau « Vis … ») et depuis le rail « Pars en immersion » de l’accueil :
+
+- **Scènes animées** : photographies en mouvement lent, embruns lumineux, son de l’océan synthétisé, avancée automatique avec barres de progression, pause au toucher, flèches et clavier.
+- **Panoramas** (`spot-panoramas.js`) : 27 vues larges réelles en travelling et 2 sphères 360° (Pannellum, chargé à la demande), toutes prises à moins de 4 km du spot, vérifiées à la main, avec auteur et licence.
+- **Balade libre** : Google Street View autour des coordonnées du spot, chargé seulement après un appui sur « Lancer la balade ».
+- **Scènes IA** (`spot-scenes.js`) : emplacement prêt pour les images créées avec ChatGPT, toujours marquées « Scène illustrée par IA ». Procédure : [docs/prompts-images-chatgpt.md](docs/prompts-images-chatgpt.md) puis `python3 scripts/add_ai_images.py`.
+- Guide Poulpy : description, conseil, points de vigilance et conditions en direct sur chaque scène, avec « Ajouter à un voyage ».
+
+## Catalogue de septembre 2026
+
+152 spots ajoutés (432 au total) sur les sept régions, dont La Réunion, la Guadeloupe, la Martinique, la Polynésie et la Nouvelle-Calédonie. 109 ont une photographie Wikimedia Commons vérifiée ; les 43 autres, avec Tamarindo et Byron Bay, attendent une illustration (liste dans le document de prompts). Chaque spot porte désormais un champ `country` : Hawaï est rattaché à l’Amérique du Nord, et les pays qui tombaient dans « Autres destinations » ont leur propre entrée. Les fiches ajoutées sont marquées « à vérifier localement » (`editorialStatus: unverified`). Migration : `scripts/add-spots.cjs`. Cinq photos en noir et blanc (Trestles, Nazaré, Pipeline, Ocean Beach) ont été remplacées par des vues en couleur ; Coxos attend encore la sienne.
 
 ## Cockpit d’accueil
 

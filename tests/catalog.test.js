@@ -6,13 +6,14 @@ const vm=require('node:vm');
 const root=path.join(__dirname,'..');
 const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
 const all=JSON.parse(fs.readFileSync(path.join(root,'data/catalog.json'),'utf8'));
-const base=all.filter(s=>s.editorialStatus==='unverified');
+const additions=all.filter(s=>s.edition==='catalogue-2026-09');
+const base=all.filter(s=>s.editorialStatus==='unverified'&&s.edition!=='catalogue-2026-09');
 const extra=all.filter(s=>s.editorialStatus==='reviewed');
 const photos=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/sources.json'),'utf8'));
 const legacy=require('../legacy-spots.js');
 const sports=new Set(['surf','bodyboard','plongee','snorkeling','paddle','kayak','baignade','kitesurf','windsurf']);
-test('280 distinct spots, including 112 sourced additions across all seven regions',()=>{
- assert.equal(base.length,168);assert.equal(extra.length,112);assert.equal(all.length,280);
+test('432 distinct spots: 168 historical, 112 sourced and 152 September 2026 additions',()=>{
+ assert.equal(base.length,168);assert.equal(extra.length,112);assert.equal(additions.length,152);assert.equal(all.length,432);
  assert.equal(new Set(all.map(s=>s.id)).size,all.length);
  for(const s of all){assert.ok(s.sports.length,s.id);assert.ok(s.sports.every(x=>sports.has(x)),s.id);}
  assert.deepEqual([...base.find(s=>s.id==='uluwatu').sports],['surf']);
@@ -33,7 +34,7 @@ test('browser, media and server views match the canonical catalogue exactly',()=
  const runtime={window:{}};vm.runInNewContext(fs.readFileSync(path.join(root,'catalog-runtime.js'),'utf8'),runtime);
  const server=JSON.parse(fs.readFileSync(path.join(root,'netlify/functions/lib/catalog.json'),'utf8'));
  assert.equal(JSON.stringify(runtime.window.OCEAN_CATALOG),JSON.stringify(all));
- assert.equal(server.length,280);
+ assert.equal(server.length,all.length);
  assert.equal(JSON.stringify(photos),JSON.stringify(Object.fromEntries(all.filter(s=>s.photo).map(s=>[s.id,s.photo]))));
  for(const s of all){
   const row=server.find(x=>x.id===s.id);assert.ok(row,s.id);
@@ -72,8 +73,8 @@ test('every spot shows access, best period and local rules without inventing mis
  assert.equal((ctx.visitGuide(historical).match(/À vérifier localement/g)||[]).length,3);
 });
 test('each published photograph belongs to the destination and has usable attribution',()=>{
- assert.equal(all.length,280);
- assert.equal(Object.keys(photos).length,278);
+ assert.equal(all.length,432);
+ assert.equal(Object.keys(photos).length,all.filter(s=>s.photo).length);
  assert.equal(all.find(s=>s.id==='tamarindo').photo,null);
  assert.equal(all.find(s=>s.id==='byronbay').photo,null);
  assert.equal(photos.tamarindo,undefined);
@@ -140,10 +141,18 @@ test('visible weather keeps marine values aligned when lakes appear between coas
 });
 test('gallery images are local, credited and attached to existing destinations',()=>{
  const galleries=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/gallery-sources.json'),'utf8'));
- assert.equal(Object.values(galleries).flat().length,29);assert.equal(extra.filter(s=>s.catalogNew).length,40);
+ assert.equal(Object.values(galleries).flat().length,29);assert.equal(extra.filter(s=>s.catalogNew).length,0);assert.equal(all.filter(s=>s.catalogNew).length,additions.length);
  for(const [id,rows] of Object.entries(galleries)){assert.ok(all.some(s=>s.id===id),id);for(const p of rows){assert.ok(fs.statSync(path.join(root,p.src)).size>1000);assert.ok(p.author&&p.license);assert.equal(new URL(p.source).protocol,'https:');}}
 });
 test('an unrecognised country does not invent an emergency phone number',()=>{
  const ctx={};vm.runInNewContext(functionSource('function countryEmergency','var SPORT_VERB')+';this.emergency=countryEmergency;',ctx);
  assert.equal(ctx.emergency('Lieu non identifié').call,null);assert.equal(ctx.emergency('Savoie, France').call,'112');
+});
+
+test('every spot has a country and sits on the right continent',()=>{
+ for(const s of all)assert.ok(typeof s.country==='string'&&s.country,s.id);
+ for(const s of all.filter(s=>/hawaï|kauaʻi|oahu|maui/i.test(s.loc)))assert.equal(s.world,'na',s.id);
+ for(const s of all.filter(s=>s.country==='États-Unis'))assert.equal(s.world,'na',s.id);
+ for(const s of all.filter(s=>s.world==='oc'))assert.notEqual(s.country,'États-Unis',s.id);
+ for(const s of additions){assert.equal(s.editorialStatus,'unverified',s.id);assert.equal(s.source.url,null,s.id);assert.ok(s.dangers.length&&s.tip,s.id);}
 });

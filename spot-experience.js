@@ -119,7 +119,7 @@
     } catch (_) { if (n === request) $('#spotWeek').innerHTML = '<p class="spot-week-empty">Prévisions détaillées indisponibles pour le moment. Réessaie avec une connexion.</p>'; }
   }
 
-  function openImmersion(s) { window.OceanGallery?.open(s,0,{immersive:true}); }
+  function openImmersion(s) { if(window.OceanVoyage)window.OceanVoyage.open(s);else window.OceanGallery?.open(s,0,{immersive:true}); }
 
   function update(s, act) {
     activeSpot=s;activeAct=act;ensureExperiencePanel();

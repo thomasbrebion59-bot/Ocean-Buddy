@@ -1,0 +1,147 @@
+/* Ocean Blue — dernière couche de style (septembre 2026).
+   Retour au bleu cobalt d’origine : le bleu structure (navigation, héros, titres),
+   le citron vert signale l’état actif, le corail appelle à l’action. */
+:root{
+  --ob-navy:#0b2d7a;--ob-navy-2:#0f3a9a;--ob-cobalt:#1f55e0;--ob-blue:#2f6bff;--ob-sky:#e8efff;--ob-mist:#f3f6fd;
+  --ob-lime:#e0ff91;--ob-coral:#ff7a55;--ob-coral-hi:#ff916f;--ob-ink:#0f2350;--ob-muted:#5a6a8c;--ob-line:#dfe6f5;--ob-card:#fff;
+  --ob-abyss:var(--ob-navy);--ob-abyss-2:var(--ob-navy-2);--ob-sand:var(--ob-mist);
+  --ob-shadow:0 1px 2px rgba(11,45,122,.06),0 14px 34px -16px rgba(11,45,122,.32);
+  --ob-shadow-lg:0 30px 60px -28px rgba(11,45,122,.55);
+  --ob-radius:22px;
+}
+html,body{background:var(--ob-mist)}
+.ocean-v2 .screen-wrap,.ocean-v2 .screen{background:transparent}
+body.ocean-v2{color:var(--ob-ink)}
+::selection{background:var(--ob-lime);color:var(--ob-navy)}
+
+/* ---------- Navigation cobalt ---------- */
+.ocean-v2 .nav{background:linear-gradient(185deg,#2360e8 0%,#1a4fd6 45%,#1440b8 100%);border-color:#1a4fd6}
+.ocean-v2 .nav::before{content:"";position:absolute;inset:auto 0 0;height:220px;pointer-events:none;opacity:.22;
+  background:repeating-radial-gradient(ellipse at 50% 130%,transparent 0 16px,rgba(255,255,255,.55) 17px 18px,transparent 19px 34px)}
+.sidebar-brand>span,.sidebar-brand b{color:#fff}
+.sidebar-brand small{color:#cfdcff}
+.sidebar-label{color:#b8cbff}
+.ocean-v2 .nav>button[data-s]{color:#dbe6ff}
+.ocean-v2 .nav>button[data-s]:hover{background:rgba(255,255,255,.12);color:#fff}
+.ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{background:var(--ob-lime);color:var(--ob-navy);box-shadow:0 10px 24px -12px rgba(224,255,145,.9)}
+.ocean-v2 .nav>button[data-s].active:hover{background:#ecffb8;color:var(--ob-navy)}
+.ocean-v2 .nav .sidebar-poulpy{background:rgba(8,40,140,.55);border-color:rgba(255,255,255,.22)}
+.sidebar-poulpy b{color:#fff}.sidebar-poulpy span{color:#d4e0ff}.sidebar-poulpy i{color:var(--ob-lime)}
+.ocean-v2 .nav .sidebar-settings,.ocean-v2 .nav .sidebar-user{color:#e6eeff;border-color:rgba(255,255,255,.22)}
+.sidebar-user small,.sidebar-motto{color:#c2d3ff}
+.ocean-v2 .nav .sidebar-user .user-initial{background:var(--ob-lime);color:var(--ob-navy)}
+@media (max-width:959px){
+  .ocean-v2 .nav{background:rgba(26,79,214,.94);border-color:rgba(255,255,255,.14);box-shadow:0 -10px 30px -12px rgba(11,45,122,.45)}
+  .ocean-v2 .nav::before{display:none}
+  .ocean-v2 .nav>button[data-s]{color:#dbe6ff}
+  .ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{background:var(--ob-lime);color:var(--ob-navy)}
+}
+
+/* ---------- Barre du haut ---------- */
+.ocean-v2 .app-chrome{background:rgba(243,246,253,.82);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(18px) saturate(1.5);border-color:var(--ob-line)}
+.chrome-mobile-brand,.chrome-breadcrumb b{color:var(--ob-navy)}
+.chrome-mobile-brand b,.mobile-search{color:var(--ob-cobalt)}
+.chrome-search{border-color:var(--ob-line);background:#fff}
+
+/* ---------- Titres et sections ---------- */
+.ocean-v2 .sec h2,.ocean-v2 h1,.ocean-v2 .hub-greet h2{color:var(--ob-navy)}
+.ocean-v2 .sec a,.hub-link{color:var(--ob-cobalt)!important}
+
+/* ---------- Accueil : grand héros en premier ---------- */
+.ocean-v2 #home .home-intro{position:relative}
+.ocean-v2 #home #homeTop{border:0;background-color:var(--ob-navy);
+  background-image:linear-gradient(100deg,rgba(9,46,113,.86) 0%,rgba(9,46,113,.45) 55%,rgba(8,40,68,.08) 100%),url('assets/photos/hero.jpg');
+  background-size:cover;background-position:center;box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 #homeTop h1{color:#fffdf2;text-shadow:0 6px 30px rgba(4,22,59,.35)}
+.ocean-v2 #homeTop h1 span{color:var(--ob-lime)}
+.ocean-v2 #homeTop .hero-kicker{color:var(--ob-lime)}
+.hero-cta{background:var(--ob-coral);color:#1b1410;box-shadow:0 14px 30px -12px rgba(255,122,85,.8);transition:transform .25s cubic-bezier(.22,1,.36,1),background .2s}
+.hero-cta:hover{background:var(--ob-coral-hi);transform:translateY(-2px)}
+.ocean-v2 .mascot-card{background:linear-gradient(160deg,#2a66f0,#1a4fd6 55%,#1440b8);box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 .mascot-card .poulpy-title{color:var(--ob-lime)}
+/* Le héros porte le salut : le cockpit n’en répète pas le titre. */
+#home .ocean-hub .hub-greet{display:none}
+#home .ocean-hub{padding-top:18px}
+
+/* Prochain départ et semaine en bleu */
+.hub-trip{background:linear-gradient(180deg,rgba(11,45,122,.2) 0%,rgba(11,45,122,.55) 45%,rgba(11,45,122,.95) 100%),var(--hub-cover) center/cover no-repeat,var(--ob-navy)!important;box-shadow:0 24px 44px -24px rgba(11,45,122,.85)}
+.hub-trip-empty{background:linear-gradient(120deg,#1a4fd6,#0b2d7a)!important}
+.hub-days i.on{background:var(--ob-cobalt)}
+.hub-level{background:conic-gradient(var(--ob-cobalt) calc(var(--p)*1%),#dfe6fb 0)!important}
+.hub-week,.hub-spot{border-color:var(--ob-line);box-shadow:var(--ob-shadow)}
+
+/* ---------- Rail « Pars en immersion » ---------- */
+.ob-dive{display:grid;gap:12px;padding:8px 16px 4px}
+.ob-dive-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.ob-dive-head small{display:block;font-size:11px;font-weight:800;letter-spacing:.14em;color:var(--ob-cobalt);text-transform:uppercase}
+.ob-dive-head h2{margin:4px 0 0;font-family:"Barlow Condensed",sans-serif;font-size:34px;font-weight:800;line-height:.95;text-transform:uppercase;color:var(--ob-navy)}
+.ob-dive-head h2 span{color:var(--ob-cobalt)}
+.ob-dive-head p{margin:6px 0 0;color:var(--ob-muted);font-size:13.5px;max-width:44ch}
+.ob-dive-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:4px 16px 16px;scrollbar-width:none;overscroll-behavior-x:contain}
+.ob-dive-track::-webkit-scrollbar{display:none}
+.ob-story{position:relative;flex:0 0 168px;height:280px;scroll-snap-align:start;border:0;padding:0;border-radius:24px;overflow:hidden;cursor:pointer;color:#fff;text-align:left;background:var(--ob-navy);box-shadow:var(--ob-shadow);isolation:isolate;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s}
+.ob-story:hover{transform:translateY(-4px);box-shadow:var(--ob-shadow-lg)}
+.ob-story:active{transform:scale(.97)}
+.ob-story img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 6s ease-out}
+.ob-story:hover img{transform:scale(1.1)}
+.ob-story::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(4,22,59,.1) 30%,rgba(4,22,59,.9))}
+.ob-story-ring{position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:6px;padding:4px 9px 4px 4px;border-radius:999px;background:rgba(8,32,92,.5);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font-size:10.5px;font-weight:800;letter-spacing:.06em}
+.ob-story-ring i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--ob-lime);color:var(--ob-navy)}
+.ob-story-ring i svg{width:12px;height:12px}
+.ob-story-txt{position:absolute;left:12px;right:12px;bottom:12px}
+.ob-story-txt small{display:block;font-size:11px;font-weight:700;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ob-story-txt b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:24px;font-weight:800;line-height:1;text-transform:uppercase;margin-top:3px}
+.ob-story.is-lead{flex-basis:230px}
+@media (min-width:960px){.ob-dive{padding:26px 0 6px}.ob-dive-head h2{font-size:44px}.ob-story{flex-basis:200px;height:320px}.ob-story.is-lead{flex-basis:280px}.ob-dive-track{margin:0;padding:4px 0 18px}}
+
+/* ---------- Explorer : cartes continents et spots ---------- */
+.ocean-v2 .isl,.ocean-v2 .world-card{border-radius:var(--ob-radius);box-shadow:var(--ob-shadow);transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s}
+.ocean-v2 .isl:hover{transform:translateY(-3px);box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 .world-count{background:var(--ob-lime);color:var(--ob-navy)}
+.ocean-v2 .explore-path{border-color:var(--ob-line);box-shadow:var(--ob-shadow)}
+.ocean-v2 .explore-path .path-number{background:var(--ob-sky);color:var(--ob-cobalt)}
+.ocean-v2 #spotsTop h1,.ocean-v2 .w-title{color:var(--ob-navy)}
+
+/* ---------- Fiche spot ---------- */
+.ocean-v2 .detail-hero{box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 #detail .hero-immersion,.ocean-v2 #detail .hero-immersion span{color:var(--ob-navy)!important}
+.ocean-v2 #detail .hero-immersion{background:var(--ob-lime);color:var(--ob-navy);border-color:var(--ob-lime);font-weight:800;box-shadow:0 12px 30px -10px rgba(224,255,145,.7);animation:immPulse 2.8s ease-in-out infinite}
+.ocean-v2 .hero-immersion::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ob-coral);margin-right:8px;vertical-align:1px;box-shadow:0 0 0 0 rgba(255,122,85,.7);animation:livePing 1.8s infinite}
+@keyframes immPulse{0%,100%{transform:none}50%{transform:translateY(-2px)}}
+@keyframes livePing{to{box-shadow:0 0 0 9px rgba(255,122,85,0)}}
+.ocean-v2 .dtab.active{color:var(--ob-cobalt)}
+.ocean-v2 .dtab.active::after{background:var(--ob-cobalt)}
+.ocean-v2 .block{border-radius:var(--ob-radius);border-color:var(--ob-line)}
+.trip-add-from-spot{border-color:var(--ob-cobalt);color:var(--ob-cobalt)}
+.reduce-motion .hero-immersion,.reduce-motion .hero-immersion::before{animation:none}
+@media (prefers-reduced-motion:reduce){.ocean-v2 .hero-immersion,.ocean-v2 .hero-immersion::before{animation:none}}
+
+/* Bandeau « Voyage dans le spot » dans la fiche */
+.ob-voyage-banner{position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;margin:16px 0;padding:18px;border:0;width:100%;border-radius:24px;overflow:hidden;color:#fff;text-align:left;cursor:pointer;isolation:isolate;
+  background:linear-gradient(100deg,rgba(11,45,122,.94),rgba(31,85,224,.72)),var(--ob-cover,none) center/cover,var(--ob-navy);box-shadow:var(--ob-shadow-lg);transition:transform .3s cubic-bezier(.22,1,.36,1)}
+.ob-voyage-banner:hover{transform:translateY(-2px)}
+.ob-voyage-banner small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--ob-lime)}
+.ob-voyage-banner b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:28px;font-weight:800;line-height:1;text-transform:uppercase;margin:4px 0}
+.ob-voyage-banner em{display:block;font-style:normal;font-size:13px;opacity:.88;line-height:1.4}
+.ob-voyage-banner span.go{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--ob-lime);color:var(--ob-navy)}
+.ob-voyage-banner span.go svg{width:22px;height:22px}
+
+/* ---------- Boutons génériques ---------- */
+.ocean-v2 .chal-btn{background:var(--ob-cobalt);color:#fff}
+.ocean-v2 .onb .onb-btn{background:var(--ob-lime);color:var(--ob-navy);box-shadow:0 14px 34px -12px rgba(224,255,145,.75)}
+.ocean-v2 .onb .dots span.on{background:var(--ob-lime)}
+.ocean-v2 .onb .onb-kicker{color:var(--ob-lime)}
+.ocean-v2 .onb{background:radial-gradient(120% 80% at 50% 0%,#2a66f0,#1440b8 55%,#0b2d7a)}
+
+/* ---------- En-têtes Défis, Profil, Voyages ---------- */
+.ocean-v2 #chalTop{background:linear-gradient(90deg,rgba(11,45,122,.94) 0%,rgba(11,45,122,.78) 42%,rgba(31,85,224,.18) 100%),url('assets/design/protect.webp') right 56%/cover!important;border:0!important;color:#fff;box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 #profTop{background:radial-gradient(ellipse at 88% 0%,rgba(224,255,145,.22),transparent 55%),linear-gradient(125deg,#0b2d7a,#1f55e0)!important;border:0!important;color:#fff;box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 #profTop .ph-lvl{background:var(--ob-lime);color:var(--ob-navy)}
+
+/* ---------- Explorer : en-tête de destination lisible, états actifs cobalt ---------- */
+.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop{background-image:linear-gradient(95deg,rgba(11,45,122,.9) 0%,rgba(11,45,122,.55) 55%,rgba(31,85,224,.12) 100%),var(--region-photo)!important;box-shadow:var(--ob-shadow-lg)}
+.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop h1,.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop h1 span{color:#fff!important}
+.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop .page-eyebrow{color:var(--ob-lime)}
+.ocean-v2 .chip.active,.ocean-v2 .sp-chip.active{background:var(--ob-cobalt)!important;border-color:var(--ob-cobalt)!important;color:#fff!important}
+.ocean-v2 .field-activity-option.active,.ocean-v2 [aria-pressed=true].field-activity-option{background:var(--ob-cobalt)!important;color:#fff!important}
+.ocean-v2 .im-activity-choices button[aria-pressed=true],.ocean-v2 .im-activity-choices button.active{background:var(--ob-cobalt)!important;border-color:var(--ob-cobalt)!important;color:#fff!important}
