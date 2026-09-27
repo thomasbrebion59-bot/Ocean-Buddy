@@ -16,7 +16,7 @@ Ouvrir http://127.0.0.1:8765/. Aucun build ni installation npm n’est nécessai
 
 La palette associe cobalt, sable, corail et citron vert. Les cartes de destinations ont une photographie lumineuse et un cartouche blanc ; le lieu représenté est indiqué. La navigation reste latérale sur ordinateur et inférieure sur téléphone.
 
-L’aquarium est remplacé par **Surf trips** : plusieurs voyages, dates facultatives, étapes à choisir parmi les 432 spots ou les favoris, ordre modifiable, carte, notes par étape, checklist personnalisable, hébergements, transports et budget. Chaque fiche de spot propose « Ajouter à un voyage ». Trois idées de départ sont proposées sans créer de voyage automatiquement : côte basque, Portugal et Bali.
+L’aquarium est remplacé par **Surf trips** : plusieurs voyages, dates facultatives, étapes à choisir parmi les 718 spots ou les favoris, ordre modifiable, carte, notes par étape, checklist personnalisable, hébergements, transports et budget. Chaque fiche de spot propose « Ajouter à un voyage ». Trois idées de départ sont proposées sans créer de voyage automatiquement : côte basque, Portugal et Bali.
 
 Les voyages sont enregistrés dans le stockage du navigateur. Ils peuvent être archivés puis restaurés et exportés en JSON. Le bouton **Supprimer** est disponible sur les cartes de voyages, dans les fiches et dans les archives. Après confirmation, le voyage rejoint une **corbeille locale** : il disparaît des voyages disponibles et reste récupérable avec ses étapes, notes et préparatifs. La restauration remet un voyage archivé dans les archives. Aucune suppression définitive automatique n’est appliquée. Il n’y a pas de synchronisation entre appareils ni de moteur de réservation. La ligne de la carte relie les étapes ; elle ne calcule pas un trajet routier. Les données de profil, favoris, progression et sessions sont conservées.
 
@@ -43,6 +43,10 @@ L’intégration conversationnelle de Poulpy utilise une fonction Netlify et l�
 ## Catalogue de septembre 2026
 
 152 spots ajoutés (432 au total) sur les sept régions, dont La Réunion, la Guadeloupe, la Martinique, la Polynésie et la Nouvelle-Calédonie. 109 ont une photographie Wikimedia Commons vérifiée ; les 43 autres, avec Tamarindo et Byron Bay, attendent une illustration (liste dans le document de prompts). Chaque spot porte désormais un champ `country` : Hawaï est rattaché à l’Amérique du Nord, et les pays qui tombaient dans « Autres destinations » ont leur propre entrée. Les fiches ajoutées sont marquées « à vérifier localement » (`editorialStatus: unverified`). Migration : `scripts/add-spots.cjs`. Cinq photos en noir et blanc (Trestles, Nazaré, Pipeline, Ocean Beach) ont été remplacées par des vues en couleur ; Coxos attend encore la sienne.
+
+## Catalogue de fin septembre 2026 (lot 2)
+
+286 spots ajoutés (718 au total), surtout dans les régions peu couvertes : Caraïbes et Amérique centrale, Mer Rouge et Moyen-Orient, Asie, Océanie et Pacifique, Amérique du Sud, pays nordiques, îles méditerranéennes, lacs et rivières pour le paddle, le kayak et la baignade, et quelques spots français manquants (calanques, Corse, lacs, gorges, outre-mer). Chaque position a été contrôlée avec Wikipédia, Wikidata, OpenStreetMap ou les coordonnées GPS de photos Commons ; la source figure en commentaire dans `data/new-spots-2026-09b.cjs`. 199 fiches ont une photographie Wikimedia Commons libre (CC BY, CC BY-SA, CC0 ou domaine public) vérifiée sur planche contact ; les 87 autres affichent l’illustration de secours. Les textes restent « à vérifier localement » (`editorialStatus: unverified`) et ces spots portent le badge « Nouveau ». Fusion : `node scripts/add-spots.cjs data/new-spots-2026-09b.cjs data/new-spot-photos-2026-09b.json catalogue-2026-09b`. Au passage, Todos Santos et Cabo Pulmo sont rattachés au Mexique, et le numéro d’urgence ne confond plus le Mexique ni les noms contenant « usa » (Lampedusa, Musandam) avec les États-Unis.
 
 ## Cockpit d’accueil
 
