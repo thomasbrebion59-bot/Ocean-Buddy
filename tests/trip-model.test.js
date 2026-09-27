@@ -173,3 +173,37 @@ test('progress counts checked preparation items', () => {
   assert.deepEqual(M.progress(t),{done:2,total:6,pct:33});
   assert.deepEqual(M.progress({...t,checklist:[]}),{done:0,total:0,pct:0});
 });
+test('nights per step follow step dates, then the trip end', () => {
+  let t=M.create({start:'2026-10-10',end:'2026-10-17'},['biarritz','anglet','hossegor']);
+  t=M.editStep(t,t.steps[0].id,{date:'2026-10-10'});
+  t=M.editStep(t,t.steps[1].id,{date:'2026-10-13'});
+  t=M.editStep(t,t.steps[2].id,{date:'2026-10-13'});
+  assert.deepEqual(M.stepNights(t).map(x=>x.nights),[3,0,4]);
+  assert.deepEqual(M.stepNights(t).map(x=>x.basis),['dates','dates','dates']);
+});
+test('undated steps share the trip nights evenly, and nothing is invented without dates', () => {
+  const t=M.create({start:'2026-10-10',end:'2026-10-17'},['biarritz','anglet','hossegor']);
+  assert.deepEqual(M.stepNights(t).map(x=>x.nights),[3,2,2]);
+  assert.ok(M.stepNights(t).every(x=>x.basis==='split'));
+  assert.deepEqual(M.stepNights(M.create({},['biarritz'])),[{nights:null,basis:null}]);
+  let partial=M.create({start:'2026-10-10'},['biarritz','anglet']);
+  partial=M.editStep(partial,partial.steps[0].id,{date:'2026-10-11'});
+  assert.deepEqual(M.stepNights(partial).map(x=>x.nights),[null,null]);
+});
+test('lodging estimate multiplies nightly ranges by nights and names the cheapest stop', () => {
+  let t=M.create({start:'2026-07-30',end:'2026-08-05'},['biarritz','anglet','hossegor']);
+  t=M.editStep(t,t.steps[0].id,{date:'2026-07-30'});
+  t=M.editStep(t,t.steps[1].id,{date:'2026-08-01'});
+  t=M.editStep(t,t.steps[2].id,{date:'2026-08-03'});
+  const months=[];
+  const prices={biarritz:{lo:30,hi:40},anglet:{lo:20,hi:30},hossegor:{lo:25,hi:35}};
+  const est=M.lodging(t,(id,month)=>{months.push(month);return prices[id];});
+  assert.deepEqual(months,[7,8,8]);
+  assert.deepEqual(est.steps.map(s=>s.total),[{lo:60,hi:80},{lo:40,hi:60},{lo:50,hi:70}]);
+  assert.deepEqual(est.total,{lo:150,hi:210});
+  assert.equal(est.nights,6);assert.equal(est.complete,true);
+  assert.equal(est.cheapest.spotId,'anglet');
+  const unknown=M.lodging(t,id=>id==='anglet'?null:prices[id]);
+  assert.equal(unknown.complete,false);assert.deepEqual(unknown.total,{lo:110,hi:150});
+  assert.equal(M.lodging(M.create({},['biarritz','biarritz']),()=>({lo:10,hi:20})).cheapest,null);
+});
