@@ -652,11 +652,11 @@ function spotPhotoCredit(id){
 }
 function countryEmergency(loc){
   loc=loc.toLowerCase();var has=function(k){return loc.indexOf(k)>=0;};
-  if(has('hawa')||has('usa')||has('états-unis')||has('etats-unis')||has('californie')||has('oregon')) return {emergency:'911',sea:'US Coast Guard : 911 / VHF 16',call:'911'};
+  if(has('mexique')) return {emergency:'911',sea:'Urgences : 911',call:'911'};
+  if(has('hawa')||/\busa\b/.test(loc)||has('états-unis')||has('etats-unis')||has('californie')||has('oregon')) return {emergency:'911',sea:'US Coast Guard : 911 / VHF 16',call:'911'};
   if(has('australie')) return {emergency:'000',sea:'Secours : 000 (112 depuis un mobile)',call:'000'};
   if(has('nouvelle-zélande')||has('new zealand')) return {emergency:'111',sea:'Garde-côtes : 111',call:'111'};
   if(has('brésil')||has('bresil')) return {emergency:'190',sea:'SAMU : 192 · pompiers 193',call:'190'};
-  if(has('mexique')) return {emergency:'911',sea:'Urgences : 911',call:'911'};
   if(has('pérou')||has('perou')) return {emergency:'105',sea:'Pompiers/sauvetage : 116',call:'105'};
   if(has('chili')) return {emergency:'131',sea:'Sauvetage maritime : 137',call:'131'};
   if(has('argentine')) return {emergency:'911',sea:'Préfecture navale : 106',call:'911'};

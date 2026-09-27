@@ -7,13 +7,14 @@ const root=path.join(__dirname,'..');
 const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
 const all=JSON.parse(fs.readFileSync(path.join(root,'data/catalog.json'),'utf8'));
 const additions=all.filter(s=>s.edition==='catalogue-2026-09');
-const base=all.filter(s=>s.editorialStatus==='unverified'&&s.edition!=='catalogue-2026-09');
+const additions2=all.filter(s=>s.edition==='catalogue-2026-09b');
+const base=all.filter(s=>s.editorialStatus==='unverified'&&!['catalogue-2026-09','catalogue-2026-09b'].includes(s.edition));
 const extra=all.filter(s=>s.editorialStatus==='reviewed');
 const photos=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/sources.json'),'utf8'));
 const legacy=require('../legacy-spots.js');
 const sports=new Set(['surf','bodyboard','plongee','snorkeling','paddle','kayak','baignade','kitesurf','windsurf']);
-test('432 distinct spots: 168 historical, 112 sourced and 152 September 2026 additions',()=>{
- assert.equal(base.length,168);assert.equal(extra.length,112);assert.equal(additions.length,152);assert.equal(all.length,432);
+test('718 distinct spots: 168 historical, 112 sourced, 152 + 286 September 2026 additions',()=>{
+ assert.equal(base.length,168);assert.equal(extra.length,112);assert.equal(additions.length,152);assert.equal(additions2.length,286);assert.equal(all.length,718);
  assert.equal(new Set(all.map(s=>s.id)).size,all.length);
  for(const s of all){assert.ok(s.sports.length,s.id);assert.ok(s.sports.every(x=>sports.has(x)),s.id);}
  assert.deepEqual([...base.find(s=>s.id==='uluwatu').sports],['surf']);
@@ -73,7 +74,7 @@ test('every spot shows access, best period and local rules without inventing mis
  assert.equal((ctx.visitGuide(historical).match(/À vérifier localement/g)||[]).length,3);
 });
 test('each published photograph belongs to the destination and has usable attribution',()=>{
- assert.equal(all.length,432);
+ assert.equal(all.length,718);
  assert.equal(Object.keys(photos).length,all.filter(s=>s.photo).length);
  for(const id of ['tamarindo','byronbay']){const p=all.find(s=>s.id===id).photo;assert.equal(p.ai,true,id);assert.equal(p.label,'Illustration IA',id);assert.match(p.caption,/pas une photo du lieu/,id);assert.ok(photos[id],id);}
  for(const s of all.filter(s=>s.photo?.ai))assert.match(s.photo.src,/-ia\.webp$/,s.id);
@@ -139,12 +140,14 @@ test('visible weather keeps marine values aligned when lakes appear between coas
 });
 test('gallery images are local, credited and attached to existing destinations',()=>{
  const galleries=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/gallery-sources.json'),'utf8'));
- assert.equal(Object.values(galleries).flat().length,29);assert.equal(extra.filter(s=>s.catalogNew).length,0);assert.equal(all.filter(s=>s.catalogNew).length,additions.length);
+ assert.equal(Object.values(galleries).flat().length,29);assert.equal(extra.filter(s=>s.catalogNew).length,0);assert.equal(all.filter(s=>s.catalogNew).length,additions2.length);assert.ok(additions2.every(s=>s.catalogNew));
  for(const [id,rows] of Object.entries(galleries)){assert.ok(all.some(s=>s.id===id),id);for(const p of rows){assert.ok(fs.statSync(path.join(root,p.src)).size>1000);assert.ok(p.author&&p.license);assert.equal(new URL(p.source).protocol,'https:');}}
 });
 test('an unrecognised country does not invent an emergency phone number',()=>{
  const ctx={};vm.runInNewContext(functionSource('function countryEmergency','var SPORT_VERB')+';this.emergency=countryEmergency;',ctx);
  assert.equal(ctx.emergency('Lieu non identifié').call,null);assert.equal(ctx.emergency('Savoie, France').call,'112');
+ assert.equal(ctx.emergency('Musandam, Oman').call,null);assert.equal(ctx.emergency('Lampedusa, Italie').call,'112');
+ assert.equal(ctx.emergency('Basse-Californie du Sud, Mexique').sea,'Urgences : 911');assert.match(ctx.emergency('Hawaï (USA)').sea,/US Coast Guard/);
 });
 
 test('every spot has a country and sits on the right continent',()=>{
@@ -152,5 +155,7 @@ test('every spot has a country and sits on the right continent',()=>{
  for(const s of all.filter(s=>/hawaï|kauaʻi|oahu|maui/i.test(s.loc)))assert.equal(s.world,'na',s.id);
  for(const s of all.filter(s=>s.country==='États-Unis'))assert.equal(s.world,'na',s.id);
  for(const s of all.filter(s=>s.world==='oc'))assert.notEqual(s.country,'États-Unis',s.id);
- for(const s of additions){assert.equal(s.editorialStatus,'unverified',s.id);assert.equal(s.source.url,null,s.id);assert.ok(s.dangers.length&&s.tip,s.id);}
+ for(const s of [...additions,...additions2]){assert.equal(s.editorialStatus,'unverified',s.id);assert.equal(s.source.url,null,s.id);assert.ok(s.dangers.length&&s.tip,s.id);}
+ for(const s of additions2){assert.ok(s.loc.endsWith(s.country),s.id);assert.ok(['coastal-sector','lake-sector','inland-sector'].includes(s.coordinatePrecision),s.id);if(s.photo)assert.match(s.photo.license,/CC BY|CC0|Public domain|PD|Attribution/i,s.id);}
+ for(const id of ['todossantos','cabopulmo'])assert.equal(all.find(s=>s.id===id).country,'Mexique',id);
 });

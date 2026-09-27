@@ -21,7 +21,7 @@
 
 Ton prochain départ commence avec Ocean Buddy.
 
-Explore 432 spots pour le surf, la plongée, le snorkeling, le paddle, le kayak et d’autres activités nautiques. Choisis ton activité, parcours les régions et découvre chaque destination en images (photographies et, à défaut, illustrations signalées), des repères pratiques et une carte par activité. Les informations encore en cours de vérification sont signalées.
+Explore plus de 700 spots pour le surf, la plongée, le snorkeling, le paddle, le kayak et d’autres activités nautiques. Choisis ton activité, parcours les régions et découvre chaque destination en images (photographies et, à défaut, illustrations signalées), des repères pratiques et une carte par activité. Les informations encore en cours de vérification sont signalées.
 
 PRÉPARE TON VOYAGE
 Crée ton itinéraire, ajoute des étapes, organise les dates et garde tes notes au même endroit. Enregistre tes favoris et partage une copie de ton voyage.
