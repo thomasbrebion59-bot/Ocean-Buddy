@@ -83,6 +83,39 @@
     const rank={ongoing:0,upcoming:1,undated:2};
     return live.filter(x=>x.when.state in rank).sort((a,b)=>rank[a.when.state]-rank[b.when.state]||(a.when.days??0)-(b.when.days??0))[0]||null;
   }
+  /* Nuits passées à chaque étape : écart avec la date de l’étape suivante (ou la fin du voyage).
+     Sans aucune date d’étape, les nuits du voyage sont réparties à parts égales. */
+  function stepNights(t){
+    const day=d=>Date.parse(d+'T12:00:00Z')/86400000;
+    const steps=t.steps||[],dated=steps.some(s=>validDate(s.date)&&s.date);
+    if(!dated){
+      const d=duration(t);if(!d||!steps.length)return steps.map(()=>({nights:null,basis:null}));
+      const total=Math.max(0,d-1),base=Math.floor(total/steps.length),extra=total%steps.length;
+      return steps.map((_,i)=>({nights:base+(i<extra?1:0),basis:'split'}));
+    }
+    return steps.map((s,i)=>{
+      if(!s.date)return {nights:null,basis:null};
+      const next=steps.slice(i+1).find(x=>x.date&&x.date>=s.date);
+      const until=next?next.date:(t.end&&t.end>=s.date?t.end:'');
+      return until?{nights:Math.round(day(until)-day(s.date)),basis:'dates'}:{nights:null,basis:null};
+    });
+  }
+  /* Estimation d’hébergement d’un voyage. priceFor(spotId, mois 1-12 ou null) → {lo,hi} ou null. */
+  function lodging(t,priceFor){
+    const nights=stepNights(t),startMonth=/^\d{4}-(\d{2})/.exec(t.start||'');
+    const steps=(t.steps||[]).map((s,i)=>{
+      const m=/^\d{4}-(\d{2})/.exec(s.date||'')||startMonth,price=priceFor(s.spotId,m?Number(m[1]):null);
+      const n=nights[i].nights;
+      return {stepId:s.id,spotId:s.spotId,nights:n,basis:nights[i].basis,perNight:price||null,total:price&&n!==null?{lo:price.lo*n,hi:price.hi*n}:null};
+    });
+    const priced=steps.filter(s=>s.total);
+    const total=priced.length?{lo:priced.reduce((a,s)=>a+s.total.lo,0),hi:priced.reduce((a,s)=>a+s.total.hi,0)}:null;
+    const withPrice=steps.filter(s=>s.perNight);
+    const cheapest=withPrice.length>1?withPrice.reduce((a,s)=>(s.perNight.lo+s.perNight.hi)<(a.perNight.lo+a.perNight.hi)?s:a):null;
+    const uniqueSpots=new Set(withPrice.map(s=>s.spotId)).size;
+    return {steps,total,nights:priced.reduce((a,s)=>a+s.nights,0),complete:steps.length>0&&priced.length===steps.length,
+      cheapest:cheapest&&uniqueSpots>1?cheapest:null};
+  }
   function progress(t){const total=t.checklist.length,done=t.checklist.filter(c=>c.done).length;return {done,total,pct:total?Math.round(done/total*100):0};}
-  return {KEY,uid,create,edit,addStep,replaceStep,editStep,moveStep,removeTrip,restoreTrip,load,save,duration,countdown,nextTrip,progress,defaultChecklist};
+  return {KEY,uid,create,edit,addStep,replaceStep,editStep,moveStep,removeTrip,restoreTrip,load,save,duration,countdown,nextTrip,progress,stepNights,lodging,defaultChecklist};
 });
