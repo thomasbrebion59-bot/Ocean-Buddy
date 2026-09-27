@@ -20,7 +20,7 @@
     panel.hidden=true;const done=resolveChoice;resolveChoice=null;choicePromise=null;done?.(mode);
     document.dispatchEvent(new CustomEvent('ocean-ai-choice',{detail:mode}));
   });
-  const resetChoice=document.createElement('button');resetChoice.type='button';resetChoice.className='set-reset';resetChoice.textContent='Poulpy : choisir IA ou guide intégré';
+  const resetChoice=document.createElement('button');resetChoice.type='button';resetChoice.className='set-reset set-neutral';resetChoice.textContent='Poulpy : choisir IA ou guide intégré';
   resetChoice.onclick=()=>{if(window.OceanAssistantBusy?.()){toast('Attends la fin de la réponse avant de changer ce choix.');return;}
     mode=null;try{localStorage.removeItem(KEY);}catch(_){}closeSettings();openChat();choose();};
   document.querySelector('.set-about').before(resetChoice);

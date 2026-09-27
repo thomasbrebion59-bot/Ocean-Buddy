@@ -54,7 +54,7 @@
     {key:'travel',sport:null,title:'Le monde t’attend.',label:'Exploration',copy:'Pars avec Poulpy l’explorateur.'}
   ];
   const activitiesSection=document.createElement('section');activitiesSection.className='poulpy-activities';activitiesSection.setAttribute('aria-labelledby','activityHeading');
-  activitiesSection.innerHTML=`<div class="editorial-heading"><div><span class="section-kicker">SUR L’EAU. SOUS L’EAU. AVEC TOI.</span><h2 id="activityHeading">Quelle aventure aujourd’hui<span> ?</span></h2></div><button class="text-button" type="button" id="allActivities">Les 9 activités <span aria-hidden="true">↗</span></button></div><div class="activity-adventures">${activities.map((a,i)=>`<button type="button" class="activity-adventure adventure-${a.key}" data-adventure="${a.key}" aria-label="${a.sport?'Explorer les spots de '+a.label:'Explorer les continents avec Poulpy'}"><span class="adventure-top"><span>${a.label}</span><span class="adventure-index" aria-hidden="true">0${i+1}</span></span><span class="adventure-art">${image(a.key)}</span><span class="adventure-bottom"><strong>${a.title}</strong><span>${a.copy}</span><i aria-hidden="true">↗</i></span></button>`).join('')}</div>`;
+  activitiesSection.innerHTML=`<div class="editorial-heading"><div><span class="section-kicker">SUR L’EAU. SOUS L’EAU. AVEC TOI.</span><h2 id="activityHeading">Quelle aventure aujourd’hui<span> ?</span></h2></div><button class="text-button" type="button" id="allActivities">Les 9 activités <span aria-hidden="true">↗</span></button></div><div class="activity-adventures">${activities.map((a,i)=>`<button type="button" class="activity-adventure adventure-${a.key}" data-adventure="${a.key}" aria-label="${a.sport?`Explorer les spots de ${a.label}`:'Explorer les continents avec Poulpy'}"><span class="adventure-top"><span>${a.label}</span><span class="adventure-index" aria-hidden="true">0${i+1}</span></span><span class="adventure-art">${image(a.key)}</span><span class="adventure-bottom"><strong>${a.title}</strong><span>${a.copy}</span><i aria-hidden="true">↗</i></span></button>`).join('')}</div>`;
   $('.home-intro').after(activitiesSection);
   $('#allActivities').onclick=openActivityGate;
   activitiesSection.querySelectorAll('[data-adventure]').forEach(button=>button.onclick=()=>{const a=activities.find(a=>a.key===button.dataset.adventure);a.sport?explore(a.sport):openWorlds();});
@@ -79,7 +79,7 @@
   dialog.addEventListener('close',()=>{if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});});
   dialog.querySelectorAll('[data-poulpy-choice]').forEach(button=>button.onclick=()=>{
     preferred=button.dataset.poulpyChoice;
-    try{localStorage.setItem(storageKey,preferred);$('#poulpySaveNote').textContent=(preferred==='auto'?'Poulpy suit ton activité':variants[preferred].name+' choisi')+' · enregistré sur cet appareil.';}catch(_){$('#poulpySaveNote').textContent='Choix appliqué pour cette session. Le stockage de ton navigateur est indisponible.';}
+    try{localStorage.setItem(storageKey,preferred);$('#poulpySaveNote').textContent=preferred==='auto'?'Poulpy suit ton activité · enregistré sur cet appareil.':`${variants[preferred].name} choisi · enregistré sur cet appareil.`;}catch(_){$('#poulpySaveNote').textContent='Choix appliqué pour cette session. Le stockage de ton navigateur est indisponible.';}
     refresh();
   });
   const profileCard=document.createElement('button');profileCard.type='button';profileCard.className='poulpy-profile-card';profileCard.onclick=openWardrobe;

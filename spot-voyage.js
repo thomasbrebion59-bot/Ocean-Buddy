@@ -63,7 +63,7 @@
     root.addEventListener('pointerdown',e=>{if(e.target.closest('.voyage-stage')&&['photo','ai','wide'].includes(scenes[index]?.type))hold(true);});
     root.addEventListener('pointerup',()=>{if(paused==='hold')hold(false);});
     root.addEventListener('pointercancel',()=>{if(paused==='hold')hold(false);});
-    root.addEventListener('keydown',e=>{if(e.key==='Escape')close();if(e.key==='ArrowRight')go(1);if(e.key==='ArrowLeft')go(-1);if(e.key===' '&&!e.target.closest('button')){e.preventDefault();togglePause();}});
+    root.addEventListener('keydown',e=>{if(e.key==='Escape')close();const ahead=document.documentElement.dir==='rtl'?-1:1;if(e.key==='ArrowRight')go(ahead);if(e.key==='ArrowLeft')go(-ahead);if(e.key===' '&&!e.target.closest('button')){e.preventDefault();togglePause();}});
     return root;
   }
   function onClick(e){

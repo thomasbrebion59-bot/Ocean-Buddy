@@ -14,20 +14,21 @@
   try{trips=M.load(localStorage,knownIds())}catch(e){loadError='Ton carnet ne peut pas être chargé. Les données existantes sont conservées. Réessaie après avoir rechargé la page.';}
   const active=()=>trips.filter(t=>!t.archived&&!t.deleted), current=()=>trips.find(t=>t.id===selected&&!t.archived&&!t.deleted);
   const spot=id=>SPOTS.find(s=>s.id===id);
-  const photo=id=>spotPhotoUrl(id,1280)||'assets/photos/hero.jpg';
+  const photo=id=>spotPhotoUrl(id,1280)||spotIllustration(id);
   const date=v=>v?new Date(v+'T12:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short',year:'numeric'}):'Dates à définir';
   const range=t=>t.start?(date(t.start)+(t.end?' — '+date(t.end):'')):(t.end?'Jusqu’au '+date(t.end):'Dates à définir');
   const distanceKm=(a,b)=>{if(!a||!b)return null;const rad=Math.PI/180,dLat=(b.lat-a.lat)*rad,dLon=(b.lon-a.lon)*rad,x=Math.sin(dLat/2)**2+Math.cos(a.lat*rad)*Math.cos(b.lat*rad)*Math.sin(dLon/2)**2;return 6371*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));};
   const routeDistance=t=>{let total=0,legs=0,prev=null;t.steps.forEach(s=>{const c=COORDS[s.spotId];if(c&&prev){total+=distanceKm(prev,c);legs++;}prev=c||null;});return legs?total:null;};
   const prettyDistance=n=>n<1?Math.round(n*1000)+' m':n<100?Math.round(n)+' km':Math.round(n/10)*10+' km';
   const region=t=>t.steps.length?(SPOT_WORLD[t.steps[0].spotId]||t.steps[0].legacy?.world||'as'):'as';
-  const cover=t=>t.steps.length&&spot(t.steps[0].spotId)?photo(t.steps[0].spotId):WORLD_PHOTOS[region(t)]?.src||WORLD_PHOTOS.as.src;
+  /* Sans étape, pas de paysage d'un autre continent : une vue d'océan neutre. */
+  const cover=t=>t.steps.length&&spot(t.steps[0].spotId)?photo(t.steps[0].spotId):t.steps.length?WORLD_PHOTOS[region(t)]?.src||'assets/photos/hero.jpg':'assets/photos/hero.jpg';
   function persist(next){
     if(loadError){toast(loadError);return false;}
     try{M.save(localStorage,next);trips=next;renderProfile();return true}catch(e){toast('Enregistrement impossible. Vérifie l’espace disponible ou l’accès au stockage de ton navigateur.');return false;}
   }
   function update(fn,{draw=true}={}){const t=current();if(!t)return false;try{const next=fn(t);if(persist(trips.map(x=>x.id===t.id?next:x))){if(draw)render();return true}}catch(e){toast(e.message)}return false;}
-  const badge=t=>`${t.steps.length} spot${t.steps.length>1?'s':''}${M.duration(t)?' · '+M.duration(t)+' jour'+(M.duration(t)>1?'s':''):''}`;
+  const badge=t=>{const n=t.steps.length,d=M.duration(t),spots=n>1?`${n} spots`:`${n} spot`;return d?spots+' · '+(d>1?`${d} jours`:`${d} jour`):spots;};
   const todayKey=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
   const when=t=>{const c=M.countdown(t,todayKey());return c.state==='upcoming'?(c.days===1?'Départ demain':`J-${c.days}`):c.state==='ongoing'?`Jour ${c.days} · en route`:c.state==='past'?'Voyage terminé':'';};
   const prep=t=>{const p=M.progress(t);return p.total?`<span class="trip-prep" style="--p:${p.pct}%"><i></i><small>Préparation ${p.done}/${p.total}</small></span>`:'';};
@@ -112,7 +113,7 @@
     const normal=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
     function refreshCountries(){const r=$('#tripRegion').value,c=$('#tripCountry');if(!c)return;const names=[...new Set(SPOTS.filter(s=>r==='all'||SPOT_WORLD[s.id]===r).map(countryOf))].sort((a,b)=>a.localeCompare(b,'fr'));c.innerHTML='<option value="all">Tous les pays</option>'+names.map(n=>'<option value="'+esc(n)+'">'+esc(n)+'</option>').join('');c.disabled=r==='all';}
     function results(){const q=normal($('#tripSpotSearch').value),r=$('#tripRegion').value,c=$('#tripCountry').value,list=SPOTS.filter(s=>normal(s.name+' '+s.loc).includes(q)&&(r==='all'||SPOT_WORLD[s.id]===r)&&(c==='all'||countryOf(s)===c)&&(!$('#tripOnlyFavs').checked||favs.has(s.id)));
-      $('#tripSpotResults').innerHTML=`<p class="trip-result-count">${list.length} spot${list.length>1?'s':''}${list.length>30?' · 30 premiers résultats':''}</p>${list.slice(0,30).map(s=>`<button data-pick="${s.id}"><img src="${esc(photo(s.id))}" alt="" loading="lazy"><span><b>${esc(s.name)}</b><small>${esc(s.loc)} · ${esc(lvlLabel[s.level])}</small>${current()?.steps.some(x=>x.spotId===s.id)?'<em>Déjà prévu · ajouter une autre session</em>':''}</span>${I.plus}</button>`).join('')}${!list.length?'<p>Aucun spot trouvé. Essaie un autre lieu ou enlève un filtre.</p>':''}`;
+      $('#tripSpotResults').innerHTML=`<p class="trip-result-count">${list.length>1?`${list.length} spots`:`${list.length} spot`}${list.length>30?' · 30 premiers résultats':''}</p>${list.slice(0,30).map(s=>`<button data-pick="${s.id}"><img src="${esc(photo(s.id))}" alt="" loading="lazy"><span><b>${esc(s.name)}</b><small>${esc(s.loc)} · ${esc(lvlLabel[s.level])}</small>${current()?.steps.some(x=>x.spotId===s.id)?'<em>Déjà prévu · ajouter une autre session</em>':''}</span>${I.plus}</button>`).join('')}${!list.length?'<p>Aucun spot trouvé. Essaie un autre lieu ou enlève un filtre.</p>':''}`;
     }
     $('#tripSpotSearch').oninput=results;$('#tripRegion').onchange=()=>{refreshCountries();results()};$('#tripCountry').onchange=results;$('#tripOnlyFavs').onchange=results;refreshCountries();
     $('#tripSpotResults').onclick=e=>{const b=e.target.closest('[data-pick]');if(!b)return;if(update(t=>replacingStepId?M.replaceStep(t,replacingStepId,b.dataset.pick,knownIds()):M.addStep(t,b.dataset.pick,knownIds()))){closeDialog();toast(replacingStepId?'Étape remplacée, notes conservées':'Spot ajouté à ton itinéraire');}};results();

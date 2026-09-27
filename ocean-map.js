@@ -2,7 +2,7 @@
 (() => {
   'use strict';
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const total=n=>n+' spot'+(n>1?'s':'');
+  const total=n=>n>1?`${n} spots`:`${n} spot`;
   const colors={surf:'#1754d1',bodyboard:'#3153b5',baignade:'#007aa1',paddle:'#007b75',kayak:'#a24d1c',snorkeling:'#007a92',plongee:'#4149b8',kitesurf:'#a33767',windsurf:'#88532a'};
   let rows=[],toolbar=null,empty=null;
   let terrainMap=null,terrainOverlay=null,terrainTarget=null,terrainGeneration=0,terrainEngine=null;
@@ -134,7 +134,7 @@
       const many=g.items.length>1,s=g.items[0].s,acts=spotSports(s),primary=activeSport||acts[0],pos=leafMap.unproject([g.x,g.y],zoom);
       const label=many?'spots':(zoom>=9?s.name.split(' — ')[0]:SPORTMAP[primary].label);
       const allActs=[...new Set(g.items.flatMap(p=>spotSports(p.s)))];
-      const sub=many?(activeSport?SPORTMAP[activeSport].label:allActs.length+' activités'):(zoom>=9?SPORTMAP[primary].label:'');
+      const sub=many?(activeSport?SPORTMAP[activeSport].label:`${allActs.length} activités`):(zoom>=9?SPORTMAP[primary].label:'');
       const html=`<div class="activity-pin ${many?'activity-cluster':''}" style="--activity-color:${colors[primary]||'#164bd6'}">${many?'<strong>'+g.items.length+'</strong>':sportIcon(primary)}<span><b>${esc(label)}</b>${sub?`<small>${esc(sub)}</small>`:''}</span>${!many&&acts.length>1?`<i>+${acts.length-1}</i>`:''}</div>`;
       const title=many?`${g.items.length} spots · ${allActs.map(id=>SPORTMAP[id].label).join(', ')} · zoomer`:`${s.name} · ${acts.map(id=>SPORTMAP[id].label).join(', ')}`;
       const marker=L.marker(pos,{icon:L.divIcon({className:'activity-pin-wrap',html,iconSize:[126,46],iconAnchor:[63,46]}),title,alt:title,riseOnHover:true}).addTo(leafMarkers);

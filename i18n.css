@@ -1,0 +1,67 @@
+/* Ocean Buddy — ajustements par langue : écritures non latines et lecture de droite à gauche.
+   Chargé après les autres feuilles. La langue et le sens sont posés sur <html> par i18n.js. */
+
+/* ---------- Lecture de droite à gauche (arabe, hébreu, ourdou) ---------- */
+/* Les flèches dessinées pointent dans le sens de lecture : « retour » vers la droite, « suivant » vers la gauche. */
+[dir=rtl] svg:has(> path[d^="M19 12H"], > path[d="M5 12h14m-6-6 6 6-6 6"], > path[d="M5 12h13"], > path[d="M11.5 6 5 12l6.5 6"], > path[d="M15 5l-7 7 7 7"], > path[d="m9 5 7 7-7 7"]){transform:scaleX(-1)}
+/* Voyage plein écran : « scène suivante » du côté gauche, comme la progression des barres. */
+[dir=rtl] .voyage-tap-prev{left:auto;right:0;justify-content:flex-end;padding-left:0;padding-right:14px}
+[dir=rtl] .voyage-tap-next{right:auto;left:0;justify-content:flex-start;padding-right:0;padding-left:14px}
+/* Les lettres arabes et ourdoues se lient : aucun espacement entre elles. */
+:root:is(:lang(ar),:lang(ur)) *{letter-spacing:0!important}
+
+/* ---------- Ourdou : police naskh ----------
+   Sans police désignée, iOS et Android choisissent le nastaliq pour l'ourdou ; ses lettres très hautes
+   se chevauchent avec les interlignes serrés des titres. */
+:root:lang(ur){
+  --urdu:"Geeza Pro","SF Arabic","Noto Naskh Arabic","Noto Sans Arabic","Segoe UI",Tahoma;
+  --display:'Manrope',var(--urdu),sans-serif;
+  --impact:'Barlow Condensed',var(--urdu),sans-serif;
+  --body:'DM Sans',var(--urdu),sans-serif;
+}
+:root:lang(ur) body{font-family:var(--body)}
+:root:lang(ur) :is(.ob-dive-head h2,.ob-story-txt b,.ob-voyage-banner b,.sess-empty b,.hub-greet h2,.hub-level span,.hub-flame b,.hub-count b,.hub-trip-body>b,.voyage-walk-badge b,.voyage-id b,.voyage-card h2){font-family:'Barlow Condensed',var(--urdu),sans-serif}
+:root:lang(ur) .voyage{font-family:"DM Sans",Manrope,var(--urdu),sans-serif}
+:root:lang(ur) :is(input,select,textarea,button){font-family:inherit}
+
+/* ---------- Écritures sans majuscules : pas d'espacement de lettres ----------
+   Les titres latins sont resserrés (lettres négatives) ou espacés (petites capitales) ; appliqué au
+   devanagari, au tamoul, au thaï ou aux idéogrammes, cela colle ou disjoint les signes. */
+:root:is(:lang(he),:lang(hi),:lang(mr),:lang(bn),:lang(gu),:lang(pa),:lang(or),:lang(ta),:lang(te),:lang(kn),:lang(ml),:lang(th),:lang(ja),:lang(ko),:lang(zh)) *{letter-spacing:normal!important}
+
+/* ---------- Interligne des titres ----------
+   Les titres d'affiche ont un interligne inférieur à 1 pour le latin en capitales. Les voyelles
+   suscrites et souscrites (devanagari, bengali, tamoul, thaï…), les points arabes et les accents
+   empilés du vietnamien débordent alors sur la ligne voisine ou sont coupés. */
+:root:is(:lang(el),:lang(ru),:lang(uk),:lang(bg)) :is(
+  h1,h2,h3,h4,.poulpy-title,.th-cap .nm,.isl-plate b,.hub-greet h2,.hub-trip-body>b,.ob-dive-head h2,.ob-story-txt b,.ob-voyage-banner b,
+  .adventure-bottom strong,.voyage-id b,.voyage-card h2,.trip-map-card b,.experience-photo-open b,.gallery-empty b,.sess-empty b,.today-head .t,.field-trip h3){line-height:1.02!important}
+:root:is(:lang(vi),:lang(ja),:lang(ko),:lang(zh)) :is(
+  h1,h2,h3,h4,.poulpy-title,.th-cap .nm,.isl-plate b,.hub-greet h2,.hub-trip-body>b,.ob-dive-head h2,.ob-story-txt b,.ob-voyage-banner b,
+  .adventure-bottom strong,.voyage-id b,.voyage-card h2,.trip-map-card b,.experience-photo-open b,.gallery-empty b,.sess-empty b,.today-head .t,.field-trip h3){line-height:1.14!important}
+:root:is(:lang(hi),:lang(mr),:lang(bn),:lang(gu),:lang(pa),:lang(or),:lang(ta),:lang(te),:lang(kn),:lang(ml),:lang(th),:lang(ar),:lang(ur)) :is(
+  h1,h2,h3,h4,.poulpy-title,.th-cap .nm,.isl-plate b,.hub-greet h2,.hub-trip-body>b,.ob-dive-head h2,.ob-story-txt b,.ob-voyage-banner b,
+  .adventure-bottom strong,.voyage-id b,.voyage-card h2,.trip-map-card b,.experience-photo-open b,.gallery-empty b,.sess-empty b,.today-head .t,.field-trip h3){line-height:1.32!important}
+/* Petits libellés d'une ligne coupés en haut et en bas (overflow caché) : un peu d'air vertical. */
+:root:is(:lang(hi),:lang(mr),:lang(bn),:lang(gu),:lang(pa),:lang(or),:lang(ta),:lang(te),:lang(kn),:lang(ml),:lang(th),:lang(ur)) :is(.nav .mobile-label,.voyage-id small,.chip,.lt-info b,.lt-info span){line-height:1.35}
+
+/* ---------- Coupure des mots ---------- */
+/* Japonais : couper entre les groupes de mots plutôt qu'au milieu (navigateurs qui le permettent). */
+:root:lang(ja) :is(h1,h2,h3,.poulpy-title){word-break:auto-phrase}
+/* Coréen : les mots sont séparés par des espaces ; ne pas couper à l'intérieur d'un mot. */
+:root:lang(ko) :is(h1,h2,h3,h4,p,.poulpy-title){word-break:keep-all;overflow-wrap:anywhere}
+/* Langues aux mots longs (allemand, finnois, hongrois…) : césure plutôt que débordement. */
+:root:is(:lang(de),:lang(fi),:lang(hu),:lang(nl),:lang(sv),:lang(da),:lang(nb),:lang(el),:lang(ru),:lang(uk),:lang(pl),:lang(cs),:lang(sk),:lang(sl),:lang(hr),:lang(ta),:lang(ml),:lang(te),:lang(kn)) :is(h1,h2,h3,h4,.poulpy-title,button,.chip){overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto}
+
+/* ---------- Titres d'affiche en tamoul, malayalam, télougou, kannada ----------
+   Ces écritures sont larges et hautes : aux tailles prévues pour le latin condensé, un titre de
+   trois mots occupe tout l'écran d'un téléphone et se coupe au milieu des mots. */
+@media (max-width:700px){
+  :root:is(:lang(ta),:lang(ml),:lang(te),:lang(kn)) .ocean-v2 #homeTop h1,
+  :root:is(:lang(ta),:lang(ml),:lang(te),:lang(kn)) .ocean-v2 .onb h1{font-size:48px!important}
+  :root:is(:lang(ta),:lang(ml),:lang(te),:lang(kn)) :is(.ocean-v2 #chalTop h1,.ocean-v2 .topbar h1,.trip-heading h1,.community-hero h1){font-size:40px!important}
+  :root:is(:lang(ta),:lang(ml),:lang(te),:lang(kn)) :is(.trip-welcome h2,.trip-banner h2,.poulpy-title,.editorial-heading h2,.poulpy-eco-banner h2){font-size:34px!important}
+}
+
+/* Titre d'accueil en japonais, chinois et coréen : pas de syllabe orpheline sur téléphone. */
+:root:is(:lang(ja),:lang(zh),:lang(ko)) #homeTop h1{font-size:clamp(40px,12.5vw,76px)!important}

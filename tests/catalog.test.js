@@ -75,10 +75,8 @@ test('every spot shows access, best period and local rules without inventing mis
 test('each published photograph belongs to the destination and has usable attribution',()=>{
  assert.equal(all.length,432);
  assert.equal(Object.keys(photos).length,all.filter(s=>s.photo).length);
- assert.equal(all.find(s=>s.id==='tamarindo').photo,null);
- assert.equal(all.find(s=>s.id==='byronbay').photo,null);
- assert.equal(photos.tamarindo,undefined);
- assert.equal(photos.byronbay,undefined);
+ for(const id of ['tamarindo','byronbay']){const p=all.find(s=>s.id===id).photo;assert.equal(p.ai,true,id);assert.equal(p.label,'Illustration IA',id);assert.match(p.caption,/pas une photo du lieu/,id);assert.ok(photos[id],id);}
+ for(const s of all.filter(s=>s.photo?.ai))assert.match(s.photo.src,/-ia\.webp$/,s.id);
  assert.match(photos.cumbuco.caption,/Barra do Cauípe/);
  assert.match(photos.ngor.caption,/reef/);
  for(const s of all.filter(s=>s.photo)){const p=photos[s.id];assert.ok(p,s.id);assert.ok(fs.statSync(path.join(root,p.src)).size>1000,s.id);assert.ok(fs.statSync(path.join(root,p.thumb)).size>1000,s.id+' thumbnail');assert.ok(p.author&&p.license&&p.source,s.id);assert.equal(new URL(p.source).protocol,'https:',s.id);}

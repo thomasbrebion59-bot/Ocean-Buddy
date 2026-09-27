@@ -27,7 +27,7 @@
     return record?.url&&/^https:\/\//i.test(record.url)?`<a class="field-source" href="${esc(record.url)}" target="_blank" rel="noopener noreferrer"><span><small>SOURCE DU CATALOGUE</small><b>${esc(record.label)}</b></span>${external}</a>`:'<p class="field-source-pending">Informations éditoriales à confirmer auprès de sources locales.</p>';
   }
   function sourceLink(s){const html=source(s);return html.includes('field-source-pending')?'':html;}
-  const frNum=(n,d)=>n.toFixed(d).replace('.',',');
+  const frNum=(n,d)=>window.obNum?obNum(n,d):n.toFixed(d).replace('.',',');
   function visitRows(s){
     const record=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
     const grounded=s.editorialStatus==='reviewed'&&/^https:\/\//i.test(record?.url||'')&&/^\d{4}-\d{2}-\d{2}$/.test(s.visit?.reviewed||'');

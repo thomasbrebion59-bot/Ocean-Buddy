@@ -25,7 +25,7 @@
     'zh-Hans': '简体中文', 'zh-Hant': '繁體中文'
   };
   var RTL = { ar: 1, he: 1, ur: 1 };
-  var VERSIONS = /*VERSIONS*/{"ar":"78f2fbff62","bn":"7979ddf5a5","ca":"2c624aa4e3","cs":"b99c6506b6","da":"14d26719ba","de":"de1c4d3bda","el":"5436cf122b","en":"e6df01d20b","es":"1c006bb0c7","fi":"f87a202dad","gu":"76329cabe7","he":"c0fe32f38e","hi":"fab8737ac1","hr":"3beccc00c4","hu":"61d05ba00a","id":"087774d668","it":"696ebe747a","ja":"abb26fb2a8","kn":"0d5fa25d90","ko":"3297cec600","ml":"c553bef934","mr":"3620612d69","ms":"db17d30ffc","nb":"c70ff659ff","nl":"ab6d1bf978","or":"8ae90158b9","pa":"52a595e37a","pl":"9daa0dc61f","pt-BR":"88b5735124","pt-PT":"b03271b8ad","ro":"3def1ca88b","ru":"64991767ba","sk":"312a67cb89","sl":"0182c54b1e","sv":"a2db0d5e4e","ta":"00e4d4cbd0","te":"e0af92b26f","th":"7454418e48","tr":"9baea82834","uk":"9d31d2f257","ur":"90ac05fc16","vi":"e63304d2bd","zh-Hans":"81ac4266b4","zh-Hant":"51c43929ca"}/*/VERSIONS*/;
+  var VERSIONS = /*VERSIONS*/{"ar":"73e8075c80","bn":"14614d69f3","ca":"ed3b606eaa","cs":"0bb36b122c","da":"51aefa22eb","de":"8db67caeb3","el":"a3ce96f799","en":"a7fc0cecf8","es":"ad5f15fe7b","fi":"0eeb1f1ba6","gu":"795d0b62c3","he":"47c45a0fef","hi":"786496ba32","hr":"98c9163551","hu":"56944ce07b","id":"e66e744451","it":"f4c7ef43a2","ja":"b3daa46123","kn":"fbf5845958","ko":"f84869f78a","ml":"de89a399ea","mr":"a79885d18a","ms":"f694c5e08d","nb":"2c9f96d931","nl":"ef6b4b70d7","or":"aba7d13217","pa":"4298e298fb","pl":"72f08b7646","pt-BR":"da66d59490","pt-PT":"db7086e785","ro":"ebf54ec6b6","ru":"4312b1e048","sk":"13d796932e","sl":"c04b7f612e","sv":"77c897da56","ta":"6fb4d73d11","te":"b532b7f5aa","th":"7c477e662c","tr":"40dd7fd0fc","uk":"75ae0cd85b","ur":"503604b18f","vi":"f098092167","zh-Hans":"d4517a73d5","zh-Hant":"d4a7eb1f5c"}/*/VERSIONS*/;
   var STORE_KEY = 'oceanbuddy_lang';
 
   function resolve(tag) {
@@ -35,7 +35,7 @@
     if (LANGS[t]) return t;
     if (low.indexOf('zh') === 0) return /hant|tw|hk|mo/.test(low) ? 'zh-Hant' : 'zh-Hans';
     if (low.indexOf('pt') === 0) return low === 'pt-pt' || low === 'pt-ao' || low === 'pt-mz' ? 'pt-PT' : 'pt-BR';
-    if (low === 'no' || low === 'nn' || low.indexOf('nb') === 0 || low.indexOf('no-') === 0) return 'nb';
+    if (/^(no|nn|nb)(-|$)/.test(low)) return 'nb';
     if (low === 'iw' || low.indexOf('iw-') === 0) return 'he';
     if (low === 'in' || low.indexOf('in-') === 0) return 'id';
     var base = low.split('-')[0];
@@ -86,6 +86,12 @@
   };
   window.OB_LOCALE = intlTag;
   window.obT = OB.t;
+  // Nombre décimal dans la langue choisie : 1,8 (fr) · 1.8 (en) · ١٫٨ (ar).
+  window.obNum = function (n, digits) {
+    var d = digits == null ? 1 : digits;
+    try { return new Intl.NumberFormat(lang === 'fr' ? 'fr-FR' : intlTag, { minimumFractionDigits: d, maximumFractionDigits: d }).format(n); }
+    catch (e) { return Number(n).toFixed(d); }
+  };
 
   /* ---------- Formats de date et de nombre ---------- */
   if (lang !== 'fr') {
@@ -143,6 +149,7 @@
   var exact = null;      // texte normalisé -> traduction
   var templates = [];    // [RegExp, traduction avec {n}]
   var byFirstWord = null; // premier mot -> clés longues pour les remplacements partiels
+  var hasRich = false;   // le dictionnaire contient des phrases avec balises <b>…</b>
 
   function norm(s) { return s.replace(/\s+/g, ' ').trim(); }
   function escapeRe(s) { return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'); }
@@ -156,20 +163,24 @@
     byFirstWord = Object.create(null);
     Object.keys(d).forEach(function (k) {
       var v = d[k];
-      if (!v || v === k) return;
+      if (!v) return;
       var nk = norm(k);
+      // Un gabarit identique (« Expert {0} » en anglais) reste utile : ses valeurs se traduisent.
+      if (v === k && !(/\{\d+\}/.test(nk) && /[A-Za-zÀ-ÿ]{2}/.test(nk.replace(/\{\d+\}/g, '')))) return;
+      if (/<\/?(b|strong|em|i|span)>|<br>/.test(nk)) hasRich = true;
       if (/\{\d+\}/.test(nk)) {
         var parts = nk.split(/\{(\d+)\}/);
         var re = '';
         for (var i = 0; i < parts.length; i++) re += i % 2 ? '(.*?)' : escapeRe(parts[i]);
-        // Une valeur vide (icône, balise) laisse l'espace voisin facultatif.
-        re = re.replace(/ \(\.\*\?\)/g, ' ?(.*?)').replace(/\(\.\*\?\) /g, '(.*?) ?');
+        // Une valeur vide (icône, balise) rend facultatif l'espace voisin ; une valeur non vide
+        // garde son espace (« {0} jour » ne reconnaît pas « Bonjour »).
+        re = re.replace(/\(\.\*\?\) /g, '(?:(.*?) )?').replace(/ \(\.\*\?\)/g, '(?: (.*?))?');
         var order = [];
         for (var j = 1; j < parts.length; j += 2) order.push(+parts[j]);
         templates.push([new RegExp('^' + re + '$'), v, order, nk.replace(/\{\d+\}/g, '').length]);
       } else {
         exact[nk] = v;
-        if (nk.length >= 8 && /\s/.test(nk)) {
+        if (nk.length >= 8 && /\s/.test(nk) && nk.indexOf('<') < 0) {
           var w = nk.split(' ')[0];
           (byFirstWord[w] = byFirstWord[w] || []).push(nk);
         }
@@ -180,30 +191,70 @@
     return true;
   }
 
+  // Valeur insérée dans un gabarit : « 3 sessions », « surf » (nom d'activité en minuscules).
+  var LOWER_OK = /^(en|es|it|pt|ca|ro|nl|sv|da|nb|fi|pl|cs|sk|sl|hr|hu|tr|id|ms|vi|ru|uk|el)/;
+  function value(val, whole) {
+    var nv = norm(val);
+    if (!nv) return val;
+    var tv = exact[nv];
+    if (tv === undefined && nv.length < whole.length) tv = lookup(nv);
+    if (tv === undefined && /^[a-zà-ÿ]/.test(nv)) {
+      var cap = exact[nv.charAt(0).toUpperCase() + nv.slice(1)];
+      if (cap !== undefined) tv = LOWER_OK.test(lang) && cap.charAt(1) === cap.charAt(1).toLowerCase() ? cap.charAt(0).toLowerCase() + cap.slice(1) : cap;
+    }
+    return tv === undefined ? val : tv;
+  }
+
+  // Traduction exacte ou par gabarit {0} ; undefined si le texte est inconnu.
+  function lookup(nt) {
+    var hit = exact[nt];
+    if (hit !== undefined) return hit;
+    for (var i = 0; i < templates.length; i++) {
+      var m = templates[i][0].exec(nt);
+      if (m) {
+        var order = templates[i][2];
+        return templates[i][1].replace(/\{(\d+)\}/g, function (_, n) {
+          var idx = order.indexOf(+n);
+          var val = (idx >= 0 && m[idx + 1]) || '';
+          return value(val, nt);
+        });
+      }
+    }
+    return undefined;
+  }
+
   function translate(text) {
     if (!text || !prepare()) return text;
     var nt = norm(text);
     if (!nt) return text;
-    var hit = exact[nt];
-    if (hit === undefined) {
-      for (var i = 0; i < templates.length; i++) {
-        var m = templates[i][0].exec(nt);
-        if (m) {
-          var order = templates[i][2];
-          hit = templates[i][1].replace(/\{(\d+)\}/g, function (_, n) {
-            var idx = order.indexOf(+n);
-            var val = idx >= 0 ? m[idx + 1] : '';
-            return exact[norm(val)] || val;
-          });
-          break;
-        }
-      }
-    }
+    var hit = lookup(nt);
+    if (hit === undefined && nt.indexOf(' · ') > 0) hit = joined(nt, ' · ');
+    if (hit === undefined && nt.indexOf(', ') > 0) hit = joined(nt, ', ');
     if (hit === undefined) hit = partial(nt);
     if (hit === undefined || hit === nt) return text;
     var lead = text.match(/^\s*/)[0], trail = text.match(/\s*$/)[0];
     return lead + hit + trail;
   }
+
+  /* Libellés assemblés : « Surf · Intermédiaire », « Surf, Plongée, Baignade ». Avec « · », chaque
+     morceau est traduit s'il est connu ; avec « , », seulement si tous les morceaux sont connus. */
+  function joined(nt, sep) {
+    var parts = nt.split(sep), changed = false, strict = sep === ', ';
+    for (var i = 0; i < parts.length; i++) {
+      var h = lookup(parts[i]);
+      if (h === undefined && !strict) h = parts[i].indexOf(', ') > 0 ? joined(parts[i], ', ') : partial(parts[i]);
+      if (h === undefined) { if (strict) return undefined; continue; }
+      if (h !== parts[i]) changed = true;
+      parts[i] = h;
+    }
+    return changed ? parts.join(sep) : undefined;
+  }
+
+  // Premiers mots de noms de lieux (« La Gravière », « Plage de… ») : ne pas les traduire seuls.
+  var TOPONYM = {};
+  ('La Le Les L’ Un Une Des Du De Au Aux Plage Mer Baie Pointe Île Îles Cap Côte Lac Port Anse Grand Grande Petit Petite ' +
+   'Saint Sainte Mont Récif Golfe Passe Rocher Roche Dune Étang Crique Calanque Porto Praia Playa Punta Ponta').split(' ')
+    .forEach(function (w) { TOPONYM[w] = 1; });
 
   // Remplace les phrases connues contenues dans un texte plus long (concaténations).
   function partial(nt) {
@@ -227,7 +278,7 @@
           }
         }
       }
-      if (!done && i === 0 && exact[words[0]] !== undefined && /^[A-ZÀ-Ö]/.test(words[0])) {
+      if (!done && i === 0 && exact[words[0]] !== undefined && /^[A-ZÀ-Ö]/.test(words[0]) && !TOPONYM[words[0]]) {
         // verbe ou libellé en tête suivi d'un nom propre : « Explorer » + nom du spot
         out += exact[words[0]];
         pos += words[0].length;
@@ -246,8 +297,13 @@
   }
 
   var SKIP = { SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, TEXTAREA: 1, CODE: 1, PRE: 1 };
-  var ATTRS = ['placeholder', 'title', 'aria-label', 'alt', 'data-tip'];
+  var ATTRS = ['placeholder', 'title', 'aria-label', 'aria-valuetext', 'alt', 'data-tip'];
   var done = new WeakMap(); // nœud texte -> valeur déjà traduite
+
+  // Le texte d'un <textarea> appartient à l'utilisateur, mais son placeholder se traduit.
+  function attrsAllowed(el) {
+    return el.tagName === 'TEXTAREA' ? !skipped(el.parentNode) : !skipped(el);
+  }
 
   function skipped(el) {
     for (var e = el; e && e.nodeType === 1; e = e.parentNode) {
@@ -256,21 +312,89 @@
     return false;
   }
 
+  /* Phrases avec mots en gras : « ne retiens <b>jamais</b> ta respiration » est traduite d'un bloc
+     (clé extraite avec ses balises) plutôt que morceau par morceau. */
+  var INLINE = { B: 1, STRONG: 1, EM: 1, I: 1, SPAN: 1 };
+  var richDone = new WeakMap(); // élément -> contenu riche déjà traduit
+
+  function richKey(el) {
+    var s = '', tags = false;
+    for (var c = el.firstChild; c; c = c.nextSibling) {
+      if (c.nodeType === 3) s += c.nodeValue;
+      else if (c.nodeType === 1 && c.tagName === 'BR' && !c.attributes.length) { s += '<br>'; tags = true; }
+      else if (c.nodeType === 1 && INLINE[c.tagName] && !c.attributes.length && !c.firstElementChild) {
+        var tg = c.tagName.toLowerCase();
+        s += '<' + tg + '>' + c.textContent + '</' + tg + '>';
+        tags = true;
+      } else if (c.nodeType !== 8) return null;
+    }
+    return tags ? norm(s) : null;
+  }
+
+  function doRich(el) {
+    if (!hasRich || !el || el.nodeType !== 1 || (INLINE[el.tagName] && !el.attributes.length)) return false;
+    var key = richKey(el);
+    if (!key) return false;
+    if (richDone.get(el) === key) return true;
+    var t = lookup(key);
+    if (t === undefined || t === key) return false;
+    // Construit le résultat sans innerHTML : seules les balises b/strong/em/i sont recréées.
+    var frag = document.createDocumentFragment(), stack = [frag], re = /<(\/?)(b|strong|em|i|span)>|<br>/g, last = 0, m;
+    var text = function (str) { if (str) stack[stack.length - 1].appendChild(document.createTextNode(str)); };
+    while ((m = re.exec(t))) {
+      text(t.slice(last, m.index));
+      last = re.lastIndex;
+      if (!m[2]) stack[stack.length - 1].appendChild(document.createElement('br'));
+      else if (!m[1]) { var e = document.createElement(m[2]); stack[stack.length - 1].appendChild(e); stack.push(e); }
+      else if (stack.length > 1 && stack[stack.length - 1].tagName.toLowerCase() === m[2]) stack.pop();
+    }
+    text(t.slice(last));
+    var tw = document.createTreeWalker(frag, NodeFilter.SHOW_TEXT), n;
+    while ((n = tw.nextNode())) { n.nodeValue = flipArrows(n.nodeValue); done.set(n, n.nodeValue); }
+    while (el.firstChild) el.removeChild(el.firstChild);
+    el.appendChild(frag);
+    richDone.set(el, richKey(el));
+    return true;
+  }
+
+  // En arabe, hébreu et ourdou, « suivant → » et « A → B → C » se lisent vers la gauche.
+  var ARROWS = { '→': '←', '←': '→', '↗': '↖', '↖': '↗', '↘': '↙', '↙': '↘' };
+  function flipArrows(s) {
+    return OB.isRTL && s ? s.replace(/[→←↗↖↘↙]/g, function (a) { return ARROWS[a]; }) : s;
+  }
+
+  // Mesures écrites à la française dans le catalogue (« 1,8 m ») : séparateur décimal de la langue.
+  var DEC = (function () { try { return new Intl.NumberFormat(intlTag).format(1.5).charAt(1); } catch (e) { return ','; } })();
+  function localNumbers(s) {
+    return DEC === ',' || !s ? s : s.replace(/(\d),(\d+)(?=\s?(?:m\b|km|kn|nœuds|°|h\b|s\b|%|mm))/g, '$1' + DEC + '$2');
+  }
+
   function doText(node) {
     var v = node.nodeValue;
     if (!v || !/[A-Za-zÀ-ÿ]/.test(v) || done.get(node) === v) return;
     if (skipped(node.parentNode)) return;
-    var t = translate(v);
+    var p = node.parentNode;
+    if (p && INLINE[p.tagName] && !p.attributes.length) p = p.parentNode;
+    if (doRich(p)) return;
+    var t = localNumbers(flipArrows(translate(v)));
     done.set(node, t);
     if (t !== v) node.nodeValue = t;
   }
 
+  var attrDone = new WeakMap(); // élément -> { attribut: valeur déjà traduite }
+
   function doAttrs(el) {
+    var memo = attrDone.get(el);
     for (var i = 0; i < ATTRS.length; i++) {
       var a = ATTRS[i];
       if (!el.hasAttribute(a)) continue;
       var v = el.getAttribute(a);
+      // Une valeur déjà traduite n'est pas retraduite : sinon un gabarit comme « {0} spot{1} » peut
+      // reconnaître sa propre traduction et allonger le texte sans fin (page bloquée).
+      if (memo && memo[a] === v) continue;
       var t = translate(v);
+      if (!memo) attrDone.set(el, memo = {});
+      memo[a] = t;
       if (t !== v) el.setAttribute(a, t);
     }
     if (el.tagName === 'INPUT' && (el.type === 'button' || el.type === 'submit') && el.value) {
@@ -284,26 +408,32 @@
     if (rootNode.nodeType === 3) { doText(rootNode); return; }
     if (rootNode.nodeType !== 1 && rootNode.nodeType !== 9 && rootNode.nodeType !== 11) return;
     if (rootNode.nodeType === 1) {
+      if (attrsAllowed(rootNode)) doAttrs(rootNode);
       if (skipped(rootNode)) return;
-      doAttrs(rootNode);
     }
+    // Liste figée avant traduction : doRich() reconstruit certains éléments, et un TreeWalker posé
+    // sur un nœud retiré s'arrêterait là, laissant tout le reste de la page en français.
     var tw = document.createTreeWalker(rootNode, NodeFilter.SHOW_ELEMENT | NodeFilter.SHOW_TEXT);
-    var n;
-    while ((n = tw.nextNode())) {
-      if (n.nodeType === 3) doText(n);
-      else if (!SKIP[n.tagName]) doAttrs(n);
+    var nodes = [], n;
+    while ((n = tw.nextNode())) nodes.push(n);
+    for (var i = 0; i < nodes.length; i++) {
+      n = nodes[i];
+      if (n.nodeType === 3) { if (n.parentNode) doText(n); }
+      else if (!SKIP[n.tagName] || n.tagName === 'TEXTAREA') doAttrs(n);
     }
   }
 
   function start() {
     if (!prepare()) return;
     document.title = translate(document.title);
+    var metas = document.querySelectorAll('meta[name="description"],meta[property="og:title"],meta[property="og:description"]');
+    for (var k = 0; k < metas.length; k++) metas[k].setAttribute('content', translate(metas[k].getAttribute('content')));
     walk(document.body);
     new MutationObserver(function (list) {
       for (var i = 0; i < list.length; i++) {
         var m = list[i];
         if (m.type === 'characterData') doText(m.target);
-        else if (m.type === 'attributes') { if (m.target.nodeType === 1 && !skipped(m.target)) doAttrs(m.target); }
+        else if (m.type === 'attributes') { if (m.target.nodeType === 1 && attrsAllowed(m.target)) doAttrs(m.target); }
         else for (var j = 0; j < m.addedNodes.length; j++) walk(m.addedNodes[j]);
       }
     }).observe(document.body, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ATTRS });

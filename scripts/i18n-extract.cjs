@@ -159,10 +159,34 @@ function isHumanText(s) {
   return true;
 }
 
+/* Phrases avec mise en forme : « ne retiens <b>jamais</b> ta respiration », « Le large se vit<br><b>ensemble.</b> »
+   deviennent aussi une clé entière, balises comprises, que i18n.js traduit d'un bloc (les morceaux restent
+   extraits en secours). Seules les balises sans attribut b, strong, em, i, span et <br> sont gardées. */
+const RICH_TAG = /<\/?(?:b|strong|em|i|span)>|<br>/g;
+function richSegments(text) {
+  if (!/<(b|strong|em|i|span)>|<br\s*\/?>/.test(text)) return [];
+  const out = [];
+  for (const part of text.split(/<(?!\/?(?:b|strong|em|i|span)>|br\s*\/?>)[^>]*>/)) {
+    const key = decodeEntities(part).replace(/<br\s*\/?>/g, '<br>').replace(/\s+/g, ' ').trim()
+      .replace(/^(<br> ?)+|( ?<br>)+$/g, '');
+    if (!/<(b|strong|em|i|span)>|<br>/.test(key)) continue;
+    const plain = key.replace(RICH_TAG, ' ').replace(/\s+/g, ' ').trim();
+    if (/[<>]/.test(plain) || !isHumanText(plain)) continue;
+    // Balises vides (icônes) ou non refermées (texte concaténé) : pas de clé entière.
+    if (/<(b|strong|em|i|span)> ?<\/\1>/.test(key)) continue;
+    const opened = (key.match(/<(?:b|strong|em|i|span)>/g) || []).length, closed = (key.match(/<\/(?:b|strong|em|i|span)>/g) || []).length;
+    if (opened !== closed) continue;
+    // Au moins un mot hors des balises, sinon la clé simple suffit (« <b>Débutant</b> »).
+    if ((key.replace(/<(b|strong|em|i|span)>[\s\S]*?<\/\1>/g, '').replace(/\{\d+\}/g, '').match(LETTERS) || []).length < 2) continue;
+    out.push(key);
+  }
+  return out;
+}
+
 /* ---------- Collecte ---------- */
 const found = new Map(); // clé -> Set(fichiers)
-function add(key, file) {
-  if (!isHumanText(key)) return;
+function add(key, file, forced) {
+  if (!forced && !isHumanText(key)) return;
   if (!found.has(key)) found.set(key, new Set());
   found.get(key).add(file);
 }
@@ -170,14 +194,22 @@ function add(key, file) {
 const jsFiles = fs.readdirSync(ROOT).filter(f => f.endsWith('.js') && !SKIP_JS.has(f));
 for (const f of jsFiles) {
   const src = fs.readFileSync(path.join(ROOT, f), 'utf8');
-  for (const lit of extractLiterals(src)) for (const seg of segments(lit)) add(seg, f);
+  for (const lit of extractLiterals(src)) {
+    for (const seg of segments(lit)) add(seg, f);
+    for (const seg of richSegments(lit)) add(seg, f, true);
+  }
+  // obT('jour') : mot isolé à traduire malgré le filtre (minuscules, sans espace).
+  for (const m of src.matchAll(/\bobT\(\s*(['"])((?:\\.|(?!\1)[^\\\n])+)\1\s*\)/g)) add(unescape(m[2]), f, true);
 }
 for (const f of HTML_FILES) {
   let html = fs.readFileSync(path.join(ROOT, f), 'utf8');
   html = html.replace(/<script[\s\S]*?<\/script>/gi, '').replace(/<style[\s\S]*?<\/style>/gi, '').replace(/<!--[\s\S]*?-->/g, '');
   if (f === 'photos.html') html = html.replace(/<(table|ul|ol|figure|dl|article)[\s\S]*?<\/\1>/gi, '');
   for (const seg of segments(html)) add(seg, f);
-  for (const m of html.matchAll(/<meta[^>]+name="(?:description|apple-mobile-web-app-title)"[^>]+content="([^"]+)"/g)) add(m[1], f);
+  for (const seg of richSegments(html)) add(seg, f, true);
+  // <i data-i18n>jour</i> : mot isolé à traduire malgré le filtre.
+  for (const m of html.matchAll(/<(\w+)\b[^>]*\bdata-i18n\b[^>]*>([^<]+)<\/\1>/g)) add(decodeEntities(m[2]).trim(), f, true);
+  for (const m of html.matchAll(/<meta[^>]+(?:name|property)="(?:description|apple-mobile-web-app-title|og:title|og:description)"[^>]+content="([^"]+)"/g)) add(m[1], f);
 }
 
 const keys = [...found.keys()].sort((a, b) => a.localeCompare(b, 'fr'));

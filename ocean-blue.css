@@ -264,3 +264,80 @@ body.ocean-v2{color:var(--ob-ink)}
 .ocean-v2 #fieldOverview.is-compact .field-compare-slot{padding:0;border:0}
 .ocean-v2 #fieldOverview.is-compact .spot-compare-button{background:#fff;color:var(--ob-cobalt);border-color:#b9cbf5;min-height:40px}
 .ocean-v2 #fieldOverview.is-compact .spot-compare-button.selected{background:var(--ob-cobalt);color:#fff;border-color:var(--ob-cobalt)}
+
+/* ---------- Deuxième passe : écrans secondaires ---------- */
+/* Focus des champs : bleu cobalt, plus de halo turquoise */
+input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid rgba(31,85,224,.4);outline-offset:2px}
+.set-input:focus,.search:focus{border-color:var(--ob-blue);box-shadow:0 0 0 4px rgba(31,85,224,.14)}
+
+/* Onboarding : sur ordinateur, les dix choix tiennent sans défilement caché */
+.ocean-v2 .onb-near{min-height:40px;display:inline-flex;align-items:center;justify-content:center;gap:6px}
+@media (min-width:641px){
+  #onb .onb-step[data-step="1"]{max-width:860px}
+  #onb .sport-grid{grid-template-columns:repeat(5,minmax(0,1fr))!important;max-height:none!important;overflow:visible!important}
+  #onb .sport-card{min-height:0!important;padding:12px 8px!important}
+  #onb .sport-card .se{width:64px!important;height:64px!important;min-width:0!important;margin:0 auto!important;overflow:hidden}
+  #onb .sport-card .se img,#onb .sport-card .se svg{width:100%!important;height:100%!important}
+}
+
+/* Fiche spot : « Mode immersion » ne recouvre plus les repères sur mobile */
+@media (max-width:700px){
+  .ocean-v2 #detail #detailHero .dfacts{padding-bottom:78px}
+  .ocean-v2 #detail .hero-immersion{left:22px;right:auto;bottom:20px}
+}
+/* Spot sans photo : illustration Poulpy, voile pour garder le titre lisible */
+.ocean-v2 #detail #detailHero.illustrated-hero .hero-photo.on{filter:saturate(1.04)}
+.ocean-v2 #detail #detailHero.illustrated-hero::after{background:linear-gradient(180deg,rgba(11,45,122,.08) 0%,rgba(11,45,122,.22) 40%,rgba(11,45,122,.88) 100%)}
+/* Boutons photo : blanc et citron vert plutôt que beige */
+.ocean-v2 #detail .hero-more{background:rgba(255,255,255,.94);border-color:#fff}
+.experience-photo-open strong{background:var(--ob-lime);color:var(--ob-navy)}
+
+/* Recherche sans résultat : un message utile et des sorties */
+.ocean-v2 .nospot{display:flex;flex-direction:column;align-items:center;gap:6px;padding:34px 18px;border:1px dashed #c9d6f3;border-radius:18px;background:var(--ob-sky);color:var(--ob-muted)}
+.ocean-v2 .nospot b{color:var(--ob-navy);font-size:15px}
+.ocean-v2 .nospot span{font-size:12.5px}
+.ocean-v2 .nospot button{margin:8px auto 0;min-height:42px;border-radius:999px;border:1px solid #b9cbf5;background:#fff;color:var(--ob-cobalt)}
+.ocean-v2 .nospot button+button{margin-top:0}
+
+/* Voyages */
+.trip-dialog h2,.community-dialog h2{text-wrap:balance}
+.trip-pill{text-transform:uppercase}
+@media (max-width:560px){
+  .trip-picker-filters{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;align-items:end}
+  .trip-picker-filters>label[for]{grid-row:1}
+  .trip-picker-filters>select{grid-row:2}
+  .trip-dialog .trip-picker-filters select{max-width:none;width:100%;font-size:12px;padding:9px 8px}
+  .trip-picker-filters .trip-only-favs{grid-column:1/-1;grid-row:3;display:flex;align-items:center;gap:8px;min-height:40px;font-size:12px}
+}
+@media (max-width:479px){
+  .trip-step{grid-template-columns:minmax(0,1fr) 40px;gap:12px 10px}
+  .trip-step-photo{grid-column:1;grid-row:1;min-height:136px}
+  .trip-step-controls{grid-column:2;grid-row:1}
+  .trip-step-controls button{width:40px;height:40px}
+  .trip-step-info{grid-column:1/-1;grid-row:2}
+  .trip-step-info small{font-size:10.5px}
+  .trip-step-photo button{left:8px;right:auto;font-size:11px;padding:9px 12px}
+  .trip-step-logistics summary{font-size:12px}
+}
+
+/* Partage d'un voyage (Communauté) */
+.community-dialog{margin:auto}
+.community-dialog label.community-consent{display:block;font-weight:600;line-height:1.55}
+.community-dialog label.community-consent input{margin:0 6px 0 0;vertical-align:-2px}
+.community-share-fields fieldset{margin:0;padding:8px 12px 10px}
+.community-share-step{margin:0;padding:10px 12px;border-radius:10px;background:var(--ob-sky);color:#24526e;font-size:11px;font-weight:800}
+
+/* Réglages : le choix de Poulpy n'est pas une action destructive */
+.ocean-v2 .set-reset.set-neutral{background:var(--ob-sky);border-color:#c9d6f3;color:var(--ob-cobalt)}
+.set-about a{display:inline-block;padding:6px 0}
+.ai-consent h3{text-wrap:balance}
+/* Pendant l'accueil plein écran, le message se centre sur l'écran (pas de barre latérale visible) */
+@media (min-width:960px){body:has(#onb:not(.hide)) .toast{left:50%;max-width:calc(100vw - 60px)}}
+#communityTripPreview{margin-top:16px;padding-top:16px;border-top:1px solid var(--ob-line)}
+#communityTripPreview h3{margin:0 0 6px;color:var(--ob-navy)}
+/* Cibles tactiles d'au moins 40 px sur mobile */
+@media (max-width:959px){
+  .ocean-v2 .chat-close,.ocean-v2 .poulpy-chat-reset{width:40px;height:40px;min-width:40px}
+  .ocean-v2 #chatQuick .qchip{min-height:40px}
+  .ocean-v2 .quiz-x,.trip-dialog-close,.dialog-x,.compare-close{min-width:40px;min-height:40px}
+}

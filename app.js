@@ -27,7 +27,7 @@ function showEcoLog(){
   var c=document.getElementById('ecoInfoCard'); if(!c) return;
   var h='<button class="aqi-x" onclick="closeEcoLog()" aria-label="Fermer">'
       + '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>'
-      + '<div class="eco-hd">'+uic('feuille')+'<div><h4>'+ecoLog.length+' gestes</h4>'
+      + '<div class="eco-hd">'+uic('feuille')+'<div><h4>'+`${ecoLog.length} gestes`+'</h4>'
       + '<p>Ton carnet écolo, geste par geste.</p></div></div><div class="eco-l">';
   h+= ecoLog.length ? ecoLog.map(function(g){
         return '<div class="eco-g"><div class="eco-t">'+esc(g.t)+'</div>'
@@ -114,6 +114,7 @@ function scene(s,big){
   const color=(value,fallback)=>/^#[0-9a-f]{3}(?:[0-9a-f]{3})?$/i.test(String(value))?value:fallback;
   const sky=color(s.sky,'#9bd8ec'),sky2=color(s.sky2,'#4b9dc4'),sea=color(s.sea,'#1984a8'),sea2=color(s.sea2,'#13516f');
   const a=big?1:(H/240);
+  const rider=(s.sports||[]).some(x=>['surf','bodyboard','kitesurf','windsurf','paddle'].includes(x))||!(s.sports||[]).length;
   const wy=v=>Math.round(v*a);
   return `<svg class="scene" viewBox="0 0 ${W} ${H}" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
     <defs>
@@ -159,7 +160,7 @@ function scene(s,big){
     <path d="M-20 ${wy(184)} C70 ${wy(130)} 150 ${wy(224)} 250 ${wy(162)}" stroke="#ffffff" stroke-width="${big?3:2}" fill="none" stroke-linecap="round" opacity=".6"/>
     <!-- foam spray -->
     <g fill="#ffffff"><circle cx="116" cy="${wy(168)}" r="${big?5:3.4}"/><circle cx="138" cy="${wy(182)}" r="${big?4:2.8}" opacity=".9"/><circle cx="96" cy="${wy(186)}" r="${big?3:2.2}" opacity=".85"/><circle cx="162" cy="${wy(192)}" r="${big?4:2.6}" opacity=".9"/><circle cx="80" cy="${wy(160)}" r="${big?3:2}" opacity=".8"/><circle cx="130" cy="${wy(156)}" r="${big?2.5:1.8}" opacity=".75"/></g>
-    <!-- surfer with board + splash -->
+    ${rider?`<!-- surfer with board + splash -->
     <g transform="translate(${big?214:200},${wy(154)})">
       <g fill="#ffffff" opacity=".85"><circle cx="-12" cy="16" r="2"/><circle cx="-16" cy="13" r="1.4"/><circle cx="14" cy="16" r="1.8"/></g>
       <path d="M-15 15 Q0 11 15 15 Q0 19 -15 15 Z" fill="#f4f7fa"/>
@@ -170,7 +171,8 @@ function scene(s,big){
       <line x1="2" y1="13" x2="-3" y2="16" stroke="#1b4a66" stroke-width="2.8" stroke-linecap="round"/>
       <line x1="2" y1="13" x2="7" y2="16" stroke="#1b4a66" stroke-width="2.8" stroke-linecap="round"/>
       <circle cx="1" cy="-2" r="3.4" fill="#7a4a32"/>
-    </g>
+    </g>`:`<!-- bulles pour les spots sans planche -->
+    <g fill="#ffffff" opacity=".55"><circle cx="228" cy="${wy(196)}" r="${big?4:2.6}"/><circle cx="236" cy="${wy(182)}" r="${big?2.6:1.8}"/><circle cx="231" cy="${wy(170)}" r="${big?1.8:1.3}"/></g>`}
   </svg>`;
 }
 /* header sky scene */
@@ -222,7 +224,7 @@ function spotCardMeta(s){
   const live=LIVE[s.id]||{};
   if(!live.live)return '<span class="spot-preview">'+spotSports(s).slice(0,3).map(id=>SPORTMAP[id].label).join(' · ')+'</span>';
   const checked=live.fetchedAt?new Date(live.fetchedAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):'';
-  return `<span>${icoWind()} ${esc(live.wind||'—')}</span><span>${icoSwell()} ${esc(live.swell||'—')}</span><span>${icoTemp()} ${esc(live.temp||'—')}</span><span class="live-dot" title="Modèle Open-Meteo${checked?' · consulté à '+checked:''}"></span>`;
+  return `<span>${icoWind()} ${esc(live.wind||'—')}</span><span>${icoSwell()} ${esc(live.swell||'—')}</span><span>${icoTemp()} ${esc(live.temp||'—')}</span><span class="live-dot" title="${checked?`Modèle Open-Meteo · consulté à ${checked}`:'Modèle Open-Meteo'}"></span>`;
 }
 function spotCard(s){
   let dots='';for(let i=0;i<4;i++)dots+=`<span class="dot ${i<Math.min(4,Math.max(0,Number(s.danger)||0))?'on':''}"></span>`;
@@ -281,7 +283,7 @@ function setSport(id){
 let userPos=null,nearMode=false,userMarker=null;
 function distKm(la1,lo1,la2,lo2){const R=6371,r=Math.PI/180;const dLa=(la2-la1)*r,dLo=(lo2-lo1)*r;const a=Math.sin(dLa/2)**2+Math.cos(la1*r)*Math.cos(la2*r)*Math.sin(dLo/2)**2;return 2*R*Math.asin(Math.sqrt(a));}
 function spotDist(s){const c=COORDS[s.id];if(!c||!userPos)return null;return distKm(userPos.lat,userPos.lon,c.lat,c.lon);}
-function fmtDist(d){if(d==null)return '';return d<1?Math.round(d*1000)+' m':(d<20?d.toFixed(1):Math.round(d))+' km';}
+function fmtDist(d){if(d==null)return '';return d<1?Math.round(d*1000)+' m':(d<20?num1(d):Math.round(d))+' km';}
 function requestGeo(ok,fail){
   if(!window.OceanMobile?.native&&!navigator.geolocation){fail&&fail();return;}
   toast('📍 Localisation en cours…');
@@ -365,7 +367,7 @@ function exploreSpots(filter=currentFilter,options={}){
     &&(!sport||spotSports(s).includes(sport))
     &&(filter==='all'||(filter==='new'?s.catalogNew:s.level===filter))
     &&(!favorite||favs.has(s.id))
-    &&(!search||searchable(s.name+' '+s.loc).includes(search)));
+    &&(!search||searchable(s.name+' '+s.loc+' '+spotSports(s).map(id=>(typeof SPORTMAP!=='undefined'&&SPORTMAP[id]?.label)||id).join(' ')).includes(search)));
 }
 function worldCount(id){
   return exploreSpots('all',{world:id,country:null,search:'',favorite:false}).length;
@@ -396,7 +398,7 @@ function renderWorlds(){
       <span class="isl-plate"><span class="world-place">${esc(photo.place)}</span><b>${esc(w.lab)}</b><span class="world-sub">${esc(w.sub)}</span><span class="world-open">Explorer <span aria-hidden="true">↗</span></span></span>
     </button>`;
   }).join('');
-  const total=document.getElementById('worldTotal');if(total){const count=exploreSpots('all',{world:'all',country:null,search:'',favorite:false}).length;total.innerHTML='<b>'+count+' spots'+(activeSport?' de '+SPORTMAP[activeSport].label.toLowerCase():'')+'.</b> Choisis ta destination.';}
+  const total=document.getElementById('worldTotal');if(total){const count=exploreSpots('all',{world:'all',country:null,search:'',favorite:false}).length;total.innerHTML='<b>'+(activeSport?`${count} spots de ${SPORTMAP[activeSport].label.toLowerCase()}.`:`${count} spots.`)+'</b> <span class="wt-hint">Choisis ta destination.</span>';}
   const allLabel=document.querySelector('.w-all-tx i');if(allLabel)allLabel.textContent='Ouvre la carte et trouve ton prochain terrain de jeu.';
 }
 
@@ -408,7 +410,7 @@ function renderCountries(){
     const sample=scoped.find(s=>countryOf(s)===name&&spotPhotoUrl(s.id,720))||scoped.find(s=>countryOf(s)===name), photo=(sample&&spotPhotoUrl(sample.id,720))||WORLD_PHOTOS[spotWorld].src;
     return `<button class="isl country-card" onclick="openCountry(${esc(JSON.stringify(name))})" aria-label="Explorer ${esc(name)}, ${countryCount(name)} spots"><img class="isl-img" src="${esc(photo)}" alt="" loading="lazy" decoding="async"><span class="world-num" aria-hidden="true">${String(index+1).padStart(2,'0')}</span><span class="world-count">${countryCount(name)>1?`${countryCount(name)} spots`:`${countryCount(name)} spot`}</span><span class="isl-plate"><span class="world-place">${esc(worldOf(spotWorld)?.lab||'Destination')}</span><b>${esc(name)}</b><span class="world-sub">Spots et activités du pays</span><span class="world-open">Explorer <span aria-hidden="true">↗</span></span></span></button>`;
   }).join('');
-  const total=document.getElementById('worldTotal');if(total)total.innerHTML='<b>'+names.reduce((n,x)=>n+countryCount(x),0)+' spots</b> répartis dans '+names.length+(names.length===1?' destination.':' destinations.')+' Choisis un pays.';
+  const total=document.getElementById('worldTotal');if(total){const nb=names.reduce((n,x)=>n+countryCount(x),0),nd=names.length;total.innerHTML='<b>'+`${nb} spots`+'</b> <span>'+(nd===1?`répartis dans ${nd} destination.`:`répartis dans ${nd} destinations.`)+'</span> <span>Choisis un pays.</span>';}
 }
 
 function openWorld(id){
@@ -468,7 +470,7 @@ function syncWorldUI(){
   if(ttl) ttl.textContent = spotCountry||w?.lab || (spotWorld==='all'?'Trouve ton spot.':'Le monde est à toi.');
   if(ttl&&!on)ttl.innerHTML='Le monde<br> <span>est à toi.</span>';
   if(sub) sub.textContent = on
-    ? (spotCountry?(countryCount(spotCountry)>1?countryCount(spotCountry)+' spots à explorer dans ce pays':'Un spot à explorer dans ce pays'):w? worldCount(w.id)+' spots à explorer' : exploreSpots('all',{world:'all',country:null,search:'',favorite:false}).length+' spots, partout dans le monde')
+    ? (spotCountry?(countryCount(spotCountry)>1?`${countryCount(spotCountry)} spots à explorer dans ce pays`:'Un spot à explorer dans ce pays'):w? `${worldCount(w.id)} spots à explorer` : `${exploreSpots('all',{world:'all',country:null,search:'',favorite:false}).length} spots, partout dans le monde`)
     : 'Choisis un horizon. Prépare ta session. Vis ton aventure.';
 }
 function renderSpots(filter=currentFilter,keep){
@@ -477,20 +479,27 @@ function renderSpots(filter=currentFilter,keep){
   let list=exploreSpots(filter);
   if(nearMode&&userPos)list=list.slice().sort((a,b)=>(spotDist(a)??9e9)-(spotDist(b)??9e9));
   const resultCount=document.getElementById('spotResultCount');
-  if(resultCount)resultCount.textContent=list.length+(filter==='new'?(list.length===1?' nouveau spot':' nouveaux spots'):(list.length===1?' spot':' spots'))+(q?(list.length===1?' trouvé':' trouvés'):' à explorer');
+  if(resultCount){const n=list.length,one=n===1;resultCount.textContent=filter==='new'
+    ?(q?(one?`${n} nouveau spot trouvé`:`${n} nouveaux spots trouvés`):(one?`${n} nouveau spot à explorer`:`${n} nouveaux spots à explorer`))
+    :(q?(one?`${n} spot trouvé`:`${n} spots trouvés`):(one?`${n} spot à explorer`:`${n} spots à explorer`));}
   var _h;
   if(!list.length){
     const oldFavorites=favOnly&&[...favs].some(id=>window.OceanLegacySpots?.archive(id)&&!window.OceanLegacySpots?.canonicalId(id));
-    _h='<div class="nospot">Aucun spot ici.'+(oldFavorites?'<button onclick="go(\'profile\')">Voir mes favoris archivés</button>':'')+((spotWorld&&spotWorld!=='all'&&currentSearch)?'<button onclick="openWorld(\'all\')">Chercher dans tous les spots</button>':'')+'</div>';
+    const title=q?`Aucun spot ne correspond à « ${esc(q)} ».`:favOnly?(favs.size?'Aucun de tes favoris ici.':'Pas encore de favori.'):'Aucun spot ici.';
+    const hint=q?'Essaie un pays, une région ou un autre nom.':favOnly&&!favs.size?'Touche le cœur d’un spot pour le retrouver ici.':'';
+    _h='<div class="nospot"><b>'+title+'</b>'+(hint?'<span>'+hint+'</span>':'')
+      +(q?'<button onclick="clearSpotSearch()">Effacer la recherche</button>':'')
+      +(activeSport&&(q||(favOnly&&favs.size))?'<button onclick="exploreAllActivities()">Chercher dans toutes les activités</button>':'')
+      +(oldFavorites?'<button onclick="go(\'profile\')">Voir mes favoris archivés</button>':'')+((spotWorld&&spotWorld!=='all'&&currentSearch)?'<button onclick="openWorld(\'all\')">Chercher dans tous les spots</button>':'')+'</div>';
   }else{
     var _v=list.slice(0,spotShown);
     _h=_v.map(spotCard).join('');
     if(list.length>spotShown){
-      _h+='<button class="more-spots" onclick="moreSpots()">Voir '
-        + Math.min(SPOT_PAGE,list.length-spotShown)+' spots de plus'
-        + '<span>'+spotShown+' sur '+list.length+'</span></button>';
+      _h+='<button class="more-spots" onclick="moreSpots()">'
+        + `Voir ${Math.min(SPOT_PAGE,list.length-spotShown)} spots de plus`
+        + '<span>'+spotShown+' / '+list.length+'</span></button>';
     }else if(list.length>SPOT_PAGE){
-      _h+='<div class="more-end">Les '+list.length+' spots sont affichés.</div>';
+      _h+='<div class="more-end">'+`Les ${list.length} spots sont affichés.`+'</div>';
     }
   }
   document.getElementById('spotList').innerHTML=_h;
@@ -500,6 +509,9 @@ function renderSpots(filter=currentFilter,keep){
 }
 function filterSpots(el,f){document.querySelectorAll('#filters .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderSpots(f);}
 function searchable(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();}
+function clearSpotSearch(){const i=document.getElementById('spotSearch');if(i){i.value='';i.focus();}searchSpots('');}
+/* Garde la recherche et la destination, retire seulement le filtre d'activité. */
+function exploreAllActivities(){window.OceanNavigation?.begin();activeSport=null;chosenSport='all';renderSportFilters();renderWorlds();syncWorldUI();searchSpots(currentSearch);saveState();}
 function searchSpots(q){currentSearch=(q||'').toLowerCase().trim();renderSpots();if(document.getElementById('mapView').style.display!=='none')renderMap(true);}
 function toggleFav(id,ev){if(ev)ev.stopPropagation();
   if(favs.has(id))favs.delete(id);else favs.add(id);
@@ -584,7 +596,7 @@ function setMapFull(on,fromPop){
   if(bar&&on){
     var w=(typeof worldOf==='function')?worldOf(spotWorld):null;
     var nb=(typeof leafMap!=='undefined'&&leafMap&&leafMap._pts)?leafMap._pts.length:0;
-    bar.innerHTML='<b>'+(w?w.lab:'Tous les spots')+'</b><span>'+nb+' spot'+(nb>1?'s':'')+'</span>'
+    bar.innerHTML='<b>'+(w?w.lab:'Tous les spots')+'</b><span>'+(nb>1?`${nb} spots`:`${nb} spot`)+'</span>'
                 + '<button type="button" onclick="setMapFull(false)">Fermer</button>';
   }
   /* Leaflet cadre sur la taille du conteneur au moment de l'appel : on le
@@ -620,6 +632,12 @@ function spotPhotoUrl(id,w){
   const photo=window.OceanPhotos?.lead(id,activeSport)||window.SPOT_PHOTOS?.[id]||SPOTS.find(s=>s.id===id)?.photo;
   return photo?(w<=480&&photo.thumb?photo.thumb:photo.src):null;
 }
+/* Spot sans photo : l'illustration Poulpy de l'activité, jamais une image vide. */
+function spotIllustration(id,act){
+  const s=SPOTS.find(x=>x.id===id),a=act||(s?spotSports(s)[0]:'');
+  const file=/plongee|snorkeling/.test(a)?'dive.webp':/paddle|kayak/.test(a)?'paddle-v2.webp':/surf|bodyboard|kitesurf|windsurf/.test(a)?'surf-v2.webp':'travel-v2.webp';
+  return 'assets/poulpy/scenes/'+file;
+}
 /* Laisse le navigateur choisir entre la miniature et la grande photo. */
 function spotPhotoSrcset(id){
   const photo=window.OceanPhotos?.lead(id,activeSport)||window.SPOT_PHOTOS?.[id];
@@ -629,6 +647,7 @@ function spotPhotoSrcset(id){
 }
 function spotPhotoCredit(id){
   const photo=window.OceanPhotos?.lead(id,activeSport)||window.SPOT_PHOTOS?.[id]||SPOTS.find(s=>s.id===id)?.photo;
+  if(photo&&(photo.ai||photo.label==='Illustration IA'))return 'Illustration IA · ce n’est pas une photo du lieu';
   return photo?photo.author+' · '+photo.license+' — Wikimedia Commons':'';
 }
 function countryEmergency(loc){
@@ -663,6 +682,8 @@ function countryEmergency(loc){
   if(has('portugal')||has('espagne')||has('italie')||has('grèce')||has('grece')||has('islande')||has('norvège')||has('norvege')) return {emergency:'112',sea:'Secours en mer : 112 / VHF 16',call:'112'};
   return {emergency:'À confirmer',sea:'Repère le numéro des secours locaux avant ta sortie.',call:null};
 }
+// Phrases entières pour la traduction (« J'ai » + verbe se traduirait mot à mot).
+var SPORT_DID={surf:"J'ai surfé ici",bodyboard:"J'ai ridé ici",baignade:"J'ai nagé ici",paddle:"J'ai pagayé ici",kayak:"J'ai pagayé ici",snorkeling:"J'ai fait du snorkeling ici",plongee:"J'ai plongé ici",kitesurf:"J'ai kité ici",windsurf:"J'ai navigué ici"};
 var SPORT_VERB={surf:'surfé',bodyboard:'ridé',baignade:'nagé',paddle:'pagayé',kayak:'pagayé',snorkeling:'fait du snorkeling',plongee:'plongé',kitesurf:'kité',windsurf:'navigué'};
 
 /* ================= FAUNE & FLORE ================= */
@@ -776,7 +797,7 @@ function bioGridMore(list){
   if(list.length<=4) return bioGrid(list,' style="margin-top:10px"');
   var rest=list.slice(4);
   return bioGrid(list.slice(0,4),' style="margin-top:10px"')
-    + '<button class="bio-more" onclick="bioMore(this)">Voir les '+rest.length+' autres espèces</button>'
+    + '<button class="bio-more" onclick="bioMore(this)">'+`Voir les ${rest.length} autres espèces`+'</button>'
     + '<div style="display:none">'+bioGrid(rest,' style="margin-top:10px"')+'</div>';
 }
 function bioMore(b){
@@ -832,7 +853,7 @@ function worldLab(sid){
   return '';
 }
 function ctaLabel(act){
-  return sportIcon(act,'#fff')+" J'ai "+(SPORT_VERB[act]||'pratiqué')+' ici'
+  return sportIcon(act,'#fff')+' '+(SPORT_DID[act]||"J'ai pratiqué ici")
        + '<span class="cta-xp">+40 XP</span>';
 }
 function setHeroPhoto(s){
@@ -957,6 +978,8 @@ function openSpot(id){
   }).join('')+'</div>'):'';
   document.getElementById('dAnec').textContent=ANEC[s.id]||"Ce spot garde encore quelques secrets… 🐙";
   const fun=FUN[s.id];const fb=document.getElementById('dFunBlock');
+  /* Pas d'anecdote ni d'histoire : on masque le bloc plutôt que d'afficher une phrase de remplissage. */
+  const anecBlock=document.getElementById('dAnec').closest('.anec-block');if(anecBlock)anecBlock.style.display=(ANEC[s.id]||fun)?'':'none';
   if(fun){fb.style.display='';document.getElementById('dFun').textContent=fun;}else{fb.style.display='none';}
   document.getElementById('dTip').textContent=s.tip;
   var _to=document.getElementById('dTipOcto');
@@ -982,7 +1005,7 @@ function renderSpotSource(s){
   host.append('Source : ');
   const link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.label||'Consulter la source';
   host.append(link);
-  if(checked)host.append(' · Vérifié le '+new Date(checked+'T12:00:00Z').toLocaleDateString('fr-FR'));
+  if(checked){const v=document.createElement('span');v.textContent=`Vérifié le ${new Date(checked+'T12:00:00Z').toLocaleDateString('fr-FR')}`;host.append(' · ',v);}
 }
 function chalButton(ch,kind,i){
   var P=window.OceanProgress,done=P&&P.chalDone(ch.id),g=P&&P.goal(ch.id,{sessions:sessions});
@@ -1020,9 +1043,9 @@ function pstatTile(svg,bg,color,v,l,on){return '<div class="pstat"'+(on?' onclic
 function renderProfile(){
   var L=levelInfo();
   var fill=document.getElementById('profXpFill');if(fill)fill.style.width=L.pct+'%';
-  var xt=document.getElementById('profXpText');if(xt)xt.textContent=L.title+' · '+xp+' XP'+(L.max?' · niveau maximum atteint':' — plus que '+L.remain+' XP avant le niveau '+L.next.n);
-  var pl=document.getElementById('profLevel');if(pl)pl.textContent='Niv. '+L.n;
-  var sk=window.OceanProgress?OceanProgress.streak():0;var ps=document.getElementById('profStreak');if(ps)ps.textContent=sk;var psl=document.getElementById('profStreakLab');if(psl)psl.textContent=sk>1?'jours d’affilée':'jour';
+  var xt=document.getElementById('profXpText');if(xt)xt.textContent=L.max?`${L.title} · ${xp} XP · niveau maximum atteint`:`${L.title} · ${xp} XP — plus que ${L.remain} XP avant le niveau ${L.next.n}`;
+  var pl=document.getElementById('profLevel');if(pl)pl.textContent=`Niv. ${L.n}`;
+  var sk=window.OceanProgress?OceanProgress.streak():0;var ps=document.getElementById('profStreak');if(ps)ps.textContent=sk;var psl=document.getElementById('profStreakLab');if(psl)psl.textContent=sk>1?'jours d’affilée':(window.obT?obT('jour'):'jour');
   var rt=document.getElementById('profTrips');if(rt)rt.textContent=window.OceanTrips?OceanTrips.count():0;
   var appB=currentBadges().filter(function(b){return !b.locked;}).length;
   var quizB=0;try{quizB=quizLoad().badges.length;}catch(e){}
@@ -1041,7 +1064,7 @@ function renderArchivedFavorites(){
   if(!host.dataset.bound){host.dataset.bound='1';host.addEventListener('click',event=>{const button=event.target.closest('[data-archived-favorite]');if(!button)return;favs.delete(button.dataset.archivedFavorite);saveState();renderProfile();toast('Favori archivé retiré');});}
 }
 function renderQuizBadges(){var el=document.getElementById('quizBadgesProfile');if(!el||typeof QUIZ_CATS==='undefined')return;var d=quizLoad();
-  el.innerHTML=QUIZ_CATS.filter(function(c){return c.id!=='tout';}).map(function(c){var got=d.badges.indexOf(c.id)>=0;return '<div class="qb '+(got?'got':'')+'"><div class="qb-e">'+(got?'🏅':c.emoji)+'</div><div class="qb-n">Expert '+c.label+'</div><div class="qb-s">'+(got?'Débloqué ✓':'Sans-faute requis')+'</div></div>';}).join('');}
+  el.innerHTML=QUIZ_CATS.filter(function(c){return c.id!=='tout';}).map(function(c){var got=d.badges.indexOf(c.id)>=0;return '<div class="qb '+(got?'got':'')+'"><div class="qb-e">'+(got?'🏅':c.emoji)+'</div><div class="qb-n">'+`Expert ${c.label}`+'</div><div class="qb-s">'+(got?'Débloqué ✓':'Sans-faute requis')+'</div></div>';}).join('');}
 function renderSessions(){
   const el=document.getElementById('sessions');if(!el)return;
   el.innerHTML=sessions.length?sessions.slice(0,8).map(function(s){var em=(s.act&&typeof SPORTMAP!=='undefined'&&SPORTMAP[s.act])?sportIcon(s.act):sportIcon('surf');return '<div class="sess"><div class="si">'+em+'</div><div class="sn">'+esc(s.spot)+'</div><div class="sd">'+esc(s.date)+'</div></div>';}).join(''):'<div class="sess-empty"><img src="assets/poulpy/scenes/surf-v2.webp" alt="" width="64" height="64" loading="lazy"><div><b>Ton carnet t’attend.</b><p>Sur la fiche d’un spot, touche « J’ai surfé ici » pour y noter ta première session.</p><button type="button" class="sess-empty-btn" onclick="go(\'spots\')">Choisir un spot →</button></div></div>';
@@ -1108,7 +1131,7 @@ function renderToday(){
       <div class="th-credit" id="todayCredit"></div>
       <div class="th-cap">
         <div class="nm">${esc(s.name.split(' — ')[0])}</div>
-        <div class="rc">${actLab} · ${(typeof LVLTXT!=='undefined'&&LVLTXT[s.level])||s.level}</div>
+        <div class="rc"><span>${actLab}</span> · <span>${(typeof LVLTXT!=='undefined'&&LVLTXT[s.level])||s.level}</span></div>
       </div>
       <div class="cond-row">
         <div class="cond">${icoWind()}<div class="cv">${conditions.wind||'—'}</div><div class="cl">Vent</div></div>
@@ -1146,7 +1169,7 @@ function renderConditions(s,live){
   const head=document.getElementById('dCondHead');
   if(head){
     const stamp=live?.fetchedAt?new Date(live.fetchedAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):null;
-    head.textContent=live?(isInland(s)?'Eau douce · vent Open-Meteo':'Prévisions du modèle · Open-Meteo')+(stamp?' · consultées à '+stamp:''):'Prévisions du modèle indisponibles pour le moment';
+    head.textContent=live?(isInland(s)?'Eau douce · vent Open-Meteo':'Prévisions du modèle · Open-Meteo')+(stamp?' · '+`consultées à ${stamp}`:''):'Prévisions du modèle indisponibles pour le moment';
   }
 }
 function tideFromMarine(mar){
@@ -1177,9 +1200,9 @@ async function fetchConditions(s){
     if(ws==null&&wv==null&&sst==null&&!tide)return;
     const o={
       wind:ws!=null?(`${Math.round(ws)} km/h ${cardinal(wd)}`).trim():'—',
-      swell:wv!=null?`${(+wv).toFixed(1)} m`:'—',
+      swell:wv!=null?`${num1(+wv)} m`:'—',
       temp:sst!=null?`${Math.round(sst)}°C`:'—',
-      current:mc.ocean_current_velocity!=null?`${(+mc.ocean_current_velocity).toFixed(1)} km/h ${cardinal(mc.ocean_current_direction)}`:'—',
+      current:mc.ocean_current_velocity!=null?`${num1(+mc.ocean_current_velocity)} km/h ${cardinal(mc.ocean_current_direction)}`:'—',
       currentK:mc.ocean_current_velocity!=null?+mc.ocean_current_velocity:null,
       tide:tide||'—',live:true,fetchedAt:Date.now()
     };
@@ -1205,7 +1228,8 @@ function tideExtremes(ys,times){
   }
   return out;
 }
-function tideFmt(v){ return (v>=0?'+':'−')+Math.abs(v).toFixed(1).replace('.',',')+' m'; }
+function num1(v){ return typeof obNum==='function'?obNum(v,1):v.toFixed(1); }
+function tideFmt(v){ return (v>=0?'+':'−')+num1(Math.abs(v))+' m'; }
 /* AFFICHER une heure : on lit la chaine telle quelle. L'API marine est appelee
    avec timezone=auto, donc "2026-09-08T14:00" est deja l'heure murale DU SPOT ;
    la passer par new Date() la relirait dans le fuseau du lecteur. */
@@ -1247,15 +1271,15 @@ function tideGap(sec){
 function tideTz(mar){
   var o=mar&&mar.utc_offset_seconds; if(typeof o!=='number')return '';
   var d=o-(-new Date().getTimezoneOffset()*60);
-  return '<div class="tide-tz">Heures en <b>heure locale du spot</b>'
-       + (d===0 ? ' — la même que la tienne.'
-                : ' ('+tideUTC(o)+') · '+tideGap(d)
-                  +(d>0?' d’avance sur ton heure.':' de retard sur ton heure.'))
+  return '<div class="tide-tz">'
+       + (d===0 ? 'Heures en <b>heure locale du spot</b> — la même que la tienne.'
+                : d>0 ? `Heures en <b>heure locale du spot</b> (${tideUTC(o)}) · ${tideGap(d)} d’avance sur ton heure.`
+                      : `Heures en <b>heure locale du spot</b> (${tideUTC(o)}) · ${tideGap(d)} de retard sur ton heure.`)
        + '</div>';
 }
 function tideIn(ms){
   var m=Math.max(0,Math.round(ms/60000)),h=Math.floor(m/60);
-  return h?('dans '+h+' h '+(m%60<10?'0':'')+(m%60)):('dans '+m+' min');
+  return h?`dans ${h} h ${(m%60<10?'0':'')+(m%60)}`:`dans ${m} min`;
 }
 function renderTideChart(mar){
   var block=document.getElementById('dTideBlock'),el=document.getElementById('dTideChart');
@@ -1283,10 +1307,10 @@ function renderTideChart(mar){
   var head='<div class="tide-now"><div class="tide-state"><span class="ar">'+arrow+'</span>'+state+'</div></div>';
   head+='<div class="tide-when">';
   head+= next
-    ? ((next.hi?'Pleine mer':'Basse mer')+' à <b>'+tideHM(next.t)+'</b> · '
-       + tideIn(tideMs(next.t,off)-now))
+    ? ('<span>'+(next.hi?`Pleine mer à <b>${tideHM(next.t)}</b>`:`Basse mer à <b>${tideHM(next.t)}</b>`)+'</span> · <span>'
+       + tideIn(tideMs(next.t,off)-now)+'</span>')
     : 'Prochaine bascule au-delà de la fenêtre affichée.';
-  head+=' <span class="tide-range">marnage '+ (mx-mn).toFixed(1).replace('.',',') +' m</span>';
+  head+=' <span class="tide-range">'+`marnage ${num1(mx-mn)} m`+'</span>';
   head+=tideTz(mar)+'</div>';
   var hd=document.getElementById('dTideHead'); if(hd)hd.innerHTML=head;
 
@@ -1433,7 +1457,7 @@ async function fetchPreviewConditions(spots){
   spots.forEach((s,index)=>{
     const wc=(wa[index]||{}).current||{},mc=(ma[marineIndex.get(s.id)]||{}).current||{},data={};
     if(wc.wind_speed_10m!=null){data.wind=(`${Math.round(wc.wind_speed_10m)} km/h ${cardinal(wc.wind_direction_10m)}`).trim();data.windK=Math.round(wc.wind_speed_10m);}
-    if(mc.wave_height!=null){data.swell=`${(+mc.wave_height).toFixed(1)} m`;data.waveM=+mc.wave_height;}
+    if(mc.wave_height!=null){data.swell=`${typeof obNum==='function'?obNum(+mc.wave_height,1):(+mc.wave_height).toFixed(1)} m`;data.waveM=+mc.wave_height;}
     if(mc.sea_surface_temperature!=null)data.temp=`${Math.round(mc.sea_surface_temperature)}°C`;
     if(!Object.keys(data).length)return;
     LIVE[s.id]=Object.assign(LIVE[s.id]||{},data,{live:true,fetchedAt:Date.now()});
@@ -1455,13 +1479,15 @@ function renderLiveTop(){
     return `<button class="lt-row" onclick="openSpot(${esc(JSON.stringify(String(s.id)))})"><span class="lt-info"><b>${esc(s.name.split(' — ')[0])}</b><span>${esc(detail)}</span></span><span class="lt-badge lt-ref">Voir →</span></button>`;
   }).join('')+(live?'<p class="lt-note">Prévisions du modèle Open-Meteo.</p>':'');
 }
-function dayLabel(iso,i){if(i===0)return 'Auj';const d=new Date(iso);return ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'][d.getDay()]||'J+'+i;}
+function dayLabel(iso,i){if(i===0)return 'Auj';const d=new Date(iso);
+  if(window.OB_I18N&&OB_I18N.lang!=='fr'){try{const w=new Intl.DateTimeFormat(OB_I18N.locale,{weekday:'short'}).format(d).replace(/\.$/,'');return w.charAt(0).toUpperCase()+w.slice(1);}catch(e){}}
+  return ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'][d.getDay()]||'J+'+i;}
 function renderForecastBars(barsId,bestId,days,vals,opt){
   opt=opt||{};var unit=opt.unit||'m',dec=unit==='km/h'?0:1;
   var max=Math.max.apply(null,vals)||1;
   var bi=opt.best==='min'?vals.indexOf(Math.min.apply(null,vals)):vals.indexOf(Math.max.apply(null,vals));
   if(bestId)document.getElementById(bestId).innerHTML=(opt.liveOn?'<span class="live-badge"><i></i>'+(opt.badge||'Modèle Open-Meteo')+'</span>':'🤙 ')+(opt.bestLabel||'Houle la plus haute')+' : <b>'+days[bi]+'</b> · '+vals[bi].toFixed(dec)+' '+unit;
-  document.getElementById(barsId).innerHTML=vals.map(function(v,i){var h=Math.round((v/max)*100);return '<div class="fc-col '+(i===bi?'best':'')+'"><div class="fc-val">'+v.toFixed(dec)+'</div><div class="fc-bar" style="height:'+h+'%"></div><div class="fc-day">'+days[i]+'</div></div>';}).join('');
+  document.getElementById(barsId).innerHTML=vals.map(function(v,i){var h=Math.round((v/max)*100);return '<div class="fc-col '+(i===bi?'best':'')+'"><div class="fc-val">'+(dec?num1(v):v.toFixed(0))+'</div><div class="fc-bar" style="height:'+h+'%"></div><div class="fc-day">'+days[i]+'</div></div>';}).join('');
 }
 function renderMiniForecast(s,calm){
   document.getElementById('dForecast').innerHTML='<p class="field-forecast-empty">Les prévisions ne sont pas disponibles pour ce lieu pour le moment.</p>';
@@ -1529,7 +1555,7 @@ function renderStreak(){
   const n=P.streak(),days=P.week();
   const num=document.getElementById('streakNum'),lab=document.getElementById('streakLab'),row=document.getElementById('streakDays');
   if(num)num.textContent=n;
-  if(lab)lab.textContent=n>=7?(n>1?'jours d’affilée — série de champion, bravo !':'jour'):(n<=1?'jour avec Poulpy — reviens demain pour lancer ta série !':'jours d’affilée — encore '+(7-n)+' pour le badge 7 jours !');
+  if(lab)lab.textContent=n>=7?(n>1?'jours d’affilée — série de champion, bravo !':'jour'):(n<=1?'jour avec Poulpy — reviens demain pour lancer ta série !':`jours d’affilée — encore ${7-n} pour le badge 7 jours !`);
   if(row)row.innerHTML=days.map(d=>`<div class="sd${d.on?' on':''}${d.today?' today':''}"><span class="dd">${d.on?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"><path d="M2 12c2.5 0 2.5-3 5-3s2.5 3 5 3 2.5-3 5-3 2.5 3 5 3"/></svg>':'·'}</span>${d.l}</div>`).join('');
 }
 var WAVE_ICON='<svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 8.5c2.2 0 2.2-2.4 4.4-2.4S8.6 8.5 10.8 8.5 13 6.1 15.2 6.1 17.4 8.5 19.6 8.5"/><path d="M2 14c2.2 0 2.2-2.4 4.4-2.4S8.6 14 10.8 14 13 11.6 15.2 11.6 17.4 14 19.6 14"/><path d="M2 19.5c2.2 0 2.2-2.4 4.4-2.4S8.6 19.5 10.8 19.5 13 17.1 15.2 17.1 17.4 19.5 19.6 19.5"/></svg>';
@@ -1577,13 +1603,13 @@ function welcomeText(){
   var ctx;
   if(ses || ges){
     var b=[];
-    if(ses)b.push(ses + (ses>1?' sessions':' session'));
-    if(ges)b.push(ges + (ges>1?' gestes':' geste') + ' pour l’océan');
-    ctx = ' ' + b.join(' et ') + ' à ton carnet.';
+    if(ses)b.push(ses>1?`${ses} sessions`:`${ses} session`);
+    if(ges)b.push(ges>1?`${ges} gestes pour l’océan`:`${ges} geste pour l’océan`);
+    ctx = b.length>1 ? `${b[0]} et ${b[1]} à ton carnet.` : `${b[0]} à ton carnet.`;
   } else {
-    ctx = ' Explore les ' + nb + ' spots du catalogue et prépare ton prochain voyage avec moi.';
+    ctx = `Explore les ${nb} spots du catalogue et prépare ton prochain voyage avec moi.`;
   }
-  return tete + ctx + '<span class="bub-cta">Pose-moi une question →</span>';
+  return '<span>' + tete + '</span> <span>' + ctx + '</span><span class="bub-cta">Pose-moi une question →</span>';
 }
 function renderWelcome(){
   var o=document.getElementById('octoHi'), b=document.getElementById('welcomeBubble');
@@ -1761,7 +1787,7 @@ function renderCompetition(){
         + '<span class="cmp-tier t-'+T.cur.k+'"><span class="dot"></span>'+T.cur.n+'</span></div>';
     h+='<div class="cmp-bar"><div class="cmp-fill" style="width:'+pct+'%"></div></div>';
     h+='<div class="cmp-next">'+(T.next
-        ? ('Encore <b>'+(T.next.min-p.pts)+' points</b> pour passer '+T.next.n+'.')
+        ? `Encore <b>${T.next.min-p.pts} points</b> pour passer ${T.next.n}.`
         : 'Palier maximum atteint. Continue, le compteur ne s\'arrête pas.')+'</div>';
     h+='<div class="cmp-rules">'
       + cmpRule('feuille','Un geste pour l\'océan',15,p.gestes)
@@ -1937,7 +1963,8 @@ function go(s){
     resetScreenLive(cur);resetScreenLive(target);
     wrap.style.minHeight='';wrap.classList.remove('transitioning');
     wrap.scrollTop=0;
-    wrap.focus({preventScroll:true});
+    /* Ne reprend pas le focus à un champ déjà activé (ex. recherche ouverte depuis la loupe). */
+    if(!target.contains(document.activeElement))wrap.focus({preventScroll:true});
     if(s==='home')animateCounts();
     if(s==='profile')renderProfile();
     window.OceanNavigation?.settled();
@@ -2425,7 +2452,7 @@ function renderQuizPicker(){
   h+='<button class="quiz-daily'+(done?' done':'')+'" onclick="quizStartDaily()"><span class="qd-ic"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg></span><span class="qd-tx"><b>Défi du jour</b><span>'+(done?'Déjà relevé aujourd’hui ✓ · rejouable':'Bonus +30 XP au 1ᵉʳ essai !')+'</span></span><span class="qd-go">'+(done?'↻':'▶')+'</span></button>';
   h+='<div class="quiz-mode"><span>Mode</span><button class="qm-btn'+(quizTimed?'':' on')+'" onclick="quizSetTimed(false)">Normal</button><button class="qm-btn'+(quizTimed?' on':'')+'" onclick="quizSetTimed(true)">⏱️ Chrono</button></div>';
   h+='<div class="quiz-cats">'+QUIZ_CATS.map(function(c){var bs=d.best[c.id]||0;var bd=d.badges.indexOf(c.id)>=0;return '<button class="quiz-cat" onclick="quizPick(\''+c.id+'\')"><span class="qc-e">'+c.emoji+'</span><span class="qc-l">'+c.label+(bd?' 🏅':'')+'</span>'+(bs?'<span class="qc-best">★ '+bs+'</span>':'')+'</button>';}).join('')+'</div>';
-  if(d.badges.length){h+='<div class="quiz-badges"><b>🏅 Tes badges :</b> '+d.badges.map(function(id){var c=QUIZ_CATS.filter(function(x){return x.id===id;})[0];return c?('Expert '+c.label):'';}).filter(Boolean).join(' · ')+'</div>';}
+  if(d.badges.length){h+='<div class="quiz-badges"><b>🏅 Tes badges :</b> '+d.badges.map(function(id){var c=QUIZ_CATS.filter(function(x){return x.id===id;})[0];return c?`Expert ${c.label}`:'';}).filter(Boolean).join(' · ')+'</div>';}
   document.getElementById('quizBody').innerHTML=h;
 }
 function quizStartDaily(){quizDaily=true;quizCat='tout';quizQs=quizShuffle(QUIZ_BANK).slice(0,7);quizIdx=0;quizScore=0;quizStreak=0;renderQuizQuestion();}

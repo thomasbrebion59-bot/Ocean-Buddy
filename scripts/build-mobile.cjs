@@ -15,7 +15,13 @@ async function main(){
   let css='';
   fs.mkdirSync(path.join(dest,'vendor/fonts'),{recursive:true});
   for(const [pkg,family,weights] of fonts){
-    for(const weight of weights){const filename=`${pkg}-latin-${weight}-normal.woff2`;fs.copyFileSync(path.join(root,'node_modules/@fontsource',pkg,'files',filename),path.join(dest,'vendor/fonts',filename));css+=`@font-face{font-family:'${family}';font-style:normal;font-weight:${weight};font-display:swap;src:url('./${filename}') format('woff2')}\n`;}
+    // Every subset the package ships (latin-ext for cs/pl/ro/tr/hu…, vietnamese, cyrillic, greek), each
+    // limited by its unicode-range so a device only loads what the chosen language needs.
+    for(const weight of weights){
+      const faces=[...fs.readFileSync(path.join(root,'node_modules/@fontsource',pkg,`${weight}.css`),'utf8').matchAll(/url\(\.\/files\/([^)]+\.woff2)\)[^;]*;\s*unicode-range:\s*([^;]+);/g)];
+      if(!faces.some(face=>face[1]===`${pkg}-latin-${weight}-normal.woff2`))throw Error(`Latin subset missing for ${pkg} ${weight}`);
+      for(const [,filename,range] of faces){fs.copyFileSync(path.join(root,'node_modules/@fontsource',pkg,'files',filename),path.join(dest,'vendor/fonts',filename));css+=`@font-face{font-family:'${family}';font-style:normal;font-weight:${weight};font-display:swap;src:url('./${filename}') format('woff2');unicode-range:${range.trim()}}\n`;}
+    }
     fs.copyFileSync(path.join(root,'node_modules/@fontsource',pkg,'LICENSE'),path.join(dest,'vendor/fonts',pkg+'-LICENSE.txt'));
   }
   fs.writeFileSync(path.join(dest,'vendor/fonts/fonts.css'),css);

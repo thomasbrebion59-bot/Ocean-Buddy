@@ -9,7 +9,8 @@
   const api = 'https://api.open-meteo.com/v1/forecast';
   const marineApi = 'https://marine-api.open-meteo.com/v1/marine';
   const days = ['Dim','Lun','Mar','Mer','Jeu','Ven','Sam'];
-  const day = (iso, i) => i === 0 ? 'Aujourd’hui' : (days[new Date(iso + 'T12:00:00').getDay()] || `J+${i}`);
+  const weekday = d => { try { const w = new Intl.DateTimeFormat(OB_I18N.locale, { weekday: 'short' }).format(d).replace(/\.$/, ''); return w.charAt(0).toUpperCase() + w.slice(1); } catch (e) { return days[d.getDay()]; } };
+  const day = (iso, i) => { if (i === 0) return 'Aujourd’hui'; const d = new Date(iso + 'T12:00:00'); return (window.OB_I18N && OB_I18N.lang !== 'fr' ? weekday(d) : days[d.getDay()]) || `J+${i}`; };
   const direction = deg => deg == null || Number.isNaN(+deg) ? '—' : ((window.OB_I18N&&OB_I18N.lang!=='fr')?['N','NE','E','SE','S','SW','W','NW']:['N','NE','E','SE','S','SO','O','NO'])[Math.round(+deg / 45) % 8];
   const photo = s => window.OceanPhotos?.lead(s.id, activeAct);
 
@@ -40,7 +41,7 @@
     const image=photo(s);
     const count=window.OceanPhotos?.list(s.id,act)?.length||0;
     const query=encodeURIComponent([s.name,s.loc,act,'spot'].filter(Boolean).join(' '));
-    return `<div class="experience-heading"><span><small>LE SPOT EN IMAGES</small><b>Approche-toi du lieu.</b></span><i>${count?count+(count>1?' photos locales':' photo locale'):'Aucune photo locale'}</i></div><button type="button" class="experience-photo-open ${image?'':'no-image'}" data-experience-open>${image?`<img src="${esc(image.thumb||image.src)}" alt="" loading="lazy">`:'<span class="experience-photo-symbol" aria-hidden="true">◎</span>'}<span><b>${image?'Explorer '+esc(s.name):'Découvrir '+esc(s.name)+' en images'}</b><small>${image?'Photos créditées · tu peux en chercher d’autres dans la galerie.':'Aucune image locale pour ce lieu. Cherche des photos réutilisables avec leurs crédits.'}</small><strong>${image?'Entrer dans le décor':'Trouver des photos'} ↗</strong></span></button><a class="experience-video-search" href="https://www.youtube.com/results?search_query=${query}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span><span><b>Voir des vidéos du spot</b><small>Ouvre les vidéos proposées sur YouTube · lecture à la demande</small></span><span aria-hidden="true">↗</span></a>`;
+    return `<div class="experience-heading"><span><small>LE SPOT EN IMAGES</small><b>Approche-toi du lieu.</b></span><i>${count?(count>1?`${count} photos locales`:`${count} photo locale`):'Aucune photo locale'}</i></div><button type="button" class="experience-photo-open ${image?'':'no-image'}" data-experience-open>${image?`<img src="${esc(image.thumb||image.src)}" alt="" loading="lazy">`:'<span class="experience-photo-symbol" aria-hidden="true">◎</span>'}<span><b>${image?`Explorer ${esc(s.name)}`:`Découvrir ${esc(s.name)} en images`}</b><small>${image?'Photos créditées · tu peux en chercher d’autres dans la galerie.':'Aucune image locale pour ce lieu. Cherche des photos réutilisables avec leurs crédits.'}</small><strong>${image?'Entrer dans le décor':'Trouver des photos'} ↗</strong></span></button><a class="experience-video-search" href="https://www.youtube.com/results?search_query=${query}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span><span><b>Voir des vidéos du spot</b><small>Ouvre les vidéos proposées sur YouTube · lecture à la demande</small></span><span aria-hidden="true">↗</span></a>`;
   }
 
   let areaMap=null,areaMarker=null,areaSpotId=null;
@@ -81,7 +82,8 @@
   function indicativeRange(marine) {
     const values=marine?.hourly?.sea_level_height_msl?.filter(value=>Number.isFinite(+value)).slice(0,25)||[];
     if(values.length<6)return '—';
-    return `${(Math.max(...values)-Math.min(...values)).toFixed(2)} m · modèle`;
+    const range=Math.max(...values)-Math.min(...values);
+    return `${window.obNum?obNum(range,2):range.toFixed(2)} m · modèle`;
   }
 
   function renderWeek(s, weather, marine, fetchedAt) {

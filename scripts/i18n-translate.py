@@ -43,6 +43,7 @@ PROMPT = """You are a professional app localiser. Translate the user-interface t
 Rules:
 - Return ONLY a JSON array of strings, same length and same order as the input array, no commentary, no code fence.
 - Keep placeholders such as {{0}}, {{1}} exactly, once each; you may move them to fit the grammar.
+- Keep inline tags <b>…</b>, <strong>…</strong>, <em>…</em>, <i>…</i>, <span>…</span> and <br> (same number of each), around the words that carry the same meaning in {language}.
 - Keep emojis, arrows, numbers, units (m, km, °C, kn), URLs and e-mail addresses unchanged.
 - Keep proper nouns unchanged (spot, beach, reef, island and place names, "Ocean Buddy", "Poulpy", "Open-Meteo", "Wikimedia Commons"), unless the place has a well-established name in {language}.
 - The app speaks informally to one person (French "tu"): use the natural informal/friendly register of {language}.
@@ -66,7 +67,7 @@ def load(path, default):
 
 
 def placeholders(s):
-    return sorted(re.findall(r"\{\d+\}", s))
+    return sorted(re.findall(r"\{\d+\}", s) + re.findall(r"</?(?:b|strong|em|i|span)>|<br>", s))
 
 
 def ask(model, language, batch):

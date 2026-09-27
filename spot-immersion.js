@@ -102,7 +102,7 @@
     e.preventDefault();const ids=M.topicList(isInland(spot)).map(([id])=>id),i=ids.indexOf(topic);
     topic=ids[e.key==='Home'?0:e.key==='End'?ids.length-1:(i+(e.key==='ArrowRight'?1:-1)+ids.length)%ids.length];draw(true);
   });
-  section.addEventListener('input',e=>{if(e.target.id!=='imTideRange')return;tide=+e.target.value;$('#imTideDrawing').innerHTML=tideDiagram();const label=tide<34?'Bas':tide>66?'Haut':'Intermédiaire';$('#imTideOutput').textContent=label;e.target.setAttribute('aria-valuetext','Niveau '+label.toLowerCase()+' dans l’exemple');});
+  section.addEventListener('input',e=>{if(e.target.id!=='imTideRange')return;tide=+e.target.value;$('#imTideDrawing').innerHTML=tideDiagram();const label=tide<34?'Bas':tide>66?'Haut':'Intermédiaire';$('#imTideOutput').textContent=label;e.target.setAttribute('aria-valuetext',tide<34?'Niveau bas dans l’exemple':tide>66?'Niveau haut dans l’exemple':'Niveau intermédiaire dans l’exemple');});
   $('#fieldAtAGlance').addEventListener('click',e=>{const b=e.target.closest('[data-im-open]');if(b)openTopic(b.dataset.imOpen);});
   window.OceanImmersion={update,refreshConditions,openTopic};
   const current=SPOTS.find(s=>s.id===currentSpot);if(current)update(current,detailAct(current));

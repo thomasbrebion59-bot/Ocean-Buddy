@@ -8697,7 +8697,19 @@
     },
     "reviewed": null,
     "editorialStatus": "unverified",
-    "photo": null,
+    "photo": {
+      "ai": true,
+      "file": "tamarindo.png",
+      "src": "assets/spots/tamarindo-ia.webp",
+      "thumb": "assets/spots/thumbs/tamarindo.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    },
     "country": "Costa Rica"
   },
   {
@@ -9709,7 +9721,19 @@
     },
     "reviewed": null,
     "editorialStatus": "unverified",
-    "photo": null,
+    "photo": {
+      "ai": true,
+      "file": "byronbay.png",
+      "src": "assets/spots/byronbay-ia.webp",
+      "thumb": "assets/spots/thumbs/byronbay.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    },
     "country": "Australie"
   },
   {
@@ -16573,7 +16597,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "saintebarbe.png",
+      "src": "assets/spots/saintebarbe-ia.webp",
+      "thumb": "assets/spots/thumbs/saintebarbe.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "oleron",
@@ -16624,7 +16660,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "oleron.png",
+      "src": "assets/spots/oleron-ia.webp",
+      "thumb": "assets/spots/thumbs/oleron.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "beauduc",
@@ -17532,7 +17580,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "pounta.png",
+      "src": "assets/spots/pounta-ia.webp",
+      "thumb": "assets/spots/thumbs/pounta.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "stiniva",
@@ -17705,7 +17765,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "gozo.png",
+      "src": "assets/spots/gozo-ia.webp",
+      "thumb": "assets/spots/thumbs/gozo.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "croyde",
@@ -17877,7 +17949,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "lahinch.png",
+      "src": "assets/spots/lahinch-ia.webp",
+      "thumb": "assets/spots/thumbs/lahinch.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "mullaghmore",
@@ -18049,7 +18133,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "sylt.png",
+      "src": "assets/spots/sylt-ia.webp",
+      "thumb": "assets/spots/thumbs/sylt.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "scheveningen",
@@ -18646,7 +18742,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "aliwal.png",
+      "src": "assets/spots/aliwal-ia.webp",
+      "thumb": "assets/spots/thumbs/aliwal.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "sodwana",
@@ -18819,7 +18927,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "bigbay.png",
+      "src": "assets/spots/bigbay-ia.webp",
+      "thumb": "assets/spots/thumbs/bigbay.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "pontadoouro",
@@ -18870,7 +18990,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "pontadoouro.png",
+      "src": "assets/spots/pontadoouro-ia.webp",
+      "thumb": "assets/spots/thumbs/pontadoouro.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "bazaruto",
@@ -19042,7 +19174,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "lavanono.png",
+      "src": "assets/spots/lavanono-ia.webp",
+      "thumb": "assets/spots/thumbs/lavanono.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "mnemba",
@@ -19215,7 +19359,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "tamarinmu.png",
+      "src": "assets/spots/tamarinmu-ia.webp",
+      "thumb": "assets/spots/thumbs/tamarinmu.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "beauvallon",
@@ -19633,7 +19789,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "sunsetbeach.png",
+      "src": "assets/spots/sunsetbeach-ia.webp",
+      "thumb": "assets/spots/thumbs/sunsetbeach.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "jaws",
@@ -19743,7 +19911,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "kona.png",
+      "src": "assets/spots/kona-ia.webp",
+      "thumb": "assets/spots/thumbs/kona.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "hanalei",
@@ -19917,7 +20097,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "rinconca.png",
+      "src": "assets/spots/rinconca-ia.webp",
+      "thumb": "assets/spots/thumbs/rinconca.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "pointlobos",
@@ -20028,7 +20220,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "catalina.png",
+      "src": "assets/spots/catalina-ia.webp",
+      "thumb": "assets/spots/thumbs/catalina.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "keylargo",
@@ -20202,7 +20406,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "hatteras.png",
+      "src": "assets/spots/hatteras-ia.webp",
+      "thumb": "assets/spots/thumbs/hatteras.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "lawrencetown",
@@ -20313,7 +20529,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "puntamita.png",
+      "src": "assets/spots/puntamita-ia.webp",
+      "thumb": "assets/spots/thumbs/puntamita.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "scorpionbay",
@@ -20362,7 +20590,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "scorpionbay.png",
+      "src": "assets/spots/scorpionbay-ia.webp",
+      "thumb": "assets/spots/thumbs/scorpionbay.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "laventana",
@@ -20412,7 +20652,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "laventana.png",
+      "src": "assets/spots/laventana-ia.webp",
+      "thumb": "assets/spots/thumbs/laventana.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "ikkil",
@@ -20521,7 +20773,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "soupbowl.png",
+      "src": "assets/spots/soupbowl-ia.webp",
+      "thumb": "assets/spots/thumbs/soupbowl.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "hadicurari",
@@ -20935,7 +21199,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "elzonte.png",
+      "src": "assets/spots/elzonte-ia.webp",
+      "thumb": "assets/spots/thumbs/elzonte.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "cousteau",
@@ -21106,7 +21382,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "thunderball.png",
+      "src": "assets/spots/thunderball-ia.webp",
+      "thumb": "assets/spots/thumbs/thunderball.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "itamambuca",
@@ -21217,7 +21505,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "portodegalinhas.png",
+      "src": "assets/spots/portodegalinhas-ia.webp",
+      "thumb": "assets/spots/thumbs/portodegalinhas.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "bonito",
@@ -21266,7 +21566,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "bonito.png",
+      "src": "assets/spots/bonito-ia.webp",
+      "thumb": "assets/spots/thumbs/bonito.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "praiamole",
@@ -21498,7 +21810,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "prea.png",
+      "src": "assets/spots/prea-ia.webp",
+      "thumb": "assets/spots/thumbs/prea.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "atins",
@@ -21608,7 +21932,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "puntahermosa.png",
+      "src": "assets/spots/puntahermosa-ia.webp",
+      "thumb": "assets/spots/thumbs/puntahermosa.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "paracas",
@@ -22330,7 +22666,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "desertpoint.png",
+      "src": "assets/spots/desertpoint-ia.webp",
+      "thumb": "assets/spots/thumbs/desertpoint.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "lakeypeak",
@@ -22379,7 +22727,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "lakeypeak.png",
+      "src": "assets/spots/lakeypeak-ia.webp",
+      "thumb": "assets/spots/thumbs/lakeypeak.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "wakatobi",
@@ -22549,7 +22909,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "krui.png",
+      "src": "assets/spots/krui-ia.webp",
+      "thumb": "assets/spots/thumbs/krui.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "tubbataha",
@@ -23208,7 +23580,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "cokes.png",
+      "src": "assets/spots/cokes-ia.webp",
+      "thumb": "assets/spots/thumbs/cokes.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "hanifaru",
@@ -23317,7 +23701,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "miyazaki.png",
+      "src": "assets/spots/miyazaki-ia.webp",
+      "thumb": "assets/spots/thumbs/miyazaki.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "ishigaki",
@@ -23367,7 +23763,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "ishigaki.png",
+      "src": "assets/spots/ishigaki-ia.webp",
+      "thumb": "assets/spots/thumbs/ishigaki.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "jialeshui",
@@ -23416,7 +23824,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "jialeshui.png",
+      "src": "assets/spots/jialeshui-ia.webp",
+      "thumb": "assets/spots/thumbs/jialeshui.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "riyuebay",
@@ -23465,7 +23885,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "riyuebay.png",
+      "src": "assets/spots/riyuebay-ia.webp",
+      "thumb": "assets/spots/thumbs/riyuebay.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "masirah",
@@ -23636,7 +24068,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "lennox.png",
+      "src": "assets/spots/lennox-ia.webp",
+      "thumb": "assets/spots/thumbs/lennox.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "kirra",
@@ -23748,7 +24192,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "jervisbay.png",
+      "src": "assets/spots/jervisbay-ia.webp",
+      "thumb": "assets/spots/thumbs/jervisbay.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "lordhowe",
@@ -23799,7 +24255,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "lordhowe.png",
+      "src": "assets/spots/lordhowe-ia.webp",
+      "thumb": "assets/spots/thumbs/lordhowe.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "coralbay",
@@ -23849,7 +24317,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "coralbay.png",
+      "src": "assets/spots/coralbay-ia.webp",
+      "thumb": "assets/spots/thumbs/coralbay.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "luckybay",
@@ -24263,7 +24743,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "rainbowreef.png",
+      "src": "assets/spots/rainbowreef-ia.webp",
+      "thumb": "assets/spots/thumbs/rainbowreef.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "moorea",
@@ -24498,7 +24990,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "poe.png",
+      "src": "assets/spots/poe-ia.webp",
+      "thumb": "assets/spots/thumbs/poe.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "coolidge",
@@ -24547,7 +25051,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "coolidge.png",
+      "src": "assets/spots/coolidge-ia.webp",
+      "thumb": "assets/spots/thumbs/coolidge.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "bluecorner",
@@ -24716,7 +25232,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "salani.png",
+      "src": "assets/spots/salani-ia.webp",
+      "thumb": "assets/spots/thumbs/salani.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "vavau",
@@ -24828,7 +25356,19 @@
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09",
     "catalogNew": true,
-    "photo": null
+    "photo": {
+      "ai": true,
+      "file": "aitutaki.png",
+      "src": "assets/spots/aitutaki-ia.webp",
+      "thumb": "assets/spots/thumbs/aitutaki.webp",
+      "width": 1536,
+      "height": 1024,
+      "source": "https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html",
+      "author": "Illustration générée par IA (ChatGPT)",
+      "license": "Illustration Ocean Buddy",
+      "caption": "Illustration IA · ce n’est pas une photo du lieu",
+      "label": "Illustration IA"
+    }
   },
   {
     "id": "kavieng",

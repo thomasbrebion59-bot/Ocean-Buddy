@@ -47,7 +47,8 @@
     $('.path-final').classList.toggle('current',!!spotWorld);
     if(spotWorld)$('.path-final').setAttribute('aria-current','step');else $('.path-final').removeAttribute('aria-current');
     if(document.body.dataset.screen==='spots'){
-      $('#spotsSub').textContent=spotWorld?(world?(spotCountry?countryCount(spotCountry):worldCount(world.id)):SPOTS.filter(s=>!activeSport||spotSports(s).includes(activeSport)).length)+' spots'+(activeSport?' · '+sportName:'')+' à explorer':(activeSport?sportName+' : choisis ton continent, puis ton spot.':'Choisis ton continent, puis ton spot.');
+      {const n=world?(spotCountry?countryCount(spotCountry):worldCount(world.id)):SPOTS.filter(s=>!activeSport||spotSports(s).includes(activeSport)).length;
+      $('#spotsSub').textContent=spotWorld?(activeSport?`${n} spots · ${sportName} à explorer`:`${n} spots à explorer`):(activeSport?`${sportName} : choisis ton continent, puis ton spot.`:'Choisis ton continent, puis ton spot.');}
     }
   }
   function begin(){
