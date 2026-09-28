@@ -10,6 +10,7 @@ async function main(){
   copyLocales(dest);
   fs.mkdirSync(path.join(dest,'vendor'),{recursive:true});
   fs.cpSync(path.join(root,'vendor/maplibre'),path.join(dest,'vendor/maplibre'),{recursive:true});
+  fs.cpSync(path.join(root,'vendor/three'),path.join(dest,'vendor/three'),{recursive:true});
   const fonts=[['barlow-condensed','Barlow Condensed',[600,700,800,900]],['manrope','Manrope',[400,500,600,700,800]],['dm-sans','DM Sans',[400,500,600,700]]];
   let css='';
   fs.mkdirSync(path.join(dest,'vendor/fonts'),{recursive:true});

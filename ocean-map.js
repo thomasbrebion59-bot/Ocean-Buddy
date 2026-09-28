@@ -24,6 +24,11 @@
   let map=null,engine=null,starting=null,selectedMarker=null,hovered=null,userDot=null,selected=null,worldOn=null,fitKey='',needFit=true,listTimer=0,sheetOpen=false,lastData='';
   let terrainMap=null,terrainOverlay=null,terrainTarget=null,terrainGeneration=0;
   let terrainOpener=null,terrainUnderlying=[];
+  /* Globe 3D (ocean-globe.js) pour la vue d’ensemble ; la carte MapLibre prend le relais en « plongée »
+     sous DIVE_KM de large et rend la main au globe au-delà de RISE_KM (écart pour éviter les allers-retours). */
+  const DIVE_KM=600,RISE_KM=1100,WORLD_KM=7000,HOME={lat:30,lon:-8};
+  let planet=null,planetStarting=null,planetFailed=false,mode='globe',modeTimer=0,diving=false;
+  const useGlobe=()=>!planetFailed&&!!window.OceanGlobe?.supported();
 
   function candidates(){const found=typeof exploreSpots==='function'?exploreSpots(currentFilter,{sport:null}):SPOTS.filter(s=>inWorld(s));return found.filter(s=>COORDS[s.id]&&Number.isFinite(COORDS[s.id].lat)&&Number.isFinite(COORDS[s.id].lon));}
   const shortName=s=>String(s.name||'').split(' — ')[0];
@@ -80,6 +85,26 @@
     ]};
   }
 
+  /* Plongée depuis le globe : la carte démarre dans les teintes « Abysses vivantes » du globe,
+     puis s’éclaircit en deux niveaux de zoom vers le style clair habituel. */
+  function diveStyle(st,z0){
+    const z1=z0+2.4,Z=(dark,light)=>['interpolate-hcl',['linear'],['zoom'],z0,dark,z1,light];
+    const set=(id,prop,value)=>{const layer=st.layers.find(l=>l.id===id);if(layer)layer.paint[prop]=value;};
+    set('land','background-color',Z('#173D54','#f5f6f0'));
+    set('ice','fill-color',Z('#2B566B','#fbfcff'));
+    set('wood','fill-color',Z('#1d4a5c','#e7eedf'));
+    set('water','fill-color',Z('#2A86B8','#c9dbfc'));
+    set('river','line-color',Z('#2A86B8','#c9dbfc'));
+    set('road-major','line-color',Z('#2c5468','#ffffff'));
+    set('border-region','line-color',Z('#3f6a7d','#d3d8e4'));
+    set('border-country','line-color',Z('#84A6B6','#aab5cd'));
+    set('sea-name','text-color',Z('#A3E7DF','#5f82cf'));set('sea-name','text-halo-color',Z('rgba(23,61,84,.6)','rgba(201,219,252,.8)'));
+    for(const id of ['country-major','country']){set(id,'text-color',Z('#d6e6ef','#51607f'));set(id,'text-halo-color',Z('#173D54','#f5f6f0'));}
+    set('state','text-color',Z('#9fbccb','#97a2ba'));set('state','text-halo-color',Z('#173D54','#f5f6f0'));
+    for(const id of ['city-major','city']){set(id,'text-color',Z('#eef6fa','#34426a'));set(id,'text-halo-color',Z('#173D54','#ffffff'));}
+    return st;
+  }
+
   /* ---------- Interface : panneau, filtres, commandes ---------- */
   const ICONS={
     plus:'<path d="M12 5v14M5 12h14"/>',minus:'<path d="M5 12h14"/>',
@@ -105,17 +130,27 @@
     card=document.createElement('article');card.className='omap-card';card.hidden=true;card.setAttribute('aria-live','polite');
     empty=document.createElement('div');empty.className='omap-empty';empty.hidden=true;
     status=document.createElement('p');status.className='omap-status';status.setAttribute('role','status');status.textContent='Chargement de la carte…';
-    host.before(stage);stage.append(host,filters,ctrls,card,empty,status);wrap.prepend(panel);
+    const planetHost=document.createElement('div');planetHost.className='omap-globe';
+    const credit=document.createElement('p');credit.className='omap-credit';credit.textContent='Relief marin : Natural Earth';
+    host.before(stage);stage.append(host,planetHost,credit,filters,ctrls,card,empty,status);wrap.prepend(panel);
+    wrap.classList.toggle('is-globe',useGlobe());
     list=panel.querySelector('.omap-list');
     $('#mapBar')?.remove();
     panel.querySelector('.omap-sheet-head').addEventListener('click',()=>setSheet(!sheetOpen));
     panel.addEventListener('click',onPanelClick);
     filters.addEventListener('click',e=>{const b=e.target.closest('[data-map-sport]');if(b)choose(b.dataset.mapSport||null);});
     filters.addEventListener('change',e=>{if(!e.target.matches('[data-map-level]'))return;window.OceanNavigation?.begin();currentFilter=e.target.value;document.querySelectorAll('#filters [data-f]').forEach(b=>b.classList.toggle('active',b.dataset.f===currentFilter));renderSpots();render(false);filters.querySelector('select')?.focus({preventScroll:true});});
-    ctrls.addEventListener('click',e=>{const b=e.target.closest('[data-omap]');if(!b||!map)return;const k=b.dataset.omap;if(k==='in')map.zoomIn();if(k==='out')map.zoomOut();if(k==='world')overview(true);if(k==='locate')locate();});
+    ctrls.addEventListener('click',e=>{
+      const b=e.target.closest('[data-omap]');if(!b)return;const k=b.dataset.omap,onGlobe=mode==='globe'&&planet;
+      if(!onGlobe&&!map)return;
+      if(k==='in'){if(onGlobe)planet.zoomIn();else map.zoomIn();}
+      if(k==='out'){if(onGlobe)planet.zoomOut();else if(planet&&mapWidthKm(map.getZoom()-1)>RISE_KM)rise({animateOut:true});else map.zoomOut();}
+      if(k==='world')overview(true);
+      if(k==='locate')locate();
+    });
     card.addEventListener('click',onCardClick);
     wrap.addEventListener('keydown',e=>{if(e.key==='Escape'&&!card.hidden&&!terrainOverlay){e.stopPropagation();deselect(true);}});
-    addEventListener('resize',()=>{if(!mapVisible())return;syncMode();size();map?.resize();updateMinZoom();});
+    addEventListener('resize',()=>{if(!mapVisible())return;syncMode();size();planet?.setPadding(planetPad());map?.resize();updateMinZoom();});
     return true;
   }
   function syncMode(){
@@ -168,7 +203,8 @@
     starting=(async()=>{
       if(!webgl())throw Error('webgl');
       const ml=await loadEngine();
-      const m=new ml.Map({container:$('#spotMap'),style:style(globe()?'globe':'mercator'),center:[10,22],zoom:1.2,minZoom:0,maxZoom:17,renderWorldCopies:true,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,fadeDuration:180,maxTileCacheSize:120,locale:{'Map.Title':'Carte des spots','NavigationControl.ZoomIn':'Zoom avant','NavigationControl.ZoomOut':'Zoom arrière','AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
+      const dive=useGlobe(),v=dive&&planet?planet.view():null;
+      const m=new ml.Map({container:$('#spotMap'),style:dive?diveStyle(style('mercator'),M.mapZoom(DIVE_KM/side(),40)):style(globe()?'globe':'mercator'),center:v?[v.lon,v.lat]:[10,22],zoom:v?M.mapZoom(v.kmPerPx,v.lat):1.2,minZoom:0,maxZoom:17,renderWorldCopies:true,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,fadeDuration:180,maxTileCacheSize:120,locale:{'Map.Title':'Carte des spots','NavigationControl.ZoomIn':'Zoom avant','NavigationControl.ZoomOut':'Zoom arrière','AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
       m.touchZoomRotate.disableRotation();m.keyboard.disableRotation?.();
       m.addControl(new ml.AttributionControl({compact:true}),'bottom-right');
       m.getCanvas().setAttribute('aria-label','Carte interactive des spots. Utilise les flèches pour te déplacer, plus et moins pour zoomer.');
@@ -198,7 +234,11 @@
     map.on('mousemove',e=>{const f=pick(e.point)[0];map.getCanvas().style.cursor=f?'pointer':'';hover(f);if(f&&matchMedia('(hover:hover)').matches&&f.properties.id!==selected){tip.setLngLat(f.geometry.coordinates).setText(f.properties.n).addTo(map);}else tip.remove();});
     map.on('mouseout',()=>{tip.remove();hover(null);});
     map.on('zoom',()=>worldState());
-    map.on('moveend',()=>{clearTimeout(listTimer);listTimer=setTimeout(updateList,80);});
+    map.on('moveend',()=>{if(mode!=='map')return;clearTimeout(listTimer);listTimer=setTimeout(updateList,80);updateMinZoom();});
+    /* En dézoomant (geste de l’utilisateur), la carte rend la main au globe. */
+    let userZoom=false;
+    map.on('zoomstart',e=>{userZoom=!!e.originalEvent;});
+    map.on('zoomend',()=>{if(userZoom&&mode==='map'&&planet&&!diving&&mapWidthKm()>RISE_KM*.98)rise();userZoom=false;});
     map.on('error',e=>{if(/glyph|font/i.test(String(e?.error?.message||'')))return;});
     status.hidden=true;
     updateMinZoom();
@@ -228,9 +268,93 @@
     const m=mobile(),w=stage?.clientWidth||0,top=m?(filters?.offsetHeight||40)+26:30;
     return {top:Math.min(top,120),bottom:m?(card&&!card.hidden?card.offsetHeight+80:80):(card&&!card.hidden?40:30),left:m?24:(card&&!card.hidden&&w>900?440:48),right:m?60:84};
   }
+  /* Marges du globe : sur mobile, filtres en haut et tiroir de liste en bas. */
+  function planetPad(){return mobile()?{top:Math.min((filters?.offsetHeight||40)+18,110),bottom:64,left:0,right:0}:{top:0,bottom:0,left:0,right:0};}
+  /* Petit côté de la zone utile : la même mesure relie les km du globe et le zoom de la carte. */
+  function side(){const p=planetPad(),w=stage?.clientWidth||innerWidth,h=stage?.clientHeight||innerHeight;return Math.max(1,Math.min(w-p.left-p.right,h-p.top-p.bottom));}
+  const clampLat=lat=>Math.max(-70,Math.min(70,lat));
+  function mapWidthKm(zoom=map.getZoom()){return M.kmPerPx(zoom,clampLat(map.getCenter().lat))*side();}
+  /* Centre de la vue courante, globe ou carte. */
+  function viewCenter(){
+    if(mode==='globe'&&planet){const v=planet.view();return {lat:v.lat,lon:v.lon};}
+    const c=map?.getCenter();return c?{lat:c.lat,lon:c.lng}:{...HOME};
+  }
+
+  /* ---------- Globe ⇄ carte détaillée ---------- */
+  function ensurePlanet(){
+    if(planet)return Promise.resolve(planet);
+    if(planetStarting)return planetStarting;
+    const host=stage.querySelector('.omap-globe');
+    planetStarting=window.OceanGlobe.create(host,{
+      minWidthKm:DIVE_KM,
+      onSelect:id=>select(id),
+      onEmpty:()=>deselect(),
+      onView:()=>{if(mode!=='globe')return;worldState();clearTimeout(listTimer);listTimer=setTimeout(updateList,90);},
+      onDive:v=>dive(v)
+    }).then(p=>{
+      planet=p;planet.setPadding(planetPad());
+      wrap.classList.add('is-planet');
+      /* La carte détaillée se prépare en arrière-plan : la première plongée est plus rapide. */
+      setTimeout(()=>{loadEngine().catch(()=>{});},2500);
+      return p;
+    });
+    planetStarting.catch(()=>{planetStarting=null;planetFailed=true;wrap?.classList.remove('is-globe','is-planet');});
+    return planetStarting;
+  }
+  function setMode(next){
+    mode=next;clearTimeout(modeTimer);
+    wrap.classList.toggle('is-map',next==='map');
+    wrap.classList.toggle('is-planet',next==='globe'&&!!planet);
+    if(next==='globe'){planet?.setActive(true);tip?.remove();if(map)hover(null);}
+    else modeTimer=setTimeout(()=>{if(mode==='map')planet?.setActive(false);},420);
+    worldState(true);
+  }
+  /* Plongée : la carte reprend le centre et l’échelle exacts du globe, puis poursuit le zoom. */
+  function dive(v,target){
+    if(diving||!planet)return;diving=true;
+    const slow=setTimeout(()=>{status.hidden=false;status.classList.add('is-soft');status.textContent='Plongée vers la carte détaillée…';},250);
+    ensureMap().then(m=>{
+      m.resize();
+      m.jumpTo({center:[v.lon,v.lat],zoom:M.mapZoom(v.kmPerPx,v.lat),padding:planetPad()});
+      updateMinZoom();setData();
+      if(selected){const s=SPOTS.find(x=>x.id===selected);if(s)placeSelected(s);}
+      if(typeof userPos!=='undefined'&&userPos&&userDot)userDot.setLngLat([userPos.lon,userPos.lat]).addTo(m);
+      let shown=false;
+      const reveal=()=>{
+        if(shown)return;shown=true;clearTimeout(slow);status.hidden=true;status.classList.remove('is-soft');
+        setMode('map');diving=false;
+        if(target)m.flyTo({...target,padding:pad(),duration:1100});
+        else if(v.reason!=='cluster')m.easeTo({zoom:m.getZoom()+.8,duration:450});
+        updateList();
+      };
+      if(m.areTilesLoaded?.())reveal();else{m.once('idle',reveal);setTimeout(reveal,900);}
+    }).catch(()=>{
+      clearTimeout(slow);diving=false;status.hidden=true;status.classList.remove('is-soft');
+      if(typeof toast==='function')toast('Carte détaillée indisponible pour le moment.');
+    });
+  }
+  /* Remontée : le globe reprend là où la carte en est. */
+  function rise({animateOut=false}={}){
+    if(!planet||mode==='globe')return;
+    const c=map.getCenter();
+    planet.jumpTo({lat:Math.max(-78,Math.min(78,c.lat)),lon:c.lng,widthKm:Math.max(mapWidthKm(),planet.minWidthKm)});
+    tip?.remove();
+    setMode('globe');
+    if(animateOut)planet.zoomOut();
+    if(selected)planet.setSelected(selected);
+    updateList();
+  }
+
   /* Projection selon la forme de l’écran ; la vue monde est recalculée à chaque changement. */
   function updateMinZoom(){
-    if(!map)return;const want=globe()?'globe':'mercator';
+    if(!map)return;
+    if(useGlobe()){
+      /* Avec le globe, la carte ne sert qu’en détail : toujours à plat, jamais plus large que la remontée. */
+      if(map.getProjection?.()?.type!=='mercator')map.setProjection({type:'mercator'});
+      map.setMinZoom(Math.max(0,M.mapZoom(RISE_KM*1.3/side(),clampLat(map.getCenter().lat))));
+      return;
+    }
+    const want=globe()?'globe':'mercator';
     if(map.getProjection?.()?.type!==want){map.setProjection({type:want});needFit=true;}
     const h=map.getContainer().clientHeight||500;
     map.setMinZoom(want==='globe'?0:Math.max(0,Math.log2(h/512)-.2));
@@ -243,6 +367,18 @@
   }
   const worldZoom=()=>overviewZoom()+(globe()?1.1:.9);
   function overview(animate){
+    if(planet){
+      deselect();
+      const pts=rows.map(s=>COORDS[s.id]),c=M.cap(pts);
+      if(regionsMode()||!c){if(mode==='map')rise();planet.overview(HOME,animate);return;}
+      /* Sélection resserrée déjà visible sur la carte détaillée : on y reste. */
+      if(mode==='map'&&c.radius*M.EARTH_KM*2.5+300<RISE_KM){
+        const b=M.bounds(pts);map.fitBounds(b,{padding:pad(),maxZoom:11,animate:!!animate,duration:animate?900:0});return;
+      }
+      if(mode==='map')rise();
+      planet.fit(pts,{animate,minWidthKm:planet.minWidthKm});
+      return;
+    }
     if(!map)return;deselect();
     if(regionsMode()||!rows.length){
       const opts=animate?{duration:900}:{};
@@ -259,24 +395,44 @@
     else map.fitBounds(b,{padding:pad(),maxZoom:11,animate:!!animate,duration:animate?900:0});
   }
   function zoomRegion(id){
-    const r=REGIONS.find(x=>x.id===id);if(!r||!map)return;
-    const inside=rows.filter(s=>regionOf(s)?.id===id),b=M.bounds(inside.map(s=>COORDS[s.id]));
+    const r=REGIONS.find(x=>x.id===id);if(!r)return;
+    const inside=rows.filter(s=>regionOf(s)?.id===id);
+    if(planet){
+      setSheet(false);if(mode==='map')rise();
+      if(!inside.length){planet.flyTo({lat:r.at[1],lon:r.at[0],widthKm:6000});return;}
+      planet.fit(inside.map(s=>COORDS[s.id]),{maxWidthKm:WORLD_KM*.9});
+      return;
+    }
+    if(!map)return;
+    const b=M.bounds(inside.map(s=>COORDS[s.id]));
     if(!b){map.flyTo({center:r.at,zoom:3.2});return;}
     setSheet(false);
     const cam=map.cameraForBounds(b,{padding:pad(),maxZoom:9})||{center:r.at,zoom:3};
     map.flyTo({...cam,zoom:Math.max(cam.zoom,worldZoom()+.35),duration:1000});
   }
+  /* Vue du monde : le panneau propose les grandes régions. */
+  function isWorld(){
+    if(!regionsMode())return false;
+    if(planet)return mode==='globe'&&planet.view().widthKm>WORLD_KM;
+    return !!map&&map.getZoom()<worldZoom();
+  }
   function worldState(force){
-    if(!map||!wrap)return;
-    const world=regionsMode()&&map.getZoom()<worldZoom();
+    if(!wrap||(!map&&!planet))return;
+    const world=isWorld();
     if(!force&&world===worldOn)return;
     const changed=world!==worldOn;worldOn=world;
     wrap.classList.toggle('is-world',world);
     if(changed&&force!==true)updateList();
   }
+  let planetData='';
   function setData(){
     const key=activeSport+'|'+rows.map(s=>s.id).join(',');
-    if(key!==lastData){
+    if(planet&&key!==planetData){
+      planetData=key;
+      planet.setSpots(rows.map(s=>{const c=COORDS[s.id];return {id:s.id,lat:c.lat,lon:c.lon,name:shortName(s),act:primary(s)||'surf'};}));
+      if(selected)planet.setSelected(selected);
+    }
+    if(map&&key!==lastData){
       lastData=key;hovered=null;
       /* k : ordre d’affichage — le spot le plus au sud passe devant, comme une vue en perspective. */
       const feats=rows.map(s=>{const c=COORDS[s.id],a=primary(s)||'surf';return {type:'Feature',geometry:{type:'Point',coordinates:[c.lon,c.lat]},properties:{id:s.id,a,c:color(a),n:shortName(s),k:-c.lat}};});
@@ -289,16 +445,20 @@
 
   /* ---------- Liste de la zone visible ---------- */
   function updateList(){
-    if(!map||!panel)return;
+    const onGlobe=mode==='globe'&&!!planet;
+    if((!map&&!onGlobe)||!panel)return;
     const title=panel.querySelector('.omap-title'),sub=panel.querySelector('.omap-sub');
-    if(regionsMode()&&map.getZoom()<worldZoom()){
+    if(isWorld()){
       title.textContent=rows.length>1?`${rows.length} spots dans le monde`:`${rows.length} spot dans le monde`;
       sub.textContent='Choisis une région pour commencer.';
       list.innerHTML=`<p class="omap-list-intro">Les régions</p><ul class="omap-regions">${REGIONS.map(r=>{const inside=rows.filter(s=>regionOf(s)?.id===r.id);if(!inside.length)return '';const names=M.top(inside.map(countryOf),3).join(' · ');return `<li><button type="button" data-region="${r.id}"><span><b>${esc(r.lab)}</b><small>${esc(names)}</small></span><em>${total(inside.length)}</em>${icon('arrow')}</button></li>`;}).join('')}</ul>`;
       return;
     }
-    const b=map.getBounds(),view={west:b.getWest(),east:b.getEast(),south:b.getSouth(),north:b.getNorth()},c=map.getCenter(),center={lon:c.lng,lat:c.lat};
-    const inside=rows.filter(s=>M.inView(COORDS[s.id].lon,COORDS[s.id].lat,view)).map(s=>({s,d:M.distance(COORDS[s.id],center)})).sort((a,b)=>a.d-b.d).map(x=>x.s);
+    let visible;
+    if(onGlobe){const ids=new Set(planet.visibleIds());visible=rows.filter(s=>ids.has(s.id));}
+    else{const b=map.getBounds(),view={west:b.getWest(),east:b.getEast(),south:b.getSouth(),north:b.getNorth()};visible=rows.filter(s=>M.inView(COORDS[s.id].lon,COORDS[s.id].lat,view));}
+    const center=viewCenter();
+    const inside=visible.map(s=>({s,d:M.distance(COORDS[s.id],center)})).sort((a,b)=>a.d-b.d).map(x=>x.s);
     const n=inside.length;
     title.textContent=n>1?`${n} spots dans cette zone`:n===1?'1 spot dans cette zone':'Aucun spot dans cette zone';
     sub.textContent=n?M.top(inside.map(countryOf),3).join(' · '):'Dézoome ou reviens à la vue du monde.';
@@ -316,24 +476,33 @@
   }
 
   /* ---------- Aperçu du spot ---------- */
-  function select(id,{fly=false}={}){
-    const s=SPOTS.find(x=>x.id===id),c=s&&COORDS[s.id];if(!s||!c||!map)return;
-    selected=id;tip?.remove();
-    const a=primary(s);
-    const el=selectedMarker.getElement();el.style.setProperty('--c',color(a));el.innerHTML='<span></span>';
+  function placeSelected(s){
+    if(!map||!selectedMarker)return;const c=COORDS[s.id];
+    const el=selectedMarker.getElement();el.style.setProperty('--c',color(primary(s)));el.innerHTML='<span></span>';
     selectedMarker.setLngLat([c.lon,c.lat]).addTo(map);
+  }
+  function select(id,{fly=false}={}){
+    const s=SPOTS.find(x=>x.id===id),c=s&&COORDS[s.id];if(!s||!c||(!map&&!planet))return;
+    selected=id;tip?.remove();
+    placeSelected(s);planet?.setSelected(id);
     renderCard(s);
     const p=pad();
-    if(fly)map.flyTo({center:[c.lon,c.lat],zoom:Math.max(map.getZoom(),10),padding:p,duration:900});
-    else{const pt=map.project([c.lon,c.lat]),w=map.getContainer().clientWidth,h=map.getContainer().clientHeight;if(pt.x<p.left||pt.x>w-p.right||pt.y<p.top+30||pt.y>h-p.bottom)map.easeTo({center:[c.lon,c.lat],padding:p,duration:500});}
+    if(mode==='globe'&&planet){
+      /* Depuis la liste, le globe vole vers le spot ; sur le globe, il ne bouge que si le spot sort du cadre. */
+      if(fly)planet.flyTo({lat:c.lat,lon:c.lon,widthKm:Math.min(planet.view().widthKm,1400)});
+      else{const pt=planet.project(c.lat,c.lon),w=stage.clientWidth,h=stage.clientHeight;if(!pt.front||pt.facing<.25||pt.x<p.left||pt.x>w-p.right||pt.y<p.top+30||pt.y>h-p.bottom)planet.flyTo({lat:c.lat,lon:c.lon});}
+    }else if(map){
+      if(fly)map.flyTo({center:[c.lon,c.lat],zoom:Math.max(map.getZoom(),10),padding:p,duration:900});
+      else{const pt=map.project([c.lon,c.lat]),w=map.getContainer().clientWidth,h=map.getContainer().clientHeight;if(pt.x<p.left||pt.x>w-p.right||pt.y<p.top+30||pt.y>h-p.bottom)map.easeTo({center:[c.lon,c.lat],padding:p,duration:500});}
+    }
     list?.querySelectorAll('.omap-item').forEach(b=>b.classList.toggle('is-on',b.dataset.spot===id));
   }
   function deselect(focusMap){
     if(!selected&&card?.hidden)return;
-    selected=null;selectedMarker?.remove();if(card){card.hidden=true;card.innerHTML='';}
+    selected=null;selectedMarker?.remove();planet?.setSelected(null);if(card){card.hidden=true;card.innerHTML='';}
     wrap?.classList.remove('has-card');
     list?.querySelectorAll('.omap-item.is-on').forEach(b=>b.classList.remove('is-on'));
-    if(focusMap)map?.getCanvas().focus({preventScroll:true});
+    if(focusMap){if(mode==='globe'&&planet)planet.focus();else map?.getCanvas().focus({preventScroll:true});}
   }
   function liveLine(s){
     const live=typeof LIVE!=='undefined'&&LIVE[s.id];if(!live?.live)return '';
@@ -356,7 +525,7 @@
   }
   function onCardClick(e){
     const b=e.target.closest('[data-card],[data-spot]');if(!b)return;
-    if(b.dataset.spot){select(b.dataset.spot,{fly:map.getZoom()<9});return;}
+    if(b.dataset.spot){select(b.dataset.spot,{fly:mode==='map'&&!!map&&map.getZoom()<9});return;}
     const id=card.dataset.spot,k=b.dataset.card;
     if(k==='close'){deselect(true);return;}
     if(k==='open'){window.OceanNavigation?.begin();if(mapFull)setMapFull(false,true);openSpot(id);return;}
@@ -373,6 +542,15 @@
   }
   function showUser(pos,fly){
     if(!pos)return;
+    if(useGlobe()){
+      ensurePlanet().then(p=>{
+        p.setUser(pos);if(map&&userDot)userDot.setLngLat([pos.lon,pos.lat]).addTo(map);
+        if(fly===false)return;
+        if(mode==='map')map.flyTo({center:[pos.lon,pos.lat],zoom:Math.max(map.getZoom(),7.5),padding:pad(),duration:1000});
+        else p.flyTo({lat:pos.lat,lon:pos.lon,widthKm:Math.min(p.view().widthKm,1200)});
+      }).catch(()=>{});
+      return;
+    }
     ensureMap().then(m=>{userDot.setLngLat([pos.lon,pos.lat]).addTo(m);if(fly!==false)m.flyTo({center:[pos.lon,pos.lat],zoom:Math.max(m.getZoom(),7.5),padding:pad(),duration:1000});}).catch(()=>{});
   }
 
@@ -388,6 +566,20 @@
     if(selected&&!rows.some(s=>s.id===selected))deselect();
     if(!mapVisible())return;
     size();
+    if(useGlobe()){
+      const first=!planet;
+      ensurePlanet().then(p=>{
+        if(mode==='globe')p.setActive(true);
+        p.setPadding(planetPad());map?.resize();setData();
+        if(needFit){needFit=false;overview(false);}
+        if(first&&typeof userPos!=='undefined'&&userPos&&nearMode)showUser(userPos,false);
+        status.hidden=true;worldState(true);updateList();
+      }).catch(()=>{
+        /* Pas de WebGL 2 ou chargement impossible : la carte MapLibre prend tout le rôle. */
+        planetFailed=true;mode='map';wrap.classList.remove('is-globe','is-planet','is-map');render(true);
+      });
+      return;
+    }
     const first=!map;
     ensureMap().then(()=>{
       map.resize();updateMinZoom();setData();
@@ -402,7 +594,9 @@
   }
   /* Redimensionne ; ne recadre que si la sélection de spots a changé. */
   function fit(){
-    if(!map||!mapVisible())return;size();map.resize();updateMinZoom();
+    if((!map&&!planet)||!mapVisible())return;size();
+    if(planet){planet.setPadding(planetPad());planet.resize();}
+    if(map){map.resize();updateMinZoom();}
     if(needFit){needFit=false;overview(false);}
     revealActivity();
   }
@@ -424,7 +618,7 @@
     return 12742*Math.asin(Math.min(1,Math.sqrt(Math.sin(dLat/2)**2+Math.cos(a.lat*Math.PI/180)*Math.cos(b.lat*Math.PI/180)*Math.sin(dLon/2)**2)));
   }
   function nearestSpot(){
-    const c=map?.getCenter(),center=c&&{lat:c.lat,lon:c.lng};
+    const center=(map||planet)&&viewCenter();
     return center?rows.slice().sort((a,b)=>distance(COORDS[a.id],center)-distance(COORDS[b.id],center))[0]:rows[0];
   }
   async function startTerrain(spot){
@@ -580,5 +774,5 @@
       get map(){return m;}
     };
   }
-  window.OceanMap={render,fit,mini,color,revealActivity,startTerrain,closeTerrain,showUser,select,overview:()=>overview(true),region:zoomRegion,count:()=>rows.length,get map(){return map;}};
+  window.OceanMap={render,fit,mini,color,revealActivity,startTerrain,closeTerrain,showUser,select,overview:()=>overview(true),region:zoomRegion,count:()=>rows.length,get map(){return map;},get globe(){return planet;}};
 })();
