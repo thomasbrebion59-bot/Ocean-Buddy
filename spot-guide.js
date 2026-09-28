@@ -4,7 +4,7 @@
 (() => {
   'use strict';
   const M=window.SpotGuideModel;if(!M)return;
-  const DATA_URL='assets/data/spot-guides.js?v=638eb4240dad';
+  const DATA_URL='assets/data/spot-guides.js?v=2480384a9576';
   const $=s=>document.querySelector(s);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const svg=(body,cls='')=>`<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
