@@ -77,7 +77,7 @@ def ask(model, language, batch):
         subprocess.run(
             [CODEX, "exec", "--skip-git-repo-check", "-c", 'sandbox_mode="read-only"', "-m", model,
              "-o", str(out), "-"],
-            input=prompt, text=True, capture_output=True, cwd=tmp, timeout=1800,
+            input=prompt, text=True, capture_output=True, cwd=tmp, timeout=300,
         )
         text = out.read_text() if out.exists() else ""
     m = re.search(r"\[[\s\S]*\]", text)
