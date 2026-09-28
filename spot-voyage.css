@@ -21,19 +21,10 @@
 .voyage-pano .pnlm-container{background:#04163b}
 .voyage-loading{position:absolute;inset:0;display:grid;place-items:center;font-weight:700;opacity:.8}
 .voyage-walk{position:absolute;inset:0;width:100%;height:100%;border:0;background:#04163b}
-.voyage-walk-cover{position:absolute;inset:0;display:grid;place-items:center}
-.voyage-walk-cover .voyage-photo{filter:blur(6px) saturate(1.2) brightness(.7)}
-.voyage-walk-badge{position:relative;display:grid;justify-items:center;gap:6px;padding:22px 26px;border-radius:26px;background:rgba(8,32,92,.55);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.2);text-align:center;margin-bottom:22vh}
-.voyage-walk-badge svg{width:46px;height:46px;color:#e0ff91;animation:orbit 5s linear infinite}
-.voyage-walk-badge b{font-family:"Barlow Condensed",sans-serif;font-size:32px;text-transform:uppercase;letter-spacing:.01em}
-.voyage-walk-badge small{opacity:.85}
-@keyframes orbit{to{transform:rotateY(360deg)}}
 
 .voyage-spray{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;mix-blend-mode:screen}
-.voyage[data-kind=pano] .voyage-spray,.voyage.is-walking .voyage-spray{display:none}
+
 .voyage-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(4,22,59,.72) 0%,rgba(4,22,59,0) 22%,rgba(4,22,59,0) 42%,rgba(4,22,59,.55) 64%,rgba(4,22,59,.95) 100%)}
-.voyage[data-kind=pano] .voyage-shade{background:linear-gradient(180deg,rgba(4,22,59,.6),transparent 20%,transparent 70%,rgba(4,22,59,.85))}
-.voyage.is-walking .voyage-shade{display:none}
 
 .voyage-top{position:absolute;inset:0 0 auto;padding:calc(env(safe-area-inset-top,0px) + 12px) 16px 0;z-index:3}
 .voyage-bars{display:flex;gap:4px}
@@ -57,16 +48,12 @@
 .voyage-tap-next{right:0;justify-content:flex-end;padding-right:14px}
 .voyage-tap svg{width:44px;height:44px;padding:10px;border-radius:50%;background:rgba(8,32,92,.45);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
 .voyage-tap:hover,.voyage-tap:focus-visible{opacity:1}
-.voyage[data-kind=pano] .voyage-tap,.voyage.is-walking .voyage-tap{top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 50%);width:auto;opacity:.9}
+.voyage[data-kind=explore] .voyage-tap{top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 50%);width:auto;opacity:.9}
 
 .voyage-card{position:absolute;left:0;right:0;bottom:0;z-index:3;padding:0 18px calc(env(safe-area-inset-bottom,0px) + 18px);max-width:720px;margin:0 auto;animation:cardIn .5s cubic-bezier(.22,1,.36,1) both}
 .voyage-card>*{animation:cardIn .55s cubic-bezier(.22,1,.36,1) both}
 .voyage-card>*:nth-child(2){animation-delay:.05s}.voyage-card>*:nth-child(3){animation-delay:.1s}.voyage-card>*:nth-child(n+4){animation-delay:.15s}
 @keyframes cardIn{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
-.voyage.is-walking .voyage-card{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 10px)}
-.voyage.is-walking .voyage-card h2,.voyage.is-walking .voyage-card p,.voyage.is-walking .voyage-chips,.voyage.is-walking .voyage-live{display:none}
-.voyage.is-walking .voyage-card{pointer-events:none}
-.voyage.is-walking .voyage-card .voyage-actions,.voyage.is-walking .voyage-card .voyage-credit{pointer-events:auto}
 .voyage-kicker{display:flex;align-items:center;gap:9px;font-size:12px;font-weight:800;letter-spacing:.12em;text-transform:uppercase}
 .voyage-kicker img{width:34px;height:34px;border-radius:50%;border:2px solid #e0ff91;object-fit:cover;background:#fff}
 .voyage-kicker span{flex:1;color:#e0ff91}
@@ -96,3 +83,76 @@
 }
 @media (prefers-reduced-motion:reduce){.voyage-wide{animation:none!important}.voyage-photo{animation:none!important;transform:scale(1.04)}.voyage-card,.voyage-card>*{animation:none}}
 .reduce-motion .voyage-photo{animation:none!important;transform:scale(1.04)}
+
+/* Explorer le spot : points de vue 360°, mini-carte, passage d'un point à l'autre. */
+.voyage-btn-360{width:auto;min-width:42px;padding:0 12px 0 10px;border-radius:21px;gap:5px;display:inline-flex;align-items:center;font-weight:800;font-size:13px;background:rgba(224,255,145,.16);border-color:rgba(224,255,145,.55);color:#e0ff91}
+.voyage-btn-360 svg{width:18px;height:18px}
+.voyage[data-kind=explore] .voyage-spray,.voyage[data-kind=explore] .voyage-tap-next{display:none}
+.voyage[data-kind=explore] .voyage-shade{background:linear-gradient(180deg,rgba(4,22,59,.66),transparent 17%,transparent 52%,rgba(4,22,59,.9) 86%)}
+.vx-layers{position:absolute;inset:0;background:#04163b}
+.vx-layer{position:absolute;inset:0;transition:opacity .6s ease,transform .8s cubic-bezier(.22,1,.36,1),filter .6s ease}
+.vx-layer.is-entering{opacity:0;transform:scale(1.07)}
+.vx-layer.is-leaving{opacity:0;transform:scale(1.1);filter:blur(6px);pointer-events:none}
+.vx-move{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);z-index:2;padding:10px 18px 10px 40px;border-radius:999px;background:rgba(8,32,92,.62) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e0ff91' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='13' cy='4.5' r='1.8'/%3E%3Cpath d='m9.5 21 2-6 3 3v3M8 12l2.5-4.5L14 9l2.5 3M11.5 15l1-5.5'/%3E%3C/svg%3E") 12px 50%/22px no-repeat;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font-weight:800;font-size:14px;white-space:nowrap;pointer-events:none;transition:opacity .35s;animation:vxPulse 1.2s ease-in-out infinite}
+@keyframes vxPulse{50%{opacity:.6}}
+.vx-move.is-done{opacity:0;animation:none}
+.vx-layer .voyage-walk{position:absolute;inset:-64px 0 0;height:calc(100% + 64px)}
+.vx-google .voyage-card{padding-bottom:calc(env(safe-area-inset-bottom,0px) + 28px)}
+.vx-google .voyage-shade{background:linear-gradient(180deg,rgba(4,22,59,.66),transparent 17%,transparent 50%,rgba(4,22,59,.88) 80%,rgba(4,22,59,.55) 100%)}
+.vx-layer .voyage-loading{pointer-events:none}
+.vx-note .voyage-photo{filter:blur(8px) saturate(1.15) brightness(.55);animation:none;transform:scale(1.08)}
+.vx-panel{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);width:min(88vw,420px);box-sizing:border-box;display:grid;justify-items:center;gap:10px;padding:22px 20px;border-radius:24px;background:rgba(8,32,92,.62);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.2);text-align:center}
+.vx-panel>svg{width:38px;height:38px;color:#e0ff91}
+.vx-panel b{font-size:18px;line-height:1.25}
+.vx-panel span{font-size:14px;line-height:1.45;color:#dfe8ff}
+.vx-panel a:not(.voyage-cta){display:inline-flex;align-items:center;color:#e0ff91;font-size:13px;font-weight:700;padding:0 10px;min-height:40px}
+.vx-panel .voyage-cta{min-height:44px;text-decoration:none}
+
+.vx-map{position:absolute;z-index:3;top:calc(env(safe-area-inset-top,0px) + 76px);right:16px;width:88px;height:88px;pointer-events:none;filter:drop-shadow(0 6px 18px rgba(0,0,0,.35));transition:opacity .3s}
+.vx-map:empty,.voyage:not([data-kind=explore]) .vx-map{display:none}
+.vx-map svg{width:100%;height:100%;overflow:visible}
+.vx-land{fill:#e9d8ae}
+.vx-foam{fill:none;stroke:rgba(255,255,255,.7);stroke-width:1.4}
+.vx-ring{fill:none;stroke:rgba(255,255,255,.85);stroke-width:2.4}
+.vx-cone path{fill:rgba(224,255,145,.55)}
+.vx-dot{fill:#0b2d7a;stroke:#fff;stroke-width:1.6}
+.vx-dot.is-water{fill:#2f9bff}
+.vx-dot.is-on{fill:#e0ff91;stroke:#0b2d7a;stroke-width:2}
+.vx-n{font:800 10px "DM Sans",sans-serif;fill:#0b2d7a;text-anchor:middle}
+
+.voyage[data-kind=explore] .voyage-card{pointer-events:none}
+.voyage[data-kind=explore] .voyage-card>*{pointer-events:auto}
+.voyage[data-kind=explore] .voyage-card h2{font-size:clamp(28px,7.4vw,44px);margin:8px 0 4px}
+.vx-fold{width:40px;height:40px;margin:-4px -6px -4px 0;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);background:rgba(8,32,92,.42);color:#fff}
+.vx-fold svg{transition:transform .25s}
+.vx-min .vx-fold svg{transform:rotate(180deg)}
+.vx-min .voyage-card h2,.vx-min .vx-missing,.vx-min .vx-place,.vx-min .vx-text,.vx-min .voyage-card .voyage-actions,.vx-min .voyage-card .voyage-credit{display:none}
+.vx-min .vx-map{opacity:.45}
+.vx-place{display:flex;align-items:center;gap:6px;margin:0 0 4px!important;font-size:13.5px!important;font-weight:700;color:#e0ff91!important}
+.vx-place svg{width:15px;height:15px}
+.vx-text{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.vx-strip{display:flex;gap:8px;margin:12px -18px 0;padding:2px 18px 4px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 18px),transparent)}
+.vx-strip::-webkit-scrollbar{display:none}
+.vx-chip{flex:none;display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 14px 0 11px;border-radius:14px;border:1px solid rgba(255,255,255,.26);background:rgba(8,32,92,.5);color:#fff;font-weight:800;font-size:13.5px;scroll-snap-align:center;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:background .2s,transform .2s}
+.vx-chip svg{width:19px;height:19px}
+.vx-chip:active{transform:scale(.95)}
+.vx-chip.is-on{background:#fff;color:#0b2d7a;border-color:#fff}
+.vx-missing{display:flex;align-items:center;gap:6px;margin:8px 0 0!important;font-size:12.5px!important;opacity:.78}
+.vx-missing svg{width:16px;height:16px}
+.voyage[data-kind=explore] .voyage-credit a{display:inline-flex;align-items:center;min-height:40px;margin:-12px 0}
+.voyage[data-kind=explore] .voyage-actions{margin-top:10px}
+.voyage[data-kind=explore] .voyage-cta{min-height:44px;padding:10px 16px}
+.vx-link{border:0;background:none;color:inherit;text-decoration:underline;font-size:inherit;padding:12px 4px;margin:-12px 0}
+@media (min-width:960px){
+  .vx-map{top:96px;right:32px;width:132px;height:132px}
+  .vx-strip{margin:12px 0 0;padding:2px 0 4px;flex-wrap:wrap;overflow:visible;-webkit-mask-image:none}
+  .vx-panel{left:calc(50% + 180px)}
+}
+@media (prefers-reduced-motion:reduce){.vx-layer{transition:none}.vx-move{animation:none}}
+[dir=rtl] .vx-map{right:auto;left:16px}
+[dir=rtl] .vx-fold{margin:-4px 0 -4px -6px}
+[dir=rtl] .vx-move{padding:10px 40px 10px 18px;background-position:calc(100% - 12px) 50%}
+@media (min-width:960px){[dir=rtl] .vx-map{left:32px}[dir=rtl] .vx-panel{left:calc(50% - 180px)}}
+/* Entrée « Balade-toi sur le spot en 360° » sur la fiche spot (reprend le style du lien vidéo). */
+button.experience-explore-360{width:100%;font:inherit;text-align:start;cursor:pointer}
+.experience-explore-360>span:first-child{font-size:10px!important;font-weight:800}
