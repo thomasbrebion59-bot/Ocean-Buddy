@@ -5,6 +5,11 @@
   'use strict';
   const M=window.SpotGuideModel;if(!M)return;
   const DATA_URL='assets/data/spot-guides.js?v=2480384a9576';
+  const DATA_URL_EN='assets/data/spot-guides.en.js?v=711eb3b4fa1e';
+  /* Hors français, le contenu éditorial (esprit du lieu, lieux, libellés d’hébergement) s’affiche en anglais.
+     Il est marqué translate="no" pour que i18n.js ne le retraduise pas par morceaux ; les libellés d’interface restent traduisibles. */
+  const english=()=>!!(window.OB_I18N&&OB_I18N.lang&&OB_I18N.lang!=='fr');
+  const NT=' translate="no" data-no-i18n';
   const $=s=>document.querySelector(s);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const svg=(body,cls='')=>`<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
@@ -37,20 +42,40 @@
     compass:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/>'
   };
   const icon=(k,cls)=>svg(P[k]||P.nature,cls);
+  const lab=e=>e.labelCustom?`<span${NT}>${esc(e.label)}</span>`:esc(e.label);
   const KIND_LABEL={nature:'Nature',plage:'Plage',village:'Village',ville:'Ville',marche:'Marché',musee:'Musée',patrimoine:'Patrimoine',panorama:'Point de vue',rando:'Randonnée',ile:'Île',lac:'Lac'};
   const DIRS=['au nord','au nord-est','à l’est','au sud-est','au sud','au sud-ouest','à l’ouest','au nord-ouest'];
   let data=null,loading=null,current=null,section=null;
 
   /* ---------- Données ---------- */
-  function load(){
-    if(data)return Promise.resolve(data);
-    if(window.OCEAN_SPOT_GUIDES){data=window.OCEAN_SPOT_GUIDES;return Promise.resolve(data);}
-    if(!loading)loading=new Promise((resolve,reject)=>{
-      const script=document.createElement('script');script.src=DATA_URL;script.async=true;
-      script.onload=()=>{data=window.OCEAN_SPOT_GUIDES||{spots:{},countries:{}};resolve(data);};
-      script.onerror=()=>{loading=null;script.remove();reject(Error('Guide indisponible'));};
+  function inject(url){
+    return new Promise((resolve,reject)=>{
+      const script=document.createElement('script');script.src=url;script.async=true;
+      script.onload=resolve;script.onerror=()=>{script.remove();reject(Error('Guide indisponible'));};
       document.head.append(script);
     });
+  }
+  /* Superpose la version anglaise : textes, noms des lieux et libellés, sans toucher aux coordonnées ni aux prix. */
+  function overlay(base,en){
+    if(!en)return base;
+    const out={...base,countries:{...base.countries},spots:{...base.spots}};
+    for(const [name,c] of Object.entries(en.countries||{}))if(out.countries[name])out.countries[name]={...out.countries[name],...c};
+    for(const [id,e] of Object.entries(en.spots||{})){
+      const g=out.spots[id];if(!g)continue;
+      const next={...g};
+      for(const k of ['v','l','h','f','r','s'])if(e[k])next[k]=e[k];
+      if(Array.isArray(e.a)&&Array.isArray(g.a)&&e.a.length===g.a.length)next.a=g.a.map((row,i)=>{const r=row.slice();if(r[5]===1)r[5]=r[0].replace(/’/g,"'");r[0]=e.a[i][0]||r[0];r[1]=e.a[i][1]||r[1];return r;});
+      if(e.lbl&&g.z)next.z={...g.z,lbl:e.lbl};
+      out.spots[id]=next;
+    }
+    return out;
+  }
+  function load(){
+    if(data)return Promise.resolve(data);
+    if(!loading)loading=(window.OCEAN_SPOT_GUIDES?Promise.resolve():inject(DATA_URL))
+      .then(()=>english()&&!window.OCEAN_SPOT_GUIDES_EN?inject(DATA_URL_EN).catch(()=>{}):null)
+      .then(()=>{const base=window.OCEAN_SPOT_GUIDES||{spots:{},countries:{}};data=english()?overlay(base,window.OCEAN_SPOT_GUIDES_EN):base;return data;})
+      .catch(error=>{loading=null;throw error;});
     return loading;
   }
   const ready=()=>!!data;
@@ -78,7 +103,13 @@
   /* ---------- Outils ---------- */
   function distance(a,b){const r=Math.PI/180,dLat=(b.lat-a.lat)*r,dLon=(b.lon-a.lon)*r,x=Math.sin(dLat/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLon/2)**2;return 6371*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
   function bearing(a,b){const r=Math.PI/180,y=Math.sin((b.lon-a.lon)*r)*Math.cos(b.lat*r),x=Math.cos(a.lat*r)*Math.sin(b.lat*r)-Math.sin(a.lat*r)*Math.cos(b.lat*r)*Math.cos((b.lon-a.lon)*r);return (Math.atan2(y,x)/r+360)%360;}
+  const DIRS_EN=['north','north-east','east','south-east','south','south-west','west','north-west'];
+  /* Distance et mois : fragments calculés depuis les données, en anglais hors français et marqués non traduisibles. */
+  const LG=()=>english()?'en':'fr';
+  const months=m=>`<span${NT}>${esc(M.monthsLabel(m,LG()))}</span>`;
+  const monthNow2=()=>`<span${NT}>${esc(M.monthName(monthNow(),LG()))}</span>`;
   function whereText(km,deg){
+    if(english())return km<1?'Less than 1 km from the spot':`${Math.round(km)} km ${DIRS_EN[Math.round(deg/45)%8]}`;
     if(km<1)return 'À moins d’un kilomètre du spot';
     return `À ${Math.round(km)} km ${DIRS[Math.round(deg/45)%8]}`;
   }
@@ -99,12 +130,12 @@
     return `<div class="guide-chapter"><span class="guide-chapter-number">01</span><span class="guide-chapter-label">L’esprit du lieu</span></div>
       <div class="guide-spirit-cover${photo?'':' no-photo'}">${photo?`<img src="${esc(photo)}" alt="" loading="lazy" decoding="async">`:''}
         <div class="guide-spirit-words">
-          <span class="guide-eyebrow">${esc(country(s)||'Carnet de voyage')}${c.lang?` · ${esc(c.lang)}`:''}</span>
-          ${hello?`<p class="guide-hello" lang="und"><span aria-hidden="true">«&nbsp;</span>${esc(hello)}<span aria-hidden="true">&nbsp;»</span></p><p class="guide-gloss"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" width="40" height="40" loading="lazy" decoding="async"><span>Poulpy te souffle le mot du coin : ${esc(gloss)}.</span></p>`:`<h3 class="guide-hello">Le temps d’une escale</h3>`}
+          <span class="guide-eyebrow">${esc(country(s)||'Carnet de voyage')}${c.lang?` · <span${NT}>${esc(c.lang)}</span>`:''}</span>
+          ${hello?`<p class="guide-hello" lang="und"${NT}><span aria-hidden="true">«&nbsp;</span>${esc(hello)}<span aria-hidden="true">&nbsp;»</span></p><p class="guide-gloss"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" width="40" height="40" loading="lazy" decoding="async"><span><span>Poulpy te souffle le mot du coin :</span> <span${NT}>${esc(gloss)}.</span></span></p>`:`<h3 class="guide-hello">Le temps d’une escale</h3>`}
         </div>
       </div>
-      ${c.vibe?`<blockquote class="guide-vibe"><svg class="guide-quote" viewBox="0 0 48 40" aria-hidden="true"><path d="M0 40V24C0 10 7 2 20 0l2 6c-7 2-11 7-11 14h9v20H0Zm26 0V24C26 10 33 2 46 0l2 6c-7 2-11 7-11 14h9v20H26Z" fill="currentColor"/></svg><p>${esc(c.vibe)}</p></blockquote>`:''}
-      ${tiles.length?`<div class="guide-tiles">${tiles.map(([k,label,title,text])=>`<article class="guide-tile tile-${k}"><span class="guide-tile-icon">${icon(k)}</span><small>${label}</small>${title?`<b>${esc(title)}</b>`:''}<p>${esc(text)}</p></article>`).join('')}</div>`:''}
+      ${c.vibe?`<blockquote class="guide-vibe"${NT}><svg class="guide-quote" viewBox="0 0 48 40" aria-hidden="true"><path d="M0 40V24C0 10 7 2 20 0l2 6c-7 2-11 7-11 14h9v20H0Zm26 0V24C26 10 33 2 46 0l2 6c-7 2-11 7-11 14h9v20H26Z" fill="currentColor"/></svg><p>${esc(c.vibe)}</p></blockquote>`:''}
+      ${tiles.length?`<div class="guide-tiles">${tiles.map(([k,label,title,text])=>`<article class="guide-tile tile-${k}"><span class="guide-tile-icon">${icon(k)}</span><small>${label}</small>${title?`<b${NT}>${esc(title)}</b>`:''}<p${NT}>${esc(text)}</p></article>`).join('')}</div>`:''}
       ${c.grounded?'':'<p class="guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>'}`;
   }
 
@@ -157,7 +188,7 @@
       return head+`<div class="guide-around-fallback"><p>Poulpy n’a pas encore sélectionné les incontournables de ce secteur. Explore les environs sur la carte :</p><div class="guide-chips">${[['panorama','Points de vue','point de vue'],['marche','Marchés','marché'],['rando','Randonnées','randonnée'],['musee','Musées','musée']].map(([k,label,query])=>`<a href="${esc(q(query))}" target="_blank" rel="noopener">${icon(k)}<span>${label}</span></a>`).join('')}</div></div>`;
     }
     return head+`<div class="guide-around-layout"><figure class="guide-radar-wrap">${radar(items)}<figcaption>Distances à vol d’oiseau depuis le secteur du spot. Le trajet réel peut être plus long.</figcaption></figure>
-      <ol class="guide-around-list">${items.map(x=>`<li class="guide-place" data-around-item="${x.i}"><span class="guide-place-number">${x.i}</span><div class="guide-place-body"><span class="guide-place-kind">${icon(x.k)}${esc(KIND_LABEL[x.k]||'À voir')}</span><b>${esc(x.n)}</b><p>${esc(x.d)}</p><span class="guide-place-where">${esc(whereText(x.km,x.deg))}</span><span class="guide-place-links"><a href="${esc(mapsUrl(x.n,s))}" target="_blank" rel="noopener">${icon('map')}<span>Voir sur la carte</span></a>${x.title?`<a href="${esc(wikiUrl(lang,x.title))}" target="_blank" rel="noopener">${icon('book')}<span>En savoir plus</span></a>`:''}</span></div></li>`).join('')}</ol></div>
+      <ol class="guide-around-list">${items.map(x=>`<li class="guide-place" data-around-item="${x.i}"><span class="guide-place-number">${x.i}</span><div class="guide-place-body"><span class="guide-place-kind">${icon(x.k)}${esc(KIND_LABEL[x.k]||'À voir')}</span><b${NT}>${esc(x.n)}</b><p${NT}>${esc(x.d)}</p><span class="guide-place-where"${english()?NT:''}>${esc(whereText(x.km,x.deg))}</span><span class="guide-place-links"><a href="${esc(mapsUrl(x.n,s))}" target="_blank" rel="noopener">${icon('map')}<span>Voir sur la carte</span></a>${x.title?`<a href="${esc(wikiUrl(lang,x.title))}" target="_blank" rel="noopener">${icon('book')}<span>En savoir plus</span></a>`:''}</span></div></li>`).join('')}</ol></div>
       <p class="guide-source">Lieux sélectionnés par Ocean Buddy et situés grâce aux coordonnées de Wikipédia. Vérifie horaires et accès avant de partir.</p>`;
   }
 
@@ -191,13 +222,13 @@
     const e=estimate(s),now=monthNow(),dates=tripDates(s),pl=place(s,e);
     const links=M.searchLinks(pl,{checkin:dates?.checkin,checkout:dates?.checkout,coords:coordsOf(s.id)});
     const inPeak=e.peak.includes(now),hasPeak=e.peak.length>0;
-    const seasons=`<div class="guide-seasons"><div class="guide-season${!inPeak?' is-now':''}"><small>Hors haute saison</small><b>${M.euros({lo:e.lo,hi:e.hi})}</b>${!inPeak?`<span>En ce moment · ${MONTHS[now-1]}</span>`:''}</div>${hasPeak?`<div class="guide-season peak${inPeak?' is-now':''}"><small>Haute saison · ${esc(M.monthsLabel(e.peak))}</small><b>${M.euros({lo:e.peakLo,hi:e.peakHi})}</b>${inPeak?`<span>En ce moment · ${MONTHS[now-1]}</span>`:''}</div>`:''}</div>`;
+    const seasons=`<div class="guide-seasons"><div class="guide-season${!inPeak?' is-now':''}"><small>Hors haute saison</small><b>${M.euros({lo:e.lo,hi:e.hi})}</b>${!inPeak?`<span>En ce moment · ${monthNow2()}</span>`:''}</div>${hasPeak?`<div class="guide-season peak${inPeak?' is-now':''}"><small>Haute saison · ${months(e.peak)}</small><b>${M.euros({lo:e.peakLo,hi:e.peakHi})}</b>${inPeak?`<span>En ce moment · ${monthNow2()}</span>`:''}</div>`:''}</div>`;
     const buttons=[['booking','Booking.com'],['hostelworld','Hostelworld'],['airbnb','Airbnb'],['google','Google Hôtels']];
     if(e.type==='camping')buttons.unshift(['camping','Campings sur la carte']);
     return `<div class="guide-chapter"><span class="guide-chapter-number">03</span><span class="guide-chapter-label">Dormir pas cher</span></div>
       <div class="guide-sleep-grid">
         <div class="guide-ticket">
-          <div class="guide-ticket-top"><span class="guide-ticket-icon">${icon(e.type)}</span><div><small>La nuit la moins chère</small><b>${esc(e.label)}</b></div></div>
+          <div class="guide-ticket-top"><span class="guide-ticket-icon">${icon(e.type)}</span><div><small>La nuit la moins chère</small><b>${lab(e)}</b></div></div>
           <p class="guide-price"><strong>${M.euros({lo:e.lo,hi:e.hi})}</strong><span>par nuit, pour une personne</span></p>
           <p class="guide-ticket-detail">${esc(e.detail)}</p>
           ${seasons}
@@ -216,11 +247,11 @@
   function glanceHTML(s){
     const c=culture(s),e=estimate(s);
     const chips=[
-      c.hello&&['speech','guideSpirit',`Dis « ${c.hello[0]} »`],
-      c.food&&['food','guideSpirit',`Goûte : ${c.food[0]}`],
-      ['bed','guideSleep',`Dès ${e.lo} € la nuit`]
+      c.hello&&['speech','guideSpirit','Le mot du coin',c.hello[0]],
+      c.food&&['food','guideSpirit','À goûter',c.food[0]],
+      ['bed','guideSleep',`Dès ${e.lo} € la nuit`,null]
     ].filter(Boolean);
-    return chips.map(([k,target,label])=>`<button type="button" class="guide-glance-chip" data-guide-jump="${target}">${icon(k)}<span>${esc(label)}</span></button>`).join('');
+    return chips.map(([k,target,label,value])=>`<button type="button" class="guide-glance-chip" data-guide-jump="${target}">${icon(k)}<span>${esc(label)}</span>${value?`<b${NT}>${esc(value)}</b>`:''}</button>`).join('');
   }
 
   /* ---------- Montage sur la fiche ---------- */
@@ -292,7 +323,7 @@
     if(!s||s.custom)return 'Estimation indisponible pour un spot privé.';
     if(!data){load().then(()=>window.OceanNotebook?.refresh?.()).catch(()=>{});return '<span class="guide-compare-wait">Estimation en cours…</span>';}
     const e=estimate(s);
-    return `<span class="guide-compare-price"><b>${M.euros({lo:e.lo,hi:e.hi})}</b><small>${esc(e.label)} · hors haute saison</small>${e.peak.length?`<small>Haute saison (${esc(M.monthsLabel(e.peak))}) : ${M.euros({lo:e.peakLo,hi:e.peakHi})}</small>`:''}</span>`;
+    return `<span class="guide-compare-price"><b>${M.euros({lo:e.lo,hi:e.hi})}</b><small>${lab(e)} · hors haute saison</small>${e.peak.length?`<small>Haute saison (${months(e.peak)}) : ${M.euros({lo:e.peakLo,hi:e.peakHi})}</small>`:''}</span>`;
   }
   function compareCheapest(ids){
     if(!data||ids.length<2)return null;
@@ -305,7 +336,7 @@
     if(!s||s.custom)return '—';
     if(!data)return '<span class="guide-compare-wait">Chargement…</span>';
     const c=culture(s);
-    return `<span class="guide-compare-spirit">${c.hello?`<b>« ${esc(c.hello[0])} »</b>`:''}${c.food?`<small>À goûter : ${esc(c.food[0])}</small>`:''}</span>`;
+    return `<span class="guide-compare-spirit">${c.hello?`<b${NT}>« ${esc(c.hello[0])} »</b>`:''}${c.food?`<small><span>À goûter</span> <span${NT}>${esc(c.food[0])}</span></small>`:''}</span>`;
   }
 
   /* ---------- Voyages ---------- */
@@ -321,7 +352,7 @@
       if(!step.perNight||!s){host.innerHTML='';return;}
       const e=estimate(s);
       const nightsText=step.nights===null?'Ajoute la date de l’étape pour estimer le total.':step.nights===0?'Pas de nuit prévue ici : une étape à la journée.':`${step.nights===1?'1 nuit':step.nights+' nuits'}${step.basis==='split'?' (réparties à parts égales)':''} : ${M.euros(step.total)} au total.`;
-      host.innerHTML=`<span class="trip-lodging-icon">${icon(e.type)}</span><span><b>${esc(e.label)} · ${M.euros(step.perNight)} la nuit${step.perNight.peak?' (haute saison)':''}</b><small>${esc(nightsText)}</small></span>${est.cheapest&&est.cheapest.stepId===step.stepId?'<em>Le moins cher</em>':''}`;
+      host.innerHTML=`<span class="trip-lodging-icon">${icon(e.type)}</span><span><b>${lab(e)} · ${M.euros(step.perNight)} la nuit${step.perNight.peak?' (haute saison)':''}</b><small>${esc(nightsText)}</small></span>${est.cheapest&&est.cheapest.stepId===step.stepId?'<em>Le moins cher</em>':''}`;
       host.classList.toggle('is-cheapest',!!est.cheapest&&est.cheapest.stepId===step.stepId);
     });
     if(!panel)return;

@@ -67,3 +67,20 @@ test('every catalogue country has a lodging baseline and the guide data stays co
     }
   }
 });
+test('the English guide mirrors the French one: same spots, same places, same greeting words', () => {
+  const root=path.join(__dirname,'..');
+  const fr=JSON.parse(fs.readFileSync(path.join(root,'data/spot-guides.json'),'utf8'));
+  const file=path.join(root,'data/spot-guides.en.json');
+  if(!fs.existsSync(file))return;
+  const en=JSON.parse(fs.readFileSync(file,'utf8'));
+  assert.deepEqual(Object.keys(en.spots).sort(),Object.keys(fr.spots).sort());
+  for(const [id,g] of Object.entries(fr.spots)){
+    const e=en.spots[id];
+    assert.equal((e.around||[]).length,(g.around||[]).length,id);
+    if(g.hello)assert.equal(e.hello[0],g.hello[0],id);
+    for(const k of ['vibe','respect','season'])if(g[k])assert.ok(e[k]&&e[k]!==g[k],id+' '+k);
+  }
+  for(const name of Object.keys(fr.countries))assert.ok(en.countries[name],name);
+  assert.equal(M.monthsLabel([7,8],'en'),'July and August');
+  assert.equal(M.monthsLabel([12,1,2],'en'),'December to February');
+});

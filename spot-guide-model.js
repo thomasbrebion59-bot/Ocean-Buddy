@@ -195,7 +195,8 @@
     if(altType){const r=rangeFor(table,altType);alt={type:altType,label:LABELS[altType],lo:scaled(r,factor)[0],hi:scaled(r,factor)[1]};}
     const peak=validMonths(g.p)||validMonths(table.p)||[];
     const low=scaled(base,factor),high=scaled(base,factor*PEAK_FACTOR);
-    return {type,label:typeof g.lbl==='string'&&g.lbl.trim()?g.lbl.trim().slice(0,40):LABELS[type],detail:DETAILS[type],
+    const custom=typeof g.lbl==='string'&&!!g.lbl.trim();
+    return {type,label:custom?g.lbl.trim().slice(0,40):LABELS[type],labelCustom:custom,detail:DETAILS[type],
       lo:low[0],hi:low[1],peakLo:high[0],peakHi:high[1],peak,alt,basis:guide&&g.k?'spot':basis,area,factor,
       town:typeof g.town==='string'?g.town.trim().slice(0,60):''};
   }
@@ -207,8 +208,10 @@
   }
   function monthOf(date){const m=/^\d{4}-(\d{2})-\d{2}$/.exec(String(date||''));return m?Number(m[1]):null;}
   /* Mois de haute saison sous forme lisible : « juillet et août », « de décembre à mars ». */
-  function monthsLabel(months){
+  const MONTHS_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  function monthsLabel(months,lang){
     const list=validMonths(months);if(!list)return '';
+    const en=lang==='en',N=en?MONTHS_EN:MONTHS,AND=en?' and ':' et ';
     const sorted=[...list].sort((a,b)=>a-b);
     // Cherche une suite continue, éventuellement à cheval sur l’année.
     const set=new Set(sorted);
@@ -216,14 +219,15 @@
     if(start!==undefined){
       const run=[];let m=start;while(set.has(m)&&run.length<12){run.push(m);m=m===12?1:m+1;}
       if(run.length===sorted.length){
-        if(run.length===1)return MONTHS[run[0]-1];
-        if(run.length===2)return MONTHS[run[0]-1]+' et '+MONTHS[run[1]-1];
-        return 'de '+MONTHS[run[0]-1]+' à '+MONTHS[run[run.length-1]-1];
+        if(run.length===1)return N[run[0]-1];
+        if(run.length===2)return N[run[0]-1]+AND+N[run[1]-1];
+        return en?N[run[0]-1]+' to '+N[run[run.length-1]-1]:'de '+N[run[0]-1]+' à '+N[run[run.length-1]-1];
       }
     }
-    const names=sorted.map(m=>MONTHS[m-1]);
-    return names.slice(0,-1).join(', ')+' et '+names[names.length-1];
+    const names=sorted.map(m=>N[m-1]);
+    return names.slice(0,-1).join(', ')+AND+names[names.length-1];
   }
+  function monthName(m,lang){return (lang==='en'?MONTHS_EN:MONTHS)[m-1]||'';}
   /* Position d’un prix parmi tous les spots : part des spots plus chers (0-100). */
   function cheaperThan(value,all){
     const list=(all||[]).filter(Number.isFinite);if(!list.length||!Number.isFinite(value))return null;
@@ -242,5 +246,5 @@
     const camping=`https://www.google.com/maps/search/${encodeURIComponent('camping')}${c?`/@${(+c.lat).toFixed(4)},${(+c.lon).toFixed(4)},12z`:encodeURIComponent(' '+q)}`;
     return {booking,hostelworld,airbnb,google,camping};
   }
-  return {EDITION,TYPES,LABELS,DETAILS,PEAK_FACTOR,COUNTRIES:C,REGIONS,WORLD,baseline,estimate,nightly,monthOf,monthsLabel,cheaperThan,euros,searchLinks,round};
+  return {EDITION,TYPES,LABELS,DETAILS,PEAK_FACTOR,COUNTRIES:C,REGIONS,WORLD,baseline,estimate,nightly,monthOf,monthsLabel,cheaperThan,euros,searchLinks,round,monthName};
 });
