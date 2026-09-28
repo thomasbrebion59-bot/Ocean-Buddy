@@ -193,7 +193,7 @@ body.mapfull .app-chrome{visibility:hidden}
 .omini button:focus-visible{outline:3px solid #ffb979;outline-offset:2px}
 .omini.is-full{position:fixed!important;inset:0!important;z-index:1200;width:auto!important;height:auto!important;max-height:none!important;margin:0!important;border:0!important;border-radius:0!important}
 .omini.is-full .omini-ctrls{top:calc(12px + env(safe-area-inset-top))}
-body.omini-full{overflow:hidden}body.omini-full .nav,body.omini-full .fab{visibility:hidden}
+body.omini-full{overflow:hidden}body.omini-full .nav,body.omini-full .fab,body.omini-full .app-chrome,body.omini-full .spot-bar{visibility:hidden}
 .omini .maplibregl-ctrl-attrib{font:500 10px var(--body);background:rgba(255,255,255,.82)}
 .omini .maplibregl-cooperative-gesture-screen{font:700 14px var(--body);background:rgba(11,45,122,.55)}
 .omini-focus{width:48px;height:52px}

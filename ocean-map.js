@@ -238,7 +238,7 @@
   /* Globe : il remplit la largeur. Planisphère : tous les spots dans le cadre. */
   function overviewZoom(){
     const c=map.getContainer(),w=c.clientWidth,h=c.clientHeight-(mobile()?140:0);
-    if(globe())return Math.log2(Math.min(w*1.02,h*.92)*Math.PI/512);
+    if(globe())return Math.log2(Math.min(w*.98,h*.92)*Math.PI/512);
     return Math.max(map.getMinZoom(),Math.min(1.9,Math.log2((w-40)/512)));
   }
   const worldZoom=()=>overviewZoom()+(globe()?1.1:.9);
@@ -558,6 +558,11 @@
       if(!m||!visible())return;
       const pts=[];const f=cfg.focus&&COORDS[cfg.focus];if(f)pts.push(f);
       (cfg.places||[]).forEach(p=>pts.push({lat:p.lat,lon:p.lon}));(cfg.steps||[]).forEach(x=>COORDS[x.id]&&pts.push(COORDS[x.id]));
+      /* Sans incontournables, on cadre aussi les spots voisins (moins de 120 km) pour donner des repères. */
+      if(f&&!(cfg.places||[]).length&&cfg.others!==false){
+        const km=(a,b)=>M.distance(a,b)*111;
+        SPOTS.filter(s=>s.id!==cfg.focus&&COORDS[s.id]).map(s=>({c:COORDS[s.id],d:km(COORDS[s.id],f)})).filter(x=>x.d<120).sort((a,b)=>a.d-b.d).slice(0,4).forEach(x=>pts.push(x.c));
+      }
       if(!pts.length)return;
       const w=canvas.clientWidth,padX=Math.min(70,w*.12),padding={top:60,bottom:50,left:padX,right:padX+44};
       const b=M.bounds(pts);
@@ -575,5 +580,5 @@
       get map(){return m;}
     };
   }
-  window.OceanMap={render,fit,mini,revealActivity,startTerrain,closeTerrain,showUser,select,overview:()=>overview(true),region:zoomRegion,count:()=>rows.length,get map(){return map;}};
+  window.OceanMap={render,fit,mini,color,revealActivity,startTerrain,closeTerrain,showUser,select,overview:()=>overview(true),region:zoomRegion,count:()=>rows.length,get map(){return map;}};
 })();
