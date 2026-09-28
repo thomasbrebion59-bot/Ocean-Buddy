@@ -51,3 +51,32 @@ const code=fs.readFileSync(loader,'utf8');
 const next=code.replace(/assets\/data\/spot-guides\.js\?v=[0-9a-f]+/,'assets/data/spot-guides.js?v='+hash);
 if(next!==code)fs.writeFileSync(loader,next);
 console.log(`${Object.keys(spots).length} carnets, ${places} lieux, ${Object.keys(countries).length} pays · ${(Buffer.byteLength(body)/1024).toFixed(0)} Ko · v=${hash}`);
+
+/* Version anglaise (toutes les langues sauf le français) : uniquement les textes, superposés au fichier français. */
+const enFile=path.join(root,'data/spot-guides.en.json');
+if(fs.existsSync(enFile)){
+  const en=JSON.parse(fs.readFileSync(enFile,'utf8'));
+  const enSpots={};let missing=0;
+  for(const [id,g] of Object.entries(en.spots||{})){
+    const base=spots[id];if(!base){console.warn('Traduction sans carnet français :',id);continue;}
+    const o={};
+    if(g.vibe)o.v=g.vibe;if(g.lang)o.l=g.lang;
+    if(Array.isArray(g.hello)&&g.hello.length===2)o.h=g.hello;
+    if(Array.isArray(g.food)&&g.food.length===2)o.f=g.food;
+    if(g.respect)o.r=g.respect;if(g.season)o.s=g.season;
+    if(Array.isArray(g.around)&&base.a&&g.around.length===base.a.length)o.a=g.around.map(p=>[p.n,p.d]);
+    else if(base.a)console.warn('Lieux traduits incomplets :',id);
+    if(g.lbl)o.lbl=g.lbl;
+    enSpots[id]=o;
+  }
+  for(const id of Object.keys(spots))if(!enSpots[id]){missing++;}
+  const enCountries={};
+  for(const [name,c] of Object.entries(en.countries||{}))enCountries[name]={lang:c.lang,hello:c.hello,food:c.food,respect:c.respect};
+  const enBody=`/* Generated from data/spot-guides.en.json by scripts/build-spot-guides.cjs. Do not edit by hand. */\nwindow.OCEAN_SPOT_GUIDES_EN=${JSON.stringify({countries:enCountries,spots:enSpots})};\n`;
+  fs.writeFileSync(path.join(root,'assets/data/spot-guides.en.js'),enBody);
+  const enHash=crypto.createHash('sha256').update(enBody).digest('hex').slice(0,12);
+  const code2=fs.readFileSync(loader,'utf8');
+  const next2=code2.replace(/assets\/data\/spot-guides\.en\.js\?v=[0-9a-f]+/,'assets/data/spot-guides.en.js?v='+enHash);
+  if(next2!==code2)fs.writeFileSync(loader,next2);
+  console.log(`EN : ${Object.keys(enSpots).length} carnets traduits (${missing} manquants), ${Object.keys(enCountries).length} pays · ${(Buffer.byteLength(enBody)/1024).toFixed(0)} Ko · v=${enHash}`);
+}
