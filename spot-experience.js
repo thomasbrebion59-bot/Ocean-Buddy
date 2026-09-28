@@ -19,15 +19,9 @@
     if (!infos) return;
     if (!$('#spotVideoPanel')) { const section=document.createElement('section');section.id='spotVideoPanel';infos.append(section); }
     if (!$('#spotAreaMap')) {
-      const section=document.createElement('section');section.id='spotAreaMap';section.className='spot-area-map';
-      section.innerHTML='<div class="area-map-heading"><div><small>REPÈRE 2D</small><h3>Explore le secteur</h3><p class="area-map-copy"></p></div><button type="button" data-area-map-toggle aria-expanded="false">Ouvrir la carte</button></div><div class="area-map-canvas" data-area-map hidden role="region" aria-label="Carte approximative du secteur"><div class="area-map-leaflet"></div></div><div class="area-map-footer"><span>Glisse et zoome pour regarder les alentours.</span><a data-area-map-link target="_blank" rel="noopener noreferrer">Ouvrir dans OpenStreetMap ↗</a></div>';
+      const section=document.createElement('section');section.id='spotAreaMap';section.className='spot-area-map';section.setAttribute('aria-labelledby','areaMapTitle');
+      section.innerHTML='<div class="area-map-heading"><div><small>LA CARTE DU SECTEUR</small><h3 id="areaMapTitle">Explore le secteur</h3><p class="area-map-copy"></p></div></div><div class="area-map-canvas" data-area-map></div><ul class="area-map-legend"><li><i class="is-focus" aria-hidden="true"></i>Ce spot</li><li><i class="is-spot" aria-hidden="true"></i>Autres spots Ocean Buddy</li><li class="area-map-legend-places" hidden><i class="is-place" aria-hidden="true">1</i>À découvrir autour</li></ul><div class="area-map-footer"><span>Repère approximatif du secteur : il ne marque ni un point de courant ni une mise à l’eau validée.</span><a data-area-map-link target="_blank" rel="noopener noreferrer">Ouvrir dans OpenStreetMap ↗</a></div>';
       infos.append(section);
-      section.addEventListener('click',event=>{
-        const button=event.target.closest('[data-area-map-toggle]');if(!button)return;
-        const canvas=section.querySelector('[data-area-map]'),show=canvas.hidden;
-        canvas.hidden=!show;button.setAttribute('aria-expanded',String(show));button.textContent=show?'Masquer la carte':'Ouvrir la carte';
-        if(show)requestAnimationFrame(()=>openAreaMap(activeSpot));
-      });
     }
   }
 
@@ -41,27 +35,31 @@
     const image=photo(s);
     const count=window.OceanPhotos?.list(s.id,act)?.length||0;
     const query=encodeURIComponent([s.name,s.loc,act,'spot'].filter(Boolean).join(' '));
-    return `<div class="experience-heading"><span><small>LE SPOT EN IMAGES</small><b>Approche-toi du lieu.</b></span><i>${count?(count>1?`${count} photos locales`:`${count} photo locale`):'Aucune photo locale'}</i></div><button type="button" class="experience-photo-open ${image?'':'no-image'}" data-experience-open>${image?`<img src="${esc(image.thumb||image.src)}" alt="" loading="lazy">`:'<span class="experience-photo-symbol" aria-hidden="true">◎</span>'}<span><b>${image?`Explorer ${esc(s.name)}`:`Découvrir ${esc(s.name)} en images`}</b><small>${image?'Photos créditées · tu peux en chercher d’autres dans la galerie.':'Aucune image locale pour ce lieu. Cherche des photos réutilisables avec leurs crédits.'}</small><strong>${image?'Entrer dans le décor':'Trouver des photos'} ↗</strong></span></button><a class="experience-video-search" href="https://www.youtube.com/results?search_query=${query}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span><span><b>Voir des vidéos du spot</b><small>Ouvre les vidéos proposées sur YouTube · lecture à la demande</small></span><span aria-hidden="true">↗</span></a>`;
+    return `<div class="experience-heading"><span><small>LE SPOT EN IMAGES</small><b>Approche-toi du lieu.</b></span><i>${count?(count>1?`${count} photos locales`:`${count} photo locale`):'Aucune photo locale'}</i></div><button type="button" class="experience-photo-open ${image?'':'no-image'}" data-experience-open>${image?`<img src="${esc(image.thumb||image.src)}" alt="" loading="lazy">`:'<span class="experience-photo-symbol" aria-hidden="true">◎</span>'}<span><b>${image?`Explorer ${esc(s.name)}`:`Découvrir ${esc(s.name)} en images`}</b><small>${image?'Photos créditées · tu peux en chercher d’autres dans la galerie.':'Aucune image locale pour ce lieu. Cherche des photos réutilisables avec leurs crédits.'}</small><strong>${image?'Entrer dans le décor':'Trouver des photos'} ↗</strong></span></button>${window.OceanVoyage?'<button type="button" class="experience-video-search experience-explore-360" data-experience-explore><span aria-hidden="true">360°</span><span><b>Balade-toi sur le spot en 360°</b><small>Parking, plage, point de vue et, quand elles existent, des vues dans l’eau · chargées à la demande</small></span><span aria-hidden="true">→</span></button>':''}<a class="experience-video-search" href="https://www.youtube.com/results?search_query=${query}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true">▶</span><span><b>Voir des vidéos du spot</b><small>Ouvre les vidéos proposées sur YouTube · lecture à la demande</small></span><span aria-hidden="true">↗</span></a>`;
   }
 
-  let areaMap=null,areaMarker=null,areaSpotId=null;
+  /* Carte du secteur : même moteur que la carte des spots, créée quand elle devient visible. */
+  let areaMap=null,areaRequest=0;
   function updateAreaMap(s){
-    const panel=$('#spotAreaMap'),toggle=panel?.querySelector('[data-area-map-toggle]'),copy=panel?.querySelector('.area-map-copy'),link=panel?.querySelector('[data-area-map-link]');
-    if(!panel||!toggle||!copy||!link)return;
-    const point=typeof COORDS!=='undefined'?COORDS[s.id]:null;
-    if(!point){copy.textContent='Aucune coordonnée de secteur vérifiée pour ce lieu.';toggle.disabled=true;link.hidden=true;panel.querySelector('[data-area-map]').hidden=true;toggle.setAttribute('aria-expanded','false');toggle.textContent='Repère indisponible';if(areaMap){areaMap.remove();areaMap=null;areaMarker=null;areaSpotId=null;}return;}
-    const lat=Number(point.lat),lon=Number(point.lon);if(!Number.isFinite(lat)||!Number.isFinite(lon)){copy.textContent='Coordonnées indisponibles pour ce lieu.';toggle.disabled=true;link.hidden=true;panel.querySelector('[data-area-map]').hidden=true;toggle.setAttribute('aria-expanded','false');toggle.textContent='Repère indisponible';if(areaMap){areaMap.remove();areaMap=null;areaMarker=null;areaSpotId=null;}return;}
-    toggle.disabled=false;copy.textContent='Repère approximatif du secteur. Il ne marque ni un point de courant en direct ni un point de mise à l’eau validé.';
-    link.hidden=false;link.href=`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=13/${lat}/${lon}`;
-    panel.dataset.lat=String(lat);panel.dataset.lon=String(lon);panel.dataset.spotName=s.name;panel.dataset.spotId=s.id;
-    if(areaMap&&areaSpotId!==s.id){areaMap.setView([lat,lon],13,{animate:false});areaMarker?.setLatLng([lat,lon]);areaMarker?.setTooltipContent(s.name);areaSpotId=s.id;}
-  }
-  function openAreaMap(s){
-    const host=$('#spotAreaMap .area-map-leaflet'),panel=$('#spotAreaMap');if(!host||!panel||!s)return;
-    if(typeof L==='undefined'){const offline=()=>{host.innerHTML='<p class="area-map-fallback">La carte interactive est indisponible. Tu peux ouvrir le secteur dans OpenStreetMap.</p>';};if(window.OceanLeaflet)window.OceanLeaflet().then(()=>openAreaMap(s),offline);else offline();return;}
-    const lat=Number(panel.dataset.lat),lon=Number(panel.dataset.lon);if(!Number.isFinite(lat)||!Number.isFinite(lon))return;
-    if(!areaMap){areaMap=L.map(host,{zoomControl:true,attributionControl:true,scrollWheelZoom:false,keyboard:true}).setView([lat,lon],13);L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(areaMap);areaMarker=L.circleMarker([lat,lon],{radius:9,color:'#fff',weight:3,fillColor:'#164bd6',fillOpacity:.95}).addTo(areaMap);areaMarker.bindTooltip(panel.dataset.spotName);areaSpotId=s.id;}
-    areaMap.invalidateSize({pan:false});
+    const panel=$('#spotAreaMap');if(!panel)return;
+    const copy=panel.querySelector('.area-map-copy'),link=panel.querySelector('[data-area-map-link]'),host=panel.querySelector('[data-area-map]');
+    /* La carte suit les incontournables « À découvrir autour » quand le carnet est affiché. */
+    const around=$('#guideAround');if(around&&around.nextElementSibling!==panel&&around.parentNode)around.after(panel);
+    const point=typeof COORDS!=='undefined'?COORDS[s.id]:null,lat=Number(point?.lat),lon=Number(point?.lon);
+    if(!point||!Number.isFinite(lat)||!Number.isFinite(lon)){panel.hidden=true;return;}
+    panel.hidden=false;
+    copy.textContent=`${s.name} et les spots voisins. Touche un point pour en savoir plus.`;
+    link.href=`https://www.openstreetmap.org/?mlat=${lat}&mlon=${lon}#map=13/${lat}/${lon}`;
+    const legend=panel.querySelector('.area-map-legend-places');legend.hidden=true;
+    const focusDot=panel.querySelector('.area-map-legend .is-focus'),first=typeof spotSports==='function'?spotSports(s)[0]:null;if(focusDot&&window.OceanMap?.color)focusDot.style.background=window.OceanMap.color(first);
+    const config={focus:s.id,places:[],label:`Carte du secteur autour de ${s.name}`};
+    if(!window.OceanMap?.mini){host.innerHTML='<p class="area-map-fallback">La carte interactive est indisponible. Tu peux ouvrir le secteur dans OpenStreetMap.</p>';return;}
+    if(areaMap)areaMap.update(config);else areaMap=window.OceanMap.mini(host,config);
+    const request=++areaRequest;
+    window.OceanSpotGuide?.around?.(s).then(items=>{
+      if(request!==areaRequest||!items?.length)return;
+      legend.hidden=false;areaMap.update({places:items.map(x=>({i:x.i,n:x.n,d:x.d,lat:x.lat,lon:x.lon}))});
+    }).catch(()=>{});
   }
 
   function drawSafety(s, live, marine) {
@@ -127,7 +125,7 @@
     activeSpot=s;activeAct=act;ensureExperiencePanel();
     const hasPhoto=!!photo(s),btn=$('#dImmersionBtn'),panel=$('#spotVideoPanel');
     if(btn){btn.hidden=false;btn.disabled=false;btn.onclick=()=>openImmersion(s);}
-    if(panel){panel.hidden=false;panel.innerHTML=videoPanel(s,act);panel.querySelector('[data-experience-open]')?.addEventListener('click',()=>openImmersion(s));}
+    if(panel){panel.hidden=false;panel.innerHTML=videoPanel(s,act);panel.querySelector('[data-experience-open]')?.addEventListener('click',()=>openImmersion(s));panel.querySelector('[data-experience-explore]')?.addEventListener('click',()=>window.OceanVoyage?.open(s,{explore:true}));}
     updateAreaMap(s);
     drawSafety(s,window.LIVE?.[s.id]);loadWeek(s,act);
   }

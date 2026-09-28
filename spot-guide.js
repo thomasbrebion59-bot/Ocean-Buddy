@@ -371,5 +371,5 @@
     const id=window.OceanTrips?.route?.().selected;const t=trips().find(x=>x.id===id);if(t)fillTrip(t);
   });
 
-  window.OceanSpotGuide={load,ready,update,estimate,priceFor,culture,compareCell,compareCheapest,compareSpirit,fillTrip};
+  window.OceanSpotGuide={load,ready,update,around:s=>load().then(()=>aroundItems(s)),estimate,priceFor,culture,compareCell,compareCheapest,compareSpirit,fillTrip};
 })();

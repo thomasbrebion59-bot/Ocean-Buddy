@@ -5,7 +5,7 @@
 const VERSION='ob-2026-09-25';
 const STATIC=VERSION+'-static', PAGES=VERSION+'-pages';
 const CORE=['./','index.html','manifest.webmanifest','assets/app/icon-192.png','assets/poulpy/scenes/travel-v2.webp'];
-const CACHEABLE_HOSTS=['fonts.googleapis.com','fonts.gstatic.com','unpkg.com'];
+const CACHEABLE_HOSTS=['fonts.googleapis.com','fonts.gstatic.com'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(PAGES).then(cache=>cache.addAll(CORE)).catch(()=>{}).then(()=>self.skipWaiting()));
