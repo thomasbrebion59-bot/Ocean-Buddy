@@ -16,3 +16,7 @@ Captures iPhone à refaire : accueil sans retour superflu, exploration et filtre
 ## Série marketing iPhone 6,9" (28 septembre 2026) — à utiliser
 
 `iphone-69/01…06` (1320 × 2868, format accepté pour l'iPhone 6,9" et redimensionné par Apple pour les autres tailles) : Bora Bora immersif, Navagio, fiche complète de Bora Bora, alentours/hébergement, Hanauma Bay, esprit du lieu. Captures de l'interface mobile actuelle (`mobile/www`), habillées d'une accroche. Remplacent l'ancienne capture Raja Ampat.
+
+## Série iPad 13" (28 septembre 2026) — à utiliser
+
+`ipad-13-v2/01…06` (2064 × 2752) : même série que l'iPhone, capturée sur la mise en page iPad actuelle (menu latéral). Remplace `ipad-13/` (ancienne interface en bande étroite).
