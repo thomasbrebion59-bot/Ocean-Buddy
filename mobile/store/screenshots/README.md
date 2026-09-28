@@ -12,3 +12,7 @@ Ces images sont des références de travail. **Aucune n’est encore validée po
 | `ipad-13/*.png` | Archives de l’ancienne présentation iPad. L’interface occupe une bande étroite au centre ; ces images ne servent pas à la première sortie iPhone. |
 
 Captures iPhone à refaire : accueil sans retour superflu, exploration et filtres, fiche de lieu sourcée (par exemple Poʻipū ou Cathedral Cove), voyage privé, et éventuellement galerie. Ne montrer aucune communauté tant que le service n’est pas activé et testé.
+
+## Série marketing iPhone 6,9" (28 septembre 2026) — à utiliser
+
+`iphone-69/01…06` (1320 × 2868, format accepté pour l'iPhone 6,9" et redimensionné par Apple pour les autres tailles) : Bora Bora immersif, Navagio, fiche complète de Bora Bora, alentours/hébergement, Hanauma Bay, esprit du lieu. Captures de l'interface mobile actuelle (`mobile/www`), habillées d'une accroche. Remplacent l'ancienne capture Raja Ampat.
