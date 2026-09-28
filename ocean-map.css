@@ -186,7 +186,7 @@ body.mapfull .app-chrome{visibility:hidden}
    et apparaît en fondu lors de la plongée. */
 .omap.is-globe{--og-label:rgba(7,27,50,.94);--og-lime:#d7f75b}
 .omap.is-globe .omap-stage{background:radial-gradient(120% 95% at 50% 46%,#102b55 0%,#061329 55%,#020711 100%)}
-.ocean-v2 .omap.is-globe #spotMap{background:#173d54}
+.ocean-v2 .omap.is-globe #spotMap{background:#2a86b8}
 .ocean-v2 .omap.is-planet #spotMap,.ocean-v2 .omap.is-planet #spotMap *{visibility:hidden!important;transition:visibility 0s .36s}
 .omap .omap-globe{position:absolute;inset:0;z-index:1;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s .35s}
 .omap.is-planet .omap-globe{opacity:1;visibility:visible;transition:opacity .35s ease}
@@ -196,38 +196,14 @@ body.mapfull .app-chrome{visibility:hidden}
 .og-layer{position:absolute;inset:0;overflow:hidden;pointer-events:none;font-family:var(--body)}
 .og-layer>*{position:absolute;left:0;top:0}
 .og-layer>[hidden]{display:none}
-/* Groupes de spots : disque cobalt profond, anneau segmenté par activité. */
-.og-cluster{z-index:1;width:var(--sz);height:var(--sz);margin:calc(var(--sz)/-2) 0 0 calc(var(--sz)/-2);padding:2px;border:0;border-radius:50%;background:var(--ring);cursor:pointer;pointer-events:auto;box-shadow:0 6px 18px -6px rgba(2,7,17,.8);animation:og-pop .18s ease-out}
-.og-cluster span{display:grid;place-items:center;width:100%;height:100%;border-radius:50%;background:#0b2d7a;color:#fff;font:700 12px/1 var(--body);box-shadow:inset 0 0 0 1px rgba(255,255,255,.65);transition:background .14s}
-.og-cluster:hover span{background:#1f55e0}
-.og-cluster:focus-visible{outline:3px solid #ffb979;outline-offset:2px}
-@keyframes og-pop{from{transform:scale(.6);opacity:0}}
-/* Étiquettes : pastille sombre, texte blanc. */
-.og-label{width:0;height:0}
-.og-label button,.og-sel b,.og-hover b{position:absolute;left:9px;top:-12px;height:24px;max-width:170px;padding:0 8px;border:0;border-radius:8px;background:var(--og-label);color:#fff;font:600 12px/24px var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 6px 16px -8px rgba(2,7,17,.9)}
-.og-label button{pointer-events:auto;cursor:pointer}
-.og-label button:hover{background:#0b2d7a}
-.og-label.is-left button{left:auto;right:9px}
-[dir=rtl] .og-label button{left:auto;right:9px}[dir=rtl] .og-label.is-left button{right:auto;left:9px}
-/* Spot choisi : cœur à sa couleur, anneau citron, halo et réponse aquatique à la sélection. */
-.og-sel,.og-hover,.og-user{width:0;height:0;pointer-events:none}
-.og-label{z-index:2}.og-user{z-index:3}.og-hover{z-index:4}.og-sel{z-index:5}
-.og-sel i{position:absolute;left:-9px;top:-9px;width:18px;height:18px;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px var(--og-lime),0 0 0 3px rgba(2,7,17,.5),0 0 18px 8px rgba(215,247,91,.16)}
-.og-sel::before{content:"";position:absolute;left:-12px;top:-12px;width:24px;height:24px;border-radius:50%;background:rgba(215,247,91,.2);animation:og-breathe 2.4s ease-out infinite}
-.og-sel.is-new::after{content:"";position:absolute;left:-6px;top:-6px;width:12px;height:12px;border:1.5px solid rgba(215,247,91,.8);border-radius:50%;animation:og-ripple .9s ease-out 2 both}
-.og-sel b{display:none}
-@keyframes og-breathe{from{transform:scale(1);opacity:1}to{transform:scale(1.5);opacity:0}}
-@keyframes og-ripple{to{transform:scale(3.7);opacity:0}}
+.og-hover{width:0;height:0;pointer-events:none}
 .og-hover i{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px #fff}
-.og-hover b{left:14px}
-.og-user::before{content:"";position:absolute;left:-8px;top:-8px;width:16px;height:16px;border:3px solid #fff;border-radius:50%;background:#2f6bff;box-sizing:border-box;box-shadow:0 2px 8px rgba(2,7,17,.6)}
-.og-user::after{content:"";position:absolute;left:-17px;top:-17px;width:34px;height:34px;border-radius:50%;background:rgba(47,107,255,.3);animation:og-breathe 2s ease-out infinite}
+.og-hover b{position:absolute;left:14px;top:-12px;height:24px;max-width:170px;padding:0 8px;border-radius:8px;background:var(--og-label);color:#fff;font:600 12px/24px var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 6px 16px -8px rgba(2,7,17,.9)}
 .omap-credit{position:absolute;z-index:2;inset-inline-end:12px;bottom:8px;margin:0;font:500 10px var(--body);color:rgba(188,212,234,.5);pointer-events:none;opacity:0;transition:opacity .3s}
 .omap.is-planet .omap-credit{opacity:1}
 .omap-status.is-soft{top:auto;bottom:24px;transform:translateX(-50%);background:rgba(7,27,50,.9);color:#fff}
 @media(max-width:759px){.omap-credit{bottom:70px}.omap.has-card .omap-credit{visibility:hidden}.omap-status.is-soft{bottom:84px}}
-@media(prefers-reduced-motion:reduce){.og-cluster,.og-sel::before,.og-sel.is-new::after,.og-user::after{animation:none!important}.omap .omap-globe{transition:none}}
-.reduce-motion .og-cluster,.reduce-motion .og-sel::before,.reduce-motion .og-sel.is-new::after,.reduce-motion .og-user::after{animation:none!important}
+@media(prefers-reduced-motion:reduce){.omap .omap-globe{transition:none}}
 
 /* ---------- Petites cartes : fiche du spot, voyage ---------- */
 .omini{position:relative;overflow:hidden;background:#c9dbfc;isolation:isolate;font-family:var(--body)}

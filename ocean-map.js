@@ -85,23 +85,20 @@
     ]};
   }
 
-  /* Plongée depuis le globe : la carte démarre dans les teintes « Abysses vivantes » du globe,
+  /* Plongée depuis le globe : la carte démarre dans les teintes du globe (terres sable, mer bleue),
      puis s’éclaircit en deux niveaux de zoom vers le style clair habituel. */
   function diveStyle(st,z0){
     const z1=z0+2.4,Z=(dark,light)=>['interpolate-hcl',['linear'],['zoom'],z0,dark,z1,light];
     const set=(id,prop,value)=>{const layer=st.layers.find(l=>l.id===id);if(layer)layer.paint[prop]=value;};
-    set('land','background-color',Z('#173D54','#f5f6f0'));
-    set('ice','fill-color',Z('#2B566B','#fbfcff'));
-    set('wood','fill-color',Z('#1d4a5c','#e7eedf'));
+    set('land','background-color',Z('#E9DFC4','#f5f6f0'));
+    set('ice','fill-color',Z('#F7F9FA','#fbfcff'));
+    set('wood','fill-color',Z('#DFD6B8','#e7eedf'));
     set('water','fill-color',Z('#2A86B8','#c9dbfc'));
-    set('river','line-color',Z('#2A86B8','#c9dbfc'));
-    set('road-major','line-color',Z('#2c5468','#ffffff'));
-    set('border-region','line-color',Z('#3f6a7d','#d3d8e4'));
-    set('border-country','line-color',Z('#84A6B6','#aab5cd'));
-    set('sea-name','text-color',Z('#A3E7DF','#5f82cf'));set('sea-name','text-halo-color',Z('rgba(23,61,84,.6)','rgba(201,219,252,.8)'));
-    for(const id of ['country-major','country']){set(id,'text-color',Z('#d6e6ef','#51607f'));set(id,'text-halo-color',Z('#173D54','#f5f6f0'));}
-    set('state','text-color',Z('#9fbccb','#97a2ba'));set('state','text-halo-color',Z('#173D54','#f5f6f0'));
-    for(const id of ['city-major','city']){set(id,'text-color',Z('#eef6fa','#34426a'));set(id,'text-halo-color',Z('#173D54','#ffffff'));}
+    set('river','line-color',Z('#3E92C4','#c9dbfc'));
+    set('road-major','line-color',Z('#F4EEDD','#ffffff'));
+    set('border-region','line-color',Z('#CDBF9C','#d3d8e4'));
+    set('border-country','line-color',Z('#A08A60','#aab5cd'));
+    set('sea-name','text-color',Z('#E6F4F8','#5f82cf'));set('sea-name','text-halo-color',Z('rgba(11,45,122,.45)','rgba(201,219,252,.8)'));
     return st;
   }
 

@@ -12,8 +12,8 @@
   /* ---------- Palette « Abysses vivantes » ---------- */
   const P={
     ramp:['#5BC3CD','#34AAC6','#218FBC','#1971AE','#14599C','#104486','#0B346F','#0A2858','#081E42','#06152F'],
-    land:'#173D54',ice:'#2B566B',lake:'#247EAA',coast:'#A3E7DF',fres:'#79E3EF',spec:'#B8EEFF',
-    atmoIn:'#398CF5',atmoOut:'#79E3EF',border:'#84A6B6',stars:['#BCD4EA','#FFFFFF']
+    land:'#E9DFC4',ice:'#F7F9FA',lake:'#3E92C4',coast:'#1B4F72',fres:'#79E3EF',spec:'#B8EEFF',
+    atmoIn:'#398CF5',atmoOut:'#79E3EF',border:'#A08A60',stars:['#BCD4EA','#FFFFFF']
   };
   /* Couleurs des activités, éclaircies pour le fond sombre. */
   const GLOW={surf:'#5C88FF',bodyboard:'#81B2FF',baignade:'#39CDE8',paddle:'#36CDAF',kayak:'#A1D763',snorkeling:'#FFC34D',plongee:'#6889D6',kitesurf:'#FF8068',windsurf:'#BD8AFF'};
@@ -21,7 +21,7 @@
 
   let threeLoading=null;
   function loadThree(){
-    if(!threeLoading)threeLoading=import(new URL('vendor/three/three.module.min.js',document.baseURI).href).catch(e=>{threeLoading=null;throw e;});
+    if(!threeLoading)threeLoading=import(new URL('vendor/three/three.globe.min.js',document.baseURI).href).catch(e=>{threeLoading=null;throw e;});
     return threeLoading;
   }
   function supported(){try{const c=document.createElement('canvas');return !!c.getContext('webgl2');}catch(_){return false;}}
@@ -57,7 +57,9 @@
       col=mix(col,uCoast,line*uCoastA);
       vec3 V=normalize(uCam-vPos);
       float ndv=max(dot(n,V),0.);
-      col*=.62+.38*max(dot(n,uLight),0.);
+      /* Terres plus uniformément éclairées : elles restent lisibles jusqu’au bord du globe. */
+      float lit=max(dot(n,uLight),0.);
+      col*=mix(.62+.38*lit,.8+.2*lit,land);
       float F=pow(1.-ndv,3.5);
       col=mix(col,uHaze,F*.3);
       col+=uFres*.16*F;
@@ -119,11 +121,12 @@
     canvas.setAttribute('aria-label','Globe interactif des spots. Glisse pour tourner la Terre, pince ou utilise plus et moins pour zoomer. Au clavier : flèches pour tourner, plus et moins pour zoomer.');
     const layer=document.createElement('div');layer.className='og-layer';
     host.append(canvas,layer);
-    const renderer=new T.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'high-performance'});
-    renderer.setClearColor(0x000000,0);
+    /* Écrans haute densité : l’anticrénelage matériel n’apporte rien de visible et coûte cher sur téléphone. */
+    const renderer=new T.WebGLRenderer({canvas,antialias:!(mobile&&(devicePixelRatio||1)>=2),alpha:true,powerPreference:'high-performance'});
+    renderer.setClearColor(0x000000,0);renderer.autoClear=false;
     renderer.outputColorSpace=T.SRGBColorSpace;
     const maxTex=renderer.capabilities.maxTextureSize;
-    const dprCap=2;
+    const dprCap=2;let dprNow=Math.min(devicePixelRatio||1,dprCap),lastFrame=0,slow=0;
     const scene=new T.Scene();
     const camera=new T.PerspectiveCamera(FOV,1,.01,200);
     const col=h=>new T.Color(h);
@@ -164,11 +167,6 @@
     const dotU={uCam:{value:new T.Vector3()},uHalo:{value:12},uCore:{value:4},uRing:{value:0},uHaloA:{value:.18},uDpr:{value:1},uWhite:{value:col('#ffffff')}};
     const dotMat=new T.ShaderMaterial({uniforms:dotU,vertexShader:DOT_V,fragmentShader:DOT_F,transparent:true,depthTest:false,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor});
     let dots=null,spots=[],byId=new Map(),levels=[],level=-1,hideAttr=null;
-    let clusterEls=new Map(),labelEls=new Map(),selected=null,hovered=null,user=null;
-    const selEl=document.createElement('div');selEl.className='og-sel';selEl.hidden=true;selEl.innerHTML='<i></i><b></b>';
-    const hovEl=document.createElement('div');hovEl.className='og-hover';hovEl.hidden=true;hovEl.innerHTML='<i></i><b></b>';
-    const userEl=document.createElement('div');userEl.className='og-user';userEl.hidden=true;
-    layer.append(userEl,hovEl,selEl);
 
     function setSpots(list){
       spots=list.filter(s=>Number.isFinite(s.lat)&&Number.isFinite(s.lon)).map(s=>({...s,v:M.vec(s.lat,s.lon)}));
@@ -179,7 +177,7 @@
       const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(pos,3));g.setAttribute('color',new T.BufferAttribute(c,3));g.setAttribute('hide',new T.BufferAttribute(hideAttr,1));
       dots=new T.Points(g,dotMat);dots.renderOrder=3;dots.frustumCulled=false;scene.add(dots);
       levels=M.clusterLevels(spots);level=-1;
-      clusterEls.forEach(el=>el.remove());clusterEls.clear();
+      badges=[];shownBadges=[];labels=[];hotBadge=null;
       if(selected&&!byId.has(selected))setSelected(null);
       if(hovered&&!byId.has(hovered))setHover(null);
       invalidate(true);
@@ -240,6 +238,9 @@
     const easeInOut=t=>t<.5?4*t*t*t:1-(-2*t+2)**3/2;
     function frame(now){
       raf=0;if(!active)return;
+      /* Résolution adaptative : si les images s’enchaînent sous ~45 i/s, on baisse d’un cran (jamais sous 1). */
+      if(lastFrame&&now-lastFrame<70){slow=slow*.92+(now-lastFrame>23?.08:0);if(slow>.55&&dprNow>1){dprNow=Math.max(1,dprNow-.25);slow=0;resize();}}
+      lastFrame=now;
       let again=false;
       if(anim){
         const t=Math.min(1,(now-anim.t0)/anim.ms),e=easeInOut(t);
@@ -254,6 +255,7 @@
         if(Math.hypot(inertia.vLat,inertia.vLon)<.02*kpp()/KM/RAD){inertia=null;moved('inertia');}else again=true;
         dirty=true;
       }
+      if(ripStart){if(now-ripStart<1800){again=true;dirty=true;}else{ripStart=0;dirty=true;}}
       if(revealStart){const t=Math.min(1,(now-revealStart)/900);uniEarth.uReveal.value=easeInOut(t);if(t<1)again=true;else revealStart=0;dirty=true;}
       if(dirty){dirty=false;draw();}
       if(again)raf=requestAnimationFrame(frame);
@@ -274,46 +276,177 @@
       const s=Math.max(0,Math.min(1,(Math.log(8000)-Math.log(Math.max(w,1)))/(Math.log(8000)-Math.log(1500))));
       const far=Math.max(0,Math.min(1,(Math.log(Math.max(w,1))-Math.log(8000))/Math.log(2)));
       dotU.uCore.value=4+2*(1-far)+2*s;dotU.uHalo.value=12+4*(1-far)+4*s+2;dotU.uRing.value=s>.6?1:0;dotU.uHaloA.value=.2;
-      uniEarth.uCoastA.value=.35+.15*s;uniEarth.uCoastW.value=.7+.3*s;
+      uniEarth.uCoastA.value=.45+.2*s;uniEarth.uCoastW.value=.8+.4*s;
       /* Frange atmosphérique fine : environ 9 px sur ordinateur, 6 px sur mobile. */
       atmoU.uThick.value=(mobile?6:9)*k/KM;atmoU.uAlpha.value=.6-.45*s;
-      borderMat.opacity=.2*Math.max(0,Math.min(1,(Math.log(14000)-Math.log(w))/Math.log(2)));
-      renderer.render(scene,camera);
-      /* Regroupements : échelle la plus proche du zoom courant. */
+      borderMat.opacity=.5*Math.max(0,Math.min(1,(Math.log(14000)-Math.log(w))/Math.log(2)));
+      /* Regroupements : échelle la plus proche du zoom courant ; repères placés pour cette image. */
       if(levels.length){const lv=M.levelFor(k);if(lv!==level)applyLevel(lv);}
-      placeOverlay();
+      layoutOverlay();
+      const rip=ripStart?(performance.now()-ripStart)/900:-1;pinU.uRip.value=rip>=0&&rip<2?rip%1:-1;
+      renderer.clear();renderer.render(scene,camera);renderer.render(overlay,ortho);
     }
 
-    /* ---------- Regroupements (DOM) ---------- */
+    /* ---------- Repères (groupes, étiquettes, spot choisi, position) ----------
+       Dessinés en WebGL dans la même image que la Terre, avec des positions calculées à chaque
+       image : ils restent collés à la planète pendant les gestes, sans le moindre décalage. */
+    const overlay=new T.Scene(),ortho=new T.OrthographicCamera(0,1,0,1,-1,1);
+    const quad=()=>{const g=new T.InstancedBufferGeometry();g.setIndex([0,1,2,0,2,3]);g.setAttribute('position',new T.BufferAttribute(new Float32Array([-.5,-.5,0,.5,-.5,0,.5,.5,0,-.5,.5,0]),3));return g;};
+    const inst=(g,name,size,count)=>{const a=new T.InstancedBufferAttribute(new Float32Array(count*size),size);a.setUsage(T.DynamicDrawUsage);g.setAttribute(name,a);return a.array;};
+    const premult={side:T.DoubleSide,transparent:true,depthTest:false,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor};
+    const bodyFont=(getComputedStyle(document.body).fontFamily||'system-ui');
+    try{await Promise.race([document.fonts?.load(`700 12px ${bodyFont}`),new Promise(r=>setTimeout(r,800))]);}catch(_){}
+    const TS=2;
+    /* Chiffres : un atlas de 10 glyphes, les nombres sont composés dans le shader. */
+    const digitAdv=(()=>{const c=document.createElement('canvas').getContext('2d');c.font=`700 ${12*TS}px ${bodyFont}`;return [...'0123456789'].map(d=>c.measureText(d).width/TS);})();
+    const digitW=Math.ceil(Math.max(...digitAdv))+2;
+    const digitTex=(()=>{
+      const c=document.createElement('canvas');c.width=10*digitW*TS;c.height=16*TS;const x=c.getContext('2d');
+      x.font=`700 ${12*TS}px ${bodyFont}`;x.fillStyle='#fff';x.textAlign='center';x.textBaseline='middle';
+      for(let d=0;d<10;d++)x.fillText(String(d),(d+.5)*digitW*TS,8.6*TS);
+      const t=new T.CanvasTexture(c);t.colorSpace=T.NoColorSpace;t.generateMipmaps=false;t.minFilter=T.LinearFilter;return t;
+    })();
+    const MAXB=320;
+    const badgeGeo=quad();badgeGeo.instanceCount=0;
+    const B={at:inst(badgeGeo,'aAt',2,MAXB),size:inst(badgeGeo,'aSize',1,MAXB),alpha:inst(badgeGeo,'aAlpha',1,MAXB),hot:inst(badgeGeo,'aHot',1,MAXB),
+      c1:inst(badgeGeo,'aC1',3,MAXB),c2:inst(badgeGeo,'aC2',3,MAXB),c3:inst(badgeGeo,'aC3',3,MAXB),f:inst(badgeGeo,'aF',3,MAXB),num:inst(badgeGeo,'aNum',4,MAXB)};
+    const badgeMat=new T.ShaderMaterial({...premult,uniforms:{uDigits:{value:digitTex},uDigitW:{value:digitW},uAdv:{value:digitAdv},uDisk:{value:col('#0B2D7A')},uHot:{value:col('#1F55E0')}},
+      vertexShader:`attribute vec2 aAt;attribute float aSize,aAlpha,aHot;attribute vec3 aC1,aC2,aC3,aF;attribute vec4 aNum;
+        varying vec2 vP;varying float vSize,vAlpha,vHot;varying vec3 vC1,vC2,vC3,vF;varying vec4 vNum;
+        void main(){float s=aSize+12.;vP=position.xy*s;vSize=aSize;vAlpha=aAlpha;vHot=aHot;vC1=aC1;vC2=aC2;vC3=aC3;vF=aF;vNum=aNum;
+          gl_Position=projectionMatrix*vec4(aAt+vP,0.,1.);if(aAlpha<.01)gl_Position=vec4(2.,2.,2.,1.);}`,
+      fragmentShader:`uniform sampler2D uDigits;uniform float uDigitW,uAdv[10];uniform vec3 uDisk,uHot;
+        varying vec2 vP;varying float vSize,vAlpha,vHot;varying vec3 vC1,vC2,vC3,vF;varying vec4 vNum;
+        void main(){
+          float R=vSize*.5,r=length(vP),aa=max(fwidth(r),.35);
+          float disk=1.-smoothstep(R-aa,R,r),core=1.-smoothstep(R-2.-aa,R-2.,r);
+          float shadow=(1.-smoothstep(R-1.,R+6.,r))*.35*(1.-disk);
+          float a=fract(atan(vP.x,-vP.y)/6.2831853);
+          vec3 ring=vec3(1.);float ra=.28;
+          if(a<vF.x){ring=vC1;ra=1.;}else if(a<vF.y){ring=vC2;ra=1.;}else if(a<vF.z){ring=vC3;ra=1.;}
+          float gap=.0045;
+          if((vF.x<1.&&abs(a-vF.x)<gap)||(vF.y>vF.x&&vF.y<1.&&abs(a-vF.y)<gap)||(vF.z>vF.y&&vF.z<1.&&abs(a-vF.z)<gap)||a<gap)ra=0.;
+          vec3 c=mix(uDisk,uHot,vHot);
+          float edge=(1.-smoothstep(R-3.,R-2.,r))-(1.-smoothstep(R-3.-aa,R-3.,r));
+          c=mix(c,vec3(1.),max(edge,0.)*.65);
+          /* Nombre centré, chaque chiffre avec sa chasse réelle. */
+          float a0=uAdv[int(vNum.y)],a1=vNum.x>1.5?uAdv[int(vNum.z)]:0.,a2=vNum.x>2.5?uAdv[int(vNum.w)]:0.;
+          float x=vP.x+(a0+a1+a2)*.5,d=-1.,lx=0.;
+          if(x>=0.&&x<a0){d=vNum.y;lx=x-a0*.5;}else if(x>=a0&&x<a0+a1){d=vNum.z;lx=x-a0-a1*.5;}else if(x>=a0+a1&&x<a0+a1+a2){d=vNum.w;lx=x-a0-a1-a2*.5;}
+          if(d>=0.&&abs(vP.y)<8.){
+            float t=texture2D(uDigits,vec2((d+.5+lx/uDigitW)/10.,.5-vP.y/16.)).a;
+            c=mix(c,vec3(1.),t);
+          }
+          float alpha=core+(disk-core)*ra;
+          vec3 rgb=c*core+ring*(disk-core)*ra;
+          gl_FragColor=vec4(rgb*vAlpha,(alpha+shadow)*vAlpha);
+          #include <colorspace_fragment>
+        }`});
+    const badgeMesh=new T.Mesh(badgeGeo,badgeMat);badgeMesh.frustumCulled=false;badgeMesh.renderOrder=1;overlay.add(badgeMesh);
+    /* Étiquettes : un atlas de texte refait au repos (six au plus). */
+    const MAXL=12,labelCanvas=document.createElement('canvas');labelCanvas.width=512*TS;labelCanvas.height=32*MAXL*TS;
+    const labelTex=new T.CanvasTexture(labelCanvas);labelTex.colorSpace=T.SRGBColorSpace;labelTex.premultiplyAlpha=true;labelTex.generateMipmaps=false;labelTex.minFilter=T.LinearFilter;
+    const labelGeo=quad();labelGeo.instanceCount=0;
+    const L={at:inst(labelGeo,'aAt',2,MAXL),off:inst(labelGeo,'aOff',2,MAXL),sz:inst(labelGeo,'aSz',2,MAXL),uv:inst(labelGeo,'aUV',4,MAXL),alpha:inst(labelGeo,'aAlpha',1,MAXL)};
+    const labelMesh=new T.Mesh(labelGeo,new T.ShaderMaterial({...premult,uniforms:{uTex:{value:labelTex}},
+      vertexShader:`attribute vec2 aAt,aOff,aSz;attribute vec4 aUV;attribute float aAlpha;varying vec2 vUv;varying float vA;
+        void main(){vUv=vec2(mix(aUV.x,aUV.z,position.x+.5),mix(aUV.w,aUV.y,position.y+.5));vA=aAlpha;gl_Position=projectionMatrix*vec4(aAt+aOff+position.xy*aSz,0.,1.);if(aAlpha<.01)gl_Position=vec4(2.,2.,2.,1.);}`,
+      fragmentShader:`uniform sampler2D uTex;varying vec2 vUv;varying float vA;void main(){gl_FragColor=texture2D(uTex,vUv)*vA;
+        #include <colorspace_fragment>
+      }`}));
+    labelMesh.frustumCulled=false;labelMesh.renderOrder=2;overlay.add(labelMesh);
+    /* Spot choisi (cœur à sa couleur, anneau citron, onde à la sélection) et position de l’utilisateur. */
+    const pinGeo=quad();pinGeo.instanceCount=2;
+    const PN={at:inst(pinGeo,'aAt',2,2),type:inst(pinGeo,'aType',1,2),c:inst(pinGeo,'aC',3,2),alpha:inst(pinGeo,'aAlpha',1,2)};
+    PN.type[1]=1;
+    const pinU={uRip:{value:-1},uLime:{value:col('#D7F75B')},uUser:{value:col('#2F6BFF')}};
+    const pinMesh=new T.Mesh(pinGeo,new T.ShaderMaterial({...premult,uniforms:pinU,
+      vertexShader:`attribute vec2 aAt;attribute float aType,aAlpha;attribute vec3 aC;varying vec2 vP;varying float vT,vA;varying vec3 vC;
+        void main(){vP=position.xy*64.;vT=aType;vA=aAlpha;vC=aC;gl_Position=projectionMatrix*vec4(aAt+vP,0.,1.);if(aAlpha<.01)gl_Position=vec4(2.,2.,2.,1.);}`,
+      fragmentShader:`uniform float uRip;uniform vec3 uLime,uUser;varying vec2 vP;varying float vT,vA;varying vec3 vC;
+        float ring(float r,float a,float b,float aa){return (1.-smoothstep(b-aa,b,r))*smoothstep(a-aa,a,r);}
+        void main(){
+          float r=length(vP),aa=max(fwidth(r),.35);vec3 c;float a;
+          if(vT<.5){
+            float core=1.-smoothstep(9.-aa,9.,r),lime=ring(r,9.,11.,aa),dark=ring(r,11.,12.,aa);
+            float halo=(1.-smoothstep(11.,18.,r))*.16*(1.-core-lime-dark);
+            c=vC*core+uLime*lime+uLime*halo;a=core+lime+dark*.5+halo;
+            if(uRip>=0.){float rr=6.+16.*uRip;float w=ring(r,rr-.75,rr+.75,aa)*(1.-uRip)*.8;c+=uLime*w;a+=w;}
+          }else{
+            float white=1.-smoothstep(8.-aa,8.,r),blue=1.-smoothstep(5.-aa,5.,r),halo=(1.-smoothstep(8.,17.,r))*.3*(1.-white);
+            c=vec3(1.)*(white-blue)+uUser*blue+uUser*halo;a=white+halo;
+          }
+          gl_FragColor=vec4(c*vA,min(a,1.)*vA);
+          #include <colorspace_fragment>
+        }`}));
+    pinMesh.frustumCulled=false;pinMesh.renderOrder=3;overlay.add(pinMesh);
+
+    let badges=[],labels=[],selected=null,hovered=null,hotBadge=null,user=null,ripStart=0;
+    const hovEl=document.createElement('div');hovEl.className='og-hover';hovEl.hidden=true;hovEl.innerHTML='<i></i><b></b>';
+    layer.append(hovEl);
+
     function applyLevel(lv){
-      level=lv;const groups=levels[lv]||[];const keep=new Set();
-      hideAttr.fill(0);
+      level=lv;const groups=levels[lv]||[];hideAttr.fill(0);
+      const prev=new Map(badges.map(b=>[b.key,b]));
+      badges=[];
       for(const g of groups){
         if(g.n<3)continue;
         for(const id of g.ids){const s=byId.get(id);if(s)hideAttr[s.i]=1;}
-        const key=g.key+':'+g.n;keep.add(key);
-        let el=clusterEls.get(key);
-        if(!el){
-          el=document.createElement('button');el.type='button';el.className='og-cluster';
-          const acts=new Map();for(const id of g.ids){const a=byId.get(id)?.act;if(a)acts.set(a,(acts.get(a)||0)+1);}
-          const top=[...acts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);
-          let at=0;const stops=[];
-          for(const [a,n] of top){const e=at+n/g.n*360;stops.push(`${glow(a)} ${at.toFixed(1)}deg ${(e-1.5).toFixed(1)}deg`,`transparent ${(e-1.5).toFixed(1)}deg ${e.toFixed(1)}deg`);at=e;}
-          if(at<359.5)stops.push(`rgba(255,255,255,.28) ${at.toFixed(1)}deg 360deg`);
-          el.style.setProperty('--ring',`conic-gradient(${stops.join(',')})`);
-          el._sz=Math.round(Math.min(38,28+Math.log2(g.n/3+1)*3.4));
-          el.style.setProperty('--sz',el._sz+'px');
-          el.innerHTML=`<span>${g.n}</span>`;
-          el.setAttribute('aria-label',`${g.n} spots regroupés ici. Zoomer pour les voir.`);
-          el.addEventListener('click',e=>{e.stopPropagation();openCluster(el._union||el._g);});
-          layer.append(el);clusterEls.set(key,el);
-        }
-        el._g=g;el._v=M.vec(g.lat,g.lon);
+        const acts=new Map();for(const id of g.ids){const a=byId.get(id)?.act;if(a)acts.set(a,(acts.get(a)||0)+1);}
+        const top=[...acts.entries()].sort((a,b)=>b[1]-a[1]).slice(0,3);
+        const colors=top.map(([a])=>col(glow(a)));let f=0;const fr=top.map(([,n])=>(f+=n/g.n));
+        while(fr.length<3){fr.push(fr[fr.length-1]??0);colors.push(colors[colors.length-1]??col('#ffffff'));}
+        const key=g.key+':'+g.n;
+        badges.push({key,g,n:g.n,v:M.vec(g.lat,g.lon),colors,fr,host:prev.get(key)?.host||null});
       }
-      clusterEls.forEach((el,key)=>{if(!keep.has(key)){el.remove();clusterEls.delete(key);}});
+      badges.sort((a,b)=>b.n-a.n||(a.key<b.key?-1:1));
       dots.geometry.attributes.hide.needsUpdate=true;
       scheduleLabels();
     }
+    const sizeFor=n=>Math.round(Math.min(38,28+Math.log2(n/3+1)*3.4));
+    /* Chaque image : projection, fusion des badges qui se touchent (avec un léger effet de seuil
+       pour éviter le clignotement), écart autour du spot choisi, puis écriture des attributs. */
+    function layoutOverlay(){
+      const gap=mobile?10:6,sp=selected&&byId.has(selected)?project(byId.get(selected).v):null;
+      const shown=[];
+      for(const b of badges){
+        const p=project(b.v);b.p=p;b.total=b.n;b.members=null;b.absorbed=false;
+        b.on=p.front&&p.facing>=.12&&p.x>-40&&p.x<W+40&&p.y>-40&&p.y<H+40;
+      }
+      for(const b of badges){
+        if(!b.on)continue;
+        let host=null;
+        for(const o of shown){const lim=(sizeFor(o.total)+sizeFor(b.n))/2+gap+(b.host===o.key?6:0);if(Math.hypot(o.p.x-b.p.x,o.p.y-b.p.y)<lim){host=o;break;}}
+        b.host=host?.key||null;
+        if(host){b.absorbed=true;host.total+=b.n;(host.members||(host.members=[host])).push(b);}else shown.push(b);
+      }
+      let i=0;
+      for(const b of shown){
+        if(i>=MAXB)break;
+        const sz=sizeFor(b.total);let x=b.p.x,y=b.p.y;
+        /* 8 px libres autour du spot choisi : c’est le badge qui s’écarte, jamais le spot. */
+        if(sp&&sp.front){const dx=x-sp.x,dy=y-sp.y,d=Math.hypot(dx,dy),min=sz/2+12+8;if(d<min){if(d>.5){x=sp.x+dx*min/d;y=sp.y+dy*min/d;}else y=sp.y-min;}}
+        b.sx=x;b.sy=y;b.sz=sz;
+        B.at[i*2]=x;B.at[i*2+1]=y;B.size[i]=sz;B.alpha[i]=1;B.hot[i]=hotBadge===b.key?1:0;
+        b.colors.forEach((c,k)=>{const arr=[B.c1,B.c2,B.c3][k];arr[i*3]=c.r;arr[i*3+1]=c.g;arr[i*3+2]=c.b;});
+        B.f[i*3]=b.fr[0];B.f[i*3+1]=b.fr[1];B.f[i*3+2]=b.fr[2];
+        const digits=String(Math.min(999,b.total));B.num[i*4]=digits.length;for(let k=0;k<3;k++)B.num[i*4+1+k]=+(digits[k]||0);
+        i++;
+      }
+      badgeGeo.instanceCount=i;
+      for(const k in B)badgeGeo.attributes['a'+{at:'At',size:'Size',alpha:'Alpha',hot:'Hot',c1:'C1',c2:'C2',c3:'C3',f:'F',num:'Num'}[k]].needsUpdate=true;
+      shownBadges=shown.slice(0,i);
+      /* Étiquettes : suivent leur spot à chaque image. */
+      labels.forEach((l,k)=>{const s=byId.get(l.id);const p=s&&project(s.v);const on=p&&p.front&&p.facing>=.12&&!hideAttr[s.i]&&l.id!==hovered;
+        L.at[k*2]=p?p.x:0;L.at[k*2+1]=p?p.y:0;L.alpha[k]=on?1:0;});
+      labelGeo.instanceCount=labels.length;['aAt','aAlpha','aOff','aSz','aUV'].forEach(n=>labelGeo.attributes[n].needsUpdate=true);
+      /* Spot choisi et position. */
+      if(sp){PN.at[0]=sp.x;PN.at[1]=sp.y;PN.alpha[0]=sp.front&&sp.facing>=.05?1:0;const c=col(glow(byId.get(selected).act));PN.c[0]=c.r;PN.c[1]=c.g;PN.c[2]=c.b;}else PN.alpha[0]=0;
+      if(user){const p=project(user.v);PN.at[2]=p.x;PN.at[3]=p.y;PN.alpha[1]=p.front&&p.facing>=.05?1:0;}else PN.alpha[1]=0;
+      ['aAt','aAlpha','aC','aType'].forEach(n=>pinGeo.attributes[n].needsUpdate=true);
+      if(hovered&&byId.has(hovered)){const p=project(byId.get(hovered).v);hovEl.style.visibility=p.front&&!anim&&!inertia&&!drag?'':'hidden';hovEl.style.transform=`translate(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px)`;}
+    }
+    let shownBadges=[];
     function openCluster(g){
       const pts=g.ids.map(id=>byId.get(id)).filter(Boolean);
       const c=M.cap(pts);if(!c)return;
@@ -323,92 +456,60 @@
       if(target<(opts.minWidthKm||600)){flyTo({lat:c.lat,lon:c.lon,widthKm:opts.minWidthKm||600},{done:()=>opts.onDive?.({lat:c.lat,lon:c.lon,kmPerPx:Math.max(target,40)/minSide(),reason:'cluster'})});return;}
       flyTo({lat:c.lat,lon:c.lon,widthKm:target});
     }
+    const badgeAt=(x,y)=>shownBadges.find(b=>Math.hypot(b.sx-x,b.sy-y)<b.sz/2+(mobile?8:3));
+    const unionOf=b=>({ids:(b.members||[b]).flatMap(m=>m.g.ids)});
 
     /* ---------- Étiquettes, sélection, survol ---------- */
-    let labelIds=[];
-    function scheduleLabels(){clearTimeout(restTimer);restTimer=setTimeout(()=>{computeLabels();placeOverlay();},120);}
-    /* Au repos, deux badges qui se touchent à l’écran (bord du globe, perspective) fusionnent :
-       le plus gros affiche le total et ouvre l’ensemble. */
-    function mergeClusters(){
-      const gap=mobile?10:6,shown=[];
-      const all=[...clusterEls.values()];
-      for(const el of all){el._absorbed=false;el._union=null;const p=project(el._v);el._p=p;}
-      all.filter(el=>el._p.front&&el._p.facing>=.12).sort((a,b)=>b._g.n-a._g.n).forEach(el=>{
-        const host=shown.find(o=>Math.hypot(o._p.x-el._p.x,o._p.y-el._p.y)<(o._sz+el._sz)/2+gap);
-        if(!host){shown.push(el);return;}
-        el._absorbed=true;host._union=host._union||{...host._g,ids:[...host._g.ids]};
-        host._union.ids.push(...el._g.ids);host._union.n+=el._g.n;
-      });
-      for(const el of all){
-        const n=(el._union||el._g).n,label=el.firstChild;
-        if(label.textContent!==String(n)){label.textContent=n;el.setAttribute('aria-label',`${n} spots regroupés ici. Zoomer pour les voir.`);}
-      }
-    }
+    function scheduleLabels(){clearTimeout(restTimer);restTimer=setTimeout(()=>{computeLabels();invalidate();},120);}
     function computeLabels(){
-      mergeClusters();
+      applyCamera();layoutOverlay();
       const w=widthKm(),max=w<1500?6:w<2600?3:0;
-      labelIds=[];if(!max||!levels.length){syncLabels();return;}
-      const cx=pad.left+(W-pad.left-pad.right)/2,cy=pad.top+(H-pad.top-pad.bottom)/2;
-      const boxes=[];
-      clusterEls.forEach(el=>{const p=el._p;if(p&&p.front&&!el._absorbed){const r=el._sz/2+2;boxes.push([p.x-r,p.y-r,p.x+r,p.y+r]);}});
-      if(selected&&byId.has(selected)){const p=project(byId.get(selected).v);boxes.push([p.x-8,p.y-8,p.x+160,p.y+14]);}
-      const cands=[];
-      for(const s of spots){if(hideAttr[byId.get(s.id).i]||s.id===selected)continue;const p=project(s.v);if(!p.front||p.x<pad.left+8||p.x>W-pad.right-8||p.y<pad.top+8||p.y>H-pad.bottom-8)continue;cands.push({s,p,d:Math.hypot(p.x-cx,p.y-cy)});}
-      cands.sort((a,b)=>a.d-b.d);
-      /* Une étiquette ne cache jamais le point d’un autre spot. */
-      for(const {p} of cands)boxes.push([p.x-6,p.y-6,p.x+6,p.y+6]);
-      for(const {s,p} of cands){
-        if(labelIds.length>=max)break;
-        const tw=Math.min(150,s.name.length*6.6+18);
-        const opts2=[[p.x+9,p.y-11,p.x+9+tw,p.y+11],[p.x-9-tw,p.y-11,p.x-9,p.y+11]];
-        const box=opts2.find(b=>b[0]>pad.left&&b[2]<W-pad.right&&!boxes.some(o=>b[0]<o[2]&&b[2]>o[0]&&b[1]<o[3]&&b[3]>o[1]));
-        if(!box)continue;boxes.push(box);labelIds.push({id:s.id,left:box===opts2[1]});
-      }
-      syncLabels();
-    }
-    function syncLabels(){
-      const keep=new Set(labelIds.map(l=>l.id));
-      labelEls.forEach((el,id)=>{if(!keep.has(id)){el.remove();labelEls.delete(id);}});
-      for(const l of labelIds){
-        let el=labelEls.get(l.id);
-        if(!el){
-          el=document.createElement('div');el.className='og-label';
-          const b=document.createElement('button');b.type='button';b.tabIndex=-1;b.textContent=byId.get(l.id).name;
-          b.addEventListener('click',e=>{e.stopPropagation();opts.onSelect?.(l.id);});
-          el.append(b);layer.append(el);labelEls.set(l.id,el);
+      const chosen=[];
+      if(max&&levels.length){
+        const cx=pad.left+(W-pad.left-pad.right)/2,cy=pad.top+(H-pad.top-pad.bottom)/2;
+        const boxes=shownBadges.map(b=>{const r=b.sz/2+2;return [b.sx-r,b.sy-r,b.sx+r,b.sy+r];});
+        if(selected&&byId.has(selected)){const p=project(byId.get(selected).v);boxes.push([p.x-14,p.y-14,p.x+14,p.y+14]);}
+        const cands=[];
+        for(const s of spots){if(hideAttr[byId.get(s.id).i]||s.id===selected)continue;const p=project(s.v);if(!p.front||p.facing<.2||p.x<pad.left+8||p.x>W-pad.right-8||p.y<pad.top+8||p.y>H-pad.bottom-8)continue;cands.push({s,p,d:Math.hypot(p.x-cx,p.y-cy)});}
+        cands.sort((a,b)=>a.d-b.d);
+        /* Une étiquette ne cache jamais le point d’un autre spot. */
+        for(const {p} of cands)boxes.push([p.x-6,p.y-6,p.x+6,p.y+6]);
+        const ctx=labelCanvas.getContext('2d');ctx.font=`600 ${12*TS}px ${bodyFont}`;
+        for(const {s,p} of cands){
+          if(chosen.length>=max)break;
+          const tw=Math.min(170,Math.ceil(ctx.measureText(s.name).width/TS)+16);
+          const opts2=[[p.x+9,p.y-12,p.x+9+tw,p.y+12,1],[p.x-9-tw,p.y-12,p.x-9,p.y+12,-1]];
+          const box=opts2.find(b=>b[0]>pad.left&&b[2]<W-pad.right&&!boxes.some(o=>b[0]<o[2]&&b[2]>o[0]&&b[1]<o[3]&&b[3]>o[1]));
+          if(!box)continue;boxes.push(box);chosen.push({id:s.id,side:box[4],w:tw});
         }
-        el.classList.toggle('is-left',l.left);
       }
+      drawLabels(chosen);
     }
-    /* Au bord du globe, les repères s’effacent avant de passer derrière la Terre. */
-    /* Les repères derrière la Terre (ou rasant le bord) sont masqués ; les autres restent pleinement opaques. */
-    const put=(el,p,show=true)=>{if(!show||!p.front||p.facing<.12){el.style.visibility='hidden';return;}el.style.visibility='';el.style.transform=`translate(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px)`;};
-    function placeOverlay(){
-      const sp=selected&&byId.has(selected)?project(byId.get(selected).v):null;
-      clusterEls.forEach(el=>{
-        const p=project(el._v);el._p=p;
-        /* 8 px libres autour du spot choisi : c’est le badge qui s’écarte, jamais le spot. */
-        if(sp&&sp.front){const dx=p.x-sp.x,dy=p.y-sp.y,d=Math.hypot(dx,dy),min=el._sz/2+11+8;if(d<min){const k=d>.5?min/d:0;p.x=d>.5?sp.x+dx*k:sp.x;p.y=d>.5?sp.y+dy*k:sp.y-min;}}
-        put(el,p,!el._absorbed&&p.x>-40&&p.x<W+40&&p.y>-40&&p.y<H+40);
+    function drawLabels(chosen){
+      const ctx=labelCanvas.getContext('2d'),cw=labelCanvas.width,ch=labelCanvas.height;
+      ctx.clearRect(0,0,cw,ch);ctx.font=`600 ${12*TS}px ${bodyFont}`;ctx.textBaseline='middle';
+      labels=chosen.slice(0,MAXL);
+      labels.forEach((l,k)=>{
+        const y=k*32*TS,w=l.w*TS,h=24*TS;
+        ctx.fillStyle='rgba(7,27,50,.94)';ctx.beginPath();ctx.roundRect?ctx.roundRect(0,y,w,h,8*TS):ctx.rect(0,y,w,h);ctx.fill();
+        ctx.fillStyle='#fff';ctx.save();ctx.beginPath();ctx.rect(8*TS,y,w-16*TS,h);ctx.clip();
+        let text=byId.get(l.id).name;
+        while(text.length>1&&ctx.measureText(text).width>w-16*TS)text=text.slice(0,-2)+'…';
+        ctx.fillText(text,8*TS,y+h/2+TS);ctx.restore();
+        L.off[k*2]=l.side*(9+l.w/2);L.off[k*2+1]=0;L.sz[k*2]=l.w;L.sz[k*2+1]=24;
+        L.uv[k*4]=0;L.uv[k*4+1]=1-(y+h)/ch;L.uv[k*4+2]=w/cw;L.uv[k*4+3]=1-y/ch;
+        l.box=[l.side>0?9:-9-l.w,-12,l.side>0?9+l.w:-9,12];
       });
-      labelEls.forEach((el,id)=>{const s=byId.get(id);s?put(el,project(s.v)):el.remove();});
-      if(selected&&byId.has(selected))put(selEl,project(byId.get(selected).v));
-      if(hovered&&byId.has(hovered))put(hovEl,project(byId.get(hovered).v));
-      if(user)put(userEl,project(user.v));
+      labelTex.needsUpdate=true;
     }
     function setSelected(id){
-      selected=id&&byId.has(id)?id:null;selEl.hidden=!selected;
-      if(selected){
-        const s=byId.get(selected);selEl.style.setProperty('--c',glow(s.act));selEl.querySelector('b').textContent=s.name;
-        selEl.classList.remove('is-new');void selEl.offsetWidth;if(!reduced())selEl.classList.add('is-new');
-        if(hovered===selected)setHover(null);
-      }
+      selected=id&&byId.has(id)?id:null;
+      if(selected){if(hovered===selected)setHover(null);if(!reduced()){ripStart=performance.now();}}
       invalidate();scheduleLabels();
     }
     function setHover(id){
       if(id===hovered)return;hovered=id&&id!==selected?id:null;hovEl.hidden=!hovered;
-      if(hovered){const s=byId.get(hovered);hovEl.style.setProperty('--c',glow(s.act));hovEl.querySelector('b').textContent=s.name;labelEls.get(hovered)?.style.setProperty('visibility','hidden');}
-      canvas.style.cursor=hovered?'pointer':'';
+      if(hovered){const s=byId.get(hovered);hovEl.style.setProperty('--c',glow(s.act));hovEl.querySelector('b').textContent=s.name;}
       invalidate();
     }
     /* Spot visible le plus proche d’un pixel (zone tactile de 44 px). */
@@ -417,6 +518,7 @@
       for(const s of spots){if(hideAttr[byId.get(s.id).i])continue;const p=project(s.v);if(!p.front)continue;const d=Math.hypot(p.x-x,p.y-y);if(d<bd){bd=d;best=s.id;}}
       return best;
     }
+    const labelAt=(x,y)=>labels.find((l,k)=>{if(!L.alpha[k])return false;const ax=L.at[k*2],ay=L.at[k*2+1],b=l.box;return x>=ax+b[0]&&x<=ax+b[2]&&y>=ay+b[1]&&y<=ay+b[3];});
 
     /* ---------- Mouvements ---------- */
     function moved(reason){lastMove=performance.now();keepKpp=kpp();if(reason!=='overview')overviewOn=false;scheduleLabels();opts.onView?.(getView(),reason);}
@@ -455,7 +557,10 @@
     });
     canvas.addEventListener('pointermove',e=>{
       const p=local(e);
-      if(!ptrs.has(e.pointerId)){if(e.pointerType==='mouse')setHover(hit(p.x,p.y,12));return;}
+      if(!ptrs.has(e.pointerId)){
+        if(e.pointerType==='mouse'){const b=badgeAt(p.x,p.y),hot=b?.key||null;if(hot!==hotBadge){hotBadge=hot;invalidate();}setHover(b?null:hit(p.x,p.y,12));canvas.style.cursor=b||hovered||labelAt(p.x,p.y)?'pointer':'';}
+        return;
+      }
       ptrs.set(e.pointerId,p);
       if(pinch&&ptrs.size>=2){
         const [a,b]=[...ptrs.values()],d=Math.hypot(a.x-b.x,a.y-b.y),mid={x:(a.x+b.x)/2,y:(a.y+b.y)/2};
@@ -494,9 +599,11 @@
       moved('drag');
     };
     canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);
-    canvas.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'&&!ptrs.size)setHover(null);});
+    canvas.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'&&!ptrs.size){setHover(null);if(hotBadge){hotBadge=null;invalidate();}}});
     let lastTap=null;
     function tap(p,type){
+      const b=badgeAt(p.x,p.y);if(b){lastTap=null;openCluster(unionOf(b));return;}
+      const l=labelAt(p.x,p.y);if(l){opts.onSelect?.(l.id);return;}
       const id=hit(p.x,p.y,type==='mouse'?12:22);
       const now=performance.now();
       if(!id&&lastTap&&now-lastTap.t<320&&Math.hypot(p.x-lastTap.x,p.y-lastTap.y)<30){lastTap=null;if(zoomAt(2.2,p.x,p.y,true))dive('dbl');return;}
@@ -532,8 +639,9 @@
     /* ---------- Taille, textures, cycle de vie ---------- */
     function resize(){
       const r=host.getBoundingClientRect();W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
-      const dpr=Math.min(devicePixelRatio||1,dprCap);
+      const dpr=Math.min(devicePixelRatio||1,dprNow);
       renderer.setPixelRatio(dpr);renderer.setSize(W,H,false);
+      ortho.right=W;ortho.bottom=H;ortho.updateProjectionMatrix();
       dotU.uDpr.value=dpr;starMat.uniforms.uDpr.value=dpr;
       /* Le cadre change (tiroir, rotation, plein écran) : on garde l’échelle à l’écran, ou la vue d’ensemble. */
       view.dist=clampDist(overviewOn?maxDist():keepKpp?distForKpp(keepKpp):view.dist);keepKpp=kpp();invalidate();scheduleLabels();
@@ -560,7 +668,7 @@
 
     const api={
       setSpots,setSelected,
-      setUser(pos){user=pos?{v:M.vec(pos.lat,pos.lon)}:null;userEl.hidden=!user;invalidate();},
+      setUser(pos){user=pos?{v:M.vec(pos.lat,pos.lon)}:null;invalidate();},
       setPadding(p){pad={...pad,...p};view.dist=clampDist(view.dist);invalidate();scheduleLabels();},
       view:getView,flyTo,zoomIn,zoomOut,resize,
       jumpTo(t){stop();if(t.lat!=null)view.lat=t.lat;if(t.lon!=null)view.lon=t.lon;view.dist=clampDist(t.dist||distForWidth(t.widthKm||widthKm()));invalidate();moved('jump');},
@@ -580,6 +688,8 @@
         return out;
       },
       project(lat,lon){applyCamera();return project(M.vec(lat,lon));},
+      /* Badges et étiquettes affichés, avec leur position à l’écran. */
+      markers(){return {badges:shownBadges.map(b=>({n:b.total,x:b.sx,y:b.sy,size:b.sz})),labels:labels.map((l,k)=>({id:l.id,x:L.at[k*2]+L.off[k*2],y:L.at[k*2+1],visible:!!L.alpha[k]}))};},
       /* Spots affichés seuls (hors groupes), avec leur position à l’écran. */
       singles(){applyCamera();return spots.filter(s=>!hideAttr[byId.get(s.id).i]).map(s=>({id:s.id,...project(s.v)})).filter(p=>p.front&&p.facing>.12);},
       setActive(on){active=!!on;canvas.style.visibility=on?'':'hidden';layer.style.visibility=on?'':'hidden';if(on){resize();invalidate();}else{stop();cancelAnimationFrame(raf);raf=0;}},
