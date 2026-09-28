@@ -31,6 +31,30 @@
   "Blouberg sunrise 1 – Panorama (Greg Zaal and Rico Cilliers via Poly Haven).jpg": {
    "k": "plage",
    "name": "Plage de Bloubergstrand"
+  },
+  "Muttaun (Piz Polaschin) Spherical Panorama.jpg": {
+   "k": "vue",
+   "name": "Muttaun, au-dessus du lac"
+  },
+  "Leuchtturm Podersdorf, Neusiedler See, Burgenland, 2021.jpg": {
+   "k": "jetee",
+   "name": "Phare de Podersdorf"
+  },
+  "Paros New Golden Beach South Panosphere 20250830.jpg": {
+   "k": "bord",
+   "name": "Rochers de New Golden Beach"
+  },
+  "Paros New Golden Beach North Panosphere 20250830.jpg": {
+   "k": "pano",
+   "name": "New Golden Beach, côté nord"
+  },
+  "Simons town rocks – Panorama (Greg Zaal and Rico Cilliers via Poly Haven).jpg": {
+   "k": "bord",
+   "name": "Rochers de Simon’s Town"
+  },
+  "Simons town harbour – Panorama (Greg Zaal and Rico Cilliers via Poly Haven).jpg": {
+   "k": "jetee",
+   "name": "Port de Simon’s Town"
   }
  },
  "kind": {
@@ -168,7 +192,14 @@
   "CIHM0ogKEICAgIDqhaDKPw": "eau",
   "CIHM0ogKEICAgIDXwIy1Xw": "eau",
   "CIHM0ogKEICAgICUhLPaEw": "eau",
-  "CIABIhA5C7D94pQkunNwzl75Kujt": "eau"
+  "CIABIhA5C7D94pQkunNwzl75Kujt": "eau",
+  "CIHM0ogKEICAgIDEqOapDw": "vue",
+  "CIHM0ogKEICAgICMzJ2GigE": "bord",
+  "CIHM0ogKEICAgICkiJ6-kwE": "eau",
+  "CIHM0ogKEICAgIC4nOLFaw": "bord",
+  "CIHM0ogKEICAgICmx52gLQ": "vue",
+  "CIHM0ogKEICAgIDascuOFQ": "bord",
+  "CIHM0ogKEICAgICUws2-_QE": "bord"
  },
  "drop": [
   "CIHM0ogKEICAgID4q7_PqAE",
@@ -294,7 +325,12 @@
   "CIHM0ogKEICAgIDqvaW6nwE",
   "CIHM0ogKEICAgID4p_7CyAE",
   "CIABIhADycKzCRwc5mfUdPoADeWO",
-  "CIABIhBmqGBTATfCKx7WVIHZ1Ike"
+  "CIABIhBmqGBTATfCKx7WVIHZ1Ike",
+  "CIHM0ogKEICAgID41JqxQQ",
+  "CIHM0ogKEICAgID41PrdSA",
+  "CIHM0ogKEICAgIDq8-KKPA",
+  "CIHM0ogKEICAgIDaqa-RjQE",
+  "CIHM0ogKEICAgIDcxen7uwE"
  ],
  "extra": {
   "nazare": [
