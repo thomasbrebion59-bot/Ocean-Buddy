@@ -20,3 +20,7 @@ Captures iPhone à refaire : accueil sans retour superflu, exploration et filtre
 ## Série iPad 13" (28 septembre 2026) — à utiliser
 
 `ipad-13-v2/01…06` (2064 × 2752) : même série que l'iPhone, capturée sur la mise en page iPad actuelle (menu latéral). Remplace `ipad-13/` (ancienne interface en bande étroite).
+
+## Série finale v3 (28 septembre 2026) — celle envoyée sur App Store Connect
+
+`v3-iphone-69/` (1320 × 2868) et `v3-ipad-13/` (2064 × 2752), 8 captures dans l'ordre du parcours de l'app : accueil, globe 3D, fiche Bora Bora, esprit du lieu, alentours, voyages immersifs Bora Bora, Navagio, Hanauma Bay. Capturées depuis f6a0372 (globe 3D). Remplacent les séries précédentes.
