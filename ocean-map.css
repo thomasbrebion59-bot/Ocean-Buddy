@@ -47,11 +47,7 @@ body.mapfull .app-chrome{visibility:hidden}
 @keyframes omap-blink{50%{opacity:.5}}
 
 /* ---------- Repères HTML : régions, spot choisi, position ---------- */
-.omap-region{display:flex;align-items:center;gap:8px;min-height:40px;padding:6px 7px 6px 14px;border:2px solid #fff;border-radius:999px;background:var(--ob-navy,#0b2d7a);color:#fff;cursor:pointer;
   font:800 13px/1.1 var(--body);white-space:nowrap;box-shadow:0 10px 24px -8px rgba(11,45,122,.65);transition:opacity .25s,visibility .25s,background .15s}
-.omap-region span{padding:5px 9px;border-radius:999px;background:var(--ob-lime,#e0ff91);color:var(--ob-navy,#0b2d7a);font:800 11px var(--body)}
-.omap-region:hover{background:var(--ob-cobalt,#1f55e0)}
-.omap:not(.is-world) .omap-region{opacity:0;visibility:hidden;pointer-events:none}
 .omap-selected{width:48px;height:52px;pointer-events:none;z-index:2}
 .omap-selected span{position:absolute;left:50%;top:5px;width:36px;height:36px;margin-left:-18px;border:3.5px solid #fff;border-radius:50% 50% 50% 0;background:var(--c,#1f55e0);transform:rotate(-45deg);box-shadow:-2px 3px 10px rgba(11,45,122,.45);animation:omap-drop .35s cubic-bezier(.3,1.5,.6,1)}
 .omap-selected span::after{content:"";position:absolute;inset:9px;border-radius:50%;background:#fff}
@@ -95,6 +91,7 @@ body.mapfull .app-chrome{visibility:hidden}
 [dir=rtl] .omap-go svg{transform:scaleX(-1)}
 .omap-trip{border:1px solid #c9d6f3;background:#e8efff;color:var(--ob-cobalt,#1f55e0)}.omap-trip:hover{background:#dce6ff}
 .omap-relief{padding:0!important;border:1px solid var(--omap-line);background:#fff;color:#3a4f7d}.omap-relief:hover{background:#f0f4ff}
+.omap-stack-sub{margin:-6px 44px 8px 4px;font:600 12px var(--body);color:#5a6a8c}
 .omap-stack-title{margin:4px 44px 10px 4px;font:800 16px var(--body);color:var(--ob-navy,#0b2d7a)}
 .omap-card .omap-items{max-height:260px;overflow:auto}
 
@@ -179,9 +176,58 @@ body.mapfull .app-chrome{visibility:hidden}
   .ocean-v2 #spotMapWrap.omap.full .omap-filters{top:calc(10px + env(safe-area-inset-top))}
   .ocean-v2 #spotMapWrap.omap.full .omap-ctrls{top:calc(62px + env(safe-area-inset-top))}
 }
-.omap.is-narrow .omap-region{flex-direction:column;gap:3px;min-height:0;padding:6px 11px 7px;border-radius:14px;font-size:12px}
-.omap.is-narrow .omap-region span{padding:2px 8px;font-size:10px}
 @media(max-width:379px){.omap-sheet-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.omap-sheet-toggle{width:40px;padding:0;justify-content:center}.omap-title{font-size:14px}}
 @media(min-width:760px) and (max-width:1100px){.ocean-v2 #spotMapWrap.omap{grid-template-columns:300px minmax(0,1fr)}}
 @media(prefers-reduced-motion:reduce){.omap-selected span,.omap-selected::before,.omap-user::after,.omap-card,.omap-panel{animation:none!important;transition:none!important}}
 .reduce-motion .omap-selected span,.reduce-motion .omap-selected::before,.reduce-motion .omap-user::after,.reduce-motion .omap-card{animation:none!important}
+
+/* ---------- Petites cartes : fiche du spot, voyage ---------- */
+.omini{position:relative;overflow:hidden;background:#c9dbfc;isolation:isolate;font-family:var(--body)}
+.omini .omini-canvas{position:absolute;inset:0}
+.omini-ctrls{position:absolute;z-index:3;top:12px;inset-inline-end:12px;display:flex;flex-direction:column;gap:8px}
+.omini-ctrls>button,.omini-ctrls .omap-zoom button{display:grid;place-items:center;width:42px;height:42px;padding:0;border:0;border-radius:13px;background:#fff;color:var(--ob-navy,#0b2d7a);cursor:pointer;box-shadow:0 2px 6px rgba(11,45,122,.08),0 8px 22px -10px rgba(11,45,122,.35)}
+.omini-ctrls .omap-zoom{display:flex;flex-direction:column;border-radius:13px;overflow:hidden;box-shadow:0 2px 6px rgba(11,45,122,.08),0 8px 22px -10px rgba(11,45,122,.35)}
+.omini-ctrls .omap-zoom button{border-radius:0;box-shadow:none}.omini-ctrls .omap-zoom button+button{border-top:1px solid #dfe6f5}
+.omini-ctrls svg{width:20px;height:20px}
+.omini-ctrls button:hover{background:#f0f4ff;color:var(--ob-cobalt,#1f55e0)}
+.omini button:focus-visible{outline:3px solid #ffb979;outline-offset:2px}
+.omini.is-full{position:fixed!important;inset:0!important;z-index:1200;width:auto!important;height:auto!important;max-height:none!important;margin:0!important;border:0!important;border-radius:0!important}
+.omini.is-full .omini-ctrls{top:calc(12px + env(safe-area-inset-top))}
+body.omini-full{overflow:hidden}body.omini-full .nav,body.omini-full .fab{visibility:hidden}
+.omini .maplibregl-ctrl-attrib{font:500 10px var(--body);background:rgba(255,255,255,.82)}
+.omini .maplibregl-cooperative-gesture-screen{font:700 14px var(--body);background:rgba(11,45,122,.55)}
+.omini-focus{width:48px;height:52px}
+.omini-focus b{position:absolute;left:50%;top:100%;transform:translate(-50%,6px);padding:4px 10px;border-radius:999px;background:var(--ob-navy,#0b2d7a);color:#fff;font:800 12px var(--body);white-space:nowrap;box-shadow:0 6px 16px -6px rgba(11,45,122,.6)}
+.omini-place,.omini-step{display:grid;place-items:center;width:30px;height:30px;padding:0;border:2.5px solid #fff;border-radius:50%;background:var(--ob-coral,#ff7a55);color:#1b1410;font:800 12.5px var(--body);cursor:pointer;box-shadow:0 4px 12px -3px rgba(11,45,122,.5)}
+.omini-step{width:34px;height:34px;background:var(--ob-cobalt,#1f55e0);color:#fff;font-size:14px}
+.omini-place:hover{background:#ff916f}.omini-step:hover{background:#1a47c2}
+.omini-leg{padding:3px 8px;border-radius:999px;background:#fff;color:var(--ob-cobalt,#1f55e0);font:800 11px var(--body);white-space:nowrap;box-shadow:0 3px 10px -3px rgba(11,45,122,.4);pointer-events:none}
+.omini-pop .maplibregl-popup-content{padding:12px 34px 12px 14px;border-radius:14px;box-shadow:0 14px 34px -12px rgba(11,45,122,.55);font-family:var(--body)}
+.omini-pop .maplibregl-popup-close-button{width:30px;height:30px;font-size:20px;color:#5a6a8c;border-radius:50%}
+.omini-pop-body small{display:block;font:700 10.5px var(--body);color:#5a6a8c;text-transform:uppercase;letter-spacing:.06em}
+.omini-pop-body b{display:block;margin:3px 0 4px;font:800 15px/1.25 var(--body);color:var(--ob-navy,#0b2d7a)}
+.omini-pop-body span{display:block;font:600 12px/1.45 var(--body);color:#40507a}
+.omini-pop-body button{margin-top:9px;min-height:40px;width:100%;border:0;border-radius:11px;background:var(--ob-cobalt,#1f55e0);color:#fff;font:800 12.5px var(--body);cursor:pointer}
+.omini .omini-status{white-space:nowrap}
+
+/* Fiche du spot : une vraie carte, grande, toujours affichée. */
+.ocean-v2 #spotAreaMap{grid-column:1/-1;margin:26px 0;padding:20px;border:1px solid #dfe6f5;border-radius:22px;background:#fff;box-shadow:0 14px 34px -24px rgba(11,45,122,.4)}
+.ocean-v2 #spotAreaMap[hidden]{display:none}
+.ocean-v2 #spotAreaMap .area-map-heading small{color:var(--ob-cobalt,#1f55e0);font:800 10px var(--body);letter-spacing:1.4px}
+.ocean-v2 #spotAreaMap .area-map-heading h3{font:800 22px/1.2 var(--body);margin:5px 0 6px}
+.ocean-v2 #spotAreaMap .area-map-heading p{font:600 13px/1.55 var(--body);color:#5a6a8c}
+.ocean-v2 #spotAreaMap .area-map-canvas{height:clamp(420px,62vh,640px);margin-top:16px;border:1px solid #d3ddf3;border-radius:18px}
+.area-map-legend{display:flex;flex-wrap:wrap;gap:8px 18px;margin:12px 2px 0;padding:0;list-style:none;font:650 12px var(--body);color:#40507a}
+.area-map-legend li{display:inline-flex;align-items:center;gap:7px}.area-map-legend li[hidden]{display:none}
+.area-map-legend i{display:inline-grid;place-items:center;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 1px #c9d6f3;font:800 9px var(--body);font-style:normal}
+.area-map-legend .is-focus{background:var(--ob-navy,#0b2d7a);width:14px;height:14px}
+.area-map-legend .is-spot{background:conic-gradient(#1f55e0,#0e9fc4,#5c9e2c,#f0a20c,#ff6a4d,#9d5be6,#1f55e0)}
+.area-map-legend .is-place{width:18px;height:18px;background:var(--ob-coral,#ff7a55);color:#1b1410}
+.ocean-v2 #spotAreaMap .area-map-footer{margin-top:10px;font:500 11px/1.5 var(--body)}
+@media(max-width:639px){
+  .ocean-v2 #spotAreaMap{margin:20px 0;padding:14px;border-radius:18px}
+  .ocean-v2 #spotAreaMap .area-map-heading h3{font-size:20px}
+  .ocean-v2 #spotAreaMap .area-map-canvas{height:clamp(360px,60vh,560px);margin-inline:-6px;border-radius:15px}
+}
+.ocean-v2 .trip-map.omini{height:min(62vh,560px);border-radius:18px;border:1px solid #d3ddf3}
+.trip-map-empty{padding:26px;font:600 13px/1.6 var(--body);color:#5a6a8c}

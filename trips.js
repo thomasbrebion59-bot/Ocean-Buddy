@@ -34,7 +34,7 @@
   const prep=t=>{const p=M.progress(t);return p.total?`<span class="trip-prep" style="--p:${p.pct}%"><i></i><small>Préparation ${p.done}/${p.total}</small></span>`:'';};
   function render(){
     const wrap=$('#screenWrap'),scroll=wrap.scrollTop,focus=document.activeElement?.dataset.focus;
-    if(tripMap){tripMap.remove();tripMap=null;}
+    if(tripMap){tripMap.destroy();tripMap=null;}
     const t=current(),saved=active();
     $('#trips').classList.toggle('has-trip',!!t);$('#trips').classList.toggle('has-saved',saved.length>0);
     $('#tripContent').innerHTML=`<div class="trip-heading"><div><div class="page-eyebrow">LE VOYAGE COMMENCE AVANT LE DÉPART</div><h1>Les bons spots.<br><span>Dans le bon ordre.</span></h1><p>Rassemble tes envies. Dessine ton itinéraire. Prépare le grand départ.</p></div><button class="trip-primary" data-action="new">${I.plus} Nouveau voyage</button></div>${loadError?`<p class="trip-error" role="alert">${loadError}</p>`:''}
@@ -131,12 +131,11 @@
   }
   function drawMap(t){
     const host=$('#tripMap');if(!host)return;
-    if(typeof L==='undefined'){const offline=()=>{host.innerHTML='<p>La carte nécessite une connexion. Ton itinéraire reste disponible dans l’onglet voisin.</p>';};if(window.OceanLeaflet)window.OceanLeaflet().then(()=>{if(host.isConnected)drawMap(t);},offline);else offline();return;}
     const coords=t.steps.map((s,i)=>({s,i,c:COORDS[s.spotId]})).filter(x=>x.c);
-    if(!coords.length){host.innerHTML='<p>Ajoute un spot pour voir ton voyage sur la carte.</p>';return;}
-    tripMap=L.map(host,{scrollWheelZoom:true,dragging:true,touchZoom:true,doubleClickZoom:true,boxZoom:true,keyboard:true,inertia:true});L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',maxZoom:18}).addTo(tripMap);
-    const points=coords.map(({s,i,c},j)=>{const p=[c.lat,c.lon],prev=j>0&&coords[j-1].i===i-1?coords[j-1].c:null,leg=prev?distanceKm(prev,c):null;L.marker(p,{icon:L.divIcon({className:'trip-map-pin',html:String(i+1),iconSize:[32,32]})}).addTo(tripMap).bindPopup(`<b>${esc(spot(s.spotId).name)}</b><br>${s.date?esc(date(s.date)):'Date à définir'}${leg!==null?`<br><span>${prettyDistance(leg)} depuis l’étape ${i}</span>`:''}`);return p;});
-    if(points.length>1){coords.forEach(({i,c},j)=>{if(j===0||coords[j-1].i!==i-1)return;const a=points[j-1],p=points[j],mid=[(a[0]+p[0])/2,(a[1]+p[1])/2],d=distanceKm(coords[j-1].c,c);L.polyline([a,p],{color:'#2154dc',weight:4,opacity:.85,dashArray:'8 9'}).addTo(tripMap);L.marker(mid,{interactive:false,icon:L.divIcon({className:'trip-leg-label-wrap',html:'<span class="trip-leg-label">'+prettyDistance(d)+'</span>',iconSize:[70,24],iconAnchor:[35,12]})}).addTo(tripMap)});tripMap.fitBounds(points,{padding:[55,55],maxZoom:11})}else tripMap.setView(points[0],11);
+    if(!coords.length){host.innerHTML='<p class="trip-map-empty">Ajoute un spot pour voir ton voyage sur la carte.</p>';return;}
+    if(!window.OceanMap?.mini){host.innerHTML='<p class="trip-map-empty">La carte est indisponible. Ton itinéraire reste disponible dans l’onglet voisin.</p>';return;}
+    const steps=coords.map(({s,i,c},j)=>{const prev=j>0&&coords[j-1].i===i-1?coords[j-1].c:null,leg=prev?distanceKm(prev,c):null;return {id:s.spotId,i,kicker:`Étape ${i+1}`,leg:leg!==null?prettyDistance(leg):'',lines:[s.date?date(s.date):'Date à définir',...(leg!==null?[`${prettyDistance(leg)} depuis l’étape ${i}`]:[])]};});
+    tripMap=window.OceanMap.mini(host,{steps,others:false,cooperative:false,maxZoom:11,zoom:10,label:'Carte des étapes du voyage'});
   }
   $('#tripContent').addEventListener('click',e=>{
     const b=e.target.closest('[data-action]');if(!b)return;const a=b.dataset.action,id=b.dataset.id;
