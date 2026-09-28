@@ -13,7 +13,11 @@
   const P={
     ramp:['#5BC3CD','#34AAC6','#218FBC','#1971AE','#14599C','#104486','#0B346F','#0A2858','#081E42','#06152F'],
     land:'#E9DFC4',ice:'#F7F9FA',lake:'#3E92C4',coast:'#1B4F72',fres:'#79E3EF',spec:'#B8EEFF',
-    atmoIn:'#398CF5',atmoOut:'#79E3EF',border:'#A08A60',stars:['#BCD4EA','#FFFFFF']
+    atmoIn:'#398CF5',atmoOut:'#79E3EF',border:'#0B2D7A',stars:['#BCD4EA','#FFFFFF'],
+    /* Identité des continents (direction Astra) : base, trait du motif, rehaut.
+       Europe, Afrique, Asie, Amérique du Nord et Caraïbes, Amérique du Sud, Océanie, Antarctique. */
+    cont:[['#E3C9A0','#9E6B4A','#F6E7CC'],['#E0A062','#A5572F','#F2CF8E'],['#E3AFA3','#B0615A','#F7D8CC'],['#E2D08A','#A8904F','#FFF0BE'],
+      ['#CDBF72','#8F8A45','#F0E2A4'],['#EDB98F','#BF8260','#FFE0C2'],['#F3EEDB','#C9C3AF','#FFF9EA']]
   };
   /* Couleurs des activités, éclaircies pour le fond sombre. */
   const GLOW={surf:'#5C88FF',bodyboard:'#81B2FF',baignade:'#39CDE8',paddle:'#36CDAF',kayak:'#A1D763',snorkeling:'#FFC34D',plongee:'#6889D6',kitesurf:'#FF8068',windsurf:'#BD8AFF'};
@@ -28,12 +32,20 @@
 
   const EARTH_V=`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
   const EARTH_F=`
-    uniform sampler2D uMap;uniform vec2 uTex;uniform vec3 uLight,uCam;
+    uniform sampler2D uMap,uCult,uPat;uniform vec2 uTex;uniform vec3 uLight,uCam;
     uniform vec3 uRamp[10];uniform vec3 uLand,uIce,uLake,uCoast,uFres,uSpec,uHaze;
-    uniform float uCoastA,uCoastW,uReveal;
+    uniform vec3 uBase[7],uAcc1[7],uAcc2[7];
+    uniform float uCoastA,uCoastW,uReveal,uLandReveal,uPatScale,uPatA,uCultOn;
     varying vec3 vPos;
     const float PI=3.141592653589793;
     vec3 ramp(float d){d=clamp(d,1.,10.);int i=int(floor(d));float f=d-float(i);return mix(uRamp[max(i-1,0)],uRamp[min(i,9)],f);}
+    /* Motif du continent k : atlas 4 × 2 de tuiles, projection triplanaire (ni couture ni étirement aux pôles). */
+    vec2 patTap(int k,vec2 q,vec2 gx,vec2 gy){vec2 o=vec2(float(k-4*(k/4))*.25,.5-float(k/4)*.5);return textureGrad(uPat,o+fract(q)*vec2(.25,.5),gx*vec2(.25,.5),gy*vec2(.25,.5)).rg;}
+    vec2 pattern(int k,vec3 n){
+      vec3 p=n*uPatScale,b=pow(abs(n),vec3(4.));b/=b.x+b.y+b.z;
+      vec3 px=dFdx(p),py=dFdy(p);
+      return patTap(k,p.yz,px.yz,py.yz)*b.x+patTap(k,p.xz,px.xz,py.xz)*b.y+patTap(k,p.xy,px.xy,py.xy)*b.z;
+    }
     void main(){
       vec3 n=normalize(vPos);
       float u=atan(n.x,n.z)/(2.*PI)+.5,v=asin(clamp(n.y,-1.,1.))/PI+.5;
@@ -51,7 +63,18 @@
       vec3 water=ramp(depth);
       water=mix(uRamp[4],water,uReveal);
       water=mix(water,uLake,1.-smoothstep(.25,.8,depth));
-      vec3 col=mix(water,mix(uLand,uIce,t.b*.85),land);
+      /* Terres : palette du continent (fondue aux frontières), nuance propre à chaque pays, motif artisanal. */
+      vec3 c=textureGrad(uCult,vec2(u,v),dx,dy).rgb;
+      float kf=clamp((c.r*255.-18.)/36.,0.,6.);int k0=int(floor(kf)),k1=min(k0+1,6);float kt=kf-float(k0);
+      vec3 ground=mix(uBase[k0],uBase[k1],kt)*(.93+.14*c.g);
+      ground=mix(ground,mix(uAcc1[k0],uAcc1[k1],kt),(c.b-.5)*.12);
+      if(uPatA>.001){
+        vec2 pa=mix(pattern(k0,n),kt>.001?pattern(k1,n):vec2(0.),kt);
+        ground=mix(ground,mix(uAcc1[k0],uAcc1[k1],kt),pa.x*uPatA);
+        ground=mix(ground,mix(uAcc2[k0],uAcc2[k1],kt),pa.y*uPatA*.8);
+      }
+      ground=mix(uLand,ground,uCultOn);
+      vec3 col=mix(water,mix(ground,uIce,t.b*.7),land*uLandReveal);
       float hw=.5*uCoastW*w;
       float line=(1.-smoothstep(hw-.5*w,hw+.5*w,abs(sdf)))*(1.-smoothstep(4.,8.,tpp)*.5);
       col=mix(col,uCoast,line*uCoastA);
@@ -133,7 +156,9 @@
     const uniEarth={
       uMap:{value:null},uTex:{value:new T.Vector2(4096,2048)},uLight:{value:new T.Vector3()},uCam:{value:new T.Vector3()},
       uRamp:{value:P.ramp.map(col)},uLand:{value:col(P.land)},uIce:{value:col(P.ice)},uLake:{value:col(P.lake)},uCoast:{value:col(P.coast)},
-      uFres:{value:col(P.fres)},uSpec:{value:col(P.spec)},uHaze:{value:col(P.atmoIn)},uCoastA:{value:.35},uCoastW:{value:.7},uReveal:{value:0}
+      uFres:{value:col(P.fres)},uSpec:{value:col(P.spec)},uHaze:{value:col(P.atmoIn)},uCoastA:{value:.35},uCoastW:{value:.7},uReveal:{value:0},uLandReveal:{value:0},
+      uCult:{value:null},uPat:{value:null},uCultOn:{value:0},uPatScale:{value:12.7},uPatA:{value:0},
+      uBase:{value:P.cont.map(c=>col(c[0]))},uAcc1:{value:P.cont.map(c=>col(c[1]))},uAcc2:{value:P.cont.map(c=>col(c[2]))}
     };
     const seg=mobile?128:192;
     const earth=new T.Mesh(new T.SphereGeometry(1,seg,seg/2),new T.ShaderMaterial({uniforms:uniEarth,vertexShader:EARTH_V,fragmentShader:EARTH_F}));
@@ -163,6 +188,18 @@
       borders=new T.LineSegments(g,borderMat);borders.renderOrder=1;scene.add(borders);invalidate();
     }).catch(()=>{});
 
+    /* Vol : un fin arc citron suit le grand cercle parcouru, puis s’efface en 300 ms. */
+    const ARC_N=96,arcPos=new Float32Array(ARC_N*3),arcGeo=new T.BufferGeometry();arcGeo.setAttribute('position',new T.BufferAttribute(arcPos,3));
+    const arcMat=new T.LineBasicMaterial({color:col('#D7F75B'),transparent:true,opacity:0,depthTest:true,depthWrite:false});
+    const arcLine=new T.Line(arcGeo,arcMat);arcLine.renderOrder=2;arcLine.frustumCulled=false;arcLine.visible=false;scene.add(arcLine);
+    let arcFade=0;
+    function setArc(a,b,ang){
+      const p=M.vec(a.lat,a.lon),q=M.vec(b.lat,b.lon),sn=Math.sin(ang);
+      for(let i=0;i<ARC_N;i++){const t=i/(ARC_N-1),x=Math.sin((1-t)*ang)/sn,y=Math.sin(t*ang)/sn,h=1.004+Math.sin(Math.PI*t)*Math.min(.08,ang*.05);
+        arcPos.set([(p[0]*x+q[0]*y)*h,(p[1]*x+q[1]*y)*h,(p[2]*x+q[2]*y)*h],i*3);}
+      arcGeo.attributes.position.needsUpdate=true;arcGeo.setDrawRange(0,0);arcLine.visible=true;arcMat.opacity=.85;arcFade=0;
+    }
+
     /* ---------- Spots ---------- */
     const dotU={uCam:{value:new T.Vector3()},uHalo:{value:12},uCore:{value:4},uRing:{value:0},uHaloA:{value:.18},uDpr:{value:1},uWhite:{value:col('#ffffff')}};
     const dotMat=new T.ShaderMaterial({uniforms:dotU,vertexShader:DOT_V,fragmentShader:DOT_F,transparent:true,depthTest:false,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor});
@@ -176,7 +213,7 @@
       spots.forEach((s,i)=>{pos.set([s.v[0]*1.001,s.v[1]*1.001,s.v[2]*1.001],i*3);const k=col(glow(s.act));c.set([k.r,k.g,k.b],i*3);});
       const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(pos,3));g.setAttribute('color',new T.BufferAttribute(c,3));g.setAttribute('hide',new T.BufferAttribute(hideAttr,1));
       dots=new T.Points(g,dotMat);dots.renderOrder=3;dots.frustumCulled=false;scene.add(dots);
-      levels=M.clusterLevels(spots);level=-1;
+      levels=M.clusterLevels(spots);level=-1;refreshCountries();
       badges=[];shownBadges=[];labels=[];hotBadge=null;
       if(selected&&!byId.has(selected))setSelected(null);
       if(hovered&&!byId.has(hovered))setHover(null);
@@ -184,7 +221,7 @@
     }
 
     /* ---------- Caméra : centre (lat, lon) + distance au centre de la Terre (rayons) ---------- */
-    const view={lat:30,lon:-8,dist:4.2};let overviewOn=false,keepKpp=0;
+    const view={lat:30,lon:-8,dist:4.2};let overviewOn=false,keepKpp=0,touched=false,spin=0;
     let W=1,H=1,pad={top:0,bottom:0,left:0,right:0},anim=null,inertia=null,dirty=true,raf=0,active=true,lastMove=0,restTimer=0,revealStart=0;
     const minSide=()=>Math.max(1,Math.min(W-pad.left-pad.right,H-pad.top-pad.bottom));
     const tanHalf=Math.tan(FOV*RAD/2);
@@ -198,7 +235,7 @@
     const clampDist=d=>Math.max(minDist(),Math.min(maxDist()*1.35,d));
     function applyCamera(){
       view.lat=Math.max(-78,Math.min(78,view.lat));view.lon=M.wrapLon(view.lon);
-      const v=M.vec(view.lat,view.lon);
+      const v=M.vec(view.lat,view.lon+spin);
       camera.position.set(v[0]*view.dist,v[1]*view.dist,v[2]*view.dist);
       camera.up.set(0,1,0);camera.lookAt(0,0,0);
       camera.near=Math.max(.002,(view.dist-1)*.25);camera.far=view.dist+90;
@@ -246,7 +283,8 @@
         const t=Math.min(1,(now-anim.t0)/anim.ms),e=easeInOut(t);
         const q=slerp(anim.a,anim.b,e);view.lat=q.lat;view.lon=q.lon;
         view.dist=Math.exp(Math.log(anim.d0)+(Math.log(anim.d1)-Math.log(anim.d0))*e)+anim.bump*Math.sin(Math.PI*e);
-        if(t>=1){const done=anim.done;anim=null;moved('fly');done?.();}else again=true;
+        if(anim.arc)arcGeo.setDrawRange(0,Math.max(2,Math.round(ARC_N*Math.min(1,e*1.15))));
+        if(t>=1){const done=anim.done,arc=anim.arc;anim=null;if(arc)arcFade=now;moved('fly');done?.();}else again=true;
         dirty=true;
       }else if(inertia){
         const dt=Math.min(40,now-inertia.t);inertia.t=now;
@@ -255,9 +293,13 @@
         if(Math.hypot(inertia.vLat,inertia.vLon)<.02*kpp()/KM/RAD){inertia=null;moved('inertia');}else again=true;
         dirty=true;
       }
+      if(arcFade){const t=(now-arcFade)/300;arcMat.opacity=.85*Math.max(0,1-t);if(t>=1){arcFade=0;arcLine.visible=false;}else again=true;dirty=true;}
       if(ripStart){if(now-ripStart<1800){again=true;dirty=true;}else{ripStart=0;dirty=true;}}
-      if(revealStart){const t=Math.min(1,(now-revealStart)/900);uniEarth.uReveal.value=easeInOut(t);if(t<1)again=true;else revealStart=0;dirty=true;}
+      /* Ouverture « la marée révèle le monde » : les fonds marins, puis les terres, pendant une rotation de 8°. */
+      if(revealStart){const t=Math.min(1,(now-revealStart)/1200);uniEarth.uReveal.value=easeInOut(Math.min(1,t/.75));uniEarth.uLandReveal.value=easeInOut(Math.max(0,(t-.12)/.88));
+        spin=touched?0:8*(1-easeInOut(t));if(t<1)again=true;else{revealStart=0;spin=0;}dirty=true;}
       if(dirty){dirty=false;draw();}
+      if(emblemAnim){dirty=true;again=true;}
       if(again)raf=requestAnimationFrame(frame);
     }
     function slerp(a,b,t){
@@ -275,11 +317,13 @@
       /* Échelle espace → continent → région : points, liserés et halo s’adaptent en continu. */
       const s=Math.max(0,Math.min(1,(Math.log(8000)-Math.log(Math.max(w,1)))/(Math.log(8000)-Math.log(1500))));
       const far=Math.max(0,Math.min(1,(Math.log(Math.max(w,1))-Math.log(8000))/Math.log(2)));
-      dotU.uCore.value=4+2*(1-far)+2*s;dotU.uHalo.value=12+4*(1-far)+4*s+2;dotU.uRing.value=s>.6?1:0;dotU.uHaloA.value=.2;
+      dotU.uCore.value=4+2*(1-far)+2*s;dotU.uHalo.value=12+4*(1-far)+4*s+2;dotU.uRing.value=s>.6?1:0;dotU.uHaloA.value=mobile?.07:.16;
       uniEarth.uCoastA.value=.45+.2*s;uniEarth.uCoastW.value=.8+.4*s;
+      /* Motifs culturels : invisibles vus de l’espace, ils apparaissent à l’échelle d’un continent. */
+      uniEarth.uPatA.value=.2*Math.max(0,Math.min(1,(14-k)/8));
       /* Frange atmosphérique fine : environ 9 px sur ordinateur, 6 px sur mobile. */
       atmoU.uThick.value=(mobile?6:9)*k/KM;atmoU.uAlpha.value=.6-.45*s;
-      borderMat.opacity=.5*Math.max(0,Math.min(1,(Math.log(14000)-Math.log(w))/Math.log(2)));
+      borderMat.opacity=.28*Math.max(0,Math.min(1,(Math.log(14000)-Math.log(w))/Math.log(2)));
       /* Regroupements : échelle la plus proche du zoom courant ; repères placés pour cette image. */
       if(levels.length){const lv=M.levelFor(k);if(lv!==level)applyLevel(lv);}
       layoutOverlay();
@@ -306,6 +350,35 @@
       for(let d=0;d<10;d++)x.fillText(String(d),(d+.5)*digitW*TS,8.6*TS);
       const t=new T.CanvasTexture(c);t.colorSpace=T.NoColorSpace;t.generateMipmaps=false;t.minFilter=T.LinearFilter;return t;
     })();
+    /* Emblèmes des pays : médaillons culturels (atlas 16 × 8 de 128 px), sous les groupes de spots. */
+    const MAXE=128,emblemGeo=quad();emblemGeo.instanceCount=0;
+    const E={at:inst(emblemGeo,'aAt',2,MAXE),size:inst(emblemGeo,'aSize',1,MAXE),alpha:inst(emblemGeo,'aAlpha',1,MAXE),uv:inst(emblemGeo,'aCell',1,MAXE)};
+    const emblemU={uTex:{value:null}};
+    const emblemMesh=new T.Mesh(emblemGeo,new T.ShaderMaterial({...premult,uniforms:emblemU,
+      vertexShader:`attribute vec2 aAt;attribute float aSize,aAlpha,aCell;varying vec2 vUv,vP;varying float vA,vS;
+        void main(){float s=aSize*1.3;vP=position.xy*s;vS=aSize;vA=aAlpha;
+          vec2 cell=vec2(mod(aCell,16.),floor(aCell/16.));vec2 q=vP/aSize+.5;
+          vUv=vec2((cell.x+q.x)/16.,1.-(cell.y+q.y)/8.);
+          gl_Position=projectionMatrix*vec4(aAt+vP,0.,1.);if(aAlpha<.01)gl_Position=vec4(2.,2.,2.,1.);}`,
+      fragmentShader:`uniform sampler2D uTex;varying vec2 vUv,vP;varying float vA,vS;
+        void main(){
+          vec2 q=vP/vS+.5;vec4 c=vec4(0.);
+          float rq=length(q-.5);if(rq<.5){c=texture2D(uTex,vUv);c*=1.-smoothstep(.46,.49,rq);}
+          float r=length(vP+vec2(0.,-vS*.06))/(vS*.5);
+          float sh=(1.-smoothstep(.8,1.25,r))*.35*(1.-c.a);
+          gl_FragColor=vec4(c.rgb*c.a,c.a+sh)*vA;
+          #include <colorspace_fragment>
+        }`}));
+    emblemMesh.frustumCulled=false;emblemMesh.renderOrder=0;overlay.add(emblemMesh);
+    let countries=[],emblemsOn=[],emblemAnim=false;
+    const eState=new Map();
+    new T.TextureLoader().load(new URL('assets/globe/emblems.webp',document.baseURI).href,tex=>{tex.colorSpace=T.SRGBColorSpace;tex.generateMipmaps=true;tex.minFilter=T.LinearMipmapLinearFilter;tex.anisotropy=4;emblemU.uTex.value=tex;invalidate();});
+    fetch(new URL('assets/globe/countries.json',document.baseURI)).then(r=>r.ok?r.json():{}).then(d=>{countryData=d;refreshCountries();invalidate();}).catch(()=>{});
+    let countryData={};
+    function refreshCountries(){
+      const n=new Map();for(const s of spots)if(s.country)n.set(s.country,(n.get(s.country)||0)+1);
+      countries=[...n.entries()].filter(([k])=>countryData[k]?.e!=null).map(([k,c])=>{const d=countryData[k];return {name:k,n:c,e:d.e,v:M.vec(d.lat,d.lon)};}).sort((a,b)=>b.n-a.n);
+    }
     const MAXB=320;
     const badgeGeo=quad();badgeGeo.instanceCount=0;
     const B={at:inst(badgeGeo,'aAt',2,MAXB),size:inst(badgeGeo,'aSize',1,MAXB),alpha:inst(badgeGeo,'aAlpha',1,MAXB),hot:inst(badgeGeo,'aHot',1,MAXB),
@@ -383,7 +456,13 @@
 
     let badges=[],labels=[],selected=null,hovered=null,hotBadge=null,user=null,ripStart=0;
     const hovEl=document.createElement('div');hovEl.className='og-hover';hovEl.hidden=true;hovEl.innerHTML='<i></i><b></b>';
-    layer.append(hovEl);
+    const tipEl=document.createElement('div');tipEl.className='og-country';tipEl.hidden=true;
+    layer.append(hovEl,tipEl);
+    function countryTip(em,p){
+      tipEl.hidden=!em;if(!em)return;
+      tipEl.textContent=`${em.c.name} · ${em.c.n>1?em.c.n+' spots':'1 spot'}`;
+      tipEl.style.transform=`translate(${em.x.toFixed(1)}px,${(em.y-em.r-8).toFixed(1)}px)`;
+    }
 
     function applyLevel(lv){
       level=lv;const groups=levels[lv]||[];hideAttr.fill(0);
@@ -436,6 +515,29 @@
       badgeGeo.instanceCount=i;
       for(const k in B)badgeGeo.attributes['a'+{at:'At',size:'Size',alpha:'Alpha',hot:'Hot',c1:'C1',c2:'C2',c3:'C3',f:'F',num:'Num'}[k]].needsUpdate=true;
       shownBadges=shown.slice(0,i);
+      /* Emblèmes : 18 px vus de l’espace (les 8 pays les plus riches en spots), 26 px par continent, 40 px en région ;
+         jamais sur un groupe, une étiquette ou le spot choisi. Apparition et disparition en fondu. */
+      {
+        const w=widthKm(),size=w>8000?22:w>1500?28:40,cap=w>8000?8:MAXE,taken=shownBadges.map(b=>[b.sx,b.sy,b.sz/2+4]);
+        if(sp)taken.push([sp.x,sp.y,20]);
+        const now=performance.now(),dt=Math.min(64,now-(layoutT||now));layoutT=now;let j=0,busy=false;emblemsOn=[];
+        for(const c of countries){
+          const p=project(c.v);let on=j<cap&&p.front&&p.facing>.3&&p.x>pad.left-20&&p.x<W-pad.right+20&&p.y>pad.top-20&&p.y<H-pad.bottom+20;
+          if(on&&taken.some(([x,y,r])=>Math.hypot(x-p.x,y-p.y)<r+size/2))on=false;
+          if(on&&labels.some((l,k)=>{if(!L.alpha[k]||!l.box)return false;const ax=L.at[k*2],ay=L.at[k*2+1],h=size/2+3;return p.x>ax+l.box[0]-h&&p.x<ax+l.box[2]+h&&p.y>ay+l.box[1]-h&&p.y<ay+l.box[3]+h;}))on=false;
+          const st=eState.get(c.name)||{a:0,pop:0};eState.set(c.name,st);
+          const target=on?1:0;st.a+=(target-st.a)*Math.min(1,dt/110);if(Math.abs(st.a-target)<.02)st.a=target;else busy=true;
+          if(st.pop){const t=(now-st.pop)/550;if(t>=1)st.pop=0;else busy=true;}
+          if(on){taken.push([p.x,p.y,size/2+6]);j++;}
+          if(st.a<=0||j>MAXE)continue;
+          const k=emblemsOn.length;if(k>=MAXE)continue;
+          const pop=st.pop?1+.12*Math.sin(Math.PI*Math.min(1,(now-st.pop)/550)):1;
+          E.at[k*2]=p.x;E.at[k*2+1]=p.y;E.size[k]=size*(.85+.15*st.a)*pop;E.alpha[k]=st.a;E.uv[k]=c.e;
+          emblemsOn.push({c,x:p.x,y:p.y,r:size/2});
+        }
+        emblemGeo.instanceCount=emblemsOn.length;['aAt','aSize','aAlpha','aCell'].forEach(n=>emblemGeo.attributes[n].needsUpdate=true);
+        emblemAnim=busy;
+      }
       /* Étiquettes : suivent leur spot à chaque image. */
       labels.forEach((l,k)=>{const s=byId.get(l.id);const p=s&&project(s.v);const on=p&&p.front&&p.facing>=.12&&!hideAttr[s.i]&&l.id!==hovered;
         L.at[k*2]=p?p.x:0;L.at[k*2+1]=p?p.y:0;L.alpha[k]=on?1:0;});
@@ -446,7 +548,8 @@
       ['aAt','aAlpha','aC','aType'].forEach(n=>pinGeo.attributes[n].needsUpdate=true);
       if(hovered&&byId.has(hovered)){const p=project(byId.get(hovered).v);hovEl.style.visibility=p.front&&!anim&&!inertia&&!drag?'':'hidden';hovEl.style.transform=`translate(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px)`;}
     }
-    let shownBadges=[];
+    let shownBadges=[],layoutT=0;
+    const emblemAt=(x,y)=>emblemsOn.find(e=>e.c&&Math.hypot(e.x-x,e.y-y)<Math.max(e.r,mobile?20:0)&&eState.get(e.c.name)?.a>.5);
     function openCluster(g){
       const pts=g.ids.map(id=>byId.get(id)).filter(Boolean);
       const c=M.cap(pts);if(!c)return;
@@ -532,7 +635,8 @@
       if(!ms){view.lat=b.lat;view.lon=b.lon;view.dist=d1;invalidate();moved('fly');done?.();return;}
       /* Long trajet : la caméra prend de la hauteur au milieu du vol. */
       const bump=Math.max(0,Math.min(1.5,ang*.9)-(Math.max(view.dist,d1)-1)*.6);
-      anim={a,b,d0:view.dist,d1,t0:performance.now(),ms,bump,done};invalidate();
+      const arc=ang>6*RAD&&!reduced();if(arc)setArc(a,b,ang);
+      anim={a,b,d0:view.dist,d1,t0:performance.now(),ms,bump,done,arc};invalidate();
     }
     function zoomAt(f,x,y,animate){
       const target=1+(view.dist-1)/f;
@@ -550,6 +654,7 @@
     const local=e=>{const r=canvas.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};};
     canvas.addEventListener('pointerdown',e=>{
       if(e.button>0)return;
+      touched=true;spin=0;
       try{canvas.setPointerCapture(e.pointerId);}catch(_){}stop();
       const p=local(e);ptrs.set(e.pointerId,p);
       if(ptrs.size===1){drag={g:pick(p.x,p.y),last:p,t:performance.now(),v:[],moved:false};tapStart={...p,t:performance.now()};}
@@ -558,7 +663,11 @@
     canvas.addEventListener('pointermove',e=>{
       const p=local(e);
       if(!ptrs.has(e.pointerId)){
-        if(e.pointerType==='mouse'){const b=badgeAt(p.x,p.y),hot=b?.key||null;if(hot!==hotBadge){hotBadge=hot;invalidate();}setHover(b?null:hit(p.x,p.y,12));canvas.style.cursor=b||hovered||labelAt(p.x,p.y)?'pointer':'';}
+        if(e.pointerType==='mouse'){
+          const b=badgeAt(p.x,p.y),hot=b?.key||null;if(hot!==hotBadge){hotBadge=hot;invalidate();}
+          const id=b?null:hit(p.x,p.y,12),em=!b&&!id?emblemAt(p.x,p.y):null;setHover(id);countryTip(em,p);
+          canvas.style.cursor=b||hovered||em||labelAt(p.x,p.y)?'pointer':'';
+        }
         return;
       }
       ptrs.set(e.pointerId,p);
@@ -599,11 +708,12 @@
       moved('drag');
     };
     canvas.addEventListener('pointerup',end);canvas.addEventListener('pointercancel',end);
-    canvas.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'&&!ptrs.size){setHover(null);if(hotBadge){hotBadge=null;invalidate();}}});
+    canvas.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse'&&!ptrs.size){setHover(null);tipEl.hidden=true;if(hotBadge){hotBadge=null;invalidate();}}});
     let lastTap=null;
     function tap(p,type){
       const b=badgeAt(p.x,p.y);if(b){lastTap=null;openCluster(unionOf(b));return;}
       const l=labelAt(p.x,p.y);if(l){opts.onSelect?.(l.id);return;}
+      const em=emblemAt(p.x,p.y);if(em){lastTap=null;const st=eState.get(em.c.name);if(st&&!reduced())st.pop=performance.now();invalidate();opts.onCountry?.(em.c.name);return;}
       const id=hit(p.x,p.y,type==='mouse'?12:22);
       const now=performance.now();
       if(!id&&lastTap&&now-lastTap.t<320&&Math.hypot(p.x-lastTap.x,p.y-lastTap.y)<30){lastTap=null;if(zoomAt(2.2,p.x,p.y,true))dive('dbl');return;}
@@ -613,7 +723,7 @@
       opts.onEmpty?.();
     }
     canvas.addEventListener('wheel',e=>{
-      e.preventDefault();stop();
+      e.preventDefault();stop();touched=true;spin=0;
       const p=local(e),unit=e.deltaMode===1?16:e.deltaMode===2?H:1;
       const dy=e.deltaY*unit*(e.ctrlKey?.012:.0022);
       const f=Math.exp(-Math.max(-1.2,Math.min(1.2,dy)));
@@ -655,7 +765,8 @@
       });
     }
     const base=new URL('assets/globe/',document.baseURI).href;
-    const first=await loadTexture(base+'earth-4k.webp');
+    const [first,cult,pat]=await Promise.all(['earth-4k.webp','cultures-2k.webp','patterns.webp'].map(f=>loadTexture(base+f)));
+    uniEarth.uCult.value=cult;uniEarth.uPat.value=pat;uniEarth.uCultOn.value=1;
     uniEarth.uMap.value=first;uniEarth.uTex.value.set(first.image.width,first.image.height);
     renderer.initTexture?.(first);
     earth.visible=true;
@@ -663,7 +774,7 @@
     const conn=navigator.connection;let dead=false;
     if(!mobile&&maxTex>=8192&&!conn?.saveData)setTimeout(()=>loadTexture(base+'earth-8k.webp').then(tex=>{if(dead)return;const old=uniEarth.uMap.value;uniEarth.uMap.value=tex;uniEarth.uTex.value.set(tex.image.width,tex.image.height);old?.dispose();invalidate();}).catch(()=>{}),1200);
     resize();applyCamera();
-    revealStart=reduced()?0:performance.now();if(!revealStart)uniEarth.uReveal.value=1;
+    revealStart=reduced()?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;uniEarth.uLandReveal.value=1;}
     invalidate();
 
     const api={
@@ -689,7 +800,7 @@
       },
       project(lat,lon){applyCamera();return project(M.vec(lat,lon));},
       /* Badges et étiquettes affichés, avec leur position à l’écran. */
-      markers(){return {badges:shownBadges.map(b=>({n:b.total,x:b.sx,y:b.sy,size:b.sz})),labels:labels.map((l,k)=>({id:l.id,x:L.at[k*2]+L.off[k*2],y:L.at[k*2+1],visible:!!L.alpha[k]}))};},
+      markers(){return {emblems:emblemsOn.map(e=>({name:e.c.name,x:e.x,y:e.y,r:e.r})),badges:shownBadges.map(b=>({n:b.total,x:b.sx,y:b.sy,size:b.sz})),labels:labels.map((l,k)=>({id:l.id,x:L.at[k*2]+L.off[k*2],y:L.at[k*2+1],visible:!!L.alpha[k]}))};},
       /* Spots affichés seuls (hors groupes), avec leur position à l’écran. */
       singles(){applyCamera();return spots.filter(s=>!hideAttr[byId.get(s.id).i]).map(s=>({id:s.id,...project(s.v)})).filter(p=>p.front&&p.facing>.12);},
       setActive(on){active=!!on;canvas.style.visibility=on?'':'hidden';layer.style.visibility=on?'':'hidden';if(on){resize();invalidate();}else{stop();cancelAnimationFrame(raf);raf=0;}},

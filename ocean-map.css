@@ -197,6 +197,7 @@ body.mapfull .app-chrome{visibility:hidden}
 .og-layer>*{position:absolute;left:0;top:0}
 .og-layer>[hidden]{display:none}
 .og-hover{width:0;height:0;pointer-events:none}
+.og-country{padding:5px 10px;border-radius:9px;background:var(--og-label);color:#fff;font:700 12px var(--body);white-space:nowrap;pointer-events:none;translate:-50% -100%;box-shadow:0 6px 16px -8px rgba(2,7,17,.9)}
 .og-hover i{position:absolute;left:-6px;top:-6px;width:12px;height:12px;border-radius:50%;background:var(--c);box-shadow:0 0 0 2px #fff}
 .og-hover b{position:absolute;left:14px;top:-12px;height:24px;max-width:170px;padding:0 8px;border-radius:8px;background:var(--og-label);color:#fff;font:600 12px/24px var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 6px 16px -8px rgba(2,7,17,.9)}
 .omap-credit{position:absolute;z-index:2;inset-inline-end:12px;bottom:8px;margin:0;font:500 10px var(--body);color:rgba(188,212,234,.5);pointer-events:none;opacity:0;transition:opacity .3s}

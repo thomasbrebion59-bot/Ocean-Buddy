@@ -287,7 +287,9 @@
       onSelect:id=>select(id),
       onEmpty:()=>deselect(),
       onView:()=>{if(mode!=='globe')return;worldState();clearTimeout(listTimer);listTimer=setTimeout(updateList,90);},
-      onDive:v=>dive(v)
+      onDive:v=>dive(v),
+      /* Emblème d’un pays : on vole vers ses spots. */
+      onCountry:name=>{const pts=rows.filter(s=>s.country===name).map(s=>COORDS[s.id]);if(pts.length&&planet){deselect();planet.fit(pts,{minWidthKm:planet.minWidthKm,maxWidthKm:WORLD_KM*.8});}}
     }).then(p=>{
       planet=p;planet.setPadding(planetPad());
       wrap.classList.add('is-planet');
@@ -426,7 +428,7 @@
     const key=activeSport+'|'+rows.map(s=>s.id).join(',');
     if(planet&&key!==planetData){
       planetData=key;
-      planet.setSpots(rows.map(s=>{const c=COORDS[s.id];return {id:s.id,lat:c.lat,lon:c.lon,name:shortName(s),act:primary(s)||'surf'};}));
+      planet.setSpots(rows.map(s=>{const c=COORDS[s.id];return {id:s.id,lat:c.lat,lon:c.lon,name:shortName(s),act:primary(s)||'surf',country:s.country};}));
       if(selected)planet.setSelected(selected);
     }
     if(map&&key!==lastData){

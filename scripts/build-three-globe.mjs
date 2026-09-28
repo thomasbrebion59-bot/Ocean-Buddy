@@ -6,7 +6,7 @@ import {fileURLToPath} from 'node:url';
 import path from 'node:path';
 
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
-const names=['AdditiveBlending','BackSide','BufferAttribute','BufferGeometry','CanvasTexture','ClampToEdgeWrapping','Color','CustomBlending','DoubleSide','DynamicDrawUsage','Float32BufferAttribute','InstancedBufferAttribute','InstancedBufferGeometry','LinearFilter','LinearMipmapLinearFilter','LineBasicMaterial','LineSegments','Mesh','NoColorSpace','OneFactor','OneMinusSrcAlphaFactor','OrthographicCamera','PerspectiveCamera','Points','Raycaster','RepeatWrapping','Scene','ShaderMaterial','SphereGeometry','SRGBColorSpace','TextureLoader','Vector2','Vector3','WebGLRenderer'];
+const names=['AdditiveBlending','BackSide','BufferAttribute','BufferGeometry','CanvasTexture','ClampToEdgeWrapping','Color','CustomBlending','DoubleSide','DynamicDrawUsage','Float32BufferAttribute','InstancedBufferAttribute','InstancedBufferGeometry','LinearFilter','LinearMipmapLinearFilter','Line','LineBasicMaterial','LineSegments','Mesh','NoColorSpace','OneFactor','OneMinusSrcAlphaFactor','OrthographicCamera','PerspectiveCamera','Points','Raycaster','RepeatWrapping','Scene','ShaderMaterial','SphereGeometry','SRGBColorSpace','TextureLoader','Vector2','Vector3','WebGLRenderer'];
 await build({
   stdin:{contents:`export {${names.join(',')}} from 'three';`,resolveDir:root,loader:'js'},
   bundle:true,minify:true,format:'esm',target:'es2020',legalComments:'none',

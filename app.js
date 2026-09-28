@@ -269,6 +269,11 @@ function renderSportFilters(){
   el.innerHTML=h;
 }
 function setSport(id){
+  /* Choisir une activité, c’est entrer dans son élément : transition immersive, l’écran change sous la scène. */
+  if(id&&SPORTMAP[id]&&window.OceanTransition){window.OceanTransition.play(id,()=>applySport(id));return;}
+  applySport(id);
+}
+function applySport(id){
   window.OceanNavigation?.begin();
   activeSport=id&&SPORTMAP[id]?id:null;chosenSport=activeSport||'all';
   currentFilter='all';currentSearch='';favOnly=false;nearMode=false;
@@ -461,6 +466,9 @@ function syncWorldUI(){
     const sample=w&&activeSport?exploreSpots('all',{world:w.id,country:spotCountry||null,search:'',favorite:false})[0]:null;
     const photo=sample&&spotPhotoUrl(sample.id,720)||w&&WORLD_PHOTOS[w.id].src||'assets/photos/hero.jpg';
     top.style.setProperty('--region-photo',`url("${photo}")`);
+    /* Choix de la destination après une activité : l’en-tête prend le décor de l’activité. */
+    const act=!on&&activeSport&&window.OceanTransition?.FX[activeSport]?activeSport:'';
+    top.dataset.act=act;if(act)top.style.setProperty('--act-scene',`url("assets/transitions/${act}.webp")`);
   }
   var ttl=document.getElementById('spotsTitle'), sub=document.getElementById('spotsSub');
   if(ttl) ttl.textContent = spotCountry||w?.lab || (spotWorld==='all'?'Trouve ton spot.':'Le monde est à toi.');
