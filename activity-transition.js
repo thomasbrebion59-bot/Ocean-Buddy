@@ -10,7 +10,7 @@
   'use strict';
   /* Position du premier plan dans le cadre 900×1350 (scripts/build-transition-layers.py → layers.json). */
   let LAYERS={};
-  fetch("assets/transitions/layers.json?v=3").then(r=>r.ok?r.json():{}).then(j=>{LAYERS=j||{};}).catch(()=>{});
+  fetch("assets/transitions/layers.json?v=4").then(r=>r.ok?r.json():{}).then(j=>{LAYERS=j||{};}).catch(()=>{});
 
   /* in : forme du cache ; out : forme de la révélation ; bg : [x,y,échelle] départ → arrivée (px à 390 de large) ;
      fg : [x,y,rotation,échelle] entrée → repos, fgOut : [x,y] pendant la sortie ; bob : flottaison (px) ;
@@ -36,7 +36,7 @@
     if(!cache.has(src)){const i=new Image();i.decoding='async';i.src=src;cache.set(src,(i.decode?i.decode():new Promise((r,j)=>{i.onload=r;i.onerror=j;})).then(()=>i).catch(()=>null));}
     return cache.get(src);
   }
-  const load=id=>Promise.all([img(`assets/transitions/${id}.webp?v=3`),img(`assets/transitions/${id}-fg.webp?v=3`),FX[id]?.fg2?img(`assets/transitions/${id}-fg2.webp?v=3`):null]);
+  const load=id=>Promise.all([img(`assets/transitions/${id}.webp?v=4`),img(`assets/transitions/${id}-fg.webp?v=4`),FX[id]?.fg2?img(`assets/transitions/${id}-fg2.webp?v=4`):null]);
   /* Les calques se préparent en tâche de fond, une fois l’app au calme. */
   (window.requestIdleCallback||setTimeout)(()=>Object.keys(FX).forEach((id,i)=>setTimeout(()=>load(id),i*500)),{timeout:6000});
 
@@ -148,6 +148,12 @@
   async function play(id,swap){
     const fx=FX[id];
     if(!fx||busy){swap?.();return;}
+    /* Version 3D (activity-transition-3d.js) dès qu’elle est prête ; sinon, cette version 2D. */
+    if(window.OceanTransition3D?.ready()){
+      busy=true;let done=false;
+      try{done=await window.OceanTransition3D.play(id,swap);}catch(e){console.error(e);}
+      busy=false;if(done)return;
+    }
     busy=true;
     const sport=(typeof SPORTMAP!=='undefined'&&SPORTMAP[id])||{label:id};
     const n=count(id);

@@ -470,7 +470,7 @@ function syncWorldUI(){
     top.style.setProperty('--region-photo',`url("${photo}")`);
     /* Choix de la destination après une activité : l’en-tête prend le décor de l’activité. */
     const act=!on&&activeSport&&window.OceanTransition?.FX[activeSport]?activeSport:'';
-    top.dataset.act=act;if(act)top.style.setProperty('--act-scene',`url("assets/transitions/${act}.webp?v=3")`);
+    top.dataset.act=act;if(act)top.style.setProperty('--act-scene',`url("assets/transitions/${act}.webp?v=4")`);
   }
   var ttl=document.getElementById('spotsTitle'), sub=document.getElementById('spotsSub');
   if(ttl) ttl.textContent = spotCountry||w?.lab || (spotWorld==='all'?'Trouve ton spot.':'Le monde est à toi.');

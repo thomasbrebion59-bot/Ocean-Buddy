@@ -2,7 +2,7 @@
 """Calques des transitions d'activité (direction artistique GPT-6 Astra, images ChatGPT).
 Entrée : un dossier avec <activité>-bg.png (décor portrait) et <activité>-fg.png (premier plan sur vert #00FF00).
 Sortie : assets/transitions/<activité>.webp (décor 900×1350, aussi utilisé par les en-têtes thémés)
-         assets/transitions/<activité>-fg.webp (premier plan détouré, recadré ; <activité>-fg2.png → -fg2.webp)
+         assets/transitions/<activité>-fg.webp (premier plan détouré, recadré ; <activité>-fg2.png → -fg2.webp, <activité>-mid.png → -mid.webp pour la 3D)
          assets/transitions/layers.json (position du premier plan dans le cadre, en fractions).
 Usage : python3 scripts/build-transition-layers.py <dossier>"""
 import json, sys, pathlib
@@ -37,7 +37,7 @@ def main(src):
         act = bg.name[:-7]
         Image.open(bg).convert('RGB').resize((W, H), Image.LANCZOS).save(OUT / f'{act}.webp', quality=80, method=6)
         # Premier plan, et second premier plan éventuel (kitesurf : l’aile + Poulpy).
-        for suffix, name in (('fg', act), ('fg2', act + '#2')):
+        for suffix, name in (('fg', act), ('fg2', act + '#2'), ('mid', act + '#mid')):
             fg = src / f'{act}-{suffix}.png'
             if not fg.exists(): continue
             im = key(Image.open(fg)).resize((W, H), Image.LANCZOS)

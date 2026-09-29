@@ -33,3 +33,7 @@
 .ocean-v2 #spotsTop[data-act]:not([data-act=""]) .page-eyebrow{color:#d7f75b!important;opacity:1}
 
 ::view-transition-old(root),::view-transition-new(root){animation-duration:.42s;animation-timing-function:cubic-bezier(.2,.8,.2,1)}
+
+/* Version 3D : le canvas WebGL est transparent, l’app reste visible autour des masques. */
+.act-tr-3d{background:transparent!important}
+.act-tr-gl{position:absolute;inset:0;width:100%;height:100%;display:block}

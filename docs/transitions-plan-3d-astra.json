@@ -1,0 +1,531 @@
+{
+  "global": {
+    "duration_ms": 3300,
+    "principles": [
+      "Chaque transition raconte un événement physique : la caméra entre dans une matière, rencontre Poulpy, puis transporte cette matière jusque dans l'application.",
+      "Construire le spectaculaire avec la profondeur, les occultations et les changements de vitesse. Réserver le maximum d'intensité à un seul instant signature par activité.",
+      "Les plans texturés constituent un diorama 2,5D traversé par une véritable caméra 3D. Ne jamais montrer leur tranche ni promettre une rotation autour de Poulpy.",
+      "La caméra reste majoritairement frontale. Les déplacements latéraux font glisser les premiers plans beaucoup plus vite que le décor ; les rotations propres de Poulpy restent inférieures à 8 degrés hors roulis.",
+      "Le milieu masque brièvement 15 à 35 % de Poulpy et l'avant-plan traverse les bords de l'objectif. Ces occultations rendent la profondeur perceptible avant les effets lumineux.",
+      "Poulpy demeure le point affectif et visuel principal : visage lisible, orange chaud, regard orienté vers le trajet, aucune particule durablement devant les yeux.",
+      "Le titre apparaît après l'instant signature, lorsque la caméra retrouve son équilibre. Ne jamais superposer lecture, roulis maximal et flash.",
+      "La sortie commence avant la fin du mouvement : l'eau, l'écume ou la lumière deviennent le masque qui découvre la destination réelle.",
+      "Les paramètres indiqués sont des maxima artistiques. Réduire les effets secondaires avant de réduire la fluidité, la lisibilité ou les occultations principales."
+    ],
+    "style": "Expédition océanique cinématographique en gouache premium : relief peint, bleus profonds, turquoise lumineux, écume ivoire, Poulpy orange chaleureux. Lumière directionnelle cohérente avec chaque décor fourni. Reflets et particules reprennent cette palette ; aucun rendu plastique photoréaliste ajouté aux peintures.",
+    "coordinate_system": {
+      "axes": "x vers la droite, y vers le haut, z vers le spectateur. Positions, dimensions et amplitudes en unités monde ; angles en degrés ; temps en millisecondes.",
+      "background": "Décor centré en [0,0,-10], dimensions 10×15. Courbure verticale progressive : z=-10 pour y>=1, puis rapprochement jusqu'à z=-8.8 au bord inférieur. Aucun déplacement caméra derrière un plan.",
+      "camera": "Perspective portrait 390×844. fov_deg est le champ vertical, utilisé comme commande de focale. focal_mm_equivalent suppose un capteur virtuel de hauteur 24 mm.",
+      "layer_sizes": "Les dimensions données sont les dimensions du quad, incluant ses espaces transparents. Ajuster le détourage et l'ancrage aux proportions réelles de Poulpy, sans étirement.",
+      "coverage": "Vérifier tous les frustums, roulis et déplacements avant intégration. Les coins hors peinture doivent rester couverts par une matière de transition ou un prolongement peint ; ne jamais étirer les derniers pixels du décor.",
+      "foreground": "Les avant-plans décrits utilisent des sprites instanciés ou de la géométrie procédurale simple. Un quatrième grand plan texturé n'est pas obligatoire."
+    },
+    "animation": {
+      "camera_interpolation": "Spline Hermite contrainte passant par les positions et les cibles aux temps indiqués, sans dépassement des bornes. Appliquer l'easing indiqué à chaque segment entrant. Roulis et focale interpolés séparément.",
+      "easings": {
+        "launch": "cubic-bezier(0.22,0.00,0.36,1.00)",
+        "rush": "cubic-bezier(0.42,0.00,0.82,0.62)",
+        "brake": "cubic-bezier(0.12,0.72,0.18,1.00)",
+        "glide": "cubic-bezier(0.37,0.00,0.63,1.00)"
+      },
+      "title": {
+        "in_ms": [1900, 2150],
+        "hold_ms": [2150, 2700],
+        "out_ms": [2700, 2920],
+        "position": "Bloc centré dans la zone comprise entre 25 et 39 % de la hauteur ; déplacement vertical maximal de 8 px.",
+        "motion": "Opacité 0→1, translation y 8→0 px, échelle 0.97→1. Aucun rebond. Sortie opacité 1→0 et translation y 0→-6 px.",
+        "content": "Nom de l'activité et nombre de spots fourni par les données réelles. Jauges uniquement si elles correspondent à une information réelle."
+      },
+      "end": "À 3300 ms : alpha du canvas exactement nul, destination nette, suppression de la boucle de rendu et libération différée des ressources transitoires."
+    },
+    "rendering": {
+      "budget": "600 particules actives maximum, tous systèmes confondus. Cible de 16.7 ms par image sur les appareils retenus pour validation, sans garantie indépendante du matériel.",
+      "resolution": "DPR plafonné à 1.5 ; résolution dynamique jusqu'à DPR 1.0 si nécessaire. Mesurer le coût GPU des shaders sur téléphone.",
+      "compositing": "Scène dans une cible couleur unique ; effets plein écran regroupés autant que possible. Alpha prémultiplié. Aucun RGB parasite dans les zones d'alpha nul.",
+      "refraction": "La réfraction du diorama échantillonne sa texture de rendu. Pour déformer réellement l'interface HTML, fournir une capture déjà disponible et autorisée de l'écran ; sans capture, utiliser la même onde comme masque transparent avec bord lumineux. WebGL ne peut pas réfracter directement le DOM situé sous son canvas.",
+      "particles": "Instances triées par familles de profondeur, sprites avec deux ou trois niveaux de flou précalculés. Pas de profondeur de champ plein écran. Bulles réfractives simulées, sans transmission physique par particule.",
+      "lighting": "Rayons radiaux calculés à résolution réduite ou analytiquement ; caustiques limitées aux surfaces éclairées. Pas de véritable simulation volumétrique.",
+      "shader_units": "Distorsion et aberration en pixels CSS à 390×844 ; intensités normalisées entre 0 et 1 ; fréquences en hertz sauf mention contraire.",
+      "assets": "Extraire le fond #00FF00 hors ligne, décontaminer les franges, exporter avec alpha. Précharger et téléverser les textures avant le déclenchement.",
+      "fallback": "En mode mouvement réduit : fondu de 450 ms, cadrage fixe et titre. Sans son ou sans API haptique : continuer silencieusement."
+    }
+  },
+  "activities": {
+    "surf": {
+      "concept": "La caméra plonge dans le tube, frôle sa lèvre et retrouve Poulpy au moment où la vague s'ouvre sur l'application.",
+      "entry": {
+        "start_ms": 0,
+        "end_ms": 430,
+        "effect": "Une onde au point touché incline l'image comme une surface d'eau. Une masse bleu profond descend du coin supérieur droit ; son bord d'écume devient la voûte du tube.",
+        "parameters": "Rayon de l'onde 0→1.25 diagonale écran ; bord 18 px ; distorsion 0→14→3 px. Occultation maximale à 280 ms."
+      },
+      "camera": {
+        "keyframes": [
+          {"ms": 0, "position": [-0.55, 0.25, 1.3], "target": [0, -0.55, -7.5], "roll_deg": -5, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "glide"},
+          {"ms": 550, "position": [-0.35, -0.6, 0.3], "target": [0.15, -1.1, -6.8], "roll_deg": -11, "fov_deg": 59, "focal_mm_equivalent": 21.2, "easing": "rush"},
+          {"ms": 1250, "position": [0.55, -0.9, -0.6], "target": [0.35, -1.1, -6.2], "roll_deg": 8, "fov_deg": 62, "focal_mm_equivalent": 20, "easing": "launch"},
+          {"ms": 1850, "position": [0.15, 0.15, 0.6], "target": [0, -0.25, -8], "roll_deg": 0, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "brake"},
+          {"ms": 3300, "position": [0.3, 0.35, 0.15], "target": [0, -0.1, -8], "roll_deg": 2, "fov_deg": 55, "focal_mm_equivalent": 23.1, "easing": "glide"}
+        ],
+        "micro_motion": "De 450 à 1500 ms : bruit lissé de position, amplitude 0.018, fréquence 3 Hz ; extinction avant le titre."
+      },
+      "layers": [
+        {"name": "decor", "z": -10, "size": [10, 15], "motion": "Décor de tube existant ; translation x 0→-0.15 sur 3300 ms."},
+        {"name": "mid_wave_lip", "z": -4.8, "size": [8.8, 10.8], "motion": "Arche ouverte au centre. De 400 à 1350 ms : x 0.8→-0.5, rotation z -8→6 degrés ; le bord droit passe devant la planche."},
+        {"name": "poulpy", "z": -6.2, "size": [3.4, 3.4], "motion": "Centre [0.1,-1.7,-6.2]. De 550 à 1450 ms : x -0.4→0.35, y -1.9→-1.4, rotation z -9→7→0 degrés ; stabilisation à 1850 ms."}
+      ],
+      "particles": {
+        "total": 420,
+        "systems": [
+          {"type": "ecume", "count": 250, "behavior": "Émission le long de la lèvre, z -5→1 ; vitesse 1.8 à 4 unités/s, trajectoires courbes vers les bords."},
+          {"type": "embruns", "count": 130, "behavior": "Jet bref à 1180 ms ; tailles 0.015 à 0.07, étirement orienté selon la vitesse."},
+          {"type": "gouttes_proches", "count": 40, "behavior": "Grosses gouttes floues, z -1→2, jamais plus de 6 simultanément dans la zone du visage."}
+        ]
+      },
+      "shader": {
+        "liquid_distortion_px": "4 en mouvement ; pic 12 à 1230 ms ; 1 pendant le titre.",
+        "chromatic_aberration_px": "Pic 1.2 pendant 100 ms au franchissement de la lèvre ; 0 ailleurs.",
+        "god_rays": "Source [0.78,0.18] en UV ; intensité 0.18→0.42 à 1450 ms.",
+        "caustics": "Intensité 0.12 dans le tube, extinction au retour à l'air.",
+        "grade": "Ombres bleu cobalt, ouverture dorée, grain 0.018, vignette 0.12."
+      },
+      "exit": {
+        "start_ms": 2720,
+        "end_ms": 3300,
+        "effect": "La lèvre se rabat en diagonale haut droite→bas gauche. Derrière son bord réfractif de 24 px, l'alpha du canvas disparaît ; quelques gouttes persistent jusqu'à 3240 ms."
+      },
+      "sound_haptics": {
+        "sound": "Montée grave et étouffée dans le tube, claquement d'écume à 1250 ms, souffle ouvert à 1450 ms.",
+        "vibrations": [{"ms": 260, "duration_ms": 9}, {"ms": 1250, "duration_ms": 18}]
+      },
+      "wow_moment": {
+        "ms": 1250,
+        "description": "La lèvre passe à quelques centimètres apparents de l'objectif, cache un tiers de Poulpy, puis découvre d'un coup son visage et le soleil. Le roulis change de signe pendant cette occultation."
+      },
+      "mid_prompt": "Single isolated curling ocean wave lip forming an asymmetric hollow arch, premium hand-painted gouache matching a rich cobalt surfing barrel at golden sunset, thick sculptural turquoise water, warm ivory foam, top-heavy crest and substantial right-hand wall, broad empty central opening for a character, lower center completely open, portrait 390:844 composition. Fully opaque painted material with crisp cutout edges. Flat uniform pure #00FF00 background visible outside and through the opening. No green anywhere in the painted object, no translucent water, no fine spray, no thin strands, no character, no board, no sky, no text, no cast shadow on the background."
+    },
+    "bodyboard": {
+      "concept": "Au ras de l'eau, la caméra accompagne un rebond de Poulpy avant qu'une gerbe d'écume ne frappe l'objectif et révèle la destination.",
+      "entry": {
+        "start_ms": 0,
+        "end_ms": 380,
+        "effect": "Une lame turquoise monte depuis le bas, prend l'écran dans son épaisseur puis redescend pour installer la caméra au niveau de la planche.",
+        "parameters": "Front de vague incliné de 12 degrés ; distorsion verticale 16→2 px ; bord mousseux de 30 px."
+      },
+      "camera": {
+        "keyframes": [
+          {"ms": 0, "position": [0.35, 0.1, 1.2], "target": [0, -1.2, -7], "roll_deg": 4, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "glide"},
+          {"ms": 650, "position": [0.15, -1.2, 0], "target": [0, -1.55, -6], "roll_deg": -3, "fov_deg": 59, "focal_mm_equivalent": 21.2, "easing": "rush"},
+          {"ms": 1220, "position": [-0.3, -0.55, -0.45], "target": [0.1, -0.85, -5.8], "roll_deg": -7, "fov_deg": 62, "focal_mm_equivalent": 20, "easing": "launch"},
+          {"ms": 1660, "position": [0.12, -0.85, 0.15], "target": [0, -1.45, -6.2], "roll_deg": 3, "fov_deg": 56, "focal_mm_equivalent": 22.6, "easing": "brake"},
+          {"ms": 2050, "position": [0, 0.1, 0.8], "target": [0, -0.35, -8], "roll_deg": 0, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "brake"},
+          {"ms": 3300, "position": [0, -0.1, 0.3], "target": [0, -0.4, -8], "roll_deg": 0, "fov_deg": 55, "focal_mm_equivalent": 23.1, "easing": "glide"}
+        ],
+        "micro_motion": "Un seul choc vertical amorti à 1580 ms : amplitude 0.055, deux oscillations, extinction en 180 ms."
+      },
+      "layers": [
+        {"name": "decor", "z": -10, "size": [10, 15], "motion": "Vague bleue existante ; translation y 0→0.2 pendant l'approche."},
+        {"name": "mid_foam_ridge", "z": -4.7, "size": [7, 3.8], "motion": "Centre y=-3.1 ; montée à -2.35 entre 950 et 1300 ms puis descente à -3.4 à 1750 ms. Masque le dessous de la planche."},
+        {"name": "poulpy", "z": -6, "size": [3.5, 2.8], "motion": "Centre y=-1.65. Rebond y -1.65→-1.0→-1.65 entre 850 et 1580 ms ; rotation z 4→-6→2 degrés ; aucun looping."}
+      ],
+      "particles": {
+        "total": 480,
+        "systems": [
+          {"type": "ecume_rasante", "count": 300, "behavior": "Flux continu sous la planche, vitesse 3.5 unités/s vers le bas du cadre, z -6→0."},
+          {"type": "gerbe_impact", "count": 140, "behavior": "Émission à 1580 ms, éventail latéral ; impulsion y 2.3 unités/s, gravité -5 unités/s²."},
+          {"type": "gouttes_objectif", "count": 40, "behavior": "Sprites larges et flous aux bords, durée 180 à 350 ms."}
+        ]
+      },
+      "shader": {
+        "water_surface": "Bande procédurale basse occupant 18 à 32 % de l'écran ; ondulation 2 Hz, amplitude 9 px.",
+        "liquid_distortion_px": "2 continu ; impulsion 15 à 1580 ms puis amortissement en 220 ms.",
+        "chromatic_aberration_px": "0.8 au contact pendant 80 ms.",
+        "grade": "Bleus francs, écume chaude, grain 0.015, vignette 0.08."
+      },
+      "exit": {
+        "start_ms": 2730,
+        "end_ms": 3300,
+        "effect": "Une seconde gerbe part du bas-centre. Son centre découvre l'application tandis que son anneau d'écume s'étend hors écran ; réfraction résiduelle 8→0 px."
+      },
+      "sound_haptics": {
+        "sound": "Glissement rapide sur l'eau, brève suspension sonore au sommet, impact rond à 1580 ms.",
+        "vibrations": [{"ms": 1580, "duration_ms": 20}, {"ms": 2770, "duration_ms": 8}]
+      },
+      "wow_moment": {
+        "ms": 1580,
+        "description": "Après 160 ms de suspension visuelle, la planche retouche l'eau : Poulpy reste net tandis que l'écume jaillit devant lui et que l'objectif encaisse un unique rebond."
+      },
+      "mid_prompt": "Single isolated broad low ocean foam ridge viewed almost at water level, premium gouache painting, deep ultramarine underside, sculptural cyan crest and thick warm ivory foam, asymmetric rising wedge on the lower right, low open center to leave a bodyboard character visible above, landscape-shaped object inside a portrait canvas. Opaque solid paint, crisp clean cutout silhouette, large connected shapes. Uniform pure #00FF00 background. No green in the object, no transparency, no fine spray, no thin strands, no character, no board, no horizon, no text, no shadow on the background."
+    },
+    "baignade": {
+      "concept": "La caméra remonte d'une eau cristalline, traverse la surface et découvre Poulpy dans sa bouée au milieu d'un cercle de lumière.",
+      "entry": {
+        "start_ms": 0,
+        "end_ms": 460,
+        "effect": "Le point touché devient une goutte-lentille qui grossit jusqu'à engloutir l'écran ; les couleurs se transforment en eau turquoise peu profonde.",
+        "parameters": "Rayon 0→1.2 diagonale ; réfraction 18→4 px ; teinte aquatique d'opacité maximale 0.24."
+      },
+      "camera": {
+        "keyframes": [
+          {"ms": 0, "position": [0.1, -1.1, 1.1], "target": [0, -0.3, -8], "roll_deg": -3, "fov_deg": 57, "focal_mm_equivalent": 22.1, "easing": "glide"},
+          {"ms": 850, "position": [-0.25, -0.65, 0.25], "target": [0, -0.65, -6.4], "roll_deg": -2, "fov_deg": 59, "focal_mm_equivalent": 21.2, "easing": "glide"},
+          {"ms": 1420, "position": [0.1, 0.6, 0.05], "target": [0, -1.3, -6.4], "roll_deg": 2, "fov_deg": 57, "focal_mm_equivalent": 22.1, "easing": "launch"},
+          {"ms": 1950, "position": [0, 0.35, 0.9], "target": [0, -0.45, -8], "roll_deg": 0, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "brake"},
+          {"ms": 3300, "position": [0, 0.45, 0.65], "target": [0, -0.3, -8], "roll_deg": 0, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "glide"}
+        ],
+        "micro_motion": "Flottaison lente : y ±0.022 à 0.65 Hz après 1550 ms."
+      },
+      "layers": [
+        {"name": "decor", "z": -10, "size": [10, 15], "motion": "Crique existante immobile ; caustiques uniquement dans la partie aquatique."},
+        {"name": "poulpy", "z": -6.4, "size": [3.4, 3.5], "motion": "Centre [0,-1.55,-6.4] ; y ±0.07 à 0.7 Hz, rotation z ±2 degrés. Visible à travers la réfraction avant l'émersion, entièrement net ensuite."},
+        {"name": "surface_procedurale", "z": -3.5, "size": [8, 3], "motion": "Bande d'eau proche projetée par shader ; franchissement synchronisé avec la montée caméra de 1100 à 1450 ms, sans représenter une seconde ligne d'horizon."}
+      ],
+      "particles": {
+        "total": 220,
+        "systems": [
+          {"type": "bulles", "count": 90, "behavior": "Montée y à 0.8 unité/s, tailles 0.025 à 0.16, disparition lors du franchissement de surface."},
+          {"type": "gouttes", "count": 50, "behavior": "Émission à 1320 ms, arcs courts vers les bords ; durée maximale 500 ms."},
+          {"type": "paillettes_de_lumiere", "count": 80, "behavior": "Reflets blancs et dorés attachés à la surface, scintillement lent et déphasé, aucune pluie de confettis."}
+        ]
+      },
+      "shader": {
+        "surface_crossing": "De 1080 à 1450 ms : ménisque courbe traversant l'écran du haut vers le bas, séparation air/eau, réfraction 16 px au bord et 4 px sous l'eau.",
+        "caustics": "Intensité 0.26 avant émersion, 0.1 ensuite ; vitesse 0.22 cycle/s.",
+        "god_rays": "Source [0.3,0.05], intensité 0.2 sous l'eau puis 0.06.",
+        "grade": "Turquoise clair, hautes lumières ivoire, grain 0.012, vignette 0.04."
+      },
+      "exit": {
+        "start_ms": 2740,
+        "end_ms": 3300,
+        "effect": "Une ride circulaire naît au contact de la bouée. L'intérieur de l'anneau devient transparent ; la destination apparaît comme une eau redevenue parfaitement calme.",
+        "parameters": "Bord 20→5 px ; réfraction 7→0 px ; aucune disparition brusque de Poulpy avant le passage du masque."
+      },
+      "sound_haptics": {
+        "sound": "Son filtré sous l'eau, petite inspiration aquatique à l'émersion, clapotis clair.",
+        "vibrations": [{"ms": 1350, "duration_ms": 10}]
+      },
+      "wow_moment": {
+        "ms": 1350,
+        "description": "Pendant environ 120 ms, le visage de Poulpy se découvre au-dessus du ménisque tandis que le bas de la bouée reste déformé sous l'eau ; les gouttes poursuivent la montée de la caméra."
+      },
+      "mid_prompt": null
+    },
+    "paddle": {
+      "concept": "Un coup de pagaie ouvre un sillage lumineux dans un océan miroir, et la caméra glisse le long de cette ouverture jusqu'à Poulpy.",
+      "entry": {
+        "start_ms": 0,
+        "end_ms": 440,
+        "effect": "Une incision liquide part du point touché vers le bas ; deux nappes de reflets s'écartent doucement comme le sillage d'une pagaie.",
+        "parameters": "Séparation horizontale maximale 22 px ; bord doré 3 px ; réfraction 10→2 px."
+      },
+      "camera": {
+        "keyframes": [
+          {"ms": 0, "position": [-0.7, 0.7, 1.1], "target": [0, -1.1, -7], "roll_deg": -4, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "glide"},
+          {"ms": 800, "position": [-0.4, -0.35, 0.25], "target": [0.1, -1.7, -6.4], "roll_deg": -2, "fov_deg": 56, "focal_mm_equivalent": 22.6, "easing": "launch"},
+          {"ms": 1400, "position": [0.5, -0.05, 0.05], "target": [0, -1.25, -6.4], "roll_deg": 3, "fov_deg": 58, "focal_mm_equivalent": 21.6, "easing": "glide"},
+          {"ms": 1950, "position": [0.1, 0.25, 0.8], "target": [0, -0.45, -8], "roll_deg": 0, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "brake"},
+          {"ms": 3300, "position": [0.2, 0.35, 0.45], "target": [0, -0.3, -8], "roll_deg": 0, "fov_deg": 54, "focal_mm_equivalent": 23.6, "easing": "glide"}
+        ],
+        "micro_motion": "Aucun tremblement ; dérive verticale de 0.015 à 0.5 Hz."
+      },
+      "layers": [
+        {"name": "decor", "z": -10, "size": [10, 15], "motion": "Mer au couchant existante ; horizon parfaitement stable."},
+        {"name": "mid_wake", "z": -5.1, "size": [5.5, 4.5], "motion": "Centre y=-2.6 ; sillage en V sous la pagaie. De 950 à 1500 ms : échelle 0.8→1.1, translation y -2.4→-2.8 ; centre transparent."},
+        {"name": "poulpy", "z": -6.4, "size": [3.5, 4], "motion": "Centre y=-1.25 ; rotation z 3→-3→0 degrés de 600 à 1550 ms. Le personnage, la pagaie et la planche bougent ensemble : aucun faux mouvement articulaire du détourage."}
+      ],
+      "particles": {
+        "total": 260,
+        "systems": [
+          {"type": "gouttes_de_pagaie", "count": 70, "behavior": "Émission localisée au bout réel de la pagaie à 1120 ms ; vitesse 0.8 à 1.6 unité/s, chute douce."},
+          {"type": "reflets_du_sillage", "count": 150, "behavior": "Distribués sur deux courbes en V à z -7→-3, tailles 0.02 à 0.08, extinction progressive sur 800 ms."},
+          {"type": "poussiere_doree", "count": 40, "behavior": "Très discrète dans le contre-jour, jamais au-dessus d'une opacité de 0.18."}
+        ]
+      },
+      "shader": {
+        "liquid_distortion_px": "Ondes elliptiques au point de pagaie : pic 9 à 1160 ms, puis 2.",
+        "specular_path": "Traînée dorée fragmentée sur la surface, largeur 0.12 écran, intensité maximale 0.28 à 1400 ms.",
+        "god_rays": "Source [0.28,0.3], intensité 0.14 ; aucune pulsation.",
+        "grade": "Bleus du crépuscule, reflets abricot, grain 0.015, vignette 0.08."
+      },
+      "exit": {
+        "start_ms": 2720,
+        "end_ms": 3300,
+        "effect": "Le V du sillage s'élargit depuis le bas-centre ; l'application apparaît à l'intérieur, avec une dernière ligne de reflet doré glissant sur son contour."
+      },
+      "sound_haptics": {
+        "sound": "Eau calme, immersion de pagaie à 1120 ms, filet d'eau et résonance légère au déploiement du sillage.",
+        "vibrations": [{"ms": 1120, "duration_ms": 9}]
+      },
+      "wow_moment": {
+        "ms": 1400,
+        "description": "Le déplacement latéral de caméra sépare nettement pagaie, sillage et horizon. Le reflet du couchant parcourt le V jusqu'à l'objectif comme une ligne de lumière liquide."
+      },
+      "mid_prompt": "Single isolated V-shaped paddleboard wake seen from a low three-quarter front angle, two broad connected ribbons of deep blue water with cyan ridges and warm apricot sunset reflections, premium hand-painted gouache, wide lower arms and narrow upper convergence, generous empty central channel, portrait composition. Entire painted ribbons opaque, crisp cutout edges, substantial shapes without fine threads. Uniform pure #00FF00 background outside and between the ribbons. No green pigment, no transparent water, no character, no paddle, no board, no horizon, no text, no background shadow."
+    },
+    "kayak": {
+      "concept": "La caméra sort d'une grotte dans le sillage de Poulpy : la roche passe tout près, puis la crique s'ouvre dans une lumière éclatante.",
+      "entry": {
+        "start_ms": 0,
+        "end_ms": 410,
+        "effect": "Le haut et les côtés de l'application se minéralisent en ombre bleue ; une ouverture irrégulière laisse apparaître la mer avant de devenir l'entrée de la grotte.",
+        "parameters": "Masque de bruit à grande échelle, aucun grain électrique ; bord humide 5 px ; obscurité maximale 0.72."
+      },
+      "camera": {
+        "keyframes": [
+          {"ms": 0, "position": [-0.45, 0.15, 1.6], "target": [0.1, -0.7, -8], "roll_deg": -4, "fov_deg": 51, "focal_mm_equivalent": 25.2, "easing": "glide"},
+          {"ms": 750, "position": [-0.25, -0.3, 0.45], "target": [0.2, -1.2, -6.7], "roll_deg": -2, "fov_deg": 55, "focal_mm_equivalent": 23.1, "easing": "rush"},
+          {"ms": 1350, "position": [0.55, -0.05, -0.45], "target": [0.15, -1.2, -6.7], "roll_deg": 4, "fov_deg": 60, "focal_mm_equivalent": 20.8, "easing": "launch"},
+          {"ms": 1950, "position": [0.15, 0.3, 0.7], "target": [0, -0.35, -8], "roll_deg": 0, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "brake"},
+          {"ms": 3300, "position": [0.2, 0.25, 0.2], "target": [0, -0.35, -8], "roll_deg": 0, "fov_deg": 55, "focal_mm_equivalent": 23.1, "easing": "glide"}
+        ],
+        "micro_motion": "Flottaison y ±0.025 à 0.85 Hz, aucune secousse au changement de lumière."
+      },
+      "layers": [
+        {"name": "decor", "z": -10, "size": [10, 15], "motion": "Décor de crique existant. Sa voûte peinte reste une ombre lointaine ; le calque proche doit en prolonger la silhouette."},
+        {"name": "mid_cave_arch", "z": -3.4, "size": [8.8, 11], "motion": "Arche au premier plan. De 450 à 1500 ms : z -3.4→-1.7, x -0.1→-0.7, y 0→0.6. L'ouverture grossit et ses bords quittent le cadre sans que la caméra traverse le quad."},
+        {"name": "poulpy", "z": -6.7, "size": [3.3, 3.9], "motion": "Centre [0,-1.45,-6.7] ; x -0.25→0.2, rotation z -3→2 degrés ; léger tangage simulé par y ±0.05."}
+      ],
+      "particles": {
+        "total": 280,
+        "systems": [
+          {"type": "gouttes_de_voute", "count": 65, "behavior": "Chute dans les bandes latérales, z -3→-1.8 ; disparition avant 1600 ms."},
+          {"type": "ecume_de_sillage", "count": 170, "behavior": "Deux traînées basses de part et d'autre du kayak ; vitesse 1.7 unité/s."},
+          {"type": "poussiere_lumineuse", "count": 45, "behavior": "Particules lentes visibles uniquement dans le faisceau sortant de la grotte."}
+        ]
+      },
+      "shader": {
+        "exposure": "Gain 0.72 dans la grotte, montée à 1.08 entre 1150 et 1450 ms, retour à 1 à 1750 ms ; pas de blanc brûlé plein écran.",
+        "god_rays": "Source [0.65,0.28], intensité 0.08→0.38→0.15.",
+        "caustics": "Intensité 0.16 sur le bas de la roche et l'eau.",
+        "liquid_distortion_px": "2 dans le tiers inférieur ; pic 6 au passage d'une goutte proche.",
+        "grade": "Ombres outremer, roche ocre, eau cyan, grain 0.02."
+      },
+      "exit": {
+        "start_ms": 2730,
+        "end_ms": 3300,
+        "effect": "Le reflet lumineux de la sortie de grotte s'étale sur l'eau, puis devient une ouverture transparente irrégulière qui monte depuis le bas. Le contour conserve une réfraction de 6→0 px."
+      },
+      "sound_haptics": {
+        "sound": "Clapotis réverbéré dans la grotte, ouverture stéréo progressive vers la mer, goutte proche à 1210 ms.",
+        "vibrations": [{"ms": 1300, "duration_ms": 12}]
+      },
+      "wow_moment": {
+        "ms": 1350,
+        "description": "Le pilier gauche file hors champ beaucoup plus vite que Poulpy, pendant que les falaises lointaines restent presque immobiles. La lumière entre précisément quand la roche libère l'objectif."
+      },
+      "mid_prompt": "Single isolated sea-cave entrance arch viewed from inside looking outward, premium painted gouache, massive dark ultramarine rock ceiling with broad irregular edges, substantial left pillar and smaller upper right rock shoulder, restrained warm ochre reflected light on inner edges, large open central and lower aperture, portrait 390:844 framing. Opaque rock, crisp cutout contour, no tiny stalactites or thin elements. Uniform pure #00FF00 background visible through the opening and outside the rock. No green in the rock, no water, no landscape inside the opening, no character, no text, no background shadow."
+    },
+    "snorkeling": {
+      "concept": "La caméra perce la surface et descend à hauteur de Poulpy dans un jardin de coraux, tandis qu'une grappe de bulles remonte tout près de l'objectif.",
+      "entry": {
+        "start_ms": 0,
+        "end_ms": 520,
+        "effect": "L'interface ondule puis bascule sous une surface d'eau qui balaie le cadre de bas en haut. La netteté revient progressivement dans le lagon.",
+        "parameters": "Ménisque 28 px ; réfraction maximale 20 px à 280 ms ; teinte sous-marine cyan 0.16."
+      },
+      "camera": {
+        "keyframes": [
+          {"ms": 0, "position": [0.2, 1, 1.2], "target": [0, -0.8, -8], "roll_deg": 3, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "glide"},
+          {"ms": 650, "position": [-0.3, 0.1, 0.1], "target": [0, -1.3, -6.5], "roll_deg": -5, "fov_deg": 59, "focal_mm_equivalent": 21.2, "easing": "launch"},
+          {"ms": 1370, "position": [0.5, -0.7, -0.35], "target": [0.1, -1.45, -6.4], "roll_deg": 4, "fov_deg": 60, "focal_mm_equivalent": 20.8, "easing": "glide"},
+          {"ms": 1950, "position": [0, 0.15, 0.8], "target": [0, -0.45, -8], "roll_deg": 0, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "brake"},
+          {"ms": 3300, "position": [0.1, 0.25, 0.45], "target": [0, -0.3, -8], "roll_deg": 0, "fov_deg": 54, "focal_mm_equivalent": 23.6, "easing": "glide"}
+        ],
+        "micro_motion": "Dérive aquatique y ±0.018 et roulis ±0.25 degré à 0.6 Hz."
+      },
+      "layers": [
+        {"name": "decor", "z": -10, "size": [10, 15], "motion": "Récif existant, fixe ; éclairage de surface venant du haut gauche."},
+        {"name": "mid_coral", "z": -4.4, "size": [7.5, 5.6], "motion": "Centre y=-2.6 ; coraux massifs dans les coins bas. Translation x 0.15→-0.3 de 500 à 1500 ms ; occultation courte d'un tentacule inférieur."},
+        {"name": "poulpy", "z": -6.4, "size": [4, 2.8], "motion": "Centre [0,-1.35,-6.4] ; x -0.35→0.25, y -1.5→-1.2, rotation z -4→2 degrés entre 550 et 1600 ms."}
+      ],
+      "particles": {
+        "total": 440,
+        "systems": [
+          {"type": "bulles", "count": 170, "behavior": "Montée 0.8 à 1.7 unité/s, rayon 0.025 à 0.14 ; groupe de 12 grandes bulles traverse le bord droit à 1370 ms."},
+          {"type": "particules_en_suspension", "count": 240, "behavior": "Dérive lente, z -9→-1.5, opacité 0.08 à 0.24 ; séparation nette des vitesses selon profondeur."},
+          {"type": "bulles_proches", "count": 30, "behavior": "Rayon 0.16 à 0.32, contour doux ; centre du cadre et visage protégés."}
+        ]
+      },
+      "shader": {
+        "caustics": "Intensité 0.24, échelle de motif 0.8 unité, vitesse 0.28 cycle/s ; réduire à 0.08 sur le visage.",
+        "god_rays": "Source [0.2,0], intensité 0.28 ; oscillation angulaire lente de 2 degrés.",
+        "liquid_distortion_px": "2.5 continu, 7 lors du passage de la grappe proche.",
+        "depth_grade": "Lointain bleui, premier plan plus chaud et contrasté ; grain 0.014, vignette 0.09."
+      },
+      "exit": {
+        "start_ms": 2720,
+        "end_ms": 3300,
+        "effect": "Une bulle proche grossit et devient une fenêtre sur l'application. Son bord réfractif se dilate, se fragmente en six arcs, puis disparaît sans flash."
+      },
+      "sound_haptics": {
+        "sound": "Immersion douce, bulles aériennes filtrées, léger tintement organique à la découverte du récif.",
+        "vibrations": [{"ms": 300, "duration_ms": 10}, {"ms": 1370, "duration_ms": 7}]
+      },
+      "wow_moment": {
+        "ms": 1370,
+        "description": "Le corail proche glisse à gauche, Poulpy reste au centre et les bulles montent à droite : trois directions et trois vitesses rendent le volume immédiatement sensible."
+      },
+      "mid_prompt": "Single isolated shallow tropical reef foreground frame, premium hand-painted gouache, chunky warm coral-red and ivory coral formations in the lower left, rounded cobalt and violet coral mound in the lower right, broad sandy blue base fragments, large clear central opening for a swimming character, portrait composition. Thick simple coral lobes, opaque paint, crisp cutout edges. Uniform pure #00FF00 background outside and between formations. No green or greenish turquoise in the painted object, no delicate branching filaments, no fish, no bubbles, no character, no complete seabed scene, no text, no background shadow."
+    },
+    "plongee": {
+      "concept": "La caméra s'enfonce dans une cathédrale bleue, dépasse une arche de récif et découvre Poulpy dans un faisceau de lumière venu de la surface.",
+      "entry": {
+        "start_ms": 0,
+        "end_ms": 480,
+        "effect": "Une onde comprime l'interface autour du point touché ; l'écran devient une eau profonde traversée par des bulles qui remontent en sens inverse de la descente.",
+        "parameters": "Déplacement radial maximal 18 px ; bord lumineux cyan 4 px ; obscurcissement progressif limité à 0.35."
+      },
+      "camera": {
+        "keyframes": [
+          {"ms": 0, "position": [-0.2, 1.1, 1.3], "target": [0, -0.7, -8], "roll_deg": -3, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "glide"},
+          {"ms": 700, "position": [-0.45, 0.2, 0.25], "target": [0.1, -1.2, -6.8], "roll_deg": -6, "fov_deg": 57, "focal_mm_equivalent": 22.1, "easing": "rush"},
+          {"ms": 1450, "position": [0.4, -0.9, -0.35], "target": [0, -1.3, -6.5], "roll_deg": 4, "fov_deg": 60, "focal_mm_equivalent": 20.8, "easing": "launch"},
+          {"ms": 1950, "position": [0, 0.05, 0.8], "target": [0, -0.4, -8], "roll_deg": 0, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "brake"},
+          {"ms": 3300, "position": [0.1, -0.2, 0.3], "target": [0, -0.5, -8], "roll_deg": 1, "fov_deg": 55, "focal_mm_equivalent": 23.1, "easing": "glide"}
+        ],
+        "micro_motion": "Dérive de position 0.02 à 0.45 Hz ; aucun tremblement rapide."
+      },
+      "layers": [
+        {"name": "decor", "z": -10, "size": [10, 15], "motion": "Cathédrale sous-marine existante ; translation y 0→0.35 pour renforcer la descente."},
+        {"name": "mid_reef_gate", "z": -4.2, "size": [8.2, 10], "motion": "Deux piliers latéraux irréguliers. Entre 600 et 1550 ms : y -0.35→0.6, x 0.1→-0.25 ; le pilier gauche passe devant les tentacules extérieurs."},
+        {"name": "poulpy", "z": -6.5, "size": [3.7, 4], "motion": "Centre [0,-1.4,-6.5] ; descente y -0.95→-1.5 de 450 à 1550 ms ; rotation z -3→3→0 degrés."}
+      ],
+      "particles": {
+        "total": 560,
+        "systems": [
+          {"type": "bulles_de_plongee", "count": 220, "behavior": "Montée y 1.1 à 2 unités/s, émissions déphasées près de l'équipement ; rayons 0.02 à 0.12."},
+          {"type": "plancton", "count": 290, "behavior": "Points cyan peu lumineux à z -9→-2, opacité 0.06 à 0.2 ; vitesse faible, aucun effet de champ d'étoiles."},
+          {"type": "bulles_proches", "count": 50, "behavior": "Traversées rapides aux bords ; 8 grandes bulles autour de 1420 ms, profondeur simulée par taille et flou."}
+        ]
+      },
+      "shader": {
+        "god_rays": "Source [0.18,-0.05], intensité 0.16→0.42 à 1450 ms puis 0.25 ; faisceau principal orienté vers Poulpy.",
+        "caustics": "Intensité 0.1 ; fréquence spatiale plus large que pour le snorkeling.",
+        "liquid_distortion_px": "1.8 continu, pic 6 pendant les grosses bulles.",
+        "depth_grade": "Atténuation rouge dans le lointain uniquement ; conserver la chaleur et la lisibilité de Poulpy ; vignette 0.17, grain 0.02."
+      },
+      "exit": {
+        "start_ms": 2710,
+        "end_ms": 3300,
+        "effect": "Le faisceau se resserre en un disque réfractif derrière Poulpy, puis s'élargit en révélant l'application depuis le centre. Les bulles remontent sur le bord du masque jusqu'à extinction."
+      },
+      "sound_haptics": {
+        "sound": "Grave aquatique discret, souffle de plongée stylisé, bulles montantes ; ouverture harmonique à 1450 ms.",
+        "vibrations": [{"ms": 420, "duration_ms": 12}, {"ms": 1450, "duration_ms": 14}]
+      },
+      "wow_moment": {
+        "ms": 1450,
+        "description": "La caméra termine sa descente derrière le pilier proche : celui-ci libère Poulpy exactement quand le faisceau éclaire son casque et qu'une grosse bulle passe devant l'objectif."
+      },
+      "mid_prompt": "Single isolated underwater reef gateway made of two massive irregular vertical rock pillars, premium cinematic gouache, deep ultramarine and muted violet stone with restrained blue coral encrustations, taller substantial left pillar and shorter right pillar, large completely open central passage, portrait 390:844 framing. Opaque painted rock with crisp cutout edges and broad connected silhouettes. Uniform pure #00FF00 background outside and through the gateway. No green in the object, no thin seaweed or filaments, no water background, no light beams, no diver, no octopus, no bubbles, no text, no shadow on the background."
+    },
+    "kitesurf": {
+      "concept": "Une rafale soulève la caméra avec Poulpy, tend le cadre entre l'aile et la planche, puis transforme l'atterrissage en révélation d'écume.",
+      "entry": {
+        "start_ms": 0,
+        "end_ms": 380,
+        "effect": "Une rafale diagonale déforme l'interface du bas gauche vers le haut droit ; une bande d'embruns laisse apparaître le ciel et l'aile.",
+        "parameters": "Distorsion directionnelle maximale 15 px ; inclinaison du front 28 degrés ; aucune découpe géométrique sèche."
+      },
+      "camera": {
+        "keyframes": [
+          {"ms": 0, "position": [-0.45, -0.45, 1.3], "target": [0, -0.3, -8], "roll_deg": -5, "fov_deg": 55, "focal_mm_equivalent": 23.1, "easing": "glide"},
+          {"ms": 750, "position": [-0.3, -0.7, 0.2], "target": [0, -0.6, -6.8], "roll_deg": -10, "fov_deg": 60, "focal_mm_equivalent": 20.8, "easing": "rush"},
+          {"ms": 1320, "position": [0.45, 0.65, -0.25], "target": [0.15, -0.1, -7], "roll_deg": 11, "fov_deg": 63, "focal_mm_equivalent": 19.6, "easing": "launch"},
+          {"ms": 1730, "position": [0.2, -0.15, 0.25], "target": [0, -0.7, -7], "roll_deg": 2, "fov_deg": 57, "focal_mm_equivalent": 22.1, "easing": "brake"},
+          {"ms": 2050, "position": [0, 0.2, 0.9], "target": [0, -0.2, -8], "roll_deg": 0, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "brake"},
+          {"ms": 3300, "position": [0.2, 0.3, 0.5], "target": [0, -0.2, -8], "roll_deg": 1, "fov_deg": 54, "focal_mm_equivalent": 23.6, "easing": "glide"}
+        ],
+        "micro_motion": "Impulsion amortie y de 0.045 à 1730 ms, durée 150 ms ; pas de vibration caméra pendant le sommet."
+      },
+      "layers": [
+        {"name": "decor", "z": -10, "size": [10, 15], "motion": "Mer et ciel du couchant. Séparer l'aile du fond existant et restaurer localement le ciel si elle y est fusionnée."},
+        {"name": "aile_existante", "z": -7.5, "size": [5, 2.9], "motion": "Centre [0,3,-7.5] ; rotation z -7→7→0 degrés, x -0.2→0.35 entre 450 et 1730 ms. Garder l'aile entière visible au sommet."},
+        {"name": "poulpy_planche", "z": -6.5, "size": [3.1, 2.9], "motion": "Centre y=-2.0 ; saut y -2.0→-1.2→-2.0 de 750 à 1730 ms, rotation z -8→9→0 degrés. Relier aile et poignée par deux courbes procédurales antialiasées de 1 à 1.5 px, recalculées depuis leurs ancrages."},
+        {"name": "ecume_procedurale", "z": -3.8, "size": [7, 2.8], "motion": "Bande fragmentée basse à l'atterrissage, construite avec les sprites du budget particules ; masque le contact planche-eau."}
+      ],
+      "particles": {
+        "total": 500,
+        "systems": [
+          {"type": "embruns", "count": 280, "behavior": "Traînée diagonale pendant l'accélération, puis explosion basse à 1730 ms ; vitesse 2 à 5 unités/s."},
+          {"type": "traits_de_vent", "count": 80, "behavior": "Traits courts, opacité <=0.16, uniquement en périphérie de 550 à 1500 ms."},
+          {"type": "ecume_atterrissage", "count": 140, "behavior": "Éventail horizontal à 1730 ms, gravité -6 unités/s², extinction avant 2350 ms."}
+        ]
+      },
+      "shader": {
+        "directional_distortion_px": "0→7 pendant la montée, 0 au sommet, pic 10 à l'atterrissage.",
+        "chromatic_aberration_px": "0.9 pendant 90 ms au départ du saut.",
+        "light": "Contre-jour chaud d'intensité 0.22 ; éclaircie douce de 120 ms au sommet, sans flash blanc.",
+        "grade": "Mer cobalt, ciel abricot, aile orange saturée, grain 0.018, vignette 0.1."
+      },
+      "exit": {
+        "start_ms": 2710,
+        "end_ms": 3300,
+        "effect": "Une rafale emporte une nappe d'écume du bas gauche au haut droit. L'application apparaît derrière elle ; le mouvement reprend exactement la diagonale de traction de l'aile."
+      },
+      "sound_haptics": {
+        "sound": "Traction de vent montante, silence relatif de 130 ms au sommet, impact d'eau à 1730 ms.",
+        "vibrations": [{"ms": 760, "duration_ms": 9}, {"ms": 1730, "duration_ms": 22}]
+      },
+      "wow_moment": {
+        "ms": 1320,
+        "description": "Au sommet, l'écume continue de tomber tandis que Poulpy et la caméra semblent suspendus. L'aile reste haute, les lignes restent tendues et le roulis révèle toute la diagonale aile-planche."
+      },
+      "mid_prompt": null
+    },
+    "windsurf": {
+      "concept": "La caméra accompagne une prise de carre fulgurante ; la voile traverse la lumière et entraîne une lame d'eau qui ouvre l'application.",
+      "entry": {
+        "start_ms": 0,
+        "end_ms": 420,
+        "effect": "Une onde oblique se plisse comme une surface sous le vent ; son bord lumineux entraîne l'écran vers la mer agitée.",
+        "parameters": "Front incliné de -24 degrés ; distorsion tangentielle 14→2 px ; embruns concentrés dans le bas."
+      },
+      "camera": {
+        "keyframes": [
+          {"ms": 0, "position": [0.55, 0.1, 1.25], "target": [0, -0.65, -8], "roll_deg": 5, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "glide"},
+          {"ms": 720, "position": [0.35, -0.75, 0.2], "target": [0, -1.1, -6.7], "roll_deg": 9, "fov_deg": 58, "focal_mm_equivalent": 21.6, "easing": "rush"},
+          {"ms": 1370, "position": [-0.55, -0.25, -0.35], "target": [0.15, -0.65, -6.6], "roll_deg": -9, "fov_deg": 61, "focal_mm_equivalent": 20.4, "easing": "launch"},
+          {"ms": 1950, "position": [0, 0.2, 0.8], "target": [0, -0.35, -8], "roll_deg": 0, "fov_deg": 53, "focal_mm_equivalent": 24.1, "easing": "brake"},
+          {"ms": 3300, "position": [-0.2, 0.15, 0.3], "target": [0, -0.3, -8], "roll_deg": -1, "fov_deg": 55, "focal_mm_equivalent": 23.1, "easing": "glide"}
+        ],
+        "micro_motion": "Deux impulsions verticales irrégulières à 810 et 1460 ms : amplitudes 0.02 et 0.04 ; extinction en 100 et 160 ms."
+      },
+      "layers": [
+        {"name": "decor", "z": -10, "size": [10, 15], "motion": "Mer agitée et ciel existants ; horizon fixe, lumière chaude derrière la voile."},
+        {"name": "mid_carve_spray", "z": -4.6, "size": [6.5, 4.6], "motion": "Centre y=-2.5 ; lame d'eau en croissant. De 950 à 1500 ms : x -0.7→0.5, rotation z -12→10 degrés ; masque brièvement le rail de la planche."},
+        {"name": "poulpy_rig", "z": -6.6, "size": [3.9, 4.7], "motion": "Poulpy, planche et gréement restent solidaires. Centre [0,-0.95,-6.6] ; rotation z 7→-7→0 degrés entre 650 et 1750 ms ; rotation y limitée à 4 degrés, sans montrer l'envers de la voile."}
+      ],
+      "particles": {
+        "total": 460,
+        "systems": [
+          {"type": "embruns_de_carve", "count": 260, "behavior": "Émission le long du rail, vitesse 2 à 4 unités/s, éventail tangent au virage entre 950 et 1600 ms."},
+          {"type": "ecume", "count": 140, "behavior": "Traînée basse à z -7→-2, durée 500 à 850 ms."},
+          {"type": "vent", "count": 60, "behavior": "Traits brefs en périphérie, angle cohérent avec la voile, opacité maximale 0.14."}
+        ]
+      },
+      "shader": {
+        "liquid_distortion_px": "2 dans la partie basse ; pic 11 à 1420 ms dans la gerbe uniquement.",
+        "sail_light": "Balayage chaud sur le masque de la voile existante entre 1260 et 1440 ms, intensité additive maximale 0.18 ; conserver les aplats peints.",
+        "god_rays": "Source [0.64,0.28], intensité 0.2.",
+        "chromatic_aberration_px": "0.7 pendant 100 ms au changement de carre.",
+        "grade": "Ombres bleu ardoise, voile jaune-orange lumineuse, grain 0.018, vignette 0.12."
+      },
+      "exit": {
+        "start_ms": 2720,
+        "end_ms": 3300,
+        "effect": "Le croissant d'eau s'étire dans la direction du virage et balaie le cadre de droite à gauche. Son intérieur transparent révèle la destination ; dernier filet d'écume au bas de l'écran."
+      },
+      "sound_haptics": {
+        "sound": "Vent tendu, froissement bref de voile à 1280 ms, découpe de l'eau à 1420 ms, souffle qui retombe avant le titre.",
+        "vibrations": [{"ms": 810, "duration_ms": 7}, {"ms": 1420, "duration_ms": 18}]
+      },
+      "wow_moment": {
+        "ms": 1370,
+        "description": "Le roulis de caméra s'inverse pendant que la planche prend sa carre. La voile capte une bande de soleil et le croissant d'eau passe devant le rail : lumière, profondeur et accélération culminent ensemble."
+      },
+      "mid_prompt": "Single isolated curved sheet of ocean spray from a fast windsurf carving turn, premium hand-painted gouache, broad sculptural crescent of cobalt and cyan water with thick warm ivory foam along its upper rim, rising mass on the lower left and a tapering but substantial connected sweep toward the lower right, open upper half and open center for a character and sail, portrait composition. Fully opaque painted forms, crisp cutout edges. Uniform pure #00FF00 background around and inside the crescent. No green in the object, no transparent mist, no fine strands or tiny detached droplets, no board, no sail, no character, no horizon, no text, no background shadow."
+    }
+  }
+}

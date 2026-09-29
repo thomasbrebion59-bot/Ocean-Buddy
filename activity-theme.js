@@ -61,7 +61,7 @@
     const meta=document.querySelector('meta[name=theme-color]');
     if(id!==cur){
       cur=id;stop();list=[];
-      if(id){root.dataset.act=id;root.style.setProperty('--act-scene',`url("assets/transitions/${id}.webp?v=3")`);}
+      if(id){root.dataset.act=id;root.style.setProperty('--act-scene',`url("assets/transitions/${id}.webp?v=4")`);}
       else{delete root.dataset.act;root.style.removeProperty('--act-scene');}
       if(meta)meta.content=id?COLORS[id]:'#1a4fd6';
       root.classList.add('act-swapped');clearTimeout(set.t);set.t=setTimeout(()=>root.classList.remove('act-swapped'),900);
@@ -69,7 +69,7 @@
     chip(id);start();
   }
   /* Aperçu dans le choix d’activité : le fond suit la carte touchée. */
-  function preview(id){const o=document.getElementById('onb');if(!o)return;if(id&&COLORS[id]){o.dataset.act=id;o.style.setProperty('--act-scene',`url("assets/transitions/${id}.webp?v=3")`);}else{delete o.dataset.act;}}
+  function preview(id){const o=document.getElementById('onb');if(!o)return;if(id&&COLORS[id]){o.dataset.act=id;o.style.setProperty('--act-scene',`url("assets/transitions/${id}.webp?v=4")`);}else{delete o.dataset.act;}}
   addEventListener('load',()=>{try{set(typeof activeSport!=='undefined'?activeSport:null);}catch(_){}});
   /* Zoom de page bloqué (Safari iOS ignore user-scalable=no) ; les vues qui zooment elles-mêmes sont épargnées. */
   const ZOOMABLE='.omap,.og-canvas,.maplibregl-map,.leaflet-container,.spot-gallery,.voyage,.immersion-mode,[data-zoomable]';
