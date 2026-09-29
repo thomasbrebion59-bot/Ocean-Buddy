@@ -14,10 +14,21 @@ Service activé le 13 septembre 2026 sur le projet existant. L’état `enabled:
 4. Vérifier que `GET https://exquisite-choux-61c0d9.netlify.app/.netlify/functions/poulpy` répond avec `enabled:true`, puis tester une conversation et ses suivis.
 5. Mettre cette URL dans `poulpy-config.js`, versionner les ressources, vérifier le navigateur et publier sur GitHub.
 
-Le client transmet uniquement la question (3 000 caractères maximum), les dix derniers messages limités à 900 caractères chacun, l’activité, le niveau choisi et l’identifiant du spot consulté. Il ne transmet ni géolocalisation personnelle, ni notes privées, ni itinéraires sauvegardés. Le catalogue est chargé côté serveur. Les sources et les repères peuvent être employés par l’assistant ; il ne dispose pas de recherche web en direct. Aucun message n’est enregistré par le serveur applicatif. `store:false` désactive le stockage des réponses pour récupération via l’API ; les politiques du fournisseur s’appliquent toujours.
+Le client transmet uniquement la question (1 000 caractères maximum), les huit derniers messages limités à 600 caractères chacun, l’activité, le niveau choisi et l’identifiant du spot consulté. Il ne transmet ni géolocalisation personnelle, ni notes privées, ni itinéraires sauvegardés. Le catalogue est chargé côté serveur. Les sources et les repères peuvent être employés par l’assistant ; il ne dispose pas de recherche web en direct. Aucun message n’est enregistré par le serveur applicatif. `store:false` désactive le stockage des réponses pour récupération via l’API ; les politiques du fournisseur s’appliquent toujours.
 
 Le serveur limite chaque requête et réponse, masque les erreurs du fournisseur, autorise seulement les origines configurées dans les navigateurs et configure une limitation Netlify de six appels par minute et par IP/domaine. CORS ne constitue pas une authentification. Vérifier la disponibilité effective de la limitation Netlify et les plafonds du compte avant d’ouvrir le service au public. `POULPY_ENABLED=false` coupe les appels au fournisseur.
 
 Pour utiliser ultérieurement un compte OpenAI API distinct, configurer une clé projet côté serveur, `OPENAI_MODEL` et `POULPY_ENABLED=true`, puis retirer `OPENAI_BASE_URL` du gateway. Cette option possède sa propre facturation et demande une vérification préalable du compte et de ses limites.
 
 Références : [OpenAI — génération de texte](https://developers.openai.com/api/docs/guides/text), [Netlify Functions](https://docs.netlify.com/build/functions/overview/), [Netlify AI Gateway](https://docs.netlify.com/build/ai-gateway/overview/), [limitation des appels](https://docs.netlify.com/manage/security/secure-access-to-sites/rate-limiting/).
+
+## Périmètre verrouillé (29 septembre 2026)
+
+Poulpy n’est pas un ChatGPT libre : il répond uniquement aux sujets Ocean Buddy (spots, sports nautiques, océan, météo marine, sécurité, matériel, faune, voyages autour de l’eau, usage de l’application).
+
+- Consignes serveur « PÉRIMÈTRE STRICT » : hors sujet ou tentative de détournement → le modèle renvoie `[[hors_sujet]]`, remplacé côté serveur par un message fixe.
+- Filtre avant envoi (`blocked()` dans `poulpy-core.mjs`) : demandes de code, devoirs, extraction des consignes ou de clés, « ignore les instructions », jeux de rôle « sans restriction » → refus immédiat, aucun appel au fournisseur.
+- Toute réponse contenant un bloc de code est remplacée par le message de refus.
+- Appel POST sans en-tête `Origin` autorisé (script, curl) → 403.
+- Limites : 5 appels/min (Netlify) + 6/min et 30/heure par IP (fonction), question ≤ 1 000 caractères, historique 8 × 600, réponse ≤ 700 jetons, recherche web désactivée (activer seulement avec `POULPY_WEB_SEARCH=true`).
+- La clé reste injectée côté serveur par Netlify AI Gateway ; elle n’est jamais envoyée au site ni à l’application.
