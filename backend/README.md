@@ -24,7 +24,10 @@ Références : [OpenAI — génération de texte](https://developers.openai.com/
 
 ## Périmètre verrouillé (29 septembre 2026)
 
-Poulpy n’est pas un ChatGPT libre : il répond uniquement aux sujets Ocean Buddy (spots, sports nautiques, océan, météo marine, sécurité, matériel, faune, voyages autour de l’eau, usage de l’application).
+Poulpy n’est pas un ChatGPT libre : il répond uniquement aux usages Ocean Buddy — spots, organisation du voyage (vols, trajets, hébergements, restaurants, activités), comparaisons, éducation sur l’océan et sa faune, conditions/sécurité/matériel nautiques, usage de l’application et petites blagues. Tout le reste (code, culture générale, actualité, finance, questions sur le propriétaire, le serveur ou les comptes) est refusé.
+
+- Filtre de sortie `leaks()` : toute réponse contenant une clé, un jeton, une adresse e-mail, un nom de variable d’environnement ou un extrait des consignes est remplacée par le message de refus.
+- En-têtes de sécurité sur chaque réponse : `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, CSP `default-src 'none'`.
 
 - Consignes serveur « PÉRIMÈTRE STRICT » : hors sujet ou tentative de détournement → le modèle renvoie `[[hors_sujet]]`, remplacé côté serveur par un message fixe.
 - Filtre avant envoi (`blocked()` dans `poulpy-core.mjs`) : demandes de code, devoirs, extraction des consignes ou de clés, « ignore les instructions », jeux de rôle « sans restriction » → refus immédiat, aucun appel au fournisseur.
