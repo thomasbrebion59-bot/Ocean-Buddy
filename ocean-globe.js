@@ -24,7 +24,7 @@
   const glow=id=>GLOW[id]||'#5C88FF';
 
   /* Version des fichiers du globe (moteur, textures, données), recalculée par scripts/version-assets.py. */
-  const ASSET_V='59ca29f6cdcf';
+  const ASSET_V='b7ec90c0fe4d';
   const asset=path=>new URL(path+'?v='+ASSET_V,document.baseURI).href;
   const NEEDED=['WebGLRenderer','ShaderMaterial','InstancedBufferGeometry','Line','OrthographicCamera','CanvasTexture'];
   let threeLoading=null;
@@ -44,7 +44,7 @@
 
   const EARTH_V=`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
   const EARTH_F=`
-    uniform sampler2D uMap,uCult,uPat;uniform vec2 uTex;uniform vec3 uLight,uCam;
+    uniform sampler2D uMap,uCult,uPat,uRel;uniform float uRelOn;uniform vec2 uTex;uniform vec3 uLight,uCam;
     uniform vec3 uRamp[10];uniform vec3 uLand,uIce,uLake,uCoast,uFres,uSpec,uHaze;
     uniform vec3 uBase[7],uAcc1[7],uAcc2[7];
     uniform float uCoastA,uCoastW,uReveal,uLandReveal,uPatScale,uPatA,uCultOn;
@@ -72,7 +72,11 @@
       float w=clamp(max(fwidth(sdf),tpp),1e-3,8.);
       float land=smoothstep(-.5*w,.5*w,sdf);
       float depth=t.g*255./25.;
+      /* Relief réel (Natural Earth) : profondeur continue et détail des fonds, ombrage des montagnes. */
+      vec3 rel=textureGrad(uRel,vec2(u,v),dx,dy).rgb;
+      depth=mix(depth,clamp(depth+(1.+rel.b*9.-depth)*.35,1.,10.),uRelOn*smoothstep(1.2,2.,depth));
       vec3 water=ramp(depth);
+      water*=1.+(rel.g-.5)*1.1*uRelOn;
       water=mix(uRamp[4],water,uReveal);
       water=mix(water,uLake,1.-smoothstep(.25,.8,depth));
       /* Terres : palette du continent (fondue aux frontières), nuance propre à chaque pays, motif artisanal. */
@@ -86,6 +90,7 @@
         ground=mix(ground,mix(uAcc2[k0],uAcc2[k1],kt),pa.y*uPatA*.8);
       }
       ground=mix(uLand,ground,uCultOn);
+      ground*=1.+(rel.r-.5)*2.4*uRelOn*clamp(.55+tpp*.9,.55,1.);
       vec3 col=mix(water,mix(ground,uIce,t.b*.7),land*uLandReveal);
       float hw=.5*uCoastW*w;
       float line=(1.-smoothstep(hw-.5*w,hw+.5*w,abs(sdf)))*(1.-smoothstep(4.,8.,tpp)*.5);
@@ -98,8 +103,6 @@
       float F=pow(1.-ndv,3.5);
       col=mix(col,uHaze,F*.3);
       col+=uFres*.16*F;
-      vec3 H=normalize(uLight+V);
-      col+=uSpec*pow(max(dot(n,H),0.),96.)*.18*(1.-land);
       gl_FragColor=vec4(col,1.);
       #include <colorspace_fragment>
     }`;
@@ -161,7 +164,9 @@
     renderer.setClearColor(0x000000,0);renderer.autoClear=false;
     renderer.outputColorSpace=T.SRGBColorSpace;
     const maxTex=renderer.capabilities.maxTextureSize;
-    const dprCap=2;let dprNow=Math.min(devicePixelRatio||1,dprCap),lastFrame=0,slow=0;
+    /* Pleine définition de l’écran (jusqu’à ×3). Pendant un mouvement continu seulement, si les images
+       ralentissent, la définition baisse par paliers (jamais sous 60 %) ; elle revient au repos. */
+    const dprFull=Math.min(devicePixelRatio||1,3);let dprNow=dprFull,lastFrame=0,slow=0,prevAgain=false,sharpTimer=0;
     const scene=new T.Scene();
     const camera=new T.PerspectiveCamera(FOV,1,.01,200);
     const col=h=>new T.Color(h);
@@ -169,7 +174,7 @@
       uMap:{value:null},uTex:{value:new T.Vector2(4096,2048)},uLight:{value:new T.Vector3()},uCam:{value:new T.Vector3()},
       uRamp:{value:P.ramp.map(col)},uLand:{value:col(P.land)},uIce:{value:col(P.ice)},uLake:{value:col(P.lake)},uCoast:{value:col(P.coast)},
       uFres:{value:col(P.fres)},uSpec:{value:col(P.spec)},uHaze:{value:col(P.atmoIn)},uCoastA:{value:.35},uCoastW:{value:.7},uReveal:{value:0},uLandReveal:{value:0},
-      uCult:{value:null},uPat:{value:null},uCultOn:{value:0},uPatScale:{value:12.7},uPatA:{value:0},
+      uCult:{value:null},uPat:{value:null},uRel:{value:null},uRelOn:{value:0},uCultOn:{value:0},uPatScale:{value:12.7},uPatA:{value:0},
       uBase:{value:P.cont.map(c=>col(c[0]))},uAcc1:{value:P.cont.map(c=>col(c[1]))},uAcc2:{value:P.cont.map(c=>col(c[2]))}
     };
     const seg=mobile?128:192;
@@ -288,7 +293,7 @@
     function frame(now){
       raf=0;if(!active)return;
       /* Résolution adaptative : si les images s’enchaînent sous ~45 i/s, on baisse d’un cran (jamais sous 1). */
-      if(lastFrame&&now-lastFrame<70){slow=slow*.92+(now-lastFrame>23?.08:0);if(slow>.55&&dprNow>1){dprNow=Math.max(1,dprNow-.25);slow=0;resize();}}
+      if(prevAgain&&lastFrame){slow=slow*.9+(now-lastFrame>21?.1:0);const floor=Math.max(1,dprFull*.6);if(slow>.6&&dprNow>floor){dprNow=Math.max(floor,dprNow-.25);slow=0;resize();}}
       lastFrame=now;
       let again=false;
       if(anim){
@@ -311,6 +316,8 @@
       if(revealStart){const t=Math.min(1,(now-revealStart)/1200);uniEarth.uReveal.value=easeInOut(Math.min(1,t/.75));uniEarth.uLandReveal.value=easeInOut(Math.max(0,(t-.12)/.88));
         spin=touched?0:8*(1-easeInOut(t));if(t<1)again=true;else{revealStart=0;spin=0;}dirty=true;}
       if(dirty){dirty=false;draw();}
+      prevAgain=again||emblemAnim;
+      if(!prevAgain&&dprNow<dprFull){clearTimeout(sharpTimer);sharpTimer=setTimeout(()=>{if(!raf){dprNow=dprFull;slow=0;resize();}},350);}
       if(emblemAnim){dirty=true;again=true;}
       if(again)raf=requestAnimationFrame(frame);
     }
@@ -332,7 +339,7 @@
       dotU.uCore.value=4+2*(1-far)+2*s;dotU.uHalo.value=12+4*(1-far)+4*s+2;dotU.uRing.value=s>.6?1:0;dotU.uHaloA.value=mobile?.07:.16;
       uniEarth.uCoastA.value=.45+.2*s;uniEarth.uCoastW.value=.8+.4*s;
       /* Motifs culturels : invisibles vus de l’espace, ils apparaissent à l’échelle d’un continent. */
-      uniEarth.uPatA.value=.2*Math.max(0,Math.min(1,(14-k)/8));
+      uniEarth.uPatA.value=.2*Math.max(0,Math.min(1,(14-k)/8))*(.35+.65*Math.max(0,Math.min(1,(k-1)/2.5)));
       /* Frange atmosphérique fine : environ 9 px sur ordinateur, 6 px sur mobile. */
       atmoU.uThick.value=(mobile?6:9)*k/KM;atmoU.uAlpha.value=.6-.45*s;
       borderMat.opacity=.28*Math.max(0,Math.min(1,(Math.log(14000)-Math.log(w))/Math.log(2)));
@@ -352,7 +359,7 @@
     const premult={side:T.DoubleSide,transparent:true,depthTest:false,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor};
     const bodyFont=(getComputedStyle(document.body).fontFamily||'system-ui');
     try{await Promise.race([document.fonts?.load(`700 12px ${bodyFont}`),new Promise(r=>setTimeout(r,800))]);}catch(_){}
-    const TS=2;
+    const TS=Math.min(3,Math.ceil(devicePixelRatio||1));
     /* Chiffres : un atlas de 10 glyphes, les nombres sont composés dans le shader. */
     const digitAdv=(()=>{const c=document.createElement('canvas').getContext('2d');c.font=`700 ${12*TS}px ${bodyFont}`;return [...'0123456789'].map(d=>c.measureText(d).width/TS);})();
     const digitW=Math.ceil(Math.max(...digitAdv))+2;
@@ -776,7 +783,8 @@
         return tex;
       });
     }
-    const [first,cult,pat]=await Promise.all(['earth-4k.webp','cultures-2k.webp','patterns.webp'].map(f=>loadTexture(asset('assets/globe/'+f))));
+    const [first,cult,pat,rel]=await Promise.all(['earth-4k.webp','cultures-2k.webp','patterns.webp','relief-4k.webp'].map(f=>loadTexture(asset('assets/globe/'+f))));
+    uniEarth.uRel.value=rel;uniEarth.uRelOn.value=1;
     uniEarth.uCult.value=cult;uniEarth.uPat.value=pat;uniEarth.uCultOn.value=1;
     uniEarth.uMap.value=first;uniEarth.uTex.value.set(first.image.width,first.image.height);
     renderer.initTexture?.(first);
@@ -784,6 +792,8 @@
     /* Ordinateur : la texture 8K arrive ensuite, pour des côtes plus fines au zoom. */
     const conn=navigator.connection;let dead=false;
     if(!mobile&&maxTex>=8192&&!conn?.saveData)setTimeout(()=>loadTexture(asset('assets/globe/earth-8k.webp')).then(tex=>{if(dead)return;const old=uniEarth.uMap.value;uniEarth.uMap.value=tex;uniEarth.uTex.value.set(tex.image.width,tex.image.height);old?.dispose();invalidate();}).catch(()=>{}),1200);
+    /* Relief 8K : montagnes nettes jusqu’au zoom région, sur ordinateur seulement. */
+    if(!mobile&&maxTex>=8192&&!conn?.saveData)setTimeout(()=>loadTexture(asset('assets/globe/relief-8k.webp')).then(tex=>{if(dead)return;const old=uniEarth.uRel.value;uniEarth.uRel.value=tex;old?.dispose();invalidate();}).catch(()=>{}),2600);
     resize();applyCamera();
     revealStart=reduced()?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;uniEarth.uLandReveal.value=1;}
     invalidate();
