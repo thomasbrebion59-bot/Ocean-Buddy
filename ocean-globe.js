@@ -23,9 +23,21 @@
   const GLOW={surf:'#5C88FF',bodyboard:'#81B2FF',baignade:'#39CDE8',paddle:'#36CDAF',kayak:'#A1D763',snorkeling:'#FFC34D',plongee:'#6889D6',kitesurf:'#FF8068',windsurf:'#BD8AFF'};
   const glow=id=>GLOW[id]||'#5C88FF';
 
+  /* Version des fichiers du globe (moteur, textures, données), recalculée par scripts/version-assets.py. */
+  const ASSET_V='59ca29f6cdcf';
+  const asset=path=>new URL(path+'?v='+ASSET_V,document.baseURI).href;
+  const NEEDED=['WebGLRenderer','ShaderMaterial','InstancedBufferGeometry','Line','OrthographicCamera','CanvasTexture'];
   let threeLoading=null;
   function loadThree(){
-    if(!threeLoading)threeLoading=import(new URL('vendor/three/three.globe.min.js',document.baseURI).href).catch(e=>{threeLoading=null;throw e;});
+    /* Adresse versionnée (scripts/version-assets.py) ; si un vieux moteur resté en cache n’a pas toutes
+       les classes attendues, on le recharge directement depuis le réseau au lieu d’abandonner le globe. */
+    if(!threeLoading)threeLoading=(async()=>{
+      const url=asset('vendor/three/three.globe.min.js');
+      let T=await import(url);
+      if(!NEEDED.every(k=>k in T))T=await import(url+'&r='+Date.now());
+      if(!NEEDED.every(k=>k in T))throw Error('three incomplet');
+      return T;
+    })().catch(e=>{threeLoading=null;throw e;});
     return threeLoading;
   }
   function supported(){try{const c=document.createElement('canvas');return !!c.getContext('webgl2');}catch(_){return false;}}
@@ -178,7 +190,7 @@
     /* Frontières : très discrètes, visibles à l’échelle d’un continent. */
     const borderMat=new T.LineBasicMaterial({color:col(P.border),transparent:true,opacity:0,depthWrite:false});
     let borders=null;
-    fetch(new URL('assets/globe/borders.json',document.baseURI)).then(r=>r.ok?r.json():[]).then(lines=>{
+    fetch(asset('assets/globe/borders.json')).then(r=>r.ok?r.json():[]).then(lines=>{
       const out=[];const push=(lat,lon)=>{const v=M.vec(lat,lon);out.push(v[0]*1.0007,v[1]*1.0007,v[2]*1.0007);};
       for(const l of lines)for(let i=2;i<l.length;i+=2){
         const a={lon:l[i-2],lat:l[i-1]},b={lon:l[i],lat:l[i+1]},steps=Math.max(1,Math.ceil(Math.hypot(b.lon-a.lon,b.lat-a.lat)/.8));
@@ -372,8 +384,8 @@
     emblemMesh.frustumCulled=false;emblemMesh.renderOrder=0;overlay.add(emblemMesh);
     let countries=[],emblemsOn=[],emblemAnim=false;
     const eState=new Map();
-    new T.TextureLoader().load(new URL('assets/globe/emblems.webp',document.baseURI).href,tex=>{tex.colorSpace=T.SRGBColorSpace;tex.generateMipmaps=true;tex.minFilter=T.LinearMipmapLinearFilter;tex.anisotropy=4;emblemU.uTex.value=tex;invalidate();});
-    fetch(new URL('assets/globe/countries.json',document.baseURI)).then(r=>r.ok?r.json():{}).then(d=>{countryData=d;refreshCountries();invalidate();}).catch(()=>{});
+    new T.TextureLoader().load(asset('assets/globe/emblems.webp'),tex=>{tex.colorSpace=T.SRGBColorSpace;tex.generateMipmaps=true;tex.minFilter=T.LinearMipmapLinearFilter;tex.anisotropy=4;emblemU.uTex.value=tex;invalidate();});
+    fetch(asset('assets/globe/countries.json')).then(r=>r.ok?r.json():{}).then(d=>{countryData=d;refreshCountries();invalidate();}).catch(()=>{});
     let countryData={};
     function refreshCountries(){
       const n=new Map();for(const s of spots)if(s.country)n.set(s.country,(n.get(s.country)||0)+1);
@@ -764,15 +776,14 @@
         return tex;
       });
     }
-    const base=new URL('assets/globe/',document.baseURI).href;
-    const [first,cult,pat]=await Promise.all(['earth-4k.webp','cultures-2k.webp','patterns.webp'].map(f=>loadTexture(base+f)));
+    const [first,cult,pat]=await Promise.all(['earth-4k.webp','cultures-2k.webp','patterns.webp'].map(f=>loadTexture(asset('assets/globe/'+f))));
     uniEarth.uCult.value=cult;uniEarth.uPat.value=pat;uniEarth.uCultOn.value=1;
     uniEarth.uMap.value=first;uniEarth.uTex.value.set(first.image.width,first.image.height);
     renderer.initTexture?.(first);
     earth.visible=true;
     /* Ordinateur : la texture 8K arrive ensuite, pour des côtes plus fines au zoom. */
     const conn=navigator.connection;let dead=false;
-    if(!mobile&&maxTex>=8192&&!conn?.saveData)setTimeout(()=>loadTexture(base+'earth-8k.webp').then(tex=>{if(dead)return;const old=uniEarth.uMap.value;uniEarth.uMap.value=tex;uniEarth.uTex.value.set(tex.image.width,tex.image.height);old?.dispose();invalidate();}).catch(()=>{}),1200);
+    if(!mobile&&maxTex>=8192&&!conn?.saveData)setTimeout(()=>loadTexture(asset('assets/globe/earth-8k.webp')).then(tex=>{if(dead)return;const old=uniEarth.uMap.value;uniEarth.uMap.value=tex;uniEarth.uTex.value.set(tex.image.width,tex.image.height);old?.dispose();invalidate();}).catch(()=>{}),1200);
     resize();applyCamera();
     revealStart=reduced()?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;uniEarth.uLandReveal.value=1;}
     invalidate();

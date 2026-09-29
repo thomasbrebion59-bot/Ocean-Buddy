@@ -27,7 +27,7 @@
   /* Globe 3D (ocean-globe.js) pour la vue d’ensemble ; la carte MapLibre prend le relais en « plongée »
      sous DIVE_KM de large et rend la main au globe au-delà de RISE_KM (écart pour éviter les allers-retours). */
   const DIVE_KM=600,RISE_KM=1100,WORLD_KM=7000,HOME={lat:30,lon:-8};
-  let planet=null,planetStarting=null,planetFailed=false,mode='globe',modeTimer=0,diving=false;
+  let planet=null,planetStarting=null,planetFailed=false,planetTries=0,mode='globe',modeTimer=0,diving=false;
   const useGlobe=()=>!planetFailed&&!!window.OceanGlobe?.supported();
 
   function candidates(){const found=typeof exploreSpots==='function'?exploreSpots(currentFilter,{sport:null}):SPOTS.filter(s=>inWorld(s));return found.filter(s=>COORDS[s.id]&&Number.isFinite(COORDS[s.id].lat)&&Number.isFinite(COORDS[s.id].lon));}
@@ -297,7 +297,8 @@
       setTimeout(()=>{loadEngine().catch(()=>{});},2500);
       return p;
     });
-    planetStarting.catch(()=>{planetStarting=null;planetFailed=true;wrap?.classList.remove('is-globe','is-planet');});
+    /* Un échec ponctuel (réseau, cache) ne condamne pas le globe : on réessaie une fois avant la carte à plat. */
+    planetStarting.catch(e=>{console.warn('Globe 3D :',e);planetStarting=null;host.replaceChildren();if(++planetTries>=2){planetFailed=true;wrap?.classList.remove('is-globe','is-planet');}});
     return planetStarting;
   }
   function setMode(next){
@@ -575,7 +576,8 @@
         status.hidden=true;worldState(true);updateList();
       }).catch(()=>{
         /* Pas de WebGL 2 ou chargement impossible : la carte MapLibre prend tout le rôle. */
-        planetFailed=true;mode='map';wrap.classList.remove('is-globe','is-planet','is-map');render(true);
+        if(!planetFailed){status.hidden=false;status.textContent='Chargement du globe…';setTimeout(()=>render(true),600);return;}
+        mode='map';wrap.classList.remove('is-globe','is-planet','is-map');render(true);
       });
       return;
     }
