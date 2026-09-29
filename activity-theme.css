@@ -1,0 +1,97 @@
+/* Thèmes d’activité : choisir une activité change toute l’interface (couleurs, barre du haut, navigation,
+   ambiance animée). Les bleus de l’app passent par les variables --t-* ; activity-theme.js pose
+   html[data-act] et le décor. Sans activité, ce sont exactement les valeurs cobalt d’origine. */
+:root{
+  --t-main:#2154dc;--t-main2:#1f55e0;--t-deep:#0b2d7a;--t-deep2:#173b84;--t-tint:#e8efff;--t-line:#b9cbf5;--t-page:#f3f6fd;--t-bright:#2f6bff;--t-deep-b:#0f3a9a;
+  --t-nav-a:#2360e8;--t-nav-b:#1a4fd6;--t-nav-c:#1440b8;--t-acc:#e0ff91;--t-acc-ink:#0b2d7a;--t-cta:#ff7a55;--t-cta-ink:#1b1410;
+  --t-glow:rgba(47,107,255,.35);--t-wash:rgba(47,107,255,.14);
+}
+html[data-act="surf"]{--t-main:#1a5ad6;--t-main2:#1d6cf0;--t-deep:#082a78;--t-deep2:#123a8c;--t-tint:#e4efff;--t-line:#b3cdf8;--t-page:#eef5ff;--t-bright:#3a8bff;--t-deep-b:#0d3fa8;--t-nav-a:#3a8bff;--t-nav-b:#1d6cf0;--t-nav-c:#0f47c4;--t-acc:#e6ffa3;--t-glow:rgba(58,139,255,.42);--t-wash:rgba(58,139,255,.2)}
+html[data-act="bodyboard"]{--t-main:#1470d8;--t-main2:#2586ee;--t-deep:#0a3a7e;--t-deep2:#125090;--t-tint:#e3f1ff;--t-line:#b0d5f8;--t-page:#edf6ff;--t-bright:#4aa6ff;--t-deep-b:#0e5cb0;--t-nav-a:#54b0ff;--t-nav-b:#2a8cf0;--t-nav-c:#1567cc;--t-acc:#ffe680;--t-acc-ink:#4a3200;--t-glow:rgba(74,166,255,.45);--t-wash:rgba(74,166,255,.22)}
+html[data-act="baignade"]{--t-main:#087ea6;--t-main2:#0e9cc4;--t-deep:#053f58;--t-deep2:#0a5876;--t-tint:#dff5fb;--t-line:#a5dcec;--t-page:#ecf9fc;--t-bright:#22b8dd;--t-deep-b:#08688a;--t-nav-a:#33c2e4;--t-nav-b:#0e9cc4;--t-nav-c:#087a9c;--t-acc:#fff3a6;--t-acc-ink:#4a3a00;--t-glow:rgba(34,184,221,.42);--t-wash:rgba(34,184,221,.2)}
+html[data-act="paddle"]{--t-main:#0b8a72;--t-main2:#0f9e86;--t-deep:#05453a;--t-deep2:#0a5e51;--t-tint:#dff5ed;--t-line:#a8dfd0;--t-page:#f0f8f2;--t-bright:#22b89b;--t-deep-b:#087060;--t-nav-a:#2ec2a4;--t-nav-b:#0f9e86;--t-nav-c:#097a68;--t-acc:#ffe8a0;--t-acc-ink:#3d2c00;--t-cta:#ff9a5c;--t-glow:rgba(34,184,155,.42);--t-wash:rgba(255,190,120,.2)}
+html[data-act="kayak"]{--t-main:#3d8a1a;--t-main2:#4c9a25;--t-deep:#213f0f;--t-deep2:#2f5c14;--t-tint:#eaf5de;--t-line:#c2dda3;--t-page:#f4f8ec;--t-bright:#68b93a;--t-deep-b:#3a6f18;--t-nav-a:#78c447;--t-nav-b:#4c9a25;--t-nav-c:#33741a;--t-acc:#ffe79a;--t-acc-ink:#3d2c00;--t-glow:rgba(104,185,58,.4);--t-wash:rgba(104,185,58,.18)}
+html[data-act="snorkeling"]{--t-main:#087f8f;--t-main2:#0a94a4;--t-deep:#06434e;--t-deep2:#0a5662;--t-tint:#dff6f4;--t-line:#a6dcdb;--t-page:#eef9f6;--t-bright:#17b6b8;--t-deep-b:#08616d;--t-nav-a:#25c2b6;--t-nav-b:#0a9aa2;--t-nav-c:#077785;--t-acc:#ffd257;--t-acc-ink:#4a2e00;--t-cta:#ff8a4d;--t-glow:rgba(23,182,184,.42);--t-wash:rgba(255,210,87,.2)}
+html[data-act="plongee"]{--t-main:#0a6f9c;--t-main2:#0b5fa8;--t-deep:#041d4a;--t-deep2:#0a3a6e;--t-tint:#e1f2f8;--t-line:#b0d8e6;--t-page:#e8f3f7;--t-bright:#1aa2ca;--t-deep-b:#08376f;--t-nav-a:#0d4283;--t-nav-b:#082d63;--t-nav-c:#041a3f;--t-acc:#5ef2e0;--t-acc-ink:#03233f;--t-glow:rgba(26,162,202,.45);--t-wash:rgba(10,60,120,.22)}
+html[data-act="kitesurf"]{--t-main:#d63f2b;--t-main2:#e8503f;--t-deep:#4a1b2e;--t-deep2:#6e2a3c;--t-tint:#ffeee8;--t-line:#f6c6b9;--t-page:#fff6f1;--t-bright:#ff6a4d;--t-deep-b:#8a2c3a;--t-nav-a:#ff8a5c;--t-nav-b:#ee5741;--t-nav-c:#c3362f;--t-acc:#ffe066;--t-acc-ink:#4a1b00;--t-cta:#ffd23f;--t-cta-ink:#3a1a00;--t-glow:rgba(255,106,77,.42);--t-wash:rgba(255,150,90,.22)}
+html[data-act="windsurf"]{--t-main:#6d3ecf;--t-main2:#844be0;--t-deep:#291270;--t-deep2:#42228f;--t-tint:#efe9ff;--t-line:#d1bff6;--t-page:#f6f2ff;--t-bright:#a06cf0;--t-deep-b:#4e2aa8;--t-nav-a:#a26cf5;--t-nav-b:#7a44d8;--t-nav-c:#552cae;--t-acc:#e0ff91;--t-acc-ink:#2a1270;--t-glow:rgba(160,108,240,.42);--t-wash:rgba(160,108,240,.2)}
+
+/* Tokens Ocean Blue rebranchés sur le thème. */
+:root{--ob-lime:var(--t-acc);--ob-coral:var(--t-cta)}
+html[data-act] .hero-cta{color:var(--t-cta-ink)}
+html[data-act] body,html[data-act]{background:var(--t-page)}
+html[data-act] .ocean-v2 .phone{background:transparent}
+html[data-act] .ocean-v2 .nav{background:linear-gradient(185deg,var(--t-nav-a) 0%,var(--t-nav-b) 45%,var(--t-nav-c) 100%);border-color:var(--t-nav-b);box-shadow:0 -10px 30px -14px var(--t-deep)}
+html[data-act] .ocean-v2 .nav>button[data-s].active,html[data-act] .ocean-v2 .nav>button[aria-current=page]{background:var(--t-acc)}
+html[data-act] .ocean-v2 #spotsTop[data-act]:not([data-act=""]) h1 span,html[data-act] .ocean-v2 #spotsTop[data-act]:not([data-act=""]) .page-eyebrow{color:var(--t-acc)!important}
+html[data-act] .ocean-v2 #spotsTop[data-act]:not([data-act=""]){background:linear-gradient(180deg,rgba(4,16,40,.32) 0%,rgba(4,16,40,.7) 100%),var(--act-scene) center 40%/cover no-repeat}
+html[data-act] .ocean-v2 .nav>button[data-s].active,html[data-act] .ocean-v2 .nav>button[aria-current=page]{color:var(--t-acc-ink)}
+html[data-act] ::selection{background:var(--t-acc);color:var(--t-acc-ink)}
+
+/* Couche d’ambiance : une seule, fixe, derrière le contenu. */
+#actAmb{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;opacity:0;transition:opacity .6s ease;contain:strict}
+html[data-act] #actAmb{opacity:1}
+.aa-wash{position:absolute;inset:0;background:radial-gradient(120% 60% at 50% 0%,var(--t-wash),transparent 70%),linear-gradient(180deg,transparent 55%,var(--t-wash) 100%)}
+.aa-fx{position:absolute;inset:0;width:100%;height:100%}
+.aa-rays,.aa-waves{position:absolute;left:0;right:0;pointer-events:none}
+.aa-rays{top:0;height:75%;opacity:0;transition:opacity .8s}
+.aa-rays i{position:absolute;top:-10%;width:22vw;height:120%;transform-origin:50% 0;background:linear-gradient(180deg,rgba(255,255,255,.55),rgba(255,255,255,0) 80%);filter:blur(6px);mix-blend-mode:soft-light;animation:aa-sway 9s ease-in-out infinite alternate}
+.aa-rays i:nth-child(1){left:6%;transform:rotate(14deg);animation-delay:-2s}
+.aa-rays i:nth-child(2){left:30%;width:14vw;transform:rotate(10deg);animation-duration:12s}
+.aa-rays i:nth-child(3){left:56%;width:26vw;transform:rotate(16deg);animation-delay:-5s}
+.aa-rays i:nth-child(4){left:82%;width:16vw;transform:rotate(9deg);animation-duration:11s;animation-delay:-3s}
+@keyframes aa-sway{from{transform:rotate(9deg) translateX(-2vw);opacity:.55}to{transform:rotate(17deg) translateX(3vw);opacity:1}}
+html[data-act="plongee"] .aa-rays,html[data-act="snorkeling"] .aa-rays,html[data-act="baignade"] .aa-rays{opacity:1}
+.aa-waves{bottom:0;height:150px;opacity:0;transition:opacity .8s}
+.aa-waves svg{position:absolute;left:0;bottom:0;width:200%;height:100%;animation:aa-drift 14s linear infinite;will-change:transform}
+.aa-waves svg:nth-child(2){bottom:8px;opacity:.6;animation-duration:22s;animation-direction:reverse}
+.aa-waves path{fill:var(--t-wash)}
+@keyframes aa-drift{to{transform:translate3d(-50%,0,0)}}
+html[data-act="surf"] .aa-waves,html[data-act="bodyboard"] .aa-waves,html[data-act="paddle"] .aa-waves,html[data-act="kayak"] .aa-waves{opacity:1}
+
+/* Barre du haut : décor de l’activité, animé lentement. */
+html[data-act] .ocean-v2 .app-chrome{background:linear-gradient(120deg,var(--t-nav-b),var(--t-nav-c));border-color:transparent;-webkit-backdrop-filter:none;backdrop-filter:none;color:#fff;overflow:hidden;isolation:isolate;box-shadow:0 10px 28px -16px var(--t-deep)}
+html[data-act] .app-chrome::before{content:"";position:absolute;inset:-6% -10%;z-index:-1;background:var(--act-scene) center/cover no-repeat;opacity:.5;mix-blend-mode:soft-light;animation:aa-pan 24s ease-in-out infinite alternate}
+html[data-act] .app-chrome::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(90deg,rgba(255,255,255,.14),transparent 45%);pointer-events:none}
+@keyframes aa-pan{from{transform:translate3d(-2%,0,0) scale(1.05)}to{transform:translate3d(2%,-2%,0) scale(1.14)}}
+html[data-act] .chrome-mobile-brand,html[data-act] .chrome-breadcrumb,html[data-act] .chrome-breadcrumb b,html[data-act] .app-page-title{color:#fff!important}
+html[data-act] .chrome-mobile-brand b{color:var(--t-acc)!important}
+html[data-act] .mobile-search,html[data-act] .chrome-search svg{color:#fff!important}
+html[data-act] .app-back{background:rgba(255,255,255,.18);border-color:rgba(255,255,255,.35);color:#fff}
+html[data-act] .mobile-poulpy{border-color:rgba(255,255,255,.5)}
+
+/* Pastille d’activité dans la barre du haut : rappelle où l’on est, un toucher pour changer. */
+.act-chip{display:none;align-items:center;gap:7px;height:38px;padding:0 13px 0 5px;border:1px solid rgba(255,255,255,.38);border-radius:999px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);color:#fff;font:800 12px var(--body,system-ui);white-space:nowrap;cursor:pointer;flex:none;max-width:44vw;overflow:hidden;text-overflow:ellipsis;animation:aa-pop .5s cubic-bezier(.2,1.2,.3,1)}
+.act-chip img{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#fff}
+html[data-act] .act-chip{display:inline-flex}
+@keyframes aa-pop{from{transform:scale(.6);opacity:0}}
+@media(max-width:380px){.act-chip span{display:none}.act-chip{padding:0 5px}}
+
+/* Arrivée fluide du contenu après la transition. */
+html.act-swapped .screen{animation:aa-in .7s cubic-bezier(.2,.8,.2,1)}
+@keyframes aa-in{from{opacity:.0;transform:translate3d(0,18px,0)}}
+html.act-swapped #spotsTop,html.act-swapped .worlds>*{animation:aa-in .7s cubic-bezier(.2,.8,.2,1) backwards}
+html.act-swapped .worlds>*:nth-child(2){animation-delay:.07s}html.act-swapped .worlds>*:nth-child(3){animation-delay:.14s}html.act-swapped .worlds>*:nth-child(4){animation-delay:.21s}html.act-swapped .worlds>*:nth-child(5){animation-delay:.28s}
+
+/* Onboarding / choix d’activité : le fond épouse l’activité survolée. */
+.onb[data-act]{background-image:linear-gradient(180deg,rgba(6,21,47,.35),rgba(6,21,47,.75)),var(--act-scene);background-size:cover;background-position:center;transition:background-image .4s}
+
+.reduce-motion .aa-rays i,.reduce-motion .aa-waves svg,.reduce-motion .app-chrome::before{animation:none}
+@media(prefers-reduced-motion:reduce){.aa-rays i,.aa-waves svg,html[data-act] .app-chrome::before,html.act-swapped .screen,html.act-swapped #spotsTop{animation:none!important}}
+
+/* ---------- Tenue sur téléphone ----------
+   L’app se manie comme une app native : pas de zoom de page (pincement, double-tap, focus d’un champ),
+   pas de rebond ni de glissement latéral de la page. La carte, le globe et les galeries gardent leur propre zoom. */
+html,body{overscroll-behavior:none;overflow-x:hidden;touch-action:manipulation;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+html,body{height:100%;overflow-y:hidden}
+.ocean-v2 .screen-wrap{overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain}
+img,svg,video,canvas{-webkit-user-drag:none;-webkit-touch-callout:none}
+.ocean-v2 .nav,.ocean-v2 .app-chrome,.act-chip,.chip,.sport-card,button{-webkit-user-select:none;user-select:none}
+@media(max-width:959px){
+  input,textarea,select,.ocean-v2 .search,.ocean-v2 .chat-input input,.ocean-v2 .set-input,#globalSearch,#spotSearch{font-size:16px!important}
+}
+html[data-act] .poulpy-world-note{background:var(--t-tint);border-color:var(--t-line)}
+html[data-act] .poulpy-world-note p b{color:var(--t-deep)}
+html[data-act] .ocean-v2 .nav .sidebar-poulpy{background:color-mix(in srgb,var(--t-deep) 62%,transparent)}
+html[data-act] .chrome-user b,html[data-act] .chrome-user{color:#fff!important}
+html[data-act] .ocean-v2 .app-chrome .sound-toggle,html[data-act] .ocean-v2 .app-chrome [class*=sound]{color:var(--t-deep)}

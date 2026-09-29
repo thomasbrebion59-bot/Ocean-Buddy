@@ -1,25 +1,25 @@
 /* Navigation remains visible while content scrolls. */
-.app-back { display:inline-flex; align-items:center; justify-content:center; gap:8px; flex-shrink:0; min-height:44px; padding:10px 13px; border:1px solid #d5e0f0; border-radius:10px; background:#fff; color:#2154dc; font:700 12px var(--body); cursor:pointer; }
+.app-back { display:inline-flex; align-items:center; justify-content:center; gap:8px; flex-shrink:0; min-height:44px; padding:10px 13px; border:1px solid #d5e0f0; border-radius:10px; background:#fff; color:var(--t-main); font:700 12px var(--body); cursor:pointer; }
 .app-back[hidden] { display:none; }
 .app-back svg { width:19px; height:19px; }
-.app-back:hover { background:#e7eefb; border-color:#2154dc; }
+.app-back:hover { background:#e7eefb; border-color:var(--t-main); }
 .app-page-title { display:none; }
 .explore-path { display:flex; align-items:center; gap:17px; margin:20px 0 8px; padding:14px 17px; border:1px solid #d6e1f0; border-radius:14px; background:#fff; color:#6e819a; }
-.explore-path button { display:flex; align-items:center; gap:11px; min-height:44px; padding:4px 8px; border:0; border-radius:9px; background:none; color:#173b84; text-align:left; cursor:pointer; }
+.explore-path button { display:flex; align-items:center; gap:11px; min-height:44px; padding:4px 8px; border:0; border-radius:9px; background:none; color:var(--t-deep2); text-align:left; cursor:pointer; }
 .explore-path button:hover { background:#edf3ff; }
 .explore-path small { display:block; color:#6b809c; font-size:9px; margin-bottom:4px; }
 .explore-path b { display:block; font-size:12px; line-height:1.3; }
-.explore-path i { margin-left:12px; font-size:10px; font-style:normal; color:#2154dc; text-decoration:underline; text-underline-offset:3px; }
+.explore-path i { margin-left:12px; font-size:10px; font-style:normal; color:var(--t-main); text-decoration:underline; text-underline-offset:3px; }
 .path-number { display:grid; place-items:center; width:28px; height:28px; flex-shrink:0; border-radius:50%; background:#edf2fb; color:#5d7ca8; font-size:11px; font-weight:800; }
-.explore-path [aria-current=step] .path-number,.path-final.current .path-number { background:#2154dc; color:white; }
+.explore-path [aria-current=step] .path-number,.path-final.current .path-number { background:var(--t-main); color:white; }
 .path-separator { font-size:23px; color:#a5b6d1; }
 .path-final { display:flex; align-items:center; gap:10px; font-size:12px; }
-.path-final.current { color:#173b84; font-weight:700; }
+.path-final.current { color:var(--t-deep2); font-weight:700; }
 .ocean-v2 #sportFilters { display:none!important; }
 .ocean-v2 .wback { min-height:44px; }
 @media(max-width:959px) {
  .has-app-back .chrome-mobile-brand { display:none; }
- .has-app-back .app-page-title { display:block; color:#173b84; font-size:13px; font-weight:700; }
+ .has-app-back .app-page-title { display:block; color:var(--t-deep2); font-size:13px; font-weight:700; }
  .has-app-back .chrome-title { min-width:0; flex:1; }
  .has-app-back .chrome-search { display:none; }
 }

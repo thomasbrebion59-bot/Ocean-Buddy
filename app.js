@@ -271,11 +271,13 @@ function renderSportFilters(){
 function setSport(id){
   /* Choisir une activité, c’est entrer dans son élément : transition immersive, l’écran change sous la scène. */
   if(id&&SPORTMAP[id]&&window.OceanTransition){window.OceanTransition.play(id,()=>applySport(id));return;}
+  if(!id&&activeSport&&window.OceanTransition?.neutral){window.OceanTransition.neutral(()=>applySport(null));return;}
   applySport(id);
 }
 function applySport(id){
   window.OceanNavigation?.begin();
   activeSport=id&&SPORTMAP[id]?id:null;chosenSport=activeSport||'all';
+  window.OceanTheme?.set(activeSport);
   currentFilter='all';currentSearch='';favOnly=false;nearMode=false;
   document.getElementById('spotSearch').value='';
   document.getElementById('favChip')?.classList.remove('active');
@@ -1821,7 +1823,7 @@ function renderSportGuide(){
   g.innerHTML=h;
   window.OceanPoulpy?.decorateOnboarding();
 }
-function pickSport(el,id){document.querySelectorAll('#sportGrid .sport-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');chosenSport=id;}
+function pickSport(el,id){document.querySelectorAll('#sportGrid .sport-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');chosenSport=id;window.OceanTheme?.preview(id==='all'?null:id);}
 function onbBubbles(){let h='';for(let i=0;i<14;i++){const s=4+Math.random()*16;h+=`<i class="obub" style="left:${Math.random()*100}%;bottom:-30px;width:${s}px;height:${s}px;animation-duration:${5+Math.random()*6}s;animation-delay:${Math.random()*6}s"></i>`;}document.getElementById('onbBubbles').innerHTML=h;}
 function showStep(n){document.querySelectorAll('.onb-step').forEach(s=>s.classList.toggle('active',+s.dataset.step===n));onbStep=n;window.OceanPoulpy?.focusOnboarding();}
 function onbNext(){

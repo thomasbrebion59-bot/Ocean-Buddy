@@ -13,8 +13,8 @@
     baignade:{entry:'rise',fx:'rings',n:3,exit:'hole',ms:1100,tint:'#0e9fc4'},
     paddle:{entry:'v',fx:'rings',n:6,exit:'v',ms:1200,tint:'#0f9e86'},
     kayak:{entry:'arc',fx:'drops',n:10,exit:'hole',ms:1200,tint:'#5c9e2c'},
-    snorkeling:{entry:'drop',fx:'bubbles',n:8,exit:'rise-out',ms:1300,tint:'#f0a20c'},
-    plongee:{entry:'rise',fx:'bubbles',n:18,exit:'rise-out',ms:1450,tint:'#0b2d7a'},
+    snorkeling:{entry:'drop',fx:'bubbles',n:8,exit:'rise-out',ms:1300,tint:'#f0a20c',gauge:3},
+    plongee:{entry:'rise',fx:'bubbles',n:18,exit:'rise-out',ms:1450,tint:'#0b2d7a',gauge:18},
     kitesurf:{entry:'diag',fx:'wind',n:10,exit:'diag',ms:1250,tint:'#ff6a4d'},
     windsurf:{entry:'sail',fx:'wind',n:10,exit:'sail',ms:1200,tint:'#9d5be6'}
   };
@@ -82,10 +82,10 @@
     const fx=FX[id];
     if(!fx||busy){swap?.();return;}
     busy=true;
-    const sport=window.SPORTMAP?.[id]||{label:id};
+    const sport=(typeof SPORTMAP!=='undefined'&&SPORTMAP[id])||{label:id};
     const el=document.createElement('div');el.className='act-tr';el.setAttribute('aria-hidden','true');el.style.setProperty('--tint',fx.tint);
     const n=count(id);
-    el.innerHTML=`<div class="act-tr-scene"></div><canvas class="act-tr-fx"></canvas><div class="act-tr-title"><img src="assets/poulpy/icons/${id}.jpg" alt=""><b>${sport.label}</b>${n?`<small>${n} spots t’attendent</small>`:''}</div>`;
+    el.innerHTML=`<div class="act-tr-scene"></div><canvas class="act-tr-fx"></canvas><div class="act-tr-title"><img src="assets/poulpy/icons/${id}.jpg" alt=""><b>${sport.label}</b>${n?`<small>${n} spots t’attendent</small>`:''}${fx.gauge?`<i class="act-tr-gauge"><span>0</span> m</i>`:''}</div>`;
     const live=document.getElementById('a11yLive');if(live)live.textContent=`${sport.label} : ${n} spots`;
     if(reduced()){
       document.body.append(el);el.classList.add('is-fade');
@@ -95,7 +95,7 @@
       return;
     }
     const img=await Promise.race([load(id),new Promise(r=>setTimeout(r,280))]);
-    const scene=el.querySelector('.act-tr-scene'),title=el.querySelector('.act-tr-title'),cv=el.querySelector('.act-tr-fx');
+    const scene=el.querySelector('.act-tr-scene'),title=el.querySelector('.act-tr-title'),cv=el.querySelector('.act-tr-fx'),gauge=el.querySelector('.act-tr-gauge span');
     if(img)scene.style.backgroundImage=`url(${src(id)})`;
     document.body.append(el);
     const W=innerWidth,H=innerHeight,dpr=Math.min(2,devicePixelRatio||1);
@@ -111,6 +111,7 @@
           el.style.clipPath='none';swapped=true;
           /* Écran couvert : on change d’écran dessous (un seul calcul, pendant que rien ne bouge au-dessus). */
           try{swap?.();}catch(e){console.error(e);}
+          try{navigator.vibrate?.(8);}catch(_){}
           last=performance.now();
         }
         /* 2. Geste : parallaxe du fond et titre. */
@@ -119,11 +120,12 @@
         scene.style.transform=par;
         const ti=clamp((t-tIn*.8)/.18),to=clamp((t-tHold-.04)/.14);
         title.style.opacity=(ti*(1-to)).toFixed(3);title.style.transform=`translate3d(-50%,${(14*(1-easeOut(ti))-10*to).toFixed(1)}px,0) scale(${(.94+.06*easeOut(ti)).toFixed(3)})`;
+        if(gauge)gauge.textContent=Math.round(fx.gauge*easeOut(clamp((t-tIn*.8)/(tHold-tIn*.8))));
         draw(ctx,t*total/1000,dt);
         /* 3. Révélation de la destination. */
         if(t>tHold){
           const r=easeOut(clamp((t-tHold)/(1-tHold)));
-          if(fx.exit==='hole'){const R=Math.hypot(W,H)*r*.62;el.style.webkitMaskImage=el.style.maskImage=`radial-gradient(circle at 50% 46%,transparent ${R.toFixed(1)}px,#000 ${(R+2).toFixed(1)}px)`;}
+          if(fx.exit==='hole'){const R=Math.hypot(W,H)*r*.62,cx=W/2,cy=H*.46;el.style.clipPath=`path(evenodd,'M0 0H${W}V${H}H0Z M${(cx-R).toFixed(1)} ${cy}a${R.toFixed(1)} ${R.toFixed(1)} 0 1 0 ${(2*R).toFixed(1)} 0a${R.toFixed(1)} ${R.toFixed(1)} 0 1 0 ${(-2*R).toFixed(1)} 0Z')`;}
           else if(fx.exit==='rise-out'){el.style.transform=`translate3d(0,${(-105*r).toFixed(2)}%,0)`;}
           else if(fx.exit==='wipe-down'){el.style.transform=`translate3d(0,${(105*r).toFixed(2)}%,0)`;}
           else el.style.clipPath=poly(shape(fx.exit,1-r,W,H));
@@ -134,5 +136,10 @@
     });
     el.remove();busy=false;
   }
-  window.OceanTransition={play,preload:load,FX};
+  /* Retour à « toutes les activités » : fondu enchaîné natif (View Transitions) quand le navigateur le permet. */
+  function neutral(swap){
+    if(reduced()||!document.startViewTransition||busy){swap?.();return;}
+    try{document.startViewTransition(()=>swap?.());}catch(_){swap?.();}
+  }
+  window.OceanTransition={play,neutral,preload:load,FX};
 })();

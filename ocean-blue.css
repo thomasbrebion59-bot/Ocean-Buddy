@@ -2,7 +2,7 @@
    Retour au bleu cobalt d’origine : le bleu structure (navigation, héros, titres),
    le citron vert signale l’état actif, le corail appelle à l’action. */
 :root{
-  --ob-navy:#0b2d7a;--ob-navy-2:#0f3a9a;--ob-cobalt:#1f55e0;--ob-blue:#2f6bff;--ob-sky:#e8efff;--ob-mist:#f3f6fd;
+  --ob-navy:var(--t-deep);--ob-navy-2:var(--t-deep-b);--ob-cobalt:var(--t-main2);--ob-blue:var(--t-bright);--ob-sky:var(--t-tint);--ob-mist:var(--t-page);
   --ob-lime:#e0ff91;--ob-coral:#ff7a55;--ob-coral-hi:#ff916f;--ob-ink:#0f2350;--ob-muted:#5a6a8c;--ob-line:#dfe6f5;--ob-card:#fff;
   --ob-abyss:var(--ob-navy);--ob-abyss-2:var(--ob-navy-2);--ob-sand:var(--ob-mist);
   --ob-shadow:0 1px 2px rgba(11,45,122,.06),0 14px 34px -16px rgba(11,45,122,.32);
@@ -15,7 +15,7 @@ body.ocean-v2{color:var(--ob-ink)}
 ::selection{background:var(--ob-lime);color:var(--ob-navy)}
 
 /* ---------- Navigation cobalt ---------- */
-.ocean-v2 .nav{background:linear-gradient(185deg,#2360e8 0%,#1a4fd6 45%,#1440b8 100%);border-color:#1a4fd6}
+.ocean-v2 .nav{background:linear-gradient(185deg,var(--t-nav-a) 0%,var(--t-nav-b) 45%,var(--t-nav-c) 100%);border-color:var(--t-nav-b)}
 .ocean-v2 .nav::before{content:"";position:absolute;inset:auto 0 0;height:220px;pointer-events:none;opacity:.22;
   background:repeating-radial-gradient(ellipse at 50% 130%,transparent 0 16px,rgba(255,255,255,.55) 17px 18px,transparent 19px 34px)}
 .sidebar-brand>span,.sidebar-brand b{color:#fff}
@@ -57,7 +57,7 @@ body.ocean-v2{color:var(--ob-ink)}
 .ocean-v2 #homeTop .hero-kicker{color:var(--ob-lime)}
 .hero-cta{background:var(--ob-coral);color:#1b1410;box-shadow:0 14px 30px -12px rgba(255,122,85,.8);transition:transform .25s cubic-bezier(.22,1,.36,1),background .2s}
 .hero-cta:hover{background:var(--ob-coral-hi);transform:translateY(-2px)}
-.ocean-v2 .mascot-card{background:linear-gradient(160deg,#2a66f0,#1a4fd6 55%,#1440b8);box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 .mascot-card{background:linear-gradient(160deg,#2a66f0,var(--t-nav-b) 55%,var(--t-nav-c));box-shadow:var(--ob-shadow-lg)}
 .ocean-v2 .mascot-card .poulpy-title{color:var(--ob-lime)}
 /* Le héros porte le salut : le cockpit n’en répète pas le titre. */
 #home .ocean-hub .hub-greet{display:none}
@@ -65,7 +65,7 @@ body.ocean-v2{color:var(--ob-ink)}
 
 /* Prochain départ et semaine en bleu */
 .hub-trip{background:linear-gradient(180deg,rgba(11,45,122,.2) 0%,rgba(11,45,122,.55) 45%,rgba(11,45,122,.95) 100%),var(--hub-cover) center/cover no-repeat,var(--ob-navy)!important;box-shadow:0 24px 44px -24px rgba(11,45,122,.85)}
-.hub-trip-empty{background:linear-gradient(120deg,#1a4fd6,#0b2d7a)!important}
+.hub-trip-empty{background:linear-gradient(120deg,var(--t-nav-b),var(--t-deep))!important}
 .hub-days i.on{background:var(--ob-cobalt)}
 .hub-level{background:conic-gradient(var(--ob-cobalt) calc(var(--p)*1%),#dfe6fb 0)!important}
 .hub-week,.hub-spot{border-color:var(--ob-line);box-shadow:var(--ob-shadow)}
@@ -131,11 +131,11 @@ body.ocean-v2{color:var(--ob-ink)}
 .ocean-v2 .onb .onb-btn{background:var(--ob-lime);color:var(--ob-navy);box-shadow:0 14px 34px -12px rgba(224,255,145,.75)}
 .ocean-v2 .onb .dots span.on{background:var(--ob-lime)}
 .ocean-v2 .onb .onb-kicker{color:var(--ob-lime)}
-.ocean-v2 .onb{background:radial-gradient(120% 80% at 50% 0%,#2a66f0,#1440b8 55%,#0b2d7a)}
+.ocean-v2 .onb{background:radial-gradient(120% 80% at 50% 0%,#2a66f0,var(--t-nav-c) 55%,var(--t-deep))}
 
 /* ---------- En-têtes Défis, Profil, Voyages ---------- */
 .ocean-v2 #chalTop{background:linear-gradient(90deg,rgba(11,45,122,.94) 0%,rgba(11,45,122,.78) 42%,rgba(31,85,224,.18) 100%),url('assets/design/protect.webp') right 56%/cover!important;border:0!important;color:#fff;box-shadow:var(--ob-shadow-lg)}
-.ocean-v2 #profTop{background:radial-gradient(ellipse at 88% 0%,rgba(224,255,145,.22),transparent 55%),linear-gradient(125deg,#0b2d7a,#1f55e0)!important;border:0!important;color:#fff;box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 #profTop{background:radial-gradient(ellipse at 88% 0%,rgba(224,255,145,.22),transparent 55%),linear-gradient(125deg,var(--t-deep),var(--t-main2))!important;border:0!important;color:#fff;box-shadow:var(--ob-shadow-lg)}
 .ocean-v2 #profTop .ph-lvl{background:var(--ob-lime);color:var(--ob-navy)}
 
 /* ---------- Explorer : en-tête de destination lisible, états actifs cobalt ---------- */
@@ -223,7 +223,7 @@ body.ocean-v2{color:var(--ob-ink)}
 .ocean-v2 #detail .im-eyebrow{color:var(--ob-cobalt)}
 .ocean-v2 #detail .im-terrain-copy li>span{background:var(--ob-sky);color:var(--ob-cobalt)}
 .ocean-v2 .experience-video-search>span:first-child{background:var(--ob-sky);color:var(--ob-cobalt)}
-.ocean-v2 .area-map-heading button{background:var(--ob-sky);border-color:#b9cbf5;color:var(--ob-cobalt)}
+.ocean-v2 .area-map-heading button{background:var(--ob-sky);border-color:var(--t-line);color:var(--ob-cobalt)}
 .ocean-v2 .area-map-heading button:hover{background:#d6e2ff}
 
 /* Accueil */
@@ -243,7 +243,7 @@ body.ocean-v2{color:var(--ob-ink)}
 .trip-checklist label.done span{color:#8a97b3}
 .trip-spot-results em{color:var(--ob-muted)}
 .ocean-v2 #fieldOverview.is-compact .field-compare-slot{padding:0;border:0}
-.ocean-v2 #fieldOverview.is-compact .spot-compare-button{background:#fff;color:var(--ob-cobalt);border-color:#b9cbf5;min-height:40px}
+.ocean-v2 #fieldOverview.is-compact .spot-compare-button{background:#fff;color:var(--ob-cobalt);border-color:var(--t-line);min-height:40px}
 .ocean-v2 #fieldOverview.is-compact .spot-compare-button.selected{background:var(--ob-cobalt);color:#fff;border-color:var(--ob-cobalt)}
 
 /* ---------- Deuxième passe : écrans secondaires ---------- */
@@ -277,7 +277,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px soli
 .ocean-v2 .nospot{display:flex;flex-direction:column;align-items:center;gap:6px;padding:34px 18px;border:1px dashed #c9d6f3;border-radius:18px;background:var(--ob-sky);color:var(--ob-muted)}
 .ocean-v2 .nospot b{color:var(--ob-navy);font-size:15px}
 .ocean-v2 .nospot span{font-size:12.5px}
-.ocean-v2 .nospot button{margin:8px auto 0;min-height:42px;border-radius:999px;border:1px solid #b9cbf5;background:#fff;color:var(--ob-cobalt)}
+.ocean-v2 .nospot button{margin:8px auto 0;min-height:42px;border-radius:999px;border:1px solid var(--t-line);background:#fff;color:var(--ob-cobalt)}
 .ocean-v2 .nospot button+button{margin-top:0}
 
 /* Voyages */

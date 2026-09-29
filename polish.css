@@ -68,8 +68,8 @@ body.has-app-back #detail .back-btn{display:none}
 .sd.today .dd{box-shadow:0 0 0 2px #e0ff91,0 0 0 4px rgba(33,84,220,.35)}
 
 /* ---------- Réglages ---------- */
-.set-about a{color:#2154dc;font-weight:700;text-decoration:none;border-bottom:1px solid rgba(33,84,220,.25)}
-.set-about a:hover{border-bottom-color:#2154dc}
+.set-about a{color:var(--t-main);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(33,84,220,.25)}
+.set-about a:hover{border-bottom-color:var(--t-main)}
 .settings-btn svg{display:block;margin:auto}
 
 /* ---------- Communauté : ouverture prochaine ---------- */
@@ -79,10 +79,10 @@ body.has-app-back #detail .back-btn{display:none}
 .community-service-state.is-soon p{margin:0 0 12px}
 .community-service-state.is-soon>div{min-width:0}
 @media (max-width:520px){.community-service-state.is-soon{flex-direction:column;gap:12px}.community-service-state.is-soon img{width:56px;height:56px;border-radius:16px}}
-.community-service-state.is-soon button{background:#2154dc;color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer}
+.community-service-state.is-soon button{background:var(--t-main);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer}
 
 /* ---------- Hors connexion ---------- */
-body.is-offline .app-chrome::after{content:'Hors connexion';position:absolute;left:50%;bottom:-11px;translate:-50% 0;background:#0b2d7a;color:#e0ff91;font:700 10px/1 var(--body,system-ui);letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;box-shadow:0 6px 16px -6px rgba(0,0,0,.35)}
+body.is-offline .app-chrome::after{content:'Hors connexion';position:absolute;left:50%;bottom:-11px;translate:-50% 0;background:var(--t-deep);color:#e0ff91;font:700 10px/1 var(--body,system-ui);letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;box-shadow:0 6px 16px -6px rgba(0,0,0,.35)}
 
 /* ---------- Moins d'animations ---------- */
 .reduce-motion .rv{opacity:1!important;translate:none!important}
@@ -92,12 +92,12 @@ body.is-offline .app-chrome::after{content:'Hors connexion';position:absolute;le
 .chrome-sound{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;border:1px solid #dce6e0;background:#fff;color:#50756d;cursor:pointer;transition:background-color .2s ease,color .2s ease,scale .15s ease}
 .chrome-sound svg{width:19px;height:19px}
 .chrome-sound:active{scale:.92}
-.chrome-sound.on{background:#e0ff91;border-color:#c9ec6e;color:#0b2d7a;animation:obSoundPulse 2.8s ease-in-out infinite}
+.chrome-sound.on{background:#e0ff91;border-color:#c9ec6e;color:var(--t-deep);animation:obSoundPulse 2.8s ease-in-out infinite}
 @keyframes obSoundPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,255,145,.0)}50%{box-shadow:0 0 0 6px rgba(224,255,145,.45)}}
 @media (max-width:639px){.chrome-sound{margin-left:auto;width:38px;height:38px}.chrome-sound+.mobile-search{margin-left:0}}
 
 /* ---------- Partage d'un spot ---------- */
-.hero-share{position:absolute;z-index:5;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:#0b2d7a;box-shadow:0 6px 16px rgba(0,0,0,.18);cursor:pointer;transition:scale .15s ease}
+.hero-share{position:absolute;z-index:5;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:var(--t-deep);box-shadow:0 6px 16px rgba(0,0,0,.18);cursor:pointer;transition:scale .15s ease}
 .hero-share svg{width:19px;height:19px}
 .hero-share:active{scale:.92}
 

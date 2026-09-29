@@ -1,7 +1,7 @@
 /* Cockpit d’accueil et palette unifiée (dernière couche).
    Abysse structure, cobalt agit, corail appelle, citron vert signale l’état actif. */
 :root{
-  --ob-abyss:#0a2b3e;--ob-abyss-2:#0f3a52;--ob-cobalt:#2154dc;--ob-cobalt-deep:#133b8c;
+  --ob-abyss:#0a2b3e;--ob-abyss-2:#0f3a52;--ob-cobalt:var(--t-main);--ob-cobalt-deep:#133b8c;
   --ob-coral:#fc754f;--ob-coral-hi:#ff8e6e;--ob-lime:#dfff89;--ob-sand:#f5f5f0;--ob-ink:#172c45;
   --ob-muted:#5f7183;--ob-line:#dde3e6;--ob-card:#fff;
   --ob-ease:cubic-bezier(.22,1,.36,1);
