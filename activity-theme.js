@@ -21,8 +21,8 @@
   }
   function size(){if(!cv)return;const d=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);}
   function seed(kind){
-    const r=Math.random,n={bubbles:20,sparkle:14,foam:16,drift:12,wind:12}[kind]||0;list=[];
-    for(let i=0;i<n;i++)list.push({x:r()*W,y:r()*H,s:1.5+r()*4,v:.2+r()*.6,p:r()*7,l:50+r()*130,a:.25+r()*.45});
+    const r=Math.random,n=cur==='plongee'?30:({bubbles:20,sparkle:14,foam:16,drift:12,wind:12}[kind]||0);list=[];
+    for(let i=0;i<n;i++){const big=cur==='plongee'&&i%7===0;list.push({x:r()*W,y:r()*H,s:big?6+r()*5:1.5+r()*4,v:big?.7+r()*.4:.2+r()*.6,p:r()*7,l:50+r()*130,a:.25+r()*.45});}
   }
   function frame(now){
     raf=requestAnimationFrame(frame);
@@ -61,7 +61,7 @@
     const meta=document.querySelector('meta[name=theme-color]');
     if(id!==cur){
       cur=id;stop();list=[];
-      if(id){root.dataset.act=id;root.style.setProperty('--act-scene',`url("assets/transitions/${id}.webp")`);}
+      if(id){root.dataset.act=id;root.style.setProperty('--act-scene',`url("assets/transitions/${id}.webp?v=3")`);}
       else{delete root.dataset.act;root.style.removeProperty('--act-scene');}
       if(meta)meta.content=id?COLORS[id]:'#1a4fd6';
       root.classList.add('act-swapped');clearTimeout(set.t);set.t=setTimeout(()=>root.classList.remove('act-swapped'),900);
@@ -69,7 +69,7 @@
     chip(id);start();
   }
   /* Aperçu dans le choix d’activité : le fond suit la carte touchée. */
-  function preview(id){const o=document.getElementById('onb');if(!o)return;if(id&&COLORS[id]){o.dataset.act=id;o.style.setProperty('--act-scene',`url("assets/transitions/${id}.webp")`);}else{delete o.dataset.act;}}
+  function preview(id){const o=document.getElementById('onb');if(!o)return;if(id&&COLORS[id]){o.dataset.act=id;o.style.setProperty('--act-scene',`url("assets/transitions/${id}.webp?v=3")`);}else{delete o.dataset.act;}}
   addEventListener('load',()=>{try{set(typeof activeSport!=='undefined'?activeSport:null);}catch(_){}});
   /* Zoom de page bloqué (Safari iOS ignore user-scalable=no) ; les vues qui zooment elles-mêmes sont épargnées. */
   const ZOOMABLE='.omap,.og-canvas,.maplibregl-map,.leaflet-container,.spot-gallery,.voyage,.immersion-mode,[data-zoomable]';

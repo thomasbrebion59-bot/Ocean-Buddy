@@ -1,0 +1,53 @@
+{
+  "fg": {
+    "surf": {
+      "pick": "a",
+      "why": "Visage et silhouette plus proches de la référence, geste plus fluide et planche bien lisible. Les deux variantes présentent toutefois trop de taches et ne respectent pas leur implantation imposée.",
+      "redo": true
+    },
+    "bodyboard": {
+      "pick": "a",
+      "why": "Position couchée plus explicite, équipement mieux dégagé et ensemble plus compact. Les deux variantes modifient la carte des cinq taches ; les attaches des bras superposés restent ambiguës.",
+      "redo": true
+    },
+    "baignade": {
+      "pick": "b",
+      "why": "Dôme et expression plus cohérents avec les autres activités, appuis sur la bouée plus lisibles. Les deux variantes dépassent les cinq taches autorisées et ne conservent pas leur disposition.",
+      "redo": true
+    },
+    "paddle": {
+      "pick": "a",
+      "why": "Visage plus fidèle à la référence et regard expressif, prise de pagaie plus convaincante. B allonge davantage le corps et les bras. Les deux versions présentent une carte de taches non conforme.",
+      "redo": true
+    },
+    "kayak": {
+      "pick": "a",
+      "why": "Expression, volume du manteau et posture plus proches du Poulpy de référence. B réduit les yeux et étire le corps en buste. A reste à refaire pour les taches et la clarification des bras autour de la pagaie.",
+      "redo": true
+    },
+    "snorkeling": {
+      "pick": "a",
+      "why": "Silhouette plus compacte, regard vivant et bras moins étirés que B. Les deux variantes changent la répartition des taches ; les bras arrière ne permettent pas de valider clairement les huit attaches.",
+      "redo": true
+    },
+    "plongee": {
+      "pick": "a",
+      "why": "Manteau plus rond et silhouette radiale plus proche de la référence. B accentue un buste séparé et un bras en forme de coude. Les deux variantes restent non conformes à la carte des cinq taches.",
+      "redo": true
+    },
+    "kitesurf": {
+      "pick": "a",
+      "why": "A dégage légèrement mieux le titre, mais les deux variantes montrent uniquement l’aile : Poulpy, la planche et le geste sont absents. Aucun premier plan ne répond à la demande.",
+      "redo": true
+    },
+    "windsurf": {
+      "pick": "a",
+      "why": "Poulpy plus compact, visage plus proche de la référence et appuis mieux répartis. B transforme davantage les bras en jambes et étire le corps. Les deux cartes de taches sont non conformes.",
+      "redo": true
+    }
+  },
+  "kayak_bg": {
+    "pick": "c",
+    "why": "Zone sombre du titre plus homogène, profondeur mieux étagée et lumière chaude venant de gauche plus compatible avec le premier plan A. Le cadrage laisse davantage respirer les falaises. Les montages fournis ne permettent pas de certifier le détourage des sources à 200 %."
+  }
+}

@@ -4,13 +4,13 @@
    2. geste : le décor et Poulpy (calques séparés, assets/transitions/{id}.webp et {id}-fg.webp) bougent en parallaxe ;
    3. le titre et le nombre de spots apparaissent ;
    4. une forme propre à l’activité révèle l’app déjà thémée.
-   Tout est animé en transform / opacity / clip-path + un canvas léger (12 particules au plus) : 60 i/s visés sur téléphone.
+   Tout est animé en transform / opacity / clip-path + un canvas léger (12 particules au plus, ~40 bulles-sprites pour la plongée) : 60 i/s visés sur téléphone.
    Un toucher passe directement à la révélation. Mouvement réduit : fondu de 250 ms. */
 (() => {
   'use strict';
   /* Position du premier plan dans le cadre 900×1350 (scripts/build-transition-layers.py → layers.json). */
   let LAYERS={};
-  fetch('assets/transitions/layers.json').then(r=>r.ok?r.json():{}).then(j=>{LAYERS=j||{};}).catch(()=>{});
+  fetch("assets/transitions/layers.json?v=3").then(r=>r.ok?r.json():{}).then(j=>{LAYERS=j||{};}).catch(()=>{});
 
   /* in : forme du cache ; out : forme de la révélation ; bg : [x,y,échelle] départ → arrivée (px à 390 de large) ;
      fg : [x,y,rotation,échelle] entrée → repos, fgOut : [x,y] pendant la sortie ; bob : flottaison (px) ;
@@ -22,8 +22,8 @@
     paddle:{tint:'#38d8d0',veil:'#0f9e86',in:'rise',out:'wave-down',bg:[[0,0,1.08],[-9,0,1.06]],fg:[[-75,45,-2,.93],[16,-8,3,1.03]],fgOut:[35,-10],fx:'wake',line:1},
     kayak:{tint:'#1455d9',veil:'#4c9a25',in:'sides',out:'slit',bg:[[0,0,1.04],[0,0,1.12]],fg:[[25,125,7,.96],[-12,0,-3,1]],fgOut:[-8,-10],fx:'glints'},
     snorkeling:{tint:'#38d8d0',veil:'#0a9aa2',in:'rise',out:'wave-down',bg:[[0,0,1.08],[0,-12,1.06]],fg:[[95,25,7,.96],[-18,-8,-4,1]],fgOut:[-40,-10],bob:5,fx:'bubbles',caustics:1,gauge:3},
-    plongee:{tint:'#08255b',veil:'#08255b',in:'drop',out:'hole',bg:[[0,0,1.1],[0,-24,1.05]],fg:[[30,-75,-8,.95],[0,18,3,1]],fgOut:[0,40],fx:'bubbles',gauge:18,ticks:1},
-    kitesurf:{tint:'#ff7564',veil:'#ee5741',in:'diag',out:'diag-out',bg:[[0,0,1.1],[-14,0,1.08]],fg:[[130,-50,20,.9],[-40,-70,-8,1]],fgOut:[220,-160],fx:'kitelines',fgTop:1},
+    plongee:{tint:'#08255b',veil:'#08255b',in:'drop',out:'hole',bg:[[0,0,1.1],[0,-24,1.05]],fg:[[30,-75,-8,.95],[0,18,3,1]],fgOut:[0,40],fx:'dive',gauge:18,ticks:1},
+    kitesurf:{tint:'#ff7564',veil:'#ee5741',in:'diag',out:'diag-out',bg:[[0,0,1.1],[-14,0,1.08]],fg:[[130,-50,20,.9],[-40,-70,-8,1]],fgOut:[220,-160],fx:'kitelines',fgTop:1,fg2:[[-120,60,-10,.94],[10,0,4,1]],fg2Out:[-60,40]},
     windsurf:{tint:'#ffe16b',veil:'#7a44d8',in:'sail',out:'diag-out',bg:[[0,0,1.1],[-16,0,1.08]],fg:[[-105,40,-9,.95],[22,-5,2,1]],fgOut:[260,-20],bounce:.6,fx:'wake',segments:1}
   };
   const T={cover:420,gesture:1450,title:2200,end:2800};
@@ -36,7 +36,7 @@
     if(!cache.has(src)){const i=new Image();i.decoding='async';i.src=src;cache.set(src,(i.decode?i.decode():new Promise((r,j)=>{i.onload=r;i.onerror=j;})).then(()=>i).catch(()=>null));}
     return cache.get(src);
   }
-  const load=id=>Promise.all([img(`assets/transitions/${id}.webp`),img(`assets/transitions/${id}-fg.webp`)]);
+  const load=id=>Promise.all([img(`assets/transitions/${id}.webp?v=3`),img(`assets/transitions/${id}-fg.webp?v=3`),FX[id]?.fg2?img(`assets/transitions/${id}-fg2.webp?v=3`):null]);
   /* Les calques se préparent en tâche de fond, une fois l’app au calme. */
   (window.requestIdleCallback||setTimeout)(()=>Object.keys(FX).forEach((id,i)=>setTimeout(()=>load(id),i*500)),{timeout:6000});
 
@@ -83,14 +83,43 @@
 
   /* ---------- Détails dessinés (canvas, 12 éléments au plus) ---------- */
   function detail(kind,W,H){
-    const R=Math.random,list=[];let last=null;
+    const R=Math.random,list=[];
     for(let i=0;i<12;i++)list.push({t0:R(),x:R(),y:R(),s:R(),v:R()});
-    return (ctx,g,now,anchor)=>{
+    /* Bulles : sprite pré-rendu (contour, reflet, cœur translucide), puis simples drawImage. */
+    let sprite=null,soft=null,deep=null;
+    if(kind==='bubbles'||kind==='dive'){
+      const mk=(blur)=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d');
+        if(blur){const gr=x.createRadialGradient(32,32,4,32,32,30);gr.addColorStop(0,'rgba(255,255,255,.05)');gr.addColorStop(.72,'rgba(210,245,255,.16)');gr.addColorStop(.9,'rgba(255,255,255,.34)');gr.addColorStop(1,'rgba(255,255,255,0)');x.fillStyle=gr;x.fillRect(0,0,64,64);return c;}
+        const gr=x.createRadialGradient(26,24,2,32,32,30);gr.addColorStop(0,'rgba(255,255,255,.28)');gr.addColorStop(.6,'rgba(170,235,255,.1)');gr.addColorStop(1,'rgba(170,235,255,.02)');
+        x.beginPath();x.arc(32,32,29,0,7);x.fillStyle=gr;x.fill();x.lineWidth=3;x.strokeStyle='rgba(255,255,255,.75)';x.stroke();
+        x.beginPath();x.ellipse(22,20,7,4.5,-.7,0,7);x.fillStyle='rgba(255,255,255,.95)';x.fill();
+        x.beginPath();x.arc(42,44,3,0,7);x.fillStyle='rgba(255,255,255,.5)';x.fill();return c;};
+      sprite=mk(false);soft=mk(true);
+      if(kind==='dive'){deep=[];
+        /* 3 familles : chapelet du détendeur, colonnes sur les côtés, grosses bulles floues au premier plan. */
+        for(let i=0;i<16;i++)deep.push({f:'reg',t0:i/16,s:.35+R()*.65,w:R()*9});
+        for(let i=0;i<22;i++){const c=i%4;deep.push({f:'col',c,t0:R(),s:.2+R()*.8,v:.55+R()*.6,w:R()*9});}
+        for(let i=0;i<5;i++)deep.push({f:'big',t0:R(),x:R(),s:R(),v:.9+R()*.5});
+      }
+    }
+    const bub=(ctx,x,y,r,a,img)=>{ctx.globalAlpha=a;ctx.drawImage(img||sprite,x-r,y-r,r*2,r*2);ctx.globalAlpha=1;};
+    return (ctx,g,now,anchor,anchor2)=>{
       ctx.clearRect(0,0,W,H);if(!anchor)return;
       const [ax,ay,aw,ah]=anchor;
       if(kind==='bubbles'){
-        for(const q of list.slice(0,9)){const side=q.x<.5?q.x*.22:.78+q.x*.22,sp=.5+q.v;const y=H*(1.05-((g*sp+q.t0)%1.15));const x=W*side+Math.sin(now/400+q.t0*9)*6,r=2+q.s*5;
-          ctx.beginPath();ctx.arc(x,y,r,0,7);ctx.strokeStyle='rgba(255,255,255,.6)';ctx.lineWidth=1.2;ctx.stroke();ctx.beginPath();ctx.arc(x-r*.3,y-r*.3,r*.25,0,7);ctx.fillStyle='rgba(255,255,255,.85)';ctx.fill();}
+        for(const q of list.slice(0,9)){const side=q.x<.5?q.x*.22:.78+q.x*.22,sp=.5+q.v;const y=H*(1.05-((g*sp+q.t0)%1.15));const x=W*side+Math.sin(now/400+q.t0*9)*6;bub(ctx,x,y,3+q.s*6,.9);}
+      }else if(kind==='dive'){
+        const sec=now/1000;
+        /* Colonnes lointaines : petites, lentes, sur les bords, hors zone du titre. */
+        const cols=[W*.07,W*.2,W*.83,W*.94];
+        for(const q of deep){
+          if(q.f==='col'){const k=(sec*q.v*.32+q.t0)%1,y=H*(1.08-k*1.2),x=cols[q.c]+Math.sin(sec*2.2+q.w)*(4+k*6);bub(ctx,x,y,1.6+q.s*3.4,.35+.45*Math.sin(k*Math.PI));}
+          else if(q.f==='reg'){ /* Chapelet qui s’échappe du détendeur de Poulpy et grossit en montant. */
+            const k=(sec*.55+q.t0)%1,ox=ax+aw*.72,oy=ay+ah*.36;const y=oy-k*(oy+30),x=ox+Math.sin(sec*3+q.w+k*6)*(3+k*14)+k*18;
+            bub(ctx,x,y,(2+q.s*4)*(1+k*1.4),Math.min(1,k*6)*(1-Math.max(0,(k-.85)/.15)));}
+          else{ /* Premier plan : grosses bulles floues, rapides, parallaxe forte. */
+            const k=(sec*q.v*.42+q.t0)%1,y=H*(1.15-k*1.35),x=(q.x<.5?q.x*.3:.7+q.x*.3)*W+Math.sin(sec*1.4+q.t0*9)*12;bub(ctx,x,y,14+q.s*22,.8,soft);}
+        }
       }else if(kind==='foam'){
         for(const q of list.slice(0,8)){const k=(g*1.6+q.t0)%1;const x=ax+aw*(.2+q.x*.5)-k*aw*.7,y=ay+ah*(.75+q.y*.2)+k*20*(q.s-.5);
           ctx.beginPath();ctx.arc(x,y,(3+q.s*5)*(1-k),0,7);ctx.fillStyle=`rgba(255,245,223,${.9*(1-k)})`;ctx.fill();}
@@ -105,7 +134,8 @@
         for(const q of list.slice(0,3)){const x=(q.x*W+g*90*(q.v+.5))%W,y=H*(.62+q.y*.3);const a=.35+.35*Math.sin(now/260+q.t0*9);ctx.beginPath();ctx.ellipse(x,y,14+q.s*16,2.5,0,0,7);ctx.fillStyle=`rgba(255,245,223,${a})`;ctx.fill();}
         for(let i=0;i<2;i++){const k=(g*1.2+i*.5)%1;ctx.beginPath();ctx.arc(ax+aw*(i?.95:.05),ay+ah*.8,8+k*22,Math.PI*.1,Math.PI*.9);ctx.strokeStyle=`rgba(255,255,255,${.7*(1-k)})`;ctx.lineWidth=2;ctx.stroke();}
       }else if(kind==='kitelines'){
-        const bx=W*.18,by=H*1.02,k1=[ax+aw*.25,ay+ah*.78],k2=[ax+aw*.7,ay+ah*.88];ctx.lineWidth=1.3;ctx.strokeStyle='rgba(8,37,91,.55)';
+        /* Lignes : de l’aile jusqu’à la barre tenue par Poulpy (haut du second calque), sinon vers le bas de l’écran. */
+        const bx=anchor2?anchor2[0]+anchor2[2]*.28:W*.18,by=anchor2?anchor2[1]+anchor2[3]*.12:H*1.02,k1=[ax+aw*.25,ay+ah*.78],k2=[ax+aw*.7,ay+ah*.88];ctx.lineWidth=1.3;ctx.strokeStyle='rgba(8,37,91,.55)';
         for(const [x,y] of [k1,k2]){ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo((x+bx)/2+18,(y+by)/2,bx,by);ctx.stroke();}
         for(const q of list.slice(0,3)){const k=(g*1.5+q.t0)%1,y=H*(.25+q.y*.5),x=-80+k*(W+160);if(x>W*.25&&x<W*.75&&y>H*.3&&y<H*.6)continue;ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(x+40,y-6,x+80,y);ctx.strokeStyle=`rgba(255,255,255,${.55*Math.sin(k*Math.PI)})`;ctx.lineWidth=2;ctx.stroke();}
       }
@@ -123,14 +153,15 @@
     const n=count(id);
     const el=document.createElement('div');el.className='act-tr';el.dataset.act=id;el.setAttribute('aria-hidden','true');
     el.style.setProperty('--tint',fx.tint);el.style.setProperty('--veil',fx.veil);
-    el.innerHTML=`<div class="act-tr-scene"></div>${fx.caustics?'<div class="act-tr-caustics"></div>':''}<img class="act-tr-fg" alt=""><canvas class="act-tr-fx"></canvas><div class="act-tr-veil"></div>
+    el.innerHTML=`<div class="act-tr-scene"></div>${fx.caustics?'<div class="act-tr-caustics"></div>':''}<img class="act-tr-fg" alt="">${fx.fg2?'<img class="act-tr-fg act-tr-fg2" alt="">':''}<canvas class="act-tr-fx"></canvas><div class="act-tr-veil"></div>
       <div class="act-tr-title"><img class="act-tr-badge" src="assets/poulpy/icons/${id}.jpg" alt=""><b>${sport.label}</b>${fx.line?'<i class="act-tr-line"></i>':''}${n?`<small>${n} spots t’attendent</small>`:''}${fx.gauge?`<span class="act-tr-gauge">${fx.ticks?'<em></em><em></em><em></em>':''}<span>0</span> m</span>`:''}${fx.segments?'<span class="act-tr-seg"><em></em><em></em><em></em></span>':''}</div>`;
     const live=document.getElementById('a11yLive');if(live)live.textContent=`${sport.label} : ${n} spots`;
-    const [bgImg,fgImg]=await Promise.race([load(id),new Promise(r=>setTimeout(()=>r([null,null]),reduced()?150:380))]);
-    const scene=el.querySelector('.act-tr-scene'),fgEl=el.querySelector('.act-tr-fg'),veil=el.querySelector('.act-tr-veil'),title=el.querySelector('.act-tr-title'),cv=el.querySelector('.act-tr-fx');
+    const [bgImg,fgImg,fg2Img]=await Promise.race([load(id),new Promise(r=>setTimeout(()=>r([null,null,null]),reduced()?150:380))]);
+    const scene=el.querySelector('.act-tr-scene'),fgEl=el.querySelector('.act-tr-fg:not(.act-tr-fg2)'),fg2El=el.querySelector('.act-tr-fg2'),veil=el.querySelector('.act-tr-veil'),title=el.querySelector('.act-tr-title'),cv=el.querySelector('.act-tr-fx');
     if(bgImg)scene.style.backgroundImage=`url(${bgImg.src})`;
     const box=LAYERS[id];
     if(fgImg&&box)fgEl.src=fgImg.src;else fgEl.remove();
+    const box2=LAYERS[id+'#2'];if(fg2El){if(fg2Img&&box2)fg2El.src=fg2Img.src;else fg2El.remove();}
 
     if(reduced()){
       document.body.append(el);el.classList.add('is-fade');
@@ -151,6 +182,12 @@
       const cx=Math.max(w/2+6,Math.min(W-w/2-6,fx0+(box.x+box.w/2)*fw));
       const y=top?Math.max(H*.05,fy0+box.y*fh):Math.min(H*.95,fy0+(box.y+box.h)*fh)-h;
       fgRect=[cx-w/2,y,w,h];Object.assign(fgEl.style,{left:fgRect[0]+'px',top:fgRect[1]+'px',width:fgRect[2]+'px',height:fgRect[3]+'px'});}
+    let fg2Rect=null;
+    if(fg2El&&fg2El.isConnected){
+      const k=Math.min(W*.7/(box2.w*fw),H*.34/(box2.h*fh),1.2),w=box2.w*fw*k,h=box2.h*fh*k;
+      const cx=Math.max(w/2+6,Math.min(W-w/2-6,fx0+(box2.x+box2.w/2)*fw)),y=Math.min(H*.95,fy0+(box2.y+box2.h)*fh)-h;
+      fg2Rect=[cx-w/2,y,w,h];Object.assign(fg2El.style,{left:fg2Rect[0]+'px',top:fg2Rect[1]+'px',width:w+'px',height:h+'px'});
+    }
     cv.width=W*dpr;cv.height=H*dpr;const ctx=cv.getContext('2d');ctx.scale(dpr,dpr);
     const draw=detail(fx.fx,W,H);
     const gauge=title.querySelector('.act-tr-gauge>span'),ticks=[...title.querySelectorAll('.act-tr-gauge em,.act-tr-seg em')],line=title.querySelector('.act-tr-line');
@@ -188,7 +225,16 @@
           fgEl.style.opacity=clamp(g*5).toFixed(3);
           anchor=[fgRect[0]+x*u,fgRect[1]+y*u,fgRect[2]*sc,fgRect[3]*sc];
         }else anchor=[W*.3,H*.62,W*.4,H*.2];
-        draw(ctx,g,ms,anchor);
+        let anchor2=null;
+        if(fg2Rect){
+          const [f0,f1]=fx.fg2,k=easeOut(clamp(g*1.3));const live=clamp(g*2.2-.6);
+          let x=lerp(f0[0],f1[0],k)+Math.sin(ms/650)*4*live,y=lerp(f0[1],f1[1],k)+Math.sin(ms/400)*5*live,rot=lerp(f0[2],f1[2],k)+Math.sin(ms/500)*2*live,sc=lerp(f0[3],f1[3],k);
+          x+=fx.fg2Out[0]*re;y+=fx.fg2Out[1]*re;
+          fg2El.style.transform=`translate3d(${(x*u).toFixed(2)}px,${(y*u).toFixed(2)}px,0) rotate(${rot.toFixed(2)}deg) scale(${sc.toFixed(4)})`;
+          fg2El.style.opacity=clamp(g*5).toFixed(3);
+          anchor2=[fg2Rect[0]+x*u,fg2Rect[1]+y*u,fg2Rect[2]*sc,fg2Rect[3]*sc];
+        }
+        draw(ctx,g,ms,anchor,anchor2);
         /* 3. Titre. */
         const ti=clamp((t-(T.gesture-80))/300),to=clamp((t-T.title-60)/260);
         title.style.opacity=(ti*(1-to)).toFixed(3);
