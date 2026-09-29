@@ -27,7 +27,7 @@
   enhanceSpotlight();
   window.openChat=function(){
     const first=!chatSeeded;if(first)chatSeeded=true;originalOpen();refreshContext();
-    if(first){addMsg('bot',endpoint?'Salut, moi c’est <b>Poulpy IA</b> 🐙 ! Je peux t’aider pour un spot, un voyage, la météo marine, la sécurité, le matériel et l’écologie de l’océan.':'Salut, moi c’est <b>Poulpy</b> 🐙 ! Mon <b>guide intégré</b> répond déjà à de nombreuses questions sur l’océan. Autorise Poulpy IA si tu veux des réponses plus ouvertes.');}
+    if(first){addMsg('bot',endpoint?'Salut, moi c’est <b>Poulpy IA</b> 🐙 ! Je t’aide sur les spots, les hébergements proches, les comparaisons, la faune marine, la météo marine et la sécurité.':'Salut, moi c’est <b>Poulpy</b> 🐙 ! Mon <b>guide intégré</b> répond déjà à de nombreuses questions sur l’océan. Autorise Poulpy IA si tu veux des réponses plus ouvertes.');}
     if(!busy&&status!=='ready')health();
   };
   document.querySelectorAll('.sidebar-poulpy,.mobile-poulpy').forEach(button=>button.onclick=()=>openChat());
