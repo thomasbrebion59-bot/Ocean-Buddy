@@ -13,7 +13,7 @@
 - Site : https://thomasbrebion59-bot.github.io/Ocean-Buddy/
 - Assistance : https://thomasbrebion59-bot.github.io/Ocean-Buddy/support.html
 - Confidentialité : https://thomasbrebion59-bot.github.io/Ocean-Buddy/privacy.html
-- Contact public autorisé : thomas.brebion59@icloud.com
+- Contact public autorisé : oceanbuddy.contact@gmail.com
 - Prix : gratuite ; l’application actuelle ne contient pas d’achat intégré.
 - Disponibilité/pays : tous les territoires proposés par App Store Connect, sous réserve des obligations réglementaires du compte.
 

@@ -33,7 +33,7 @@ L’application n’a pas encore été publiée sur un store. Une archive 1.1.0 
 
 1. Vérifier l’adhésion Apple Developer Program, l’équipe et l’état réel de l’application dans App Store Connect avec le compte titulaire.
 2. Vérifier dans App Store Connect que l’identifiant de l’archive signée correspond bien à la fiche de l’app.
-3. Vérifier les pages `privacy.html` et `support.html` publiées avec le contact public autorisé par le titulaire : thomas.brebion59@icloud.com.
+3. Vérifier les pages `privacy.html` et `support.html` publiées avec le contact public autorisé par le titulaire : oceanbuddy.contact@gmail.com.
 4. Configurer puis tester Supabase, Netlify et l’envoi des codes par Brevo ; vérifier la modération humaine, les signalements, le blocage et la suppression de compte avant de rendre la communauté disponible dans l’app publiée.
 5. Contrôler les déclarations de confidentialité dans `store/app-store-fr.md`, choisir les pays de distribution et compléter les déclarations de statut du vendeur avec les informations exactes du titulaire.
 6. Tester sur un iPhone physique : localisation refusée/autorisée, export, relance, hors connexion, suppression, clavier, lecteur d’écran et interruption du son ; capturer les écrans définitifs depuis la version signée.
