@@ -987,8 +987,9 @@ function openSpot(id){
   try{renderFaune(s);}catch(e){}
   document.getElementById('dDangers').innerHTML=(Array.isArray(s.dangers)?s.dangers:[]).map(d=>{var m=DANGER_MAP[d[0]]||['pin','#eef4f7','#7c98a8'];return `<div class="danger-item"><span class="di" style="background:${m[1]};color:${m[2]}">${uic(m[0])}</span><span>${esc(d[1])}</span></div>`;}).join('')||'<p>Vérifie les consignes locales avant ta sortie.</p>';
   showDetailCat('infos',false);
-  window.OceanCommunity?.mountSpot(id);
-  window.OceanSpotGuide?.update(s);
+  /* Les modules annexes (communauté, guide, carte) ne doivent jamais bloquer l’ouverture de la fiche. */
+  try{window.OceanCommunity?.mountSpot(id);}catch(e){console.warn('community',e);}
+  try{window.OceanSpotGuide?.update(s);}catch(e){console.warn('guide',e);}
   go('detail');
 }
 function renderSpotSource(s){

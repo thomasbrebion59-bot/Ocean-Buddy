@@ -681,7 +681,7 @@
      avec son cadre (onglet affiché, plein écran, rotation) et ne reste jamais blanche. */
   const GESTURES={'CooperativeGesturesHandler.WindowsHelpText':'Utilise Ctrl + molette pour zoomer la carte','CooperativeGesturesHandler.MacHelpText':'Utilise ⌘ + molette pour zoomer la carte','CooperativeGesturesHandler.MobileHelpText':'Utilise deux doigts pour déplacer la carte'};
   function mini(host,initial){
-    let cfg=initial||{},m=null,ml=null,creating=null,markers=[],pop=null,io=null,ro=null,dead=false,full=false;
+    let cfg=initial||{},m=null,ml=null,creating=null,markers=[],pop=null,io=null,ro=null,dead=false,full=false,ready=false;
     host.classList.add('omini');host.innerHTML=`<div class="omini-canvas"></div><div class="omini-ctrls"><div class="omap-zoom"><button type="button" data-mini="in" aria-label="Zoom avant" title="Zoom avant">${icon('plus')}</button><button type="button" data-mini="out" aria-label="Zoom arrière" title="Zoom arrière">${icon('minus')}</button></div><button type="button" data-mini="fit" aria-label="Recentrer la carte" title="Recentrer">${icon('locate')}</button><button type="button" data-mini="full" aria-label="Carte en plein écran" title="Plein écran">${icon('expand')}</button></div><p class="omap-status omini-status" role="status">Chargement de la carte…</p>`;
     const canvas=host.querySelector('.omini-canvas'),status=host.querySelector('.omini-status');
     host.addEventListener('click',e=>{const b=e.target.closest('[data-mini]');if(!b||!m)return;const k=b.dataset.mini;if(k==='in')m.zoomIn();if(k==='out')m.zoomOut();if(k==='fit')frame(true);if(k==='full')setFull(!full);});
@@ -712,8 +712,8 @@
         pop=new ml.Popup({closeButton:true,className:'omini-pop',maxWidth:'260px',offset:14});
         m.on('click','others',e=>{const f=e.features[0];if(f)spotPopup(f.properties.id,f.geometry.coordinates);});
         m.on('mouseenter','others',()=>{m.getCanvas().style.cursor='pointer';});m.on('mouseleave','others',()=>{m.getCanvas().style.cursor='';});
-        status.hidden=true;apply();
-      })().catch(()=>{if(dead)return;status.hidden=false;status.classList.add('is-error');status.innerHTML='<b>La carte n’a pas pu se charger.</b><span>Vérifie ta connexion, puis réessaie.</span><button type="button">Réessayer</button>';status.querySelector('button').onclick=()=>{status.classList.remove('is-error');status.textContent='Chargement de la carte…';creating=null;try{m?.remove();}catch(_){}m=null;start();};}).finally(()=>{creating=null;});
+        ready=true;status.hidden=true;apply();
+      })().catch(()=>{ready=false;try{m?.remove();}catch(_){}m=null;if(dead)return;status.hidden=false;status.classList.add('is-error');status.innerHTML='<b>La carte n’a pas pu se charger.</b><span>Vérifie ta connexion, puis réessaie.</span><button type="button">Réessayer</button>';status.querySelector('button').onclick=()=>{status.classList.remove('is-error');status.textContent='Chargement de la carte…';creating=null;try{m?.remove();}catch(_){}m=null;start();};}).finally(()=>{creating=null;});
     }
     function spotPopup(id,at){
       const s=SPOTS.find(x=>x.id===id);if(!s||!pop)return;
@@ -724,7 +724,8 @@
     }
     function marker(el,at,anchor='center'){const k=new ml.Marker({element:el,anchor}).setLngLat(at).addTo(m);markers.push(k);return k;}
     function apply(){
-      if(!m)return;
+      /* Tant que la carte charge, la config est gardée : start() l’applique une fois prête. */
+      if(!m||!ready)return;
       markers.forEach(k=>k.remove());markers=[];pop?.remove();
       const focus=cfg.focus&&SPOTS.find(s=>s.id===cfg.focus),steps=(cfg.steps||[]).filter(x=>COORDS[x.id]);
       const hide=new Set([cfg.focus,...steps.map(x=>x.id)]);
@@ -771,7 +772,7 @@
     return {
       update(next){cfg={...cfg,...next};if(m)apply();else start();},
       resize(){if(m){m.resize();frame(false);}else start();},
-      destroy(){dead=true;io?.disconnect();ro?.disconnect();if(full)setFull(false);try{m?.remove();}catch(_){}m=null;},
+      destroy(){dead=true;ready=false;io?.disconnect();ro?.disconnect();if(full)setFull(false);try{m?.remove();}catch(_){}m=null;},
       get map(){return m;}
     };
   }

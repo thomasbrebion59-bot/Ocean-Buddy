@@ -54,7 +54,8 @@
     const focusDot=panel.querySelector('.area-map-legend .is-focus'),first=typeof spotSports==='function'?spotSports(s)[0]:null;if(focusDot&&window.OceanMap?.color)focusDot.style.background=window.OceanMap.color(first);
     const config={focus:s.id,places:[],label:`Carte du secteur autour de ${s.name}`};
     if(!window.OceanMap?.mini){host.innerHTML='<p class="area-map-fallback">La carte interactive est indisponible. Tu peux ouvrir le secteur dans OpenStreetMap.</p>';return;}
-    if(areaMap)areaMap.update(config);else areaMap=window.OceanMap.mini(host,config);
+    /* La carte du secteur ne doit jamais empêcher la fiche de s’ouvrir. */
+    try{if(areaMap)areaMap.update(config);else areaMap=window.OceanMap.mini(host,config);}catch(e){console.warn('area map',e);}
     const request=++areaRequest;
     window.OceanSpotGuide?.around?.(s).then(items=>{
       if(request!==areaRequest||!items?.length)return;
