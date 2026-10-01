@@ -9,6 +9,10 @@ L’utilisateur demande que chaque modification terminée et vérifiée de cette
 - Site : `https://thomasbrebion59-bot.github.io/Ocean-Buddy/`
 - GitHub Pages utilise la racine de `main` ; conserver `.nojekyll`.
 
+## Application mobile
+
+Les apps iOS installées (1.2.0 et plus) se mettent à jour depuis `app-update/` sur GitHub Pages. Quand une modification publiée concerne aussi l’app, lancer `node scripts/publish-app-update.cjs` avant le commit et inclure `app-update/` (voir `mobile/README.md`). Ne jamais publier ainsi un changement qui demande un nouveau plugin ou un réglage natif : il faut alors une version App Store.
+
 ## À la fin d’une modification
 
 Après la dernière modification JavaScript ou CSS, exécuter `python3 scripts/version-assets.py` avant les vérifications finales et le commit. Ce script met à jour les URL des ressources dans `index.html` pour que les visiteurs reçoivent bien la nouvelle version, même si leur navigateur a conservé les anciens fichiers en cache.

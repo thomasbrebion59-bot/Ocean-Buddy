@@ -1,4 +1,4 @@
-import { Capacitor } from '@capacitor/core';
+import { Capacitor, CapacitorHttp } from '@capacitor/core';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
 import { Geolocation } from '@capacitor/geolocation';
@@ -6,6 +6,7 @@ import { Share } from '@capacitor/share';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
 import { Preferences } from '@capacitor/preferences';
 import { StatusBar, Style } from '@capacitor/status-bar';
+import { CapacitorUpdater } from '@capgo/capacitor-updater';
 
 const native=Capacitor.isNativePlatform(), backupKey='oceanbuddy_native_backup_v1';
 let ready=false, pending=Promise.resolve(), lastSnapshot='';
@@ -76,5 +77,53 @@ async function shareJSON(name,data){
   const file=await Filesystem.writeFile({path:'exports/'+Date.now()+'-'+safe,data:JSON.stringify(data,null,2),directory:Directory.Cache,encoding:Encoding.UTF8,recursive:true});
   try{await Share.share({title:name,files:[file.uri],dialogTitle:'Partager ton voyage Ocean Buddy'});}catch(_){/* Closing the native share sheet keeps the trip intact. */}
 }
-window.OceanMobile={native,boot,persist,openExternal,shareJSON,
+
+/* Mises à jour. Le contenu web (écrans, spots, styles) arrive directement dans l’app :
+ * seuls les fichiers modifiés sont téléchargés depuis GitHub Pages, vérifiés par SHA-256,
+ * puis appliqués quand la personne accepte (ou au prochain lancement). Les changements
+ * natifs passent toujours par l’App Store : l’app propose alors d’ouvrir sa fiche. */
+const BUNDLE=__OB_BUNDLE__, UPDATE_BASE=__OB_UPDATE_BASE__;
+const APP_STORE_ID='6811870966', STORE_URL='itms-apps://apps.apple.com/app/id'+APP_STORE_ID;
+const versionCmp=(a,b)=>{const x=String(a).split('.').map(Number),y=String(b).split('.').map(Number);for(let i=0;i<3;i++){const d=(x[i]||0)-(y[i]||0);if(d)return Math.sign(d);}return 0;};
+let liveBundle=null;
+async function appReady(){if(native)await CapacitorUpdater.notifyAppReady().catch(()=>{});}
+// Requêtes natives : pas de cache du WebView ni de dépendance aux en-têtes CORS de l’hébergeur.
+async function getJSON(url){
+  const r=await CapacitorHttp.get({url:url+(url.includes('?')?'&':'?')+'t='+Date.now(),headers:{'Cache-Control':'no-cache'}});
+  if(r.status<200||r.status>=300)throw Error('HTTP '+r.status+' '+url);
+  return typeof r.data==='string'?JSON.parse(r.data):r.data;
+}
+async function checkLiveUpdate(){
+  if(!native)return null;
+  if(liveBundle)return liveBundle;
+  const [latest,info]=await Promise.all([getJSON(UPDATE_BASE+'latest.json'),App.getInfo()]);
+  if(!latest||!(Number(latest.seq)>BUNDLE.seq))return null;
+  if(versionCmp(info.version,latest.native_min)<0)return {kind:'store'};
+  if(latest.native_max&&versionCmp(info.version,latest.native_max)>0)return null;
+  const version=String(latest.seq);
+  let bundle=(await CapacitorUpdater.list()).bundles.find(b=>b.version===version&&['pending','success'].includes(b.status));
+  if(!bundle){
+    const manifest=await getJSON(UPDATE_BASE+latest.manifest);
+    bundle=await CapacitorUpdater.download({url:UPDATE_BASE+latest.manifest,version,
+      manifest:manifest.files.map(([file_name,file_hash])=>({file_name,file_hash,download_url:UPDATE_BASE+'files/'+file_hash}))});
+  }
+  // Sans réponse de la personne, la nouvelle version s’installe dès que l’app passe en arrière-plan.
+  await CapacitorUpdater.next({id:bundle.id});
+  liveBundle={kind:'live',id:bundle.id,seq:latest.seq};
+  return liveBundle;
+}
+async function applyLiveUpdate(){if(liveBundle){await persist().catch(()=>{});await CapacitorUpdater.set({id:liveBundle.id});}}
+async function checkStoreUpdate(){
+  if(Capacitor.getPlatform()!=='ios')return null;
+  const info=await App.getInfo(), region=(navigator.language.split('-')[1]||'fr').toLowerCase();
+  for(const country of [region,'fr']){
+    const store=(await getJSON(`https://itunes.apple.com/lookup?id=${APP_STORE_ID}&country=${country}`))?.results?.[0]?.version;
+    if(store)return versionCmp(store,info.version)>0?{kind:'store',version:store}:null;
+  }
+  return null;
+}
+const openStore=()=>{location.href=STORE_URL;};
+
+window.OceanMobile={native,boot,persist,openExternal,shareJSON,appReady,bundle:BUNDLE,
+  updates:{checkLive:checkLiveUpdate,applyLive:applyLiveUpdate,checkStore:checkStoreUpdate,openStore},
   getCurrentPosition:(success,failure,options)=>Geolocation.getCurrentPosition(options).then(success).catch(failure)};

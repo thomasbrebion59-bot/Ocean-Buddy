@@ -31,14 +31,17 @@ async function main(){
   }
   fs.writeFileSync(path.join(dest,'vendor/fonts/fonts.css'),css);
   fs.copyFileSync(path.join(root,'mobile/native.css'),path.join(dest,'native.css'));
-  await esbuild.build({entryPoints:[path.join(root,'mobile/client.js')],outfile:path.join(dest,'native.js'),bundle:true,minify:true,format:'iife',target:['safari15','chrome100']});
+  // Numéro du contenu embarqué : les mises à jour directes (scripts/publish-app-update.cjs) le comparent à app-update/latest.json.
+  const seq=Number(process.env.OB_BUNDLE_SEQ)||Number(new Date().toISOString().replace(/\D/g,'').slice(0,12));
+  await esbuild.build({entryPoints:[path.join(root,'mobile/client.js')],outfile:path.join(dest,'native.js'),bundle:true,minify:true,format:'iife',target:['safari15','chrome100'],define:{__OB_BUNDLE__:JSON.stringify({seq}),__OB_UPDATE_BASE__:JSON.stringify(process.env.OB_UPDATE_BASE||'https://thomasbrebion59-bot.github.io/Ocean-Buddy/app-update/')}});
   let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
   html=html.replace(/<link[^>]+https:\/\/fonts\.(?:googleapis|gstatic)\.com[^>]*>\n?/g,'');
   html=html.replace('</head>','<link rel="stylesheet" href="vendor/fonts/fonts.css"><link rel="stylesheet" href="native.css"></head>');
   const scripts=[];html=html.replace(/<script src="([^\"]+)"[^>]*><\/script>/g,(tag,src)=>{if(src.split('?')[0]==='i18n.js')return tag;scripts.push(src);return '';});
-  const loader=`<script src="native.js"></script><script>OceanMobile.boot().then(async()=>{for(const src of ${JSON.stringify(scripts)})await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.body.append(s)});}).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script>`;
+  const loader=`<script src="native.js"></script><script>OceanMobile.boot().then(async()=>{for(const src of ${JSON.stringify(scripts)})await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.body.append(s)});await OceanMobile.appReady();}).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script>`;
   html=html.replace('</body>',loader+'</body>');fs.writeFileSync(path.join(dest,'index.html'),html);
   if(/https:\/\/(fonts\.|unpkg\.com)/.test(html))throw Error('Remote boot dependencies remain');
-  console.log(`Mobile bundle ready: ${scripts.length} local scripts, fonts and map engine included.`);
+  fs.writeFileSync(path.join(dest,'bundle.json'),JSON.stringify({seq})+'\n');
+  console.log(`Mobile bundle ${seq} ready: ${scripts.length} local scripts, fonts and map engine included.`);
 }
 main().catch(error=>{console.error(error);process.exit(1)});

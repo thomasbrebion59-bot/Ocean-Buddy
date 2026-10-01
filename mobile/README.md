@@ -1,6 +1,6 @@
 # Ocean Buddy sur iOS et Android
 
-Version du projet : 1.1.0 (build 2). Identifiant : `io.github.thomasbrebion59bot.oceanbuddy`.
+Version du projet : 1.2.0 (build 202610011). Identifiant : `io.github.thomasbrebion59bot.oceanbuddy`.
 
 Capacitor embarque le catalogue, les photographies, les polices, Leaflet et le moteur de relief dans l’application. La météo, les tuiles cartographiques, Poulpy IA et la communauté nécessitent internet. La galerie, le son et le relief restent facultatifs. Les données du site et celles de chaque installation mobile sont séparées.
 
@@ -15,6 +15,24 @@ npm run open:ios
 Node 22+ et Xcode 26+ sont requis. La première version native cible l’iPhone avec iOS 16.4 minimum (dialogues et API JavaScript utilisées par l’interface). Le projet Xcode utilise Swift Package Manager ; CocoaPods n’est pas nécessaire. Les dépendances sont verrouillées dans package-lock.json et le fichier Package.resolved généré par Xcode. Ne jamais copier `.tools`, les identifiants de connexion ou les fichiers `.env` dans une application distribuée.
 
 `mobile/www` et les copies natives `public` sont générées et ignorées par Git. Relancer `npm run sync:mobile` après toute modification du site. Les visuels de lancement et l’icône utilisent le Poulpy corrigé déjà validé dans le projet.
+
+## Mises à jour directes (sans App Store)
+
+Depuis la 1.2.0, l’app reçoit les nouveautés du site sans repasser par Apple (`@capgo/capacitor-updater`, en mode manuel, sans serveur Capgo ni statistiques) :
+
+1. au démarrage et au retour dans l’app (30 min minimum entre deux vérifications), elle lit `app-update/latest.json` sur GitHub Pages par une requête native ;
+2. si le contenu est plus récent, elle télécharge seulement les fichiers absents de l’app installée (`app-update/files/<sha256>`, chaque fichier vérifié par son empreinte) et réutilise tout le reste ;
+3. une fenêtre Poulpy propose « Mettre à jour maintenant » ; sinon, la nouvelle version s’installe dès que l’app passe en arrière-plan ;
+4. si la nouvelle version ne démarre pas (pas d’appel à `notifyAppReady` en 15 s), l’app revient seule à la version précédente.
+
+Publier une mise à jour pour les téléphones, après une modification vérifiée du site :
+
+```sh
+node scripts/publish-app-update.cjs   # construit mobile/www, remplit app-update/
+git add app-update && git commit && git push origin HEAD:main
+```
+
+Seul le contenu web peut passer ainsi (HTML, CSS, JS, images, données). Un nouveau plugin, une autorisation ou un réglage natif exigent une version App Store. Pour chaque build envoyé à Apple, enregistrer d’abord sa référence avec `node scripts/publish-app-update.cjs --baseline <version>` (dans `mobile/ota-baselines/`), puis `npx cap sync` et archiver avec ce même `mobile/www`. Les apps plus anciennes que `--native-min` (par défaut la dernière référence) reçoivent plutôt une fenêtre « Ouvrir l’App Store » dès que l’App Store propose une version plus récente.
 
 ## Fonctions natives
 
