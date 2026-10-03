@@ -10099,8 +10099,8 @@
     ],
     "world": "oc",
     "coords": {
-      "lat": -16.5,
-      "lon": -151.74
+      "lat": -16.537,
+      "lon": -151.736
     },
     "coordinatePrecision": "coastal-sector",
     "waterType": "sea",

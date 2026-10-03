@@ -70,7 +70,9 @@
   }
   /* Aperçu dans le choix d’activité : le fond suit la carte touchée. */
   function preview(id){const o=document.getElementById('onb');if(!o)return;if(id&&COLORS[id]){o.dataset.act=id;o.style.setProperty('--act-scene',`url("assets/transitions/${id}.webp?v=4")`);}else{delete o.dataset.act;}}
-  addEventListener('load',()=>{try{set(typeof activeSport!=='undefined'?activeSport:null);}catch(_){}});
+  /* L’app native injecte les scripts après « load » : on applique alors l’activité tout de suite. */
+  const initial=()=>{try{set(typeof activeSport!=='undefined'?activeSport:null);}catch(_){}};
+  if(document.readyState==='complete')setTimeout(initial,0);else addEventListener('load',initial);
   /* Zoom de page bloqué (Safari iOS ignore user-scalable=no) ; les vues qui zooment elles-mêmes sont épargnées. */
   const ZOOMABLE='.omap,.og-canvas,.maplibregl-map,.leaflet-container,.spot-gallery,.voyage,.immersion-mode,[data-zoomable]';
   const own=e=>e.target&&e.target.closest&&e.target.closest(ZOOMABLE);

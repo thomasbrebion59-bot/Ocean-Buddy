@@ -39,8 +39,11 @@
   function fallbackButton(question){const b=document.createElement('button');b.type='button';b.className='msg-btn';b.textContent='Consulter le guide intégré';b.onclick=()=>{if(busy)return;b.disabled=true;addMsg('bot','<b>Guide intégré</b> · réponse issue du contenu de l’application.');try{localReply(question);}catch(_){addMsg('bot','Ouvre une fiche de spot ou choisis une activité pour retrouver les repères du guide.');}};$('#chatMsgs .msg:last-child .bubble2')?.append(b);}
   window.chatSend=async function(question){
     question=String(question||'').trim();if(!question||busy||choosing)return;if(question.length>1000){toast('Raccourcis ta question à 1 000 caractères.');return;}
-    let aiMode='local';if(endpoint){choosing=true;reset.disabled=true;try{aiMode=await window.OceanPrivacy.choose();}finally{choosing=false;reset.disabled=false;}}
-    const s=refreshContext();addMsg('user',esc(question));setBusy(true);showTyping();
+    /* Première question : la bulle s’affiche avant la carte de consentement (sinon la question semblait perdue). */
+    let aiMode='local',shown=false;
+    if(endpoint&&!window.OceanPrivacy.getMode?.()){addMsg('user',esc(question));shown=true;}
+    if(endpoint){choosing=true;reset.disabled=true;try{aiMode=await window.OceanPrivacy.choose();}finally{choosing=false;reset.disabled=false;}}
+    const s=refreshContext();if(!shown)addMsg('user',esc(question));setBusy(true);showTyping();
     if(!endpoint||aiMode!=='ai'){hideTyping();status='local';try{localReply(question);}finally{setBusy(false);setChatStatus();}return;}
     healthSequence++;status='busy';setChatStatus();controller=new AbortController();const timer=setTimeout(()=>controller.abort(),Math.min(cfg.timeoutMs||30000,45000));
     try{

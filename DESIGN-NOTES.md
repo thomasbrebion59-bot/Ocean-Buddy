@@ -1,3 +1,30 @@
+# Ocean Buddy 1.3 — la vraie Terre (octobre 2026)
+
+## La planète
+
+Le globe (`ocean-globe.js`) montre la vraie Terre, à partir d’images de la NASA (domaine public) construites par `scripts/build-globe-earth.py <dossier NASA>` :
+
+- `earth-day-{4k,8k}.webp` : Blue Marble Next Generation (juillet 2004), couleurs réelles. Le téléphone n’utilise que la 4K.
+- `earth-normal-4k.webp` : pente du relief (GEBCO, exagérée ×28) et masque de l’eau pour le reflet du soleil.
+- `earth-sky-4k.webp` : lumières des villes (Black Marble 2016), nuages (Blue Marble) et glaces.
+- `sky-2k.webp` et `stars.bin` : voie lactée et 9 000 étoiles réelles (NASA SVS Deep Star Maps 2020), placées selon l’heure sidérale.
+
+Le shader calcule l’éclairage (terminateur rougi), la diffusion de l’atmosphère (bleu au limbe), le reflet du soleil sur l’océan, l’ombre des nuages et les lumières de la nuit. Deux éclairages : « studio » (soleil en haut à gauche de la caméra, réglage par défaut) et « jour et nuit réels » (position du soleil calculée pour l’instant présent). Les nuages dérivent et la Terre tourne doucement tant qu’on ne l’a pas touchée ; l’animation s’arrête quand le globe est caché ou au repos depuis une minute. Les emblèmes des pays ne sont plus affichés (`opts.emblems` pour les réactiver).
+
+En zoomant, la carte détaillée commence sur la même image satellite (NASA GIBS, Blue Marble) puis passe au style clair en deux niveaux de zoom. Sur écran tactile, la bascule se fait à 1 200 km de large (600 km sur ordinateur, qui charge la 8K).
+
+## La coque d’application (`app-shell.css`, `app-shell.js`)
+
+Conventions iOS 26 : barre d’onglets flottante en verre (Accueil, Explorer, Voyages, Défis, Profil ; Communauté reste dans la barre latérale et le profil), bouton Poulpy rond à côté, en-tête translucide dont le titre apparaît au défilement, grands titres, barre discrète au défilement vers le bas. Textes de 11 px au minimum sur téléphone. L’onglet Explorer ouvre la planète en plein écran (recherche flottante, filtres en verre sombre, continents en photos dans le tiroir, boutons soleil réel, nuages et « Surprends-moi »). La fiche d’un spot affiche sa photo jusqu’en haut de l’écran. La barre d’état de l’app iOS suit le fond (`ocean:statusbar`, `mobile/client.js`).
+
+## Envies de départ
+
+- Accueil (`home-feed.js/css`) : la Terre en ouverture, « Où partir en <mois> ? » (meilleure saison tirée des carnets de destination, `data/seasons.json` construit par `scripts/build-seasons.cjs`), puis des collections (lagons, vagues de légende, plongées, l’été au frais, débuter en douceur, îles lointaines). Seules les vraies photos servent de couverture ; les rails changent chaque jour.
+- Filtre « En saison ce mois-ci » sur la carte et dans la liste.
+- Trophées (`badges.js/css`, `assets/badges/`) : 13 médailles émaillées (GPT-6 Astra), rareté selon la difficulté, vitrine, fiche 3D, célébration et carte à partager.
+- Passeport océan (`passport.js`) : carte du monde des spots visités et des favoris, pays et continents.
+- Fenêtre « Nouveautés » une fois après la mise à jour.
+
 # Notes de conception et vérification — Surf trips
 
 ## Identité

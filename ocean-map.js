@@ -26,7 +26,9 @@
   let terrainOpener=null,terrainUnderlying=[];
   /* Globe 3D (ocean-globe.js) pour la vue d’ensemble ; la carte MapLibre prend le relais en « plongée »
      sous DIVE_KM de large et rend la main au globe au-delà de RISE_KM (écart pour éviter les allers-retours). */
-  const DIVE_KM=600,RISE_KM=1100,WORLD_KM=7000,HOME={lat:30,lon:-8};
+  /* Téléphone : la texture du globe y est en 4K, la carte satellite prend donc le relais plus tôt (images plus nettes). */
+  const coarse=matchMedia('(pointer:coarse)').matches;
+  const DIVE_KM=coarse?1200:600,RISE_KM=coarse?2100:1100,WORLD_KM=7000,HOME={lat:30,lon:-8};
   let planet=null,planetStarting=null,planetFailed=false,planetTries=0,mode='globe',modeTimer=0,diving=false;
   const useGlobe=()=>!planetFailed&&!!window.OceanGlobe?.supported();
 
@@ -85,20 +87,23 @@
     ]};
   }
 
-  /* Plongée depuis le globe : la carte démarre dans les teintes du globe (terres sable, mer bleue),
-     puis s’éclaircit en deux niveaux de zoom vers le style clair habituel. */
+  /* Plongée depuis le globe : la carte démarre sur la même image satellite que la planète
+     (NASA Blue Marble, service GIBS, domaine public), puis passe en deux niveaux de zoom
+     au style clair habituel, plus lisible de près. */
+  const GIBS='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg';
   function diveStyle(st,z0){
-    const z1=z0+2.4,Z=(dark,light)=>['interpolate-hcl',['linear'],['zoom'],z0,dark,z1,light];
+    const z1=z0+2.4,Z=(dark,light)=>['interpolate-hcl',['linear'],['zoom'],z0+.5,dark,z1,light];
     const set=(id,prop,value)=>{const layer=st.layers.find(l=>l.id===id);if(layer)layer.paint[prop]=value;};
-    set('land','background-color',Z('#E9DFC4','#f5f6f0'));
-    set('ice','fill-color',Z('#F7F9FA','#fbfcff'));
-    set('wood','fill-color',Z('#DFD6B8','#e7eedf'));
-    set('water','fill-color',Z('#2A86B8','#c9dbfc'));
-    set('river','line-color',Z('#3E92C4','#c9dbfc'));
-    set('road-major','line-color',Z('#F4EEDD','#ffffff'));
-    set('border-region','line-color',Z('#CDBF9C','#d3d8e4'));
-    set('border-country','line-color',Z('#A08A60','#aab5cd'));
-    set('sea-name','text-color',Z('#E6F4F8','#5f82cf'));set('sea-name','text-halo-color',Z('rgba(11,45,122,.45)','rgba(201,219,252,.8)'));
+    st.sources.nasa={type:'raster',tiles:[GIBS],tileSize:256,maxzoom:8,attribution:'Images satellite : NASA Blue Marble (GIBS)'};
+    const at=st.layers.findIndex(l=>l.id==='building');
+    /* L’océan du globe est bleui par l’atmosphère : un voile bleu sur l’eau garde la même teinte à la plongée. */
+    st.layers.splice(at<0?st.layers.length:at,0,{id:'nasa',type:'raster',source:'nasa',paint:{'raster-opacity':['interpolate',['linear'],['zoom'],z0+.4,1,z1+.6,0],'raster-fade-duration':0,'raster-resampling':'linear'}},
+      {id:'nasa-sea',type:'fill',source:'omt','source-layer':'water',filter:['!=',['get','brunnel'],'tunnel'],paint:{'fill-color':'#2a5fc4','fill-opacity':['interpolate',['linear'],['zoom'],z0+.4,.4,z1+.6,0]}});
+    set('sea-name','text-color',Z('#E6F4F8','#5f82cf'));set('sea-name','text-halo-color',Z('rgba(2,10,30,.55)','rgba(201,219,252,.8)'));
+    for(const id of ['country-major','country','state','city-major','city']){set(id,'text-color',Z('#F4F7FF',id.startsWith('city')?'#34426a':'#51607f'));set(id,'text-halo-color',Z('rgba(2,10,30,.6)',id.startsWith('city')?'#ffffff':'#f5f6f0'));}
+    set('border-country','line-color',Z('rgba(255,255,255,.45)','#aab5cd'));
+    set('border-region','line-color',Z('rgba(255,255,255,.25)','#d3d8e4'));
+    set('road-major','line-color',Z('rgba(255,255,255,.35)','#ffffff'));
     return st;
   }
 
@@ -128,7 +133,7 @@
     empty=document.createElement('div');empty.className='omap-empty';empty.hidden=true;
     status=document.createElement('p');status.className='omap-status';status.setAttribute('role','status');status.textContent='Chargement de la carte…';
     const planetHost=document.createElement('div');planetHost.className='omap-globe';
-    const credit=document.createElement('p');credit.className='omap-credit';credit.textContent='Relief marin : Natural Earth';
+    const credit=document.createElement('p');credit.className='omap-credit';credit.textContent='Images : NASA Blue Marble, Black Marble et ciel SVS';
     host.before(stage);stage.append(host,planetHost,credit,filters,ctrls,card,empty,status);wrap.prepend(panel);
     wrap.classList.toggle('is-globe',useGlobe());
     list=panel.querySelector('.omap-list');
@@ -165,7 +170,7 @@
   function renderFilters(){
     const base=candidates(),count=id=>id?base.filter(s=>spotSports(s).includes(id)).length:base.length;
     const scroll=filters.querySelector('.omap-acts')?.scrollLeft||0;
-    const levels=[['all','Tous les niveaux'],['debutant','Débutant'],['intermediaire','Intermédiaire'],['expert','Expert'],['variable','Niveau à évaluer'],['new','Nouveaux spots']];
+    const levels=[['all','Tous les niveaux'],['season','En saison ce mois-ci'],['debutant','Débutant'],['intermediaire','Intermédiaire'],['expert','Expert'],['variable','Niveau à évaluer'],['new','Nouveaux spots']];
     filters.innerHTML=`<label class="omap-level"><span class="omap-sr">Niveau</span><select data-map-level aria-label="Niveau">${levels.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select></label><div class="omap-acts" role="group" aria-label="Activités">${[{id:'',label:'Tout explorer'},...SPORTS].map(s=>{const n=count(s.id);return `<button type="button" data-map-sport="${s.id}" aria-pressed="${(activeSport||'')===s.id}" ${n||!s.id?'':'disabled'} style="--c:${s.id?color(s.id):'#0b2d7a'}"><i aria-hidden="true"></i><span>${esc(s.label)}</span><small>${n}</small></button>`;}).join('')}</div>`;
     filters.querySelector('select').value=currentFilter;filters.querySelector('.omap-acts').scrollLeft=scroll;
     revealActivity();
@@ -261,12 +266,17 @@
     if(found.length>12&&map.getZoom()<9){map.easeTo({center:e.lngLat,zoom:Math.min(map.getZoom()+2.5,12),duration:600});return;}
     showStack(found.map(f=>f.properties.id));
   }
+  /* Explorer en plein écran (app-shell.js) : recherche et filtres en haut, tiroir et onglets en bas. */
+  const immersive=()=>document.body.classList.contains('explore-immersive');
+  let topProbe=null;
+  const safeTop=()=>{if(!topProbe){topProbe=document.createElement('div');topProbe.style.cssText='position:fixed;top:0;left:0;width:0;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none';document.body.append(topProbe);}return topProbe.offsetHeight||0;};
   function pad(){
+    if(immersive()){const card2=card&&!card.hidden?card.offsetHeight+20:0;return {top:safeTop()+120,bottom:Math.max(card2,150)+90,left:24,right:64};}
     const m=mobile(),w=stage?.clientWidth||0,top=m?(filters?.offsetHeight||40)+26:30;
     return {top:Math.min(top,120),bottom:m?(card&&!card.hidden?card.offsetHeight+80:80):(card&&!card.hidden?40:30),left:m?24:(card&&!card.hidden&&w>900?440:48),right:m?60:84};
   }
   /* Marges du globe : sur mobile, filtres en haut et tiroir de liste en bas. */
-  function planetPad(){return mobile()?{top:Math.min((filters?.offsetHeight||40)+18,110),bottom:64,left:0,right:0}:{top:0,bottom:0,left:0,right:0};}
+  function planetPad(){if(immersive())return {top:safeTop()+110,bottom:200,left:0,right:0};return mobile()?{top:Math.min((filters?.offsetHeight||40)+18,110),bottom:64,left:0,right:0}:{top:0,bottom:0,left:0,right:0};}
   /* Petit côté de la zone utile : la même mesure relie les km du globe et le zoom de la carte. */
   function side(){const p=planetPad(),w=stage?.clientWidth||innerWidth,h=stage?.clientHeight||innerHeight;return Math.max(1,Math.min(w-p.left-p.right,h-p.top-p.bottom));}
   const clampLat=lat=>Math.max(-70,Math.min(70,lat));
@@ -282,8 +292,9 @@
     if(planet)return Promise.resolve(planet);
     if(planetStarting)return planetStarting;
     const host=stage.querySelector('.omap-globe');
+    let prefs={};try{prefs=JSON.parse(localStorage.getItem('oceanbuddy_globe')||'{}')||{};}catch(_){}
     planetStarting=window.OceanGlobe.create(host,{
-      minWidthKm:DIVE_KM,
+      minWidthKm:DIVE_KM,lighting:prefs.light,clouds:prefs.clouds!==false,
       onSelect:id=>select(id),
       onEmpty:()=>deselect(),
       onView:()=>{if(mode!=='globe')return;worldState();clearTimeout(listTimer);listTimer=setTimeout(updateList,90);},

@@ -25,7 +25,7 @@
     'zh-Hans': '简体中文', 'zh-Hant': '繁體中文'
   };
   var RTL = { ar: 1, he: 1, ur: 1 };
-  var VERSIONS = /*VERSIONS*/{"ar":"aab3b1ead4","bn":"71c466cb70","ca":"dfe868cd88","cs":"973bdaa213","da":"e72b4281af","de":"1a3842a107","el":"1765c897b7","en":"d3f57bf8c1","es":"9cedd83330","fi":"3c3fc85337","gu":"f5ac9d093f","he":"eb83dd32e6","hi":"2da2da1940","hr":"968ed8c9bf","hu":"719d7232aa","id":"bf79955883","it":"a92a4d0ff3","ja":"8f68fb927b","kn":"915060536f","ko":"ef96a14c9c","ml":"44b44c3d1c","mr":"7ab4df7deb","ms":"4432571f7f","nb":"087160a19f","nl":"3a089f6ea5","or":"178e30e48f","pa":"8f1ec5e481","pl":"30656e8bc5","pt-BR":"bd5cdc2abb","pt-PT":"d0a0587cab","ro":"12f106b2c5","ru":"4771dfedb3","sk":"c4f6d25f32","sl":"6162840e0f","sv":"2fcfc15d57","ta":"c93e9e61bc","te":"6647aa8e3d","th":"a2ecad901e","tr":"b3ed9fff51","uk":"6c46b6812b","ur":"29b2cea633","vi":"7b49606c01","zh-Hans":"b7eb496af2","zh-Hant":"8ace085048"}/*/VERSIONS*/;
+  var VERSIONS = /*VERSIONS*/{"ar":"631fd132ca","bn":"ca6afd07c0","ca":"eeccd5b663","cs":"ea7176ddbf","da":"ea0cbcca09","de":"f2d815047a","el":"6fffe02ae3","en":"78eae5f49a","es":"0dfa1d3233","fi":"5e6de510f5","gu":"7e7f4672f3","he":"dccd14ac55","hi":"eefee4d7ea","hr":"74f38b1c6e","hu":"735b768f9e","id":"5142cc9964","it":"6376be4d4b","ja":"b8e4f45688","kn":"fc0774a583","ko":"7059c18787","ml":"c25c5d4170","mr":"4afd69f3fd","ms":"cf67bddfb4","nb":"a1cab1a227","nl":"1da2fd4924","or":"8ddc3a2805","pa":"74a52cb74d","pl":"1169db56c5","pt-BR":"04fc78dee8","pt-PT":"6387cd30fe","ro":"bf0a875a3d","ru":"9b5adc7375","sk":"755057605e","sl":"9d95b01e56","sv":"fdedd92cd3","ta":"33f86334b9","te":"e84e1e49c4","th":"b098938f2e","tr":"9bfd4e58cf","uk":"3143022837","ur":"bcc48fe292","vi":"4efee79d6f","zh-Hans":"6fe8c35dc4","zh-Hant":"965e8b45b9"}/*/VERSIONS*/;
   var STORE_KEY = 'oceanbuddy_lang';
 
   function resolve(tag) {
@@ -134,7 +134,34 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', languagePicker);
   else languagePicker();
 
-  if (lang === 'fr') return; // texte source : rien à traduire
+  // iOS dessine ↗, ▶… en émoji bleu : le sélecteur de variation U+FE0E demande la version texte.
+  var EMOJI_ARROW = /([\u2194-\u2199\u21A9\u21AA\u25B6\u25C0])(?![\uFE0E\uFE0F])/g;
+  var HAS_ARROW = /[\u2194-\u2199\u21A9\u21AA\u25B6\u25C0](?![\uFE0E\uFE0F])/;
+  function textArrows(s) { return s && HAS_ARROW.test(s) ? s.replace(EMOJI_ARROW, '$1\uFE0E') : s; }
+
+  /* Français (pas de dictionnaire) : seules les flèches passent en version texte. */
+  function arrowsOnly() {
+    var fix = function (node) {
+      if (node.nodeType === 3) { var v = node.nodeValue, t = textArrows(v); if (t !== v) node.nodeValue = t; return; }
+      if (node.nodeType !== 1 && node.nodeType !== 9 && node.nodeType !== 11) return;
+      var tw = document.createTreeWalker(node, NodeFilter.SHOW_TEXT), n, list = [];
+      while ((n = tw.nextNode())) if (HAS_ARROW.test(n.nodeValue)) list.push(n);
+      for (var i = 0; i < list.length; i++) fix(list[i]);
+    };
+    fix(document.body);
+    new MutationObserver(function (records) {
+      for (var i = 0; i < records.length; i++) {
+        var m = records[i];
+        if (m.type === 'characterData') fix(m.target);
+        else for (var j = 0; j < m.addedNodes.length; j++) fix(m.addedNodes[j]);
+      }
+    }).observe(document.body, { childList: true, subtree: true, characterData: true });
+  }
+
+  if (lang === 'fr') { // texte source : rien à traduire, seulement les flèches
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrowsOnly); else arrowsOnly();
+    return;
+  }
 
   /* ---------- Chargement du dictionnaire ---------- */
   var base = (function () {
@@ -350,7 +377,7 @@
     }
     text(t.slice(last));
     var tw = document.createTreeWalker(frag, NodeFilter.SHOW_TEXT), n;
-    while ((n = tw.nextNode())) { n.nodeValue = flipArrows(n.nodeValue); done.set(n, n.nodeValue); }
+    while ((n = tw.nextNode())) { n.nodeValue = textArrows(flipArrows(n.nodeValue)); done.set(n, n.nodeValue); }
     while (el.firstChild) el.removeChild(el.firstChild);
     el.appendChild(frag);
     richDone.set(el, richKey(el));
@@ -371,12 +398,13 @@
 
   function doText(node) {
     var v = node.nodeValue;
+    if (v && HAS_ARROW.test(v) && !/[A-Za-zÀ-ÿ]/.test(v)) { var ta = textArrows(v); done.set(node, ta); if (ta !== v) node.nodeValue = ta; return; }
     if (!v || !/[A-Za-zÀ-ÿ]/.test(v) || done.get(node) === v) return;
     if (skipped(node.parentNode)) return;
     var p = node.parentNode;
     if (p && INLINE[p.tagName] && !p.attributes.length) p = p.parentNode;
     if (doRich(p)) return;
-    var t = localNumbers(flipArrows(translate(v)));
+    var t = textArrows(localNumbers(flipArrows(translate(v))));
     done.set(node, t);
     if (t !== v) node.nodeValue = t;
   }

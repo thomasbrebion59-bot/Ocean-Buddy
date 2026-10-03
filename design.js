@@ -38,7 +38,7 @@
   $('.chrome-user').insertAdjacentHTML('beforebegin',`<button class="mobile-search" aria-label="Rechercher un spot">${icon('search')}</button>`);
   function searchEverywhere(query=''){
     window.OceanNavigation?.begin();
-    activeSport=null;currentFilter='all';favOnly=false;nearMode=false;currentSearch='';
+    activeSport=null;chosenSport='all';window.OceanTheme?.set?.(null);currentFilter='all';favOnly=false;nearMode=false;currentSearch='';
     $('#favChip').classList.remove('active');$('#nearBtn').classList.remove('on');
     document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
     renderSportFilters();renderWorlds();

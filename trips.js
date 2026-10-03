@@ -37,7 +37,7 @@
     if(tripMap){tripMap.destroy();tripMap=null;}
     const t=current(),saved=active();
     $('#trips').classList.toggle('has-trip',!!t);$('#trips').classList.toggle('has-saved',saved.length>0);
-    $('#tripContent').innerHTML=`<div class="trip-heading"><div><div class="page-eyebrow">LE VOYAGE COMMENCE AVANT LE DÉPART</div><h1>Les bons spots.<br><span>Dans le bon ordre.</span></h1><p>Rassemble tes envies. Dessine ton itinéraire. Prépare le grand départ.</p></div><button class="trip-primary" data-action="new">${I.plus} Nouveau voyage</button></div>${loadError?`<p class="trip-error" role="alert">${loadError}</p>`:''}
+    $('#tripContent').innerHTML=`<div class="trip-heading"><div><div class="page-eyebrow">LE VOYAGE COMMENCE AVANT LE DÉPART</div><h1>Les bons spots.<br><span>Dans le bon ordre.</span></h1><p>Rassemble tes envies. Dessine ton itinéraire. Prépare le grand départ.</p></div>${saved.length?`<button class="trip-primary" data-action="new">${I.plus} Nouveau voyage</button>`:''}</div>${loadError?`<p class="trip-error" role="alert">${loadError}</p>`:''}
       ${saved.length?`<div class="trip-switch"><button class="${t?'':'active'}" data-action="overview">Mes voyages <b>${saved.length}</b></button>${saved.map(x=>`<button class="${x.id===selected?'active':''}" data-action="select" data-id="${esc(x.id)}">${esc(x.name)}</button>`).join('')}</div>`:''}
       ${t?tripDetail(t):overview(saved)}
       <p class="trip-storage">${loadError?'':I.check+' Ton carnet est enregistré sur cet appareil.'} <a href="photos.html" target="_blank" rel="noopener">Crédits photos</a></p>`;

@@ -33,7 +33,7 @@
   function update(){
     /* Les écrans racines ont la barre d'onglets : un « Retour » y ressemblait à un bug. */
     const scr=document.body.dataset.screen||'home';
-    const isRoot=['home','challenges','community','profile'].includes(scr)||(scr==='spots'&&!spotWorld)||(scr==="trips"&&!window.OceanTrips?.route?.()?.selected);
+    const isRoot=['home','challenges','community','profile'].includes(scr)||(scr==='spots'&&(!spotWorld||spotWorld==='all'&&!spotCountry))||(scr==="trips"&&!window.OceanTrips?.route?.()?.selected);
     const hasBack=entry.index>0&&!isRoot;
     backButton.hidden=!hasBack;document.body.classList.toggle('has-app-back',hasBack);
     const backLabel='Retour vers '+(entry.from||'l’accueil');backButton.setAttribute('aria-label',backLabel);backButton.title=backLabel;
@@ -87,7 +87,7 @@
     activeSport=SPORTMAP[route.sport]?route.sport:null;
     spotWorld=route.world==='all'||worldOf(route.world)?route.world:null;
     spotCountry=typeof route.country==='string'&&route.country?route.country:null;
-    currentFilter=['all','new','debutant','intermediaire','expert'].includes(route.filter)?route.filter:'all';
+    currentFilter=['all','new','season','debutant','intermediaire','expert'].includes(route.filter)?route.filter:'all';
     currentSearch=typeof route.search==='string'?route.search:'';favOnly=!!route.favorites;nearMode=!!route.near&&!!userPos;
     spotShown=Math.max(SPOT_PAGE,Number(route.shown)||SPOT_PAGE);
     $('#spotSearch').value=currentSearch;$('#favChip').classList.toggle('active',favOnly);$('#nearBtn').classList.toggle('on',nearMode);

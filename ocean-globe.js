@@ -1,30 +1,22 @@
-/* Globe 3D des spots — direction artistique « Abysses vivantes » (conçue avec GPT-6 Astra).
-   Une Terre bleu profond dont la bathymétrie réelle (Natural Earth) dessine le paysage ; les spots
-   brillent comme du plancton. three.js n’est chargé qu’à l’ouverture de la carte.
-   La texture porte des mesures (distance à la côte, profondeur, glaces) et le shader applique la
-   palette : les côtes restent nettes même très zoomées. Au-delà du zoom « région », la carte
-   détaillée prend le relais (ocean-map.js). */
+/* Globe 3D des spots — la vraie Terre, vue de l’espace.
+   Images de la NASA (domaine public) : Blue Marble pour la surface, relief GEBCO, nuages Blue Marble,
+   lumières des villes Black Marble 2016, et le vrai ciel (NASA SVS Deep Star Maps 2020) placé selon
+   l’heure sidérale du moment. Le shader calcule l’éclairage du soleil, la diffusion de l’atmosphère
+   (bleu au limbe, rougeoiement au terminateur), le reflet du soleil sur l’océan et les ombres des nuages.
+   Deux éclairages : « studio » (le soleil suit la caméra, la face visible reste éclairée) et « réel »
+   (jour et nuit en direct, position réelle du soleil). three.js n’est chargé qu’à l’ouverture de la carte.
+   Au-delà du zoom « région », la carte détaillée prend le relais (ocean-map.js). */
 (() => {
   'use strict';
   const M=window.OceanMapModel;
   const KM=M.EARTH_KM,RAD=Math.PI/180,FOV=30;
   const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches;
-  /* ---------- Palette « Abysses vivantes » ---------- */
-  const P={
-    ramp:['#5BC3CD','#34AAC6','#218FBC','#1971AE','#14599C','#104486','#0B346F','#0A2858','#081E42','#06152F'],
-    land:'#E9DFC4',ice:'#F7F9FA',lake:'#3E92C4',coast:'#1B4F72',fres:'#79E3EF',spec:'#B8EEFF',
-    atmoIn:'#398CF5',atmoOut:'#79E3EF',border:'#0B2D7A',stars:['#BCD4EA','#FFFFFF'],
-    /* Identité des continents (direction Astra) : base, trait du motif, rehaut.
-       Europe, Afrique, Asie, Amérique du Nord et Caraïbes, Amérique du Sud, Océanie, Antarctique. */
-    cont:[['#E3C9A0','#9E6B4A','#F6E7CC'],['#E0A062','#A5572F','#F2CF8E'],['#E3AFA3','#B0615A','#F7D8CC'],['#E2D08A','#A8904F','#FFF0BE'],
-      ['#CDBF72','#8F8A45','#F0E2A4'],['#EDB98F','#BF8260','#FFE0C2'],['#F3EEDB','#C9C3AF','#FFF9EA']]
-  };
   /* Couleurs des activités, éclaircies pour le fond sombre. */
   const GLOW={surf:'#5C88FF',bodyboard:'#81B2FF',baignade:'#39CDE8',paddle:'#36CDAF',kayak:'#A1D763',snorkeling:'#FFC34D',plongee:'#6889D6',kitesurf:'#FF8068',windsurf:'#BD8AFF'};
   const glow=id=>GLOW[id]||'#5C88FF';
 
   /* Version des fichiers du globe (moteur, textures, données), recalculée par scripts/version-assets.py. */
-  const ASSET_V='30e5ce643b8b';
+  const ASSET_V='4af39f01daae';
   const asset=path=>new URL(path+'?v='+ASSET_V,document.baseURI).href;
   const NEEDED=['WebGLRenderer','ShaderMaterial','InstancedBufferGeometry','Line','OrthographicCamera','CanvasTexture'];
   let threeLoading=null;
@@ -42,79 +34,119 @@
   }
   function supported(){try{const c=document.createElement('canvas');return !!c.getContext('webgl2');}catch(_){return false;}}
 
-  const EARTH_V=`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
-  const EARTH_F=`
-    uniform sampler2D uMap,uCult,uPat,uRel;uniform float uRelOn;uniform vec2 uTex;uniform vec3 uLight,uCam;
-    uniform vec3 uRamp[10];uniform vec3 uLand,uIce,uLake,uCoast,uFres,uSpec,uHaze;
-    uniform vec3 uBase[7],uAcc1[7],uAcc2[7];
-    uniform float uCoastA,uCoastW,uReveal,uLandReveal,uPatScale,uPatA,uCultOn;
-    varying vec3 vPos;
+  /* ---------- Soleil et ciel réels ----------
+     Formules de l’Astronomical Almanac (précision ≈ 0,01°), largement suffisantes pour l’éclairage. */
+  function sky(date=new Date()){
+    const d=(date.getTime()-Date.UTC(2000,0,1,12))/864e5;
+    const g=(357.529+.98560028*d)*RAD,q=280.459+.98564736*d;
+    const L=(q+1.915*Math.sin(g)+.02*Math.sin(2*g))*RAD,e=(23.439-3.6e-7*d)*RAD;
+    const ra=Math.atan2(Math.cos(e)*Math.sin(L),Math.cos(L))/RAD,dec=Math.asin(Math.sin(e)*Math.sin(L))/RAD;
+    const gmst=((280.46061837+360.98564736629*d)%360+360)%360;
+    return {gmst,sun:{lat:dec,lon:M.wrapLon(ra-gmst)}};
+  }
+
+  /* Repère local et coordonnées équirectangulaires, communs aux shaders de la Terre et des nuages. */
+  const GEO=`
     const float PI=3.141592653589793;
-    vec3 ramp(float d){d=clamp(d,1.,10.);int i=int(floor(d));float f=d-float(i);return mix(uRamp[max(i-1,0)],uRamp[min(i,9)],f);}
-    /* Motif du continent k : atlas 4 × 2 de tuiles, projection triplanaire (ni couture ni étirement aux pôles). */
-    vec2 patTap(int k,vec2 q,vec2 gx,vec2 gy){vec2 o=vec2(float(k-4*(k/4))*.25,.5-float(k/4)*.5);return textureGrad(uPat,o+fract(q)*vec2(.25,.5),gx*vec2(.25,.5),gy*vec2(.25,.5)).rg;}
-    vec2 pattern(int k,vec3 n){
-      vec3 p=n*uPatScale,b=pow(abs(n),vec3(4.));b/=b.x+b.y+b.z;
-      vec3 px=dFdx(p),py=dFdy(p);
-      return patTap(k,p.yz,px.yz,py.yz)*b.x+patTap(k,p.xz,px.xz,py.xz)*b.y+patTap(k,p.xy,px.xy,py.xy)*b.z;
-    }
-    void main(){
-      vec3 n=normalize(vPos);
-      float u=atan(n.x,n.z)/(2.*PI)+.5,v=asin(clamp(n.y,-1.,1.))/PI+.5;
-      /* Couture à ±180° : on prend les dérivées de la coordonnée continue (méthode de Tarini). */
-      float u2=fract(u+.5);
-      vec2 dx=vec2(dFdx(u),dFdx(v)),dy=vec2(dFdy(u),dFdy(v));
+    const vec3 BR=vec3(.175,.41,1.);
+    /* Lumière du soleil après la traversée de l’atmosphère : elle rougit près du terminateur. */
+    vec3 sunTint(float mu){return exp(-BR*.09*min(1./(max(mu,0.)+.025),40.));}
+    /* Coordonnées de texture et dérivées sans couture à ±180° (méthode de Tarini). */
+    void geo(vec3 n,out vec2 uv,out vec2 dx,out vec2 dy){
+      float u=atan(n.x,n.z)/(2.*PI)+.5,v=asin(clamp(n.y,-1.,1.))/PI+.5,u2=fract(u+.5);
+      dx=vec2(dFdx(u),dFdx(v));dy=vec2(dFdy(u),dFdy(v));
       float dx2=dFdx(u2),dy2=dFdy(u2);
       if(abs(dx2)+abs(dy2)<abs(dx.x)+abs(dy.x)){dx.x=dx2;dy.x=dy2;}
-      vec3 t=textureGrad(uMap,vec2(u,v),dx,dy).rgb;
-      float tpp=max(length(dx*uTex),length(dy*uTex));
-      float sdf=(t.r*255.-128.)/16.;
-      float w=clamp(max(fwidth(sdf),tpp),1e-3,8.);
-      float land=smoothstep(-.5*w,.5*w,sdf);
-      float depth=t.g*255./25.;
-      /* Relief réel (Natural Earth) : profondeur continue et détail des fonds, ombrage des montagnes. */
-      vec3 rel=textureGrad(uRel,vec2(u,v),dx,dy).rgb;
-      depth=mix(depth,clamp(depth+(1.+rel.b*9.-depth)*.35,1.,10.),uRelOn*smoothstep(1.2,2.,depth));
-      vec3 water=ramp(depth);
-      water*=1.+(rel.g-.5)*1.1*uRelOn;
-      water=mix(uRamp[4],water,uReveal);
-      water=mix(water,uLake,1.-smoothstep(.25,.8,depth));
-      /* Terres : palette du continent (fondue aux frontières), nuance propre à chaque pays, motif artisanal. */
-      vec3 c=textureGrad(uCult,vec2(u,v),dx,dy).rgb;
-      float kf=clamp((c.r*255.-18.)/36.,0.,6.);int k0=int(floor(kf)),k1=min(k0+1,6);float kt=kf-float(k0);
-      vec3 ground=mix(uBase[k0],uBase[k1],kt)*(.93+.14*c.g);
-      ground=mix(ground,mix(uAcc1[k0],uAcc1[k1],kt),(c.b-.5)*.12);
-      if(uPatA>.001){
-        vec2 pa=mix(pattern(k0,n),kt>.001?pattern(k1,n):vec2(0.),kt);
-        ground=mix(ground,mix(uAcc1[k0],uAcc1[k1],kt),pa.x*uPatA);
-        ground=mix(ground,mix(uAcc2[k0],uAcc2[k1],kt),pa.y*uPatA*.8);
-      }
-      ground=mix(uLand,ground,uCultOn);
-      ground*=1.+(rel.r-.5)*2.4*uRelOn*clamp(.55+tpp*.9,.55,1.);
-      vec3 col=mix(water,mix(ground,uIce,t.b*.7),land*uLandReveal);
-      float hw=.5*uCoastW*w;
-      float line=(1.-smoothstep(hw-.5*w,hw+.5*w,abs(sdf)))*(1.-smoothstep(4.,8.,tpp)*.5);
-      col=mix(col,uCoast,line*uCoastA);
-      vec3 V=normalize(uCam-vPos);
-      float ndv=max(dot(n,V),0.);
-      /* Terres plus uniformément éclairées : elles restent lisibles jusqu’au bord du globe. */
-      float lit=max(dot(n,uLight),0.);
-      col*=mix(.62+.38*lit,.8+.2*lit,land);
-      float F=pow(1.-ndv,3.5);
-      col=mix(col,uHaze,F*.3);
-      col+=uFres*.16*F;
+      uv=vec2(u,v);
+    }`;
+  const EARTH_V=`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
+  const EARTH_F=`
+    uniform sampler2D uDay,uNorm,uSky;uniform vec3 uSun,uCam;
+    uniform float uCloudOff,uCloudA,uRelief,uNight,uExpo,uSpec,uReveal;
+    varying vec3 vPos;
+    ${GEO}
+    void main(){
+      vec3 n=normalize(vPos);vec2 uv,dx,dy;geo(n,uv,dx,dy);
+      vec3 albedo=textureGrad(uDay,uv,dx,dy).rgb;
+      vec3 nm=textureGrad(uNorm,uv,dx,dy).rgb;
+      vec3 sk=textureGrad(uSky,uv,dx,dy).rgb;
+      float water=smoothstep(.25,.75,nm.b);
+      /* Relief : pente est / nord de la texture, dans le repère local du point. */
+      float lon=(uv.x-.5)*2.*PI,lat=(uv.y-.5)*PI;
+      vec3 east=vec3(cos(lon),0.,-sin(lon)),north=vec3(-sin(lat)*sin(lon),cos(lat),-sin(lat)*cos(lon));
+      vec2 s=(nm.rg-.5)*2.*uRelief*(1.-water);
+      vec3 N=normalize(n*sqrt(max(1.-dot(s,s),.05))+east*s.x+north*s.y);
+      vec3 V=normalize(uCam-vPos),L=uSun;
+      float mu=dot(n,L),ndv=max(dot(n,V),0.);
+      vec3 sunC=sunTint(mu);
+      /* Ombre des nuages, décalée vers le soleil. */
+      vec3 tl=L-n*mu;
+      vec2 off=vec2(dot(tl,east)/max(cos(lat),.15)/(2.*PI),dot(tl,north)/PI)*.006;
+      float cs=textureGrad(uSky,uv+vec2(uCloudOff,0.)+off,dx,dy).g*uCloudA;
+      float diff=max(dot(N,L),0.)*smoothstep(-.03,.06,mu);
+      vec3 col=albedo*sunC*diff*(1.-.5*cs)*uExpo;
+      /* Océan : reflet du soleil (GGX) et du ciel (Fresnel). */
+      vec3 H=normalize(L+V);
+      float nh=max(dot(n,H),0.),vh=max(dot(V,H),0.);
+      float F=.02+.98*pow(1.-vh,5.),a2=.07,dd=nh*nh*(a2-1.)+1.;
+      float glint=a2/(PI*dd*dd)*F*max(mu,0.)/max(4.*ndv,.25);
+      col+=water*uSpec*glint*sunC*(1.-.85*cs);
+      col+=water*(.02+.98*pow(1.-ndv,5.))*vec3(.3,.5,.95)*.3*smoothstep(-.05,.3,mu);
+      /* Nuit : lumières des villes, voilées par les nuages. */
+      col+=vec3(1.,.64,.33)*sk.r*sk.r*(1.-smoothstep(-.16,.05,mu))*(1.-.7*cs)*uNight;
+      /* Atmosphère vue du dessus : extinction et diffusion (bleu, surtout vers le limbe). */
+      vec3 ext=exp(-BR*.1/(ndv+.06));
+      col=col*ext+(1.-ext)*vec3(.3,.55,1.)*sunC*smoothstep(-.25,.35,mu)*1.05;
+      col=mix(vec3(.004,.012,.035),col,uReveal);
       gl_FragColor=vec4(col,1.);
+      #include <colorspace_fragment>
+    }`;
+  const CLOUD_F=`
+    uniform sampler2D uSky;uniform vec3 uSun,uCam;uniform float uCloudOff,uCloudA,uExpo;
+    varying vec3 vPos;
+    ${GEO}
+    void main(){
+      vec3 n=normalize(vPos);vec2 uv,dx,dy;geo(n,uv,dx,dy);
+      float c=textureGrad(uSky,uv+vec2(uCloudOff,0.),dx,dy).g*uCloudA;
+      if(c<.004)discard;
+      vec3 V=normalize(uCam-vPos);
+      float mu=dot(n,uSun),ndv=max(dot(n,V),0.);
+      vec3 sunC=sunTint(mu);
+      float lit=smoothstep(-.1,.25,mu);
+      vec3 col=sunC*(.18+.82*max(mu,0.))*lit*uExpo*1.02+vec3(.012,.016,.03)*(1.-lit);
+      vec3 ext=exp(-BR*.05/(ndv+.06));
+      col=col*ext+(1.-ext)*vec3(.3,.55,1.)*sunC*lit;
+      gl_FragColor=vec4(col*c,c);
       #include <colorspace_fragment>
     }`;
   const ATMO_V=`varying vec3 vW;void main(){vec4 w=modelMatrix*vec4(position,1.);vW=w.xyz;gl_Position=projectionMatrix*viewMatrix*w;}`;
   const ATMO_F=`
-    uniform vec3 uCam,uIn,uOut;uniform float uThick,uAlpha;varying vec3 vW;
+    uniform vec3 uCam,uSun;uniform float uTop,uI;varying vec3 vW;
+    const vec3 BR=vec3(.175,.41,1.);
+    vec3 sunTint(float mu){return exp(-BR*.09*min(1./(max(mu,0.)+.025),40.));}
     void main(){
       vec3 d=normalize(vW-uCam);
-      float b=length(cross(d,-uCam));
-      float t=clamp((b-1.)/uThick,0.,1.);
-      float a=pow(1.-t,2.6)*uAlpha*step(1.,b+.002);
-      gl_FragColor=vec4(mix(uIn,uOut,smoothstep(0.,.7,t))*a,0.);
+      vec3 pc=uCam+d*max(-dot(uCam,d),0.);
+      float b=length(pc);
+      if(b<1.)discard;
+      /* Densité au point le plus bas du rayon : décroissance exponentielle avec l’altitude. */
+      float h=clamp((b-1.)/(uTop-1.),0.,1.);
+      float dens=exp(-h*3.4)*(1.-smoothstep(.75,1.,h));
+      float mu=dot(pc/b,uSun),ct=dot(d,uSun);
+      float lit=smoothstep(-.32,.22,mu);
+      float phase=.75*(1.+ct*ct)+.5*pow(max(ct,0.),10.);
+      vec3 c=mix(vec3(.55,.78,1.),vec3(.2,.45,1.),smoothstep(0.,.45,h))*dens*lit*sunTint(mu+.08)*phase*uI;
+      gl_FragColor=vec4(c,0.);
+      #include <colorspace_fragment>
+    }`;
+  const SKY_V=`varying vec3 vD;void main(){vD=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
+  const SKY_F=`
+    uniform sampler2D uMw;uniform float uI;varying vec3 vD;
+    void main(){
+      vec3 d=normalize(vD);
+      float ra=atan(d.x,d.z),dec=asin(clamp(d.y,-1.,1.));
+      vec3 c=texture2D(uMw,vec2(fract(.5-ra/6.2831853),.5+dec/3.1415927)).rgb;
+      gl_FragColor=vec4(c*uI,0.);
       #include <colorspace_fragment>
     }`;
   const DOT_V=`
@@ -145,8 +177,11 @@
       gl_FragColor=vec4(rgb*vA,(disk+halo)*vA);
       #include <colorspace_fragment>
     }`;
-  const STAR_V=`attribute float size;attribute vec3 color;varying vec3 vC;uniform float uDpr;void main(){vC=color;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);gl_PointSize=size*uDpr;}`;
-  const STAR_F=`varying vec3 vC;void main(){float r=length(gl_PointCoord*2.-1.);float a=1.-smoothstep(.35,1.,r);if(a<.01)discard;gl_FragColor=vec4(vC*a,0.);
+  /* Étoiles réelles : taille et éclat selon la magnitude, couleur selon la température. */
+  const STAR_V=`attribute float size,glow;attribute vec3 color;varying vec3 vC;varying float vG;uniform float uDpr;
+    void main(){vC=color;vG=glow;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);gl_PointSize=size*uDpr;}`;
+  const STAR_F=`varying vec3 vC;varying float vG;uniform float uI;
+    void main(){float r=length(gl_PointCoord*2.-1.);float a=exp(-r*r*4.5)+vG*exp(-r*r*2.2)*.18;if(a<.01)discard;gl_FragColor=vec4(vC*a*uI,0.);
     #include <colorspace_fragment>
   }`;
 
@@ -170,30 +205,45 @@
     const scene=new T.Scene();
     const camera=new T.PerspectiveCamera(FOV,1,.01,200);
     const col=h=>new T.Color(h);
+    /* Éclairage : « studio » (le soleil suit la caméra, en haut à gauche) ou « réel » (soleil du moment). */
+    let lighting=opts.lighting==='live'?'live':'studio',cloudsOn=opts.clouds!==false;
+    const sunDir=new T.Vector3(),studioSun=new T.Vector3(-.74,.3,.6).normalize();
     const uniEarth={
-      uMap:{value:null},uTex:{value:new T.Vector2(4096,2048)},uLight:{value:new T.Vector3()},uCam:{value:new T.Vector3()},
-      uRamp:{value:P.ramp.map(col)},uLand:{value:col(P.land)},uIce:{value:col(P.ice)},uLake:{value:col(P.lake)},uCoast:{value:col(P.coast)},
-      uFres:{value:col(P.fres)},uSpec:{value:col(P.spec)},uHaze:{value:col(P.atmoIn)},uCoastA:{value:.35},uCoastW:{value:.7},uReveal:{value:0},uLandReveal:{value:0},
-      uCult:{value:null},uPat:{value:null},uRel:{value:null},uRelOn:{value:0},uCultOn:{value:0},uPatScale:{value:12.7},uPatA:{value:0},
-      uBase:{value:P.cont.map(c=>col(c[0]))},uAcc1:{value:P.cont.map(c=>col(c[1]))},uAcc2:{value:P.cont.map(c=>col(c[2]))}
+      uDay:{value:null},uNorm:{value:null},uSky:{value:null},uSun:{value:sunDir},uCam:{value:new T.Vector3()},
+      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:5.5},uReveal:{value:0}
     };
     const seg=mobile?128:192;
     const earth=new T.Mesh(new T.SphereGeometry(1,seg,seg/2),new T.ShaderMaterial({uniforms:uniEarth,vertexShader:EARTH_V,fragmentShader:EARTH_F}));
     earth.visible=false;scene.add(earth);
-    const atmoU={uCam:{value:new T.Vector3()},uIn:{value:col(P.atmoIn)},uOut:{value:col(P.atmoOut)},uThick:{value:.13},uAlpha:{value:.5}};
-    const atmo=new T.Mesh(new T.SphereGeometry(1.14,96,48),new T.ShaderMaterial({uniforms:atmoU,vertexShader:ATMO_V,fragmentShader:ATMO_F,side:T.BackSide,transparent:true,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor}));
+    /* Nuages : une sphère à peine plus haute (léger relief quand la Terre tourne), qui dérive lentement. */
+    const cloudU={uSky:{value:null},uSun:{value:sunDir},uCam:uniEarth.uCam,uCloudOff:uniEarth.uCloudOff,uCloudA:uniEarth.uCloudA,uExpo:uniEarth.uExpo};
+    const clouds=new T.Mesh(new T.SphereGeometry(1.0045,seg,seg/2),new T.ShaderMaterial({uniforms:cloudU,vertexShader:EARTH_V,fragmentShader:CLOUD_F,transparent:true,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor}));
+    clouds.visible=false;clouds.renderOrder=1;scene.add(clouds);
+    const atmoU={uCam:uniEarth.uCam,uSun:{value:sunDir},uTop:{value:1.03},uI:{value:.95}};
+    const atmo=new T.Mesh(new T.SphereGeometry(1,96,48),new T.ShaderMaterial({uniforms:atmoU,vertexShader:ATMO_V,fragmentShader:ATMO_F,side:T.BackSide,transparent:true,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor}));
     atmo.renderOrder=2;scene.add(atmo);
-    /* Étoiles : peu nombreuses, fixes par rapport à la Terre (légère parallaxe quand elle tourne). */
-    {
-      const n=150,pos=new Float32Array(n*3),size=new Float32Array(n),c=new Float32Array(n*3);let seed=7;
-      const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
-      for(let i=0;i<n;i++){const z=rnd()*2-1,a=rnd()*Math.PI*2,r=Math.sqrt(1-z*z);pos.set([r*Math.cos(a)*80,z*80,r*Math.sin(a)*80],i*3);size[i]=.8+rnd()*rnd()*1.8;const k=col(rnd()<.85?P.stars[0]:P.stars[1]).multiplyScalar(.35+rnd()*.55);c.set([k.r,k.g,k.b],i*3);}
-      const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(pos,3));g.setAttribute('size',new T.BufferAttribute(size,1));g.setAttribute('color',new T.BufferAttribute(c,3));
-      const stars=new T.Points(g,new T.ShaderMaterial({uniforms:{uDpr:{value:1}},vertexShader:STAR_V,fragmentShader:STAR_F,transparent:true,depthWrite:false,blending:T.AdditiveBlending}));
-      stars.renderOrder=-1;scene.add(stars);var starMat=stars.material;
-    }
+    /* Ciel : voie lactée et étoiles réelles, tournant avec l’heure sidérale (repère équatorial). */
+    const heavens=new T.Scene(),skyCam=new T.PerspectiveCamera(FOV,1,.5,200);
+    const skyU={uMw:{value:null},uI:{value:0}};
+    const skyMesh=new T.Mesh(new T.SphereGeometry(90,48,24),new T.ShaderMaterial({uniforms:skyU,vertexShader:SKY_V,fragmentShader:SKY_F,side:T.BackSide,transparent:true,depthWrite:false,depthTest:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneFactor}));
+    const starU={uDpr:{value:1},uI:{value:0}};
+    const starMat=new T.ShaderMaterial({uniforms:starU,vertexShader:STAR_V,fragmentShader:STAR_F,transparent:true,depthWrite:false,depthTest:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneFactor});
+    heavens.add(skyMesh);
+    fetch(asset('assets/globe/stars.bin')).then(r=>r.ok?r.arrayBuffer():Promise.reject()).then(buf=>{
+      const v=new DataView(buf),n=Math.min(buf.byteLength/6|0,mobile?6000:9000);
+      const pos=new Float32Array(n*3),size=new Float32Array(n),glow=new Float32Array(n),c=new Float32Array(n*3);
+      const cold=col('#A9C4FF'),warm=col('#FFD2A1'),k=new T.Color();
+      for(let i=0;i<n;i++){
+        const ra=v.getUint16(i*6,true)/65535*360,dec=v.getUint16(i*6+2,true)/65535*180-90,b=v.getUint8(i*6+4)/255,t=v.getUint8(i*6+5)/255;
+        const p=M.vec(dec,ra);pos.set([p[0]*85,p[1]*85,p[2]*85],i*3);
+        size[i]=1.1+2.6*b*b*b;glow[i]=b>.8?(b-.8)/.2*.6:0;
+        k.copy(cold).lerp(warm,t).lerp(col('#ffffff'),.35).multiplyScalar(.22+.95*Math.pow(b,1.5));c.set([k.r,k.g,k.b],i*3);
+      }
+      const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(pos,3));g.setAttribute('size',new T.BufferAttribute(size,1));g.setAttribute('glow',new T.BufferAttribute(glow,1));g.setAttribute('color',new T.BufferAttribute(c,3));
+      const stars=new T.Points(g,starMat);stars.frustumCulled=false;heavens.add(stars);invalidate();
+    }).catch(()=>{});
     /* Frontières : très discrètes, visibles à l’échelle d’un continent. */
-    const borderMat=new T.LineBasicMaterial({color:col(P.border),transparent:true,opacity:0,depthWrite:false});
+    const borderMat=new T.LineBasicMaterial({color:col('#E8F1FF'),transparent:true,opacity:0,depthWrite:false});
     let borders=null;
     fetch(asset('assets/globe/borders.json')).then(r=>r.ok?r.json():[]).then(lines=>{
       const out=[];const push=(lat,lon)=>{const v=M.vec(lat,lon);out.push(v[0]*1.0007,v[1]*1.0007,v[2]*1.0007);};
@@ -239,7 +289,7 @@
 
     /* ---------- Caméra : centre (lat, lon) + distance au centre de la Terre (rayons) ---------- */
     const view={lat:30,lon:-8,dist:4.2};let overviewOn=false,keepKpp=0,touched=false,spin=0;
-    let W=1,H=1,pad={top:0,bottom:0,left:0,right:0},anim=null,inertia=null,dirty=true,raf=0,active=true,lastMove=0,restTimer=0,revealStart=0;
+    let W=1,H=1,pad={top:0,bottom:0,left:0,right:0},anim=null,inertia=null,dirty=true,raf=0,active=true,lastMove=0,restTimer=0,revealStart=0,approach=1,lastTick=0,ambTimer=0,lastTouch=performance.now();
     const minSide=()=>Math.max(1,Math.min(W-pad.left-pad.right,H-pad.top-pad.bottom));
     const tanHalf=Math.tan(FOV*RAD/2);
     const kpp=(dist=view.dist)=>2*(dist-1)*tanHalf/H*KM;
@@ -252,10 +302,11 @@
     const clampDist=d=>Math.max(minDist(),Math.min(maxDist()*1.35,d));
     function applyCamera(){
       view.lat=Math.max(-78,Math.min(78,view.lat));view.lon=M.wrapLon(view.lon);
-      const v=M.vec(view.lat,view.lon+spin);
-      camera.position.set(v[0]*view.dist,v[1]*view.dist,v[2]*view.dist);
+      /* Arrivée depuis l’espace : la caméra part de plus loin (approach > 1) et rejoint la vue. */
+      const v=M.vec(view.lat,view.lon+spin),d=1+(view.dist-1)*approach;
+      camera.position.set(v[0]*d,v[1]*d,v[2]*d);
       camera.up.set(0,1,0);camera.lookAt(0,0,0);
-      camera.near=Math.max(.002,(view.dist-1)*.25);camera.far=view.dist+90;
+      camera.near=Math.max(.002,(d-1)*.25);camera.far=d+95;
       camera.aspect=W/H;
       /* Décalage optique : le centre visé tombe au milieu de la zone libre (panneaux, fiche). */
       camera.setViewOffset(W,H,-(pad.left-pad.right)/2,-(pad.top-pad.bottom)/2,W,H);
@@ -289,6 +340,9 @@
 
     /* ---------- Rendu à la demande ---------- */
     function invalidate(){dirty=true;if(active&&!raf)raf=requestAnimationFrame(frame);}
+    /* Retour sur l’écran ou dans l’app : la vie reprend. */
+    function wake(){lastTouch=performance.now();invalidate();}
+    document.addEventListener('visibilitychange',()=>{if(!document.hidden)wake();});
     const easeInOut=t=>t<.5?4*t*t*t:1-(-2*t+2)**3/2;
     function frame(now){
       raf=0;if(!active)return;
@@ -312,14 +366,27 @@
       }
       if(arcFade){const t=(now-arcFade)/300;arcMat.opacity=.85*Math.max(0,1-t);if(t>=1){arcFade=0;arcLine.visible=false;}else again=true;dirty=true;}
       if(ripStart){if(now-ripStart<1800){again=true;dirty=true;}else{ripStart=0;dirty=true;}}
-      /* Ouverture « la marée révèle le monde » : les fonds marins, puis les terres, pendant une rotation de 8°. */
-      if(revealStart){const t=Math.min(1,(now-revealStart)/1200);uniEarth.uReveal.value=easeInOut(Math.min(1,t/.75));uniEarth.uLandReveal.value=easeInOut(Math.max(0,(t-.12)/.88));
-        spin=touched?0:8*(1-easeInOut(t));if(t<1)again=true;else{revealStart=0;spin=0;}dirty=true;}
+      /* Ouverture : la Terre arrive de l’espace en tournant, le ciel s’allume. */
+      if(revealStart){const t=touched?1:Math.min(1,(now-revealStart)/2600),e=1-Math.pow(1-t,3.2);
+        uniEarth.uReveal.value=Math.min(1,t*2.4);approach=1+2.6*(1-e);spin=touched?0:48*(1-e);
+        skyU.uI.value=.42*Math.min(1,t*1.6);starU.uI.value=Math.min(1,t*1.4);
+        if(t<1)again=true;else{revealStart=0;spin=0;approach=1;}dirty=true;}
+      /* Vie au repos : les nuages dérivent ; tant qu’on n’a pas touché le globe, il tourne doucement. */
+      const dt=lastTick?Math.min(120,now-lastTick):16;lastTick=now;let ambient=false;
+      /* Pas d’animation de fond si le globe est caché (autre écran) ou au repos depuis une minute : batterie préservée. */
+      const shown=canvas.clientWidth>0&&!document.hidden,awake=now-lastTouch<60000;
+      if(active&&shown&&awake&&!reduced()){
+        if(cloudsOn){uniEarth.uCloudOff.value=(uniEarth.uCloudOff.value+dt*4.5e-7)%1;ambient=true;}
+        if(!touched&&!anim&&!inertia&&!revealStart&&widthKm()>9000){view.lon+=dt*.0016;ambient=true;}
+        if(ambient)dirty=true;
+      }
       if(dirty){dirty=false;draw();}
       prevAgain=again||emblemAnim;
       if(!prevAgain&&dprNow<dprFull){clearTimeout(sharpTimer);sharpTimer=setTimeout(()=>{if(!raf){dprNow=dprFull;slow=0;resize();}},350);}
       if(emblemAnim){dirty=true;again=true;}
       if(again)raf=requestAnimationFrame(frame);
+      /* Animation de fond : environ 30 images par seconde suffisent pour des mouvements aussi lents. */
+      else if(ambient){clearTimeout(ambTimer);ambTimer=setTimeout(()=>{if(!raf&&active)raf=requestAnimationFrame(frame);},33);}
     }
     function slerp(a,b,t){
       const p=M.vec(a.lat,a.lon),q=M.vec(b.lat,b.lon),d=Math.acos(Math.max(-1,Math.min(1,p[0]*q[0]+p[1]*q[1]+p[2]*q[2])));
@@ -330,24 +397,30 @@
     function draw(){
       applyCamera();
       const cp=camera.position;
-      uniEarth.uCam.value.copy(cp);atmoU.uCam.value.copy(cp);dotU.uCam.value.copy(cp);
-      uniEarth.uLight.value.set(-.6,.7,1).normalize().applyQuaternion(camera.quaternion);
+      uniEarth.uCam.value.copy(cp);dotU.uCam.value.copy(cp);
+      /* Soleil : réel (position du moment) ou « studio » (en haut à gauche de la caméra). */
+      const now=sky();
+      if(lighting==='live'){const v=M.vec(now.sun.lat,now.sun.lon);sunDir.set(v[0],v[1],v[2]);}
+      else sunDir.copy(studioSun).applyQuaternion(camera.quaternion);
+      heavens.rotation.y=-now.gmst*RAD;
+      skyCam.quaternion.copy(camera.quaternion);skyCam.projectionMatrix.copy(camera.projectionMatrix);skyCam.projectionMatrixInverse.copy(camera.projectionMatrixInverse);skyCam.updateMatrixWorld();
       const k=kpp(),w=widthKm();
       /* Échelle espace → continent → région : points, liserés et halo s’adaptent en continu. */
       const s=Math.max(0,Math.min(1,(Math.log(8000)-Math.log(Math.max(w,1)))/(Math.log(8000)-Math.log(1500))));
       const far=Math.max(0,Math.min(1,(Math.log(Math.max(w,1))-Math.log(8000))/Math.log(2)));
       dotU.uCore.value=4+2*(1-far)+2*s;dotU.uHalo.value=12+4*(1-far)+4*s+2;dotU.uRing.value=s>.6?1:0;dotU.uHaloA.value=mobile?.07:.16;
-      uniEarth.uCoastA.value=.45+.2*s;uniEarth.uCoastW.value=.8+.4*s;
-      /* Motifs culturels : invisibles vus de l’espace, ils apparaissent à l’échelle d’un continent. */
-      uniEarth.uPatA.value=.2*Math.max(0,Math.min(1,(14-k)/8))*(.35+.65*Math.max(0,Math.min(1,(k-1)/2.5)));
-      /* Frange atmosphérique fine : environ 9 px sur ordinateur, 6 px sur mobile. */
-      atmoU.uThick.value=(mobile?6:9)*k/KM;atmoU.uAlpha.value=.6-.45*s;
-      borderMat.opacity=.28*Math.max(0,Math.min(1,(Math.log(14000)-Math.log(w))/Math.log(2)));
+      /* Nuages : pleins vus de l’espace, ils s’effacent en approchant des côtes pour laisser voir les spots. */
+      uniEarth.uCloudA.value=cloudsOn?.88*Math.max(0,Math.min(1,(Math.log(w)-Math.log(1900))/Math.log(3.2))):0;
+      /* Atmosphère : environ 3 % du rayon, jamais moins d’une dizaine de pixels à l’écran. */
+      const top=1+Math.max(.028,(mobile?11:15)*k*approach/KM);atmoU.uTop.value=top;atmo.scale.setScalar(top);
+      /* Relief un peu plus marqué en approchant (montagnes, falaises). */
+      uniEarth.uRelief.value=.85+.5*s;
+      borderMat.opacity=.16*Math.max(0,Math.min(1,(Math.log(9000)-Math.log(w))/Math.log(2)));
       /* Regroupements : échelle la plus proche du zoom courant ; repères placés pour cette image. */
       if(levels.length){const lv=M.levelFor(k);if(lv!==level)applyLevel(lv);}
       layoutOverlay();
       const rip=ripStart?(performance.now()-ripStart)/900:-1;pinU.uRip.value=rip>=0&&rip<2?rip%1:-1;
-      renderer.clear();renderer.render(scene,camera);renderer.render(overlay,ortho);
+      renderer.clear();renderer.render(heavens,skyCam);renderer.render(scene,camera);renderer.render(overlay,ortho);
     }
 
     /* ---------- Repères (groupes, étiquettes, spot choisi, position) ----------
@@ -391,8 +464,9 @@
     emblemMesh.frustumCulled=false;emblemMesh.renderOrder=0;overlay.add(emblemMesh);
     let countries=[],emblemsOn=[],emblemAnim=false;
     const eState=new Map();
-    new T.TextureLoader().load(asset('assets/globe/emblems.webp'),tex=>{tex.colorSpace=T.SRGBColorSpace;tex.generateMipmaps=true;tex.minFilter=T.LinearMipmapLinearFilter;tex.anisotropy=4;emblemU.uTex.value=tex;invalidate();});
-    fetch(asset('assets/globe/countries.json')).then(r=>r.ok?r.json():{}).then(d=>{countryData=d;refreshCountries();invalidate();}).catch(()=>{});
+    /* Emblèmes des pays : désactivés sur la Terre réaliste (opts.emblems pour les réactiver). */
+    if(opts.emblems)new T.TextureLoader().load(asset('assets/globe/emblems.webp'),tex=>{tex.colorSpace=T.SRGBColorSpace;tex.generateMipmaps=true;tex.minFilter=T.LinearMipmapLinearFilter;tex.anisotropy=4;emblemU.uTex.value=tex;invalidate();});
+    if(opts.emblems)fetch(asset('assets/globe/countries.json')).then(r=>r.ok?r.json():{}).then(d=>{countryData=d;refreshCountries();invalidate();}).catch(()=>{});
     let countryData={};
     function refreshCountries(){
       const n=new Map();for(const s of spots)if(s.country)n.set(s.country,(n.get(s.country)||0)+1);
@@ -537,7 +611,7 @@
       /* Emblèmes : 18 px vus de l’espace (les 8 pays les plus riches en spots), 26 px par continent, 40 px en région ;
          jamais sur un groupe, une étiquette ou le spot choisi. Apparition et disparition en fondu. */
       {
-        const w=widthKm(),size=w>8000?22:w>1500?28:40,cap=w>8000?8:MAXE,taken=shownBadges.map(b=>[b.sx,b.sy,b.sz/2+4]);
+        const w=widthKm(),size=w>8000?22:w>1500?28:40,cap=!opts.emblems||w>8500?0:MAXE,taken=shownBadges.map(b=>[b.sx,b.sy,b.sz/2+4]);
         if(sp)taken.push([sp.x,sp.y,20]);
         const now=performance.now(),dt=Math.min(64,now-(layoutT||now));layoutT=now;let j=0,busy=false;emblemsOn=[];
         for(const c of countries){
@@ -647,7 +721,7 @@
     function getView(){return {lat:view.lat,lon:view.lon,widthKm:widthKm(),kmPerPx:kpp(),dist:view.dist};}
     function stop(){anim=null;inertia=null;}
     function flyTo(target,{duration,done}={}){
-      stop();
+      stop();lastTouch=performance.now();
       const d1=clampDist(target.dist||distForWidth(target.widthKm||widthKm()));
       const a={lat:view.lat,lon:view.lon},b={lat:target.lat??view.lat,lon:target.lon??view.lon};
       const ang=M.arc(a,b),ms=reduced()?0:duration??Math.min(1600,600+ang/RAD*9+Math.abs(Math.log(d1/view.dist))*260);
@@ -672,6 +746,7 @@
     const ptrs=new Map();let drag=null,pinch=null,overshoot=0,wheelTimer=0,tapStart=null;
     const local=e=>{const r=canvas.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};};
     canvas.addEventListener('pointerdown',e=>{
+      lastTouch=performance.now();
       if(e.button>0)return;
       touched=true;spin=0;
       try{canvas.setPointerCapture(e.pointerId);}catch(_){}stop();
@@ -742,7 +817,7 @@
       opts.onEmpty?.();
     }
     canvas.addEventListener('wheel',e=>{
-      e.preventDefault();stop();touched=true;spin=0;
+      e.preventDefault();stop();touched=true;spin=0;lastTouch=performance.now();
       const p=local(e),unit=e.deltaMode===1?16:e.deltaMode===2?H:1;
       const dy=e.deltaY*unit*(e.ctrlKey?.012:.0022);
       const f=Math.exp(-Math.max(-1.2,Math.min(1.2,dy)));
@@ -771,31 +846,33 @@
       const dpr=Math.min(devicePixelRatio||1,dprNow);
       renderer.setPixelRatio(dpr);renderer.setSize(W,H,false);
       ortho.right=W;ortho.bottom=H;ortho.updateProjectionMatrix();
-      dotU.uDpr.value=dpr;starMat.uniforms.uDpr.value=dpr;
+      dotU.uDpr.value=dpr;starU.uDpr.value=dpr;
       /* Le cadre change (tiroir, rotation, plein écran) : on garde l’échelle à l’écran, ou la vue d’ensemble. */
       view.dist=clampDist(overviewOn?maxDist():keepKpp?distForKpp(keepKpp):view.dist);keepKpp=kpp();invalidate();scheduleLabels();
     }
-    const ro=new ResizeObserver(()=>resize());ro.observe(host);
-    function loadTexture(url){
+    const ro=new ResizeObserver(()=>{lastTouch=performance.now();resize();});ro.observe(host);
+    function loadTexture(url,srgb){
       return new Promise((resolve,reject)=>new T.TextureLoader().load(url,resolve,undefined,reject)).then(tex=>{
-        tex.colorSpace=T.NoColorSpace;tex.wrapS=T.RepeatWrapping;tex.wrapT=T.ClampToEdgeWrapping;
+        tex.colorSpace=srgb?T.SRGBColorSpace:T.NoColorSpace;tex.wrapS=T.RepeatWrapping;tex.wrapT=T.ClampToEdgeWrapping;
         tex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());tex.generateMipmaps=true;tex.minFilter=T.LinearMipmapLinearFilter;tex.magFilter=T.LinearFilter;
         return tex;
       });
     }
-    const [first,cult,pat,rel]=await Promise.all(['earth-4k.webp','cultures-2k.webp','patterns.webp','relief-4k.webp'].map(f=>loadTexture(asset('assets/globe/'+f))));
-    uniEarth.uRel.value=rel;uniEarth.uRelOn.value=1;
-    uniEarth.uCult.value=cult;uniEarth.uPat.value=pat;uniEarth.uCultOn.value=1;
-    uniEarth.uMap.value=first;uniEarth.uTex.value.set(first.image.width,first.image.height);
-    renderer.initTexture?.(first);
-    earth.visible=true;
-    /* Ordinateur : la texture 8K arrive ensuite, pour des côtes plus fines au zoom. */
+    /* Surface (Blue Marble), relief et eau, puis nuit, nuages et glaces ; ciel en parallèle. */
+    const [day,norm,skyTex]=await Promise.all([
+      loadTexture(asset('assets/globe/earth-day-4k.webp'),true),
+      loadTexture(asset('assets/globe/earth-normal-4k.webp')),
+      loadTexture(asset('assets/globe/earth-sky-4k.webp'))
+    ]);
+    uniEarth.uDay.value=day;uniEarth.uNorm.value=norm;uniEarth.uSky.value=skyTex;cloudU.uSky.value=skyTex;
+    [day,norm,skyTex].forEach(t=>renderer.initTexture?.(t));
+    earth.visible=true;clouds.visible=true;
+    loadTexture(asset('assets/globe/sky-2k.webp'),true).then(t=>{t.wrapT=T.ClampToEdgeWrapping;skyU.uMw.value=t;invalidate();}).catch(()=>{});
+    /* Ordinateur : la surface en 8K arrive ensuite, pour des côtes plus fines au zoom. */
     const conn=navigator.connection;let dead=false;
-    if(!mobile&&maxTex>=8192&&!conn?.saveData)setTimeout(()=>loadTexture(asset('assets/globe/earth-8k.webp')).then(tex=>{if(dead)return;const old=uniEarth.uMap.value;uniEarth.uMap.value=tex;uniEarth.uTex.value.set(tex.image.width,tex.image.height);old?.dispose();invalidate();}).catch(()=>{}),1200);
-    /* Relief 8K : montagnes nettes jusqu’au zoom région, sur ordinateur seulement. */
-    if(!mobile&&maxTex>=8192&&!conn?.saveData)setTimeout(()=>loadTexture(asset('assets/globe/relief-8k.webp')).then(tex=>{if(dead)return;const old=uniEarth.uRel.value;uniEarth.uRel.value=tex;old?.dispose();invalidate();}).catch(()=>{}),2600);
+    if(!mobile&&maxTex>=8192&&!conn?.saveData)setTimeout(()=>loadTexture(asset('assets/globe/earth-day-8k.webp'),true).then(tex=>{if(dead)return;const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;old?.dispose();invalidate();}).catch(()=>{}),1200);
     resize();applyCamera();
-    revealStart=reduced()?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;uniEarth.uLandReveal.value=1;}
+    revealStart=reduced()?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;skyU.uI.value=.42;starU.uI.value=1;}
     invalidate();
 
     const api={
@@ -803,7 +880,15 @@
       setUser(pos){user=pos?{v:M.vec(pos.lat,pos.lon)}:null;invalidate();},
       setPadding(p){pad={...pad,...p};view.dist=clampDist(view.dist);invalidate();scheduleLabels();},
       view:getView,flyTo,zoomIn,zoomOut,resize,
-      jumpTo(t){stop();if(t.lat!=null)view.lat=t.lat;if(t.lon!=null)view.lon=t.lon;view.dist=clampDist(t.dist||distForWidth(t.widthKm||widthKm()));invalidate();moved('jump');},
+      /* Éclairage « studio » ou « live » (jour et nuit réels) ; nuages visibles ou non. */
+      setLighting(m){lighting=m==='live'?'live':'studio';invalidate();return lighting;},
+      get lighting(){return lighting;},
+      setClouds(on){cloudsOn=!!on;invalidate();return cloudsOn;},
+      get clouds(){return cloudsOn;},
+      /* Point de la Terre où le soleil est au zénith en ce moment. */
+      sun(){return sky().sun;},
+      wake,
+      jumpTo(t){stop();lastTouch=performance.now();if(t.lat!=null)view.lat=t.lat;if(t.lon!=null)view.lon=t.lon;view.dist=clampDist(t.dist||distForWidth(t.widthKm||widthKm()));invalidate();moved('jump');},
       /* Cadre un ensemble de points (km de marge compris) ; renvoie la largeur visée. */
       fit(points,{animate=true,minWidthKm=0,maxWidthKm=Infinity,done}={}){
         const c=M.cap(points);if(!c)return null;

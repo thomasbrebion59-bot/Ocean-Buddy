@@ -1,5 +1,4 @@
-html.native-app,html.native-app body{background:#174bd3;overscroll-behavior:none}
-html.native-app body::before{content:'';position:fixed;inset:0 0 auto;height:env(safe-area-inset-top);background:#174bd3;z-index:100000;pointer-events:none}
+html.native-app,html.native-app body{background:#f2f5fb;overscroll-behavior:none}
 .native-app .app-chrome{padding-top:env(safe-area-inset-top);min-height:calc(64px + env(safe-area-inset-top));height:auto;flex-shrink:0}
 .native-app .screen-wrap{overscroll-behavior-y:contain}
 .native-app .onb{padding-top:calc(40px + env(safe-area-inset-top))}

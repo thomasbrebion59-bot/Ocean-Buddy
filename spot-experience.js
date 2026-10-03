@@ -106,7 +106,7 @@
     if(stored&&Date.now()-stored.fetchedAt<60*60*1000){renderWeek(s,stored.weather,stored.marine,stored.fetchedAt);return;}
     $('#spotWeek').innerHTML = '<div class="spot-week-loading"><i></i><span>Chargement des 7 jours du spot…</span></div>';
     try {
-      const weatherUrl = `${api}?latitude=${c.lat}&longitude=${c.lon}&daily=temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant,weather_code&wind_speed_unit=kmh&forecast_days=7&timezone=auto`;
+      const weatherUrl = `${api}?latitude=${c.lat}&longitude=${c.lon}&daily=temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant,weather_code&wind_speed_unit=kmh&cell_selection=${typeof isInland==='function'&&isInland(s)?'land':'sea'}&forecast_days=7&timezone=auto`;
       const marineUrl = `${marineApi}?latitude=${c.lat}&longitude=${c.lon}&daily=wave_height_max&forecast_days=7&timezone=auto`;
       const getJson=async url=>{const response=await fetch(url);if(!response.ok)throw Error(`Prévision HTTP ${response.status}`);return response.json();};
       if(!pending.has(key))pending.set(key,(async()=>{

@@ -47,8 +47,13 @@ async function boot(){
   }
   document.documentElement.classList.add('native-app');
   StatusBar.setStyle({style:Style.Dark}).catch(()=>{});
+  /* L’interface 1.3 passe sous la barre d’état : textes clairs sur la Terre et les photos, foncés sur les pages claires. */
+  let barStyle='';
+  window.addEventListener?.('ocean:statusbar',event=>{const next=event.detail==='light'?Style.Light:Style.Dark;if(next===barStyle)return;barStyle=next;StatusBar.setStyle({style:next}).catch(()=>{});});
+  window.OceanShell?.statusbar?.();
   App.addListener('appStateChange',({isActive})=>{if(!isActive)persist().catch(()=>{});});
   App.addListener('backButton',()=>{
+    if(window.OceanShell?.closeTopOverlay?.())return;
     const dialog=document.querySelector('dialog[open]');
     if(dialog){dialog.close();return;}
     if(document.querySelector('#chatSheet.open')){window.closeChat?.();return;}

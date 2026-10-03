@@ -16,8 +16,10 @@ function assistant(mode=null){
  return {context,calls,messages,elements,choose:choice=>panel.listeners.click({target:{closest:()=>({dataset:{aiChoice:choice}})}})};
 }
 test('Poulpy sends nothing before a choice or after the local guide is selected',async()=>{
- const a=assistant();a.context.openChat();const reply=a.context.chatSend('Comment choisir un spot ?');await Promise.resolve();assert.equal(a.calls.length,0);assert.equal(a.messages.some(m=>m[0]==='user'),false);
- a.choose('local');await reply;assert.equal(a.calls.length,0);assert.equal(a.context.OceanPrivacy.getMode(),'local');assert.ok(a.messages.some(m=>m[1]==='Guide local'));
+ const a=assistant();a.context.openChat();const reply=a.context.chatSend('Comment choisir un spot ?');await Promise.resolve();assert.equal(a.calls.length,0);
+ /* La question reste visible pendant le choix (rien n’est envoyé), et n’est pas affichée deux fois ensuite. */
+ assert.equal(a.messages.filter(m=>m[0]==='user').length,1);
+ a.choose('local');await reply;assert.equal(a.calls.length,0);assert.equal(a.messages.filter(m=>m[0]==='user').length,1);assert.equal(a.context.OceanPrivacy.getMode(),'local');assert.ok(a.messages.some(m=>m[1]==='Guide local'));
  await a.context.chatSend('Et pour le surf ?');assert.equal(a.calls.length,0);
 });
 test('AI opt-in unlocks only the intended question and bounded context, and duplicate sends wait',async()=>{
