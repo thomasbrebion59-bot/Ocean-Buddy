@@ -3,28 +3,49 @@
 #home.hf-on #oceanHub .hub-greet{display:none}
 #home.hf-on #oceanHub{margin-top:14px}
 
-/* ---------- La Terre en ouverture ---------- */
-.hf-hero{position:relative;overflow:hidden;isolation:isolate;margin:0 0 6px;border-radius:var(--as-r-xl,28px);background:#000;color:#fff;
-  aspect-ratio:4/5;min-height:440px;max-height:620px;box-shadow:0 26px 60px -30px rgba(3,10,30,.85)}
-.hf-hero-earth{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover;object-position:50% 100%;transform-origin:50% 90%;animation:hf-earth 40s ease-in-out infinite alternate}
-@keyframes hf-earth{from{transform:scale(1)}to{transform:scale(1.06) rotate(-1.2deg)}}
-.hf-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,.55) 0%,rgba(0,0,0,0) 38%,rgba(0,0,0,0) 62%,rgba(0,4,16,.72) 100%)}
-.hf-hero-tx{position:absolute;left:22px;right:22px;top:22px}
-.hf-kicker{display:inline-block;font:700 11.5px/1 var(--body);letter-spacing:1.6px;text-transform:uppercase;color:var(--ob-lime,#e0ff91)}
-.hf-hero h2{margin:12px 0 10px;font:900 58px/.9 var(--as-condensed);letter-spacing:-1.5px;text-transform:uppercase;color:#fff;text-shadow:0 6px 30px rgba(0,0,0,.45)}
-.hf-hero h2 em{font-style:normal;color:var(--ob-lime,#e0ff91)}
-.hf-hero-tx p{max-width:300px;margin:0;font:500 15px/1.45 var(--body);color:rgba(255,255,255,.86)}
-.hf-hero-acts{position:absolute;left:16px;right:16px;bottom:16px;display:flex;gap:8px}
-.hf-hero-acts button{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 18px;border-radius:999px;cursor:pointer;font:750 15.5px var(--body);white-space:nowrap;transition:transform .2s cubic-bezier(.32,1.28,.42,1)}
-.hf-hero-acts button:active{transform:scale(.96)}
-.hf-go{flex:1;border:0;background:#fff;color:#0c1d3f;box-shadow:0 10px 30px -10px rgba(0,0,0,.6)}
-.hf-go svg{width:20px;height:20px;color:var(--as-accent,#1f55e0)}
-.hf-trip{flex:none;width:52px;padding:0!important;border:.5px solid rgba(255,255,255,.28);background:rgba(255,255,255,.14);color:#fff;-webkit-backdrop-filter:blur(18px) saturate(1.6);backdrop-filter:blur(18px) saturate(1.6)}
-.hf-trip span{display:none}
-.hf-credit{position:absolute;right:18px;bottom:74px;font:500 10px var(--body);color:rgba(255,255,255,.5)}
-@media(max-width:379px){.hf-hero h2{font-size:50px}}
-.hf-trip svg{width:22px;height:22px}
-@media(min-width:960px){.hf-hero{aspect-ratio:auto;height:480px;max-height:none}.hf-hero-earth{left:auto;right:0;width:58%;object-position:50% 30%;-webkit-mask-image:linear-gradient(90deg,transparent,#000 22%);mask-image:linear-gradient(90deg,transparent,#000 22%)}.hf-hero::after{background:linear-gradient(90deg,rgba(0,0,0,.6),rgba(0,0,0,0) 55%)}.hf-hero-tx p{max-width:380px}.hf-hero h2{font-size:84px}.hf-hero-tx{left:44px;top:44px}.hf-hero-acts{left:44px;right:auto;bottom:40px}.hf-go{flex:none;padding:0 26px}.hf-trip{width:auto;padding:0 22px!important}.hf-trip span{display:inline}.hf-credit{bottom:20px}}
+/* ---------- Ouverture : recherche, activités, spots de rêve ---------- */
+.hf-top{margin:0 0 4px}
+.hf-search{display:flex;align-items:center;gap:12px;width:100%;min-height:60px;margin:0 0 12px;padding:8px 18px;border:0;border-radius:999px;cursor:pointer;text-align:left;
+  background:#fff;color:var(--as-ink,#0c1d3f);box-shadow:0 10px 30px -14px rgba(12,29,63,.45),0 1px 2px rgba(12,29,63,.06)}
+.hf-search svg{width:22px;height:22px;flex:none;color:var(--as-accent,#1f55e0)}
+.hf-search span{display:grid;gap:1px;min-width:0}
+.hf-search b{font:750 16px/1.2 var(--body)}
+.hf-search small{font:500 13px/1.25 var(--body);color:var(--as-ink3,#7d8aa6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hf-search:active{transform:scale(.98)}
+.hf-acts{display:flex;gap:8px;overflow-x:auto;margin:0 calc(-1 * var(--as-gutter,16px)) 14px;padding:2px var(--as-gutter,16px) 4px;scrollbar-width:none;scroll-snap-type:x proximity}
+.hf-acts::-webkit-scrollbar{display:none}
+.hf-act{flex:none;display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 15px 0 5px;border:1px solid rgba(12,29,63,.08);border-radius:999px;background:#fff;color:var(--as-ink,#0c1d3f);font:700 14px var(--body);cursor:pointer;scroll-snap-align:start;box-shadow:0 4px 12px -8px rgba(12,29,63,.4)}
+.hf-act .hf-act-ic,.hf-act img,.hf-act svg{width:34px;height:34px;border-radius:50%;object-fit:cover;flex:none}
+.hf-act:active{transform:scale(.96)}
+.hf-hero{position:relative;overflow:hidden;isolation:isolate;border-radius:var(--as-r-xl,28px);background:#0b2d7a;aspect-ratio:4/5;min-height:430px;max-height:600px;box-shadow:0 26px 60px -30px rgba(12,29,63,.75)}
+.hf-slides{position:absolute;inset:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
+.hf-slides::-webkit-scrollbar{display:none}
+.hf-slide{position:relative;flex:0 0 100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always;cursor:pointer;color:#fff;overflow:hidden}
+.hf-slide img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 62%;z-index:-2;transform:scale(1.04);transition:transform 6s ease-out}
+.hf-slide::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,10,30,.25) 0%,rgba(0,10,30,0) 28%,rgba(0,10,30,0) 48%,rgba(0,12,36,.82) 100%)}
+.hf-slide-tx{position:absolute;left:20px;right:20px;bottom:38px}
+.hf-kicker{display:inline-block;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font:750 11.5px/1 var(--body);letter-spacing:1.2px;text-transform:uppercase;color:#fff}
+.hf-slide h2{margin:10px 0 4px;font:900 48px/.92 var(--as-condensed);letter-spacing:-.8px;text-transform:uppercase;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.4)}
+.hf-slide p{margin:0 0 14px;font:600 15px/1.35 var(--body);color:rgba(255,255,255,.9)}
+.hf-go{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 20px;border:0;border-radius:999px;background:#fff;color:#0c1d3f;font:800 15px var(--body);cursor:pointer;box-shadow:0 10px 26px -10px rgba(0,0,0,.55)}
+.hf-go svg{width:18px;height:18px;color:var(--as-accent,#1f55e0)}
+.hf-go:active{transform:scale(.96)}
+.hf-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:6px;pointer-events:none}
+.hf-dots i{width:6px;height:6px;border-radius:999px;background:rgba(255,255,255,.5);transition:width .3s,background .3s}
+.hf-dots i.on{width:20px;background:#fff}
+@media(min-width:960px){.hf-hero{aspect-ratio:auto;height:520px;max-height:none}.hf-slide h2{font-size:76px}.hf-slide-tx{left:44px;bottom:48px;max-width:640px}.hf-acts{margin-inline:0;padding-inline:0}.hf-search{max-width:640px}}
+
+/* ---------- Carte du monde ---------- */
+.hf-world{margin:30px 0 4px;border-radius:var(--as-r-xl,28px);overflow:hidden;background:#0b2d7a;color:#fff;box-shadow:0 22px 50px -28px rgba(11,45,122,.85)}
+.hf-world-map{position:relative;aspect-ratio:1200/473;background:#0a1d4a}
+.hf-world-map img,.hf-world-map canvas{position:absolute;inset:0;width:100%;height:100%}
+.hf-world-map img{object-fit:cover}
+.hf-world-tx{padding:16px 18px 18px}
+.hf-world-tx .hf-kicker{background:rgba(224,255,145,.16);color:var(--ob-lime,#e0ff91)}
+.hf-world-tx h2{margin:10px 0 6px;font:900 32px/.95 var(--as-condensed);text-transform:uppercase;letter-spacing:-.3px}
+.hf-world-tx p{margin:0 0 14px;font:500 14.5px/1.45 var(--body);color:rgba(255,255,255,.85)}
+.hf-world-go{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 18px;border:0;border-radius:999px;background:var(--ob-lime,#e0ff91);color:#0b2d7a;font:800 15px var(--body);cursor:pointer}
+.hf-world-go svg{width:18px;height:18px}
 
 /* ---------- Rails de photos ---------- */
 .hf-sec{margin:0}
@@ -52,5 +73,4 @@
 .hf-fav.on svg{fill:#ff5a6e;stroke:#ff5a6e}
 .hf-fav:active{transform:scale(.88)}
 @media(min-width:960px){.hf-card{flex-basis:220px}.hf-rail.big .hf-card{flex-basis:280px}.hf-rail{margin:0;padding-inline:0}}
-@media(prefers-reduced-motion:reduce){.hf-hero-earth{animation:none}}
-.reduce-motion .hf-hero-earth{animation:none}
+@media(prefers-reduced-motion:reduce){.hf-slide img{transition:none}}

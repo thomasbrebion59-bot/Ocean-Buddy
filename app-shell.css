@@ -163,8 +163,9 @@
   body.explore-immersive #spots>:not(#mapView){display:none!important}
   body.explore-immersive #spots{animation:none!important;transform:none!important}
   body.explore-immersive #mapView{position:fixed;inset:0;z-index:20;display:block!important}
-  body.explore-immersive .ocean-v2 #spotMapWrap.omap,body.ocean-v2.explore-immersive #spotMapWrap.omap{position:absolute;inset:0;height:100%!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#000!important}
-  body.explore-immersive .omap.is-globe .omap-stage{background:#000}
+  body.explore-immersive .ocean-v2 #spotMapWrap.omap,body.ocean-v2.explore-immersive #spotMapWrap.omap{position:absolute;inset:0;height:100%!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#06194a!important}
+  /* Fond bleu océan profond plutôt que le noir de l’espace. */
+  body.explore-immersive .omap.is-globe .omap-stage{background:radial-gradient(130% 85% at 50% 38%,#1d4fae 0%,#0b2d7a 42%,#061a4a 72%,#030f30 100%)}
   /* En-tête : boutons en verre sombre sur l’espace. */
   body.explore-immersive .app-chrome::before{opacity:0!important}
   body.explore-immersive .app-page-title{opacity:0!important}
@@ -249,9 +250,9 @@ body.explore-immersive .ex-regions{display:flex}
 /* Liste des spots : le fil d’Ariane n’a plus lieu d’être sur téléphone (la planète est l’entrée). */
 @media(max-width:959px){.ocean-v2 #explorePath{display:none!important}}
 
-/* ================= Première ouverture : depuis l’espace ================= */
-.ocean-v2 .onb,html[data-act] .ocean-v2 .onb{background:#000 url('assets/globe/earth-hero.webp') 50% 100%/cover no-repeat!important;justify-content:flex-start!important}
-.ocean-v2 .onb::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.35) 0%,rgba(0,0,0,0) 45%,rgba(0,6,24,.55) 78%,rgba(0,6,24,.9) 100%)}
+/* ================= Première ouverture : un spot de rêve en grand (Raja Ampat) ================= */
+.ocean-v2 .onb,html[data-act] .ocean-v2 .onb{background:#0b2d7a url('assets/spots/rajaampat.jpg') 50% 50%/cover no-repeat!important;justify-content:flex-start!important}
+.ocean-v2 .onb::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(3,15,48,.72) 0%,rgba(3,15,48,.35) 38%,rgba(3,15,48,0) 58%,rgba(3,15,48,.55) 85%,rgba(3,15,48,.85) 100%)}
 .ocean-v2 .onb:has(.onb-step.active:not([data-step="0"]))::before{background:rgba(2,8,26,.78);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 .ocean-v2 #onbBubbles{display:none}
 .ocean-v2 .onb-step[data-step="0"].active{min-height:100%;justify-content:flex-start;padding-top:calc(18px + env(safe-area-inset-top))}

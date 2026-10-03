@@ -15,7 +15,7 @@
   function photo(s){
     const p=window.OceanPhotos?.lead?.(s.id,null)||window.SPOT_PHOTOS?.[s.id]||s.photo;
     if(!p||p.ai||!p.src)return null;
-    return {src:p.src,thumb:p.thumb||p.src};
+    return {src:p.src,thumb:p.thumb||p.src,w:p.width||0};
   }
   /* Saison : mois consécutifs regroupés, « Toute l’année » si les 12 mois. */
   function seasonLabel(ms){
@@ -92,22 +92,62 @@
     </section>`;
   }
 
+  /* Ouverture : des spots de rêve en grand (vraies photos), une recherche et les activités en pastilles. */
+  const HERO_IDS=['rajaampat','borabora','noronha','navagio','whitehaven','macarella','tikehau','myrtos','nusapenida','trunkbay','pelosa','losroques'];
+  function heroSpots(){
+    const list=HERO_IDS.map(id=>SPOTS.find(s=>s.id===id)).filter(s=>s&&photo(s));
+    const start=new Date().getDate()%Math.max(1,list.length);
+    return list.slice(start).concat(list.slice(0,start)).slice(0,8);
+  }
   function hero(){
-    const n=SPOTS.length;
-    return `<section class="hf-hero" aria-label="La planète Ocean Buddy">
-      <img class="hf-hero-earth" src="assets/globe/earth-hero.webp" alt="La Terre vue de l’espace, avec l’Atlantique, l’Afrique et l’Europe" decoding="async" fetchpriority="high">
-      <div class="hf-hero-tx">
-        <span class="hf-kicker">${n} spots · 6 continents · 9 activités</span>
-        <h2>Prends<br><em>le large.</em></h2>
-        <p>La vraie Terre, vue de l’espace. Fais-la tourner, choisis ton spot, pars.</p>
+    const n=SPOTS.length,slides=heroSpots();
+    const acts=(typeof SPORTS!=='undefined'?SPORTS:[]).map(a=>`<button type="button" class="hf-act" data-hf-act="${esc(a.id)}">${window.PoulpyIcons?.html?window.PoulpyIcons.html(a.id,'hf-act-ic'):''}<span>${esc(a.label)}</span></button>`).join('');
+    return `<section class="hf-top" aria-label="Trouve ton spot">
+      <button type="button" class="hf-search" data-hf-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span><b>Où veux-tu aller ?</b><small>${n} spots · plages, lagons, vagues, récifs</small></span></button>
+      <div class="hf-acts" role="list" aria-label="Activités">${acts}</div>
+      <div class="hf-hero" data-hf-hero>
+        <div class="hf-slides" role="list">${slides.map((s,i)=>{const p=photo(s),a=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');return `<article class="hf-slide" role="listitem" data-spot="${esc(s.id)}" aria-label="${esc(String(s.name).split(' — ')[0])}, ${esc(s.country||'')}">
+          <img src="${esc(p.src)}" alt="" ${i?'loading="lazy"':'fetchpriority="high"'} decoding="async">
+          <div class="hf-slide-tx"><span class="hf-kicker">Spot de rêve · ${i+1}/${slides.length}</span><h2>${esc(String(s.name).split(' — ')[0])}</h2><p>${esc(s.country||s.loc||'')}${a?` · ${esc(a)}`:''}</p>
+          <button type="button" class="hf-go" data-hf-open="${esc(s.id)}">Découvrir ce spot<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13"/><path d="M12.5 6 19 12l-6.5 6"/></svg></button></div>
+        </article>`;}).join('')}</div>
+        <div class="hf-dots" aria-hidden="true">${slides.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</div>
       </div>
-      <div class="hf-hero-acts">
-        <button type="button" class="hf-go" data-hf-go="spots"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3.3 9.5h17.4M3.3 14.5h17.4"/><path d="M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/></svg>Explorer la planète</button>
-        <button type="button" class="hf-trip" data-hf-go="trips" aria-label="Préparer un voyage"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 6V4.8A1.8 1.8 0 0 1 10.8 3h2.4A1.8 1.8 0 0 1 15 4.8V6"/><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M8 6v14M16 6v14"/></svg><span>Préparer un voyage</span></button>
-      </div>
-      <span class="hf-credit">Image : Ocean Buddy d’après NASA Blue Marble</span>
     </section>`;
   }
+  /* Carte du monde : chaque spot est un point lumineux sur la vraie carte (NASA), une invitation à explorer. */
+  function worldCard(){
+    return `<section class="hf-world" aria-label="La carte du monde des spots">
+      <div class="hf-world-map"><img src="assets/globe/earth-map.webp" alt="" loading="lazy" decoding="async"><canvas aria-hidden="true"></canvas></div>
+      <div class="hf-world-tx"><span class="hf-kicker">La carte du monde</span><h2>${SPOTS.length} spots, 6 continents.</h2><p>Fais tourner la planète et pose ton doigt sur ton prochain voyage.</p>
+      <button type="button" class="hf-world-go" data-hf-go="spots">Explorer la carte<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13"/><path d="M12.5 6 19 12l-6.5 6"/></svg></button></div>
+    </section>`;
+  }
+  function drawWorld(){
+    const c=home.querySelector('.hf-world canvas');if(!c)return;
+    const r=c.getBoundingClientRect();if(!r.width)return;
+    const d=Math.min(3,devicePixelRatio||1);c.width=Math.round(r.width*d);c.height=Math.round(r.height*d);
+    const g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);
+    for(const s of SPOTS){const k=COORDS[s.id];if(!k)continue;const x=(k.lon+180)/360*c.width,y=(84-k.lat)/142*c.height;if(y<0||y>c.height)continue;
+      g.fillStyle='rgba(224,255,145,.22)';g.beginPath();g.arc(x,y,4.2*d,0,7);g.fill();
+      g.fillStyle='#e0ff91';g.beginPath();g.arc(x,y,1.5*d,0,7);g.fill();}
+  }
+  /* Carrousel : glisser, ou défilement automatique toutes les 6 s (sauf mouvement réduit ou après un geste). */
+  let heroTimer=0,lastTouch=0;
+  function bindHero(){
+    const box=home.querySelector('[data-hf-hero]'),track=box?.querySelector('.hf-slides');if(!track||track.dataset.bound)return;
+    track.dataset.bound='1';
+    const dots=[...box.querySelectorAll('.hf-dots i')];
+    const index=()=>Math.round(track.scrollLeft/Math.max(1,track.clientWidth));
+    track.addEventListener('scroll',()=>{const i=index();dots.forEach((d,k)=>d.classList.toggle('on',k===i));},{passive:true});
+    ['pointerdown','touchstart','wheel'].forEach(t=>track.addEventListener(t,()=>{lastTouch=Date.now();},{passive:true}));
+    clearInterval(heroTimer);
+    heroTimer=setInterval(()=>{
+      if(document.hidden||body().dataset.screen!=='home'||Date.now()-lastTouch<9000||matchMedia('(prefers-reduced-motion: reduce)').matches||document.body.classList.contains('reduce-motion'))return;
+      const i=(index()+1)%dots.length;track.scrollTo({left:i*track.clientWidth,behavior:'smooth'});
+    },6000);
+  }
+  const body=()=>document.body;
 
   function render(){
     const used=new Set();
@@ -117,7 +157,8 @@
     if(seasons){
       /* Saison qui commence ce mois-ci d’abord, puis saison en cours ; les saisons courtes passent devant « toute l’année ». */
       const inSeason=pool.filter(s=>seasons[s.id]?.includes(m));
-      const score=s=>{const ms=seasons[s.id];return (ms.length===12?2:0)+(ms.includes((m+11)%12)?1:0)+ms.length/24;};
+      /* Les photos en haute définition passent devant (plus belles en grand format). */
+      const score=s=>{const ms=seasons[s.id];return (ms.length===12?2:0)+(ms.includes((m+11)%12)?1:0)+ms.length/24+((photo(s)?.w||0)>=1200?0:1.5);};
       const ordered=inSeason.map(s=>({s,k:score(s)})).sort((a,b)=>a.k-b.k).map(o=>o.s);
       html+=rail('mois',`Où partir en ${monthName(m)} ?`,'C’est la meilleure saison pour ces spots.',pick(ordered,{n:10,perCountry:1,used}),{big:true,season:true,more:true});
     }
@@ -131,29 +172,31 @@
   /* Ordre : titre, Terre, cockpit (série, favoris), rails ; les activités et l’immersion après deux rails.
      ocean-home.js range aussi l’accueil (au chargement et 1,5 s après) : on repasse derrière lui. */
   function order(){
-    const large=$('.as-large',home),heroEl=$('.hf-hero',home),hub=$('#oceanHub',home),feed=$('.hf-feed',home);
+    const large=$('.as-large',home),heroEl=$('.hf-top',home),hub=$('#oceanHub',home),feed=$('.hf-feed',home);
     if(!heroEl||!feed)return;
     if(large&&large.nextElementSibling!==heroEl)large.after(heroEl);
     let at=heroEl;
     if(hub){if(at.nextElementSibling!==hub)at.after(hub);at=hub;}
     if(at.nextElementSibling!==feed)at.after(feed);
     const acts=$('.poulpy-activities',home),intro=$('.home-intro',home),dive=$('#obDive',home);
-    let tail=feed.querySelector('.hf-sec+.hf-sec')||feed.lastElementChild;
+    let tail=feed.querySelector('.hf-world')||feed.querySelector('.hf-sec+.hf-sec')||feed.lastElementChild;
     const after=(el)=>{if(!el)return;if(tail&&tail.nextElementSibling!==el)tail.after(el);tail=el;};
     if(tail&&tail.parentElement===feed){const rest=[...feed.children].slice([...feed.children].indexOf(tail)+1);after(acts);after(intro);after(dive);rest.forEach(after);}
   }
   function mount(){
-    if(!$('.hf-hero',home)){
+    if(!$('.hf-top',home)){
       const tmp=document.createElement('div');tmp.innerHTML=hero();
       ($('.as-large',home)||home.firstElementChild)?.after(tmp.firstElementChild);
       home.classList.add('hf-on');
     }
     let feed=$('.hf-feed',home);
-    if(!feed){feed=document.createElement('div');feed.className='hf-feed';$('.hf-hero',home).after(feed);}
+    if(!feed){feed=document.createElement('div');feed.className='hf-feed';$('.hf-top',home).after(feed);}
     /* Les sections placées entre les rails (activités, immersion) sortent du fil avant le nouveau rendu. */
     for(const el of [$('#oceanHub',home),$('#obDive',home),$('.home-intro',home),$('.poulpy-activities',home)])if(el&&feed.contains(el))feed.after(el);
     feed.innerHTML=render();
-    order();built=true;
+    /* La carte du monde vient après les deux premiers rails. */
+    const second=feed.querySelector('.hf-sec+.hf-sec');const wc=document.createElement('div');wc.innerHTML=worldCard();(second||feed.lastElementChild)?.after(wc.firstElementChild);
+    order();bindHero();requestAnimationFrame(drawWorld);built=true;
   }
   addEventListener('load',()=>setTimeout(order,0),{once:true});
   setTimeout(order,1700);
@@ -170,6 +213,12 @@
       if(typeof toast==='function')toast(`${SPOTS.filter(s=>inSeason(s.id)).length} spots en saison ce mois-ci`);
       return;
     }
+    const search=e.target.closest('[data-hf-search]');
+    if(search){document.querySelector('.mobile-search')?.click();return;}
+    const act=e.target.closest('[data-hf-act]');
+    if(act){if(typeof setSport==='function')setSport(act.dataset.hfAct);return;}
+    const open=e.target.closest('[data-hf-open]')||e.target.closest('.hf-slide[data-spot]');
+    if(open&&typeof openSpot==='function'){openSpot(open.dataset.hfOpen||open.dataset.spot);return;}
     const go2=e.target.closest('[data-hf-go]');
     if(go2){if(go2.dataset.hfGo==='trips'){go('trips');}else{go('spots');}return;}
     const card=e.target.closest('.hf-card[data-spot]');
@@ -181,5 +230,7 @@
   mount();
   /* Langue changée : on reconstruit (noms des mois). */
   window.addEventListener('ocean:lang',()=>{if(built)mount();});
+  addEventListener('resize',()=>{clearTimeout(drawWorld.t);drawWorld.t=setTimeout(drawWorld,200);});
+  window.addEventListener('ocean:navigate',e=>{if(e.detail==='home')requestAnimationFrame(drawWorld);});
   window.OceanHomeFeed={refresh:mount,seasonLabel};
 })();

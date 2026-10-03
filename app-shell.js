@@ -144,14 +144,14 @@
     const cloud=document.createElement('button');cloud.type='button';cloud.dataset.exClouds='';
     cloud.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 18.5h10.2a4 4 0 0 0 .6-8 5.6 5.6 0 0 0-10.7-1.4A4.7 4.7 0 0 0 7 18.5z"/></svg>';
     const paint=()=>{
-      const p=store.get(GLOBE_KEY,{}),live=p.light==='live',on=p.clouds!==false;
+      const p=store.get(GLOBE_KEY,{}),live=p.light==='live',on=p.clouds===true;
       sun.setAttribute('aria-pressed',String(live));sun.setAttribute('aria-label',live?'Jour et nuit en temps réel (activé)':'Afficher le jour et la nuit en temps réel');sun.title=live?'Jour et nuit réels':'Soleil réel';
       cloud.setAttribute('aria-pressed',String(on));cloud.setAttribute('aria-label',on?'Masquer les nuages':'Afficher les nuages');cloud.title=on?'Nuages affichés':'Nuages masqués';
       cloud.classList.toggle('is-off',!on);
     };
     sun.onclick=()=>{const p=store.get(GLOBE_KEY,{});p.light=p.light==='live'?'studio':'live';store.set(GLOBE_KEY,p);window.OceanMap?.globe?.setLighting?.(p.light);paint();
       if(typeof toast==='function')toast(p.light==='live'?'Jour et nuit en temps réel : la Terre telle qu’elle est maintenant.':'Lumière douce : toute la face visible est éclairée.');};
-    cloud.onclick=()=>{const p=store.get(GLOBE_KEY,{});p.clouds=p.clouds===false;store.set(GLOBE_KEY,p);window.OceanMap?.globe?.setClouds?.(p.clouds);paint();};
+    cloud.onclick=()=>{const p=store.get(GLOBE_KEY,{});p.clouds=p.clouds!==true;store.set(GLOBE_KEY,p);window.OceanMap?.globe?.setClouds?.(p.clouds);paint();};
     /* Surprends-moi : la Terre tourne et t’emmène vers un spot au hasard (en saison de préférence). */
     const dice=document.createElement('button');dice.type='button';dice.dataset.exDice='';
     dice.setAttribute('aria-label','Surprends-moi : un spot au hasard');dice.title='Surprends-moi : un spot au hasard';
@@ -187,10 +187,10 @@
     store.set(NEWS_KEY,'1.3');
     const d=document.createElement('div');d.className='as-news';d.setAttribute('role','dialog');d.setAttribute('aria-modal','true');d.setAttribute('aria-label','Nouveautés d’Ocean Buddy');
     d.innerHTML=`<div class="as-news-card">
-      <div class="as-news-hero"><img src="assets/globe/earth-hero.webp" alt="" decoding="async"><span>Nouvelle version</span></div>
-      <h2>La vraie Terre, dans ta poche.</h2>
+      <div class="as-news-hero"><img src="assets/spots/borabora.jpg" alt="" decoding="async"><span>Nouvelle version</span></div>
+      <h2>Les plus beaux spots du monde, dans ta poche.</h2>
       <ul>
-        <li><b>Une planète réelle</b><span>Images NASA, nuages, lumières des villes la nuit et vrai ciel étoilé. Active le jour et la nuit en direct.</span></li>
+        <li><b>Une vraie carte du monde</b><span>La planète en images satellite de la NASA, nette jusqu’au zoom, avec tous les continents bien visibles.</span></li>
         <li><b>Une app repensée</b><span>Nouvelle barre d’onglets, Explorer en plein écran, textes plus lisibles.</span></li>
         <li><b>Des envies de départ</b><span>Collections, idées de voyage et spots à découvrir dès l’accueil.</span></li>
         <li><b>De vrais trophées</b><span>Des médailles à collectionner et à partager.</span></li>

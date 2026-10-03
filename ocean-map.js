@@ -28,7 +28,8 @@
      sous DIVE_KM de large et rend la main au globe au-delà de RISE_KM (écart pour éviter les allers-retours). */
   /* Téléphone : la texture du globe y est en 4K, la carte satellite prend donc le relais plus tôt (images plus nettes). */
   const coarse=matchMedia('(pointer:coarse)').matches;
-  const DIVE_KM=coarse?1200:600,RISE_KM=coarse?2100:1100,WORLD_KM=7000,HOME={lat:30,lon:-8};
+  /* La carte satellite (nette jusqu’au zoom 8) prend le relais tôt : la planète reste belle de loin, et le zoom est net. */
+  const DIVE_KM=coarse?3200:2200,RISE_KM=coarse?4600:3200,WORLD_KM=7000,HOME={lat:30,lon:-8};
   let planet=null,planetStarting=null,planetFailed=false,planetTries=0,mode='globe',modeTimer=0,diving=false;
   const useGlobe=()=>!planetFailed&&!!window.OceanGlobe?.supported();
 
@@ -92,13 +93,14 @@
      au style clair habituel, plus lisible de près. */
   const GIBS='https://gibs.earthdata.nasa.gov/wmts/epsg3857/best/BlueMarble_NextGeneration/default/GoogleMapsCompatible_Level8/{z}/{y}/{x}.jpeg';
   function diveStyle(st,z0){
-    const z1=z0+2.4,Z=(dark,light)=>['interpolate-hcl',['linear'],['zoom'],z0+.5,dark,z1,light];
+    /* Images satellite nettes jusqu’au zoom 8 (500 m) ; le style clair prend le relais entre 8,2 et 9,2. */
+    const za=Math.max(z0+.5,8.2),z1=za+1,Z=(dark,light)=>['interpolate-hcl',['linear'],['zoom'],za,dark,z1,light];
     const set=(id,prop,value)=>{const layer=st.layers.find(l=>l.id===id);if(layer)layer.paint[prop]=value;};
     st.sources.nasa={type:'raster',tiles:[GIBS],tileSize:256,maxzoom:8,attribution:'Images satellite : NASA Blue Marble (GIBS)'};
     const at=st.layers.findIndex(l=>l.id==='building');
     /* L’océan du globe est bleui par l’atmosphère : un voile bleu sur l’eau garde la même teinte à la plongée. */
-    st.layers.splice(at<0?st.layers.length:at,0,{id:'nasa',type:'raster',source:'nasa',paint:{'raster-opacity':['interpolate',['linear'],['zoom'],z0+.4,1,z1+.6,0],'raster-fade-duration':0,'raster-resampling':'linear'}},
-      {id:'nasa-sea',type:'fill',source:'omt','source-layer':'water',filter:['!=',['get','brunnel'],'tunnel'],paint:{'fill-color':'#2a5fc4','fill-opacity':['interpolate',['linear'],['zoom'],z0+.4,.4,z1+.6,0]}});
+    st.layers.splice(at<0?st.layers.length:at,0,{id:'nasa',type:'raster',source:'nasa',paint:{'raster-opacity':['interpolate',['linear'],['zoom'],za,1,z1,0],'raster-fade-duration':0,'raster-resampling':'linear'}},
+      {id:'nasa-sea',type:'fill',source:'omt','source-layer':'water',filter:['!=',['get','brunnel'],'tunnel'],paint:{'fill-color':'#2a5fc4','fill-opacity':['interpolate',['linear'],['zoom'],za,.3,z1,0]}});
     set('sea-name','text-color',Z('#E6F4F8','#5f82cf'));set('sea-name','text-halo-color',Z('rgba(2,10,30,.55)','rgba(201,219,252,.8)'));
     for(const id of ['country-major','country','state','city-major','city']){set(id,'text-color',Z('#F4F7FF',id.startsWith('city')?'#34426a':'#51607f'));set(id,'text-halo-color',Z('rgba(2,10,30,.6)',id.startsWith('city')?'#ffffff':'#f5f6f0'));}
     set('border-country','line-color',Z('rgba(255,255,255,.45)','#aab5cd'));
@@ -217,10 +219,15 @@
     return starting;
   }
   function engineReady(ml){
-    map.addSource('spots',{type:'geojson',data:{type:'FeatureCollection',features:[]},promoteId:'id',buffer:32});
+    /* Spots regroupés de loin (comme sur le globe), séparés à partir du zoom 9. */
+    map.addSource('spots',{type:'geojson',data:{type:'FeatureCollection',features:[]},promoteId:'id',buffer:32,cluster:true,clusterMaxZoom:8,clusterRadius:44});
+    map.addLayer({id:'clusters',type:'circle',source:'spots',filter:['has','point_count'],paint:{
+      'circle-color':'#0b2d7a','circle-opacity':.94,'circle-stroke-color':'#ffffff','circle-stroke-width':2.5,
+      'circle-radius':['interpolate',['linear'],['get','point_count'],2,15,10,18,40,22,150,27]}});
+    map.addLayer({id:'cluster-count',type:'symbol',source:'spots',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['Noto Sans Bold'],'text-size':13,'text-allow-overlap':true},paint:{'text-color':'#ffffff'}});
     const H=['boolean',['feature-state','hover'],false];
     /* Un point net par spot, coloré par activité, liseré blanc ; il grossit avec le zoom. */
-    map.addLayer({id:'dots',type:'circle',source:'spots',layout:{'circle-sort-key':['get','k']},paint:{
+    map.addLayer({id:'dots',type:'circle',source:'spots',filter:['!',['has','point_count']],layout:{'circle-sort-key':['get','k']},paint:{
             'circle-radius':['interpolate',['linear'],['zoom'],0,['case',H,5.2,3],2,['case',H,5.7,3.5],5,['case',H,6.7,4.5],8,['case',H,8.0,5.8],12,['case',H,9.4,7.2],16,['case',H,10.4,8.2]],
       'circle-color':['get','c'],
       'circle-stroke-color':'#ffffff',
@@ -228,7 +235,7 @@
       'circle-opacity':['interpolate',['linear'],['zoom'],0,.88,6,.95,10,1],
       'circle-stroke-opacity':['interpolate',['linear'],['zoom'],0,.85,6,1],
       'circle-pitch-alignment':'map'}});
-    map.addLayer({id:'spot-label',type:'symbol',source:'spots',minzoom:8.5,layout:{'text-field':['get','n'],'text-font':['Noto Sans Bold'],'text-size':['interpolate',['linear'],['zoom'],8.5,11,14,12.5],'text-variable-anchor':['left','right','top','bottom'],'text-radial-offset':.85,'text-justify':'auto','text-max-width':9,'text-padding':3,'symbol-sort-key':['get','k']},paint:{'text-color':'#0b2d7a','text-halo-color':'#ffffff','text-halo-width':1.6}});
+    map.addLayer({id:'spot-label',type:'symbol',source:'spots',minzoom:8.5,filter:['!',['has','point_count']],layout:{'text-field':['get','n'],'text-font':['Noto Sans Bold'],'text-size':['interpolate',['linear'],['zoom'],8.5,11,14,12.5],'text-variable-anchor':['left','right','top','bottom'],'text-radial-offset':.85,'text-justify':'auto','text-max-width':9,'text-padding':3,'symbol-sort-key':['get','k']},paint:{'text-color':'#0b2d7a','text-halo-color':'#ffffff','text-halo-width':1.6}});
     selectedMarker=new ml.Marker({element:Object.assign(document.createElement('div'),{className:'omap-selected'}),anchor:'bottom'});
     userDot=new ml.Marker({element:Object.assign(document.createElement('div'),{className:'omap-user'}),anchor:'center'});
     tip=new ml.Popup({closeButton:false,closeOnClick:false,className:'omap-tip',offset:12,maxWidth:'240px'});
@@ -258,6 +265,9 @@
     return found.filter(f=>!seen.has(f.properties.id)&&seen.add(f.properties.id)).sort((a,b)=>at(a)-at(b));
   }
   function onMapClick(e){
+    /* Groupe de spots : on zoome jusqu’à ce qu’il s’ouvre. */
+    const cl=map.queryRenderedFeatures([[e.point.x-14,e.point.y-14],[e.point.x+14,e.point.y+14]],{layers:['clusters']})[0];
+    if(cl){const src=map.getSource('spots'),id=cl.properties.cluster_id;Promise.resolve(src.getClusterExpansionZoom(id)).then(z=>{map.easeTo({center:cl.geometry.coordinates,zoom:Math.min(z+.3,12),duration:650});}).catch(()=>{map.easeTo({center:cl.geometry.coordinates,zoom:map.getZoom()+2,duration:650});});return;}
     const found=pick(e.point);
     if(!found.length){deselect();return;}
     const near=found[0],p=map.project(near.geometry.coordinates);
@@ -294,7 +304,7 @@
     const host=stage.querySelector('.omap-globe');
     let prefs={};try{prefs=JSON.parse(localStorage.getItem('oceanbuddy_globe')||'{}')||{};}catch(_){}
     planetStarting=window.OceanGlobe.create(host,{
-      minWidthKm:DIVE_KM,lighting:prefs.light,clouds:prefs.clouds!==false,
+      minWidthKm:DIVE_KM,lighting:prefs.light,clouds:prefs.clouds===true,
       onSelect:id=>select(id),
       onEmpty:()=>deselect(),
       onView:()=>{if(mode!=='globe')return;worldState();clearTimeout(listTimer);listTimer=setTimeout(updateList,90);},

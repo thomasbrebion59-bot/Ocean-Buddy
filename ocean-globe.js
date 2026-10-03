@@ -62,7 +62,7 @@
   const EARTH_V=`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
   const EARTH_F=`
     uniform sampler2D uDay,uNorm,uSky;uniform vec3 uSun,uCam;
-    uniform float uCloudOff,uCloudA,uRelief,uNight,uExpo,uSpec,uReveal;
+    uniform float uCloudOff,uCloudA,uRelief,uNight,uExpo,uSpec,uReveal,uStudio;
     varying vec3 vPos;
     ${GEO}
     void main(){
@@ -78,12 +78,13 @@
       vec3 N=normalize(n*sqrt(max(1.-dot(s,s),.05))+east*s.x+north*s.y);
       vec3 V=normalize(uCam-vPos),L=uSun;
       float mu=dot(n,L),ndv=max(dot(n,V),0.);
-      vec3 sunC=sunTint(mu);
+      /* Lumière « studio » : soleil blanc venant de la caméra et lumière d’ambiance, aucune face de nuit. */
+      vec3 sunC=mix(sunTint(mu),vec3(1.),uStudio);
       /* Ombre des nuages, décalée vers le soleil. */
       vec3 tl=L-n*mu;
       vec2 off=vec2(dot(tl,east)/max(cos(lat),.15)/(2.*PI),dot(tl,north)/PI)*.006;
       float cs=textureGrad(uSky,uv+vec2(uCloudOff,0.)+off,dx,dy).g*uCloudA;
-      float diff=max(dot(N,L),0.)*smoothstep(-.03,.06,mu);
+      float diff=mix(max(dot(N,L),0.)*smoothstep(-.03,.06,mu),.45+.62*max(dot(N,L),0.),uStudio);
       vec3 col=albedo*sunC*diff*(1.-.5*cs)*uExpo;
       /* Océan : reflet du soleil (GGX) et du ciel (Fresnel). */
       vec3 H=normalize(L+V);
@@ -93,10 +94,13 @@
       col+=water*uSpec*glint*sunC*(1.-.85*cs);
       col+=water*(.02+.98*pow(1.-ndv,5.))*vec3(.3,.5,.95)*.3*smoothstep(-.05,.3,mu);
       /* Nuit : lumières des villes, voilées par les nuages. */
-      col+=vec3(1.,.64,.33)*sk.r*sk.r*(1.-smoothstep(-.16,.05,mu))*(1.-.7*cs)*uNight;
+      col+=vec3(1.,.64,.33)*sk.r*sk.r*(1.-smoothstep(-.16,.05,mu))*(1.-.7*cs)*uNight*(1.-uStudio);
       /* Atmosphère vue du dessus : extinction et diffusion (bleu, surtout vers le limbe). */
-      vec3 ext=exp(-BR*.1/(ndv+.06));
-      col=col*ext+(1.-ext)*vec3(.3,.55,1.)*sunC*smoothstep(-.25,.35,mu)*1.05;
+      vec3 ext=exp(-BR*mix(.1,.055,uStudio)/(ndv+.06));
+      col=col*ext+(1.-ext)*vec3(.3,.55,1.)*sunC*mix(smoothstep(-.25,.35,mu),1.,uStudio)*mix(1.05,.8,uStudio);
+      /* Continents plus francs en lumière studio : un peu plus de saturation et de contraste. */
+      float lum=dot(col,vec3(.2126,.7152,.0722));
+      col=mix(col,max(mix(vec3(lum),col,1.22)*1.06-.006,0.),uStudio);
       col=mix(vec3(.004,.012,.035),col,uReveal);
       gl_FragColor=vec4(col,1.);
       #include <colorspace_fragment>
@@ -206,11 +210,12 @@
     const camera=new T.PerspectiveCamera(FOV,1,.01,200);
     const col=h=>new T.Color(h);
     /* Éclairage : « studio » (le soleil suit la caméra, en haut à gauche) ou « réel » (soleil du moment). */
-    let lighting=opts.lighting==='live'?'live':'studio',cloudsOn=opts.clouds!==false;
-    const sunDir=new T.Vector3(),studioSun=new T.Vector3(-.74,.3,.6).normalize();
+    /* Nuages masqués par défaut : les continents restent bien visibles (réglage dans les commandes du globe). */
+    let lighting=opts.lighting==='live'?'live':'studio',cloudsOn=opts.clouds===true;
+    const sunDir=new T.Vector3(),studioSun=new T.Vector3(-.38,.36,.85).normalize();
     const uniEarth={
       uDay:{value:null},uNorm:{value:null},uSky:{value:null},uSun:{value:sunDir},uCam:{value:new T.Vector3()},
-      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:5.5},uReveal:{value:0}
+      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:3.2},uReveal:{value:0},uStudio:{value:lighting==='studio'?1:0}
     };
     const seg=mobile?128:192;
     const earth=new T.Mesh(new T.SphereGeometry(1,seg,seg/2),new T.ShaderMaterial({uniforms:uniEarth,vertexShader:EARTH_V,fragmentShader:EARTH_F}));
@@ -369,7 +374,7 @@
       /* Ouverture : la Terre arrive de l’espace en tournant, le ciel s’allume. */
       if(revealStart){const t=touched?1:Math.min(1,(now-revealStart)/2600),e=1-Math.pow(1-t,3.2);
         uniEarth.uReveal.value=Math.min(1,t*2.4);approach=1+2.6*(1-e);spin=touched?0:48*(1-e);
-        skyU.uI.value=.42*Math.min(1,t*1.6);starU.uI.value=Math.min(1,t*1.4);
+        skyU.uI.value=0;starU.uI.value=.6*Math.min(1,t*1.4);
         if(t<1)again=true;else{revealStart=0;spin=0;approach=1;}dirty=true;}
       /* Vie au repos : les nuages dérivent ; tant qu’on n’a pas touché le globe, il tourne doucement. */
       const dt=lastTick?Math.min(120,now-lastTick):16;lastTick=now;let ambient=false;
@@ -858,21 +863,26 @@
         return tex;
       });
     }
-    /* Surface (Blue Marble), relief et eau, puis nuit, nuages et glaces ; ciel en parallèle. */
-    const [day,norm,skyTex]=await Promise.all([
-      loadTexture(asset('assets/globe/earth-day-4k.webp'),true),
-      loadTexture(asset('assets/globe/earth-normal-4k.webp')),
-      loadTexture(asset('assets/globe/earth-sky-4k.webp'))
-    ]);
-    uniEarth.uDay.value=day;uniEarth.uNorm.value=norm;uniEarth.uSky.value=skyTex;cloudU.uSky.value=skyTex;
-    [day,norm,skyTex].forEach(t=>renderer.initTexture?.(t));
-    earth.visible=true;clouds.visible=true;
-    loadTexture(asset('assets/globe/sky-2k.webp'),true).then(t=>{t.wrapT=T.ClampToEdgeWrapping;skyU.uMw.value=t;invalidate();}).catch(()=>{});
-    /* Ordinateur : la surface en 8K arrive ensuite, pour des côtes plus fines au zoom. */
+    /* Surface (Blue Marble) et relief ; nuages et lumières de la nuit seulement quand on les affiche. */
     const conn=navigator.connection;let dead=false;
-    if(!mobile&&maxTex>=8192&&!conn?.saveData)setTimeout(()=>loadTexture(asset('assets/globe/earth-day-8k.webp'),true).then(tex=>{if(dead)return;const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;old?.dispose();invalidate();}).catch(()=>{}),1200);
+    const [day,norm]=await Promise.all([
+      loadTexture(asset('assets/globe/earth-day-4k.webp'),true),
+      loadTexture(asset('assets/globe/earth-normal-4k.webp'))
+    ]);
+    uniEarth.uDay.value=day;uniEarth.uNorm.value=norm;
+    [day,norm].forEach(t=>renderer.initTexture?.(t));
+    let skyLoading=null;
+    function needSky(){
+      if(skyLoading||!(cloudsOn||lighting==='live'))return;
+      skyLoading=loadTexture(asset('assets/globe/earth-sky-4k.webp')).then(t=>{if(dead)return;uniEarth.uSky.value=t;cloudU.uSky.value=t;invalidate();}).catch(()=>{skyLoading=null;});
+    }
+    needSky();
+    earth.visible=true;clouds.visible=cloudsOn;
+    /* Ordinateur : la surface en 8K arrive ensuite, pour des côtes plus fines au zoom. */
+    /* Surface 8K pour un zoom net (téléphones récents compris : textures 16K prises en charge). */
+    if((!mobile&&maxTex>=8192||maxTex>=16384)&&!conn?.saveData)setTimeout(()=>loadTexture(asset('assets/globe/earth-day-8k.webp'),true).then(tex=>{if(dead)return;const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;old?.dispose();invalidate();}).catch(()=>{}),1200);
     resize();applyCamera();
-    revealStart=reduced()?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;skyU.uI.value=.42;starU.uI.value=1;}
+    revealStart=reduced()?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;starU.uI.value=.6;}
     invalidate();
 
     const api={
@@ -881,9 +891,9 @@
       setPadding(p){pad={...pad,...p};view.dist=clampDist(view.dist);invalidate();scheduleLabels();},
       view:getView,flyTo,zoomIn,zoomOut,resize,
       /* Éclairage « studio » ou « live » (jour et nuit réels) ; nuages visibles ou non. */
-      setLighting(m){lighting=m==='live'?'live':'studio';invalidate();return lighting;},
+      setLighting(m){lighting=m==='live'?'live':'studio';uniEarth.uStudio.value=lighting==='studio'?1:0;needSky();invalidate();return lighting;},
       get lighting(){return lighting;},
-      setClouds(on){cloudsOn=!!on;invalidate();return cloudsOn;},
+      setClouds(on){cloudsOn=!!on;clouds.visible=cloudsOn;needSky();invalidate();return cloudsOn;},
       get clouds(){return cloudsOn;},
       /* Point de la Terre où le soleil est au zénith en ce moment. */
       sun(){return sky().sun;},
