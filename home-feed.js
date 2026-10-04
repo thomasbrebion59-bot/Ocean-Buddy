@@ -68,7 +68,10 @@
       test:s=>['oc','as','af','sa'].includes(s.world)&&/\b[îi]le|atoll|archipel/.test(text(s))}
   ];
 
-  let seasons=null,built=false;
+  let seasons=null,scores=null,built=false;
+  /* Éclat de la photo (data/photo-scores.json) : les rails commencent par les images les plus lumineuses et colorées. */
+  const vib=id=>scores?.[id]??55;
+  const bright=list=>list.map((x,i)=>({x,i,k:Math.round(vib(x.id)/20)})).sort((a,b)=>b.k-a.k||a.i-b.i).map(o=>o.x);
   function card(s,{big=false,season=null}={}){
     const p=photo(s);if(!p)return '';
     const acts=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');
@@ -115,6 +118,21 @@
       </div>
     </section>`;
   }
+  /* Envies du moment : quatre grandes tuiles photo qui mènent aux collections. */
+  const MOOD_COVER={lagons:'whitehaven',legendes:'teahupoo',plongees:'ermitage',iles:'tikehau',nord:'lofoten',debut:'macarella'};
+  function moods(feed){
+    const tiles=[];
+    for(const id of ['lagons','legendes','plongees','iles','nord','debut']){
+      const sec=feed.querySelector(`[data-hf="${id}"]`);if(!sec)continue;
+      const first=sec.querySelector('.hf-card img'),title=sec.querySelector('.as-sec h2')?.firstChild?.textContent||'',n=sec.querySelectorAll('.hf-card').length;
+      /* Couverture choisie à la main (la plus belle photo de l’ambiance), sinon la première carte. */
+      const pick=MOOD_COVER[id]&&SPOTS.find(x=>x.id===MOOD_COVER[id]),cover=(pick&&photo(pick)?.thumb)||first?.getAttribute('src');
+      if(cover)tiles.push(`<button type="button" class="hf-mood" data-hf-jump="${id}"><img src="${esc(cover)}" alt="" loading="lazy" decoding="async"><b>${esc(title)}</b><small>${n} spots</small></button>`);
+      if(tiles.length===4)break;
+    }
+    if(tiles.length<4)return '';
+    return `<section class="hf-moods" aria-label="Envies du moment"><div class="as-sec"><h2>Envies du moment<small>Choisis une ambiance, on te montre où aller.</small></h2></div><div class="hf-mood-grid">${tiles.join('')}</div></section>`;
+  }
   /* Carte du monde : chaque spot est un point lumineux sur la vraie carte (NASA), une invitation à explorer. */
   function worldCard(){
     return `<section class="hf-world" aria-label="La carte du monde des spots">
@@ -139,7 +157,13 @@
     track.dataset.bound='1';
     const dots=[...box.querySelectorAll('.hf-dots i')];
     const index=()=>Math.round(track.scrollLeft/Math.max(1,track.clientWidth));
-    track.addEventListener('scroll',()=>{const i=index();dots.forEach((d,k)=>d.classList.toggle('on',k===i));},{passive:true});
+    /* Fond d’ambiance : la photo du spot affiché, très floutée, colore le haut de l’accueil. */
+    let amb=home.querySelector('.hf-ambient');
+    if(!amb){amb=document.createElement('div');amb.className='hf-ambient';amb.setAttribute('aria-hidden','true');amb.innerHTML='<img alt=""><img alt="">';home.prepend(amb);}
+    let shown=-1,layer=0;
+    const ambient=i=>{if(i===shown)return;shown=i;const img=track.children[i]?.querySelector('img');if(!img)return;const els=amb.querySelectorAll('img');layer=1-layer;els[layer].src=img.currentSrc||img.src;els[layer].classList.add('on');els[1-layer].classList.remove('on');};
+    ambient(0);
+    track.addEventListener('scroll',()=>{const i=index();dots.forEach((d,k)=>d.classList.toggle('on',k===i));clearTimeout(ambient.t);ambient.t=setTimeout(()=>ambient(index()),120);},{passive:true});
     ['pointerdown','touchstart','wheel'].forEach(t=>track.addEventListener(t,()=>{lastTouch=Date.now();},{passive:true}));
     clearInterval(heroTimer);
     heroTimer=setInterval(()=>{
@@ -151,14 +175,14 @@
 
   function render(){
     const used=new Set();
-    const pool=daily(SPOTS.filter(s=>photo(s)),'pool');
+    const pool=bright(daily(SPOTS.filter(s=>photo(s)),'pool'));
     const m=new Date().getMonth();
     let html='';
     if(seasons){
       /* Saison qui commence ce mois-ci d’abord, puis saison en cours ; les saisons courtes passent devant « toute l’année ». */
       const inSeason=pool.filter(s=>seasons[s.id]?.includes(m));
       /* Les photos en haute définition passent devant (plus belles en grand format). */
-      const score=s=>{const ms=seasons[s.id];return (ms.length===12?2:0)+(ms.includes((m+11)%12)?1:0)+ms.length/24+((photo(s)?.w||0)>=1200?0:1.5);};
+      const score=s=>{const ms=seasons[s.id];return (ms.length===12?2:0)+(ms.includes((m+11)%12)?1:0)+ms.length/24+((photo(s)?.w||0)>=1200?0:1.5)+(100-vib(s.id))/25;};
       const ordered=inSeason.map(s=>({s,k:score(s)})).sort((a,b)=>a.k-b.k).map(o=>o.s);
       html+=rail('mois',`Où partir en ${monthName(m)} ?`,'C’est la meilleure saison pour ces spots.',pick(ordered,{n:10,perCountry:1,used}),{big:true,season:true,more:true});
     }
@@ -175,13 +199,14 @@
     const large=$('.as-large',home),heroEl=$('.hf-top',home),hub=$('#oceanHub',home),feed=$('.hf-feed',home);
     if(!heroEl||!feed)return;
     if(large&&large.nextElementSibling!==heroEl)large.after(heroEl);
-    let at=heroEl;
-    if(hub){if(at.nextElementSibling!==hub)at.after(hub);at=hub;}
-    if(at.nextElementSibling!==feed)at.after(feed);
+    if(heroEl.nextElementSibling!==feed)heroEl.after(feed);
+    /* Le cockpit (série, favoris, reprendre) vient après les envies du moment. */
+    const anchor=feed.querySelector('.hf-moods')||feed.querySelector('.hf-sec');
+    if(hub&&anchor&&anchor.nextElementSibling!==hub)anchor.after(hub);
     const acts=$('.poulpy-activities',home),intro=$('.home-intro',home),dive=$('#obDive',home);
-    let tail=feed.querySelector('.hf-world')||feed.querySelector('.hf-sec+.hf-sec')||feed.lastElementChild;
+    let tail=feed.querySelector('.hf-world')||feed.querySelectorAll('.hf-sec')[1]||feed.lastElementChild;
     const after=(el)=>{if(!el)return;if(tail&&tail.nextElementSibling!==el)tail.after(el);tail=el;};
-    if(tail&&tail.parentElement===feed){const rest=[...feed.children].slice([...feed.children].indexOf(tail)+1);after(acts);after(intro);after(dive);rest.forEach(after);}
+    if(tail&&tail.parentElement===feed){const rest=[...feed.children].slice([...feed.children].indexOf(tail)+1).filter(el=>el!==hub);after(acts);after(intro);after(dive);rest.forEach(after);}
   }
   function mount(){
     if(!$('.hf-top',home)){
@@ -194,8 +219,10 @@
     /* Les sections placées entre les rails (activités, immersion) sortent du fil avant le nouveau rendu. */
     for(const el of [$('#oceanHub',home),$('#obDive',home),$('.home-intro',home),$('.poulpy-activities',home)])if(el&&feed.contains(el))feed.after(el);
     feed.innerHTML=render();
+    /* Envies du moment juste après le premier rail, la carte du monde après le deuxième. */
+    const firstRail=feed.querySelector('.hf-sec');const mm=document.createElement('div');mm.innerHTML=moods(feed);if(mm.firstElementChild)(firstRail||feed.firstElementChild)?.after(mm.firstElementChild);
     /* La carte du monde vient après les deux premiers rails. */
-    const second=feed.querySelector('.hf-sec+.hf-sec');const wc=document.createElement('div');wc.innerHTML=worldCard();(second||feed.lastElementChild)?.after(wc.firstElementChild);
+    const second=feed.querySelectorAll('.hf-sec')[1];const wc=document.createElement('div');wc.innerHTML=worldCard();(second||feed.lastElementChild)?.after(wc.firstElementChild);
     order();bindHero();requestAnimationFrame(drawWorld);built=true;
   }
   addEventListener('load',()=>setTimeout(order,0),{once:true});
@@ -213,6 +240,8 @@
       if(typeof toast==='function')toast(`${SPOTS.filter(s=>inSeason(s.id)).length} spots en saison ce mois-ci`);
       return;
     }
+    const jump=e.target.closest('[data-hf-jump]');
+    if(jump){const sec=home.querySelector(`[data-hf="${jump.dataset.hfJump}"]`);sec?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});return;}
     const search=e.target.closest('[data-hf-search]');
     if(search){document.querySelector('.mobile-search')?.click();return;}
     const act=e.target.closest('[data-hf-act]');
@@ -226,7 +255,8 @@
   });
   home.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.hf-card')){e.preventDefault();e.target.click();}});
 
-  fetch('data/seasons.json').then(r=>r.ok?r.json():null).then(d=>{seasons=d;window.OCEAN_SEASONS=d;mount();}).catch(()=>mount());
+  Promise.all(['data/seasons.json','data/photo-scores.json'].map(u=>fetch(u).then(r=>r.ok?r.json():null).catch(()=>null)))
+    .then(([d,sc])=>{seasons=d;scores=sc;window.OCEAN_SEASONS=d;mount();});
   mount();
   /* Langue changée : on reconstruit (noms des mois). */
   window.addEventListener('ocean:lang',()=>{if(built)mount();});

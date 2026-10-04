@@ -78,8 +78,9 @@ test('each published photograph belongs to the destination and has usable attrib
  assert.equal(Object.keys(photos).length,all.filter(s=>s.photo).length);
  for(const id of ['tamarindo','byronbay']){const p=all.find(s=>s.id===id).photo;assert.equal(p.ai,true,id);assert.equal(p.label,'Illustration IA',id);assert.match(p.caption,/pas une photo du lieu/,id);assert.ok(photos[id],id);}
  for(const s of all.filter(s=>s.photo?.ai))assert.match(s.photo.src,/-ia\.webp$/,s.id);
- assert.match(photos.cumbuco.caption,/Barra do Cauípe/);
- assert.match(photos.ngor.caption,/reef/);
+ /* Couvertures revues en octobre 2026 : photos du lieu même, Wikimedia Commons. */
+ assert.match(photos.cumbuco.source,/Praia_do_cumbuco/);
+ assert.match(photos.ngor.source,/Ile_Ngor/);
  for(const s of all.filter(s=>s.photo)){const p=photos[s.id];assert.ok(p,s.id);assert.ok(fs.statSync(path.join(root,p.src)).size>1000,s.id);assert.ok(fs.statSync(path.join(root,p.thumb)).size>1000,s.id+' thumbnail');assert.ok(p.author&&p.license&&p.source,s.id);assert.equal(new URL(p.source).protocol,'https:',s.id);}
  for(const s of extra){assert.match(photos[s.id].license,/CC BY|CC0|Public domain/,s.id);assert.ok(photos[s.id].width>=600,s.id);}
  assert.match(photos.bluehole_belize.source,/Belize_Blue_Hole\.jpg/);

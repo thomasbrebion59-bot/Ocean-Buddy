@@ -74,3 +74,22 @@
 .hf-fav:active{transform:scale(.88)}
 @media(min-width:960px){.hf-card{flex-basis:220px}.hf-rail.big .hf-card{flex-basis:280px}.hf-rail{margin:0;padding-inline:0}}
 @media(prefers-reduced-motion:reduce){.hf-slide img{transition:none}}
+
+/* ---------- Fond d’ambiance (photo du spot affiché, floutée) ---------- */
+#home.hf-on{position:relative;z-index:0}
+.hf-ambient{position:absolute;z-index:-1;left:calc(-1 * var(--as-gutter,16px));right:calc(-1 * var(--as-gutter,16px));top:calc(-8px - var(--as-top,0px));height:560px;overflow:hidden;pointer-events:none;
+  -webkit-mask-image:linear-gradient(180deg,#000 35%,transparent);mask-image:linear-gradient(180deg,#000 35%,transparent)}
+.hf-ambient img{position:absolute;inset:-60px;width:calc(100% + 120px);height:calc(100% + 120px);object-fit:cover;filter:blur(46px) saturate(1.5) brightness(1.08);opacity:0;transition:opacity 1.2s ease}
+.hf-ambient img.on{opacity:.55}
+@media(min-width:960px){.hf-ambient{left:-24px;right:-24px;top:-24px}}
+
+/* ---------- Envies du moment ---------- */
+.hf-moods .as-sec{margin-top:28px}
+.hf-mood-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.hf-mood{position:relative;overflow:hidden;isolation:isolate;aspect-ratio:1/1;border:0;border-radius:var(--as-r-l,22px);padding:0;cursor:pointer;color:#fff;text-align:left;background:#0b2d7a;box-shadow:0 12px 26px -16px rgba(12,29,63,.6)}
+.hf-mood img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+.hf-mood::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(3,12,32,.78))}
+.hf-mood b{position:absolute;left:12px;right:10px;bottom:28px;font:800 20px/1 var(--as-condensed);text-transform:uppercase;letter-spacing:-.2px}
+.hf-mood small{position:absolute;left:12px;bottom:11px;font:650 12px var(--body);opacity:.85}
+.hf-mood:active{transform:scale(.97)}
+@media(min-width:960px){.hf-mood-grid{grid-template-columns:repeat(4,1fr)}}
