@@ -16,7 +16,7 @@
   const glow=id=>GLOW[id]||'#5C88FF';
 
   /* Version des fichiers du globe (moteur, textures, données), recalculée par scripts/version-assets.py. */
-  const ASSET_V='4af39f01daae';
+  const ASSET_V='ce6a5a6765df';
   const asset=path=>new URL(path+'?v='+ASSET_V,document.baseURI).href;
   const NEEDED=['WebGLRenderer','ShaderMaterial','InstancedBufferGeometry','Line','OrthographicCamera','CanvasTexture'];
   let threeLoading=null;
@@ -63,8 +63,22 @@
   const EARTH_F=`
     uniform sampler2D uDay,uNorm,uSky;uniform vec3 uSun,uCam;
     uniform float uCloudOff,uCloudA,uRelief,uNight,uExpo,uSpec,uReveal,uStudio;
+    uniform sampler2D uSst;uniform float uSstA,uSstM;
     varying vec3 vPos;
     ${GEO}
+    /* Température de l’eau : échelle « chaleur » graduée, du bleu froid au rouge corail. */
+    vec3 heat(float t){
+      vec3 c=vec3(.141,.188,.431);
+      c=mix(c,vec3(.165,.373,.769),smoothstep(-2.,8.,t));
+      c=mix(c,vec3(.118,.643,.784),smoothstep(8.,15.,t));
+      c=mix(c,vec3(.31,.812,.624),smoothstep(15.,20.,t));
+      c=mix(c,vec3(.914,.839,.29),smoothstep(20.,24.,t));
+      c=mix(c,vec3(.953,.604,.239),smoothstep(24.,27.,t));
+      c=mix(c,vec3(.847,.275,.227),smoothstep(27.,30.,t));
+      c=mix(c,vec3(.639,.141,.227),smoothstep(30.,32.,t));
+      return c;
+    }
+    vec2 sstUV(float m,vec2 uv){return vec2((mod(m,4.)+uv.x)/4.,(2.-floor(m/4.)+uv.y)/3.);}
     void main(){
       vec3 n=normalize(vPos);vec2 uv,dx,dy;geo(n,uv,dx,dy);
       vec3 albedo=textureGrad(uDay,uv,dx,dy).rgb;
@@ -95,6 +109,20 @@
       col+=water*(.02+.98*pow(1.-ndv,5.))*vec3(.3,.5,.95)*.3*smoothstep(-.05,.3,mu);
       /* Nuit : lumières des villes, voilées par les nuages. */
       col+=vec3(1.,.64,.33)*sk.r*sk.r*(1.-smoothstep(-.16,.05,mu))*(1.-.7*cs)*uNight*(1.-uStudio);
+      if(uSstA>.001){
+        float mm=mod(uSstM,12.),m0=floor(mm),f=mm-m0,m1=mod(m0+1.,12.);
+        vec2 tuv=vec2(clamp(uv.x,.0008,.9992),clamp(uv.y,.0015,.9985));
+        float s0=texture2D(uSst,sstUV(m0,tuv)).r,s1=texture2D(uSst,sstUV(m1,tuv)).r;
+        float ok=step(s0,.99)*step(s1,.99)*smoothstep(.3,.7,water);
+        float t=mix(s0,s1,f)*255./254.*34.-2.;
+        vec3 hc=heat(t);
+        /* Isothermes tous les 2 °C, plus marquée à 24 °C (eau « chaude »). */
+        float d=abs(fract(t*.5+.5)-.5)*2.,w=max(fwidth(t)*.9,.02);
+        hc*=1.-.32*(1.-smoothstep(0.,w,d));
+        hc=mix(hc,vec3(1.),.75*(1.-smoothstep(0.,w*1.4,abs(t-24.))));
+        float lit=mix(max(dot(n,L),0.)*smoothstep(-.03,.06,mu),.7+.38*max(dot(n,L),0.),uStudio);
+        col=mix(col,hc*lit*1.05,uSstA*ok*.94);
+      }
       /* Atmosphère vue du dessus : extinction et diffusion (bleu, surtout vers le limbe). */
       vec3 ext=exp(-BR*mix(.1,.055,uStudio)/(ndv+.06));
       col=col*ext+(1.-ext)*vec3(.3,.55,1.)*sunC*mix(smoothstep(-.25,.35,mu),1.,uStudio)*mix(1.05,.8,uStudio);
@@ -215,7 +243,8 @@
     const sunDir=new T.Vector3(),studioSun=new T.Vector3(-.38,.36,.85).normalize();
     const uniEarth={
       uDay:{value:null},uNorm:{value:null},uSky:{value:null},uSun:{value:sunDir},uCam:{value:new T.Vector3()},
-      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:3.2},uReveal:{value:0},uStudio:{value:lighting==='studio'?1:0}
+      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:3.2},uReveal:{value:0},uStudio:{value:lighting==='studio'?1:0},
+      uSst:{value:null},uSstA:{value:0},uSstM:{value:new Date().getMonth()}
     };
     const seg=mobile?128:192;
     const earth=new T.Mesh(new T.SphereGeometry(1,seg,seg/2),new T.ShaderMaterial({uniforms:uniEarth,vertexShader:EARTH_V,fragmentShader:EARTH_F}));
@@ -885,6 +914,13 @@
     revealStart=reduced()?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;starU.uI.value=.6;}
     invalidate();
 
+    let sstOn=false;const sstAnim={};
+    function sstTween(k,to){
+      const from=uniEarth[k].value;if(reduced()||Math.abs(to-from)<.001){uniEarth[k].value=to;invalidate();return;}
+      const t0=performance.now(),dur=k==='uSstA'?650:520;cancelAnimationFrame(sstAnim[k]);
+      const step=now=>{const p=Math.min(1,(now-t0)/dur),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;uniEarth[k].value=from+(to-from)*e;invalidate();if(p<1)sstAnim[k]=requestAnimationFrame(step);};
+      sstAnim[k]=requestAnimationFrame(step);
+    }
     const api={
       setSpots,setSelected,
       setUser(pos){user=pos?{v:M.vec(pos.lat,pos.lon)}:null;invalidate();},
@@ -894,6 +930,17 @@
       setLighting(m){lighting=m==='live'?'live':'studio';uniEarth.uStudio.value=lighting==='studio'?1:0;needSky();invalidate();return lighting;},
       get lighting(){return lighting;},
       setClouds(on){cloudsOn=!!on;clouds.visible=cloudsOn;needSky();invalidate();return cloudsOn;},
+      /* Couche « température de l’eau » (normales mensuelles NOAA) : apparition en fondu, mois interpolés. */
+      setSst(on,month){
+        if(on&&!uniEarth.uSst.value){
+          new T.TextureLoader().load(asset('assets/globe/sst-atlas.webp?v=1'),tex=>{tex.generateMipmaps=false;tex.minFilter=T.LinearFilter;tex.magFilter=T.LinearFilter;tex.wrapS=tex.wrapT=T.ClampToEdgeWrapping;uniEarth.uSst.value=tex;sstTween('uSstA',sstOn?1:0);invalidate();});
+        }
+        sstOn=!!on;if(month!=null)api.setSstMonth(month);
+        if(uniEarth.uSst.value)sstTween('uSstA',sstOn?1:0);
+        return sstOn;
+      },
+      setSstMonth(m){let cur=uniEarth.uSstM.value%12,to=((m%12)+12)%12;if(to-cur>6)cur+=12;else if(cur-to>6)cur-=12;uniEarth.uSstM.value=cur;sstTween('uSstM',to);},
+      get sst(){return sstOn;},
       get clouds(){return cloudsOn;},
       /* Point de la Terre où le soleil est au zénith en ce moment. */
       sun(){return sky().sun;},

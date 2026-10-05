@@ -370,6 +370,7 @@ function exploreSpots(filter=currentFilter,options={}){
     &&(!sport||spotSports(s).includes(sport))
     &&(filter==='all'||(filter==='new'?s.catalogNew:filter==='season'?inSeason(s.id):s.level===filter))
     &&(!favorite||favs.has(s.id))
+    &&(typeof OceanPlan==='undefined'||OceanPlan.ok(s))
     &&(!search||searchable(s.name+' '+s.loc+' '+spotSports(s).map(id=>(typeof SPORTMAP!=='undefined'&&SPORTMAP[id]?.label)||id).join(' ')).includes(search)));
 }
 /* Meilleure saison (data/seasons.json, chargé par home-feed.js) : le spot est-il en saison ce mois-ci ? */
@@ -926,6 +927,7 @@ function setDetailSport(id){
   realForecastDetail(s,act);
   window.OceanExperience?.update(s,act);
   window.OceanPoulpy?.refresh();
+  try{window.OceanSpotData?.sport();}catch(e){}
 }
 function renderDetailFacts(s,act){
   /* Trois reperes d'identite, pas de conditions : celles-ci ont leur onglet. */
@@ -999,6 +1001,7 @@ function openSpot(id){
   /* Les modules annexes (communauté, guide, carte) ne doivent jamais bloquer l’ouverture de la fiche. */
   try{window.OceanCommunity?.mountSpot(id);}catch(e){console.warn('community',e);}
   try{window.OceanSpotGuide?.update(s);}catch(e){console.warn('guide',e);}
+  try{window.OceanSpotData?.update(s);}catch(e){console.warn('data',e);}
   go('detail');
 }
 function renderSpotSource(s){
@@ -1185,6 +1188,7 @@ function renderConditions(s,live){
     <div class="wc">${icoTemp()}<div class="v">${isInland(s)?'—':temp}</div><div class="l">${isInland(s)?'Température de l’eau non disponible':'Eau'}</div></div>
     <div class="wc">${icoTide()}<div class="v" style="font-size:10.5px;">${isInland(s)?'—':tide}</div><div class="l">${isInland(s)?'Sans marée océanique':'Marée'}</div></div>`;
   window.OceanImmersion?.refreshConditions(s,live);
+  try{window.OceanSpotData?.live(s,live);}catch(e){}
   const head=document.getElementById('dCondHead');
   if(head){
     const stamp=live?.fetchedAt?new Date(live.fetchedAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):null;

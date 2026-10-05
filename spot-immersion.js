@@ -74,7 +74,7 @@
     draw();
     const weatherHelp=$('#imWeatherHelp');weatherHelp.innerHTML=`${icon(a)}<span><b>Ces chiffres, ça veut dire quoi ?</b><small>Poulpy t’explique le vent${isInland(s)?' et l’eau.':', les vagues et la marée.'}</small></span><span aria-hidden="true">→</span>`;
     document.querySelectorAll('#dTabs .dtab').forEach(b=>{
-      const key={infos:'all',meteo:'expert',activites:a,faune:'snorkeling',preserver:'all'}[b.dataset.cat];
+      const key={infos:'all',saisons:'baignade',meteo:'expert',activites:a,faune:'snorkeling',preserver:'all'}[b.dataset.cat];
       let image=b.querySelector('.poulpy-mini');if(image)image.src=PoulpyIcons.src(key);else{b.querySelector('svg')?.remove();b.insertAdjacentHTML('afterbegin',icon(key));}
     });
   }

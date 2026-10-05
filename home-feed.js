@@ -68,11 +68,24 @@
       test:s=>['oc','as','af','sa'].includes(s.world)&&/\b[îi]le|atoll|archipel/.test(text(s))}
   ];
 
-  let seasons=null,scores=null,built=false;
+  let seasons=null,scores=null,built=false,lite=null;
+  /* Normales climatiques légères (eau, soleil, houle, vent) : repères chiffrés sur les cartes et rails de données. */
+  const LI={sea:0,tx:1,sun:2,wet:3,kite:4,hs:5,calm:6};
+  const val=(s,k,m)=>{const r=lite?.[s.id];const a=r&&r[LI[k]];return a?a[m]:null;};
+  const DI={sea:'<path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/>',wave:'<path d="M2 15c2.2 0 2.2-2 4.4-2s2.2 2 4.4 2 2.2-2 4.4-2 2.2 2 4.4 2"/><path d="M6 10c1-3 4-5 7-5 2 0 3.6 1 4.6 2.4"/>',wind:'<path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 12h16a3 3 0 1 1-3 3"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/>'};
+  const num=(v,d=0)=>new Intl.NumberFormat(lang(),{maximumFractionDigits:d,minimumFractionDigits:d}).format(v);
+  function dataChip(s,kind){
+    const m=new Date().getMonth();let v=null,t='';
+    if(kind==='sea'){v=val(s,'sea',m);t=v==null?'':`${num(v)} °C`;}
+    else if(kind==='wave'){v=val(s,'hs',m);t=v==null?'':`${num(v/10,1)} m`;}
+    else if(kind==='wind'){v=val(s,'kite',m);t=v==null?'':`${num(v)} %`;}
+    if(!t)return '';
+    return `<span class="hf-data" title="${kind==='sea'?'Eau ce mois-ci':kind==='wave'?'Houle moyenne au large ce mois-ci':'Jours de vent fort ce mois-ci'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">${DI[kind]}</svg>${esc(t)}</span>`;
+  }
   /* Éclat de la photo (data/photo-scores.json) : les rails commencent par les images les plus lumineuses et colorées. */
   const vib=id=>scores?.[id]??55;
   const bright=list=>list.map((x,i)=>({x,i,k:Math.round(vib(x.id)/20)})).sort((a,b)=>b.k-a.k||a.i-b.i).map(o=>o.x);
-  function card(s,{big=false,season=null}={}){
+  function card(s,{big=false,season=null,data=null}={}){
     const p=photo(s);if(!p)return '';
     const acts=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');
     const fav=typeof favs!=='undefined'&&favs.has(s.id);
@@ -82,12 +95,12 @@
       <div class="hf-card-tx">
         <small>${esc(s.country||s.loc||'')}</small>
         <h3>${esc(String(s.name).split(' — ')[0])}</h3>
-        <p>${season?`<span class="hf-season">${esc(season)}</span>`:''}${acts?`<span>${esc(acts)}</span>`:''}</p>
+        <p>${data?dataChip(s,data):''}${season?`<span class="hf-season">${esc(season)}</span>`:''}${acts?`<span>${esc(acts)}</span>`:''}</p>
       </div>
     </article>`;
   }
   function rail(id,title,sub,items,opts={}){
-    const cards=items.map(s=>card(s,{big:opts.big,season:opts.season?seasonLabel(seasons?.[s.id]):null})).filter(Boolean);
+    const cards=items.map(s=>card(s,{big:opts.big,season:opts.season?seasonLabel(seasons?.[s.id]):null,data:opts.data||null})).filter(Boolean);
     if(cards.length<3)return '';
     return `<section class="hf-sec" data-hf="${id}" aria-label="${esc(title)}">
       <div class="as-sec"><h2>${esc(title)}<small>${esc(sub)}</small></h2>${opts.more?`<button type="button" data-hf-more="${id}">Tout voir</button>`:''}</div>
@@ -97,6 +110,12 @@
 
   /* Ouverture : des spots de rêve en grand (vraies photos), une recherche et les activités en pastilles. */
   const HERO_IDS=['rajaampat','borabora','noronha','navagio','whitehaven','macarella','tikehau','myrtos','nusapenida','trunkbay','pelosa','losroques'];
+  function planCard(m){
+    return `<section class="hf-sec hf-plan-sec" aria-label="Planifier par mois"><button type="button" class="hf-plan" data-map-plan>
+      <span class="hf-plan-cal" aria-hidden="true">${Array.from({length:12},(_,k)=>`<i class="${k===m?'on':''}">${esc(monthName(k,'narrow'))}</i>`).join('')}</span>
+      <span class="hf-plan-tx"><small>Nouveau · planificateur</small><b>Choisis ton mois, Poulpy trouve le spot</b><span>Eau chaude, plein soleil, belles vagues ou vent : la planète s’allume là où c’est le bon moment.</span></span>
+      <span class="hf-plan-go" aria-hidden="true">→</span></button></section>`;
+  }
   function heroSpots(){
     const list=HERO_IDS.map(id=>SPOTS.find(s=>s.id===id)).filter(s=>s&&photo(s));
     const start=new Date().getDate()%Math.max(1,list.length);
@@ -184,7 +203,17 @@
       /* Les photos en haute définition passent devant (plus belles en grand format). */
       const score=s=>{const ms=seasons[s.id];return (ms.length===12?2:0)+(ms.includes((m+11)%12)?1:0)+ms.length/24+((photo(s)?.w||0)>=1200?0:1.5)+(100-vib(s.id))/25;};
       const ordered=inSeason.map(s=>({s,k:score(s)})).sort((a,b)=>a.k-b.k).map(o=>o.s);
-      html+=rail('mois',`Où partir en ${monthName(m)} ?`,'C’est la meilleure saison pour ces spots.',pick(ordered,{n:10,perCountry:1,used}),{big:true,season:true,more:true});
+      html+=rail('mois',`Où partir en ${monthName(m)} ?`,'C’est la meilleure saison pour ces spots.',pick(ordered,{n:10,perCountry:1,used}),{big:true,season:true,more:true,data:lite?'sea':null});
+    }
+    if(lite){
+      html+=planCard(m);
+      /* Rails de données : la mer chaude, la houle et le vent du mois, d’après les normales de plusieurs années. */
+      const warm=pool.filter(s=>(val(s,'sea',m)??0)>=26).sort((a,b)=>Math.round(vib(b.id)/25)-Math.round(vib(a.id)/25)||val(b,'sea',m)-val(a,'sea',m));
+      html+=rail('chaud',`La mer la plus chaude en ${monthName(m)}`,'26 °C et plus d’après les normales NOAA : on y entre sans frissonner.',pick(warm,{n:10,perCountry:1,used}),{data:'sea'});
+      const swell=pool.filter(s=>has(s,'surf','bodyboard')&&(val(s,'hs',m)??0)>=14&&(val(s,'hs',m)??0)<=32).sort((a,b)=>val(b,'hs',m)-val(a,'hs',m));
+      html+=rail('houle',`Belle houle en ${monthName(m)}`,'Les spots de surf qui reçoivent le plus de vagues ce mois-ci, au large.',pick(swell,{n:10,perCountry:2,used}),{data:'wave',season:!!seasons});
+      const wind=pool.filter(s=>has(s,'kitesurf','windsurf')&&(val(s,'kite',m)??0)>=60).sort((a,b)=>val(b,'kite',m)-val(a,'kite',m));
+      html+=rail('vent',`Du vent en ${monthName(m)}`,'Kite et windsurf : vent soutenu plus d’un jour sur deux.',pick(wind,{n:10,perCountry:2,used}),{data:'wind'});
     }
     for(const c of COLLECTIONS){
       const items=pick(pool.filter(c.test),{n:10,perCountry:2,used});
@@ -258,6 +287,7 @@
   Promise.all(['data/seasons.json','data/photo-scores.json'].map(u=>fetch(u).then(r=>r.ok?r.json():null).catch(()=>null)))
     .then(([d,sc])=>{seasons=d;scores=sc;window.OCEAN_SEASONS=d;mount();});
   mount();
+  window.OceanSpotData?.load('lite').then(d=>{lite=d;if(built)mount();}).catch(()=>{});
   /* Langue changée : on reconstruit (noms des mois). */
   window.addEventListener('ocean:lang',()=>{if(built)mount();});
   addEventListener('resize',()=>{clearTimeout(drawWorld.t);drawWorld.t=setTimeout(drawWorld,200);});
