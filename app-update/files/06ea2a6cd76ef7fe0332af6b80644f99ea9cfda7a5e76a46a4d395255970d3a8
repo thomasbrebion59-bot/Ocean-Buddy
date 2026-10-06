@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<script src="i18n.js?v=3e1ff255cdad"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<title>Ocean Buddy — Explore. Progresse. Protège.</title>
+<meta name="theme-color" content="#1a4fd6">
+<meta name="color-scheme" content="light only">
+<link rel="icon" type="image/webp" href="assets/poulpy/scenes/travel-v2.webp">
+<meta name="description" content="Trouve ton prochain spot nautique, prépare ta session et protège l’océan avec Poulpy, ton guide Ocean Buddy.">
+<link rel="stylesheet" href="base.css?v=34626392cda5">
+<link rel="stylesheet" href="design.css?v=79a417a7e92a">
+<link rel="stylesheet" href="adventure.css?v=549481eaad56">
+<link rel="stylesheet" href="coastal.css?v=a4ab67ab0399">
+<link rel="stylesheet" href="trips.css?v=9df1d54a4609">
+<link rel="stylesheet" href="poulpy.css?v=520601e28a8e">
+<link rel="stylesheet" href="navigation.css?v=32f51eaaa1af">
+<link rel="stylesheet" href="field-guide.css?v=465f5a9bd36b">
+<link rel="stylesheet" href="spot-immersion.css?v=2cfab2f40cc9">
+<link rel="stylesheet" href="ocean-explore.css?v=d7b34773543c">
+<link rel="stylesheet" href="privacy.css?v=830a9770de4b">
+<link rel="stylesheet" href="community.css?v=9b509e019e58">
+<link rel="stylesheet" href="spot-experience.css?v=5d2d4ea66c40">
+<link rel="stylesheet" href="polish.css?v=d4ed871a3575">
+<link rel="stylesheet" href="ocean-hub.css?v=4d4bb77e38ac">
+<link rel="stylesheet" href="spot-guide.css?v=cfd0ef978d38">
+<link rel="stylesheet" href="spot-voyage.css?v=3deb66e8b834">
+<link rel="stylesheet" href="ocean-blue.css?v=571a378181c9">
+<link rel="stylesheet" href="ocean-map.css?v=42ce892ca0b9">
+<link rel="stylesheet" href="activity-theme.css?v=07b89b28cc5b">
+<link rel="stylesheet" href="activity-transition.css?v=54305a493298">
+<link rel="stylesheet" href="app-update.css?v=6180e2a20d2a">
+<link rel="stylesheet" href="i18n.css?v=0913dd3686ce">
+<link rel="stylesheet" href="badges.css?v=6ebf498f9b27">
+<link rel="stylesheet" href="home-feed.css?v=9af61f26a28f">
+<link rel="stylesheet" href="app-shell.css?v=1da3805f5739">
+<link rel="stylesheet" href="spot-data.css?v=65c8e69b40a7">
+<link rel="manifest" href="manifest.webmanifest">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Ocean Buddy">
+<meta property="og:title" content="Ocean Buddy — Explore. Progresse. Protège.">
+<meta property="og:description" content="Plus de 430 spots nautiques, prévisions, voyages et défis pour protéger l’océan, avec Poulpy.">
+<meta property="og:image" content="https://thomasbrebion59-bot.github.io/Ocean-Buddy/assets/app/icon-512.png">
+<meta property="og:locale" content="fr_FR">
+<meta name="twitter:card" content="summary">
+<link rel="apple-touch-icon" href="assets/app/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Ocean Buddy">
+<link rel="stylesheet" href="vendor/fonts/fonts.css"><link rel="stylesheet" href="native.css"></head>
+<body class="ocean-v2" data-screen="home">
+<a class="skip-link" href="#screenWrap">Aller au contenu</a>
+<div class="phone">
+  <div class="ambiance" id="ambiance"></div>
+
+  <!-- ============ ONBOARDING ============ -->
+  <div class="onb" id="onb">
+    <div id="onbBubbles"></div>
+    <div class="onb-step active" data-step="0">
+      <svg class="logo-svg" id="logoOcto" viewBox="0 0 140 140"></svg>
+      <span class="onb-kicker">BIENVENUE CHEZ OCEAN BUDDY</span><h1>L’océan t’appelle<span class="o">.</span></h1>
+      <div class="tag">Des spots à explorer. Des sessions à vivre.<br>Un océan à protéger, avec Poulpy.</div>
+      <div class="dots"><span class="on"></span><span></span><span></span><span></span></div>
+      <button class="onb-btn" onclick="onbNext()">L’aventure commence ici ↗</button>
+    </div>
+    <div class="onb-step" data-step="1">
+      <h2 id="sportStepTitle">Quelle activité ?</h2>
+      <div class="tag" style="margin-top:2px">Choisis ton sport nautique — tu pourras changer quand tu veux.</div>
+      <div class="sport-grid" id="sportGrid"></div>
+      <button class="onb-near" onclick="goNearMe()"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> Je ne sais pas — montre-moi les activités près de moi</button>
+      <div class="dots"><span></span><span class="on"></span><span></span><span></span></div>
+      <button class="onb-btn" onclick="onbNext()">Continuer</button>
+    </div>
+    <div class="onb-step" data-step="2">
+      <h2>Quel est ton niveau ?</h2>
+      <div class="tag" style="margin-top:2px">Un repère pour explorer. Les conditions et l’encadrement comptent aussi.</div>
+      <div class="lvl-cards" id="lvlCards">
+        <div class="lvl-card" data-lvl="debutant" onclick="pickLevel(this)"><div class="lc-ic"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/debutant.jpg" alt="" width="80" height="80"></div><div><h4>Débutant</h4><p>Je découvre, je veux des conditions douces.</p></div></div>
+        <div class="lvl-card" data-lvl="intermediaire" onclick="pickLevel(this)"><div class="lc-ic"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/intermediaire.jpg" alt="" width="80" height="80"></div><div><h4>Intermédiaire</h4><p>Je gère les bases, je progresse.</p></div></div>
+        <div class="lvl-card" data-lvl="expert" onclick="pickLevel(this)"><div class="lc-ic"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/expert.jpg" alt="" width="80" height="80"></div><div><h4>Expert</h4><p>Je suis expérimenté et j’adapte chaque sortie.</p></div></div>
+      </div>
+      <div class="dots"><span></span><span></span><span class="on"></span><span></span></div>
+      <button class="onb-btn" onclick="onbNext()">Continuer</button>
+    </div>
+    <div class="onb-step" data-step="3">
+      <svg class="logo-svg" id="logoOcto2" viewBox="0 0 140 140"></svg>
+      <h2 id="readyTitle">C’est parti !</h2>
+      <div class="tag">Explore la carte, découvre les spots, la faune, la météo et les marées — et gagne de l'XP en protégeant l'océan avec Poulpy.</div>
+      <div class="dots"><span></span><span></span><span></span><span class="on"></span></div>
+      <button class="onb-btn" onclick="finishOnb()">Plonger dans l'app 🌊</button>
+    </div>
+  </div>
+
+  <main class="screen-wrap" id="screenWrap" tabindex="-1">
+
+    <!-- ============ HOME ============ -->
+    <section class="screen active" id="home">
+      <div class="home-intro">
+        <div class="topbar" id="homeTop">
+          <div class="brand"><span class="hero-kicker">EXPLORE. PROGRESSE. PROTÈGE.</span><span class="hero-live"><i></i> L’aventure commence ici</span></div>
+          <div id="homeHello" class="hero-greeting">Bienvenue à bord</div>
+          <h1>Prends<br><span>le large.</span></h1>
+          <p class="hero-description">Ta prochaine session commence ici.<br>Des spots qui font vibrer. Un océan à préserver.</p>
+          <button class="hero-cta" onclick="OceanPoulpy.openWorlds()">Trouver mon spot <span aria-hidden="true">↗</span></button>
+          <div class="hero-foot"><span>Ton océan. À ton rythme.</span><span class="hero-coordinate" aria-hidden="true">SUR & SOUS L’EAU</span></div>
+          <div class="level-row"><div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div><span class="xp-text" id="xpText">Niv. 1 · 0 / 100 XP</span></div>
+        </div>
+        <div class="mascot-card" id="welcomeCard" onclick="OceanPoulpy.openWorlds()" role="button" tabindex="0" aria-label="Explorer les continents avec Poulpy l’explorateur">
+          <div class="poulpy-eyebrow"><i></i> POULPY L’EXPLORATEUR</div>
+          <div class="poulpy-title">On part <br>où&nbsp;?</div>
+          <svg class="mascot-svg" id="octoHi" viewBox="0 0 140 140" role="img" aria-label="Poulpy, ton guide"></svg>
+          <div class="bubble" id="welcomeBubble"></div>
+          <span class="poulpy-action">Explorer le monde <span aria-hidden="true">↗</span></span>
+        </div>
+      </div>
+
+      <section class="poulpy-spotlight" id="poulpySpotlight" aria-labelledby="poulpySpotlightTitle">
+        <div class="poulpy-spotlight-art" aria-hidden="true"><svg id="spotlightOcto" viewBox="0 0 140 140"></svg></div>
+        <div class="poulpy-spotlight-copy">
+          <span class="poulpy-spotlight-kicker">POULPY IA · TON COPILOTE</span>
+          <h2 id="poulpySpotlightTitle">Une question&nbsp;? <span>Poulpy sait t’aider.</span></h2>
+          <p>Spots, météo, marées, sécurité, matériel, voyage, faune ou écologie : écris-lui comme à un vrai compagnon de session.</p>
+          <div class="poulpy-spotlight-actions"><button type="button" onclick="openChat()">Parler à Poulpy <span aria-hidden="true">↗</span></button><small>IA facultative · guide intégré toujours disponible</small></div>
+        </div>
+      </section>
+
+      <div class="htabs" id="homeTabs">
+        <button class="htab active" data-hcat="jour" onclick="showHomeCat('jour')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.6v2.4M12 19v2.4M2.6 12H5M19 12h2.4M5.3 5.3 7 7M17 17l1.7 1.7M18.7 5.3 17 7M7 17l-1.7 1.7"/></svg> Aujourd'hui</button>
+        <button class="htab" data-hcat="explorer" onclick="showHomeCat('explorer')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15.6 8.4-2.1 5.1-5.1 2.1 2.1-5.1z"/></svg> Explorer</button>
+        <button class="htab" data-hcat="progres" onclick="showHomeCat('progres')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15.5 9 10.5l4 4 7-7"/><path d="M16 3.5h4.5V8"/></svg> Ma progression</button>
+      </div>
+
+      <div class="act-bar" id="homeActivity" onclick="openActivityGate()"></div>
+
+      <div class="hcat" data-hcat="jour">
+<!-- conditions + spot du jour ; Poulpy est rendu dans la carte -->
+      <div class="today-card" id="todayCard"></div>
+<div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9c2.2 0 2.2-2.4 4.4-2.4S8.6 9 10.8 9 13 6.6 15.2 6.6 17.4 9 19.6 9"/><path d="M2 14c2.2 0 2.2-2.4 4.4-2.4S8.6 14 10.8 14 13 11.6 15.2 11.6 17.4 14 19.6 14"/><path d="M2 19c2.2 0 2.2-2.4 4.4-2.4S8.6 19 10.8 19 13 16.6 15.2 16.6 17.4 19 19.6 19"/></svg> <span id="liveTopTitle">Conditions du moment</span></h2><a onclick="go('spots')">Voir tout →</a></div>
+      <div class="live-top" id="liveTop"></div>
+<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2.2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="#f5a623"/></svg> Défi du jour</h2><a onclick="go('challenges')">Voir tout</a></div>
+      <div style="padding:0 16px;">
+        <div class="chal" style="background:linear-gradient(135deg,#eafaf7,#fff);">
+          <div class="chal-ic" style="background:#e3f7ee;color:#2faf72"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11.2a1.8 1.8 0 0 1-1.8 1.6H8.8A1.8 1.8 0 0 1 7 19.2z"/><path d="M4.5 8h15M9.5 8V5.2A1.2 1.2 0 0 1 10.7 4h2.6a1.2 1.2 0 0 1 1.2 1.2V8"/><path d="M10 12v5M14 12v5"/></svg></div>
+          <div class="chal-body"><h4>Beach Clean Express</h4><p>Ramasse 5 déchets avant ta session de surf.</p><span class="chal-xp">+50 XP</span></div>
+          <button class="chal-btn pulse" onclick="completeDaily(this)">Go !</button>
+        </div>
+      </div>
+      </div>
+
+      <div class="hcat" data-hcat="explorer" style="display:none">
+<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#36b5d8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3.5"/><path d="M3 9.5h18M8 3v4M16 3v4"/><path d="M6.5 15c1.2 0 1.2-1.5 2.4-1.5S10.1 15 11.3 15s1.2-1.5 2.4-1.5S14.9 15 16.1 15"/></svg> Prévisions houle · 7 jours</h2></div>
+      <div class="forecast-card">
+        <div class="fc-best" id="fcBest"></div>
+        <div class="fc-bars" id="fcBars"></div>
+      </div>
+<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#1f9bbf" stroke-width="2.2" stroke-linecap="round"><path d="M2 8c2.1 0 2.1-2.4 4.3-2.4S8.4 8 10.5 8s2.1-2.4 4.3-2.4S16.9 8 19 8"/><path d="M2 13c2.1 0 2.1-2.4 4.3-2.4S8.4 13 10.5 13s2.1-2.4 4.3-2.4S16.9 13 19 13"/><path d="M2 18c2.1 0 2.1-2.4 4.3-2.4S8.4 18 10.5 18s2.1-2.4 4.3-2.4S16.9 18 19 18"/></svg> Spots près de toi</h2><a onclick="go('spots')">Carte →</a></div>
+      <div class="spot-list" id="homeSpots"></div>
+      </div>
+
+      <div class="hcat" data-hcat="progres" style="display:none">
+<!-- série -->
+      <div class="streak-card">
+        <div class="streak-top">
+          <span class="flame"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2c1 3-1 4-2.1 5.8-.9 1.5-.8 3.6.6 4.6.5-1 1-1.9 1.9-2.4.4 2 1.9 2.6 1.9 4.6a4.3 4.3 0 0 1-8.6 0c0-2.1 1.6-3.7 3.2-5.3C8 9.4 11 7.2 12 3.2z"/></svg></span>
+          <div><div class="num" id="streakNum">1</div><div class="lab" id="streakLab">jour avec Poulpy</div></div>
+        </div>
+        <div class="sd-row" id="streakDays"></div>
+      </div>
+<div class="sec"><h2><svg viewBox="0 0 24 24" fill="#1175bd"><rect x="3" y="11" width="4" height="9" rx="1.2"/><rect x="10" y="5" width="4" height="15" rx="1.2"/><rect x="17" y="13" width="4" height="7" rx="1.2"/></svg> Ton tableau de bord</h2></div>
+      <div class="stats">
+        <div class="stat"><div class="ic" style="background:#e3f1fb;color:#1f9bbf"><svg viewBox="0 0 24 24"><path d="M4.6 19.4c-2-2-1.4-7.6 2.4-11.4S16.4 2.6 18.4 4.6 19.4 12.2 15.6 16 6.6 21.4 4.6 19.4z" fill="currentColor"/><path d="M8 16 16 8" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div><div class="big" id="hsSessions" data-count="12">0</div><div class="lab">Sessions</div></div>
+        <div class="stat"><div class="ic" style="background:#e2f0f8;color:#2f8fb8"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.4" fill="#fff"/></svg></div><div class="big" id="hsSpots" data-count="7">0</div><div class="lab">Spots visités</div></div>
+        <div class="stat"><div class="ic" style="background:#e7f7ef;color:#2faf72"><svg viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z" fill="currentColor"/><path d="M9 15c2-3 5-5 8-6" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div><div class="big" id="hsEco" data-count="23">0</div><div class="lab">Gestes écolo</div></div>
+      </div>
+<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#ec5a4b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l5-5 4 4 7-7"/><path d="M16 4h4v4"/></svg> Ta progression</h2><a onclick="go('trips')">Voyages →</a></div>
+      <div class="prog-card" id="progCard"></div>
+<div class="quiz-launch" onclick="openQuiz()">
+        <div class="ql-ic"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-3.6 10.8c.4.3.6.8.6 1.2h6c0-.4.2-.9.6-1.2A6 6 0 0 0 12 3z"/></svg></div>
+        <div class="ql-tx"><b>Le Quiz de Poulpy</b><span>Teste tes connaissances océan & gagne de l'XP</span></div>
+        <span class="ql-go">Jouer <svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5.5v13l10-6.5z"/></svg></span>
+      </div>
+      </div>
+</section>
+
+    <!-- ============ SPOTS ============ -->
+    <section class="screen" id="spots">
+      <nav class="explore-path" id="explorePath" aria-label="Étapes de l’exploration">
+        <button type="button" id="exploreActivity" onclick="openActivityGate()"><span class="path-number">1</span><span><small>Activité</small><b id="exploreSportLabel">Toutes les activités</b></span><i>Modifier</i></button>
+        <span class="path-separator" aria-hidden="true">›</span>
+        <button type="button" id="exploreDestination" onclick="backToDestination()"><span class="path-number">2</span><span><small>Destination</small><b id="exploreWorldLabel">Les continents</b></span></button>
+        <span class="path-separator" aria-hidden="true">›</span>
+        <span class="path-final"><span class="path-number">3</span><span>Les spots</span></span>
+      </nav>
+      <div class="topbar" id="spotsTop" style="padding-bottom:14px;">
+        <div class="float-bubbles" id="sb"></div>
+        <h1 id="spotsTitle"><span class="th"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 4 6v14l5-2 6 2 5-2V4l-5 2-6-2z"/><path d="M9 4v14M15 6v14"/></svg> Spots & activités</span></h1>
+        <div class="sub" id="spotsSub">Choisis ton monde, puis ton spot</div>
+      </div>
+      <div id="worldPick">
+        <div class="w-intro"><span id="worldTotal"></span></div>
+        <div id="worldGrid"></div>
+        <button class="w-all" onclick="openWorld('all');setView('map')">
+          <span class="w-all-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c2.6 3 4 5.9 4 9s-1.4 6-4 9c-2.6-3-4-5.9-4-9s1.4-6 4-9z"/></svg></span>
+          <span class="w-all-tx"><b>Tout un monde à explorer</b><i>Tous les spots, sur une seule carte</i></span>
+          <svg class="w-all-go" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h13"/><path d="M12.5 6 19 12l-6.5 6"/></svg>
+        </button>
+      </div>
+      <button class="wback" id="wBack" onclick="backToWorlds()" style="display:none"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H6"/><path d="M11.5 6 5 12l6.5 6"/></svg> Tous les continents</button>
+      <div class="sbar" id="spotTools" style="display:none">
+        <input class="search" id="spotSearch" aria-label="Rechercher un spot" placeholder="Rechercher un spot…" oninput="searchSpots(this.value)">
+        <button class="sbtn" id="nearBtn" onclick="toggleNear()" aria-label="Autour de moi" title="Autour de moi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg></button>
+        <button class="sbtn" id="vtToggle" onclick="setView(document.getElementById('mapView').style.display==='none'?'map':'list')" aria-label="Afficher la carte" title="Carte"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9 4 3.5 6.2v13.3L9 17.3l6 2.2 5.5-2.2V4L15 6.2z"/><path d="M9 4v13.3M15 6.2v13.3"/></svg></button>
+      </div>
+      <div class="filters" id="sportFilters"></div>
+      <button id="vtList" onclick="setView('list')" style="display:none"></button>
+      <button id="vtMap" onclick="setView('map')" style="display:none"></button>
+      <div id="listView">
+        <div class="filters" id="filters">
+          <div class="chip active" data-f="all" onclick="filterSpots(this,'all')"><img class="poulpy-mini" src="assets/poulpy/scenes/travel-v2.webp" alt="" width="80" height="80">Tous</div>
+          <div class="chip" data-f="debutant" onclick="filterSpots(this,'debutant')"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/debutant.jpg" alt="" width="80" height="80">Débutant</div>
+          <div class="chip" data-f="intermediaire" onclick="filterSpots(this,'intermediaire')"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/intermediaire.jpg" alt="" width="80" height="80">Intermédiaire</div>
+          <div class="chip" data-f="expert" onclick="filterSpots(this,'expert')"><img class="poulpy-mini level-poulpy" src="assets/poulpy/icons/expert.jpg" alt="" width="80" height="80">Expert</div>
+          <div class="chip season-chip" data-f="season" onclick="filterSpots(this,'season')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg> En saison</div>
+          <div class="chip plan-chip" data-map-plan role="button" tabindex="0"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v14H4zM8 3v5M16 3v5M4 10h16"/></svg> <span>Quand ?</span></div>
+          <div class="chip fav-chip" id="favChip" onclick="toggleFavFilter()"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.2s-7.5-4.6-9.7-9.2C.6 7.6 2.3 4 5.8 3.4c2-.3 3.8.7 5 2.3l1.2 1.6 1.2-1.6c1.2-1.6 3-2.6 5-2.3 3.5.6 5.2 4.2 3.5 7.6-2.2 4.6-9.7 9.2-9.7 9.2z"/></svg> Favoris</div>
+        </div>
+        <button type="button" id="sdPlanChip" class="sd-plan-chip" hidden aria-label="Retirer le filtre par mois"></button>
+        <div class="spot-list" id="spotList"></div>
+      </div>
+      <div id="mapView" style="display:none">
+        <div class="map" id="spotMapWrap"><div id="spotMap" style="position:absolute;inset:0"></div><button class="map-fs" id="mapFsBtn" type="button" onclick="toggleMapFull()" aria-label="Carte en plein écran" title="Plein écran"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg></button><div class="map-bar" id="mapBar"></div></div>
+      </div>
+    </section>
+
+    <!-- ============ DETAIL ============ -->
+    <section class="screen" id="detail">
+      <div class="detail-hero" id="detailHero">
+        <button class="back-btn" aria-label="Retour à la page précédente" onclick="OceanNavigation.back()">←</button>
+        <button class="fav" id="dFav" aria-label="Modifier les favoris" onclick="toggleFav(currentSpot,event)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.4S3.8 14.9 3.8 9.4A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.2 2.8c0 5.5-8.2 11-8.2 11z"/></svg></button>
+        <img class="hero-photo" id="dHeroPhoto" alt="" decoding="async">
+        <div class="htxt"><div class="eyebrow" id="dEyebrow"></div><h2 id="dName"></h2><div class="loc" id="dLoc"></div><div class="hero-credit" id="dHeroCred"></div></div>
+        <div class="dfacts" id="dFacts"></div>
+        <button class="hero-more" id="dHeroMore" type="button" aria-label="Voir plus de photos du spot" title="Voir plus de photos du spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="3.2"/><circle cx="12" cy="13.5" r="3.4"/><path d="M8 7l1.4-2.4h5L16 7"/></svg></button>
+        <button class="hero-immersion" id="dImmersionBtn" type="button" aria-label="Ouvrir le mode immersion">Mode immersion <span aria-hidden="true">↗</span></button>
+      </div>
+      <div class="detail-body">
+        <div class="dtabs" id="dTabs">
+          <button class="dtab active" data-cat="infos" onclick="showDetailCat('infos')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2.6"/><path d="M9.2 3.2h5.6v3H9.2z"/><path d="M9 11h6M9 15h6"/></svg> Le spot</button>
+          <button class="dtab" data-cat="saisons" onclick="showDetailCat('saisons')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16v14H4zM8 3v5M16 3v5M4 10h16"/><path d="M8 14h2M14 14h2M8 17h2"/></svg> Saisons</button>
+          <button class="dtab" data-cat="meteo" onclick="showDetailCat('meteo')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3.2"/><path d="M3 9.5h18M8 3v4M16 3v4"/></svg> Conditions</button>
+          <button class="dtab" data-cat="activites" onclick="showDetailCat('activites')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 18.5C3 16 6 8.5 11 4.5s9-1.5 7.5 1.5"/><path d="M5.5 18.5c2.5 2.5 9-.5 13-5.5"/><path d="M8 16 16 7.5"/></svg> Préparer</button>
+          <button class="dtab" data-cat="faune" onclick="showDetailCat('faune')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="10.5" cy="12" rx="7.5" ry="4.6"/><path d="M18 12 22 8.6v6.8z"/><path d="M14.4 9.4 15.6 12l-1.2 2.6"/><circle cx="6.5" cy="11.2" r=".9" fill="currentColor"/></svg> Faune</button>
+          <button class="dtab" data-cat="preserver" onclick="showDetailCat('preserver')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M20.2 3.8C10.4 4.4 4.6 9.4 4.6 16.6c0 1.3.2 2.4.6 3.2 7.6.5 13.1-4.6 14.4-11.6.4-2.2.6-3.4.6-4.4z"/><path d="M4.2 20.4C6 15 9.8 11.2 15.4 9"/></svg> Préserver</button>
+        </div>
+        <div class="dcat" data-cat="infos">
+                    <div class="block"><h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="4" width="12" height="17" rx="2.6"/><path d="M9.2 3.2h5.6v3H9.2z"/><path d="M9 11h6M9 15h6"/></svg> À propos du spot</h4><p id="dDesc"></p><p class="spot-provenance" id="dSource"></p></div>
+          <div class="block anec-block acc-sand"><h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-3.6 10.8c.4.3.6.8.6 1.2h6c0-.4.2-.9.6-1.2A6 6 0 0 0 12 3z"/></svg> Le saviez-vous ?</h4><p id="dAnec"></p>
+          <div class="anec-more" id="dFunBlock"><b>La vraie histoire</b><p id="dFun"></p></div></div>
+          <div class="block" style="background:linear-gradient(135deg,#e8efff,#fff);"><div class="tip-head"><span class="tip-octo" id="dTipOcto"></span><h4>Le conseil de Poulpy</h4></div><p id="dTip"></p></div>
+        </div>
+
+        <div class="dcat" data-cat="saisons" style="display:none"><div id="dSeasons" class="sd-seasons"></div></div>
+
+        <div class="dcat" data-cat="meteo" style="display:none">
+          <div class="cond-head" id="dCondHead">Conditions du moment</div>
+        <div class="wcond" id="dWeather"></div>
+          <section class="spot-week" id="spotWeek" aria-live="polite"></section>
+          <div class="block"><h4 id="dFcHead"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3.2"/><path d="M3 9.5h18M8 3v4M16 3v4"/></svg> Prévisions houle · 5 jours</h4><div class="fc-best" id="dFcBest"></div><div class="fc-bars" id="dForecast"></div></div>
+          <div class="block" id="dTideBlock" style="display:none"><h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9c2.2 0 2.2-2.4 4.4-2.4S8.6 9 10.8 9 13 6.6 15.2 6.6 17.4 9 19.6 9"/><path d="M2 14c2.2 0 2.2-2.4 4.4-2.4S8.6 14 10.8 14 13 11.6 15.2 11.6 17.4 14 19.6 14"/><path d="M2 19c2.2 0 2.2-2.4 4.4-2.4S8.6 19 10.8 19 13 16.6 15.2 16.6 17.4 19 19.6 19"/></svg> Courbe de marée · 24 h</h4><div id="dTideHead"></div><div id="dTideChart"></div><div class="tide-read off" id="dTideRead">Glisse sur la courbe pour lire une heure.</div><div class="tide-list" id="dTideList"></div><p class="tide-cap">Niveau d'eau modélisé, en écart au niveau moyen de la mer (modèle marin Open-Meteo). PM = pleine mer · BM = basse mer.</p></div>
+        </div>
+
+        <div class="dcat" data-cat="activites" style="display:none">
+          <div class="block band" style="--b1:#0d6ba8;--b2:#1f9bbf"><h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 8.2 8.2 3.5 20.5 15.8 15.8 20.5z"/><path d="M8 8l1.5 1.5M11 5l2 2M14 8l1.5 1.5"/></svg> Guide pratique</h4><div class="dsports" id="dSports"></div><p class="g-sub" id="dGuideSub"></p><div class="guide-grid" id="dGuide"></div><p class="g-note">Ces repères décrivent le spot en général — pour les conditions du jour, ouvre l'onglet Météo. Meilleure période et affluence sont des ordres de grandeur.</p></div>
+          <div class="block acc-purple" id="dZonesBlock" style="display:none"><h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> Les zones du spot</h4><div id="dZones"></div></div>
+          <div class="block acc-green"><h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 4h2l2.2 11.5h10L19.5 8H6.2"/><circle cx="9.5" cy="20" r="1.4"/><circle cx="16.5" cy="20" r="1.4"/></svg> Matériel & cours à proximité</h4>
+          <div class="svc-row">
+            <button class="svc" id="dShop"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5h2.2l2.3 10.5h9.6L19.5 8.5H6.4"/><circle cx="9.5" cy="19.6" r="1.4"/><circle cx="16.5" cy="19.6" r="1.4"/></svg> Magasins</button>
+            <button class="svc" id="dSchool"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9 12 5.2 21.5 9 12 12.8z"/><path d="M6.6 10.6v4.3c0 1.4 2.4 2.5 5.4 2.5s5.4-1.1 5.4-2.5v-4.3"/><path d="M20.6 9.6v4.6"/></svg> Écoles &amp; cours</button>
+          </div>
+          <p class="svc-note">Ouvre une recherche de magasins et d'écoles autour du spot.</p>
+        </div>
+        </div>
+
+        <div class="dcat" data-cat="faune" style="display:none"><div class="block"><div id="dFaune"></div></div></div>
+        <div class="dcat" data-cat="preserver" style="display:none">
+          <div id="dPreserve"></div>
+        </div>
+
+        <div class="dcat" data-cat="securite" style="display:none">
+          <div class="block band" style="--b1:#d8574b;--b2:#f0906f"><h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5 2.5 20.5h19z"/><path d="M12 9.5v5M12 17.5h.01"/></svg> Dangers & vigilance</h4><div id="dDangers"></div></div>
+          <section class="spot-safety-live" id="spotSafetyLive" aria-live="polite"></section>
+          <div class="block safety-block band" style="--b1:#0a3f68;--b2:#14669b">
+          <h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3.5v5M12 15.5v5M3.5 12h5M15.5 12h5"/></svg> Sécurité & secours</h4>
+          <div class="safety-call">
+            <div class="sc-info"><div class="sc-lab">Numéro d'urgence ici</div><div class="sc-num" id="dEmerg">112</div><div class="sc-sea" id="dSea"></div></div>
+            <a class="sc-btn" id="dCall" href="tel:112">📞 Appeler</a>
+          </div>
+          <button class="svc" id="dRescue" style="width:100%;margin-top:11px"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3.5v5M12 15.5v5M3.5 12h5M15.5 12h5"/></svg> Poste de secours le plus proche</button>
+          <div class="flags">
+            <div class="fl-title"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3v18"/><path d="M6 4h11l-2.5 3.5L17 11H6"/></svg> Drapeaux de baignade</div>
+            <p class="field-flags-note">Repère le balisage, les panneaux et les consignes du poste de secours. Les couleurs et les zones autorisées dépendent du lieu et de l’activité.</p>
+          </div>
+          <div class="safety-note" id="dSafeNote">Vérifie le numéro local et les horaires de surveillance avant ta sortie. Le <a href="https://europa.eu/youreurope/citizens/travel/security-and-emergencies/emergency/index_en.htm" target="_blank" rel="noopener">112 est le numéro commun de l’Union européenne</a> ; à l’étranger, consulte les consignes locales.</div>
+        </div>
+        </div>
+
+        <button class="cta" id="dLogBtn" onclick="logSession()">J'ai surfé ici<span class="cta-xp">+40 XP</span></button>
+      </div>
+    </section>
+
+    <!-- ============ CHALLENGES ============ -->
+    <section class="screen" id="challenges">
+      <div class="topbar" id="chalTop" style="padding-bottom:18px;">
+        <div class="float-bubbles" id="cb"></div>
+        <h1><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v3a5 5 0 0 1-10 0z"/><path d="M7 5H4.6A2.4 2.4 0 0 0 7 7.5M17 5h2.4A2.4 2.4 0 0 1 17 7.5"/><path d="M12 12v4M9 20h6M10.5 16h3"/></svg> Défis</h1>
+        <div class="sub">Gagne de l'XP en protégeant l'océan</div>
+      </div>
+      <div style="padding:0 16px;margin-top:4px">
+        <div class="quiz-launch" onclick="openQuiz()">
+          <div class="ql-ic"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-3.6 10.8c.4.3.6.8.6 1.2h6c0-.4.2-.9.6-1.2A6 6 0 0 0 12 3z"/></svg></div>
+          <div class="ql-tx"><b>Le Quiz de Poulpy</b><span>5 thèmes, gagne de l'XP en répondant</span></div>
+          <span class="ql-go">Jouer <svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5.5v13l10-6.5z"/></svg></span>
+        </div>
+      </div>
+      <div class="cmp">
+        <div class="cmp-head">
+          <h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10v3a5 5 0 0 1-10 0z"/><path d="M7 5H4.6A2.4 2.4 0 0 0 7 7.5M17 5h2.4A2.4 2.4 0 0 1 17 7.5"/><path d="M12 12v4M9 20h6M10.5 16h3"/></svg> Compétition · ta saison</h4>
+          <p>Les Points Océan comptent double pour les gestes : ici, protéger rapporte plus que rider.</p>
+        </div>
+        <div class="cmp-body" id="cmpBody"></div>
+      </div>
+<div class="sec" style="margin-top:20px"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V4h9l-1.2 3H19v8h-7l-1-3H6"/></svg> Le circuit mondial</h2></div>
+      <div style="padding:0 16px">
+        <p class="evt-note"><b>Championship Tour 2026</b> — le calendrier officiel du circuit mondial (World Surf League). Douze des treize étapes se courent sur des spots de l'appli. Ocean Buddy n'organise pas ces épreuves : les dates et les noms de sponsors changent à chaque saison, le site officiel fait foi.</p>
+        <div id="cmpEvents"></div>
+      </div>
+      <div class="gsw">
+        <button data-g="a" class="on" onclick="chalShow('a')">Défis écolo</button>
+        <button data-g="b" onclick="chalShow('b')">Défis surf</button>
+      </div>
+      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20C5 12 10 8 19 8c0 8-5 12-14 12z"/><path d="M5 20c2-5 5-7 9-8.5"/></svg> Défis écolo</h2></div>
+      <div style="padding:0 16px;" id="ecoChallenges"></div>
+      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 18.5C3 16 6 8.5 11 4.5s9-1.5 7.5 1.5"/><path d="M5.5 18.5c2.5 2.5 9-.5 13-5.5"/><path d="M8 16 16 7.5"/></svg> Défis surf</h2></div>
+      <div style="padding:0 16px;" id="surfChallenges"></div>
+    </section>
+
+    <!-- ============ COMMUNAUTÉ ============ -->
+    <section class="screen" id="community" aria-label="Communauté Ocean Buddy">
+      <div id="communityContent"></div>
+    </section>
+
+    <!-- ============ PROFILE ============ -->
+    <section class="screen" id="profile">
+      <div class="topbar prof-hero" id="profTop" style="text-align:center;padding-bottom:22px;">
+        <div class="float-bubbles" id="pb"></div>
+        <button class="settings-btn" onclick="openSettings()" aria-label="Réglages"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg></button>
+        <div class="ph-avatar">
+          <svg viewBox="0 0 140 140" id="octoProfile"></svg>
+          <span class="ph-lvl" id="profLevel">Niv. 1</span>
+        </div>
+        <h1 id="profName">Explorateur</h1>
+        <div class="sub" id="profSub"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 19.5c5-1 9-4 11.5-8.5S19 3.5 19 3.5s-4 .5-8 5-6.5 11-6.5 11z"/><path d="M8 15.5 4.5 19.5"/></svg> Tes spots, tes sessions, tes voyages</div>
+        <div class="ph-xp"><div class="ph-xp-bar"><i id="profXpFill"></i></div><div class="ph-xp-text" id="profXpText"></div></div>
+        <div class="ph-chips">
+          <div class="ph-chip"><b id="profStreak">1</b><span><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.2c1 3-1 4-2.1 5.8-.9 1.5-.8 3.6.6 4.6.5-1 1-1.9 1.9-2.4.4 2 1.9 2.6 1.9 4.6a4.3 4.3 0 0 1-8.6 0c0-2.1 1.6-3.7 3.2-5.3C8 9.4 11 7.2 12 3.2z"/></svg> <i id="profStreakLab" style="font-style:normal" data-i18n>jour</i></span></div>
+          <div class="ph-chip"><b id="profTrips">0</b><span>voyages préparés</span></div>
+          <div class="ph-chip"><b id="profBadges">0</b><span><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14.5" r="5"/><path d="M8.5 10 6 3.5M15.5 10 18 3.5"/><path d="M12 12.6l.7 1.5 1.6.2-1.2 1.1.3 1.6-1.4-.8-1.4.8.3-1.6-1.2-1.1 1.6-.2z"/></svg> <i data-i18n style="font-style:normal">trophées</i></span></div>
+        </div>
+      </div>
+      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="14.5" r="5"/><path d="M8.5 10 6 3.5M15.5 10 18 3.5"/><path d="M12 12.6l.7 1.5 1.6.2-1.2 1.1.3 1.6-1.4-.8-1.4.8.3-1.6-1.2-1.1 1.6-.2z"/></svg> Mes trophées</h2></div>
+      <div class="badge-grid" id="badges"></div>
+      <div class="sub-lab">Badges du Quiz</div>
+      <div class="qbadges" id="quizBadgesProfile"></div>
+      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="11" width="4.5" height="9" rx="1.2"/><rect x="9.8" y="5" width="4.5" height="15" rx="1.2"/><rect x="16.6" y="13" width="4.5" height="7" rx="1.2"/></svg> Mes statistiques</h2></div>
+      <div class="prof-stats" id="profStats"></div>
+      <section class="archived-favorites" id="archivedFavorites" hidden aria-label="Favoris archivés"></section>
+      <div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 18.5C3 16 6 8.5 11 4.5s9-1.5 7.5 1.5"/><path d="M5.5 18.5c2.5 2.5 9-.5 13-5.5"/><path d="M8 16 16 7.5"/></svg> Mon carnet de sessions</h2></div>
+      <div class="sess-stats" id="sessionStats"></div>
+      <div style="padding:0 18px" id="sessions"></div>
+      
+      <div style="height:22px"></div>
+    </section>
+
+    <!-- ============ SURF TRIPS ============ -->
+    <section class="screen" id="trips" aria-label="Mes voyages">
+      <div id="tripContent"></div>
+    </section>
+
+  </main>
+
+  <nav class="nav" aria-label="Navigation principale">
+    <div class="nav-pill" id="navPill"></div>
+    <button class="n-home active" data-s="home" onclick="go('home')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2.5 11.2a1 1 0 0 0 .65 1.76H5V20a1 1 0 0 0 1 1h3.5v-5h5v5H18a1 1 0 0 0 1-1v-7.04h1.85a1 1 0 0 0 .65-1.76z"/></svg></span>Accueil</button>
+    <button class="n-spots" data-s="spots" onclick="go('spots')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 5.2 6.3 11.4 6.9 12a.8.8 0 0 0 1.1 0c.7-.6 7-6.8 7-12A7.5 7.5 0 0 0 12 2z"/><circle cx="12" cy="9.3" r="2.6" fill="#fff"/></svg></span>Spots</button>
+    <button class="center" data-s="challenges" onclick="go('challenges')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4h10v1.5h2.5a.8.8 0 0 1 .8.9c-.2 2-1.6 3.4-3.6 3.7A5.2 5.2 0 0 1 13 13v2h2.2a.8.8 0 0 1 0 1.6H8.8a.8.8 0 0 1 0-1.6H11v-2a5.2 5.2 0 0 1-3.7-2.9C5.3 9.8 3.9 8.4 3.7 6.4a.8.8 0 0 1 .8-.9H7zM5.6 7c.2.9.8 1.6 1.5 1.9V7zm12.9 0H17v1.9c.7-.3 1.3-1 1.5-1.9z"/><rect x="8" y="18.4" width="8" height="2" rx="1"/></svg></span></button>
+    <button class="n-prof" data-s="profile" onclick="go('profile')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-3.6 0-6 2.6-6 5.8 0 1.6.7 2.7 1 3.4-1 .1-2 .9-2 1.9 0 .8.7 1.2 1.5 1 .2 1 1 1.7 1.9 1.5.3.7 1 .9 1.6.7.6.2 1.3 0 1.6-.7.9.2 1.7-.5 1.9-1.5.8.2 1.5-.2 1.5-1 0-1-1-1.8-2-1.9.3-.7 1-1.8 1-3.4C18 5.6 15.6 3 12 3z"/><circle cx="10" cy="9" r="1.3" fill="#fff"/><circle cx="14" cy="9" r="1.3" fill="#fff"/></svg></span>Profil</button>
+    <button class="n-trips" data-s="trips" onclick="go('trips')">Voyages</button>
+    <button class="n-community" data-s="community" onclick="go('community')">Communauté</button>
+  </nav>
+
+  <button class="fab" id="poulpyFab" onclick="openChat()" aria-label="Ouvrir Poulpy"><svg id="fabOcto" viewBox="0 0 140 140"></svg></button>
+
+  <div class="chat-sheet" id="chatSheet">
+    <div class="chat-head">
+      <div class="av"><svg id="chatOcto" viewBox="0 0 140 140"></svg></div>
+      <div><h3>Poulpy</h3><div class="st" id="chatStatus"><span class="dot-on"></span> Ton guide océan · prêt</div></div>
+      <button aria-label="Fermer la discussion" class="chat-close" onclick="closeChat()">✕</button>
+    </div>
+    <div class="chat-msgs" id="chatMsgs"></div>
+    <div class="chat-quick" id="chatQuick"></div>
+    <div class="chat-input">
+      <input id="chatInput" aria-label="Message à Poulpy" placeholder="Écris à Poulpy..." onkeydown="if(event.key==='Enter'&&!event.isComposing){event.preventDefault();chatSendInput()}">
+      <button aria-label="Envoyer le message" onclick="chatSendInput()">➤</button>
+    </div>
+  </div>
+
+  <div class="quiz-modal" id="quizModal">
+    <div class="quiz-card"><button class="quiz-x" aria-label="Fermer le quiz" onclick="closeQuiz()">✕</button><div id="quizBody"></div></div>
+  </div>
+
+  <div class="quiz-modal" id="settingsModal">
+    <div class="quiz-card set-card"><button class="quiz-x" aria-label="Fermer les réglages" onclick="closeSettings()">✕</button>
+      <div class="set-title">Réglages</div>
+      <label class="set-lab" for="setName">Ton prénom</label>
+      <div class="set-row"><input id="setName" class="set-input" maxlength="18" placeholder="Ton prénom"><button class="set-save" onclick="saveName()">OK</button></div>
+      <label class="set-lab" for="setLang">Langue</label>
+      <select id="setLang" class="set-input set-lang" translate="no"></select>
+      <label class="set-toggle"><span>Réduire les animations</span><input type="checkbox" id="setReduce" onchange="toggleReduceMotion(this.checked)"></label>
+      <button class="set-reset" onclick="resetProgress()">Réinitialiser ma progression</button>
+      <div class="set-about"><b>Ocean Buddy</b><br>Explore. Progresse. Protège.<br><br>Météo & marées : Open-Meteo.<br>Carte : OpenStreetMap. Photos : Wikimedia Commons et Unsplash.<br><a href="photos.html" target="_blank" rel="noopener">Photographes et licences</a><br><a href="privacy.html" target="_blank" rel="noopener">Confidentialité</a> · <a href="support.html" target="_blank" rel="noopener">Assistance</a><br><b>Poulpy IA</b> répond à tes questions ; son guide intégré prend le relais hors connexion.</div>
+    </div>
+  </div>
+
+
+  <div class="aqi" id="ecoInfo" onclick="if(event.target===this)closeEcoLog()">
+    <div class="aqi-card" id="ecoInfoCard"></div>
+  </div>
+
+
+  <div class="confetti" id="confetti"></div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="native.js"></script><script>OceanMobile.boot().then(async()=>{for(const src of ["photo-catalog.js?v=cc13eae99496","legacy-spots.js?v=a2ed015635e8","catalog-runtime.js?v=5752bf7dc7b3","trip-model.js?v=fdd76d1468be","poulpy-icons.js?v=e99f8fb70a2a","ocean-map-model.js?v=e87c7f985412","ocean-globe.js?v=9123b58a88c6","ocean-map.js?v=f7c163a3028a","activity-theme.js?v=373d236b123b","activity-transition.js?v=585f4e6ea7f5","activity-transition-3d.js?v=8e1527a88f70","spot-photos.js?v=7db07d494e54","progression.js?v=573fcb54b5ba","app.js?v=1c24f1c4ca7b","private-spots.js?v=683221818ade","poulpy-knowledge.js?v=e0ec814bd70b","design.js?v=33a6a94a103c","trips.js?v=812442f7c62b","ocean-hub.js?v=6778359f45f9","poulpy-config.js?v=a083c1cf346b","privacy.js?v=3271dc697f75","poulpy-assistant.js?v=845ac34d4d91","poulpy.js?v=1c283306c21f","spot-notebook-model.js?v=8982c4683ab8","spot-notebook.js?v=3cb075b91dbb","spot-gallery.js?v=803f17773deb","field-guide.js?v=eab62d62d935","spot-immersion-model.js?v=8c6489617564","spot-immersion.js?v=1cf741ea0b6e","spot-guide-model.js?v=4324d45bd8bb","spot-guide.js?v=2e168d42bb0b","spot-data-model.js?v=b5ff625ddc1f","spot-data.js?v=d35a91afdaf0","spot-plan.js?v=247e9ed950cf","ocean-sst.js?v=d283a91350a2","spot-experience.js?v=7ed35b2cc972","community-config.js?v=59d15c4cfc90","trip-sharing.js?v=e29f4931ffd4","community.js?v=c482a447be08","navigation.js?v=dddfb83022b6","ocean-sound.js?v=7e7f5190346a","polish.js?v=2b1110e155a4","spot-scenes.js?v=82700c22eafe","spot-panoramas.js?v=75a041ebb045","spot-voyage.js?v=7ee1490a570c","app-update.js?v=1ddfa6391360","ocean-home.js?v=8de41dee964b","badges.js?v=2723bc4c0577","home-feed.js?v=f010fe560a1c","passport.js?v=4ece64697a09","app-shell.js?v=13cb7ff4860a"])await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.body.append(s)});await OceanMobile.appReady();}).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script></body>
+</html>

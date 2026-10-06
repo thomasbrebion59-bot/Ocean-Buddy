@@ -1,0 +1,68 @@
+{
+ "tool": "ChatGPT image_generation via codex exec (ChatGPT.app bundled CLI), model gpt-6-astra, reasoning effort low",
+ "background": "#00FF00, keyed out by scripts/build-badges.py",
+ "style_prefix": "ONE premium collectible achievement medal for a mobile app trophy case, in the spirit of Apple Watch Activity awards and high-end hard-enamel collector pins. Rendering: polished 3D metal rim with crisp bevels, fine engraved details and soft studio reflections; the inner artwork is made of glossy coloured enamel separated by thin raised metal outlines (cloisonne), with subtle depth and gentle specular highlights; clean, bold shapes that stay readable at small size. Ocean palette: cobalt blue #1f55e0, deep navy #0b2d7a, turquoise, touches of lime #e0ff91 and coral #ff7a55. Composition: the medal is perfectly centred, seen straight from the front (no tilt), and fills about 84% of the square canvas with an equal empty margin on every side; nothing is cropped; no ribbon, no chain, no stand. Strictly NO text, NO letters, NO numbers, NO words, NO logos anywhere on the medal. Background: a perfectly flat, uniform pure chroma-key green (#00FF00) filling the whole canvas - no gradient, no vignette, no cast shadow, no floor, no glow spilling onto the background, and no green reflections on the metal. Square image, 1:1 aspect ratio.",
+ "poulpy_suffix": "The attached reference image shows Poulpy, the app mascot: keep his exact character design (bright orange cartoon octopus, big glossy blue eyes, happy open smile, cream suction cups) but render him as glossy enamel artwork inside the medal.",
+ "badges": {
+  "first": {
+   "prompt": "Medal shape: a round coin medal with a warm polished BRONZE rim with a subtle rope-twist edge (common tier). Centre scene: Poulpy riding his very first small turquoise wave on a little white-and-cobalt surfboard, arms up with joy, a warm rising sun behind, a few sea-foam bubbles.",
+   "reference_images": [
+    "assets/poulpy/icons/debutant.jpg"
+   ]
+  },
+  "eco": {
+   "prompt": "Medal shape: a heraldic SHIELD with a bright polished SILVER (sterling) rim (rare tier). Centre: a friendly green sea turtle swimming upward through clear turquoise water among swaying seagrass, a glossy lime leaf emblem and small bubbles above it; clean, hopeful ocean.",
+   "reference_images": []
+  },
+  "explorer": {
+   "prompt": "Medal shape: a round medal whose polished SILVER rim is shaped like a compass rose with eight short pointed tips, the four cardinal tips longer (rare tier). Centre: Poulpy wearing his olive-and-beige explorer cap, holding a folded treasure map and a brass compass, standing on a tiny tropical island with one palm tree, turquoise ocean around.",
+   "reference_images": [
+    "assets/poulpy/scenes/travel-v2.webp (crop)"
+   ]
+  },
+  "dawn": {
+   "prompt": "Medal shape: a sunburst medal - a round polished GOLD rim surrounded by short radiating golden sun rays (epic tier). Centre: an epic dawn over the ocean - a huge glowing sun rising on the horizon, sky in coral, pink and peach enamel, a tiny silhouette of a surfer paddling out on a calm glassy sea with long golden reflections.",
+   "reference_images": []
+  },
+  "streak7": {
+   "prompt": "Medal shape: a SEVEN-POINTED STAR badge (exactly seven points) with a polished GOLD rim (epic tier). Centre: a stylised blazing flame made of ocean water - turquoise and cobalt core with coral-orange tips, its top curling like a breaking wave - on a deep navy enamel background with tiny sparkles.",
+   "reference_images": []
+  },
+  "quiz": {
+   "prompt": "Medal shape: a round polished GOLD medal framed by a raised golden laurel wreath on the left and right sides and one small star at the top (epic tier). Centre: a shining golden trophy cup with a wave crest embossed on it, on a cobalt-blue enamel background with sparkles and little bubbles.",
+   "reference_images": []
+  },
+  "dolphin": {
+   "prompt": "Medal shape: a rounded badge whose top edge is formed by a curling breaking wave, polished GOLD rim (epic tier). Centre: Poulpy and a smiling bottlenose dolphin leaping together out of turquoise water and giving each other a high-five, sparkling splash droplets.",
+   "reference_images": [
+    "assets/poulpy/icons/debutant.jpg"
+   ]
+  },
+  "legend": {
+   "prompt": "Medal shape: a majestic LEGENDARY crest - a large ornate emblem with a crown on top and stylised wave-shaped wings on both sides; the rim is made of IRIDESCENT holographic opal metal shifting between pink, cyan, violet and gold (legendary tier, the most precious of the series). Centre: Poulpy wearing a small golden crown and holding a golden trident, standing proudly on a giant cresting wave, with radiant light rays and stars behind him.",
+   "reference_images": [
+    "assets/poulpy/icons/debutant.jpg"
+   ]
+  },
+  "quiz-faune": {
+   "prompt": "Medal shape: part of the 'Quiz Expert' series - a HEXAGON badge (pointy top) with a thick polished GOLD rim with beveled facets and one small raised gold star stud at the top point. Centre, on a turquoise enamel background: a graceful manta ray gliding above a colourful coral reef with a small clownfish.",
+   "reference_images": []
+  },
+  "quiz-secu": {
+   "prompt": "Medal shape: part of the 'Quiz Expert' series - a HEXAGON badge (pointy top) with a thick polished GOLD rim with beveled facets and one small raised gold star stud at the top point. Centre, on a coral-red enamel background: a classic red-and-white lifebuoy ring crossed with a red-and-yellow lifeguard flag, a small wave below.",
+   "reference_images": []
+  },
+  "quiz-tech": {
+   "prompt": "Medal shape: part of the 'Quiz Expert' series - a HEXAGON badge (pointy top) with a thick polished GOLD rim with beveled facets and one small raised gold star stud at the top point. Centre, on a cobalt-blue enamel background: a surfboard carving a perfect turquoise barrel wave, a white spray arc trailing behind it.",
+   "reference_images": []
+  },
+  "quiz-ocean": {
+   "prompt": "Medal shape: part of the 'Quiz Expert' series - a HEXAGON badge (pointy top) with a thick polished GOLD rim with beveled facets and one small raised gold star stud at the top point. Centre, on a deep navy enamel background: a stylised planet Earth showing mostly ocean with swirling ocean currents, a small crescent moon and a tide wave.",
+   "reference_images": []
+  },
+  "quiz-eco": {
+   "prompt": "Medal shape: part of the 'Quiz Expert' series - a HEXAGON badge (pointy top) with a thick polished GOLD rim with beveled facets and one small raised gold star stud at the top point. Centre, on a teal enamel background: a young coral branch and seagrass sprouting from white sand in the shape of a leaf, with one clean water drop above.",
+   "reference_images": []
+  }
+ }
+}
