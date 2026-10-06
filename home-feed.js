@@ -155,7 +155,7 @@
   /* Carte du monde : chaque spot est un point lumineux sur la vraie carte (NASA), une invitation à explorer. */
   function worldCard(){
     return `<section class="hf-world" aria-label="La carte du monde des spots">
-      <div class="hf-world-map"><img src="assets/globe/earth-map.webp" alt="" loading="lazy" decoding="async"><canvas aria-hidden="true"></canvas></div>
+      <div class="hf-world-map"><img src="assets/globe/world-card.webp" alt="" loading="lazy" decoding="async"><canvas aria-hidden="true"></canvas></div>
       <div class="hf-world-tx"><span class="hf-kicker">La carte du monde</span><h2>${SPOTS.length} spots, 6 continents.</h2><p>Fais tourner la planète et pose ton doigt sur ton prochain voyage.</p>
       <button type="button" class="hf-world-go" data-hf-go="spots">Explorer la carte<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13"/><path d="M12.5 6 19 12l-6.5 6"/></svg></button></div>
     </section>`;
@@ -165,9 +165,12 @@
     const r=c.getBoundingClientRect();if(!r.width)return;
     const d=Math.min(3,devicePixelRatio||1);c.width=Math.round(r.width*d);c.height=Math.round(r.height*d);
     const g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);
-    for(const s of SPOTS){const k=COORDS[s.id];if(!k)continue;const x=(k.lon+180)/360*c.width,y=(84-k.lat)/142*c.height;if(y<0||y>c.height)continue;
-      g.fillStyle='rgba(224,255,145,.22)';g.beginPath();g.arc(x,y,4.2*d,0,7);g.fill();
-      g.fillStyle='#e0ff91';g.beginPath();g.arc(x,y,1.5*d,0,7);g.fill();}
+    /* Deux passes : d'abord un contour cobalt, puis le point citron — les zones denses se lisent comme une tache nette, sans halo. */
+    const pts=[];
+    for(const s of SPOTS){const k=COORDS[s.id];if(!k)continue;const x=(k.lon+180)/360*c.width,y=(84-k.lat)/142*c.height;if(y<0||y>c.height)continue;pts.push([x,y]);}
+    pts.sort((a,b)=>a[1]-b[1]);
+    g.fillStyle='#0b2d7a';for(const[x,y]of pts){g.beginPath();g.arc(x,y,3.1*d,0,7);g.fill();}
+    g.fillStyle='#e0ff91';for(const[x,y]of pts){g.beginPath();g.arc(x,y,1.9*d,0,7);g.fill();}
   }
   /* Carrousel : glisser, ou défilement automatique toutes les 6 s (sauf mouvement réduit ou après un geste). */
   let heroTimer=0,lastTouch=0;

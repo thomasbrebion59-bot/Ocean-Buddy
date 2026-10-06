@@ -16,7 +16,7 @@
   const glow=id=>GLOW[id]||'#5C88FF';
 
   /* Version des fichiers du globe (moteur, textures, données), recalculée par scripts/version-assets.py. */
-  const ASSET_V='ce6a5a6765df';
+  const ASSET_V='84747509d56d';
   const asset=path=>new URL(path+'?v='+ASSET_V,document.baseURI).href;
   const NEEDED=['WebGLRenderer','ShaderMaterial','InstancedBufferGeometry','Line','OrthographicCamera','CanvasTexture'];
   let threeLoading=null;

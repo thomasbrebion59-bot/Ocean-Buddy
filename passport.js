@@ -32,7 +32,7 @@
     const stat=(n,label)=>`<div class="pp-stat"><b>${n}</b><span>${label}</span></div>`;
     const empty=!d.visited.length&&!d.wished.length;
     card.innerHTML=`<div class="pp-head"><div><small>Ocean Buddy · Passeport</small><h2>Mon passeport océan</h2></div><span class="pp-stamp" aria-hidden="true">${d.countries.size}</span></div>
-      <div class="pp-map"><img src="assets/globe/earth-map.webp" alt="Carte du monde de tes spots" loading="lazy" decoding="async">${d.wished.map(s=>dot(s,'wish')).join('')}${d.visited.map(s=>dot(s,'been')).join('')}</div>
+      <div class="pp-map"><img src="assets/globe/world-card.webp" alt="Carte du monde de tes spots" loading="lazy" decoding="async">${d.wished.map(s=>dot(s,'wish')).join('')}${d.visited.map(s=>dot(s,'been')).join('')}</div>
       <div class="pp-legend"><span><i class="pp-dot been"></i> Visités</span><span><i class="pp-dot wish"></i> Envies (favoris)</span></div>
       <div class="pp-stats">${stat(d.countries.size,'pays')}${stat(`${d.worlds.size}/6`,'continents')}${stat(d.visited.length,'spots visités')}${stat(d.seen,'fiches vues')}</div>
       ${empty?`<p class="pp-empty">Ajoute des favoris ❤ et note tes sessions sur les fiches : ta carte du monde s’allume au fil de tes voyages.</p>`:''}
