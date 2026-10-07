@@ -1,6 +1,6 @@
 # Ocean Buddy sur iOS et Android
 
-Version du projet : 1.2.0 (build 202610011). Identifiant : `io.github.thomasbrebion59bot.oceanbuddy`.
+Version du projet : 1.3.0 (build 202610071). Identifiant : `io.github.thomasbrebion59bot.oceanbuddy`.
 
 Capacitor embarque le catalogue, les photographies, les polices, Leaflet et le moteur de relief dans l’application. La météo, les tuiles cartographiques, Poulpy IA et la communauté nécessitent internet. La galerie, le son et le relief restent facultatifs. Les données du site et celles de chaque installation mobile sont séparées.
 

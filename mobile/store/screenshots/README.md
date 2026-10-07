@@ -24,3 +24,7 @@ Captures iPhone à refaire : accueil sans retour superflu, exploration et filtre
 ## Série finale v3 (28 septembre 2026) — celle envoyée sur App Store Connect
 
 `v3-iphone-69/` (1320 × 2868) et `v3-ipad-13/` (2064 × 2752), 8 captures dans l'ordre du parcours de l'app : accueil, globe 3D, fiche Bora Bora, esprit du lieu, alentours, voyages immersifs Bora Bora, Navagio, Hanauma Bay. Capturées depuis f6a0372 (globe 3D). Remplacent les séries précédentes.
+
+## Série v4 (7 octobre 2026) — Ocean Buddy 1.3.0
+
+`v4-iphone-69/` (1320 × 2868) et `v4-ipad-13/` (2064 × 2752), 8 captures chacune, de l'app 1.3.0 (`mobile/www`, Chrome headless 430 × 932 @3 pour l'iPhone, 1032 × 1376 @2 pour l'iPad, habillage Barlow Condensed comme la v3). Ordre : 01 accueil « Ton prochain spot de rêve », 02 planète NASA « La vraie Terre en 3D », 03 « Quand partir ? » (saisons du spot), 04 fiche spot « Des spots à couper le souffle », 05 « La vraie faune du coin » (Ocean Data), 06 « Collectionne les trophées » (profil avec un compte de démonstration : 7 sessions, 3 trophées), 07 « Vis le spot avant d'y aller » (voyage immersif, scène marquée « illustrée par IA »), 08 « Choisis ton mois, tes envies » (planificateur). Pas de communauté montrée. Point connu : sur iPhone 430 px, la pastille « Tout explorer » de la planète est rognée à droite.
