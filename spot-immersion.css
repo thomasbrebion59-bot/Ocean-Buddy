@@ -135,3 +135,7 @@
 .im-copy .im-takeaway{background:var(--t-tint);border-left-color:#5a6a8c;color:var(--t-main2)}
 .im-reading,.im-level-current{background:var(--t-tint);border-color:var(--t-tint)}
 .im-reading b,.im-level-current b{color:var(--t-deep)}
+
+/* Pictogrammes SVG plats : pastille claire, marge intérieure ; sans pastille quand ils servent de glyphe de texte. */
+.ocean-v2 img.ob-ico{padding:18%;box-sizing:border-box;object-fit:contain;background:#eaf2ff;box-shadow:none}
+.ocean-v2 img.ob-ico.spico{padding:0;background:none;border-radius:0}

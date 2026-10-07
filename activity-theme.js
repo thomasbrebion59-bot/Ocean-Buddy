@@ -53,7 +53,7 @@
     }
     if(!id)return;
     const s=(typeof SPORTMAP!=='undefined'?SPORTMAP:{})[id];if(!s)return;
-    c.innerHTML=`<img src="assets/poulpy/icons/${id}.jpg" alt=""><span>${s.label}</span>`;c.setAttribute('aria-label',`Activité : ${s.label}. Changer d’activité`);
+    c.innerHTML=`<img src="assets/icons/${id}.svg" alt=""><span>${s.label}</span>`;c.setAttribute('aria-label',`Activité : ${s.label}. Changer d’activité`);
     c.style.animation='none';void c.offsetWidth;c.style.animation='';
   }
   function set(id){

@@ -1,10 +1,10 @@
-/* Small, consistent Poulpy illustrations. Labels remain separate and readable. */
+/* Pictogrammes d'activité et de niveau (SVG plats, assets/icons). Les libellés restent séparés et lisibles. */
 (() => {
   'use strict';
   const keys = ['surf','bodyboard','baignade','paddle','kayak','snorkeling','plongee','kitesurf','windsurf','debutant','intermediaire','expert'];
-  const src = key => keys.includes(key) ? `assets/poulpy/icons/${key==='paddle'?'paddle-straight':key}.jpg` : 'assets/poulpy/scenes/travel-v2.webp';
+  const src = key => keys.includes(key) ? `assets/icons/${key}.svg` : 'assets/icons/all.svg';
   function html(key, kind = '') {
-    return `<img class="poulpy-mini ${kind}" src="${src(key)}" alt="" width="80" height="80" decoding="async" loading="lazy">`;
+    return `<img class="poulpy-mini ob-ico ${kind}" src="${src(key)}" alt="" width="48" height="48" decoding="async">`;
   }
   window.PoulpyIcons = Object.freeze({src, html, keys: Object.freeze(keys)});
 })();
