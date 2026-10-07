@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" role="img" aria-labelledby="title">
+<title id="title">Ocean Buddy — Plongée</title>
+<g id="bg"><path fill="#1F5BFF" d="M0 0H390V844H0Z"/></g>
+<g id="mid">
+<path fill="#1644B8" d="M0 225Q195 245 390 225V844H0Z"/>
+<path fill="#0B1F4D" d="M0 568Q195 548 390 568V844H0Z"/>
+</g>
+<g id="fg">
+<circle fill="#F2E8D5" cx="185" cy="454" r="64"/>
+<circle fill="#F2E8D5" cx="249" cy="343" r="32"/>
+<circle fill="#F2E8D5" cx="213" cy="276" r="14"/>
+</g>
+</svg>

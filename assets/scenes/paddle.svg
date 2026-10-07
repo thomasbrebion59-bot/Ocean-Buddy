@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" role="img" aria-labelledby="title">
+<title id="title">Ocean Buddy — Paddle</title>
+<g id="bg"><path fill="#E8F0FA" d="M0 0H390V844H0Z"/></g>
+<g id="mid">
+<path fill="#A9C9F0" d="M0 225Q195 245 390 225V844H0Z"/>
+<path fill="#1F5BFF" d="M0 568Q195 548 390 568V844H0Z"/>
+</g>
+<g id="fg">
+<path fill="#F2E8D5" d="M136 531C114 520 120 463 141 391C164 312 191 260 211 256C233 269 229 328 206 408C184 485 155 534 136 531Z"/>
+<path fill="#1F5BFF" d="M148 465L176 361L203 368L174 473Q170 484 159 481L155 480Q145 477 148 465Z"/>
+<path fill="#0B1F4D" d="M257 293L266 296L222 453Q239 466 230 490L216 522Q193 519 190 504L198 474Q203 455 213 451Z"/>
+</g>
+</svg>

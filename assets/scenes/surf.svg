@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" role="img" aria-labelledby="title">
+<title id="title">Ocean Buddy — Surf</title>
+<g id="bg"><path fill="#E8F0FA" d="M0 0H390V844H0Z"/></g>
+<g id="mid">
+<path fill="#A9C9F0" d="M0 225Q195 245 390 225V844H0Z"/>
+<path fill="#1F5BFF" d="M0 568Q195 548 390 568V844H0Z"/>
+</g>
+<g id="fg">
+<path fill="#1F5BFF" d="M0 475C65 474 75 288 211 271C312 258 354 346 307 409C316 352 269 328 234 349C191 377 205 466 144 509H0Z"/>
+<path fill="#0B1F4D" d="M0 497C94 495 119 442 150 393C177 351 212 327 254 331C198 344 183 388 190 433C196 471 169 511 140 535H0Z"/>
+<path fill="#FF5A44" d="M237 460C274 430 305 419 316 424C316 439 285 466 252 485C223 501 197 510 187 507C189 495 211 478 237 460Z"/>
+</g>
+</svg>

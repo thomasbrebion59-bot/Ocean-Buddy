@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" role="img" aria-labelledby="title">
+<title id="title">Ocean Buddy — Kayak</title>
+<g id="bg"><path fill="#E8F0FA" d="M0 0H390V844H0Z"/></g>
+<g id="mid">
+<path fill="#A9C9F0" d="M0 225Q195 245 390 225V844H0Z"/>
+<path fill="#1F5BFF" d="M0 568Q195 548 390 568V844H0Z"/>
+</g>
+<g id="fg">
+<path fill="#FF5A44" d="M114 543C98 489 126 341 228 253C246 321 225 466 114 543Z"/>
+<path fill="#0B1F4D" d="M156 454C143 444 159 389 181 361C209 361 205 387 194 416C182 446 166 464 156 454Z"/>
+<path fill="#F2E8D5" d="M85 327Q78 303 91 291Q119 300 125 327L122 338L258 467Q279 465 292 485L305 507Q289 521 273 507L247 480L112 351Q94 350 85 327Z"/>
+</g>
+</svg>

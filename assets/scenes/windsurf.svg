@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" role="img" aria-labelledby="title">
+<title id="title">Ocean Buddy — Windsurf</title>
+<g id="bg"><path fill="#E8F0FA" d="M0 0H390V844H0Z"/></g>
+<g id="mid">
+<path fill="#A9C9F0" d="M0 225Q195 245 390 225V844H0Z"/>
+<path fill="#1F5BFF" d="M0 568Q195 548 390 568V844H0Z"/>
+</g>
+<g id="fg">
+<path fill="#D8F24A" d="M175 258L285 458L166 487Z"/>
+<path fill="#0B1F4D" d="M170 253L178 255L170 492L161 495ZM175 366L249 398L254 407L174 377Z"/>
+<path fill="#F2E8D5" d="M89 522Q153 497 278 504Q290 505 300 510Q267 532 111 536Q96 534 89 522Z"/>
+</g>
+</svg>
