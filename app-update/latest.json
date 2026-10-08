@@ -1,7 +1,7 @@
 {
-  "seq": 202610060732,
+  "seq": 202610080645,
   "native_min": "1.2.0",
-  "manifest": "manifests/202610060732.json",
-  "download_files": 700,
-  "download_bytes": 93335589
+  "manifest": "manifests/202610080645.json",
+  "download_files": 740,
+  "download_bytes": 93469908
 }

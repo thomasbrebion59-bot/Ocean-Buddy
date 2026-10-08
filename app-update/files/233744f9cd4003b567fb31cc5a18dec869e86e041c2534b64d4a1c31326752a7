@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" role="img" aria-labelledby="title">
+<title id="title">Ocean Buddy — Bodyboard</title>
+<g id="bg"><path fill="#E8F0FA" d="M0 0H390V844H0Z"/></g>
+<g id="mid">
+<path fill="#A9C9F0" d="M0 225Q195 245 390 225V844H0Z"/>
+<path fill="#1F5BFF" d="M0 568Q195 548 390 568V844H0Z"/>
+</g>
+<g id="fg">
+<path fill="#0B1F4D" d="M102 459L196 293Q208 273 228 283L279 312Q297 323 286 344L192 510Q186 520 175 514L108 476Q98 470 102 459Z"/>
+<path fill="#D8F24A" d="M117 444L203 294Q211 280 225 288L266 311Q280 319 272 333L186 484Q181 492 171 487L122 459Q113 454 117 444Z"/>
+<path fill="#1F5BFF" d="M167 432L234 315L245 321L178 439Z"/>
+</g>
+</svg>

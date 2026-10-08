@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" role="img" aria-labelledby="title">
+<title id="title">Ocean Buddy — Kitesurf</title>
+<g id="bg"><path fill="#E8F0FA" d="M0 0H390V844H0Z"/></g>
+<g id="mid">
+<path fill="#A9C9F0" d="M0 225Q195 245 390 225V844H0Z"/>
+<path fill="#1F5BFF" d="M0 568Q195 548 390 568V844H0Z"/>
+</g>
+<g id="fg">
+<path fill="#0B1F4D" d="M83 355L190 534L193 531L89 354ZM303 344L193 531L196 534L309 345Z"/>
+<path fill="#FF5A44" d="M65 357C91 236 277 224 326 341L291 365C253 288 142 290 99 378Z"/>
+<path fill="#0B1F4D" d="M149 542Q191 527 228 535L230 544Q185 559 151 552Z"/>
+</g>
+</svg>

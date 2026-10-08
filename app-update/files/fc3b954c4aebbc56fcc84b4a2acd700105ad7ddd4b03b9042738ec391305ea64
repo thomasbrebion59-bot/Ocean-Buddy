@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" role="img" aria-labelledby="title">
+<title id="title">Ocean Buddy — Baignade</title>
+<g id="bg"><path fill="#E8F0FA" d="M0 0H390V844H0Z"/></g>
+<g id="mid">
+<path fill="#A9C9F0" d="M0 225Q195 245 390 225V844H0Z"/>
+<path fill="#1F5BFF" d="M0 568Q195 548 390 568V844H0Z"/>
+</g>
+<g id="fg">
+<path fill="#0B1F4D" d="M82 431L162 384Q180 375 198 385L239 408L306 387L313 406L239 440Q231 443 220 438L183 421L103 452Z"/>
+<circle fill="#FF5A44" cx="258" cy="365" r="24"/>
+<path fill="#1F5BFF" d="M48 450Q109 435 167 451T290 451L327 462Q250 479 176 465T48 466Z"/>
+</g>
+</svg>

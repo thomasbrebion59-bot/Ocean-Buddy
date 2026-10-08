@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 390 844" role="img" aria-labelledby="title">
+<title id="title">Ocean Buddy — Snorkeling</title>
+<g id="bg"><path fill="#1F5BFF" d="M0 0H390V844H0Z"/></g>
+<g id="mid">
+<path fill="#1644B8" d="M0 225Q195 245 390 225V844H0Z"/>
+<path fill="#0B1F4D" d="M0 568Q195 548 390 568V844H0Z"/>
+</g>
+<g id="fg">
+<path fill="#0B1F4D" fill-rule="evenodd" d="M70 354Q191 319 276 352L269 413Q265 441 237 444H208L182 416L157 445H116Q85 444 80 416ZM91 370L99 410Q101 425 117 425H149L182 392L217 424H237Q249 423 251 410L257 367Q183 345 91 370Z"/>
+<path fill="#D8F24A" d="M287 278H309V423Q309 471 264 480H229V459H259Q287 454 287 425Z"/>
+<path fill="#1F5BFF" d="M286 270H311V303H286Z"/>
+</g>
+</svg>
