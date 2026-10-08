@@ -9,9 +9,6 @@
 <meta name="color-scheme" content="light only">
 <link rel="icon" type="image/webp" href="assets/poulpy/scenes/travel-v2.webp">
 <meta name="description" content="Trouve ton prochain spot nautique, prépare ta session et protège l’océan avec Poulpy, ton guide Ocean Buddy.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Manrope:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="base.css?v=34626392cda5">
 <link rel="stylesheet" href="design.css?v=79a417a7e92a">
 <link rel="stylesheet" href="adventure.css?v=549481eaad56">
@@ -52,7 +49,7 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Ocean Buddy">
-</head>
+<link rel="stylesheet" href="vendor/fonts/fonts.css"><link rel="stylesheet" href="native.css"></head>
 <body class="ocean-v2" data-screen="home">
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
 <div class="phone">
@@ -446,55 +443,55 @@
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </div>
 
-<script src="photo-catalog.js?v=cc13eae99496"></script>
-<script src="legacy-spots.js?v=a2ed015635e8"></script>
-<script src="catalog-runtime.js?v=5752bf7dc7b3"></script>
-<script src="trip-model.js?v=fdd76d1468be"></script>
-<script src="poulpy-icons.js?v=d8f0f0f5b6bc"></script>
-<script src="ocean-map-model.js?v=e87c7f985412"></script>
-<script src="ocean-globe.js?v=f309323b9718"></script>
-<script src="ocean-map.js?v=f7c163a3028a"></script>
-<script src="activity-theme.js?v=ace454936621"></script>
-<script src="activity-transition.js?v=c10262344870"></script>
-<script src="spot-photos.js?v=7db07d494e54"></script>
-<script src="progression.js?v=573fcb54b5ba"></script>
-<script src="app.js?v=3eca033c47cb"></script>
-<script src="private-spots.js?v=683221818ade"></script>
-<script src="poulpy-knowledge.js?v=e0ec814bd70b"></script>
-<script src="design.js?v=33a6a94a103c"></script>
-<script src="trips.js?v=812442f7c62b"></script>
-<script src="ocean-hub.js?v=6778359f45f9"></script>
-<script src="poulpy-config.js?v=a083c1cf346b"></script>
-<script src="privacy.js?v=3271dc697f75"></script>
-<script src="poulpy-assistant.js?v=845ac34d4d91"></script>
-<script src="poulpy.js?v=1c283306c21f"></script>
-<script src="spot-notebook-model.js?v=8982c4683ab8"></script>
-<script src="spot-notebook.js?v=3cb075b91dbb"></script>
-<script src="spot-gallery.js?v=803f17773deb"></script>
-<script src="field-guide.js?v=eab62d62d935"></script>
-<script src="spot-immersion-model.js?v=8c6489617564"></script>
-<script src="spot-immersion.js?v=1cf741ea0b6e"></script>
-<script src="spot-guide-model.js?v=4324d45bd8bb"></script>
-<script src="spot-guide.js?v=2e168d42bb0b"></script>
-<script src="spot-data-model.js?v=b5ff625ddc1f"></script>
-<script src="spot-data.js?v=d35a91afdaf0"></script>
-<script src="spot-plan.js?v=247e9ed950cf"></script>
-<script src="ocean-sst.js?v=d283a91350a2"></script>
-<script src="spot-experience.js?v=7ed35b2cc972"></script>
-<script src="community-config.js?v=59d15c4cfc90"></script>
-<script src="trip-sharing.js?v=e29f4931ffd4"></script>
-<script src="community.js?v=c482a447be08"></script>
-<script src="navigation.js?v=dddfb83022b6"></script>
-<script src="ocean-sound.js?v=7e7f5190346a"></script>
-<script src="polish.js?v=2b1110e155a4"></script>
-<script src="spot-scenes.js?v=82700c22eafe"></script>
-<script src="spot-panoramas.js?v=75a041ebb045"></script>
-<script src="spot-voyage.js?v=7ee1490a570c"></script>
-<script src="app-update.js?v=1ddfa6391360"></script>
-<script src="ocean-home.js?v=8de41dee964b"></script>
-<script src="badges.js?v=2723bc4c0577"></script>
-<script src="home-feed.js?v=2e7359f71eb0"></script>
-<script src="passport.js?v=f578917c0f7a"></script>
-<script src="app-shell.js?v=13cb7ff4860a"></script>
-</body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script src="native.js"></script><script>OceanMobile.boot().then(async()=>{for(const src of ["photo-catalog.js?v=cc13eae99496","legacy-spots.js?v=a2ed015635e8","catalog-runtime.js?v=5752bf7dc7b3","trip-model.js?v=fdd76d1468be","poulpy-icons.js?v=d8f0f0f5b6bc","ocean-map-model.js?v=e87c7f985412","ocean-globe.js?v=f309323b9718","ocean-map.js?v=f7c163a3028a","activity-theme.js?v=ace454936621","activity-transition.js?v=c10262344870","spot-photos.js?v=7db07d494e54","progression.js?v=573fcb54b5ba","app.js?v=3eca033c47cb","private-spots.js?v=683221818ade","poulpy-knowledge.js?v=e0ec814bd70b","design.js?v=33a6a94a103c","trips.js?v=812442f7c62b","ocean-hub.js?v=6778359f45f9","poulpy-config.js?v=a083c1cf346b","privacy.js?v=3271dc697f75","poulpy-assistant.js?v=845ac34d4d91","poulpy.js?v=1c283306c21f","spot-notebook-model.js?v=8982c4683ab8","spot-notebook.js?v=3cb075b91dbb","spot-gallery.js?v=803f17773deb","field-guide.js?v=eab62d62d935","spot-immersion-model.js?v=8c6489617564","spot-immersion.js?v=1cf741ea0b6e","spot-guide-model.js?v=4324d45bd8bb","spot-guide.js?v=2e168d42bb0b","spot-data-model.js?v=b5ff625ddc1f","spot-data.js?v=d35a91afdaf0","spot-plan.js?v=247e9ed950cf","ocean-sst.js?v=d283a91350a2","spot-experience.js?v=7ed35b2cc972","community-config.js?v=59d15c4cfc90","trip-sharing.js?v=e29f4931ffd4","community.js?v=c482a447be08","navigation.js?v=dddfb83022b6","ocean-sound.js?v=7e7f5190346a","polish.js?v=2b1110e155a4","spot-scenes.js?v=82700c22eafe","spot-panoramas.js?v=75a041ebb045","spot-voyage.js?v=7ee1490a570c","app-update.js?v=1ddfa6391360","ocean-home.js?v=8de41dee964b","badges.js?v=2723bc4c0577","home-feed.js?v=2e7359f71eb0","passport.js?v=f578917c0f7a","app-shell.js?v=13cb7ff4860a"])await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.body.append(s)});await OceanMobile.appReady();}).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script></body>
 </html>
