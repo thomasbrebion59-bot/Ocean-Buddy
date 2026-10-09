@@ -272,6 +272,7 @@ function setSport(id){
   /* Choisir une activité, c’est entrer dans son élément : transition immersive, l’écran change sous la scène. */
   if(id&&SPORTMAP[id]&&window.OceanTransition){window.OceanTransition.play(id,()=>applySport(id));return;}
   if(!id&&activeSport&&window.OceanTransition?.neutral){window.OceanTransition.neutral(()=>applySport(null));return;}
+  window.OceanTransition?.cancel?.();
   applySport(id);
 }
 function applySport(id){
@@ -473,7 +474,7 @@ function syncWorldUI(){
     top.style.setProperty('--region-photo',`url("${photo}")`);
     /* Choix de la destination après une activité : l’en-tête prend le décor de l’activité. */
     const act=!on&&activeSport&&window.OceanTransition?.FX[activeSport]?activeSport:'';
-    top.dataset.act=act;if(act)top.style.setProperty('--act-scene',`url("assets/scenes/${act}.svg?v=5")`);
+    top.dataset.act=act;if(act)top.style.setProperty('--act-scene',`url("assets/transitions/${act}.webp?v=5")`);
   }
   var ttl=document.getElementById('spotsTitle'), sub=document.getElementById('spotsSub');
   if(ttl) ttl.textContent = spotCountry||w?.lab || (spotWorld==='all'?'Trouve ton spot.':'Le monde est à toi.');

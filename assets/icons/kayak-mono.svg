@@ -1,1 +1,8 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none"><g fill="currentColor" color="currentColor"><circle cx="24" cy="11" r="3.5"/><path d="M21 16 H27 L31 25 37 28 34 32 26 28 22 24 20 30 15 29Z"/><path d="M16 21 L31 21" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M8 22 H40" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 19 H11 V25 H3Z M37 19 H45 V25 H37Z"/></g><g fill="currentColor" color="currentColor" opacity=".45"><path d="M3 29 Q24 35 45 29 Q40 40 24 40 Q8 40 3 29Z"/><path d="M6 44 Q15 40 24 44 T42 44" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></g></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" fill="none" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M4.5 27C12 24.5 36 24.5 43.5 27C40 34 33 36.5 24 36.5C15 36.5 8 34 4.5 27Z" stroke="currentColor" stroke-width="2.5"/>
+  <path d="M16 25.5C18 22.5 30 22.5 32 25.5" stroke="currentColor" stroke-width="2"/>
+  <path d="M10 13L38 21" stroke="currentColor" stroke-width="2"/>
+  <path d="M7.5 9.5L12.5 16.5" stroke="currentColor" stroke-width="3"/>
+  <path d="M35.5 18.5L40.5 25.5" stroke="currentColor" stroke-width="3"/>
+  <path d="M5 42C10 39.5 15 39.5 20 42S30 44.5 35 42" stroke="currentColor" stroke-width="2" opacity=".6"/>
+</svg>

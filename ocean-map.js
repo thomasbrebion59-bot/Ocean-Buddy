@@ -154,7 +154,7 @@
     });
     card.addEventListener('click',onCardClick);
     wrap.addEventListener('keydown',e=>{if(e.key==='Escape'&&!card.hidden&&!terrainOverlay){e.stopPropagation();deselect(true);}});
-    addEventListener('resize',()=>{if(!mapVisible())return;syncMode();size();planet?.setPadding(planetPad());map?.resize();updateMinZoom();});
+    addEventListener('resize',()=>{if(!mapVisible())return;syncMode();size();planet?.setPadding(planetPad());map?.resize();updateMinZoom();revealActivity();});
     return true;
   }
   function syncMode(){
@@ -180,7 +180,10 @@
   function revealActivity(){
     const bar=filters?.querySelector('.omap-acts'),on=bar?.querySelector('[aria-pressed=true]');
     if(!bar?.clientWidth||!on)return;
-    const a=on.getBoundingClientRect(),b=bar.getBoundingClientRect();if(a.left<b.left)bar.scrollLeft-=b.left-a.left+12;if(a.right>b.right)bar.scrollLeft+=a.right-b.right+12;
+    /* Sur mobile, la puce reste aussi en dehors du fondu au bord du défileur. */
+    const a=on.getBoundingClientRect(),b=bar.getBoundingClientRect(),rtl=getComputedStyle(bar).direction==='rtl',edge=mobile()?28:2;
+    const left=b.left+(rtl?edge:2),right=b.right-(rtl?2:edge);
+    if(a.left<left)bar.scrollLeft-=left-a.left;else if(a.right>right)bar.scrollLeft+=a.right-right;
   }
   function choose(id){
     window.OceanNavigation?.begin();activeSport=id&&SPORTMAP[id]?id:null;chosenSport=activeSport||'all';
@@ -583,7 +586,7 @@
     const key=JSON.stringify([spotWorld,spotCountry,currentSearch,favOnly]);
     if(key!==fitKey){fitKey=key;needFit=true;}
     if(refresh===true&&!map)needFit=true;
-    renderFilters();syncMode();
+    renderFilters();syncMode();revealActivity();
     if(selected&&!rows.some(s=>s.id===selected))deselect();
     if(!mapVisible())return;
     size();

@@ -25,7 +25,9 @@ body.mapfull .app-chrome{visibility:hidden}
   background:#fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%231f55e0' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E") no-repeat right 11px center/14px;
   color:var(--ob-navy,var(--t-deep));font:750 12px var(--body);text-overflow:ellipsis;box-shadow:var(--omap-shadow)}
 [dir=rtl] .omap-level select{padding:0 14px 0 30px;background-position:left 11px center}
-.omap-acts{display:flex;gap:6px;min-width:0}
+/* La rangée d’activités défile dans son espace : elle ne déborde plus sur le menu ni hors de l’écran. */
+.omap-acts{display:flex;gap:6px;min-width:0;flex:1 1 0;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;padding:3px 2px;overscroll-behavior-x:contain}
+.omap-acts::-webkit-scrollbar{display:none}
 .omap-acts button{flex:0 0 auto;display:inline-flex;align-items:center;gap:7px;height:40px;padding:0 12px 0 11px;border:1px solid var(--omap-line);border-radius:999px;background:#fff;color:var(--ob-navy,var(--t-deep));font:750 12px var(--body);white-space:nowrap;cursor:pointer;box-shadow:var(--omap-shadow);transition:background .15s,color .15s,border-color .15s}
 .omap-acts button i{width:10px;height:10px;border-radius:50%;background:var(--c);flex:none;box-shadow:0 0 0 2px #fff,0 0 0 3px color-mix(in srgb,var(--c) 35%,transparent)}
 .omap-acts button[data-map-sport=""] i{background:conic-gradient(var(--t-main2),#0e9fc4,#5c9e2c,#f0a20c,#ff6a4d,#9d5be6,var(--t-main2))}
@@ -147,9 +149,9 @@ body.mapfull .app-chrome{visibility:hidden}
   .omap-stage .omap-filters{position:absolute;z-index:4;top:10px;left:0;right:0;padding:0 10px;pointer-events:none}
   .omap-stage .omap-filters>*{pointer-events:auto}
   .omap-stage .omap-level select{max-width:none;padding-inline-start:12px}
-  .omap-stage .omap-acts{flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 10px 8px 2px;margin:-2px -10px -8px 0;
+  .omap-stage .omap-acts{flex:1;overflow-x:auto;scrollbar-width:none;padding:2px 28px 8px 2px;margin:-2px -10px -8px 0;
     -webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent)}
-  [dir=rtl] .omap-stage .omap-acts{-webkit-mask-image:linear-gradient(270deg,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(270deg,#000 calc(100% - 26px),transparent);margin:-2px 0 -8px -10px;padding:2px 2px 8px 10px}
+  [dir=rtl] .omap-stage .omap-acts{-webkit-mask-image:linear-gradient(270deg,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(270deg,#000 calc(100% - 26px),transparent);margin:-2px 0 -8px -10px;padding:2px 2px 8px 28px}
   .omap-stage .omap-acts::-webkit-scrollbar{display:none}
   .omap-acts button small{display:none}
   .omap-ctrls{top:62px;inset-inline-end:10px}
@@ -175,6 +177,11 @@ body.mapfull .app-chrome{visibility:hidden}
   .ocean-v2 #spotMapWrap.omap.full.sheet-open .omap-panel{height:min(72%,560px)}
   .ocean-v2 #spotMapWrap.omap.full .omap-filters{top:calc(10px + env(safe-area-inset-top))}
   .ocean-v2 #spotMapWrap.omap.full .omap-ctrls{top:calc(62px + env(safe-area-inset-top))}
+}
+/* Accueil immersif : activités sur une ligne dédiée, avec la place des commandes à droite. */
+@media(max-width:959px){
+  body.explore-immersive .omap-stage .omap-filters{flex-wrap:wrap;row-gap:8px}
+  body.explore-immersive .omap-stage .omap-acts{flex:1 1 100%;margin-right:52px}
 }
 @media(max-width:379px){.omap-sheet-label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}.omap-sheet-toggle{width:40px;padding:0;justify-content:center}.omap-title{font-size:14px}}
 @media(min-width:760px) and (max-width:1100px){.ocean-v2 #spotMapWrap.omap{grid-template-columns:300px minmax(0,1fr)}}
