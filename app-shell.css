@@ -1,3 +1,6 @@
+/* Bouton « Réglages » de l’explorateur : visible seulement en plein écran (voir plus bas). */
+.omap-ctrls>[data-ex-more]{display:none}
+
 /* Ocean Buddy 1.3 — coque d’application (dernière couche CSS).
    Inspirée des conventions iOS 26 : barre d’onglets flottante en verre (5 onglets) et bouton Poulpy
    à côté, en-tête translucide dont le titre apparaît au défilement, grands titres, textes lisibles
@@ -197,6 +200,13 @@
   body.explore-immersive .omap-ctrls .map-fs{display:none!important}
   body.explore-immersive .omap-ctrls>button[data-ex-sun][aria-pressed=true]{background:rgba(255,214,102,.92)!important;color:#3b2a00!important}
   body.explore-immersive .omap-ctrls>button.is-off{opacity:.55}
+  /* Réglages secondaires (température, soleil, nuages, surprise) : repliés derrière un seul bouton « Réglages ». */
+  body.explore-immersive .omap-ctrls>[data-ex-sst],body.explore-immersive .omap-ctrls>[data-ex-sun],body.explore-immersive .omap-ctrls>[data-ex-clouds],body.explore-immersive .omap-ctrls>[data-ex-dice]{display:none}
+  body.explore-immersive .omap-ctrls.more-open>[data-ex-sst],body.explore-immersive .omap-ctrls.more-open>[data-ex-sun],body.explore-immersive .omap-ctrls.more-open>[data-ex-clouds],body.explore-immersive .omap-ctrls.more-open>[data-ex-dice]{display:grid}
+  body.explore-immersive .omap-ctrls>[data-ex-more]{display:grid}
+  body.explore-immersive .omap-ctrls.more-open>[data-ex-more]{background:var(--as-deep,#0b2d7a)!important;color:#fff!important}
+  body.explore-immersive .omap-ctrls>[data-ex-more] svg{transition:transform .2s ease}
+  body.explore-immersive .omap-ctrls.more-open>[data-ex-more] svg{transform:rotate(90deg)}
   body.explore-immersive .omap.is-map .omap-ctrls>button,body.explore-immersive .omap.is-map .ex-search{background:rgba(12,29,63,.62)!important}
   body.explore-immersive .omap.is-map .ex-search{background:rgba(255,255,255,.86)!important;color:var(--as-ink);border-color:rgba(12,29,63,.08)}
   body.explore-immersive .omap.is-map .ex-search input{color:var(--as-ink)}
@@ -216,7 +226,8 @@
   body.explore-immersive .omap-card{bottom:calc(var(--as-tab-h) + var(--as-tab-bottom) + 10px);inset-inline:10px;border-radius:var(--as-r-xl);
     background:var(--as-glass-strong);-webkit-backdrop-filter:var(--as-blur);backdrop-filter:var(--as-blur);border:.5px solid var(--as-glass-border)}
   body.explore-immersive .omap.has-card .omap-panel{opacity:0;pointer-events:none}
-  body.explore-immersive .omap-credit{bottom:auto;top:calc(var(--as-top) + 102px);left:14px;right:auto;font-size:10px;color:rgba(255,255,255,.38)}
+  /* Le crédit NASA passait sous la rangée des activités : en plein écran il n’est plus affiché. */
+  body.explore-immersive .omap-credit{display:none}
   body.explore-immersive .omap .maplibregl-ctrl-bottom-right{bottom:calc(var(--as-tab-h) + var(--as-tab-bottom) + 84px)}
   body.explore-immersive .omap-status{background:var(--as-dark-glass);color:#fff}
 }

@@ -108,7 +108,7 @@
     </section>`;
   }
 
-  /* Ouverture : des spots de rêve en grand (vraies photos), une recherche et les activités en pastilles. */
+  /* Ouverture : des spots de rêve en grand (vraies photos) et une recherche. Le changement d’activité reste en haut de l’écran. */
   const HERO_IDS=['rajaampat','borabora','noronha','navagio','whitehaven','macarella','tikehau','myrtos','nusapenida','trunkbay','pelosa','losroques'];
   function planCard(m){
     return `<section class="hf-sec hf-plan-sec" aria-label="Planifier par mois"><button type="button" class="hf-plan" data-map-plan>
@@ -123,10 +123,8 @@
   }
   function hero(){
     const n=SPOTS.length,slides=heroSpots();
-    const acts=(typeof SPORTS!=='undefined'?SPORTS:[]).map(a=>`<button type="button" class="hf-act" data-hf-act="${esc(a.id)}">${window.PoulpyIcons?.html?window.PoulpyIcons.html(a.id,'hf-act-ic'):''}<span>${esc(a.label.replace(/\s*\(.*\)/,''))}</span></button>`).join('');
     return `<section class="hf-top" aria-label="Trouve ton spot">
       <button type="button" class="hf-search" data-hf-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span><b>Où veux-tu aller ?</b><small>${n} spots · plages, lagons, vagues, récifs</small></span></button>
-      <div class="hf-acts" role="list" aria-label="Activités">${acts}</div>
       <div class="hf-hero" data-hf-hero>
         <div class="hf-slides" role="list">${slides.map((s,i)=>{const p=photo(s),a=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');return `<article class="hf-slide" role="listitem" data-spot="${esc(s.id)}" aria-label="${esc(String(s.name).split(' — ')[0])}, ${esc(s.country||'')}">
           <img src="${esc(p.src)}" alt="" ${i?'loading="lazy"':'fetchpriority="high"'} decoding="async">
@@ -152,14 +150,45 @@
     if(tiles.length<4)return '';
     return `<section class="hf-moods" aria-label="Envies du moment"><div class="as-sec"><h2>Envies du moment<small>Choisis une ambiance, on te montre où aller.</small></h2></div><div class="hf-mood-grid">${tiles.join('')}</div></section>`;
   }
-  /* Planète : la vraie Terre (NASA) qui tourne sous une sphère ombrée. Un toucher ouvre l’explorateur 3D. */
+  /* Planète : la vraie Terre en 3D (même globe que l’explorateur, sans points). La sphère CSS reste en repli
+     tant que le globe n’est pas prêt. Le globe se charge quand la carte arrive à l’écran et se met en veille
+     dès qu’elle sort. Glisser fait tourner la Terre ; le bouton ouvre l’explorateur. */
   function worldCard(){
     return `<section class="hf-world" aria-label="La planète des spots">
-      <div class="hf-world-map" data-hf-go="spots" role="button" tabindex="0" aria-label="Explorer la planète"><div class="hf-planet" aria-hidden="true"><div class="hf-planet-tex"></div><i class="hf-planet-shade"></i></div></div>
+      <div class="hf-world-map"><div class="hf-planet" aria-hidden="true"><div class="hf-planet-tex"></div><i class="hf-planet-shade"></i></div><div class="hf-globe" data-hf-globe></div></div>
       <div class="hf-world-tx"><span class="hf-kicker">La planète des spots</span><h2>${SPOTS.length} spots, 6 continents.</h2><p>Fais tourner la planète et pose ton doigt sur ton prochain voyage.</p>
       <button type="button" class="hf-world-go" data-hf-go="spots">Explorer la planète<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13"/><path d="M12.5 6 19 12l-6.5 6"/></svg></button></div>
     </section>`;
   }
+  /* Globe de l’accueil : une seule instance, créée à l’approche de la carte, mise en veille hors écran. */
+  let planet=null,planetIO=null,planetBusy=false,planetOn=false;
+  function stopPlanet(){
+    planetIO?.disconnect();planetIO=null;planetBusy=false;planetOn=false;
+    planet?.destroy?.();planet=null;
+  }
+  function loadPlanet(host){
+    if(planetBusy||planet||!window.OceanGlobe?.supported?.())return;
+    planetBusy=true;
+    window.OceanGlobe.create(host,{lighting:'studio',clouds:false}).then(api=>{
+      planetBusy=false;
+      /* Le rendu a été refait entre-temps (langue, données) : on libère ce globe. */
+      if(!host.isConnected){api.destroy();return;}
+      planet=api;api.setActive(planetOn&&!document.hidden);
+      host.closest('.hf-world-map')?.classList.add('is-live');
+    }).catch(()=>{planetBusy=false;});
+  }
+  function watchPlanet(){
+    planetIO?.disconnect();
+    const host=home.querySelector('[data-hf-globe]');if(!host||!window.IntersectionObserver)return;
+    planetIO=new IntersectionObserver(([e])=>{
+      planetOn=!!e?.isIntersecting;
+      if(planet)planet.setActive(planetOn&&!document.hidden);
+      else if(planetOn)loadPlanet(host);
+    },{rootMargin:'240px 0px'});
+    planetIO.observe(host);
+  }
+  document.addEventListener('visibilitychange',()=>{planet?.setActive(planetOn&&!document.hidden);});
+
   /* Carrousel : glisser, ou défilement automatique toutes les 6 s (sauf mouvement réduit ou après un geste). */
   let heroTimer=0,lastTouch=0;
   function bindHero(){
@@ -238,12 +267,13 @@
     if(!feed){feed=document.createElement('div');feed.className='hf-feed';$('.hf-top',home).after(feed);}
     /* Les sections placées entre les rails (activités, immersion) sortent du fil avant le nouveau rendu. */
     for(const el of [$('#oceanHub',home),$('#obDive',home),$('.home-intro',home),$('.poulpy-activities',home)])if(el&&feed.contains(el))feed.after(el);
+    stopPlanet();
     feed.innerHTML=render();
     /* Envies du moment juste après le premier rail, la carte du monde après le deuxième. */
     const firstRail=feed.querySelector('.hf-sec');const mm=document.createElement('div');mm.innerHTML=moods(feed);if(mm.firstElementChild)(firstRail||feed.firstElementChild)?.after(mm.firstElementChild);
     /* La carte du monde vient après les deux premiers rails. */
     const second=feed.querySelectorAll('.hf-sec')[1];const wc=document.createElement('div');wc.innerHTML=worldCard();(second||feed.lastElementChild)?.after(wc.firstElementChild);
-    order();bindHero();built=true;
+    order();bindHero();watchPlanet();built=true;
   }
   addEventListener('load',()=>setTimeout(order,0),{once:true});
   setTimeout(order,1700);
@@ -264,8 +294,6 @@
     if(jump){const sec=home.querySelector(`[data-hf="${jump.dataset.hfJump}"]`);sec?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});return;}
     const search=e.target.closest('[data-hf-search]');
     if(search){document.querySelector('.mobile-search')?.click();return;}
-    const act=e.target.closest('[data-hf-act]');
-    if(act){if(typeof setSport==='function')setSport(act.dataset.hfAct);return;}
     const open=e.target.closest('[data-hf-open]')||e.target.closest('.hf-slide[data-spot]');
     if(open&&typeof openSpot==='function'){openSpot(open.dataset.hfOpen||open.dataset.spot);return;}
     const go2=e.target.closest('[data-hf-go]');

@@ -12,13 +12,8 @@
 .hf-search b{font:750 16px/1.2 var(--body)}
 .hf-search small{font:500 13px/1.25 var(--body);color:var(--as-ink3,#7d8aa6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hf-search:active{transform:scale(.98)}
-.hf-acts{display:flex;gap:8px;overflow-x:auto;margin:0 calc(-1 * var(--as-gutter,16px)) 14px;padding:2px var(--as-gutter,16px) 4px;scrollbar-width:none;scroll-snap-type:x proximity}
-.hf-acts::-webkit-scrollbar{display:none}
-.hf-act{flex:none;display:inline-flex;align-items:center;gap:7px;height:44px;padding:0 15px 0 5px;border:1px solid rgba(12,29,63,.08);border-radius:999px;background:#fff;color:var(--as-ink,#0c1d3f);font:700 14px var(--body);cursor:pointer;scroll-snap-align:start;box-shadow:0 4px 12px -8px rgba(12,29,63,.4)}
-.hf-act .hf-act-ic,.hf-act img,.hf-act svg{width:34px;height:34px;border-radius:50%;object-fit:cover;flex:none}
-.hf-act:active{transform:scale(.96)}
-/* Pictogramme fixe (34 px) : la taille ne dépend plus des règles génériques, les chips ne bougent plus. */
-.hf-act .poulpy-mini,.hf-act img.hf-act-ic{width:34px!important;height:34px!important;min-width:34px;max-width:34px;flex:0 0 34px;padding:0!important;margin:0!important;border-radius:50%;background:#EAF2FF;object-fit:contain;box-shadow:none!important;filter:none!important}
+/* L’accueil ne répète pas le choix d’activité : il se fait en haut de l’écran (barre des sports). */
+#home .poulpy-activities{display:none!important}
 .hf-hero{position:relative;overflow:hidden;isolation:isolate;border-radius:var(--as-r-xl,28px);background:#0b2d7a;aspect-ratio:4/5;min-height:430px;max-height:600px;box-shadow:0 26px 60px -30px rgba(12,29,63,.75)}
 .hf-slides{position:absolute;inset:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
 .hf-slides::-webkit-scrollbar{display:none}
@@ -38,10 +33,19 @@
 @media(min-width:960px){.hf-hero{aspect-ratio:auto;height:520px;max-height:none}.hf-slide h2{font-size:76px}.hf-slide-tx{left:44px;bottom:48px;max-width:640px}.hf-acts{margin-inline:0;padding-inline:0}.hf-search{max-width:640px}}
 
 /* ---------- Carte du monde ---------- */
-.hf-world{margin:30px 0 4px;border-radius:var(--as-r-xl,28px);overflow:hidden;background:#0b2d7a;color:#fff;box-shadow:0 22px 50px -28px rgba(11,45,122,.85)}
-.hf-world-map{position:relative;aspect-ratio:1200/473;background:#0a1d4a}
-.hf-world-map img,.hf-world-map canvas{position:absolute;inset:0;width:100%;height:100%}
-.hf-world-map img{object-fit:cover}
+.hf-world{margin:30px 0 4px;border-radius:var(--as-r-xl,28px);overflow:hidden;background:radial-gradient(90% 70% at 50% 16%,#2f6fe0 0%,#1b4fc4 48%,#0b2d7a 100%);color:#fff}
+.hf-world-map{--d:232px;position:relative;height:276px;display:grid;place-items:center;overflow:hidden}
+/* Globe 3D de l’accueil : carré de la taille de la planète, transparent hors de la sphère. */
+.hf-globe{position:absolute;left:50%;top:50%;width:var(--d);height:var(--d);transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;touch-action:pan-y}
+.hf-globe canvas{width:100%!important;height:100%!important}
+.hf-world-map.is-live .hf-planet{visibility:hidden}
+.hf-planet{position:relative;width:var(--d);height:var(--d);border-radius:50%;overflow:hidden;isolation:isolate;background:#0b2d7a;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 22px 50px -12px rgba(3,16,46,.75);transform:translateZ(0)}
+/* La Terre (NASA) défile en boucle : la sphère tourne sans canvas ni WebGL, donc sans à-coups. */
+.hf-planet-tex{position:absolute;inset:0;background:url(assets/globe/earth-day-4k.webp) 0 50%/calc(var(--d) * 2) var(--d) repeat-x;animation:hf-spin 48s linear infinite}
+.hf-planet-shade{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.2) 0,rgba(255,255,255,0) 44%),radial-gradient(circle at 62% 56%,rgba(0,0,0,0) 50%,rgba(3,16,46,.6) 100%)}
+@keyframes hf-spin{from{background-position:0 50%}to{background-position:calc(var(--d) * -2) 50%}}
+.reduce-motion .hf-planet-tex{animation:none}
+@media (prefers-reduced-motion:reduce){.hf-planet-tex{animation:none}}
 .hf-world-tx{padding:16px 18px 18px}
 .hf-world-tx .hf-kicker{background:rgba(224,255,145,.16);color:var(--ob-lime,#e0ff91)}
 .hf-world-tx h2{margin:10px 0 6px;font:900 32px/.95 var(--as-condensed);text-transform:uppercase;letter-spacing:-.3px}

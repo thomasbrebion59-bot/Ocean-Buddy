@@ -159,6 +159,12 @@
     dice.onclick=surprise;
     ctrls.append(sun,cloud,dice);paint();
     window.OceanSst?.mount?.(ctrls);
+    /* Un seul bouton pour les réglages secondaires : il déplie température, soleil, nuages et surprise. */
+    const more=document.createElement('button');more.type='button';more.dataset.exMore='';
+    more.setAttribute('aria-expanded','false');more.setAttribute('aria-label','Réglages de la planète');more.title='Réglages de la planète';
+    more.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="1.6" fill="currentColor"/><circle cx="19" cy="12" r="1.6" fill="currentColor"/><circle cx="5" cy="12" r="1.6" fill="currentColor"/></svg>';
+    more.onclick=()=>{const open=ctrls.classList.toggle('more-open');more.setAttribute('aria-expanded',String(open));};
+    ctrls.append(more);
     void prefs;
   }
   const recent=[];
