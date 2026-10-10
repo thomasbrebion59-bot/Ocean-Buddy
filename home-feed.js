@@ -152,25 +152,13 @@
     if(tiles.length<4)return '';
     return `<section class="hf-moods" aria-label="Envies du moment"><div class="as-sec"><h2>Envies du moment<small>Choisis une ambiance, on te montre où aller.</small></h2></div><div class="hf-mood-grid">${tiles.join('')}</div></section>`;
   }
-  /* Carte du monde : chaque spot est un point lumineux sur la vraie carte (NASA), une invitation à explorer. */
+  /* Planète : la vraie Terre (NASA) qui tourne sous une sphère ombrée. Un toucher ouvre l’explorateur 3D. */
   function worldCard(){
-    return `<section class="hf-world" aria-label="La carte du monde des spots">
-      <div class="hf-world-map"><img src="assets/globe/world-card.webp" alt="" loading="lazy" decoding="async"><canvas aria-hidden="true"></canvas></div>
-      <div class="hf-world-tx"><span class="hf-kicker">La carte du monde</span><h2>${SPOTS.length} spots, 6 continents.</h2><p>Fais tourner la planète et pose ton doigt sur ton prochain voyage.</p>
-      <button type="button" class="hf-world-go" data-hf-go="spots">Explorer la carte<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13"/><path d="M12.5 6 19 12l-6.5 6"/></svg></button></div>
+    return `<section class="hf-world" aria-label="La planète des spots">
+      <div class="hf-world-map" data-hf-go="spots" role="button" tabindex="0" aria-label="Explorer la planète"><div class="hf-planet" aria-hidden="true"><div class="hf-planet-tex"></div><i class="hf-planet-shade"></i></div></div>
+      <div class="hf-world-tx"><span class="hf-kicker">La planète des spots</span><h2>${SPOTS.length} spots, 6 continents.</h2><p>Fais tourner la planète et pose ton doigt sur ton prochain voyage.</p>
+      <button type="button" class="hf-world-go" data-hf-go="spots">Explorer la planète<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13"/><path d="M12.5 6 19 12l-6.5 6"/></svg></button></div>
     </section>`;
-  }
-  function drawWorld(){
-    const c=home.querySelector('.hf-world canvas');if(!c)return;
-    const r=c.getBoundingClientRect();if(!r.width)return;
-    const d=Math.min(3,devicePixelRatio||1);c.width=Math.round(r.width*d);c.height=Math.round(r.height*d);
-    const g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);
-    /* Deux aplats sans effet : un anneau marine, puis un point blanc. Les zones denses restent nettes. */
-    const pts=[];
-    for(const s of SPOTS){const k=COORDS[s.id];if(!k)continue;const x=(k.lon+180)/360*c.width,y=(84-k.lat)/142*c.height;if(y<0||y>c.height)continue;pts.push([x,y]);}
-    pts.sort((a,b)=>a[1]-b[1]);
-    g.fillStyle='#0b2d7a';for(const[x,y]of pts){g.beginPath();g.arc(x,y,3.2*d,0,7);g.fill();}
-    g.fillStyle='#ffffff';for(const[x,y]of pts){g.beginPath();g.arc(x,y,2.1*d,0,7);g.fill();}
   }
   /* Carrousel : glisser, ou défilement automatique toutes les 6 s (sauf mouvement réduit ou après un geste). */
   let heroTimer=0,lastTouch=0;
@@ -255,7 +243,7 @@
     const firstRail=feed.querySelector('.hf-sec');const mm=document.createElement('div');mm.innerHTML=moods(feed);if(mm.firstElementChild)(firstRail||feed.firstElementChild)?.after(mm.firstElementChild);
     /* La carte du monde vient après les deux premiers rails. */
     const second=feed.querySelectorAll('.hf-sec')[1];const wc=document.createElement('div');wc.innerHTML=worldCard();(second||feed.lastElementChild)?.after(wc.firstElementChild);
-    order();bindHero();requestAnimationFrame(drawWorld);built=true;
+    order();bindHero();built=true;
   }
   addEventListener('load',()=>setTimeout(order,0),{once:true});
   setTimeout(order,1700);
@@ -293,7 +281,5 @@
   window.OceanSpotData?.load('lite').then(d=>{lite=d;if(built)mount();}).catch(()=>{});
   /* Langue changée : on reconstruit (noms des mois). */
   window.addEventListener('ocean:lang',()=>{if(built)mount();});
-  addEventListener('resize',()=>{clearTimeout(drawWorld.t);drawWorld.t=setTimeout(drawWorld,200);});
-  window.addEventListener('ocean:navigate',e=>{if(e.detail==='home')requestAnimationFrame(drawWorld);});
   window.OceanHomeFeed={refresh:mount,seasonLabel};
 })();

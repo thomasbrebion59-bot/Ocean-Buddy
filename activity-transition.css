@@ -1,6 +1,6 @@
 /* Transitions d'activité (activity-transition.js) : photo réelle en plein écran, nom de l’activité en bas à gauche. */
 .act-tr{position:fixed;inset:0;z-index:3000;overflow:hidden;background:#0B1F4D;color:#fff;opacity:0;touch-action:none;user-select:none;-webkit-user-select:none}
-.act-tr-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;clip-path:inset(100% 0 0 0);transform:scale(1.12);transform-origin:center 60%;will-change:transform,clip-path}
+.act-tr-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;transform:translate3d(0,100%,0) scale(1.06);will-change:transform;backface-visibility:hidden}
 .act-tr-shade{position:absolute;inset:0;opacity:0;background:linear-gradient(180deg,rgba(6,21,47,0) 42%,rgba(6,21,47,.8) 100%)}
 .act-tr-cap{position:absolute;left:24px;right:24px;bottom:max(72px,calc(env(safe-area-inset-bottom) + 64px));opacity:0}
 .act-tr-eyebrow{display:block;font:600 11px/1 var(--body,system-ui);letter-spacing:.2em;text-transform:uppercase;opacity:.8}

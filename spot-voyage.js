@@ -10,6 +10,8 @@
   const PHOTO_MS=9000;
   const PANNELLUM='https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/';
   let root=null,spot=null,scenes=[],index=0,timer=null,started=0,remaining=PHOTO_MS,paused=false,viewer=null,opener=null,soundWasOn=false,particles=null;
+  /* Orientation de la carte : cap de la photo (Street View) + regard dans le panorama 360° (yaw). */
+  let curHead=0,curPano=false,yaw=0,yawRaf=0;
 
   const icon={
     close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg>',
@@ -254,7 +256,7 @@
       pannellum().then(p=>{
         if(scenes[index]!==sc||sc.views[sc.cur]!==v)return;
         const vw=p.viewer(id,{type:'equirectangular',panorama:v.src==='sphere'?v.url:commonsUrl(v),autoLoad:true,autoRotate:reduce()?0:-1.5,autoRotateInactivityDelay:6000,showControls:false,compass:false,hfov:innerWidth<700?85:100,minHfov:40,crossOrigin:'anonymous'});
-        viewer=vw;
+        viewer=vw;followYaw(vw);
         vw.on('load',()=>{layer.querySelector('.voyage-loading')?.remove();ready();});
         vw.on('error',()=>fail('Ce panorama n’a pas pu être chargé.'));
       }).catch(()=>fail('Ce panorama n’a pas pu être chargé.'));
@@ -295,18 +297,39 @@
     const far=Math.max(150,...pts.map(v=>metres(o,v)));
     const xy=v=>{const d=Math.sqrt(metres(o,v)/far)*36,a=rad(azimut(o,v));return [50+Math.sin(a)*d,50-Math.cos(a)*d];};
     const sea=sc.sea!=null?`<g transform="rotate(${sc.sea} 50 50)"><rect x="-10" y="-10" width="120" height="58" fill="url(#vxSea)"/><path d="M4 45q5-3 10 0t10 0 10 0 10 0 10 0 10 0 10 0 10 0 10 0" class="vx-foam"/></g>`:'';
-    host.innerHTML=`<svg viewBox="0 0 100 100"><defs><clipPath id="vxClip"><circle cx="50" cy="50" r="47"/></clipPath><linearGradient id="vxSea" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#2f7bf0"/><stop offset="1" stop-color="#0b2d7a"/></linearGradient></defs>
-      <g clip-path="url(#vxClip)"><circle cx="50" cy="50" r="47" class="vx-land"/>${sea}<g class="vx-cone" data-cone></g></g><circle cx="50" cy="50" r="47" class="vx-ring"/>
-      ${sc.views.map((v,i)=>{if(v.lat==null)return '';const [x,y]=xy(v);return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${i===sc.cur?5.5:3.4}" class="vx-dot${i===sc.cur?' is-on':''}${v.k==='eau'||v.k==='sous'?' is-water':''}"/>`;}).join('')}
-      <text x="50" y="12" class="vx-n">N</text></svg>`;
     const v=sc.views[sc.cur];
-    if(v?.lat!=null){[host.dataset.x,host.dataset.y]=xy(v);cone(v.src==='google'||v.src==='google-ll'?v.head:null);}
+    /* Carte en mode « regard » : le haut de la carte est toujours la direction où l’on regarde. */
+    curPano=!!v&&!(v.src==='google'||v.src==='google-ll');curHead=v?.head||0;
+    host.innerHTML=`<svg viewBox="0 0 100 100"><defs><clipPath id="vxClip"><circle cx="50" cy="50" r="47"/></clipPath><linearGradient id="vxSea" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#2f7bf0"/><stop offset="1" stop-color="#0b2d7a"/></linearGradient></defs>
+      <g class="vx-rot" data-rot transform="rotate(${-bearing()} 50 50)"><g clip-path="url(#vxClip)"><circle cx="50" cy="50" r="47" class="vx-land"/>${sea}<g class="vx-cone" data-cone></g></g>
+      ${sc.views.map((v,i)=>{if(v.lat==null)return '';const [x,y]=xy(v);return `<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${i===sc.cur?5.5:3.4}" class="vx-dot${i===sc.cur?' is-on':''}${v.k==='eau'||v.k==='sous'?' is-water':''}"/>`;}).join('')}
+      <text x="50" y="12" class="vx-n">N</text></g><circle cx="50" cy="50" r="47" class="vx-ring"/></svg>`;
+    if(v?.lat!=null){[host.dataset.x,host.dataset.y]=xy(v);cone(true);}
   }
-  function cone(h){
+  /* Cap affiché : cap de la photo + regard du panorama (yaw, positif = vers la droite, comme Pannellum). */
+  function bearing(){return curHead+(curPano?yaw:0);}
+  function turnMap(){
+    const g=root?.querySelector('[data-rot]');if(!g)return;
+    g.setAttribute('transform',`rotate(${-Math.round(bearing()*10)/10} 50 50)`);
+  }
+  /* Suit le regard du panorama 360° à chaque image tant que ce panorama est affiché. */
+  function followYaw(vw){
+    cancelAnimationFrame(yawRaf);yaw=0;
+    let last=NaN;
+    const tick=()=>{
+      if(viewer!==vw)return;
+      let y=NaN;try{y=vw.getYaw();}catch(_){}
+      if(Number.isFinite(y)&&(!Number.isFinite(last)||Math.abs(y-last)>0.2)){last=y;yaw=y;turnMap();}
+      yawRaf=requestAnimationFrame(tick);
+    };
+    tick();
+  }
+  /* La pointe de regard part de la position actuelle et pointe toujours vers le haut de la carte. */
+  function cone(show){
     const g=root.querySelector('[data-cone]'),host=root.querySelector('[data-vx-map]');if(!g)return;
-    if(h==null||isNaN(h)){g.innerHTML='';return;}
+    if(!show){g.innerHTML='';return;}
     const x=+host.dataset.x,y=+host.dataset.y;
-    g.innerHTML=`<path d="M${x} ${y}L${x-10} ${y-26}A28 28 0 0 1 ${x+10} ${y-26}Z" transform="rotate(${Math.round(h)} ${x} ${y})"/>`;
+    g.innerHTML=`<path d="M${x} ${y}L${x-10} ${y-26}A28 28 0 0 1 ${x+10} ${y-26}Z"/>`;
   }
   async function gyro(btn){
     if(!viewer)return;

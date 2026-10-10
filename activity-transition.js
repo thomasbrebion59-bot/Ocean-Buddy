@@ -48,8 +48,10 @@
       if (active === run) active = null;
       release();
       if (apply) doSwap();
+      document.dispatchEvent(new CustomEvent('ocean:transition', { detail: false }));
     } };
     active = run;
+    document.dispatchEvent(new CustomEvent('ocean:transition', { detail: true }));
     const pause = ms => Promise.race([wait(ms), stopped]);
     const anim = (target, frames, ms, delay = 0) => {
       if (run.done) return Promise.resolve();
@@ -86,7 +88,6 @@
       if (run.done) return;
 
       if (calm) {
-        photo.style.clipPath = 'inset(0)';
         photo.style.transform = 'none';
         el.querySelector('.act-tr-shade').style.opacity = '1';
         await anim(el, [{ opacity: 0 }, { opacity: 1 }], 160);
@@ -100,9 +101,8 @@
       } else {
         el.style.opacity = '1';
         /* 1. la photo monte depuis le bas, 2. l’écran change dessous, 3. la légende arrive, 4. la photo se retire. */
-        const rise = anim(photo, [{ clipPath: 'inset(100% 0 0 0)' }, { clipPath: 'inset(0% 0 0 0)' }], 420);
-        anim(photo, [{ transform: 'scale(1.12)' }, { transform: 'scale(1)' }], 1100);
-        await rise;
+        /* transform seul : la photo monte et se pose sans repeindre le calque à chaque image. */
+        await anim(photo, [{ transform: 'translate3d(0,100%,0) scale(1.06)' }, { transform: 'translate3d(0,0,0) scale(1)' }], 420);
         if (run.done) return;
         doSwap();
         if (run.done) return;

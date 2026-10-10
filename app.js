@@ -285,7 +285,9 @@ function applySport(id){
   document.getElementById('nearBtn')?.classList.remove('on');
   document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
   renderSportFilters();renderWorlds();backToWorlds();renderSpots();
-  saveState();renderHome();go('spots');
+  saveState();go('spots');
+  /* L’accueil se refait après la scène, pas pendant : le changement d’activité reste fluide. */
+  setTimeout(renderHome,1200);
 }
 /* ====== GÉOLOCALISATION / AUTOUR DE MOI ====== */
 let userPos=null,nearMode=false,userMarker=null;
