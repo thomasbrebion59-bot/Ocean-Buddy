@@ -1,6 +1,6 @@
 /* Transition d'activité : la photo de l'activité monte en plein écran, l'écran change dessous,
    le nom de l'activité apparaît en bas à gauche, puis la photo se retire. Environ 1,1 s.
-   Un toucher passe directement à la fin. Mouvement réduit : fondu seul. */
+   Un toucher abrège la scène sans dévoiler un écran encore en préparation. Mouvement réduit : fondu seul. */
 (() => {
   'use strict';
   const V = '?v=5';
@@ -30,15 +30,15 @@
   async function play(id, swap) {
     const request = ++seq;
     /* La dernière sélection remplace la précédente, même avant le changement d’écran. */
-    active?.finish(false);
+    active?.finish();
     const fx = FX[id];
     if (!fx) { if (request === seq) swap?.(); return; }
-    let swapped = false;
-    const doSwap = () => { if (swapped || request !== seq) return; swapped = true; try { swap?.(); } catch (e) { console.error(e); } };
+    let swapped = false, skip = false, revealing = false, shorten;
+    const skipped = new Promise(resolve => { shorten = resolve; });
     let el = null, timer = null, release;
     const stopped = new Promise(resolve => { release = resolve; });
     const animations = new Set();
-    const run = { done: false, finish(apply = true) {
+    const run = { done: false, covered: false, finish() {
       if (run.done) return;
       run.done = true;
       clearTimeout(timer);
@@ -47,22 +47,50 @@
       if (currentEl === el) currentEl = null;
       if (active === run) active = null;
       release();
-      if (apply) doSwap();
       document.dispatchEvent(new CustomEvent('ocean:transition', { detail: false }));
     } };
     active = run;
     document.dispatchEvent(new CustomEvent('ocean:transition', { detail: true }));
-    const pause = ms => Promise.race([wait(ms), stopped]);
+    const pause = ms => Promise.race([wait(ms), skipped, stopped]);
+    const nextFrame = () => Promise.race([new Promise(resolve => requestAnimationFrame(resolve)), stopped]);
+    const isCurrent = () => !run.done && request === seq;
+    const doSwap = async () => {
+      if (swapped || !isCurrent()) return;
+      swapped = true;
+      run.covered = true;
+      /* Le changement peut répartir ses rendus sur plusieurs images, toujours sous le voile opaque. */
+      try { await Promise.race([Promise.resolve(swap?.({ nextFrame, isCurrent })), stopped]); }
+      catch (e) { console.error(e); }
+    };
+    const skipScene = () => {
+      if (run.done || skip) return;
+      skip = true;
+      animations.forEach(a => a.cancel());
+      /* Un toucher (ou le garde-fou) couvre d’abord l’ancien écran ; le rendu reste attendu. */
+      if (el && !revealing) {
+        el.style.opacity = '1';
+        el.querySelector('.act-tr-photo').style.transform = 'none';
+        el.querySelector('.act-tr-cap').style.opacity = '1';
+        el.querySelector('.act-tr-shade').style.opacity = '1';
+      }
+      shorten();
+    };
     const anim = (target, frames, ms, delay = 0) => {
       if (run.done) return Promise.resolve();
       try {
         const a = target.animate(frames, { duration: ms, delay, easing: EASE, fill: 'forwards' });
         animations.add(a);
-        return Promise.race([a.finished.catch(() => {}), stopped]);
-      } catch (_) { return Promise.resolve(); }
+        /* Une animation suspendue termine aussi par le garde-fou, y compris le fondu abrégé. */
+        return Promise.race([a.finished.catch(() => {}), stopped, wait(ms + delay + 100)]).then(() => {
+          if (!run.done && !skip) Object.assign(target.style, frames[frames.length - 1]);
+        });
+      } catch (_) {
+        Object.assign(target.style, frames[frames.length - 1]);
+        return Promise.resolve();
+      }
     };
     /* Une animation interrompue ou suspendue ne doit jamais bloquer les touches. */
-    timer = setTimeout(() => run.finish(), 1800);
+    timer = setTimeout(skipScene, 1800);
     try {
       const sport = (typeof SPORTMAP !== 'undefined' && SPORTMAP[id]) || { label: id }, n = count(id);
       el = document.createElement('div');
@@ -77,7 +105,7 @@
       el.addEventListener('pointerdown', e => {
         e.preventDefault();
         e.stopPropagation();
-        run.finish();
+        skipScene();
       }, { once: true });
       const photo = el.querySelector('.act-tr-photo'), cap = el.querySelector('.act-tr-cap');
       const calm = reduced();
@@ -90,29 +118,31 @@
       if (calm) {
         photo.style.transform = 'none';
         el.querySelector('.act-tr-shade').style.opacity = '1';
-        await anim(el, [{ opacity: 0 }, { opacity: 1 }], 160);
-        if (run.done) return;
-        doSwap();
-        if (run.done) return;
-        cap.style.opacity = '1';
-        await pause(260);
-        if (run.done) return;
-        await anim(el, [{ opacity: 1 }, { opacity: 0 }], 160);
+        if (!skip) await anim(el, [{ opacity: 0 }, { opacity: 1 }], 160);
       } else {
         el.style.opacity = '1';
-        /* 1. la photo monte depuis le bas, 2. l’écran change dessous, 3. la légende arrive, 4. la photo se retire. */
-        /* transform seul : la photo monte et se pose sans repeindre le calque à chaque image. */
-        await anim(photo, [{ transform: 'translate3d(0,100%,0) scale(1.06)' }, { transform: 'translate3d(0,0,0) scale(1)' }], 420);
-        if (run.done) return;
-        doSwap();
-        if (run.done) return;
+        /* La photo monte sans repeindre le calque à chaque image. */
+        if (!skip) await anim(photo, [{ transform: 'translate3d(0,100%,0) scale(1.06)' }, { transform: 'translate3d(0,0,0) scale(1)' }], 420);
+      }
+      if (!isCurrent()) return;
+      /* La légende et le temps de lecture accompagnent la préparation, sans rallonger la scène. */
+      const dwell = pause(calm ? 260 : 520);
+      if (calm || skip) cap.style.opacity = '1';
+      else {
         try { navigator.vibrate?.(6); } catch (_) {}
         anim(el.querySelector('.act-tr-shade'), [{ opacity: 0 }, { opacity: 1 }], 260);
         anim(cap, [{ opacity: 0, transform: 'translate3d(0,10px,0)' }, { opacity: 1, transform: 'none' }], 320, 80);
-        await pause(520);
-        if (run.done) return;
-        await anim(el, [{ opacity: 1 }, { opacity: 0 }], 260);
       }
+      await doSwap();
+      if (!isCurrent()) return;
+      /* Le globe reprend sous la photo : son canevas doit être peint avant le fondu de sortie. */
+      document.dispatchEvent(new CustomEvent('ocean:transition-ready'));
+      await nextFrame();
+      await nextFrame();
+      await dwell;
+      if (!isCurrent()) return;
+      revealing = true;
+      await anim(el, [{ opacity: 1 }, { opacity: 0 }], skip ? 120 : calm ? 160 : 260);
     } catch (e) {
       console.error(e);
     } finally {
@@ -123,7 +153,7 @@
   function neutral(swap) {
     ++seq;
     const interrupted = !!active;
-    active?.finish(false);
+    active?.finish();
     if (interrupted || reduced() || !document.startViewTransition) { swap?.(); return; }
     try { document.startViewTransition(() => swap?.()); } catch (_) { swap?.(); }
   }
@@ -131,8 +161,8 @@
   function cancel() {
     ++seq;
     currentEl?.remove();
-    active?.finish(false);
+    active?.finish();
   }
-  window.OceanTransition = { play, neutral, cancel, preload, FX };
+  window.OceanTransition = { play, neutral, cancel, preload, FX, get covered() { return !!active?.covered; } };
   preload();
 })();

@@ -335,10 +335,15 @@
   }
   /* Scène d’activité à l’écran : le globe se fige (une seule scène GPU animée), puis reprend. */
   let globeFrozen=false;
+  const resumeGlobe=()=>{
+    if(globeFrozen){globeFrozen=false;if(planet&&mode==='globe')planet.setActive(true);}
+  };
   document.addEventListener('ocean:transition',e=>{
     if(e.detail){if(planet&&mode==='globe'){globeFrozen=true;planet.setActive(false);}return;}
-    if(globeFrozen){globeFrozen=false;if(planet&&mode==='globe')planet.setActive(true);}
+    resumeGlobe();
   });
+  /* Le canevas masqué par setActive(false) revient avant les deux images de préparation du fondu. */
+  document.addEventListener('ocean:transition-ready',resumeGlobe);
   /* Plongée : la carte reprend le centre et l’échelle exacts du globe, puis poursuit le zoom. */
   function dive(v,target){
     if(diving||!planet)return;diving=true;

@@ -1144,6 +1144,8 @@
   .screen-wrap.transitioning{overflow:hidden;}
   .screen.sw-live{position:absolute;top:0;left:0;right:0;}
   .screen.sw-live.active,.screen.sw-live.active>*,.screen.sw-done.active,.screen.sw-done.active>*{animation:none!important;} /* évite le conflit + le rejeu de l'entrée CSS d'origine */
+  /* L’activité a été préparée sous la photo : aucune entrée différée du décor ou des destinations. */
+  .screen.sw-covered.active #spotsTop,.screen.sw-covered.active .worlds>*{animation:none!important;}
   .nav-pill{position:absolute;top:8px;left:0;height:34px;width:42px;border-radius:14px;
     background:rgba(18,115,184,.12);z-index:0;opacity:0;pointer-events:none;
     transition:transform .42s cubic-bezier(.22,1.12,.32,1),width .3s ease,background-color .3s ease,opacity .22s ease;}

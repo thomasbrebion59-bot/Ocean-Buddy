@@ -270,12 +270,12 @@ function renderSportFilters(){
 }
 function setSport(id){
   /* Choisir une activité, c’est entrer dans son élément : transition immersive, l’écran change sous la scène. */
-  if(id&&SPORTMAP[id]&&window.OceanTransition){window.OceanTransition.play(id,()=>applySport(id));return;}
+  if(id&&SPORTMAP[id]&&window.OceanTransition){window.OceanTransition.play(id,transition=>applySport(id,transition));return;}
   if(!id&&activeSport&&window.OceanTransition?.neutral){window.OceanTransition.neutral(()=>applySport(null));return;}
   window.OceanTransition?.cancel?.();
   applySport(id);
 }
-function applySport(id){
+function applySport(id,transition){
   window.OceanNavigation?.begin();
   activeSport=id&&SPORTMAP[id]?id:null;chosenSport=activeSport||'all';
   window.OceanTheme?.set(activeSport);
@@ -284,10 +284,19 @@ function applySport(id){
   document.getElementById('favChip')?.classList.remove('active');
   document.getElementById('nearBtn')?.classList.remove('on');
   document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
-  renderSportFilters();renderWorlds();backToWorlds();renderSpots();
-  saveState();go('spots');
-  /* L’accueil se refait après la scène, pas pendant : le changement d’activité reste fluide. */
-  setTimeout(renderHome,1200);
+  /* backToWorlds rend déjà les destinations : évite de reconstruire deux fois les mêmes cartes. */
+  renderSportFilters();backToWorlds();saveState();
+  const render = () => {
+    renderSpots();
+    /* L’accueil se refait après la scène, pas pendant : le changement d’activité reste fluide. */
+    setTimeout(renderHome,1200);
+  };
+  if(transition){
+    go('spots');
+    /* Les fiches (photos et SVG) se préparent sur l’image suivante, sous la scène opaque. */
+    return transition.nextFrame().then(()=>{if(transition.isCurrent())render();});
+  }
+  render();go('spots');
 }
 /* ====== GÉOLOCALISATION / AUTOUR DE MOI ====== */
 let userPos=null,nearMode=false,userMarker=null;
@@ -1942,7 +1951,7 @@ function updateNavPill(s){
   pill.style.background=colors[s]||'rgba(18,115,184,.12)';
   pill.style.opacity='1';
 }
-let goTimer=null;
+let goTimer=null,goSeq=0;
 let liveScreenId=(document.querySelector('.screen.active')||{id:'home'}).id;
 function go(s){
   window.OceanNavigation?.begin();
@@ -1950,6 +1959,8 @@ function go(s){
   const wrap=document.getElementById('screenWrap');
   const target=document.getElementById(s);
   if(!target)return;
+  const request=++goSeq,covered=!!window.OceanTransition?.covered;
+  if(!covered)target.classList.remove('sw-covered');
   const curId=liveScreenId;
   const cur=(curId&&curId!==s)?document.getElementById(curId):null;
   liveScreenId=s;
@@ -1964,9 +1975,12 @@ function go(s){
   if(cur)vibrate(8);
   if(HEADBUB[s])bubbles(HEADBUB[s]);
   const reduce=document.body.classList.contains('reduce-motion')||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  if(!cur||reduce){
+  if(!cur||reduce||covered){
     wrap.querySelectorAll('.screen.active').forEach(el=>{if(el!==target){el.classList.remove('active');resetScreenLive(el);}});
     resetScreenLive(target);
+    /* Garde les entrées CSS désactivées après le retrait de la photo, même sur l’écran déjà actif. */
+    if(covered){target.classList.add('sw-done','sw-covered');target.style.visibility='';}
+    wrap.style.minHeight='';wrap.classList.remove('transitioning');
     target.classList.add('active');
     wrap.scrollTop=0;
     wrap.focus({preventScroll:true});
@@ -1987,12 +2001,15 @@ function go(s){
   target.style.opacity='0';target.style.transform='translateX('+(dir*24)+'px)';
   void target.offsetWidth;
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    /* Une navigation plus récente peut avoir remplacé ce fondu sous la scène d’activité. */
+    if(request!==goSeq)return;
     target.style.transition='transform .4s cubic-bezier(.22,.9,.3,1.02), opacity .34s ease';
     cur.style.transition='transform .36s cubic-bezier(.4,0,.2,1), opacity .3s ease';
     target.style.transform='translateX(0)';target.style.opacity='1';
     cur.style.transform='translateX('+(-dir*18)+'px)';cur.style.opacity='0';
   }));
   goTimer=setTimeout(()=>{
+    if(request!==goSeq)return;
     goTimer=null;
     cur.classList.remove('active');
     resetScreenLive(cur);resetScreenLive(target);
