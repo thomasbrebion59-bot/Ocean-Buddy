@@ -71,12 +71,14 @@ export function analyze(sc, d) {
   } else {
     const onb = exp.filter(s => s.onb); if (onb.length) fail('onboarding-flash', `Onboarding (#onb) visible pour un utilisateur existant : ${span(onb)}.`, `Onboarding (#onb) visible for a returning user: ${span(onb)}.`);
     const leg = exp.filter(s => s.intro || s.heroText || s.centerBtn);
-    if (leg.length) { const what = [...new Set(leg.flatMap(s => [s.intro && '.home-intro', s.heroText && '« PRENDS LE LARGE »', s.centerBtn && '.nav .center (trophée)'].filter(Boolean)))].join(', '); fail('legacy-home', `Ancien accueil visible (${what}) : ${span(leg)}.`, `Legacy home visible (${what}): ${span(leg)}.`); }
+    if (leg.length) { const what = [...new Set(leg.flatMap(s => [s.intro && '.home-intro', s.heroText && '« PRENDS LE LARGE »', s.centerBtn && 'ancienne barre d’onglets (.nic / onglet sans .tab-label)'].filter(Boolean)))].join(', '); fail('legacy-home', `Ancien accueil visible (${what}) : ${span(leg)}.`, `Legacy home visible (${what}): ${span(leg)}.`); }
     const nav = exp.filter(s => (s.nav.visible && s.nav.labelled < 4) || (afterLift(s) && !s.nav.visible));
     if (nav.length) { const m = Math.min(...nav.map(s => s.nav.labelled)); fail('tabbar', `Barre d’onglets incomplète (${m} onglet(s) avec libellé, 4 requis ; ou absente) : ${span(nav)}.`, `Tab bar incomplete (${m} labelled tab(s), 4 required; or missing): ${span(nav)}.`); }
     const rb = []; for (const e of ev.filter(e => e.type === 'feed-rebuild' && e.t >= liftT)) if (!rb.length || e.t - rb.at(-1).t > 100) rb.push(e); /* un rendu = une rafale / one render = one burst */
     if (rb.length) fail('feed-rebuild', `Le fil de l’accueil (.hf-feed) est reconstruit ${rb.length} fois après la levée (t=${rb.map(e => e.t).join(', ')} ms).`, `Home feed (.hf-feed) rebuilt ${rb.length} time(s) after the lift (t=${rb.map(e => e.t).join(', ')} ms).`);
     metrics.feedRebuilds = rb.length;
+    const sy = post.filter(s => s.t <= liftT + LIMITS.scrollWindow && s.sy > 0.5);
+    if (sy.length) fail('scroll-position', `La page n’est pas en haut après la levée (scrollTop ${Math.max(...sy.map(s => s.sy))}) : ${span(sy)}.`, `Page scroller is not at 0 after the lift (scrollTop ${Math.max(...sy.map(s => s.sy))}): ${span(sy)}.`);
     let sw = ev.filter(e => (e.type === 'scroll-write' || e.type === 'scroll-moved') && e.t <= liftT + LIMITS.scrollWindow);
     const hidden = sc.mode === 'restore' && hasBoot ? sw.filter(e => e.t < liftT) : [];
     sw = sw.filter(e => !hidden.includes(e));

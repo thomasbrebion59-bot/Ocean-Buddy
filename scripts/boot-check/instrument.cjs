@@ -54,7 +54,7 @@ function sample(tag){
   const fp=performance.getEntriesByName('first-paint')[0];
   B.s.push({t:Math.round(now()),tag:tag||null,fp:fp?Math.round(fp.startTime):null,
     boot:{has:!!ob,lifted:ob?!!ob.lifted:null,liftedAt:ob&&ob.liftedAt!=null?ob.liftedAt:null,reason:ob?ob.reason:null,t0:ob?ob.t0:null,booting:h.classList.contains('ob-booting'),curtain:!!cur,curtainVisible:!!cur&&vis(cur),covered},
-    onb:vis(d.getElementById('onb')),intro,heroText,centerBtn:[...d.querySelectorAll('.nav .center')].some(vis),
+    onb:vis(d.getElementById('onb')),intro,heroText,centerBtn:!!nav&&vis(nav)&&([...nav.querySelectorAll('button[data-s]')].some(b=>vis(b)&&!b.querySelector('.tab-label'))||[...nav.querySelectorAll('.nic')].some(vis)),sy:Math.round(pos()),
     nav:{present:!!nav,visible:!!nav&&vis(nav),btns:btns.length,labelled:labelled.length,pillVisible:vis(d.getElementById('navPill')),left:nr?Math.round(nr.left):null,right:nr?Math.round(nr.right):null},
     hero:vis(d.querySelector('#home .hf-top'))||vis(d.querySelector('#home .hf-hero')),
     toast:!!toast&&/(^|\\s)show(\\s|$)/.test(toast.className)&&/bon retour/i.test(toast.textContent),
