@@ -7,6 +7,10 @@
  *       l’empreinte de chaque fichier embarqué dans mobile/ota-baselines/1.2.0.json.
  *       Utiliser ce même mobile/www pour `cap sync` puis l’archive Xcode.
  *
+ *   node scripts/publish-app-update.cjs --baseline 1.3.1 --same-shell 1.3.0
+ *       Build App Store qui ne change pas la partie native : les apps 1.3.0 continuent
+ *       de recevoir les mises à jour directes (native_min par défaut = 1.3.0).
+ *
  *   node scripts/publish-app-update.cjs [--native-min 1.2.0]
  *       Construit le contenu actuel et le publie dans app-update/ (servi par GitHub Pages) :
  *       latest.json, manifests/<seq>.json et files/<sha256> pour les seuls fichiers absents
@@ -50,14 +54,20 @@ if(baselineVersion){
   if(!/^\d+\.\d+\.\d+$/.test(baselineVersion))throw Error('Version attendue : 1.2.0');
   const seq=build();bootGate();const files=hashes();
   fs.mkdirSync(baseDir,{recursive:true});
-  fs.writeFileSync(path.join(baseDir,baselineVersion+'.json'),JSON.stringify({native:baselineVersion,seq,files},null,0)+'\n');
+  /* --same-shell 1.3.0 : ce build ne change que le contenu web embarqué (même coque native),
+     les apps 1.3.0 restent donc servies par les mises à jour directes. */
+  const shell=arg('--same-shell');
+  if(shell&&!fs.existsSync(path.join(baseDir,shell+'.json')))throw Error('Référence inconnue pour --same-shell : '+shell);
+  fs.writeFileSync(path.join(baseDir,baselineVersion+'.json'),JSON.stringify({native:baselineVersion,...(shell?{shell}:{}),seq,files},null,0)+'\n');
   console.log(`Référence ${baselineVersion} (contenu ${seq}, ${Object.keys(files).length} fichiers). Lancer maintenant : npx cap sync, puis archiver dans Xcode.`);
   process.exit(0);
 }
 
 const baselines=fs.existsSync(baseDir)?fs.readdirSync(baseDir).filter(f=>f.endsWith('.json')).map(f=>JSON.parse(fs.readFileSync(path.join(baseDir,f),'utf8'))):[];
 if(!baselines.length)throw Error('Aucune référence native : lancer d’abord --baseline <version> pour le build envoyé à Apple.');
-const nativeMin=arg('--native-min')||baselines.map(b=>b.native).sort(cmp).at(-1);
+/* Par défaut : la coque native la plus récente (une référence « --same-shell » renvoie à la coque qu’elle partage). */
+const newest=baselines.slice().sort((a,b)=>cmp(a.native,b.native)).at(-1);
+const nativeMin=arg('--native-min')||newest.shell||newest.native;
 const supported=baselines.filter(b=>cmp(b.native,nativeMin)>=0);
 if(!supported.length)throw Error('Aucune référence pour '+nativeMin);
 

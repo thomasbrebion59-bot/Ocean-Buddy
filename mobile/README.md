@@ -32,7 +32,7 @@ node scripts/publish-app-update.cjs   # construit mobile/www, remplit app-update
 git add app-update && git commit && git push origin HEAD:main
 ```
 
-Seul le contenu web peut passer ainsi (HTML, CSS, JS, images, données). Un nouveau plugin, une autorisation ou un réglage natif exigent une version App Store. Pour chaque build envoyé à Apple, enregistrer d’abord sa référence avec `node scripts/publish-app-update.cjs --baseline <version>` (dans `mobile/ota-baselines/`), puis `npx cap sync` et archiver avec ce même `mobile/www`. Les apps plus anciennes que `--native-min` (par défaut la dernière référence) reçoivent plutôt une fenêtre « Ouvrir l’App Store » dès que l’App Store propose une version plus récente.
+Seul le contenu web peut passer ainsi (HTML, CSS, JS, images, données). Un nouveau plugin, une autorisation ou un réglage natif exigent une version App Store. Pour chaque build envoyé à Apple, enregistrer d’abord sa référence avec `node scripts/publish-app-update.cjs --baseline <version>` (dans `mobile/ota-baselines/`), puis `npx cap sync` et archiver avec ce même `mobile/www`. Si le build ne change pas la partie native (mêmes plugins, même `capacitor.config.json`), ajouter `--same-shell <version précédente>` : les apps de cette version continuent de recevoir les mises à jour directes (cas de la 1.3.1, même coque que la 1.3.0). Les apps plus anciennes que `--native-min` (par défaut la dernière coque native) reçoivent plutôt une fenêtre « Ouvrir l’App Store » dès que l’App Store propose une version plus récente.
 
 ## Garde-fou du démarrage (`npm run check:boot`)
 
