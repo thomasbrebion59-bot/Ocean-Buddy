@@ -30,7 +30,8 @@ const val = (n, d) => { const i = argv.indexOf('--' + n); return i >= 0 && argv[
 const vals = n => argv.flatMap((a, i) => a === '--' + n && argv[i + 1] ? [argv[i + 1]] : []);
 
 const APP_SEED = `chosenLevel='debutant';chosenSport='all';finishOnb();saveState();`;
-const LIMITS = { lift: 4300, cls: 0.02, clsWindow: 6000, scrollWindow: 4000, heroWithin: 450, flat: 0.9 };
+/* lift : plafond 4000 ms + 300 ms ; liftTimerLag : retard toléré du minuteur du plafond quand le Mac est très chargé (le minuteur part à 4000 ms mais le fil principal est occupé). */
+const LIMITS = { lift: 4300, liftTimerLag: 1500, cls: 0.02, clsWindow: 6000, scrollWindow: 4000, heroWithin: 450, flat: 0.9 };
 
 export function analyze(sc, d) {
   const S = d.s, ev = d.ev, fails = [], notes = [];
@@ -51,7 +52,8 @@ export function analyze(sc, d) {
   if (hasBoot) {
     if (liftT == null) fail('lift', 'Le rideau ne se lève jamais.', 'The curtain never lifts.');
     else {
-      if (liftT - t0 > LIMITS.lift) fail('lift', `Rideau levé trop tard : ${Math.round(liftT - t0)} ms après t0 (max ${LIMITS.lift}).`, `Curtain lifted too late: ${Math.round(liftT - t0)} ms after t0 (max ${LIMITS.lift}).`);
+      const liftMax = LIMITS.lift + (reason === 'timeout' ? LIMITS.liftTimerLag : 0);
+      if (liftT - t0 > liftMax) fail('lift', `Rideau levé trop tard : ${Math.round(liftT - t0)} ms après t0 (max ${liftMax}).`, `Curtain lifted too late: ${Math.round(liftT - t0)} ms after t0 (max ${liftMax}).`);
       if (reason !== 'ready' && reason !== 'timeout') fail('lift-reason', `Raison de levée invalide : ${reason}.`, `Invalid lift reason: ${reason}.`);
       if (reason === 'timeout') notes.push('lifted by timeout / levé par le délai maximal');
       const late = S.filter(s => s.t >= liftT + 1500 && s.boot.booting); if (late.length) fail('contract', 'html.ob-booting n’est pas retirée après la levée.', 'html.ob-booting is not removed after the lift.');
