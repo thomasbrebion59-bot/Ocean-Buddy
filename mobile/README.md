@@ -34,6 +34,17 @@ git add app-update && git commit && git push origin HEAD:main
 
 Seul le contenu web peut passer ainsi (HTML, CSS, JS, images, données). Un nouveau plugin, une autorisation ou un réglage natif exigent une version App Store. Pour chaque build envoyé à Apple, enregistrer d’abord sa référence avec `node scripts/publish-app-update.cjs --baseline <version>` (dans `mobile/ota-baselines/`), puis `npx cap sync` et archiver avec ce même `mobile/www`. Les apps plus anciennes que `--native-min` (par défaut la dernière référence) reçoivent plutôt une fenêtre « Ouvrir l’App Store » dès que l’App Store propose une version plus récente.
 
+## Garde-fou du démarrage (`npm run check:boot`)
+
+Sur l’iPhone, le chargeur natif injecte les scripts un par un : tout état intermédiaire est visible (onboarding qui clignote, ancien accueil, fil reconstruit, sauts de mise en page). `scripts/check-boot.mjs` rejoue ce démarrage dans Chrome headless (iPhone 390×844, CPU ralenti ×6, Chrome requis ; variable `CHROME` pour un autre chemin) et échoue (code 1) si le contrat de démarrage n’est pas respecté :
+
+- `html.ob-booting` puis `#obBoot` (rideau) et `window.OceanBoot` `{t0, lifted, liftedAt, reason, ready()}` ; événement `ocean:home-ready` ; levée au plus tard 4 s après `t0` ;
+- après la levée, pour un utilisateur existant : pas d’onboarding, pas d’ancien accueil (`.home-intro`, « Prends le large », bouton trophée `.nav .center`), barre d’onglets complète, `.hf-feed` jamais reconstruit, aucune écriture de défilement vertical, CLS ≤ 0,02 pendant 6 s, page jamais vide, pas de toast « Bon retour » sous le rideau, aucune erreur JS ; un nouvel utilisateur voit l’onboarding.
+
+Scénarios : `native-returning`, `native-restore` (rechargement avec `history.state`, comme après une mise à jour), `native-new`, `web-returning`, `native-returning-wide` (430×932). Options : `--scenario <nom>` (répétable), `--throttle <n>`, `--verbose`, `--keep`, `--no-build`, `--www <dossier>`, `--self-test` (vérifie la logique sur deux pages jetables). Rapport, captures et chronologie : `out/boot-check/<scénario>/` (ignoré par Git). La construction écrit toujours dans `mobile/www`.
+
+`node scripts/publish-app-update.cjs` (et `--baseline`) lance ce contrôle sur le build qu’il vient de construire et refuse de publier s’il échoue ; il n’y a pas d’option pour l’ignorer. Il n’est pas dans `npm test` (Chrome requis, ~3 min).
+
 ## Fonctions natives
 
 - Localisation sur demande pour les spots proches, sans suivi en arrière-plan ; refuser ne bloque pas le catalogue.

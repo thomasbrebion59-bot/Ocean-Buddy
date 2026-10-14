@@ -28,6 +28,12 @@ function build(){
   if(r.status!==0)process.exit(r.status||1);
   return seq;
 }
+// Garde-fou de démarrage : aucune publication si le démarrage de mobile/www régresse (voir mobile/README.md). Pas d’option pour l’ignorer.
+function bootGate(){
+  console.log('Contrôle du démarrage (npm run check:boot) sur le build construit…');
+  const r=spawnSync(process.execPath,[path.join(root,'scripts/check-boot.mjs'),'--no-build','--www',www],{stdio:'inherit'});
+  if(r.status!==0){console.error('\nPublication annulée : le démarrage de l’app ne respecte pas le contrat (rapport ci-dessus, captures dans out/boot-check/). Corriger puis relancer. / Publication aborted: boot check failed.');process.exit(r.status||1);}
+}
 function hashes(){
   const files={};
   (function walk(dir){for(const e of fs.readdirSync(dir,{withFileTypes:true})){
@@ -42,7 +48,7 @@ function hashes(){
 const baselineVersion=arg('--baseline');
 if(baselineVersion){
   if(!/^\d+\.\d+\.\d+$/.test(baselineVersion))throw Error('Version attendue : 1.2.0');
-  const seq=build(),files=hashes();
+  const seq=build();bootGate();const files=hashes();
   fs.mkdirSync(baseDir,{recursive:true});
   fs.writeFileSync(path.join(baseDir,baselineVersion+'.json'),JSON.stringify({native:baselineVersion,seq,files},null,0)+'\n');
   console.log(`Référence ${baselineVersion} (contenu ${seq}, ${Object.keys(files).length} fichiers). Lancer maintenant : npx cap sync, puis archiver dans Xcode.`);
@@ -55,7 +61,7 @@ const nativeMin=arg('--native-min')||baselines.map(b=>b.native).sort(cmp).at(-1)
 const supported=baselines.filter(b=>cmp(b.native,nativeMin)>=0);
 if(!supported.length)throw Error('Aucune référence pour '+nativeMin);
 
-const seq=build(),files=hashes();
+const seq=build();bootGate();const files=hashes();
 // Un fichier doit être hébergé dès qu’une app compatible ne l’a pas, au même chemin, à l’identique.
 const needed=Object.entries(files).filter(([p,h])=>supported.some(b=>b.files[p]!==h));
 fs.mkdirSync(path.join(out,'files'),{recursive:true});fs.mkdirSync(path.join(out,'manifests'),{recursive:true});

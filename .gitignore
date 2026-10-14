@@ -19,3 +19,6 @@ ios/**/xcuserdata/
 
 # Images ChatGPT à intégrer (scripts/add_ai_images.py)
 ai-images/
+
+# Rapports du garde-fou de démarrage (npm run check:boot)
+out/boot-check/
