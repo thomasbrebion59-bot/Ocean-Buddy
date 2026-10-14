@@ -93,7 +93,7 @@
     $('#spotSearch').value=currentSearch;$('#favChip').classList.toggle('active',favOnly);$('#nearBtn').classList.toggle('on',nearMode);
     document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f===currentFilter));
     renderSportFilters();if(spotCountry&&spotWorld&&spotWorld!=='all')renderCountries();else renderWorlds();syncWorldUI();renderSpots(currentFilter,true);
-    if(spotWorld)setView(route.view==='map'?'map':'list');
+    if(spotWorld)setView(route.view==='map'&&route.screen==='spots'?'map':'list'); /* pas de globe WebGL caché pendant le démarrage d’un autre écran */
     setMapFull(!!route.mapFull&&route.screen==='spots'&&route.view==='map',true);
     showHomeCat(['jour','explorer','progres'].includes(route.homeTab)?route.homeTab:'jour');renderHome();
     window.OceanTrips.restoreRoute(route.trip);
