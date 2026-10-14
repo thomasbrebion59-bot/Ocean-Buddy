@@ -2,6 +2,36 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<style>html.ob-booting,html.ob-booting body{background:#174bd3!important}html.ob-booting .phone{visibility:hidden}html.ob-onboarded #onb{display:none}
+#obBoot{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#174bd3;transition:opacity .22s ease-out;will-change:opacity}#obBoot.is-out{opacity:0;pointer-events:none}
+#obBoot img{display:block;width:calc(max(100vw,100vh) * .3294);height:auto;aspect-ratio:1}html:not(.native-app) #obBoot img{max-width:300px}</style>
+<script>/* Rideau de démarrage : un seul écran stable (identique au splash natif) jusqu’à ce que l’accueil soit prêt.
+   Contrat (vérifié par npm run check:boot) : html.ob-booting, #obBoot, window.OceanBoot {t0, lifted, liftedAt, reason, ready()},
+   événement window « ocean:home-ready » ; levée forcée 4000 ms après t0. Le rideau ne retarde jamais appReady(). */
+(function(){var d=document.documentElement,B;
+try{if(window.Capacitor||location.protocol==='capacitor:')d.classList.add('native-app');}catch(e){}
+d.classList.add('ob-booting');
+B=window.OceanBoot={t0:performance.now(),lifted:false,liftedAt:null,reason:null,steps:{},
+  /* Onboarding terminé : drapeau explicite, ou profil existant qui a déjà une activité ou un niveau (règle partagée avec app.js). */
+  onboarded:function(s){return !!s&&typeof s==='object'&&(s.onboarded===true||!!s.level||!!s.sport);},
+  /* Étapes attendues avant la levée (« shell » : app-shell.js ; « feed » : montage définitif de home-feed.js) ; wait() réarme une étape. */
+  wait:function(k){if(!B.lifted)B.steps[k]=false;},
+  done:function(k){B.steps[k]=true;for(var s in B.steps)if(!B.steps[s])return;B.ready('ready');},
+  after:function(f){if(B.lifted)setTimeout(f,0);else addEventListener('ocean:home-ready',function(){f();},{once:true});},
+  ready:function(reason){
+    if(B.lifted)return;
+    B.lifted=true;B.liftedAt=performance.now();B.reason=reason==='timeout'?'timeout':'ready';clearTimeout(B.cap);
+    d.classList.remove('ob-booting');
+    /* L’accueil se peint d’abord sous le rideau encore opaque (deux images), puis un seul fondu de 220 ms. */
+    var c=document.getElementById('obBoot');
+    if(c)requestAnimationFrame(function(){requestAnimationFrame(function(){c.classList.add('is-out');setTimeout(function(){if(c.parentNode)c.parentNode.removeChild(c);},260);});});
+    try{dispatchEvent(new CustomEvent('ocean:home-ready',{detail:{reason:B.reason}}));}catch(e){}
+  }};
+try{if(B.onboarded(JSON.parse(localStorage.getItem('oceanbuddy_v1')||'null')))d.classList.add('ob-onboarded');}catch(e){}
+B.wait('shell');B.wait('feed');
+B.cap=setTimeout(function(){B.ready('timeout');},4000);
+})();</script>
+<noscript><style>#obBoot{display:none}</style></noscript>
 <script src="i18n.js?v=3e1ff255cdad"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
@@ -9,7 +39,7 @@
 <meta name="color-scheme" content="light only">
 <link rel="icon" type="image/webp" href="assets/poulpy/scenes/travel-v2.webp">
 <meta name="description" content="Trouve ton prochain spot nautique, prépare ta session et protège l’océan avec Poulpy, ton guide Ocean Buddy.">
-<link rel="stylesheet" href="base.css?v=34626392cda5">
+<link rel="stylesheet" href="base.css?v=5a4d4a672d50">
 <link rel="stylesheet" href="design.css?v=79a417a7e92a">
 <link rel="stylesheet" href="adventure.css?v=549481eaad56">
 <link rel="stylesheet" href="coastal.css?v=a4ab67ab0399">
@@ -29,14 +59,13 @@
 <link rel="stylesheet" href="ocean-blue.css?v=571a378181c9">
 <link rel="stylesheet" href="ocean-map.css?v=5a0d71a902f3">
 <link rel="stylesheet" href="activity-theme.css?v=e7fcb5ce4859">
-<link rel="stylesheet" href="activity-transition.css?v=53685ffd0e50">
+<link rel="stylesheet" href="activity-transition.css?v=8af624887a7e">
 <link rel="stylesheet" href="app-update.css?v=6180e2a20d2a">
 <link rel="stylesheet" href="i18n.css?v=0913dd3686ce">
 <link rel="stylesheet" href="badges.css?v=6ebf498f9b27">
-<link rel="stylesheet" href="home-feed.css?v=b1774f388383">
-<link rel="stylesheet" href="app-shell.css?v=e071c61decc7">
+<link rel="stylesheet" href="home-feed.css?v=c65f4d24e47d">
+<link rel="stylesheet" href="app-shell.css?v=828789249156">
 <link rel="stylesheet" href="spot-data.css?v=65c8e69b40a7">
-<link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ocean Buddy">
 <meta property="og:title" content="Ocean Buddy — Explore. Progresse. Protège.">
@@ -49,8 +78,9 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Ocean Buddy">
-<link rel="stylesheet" href="vendor/fonts/fonts.css"><link rel="stylesheet" href="native.css"></head>
+<link rel="preload" href="vendor/fonts/barlow-condensed-latin-900-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="vendor/fonts/barlow-condensed-latin-800-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="preload" href="vendor/fonts/dm-sans-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin><link rel="stylesheet" href="vendor/fonts/fonts.css"><link rel="stylesheet" href="native.css"></head>
 <body class="ocean-v2" data-screen="home">
+<div id="obBoot" aria-hidden="true"><img src="assets/app/splash-poulpy.webp" alt="" width="900" height="900" decoding="sync" fetchpriority="high"></div>
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
 <div class="phone">
   <div class="ambiance" id="ambiance"></div>
@@ -96,7 +126,9 @@
   <main class="screen-wrap" id="screenWrap" tabindex="-1">
 
     <!-- ============ HOME ============ -->
-    <section class="screen active" id="home">
+    <section class="screen active hf-on" id="home">
+      <!-- Grand titre de l’accueil : place réservée dès le HTML, texte posé par app-shell.js (largeTitles). -->
+      <header class="as-large"><div><p>&nbsp;</p><h1>&nbsp;</h1></div></header>
       <div class="home-intro">
         <div class="topbar" id="homeTop">
           <div class="brand"><span class="hero-kicker">EXPLORE. PROGRESSE. PROTÈGE.</span><span class="hero-live"><i></i> L’aventure commence ici</span></div>
@@ -493,5 +525,5 @@
 
 
 
-<script src="native.js"></script><script>OceanMobile.boot().then(async()=>{for(const src of ["photo-catalog.js?v=cc13eae99496","legacy-spots.js?v=a2ed015635e8","catalog-runtime.js?v=5752bf7dc7b3","trip-model.js?v=fdd76d1468be","poulpy-icons.js?v=d8f0f0f5b6bc","ocean-map-model.js?v=e87c7f985412","ocean-globe.js?v=1dc45d6ca4b3","ocean-map.js?v=42b5dcf7e964","activity-theme.js?v=ace454936621","activity-transition.js?v=593c26f1b7b1","spot-photos.js?v=7db07d494e54","progression.js?v=573fcb54b5ba","app.js?v=c03a57a9e682","private-spots.js?v=683221818ade","poulpy-knowledge.js?v=e0ec814bd70b","design.js?v=33a6a94a103c","trips.js?v=812442f7c62b","ocean-hub.js?v=6778359f45f9","poulpy-config.js?v=a083c1cf346b","privacy.js?v=3271dc697f75","poulpy-assistant.js?v=845ac34d4d91","poulpy.js?v=1c283306c21f","spot-notebook-model.js?v=8982c4683ab8","spot-notebook.js?v=3cb075b91dbb","spot-gallery.js?v=803f17773deb","field-guide.js?v=eab62d62d935","spot-immersion-model.js?v=8c6489617564","spot-immersion.js?v=1cf741ea0b6e","spot-guide-model.js?v=4324d45bd8bb","spot-guide.js?v=2e168d42bb0b","spot-data-model.js?v=b5ff625ddc1f","spot-data.js?v=d35a91afdaf0","spot-plan.js?v=247e9ed950cf","ocean-sst.js?v=d283a91350a2","spot-experience.js?v=7ed35b2cc972","community-config.js?v=59d15c4cfc90","trip-sharing.js?v=e29f4931ffd4","community.js?v=c482a447be08","navigation.js?v=dddfb83022b6","ocean-sound.js?v=7e7f5190346a","polish.js?v=2b1110e155a4","spot-scenes.js?v=82700c22eafe","spot-panoramas.js?v=75a041ebb045","spot-voyage.js?v=7ee1490a570c","app-update.js?v=1ddfa6391360","ocean-home.js?v=8de41dee964b","badges.js?v=2723bc4c0577","home-feed.js?v=dc2769f876ca","passport.js?v=f578917c0f7a","app-shell.js?v=13cb7ff4860a"])await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.body.append(s)});await OceanMobile.appReady();}).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script></body>
+<script src="native.js"></script><script>OceanMobile.boot().then(()=>new Promise((resolve,reject)=>{let last;for(const src of ["photo-catalog.js?v=cc13eae99496","legacy-spots.js?v=a2ed015635e8","catalog-runtime.js?v=5752bf7dc7b3","trip-model.js?v=fdd76d1468be","poulpy-icons.js?v=d8f0f0f5b6bc","ocean-map-model.js?v=e87c7f985412","ocean-globe.js?v=48d79cbe1502","ocean-map.js?v=b085d7c34ff8","activity-theme.js?v=ace454936621","activity-transition.js?v=537b498cfcaa","spot-photos.js?v=7db07d494e54","progression.js?v=573fcb54b5ba","app.js?v=fabbd5ccd499","private-spots.js?v=683221818ade","poulpy-knowledge.js?v=e0ec814bd70b","design.js?v=e07e118869a6","trips.js?v=812442f7c62b","ocean-hub.js?v=6778359f45f9","poulpy-config.js?v=a083c1cf346b","privacy.js?v=3271dc697f75","poulpy-assistant.js?v=845ac34d4d91","poulpy.js?v=834e29dc214d","spot-notebook-model.js?v=8982c4683ab8","spot-notebook.js?v=3cb075b91dbb","spot-gallery.js?v=803f17773deb","field-guide.js?v=eab62d62d935","spot-immersion-model.js?v=8c6489617564","spot-immersion.js?v=1cf741ea0b6e","spot-guide-model.js?v=4324d45bd8bb","spot-guide.js?v=2e168d42bb0b","spot-data-model.js?v=b5ff625ddc1f","spot-data.js?v=d35a91afdaf0","spot-plan.js?v=247e9ed950cf","ocean-sst.js?v=d283a91350a2","spot-experience.js?v=7ed35b2cc972","community-config.js?v=59d15c4cfc90","trip-sharing.js?v=e29f4931ffd4","community.js?v=c482a447be08","navigation.js?v=dcf43681a88e","ocean-sound.js?v=7e7f5190346a","polish.js?v=5f0a1f18315f","spot-scenes.js?v=82700c22eafe","spot-panoramas.js?v=75a041ebb045","spot-voyage.js?v=cc1b529a6c9f","app-update.js?v=1ddfa6391360","ocean-home.js?v=04d4c46ee3b5","badges.js?v=2723bc4c0577","home-feed.js?v=c4df709958c9","passport.js?v=f578917c0f7a","app-shell.js?v=94fe0f7b85f0"]){const s=document.createElement('script');s.src=src;s.async=false;s.onerror=reject;document.body.append(s);last=s;}last.onload=resolve;})).then(()=>OceanMobile.appReady()).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script></body>
 </html>
