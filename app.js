@@ -45,8 +45,9 @@ function applyName(){var hh=document.getElementById('homeHello');if(hh)hh.textCo
 const COORDS=Object.fromEntries(SPOTS.map(spot=>[spot.id,spot.coords]));
 /* ---- persistance (localStorage) ---- */
 const STORE_KEY='oceanbuddy_v1';
-function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify({xp:xp,favs:[...favs],sessions:sessions,level:chosenLevel,sport:chosenSport,name:userName,eco:ecoLog}));}catch(e){}}
+function saveState(){try{localStorage.setItem(STORE_KEY,JSON.stringify({xp:xp,favs:[...favs],sessions:sessions,level:chosenLevel,sport:chosenSport,name:userName,eco:ecoLog,onboarded:onbDone}));}catch(e){}}
 function loadState(){try{const d=JSON.parse(localStorage.getItem(STORE_KEY)||'null');if(!d)return false;
+  onbDone=isOnboarded(d);
   if(typeof d.xp==='number')xp=d.xp;
   if(Array.isArray(d.favs))d.favs.forEach(f=>favs.add(window.OceanLegacySpots?.canonicalId(f)||f));
   if(Array.isArray(d.sessions)){sessions.length=0;d.sessions.forEach(s=>sessions.push(s));}
@@ -55,6 +56,8 @@ function loadState(){try{const d=JSON.parse(localStorage.getItem(STORE_KEY)||'nu
   if(d.name)userName=d.name;
   if(Array.isArray(d.eco)){ecoLog.length=0;d.eco.forEach(function(g){ecoLog.push(g);});}
   return true;}catch(e){return false;}}
+/* Onboarding terminé : drapeau explicite, ou profil existant qui a déjà une activité ou un niveau (même règle que le rideau de démarrage, index.html). */
+function isOnboarded(d){return window.OceanBoot?.onboarded?OceanBoot.onboarded(d):!!d&&typeof d==='object'&&(d.onboarded===true||!!d.level||!!d.sport);}
 
 const ECO=[
   /* chaque défi porte désormais son « pourquoi ça compte » : sans lui, on
@@ -318,7 +321,7 @@ function hideOnb(){const o=document.getElementById('onb');o.classList.add('hide'
 function goNearMe(){
   requestGeo(()=>{
     window.OceanNavigation?.begin();
-    nearMode=true;chosenSport='all';activeSport=null;quickGate=false;hideOnb();
+    nearMode=true;chosenSport='all';activeSport=null;quickGate=false;onbDone=true;hideOnb();
     currentFilter='all';currentSearch='';favOnly=false;
     document.getElementById('spotSearch').value='';
     document.getElementById('favChip').classList.remove('active');
@@ -330,7 +333,7 @@ function goNearMe(){
     document.getElementById('octoBubble').innerHTML='Voici tout ce que tu peux faire <b>près de toi</b> 🐙📍';
     toast('Les activités autour de toi 🌊');
   },()=>{
-    quickGate=false;hideOnb();setSport(chosenSport==='all'?null:chosenSport);
+    quickGate=false;onbDone=true;hideOnb();saveState();setSport(chosenSport==='all'?null:chosenSport);
     toast('📍 Localisation indisponible — choisis une destination');
   });
 }
@@ -839,8 +842,8 @@ function showHomeCat(cat){
   document.querySelectorAll('#homeTabs .htab').forEach(function(b){
     b.classList.toggle('active', b.getAttribute('data-hcat')===cat);
   });
-  /* On reste à la hauteur des onglets (ils sont bas dans l’accueil) au lieu de remonter tout en haut. */
-  var tabs=document.getElementById('homeTabs'); if(tabs&&tabs.getBoundingClientRect().top<0) tabs.scrollIntoView({block:'start'});
+  /* On reste à la hauteur des onglets (ils sont bas dans l’accueil) au lieu de remonter tout en haut. Jamais pendant le démarrage. */
+  var tabs=document.getElementById('homeTabs'); if(tabs&&!document.documentElement.classList.contains('ob-booting')&&tabs.getBoundingClientRect().top<0) tabs.scrollIntoView({block:'start'});
 }
 function showDetailCat(cat,shouldScroll=true){
   /* « Conditions » porte deux panneaux : la météo et la sécurité. Les deux
@@ -1853,7 +1856,7 @@ function cmpRule(ic,label,pts,n){
 }
 function chalShow(g){ gswPair('ecoChallenges','surfChallenges',g==='a','#challenges'); }
 /* ================= ONBOARDING ================= */
-let onbStep=0,chosenLevel=null,chosenSport=null,quickGate=false;
+let onbStep=0,chosenLevel=null,chosenSport=null,quickGate=false,onbDone=false;
 function renderSportGuide(){
   const g=document.getElementById('sportGrid');if(!g)return;
   let h=SPORTS.map(s=>`<div class="sport-card" data-sp="${s.id}" onclick="pickSport(this,'${s.id}')"><div class="se" style="background:linear-gradient(135deg,${s.color}33,${s.color}1a);box-shadow:inset 0 0 0 2px ${s.color}4d">${sportIcon(s.id)}</div><h4>${s.label}</h4><p>${s.desc}</p></div>`).join('');
@@ -1874,7 +1877,8 @@ function pickLevel(el){document.querySelectorAll('.lvl-card').forEach(c=>c.class
 function finishOnb(){
   window.OceanNavigation?.begin();
   const o=document.getElementById('onb');o.classList.add('hide');setTimeout(()=>o.style.display='none',560);
-  quickGate=false;
+  /* Fin de l’onboarding complet ou du choix rapide d’activité : il ne reviendra plus au lancement. */
+  quickGate=false;onbDone=true;saveState();
   setSport(chosenSport==='all'?null:chosenSport);
   realHomeForecast();
 }
@@ -1936,7 +1940,7 @@ function logSession(){
 
 /* ================= UI ================= */
 let tt;
-function toast(msg){const t=document.getElementById('toast');const m=String(msg);/* Pas de double pieuvre ni d’emoji en double en tête. */t.textContent=/^\p{Extended_Pictographic}/u.test(m)||m.includes('🐙')?m:'🐙 '+m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600);}
+function toast(msg,ms){const t=document.getElementById('toast');const m=String(msg);/* Pas de double pieuvre ni d’emoji en double en tête. */t.textContent=/^\p{Extended_Pictographic}/u.test(m)||m.includes('🐙')?m:'🐙 '+m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),ms||2600);}
 const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',community:'cb',trips:'tb'};
 function vibrate(pattern){try{if(navigator.userActivation&&!navigator.userActivation.hasBeenActive)return;if(navigator.vibrate)navigator.vibrate(pattern);}catch(e){}}
 const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,community:3,profile:4,trips:2};
@@ -2593,8 +2597,12 @@ if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{const ab=
 window.addEventListener('resize',()=>{const ab=document.querySelector('.nav button.active:not(.center)');if(ab)updateNavPill(ab.dataset.s);});
 /* Une personne qui revient arrive directement dans l'app : l'activité se
    change depuis l'accueil ou l'étape 1 d'Explorer, sans barrière à chaque visite. */
-if(returning&&chosenLevel){
+if(returning&&onbDone){
   const o=document.getElementById('onb');o.classList.add('hide');o.style.display='none';
   realHomeForecast();
-  setTimeout(()=>toast('Bon retour, '+userName+' ! L’océan t’attendait.'),900);
+  /* Bon retour : discret, après la levée du rideau de démarrage (jamais par-dessus l’écran qui se construit). */
+  const welcome=()=>setTimeout(()=>toast('Bon retour, '+userName+' ! L’océan t’attendait.',2500),700);
+  if(window.OceanBoot)OceanBoot.after(welcome);else welcome();
 }
+/* Le rideau masquait #onb d’après le stockage (html.ob-onboarded) : app.js en reprend la main. */
+document.documentElement.classList.remove('ob-onboarded');

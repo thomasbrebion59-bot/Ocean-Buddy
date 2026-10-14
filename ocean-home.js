@@ -40,14 +40,10 @@
     b.innerHTML=`<span><small>VOYAGE DANS LE SPOT${pano?' · 360°':''}</small><b>Vis ${esc(s.name.split(' — ')[0])}</b><em>${pano?'Vue à 360°, scènes animées et balade autour du spot.':wide?'Panoramas, scènes animées et balade autour du spot.':'Scènes animées, son des vagues et balade autour du spot.'}</em></span><span class="go" aria-hidden="true">${play}</span>`;
   }
 
-  /* Ordre de l’accueil : héros, immersion, cockpit, puis le reste. */
-  function arrange(){
-    const intro=$('#home .home-intro'),dive=$('#obDive'),hub=$('#oceanHub');
-    if(intro&&dive&&intro.nextElementSibling!==dive)intro.after(dive);
-    if(dive&&hub&&dive.nextElementSibling!==hub)dive.after(hub);
-  }
+  /* L’ordre de l’accueil appartient à home-feed.js (un seul ordonnancement, sous le rideau de démarrage) :
+     ce module ne déplace plus #obDive ni #oceanHub. */
   function init(){
-    renderDive();arrange();addEventListener('load',arrange,{once:true});setTimeout(arrange,1500);
+    renderDive();
     const original=window.openSpot;
     if(typeof original==='function'&&!original.__voyage){
       const wrapped=function(id){const r=original.apply(this,arguments);try{banner(byId(id)||currentSpotObject());}catch(_){}return r;};

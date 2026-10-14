@@ -141,7 +141,7 @@
   }
 
   /* ---- Application installable et disponible hors connexion (web uniquement) ---- */
-  const native = window.Capacitor?.isNativePlatform?.();
+  const native = window.Capacitor?.isNativePlatform?.() || document.documentElement.classList.contains('native-app');
   const secure = location.protocol === 'https:' || location.hostname === 'localhost' || location.hostname === '127.0.0.1';
   if ('serviceWorker' in navigator && secure && !native) {
     window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js', { scope: './' }).catch(() => {}); });

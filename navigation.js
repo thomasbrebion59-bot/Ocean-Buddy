@@ -122,5 +122,7 @@
   window.addEventListener('pagehide',()=>{if(!restoring){entry={...entry,route:capture()};write();}});
   window.OceanNavigation={begin,settled,back};
   history.scrollRestoration='manual';
-  if(valid(history.state)&&$('#onb').classList.contains('hide'))restore(entry.route);else {write();update();}
+  /* Relance du WebView (mise à jour appliquée, sauvegarde restaurée) : l’écran revient, mais l’accueil repart en haut,
+     sans défilement pendant le démarrage. */
+  if(valid(history.state)&&$('#onb').classList.contains('hide')){if(entry.route.screen==='home'){entry={...entry,route:{...entry.route,scroll:0}};write();}restore(entry.route);}else {write();update();}
 })();

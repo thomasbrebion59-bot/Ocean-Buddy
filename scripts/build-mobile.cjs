@@ -7,6 +7,9 @@ async function main(){
   const declaredScripts=new Set([...fs.readFileSync(path.join(root,'index.html'),'utf8').matchAll(/<script src="([^\"]+)"[^>]*><\/script>/g)].map(match=>match[1].split('?')[0]).filter(src=>!src.includes('/')&&src.endsWith('.js')));
   for(const item of fs.readdirSync(root,{withFileTypes:true}))if(item.isFile()&&(/\.(html|css|ico)$/.test(item.name)||declaredScripts.has(item.name)))fs.copyFileSync(path.join(root,item.name),path.join(dest,item.name));
   fs.cpSync(path.join(root,'assets'),path.join(dest,'assets'),{recursive:true});
+  /* Données de l’accueil (home-feed.js) : saisons des spots et éclat des photos, comme sur le site. */
+  fs.mkdirSync(path.join(dest,'data'),{recursive:true});
+  for(const f of ['seasons.json','photo-scores.json'])fs.copyFileSync(path.join(root,'data',f),path.join(dest,'data',f));
   /* Le téléphone n’utilise que les textures 4K du globe (pas de 8K ni d’emblèmes) ; photos de spots allégées pour l’app (le site garde les originaux). */
   for(const f of ['earth-8k.webp','earth-day-8k.webp','relief-8k.webp','emblems.webp','countries.json'])fs.rmSync(path.join(dest,'assets/globe',f),{force:true});
   const shrink=require('node:child_process').spawnSync('python3',[path.join(root,'scripts/compress-mobile-images.py'),path.join(dest,'assets/spots')],{stdio:'inherit'});
@@ -35,9 +38,15 @@ async function main(){
   await esbuild.build({entryPoints:[path.join(root,'mobile/client.js')],outfile:path.join(dest,'native.js'),bundle:true,minify:true,format:'iife',target:['safari15','chrome100'],define:{__OB_BUNDLE__:JSON.stringify({seq}),__OB_UPDATE_BASE__:JSON.stringify(process.env.OB_UPDATE_BASE||'https://thomasbrebion59-bot.github.io/Ocean-Buddy/app-update/')}});
   let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
   html=html.replace(/<link[^>]+https:\/\/fonts\.(?:googleapis|gstatic)\.com[^>]*>\n?/g,'');
-  html=html.replace('</head>','<link rel="stylesheet" href="vendor/fonts/fonts.css"><link rel="stylesheet" href="native.css"></head>');
+  /* Manifeste d’application web : inutile dans l’app (et absent du paquet). */
+  html=html.replace(/<link rel="manifest"[^>]*>\n?/,'');
+  /* Polices des titres préchargées (Barlow Condensed des grands titres, DM Sans du grand titre d’accueil) : pas de changement de police visible après le rideau. */
+  const preload=['barlow-condensed-latin-900-normal','barlow-condensed-latin-800-normal','dm-sans-latin-700-normal'].map(f=>`<link rel="preload" href="vendor/fonts/${f}.woff2" as="font" type="font/woff2" crossorigin>`).join('');
+  html=html.replace('</head>',preload+'<link rel="stylesheet" href="vendor/fonts/fonts.css"><link rel="stylesheet" href="native.css"></head>');
   const scripts=[];html=html.replace(/<script src="([^\"]+)"[^>]*><\/script>/g,(tag,src)=>{if(src.split('?')[0]==='i18n.js')return tag;scripts.push(src);return '';});
-  const loader=`<script src="native.js"></script><script>OceanMobile.boot().then(async()=>{for(const src of ${JSON.stringify(scripts)})await new Promise((resolve,reject)=>{const s=document.createElement('script');s.src=src;s.onload=resolve;s.onerror=reject;document.body.append(s)});await OceanMobile.appReady();}).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script>`;
+  /* Scripts insérés d’un coup avec async=false : téléchargés en parallèle, exécutés dans l’ordre du HTML.
+     appReady() suit le dernier script, sans attendre le rideau de démarrage (OceanBoot). */
+  const loader=`<script src="native.js"></script><script>OceanMobile.boot().then(()=>new Promise((resolve,reject)=>{let last;for(const src of ${JSON.stringify(scripts)}){const s=document.createElement('script');s.src=src;s.async=false;s.onerror=reject;document.body.append(s);last=s;}last.onload=resolve;})).then(()=>OceanMobile.appReady()).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script>`;
   html=html.replace('</body>',loader+'</body>');fs.writeFileSync(path.join(dest,'index.html'),html);
   if(/https:\/\/(fonts\.|unpkg\.com)/.test(html))throw Error('Remote boot dependencies remain');
   fs.writeFileSync(path.join(dest,'bundle.json'),JSON.stringify({seq})+'\n');

@@ -25,3 +25,12 @@ Après la dernière modification JavaScript ou CSS, exécuter `python3 scripts/v
 6. Vérifier le site public et les fichiers concernés, puis communiquer le lien. Ne pas annoncer une mise en ligne sur la seule base d’un `git push` réussi.
 
 En cas d’échec d’authentification, de conflit ou de déploiement, expliquer le blocage exact et conserver les changements locaux. Les contrôles de sécurité et les demandes de confirmation applicables aux accès sensibles restent obligatoires.
+
+## Stabilité du démarrage (règles permanentes)
+
+- Un seul propriétaire de l’accueil : `home-feed.js`.
+- Aucun nouveau script ne réécrit, ne réordonne ni ne remonte l’accueil ou la barre d’onglets après la levée du rideau.
+- Toute nouvelle étape de démarrage passe par le signal « accueil prêt » (`OceanBoot.ready()` / `ocean:home-ready`).
+- Aucune insertion qui décale l’accueil sans hauteur réservée.
+- Toujours tester avec le chargeur natif et un throttle CPU, jamais seulement le site web sur Mac.
+- `npm run check:boot` est obligatoire avant toute publication OTA.

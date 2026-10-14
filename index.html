@@ -2,6 +2,36 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
+<style>html.ob-booting,html.ob-booting body{background:#174bd3!important}html.ob-booting .phone{visibility:hidden}html.ob-onboarded #onb{display:none}
+#obBoot{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#174bd3;transition:opacity .22s ease-out;will-change:opacity}#obBoot.is-out{opacity:0;pointer-events:none}
+#obBoot img{display:block;width:calc(max(100vw,100vh) * .3294);height:auto;aspect-ratio:1}html:not(.native-app) #obBoot img{max-width:300px}</style>
+<script>/* Rideau de démarrage : un seul écran stable (identique au splash natif) jusqu’à ce que l’accueil soit prêt.
+   Contrat (vérifié par npm run check:boot) : html.ob-booting, #obBoot, window.OceanBoot {t0, lifted, liftedAt, reason, ready()},
+   événement window « ocean:home-ready » ; levée forcée 4000 ms après t0. Le rideau ne retarde jamais appReady(). */
+(function(){var d=document.documentElement,B;
+try{if(window.Capacitor||location.protocol==='capacitor:')d.classList.add('native-app');}catch(e){}
+d.classList.add('ob-booting');
+B=window.OceanBoot={t0:performance.now(),lifted:false,liftedAt:null,reason:null,steps:{},
+  /* Onboarding terminé : drapeau explicite, ou profil existant qui a déjà une activité ou un niveau (règle partagée avec app.js). */
+  onboarded:function(s){return !!s&&typeof s==='object'&&(s.onboarded===true||!!s.level||!!s.sport);},
+  /* Étapes attendues avant la levée (« shell » : app-shell.js ; « feed » : montage définitif de home-feed.js) ; wait() réarme une étape. */
+  wait:function(k){if(!B.lifted)B.steps[k]=false;},
+  done:function(k){B.steps[k]=true;for(var s in B.steps)if(!B.steps[s])return;B.ready('ready');},
+  after:function(f){if(B.lifted)setTimeout(f,0);else addEventListener('ocean:home-ready',function(){f();},{once:true});},
+  ready:function(reason){
+    if(B.lifted)return;
+    B.lifted=true;B.liftedAt=performance.now();B.reason=reason==='timeout'?'timeout':'ready';clearTimeout(B.cap);
+    d.classList.remove('ob-booting');
+    /* L’accueil se peint d’abord sous le rideau encore opaque (deux images), puis un seul fondu de 220 ms. */
+    var c=document.getElementById('obBoot');
+    if(c)requestAnimationFrame(function(){requestAnimationFrame(function(){c.classList.add('is-out');setTimeout(function(){if(c.parentNode)c.parentNode.removeChild(c);},260);});});
+    try{dispatchEvent(new CustomEvent('ocean:home-ready',{detail:{reason:B.reason}}));}catch(e){}
+  }};
+try{if(B.onboarded(JSON.parse(localStorage.getItem('oceanbuddy_v1')||'null')))d.classList.add('ob-onboarded');}catch(e){}
+B.wait('shell');B.wait('feed');
+B.cap=setTimeout(function(){B.ready('timeout');},4000);
+})();</script>
+<noscript><style>#obBoot{display:none}</style></noscript>
 <script src="i18n.js?v=3e1ff255cdad"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
@@ -36,7 +66,7 @@
 <link rel="stylesheet" href="app-update.css?v=6180e2a20d2a">
 <link rel="stylesheet" href="i18n.css?v=0913dd3686ce">
 <link rel="stylesheet" href="badges.css?v=6ebf498f9b27">
-<link rel="stylesheet" href="home-feed.css?v=89133047952c">
+<link rel="stylesheet" href="home-feed.css?v=c65f4d24e47d">
 <link rel="stylesheet" href="app-shell.css?v=828789249156">
 <link rel="stylesheet" href="spot-data.css?v=65c8e69b40a7">
 <link rel="manifest" href="manifest.webmanifest">
@@ -54,6 +84,7 @@
 <meta name="apple-mobile-web-app-title" content="Ocean Buddy">
 </head>
 <body class="ocean-v2" data-screen="home">
+<div id="obBoot" aria-hidden="true"><img src="assets/app/splash-poulpy.webp" alt="" width="900" height="900" decoding="sync" fetchpriority="high"></div>
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
 <div class="phone">
   <div class="ambiance" id="ambiance"></div>
@@ -99,7 +130,9 @@
   <main class="screen-wrap" id="screenWrap" tabindex="-1">
 
     <!-- ============ HOME ============ -->
-    <section class="screen active" id="home">
+    <section class="screen active hf-on" id="home">
+      <!-- Grand titre de l’accueil : place réservée dès le HTML, texte posé par app-shell.js (largeTitles). -->
+      <header class="as-large"><div><p>&nbsp;</p><h1>&nbsp;</h1></div></header>
       <div class="home-intro">
         <div class="topbar" id="homeTop">
           <div class="brand"><span class="hero-kicker">EXPLORE. PROGRESSE. PROTÈGE.</span><span class="hero-live"><i></i> L’aventure commence ici</span></div>
@@ -452,16 +485,16 @@
 <script src="trip-model.js?v=fdd76d1468be"></script>
 <script src="poulpy-icons.js?v=d8f0f0f5b6bc"></script>
 <script src="ocean-map-model.js?v=e87c7f985412"></script>
-<script src="ocean-globe.js?v=1dc45d6ca4b3"></script>
+<script src="ocean-globe.js?v=48d79cbe1502"></script>
 <script src="ocean-map.js?v=b085d7c34ff8"></script>
 <script src="activity-theme.js?v=ace454936621"></script>
 <script src="activity-transition.js?v=537b498cfcaa"></script>
 <script src="spot-photos.js?v=7db07d494e54"></script>
 <script src="progression.js?v=573fcb54b5ba"></script>
-<script src="app.js?v=f6ba91bb2b14"></script>
+<script src="app.js?v=fabbd5ccd499"></script>
 <script src="private-spots.js?v=683221818ade"></script>
 <script src="poulpy-knowledge.js?v=e0ec814bd70b"></script>
-<script src="design.js?v=33a6a94a103c"></script>
+<script src="design.js?v=e07e118869a6"></script>
 <script src="trips.js?v=812442f7c62b"></script>
 <script src="ocean-hub.js?v=6778359f45f9"></script>
 <script src="poulpy-config.js?v=a083c1cf346b"></script>
@@ -484,17 +517,17 @@
 <script src="community-config.js?v=59d15c4cfc90"></script>
 <script src="trip-sharing.js?v=e29f4931ffd4"></script>
 <script src="community.js?v=c482a447be08"></script>
-<script src="navigation.js?v=dddfb83022b6"></script>
+<script src="navigation.js?v=badadfa651a3"></script>
 <script src="ocean-sound.js?v=7e7f5190346a"></script>
-<script src="polish.js?v=2b1110e155a4"></script>
+<script src="polish.js?v=5f0a1f18315f"></script>
 <script src="spot-scenes.js?v=82700c22eafe"></script>
 <script src="spot-panoramas.js?v=75a041ebb045"></script>
 <script src="spot-voyage.js?v=cc1b529a6c9f"></script>
 <script src="app-update.js?v=1ddfa6391360"></script>
-<script src="ocean-home.js?v=8de41dee964b"></script>
+<script src="ocean-home.js?v=04d4c46ee3b5"></script>
 <script src="badges.js?v=2723bc4c0577"></script>
-<script src="home-feed.js?v=c35324c7f06a"></script>
+<script src="home-feed.js?v=c4df709958c9"></script>
 <script src="passport.js?v=f578917c0f7a"></script>
-<script src="app-shell.js?v=aa089989a61d"></script>
+<script src="app-shell.js?v=94fe0f7b85f0"></script>
 </body>
 </html>

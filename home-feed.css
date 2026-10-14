@@ -36,9 +36,11 @@
 .hf-world{margin:30px 0 4px;border-radius:var(--as-r-xl,28px);overflow:hidden;background:radial-gradient(90% 70% at 50% 16%,#2f6fe0 0%,#1b4fc4 48%,#0b2d7a 100%);color:#fff}
 .hf-world-map{--d:232px;position:relative;height:276px;display:grid;place-items:center;overflow:hidden}
 /* Globe 3D de l’accueil : carré de la taille de la planète, transparent hors de la sphère. */
-.hf-globe{position:absolute;left:50%;top:50%;width:var(--d);height:var(--d);transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;touch-action:pan-y}
+.hf-globe{position:absolute;left:50%;top:50%;width:var(--d);height:var(--d);transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;touch-action:pan-y;opacity:0;transition:opacity .45s ease}
 .hf-globe canvas{width:100%!important;height:100%!important}
-.hf-world-map.is-live .hf-planet{visibility:hidden}
+/* Le globe 3D prend le relais en fondu, une fois sa première image éclairée dessinée ; la sphère CSS disparaît ensuite. */
+.hf-world-map.is-live .hf-globe{opacity:1}
+.hf-world-map.is-live .hf-planet{visibility:hidden;transition:visibility 0s .45s}
 .hf-planet{position:relative;width:var(--d);height:var(--d);border-radius:50%;overflow:hidden;isolation:isolate;background:#0b2d7a;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 22px 50px -12px rgba(3,16,46,.75);transform:translateZ(0)}
 /* La Terre (NASA) défile en boucle : la sphère tourne sans canvas ni WebGL, donc sans à-coups. */
 .hf-planet-tex{position:absolute;inset:0;background:url(assets/globe/earth-day-4k.webp) 0 50%/calc(var(--d) * 2) var(--d) repeat-x;animation:hf-spin 48s linear infinite}

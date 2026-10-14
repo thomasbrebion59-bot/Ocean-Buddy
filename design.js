@@ -118,7 +118,7 @@
   }
   improveControls(document);
   document.querySelectorAll('.sport-card,.lvl-card').forEach(el=>new MutationObserver(()=>el.setAttribute('aria-pressed',el.classList.contains('sel'))).observe(el,{attributes:true,attributeFilter:['class']}));
-  new MutationObserver(records=>{for(const record of records)for(const node of record.addedNodes)if(node.nodeType===1)improveControls(node.parentElement||node)}).observe($('#screenWrap'),{childList:true,subtree:true});
+  new MutationObserver(records=>{const roots=new Set();for(const record of records)for(const node of record.addedNodes)if(node.nodeType===1)roots.add(node.parentElement||node);roots.forEach(improveControls)}).observe($('#screenWrap'),{childList:true,subtree:true});
   new MutationObserver(()=>improveControls($('#onb'))).observe($('#onb'),{childList:true,subtree:true,attributes:true,attributeFilter:['class']});
   document.addEventListener('keydown',event=>{
     const open=modalIds.map(id=>document.getElementById(id)).filter(el=>el.classList.contains('open')).at(-1);
@@ -128,7 +128,10 @@
   });
   $('#setName').addEventListener('keydown',event=>{if(event.key==='Enter')saveName()});
   // A returning user arrives at the app directly; changing sport remains available.
-  if(typeof returning!=='undefined'&&returning&&chosenLevel){$('#onb').classList.add('hide');$('#onb').style.display='none';activeSport=chosenSport==='all'?null:chosenSport;renderHome();renderSportFilters();renderSpots();}
+  // L’accueil et la liste des spots sont déjà rendus par app.js avec le même état : pas de second rendu au démarrage.
+  if(typeof returning!=='undefined'&&returning&&onbDone){$('#onb').classList.add('hide');$('#onb').style.display='none';activeSport=chosenSport==='all'?null:chosenSport;renderSportFilters();}
+  // Activité enregistrée (couleurs, pastille du haut) posée maintenant, sous le rideau de démarrage, plutôt qu’au « load ».
+  window.OceanTheme?.set?.(typeof activeSport!=='undefined'?activeSport:null);
   // Reduced motion applies to both the interface and the marine illustrations.
   if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)document.body.classList.add('reduce-motion');
 })();

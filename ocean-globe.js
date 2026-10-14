@@ -324,6 +324,8 @@
     /* ---------- Caméra : centre (lat, lon) + distance au centre de la Terre (rayons) ---------- */
     const view={lat:30,lon:-8,dist:4.2};let overviewOn=false,keepKpp=0,touched=false,spin=0;
     let W=1,H=1,pad={top:0,bottom:0,left:0,right:0},anim=null,inertia=null,dirty=true,raf=0,active=true,lastMove=0,restTimer=0,revealStart=0,approach=1,lastTick=0,ambTimer=0,lastTouch=performance.now();
+    /* Première image réellement dessinée (opts.onFirstFrame) : la sphère CSS de l’accueil reste affichée jusque-là. */
+    let firstFrame=typeof opts.onFirstFrame==='function'?opts.onFirstFrame:null;
     const minSide=()=>Math.max(1,Math.min(W-pad.left-pad.right,H-pad.top-pad.bottom));
     const tanHalf=Math.tan(FOV*RAD/2);
     const kpp=(dist=view.dist)=>2*(dist-1)*tanHalf/H*KM;
@@ -414,7 +416,7 @@
         if(!touched&&!anim&&!inertia&&!revealStart&&widthKm()>9000){view.lon+=dt*.0016;ambient=true;}
         if(ambient)dirty=true;
       }
-      if(dirty){dirty=false;draw();}
+      if(dirty){dirty=false;draw();if(firstFrame){const f=firstFrame;firstFrame=null;requestAnimationFrame(()=>f());}}
       prevAgain=again||emblemAnim;
       if(!prevAgain&&dprNow<dprFull){clearTimeout(sharpTimer);sharpTimer=setTimeout(()=>{if(!raf){dprNow=dprFull;slow=0;resize();}},350);}
       if(emblemAnim){dirty=true;again=true;}
@@ -909,9 +911,11 @@
     earth.visible=true;clouds.visible=cloudsOn;
     /* Ordinateur : la surface en 8K arrive ensuite, pour des côtes plus fines au zoom. */
     /* Surface 8K pour un zoom net (téléphones récents compris : textures 16K prises en charge). */
-    if((!mobile&&maxTex>=8192||maxTex>=16384)&&!conn?.saveData)setTimeout(()=>loadTexture(asset('assets/globe/earth-day-8k.webp'),true).then(tex=>{if(dead)return;const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;old?.dispose();invalidate();}).catch(()=>{}),1200);
+    /* Jamais pendant les 10 premières secondes de l’app (démarrage stable), ni dans l’app iOS (textures 4K seulement), ni pour le petit globe de l’accueil (hd:false). */
+    if(opts.hd!==false&&!document.documentElement.classList.contains('native-app')&&(!mobile&&maxTex>=8192||maxTex>=16384)&&!conn?.saveData)setTimeout(()=>loadTexture(asset('assets/globe/earth-day-8k.webp'),true).then(tex=>{if(dead)return;const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;old?.dispose();invalidate();}).catch(()=>{}),Math.max(1200,10000-performance.now()));
     resize();applyCamera();
-    revealStart=reduced()?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;starU.uI.value=.6;}
+    /* reveal:false : la Terre apparaît directement éclairée, à sa taille (le globe de l’accueil prend le relais de la sphère CSS). */
+    revealStart=reduced()||opts.reveal===false?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;starU.uI.value=.6;}
     invalidate();
 
     let sstOn=false;const sstAnim={};

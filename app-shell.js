@@ -289,6 +289,9 @@
   /* Démarrage. */
   immersive();
   if(body.dataset.screen==='spots'&&!spotWorld)toGlobe();
-  setTimeout(()=>news(false),1600);
+  /* Les nouveautés attendent la levée du rideau de démarrage. */
+  if(window.OceanBoot)OceanBoot.after(()=>setTimeout(()=>news(false),1200));else setTimeout(()=>news(false),1600);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)largeTitles();});
+  /* Barre d’onglets et grands titres en place : étape « shell » du rideau de démarrage. */
+  window.OceanBoot?.done('shell');
 })();
