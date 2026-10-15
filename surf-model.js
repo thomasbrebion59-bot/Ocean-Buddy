@@ -16,7 +16,7 @@
     const s={
       seed:seed>>>0,rng:(seed>>>0)^0x9E3779B9,opts:o,calm:!!o.calm,
       t:0,dur:o.duration||DUR,phase:'play',score:0,
-      u:0.5,y:0.45,vu:0,pose:POSE.GLIDE,dir:1,
+      u:0.5,y:0.45,vu:0,smx:0,smy:0,pose:POSE.GLIDE,dir:1,
       air:false,airT:0,airDur:0.75,z:0,zMax:0.4,spin:0,spinning:false,takeoffY:0,
       tube:false,tubeT:0,tubeTotal:0,tubeAnnounced:false,mult:1,
       speed:0.5,hollow:o.hollow!=null?o.hollow:0.6,pull:0,tSpeed:0.5,tHollow:0.6,tPull:0,secT:0,dist:0,
@@ -84,6 +84,7 @@
     inp.tap=inp.dbl=inp.cut=false;
     /* déplacement */
     let mx=inp.mx;mx=mx>1?1:mx<-1?-1:mx;let my=inp.my;my=my>1?1:my<-1?-1:my;
+    const ks=dt*10>1?1:dt*10;s.smx+=(mx-s.smx)*ks;s.smy+=(my-s.smy)*ks;mx=s.smx;my=s.smy;
     const crouch=!!inp.hold&&!s.air;
     let vu=0.5*mx+0.25*(0.5-s.y)-s.pull+0.0;
     if(s.calm)vu=0.5*mx+0.25*(0.5-s.y);

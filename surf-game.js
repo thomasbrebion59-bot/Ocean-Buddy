@@ -83,8 +83,8 @@
       if(keysOn){inp.mx=(keys.r?1:0)-(keys.l?1:0);inp.my=(keys.u?1:0)-(keys.d?1:0);inp.hold=keys.h;}
     }
     while(acc>=STEP&&n<MAX_STEPS){
-      if(mode==='menu'){if(demo.phase==='over')demo=G=newGame(true);M.step(demo,inp,STEP);}
-      else if(mode==='play')M.step(G,inp,STEP);
+      if(mode==='menu'){if(demo.phase==='over')demo=G=newGame(true);render.snap(demo);M.step(demo,inp,STEP);}
+      else if(mode==='play'){render.snap(G);M.step(G,inp,STEP);}
       acc-=STEP;n++;
     }
     if(n===MAX_STEPS&&acc>STEP)acc=0;
@@ -93,7 +93,7 @@
       if(G.fallSeq!==lastFallSeq){lastFallSeq=G.fallSeq;haptic(true);}
       if(G.phase==='over')finish();
     }
-    render.draw(G,dt,now/1000);
+    render.draw(G,dt,now/1000,acc>0?acc/STEP:0);
     raf=requestAnimationFrame(frame);
   }
   function run(){if(running||!open)return;running=true;last=performance.now();acc=0;raf=requestAnimationFrame(frame);}
