@@ -2,13 +2,14 @@
    Pages : réseau d'abord (les mises à jour arrivent tout de suite), cache en secours.
    Fichiers versionnés (?v=…), images locales et polices : cache d'abord.
    Météo, marées, cartes et services en ligne : jamais mis en cache ici. */
-const VERSION='ob-2026-09-25';
+const VERSION='ob-2026-10-15';
 const STATIC=VERSION+'-static', PAGES=VERSION+'-pages';
 const CORE=['./','index.html','manifest.webmanifest','assets/app/icon-192.png','assets/poulpy/scenes/travel-v2.webp'];
+const SURF=['assets/surf/surfeur.webp','assets/surf/surfeuse.webp'];
 const CACHEABLE_HOSTS=['fonts.googleapis.com','fonts.gstatic.com'];
 
 self.addEventListener('install',event=>{
-  event.waitUntil(caches.open(PAGES).then(cache=>cache.addAll(CORE)).catch(()=>{}).then(()=>self.skipWaiting()));
+  event.waitUntil(caches.open(PAGES).then(cache=>cache.addAll(CORE)).catch(()=>{}).then(()=>caches.open(STATIC)).then(cache=>Promise.all(SURF.map(u=>cache.add(u).catch(()=>{})))).catch(()=>{}).then(()=>self.skipWaiting()));
 });
 self.addEventListener('activate',event=>{
   event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>!k.startsWith(VERSION)).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));
@@ -16,7 +17,8 @@ self.addEventListener('activate',event=>{
 
 async function trim(name,max){
   const cache=await caches.open(name);const keys=await cache.keys();
-  for(let i=0;i<keys.length-max;i++)await cache.delete(keys[i]);
+  const del=keys.filter(k=>!k.url.includes('/assets/surf/'));
+  for(let i=0;i<del.length-max;i++)await cache.delete(del[i]);
 }
 async function networkFirst(request){
   const cache=await caches.open(PAGES);

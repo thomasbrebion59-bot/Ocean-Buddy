@@ -31,6 +31,7 @@
     render=root.SurfRender.create(cv);
     input=root.SurfInput.attach(cv,inp);
     ov.addEventListener('click',onClick);
+    ['surfeur','surfeuse'].forEach(n=>{const im=new Image();im.onload=()=>{if(im.naturalWidth>0)ov.classList.add('has-'+n);};im.src='assets/surf/'+n+'.webp';});
     document.body.appendChild(ov);
   }
   function theme(){

@@ -3,7 +3,7 @@
   'use strict';
   const DUR=75,DT=1/60,FALL_DUR=1.3;
   /* Repère : u = position le long de la vague, relative au front qui déferle (0). u<0 : mousse (chute). 0..1 : épaule. y : 0 pied de la vague, 1 lèvre. */
-  const U_FOAM=0.0,U_FLAT=1.0,U_MAX=1.15,TUBE_U0=0.06,TUBE_U1=0.34,TUBE_Y=0.55,TUBE_MIN_HOLLOW=0.45;
+  const U_FOAM=0.0,U_FLAT=1.0,U_MAX=1.15,TUBE_U0=0.06,TUBE_U1=0.46,TUBE_Y=0.55,TUBE_MIN_HOLLOW=0.45;
   const POSE={GLIDE:0,TURN:1,CROUCH:2,AIR:3,FALL:4};
   const TAU=Math.PI*2;
   const PTS={passive:40,tube:150,jump:100,air:250,spin:500,cut:200,tube0:200};
@@ -123,8 +123,8 @@
   function faceHeight(u){
     if(u<0)return 0.82;
     if(u<0.1)return 0.82+u*1.3;
-    if(u<0.9)return 0.95-0.1*(u-0.1)/0.8;
-    const k=(u-0.9)/0.25,kk=k>1?1:k;return 0.85-0.7*kk*kk*(3-2*kk);
+    if(u<0.6)return 0.95-0.05*(u-0.1)/0.5;
+    const k=(u-0.6)/0.55,kk=k>1?1:k;return 0.9-0.78*kk*kk*(3-2*kk);
   }
   return{createGame,step,award,newInput,faceHeight,rand,DUR,DT,FALL_DUR,POSE,TUBE_U0,TUBE_U1,TUBE_Y,TUBE_MIN_HOLLOW,U_FLAT,U_MAX,PTS};
 });
