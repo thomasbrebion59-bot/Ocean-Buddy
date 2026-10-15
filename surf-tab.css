@@ -1,0 +1,42 @@
+/* Onglet « Jeu » (écran #surf). Couleurs de l’app (--t-*), titres en Barlow Condensed. */
+#surf{--sf-ink:#0b2d7a;padding-bottom:8px}
+#surf .sf-hero{position:relative;height:210px;margin:4px 0 0;border-radius:28px;overflow:hidden;
+  background:linear-gradient(180deg,#8fd0ff 0%,#4aa3f5 46%,var(--t-main,#2154dc) 100%);box-shadow:0 18px 36px -22px var(--t-deep,#0b2d7a)}
+#surf .sf-hero::before{content:"";position:absolute;right:26px;top:22px;width:44px;height:44px;border-radius:50%;background:#fff6c8;box-shadow:0 0 40px 10px rgba(255,246,200,.55)}
+#surf .sf-wave{position:absolute;left:-10%;width:120%;bottom:0;height:62%}
+#surf .sf-wave-back{fill:rgba(255,255,255,.28);animation:sfDrift 9s ease-in-out infinite alternate}
+#surf .sf-wave-mid{fill:var(--t-main2,#1f55e0);opacity:.85;height:52%;animation:sfDrift 7s ease-in-out infinite alternate-reverse}
+#surf .sf-wave-front{fill:var(--t-deep,#0b2d7a);height:36%}
+#surf .sf-curl{position:absolute;right:-6px;bottom:14px;width:46%;max-width:190px;fill:rgba(255,255,255,.9)}
+#surf .sf-hero-tx{position:absolute;left:20px;top:18px;color:#fff;display:grid;gap:2px;justify-items:start}
+#surf .sf-hero-tx small{font:700 12px/1 var(--body);letter-spacing:.8px;text-transform:uppercase;opacity:.9}
+#surf .sf-hero-tx h2{margin:0;font:800 64px/.9 'Barlow Condensed',var(--body);letter-spacing:-.5px;text-transform:uppercase;text-shadow:0 2px 14px rgba(11,45,122,.35)}
+#surf .sf-offline{margin-top:8px;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font:700 12px/1 var(--body)}
+#surf .sf-offline::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--t-acc,#e0ff91)}
+@keyframes sfDrift{from{transform:translateX(-3%)}to{transform:translateX(3%)}}
+@media(prefers-reduced-motion:reduce){#surf .sf-wave{animation:none}}
+body.reduce-motion #surf .sf-wave{animation:none}
+#surf .sf-body{padding:14px 0 0;display:grid;gap:14px}
+#surf .sf-card{background:#fff;border:1px solid var(--t-line,#b9cbf5);border-radius:24px;padding:18px 16px;box-shadow:0 10px 26px -20px var(--t-deep,#0b2d7a)}
+#surf .sf-card h3{margin:0 0 12px;font:800 24px/1 'Barlow Condensed',var(--body);letter-spacing:.2px;text-transform:uppercase;color:var(--sf-ink)}
+#surf .sf-chars{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#surf .sf-char{display:grid;justify-items:center;gap:6px;padding:10px 6px 12px;border:2px solid var(--t-line,#b9cbf5);border-radius:20px;background:var(--t-tint,#e8efff);color:var(--sf-ink);cursor:pointer;font:700 15px/1 var(--body);transition:transform .2s,border-color .2s,background .2s}
+#surf .sf-char canvas{width:96px;height:96px;opacity:0;transition:opacity .25s}
+#surf .sf-char canvas.ready{opacity:1}
+#surf .sf-char:active{transform:scale(.96)}
+#surf .sf-char[aria-pressed=true]{border-color:var(--t-main,#2154dc);background:#fff;box-shadow:0 0 0 3px color-mix(in srgb,var(--t-main,#2154dc) 20%,transparent)}
+#surf .sf-play{width:100%;margin-top:14px;min-height:58px;border:0;border-radius:999px;background:var(--t-cta,#ff7a55);color:var(--t-cta-ink,#1b1410);font:800 30px/1 'Barlow Condensed',var(--body);letter-spacing:1px;text-transform:uppercase;cursor:pointer;box-shadow:0 14px 24px -14px var(--t-cta,#ff7a55);transition:transform .2s}
+#surf .sf-play:active{transform:scale(.97)}
+#surf .sf-recs{margin:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+#surf .sf-recs>div{padding:12px;border-radius:16px;background:var(--t-tint,#e8efff);min-width:0}
+#surf .sf-recs dt{font:700 12px/1.2 var(--body);color:var(--t-deep2,#173b84)}
+#surf .sf-recs dd{margin:6px 0 0;font:800 26px/1.05 'Barlow Condensed',var(--body);color:var(--sf-ink);overflow-wrap:anywhere}
+#surf .sf-empty{margin:0 0 10px;font:700 14px/1.3 var(--body);color:var(--t-deep2,#173b84)}
+#surf .sf-no-games .sf-recs{opacity:.55}
+#surf .sf-note{margin:10px 0 0;font:500 12px/1.3 var(--body);color:#5b6b8c}
+#surf .sf-how{list-style:none;margin:0;padding:0;display:grid;gap:10px}
+#surf .sf-how li{display:grid;grid-template-columns:86px 1fr;gap:10px;align-items:baseline;padding-bottom:10px;border-bottom:1px solid var(--t-line,#b9cbf5)}
+#surf .sf-how li:last-child{border:0;padding-bottom:0}
+#surf .sf-how b{font:800 20px/1 'Barlow Condensed',var(--body);text-transform:uppercase;color:var(--t-main,#2154dc)}
+#surf .sf-how span{font:500 14px/1.35 var(--body);color:#26324f}
+@media(min-width:700px){#surf .sf-body{max-width:760px;margin:0 auto}#surf .sf-hero{max-width:760px;margin-inline:auto;height:240px}}

@@ -319,7 +319,7 @@
     const fav=e.target.closest('[data-fav]');
     if(fav){e.stopPropagation();const id=fav.dataset.fav;if(typeof toggleFav==='function'){toggleFav(id,e);}const on=typeof favs!=='undefined'&&favs.has(id);fav.classList.toggle('on',on);if(typeof vibrate==='function')vibrate(8);return;}
     const surf=e.target.closest('[data-surf-game]');
-    if(surf){window.OceanSurf?.open();return;}
+    if(surf){go('surf');return;}
     const more=e.target.closest('[data-hf-more]');
     if(more){
       /* « Tout voir » : la planète n’allume que les spots en saison ce mois-ci. */
