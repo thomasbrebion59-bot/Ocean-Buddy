@@ -4,13 +4,13 @@
   const KEY='oceanbuddy_surf',STEP=1/60,MAX_STEPS=5;
   let ov=null,cv=null,render=null,input=null,menuEl=null,resEl=null,probe=null;
   let open=false,mode='menu',running=false,raf=0,last=0,acc=0,t0=0;
-  let paused=false,pauseEl=null,qBtn=null,coachEl=null,coachSpans=null,coachStep=-1,coachOn=false,coachT3=0,G=null,demo=null,char='surfeur',best=0,games=0,bestTrick='',bestTrickPts=0,bestCombo=1,btns=null,lastGrabFail=0,keysOn=false,lastFigSeq=0,lastFallSeq=0;
+  let paused=false,pauseEl=null,qBtn=null,coachEl=null,coachSpans=null,coachStep=-1,coachOn=false,coachT3=0,G=null,demo=null,char='surfeur',best=0,games=0,bestTrick='',bestTrickPts=0,bestCombo=1,btns=null,lastGrabFail=0,keysOn=false,lastFigSeq=0,lastFallSeq=0,obsHint=false,obsCoach=2,coachT4=0;
   const inp=root.SurfModel.newInput();
   const keys={l:false,r:false,u:false,d:false,h:false};
   const ATLAS_V='?v=16',KEY2=KEY;
 
-  function load(){try{const o=JSON.parse(localStorage.getItem(KEY)||'{}');if(o.char==='surfeuse'||o.char==='surfeur')char=o.char;if(o.best>0)best=o.best|0;games=o.games|0;bestTrick=typeof o.bestTrick==='string'?o.bestTrick:'';bestTrickPts=o.bestTrickPts|0;bestCombo=o.bestCombo>1?o.bestCombo|0:1;}catch(_){}}
-  function save(){try{localStorage.setItem(KEY,JSON.stringify({char,best,games,bestTrick,bestTrickPts,bestCombo}));}catch(_){}}
+  function load(){try{const o=JSON.parse(localStorage.getItem(KEY)||'{}');if(o.char==='surfeuse'||o.char==='surfeur')char=o.char;if(o.best>0)best=o.best|0;games=o.games|0;bestTrick=typeof o.bestTrick==='string'?o.bestTrick:'';bestTrickPts=o.bestTrickPts|0;bestCombo=o.bestCombo>1?o.bestCombo|0:1;obsHint=!!o.obsHint;}catch(_){}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({char,best,games,bestTrick,bestTrickPts,bestCombo,obsHint}));}catch(_){}}
   function stats(){load();return{best,games,bestTrick,bestCombo,bestTrickPts};}
   function haptic(strong){try{const H=root.Capacitor&&root.Capacitor.Plugins&&root.Capacitor.Plugins.Haptics;if(H&&H.impact)H.impact({style:strong?'MEDIUM':'LIGHT'});}catch(_){}}
   function newGame(calm){return root.SurfModel.createGame((Math.random()*4294967296)>>>0,calm?{calm:true}:undefined);}
@@ -19,7 +19,7 @@
     move:'M4 12h16M8 8l-4 4 4 4M16 8l4 4-4 4',updown:'M12 4v16M8 8l4-4 4 4M8 16l4 4 4-4',jump:'M12 19V6M6 11l6-6 6 6',
     spin:'M20 12a8 8 0 1 1-3-6.2M20 4v5h-5',grab:'M7 12V7a1.6 1.6 0 0 1 3.2 0v4M10.2 11V5.6a1.6 1.6 0 0 1 3.2 0V11M13.4 11V6.8a1.6 1.6 0 0 1 3.2 0V13c0 4-2 6-5 6s-4-1.5-5-4l-1.2-2.6a1.5 1.5 0 0 1 2.6-1.4L7 12',
     cut:'M5 18c6 0 10-4 14-12M14 6h5v5',snap:'M5 8h10l-3-3M19 16H9l3 3',floater:'M3 14c3-4 6-4 9 0s6 4 9 0',alley:'M12 20V8M7 12l5-5 5 5M5 20h14',
-    tube:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z',combo:'M6 6l12 12M18 6L6 18'};
+    tube:'M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18zM12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8z',combo:'M6 6l12 12M18 6L6 18',rock:'M3 19l5-9 4 4 3-7 6 12z'};
   /* Guide : une ligne par action ; touches clavier visibles seulement sur ordinateur. Touches réelles du code (onKey). */
   const GUIDE=[
     ['move','Se déplacer','Glisse le doigt vers la gauche ou la droite.','← →'],
@@ -32,6 +32,15 @@
     ['floater','Floater','Reste en haut de la vague, le long de la lèvre.',''],
     ['alley','Alley-oop','Lance un 360 depuis la lèvre.',''],
     ['tube','Tube','Reste appuyé près de la mousse, sous la lèvre : score ×2.','Maj'],
+    ['spin','Reverse','Lance un 360 en glissant vers la gauche au moment du saut.',''],
+    ['grab','Superman','Appuie sur Grab dans le quart de seconde qui suit le saut.','G'],
+    ['floater','Layback','Maintiens Grab pendant un floater.','G'],
+    ['snap','Re-entry','Fais un snap, puis saute tout de suite, en haut de la vague.',''],
+    ['spin','Barrel roll','Lance un 360 en glissant vers le bas au moment du saut.',''],
+    ['cut','Carve 360','Enchaîne deux cutbacks en moins de 2 secondes.',''],
+    ['rock','Obstacles','Évite les rochers et les récifs. Saute par-dessus la lèvre qui s’abat.',''],
+    ['rock','Frôlé !','Passe tout près d’un obstacle sans le toucher : points en plus.',''],
+    ['rock','Chute','Tomber te fait perdre ton combo, et tu attends 1,5 seconde.',''],
     ['combo','Combo','Enchaîne les figures sans tomber en moins de 2,5 s : ×2, ×3, jusqu’à ×4.','']];
   function guideHTML(){
     return '<ul class="surf-guide">'+GUIDE.map(r=>'<li><span class="surf-gi"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="'+IC[r[0]]+'" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="surf-gt"><b>'+r[1]+'</b><span>'+r[2]+'</span></span>'+(r[3]?'<span class="surf-gk"><kbd>'+r[3]+'</kbd></span>':'')+'</li>').join('')+'</ul>';
@@ -42,7 +51,7 @@
       '<canvas class="surf-cv" aria-hidden="true"></canvas><i class="surf-probe" aria-hidden="true"></i>'+
       '<button type="button" class="surf-x" data-surf="close" aria-label="Fermer"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>'+
       '<button type="button" class="surf-q" data-surf="help" aria-label="Comment jouer" hidden>?</button>'+
-      '<div class="surf-coach" aria-live="polite"><span>Glisse ton doigt pour te déplacer</span><span>Touche Saut pour décoller</span><span>En l’air, touche Grab !</span><span>Approche-toi de la mousse, sous la lèvre, et reste appuyé : tube !</span></div>'+
+      '<div class="surf-coach" aria-live="polite"><span>Glisse ton doigt pour te déplacer</span><span>Touche Saut pour décoller</span><span>En l’air, touche Grab !</span><span>Approche-toi de la mousse, sous la lèvre, et reste appuyé : tube !</span><span>Évite les rochers !</span></div>'+
       '<div class="surf-pause" hidden><div class="surf-card"><small>Pause</small><h2>Comment jouer</h2>'+guideHTML()+'<div class="surf-row"><button type="button" class="surf-btn surf-go" data-surf="resume">Reprendre</button><button type="button" class="surf-btn surf-ghost" data-surf="quit">Quitter</button></div></div></div>'+
       '<div class="surf-btns" hidden>'+
       '<button type="button" data-act="jump"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 19V6M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Saut</b></button>'+
@@ -98,13 +107,16 @@
   }
   function coachTo(n){
     if(n===coachStep)return;coachStep=n;
-    coachEl.classList.toggle('on',n>=0&&n<4);
+    coachEl.classList.toggle('on',n>=0&&n<5);
     for(let i=0;i<coachSpans.length;i++)coachSpans[i].classList.toggle('on',i===n);
     if(n===3)coachT3=G.t;
   }
   /* coach des deux premières parties : bulles non bloquantes, qui disparaissent une fois l'action faite */
   function coachTick(){
-    if(!coachOn)return;
+    /* bulle « Évite les rochers ! » : une seule fois, à la première apparition d'un obstacle */
+    if(obsCoach===0&&G.obsSeq>0){obsCoach=1;coachT4=G.t;coachTo(4);}
+    else if(obsCoach===1&&(G.passed>0||G.falls>0||G.t>coachT4+4)){obsCoach=2;obsHint=true;save();coachOn=false;coachTo(-1);}
+    if(obsCoach===1||!coachOn)return;
     let n=coachStep;
     if(n===0&&(Math.abs(inp.mx)>0.3||Math.abs(inp.my)>0.3||G.t>6))n=1;
     if(n===1&&(G.air||G.figCount>0))n=2;
@@ -120,7 +132,7 @@
     setTimeout(()=>ov&&open&&mode==='menu'&&ov.querySelector('[data-surf=play]').focus({preventScroll:true}),30);
   }
   function start(){
-    mode='play';menuEl.hidden=true;resEl.hidden=true;btns.hidden=false;qBtn.hidden=false;paused=false;pauseEl.hidden=true;inp.grab=false;lastGrabFail=0;G=newGame(false);lastFigSeq=0;lastFallSeq=0;input.reset();acc=0;coachOn=games<2;coachStep=-2;coachT3=0;coachTo(coachOn?0:-1);
+    mode='play';menuEl.hidden=true;resEl.hidden=true;btns.hidden=false;qBtn.hidden=false;paused=false;pauseEl.hidden=true;inp.grab=false;lastGrabFail=0;G=newGame(false);lastFigSeq=0;lastFallSeq=0;input.reset();acc=0;coachOn=games<2;obsCoach=obsHint?2:0;coachStep=-2;coachT3=0;coachTo(coachOn?0:-1);
     cv.focus&&cv.focus({preventScroll:true});
   }
   function finish(){
