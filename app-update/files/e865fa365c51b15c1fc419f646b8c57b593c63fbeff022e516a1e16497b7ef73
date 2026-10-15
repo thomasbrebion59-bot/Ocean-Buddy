@@ -1,0 +1,78 @@
+/* Mini-jeu de surf : overlay plein écran + carte d'accueil. */
+.surf-ov{position:fixed;inset:0;z-index:9000;display:none;background:#082a78;color:#fff;overflow:hidden;overscroll-behavior:none;-webkit-user-select:none;user-select:none}
+.surf-ov.on{display:block}
+html.surf-open,html.surf-open body{overflow:hidden}
+.surf-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
+.surf-probe{position:absolute;left:0;top:0;width:0;height:env(safe-area-inset-top,0px);pointer-events:none}
+.surf-x{position:absolute;z-index:3;top:calc(env(safe-area-inset-top,0px) + 8px);right:12px;width:44px;height:44px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;color:#fff;background:rgba(4,22,74,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.surf-menu,.surf-res{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 64px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);background:rgba(4,22,74,.35);overflow-y:auto}
+.surf-menu[hidden],.surf-res[hidden]{display:none}
+.surf-card{width:100%;max-width:380px;margin:auto;padding:20px 18px;border-radius:26px;text-align:center;background:linear-gradient(160deg,rgba(8,42,120,.94),rgba(26,90,214,.92));box-shadow:0 24px 48px -20px rgba(2,10,36,.9),0 0 0 1px rgba(255,255,255,.18)}
+.surf-card small{display:block;font:800 11px/1 Manrope,sans-serif;letter-spacing:1.4px;text-transform:uppercase;color:#e0ff91}
+.surf-card h2{margin:8px 0 6px;font-family:"Barlow Condensed",sans-serif;font-size:54px;font-weight:800;line-height:.95;text-transform:uppercase;letter-spacing:.5px;overflow-wrap:anywhere}
+.surf-card p{font:500 14px/1.45 'DM Sans',sans-serif;color:rgba(255,255,255,.85);margin:0 0 12px}
+.surf-pick{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:4px 0 14px}
+.surf-pick button{appearance:none;border:2px solid rgba(255,255,255,.22);border-radius:20px;padding:12px 6px 10px;color:#fff;background:rgba(255,255,255,.08);cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:8px;min-height:44px}
+.surf-pick button.on{border-color:#e0ff91;background:rgba(224,255,145,.16)}
+.surf-pick b{font-family:"Barlow Condensed",sans-serif;font-size:22px;font-weight:800;text-transform:uppercase;letter-spacing:.4px}
+.surf-av{position:relative;width:54px;height:54px;border-radius:50%;background:#2f6bff;overflow:hidden;box-shadow:inset 0 0 0 2px rgba(255,255,255,.3)}
+.surf-av::before{content:"";position:absolute;left:17px;top:9px;width:20px;height:20px;border-radius:50%;background:#ecb78f}
+.surf-av::after{content:"";position:absolute;left:11px;top:31px;width:32px;height:30px;border-radius:16px 16px 0 0;background:#ff6b57}
+.surf-av-f::before{background:#d9976b;box-shadow:-9px 6px 0 -2px #6b3a1e}
+.surf-av-f::after{background:#16a39b}
+.surf-how{list-style:none;margin:0 0 12px;padding:0;text-align:left}
+.surf-how li{position:relative;padding:5px 0 5px 20px;font:500 13.5px/1.35 'DM Sans',sans-serif;color:rgba(255,255,255,.88)}
+.surf-how li::before{content:"";position:absolute;left:2px;top:11px;width:8px;height:8px;border-radius:50%;background:#e0ff91}
+.surf-card .surf-best,.surf-card .surf-rec{font-weight:700;color:#e0ff91}
+.surf-card .surf-rec{color:#ff6b57;font-size:16px}
+.surf-btn{appearance:none;border:0;cursor:pointer;min-height:48px;padding:0 22px;border-radius:999px;font:800 17px/1 'Barlow Condensed',sans-serif;letter-spacing:.8px;text-transform:uppercase;color:#082a78;background:#e0ff91}
+.surf-go{width:100%}
+.surf-ghost{color:#fff;background:rgba(255,255,255,.14);box-shadow:inset 0 0 0 1px rgba(255,255,255,.3)}
+.surf-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.surf-row .surf-go{width:auto}
+.surf-btn:focus-visible,.surf-pick button:focus-visible,.surf-x:focus-visible{outline:3px solid #e0ff91;outline-offset:2px}
+@media (max-height:640px){.surf-card{padding:14px}.surf-card h2{font-size:42px}.surf-how li{padding:3px 0 3px 20px}}
+@media (prefers-reduced-motion:reduce){.surf-ov{scroll-behavior:auto}}
+/* Carte de l'accueil : même gabarit que .hf-plan (aucun décalage). */
+.hf-surf{background:radial-gradient(140% 120% at 0% 0%,rgba(255,107,87,.22),transparent 50%),linear-gradient(140deg,#082a78 0%,#1a5ad6 70%,#3a8bff 120%)}
+.hf-surf-ic{grid-area:cal;display:block;height:25px;width:64px}
+.hf-surf-ic svg{display:block;width:100%;height:100%}
+.hf-surf-sec{padding-top:12px}
+.surf-ov.has-surfeur .surf-av-m,.surf-ov.has-surfeuse .surf-av-f{width:92px;height:92px;border-radius:22px;background-color:#2f6bff;background-repeat:no-repeat;background-size:800% 100%;background-position:0 0;background-image:linear-gradient(#5fb0f0,#1a5ad6)}
+.surf-ov.has-surfeur .surf-av-m{background-image:url(assets/surf/surfeur.webp?v=16),linear-gradient(#5fb0f0,#1a5ad6);background-size:800% 100%,100% 100%}
+.surf-ov.has-surfeuse .surf-av-f{background-image:url(assets/surf/surfeuse.webp?v=16),linear-gradient(#5fb0f0,#1a5ad6);background-size:800% 100%,100% 100%}
+.surf-ov.has-surfeur .surf-av-m::before,.surf-ov.has-surfeur .surf-av-m::after,.surf-ov.has-surfeuse .surf-av-f::before,.surf-ov.has-surfeuse .surf-av-f::after{display:none}
+.surf-ov.g16-surfeur .surf-av-m,.surf-ov.g16-surfeuse .surf-av-f{background-size:400% 400%,100% 100%}
+.surf-btns{position:absolute;z-index:2;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);display:flex;justify-content:center;gap:14px;padding:0 16px;pointer-events:none}
+.surf-btns[hidden]{display:none}
+.surf-btns button{pointer-events:auto;touch-action:none;appearance:none;border:0;width:64px;height:64px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:#fff;cursor:pointer;background:rgba(4,22,74,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 0 0 2px rgba(224,255,145,.55),0 8px 18px -8px rgba(2,10,36,.8);-webkit-user-select:none;user-select:none}
+.surf-btns button:active{background:rgba(224,255,145,.35)}
+.surf-btns b{font:800 14px/1 "Barlow Condensed",sans-serif;letter-spacing:.6px;text-transform:uppercase}
+.surf-btns .shake{animation:surf-shake .3s}
+@keyframes surf-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
+/* Guide « Comment jouer », bouton d'aide, pause et coach */
+.surf-gh{margin:4px 0 6px;font:800 12px/1 Manrope,sans-serif;letter-spacing:1.2px;text-transform:uppercase;color:#e0ff91;text-align:left}
+.surf-guide{list-style:none;margin:0 0 12px;padding:0;max-height:36vh;overflow-y:auto;text-align:left;border-radius:16px;background:rgba(4,22,74,.35);-webkit-overflow-scrolling:touch}
+.surf-guide li{display:flex;align-items:center;gap:10px;padding:9px 10px;border-top:1px solid rgba(255,255,255,.1)}
+.surf-guide li:first-child{border-top:0}
+.surf-gi{flex:none;width:34px;height:34px;border-radius:12px;display:grid;place-items:center;color:#e0ff91;background:rgba(255,255,255,.1)}
+.surf-gt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.surf-gt b{font:800 17px/1 "Barlow Condensed",sans-serif;letter-spacing:.4px;text-transform:uppercase}
+.surf-gt span{font:500 12.5px/1.35 'DM Sans',sans-serif;color:rgba(255,255,255,.82);overflow-wrap:anywhere}
+.surf-gk{display:none;flex:none}
+.surf-kbd .surf-gk{display:inline-flex}
+.surf-gk kbd{min-width:30px;padding:5px 8px;border-radius:8px;text-align:center;font:700 13px/1 'DM Sans',sans-serif;color:#082a78;background:#e0ff91;box-shadow:0 2px 0 rgba(0,0,0,.3)}
+.surf-pause .surf-guide{max-height:52vh}
+.surf-pause{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 64px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);background:rgba(4,22,74,.55);overflow-y:auto}
+.surf-pause[hidden]{display:none}
+.surf-q{position:absolute;z-index:3;top:calc(env(safe-area-inset-top,0px) + 8px);right:66px;width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;color:#fff;font:800 22px/1 "Barlow Condensed",sans-serif;background:rgba(4,22,74,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.surf-q[hidden]{display:none}
+.surf-q:focus-visible{outline:3px solid #e0ff91;outline-offset:2px}
+.surf-coach{position:absolute;z-index:2;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px + 64px + 14px);display:none;justify-content:center;pointer-events:none}
+.surf-coach.on{display:flex}
+.surf-coach span{display:none;max-width:340px;padding:10px 16px;border-radius:18px;text-align:center;font:700 15px/1.3 'DM Sans',sans-serif;color:#082a78;background:#e0ff91;box-shadow:0 10px 22px -10px rgba(2,10,36,.8)}
+.surf-coach span.on{display:block;animation:surf-coach-in .25s ease-out}
+@keyframes surf-coach-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@media (min-width:700px){.surf-menu .surf-card,.surf-pause .surf-card{max-width:560px}.surf-guide{max-height:40vh}}
+@media (max-height:640px){.surf-guide{max-height:30vh}}
+.surf-pause .surf-card h2{font-size:36px;line-height:1}
