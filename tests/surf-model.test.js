@@ -41,18 +41,53 @@ test('la manche se termine à 75 s',()=>{
   const score=e.score;M.step(e,M.newInput(),M.DT);assert.equal(e.score,score);assert.equal(e.t,75);
 });
 
+function figs(seed,secs,fn,opts){const s=M.createGame(seed,opts),inp=M.newInput(),out=[];let seq=0;const n=Math.round(secs*60);for(let i=0;i<n;i++){fn&&fn(i,inp,s);M.step(s,inp,M.DT);if(s.figSeq!==seq){seq=s.figSeq;out.push(s.figName);}}return {out,s};}
+
 test('chaque geste donne sa figure',()=>{
-  const names=(fn,secs=2)=>run(3,secs,(i,inp)=>{if(i===5)fn(inp);},{calm:true,y:0.3}).figName;
-  assert.equal(names(i=>{i.tap=true;}),'Saut');
-  assert.equal(names(i=>{i.dbl=true;}),'360');
-  assert.equal(names(i=>{i.cut=true;},0.5),'Cutback');
-  const t=run(3,2,(i,inp)=>{inp.hold=true;},{calm:true,hollow:1,u:0.2,y:0.2});
-  assert.equal(t.figName,'Tube');
-  const a=run(3,2,(i,inp)=>{if(i===5)inp.tap=true;},{calm:true,y:0.9});
-  assert.equal(a.figName,'Air');
+  const names=(fn,secs=2,o)=>figs(3,secs,(i,inp)=>{if(i===5)fn(inp);},Object.assign({calm:true,y:0.3},o)).out;
+  assert.ok(names(i=>{i.tap=true;}).includes('Saut'));
+  assert.ok(names(i=>{i.dbl=true;}).includes('360'));
+  assert.ok(names(i=>{i.cut=true;},0.5).includes('Cutback'));
+  assert.ok(figs(3,2,(i,inp)=>{inp.hold=true;},{calm:true,hollow:1,u:0.2,y:0.2}).out.includes('Tube'));
+  assert.ok(names(i=>{i.tap=true;},2,{y:0.9}).includes('Air'));
 });
 
 test('un double appui juste après le saut transforme le saut en 360',()=>{
-  const s=run(3,2,(i,inp)=>{if(i===5)inp.tap=true;if(i===15)inp.dbl=true;},{calm:true});
-  assert.equal(s.figName,'360');
+  const r=figs(3,2,(i,inp)=>{if(i===5)inp.tap=true;if(i===15)inp.dbl=true;},{calm:true,y:0.3});
+  assert.ok(r.out.includes('360'));
+});
+
+test('alley-oop : 360 lancé depuis la lèvre',()=>{
+  const r=figs(3,2,(i,inp)=>{if(i===5)inp.dbl=true;},{calm:true,y:0.9});
+  assert.ok(r.out.includes('Alley-oop'));
+});
+
+test('grab et tail grab en l’air, petit tremblement au sol',()=>{
+  const g=figs(3,2,(i,inp)=>{if(i===5)inp.tap=true;inp.grab=i>=10&&i<20;},{calm:true,y:0.3});
+  assert.ok(g.out.includes('Grab'));
+  const t=figs(3,2,(i,inp)=>{if(i===5)inp.tap=true;inp.grab=i>=10&&i<42;},{calm:true,y:0.3});
+  assert.ok(t.out.includes('Tail grab'));
+  const f=figs(3,1,(i,inp)=>{inp.grab=i>=10&&i<20;},{calm:true,y:0.3});
+  assert.equal(f.out.includes('Grab'),false);assert.ok(f.s.grabFailSeq>=1);
+});
+
+test('snap près de la lèvre sur changement de direction',()=>{
+  const r=figs(3,1.5,(i,inp)=>{inp.mx=i<30?1:-1;},{calm:true,y:0.78});
+  assert.ok(r.out.includes('Snap'));
+  const low=figs(3,1.5,(i,inp)=>{inp.mx=i<30?1:-1;},{calm:true,y:0.3});
+  assert.equal(low.out.includes('Snap'),false);
+});
+
+test('floater : glisser en haut de la vague',()=>{
+  const r=figs(3,1.2,(i,inp)=>{},{calm:true,y:0.9});
+  assert.ok(r.out.includes('Floater'));
+});
+
+test('combo : figures enchaînées multiplient, la chute remet à zéro',()=>{
+  const s=run(3,2.2,(i,inp)=>{if(i===5||i===55)inp.tap=true;},{calm:true,y:0.3});
+  assert.equal(s.comboMult,2);assert.ok(s.bestCombo>=2);
+  const slow=run(3,6,(i,inp)=>{if(i===5||i===250)inp.tap=true;},{calm:true,y:0.3});
+  assert.equal(slow.bestCombo,1);
+  const f=run(3,3.6,(i,inp)=>{if(i===5||i===55)inp.tap=true;if(i>=100)inp.mx=-1;},{calm:true,y:0.3});
+  assert.equal(f.phase,'fall');assert.equal(f.comboMult,1);assert.equal(f.chain,0);assert.ok(f.bestCombo>=2);
 });

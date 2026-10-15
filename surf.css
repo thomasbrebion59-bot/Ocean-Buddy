@@ -39,6 +39,14 @@ html.surf-open,html.surf-open body{overflow:hidden}
 .hf-surf-ic svg{display:block;width:100%;height:100%}
 .hf-surf-sec{padding-top:12px}
 .surf-ov.has-surfeur .surf-av-m,.surf-ov.has-surfeuse .surf-av-f{width:92px;height:92px;border-radius:22px;background-color:#2f6bff;background-repeat:no-repeat;background-size:800% 100%;background-position:0 0;background-image:linear-gradient(#5fb0f0,#1a5ad6)}
-.surf-ov.has-surfeur .surf-av-m{background-image:url(assets/surf/surfeur.webp),linear-gradient(#5fb0f0,#1a5ad6);background-size:800% 100%,100% 100%}
-.surf-ov.has-surfeuse .surf-av-f{background-image:url(assets/surf/surfeuse.webp),linear-gradient(#5fb0f0,#1a5ad6);background-size:800% 100%,100% 100%}
+.surf-ov.has-surfeur .surf-av-m{background-image:url(assets/surf/surfeur.webp?v=16),linear-gradient(#5fb0f0,#1a5ad6);background-size:800% 100%,100% 100%}
+.surf-ov.has-surfeuse .surf-av-f{background-image:url(assets/surf/surfeuse.webp?v=16),linear-gradient(#5fb0f0,#1a5ad6);background-size:800% 100%,100% 100%}
 .surf-ov.has-surfeur .surf-av-m::before,.surf-ov.has-surfeur .surf-av-m::after,.surf-ov.has-surfeuse .surf-av-f::before,.surf-ov.has-surfeuse .surf-av-f::after{display:none}
+.surf-ov.g16-surfeur .surf-av-m,.surf-ov.g16-surfeuse .surf-av-f{background-size:400% 400%,100% 100%}
+.surf-btns{position:absolute;z-index:2;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);display:flex;justify-content:center;gap:14px;padding:0 16px;pointer-events:none}
+.surf-btns[hidden]{display:none}
+.surf-btns button{pointer-events:auto;touch-action:none;appearance:none;border:0;width:64px;height:64px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:#fff;cursor:pointer;background:rgba(4,22,74,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 0 0 2px rgba(224,255,145,.55),0 8px 18px -8px rgba(2,10,36,.8);-webkit-user-select:none;user-select:none}
+.surf-btns button:active{background:rgba(224,255,145,.35)}
+.surf-btns b{font:800 14px/1 "Barlow Condensed",sans-serif;letter-spacing:.6px;text-transform:uppercase}
+.surf-btns .shake{animation:surf-shake .3s}
+@keyframes surf-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}

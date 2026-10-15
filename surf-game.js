@@ -4,12 +4,14 @@
   const KEY='oceanbuddy_surf',STEP=1/60,MAX_STEPS=5;
   let ov=null,cv=null,render=null,input=null,menuEl=null,resEl=null,probe=null;
   let open=false,mode='menu',running=false,raf=0,last=0,acc=0,t0=0;
-  let G=null,demo=null,char='surfeur',best=0,keysOn=false,lastFigSeq=0,lastFallSeq=0;
+  let G=null,demo=null,char='surfeur',best=0,games=0,bestTrick='',bestTrickPts=0,bestCombo=1,btns=null,lastGrabFail=0,keysOn=false,lastFigSeq=0,lastFallSeq=0;
   const inp=root.SurfModel.newInput();
   const keys={l:false,r:false,u:false,d:false,h:false};
+  const ATLAS_V='?v=16',KEY2=KEY;
 
-  function load(){try{const o=JSON.parse(localStorage.getItem(KEY)||'{}');if(o.char==='surfeuse'||o.char==='surfeur')char=o.char;if(o.best>0)best=o.best|0;}catch(_){}}
-  function save(){try{localStorage.setItem(KEY,JSON.stringify({char,best}));}catch(_){}}
+  function load(){try{const o=JSON.parse(localStorage.getItem(KEY)||'{}');if(o.char==='surfeuse'||o.char==='surfeur')char=o.char;if(o.best>0)best=o.best|0;games=o.games|0;bestTrick=typeof o.bestTrick==='string'?o.bestTrick:'';bestTrickPts=o.bestTrickPts|0;bestCombo=o.bestCombo>1?o.bestCombo|0:1;}catch(_){}}
+  function save(){try{localStorage.setItem(KEY,JSON.stringify({char,best,games,bestTrick,bestTrickPts,bestCombo}));}catch(_){}}
+  function stats(){load();return{best,games,bestTrick,bestCombo,bestTrickPts};}
   function haptic(strong){try{const H=root.Capacitor&&root.Capacitor.Plugins&&root.Capacitor.Plugins.Haptics;if(H&&H.impact)H.impact({style:strong?'MEDIUM':'LIGHT'});}catch(_){}}
   function newGame(calm){return root.SurfModel.createGame((Math.random()*4294967296)>>>0,calm?{calm:true}:undefined);}
 
@@ -18,6 +20,10 @@
     ov.innerHTML=
       '<canvas class="surf-cv" aria-hidden="true"></canvas><i class="surf-probe" aria-hidden="true"></i>'+
       '<button type="button" class="surf-x" data-surf="close" aria-label="Fermer"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" stroke="currentColor" stroke-width="2.6" stroke-linecap="round"/></svg></button>'+
+      '<div class="surf-btns" hidden>'+
+      '<button type="button" data-act="jump"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 19V6M6 11l6-6 6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Saut</b></button>'+
+      '<button type="button" data-act="spin"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M20 12a8 8 0 1 1-3-6.2M20 4v5h-5" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg><b>360</b></button>'+
+      '<button type="button" data-act="grab"><svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M7 12V7a1.6 1.6 0 0 1 3.2 0v4M10.2 11V5.6a1.6 1.6 0 0 1 3.2 0V11M13.4 11V6.8a1.6 1.6 0 0 1 3.2 0V13c0 4-2 6-5 6s-4-1.5-5-4l-1.2-2.6a1.5 1.5 0 0 1 2.6-1.4L7 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><b>Grab</b></button></div>'+
       '<div class="surf-menu"><div class="surf-card"><small>Hors connexion</small><h2>Surf</h2><p class="surf-sub">Une manche de 75 secondes. Choisis ton personnage.</p>'+
       '<div class="surf-pick" role="radiogroup" aria-label="Personnage">'+
       '<button type="button" role="radio" data-char="surfeur"><i class="surf-av surf-av-m" aria-hidden="true"></i><b>Surfeur</b></button>'+
@@ -25,13 +31,21 @@
       '<ul class="surf-how"><li>Glisse pour te déplacer sur la vague.</li><li>Touche pour sauter, deux fois pour un 360.</li><li>Petite diagonale rapide : cutback.</li><li>Reste appuyé près du creux : tube, score doublé.</li></ul>'+
       '<p class="surf-best" data-surf-best></p>'+
       '<button type="button" class="surf-btn surf-go" data-surf="play">Jouer</button></div></div>'+
-      '<div class="surf-res" hidden><div class="surf-card"><small>Fin de la manche</small><h2 data-surf-score></h2><p data-surf-fig></p><p data-surf-record class="surf-rec"></p><p data-surf-bestscore></p>'+
+      '<div class="surf-res" hidden><div class="surf-card"><small>Fin de la manche</small><h2 data-surf-score></h2><p data-surf-fig></p><p data-surf-record class="surf-rec"></p><p data-surf-count></p><p data-surf-combo></p><p data-surf-bestscore></p>'+
       '<div class="surf-row"><button type="button" class="surf-btn surf-go" data-surf="again">Rejouer</button><button type="button" class="surf-btn surf-ghost" data-surf="quit">Quitter</button></div></div></div>';
     cv=ov.querySelector('canvas');menuEl=ov.querySelector('.surf-menu');resEl=ov.querySelector('.surf-res');probe=ov.querySelector('.surf-probe');
     render=root.SurfRender.create(cv);
     input=root.SurfInput.attach(cv,inp);
     ov.addEventListener('click',onClick);
-    ['surfeur','surfeuse'].forEach(n=>{const im=new Image();im.onload=()=>{if(im.naturalWidth>0){ov.classList.add('has-'+n);render.warm(im);}};im.src='assets/surf/'+n+'.webp';});
+    btns=ov.querySelector('.surf-btns');
+    btns.querySelectorAll('button').forEach(b=>{
+      const a=b.dataset.act;
+      b.addEventListener('pointerdown',e=>{e.preventDefault();if(mode!=='play')return;if(a==='jump')inp.tap=true;else if(a==='spin')inp.dbl=true;else inp.grab=true;try{b.setPointerCapture(e.pointerId);}catch(_){}});
+      const up=()=>{if(a==='grab')inp.grab=false;};
+      b.addEventListener('pointerup',up);b.addEventListener('pointercancel',up);b.addEventListener('lostpointercapture',up);
+      b.addEventListener('contextmenu',e=>e.preventDefault());
+    });
+    ['surfeur','surfeuse'].forEach(n=>{const im=new Image();im.onload=()=>{if(im.naturalWidth>0){ov.classList.add('has-'+n);if(im.naturalWidth>=1000&&im.naturalHeight>=1000)ov.classList.add('g16-'+n);render.warm(im);}};im.src='assets/surf/'+n+'.webp'+ATLAS_V;});
     document.body.appendChild(ov);
   }
   function theme(){
@@ -53,18 +67,22 @@
   }
   function paintPick(){ov.querySelectorAll('[data-char]').forEach(b=>{const on=b.dataset.char===char;b.classList.toggle('on',on);b.setAttribute('aria-checked',on?'true':'false');});}
   function showMenu(){
-    mode='menu';menuEl.hidden=false;resEl.hidden=true;paintPick();
+    mode='menu';menuEl.hidden=false;resEl.hidden=true;btns.hidden=true;paintPick();
     ov.querySelector('[data-surf-best]').textContent=best?'Meilleur score : '+best:'';
     demo=newGame(true);G=demo;input.reset();
     setTimeout(()=>ov&&open&&mode==='menu'&&ov.querySelector('[data-surf=play]').focus({preventScroll:true}),30);
   }
   function start(){
-    mode='play';menuEl.hidden=true;resEl.hidden=true;G=newGame(false);lastFigSeq=0;lastFallSeq=0;input.reset();acc=0;
+    mode='play';menuEl.hidden=true;resEl.hidden=true;btns.hidden=false;inp.grab=false;lastGrabFail=0;G=newGame(false);lastFigSeq=0;lastFallSeq=0;input.reset();acc=0;
     cv.focus&&cv.focus({preventScroll:true});
   }
   function finish(){
-    mode='result';input.reset();
-    const sc=Math.floor(G.score),rec=sc>best;if(rec){best=sc;save();}
+    mode='result';input.reset();inp.grab=false;btns.hidden=true;
+    const sc=Math.floor(G.score),rec=sc>best;if(rec)best=sc;
+    games++;if(G.bestFigPts>bestTrickPts){bestTrickPts=G.bestFigPts|0;bestTrick=G.bestFig;}if(G.bestCombo>bestCombo)bestCombo=G.bestCombo;save();
+    ov.querySelector('[data-surf-count]').textContent='Figures : '+G.figCount;
+    ov.querySelector('[data-surf-combo]').textContent='Meilleure combo : ×'+G.bestCombo;
+    try{root.dispatchEvent(new CustomEvent('ocean:surf-stats'));}catch(_){}
     ov.querySelector('[data-surf-score]').textContent='Score : '+sc;
     ov.querySelector('[data-surf-fig]').textContent=G.bestFig?'Meilleure figure : '+G.bestFig:'Meilleure figure : aucune';
     ov.querySelector('[data-surf-record]').textContent=rec&&sc>0?'Nouveau record !':'';
@@ -91,6 +109,7 @@
     if(mode==='play'){
       if(G.figSeq!==lastFigSeq){lastFigSeq=G.figSeq;haptic(false);}
       if(G.fallSeq!==lastFallSeq){lastFallSeq=G.fallSeq;haptic(true);}
+      if(G.grabFailSeq!==lastGrabFail){lastGrabFail=G.grabFailSeq;const gb=btns.querySelector('[data-act=grab]');gb.classList.remove('shake');void gb.offsetWidth;gb.classList.add('shake');}
       if(G.phase==='over')finish();
     }
     render.draw(G,dt,now/1000,acc>0?acc/STEP:0);
@@ -107,6 +126,7 @@
     if(k==='ArrowLeft'){keys.l=dn;keysOn=true;}else if(k==='ArrowRight'){keys.r=dn;keysOn=true;}
     else if(k==='ArrowUp'){keys.u=dn;keysOn=true;}else if(k==='ArrowDown'){keys.d=dn;keysOn=true;}
     else if(k==='Shift'){keys.h=dn;keysOn=true;}
+    else if(k==='g'||k==='G')inp.grab=dn;
     else if(k===' '&&dn&&!e.repeat){inp.tap=true;e.preventDefault();}
     else if((k==='d'||k==='D')&&dn&&!e.repeat)inp.dbl=true;
     else if((k==='c'||k==='C')&&dn&&!e.repeat)inp.cut=true;
@@ -114,9 +134,9 @@
     e.preventDefault();
   }
 
-  function openGame(){
+  function openGame(o){
     if(open)return;
-    load();if(!ov)build();
+    load();if(o&&(o.character==='surfeur'||o.character==='surfeuse')){char=o.character;save();}if(!ov)build();
     open=true;ov.classList.add('on');document.documentElement.classList.add('surf-open');
     theme();render.localize();render.setChar(char);measure();showMenu();
     root.addEventListener('resize',measure);root.addEventListener('orientationchange',measure);
@@ -130,5 +150,5 @@
     root.removeEventListener('resize',measure);root.removeEventListener('orientationchange',measure);
     document.removeEventListener('visibilitychange',onVis);document.removeEventListener('keydown',onKey,true);document.removeEventListener('keyup',onKey,true);
   }
-  root.OceanSurf={open:openGame,close,isOpen:()=>open};
+  root.OceanSurf={open:openGame,close,isOpen:()=>open,stats};
 })(window);
