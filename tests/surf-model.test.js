@@ -91,3 +91,18 @@ test('combo : figures enchaînées multiplient, la chute remet à zéro',()=>{
   const f=run(3,3.6,(i,inp)=>{if(i===5||i===55)inp.tap=true;if(i>=100)inp.mx=-1;},{calm:true,y:0.3});
   assert.equal(f.phase,'fall');assert.equal(f.comboMult,1);assert.equal(f.chain,0);assert.ok(f.bestCombo>=2);
 });
+
+test('combo plafonné à ×4 et figure répétée = moitié des points',()=>{
+  const taps=[5,55,105,155,205,255];
+  const r=run(3,5.6,(i,inp)=>{if(taps.includes(i))inp.tap=true;},{calm:true,y:0.3});
+  assert.equal(M.COMBO_MAX,4);assert.equal(r.bestCombo,4);assert.ok(r.comboMult<=4);
+  /* deux sauts : le second vaut la moitié de 40 points, multipliée par ×2 */
+  const g=M.createGame(3,{calm:true,y:0.3}),inp=M.newInput(),pts=[];let seq=0;
+  for(let i=0;i<150;i++){if(i===5||i===55)inp.tap=true;M.step(g,inp,M.DT);if(g.figSeq!==seq){seq=g.figSeq;pts.push(g.figPts);}}
+  assert.equal(pts[0],40);assert.equal(pts[1],40);
+});
+
+test('une bonne partie automatique reste dans une fourchette raisonnable',()=>{
+  const s=run(11,75.5,(i,inp)=>{const k=i%240;if(k===10||k===70)inp.tap=true;if(k===130)inp.dbl=true;if(k===200)inp.cut=true;inp.hold=k>140&&k<180;},{calm:true,y:0.4});
+  assert.ok(s.score>500&&s.score<15000,String(s.score));
+});
