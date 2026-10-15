@@ -29,6 +29,14 @@
     const wc=document.createElement('canvas');wc.width=wc.height=16;const wx=wc.getContext('2d');
     function warm(img){try{const d=img.decode?img.decode():Promise.resolve();d.then(()=>{try{wx.drawImage(img,0,0,256,256,0,0,16,16);}catch(_){}},()=>{});}catch(_){}}
     r.warm=warm;
+    r.names={};r.txtFall='Chute !';r.txtTube='TUBE ×2';
+    /* Textes du canvas : traduits une seule fois (i18n.js ne traduit que le DOM), repli sur le français. */
+    r.localize=function(){
+      const tr=function(x){try{const v=root.obT?root.obT(x):x;return v&&typeof v==='string'?v:x;}catch(_){return x;}};
+      r.txtFall=tr('Chute !');r.txtTube=tr('TUBE ×2');
+      ['Saut','Air','360','Cutback','Tube'].forEach(function(n){r.names[n]=tr(n);});
+      r.lastFigSeq=-1;
+    };
     r.setTheme=function(th){if(th.main)r.th.main=th.main;if(th.deep)r.th.deep=th.deep;if(th.bright)r.th.bright=th.bright;if(r.W)build();};
     r.setChar=function(c){
       r.char=c==='surfeuse'?'surfeuse':'surfeur';r.atlas=null;r.atlasOk=false;
@@ -199,9 +207,9 @@
       c.fillStyle=left<10?CORAL:LIME;c.fillRect(m,barY,barW*Math.max(0,left/s.dur),6);
       c.font=r.fonts.small;c.textAlign='right';c.fillStyle='#fff';c.fillText(r.secStr,m+barW,barY+12);
       /* multiplicateur tube */
-      if(s.tube){c.textAlign='center';c.font=r.fonts.score;c.fillStyle=CORAL;c.strokeText('TUBE ×2',W/2,barY+34);c.fillText('TUBE ×2',W/2,barY+34);}
+      if(s.tube){c.textAlign='center';c.font=r.fonts.score;c.fillStyle=CORAL;c.strokeText(r.txtTube,W/2,barY+34);c.fillText(r.txtTube,W/2,barY+34);}
       /* figure en cours */
-      if(s.figSeq!==r.lastFigSeq){r.lastFigSeq=s.figSeq;r.figStr=s.figSeq?s.figName+' +'+(s.figPts|0):'';}
+      if(s.figSeq!==r.lastFigSeq){r.lastFigSeq=s.figSeq;r.figStr=s.figSeq?(r.names[s.figName]||s.figName)+' +'+(s.figPts|0):'';}
       if(r.figStr&&s.figT<1.4&&s.phase!=='over'){
         const p=s.figT/1.4,sc2=p<0.15?0.6+p/0.15*0.5:1.1-p*0.1;
         c.save();c.translate(W/2,r.H*0.33);c.scale(sc2,sc2);c.globalAlpha=p>0.7?(1-p)/0.3:1;c.textAlign='center';c.textBaseline='middle';c.font=r.fonts.fig;
@@ -209,7 +217,7 @@
       }
       if(s.phase==='fall'){
         c.globalAlpha=1;c.textAlign='center';c.textBaseline='middle';c.font=r.fonts.fig;c.fillStyle=CORAL;c.strokeStyle='rgba(4,22,74,0.8)';c.lineWidth=7;
-        c.strokeText('Chute !',W/2,r.H*0.33);c.fillText('Chute !',W/2,r.H*0.33);
+        c.strokeText(r.txtFall,W/2,r.H*0.33);c.fillText(r.txtFall,W/2,r.H*0.33);
       }
     }
 

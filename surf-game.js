@@ -118,7 +118,7 @@
     if(open)return;
     load();if(!ov)build();
     open=true;ov.classList.add('on');document.documentElement.classList.add('surf-open');
-    theme();render.setChar(char);measure();showMenu();
+    theme();render.localize();render.setChar(char);measure();showMenu();
     root.addEventListener('resize',measure);root.addEventListener('orientationchange',measure);
     document.addEventListener('visibilitychange',onVis);document.addEventListener('keydown',onKey,true);document.addEventListener('keyup',onKey,true);
     run();
