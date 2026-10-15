@@ -117,6 +117,12 @@
 
   /* Ouverture : des spots de rêve en grand (vraies photos) et une recherche. Le changement d’activité reste en haut de l’écran. */
   const HERO_IDS=['rajaampat','borabora','noronha','navagio','whitehaven','macarella','tikehau','myrtos','nusapenida','trunkbay','pelosa','losroques'];
+  function surfCard(){
+    return `<section class="hf-sec hf-plan-sec hf-surf-sec" aria-label="Mini-jeu de surf"><button type="button" class="hf-plan hf-surf" data-surf-game>
+      <span class="hf-surf-ic" aria-hidden="true"><svg viewBox="0 0 64 25"><path d="M2 21C12 21 14 6 26 6c9 0 10 8 6 11-3 2-7 0-6-3 1-3 6-3 8 0 2 3 1 7 10 7h20" fill="none" stroke="#e0ff91" stroke-width="3" stroke-linecap="round"/><path d="M2 24h60" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/></svg></span>
+      <span class="hf-plan-tx"><small>Nouveau · mini-jeu</small><b>Surfe la vague, même sans réseau</b><span>Choisis ton surfeur ou ta surfeuse, glisse sur la face, entre dans le tube et enchaîne les figures.</span></span>
+      <span class="hf-plan-go" aria-hidden="true">→</span></button></section>`;
+  }
   function planCard(m){
     return `<section class="hf-sec hf-plan-sec" aria-label="Planifier par mois"><button type="button" class="hf-plan" data-map-plan>
       <span class="hf-plan-cal" aria-hidden="true">${Array.from({length:12},(_,k)=>`<i class="${k===m?'on':''}">${esc(monthName(k,'narrow'))}</i>`).join('')}</span>
@@ -235,6 +241,7 @@
     }
     if(lite){
       html+=planCard(m);
+      html+=surfCard();
       /* Rails de données : la mer chaude, la houle et le vent du mois, d’après les normales de plusieurs années. */
       const warm=pool.filter(s=>(val(s,'sea',m)??0)>=26).sort((a,b)=>Math.round(vib(b.id)/25)-Math.round(vib(a.id)/25)||val(b,'sea',m)-val(a,'sea',m));
       html+=rail('chaud',`La mer la plus chaude en ${monthName(m)}`,'26 °C et plus d’après les normales NOAA : on y entre sans frissonner.',pick(warm,{n:10,perCountry:1,used}),{data:'sea'});
@@ -311,6 +318,8 @@
   home.addEventListener('click',e=>{
     const fav=e.target.closest('[data-fav]');
     if(fav){e.stopPropagation();const id=fav.dataset.fav;if(typeof toggleFav==='function'){toggleFav(id,e);}const on=typeof favs!=='undefined'&&favs.has(id);fav.classList.toggle('on',on);if(typeof vibrate==='function')vibrate(8);return;}
+    const surf=e.target.closest('[data-surf-game]');
+    if(surf){window.OceanSurf?.open();return;}
     const more=e.target.closest('[data-hf-more]');
     if(more){
       /* « Tout voir » : la planète n’allume que les spots en saison ce mois-ci. */

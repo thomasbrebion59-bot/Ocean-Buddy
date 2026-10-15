@@ -226,6 +226,7 @@
   /* ---------- Retour (navigateur, Android) : il ferme d’abord la fenêtre ouverte au premier plan ---------- */
   const visible=el=>!!el&&el.isConnected&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden';
   function closeTopOverlay(){
+    if(window.OceanSurf?.isOpen?.()){window.OceanSurf.close();return true;}
     const newsEl=$('.as-news');if(newsEl){newsEl.querySelector('.as-news-later')?.click();return true;}
     const cele=$('.tb-cele');if(visible(cele)){(cele.querySelector('[data-tb-c=next]')||cele.querySelector('button:last-of-type'))?.click();return true;}
     const sheet=$('.tb-sheet-wrap');if(visible(sheet)){window.OceanBadges?.close?.();return true;}
