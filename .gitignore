@@ -22,3 +22,6 @@ ai-images/
 
 # Rapports du garde-fou de démarrage (npm run check:boot)
 out/boot-check/
+
+# Rapports de l’audit (out/audit/), non publiés
+out/audit/
