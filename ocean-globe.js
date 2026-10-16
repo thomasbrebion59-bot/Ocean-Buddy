@@ -378,7 +378,8 @@
     function invalidate(){dirty=true;if(active&&!raf)raf=requestAnimationFrame(frame);}
     /* Retour sur l’écran ou dans l’app : la vie reprend. */
     function wake(){lastTouch=performance.now();invalidate();}
-    document.addEventListener('visibilitychange',()=>{if(!document.hidden)wake();});
+    const onVisible=()=>{if(!document.hidden)wake();};
+    document.addEventListener('visibilitychange',onVisible);
     const easeInOut=t=>t<.5?4*t*t*t:1-(-2*t+2)**3/2;
     function frame(now){
       raf=0;if(!active)return;
@@ -974,7 +975,21 @@
       setActive(on){active=!!on;canvas.style.visibility=on?'':'hidden';layer.style.visibility=on?'':'hidden';if(on){resize();invalidate();}else{stop();cancelAnimationFrame(raf);raf=0;}},
       focus(){canvas.focus({preventScroll:true});},
       canvas,layer,
-      destroy(){dead=true;active=false;cancelAnimationFrame(raf);ro.disconnect();renderer.dispose();canvas.remove();layer.remove();}
+      destroy(){
+        if(dead)return;
+        dead=true;active=false;cancelAnimationFrame(raf);raf=0;
+        document.removeEventListener('visibilitychange',onVisible);
+        clearTimeout(ambTimer);clearTimeout(sharpTimer);clearTimeout(restTimer);clearTimeout(hdTimer);
+        Object.values(sstAnim).forEach(cancelAnimationFrame);
+        ro.disconnect();
+        /* Libère la mémoire GPU : géométries et textures de toutes les scènes, puis le contexte WebGL lui-même (limite de contextes des navigateurs). Un nouveau globe crée son propre canvas et son propre moteur. */
+        for(const sc of [scene,heavens,overlay])sc.traverse(o=>{
+          o.geometry?.dispose();
+          for(const m of [].concat(o.material||[])){for(const u of Object.values(m.uniforms||{}))if(u?.value?.isTexture)u.value.dispose();m.dispose();}
+        });
+        renderer.dispose();renderer.forceContextLoss?.();
+        canvas.remove();layer.remove();
+      }
     };
     return api;
   }
