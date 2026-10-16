@@ -108,7 +108,7 @@ body.mapfull .app-chrome{visibility:hidden}
 .omap-sheet-head:disabled{cursor:default;color:inherit;opacity:1}
 .omap-head-text{flex:1;min-width:0}
 .omap-title{display:block;font:800 17px/1.2 var(--body);color:var(--ob-navy,var(--t-deep))}
-.omap-sub{display:block;margin-top:3px;font:600 12px/1.35 var(--body);color:#5a6a8c;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.omap-sub{display:block;margin-top:3px;font:600 12px/1.35 var(--body);color:#5a6a8c;overflow:hidden;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2}
 .omap-grip,.omap-sheet-toggle{display:none}
 .omap-list{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:2px 10px 14px}
 .omap-list-intro{margin:8px 8px 8px;font:800 10px var(--body);letter-spacing:1.4px;text-transform:uppercase;color:var(--ob-cobalt,var(--t-main2))}
