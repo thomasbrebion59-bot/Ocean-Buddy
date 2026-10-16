@@ -912,7 +912,8 @@
     /* Ordinateur : la surface en 8K arrive ensuite, pour des côtes plus fines au zoom. */
     /* Surface 8K pour un zoom net (téléphones récents compris : textures 16K prises en charge). */
     /* Jamais pendant les 10 premières secondes de l’app (démarrage stable), ni dans l’app iOS (textures 4K seulement), ni pour le petit globe de l’accueil (hd:false). */
-    if(opts.hd!==false&&!document.documentElement.classList.contains('native-app')&&(!mobile&&maxTex>=8192||maxTex>=16384)&&!conn?.saveData)setTimeout(()=>loadTexture(asset('assets/globe/earth-day-8k.webp'),true).then(tex=>{if(dead)return;const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;old?.dispose();invalidate();}).catch(()=>{}),Math.max(1200,10000-performance.now()));
+    let hdTimer=0;
+    if(M.wantsHd8k({hd:opts.hd,native:document.documentElement.classList.contains('native-app'),mobile,maxTex,saveData:!!conn?.saveData}))hdTimer=setTimeout(()=>loadTexture(asset('assets/globe/earth-day-8k.webp'),true).then(tex=>{if(dead){tex.dispose();return;}const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;old?.dispose();invalidate();}).catch(()=>{}),Math.max(1200,10000-performance.now()));
     resize();applyCamera();
     /* reveal:false : la Terre apparaît directement éclairée, à sa taille (le globe de l’accueil prend le relais de la sphère CSS). */
     revealStart=reduced()||opts.reveal===false?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;starU.uI.value=.6;}

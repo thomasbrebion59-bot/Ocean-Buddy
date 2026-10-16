@@ -97,5 +97,11 @@
     const c=Math.hypot(...s)<1e-9?valid[0]:latLon(s);
     return {...c,radius:Math.max(0,...valid.map(p=>arc(c,p)))};
   }
-  return {group,bounds,inView,distance,top,vec,latLon,arc,wrapLon,mapZoom,kmPerPx,clusterPx,LEVELS,clusterLevels,levelFor,cap,EARTH_KM};
+  /* Surface 8K du globe : jamais dans l'app iOS (textures 4K seulement), jamais pour le petit globe de l'accueil (hd:false), jamais en économie de données.
+     Hors mobile dès 8192 px de texture ; sur mobile seulement si le GPU annonce 16384 px (choix assumé : téléphones récents). */
+  function wantsHd8k({hd,native,mobile,maxTex,saveData}){
+    if(hd===false||native||saveData)return false;
+    return mobile?maxTex>=16384:maxTex>=8192;
+  }
+  return {wantsHd8k,group,bounds,inView,distance,top,vec,latLon,arc,wrapLon,mapZoom,kmPerPx,clusterPx,LEVELS,clusterLevels,levelFor,cap,EARTH_KM};
 });
