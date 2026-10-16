@@ -139,3 +139,12 @@
 /* Pictogrammes SVG plats : pastille claire, marge intérieure ; sans pastille quand ils servent de glyphe de texte. */
 .ocean-v2 img.ob-ico{padding:18%;box-sizing:border-box;object-fit:contain;background:#eaf2ff;box-shadow:none}
 .ocean-v2 img.ob-ico.spico{padding:0;background:none;border-radius:0}
+
+/* Le padding en % se calcule sur la largeur du CONTENEUR, pas de l'image : dans une rangée flex large il dépassait la taille de la pastille et l'icône disparaissait (contenu à 0 px). Marges en px (~18 % de la pastille) pour la fiche. */
+.ocean-v2 #detail img.ob-ico:not(.spico){padding:5px}
+.ocean-v2 #detail .dfact img.ob-ico:not(.spico){padding:6px}
+.ocean-v2 #detail .im-context-title img.ob-ico:not(.spico){padding:11px}
+.ocean-v2 #detail .im-heading img.ob-ico:not(.spico){padding:12px}
+.ocean-v2 #detail .field-fact-icon img.ob-ico:not(.spico){padding:10px}
+.ocean-v2 #detail .im-weather-help img.ob-ico:not(.spico),.ocean-v2 #detail .field-check-emblem img.ob-ico:not(.spico),.ocean-v2 #detail .field-address-mark img.ob-ico:not(.spico){padding:9px}
+@media(max-width:700px){.ocean-v2 #detail .im-context-title img.ob-ico:not(.spico){padding:9px}.ocean-v2 #detail .im-heading img.ob-ico:not(.spico){padding:10px}.ocean-v2 #detail .field-fact-icon img.ob-ico:not(.spico){padding:8px}}
