@@ -12,9 +12,31 @@
 .hf-search b{font:750 16px/1.2 var(--body)}
 .hf-search small{font:500 13px/1.25 var(--body);color:var(--as-ink3,#7d8aa6);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .hf-search:active{transform:scale(.98)}
-/* L’accueil ne répète pas le choix d’activité : il se fait en haut de l’écran (barre des sports). */
+/* Ancienne section « Quelle aventure aujourd’hui ? » : remplacée par la rangée d’activités ci-dessous. */
 #home .poulpy-activities{display:none!important}
-.hf-hero{position:relative;overflow:hidden;isolation:isolate;border-radius:var(--as-r-xl,28px);background:#0b2d7a;aspect-ratio:4/5;min-height:430px;max-height:600px;box-shadow:0 26px 60px -30px rgba(12,29,63,.75)}
+/* L’ancienne barre « Ton activité » (bas de l’onglet Aujourd’hui) ferait doublon avec la rangée du haut. Masquée par CSS
+   dès le premier rendu (aucun décalage après la levée du rideau). */
+#home.hf-on #homeActivity{display:none!important}
+/* Choix d’activité (home-feed.js, rendu avec l’ouverture). Hauteur fixe de 52 px : aucune insertion ne décale
+   l’accueil. Cibles de 44 px ; l’activité choisie est pleine, en gras et cochée (pas seulement une couleur). */
+.hf-acts{display:flex;gap:8px;height:52px;box-sizing:border-box;overflow-x:auto;overflow-y:hidden;margin:0 calc(-1 * var(--as-gutter,16px)) 12px;padding:4px var(--as-gutter,16px);
+  scrollbar-width:none;scroll-snap-type:x proximity;scroll-padding-inline:var(--as-gutter,16px);overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.hf-acts::-webkit-scrollbar{display:none}
+.hf-act{flex:none;display:inline-flex;align-items:center;gap:7px;height:44px;min-width:44px;padding:0 14px 0 6px;box-sizing:border-box;border:1.5px solid var(--t-line,#b9cbf5);border-radius:999px;
+  background:#fff;color:var(--as-ink,#0c1d3f);font:650 14px/1 var(--body);white-space:nowrap;cursor:pointer;scroll-snap-align:start;
+  box-shadow:0 4px 12px -8px rgba(12,29,63,.4);-webkit-tap-highlight-color:transparent;transition:background-color .35s,border-color .35s,color .35s,transform .2s}
+.hf-act-ic{flex:none;width:32px;height:32px;border-radius:50%;background:var(--t-tint,#e8efff);position:relative;transition:background-color .35s}
+.hf-act-ic::before{content:"";position:absolute;inset:5px;background:var(--t-main,#2154dc);-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat;transition:background-color .35s}
+.hf-act-ok{display:none;width:16px;height:16px;flex:none;margin-left:-2px}
+.hf-act[aria-checked="true"]{background:var(--t-main,#2154dc);border-color:var(--t-deep,#0b2d7a);color:#fff;font-weight:800;box-shadow:0 3px 8px -5px var(--t-deep,#0b2d7a)}
+.hf-act[aria-checked="true"] .hf-act-ic{background:rgba(255,255,255,.2)}
+.hf-act[aria-checked="true"] .hf-act-ic::before{background:#fff}
+.hf-act[aria-checked="true"] .hf-act-ok{display:block}
+.hf-act:active{transform:scale(.96)}
+.hf-act:focus-visible{outline:3px solid var(--t-bright,#2f6bff);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){.hf-act,.hf-act-ic,.hf-act-ic::before{transition:none}}
+.reduce-motion .hf-act,.reduce-motion .hf-act-ic,.reduce-motion .hf-act-ic::before{transition:none}
+.hf-hero{position:relative;overflow:hidden;isolation:isolate;border-radius:var(--as-r-xl,28px);background:var(--t-deep,#0b2d7a);aspect-ratio:4/5;min-height:430px;max-height:600px;box-shadow:0 26px 60px -30px rgba(12,29,63,.75)}
 .hf-slides{position:absolute;inset:0;display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain}
 .hf-slides::-webkit-scrollbar{display:none}
 .hf-slide{position:relative;flex:0 0 100%;height:100%;scroll-snap-align:start;scroll-snap-stop:always;cursor:pointer;color:#fff;overflow:hidden}
@@ -52,7 +74,7 @@
 .hf-world-tx .hf-kicker{background:rgba(224,255,145,.16);color:var(--ob-lime,#e0ff91)}
 .hf-world-tx h2{margin:10px 0 6px;font:900 32px/.95 var(--as-condensed);text-transform:uppercase;letter-spacing:-.3px}
 .hf-world-tx p{margin:0 0 14px;font:500 14.5px/1.45 var(--body);color:rgba(255,255,255,.85)}
-.hf-world-go{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 18px;border:0;border-radius:999px;background:var(--ob-lime,#e0ff91);color:#0b2d7a;font:800 15px var(--body);cursor:pointer}
+.hf-world-go{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 18px;border:0;border-radius:999px;background:var(--ob-lime,#e0ff91);color:var(--t-acc-ink,#0b2d7a);font:800 15px var(--body);cursor:pointer}
 .hf-world-go svg{width:18px;height:18px}
 
 /* ---------- Rails de photos ---------- */
@@ -61,7 +83,7 @@
 .hf-rail{display:flex;gap:12px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:var(--as-gutter,16px);
   margin:0 calc(-1 * var(--as-gutter,16px));padding:2px var(--as-gutter,16px) 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .hf-rail::-webkit-scrollbar{display:none}
-.hf-card{position:relative;flex:0 0 58%;max-width:230px;aspect-ratio:4/5;scroll-snap-align:start;overflow:hidden;isolation:isolate;border-radius:var(--as-r-l,22px);background:#0b2d7a;color:#fff;cursor:pointer;
+.hf-card{position:relative;flex:0 0 58%;max-width:230px;aspect-ratio:4/5;scroll-snap-align:start;overflow:hidden;isolation:isolate;border-radius:var(--as-r-l,22px);background:var(--t-deep,#0b2d7a);color:#fff;cursor:pointer;
   box-shadow:0 14px 30px -18px rgba(12,29,63,.6);transition:transform .25s cubic-bezier(.32,1.28,.42,1)}
 .hf-rail.big .hf-card{flex-basis:78%;max-width:320px;aspect-ratio:3/4}
 .hf-card:active{transform:scale(.97)}
@@ -74,7 +96,7 @@
 .hf-rail.big .hf-card-tx h3{font-size:30px}
 .hf-card-tx p{display:flex;flex-wrap:wrap;gap:6px;margin:0}
 .hf-card-tx p span{display:inline-flex;align-items:center;height:24px;padding:0 9px;border-radius:999px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);font:700 11.5px var(--body);white-space:nowrap}
-.hf-card-tx p .hf-season{background:var(--ob-lime,#e0ff91);color:#0c1d3f}
+.hf-card-tx p .hf-season{background:var(--ob-lime,#e0ff91);color:var(--t-acc-ink,#0c1d3f)}
 .hf-fav{position:absolute;top:10px;right:10px;display:grid;place-items:center;width:38px;height:38px;padding:0;border:0;border-radius:50%;cursor:pointer;
   background:rgba(10,20,40,.32);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);color:#fff}
 .hf-fav svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:2}
@@ -94,10 +116,18 @@
 /* ---------- Envies du moment ---------- */
 .hf-moods .as-sec{margin-top:28px}
 .hf-mood-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.hf-mood{position:relative;overflow:hidden;isolation:isolate;aspect-ratio:1/1;border:0;border-radius:var(--as-r-l,22px);padding:0;cursor:pointer;color:#fff;text-align:left;background:#0b2d7a;box-shadow:0 12px 26px -16px rgba(12,29,63,.6)}
+.hf-mood{position:relative;overflow:hidden;isolation:isolate;aspect-ratio:1/1;border:0;border-radius:var(--as-r-l,22px);padding:0;cursor:pointer;color:#fff;text-align:left;background:var(--t-deep,#0b2d7a);box-shadow:0 12px 26px -16px rgba(12,29,63,.6)}
 .hf-mood img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
 .hf-mood::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(0,0,0,0) 35%,rgba(3,12,32,.78))}
 .hf-mood b{position:absolute;left:12px;right:10px;bottom:28px;font:800 20px/1 var(--as-condensed);text-transform:uppercase;letter-spacing:-.2px}
 .hf-mood small{position:absolute;left:12px;bottom:11px;font:650 12px var(--body);opacity:.85}
 .hf-mood:active{transform:scale(.97)}
 @media(min-width:960px){.hf-mood-grid{grid-template-columns:repeat(4,1fr)}}
+
+/* ---------- Couleurs de l’activité ----------
+   Sans activité, l’accueil garde exactement le cobalt d’origine ; avec une activité, la carte de la planète
+   et le planificateur prennent la palette (--t-*, activity-theme.css). Les photos ne sont jamais teintées. */
+html[data-act] .hf-world{background:radial-gradient(90% 70% at 50% 16%,var(--t-main2) 0%,var(--t-main) 48%,var(--t-deep) 100%)}
+html[data-act] .hf-plan{background:radial-gradient(140% 120% at 0% 0%,color-mix(in srgb,var(--t-acc) 20%,transparent),transparent 50%),linear-gradient(140deg,var(--t-deep) 0%,var(--t-main) 70%,var(--t-main2) 120%);box-shadow:0 22px 40px -26px var(--t-deep)}
+html[data-act] .hf-plan-cal i.on,html[data-act] .hf-plan-go{background:var(--t-acc);color:var(--t-acc-ink)}
+html[data-act] .hf-plan-tx small{color:var(--t-acc)}

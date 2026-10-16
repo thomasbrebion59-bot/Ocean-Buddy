@@ -115,7 +115,7 @@
     </section>`;
   }
 
-  /* Ouverture : des spots de rêve en grand (vraies photos) et une recherche. Le changement d’activité reste en haut de l’écran. */
+  /* Ouverture : une recherche, le choix d’activité, puis des spots de rêve en grand (vraies photos). */
   const HERO_IDS=['rajaampat','borabora','noronha','navagio','whitehaven','macarella','tikehau','myrtos','nusapenida','trunkbay','pelosa','losroques'];
   function planCard(m){
     return `<section class="hf-sec hf-plan-sec" aria-label="Planifier par mois"><button type="button" class="hf-plan" data-map-plan>
@@ -128,10 +128,31 @@
     const start=new Date().getDate()%Math.max(1,list.length);
     return list.slice(start).concat(list.slice(0,start)).slice(0,8);
   }
+  /* Choix d’activité : une pastille par activité de SPORTS (plus « Tous »), pictogrammes plats monochromes
+     (assets/icons/*-mono.svg, sans mascotte). Rendue avec l’ouverture, sous le rideau : sa hauteur est fixe (CSS)
+     et elle n’est jamais insérée après coup. La source de vérité reste activeSport (app.js) ; acts() ne fait que
+     relire cet état, syncActs() met à jour les attributs sur place. */
+  const curSport=()=>(typeof activeSport!=='undefined'&&activeSport)||'all';
+  function actButton(id,label,on){
+    const ic=id==='all'?'all':id;
+    return `<button type="button" class="hf-act" role="radio" aria-checked="${on}" tabindex="${on?0:-1}" data-hf-act="${esc(id)}"><span class="hf-act-ic" style="--ic:url('assets/icons/${esc(ic)}-mono.svg')" aria-hidden="true"></span><span class="hf-act-tx">${esc(label)}</span><svg class="hf-act-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></button>`;
+  }
+  function acts(){
+    const list=typeof SPORTS!=='undefined'?SPORTS:[],cur=curSport();
+    return `<div class="hf-acts" role="radiogroup" aria-label="Ton activité">${actButton('all','Tous',cur==='all')}${list.map(a=>actButton(a.id,String(a.label).replace(/\s*\(.*\)/,''),cur===a.id)).join('')}</div>`;
+  }
+  function syncActs(want){
+    const cur=typeof want==='string'?want:curSport();let on=null;
+    home.querySelectorAll('.hf-act[data-hf-act]').forEach(b=>{const v=b.dataset.hfAct===cur;if(v)on=b;b.setAttribute('aria-checked',v);b.tabIndex=v?0:-1;});
+    /* La pastille choisie reste visible dans la rangée (défilement horizontal seulement, jamais la page). */
+    const row=on?.parentElement;
+    if(row&&on){const a=on.offsetLeft,w=on.offsetWidth;if(a<row.scrollLeft||a+w>row.scrollLeft+row.clientWidth)row.scrollLeft=Math.max(0,a-16);}
+  }
   function hero(){
     const n=SPOTS.length,slides=heroSpots();
     return `<section class="hf-top" aria-label="Trouve ton spot">
       <button type="button" class="hf-search" data-hf-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span><b>Où veux-tu aller ?</b><small>${n} spots · plages, lagons, vagues, récifs</small></span></button>
+      ${acts()}
       <div class="hf-hero" data-hf-hero>
         <div class="hf-slides" role="list">${slides.map((s,i)=>{const p=photo(s),a=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');return `<article class="hf-slide" role="listitem" data-spot="${esc(s.id)}" aria-label="${esc(String(s.name).split(' — ')[0])}, ${esc(s.country||'')}">
           <img src="${esc(p.src)}" alt="" ${i?'loading="lazy"':'fetchpriority="high" data-fade="off"'} decoding="async">
@@ -270,7 +291,7 @@
     if($('.hf-top',home))return;
     const tmp=document.createElement('div');tmp.innerHTML=hero();
     ($('.as-large',home)||home.firstElementChild)?.after(tmp.firstElementChild);
-    home.classList.add('hf-on');
+    home.classList.add('hf-on');syncActs();
   }
   function mount(){
     mountHero();
@@ -321,6 +342,14 @@
     }
     const jump=e.target.closest('[data-hf-jump]');
     if(jump){const sec=home.querySelector(`[data-hf="${jump.dataset.hfJump}"]`);sec?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});return;}
+    const act=e.target.closest('[data-hf-act]');
+    if(act){
+      /* Depuis l’accueil, on reste sur l’accueil : seule l’interface prend les couleurs de l’activité. */
+      const id=act.dataset.hfAct==='all'?null:act.dataset.hfAct;
+      /* Retour immédiat sur la pastille touchée ; l’état réel revient par « ocean:sport » quand l’activité est appliquée. */
+      if((id||'all')!==curSport()&&typeof setSport==='function'){syncActs(id||'all');setSport(id,{stay:true});}
+      return;
+    }
     const search=e.target.closest('[data-hf-search]');
     if(search){document.querySelector('.mobile-search')?.click();return;}
     const open=e.target.closest('[data-hf-open]')||e.target.closest('.hf-slide[data-spot]');
@@ -330,7 +359,20 @@
     const card=e.target.closest('.hf-card[data-spot]');
     if(card&&typeof openSpot==='function'){openSpot(card.dataset.spot);}
   });
-  home.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.matches('.hf-card')){e.preventDefault();e.target.click();}});
+  home.addEventListener('keydown',e=>{
+    if((e.key==='Enter'||e.key===' ')&&e.target.matches('.hf-card')){e.preventDefault();e.target.click();return;}
+    /* Groupe radio : les flèches déplacent le focus, Espace ou Entrée choisit (motif ARIA « radio group »). */
+    if(e.target.matches('.hf-act')&&['ArrowRight','ArrowLeft','ArrowDown','ArrowUp','Home','End'].includes(e.key)){
+      const all=[...home.querySelectorAll('.hf-act')],i=all.indexOf(e.target),rtl=getComputedStyle(e.target).direction==='rtl';
+      const step=(e.key==='ArrowRight'||e.key==='ArrowDown')!==rtl?1:-1;
+      const j=e.key==='Home'?0:e.key==='End'?all.length-1:(i+step+all.length)%all.length;
+      e.preventDefault();all[j]?.focus();
+    }
+  });
+  /* L’activité a changé ailleurs (barre des sports, Explorer, carte, navigation) : la rangée suit, sans rendu. */
+  document.addEventListener('ocean:sport',()=>syncActs());
+  /* Scène interrompue ou annulée avant le changement : la pastille revient à l’activité réellement appliquée. */
+  document.addEventListener('ocean:transition',e=>{if(!e.detail)syncActs();});
 
   /* Démarrage : un seul montage visible. Saisons, éclat des photos et normales légères sont attendus ensemble
      (au plus jusqu’à 3 s après le début du démarrage), puis le fil est monté une fois et le rideau peut se lever. */
@@ -349,5 +391,5 @@
   Boot?.after(()=>{lastTouch=Date.now();watchPlanet();});
   /* Langue changée : on reconstruit (noms des mois). */
   window.addEventListener('ocean:lang',()=>{if(built)mount();});
-  window.OceanHomeFeed={refresh:mount,seasonLabel};
+  window.OceanHomeFeed={refresh:mount,seasonLabel,syncActs};
 })();

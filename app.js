@@ -270,15 +270,26 @@ function renderSportFilters(){
   let h='<div class="chip sp-chip'+(activeSport?'':' active')+'" onclick="setSport(null)">'+sportIcon('all')+' Tous</div>';
   h+=SPORTS.map(s=>{const a=activeSport===s.id;return `<div class="chip sp-chip${a?' active':''}" ${a?`style="background:linear-gradient(135deg,${s.color},${s.color}cc);border-color:transparent;box-shadow:0 8px 18px ${s.color}55"`:''} data-sp="${s.id}" onclick="setSport('${s.id}')">${sportIcon(s.id,a?'#fff':null)} ${s.label}</div>`;}).join('');
   el.innerHTML=h;
+  syncActivity();
 }
-function setSport(id){
+/* Une seule source de vérité : activeSport. Toutes les voies qui la changent (accueil, barre des sports, carte
+   d’Explorer, navigation, recherche) redessinent la barre des sports ; on aligne alors les couleurs de l’interface
+   et on prévient l’accueil, qui met à jour sa rangée sur place (attributs seulement, aucun rendu). */
+function syncActivity(){
+  try{if(window.OceanTheme&&window.OceanTheme.current!==(activeSport||''))window.OceanTheme.set(activeSport);}catch(e){}
+  try{document.dispatchEvent(new CustomEvent('ocean:sport',{detail:activeSport||'all'}));}catch(e){}
+}
+/* opts.stay : choix fait depuis l’accueil (rangée d’activités, fin du choix d’activité) ; l’interface change de
+   couleurs mais l’écran courant reste affiché (pas de saut vers Explorer). */
+function setSport(id,opts){
+  const stay=!!(opts&&opts.stay);
   /* Choisir une activité, c’est entrer dans son élément : transition immersive, l’écran change sous la scène. */
-  if(id&&SPORTMAP[id]&&window.OceanTransition){window.OceanTransition.play(id,transition=>applySport(id,transition));return;}
-  if(!id&&activeSport&&window.OceanTransition?.neutral){window.OceanTransition.neutral(()=>applySport(null));return;}
+  if(id&&SPORTMAP[id]&&window.OceanTransition){window.OceanTransition.play(id,transition=>applySport(id,transition,stay));return;}
+  if(!id&&activeSport&&window.OceanTransition?.neutral){window.OceanTransition.neutral(()=>applySport(null,null,stay));return;}
   window.OceanTransition?.cancel?.();
-  applySport(id);
+  applySport(id,null,stay);
 }
-function applySport(id,transition){
+function applySport(id,transition,stay){
   window.OceanNavigation?.begin();
   activeSport=id&&SPORTMAP[id]?id:null;chosenSport=activeSport||'all';
   window.OceanTheme?.set(activeSport);
@@ -295,11 +306,11 @@ function applySport(id,transition){
     setTimeout(renderHome,1200);
   };
   if(transition){
-    go('spots');
+    if(!stay)go('spots');
     /* Les fiches (photos et SVG) se préparent sur l’image suivante, sous la scène opaque. */
     return transition.nextFrame().then(()=>{if(transition.isCurrent())render();});
   }
-  render();go('spots');
+  render();if(!stay)go('spots');
 }
 /* ====== GÉOLOCALISATION / AUTOUR DE MOI ====== */
 let userPos=null,nearMode=false,userMarker=null;
@@ -1879,7 +1890,8 @@ function finishOnb(){
   const o=document.getElementById('onb');o.classList.add('hide');setTimeout(()=>o.style.display='none',560);
   /* Fin de l’onboarding complet ou du choix rapide d’activité : il ne reviendra plus au lancement. */
   quickGate=false;onbDone=true;saveState();
-  setSport(chosenSport==='all'?null:chosenSport);
+  /* A-02 : l’onboarding et le choix d’activité ouvert depuis l’accueil ramènent à l’accueil, pas à Explorer. */
+  setSport(chosenSport==='all'?null:chosenSport,{stay:true});
   realHomeForecast();
 }
 
