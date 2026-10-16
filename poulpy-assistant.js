@@ -49,7 +49,8 @@
     try{
       const live=s&&typeof LIVE!=='undefined'&&LIVE?.[s.id]?LIVE[s.id]:null;
       const r=await fetch(endpoint,{method:'POST',headers:{'content-type':'application/json'},signal:controller.signal,body:JSON.stringify({message:question,history:chatHistory.slice(-8),spotId:s?.id||null,activity:s?detailAct(s):activeSport,level:chosenLevel,conditions:live?{wave:live.wave,wind:live.wind,water:live.water}:null})});
-      const data=await r.json();if(!r.ok||!data.reply)throw new Error(data.error||'unavailable');
+      /* Le statut HTTP prime : un 429 au corps HTML (limiteur Netlify) reste une limite momentanée. */
+      const data=await r.json().catch(()=>({}));if(!r.ok||!data.reply)throw new Error(r.status===429?'rate_limited':(data.error||'unavailable'));
       hideTyping();addMsg('bot',aiFormat(data.reply));spotLinks(Array.isArray(data.spots)?data.spots:[]);remember(question,data.reply);status='ready';
     }catch(e){hideTyping();status='offline';addMsg('bot',e.message==='rate_limited'||e.message==='provider_limit'?'Poulpy IA a atteint sa limite momentanée. Réessaie un peu plus tard.':'La connexion à Poulpy IA est indisponible pour le moment. Tu peux réessayer ou consulter le guide intégré.');fallbackButton(question);}
     finally{clearTimeout(timer);controller=null;setBusy(false);setChatStatus();if($('#chatSheet').classList.contains('open'))input.focus();}
