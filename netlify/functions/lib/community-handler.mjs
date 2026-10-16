@@ -57,7 +57,8 @@ export function createCommunityHandler({env=process.env,fetcher=fetch,now=Date.n
   async function addEvent(actor,entryId,action){await db('community_moderation_events',{}, {method:'POST',body:{actor_id:actor,entry_id:entryId,action},prefer:'return=minimal'});}
   return async function(request){
     const origin=request.headers.get('origin');
-    const headers={'content-type':'application/json; charset=utf-8','cache-control':'no-store','vary':'Origin','x-content-type-options':'nosniff'};
+    // Same defensive headers as Poulpy: these JSON answers are never a page to frame, sniff or follow links from.
+    const headers={'content-type':'application/json; charset=utf-8','cache-control':'no-store','vary':'Origin','x-content-type-options':'nosniff','x-frame-options':'DENY','referrer-policy':'no-referrer','content-security-policy':"default-src 'none'; frame-ancestors 'none'",'cross-origin-resource-policy':'cross-origin'};
     if(origin&&allowed.includes(origin))headers['access-control-allow-origin']=origin;
     const json=(value,status=200)=>new Response(JSON.stringify(value),{status,headers});
     if(origin&&!allowed.includes(origin))return json({error:'origin_not_allowed'},403);
