@@ -71,6 +71,8 @@
     background:var(--as-glass)!important;-webkit-backdrop-filter:var(--as-blur);backdrop-filter:var(--as-blur);
     box-shadow:var(--as-glass-shadow),inset 0 1px 0 rgba(255,255,255,.75)!important;
     transition:transform .35s var(--as-ease),opacity .3s}
+  /* Avec une activité, le verre est légèrement teinté par sa palette ; texte encre, contraste inchangé. */
+  html[data-act] .ocean-v2 .nav{background:color-mix(in srgb,var(--t-tint) 84%,transparent)!important;border-color:color-mix(in srgb,var(--t-line) 60%,transparent)}
   .ocean-v2 .nav::before,.ocean-v2 .nav::after{display:none}
   .ocean-v2 .nav-pill{display:none}
   .ocean-v2 .nav>button[data-s],html[data-act] .ocean-v2 .nav>button[data-s]{
@@ -81,7 +83,7 @@
   .ocean-v2 .nav>button[data-s] .tab-ic{position:relative;width:26px;height:26px;display:grid;place-items:center}
   .ocean-v2 .nav>button[data-s] .tab-ic svg{position:absolute;width:24px;height:24px;transition:opacity .2s,transform .3s var(--as-spring)}
   .ocean-v2 .nav>button[data-s] .tab-ic .on{opacity:0;transform:scale(.7)}
-  .ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{color:var(--as-accent)!important;background:rgba(31,85,224,.1)!important}
+  .ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{color:var(--as-accent)!important;background:color-mix(in srgb,var(--as-accent) 10%,transparent)!important}
   html[data-act] .ocean-v2 .nav>button[data-s].active,html[data-act] .ocean-v2 .nav>button[aria-current=page]{background:color-mix(in srgb,var(--as-accent) 12%,transparent)!important}
   .ocean-v2 .nav>button[aria-current=page] .tab-ic .on,.ocean-v2 .nav>button.active .tab-ic .on{opacity:1;transform:none}
   .ocean-v2 .nav>button[aria-current=page] .tab-ic .off,.ocean-v2 .nav>button.active .tab-ic .off{opacity:0;transform:scale(.7)}
@@ -237,7 +239,7 @@ body.explore-immersive .ex-regions{display:flex}
 /* Bande des continents : photos dans le tiroir, en vue du monde. */
 .ex-regions{gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;padding:2px 14px 14px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
 .ex-regions::-webkit-scrollbar{display:none}
-.ex-regions button{flex:0 0 132px;scroll-snap-align:start;position:relative;height:96px;padding:0;border:0;border-radius:18px;overflow:hidden;cursor:pointer;background:#0b2d7a;color:#fff;text-align:left;box-shadow:0 8px 20px -12px rgba(12,29,63,.6)}
+.ex-regions button{flex:0 0 132px;scroll-snap-align:start;position:relative;height:96px;padding:0;border:0;border-radius:18px;overflow:hidden;cursor:pointer;background:var(--t-deep,#0b2d7a);color:#fff;text-align:left;box-shadow:0 8px 20px -12px rgba(12,29,63,.6)}
 .ex-regions img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .ex-regions button::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 30%,rgba(3,12,32,.78))}
 .ex-regions b{position:absolute;z-index:1;left:11px;right:8px;bottom:22px;font:800 15px/1.1 var(--body);letter-spacing:-.2px}
@@ -294,6 +296,7 @@ body.explore-immersive .ex-regions{display:flex}
 /* ================= Passeport océan (passport.js) ================= */
 .pp{margin:22px 0 6px;padding:18px 16px 16px;border-radius:var(--as-r-xl,28px);color:#fff;
   background:radial-gradient(120% 90% at 100% 0%,#2a5fd8 0%,#0b2d7a 55%,#071a48 100%);box-shadow:0 22px 50px -28px rgba(7,26,72,.9);position:relative;overflow:hidden}
+html[data-act] .pp{background:radial-gradient(120% 90% at 100% 0%,var(--t-main2) 0%,var(--t-deep) 55%,color-mix(in srgb,var(--t-deep) 70%,#000) 100%);box-shadow:0 22px 50px -28px var(--t-deep)}
 .pp::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 9px);pointer-events:none}
 .pp-head{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .pp-head small{display:block;font:700 11px var(--body);letter-spacing:1.6px;text-transform:uppercase;color:var(--ob-lime,#e0ff91)}
@@ -302,15 +305,15 @@ body.explore-immersive .ex-regions{display:flex}
 .pp-map{position:relative;margin:14px 0 8px;border-radius:16px;overflow:hidden;aspect-ratio:1200/473;background:#0a1d4a;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
 .pp-map img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .pp-dot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;display:inline-block}
-.pp-dot.been{background:var(--ob-lime,#e0ff91);box-shadow:0 0 0 2px #0b2d7a}
-.pp-dot.wish{background:#ff7a8a;box-shadow:0 0 0 2px #0b2d7a}
+.pp-dot.been{background:var(--ob-lime,#e0ff91);box-shadow:0 0 0 2px var(--t-deep,#0b2d7a)}
+.pp-dot.wish{background:#ff7a8a;box-shadow:0 0 0 2px var(--t-deep,#0b2d7a)}
 .pp-legend{position:relative;display:flex;gap:16px;font:600 12.5px var(--body);color:rgba(255,255,255,.8)}
 .pp-legend span{display:inline-flex;align-items:center;gap:7px}.pp-legend .pp-dot{position:static;margin:0}
 .pp-stats{position:relative;display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:14px 0 12px}
 .pp-stat{padding:10px 4px;border-radius:14px;background:rgba(255,255,255,.1);text-align:center}
 .pp-stat b{display:block;font:800 22px/1 var(--body)}.pp-stat span{display:block;margin-top:4px;font:600 11px/1.2 var(--body);color:rgba(255,255,255,.75)}
 .pp-empty{position:relative;margin:0 0 12px;font:500 14px/1.45 var(--body);color:rgba(255,255,255,.85)}
-.pp-go{position:relative;width:100%;height:48px;border:0;border-radius:999px;background:var(--ob-lime,#e0ff91);color:#0b2d7a;font:800 15px var(--body);cursor:pointer}
+.pp-go{position:relative;width:100%;height:48px;border:0;border-radius:999px;background:var(--ob-lime,#e0ff91);color:var(--t-acc-ink,#0b2d7a);font:800 15px var(--body);cursor:pointer}
 
 /* ================= Nouveautés 1.3 ================= */
 .as-news{position:fixed;inset:0;z-index:400;display:flex;align-items:flex-end;justify-content:center;padding:12px;background:rgba(2,8,26,.0);transition:background .3s}
@@ -320,7 +323,7 @@ body.explore-immersive .ex-regions{display:flex}
 .as-news.open .as-news-card{transform:none;opacity:1}
 .as-news-hero{position:relative;margin:0 -20px 18px;height:190px;overflow:hidden;border-radius:32px 32px 0 0;background:#000}
 .as-news-hero img{width:100%;height:100%;object-fit:cover;object-position:50% 70%}
-.as-news-hero span{position:absolute;left:20px;top:18px;padding:6px 11px;border-radius:999px;background:var(--ob-lime,#e0ff91);color:#0b2d7a;font:800 12px var(--body);letter-spacing:.4px}
+.as-news-hero span{position:absolute;left:20px;top:18px;padding:6px 11px;border-radius:999px;background:var(--ob-lime,#e0ff91);color:var(--t-acc-ink,#0b2d7a);font:800 12px var(--body);letter-spacing:.4px}
 .as-news h2{margin:0 0 14px;font:800 30px/1 var(--as-condensed);text-transform:uppercase;letter-spacing:-.3px;color:var(--as-deep)}
 .as-news ul{list-style:none;margin:0 0 18px;padding:0;display:grid;gap:12px}
 .as-news li{display:grid;gap:2px;padding:0 0 0 30px;position:relative}

@@ -65,10 +65,10 @@ body.has-app-back #detail .back-btn{display:none}
 .badge .how{font-size:9px;line-height:1.25;color:#8a9aa9;margin-top:4px;padding:0 4px}
 
 /* ---------- Série de jours ---------- */
-.sd.today .dd{box-shadow:0 0 0 2px #e0ff91,0 0 0 4px rgba(33,84,220,.35)}
+.sd.today .dd{box-shadow:0 0 0 2px #e0ff91,0 0 0 4px color-mix(in srgb,var(--t-main) 35%,transparent)}
 
 /* ---------- Réglages ---------- */
-.set-about a{color:var(--t-main);font-weight:700;text-decoration:none;border-bottom:1px solid rgba(33,84,220,.25)}
+.set-about a{color:var(--t-main);font-weight:700;text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--t-main) 25%,transparent)}
 .set-about a:hover{border-bottom-color:var(--t-main)}
 .settings-btn svg{display:block;margin:auto}
 
