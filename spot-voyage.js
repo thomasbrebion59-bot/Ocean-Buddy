@@ -346,8 +346,8 @@
     if(window.pannellum)return Promise.resolve(window.pannellum);
     if(pannellumPromise)return pannellumPromise;
     pannellumPromise=new Promise((resolve,reject)=>{
-      const css=document.createElement('link');css.rel='stylesheet';css.href=PANNELLUM+'pannellum.css';document.head.append(css);
-      const js=document.createElement('script');js.src=PANNELLUM+'pannellum.js';js.onload=()=>resolve(window.pannellum);js.onerror=()=>{pannellumPromise=null;reject();};document.head.append(js);
+      const css=document.createElement('link');css.rel='stylesheet';css.href=PANNELLUM+'pannellum.css';css.integrity='sha384-02yn80EH0cF+s23taAmuhEZ04p3CTbQvV0QZMr2reUxajpfvcLNKlzsPkZwx14mf';css.crossOrigin='anonymous';document.head.append(css);
+      const js=document.createElement('script');js.src=PANNELLUM+'pannellum.js';js.integrity='sha384-S5+w/JlcNAOymqXGNrvzn2F++XsaHTJdex6KE5VbKryfFgqJiRUJOgOkUqaiOZTf';js.crossOrigin='anonymous';js.onload=()=>resolve(window.pannellum);js.onerror=()=>{pannellumPromise=null;reject();};document.head.append(js);
     });
     return pannellumPromise;
   }
