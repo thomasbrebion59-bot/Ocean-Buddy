@@ -14,6 +14,8 @@ self.addEventListener('activate',event=>{
   event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>!k.startsWith(VERSION)).map(k=>caches.delete(k)))).then(()=>self.clients.claim()));
 });
 
+/* Jamais en cache : une réponse privée ou marquée no-store, ni une requête authentifiée. */
+const storable=(request,response)=>!request.headers.has('authorization')&&!/(?:^|,)\s*(?:no-store|private)\b/i.test(response.headers.get('cache-control')||'');
 async function trim(name,max){
   const cache=await caches.open(name);const keys=await cache.keys();
   for(let i=0;i<keys.length-max;i++)await cache.delete(keys[i]);
@@ -22,7 +24,7 @@ async function networkFirst(request){
   const cache=await caches.open(PAGES);
   try{
     const response=await fetch(request);
-    if(response.ok)cache.put(request,response.clone());
+    if(response.ok&&storable(request,response))cache.put(request,response.clone());
     return response;
   }catch(error){
     return (await cache.match(request,{ignoreSearch:true}))||(await cache.match('index.html'))||Response.error();
@@ -32,7 +34,7 @@ async function networkFirst(request){
 async function staleWhileRevalidate(request){
   const cache=await caches.open(STATIC);
   const hit=await cache.match(request);
-  const update=fetch(request).then(response=>{if(response.ok){cache.put(request,response.clone());trim(STATIC,600);}return response;}).catch(()=>hit);
+  const update=fetch(request).then(response=>{if(response.ok&&storable(request,response)){cache.put(request,response.clone());trim(STATIC,600);}return response;}).catch(()=>hit);
   return hit||update;
 }
 async function cacheFirst(request){
@@ -40,13 +42,13 @@ async function cacheFirst(request){
   const hit=await cache.match(request);
   if(hit)return hit;
   const response=await fetch(request);
-  if(response.ok||response.type==='opaque'){cache.put(request,response.clone());trim(STATIC,600);}
+  if((response.ok&&storable(request,response))||response.type==='opaque'){cache.put(request,response.clone());trim(STATIC,600);}
   return response;
 }
 
 self.addEventListener('fetch',event=>{
   const request=event.request;
-  if(request.method!=='GET')return;
+  if(request.method!=='GET'||request.headers.has('authorization'))return;
   const url=new URL(request.url);
   if(request.mode==='navigate'&&url.origin===location.origin){event.respondWith(networkFirst(request));return;}
   if(url.origin===location.origin){
