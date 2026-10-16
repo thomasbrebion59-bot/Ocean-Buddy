@@ -4,7 +4,8 @@
    arrêtées onglet caché ou mouvement réduit. */
 (() => {
   'use strict';
-  const COLORS={surf:'#1d6cf0',bodyboard:'#2a8cf0',baignade:'#0e9cc4',paddle:'#0f9e86',kayak:'#4c9a25',snorkeling:'#0a9aa2',plongee:'#082d63',kitesurf:'#ee5741',windsurf:'#7a44d8'};
+  /* Couleur de la barre d’état : --t-nav-b de chaque palette (activity-theme.css). */
+  const COLORS={surf:'#1d6cf0',bodyboard:'#0f74da',baignade:'#0b7e9e',paddle:'#0d8470',kayak:'#418320',snorkeling:'#088188',plongee:'#082d63',kitesurf:'#d4361f',windsurf:'#7a44d8'};
   /* Mouvement des particules par activité. */
   const KIND={plongee:'bubbles',snorkeling:'bubbles',baignade:'sparkle',surf:'foam',bodyboard:'foam',paddle:'sparkle',kayak:'drift',kitesurf:'wind',windsurf:'wind'};
   const WAVE='<svg viewBox="0 0 1200 150" preserveAspectRatio="none"><path d="M0 70 C100 30 200 30 300 70 S500 110 600 70 S800 30 900 70 S1100 110 1200 70 V150 H0Z"/></svg>';

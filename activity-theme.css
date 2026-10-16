@@ -6,15 +6,35 @@
   --t-nav-a:#2360e8;--t-nav-b:#1a4fd6;--t-nav-c:#1440b8;--t-acc:#e0ff91;--t-acc-ink:#0b2d7a;--t-cta:#ff7a55;--t-cta-ink:#1b1410;
   --t-glow:rgba(47,107,255,.35);--t-wash:rgba(47,107,255,.14);
 }
-html[data-act="surf"]{--t-main:#1a5ad6;--t-main2:#1d6cf0;--t-deep:#082a78;--t-deep2:#123a8c;--t-tint:#e4efff;--t-line:#b3cdf8;--t-page:#eef5ff;--t-bright:#3a8bff;--t-deep-b:#0d3fa8;--t-nav-a:#3a8bff;--t-nav-b:#1d6cf0;--t-nav-c:#0f47c4;--t-acc:#e6ffa3;--t-glow:rgba(58,139,255,.42);--t-wash:rgba(58,139,255,.2)}
-html[data-act="bodyboard"]{--t-main:#1470d8;--t-main2:#2586ee;--t-deep:#0a3a7e;--t-deep2:#125090;--t-tint:#e3f1ff;--t-line:#b0d5f8;--t-page:#edf6ff;--t-bright:#4aa6ff;--t-deep-b:#0e5cb0;--t-nav-a:#54b0ff;--t-nav-b:#2a8cf0;--t-nav-c:#1567cc;--t-acc:#ffe680;--t-acc-ink:#4a3200;--t-glow:rgba(74,166,255,.45);--t-wash:rgba(74,166,255,.22)}
-html[data-act="baignade"]{--t-main:#087ea6;--t-main2:#0e9cc4;--t-deep:#053f58;--t-deep2:#0a5876;--t-tint:#dff5fb;--t-line:#a5dcec;--t-page:#ecf9fc;--t-bright:#22b8dd;--t-deep-b:#08688a;--t-nav-a:#33c2e4;--t-nav-b:#0e9cc4;--t-nav-c:#087a9c;--t-acc:#fff3a6;--t-acc-ink:#4a3a00;--t-glow:rgba(34,184,221,.42);--t-wash:rgba(34,184,221,.2)}
-html[data-act="paddle"]{--t-main:#0b8a72;--t-main2:#0f9e86;--t-deep:#05453a;--t-deep2:#0a5e51;--t-tint:#dff5ed;--t-line:#a8dfd0;--t-page:#f0f8f2;--t-bright:#22b89b;--t-deep-b:#087060;--t-nav-a:#2ec2a4;--t-nav-b:#0f9e86;--t-nav-c:#097a68;--t-acc:#ffe8a0;--t-acc-ink:#3d2c00;--t-cta:#ff9a5c;--t-glow:rgba(34,184,155,.42);--t-wash:rgba(255,190,120,.2)}
-html[data-act="kayak"]{--t-main:#3d8a1a;--t-main2:#4c9a25;--t-deep:#213f0f;--t-deep2:#2f5c14;--t-tint:#eaf5de;--t-line:#c2dda3;--t-page:#f4f8ec;--t-bright:#68b93a;--t-deep-b:#3a6f18;--t-nav-a:#78c447;--t-nav-b:#4c9a25;--t-nav-c:#33741a;--t-acc:#ffe79a;--t-acc-ink:#3d2c00;--t-glow:rgba(104,185,58,.4);--t-wash:rgba(104,185,58,.18)}
-html[data-act="snorkeling"]{--t-main:#087f8f;--t-main2:#0a94a4;--t-deep:#06434e;--t-deep2:#0a5662;--t-tint:#dff6f4;--t-line:#a6dcdb;--t-page:#eef9f6;--t-bright:#17b6b8;--t-deep-b:#08616d;--t-nav-a:#25c2b6;--t-nav-b:#0a9aa2;--t-nav-c:#077785;--t-acc:#ffd257;--t-acc-ink:#4a2e00;--t-cta:#ff8a4d;--t-glow:rgba(23,182,184,.42);--t-wash:rgba(255,210,87,.2)}
-html[data-act="plongee"]{--t-main:#0a6f9c;--t-main2:#0b5fa8;--t-deep:#041d4a;--t-deep2:#0a3a6e;--t-tint:#e1f2f8;--t-line:#b0d8e6;--t-page:#e8f3f7;--t-bright:#1aa2ca;--t-deep-b:#08376f;--t-nav-a:#0d4283;--t-nav-b:#082d63;--t-nav-c:#041a3f;--t-acc:#5ef2e0;--t-acc-ink:#03233f;--t-glow:rgba(26,162,202,.45);--t-wash:rgba(10,60,120,.22)}
-html[data-act="kitesurf"]{--t-main:#d63f2b;--t-main2:#e8503f;--t-deep:#4a1b2e;--t-deep2:#6e2a3c;--t-tint:#ffeee8;--t-line:#f6c6b9;--t-page:#fff6f1;--t-bright:#ff6a4d;--t-deep-b:#8a2c3a;--t-nav-a:#ff8a5c;--t-nav-b:#ee5741;--t-nav-c:#c3362f;--t-acc:#ffe066;--t-acc-ink:#4a1b00;--t-cta:#ffd23f;--t-cta-ink:#3a1a00;--t-glow:rgba(255,106,77,.42);--t-wash:rgba(255,150,90,.22)}
-html[data-act="windsurf"]{--t-main:#6d3ecf;--t-main2:#844be0;--t-deep:#291270;--t-deep2:#42228f;--t-tint:#efe9ff;--t-line:#d1bff6;--t-page:#f6f2ff;--t-bright:#a06cf0;--t-deep-b:#4e2aa8;--t-nav-a:#a26cf5;--t-nav-b:#7a44d8;--t-nav-c:#552cae;--t-acc:#e0ff91;--t-acc-ink:#2a1270;--t-glow:rgba(160,108,240,.42);--t-wash:rgba(160,108,240,.2)}
+html[data-act="surf"]{--t-main:#1a5ad6;--t-main2:#0f61e9;--t-deep:#082a78;--t-deep2:#123a8c;--t-tint:#e4efff;--t-line:#b3cdf8;--t-page:#eef5ff;--t-bright:#3a8bff;--t-deep-b:#0d3fa8;--t-nav-a:#3a8bff;--t-nav-b:#1d6cf0;--t-nav-c:#0f47c4;--t-acc:#e6ffa3;--t-glow:rgba(58,139,255,.42);--t-wash:rgba(58,139,255,.2)}
+html[data-act="bodyboard"]{--t-main:#136acc;--t-main2:#106acb;--t-deep:#0a3a7e;--t-deep2:#125090;--t-tint:#e3f1ff;--t-line:#b0d5f8;--t-page:#edf6ff;--t-bright:#2694ff;--t-deep-b:#0e5cb0;--t-nav-a:#1794ff;--t-nav-b:#0f74da;--t-nav-c:#1567cc;--t-acc:#ffe680;--t-acc-ink:#4a3200;--t-glow:rgba(74,166,255,.45);--t-wash:rgba(74,166,255,.22)}
+html[data-act="baignade"]{--t-main:#07759a;--t-main2:#0b7694;--t-deep:#053f58;--t-deep2:#0a5876;--t-tint:#dff5fb;--t-line:#a5dcec;--t-page:#ecf9fc;--t-bright:#1d9ebe;--t-deep-b:#08688a;--t-nav-a:#199ebe;--t-nav-b:#0b7e9e;--t-nav-c:#087a9c;--t-acc:#fff3a6;--t-acc-ink:#4a3a00;--t-glow:rgba(34,184,221,.42);--t-wash:rgba(34,184,221,.2)}
+html[data-act="paddle"]{--t-main:#0a7964;--t-main2:#0b7966;--t-deep:#05453a;--t-deep2:#0a5e51;--t-tint:#dff5ed;--t-line:#a8dfd0;--t-page:#f0f8f2;--t-bright:#1ea289;--t-deep-b:#087060;--t-nav-a:#27a38a;--t-nav-b:#0d8470;--t-nav-c:#097a68;--t-acc:#ffe8a0;--t-acc-ink:#3d2c00;--t-cta:#ff9a5c;--t-glow:rgba(34,184,155,.42);--t-wash:rgba(255,190,120,.2)}
+html[data-act="kayak"]{--t-main:#367b17;--t-main2:#3c791d;--t-deep:#213f0f;--t-deep2:#2f5c14;--t-tint:#eaf5de;--t-line:#c2dda3;--t-page:#f4f8ec;--t-bright:#5ba233;--t-deep-b:#3a6f18;--t-nav-a:#5fa234;--t-nav-b:#418320;--t-nav-c:#33741a;--t-acc:#ffe79a;--t-acc-ink:#3d2c00;--t-glow:rgba(104,185,58,.4);--t-wash:rgba(104,185,58,.18)}
+html[data-act="snorkeling"]{--t-main:#077685;--t-main2:#087885;--t-deep:#06434e;--t-deep2:#0a5662;--t-tint:#dff6f4;--t-line:#a6dcdb;--t-page:#eef9f6;--t-bright:#14a2a4;--t-deep-b:#08616d;--t-nav-a:#1fa298;--t-nav-b:#088188;--t-nav-c:#077785;--t-acc:#ffd257;--t-acc-ink:#4a2e00;--t-cta:#ff8a4d;--t-glow:rgba(23,182,184,.42);--t-wash:rgba(255,210,87,.2)}
+html[data-act="plongee"]{--t-main:#0a6f9c;--t-main2:#0b5fa8;--t-deep:#041d4a;--t-deep2:#0a3a6e;--t-tint:#e1f2f8;--t-line:#b0d8e6;--t-page:#e8f3f7;--t-bright:#199ec5;--t-deep-b:#08376f;--t-nav-a:#0d4283;--t-nav-b:#082d63;--t-nav-c:#041a3f;--t-acc:#5ef2e0;--t-acc-ink:#03233f;--t-glow:rgba(26,162,202,.45);--t-wash:rgba(10,60,120,.22)}
+html[data-act="kitesurf"]{--t-main:#c63926;--t-main2:#c8331f;--t-deep:#4a1b2e;--t-deep2:#6e2a3c;--t-tint:#ffeee8;--t-line:#f6c6b9;--t-page:#fff6f1;--t-bright:#e8573a;--t-deep-b:#8a2c3a;--t-nav-a:#e8573a;--t-nav-b:#d4361f;--t-nav-c:#c3362f;--t-acc:#ffe066;--t-acc-ink:#4a1b00;--t-cta:#ffd23f;--t-cta-ink:#3a1a00;--t-glow:rgba(255,106,77,.42);--t-wash:rgba(255,150,90,.22)}
+html[data-act="windsurf"]{--t-main:#6d3ecf;--t-main2:#8044df;--t-deep:#291270;--t-deep2:#42228f;--t-tint:#efe9ff;--t-line:#d1bff6;--t-page:#f6f2ff;--t-bright:#a06cf0;--t-deep-b:#4e2aa8;--t-nav-a:#a26cf5;--t-nav-b:#7a44d8;--t-nav-c:#552cae;--t-acc:#e0ff91;--t-acc-ink:#2a1270;--t-glow:rgba(160,108,240,.42);--t-wash:rgba(160,108,240,.2)}
+
+/* Transition douce des couleurs (400 ms) : les tokens principaux sont déclarés comme couleurs (@property), ce qui
+   permet de les interpoler. Pas de transition pendant le rideau de démarrage (couleurs posées d’emblée) ni en
+   mouvement réduit (changement instantané). */
+@property --t-main{syntax:'<color>';inherits:true;initial-value:#2154dc}
+@property --t-main2{syntax:'<color>';inherits:true;initial-value:#1f55e0}
+@property --t-deep{syntax:'<color>';inherits:true;initial-value:#0b2d7a}
+@property --t-tint{syntax:'<color>';inherits:true;initial-value:#e8efff}
+@property --t-line{syntax:'<color>';inherits:true;initial-value:#b9cbf5}
+@property --t-page{syntax:'<color>';inherits:true;initial-value:#f3f6fd}
+@property --t-bright{syntax:'<color>';inherits:true;initial-value:#2f6bff}
+@property --t-nav-b{syntax:'<color>';inherits:true;initial-value:#1a4fd6}
+@property --t-nav-c{syntax:'<color>';inherits:true;initial-value:#1440b8}
+@property --t-acc{syntax:'<color>';inherits:true;initial-value:#e0ff91}
+html{transition:--t-main .4s ease,--t-main2 .4s ease,--t-deep .4s ease,--t-tint .4s ease,--t-line .4s ease,--t-page .4s ease,--t-bright .4s ease,--t-nav-b .4s ease,--t-nav-c .4s ease,--t-acc .4s ease}
+html.ob-booting,html:has(body.reduce-motion){transition:none}
+@media(prefers-reduced-motion:reduce){html{transition:none}}
+
+/* Fond des écrans (coque iOS, app-shell.css) : il suit la page de l’activité. */
+html[data-act]{--as-page:var(--t-page)}
 
 /* Tokens Ocean Blue rebranchés sur le thème. */
 :root{--ob-lime:var(--t-acc);--ob-coral:var(--t-cta)}
