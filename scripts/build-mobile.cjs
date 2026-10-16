@@ -35,7 +35,10 @@ async function main(){
   fs.copyFileSync(path.join(root,'mobile/native.css'),path.join(dest,'native.css'));
   // Numéro du contenu embarqué : les mises à jour directes (scripts/publish-app-update.cjs) le comparent à app-update/latest.json.
   const seq=Number(process.env.OB_BUNDLE_SEQ)||Number(new Date().toISOString().replace(/\D/g,'').slice(0,12));
-  await esbuild.build({entryPoints:[path.join(root,'mobile/client.js')],outfile:path.join(dest,'native.js'),bundle:true,minify:true,format:'iife',target:['safari15','chrome100'],define:{__OB_BUNDLE__:JSON.stringify({seq}),__OB_UPDATE_BASE__:JSON.stringify(process.env.OB_UPDATE_BASE||'https://thomasbrebion59-bot.github.io/Ocean-Buddy/app-update/')}});
+  /* Les mises à jour directes exécutent du code : leur adresse est toujours en HTTPS et se termine par « / ». */
+  const updateBase=process.env.OB_UPDATE_BASE||'https://thomasbrebion59-bot.github.io/Ocean-Buddy/app-update/';
+  if(!/^https:\/\/[^/?#\s]+\/[^?#\s]*\/$/.test(updateBase))throw Error('OB_UPDATE_BASE doit être une adresse https:// terminée par « / » : '+updateBase);
+  await esbuild.build({entryPoints:[path.join(root,'mobile/client.js')],outfile:path.join(dest,'native.js'),bundle:true,minify:true,format:'iife',target:['safari15','chrome100'],define:{__OB_BUNDLE__:JSON.stringify({seq}),__OB_UPDATE_BASE__:JSON.stringify(updateBase)}});
   let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
   html=html.replace(/<link[^>]+https:\/\/fonts\.(?:googleapis|gstatic)\.com[^>]*>\n?/g,'');
   /* Manifeste d’application web : inutile dans l’app (et absent du paquet). */
