@@ -53,7 +53,7 @@ body.has-app-back #detail .back-btn{display:none}
 
 /* ---------- Défis : progression réelle ---------- */
 .chal-goal{display:block;margin-top:6px;font-size:11px;font-weight:600;color:#5d7285;letter-spacing:.01em}
-.ocean-v2 .chal-btn.pending{background:#e9eef6!important;color:#4a5d78!important;box-shadow:none!important}
+.ocean-v2 .chal-btn.pending{background:var(--g-pale,#e9eef6)!important;color:#4a5d78!important;box-shadow:none!important}
 .chal.is-done .chal-body h4{text-decoration:none}
 .chal.is-done{opacity:.86}
 
@@ -73,9 +73,9 @@ body.has-app-back #detail .back-btn{display:none}
 .settings-btn svg{display:block;margin:auto}
 
 /* ---------- Communauté : ouverture prochaine ---------- */
-.community-service-state.is-soon{display:flex;gap:16px;align-items:flex-start;border-style:solid!important;background:linear-gradient(135deg,#eef4ff,#f6fbf4)!important}
+.community-service-state.is-soon{display:flex;gap:16px;align-items:flex-start;border-style:solid!important;background:linear-gradient(135deg,var(--g-pale,#eef4ff),#f6fbf4)!important}
 .community-service-state.is-soon img{width:72px;height:72px;border-radius:20px;object-fit:cover;flex:none;box-shadow:0 8px 18px -8px rgba(8,47,59,.35)}
-.community-service-state.is-soon b{display:block;font-size:17px;color:#123a8f;margin-bottom:4px}
+.community-service-state.is-soon b{display:block;font-size:17px;color:var(--g-main,#123a8f);margin-bottom:4px}
 .community-service-state.is-soon p{margin:0 0 12px}
 .community-service-state.is-soon>div{min-width:0}
 @media (max-width:520px){.community-service-state.is-soon{flex-direction:column;gap:12px}.community-service-state.is-soon img{width:56px;height:56px;border-radius:16px}}

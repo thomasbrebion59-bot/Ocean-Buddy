@@ -3,7 +3,7 @@
    le citron vert signale l’état actif, le corail appelle à l’action. */
 :root{
   --ob-navy:var(--t-deep);--ob-navy-2:var(--t-deep-b);--ob-cobalt:var(--t-main2);--ob-blue:var(--t-bright);--ob-sky:var(--t-tint);--ob-mist:var(--t-page);
-  --ob-lime:#e0ff91;--ob-coral:#ff7a55;--ob-coral-hi:#ff916f;--ob-ink:#0f2350;--ob-muted:#5a6a8c;--ob-line:#dfe6f5;--ob-card:#fff;
+  --ob-lime:#e0ff91;--ob-coral:#ff7a55;--ob-coral-hi:#ff916f;--ob-ink:var(--g-ink,#0f2350);--ob-muted:#5a6a8c;--ob-line:var(--g-pale,#dfe6f5);--ob-card:#fff;
   --ob-abyss:var(--ob-navy);--ob-abyss-2:var(--ob-navy-2);--ob-sand:var(--ob-mist);
   --ob-shadow:0 1px 2px color-mix(in srgb,var(--t-deep) 6%,transparent),0 14px 34px -16px color-mix(in srgb,var(--t-deep) 32%,transparent);
   --ob-shadow-lg:0 30px 60px -28px color-mix(in srgb,var(--t-deep) 55%,transparent);
@@ -19,21 +19,21 @@ body.ocean-v2{color:var(--ob-ink)}
 .ocean-v2 .nav::before{content:"";position:absolute;inset:auto 0 0;height:220px;pointer-events:none;opacity:.22;
   background:repeating-radial-gradient(ellipse at 50% 130%,transparent 0 16px,rgba(255,255,255,.55) 17px 18px,transparent 19px 34px)}
 .sidebar-brand>span,.sidebar-brand b{color:#fff}
-.sidebar-brand small{color:#cfdcff}
-.sidebar-label{color:#b8cbff}
-.ocean-v2 .nav>button[data-s]{color:#dbe6ff}
+.sidebar-brand small{color:var(--g-pale,#cfdcff)}
+.sidebar-label{color:var(--g-line,#b8cbff)}
+.ocean-v2 .nav>button[data-s]{color:var(--g-pale,#dbe6ff)}
 .ocean-v2 .nav>button[data-s]:hover{background:rgba(255,255,255,.12);color:#fff}
 .ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{background:var(--ob-lime);color:var(--ob-navy);box-shadow:0 10px 24px -12px rgba(224,255,145,.9)}
 .ocean-v2 .nav>button[data-s].active:hover{background:#ecffb8;color:var(--ob-navy)}
 .ocean-v2 .nav .sidebar-poulpy{background:rgba(8,40,140,.55);border-color:rgba(255,255,255,.22)}
-.sidebar-poulpy b{color:#fff}.sidebar-poulpy span{color:#d4e0ff}.sidebar-poulpy i{color:var(--ob-lime)}
-.ocean-v2 .nav .sidebar-settings,.ocean-v2 .nav .sidebar-user{color:#e6eeff;border-color:rgba(255,255,255,.22)}
-.sidebar-user small,.sidebar-motto{color:#c2d3ff}
+.sidebar-poulpy b{color:#fff}.sidebar-poulpy span{color:var(--g-pale,#d4e0ff)}.sidebar-poulpy i{color:var(--ob-lime)}
+.ocean-v2 .nav .sidebar-settings,.ocean-v2 .nav .sidebar-user{color:var(--g-pale,#e6eeff);border-color:rgba(255,255,255,.22)}
+.sidebar-user small,.sidebar-motto{color:var(--g-line,#c2d3ff)}
 .ocean-v2 .nav .sidebar-user .user-initial{background:var(--ob-lime);color:var(--ob-navy)}
 @media (max-width:959px){
   .ocean-v2 .nav{background:rgba(26,79,214,.94);border-color:rgba(255,255,255,.14);box-shadow:0 -10px 30px -12px color-mix(in srgb,var(--t-deep) 45%,transparent)}
   .ocean-v2 .nav::before{display:none}
-  .ocean-v2 .nav>button[data-s]{color:#dbe6ff}
+  .ocean-v2 .nav>button[data-s]{color:var(--g-pale,#dbe6ff)}
   .ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{background:var(--ob-lime);color:var(--ob-navy)}
 }
 
@@ -57,7 +57,7 @@ body.ocean-v2{color:var(--ob-ink)}
 .ocean-v2 #homeTop .hero-kicker{color:var(--ob-lime)}
 .hero-cta{background:var(--ob-coral);color:#1b1410;box-shadow:0 14px 30px -12px rgba(255,122,85,.8);transition:transform .25s cubic-bezier(.22,1,.36,1),background .2s}
 .hero-cta:hover{background:var(--ob-coral-hi);transform:translateY(-2px)}
-.ocean-v2 .mascot-card{background:linear-gradient(160deg,#2a66f0,var(--t-nav-b) 55%,var(--t-nav-c));box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 .mascot-card{background:linear-gradient(160deg,var(--g-soft,#2a66f0),var(--t-nav-b) 55%,var(--t-nav-c));box-shadow:var(--ob-shadow-lg)}
 .ocean-v2 .mascot-card .poulpy-title{color:var(--ob-lime)}
 /* Le héros porte le salut : le cockpit n’en répète pas le titre. */
 #home .ocean-hub .hub-greet{display:none}
@@ -67,7 +67,7 @@ body.ocean-v2{color:var(--ob-ink)}
 .hub-trip{background:linear-gradient(180deg,color-mix(in srgb,var(--t-deep) 20%,transparent) 0%,color-mix(in srgb,var(--t-deep) 55%,transparent) 45%,color-mix(in srgb,var(--t-deep) 95%,transparent) 100%),var(--hub-cover) center/cover no-repeat,var(--ob-navy)!important;box-shadow:0 24px 44px -24px color-mix(in srgb,var(--t-deep) 85%,transparent)}
 .hub-trip-empty{background:linear-gradient(120deg,var(--t-nav-b),var(--t-deep))!important}
 .hub-days i.on{background:var(--ob-cobalt)}
-.hub-level{background:conic-gradient(var(--ob-cobalt) calc(var(--p)*1%),#dfe6fb 0)!important}
+.hub-level{background:conic-gradient(var(--ob-cobalt) calc(var(--p)*1%),var(--g-pale,#dfe6fb) 0)!important}
 .hub-week,.hub-spot{border-color:var(--ob-line);box-shadow:var(--ob-shadow)}
 
 /* ---------- Rail « Pars en immersion » ---------- */
@@ -131,7 +131,7 @@ body.ocean-v2{color:var(--ob-ink)}
 .ocean-v2 .onb .onb-btn{background:var(--ob-lime);color:var(--ob-navy);box-shadow:0 14px 34px -12px rgba(224,255,145,.75)}
 .ocean-v2 .onb .dots span.on{background:var(--ob-lime)}
 .ocean-v2 .onb .onb-kicker{color:var(--ob-lime)}
-.ocean-v2 .onb{background:radial-gradient(120% 80% at 50% 0%,#2a66f0,var(--t-nav-c) 55%,var(--t-deep))}
+.ocean-v2 .onb{background:radial-gradient(120% 80% at 50% 0%,var(--g-soft,#2a66f0),var(--t-nav-c) 55%,var(--t-deep))}
 
 /* ---------- En-têtes Défis, Profil, Voyages ---------- */
 .ocean-v2 #chalTop{background:linear-gradient(90deg,color-mix(in srgb,var(--t-deep) 94%,transparent) 0%,color-mix(in srgb,var(--t-deep) 78%,transparent) 42%,color-mix(in srgb,var(--t-main2) 18%,transparent) 100%),url('assets/design/protect.webp') right 56%/cover!important;border:0!important;color:#fff;box-shadow:var(--ob-shadow-lg)}
@@ -152,37 +152,37 @@ body.ocean-v2{color:var(--ob-ink)}
 .ocean-v2 .community-hero{background:linear-gradient(115deg,var(--ob-navy),var(--ob-cobalt));box-shadow:var(--ob-shadow-lg)}
 .ocean-v2 .community-hero h1{color:#fff}
 .ocean-v2 .community-hero h1 b,.ocean-v2 .community-hero .community-kicker{color:var(--ob-lime)}
-.ocean-v2 .community-hero p{color:#dbe6ff}
+.ocean-v2 .community-hero p{color:var(--g-pale,#dbe6ff)}
 @media (min-width:960px){.ocean-v2 #community{padding-left:0;padding-right:0;padding-top:18px}}
 
 /* Défis : en-tête aligné sur le contenu, encarts bleu ciel */
 .ocean-v2 #chalTop{max-width:none;margin-left:0;margin-right:0}
-.ocean-v2 #chalTop .sub{color:#dbe6ff}
+.ocean-v2 #chalTop .sub{color:var(--g-pale,#dbe6ff)}
 .ocean-v2 .chal-xp{color:var(--ob-cobalt)}
 .ocean-v2 .chal-why{background:var(--ob-sky);color:var(--ob-muted)}.ocean-v2 .chal-why b{color:var(--ob-navy)}
 .ocean-v2 .chal-ic{color:var(--ob-navy)!important}
-.ocean-v2 .ql-tx b{color:var(--ob-navy)}.ocean-v2 .ql-tx span{color:#3a4f7a}
+.ocean-v2 .ql-tx b{color:var(--ob-navy)}.ocean-v2 .ql-tx span{color:var(--g-main,#3a4f7a)}
 .ocean-v2 .ql-ic{background:#fff;color:var(--ob-cobalt)}
 .ocean-v2 .ql-go{background:var(--ob-navy)}
 .ocean-v2 .evt{background:#fff;border-color:var(--ob-line)}
 .ocean-v2 .evt-a a.off{background:var(--ob-navy);color:#fff}
 .ocean-v2 .cmp-head{background:linear-gradient(120deg,var(--ob-navy),var(--ob-navy-2))}
-.ocean-v2 .cmp-head p{color:#c9d6f3}
+.ocean-v2 .cmp-head p{color:var(--g-line,#c9d6f3)}
 .ocean-v2 .cmp-pts{color:var(--ob-navy)}
 .ocean-v2 .cmp-bar{background:var(--ob-sky)}
 .ocean-v2 .cmp-fill{background:linear-gradient(90deg,var(--ob-cobalt),var(--ob-blue))}
 .ocean-v2 .cmp-rule{background:var(--ob-mist);border-color:var(--ob-line)}
 .ocean-v2 .cmp-rule .rn,.ocean-v2 .cmp-rule svg{color:var(--ob-cobalt)}
-.ocean-v2 .gsw{background:var(--ob-sky)}.ocean-v2 .gsw button{color:var(--ob-muted)}.ocean-v2 .gsw button.on{color:var(--ob-navy)}
+.ocean-v2 .gsw{background:var(--ob-sky)}.ocean-v2 .gsw button{color:var(--ob-muted)}.ocean-v2 .gsw button.on{color:#fff}
 .ocean-v2 .sd.on{background:var(--ob-lime);color:var(--ob-navy)}
-.ocean-v2 .qb.got{background:var(--ob-sky);border-color:#c9d6f3;color:var(--ob-navy)}
+.ocean-v2 .qb.got{background:var(--ob-sky);border-color:var(--g-line,#c9d6f3);color:var(--ob-navy)}
 
 /* Profil : badges verrouillés lisibles, carnet vide accueillant */
 .ocean-v2 .badge .e{background:var(--ob-lime);color:var(--ob-navy)}
-.ocean-v2 .badge.locked{background:var(--ob-sky);border-color:#c9d6f3;opacity:1}
+.ocean-v2 .badge.locked{background:var(--ob-sky);border-color:var(--g-line,#c9d6f3);opacity:1}
 .ocean-v2 .badge.locked .e{background:#fff;color:var(--ob-cobalt)}
 .ocean-v2 .badge.locked .n{color:var(--ob-navy)}
-.ocean-v2 .badge.locked .how{color:#3a4f7a}
+.ocean-v2 .badge.locked .how{color:var(--g-main,#3a4f7a)}
 .sess-empty{display:flex;align-items:center;gap:16px;padding:18px 20px;border:1px solid var(--ob-line);border-radius:18px;background:linear-gradient(120deg,var(--ob-sky),#fff 70%);box-shadow:var(--ob-shadow)}
 .sess-empty img{flex:0 0 64px;width:64px;height:64px;border-radius:16px;object-fit:cover}
 .sess-empty b{display:block;color:var(--ob-navy);font:800 18px/1.15 "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.01em}
@@ -224,7 +224,7 @@ body.ocean-v2{color:var(--ob-ink)}
 .ocean-v2 #detail .im-terrain-copy li>span{background:var(--ob-sky);color:var(--ob-cobalt)}
 .ocean-v2 .experience-video-search>span:first-child{background:var(--ob-sky);color:var(--ob-cobalt)}
 .ocean-v2 .area-map-heading button{background:var(--ob-sky);border-color:var(--t-line);color:var(--ob-cobalt)}
-.ocean-v2 .area-map-heading button:hover{background:#d6e2ff}
+.ocean-v2 .area-map-heading button:hover{background:var(--g-pale,#d6e2ff)}
 
 /* Accueil */
 .ocean-v2 .today-why{padding:10px 2px 0}
@@ -236,7 +236,7 @@ body.ocean-v2{color:var(--ob-ink)}
 @media (min-width:960px){.trip-welcome .trip-stamp{display:grid;top:26px;right:calc(29% + 58px);width:104px;height:104px;font-size:14px;line-height:1.05;padding:8px;box-sizing:border-box}}
 
 /* Divers restes turquoise */
-.ocean-v2 .tide-ev.pm{background:var(--ob-sky);color:var(--ob-cobalt);border-color:#c9d6f3}
+.ocean-v2 .tide-ev.pm{background:var(--ob-sky);color:var(--ob-cobalt);border-color:var(--g-line,#c9d6f3)}
 .chrome-sound{border-color:var(--ob-line);color:var(--ob-cobalt)}
 .poulpy-chat-context{border-color:var(--ob-line);background:var(--ob-sky);color:var(--ob-cobalt)}
 .poulpy-chat-privacy{color:var(--ob-muted)}
@@ -274,7 +274,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px soli
 .experience-photo-open strong{background:var(--ob-lime);color:var(--ob-navy)}
 
 /* Recherche sans résultat : un message utile et des sorties */
-.ocean-v2 .nospot{display:flex;flex-direction:column;align-items:center;gap:6px;padding:34px 18px;border:1px dashed #c9d6f3;border-radius:18px;background:var(--ob-sky);color:var(--ob-muted)}
+.ocean-v2 .nospot{display:flex;flex-direction:column;align-items:center;gap:6px;padding:34px 18px;border:1px dashed var(--g-line,#c9d6f3);border-radius:18px;background:var(--ob-sky);color:var(--ob-muted)}
 .ocean-v2 .nospot b{color:var(--ob-navy);font-size:15px}
 .ocean-v2 .nospot span{font-size:12.5px}
 .ocean-v2 .nospot button{margin:8px auto 0;min-height:42px;border-radius:999px;border:1px solid var(--t-line);background:#fff;color:var(--ob-cobalt)}
@@ -309,7 +309,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px soli
 .community-share-step{margin:0;padding:10px 12px;border-radius:10px;background:var(--ob-sky);color:#24526e;font-size:11px;font-weight:800}
 
 /* Réglages : le choix de Poulpy n'est pas une action destructive */
-.ocean-v2 .set-reset.set-neutral{background:var(--ob-sky);border-color:#c9d6f3;color:var(--ob-cobalt)}
+.ocean-v2 .set-reset.set-neutral{background:var(--ob-sky);border-color:var(--g-line,#c9d6f3);color:var(--ob-cobalt)}
 .set-about a{display:inline-block;padding:6px 0}
 .ai-consent h3{text-wrap:balance}
 /* Pendant l'accueil plein écran, le message se centre sur l'écran (pas de barre latérale visible) */

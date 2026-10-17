@@ -1,8 +1,8 @@
 /* Cockpit d’accueil et palette unifiée (dernière couche).
    Abysse structure, cobalt agit, corail appelle, citron vert signale l’état actif. */
 :root{
-  --ob-abyss:#0a2b3e;--ob-abyss-2:#0f3a52;--ob-cobalt:var(--t-main);--ob-cobalt-deep:#133b8c;
-  --ob-coral:#fc754f;--ob-coral-hi:#ff8e6e;--ob-lime:#dfff89;--ob-sand:#f5f5f0;--ob-ink:#172c45;
+  --ob-abyss:#0a2b3e;--ob-abyss-2:#0f3a52;--ob-cobalt:var(--t-main);--ob-cobalt-deep:var(--g-main,#133b8c);
+  --ob-coral:#fc754f;--ob-coral-hi:#ff8e6e;--ob-lime:#dfff89;--ob-sand:#f5f5f0;--ob-ink:var(--g-ink,#172c45);
   --ob-muted:#5f7183;--ob-line:#dde3e6;--ob-card:#fff;
   --ob-ease:cubic-bezier(.22,1,.36,1);
   --ob-shadow:0 1px 2px rgba(10,43,62,.06),0 12px 32px -14px rgba(10,43,62,.28);
@@ -38,7 +38,7 @@
 .hub-greet h2{margin:2px 0 0;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:34px;line-height:1;letter-spacing:-.01em;color:var(--ob-ink);text-transform:uppercase}
 .hub-dot{color:var(--ob-coral)}
 .hub-level{--p:0;position:relative;width:48px;height:48px;border-radius:50%;display:grid;place-items:center;flex:none;
-  background:conic-gradient(var(--ob-cobalt) calc(var(--p)*1%),#dfe6f4 0)!important;transition:transform .2s var(--ob-ease)}
+  background:conic-gradient(var(--ob-cobalt) calc(var(--p)*1%),var(--g-pale,#dfe6f4) 0)!important;transition:transform .2s var(--ob-ease)}
 .hub-level:active{transform:scale(.94)}
 .hub-level span{width:38px;height:38px;border-radius:50%;background:var(--ob-sand);display:grid;place-items:center;font-family:"Barlow Condensed",sans-serif;font-weight:800;font-size:20px;color:var(--ob-cobalt)}
 
@@ -53,7 +53,7 @@
 .hub-days i{font-style:normal;flex:1;max-width:34px;height:26px;border-radius:9px;display:grid;place-items:center;font-size:11px;font-weight:800;color:#8795a3;background:#f1f3f5}
 .hub-days i.on{background:var(--ob-cobalt);color:#fff}
 .hub-days i.today{box-shadow:inset 0 0 0 2px var(--ob-cobalt)}
-.hub-days i.today:not(.on){color:var(--ob-cobalt);background:#eef2fd}
+.hub-days i.today:not(.on){color:var(--ob-cobalt);background:var(--g-pale,#eef2fd)}
 .hub-days i.future{opacity:.55}
 .hub-week p{margin:0;font-size:12.5px;line-height:1.35;color:var(--ob-muted)}
 
@@ -131,7 +131,7 @@
 .trip-saved-card>.trip-saved>.trip-when{position:absolute;top:12px;left:12px;z-index:2;box-shadow:0 6px 14px -6px rgba(10,43,62,.5)}
 .trip-banner .trip-when{margin:0 0 10px 8px}
 .trip-prep{--p:0%;display:grid;gap:5px;margin:8px 0 2px}
-.trip-prep i{display:block;height:5px;border-radius:5px;background:linear-gradient(90deg,var(--ob-cobalt) var(--p),#e3e8f2 var(--p))}
+.trip-prep i{display:block;height:5px;border-radius:5px;background:linear-gradient(90deg,var(--ob-cobalt) var(--p),var(--g-pale,#e3e8f2) var(--p))}
 .trip-prep small{font-size:11.5px;font-weight:700;color:var(--ob-muted)}
 
 @media (prefers-reduced-motion:reduce){.ocean-hub,.hub-flame.on svg{animation:none}.hub-trip,.hub-spot{transition:none}}
