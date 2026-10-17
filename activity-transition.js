@@ -155,7 +155,11 @@
     const interrupted = !!active;
     active?.finish();
     if (interrupted || reduced() || !document.startViewTransition) { swap?.(); return; }
-    try { document.startViewTransition(() => swap?.()); } catch (_) { swap?.(); }
+    try {
+      /* Une transition sautée (deux choix rapprochés) rejette ses promesses avec AbortError : on les absorbe pour ne pas laisser de rejet non géré. */
+      const vt = document.startViewTransition(() => swap?.());
+      for (const p of [vt?.ready, vt?.finished, vt?.updateCallbackDone]) p?.catch?.(() => {});
+    } catch (_) { swap?.(); }
   }
   /* Annule le changement en attente et retire immédiatement la scène en cours. */
   function cancel() {
