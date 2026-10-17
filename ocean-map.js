@@ -10,6 +10,10 @@
   /* Couleurs d’activité : distinctes sur le fond clair, dans la famille cobalt / citron / corail. */
   const COLORS={surf:'#1f55e0',bodyboard:'#4f8df7',baignade:'#0e9fc4',paddle:'#0f9e86',kayak:'#5c9e2c',snorkeling:'#f0a20c',plongee:'#0b2d7a',kitesurf:'#ff6a4d',windsurf:'#9d5be6'};
   const color=id=>COLORS[id]||'#1f55e0';
+  /* Couleurs d’interface de la carte (pastilles de regroupement, tracé) : suivent l’activité choisie. MapLibre veut
+     des couleurs littérales : on lit la variable CSS, et on repeint après la transition des couleurs (400 ms). */
+  const themeColor=(v,fallback)=>{try{return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fallback;}catch(e){return fallback;}};
+  document.addEventListener('ocean:sport',()=>{clearTimeout(themeColor.t);themeColor.t=setTimeout(()=>{try{if(map&&map.getLayer&&map.getLayer("clusters"))map.setPaintProperty('clusters','circle-color',themeColor('--t-deep','#0b2d7a'));}catch(e){}},520);});
   /* Grandes régions de la liste en vue monde ; la France rejoint l’Europe. */
   const REGIONS=[
     {id:'eu',worlds:['fr','eu'],lab:'Europe',at:[14,50]},
@@ -173,7 +177,7 @@
     const base=candidates(),count=id=>id?base.filter(s=>spotSports(s).includes(id)).length:base.length;
     const scroll=filters.querySelector('.omap-acts')?.scrollLeft||0;
     const levels=[['all','Tous les niveaux'],['season','En saison ce mois-ci'],['debutant','Débutant'],['intermediaire','Intermédiaire'],['expert','Expert'],['variable','Niveau à évaluer'],['new','Nouveaux spots']];
-    filters.innerHTML=`${window.OceanPlan?.button()||''}<label class="omap-level"><span class="omap-sr">Niveau</span><select data-map-level aria-label="Niveau">${levels.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select></label><div class="omap-acts" role="group" aria-label="Activités">${[{id:'',label:'Tout explorer'},...SPORTS].map(s=>{const n=count(s.id);return `<button type="button" data-map-sport="${s.id}" aria-pressed="${(activeSport||'')===s.id}" ${n||!s.id?'':'disabled'} style="--c:${s.id?color(s.id):'#0b2d7a'}"><i aria-hidden="true"></i><span>${esc(s.label)}</span><small>${n}</small></button>`;}).join('')}</div>`;
+    filters.innerHTML=`${window.OceanPlan?.button()||''}<label class="omap-level"><span class="omap-sr">Niveau</span><select data-map-level aria-label="Niveau">${levels.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select></label><div class="omap-acts" role="group" aria-label="Activités">${[{id:'',label:'Tout explorer'},...SPORTS].map(s=>{const n=count(s.id);return `<button type="button" data-map-sport="${s.id}" aria-pressed="${(activeSport||'')===s.id}" ${n||!s.id?'':'disabled'} style="--c:${s.id?color(s.id):'var(--t-deep,#0b2d7a)'}"><i aria-hidden="true"></i><span>${esc(s.label)}</span><small>${n}</small></button>`;}).join('')}</div>`;
     filters.querySelector('select').value=currentFilter;filters.querySelector('.omap-acts').scrollLeft=scroll;
     revealActivity();
   }
@@ -225,7 +229,7 @@
     /* Spots regroupés de loin (comme sur le globe), séparés à partir du zoom 9. */
     map.addSource('spots',{type:'geojson',data:{type:'FeatureCollection',features:[]},promoteId:'id',buffer:32,cluster:true,clusterMaxZoom:8,clusterRadius:44});
     map.addLayer({id:'clusters',type:'circle',source:'spots',filter:['has','point_count'],paint:{
-      'circle-color':'#0b2d7a','circle-opacity':.94,'circle-stroke-color':'#ffffff','circle-stroke-width':2.5,
+      'circle-color':themeColor('--t-deep','#0b2d7a'),'circle-opacity':.94,'circle-stroke-color':'#ffffff','circle-stroke-width':2.5,
       'circle-radius':['interpolate',['linear'],['get','point_count'],2,15,10,18,40,22,150,27]}});
     map.addLayer({id:'cluster-count',type:'symbol',source:'spots',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['Noto Sans Bold'],'text-size':13,'text-allow-overlap':true},paint:{'text-color':'#ffffff'}});
     const H=['boolean',['feature-state','hover'],false];
@@ -741,7 +745,7 @@
         if(dead){m.remove();return;}
         m.addSource('others',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
         m.addSource('route',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
-        m.addLayer({id:'route',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#1f55e0','line-width':3.5,'line-opacity':.85,'line-dasharray':[1.2,1.6]}});
+        m.addLayer({id:'route',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':themeColor('--t-main2','#1f55e0'),'line-width':3.5,'line-opacity':.85,'line-dasharray':[1.2,1.6]}});
         m.addLayer({id:'others',type:'circle',source:'others',paint:{'circle-radius':['interpolate',['linear'],['zoom'],4,3.4,9,5.5,13,7],'circle-color':['get','c'],'circle-stroke-color':'#fff','circle-stroke-width':1.6,'circle-opacity':.95}});
         m.addLayer({id:'others-label',type:'symbol',source:'others',minzoom:9.5,layout:{'text-field':['get','n'],'text-font':['Noto Sans Bold'],'text-size':11,'text-variable-anchor':['left','right','top'],'text-radial-offset':.8,'text-max-width':9,'text-padding':3},paint:{'text-color':'#0b2d7a','text-halo-color':'#fff','text-halo-width':1.5}});
         pop=new ml.Popup({closeButton:true,className:'omini-pop',maxWidth:'260px',offset:14});

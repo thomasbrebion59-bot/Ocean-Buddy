@@ -169,9 +169,9 @@
   body.explore-immersive #spots>:not(#mapView){display:none!important}
   body.explore-immersive #spots{animation:none!important;transform:none!important}
   body.explore-immersive #mapView{position:fixed;inset:0;z-index:20;display:block!important}
-  body.explore-immersive .ocean-v2 #spotMapWrap.omap,body.ocean-v2.explore-immersive #spotMapWrap.omap{position:absolute;inset:0;height:100%!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:#06194a!important}
+  body.explore-immersive .ocean-v2 #spotMapWrap.omap,body.ocean-v2.explore-immersive #spotMapWrap.omap{position:absolute;inset:0;height:100%!important;margin:0!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:var(--g-night2,#06194a)!important}
   /* Fond bleu océan profond plutôt que le noir de l’espace. */
-  body.explore-immersive .omap.is-globe .omap-stage{background:radial-gradient(130% 85% at 50% 38%,#1d4fae 0%,#0b2d7a 42%,#061a4a 72%,#030f30 100%)}
+  body.explore-immersive .omap.is-globe .omap-stage{background:radial-gradient(130% 85% at 50% 38%,var(--g-lift,#1d4fae) 0%,var(--t-deep) 42%,var(--g-night2,#061a4a) 72%,var(--g-night3,#030f30) 100%)}
   /* En-tête : boutons en verre sombre sur l’espace. */
   body.explore-immersive .app-chrome::before{opacity:0!important}
   body.explore-immersive .app-page-title{opacity:0!important}
@@ -265,7 +265,7 @@ body.explore-immersive .ex-regions{display:flex}
 @media(max-width:959px){.ocean-v2 #explorePath{display:none!important}}
 
 /* ================= Première ouverture : un spot de rêve en grand (Raja Ampat) ================= */
-.ocean-v2 .onb,html[data-act] .ocean-v2 .onb{background:#0b2d7a url('assets/spots/rajaampat.jpg') 50% 50%/cover no-repeat!important;justify-content:flex-start!important}
+.ocean-v2 .onb,html[data-act] .ocean-v2 .onb{background:var(--t-deep) url('assets/spots/rajaampat.jpg') 50% 50%/cover no-repeat!important;justify-content:flex-start!important}
 .ocean-v2 .onb::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(180deg,rgba(3,15,48,.72) 0%,rgba(3,15,48,.35) 38%,rgba(3,15,48,0) 58%,rgba(3,15,48,.55) 85%,rgba(3,15,48,.85) 100%)}
 .ocean-v2 .onb:has(.onb-step.active:not([data-step="0"]))::before{background:rgba(2,8,26,.78);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px)}
 .ocean-v2 #onbBubbles{display:none}
@@ -295,14 +295,14 @@ body.explore-immersive .ex-regions{display:flex}
 
 /* ================= Passeport océan (passport.js) ================= */
 .pp{margin:22px 0 6px;padding:18px 16px 16px;border-radius:var(--as-r-xl,28px);color:#fff;
-  background:radial-gradient(120% 90% at 100% 0%,#2a5fd8 0%,#0b2d7a 55%,#071a48 100%);box-shadow:0 22px 50px -28px rgba(7,26,72,.9);position:relative;overflow:hidden}
+  background:radial-gradient(120% 90% at 100% 0%,var(--g-lift,#2a5fd8) 0%,var(--t-deep) 55%,var(--g-night2,#071a48) 100%);box-shadow:0 22px 50px -28px rgba(7,26,72,.9);position:relative;overflow:hidden}
 html[data-act] .pp{background:radial-gradient(120% 90% at 100% 0%,var(--t-main2) 0%,var(--t-deep) 55%,color-mix(in srgb,var(--t-deep) 70%,#000) 100%);box-shadow:0 22px 50px -28px var(--t-deep)}
 .pp::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 9px);pointer-events:none}
 .pp-head{position:relative;display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
 .pp-head small{display:block;font:700 11px var(--body);letter-spacing:1.6px;text-transform:uppercase;color:var(--ob-lime,#e0ff91)}
 .pp-head h2{margin:4px 0 0;font:800 30px/1 var(--as-condensed);text-transform:uppercase;letter-spacing:-.3px}
 .pp-stamp{flex:none;display:grid;place-items:center;width:58px;height:58px;border-radius:50%;border:2px dashed rgba(224,255,145,.8);color:var(--ob-lime,#e0ff91);font:900 26px var(--as-condensed);transform:rotate(-12deg)}
-.pp-map{position:relative;margin:14px 0 8px;border-radius:16px;overflow:hidden;aspect-ratio:1200/473;background:#0a1d4a;box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
+.pp-map{position:relative;margin:14px 0 8px;border-radius:16px;overflow:hidden;aspect-ratio:1200/473;background:var(--g-night2,#0a1d4a);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
 .pp-map img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .pp-dot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;display:inline-block}
 .pp-dot.been{background:var(--ob-lime,#e0ff91);box-shadow:0 0 0 2px var(--t-deep,#0b2d7a)}
@@ -373,3 +373,7 @@ button,a,[role=button],.poulpy-action,.hero-cta,.ql-go,.sec a,.as-sec a{font-var
   .ocean-v2 .app-chrome .chrome-sound.on svg{width:19px;height:19px}
   body.explore-immersive .app-chrome .chrome-sound{display:none!important}
 }
+
+/* Fonds sombres et reflets des écrans (Explorer, voyage, fiches) : sans activité ce sont les valeurs d’origine
+   (repli de var(--g-…,#hex)) ; avec une activité ils dérivent de ses couleurs. */
+html[data-act]{--g-lift:var(--t-main2);--g-mid:color-mix(in srgb,var(--t-main) 78%,var(--t-deep));--g-night:color-mix(in srgb,var(--t-deep) 48%,#000);--g-night2:color-mix(in srgb,var(--t-deep) 62%,#000);--g-night3:color-mix(in srgb,var(--t-deep) 36%,#000)}
