@@ -9,7 +9,7 @@
 
 /* En-tête du choix de destination : la même photo que la transition. */
 .ocean-v2 #spotsTop[data-act]:not([data-act=""]){position:relative;isolation:isolate;overflow:hidden;margin-bottom:18px;padding:26px 22px 20px!important;border-radius:26px;color:#fff;
-  background:linear-gradient(180deg,rgba(6,21,47,.1) 0%,rgba(6,21,47,.62) 100%),var(--act-scene) center 40%/cover no-repeat;box-shadow:0 20px 44px -26px rgba(11,45,122,.7);animation:act-hero .6s cubic-bezier(.2,.8,.2,1)}
+  background:linear-gradient(180deg,rgba(6,21,47,.1) 0%,rgba(6,21,47,.62) 100%),var(--act-scene) center 40%/cover no-repeat;box-shadow:0 20px 44px -26px color-mix(in srgb,var(--t-deep) 70%,transparent);animation:act-hero .6s cubic-bezier(.2,.8,.2,1)}
 .ocean-v2 #spotsTop[data-act]:not([data-act=""]) h1,.ocean-v2 #spotsTop[data-act]:not([data-act=""]) h1 span{color:#fff!important;text-shadow:0 3px 18px rgba(2,7,17,.45)}
 .ocean-v2 #spotsTop[data-act]:not([data-act=""]) h1 span{color:#d7f75b!important}
 .ocean-v2 #spotsTop[data-act]:not([data-act=""]) .sub{color:rgba(255,255,255,.92)!important}

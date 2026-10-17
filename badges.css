@@ -1,7 +1,7 @@
 /* Trophées Ocean Buddy : vitrine du profil, fiche détaillée et moment de déblocage.
    Toutes les classes sont préfixées .tb- ; chargé après i18n.css. */
 :root{
-  --tb-navy:#0b2d7a;--tb-abyss:#061a4d;--tb-cobalt:#1f55e0;--tb-lime:#e0ff91;--tb-coral:#ff7a55;--tb-mist:#f3f6fd;
+  --tb-navy:var(--t-deep);--tb-abyss:#061a4d;--tb-cobalt:var(--t-main2);--tb-lime:#e0ff91;--tb-coral:#ff7a55;--tb-mist:#f3f6fd;
   --tb-title:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;
   --tb-ui:'DM Sans','Manrope',system-ui,-apple-system,sans-serif;
   --tb-spring:cubic-bezier(.2,1.25,.32,1);
@@ -179,7 +179,7 @@
   -webkit-tap-highlight-color:transparent;transition:transform .2s var(--tb-spring),filter .2s}
 .tb-btn:active{transform:scale(.97)}
 .tb-btn svg{width:18px;height:18px}
-.tb-btn-main{background:var(--tb-lime);color:#0b2d7a;box-shadow:0 10px 24px -10px rgba(224,255,145,.7)}
+.tb-btn-main{background:var(--tb-lime);color:var(--t-deep);box-shadow:0 10px 24px -10px rgba(224,255,145,.7)}
 .tb-btn-ghost{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.22)}
 .tb-btn[disabled]{opacity:.6;cursor:progress}
 
