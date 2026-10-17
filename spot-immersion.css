@@ -35,7 +35,7 @@
 .immersion-context{display:flex;gap:24px;align-items:center;justify-content:space-between;padding:22px 0;border-bottom:1px solid #d6e1ee;margin-bottom:8px}
 .im-context-title{display:flex;align-items:center;gap:12px;flex:0 0 auto}
 .ocean-v2 .im-context-title .poulpy-mini{width:62px;height:62px;border-radius:18px}
-.im-context-title small{display:block;font-size:8px;font-weight:750;letter-spacing:1.5px;color:#6a7e95;margin-bottom:6px}
+.im-context-title small{display:block;font-size:8px;font-weight:750;letter-spacing:1.5px;color:#58697e;margin-bottom:6px}
 .im-context-title b{font:700 20px/1.2 var(--body);color:#183d73}
 .im-activity-choices{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
 .im-activity-choices button{border:1px solid #d3e1ee;background:#fff;border-radius:11px;display:flex;align-items:center;gap:7px;padding:5px 10px 5px 5px;font:650 10px var(--body);color:#416086;cursor:pointer;min-height:44px}
@@ -148,3 +148,8 @@
 .ocean-v2 #detail .field-fact-icon img.ob-ico:not(.spico){padding:10px}
 .ocean-v2 #detail .im-weather-help img.ob-ico:not(.spico),.ocean-v2 #detail .field-check-emblem img.ob-ico:not(.spico),.ocean-v2 #detail .field-address-mark img.ob-ico:not(.spico){padding:9px}
 @media(max-width:700px){.ocean-v2 #detail .im-context-title img.ob-ico:not(.spico){padding:9px}.ocean-v2 #detail .im-heading img.ob-ico:not(.spico){padding:10px}.ocean-v2 #detail .field-fact-icon img.ob-ico:not(.spico){padding:8px}}
+
+/* Couleurs de la fiche suivant l'activité. Les icônes de sport sont des fichiers SVG à deux couleurs fixes (marine + bleu vif) : on tourne la teinte du trait vif vers celle de l'activité (--t-icon-rot, nul sans activité = icône d'origine). Les tuiles claires derrière les icônes prennent la teinte pâle de l'activité. */
+html[data-act="surf"]{--t-icon-rot:-8deg}html[data-act="bodyboard"]{--t-icon-rot:-13deg}html[data-act="baignade"]{--t-icon-rot:-31deg}html[data-act="paddle"]{--t-icon-rot:-54deg}html[data-act="kayak"]{--t-icon-rot:-125deg}html[data-act="snorkeling"]{--t-icon-rot:-42deg}html[data-act="plongee"]{--t-icon-rot:-29deg}html[data-act="kitesurf"]{--t-icon-rot:-213deg}html[data-act="windsurf"]{--t-icon-rot:41deg}
+.ocean-v2 #detail img.ob-ico:not(.spico){background:var(--g-pale,#eaf2ff)}
+.ocean-v2 #detail .dfact img[src*="/icons/"]:not(.level-poulpy),.ocean-v2 #detail .im-context-title img[src*="/icons/"],.ocean-v2 #detail .im-heading img[src*="/icons/"],.ocean-v2 #detail .field-fact-card.fact-activity img[src*="/icons/"]{filter:hue-rotate(var(--t-icon-rot,0deg))}

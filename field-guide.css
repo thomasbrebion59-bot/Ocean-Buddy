@@ -1,5 +1,5 @@
 /* Ocean blue, typography and useful space. No ornamental gradients in the visit sheet. */
-.ocean-v2 #detail{--ink:#17355d;--muted:#617389;--rule:#dce3ea;--paper:#fff;--blue:var(--t-main)}
+.ocean-v2 #detail{--ink:#17355d;--muted:#556679;--rule:#dce3ea;--paper:#fff;--blue:var(--t-main)}
 .ocean-v2 #detail .block{box-shadow:none;border-radius:10px;border:1px solid var(--rule);background:#fff!important;padding:28px;margin-bottom:22px}
 .ocean-v2 #detail .block:before,.ocean-v2 #detail .block:after{display:none}
 .ocean-v2 #detail .block h4{background:none!important;padding:0!important;border:0;font-size:20px;letter-spacing:-.3px;line-height:1.3}
@@ -7,7 +7,7 @@
 .ocean-v2 #detail .block p{font-size:14px;line-height:1.8;color:var(--muted)}
 .ocean-v2 #detail .field-retired{display:none!important}
 .ocean-v2 #detail .dtabs{gap:28px;padding:0 4px;margin:0 0 30px;background:#f5f5f0f7;min-height:67px;align-items:stretch;box-shadow:none;border-bottom:1px solid #ccd8e4}
-.ocean-v2 #detail .dtab{position:relative;border:0!important;border-radius:0!important;background:transparent!important;color:#718296!important;padding:20px 0;min-height:56px;font-size:12px;box-shadow:none}
+.ocean-v2 #detail .dtab{position:relative;border:0!important;border-radius:0!important;background:transparent!important;color:#58697e!important;padding:20px 0;min-height:56px;font-size:12px;box-shadow:none}
 .ocean-v2 #detail .dtab.active{color:var(--t-main)!important;font-weight:800}
 .ocean-v2 #detail .dtab.active:after{content:'';position:absolute;bottom:0;height:3px;left:0;right:0;background:var(--t-main)}
 .ocean-v2 #detail .detail-hero{min-height:450px;border-radius:12px}
@@ -15,12 +15,12 @@
 .ocean-v2 #detail .hero-credit{max-width:740px;font-size:9px}
 .ocean-v2 #detail .detail-hero .back-btn,.ocean-v2 #detail .detail-hero .fav,.ocean-v2 #detail .hero-more{width:44px;height:44px}
 .ocean-v2 #detail .hero-more{top:74px}
-.ocean-v2 #detail .dfact{font-size:11px;background:#17355db3;border:1px solid #ffffff30;backdrop-filter:blur(8px)}
+.ocean-v2 #detail .dfact{font-size:11px;background:color-mix(in srgb,var(--g-night2,#17355d) 70%,transparent);border:1px solid #ffffff30;backdrop-filter:blur(8px)}
 .ocean-v2 #detail .trip-add-from-spot{margin:16px 0 0;border-radius:8px;max-width:none;font-size:12px}
 .ocean-v2 #detail .field-overview:not([style*="none"]){grid-template-columns:minmax(0,1.55fr) minmax(260px,1fr);gap:0 38px;align-items:start}
 .ocean-v2 #detail .field-story{grid-column:auto;background:transparent!important;border:0;padding:12px 0 24px}
 .field-eyebrow{display:block;color:var(--t-main);font-size:9px;font-weight:750;letter-spacing:1.6px;line-height:1.55;text-transform:uppercase}
-.field-coordinates{font-size:10px;letter-spacing:1.2px;color:#78889b;font-variant-numeric:tabular-nums;margin:0 0 26px}
+.field-coordinates{font-size:10px;letter-spacing:1.2px;color:#58697e;font-variant-numeric:tabular-nums;margin:0 0 26px}
 .ocean-v2 #detail .field-story h4{display:block;font:400 36px/1.12 var(--display);letter-spacing:-.5px;margin-bottom:20px}
 .field-story .field-eyebrow{margin-bottom:12px}
 .ocean-v2 #detail #dDesc{font-size:16px;line-height:1.85;max-width:620px}
@@ -128,18 +128,18 @@
 .field-arrival:hover img{transform:scale(1.035)}
 .field-arrival-image>span{position:absolute;left:15px;top:15px;padding:7px 10px;background:#fff;color:#17355d;border-radius:4px;font-size:10px;font-weight:700}
 .field-arrival-text{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:17px 0;border-bottom:1px solid #d5e0e9}
-.field-arrival-text small{display:block;font-size:11px;color:#617389;margin-bottom:6px}
+.field-arrival-text small{display:block;font-size:11px;color:#556679;margin-bottom:6px}
 .field-arrival-text b{font-size:21px;font-weight:700;letter-spacing:-.4px}
 .field-arrival-text svg{width:22px;height:22px;color:var(--t-main)}
 .ocean-v2 .lt-row{width:100%;text-align:left;font-family:var(--body);cursor:pointer;border:0;border-bottom:1px solid #dce3ea;background:transparent}
 .ocean-v2 .lt-ref{background:#eef3ff;color:var(--t-main);white-space:nowrap}
-.field-forecast-empty{font-size:13px;line-height:1.7;color:#617389;margin:10px 0;align-self:center}
+.field-forecast-empty{font-size:13px;line-height:1.7;color:#556679;margin:10px 0;align-self:center}
 .ocean-v2 #detail .field-check small{color:#5b6e82;font-size:12px}
-.ocean-v2 #detail .field-address dt{color:#617389}
+.ocean-v2 #detail .field-address dt{color:#556679}
 .ocean-v2 #detail .zone .zlvl{box-shadow:none!important}
 @media(max-width:650px){.field-arrivals{margin:30px 0}.field-arrivals-head{align-items:start;flex-direction:column;gap:8px}.field-arrivals-grid{gap:20px;grid-template-columns:1fr}.field-arrival-image{aspect-ratio:1.65}.field-arrival-text{padding:13px 0}.field-arrivals .field-text-button{min-height:44px}.field-arrival-text b{font-size:22px}}
 @media(prefers-reduced-motion:reduce){.field-arrival img{transition:none}.field-arrival:hover img{transform:none}}
-.field-result-count{font-size:12px;color:#617389;margin:20px 0 16px}
+.field-result-count{font-size:12px;color:#556679;margin:20px 0 16px}
 @media(max-width:650px){.field-arrivals-grid{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:84%;overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:thin;padding-bottom:12px}.field-arrival{scroll-snap-align:start}.field-arrival-image{aspect-ratio:1.2}}
 
 /* A coastal field notebook: cobalt, sea glass and a small coral accent. */
@@ -203,3 +203,8 @@
 
 /* Tablette/bureau : les onglets ne rétrécissent pas (texte coupé de 2-3 px) et le dernier bloc passe au-dessus de la barre d'action fixe. */
 @media(min-width:701px){.ocean-v2 #detail .dtab{flex:0 0 auto;overflow:visible}.ocean-v2 #detail{padding-bottom:calc(32px + 96px + env(safe-area-inset-bottom,0px))}}
+
+/* Numéro de chapitre : corail assombri (grand texte, >= 3:1 sur le papier de la fiche). */
+.ocean-v2 #detail .guide-chapter-number{color:#d4421f}
+/* Carte « Ton activité » : suit l'activité (jetons --g-*, repli = bleu d'origine sans activité). */
+.field-fact-card.fact-activity{background:var(--g-pale,#e9f0ff);border-color:var(--g-line,#d3e0ff);color:var(--g-ink,#204aba)}
