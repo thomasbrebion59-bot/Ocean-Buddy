@@ -2,7 +2,7 @@
    Pages : réseau d'abord (les mises à jour arrivent tout de suite), cache en secours.
    Fichiers versionnés (?v=…), images locales et polices : cache d'abord.
    Météo, marées, cartes et services en ligne : jamais mis en cache ici. */
-const VERSION='ob-2026-10-16';
+const VERSION='ob-2026-10-17';
 const STATIC=VERSION+'-static', PAGES=VERSION+'-pages';
 const CORE=['./','index.html','manifest.webmanifest','assets/app/icon-192.png','assets/poulpy/scenes/travel-v2.webp'];
 const SURF=['assets/surf/surfeur.webp?v=16','assets/surf/surfeuse.webp?v=16'];
