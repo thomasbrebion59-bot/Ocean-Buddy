@@ -32,7 +32,7 @@ B.wait('shell');B.wait('feed');
 B.cap=setTimeout(function(){B.ready('timeout');},4000);
 })();</script>
 <noscript><style>#obBoot{display:none}</style></noscript>
-<script src="i18n.js?v=3e1ff255cdad"></script>
+<script src="i18n.js?v=05e0a3a16755"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
 <meta name="theme-color" content="#1a4fd6">
@@ -67,7 +67,9 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
 <link rel="stylesheet" href="i18n.css?v=0913dd3686ce">
 <link rel="stylesheet" href="badges.css?v=6ebf498f9b27">
 <link rel="stylesheet" href="home-feed.css?v=c65f4d24e47d">
-<link rel="stylesheet" href="app-shell.css?v=828789249156">
+<link rel="stylesheet" href="surf.css?v=e865fa365c51">
+<link rel="stylesheet" href="surf-tab.css?v=95f185d20889">
+<link rel="stylesheet" href="app-shell.css?v=0eb082868b50">
 <link rel="stylesheet" href="spot-data.css?v=65c8e69b40a7">
 <link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
@@ -419,6 +421,62 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
       <div style="height:22px"></div>
     </section>
 
+    <!-- ============ JEU : MINI-JEU DE SURF ============ -->
+    <section class="screen" id="surf" aria-label="Mini-jeu de surf">
+      <div class="sf-hero" aria-hidden="false">
+        <svg class="sf-wave sf-wave-back" viewBox="0 0 400 140" preserveAspectRatio="none" aria-hidden="true"><path d="M0 70C50 30 100 30 150 70S250 110 300 70 400 30 400 30V140H0z"/></svg>
+        <svg class="sf-wave sf-wave-mid" viewBox="0 0 400 140" preserveAspectRatio="none" aria-hidden="true"><path d="M0 85C60 40 120 40 180 85S300 130 360 85 400 60 400 60V140H0z"/></svg>
+        <svg class="sf-curl" viewBox="0 0 200 120" aria-hidden="true"><path d="M8 112C20 52 70 14 128 14c34 0 56 18 60 42-14-14-34-20-52-14-26 8-34 34-22 56z"/></svg>
+        <svg class="sf-wave sf-wave-front" viewBox="0 0 400 140" preserveAspectRatio="none" aria-hidden="true"><path d="M0 100C70 70 130 70 200 100S330 130 400 100V140H0z"/></svg>
+        <div class="sf-hero-tx"><small>Mini-jeu</small><h2>Surf</h2><span class="sf-offline">Jouable sans réseau</span></div>
+      </div>
+      <div class="sf-body">
+        <section class="sf-card" aria-labelledby="sfCharT">
+          <h3 id="sfCharT">Ton personnage</h3>
+          <div class="sf-chars" role="group" aria-label="Choix du personnage">
+            <button type="button" class="sf-char" data-sf-char="surfeur" aria-pressed="true"><canvas width="192" height="192" aria-hidden="true"></canvas><b>Surfeur</b></button>
+            <button type="button" class="sf-char" data-sf-char="surfeuse" aria-pressed="false"><canvas width="192" height="192" aria-hidden="true"></canvas><b>Surfeuse</b></button>
+          </div>
+          <button type="button" class="sf-play" id="sfPlay">Jouer</button>
+        </section>
+        <section class="sf-card" aria-labelledby="sfRecT">
+          <h3 id="sfRecT">Mes records</h3>
+          <p class="sf-empty" id="sfEmpty" hidden>Pas encore de partie</p>
+          <dl class="sf-recs" id="sfRecs">
+            <div><dt>Meilleur score</dt><dd id="sfBest">–</dd></div>
+            <div><dt>Parties jouées</dt><dd id="sfGames">–</dd></div>
+            <div><dt>Meilleure figure</dt><dd id="sfTrick">–</dd></div>
+            <div><dt>Meilleure combo</dt><dd id="sfCombo">–</dd></div>
+          </dl>
+          <p class="sf-note">Records gardés sur cet appareil uniquement.</p>
+        </section>
+        <section class="sf-card" aria-labelledby="sfHowT">
+          <h3 id="sfHowT">Comment faire les figures</h3>
+          <ul class="sf-how">
+            <li><b>Glisse</b><span>Déplace ton doigt pour guider la planche sur la vague.</span></li>
+            <li><b>Saut</b><span>Touche l’écran ou appuie sur le bouton Saut.</span></li>
+            <li><b>360</b><span>Touche deux fois l’écran ou appuie sur le bouton 360.</span></li>
+            <li><b>Grab</b><span>Appuie sur le bouton Grab en l’air. Maintenu, il devient un Tail grab.</span></li>
+            <li><b>Cutback</b><span>Trace une petite diagonale rapide avec le doigt.</span></li>
+            <li><b>Snap</b><span>Change brusquement de direction en haut de la vague.</span></li>
+            <li><b>Floater</b><span>Glisse le long du haut de la vague.</span></li>
+            <li><b>Reverse</b><span>Lance un 360 en glissant vers la gauche au moment du saut.</span></li>
+            <li><b>Superman</b><span>Appuie sur Grab dans le quart de seconde qui suit le saut.</span></li>
+            <li><b>Layback</b><span>Maintiens Grab pendant un floater.</span></li>
+            <li><b>Re-entry</b><span>Fais un snap, puis saute tout de suite, en haut de la vague.</span></li>
+            <li><b>Barrel roll</b><span>Lance un 360 en glissant vers le bas au moment du saut.</span></li>
+            <li><b>Carve 360</b><span>Enchaîne deux cutbacks en moins de 2 secondes.</span></li>
+            <li><b>Tube</b><span>Reste appuyé près du creux de la vague : le score est multiplié par 2.</span></li>
+            <li><b>Obstacles</b><span>Évite les rochers et les récifs. Saute par-dessus la lèvre qui s’abat.</span></li>
+            <li><b>Frôlé !</b><span>Passe tout près d’un obstacle sans le toucher : points en plus.</span></li>
+            <li><b>Chute</b><span>Tomber te fait perdre ton combo, et tu attends 1,5 seconde.</span></li>
+            <li><b>Combo</b><span>Enchaîne les figures sans tomber : le score est multiplié par 2, puis 3…</span></li>
+          </ul>
+        </section>
+        <div style="height:22px"></div>
+      </div>
+    </section>
+
     <!-- ============ SURF TRIPS ============ -->
     <section class="screen" id="trips" aria-label="Mes voyages">
       <div id="tripContent"></div>
@@ -430,6 +488,7 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
     <div class="nav-pill" id="navPill"></div>
     <button class="n-home active" data-s="home" onclick="go('home')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3 2.5 11.2a1 1 0 0 0 .65 1.76H5V20a1 1 0 0 0 1 1h3.5v-5h5v5H18a1 1 0 0 0 1-1v-7.04h1.85a1 1 0 0 0 .65-1.76z"/></svg></span>Accueil</button>
     <button class="n-spots" data-s="spots" onclick="go('spots')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7.5 7.5 0 0 0-7.5 7.5c0 5.2 6.3 11.4 6.9 12a.8.8 0 0 0 1.1 0c.7-.6 7-6.8 7-12A7.5 7.5 0 0 0 12 2z"/><circle cx="12" cy="9.3" r="2.6" fill="#fff"/></svg></span>Spots</button>
+    <button class="n-surf" data-s="surf" onclick="go('surf')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M2 17c3 0 3-2 5.5-2S10 17 12.5 17 15 15 17.5 15 20 17 22 17v3H2z"/><path d="M3 12C5 6 10 3.5 14 4.5c-2 1.2-2.6 3-2 4.5 1 2.5 4 2.5 6 1.5-1.5 3-5 4.5-9 3.800C7.5 14.3 5 13.5 3 12z"/></svg></span>Jeu</button>
     <button class="center" data-s="challenges" onclick="go('challenges')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M7 4h10v1.5h2.5a.8.8 0 0 1 .8.9c-.2 2-1.6 3.4-3.6 3.7A5.2 5.2 0 0 1 13 13v2h2.2a.8.8 0 0 1 0 1.6H8.8a.8.8 0 0 1 0-1.6H11v-2a5.2 5.2 0 0 1-3.7-2.9C5.3 9.8 3.9 8.4 3.7 6.4a.8.8 0 0 1 .8-.9H7zM5.6 7c.2.9.8 1.6 1.5 1.9V7zm12.9 0H17v1.9c.7-.3 1.3-1 1.5-1.9z"/><rect x="8" y="18.4" width="8" height="2" rx="1"/></svg></span></button>
     <button class="n-prof" data-s="profile" onclick="go('profile')"><span class="nic"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 3c-3.6 0-6 2.6-6 5.8 0 1.6.7 2.7 1 3.4-1 .1-2 .9-2 1.9 0 .8.7 1.2 1.5 1 .2 1 1 1.7 1.9 1.5.3.7 1 .9 1.6.7.6.2 1.3 0 1.6-.7.9.2 1.7-.5 1.9-1.5.8.2 1.5-.2 1.5-1 0-1-1-1.8-2-1.9.3-.7 1-1.8 1-3.4C18 5.6 15.6 3 12 3z"/><circle cx="10" cy="9" r="1.3" fill="#fff"/><circle cx="14" cy="9" r="1.3" fill="#fff"/></svg></span>Profil</button>
     <button class="n-trips" data-s="trips" onclick="go('trips')">Voyages</button>
@@ -491,7 +550,7 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
 <script src="activity-transition.js?v=537b498cfcaa"></script>
 <script src="spot-photos.js?v=7db07d494e54"></script>
 <script src="progression.js?v=573fcb54b5ba"></script>
-<script src="app.js?v=fabbd5ccd499"></script>
+<script src="app.js?v=87afa80b52de"></script>
 <script src="private-spots.js?v=683221818ade"></script>
 <script src="poulpy-knowledge.js?v=e0ec814bd70b"></script>
 <script src="design.js?v=e07e118869a6"></script>
@@ -517,7 +576,7 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
 <script src="community-config.js?v=59d15c4cfc90"></script>
 <script src="trip-sharing.js?v=e29f4931ffd4"></script>
 <script src="community.js?v=c482a447be08"></script>
-<script src="navigation.js?v=dcf43681a88e"></script>
+<script src="navigation.js?v=0d1779e2087b"></script>
 <script src="ocean-sound.js?v=7e7f5190346a"></script>
 <script src="polish.js?v=5f0a1f18315f"></script>
 <script src="spot-scenes.js?v=82700c22eafe"></script>
@@ -526,8 +585,13 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
 <script src="app-update.js?v=1ddfa6391360"></script>
 <script src="ocean-home.js?v=04d4c46ee3b5"></script>
 <script src="badges.js?v=2723bc4c0577"></script>
-<script src="home-feed.js?v=c4df709958c9"></script>
+<script src="home-feed.js?v=91f6bbf4a7a3"></script>
 <script src="passport.js?v=f578917c0f7a"></script>
-<script src="app-shell.js?v=94fe0f7b85f0"></script>
+<script src="surf-model.js?v=db29a0e31c9a"></script>
+<script src="surf-render.js?v=f094a635d338"></script>
+<script src="surf-input.js?v=03ea6458fadc"></script>
+<script src="surf-game.js?v=96a851e57948"></script>
+<script src="surf-tab.js?v=989619a1d415"></script>
+<script src="app-shell.js?v=e8e1b57eb9ba"></script>
 </body>
 </html>

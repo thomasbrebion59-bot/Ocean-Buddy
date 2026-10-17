@@ -91,6 +91,8 @@
   .ocean-v2 .nav>button[data-s]>svg,.ocean-v2 .nav .desktop-label,.ocean-v2 .nav-spark,.ocean-v2 .nav .mobile-label{display:none!important}
   .ocean-v2 .nav .tab-label{display:block;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;padding:0 2px}
   .ocean-v2 .nav>button[data-s=community]{display:none!important}
+  /* Six onglets : sur les petits écrans, texte un peu plus serré pour que « Explorer » et « Voyages » restent entiers. */
+  @media(max-width:399px){.ocean-v2 .nav{padding:4px 2px!important}.ocean-v2 .nav>button[data-s]{font-size:9.8px;letter-spacing:-.25px}.ocean-v2 .nav .tab-label{padding:0}}
   .ocean-v2 .nav .tab-badge{position:absolute;top:3px;left:calc(50% + 6px);min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:var(--ob-coral,#ff6a4d);color:#fff;font:800 10px/16px var(--body);text-align:center;box-shadow:0 0 0 2px rgba(255,255,255,.9)}
   .ocean-v2 .nav .tab-badge[hidden]{display:none}
   /* Bouton Poulpy : rond, à droite de la barre, comme la recherche dans iOS 26. */
