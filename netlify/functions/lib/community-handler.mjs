@@ -9,8 +9,20 @@ const bearer=request=>{
   return /^Bearer [^\s]+$/.test(value)?value.slice(7):null;
 };
 const query=(table,params)=>table+'?'+new URLSearchParams(params).toString();
+// Write limits. The per-minute counters live in memory, per function instance (same mechanism as Poulpy):
+// they stop bursts but reset on a cold start; Netlify's edge limit (community.mjs) and the database counts
+// (3 entries/min, 10 reports/h per account) are the durable ones.
+export const WRITE_LIMITS={perIpPerMinute:30,perUserPerMinute:20,reportsPerHour:10};
 
 export function createCommunityHandler({env=process.env,fetcher=fetch,now=Date.now}={}){
+  const ipBuckets=new Map(),userBuckets=new Map();
+  // True when the key is over its limit for the current minute; counts the attempt otherwise.
+  function limited(buckets,key,max){
+    const t=now();for(const [k,v] of buckets)if(v.until<t)buckets.delete(k);
+    const bucket=buckets.get(key)||{count:0,until:t+60000};
+    if(bucket.count>=max||buckets.size>=10000)return true;
+    bucket.count++;buckets.set(key,bucket);return false;
+  }
   const supabase=String(env.COMMUNITY_SUPABASE_URL||'').replace(/\/$/,'');
   const serviceKey=env.COMMUNITY_SUPABASE_SECRET_KEY||env.COMMUNITY_SUPABASE_SERVICE_ROLE_KEY||'';
   const anonKey=env.COMMUNITY_SUPABASE_PUBLISHABLE_KEY||env.COMMUNITY_SUPABASE_ANON_KEY||'';
@@ -55,7 +67,7 @@ export function createCommunityHandler({env=process.env,fetcher=fetch,now=Date.n
   }
   async function approved(id){return (await db('community_entries',{select:SELECT,id:'eq.'+id,status:'eq.approved',limit:'1'}))[0]||null;}
   async function addEvent(actor,entryId,action){await db('community_moderation_events',{}, {method:'POST',body:{actor_id:actor,entry_id:entryId,action},prefer:'return=minimal'});}
-  return async function(request){
+  return async function(request,platform={}){
     const origin=request.headers.get('origin');
     // Same defensive headers as Poulpy: these JSON answers are never a page to frame, sniff or follow links from.
     const headers={'content-type':'application/json; charset=utf-8','cache-control':'no-store','vary':'Origin','x-content-type-options':'nosniff','x-frame-options':'DENY','referrer-policy':'no-referrer','content-security-policy':"default-src 'none'; frame-ancestors 'none'",'cross-origin-resource-policy':'cross-origin'};
@@ -108,7 +120,10 @@ export function createCommunityHandler({env=process.env,fetcher=fetch,now=Date.n
       if(+(request.headers.get('content-length')||0)>16000)code('request_too_large',413);
       const raw=await request.text();if(new TextEncoder().encode(raw).length>16000)code('request_too_large',413);
       let input;try{input=JSON.parse(raw)}catch(_){code('invalid_json',400)}
+      // Per IP before the session check, so junk tokens do not hammer Supabase Auth; then per verified account.
+      if(platform.ip&&limited(ipBuckets,platform.ip,WRITE_LIMITS.perIpPerMinute))code('slow_down',429);
       const currentUser=await user(request,true),action=input?.action;
+      if(limited(userBuckets,currentUser.id,WRITE_LIMITS.perUserPerMinute))code('slow_down',429);
       if(action==='update_profile'){
         const displayName=typeof input.displayName==='string'?input.displayName.trim():'';
         if(displayName.length<2||displayName.length>30)code('invalid_display_name',400);
@@ -133,6 +148,9 @@ export function createCommunityHandler({env=process.env,fetcher=fetch,now=Date.n
         if(target.author_id===currentUser.id)code('own_entry',400);
         const previous=await db('community_reports',{select:'id',reporter_id:'eq.'+currentUser.id,entry_id:'eq.'+report.entry_id,limit:'1'});
         if(previous.length)return json({reported:true});
+        const hour=new Date(now()-3600000).toISOString();
+        const lastHour=await db('community_reports',{select:'id',reporter_id:'eq.'+currentUser.id,created_at:'gte.'+hour,limit:String(WRITE_LIMITS.reportsPerHour+1)});
+        if(lastHour.length>=WRITE_LIMITS.reportsPerHour)code('slow_down',429);
         await db('community_reports',{}, {method:'POST',body:{...report,reporter_id:currentUser.id},prefer:'return=minimal'});
         return json({reported:true},202);
       }
