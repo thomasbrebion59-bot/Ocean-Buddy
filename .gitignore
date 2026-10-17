@@ -1,6 +1,8 @@
 .netlify/
 .env
 .env.*
+# Seul le modèle sans valeurs est suivi.
+!.env.example
 node_modules/
 .DS_Store
 mobile/www/
@@ -25,3 +27,14 @@ out/boot-check/
 
 # Rapports de l’audit (out/audit/), non publiés
 out/audit/
+
+# Clés, certificats et profils de signature : jamais dans le dépôt.
+*.pem
+*.p8
+*.p12
+*.mobileprovision
+*.cer
+*.key
+
+# Réglages locaux de Claude Code (permissions propres à la machine)
+.claude/settings.local.json
