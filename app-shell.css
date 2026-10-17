@@ -7,7 +7,7 @@
    (11 px au minimum), Explorer en plein écran sur la vraie Terre. Les couleurs restent celles de
    la marque (cobalt, marine, citron vert, corail) et suivent l’activité choisie (--t-*). */
 :root{
-  --as-ink:#0c1d3f;--as-ink2:#4a5a7c;--as-ink3:#7d8aa6;
+  --as-ink:var(--g-ink,#0c1d3f);--as-ink2:#4a5a7c;--as-ink3:#5d6b88;
   --as-page:#f2f5fb;--as-card:#fff;--as-line:rgba(12,29,63,.08);
   --as-accent:var(--t-main2,#1f55e0);--as-deep:var(--t-deep,#0b2d7a);
   --as-glass:rgba(250,252,255,.8);--as-glass-strong:rgba(250,252,255,.88);
@@ -193,7 +193,7 @@
   body.explore-immersive .omap-stage .omap-filters{top:calc(var(--as-top) + 56px);padding:0 12px}
   body.explore-immersive .omap-acts button,body.explore-immersive .omap-level select{height:36px;border-color:var(--as-dark-border);background-color:var(--as-dark-glass);color:#fff;box-shadow:none;-webkit-backdrop-filter:var(--as-blur);backdrop-filter:var(--as-blur)}
   body.explore-immersive .omap-level select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='2.4' stroke-linecap='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E")}
-  body.explore-immersive .omap-level select option{color:#0c1d3f}
+  body.explore-immersive .omap-level select option{color:var(--g-ink,#0c1d3f)}
   body.explore-immersive .omap-acts button i{box-shadow:0 0 0 2px rgba(255,255,255,.25)}
   body.explore-immersive .omap-acts button[aria-pressed=true]{background:#fff;color:var(--as-ink);border-color:#fff}
   /* Commandes à droite : verre sombre, plus compactes. */
@@ -224,7 +224,7 @@
   body.explore-immersive .omap-sheet-head{min-height:58px;padding:14px 12px 10px 18px}
   body.explore-immersive .omap-title{font-size:17px}
   body.explore-immersive .omap-sub{font-size:13px}
-  body.explore-immersive .omap-sheet-toggle{height:36px;background:color-mix(in srgb,var(--as-accent) 12%,#fff);font-size:13px}
+  body.explore-immersive .omap-sheet-toggle{height:36px;background:color-mix(in srgb,var(--as-accent) 12%,#fff);color:color-mix(in srgb,var(--as-accent) 78%,#000);font-size:13px}
   body.explore-immersive .omap-card{bottom:calc(var(--as-tab-h) + var(--as-tab-bottom) + 10px);inset-inline:10px;border-radius:var(--as-r-xl);
     background:var(--as-glass-strong);-webkit-backdrop-filter:var(--as-blur);backdrop-filter:var(--as-blur);border:.5px solid var(--as-glass-border)}
   body.explore-immersive .omap.has-card .omap-panel{opacity:0;pointer-events:none}
@@ -355,7 +355,7 @@ html[data-act] .pp{background:radial-gradient(120% 90% at 100% 0%,var(--t-main2)
 .as-confirm.open .as-confirm-card{transform:none;opacity:1}
 .as-confirm-card p{margin:0 0 18px;font:600 16px/1.45 var(--body);color:var(--as-ink)}
 .as-confirm-card div{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-.as-confirm-card button{height:48px;border:0;border-radius:999px;font:750 15px var(--body);cursor:pointer;background:#eef2fb;color:var(--as-ink)}
+.as-confirm-card button{height:48px;border:0;border-radius:999px;font:750 15px var(--body);cursor:pointer;background:var(--g-pale,#eef2fb);color:var(--as-ink)}
 .as-confirm-card button[data-v="1"]{background:var(--as-accent);color:#fff}
 .as-confirm-card button.is-danger{background:#e5484d;color:#fff}
 
@@ -377,3 +377,13 @@ button,a,[role=button],.poulpy-action,.hero-cta,.ql-go,.sec a,.as-sec a{font-var
 /* Fonds sombres et reflets des écrans (Explorer, voyage, fiches) : sans activité ce sont les valeurs d’origine
    (repli de var(--g-…,#hex)) ; avec une activité ils dérivent de ses couleurs. */
 html[data-act]{--g-lift:var(--t-main2);--g-mid:color-mix(in srgb,var(--t-main) 78%,var(--t-deep));--g-night:color-mix(in srgb,var(--t-deep) 48%,#000);--g-night2:color-mix(in srgb,var(--t-deep) 62%,#000);--g-night3:color-mix(in srgb,var(--t-deep) 36%,#000)}
+html[data-act]{--g-ink:color-mix(in srgb,var(--t-deep) 85%,var(--t-main));--g-main:var(--t-main);--g-soft:var(--t-bright);--g-pale:var(--t-tint);--g-line:var(--t-line)}
+
+/* Zones tactiles 44 px (B-03) sans changer l’aspect ni la mise en page : le pseudo-élément déborde du bouton. */
+.mobile-search,.ocean-v2 .qchip{position:relative}
+.mobile-search::after{content:"";position:absolute;inset:-3px}
+.ocean-v2 .qchip::after{content:"";position:absolute;inset:-5px -3px}
+
+/* Loupe de la barre du haut : avec une activité, le thème la forçait en blanc alors que la barre est transparente
+   (icône presque invisible sur fond clair). Elle prend la couleur de l’activité, sauf sur l’Explorer (verre sombre). */
+html[data-act] body.ocean-v2:not(.explore-immersive) .app-chrome .mobile-search{color:var(--t-main)!important}

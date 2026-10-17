@@ -46,7 +46,7 @@
 .hf-kicker{display:inline-block;padding:5px 10px;border-radius:999px;background:rgba(255,255,255,.18);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font:750 11.5px/1 var(--body);letter-spacing:1.2px;text-transform:uppercase;color:#fff}
 .hf-slide h2{margin:10px 0 4px;font:900 48px/.92 var(--as-condensed);letter-spacing:-.8px;text-transform:uppercase;color:#fff;text-shadow:0 4px 24px rgba(0,0,0,.4)}
 .hf-slide p{margin:0 0 14px;font:600 15px/1.35 var(--body);color:rgba(255,255,255,.9)}
-.hf-go{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 20px;border:0;border-radius:999px;background:#fff;color:#0c1d3f;font:800 15px var(--body);cursor:pointer;box-shadow:0 10px 26px -10px rgba(0,0,0,.55)}
+.hf-go{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 20px;border:0;border-radius:999px;background:#fff;color:var(--g-ink,#0c1d3f);font:800 15px var(--body);cursor:pointer;box-shadow:0 10px 26px -10px rgba(0,0,0,.55)}
 .hf-go svg{width:18px;height:18px;color:var(--as-accent,#1f55e0)}
 .hf-go:active{transform:scale(.96)}
 .hf-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:6px;pointer-events:none}
@@ -134,4 +134,9 @@ html[data-act] .hf-plan-tx small{color:var(--t-acc)}
 
 /* Fond d’ambiance : avec une activité, la photo floutée prend la teinte de l’activité (mélange « couleur » :
    on garde la lumière de la photo, on change la couleur). Sans activité : photo telle quelle. */
-html[data-act] .hf-ambient::after{content:"";position:absolute;inset:0;background:var(--t-line);mix-blend-mode:color;pointer-events:none}
+html[data-act] .hf-ambient::before{content:"";position:absolute;inset:0;z-index:1;background:linear-gradient(180deg,rgba(255,255,255,.62),rgba(255,255,255,.2) 60%,rgba(255,255,255,0));pointer-events:none}
+html[data-act] .hf-ambient::after{content:"";position:absolute;inset:0;z-index:2;background:var(--t-line);mix-blend-mode:color;pointer-events:none}
+html[data-act] #home .as-large p{color:var(--t-deep)}
+
+/* Zone tactile 44 px (B-03) : le bouton garde ses 38 px visibles, la zone de frappe déborde de 3 px (aucun décalage). */
+.hf-fav::after{content:"";position:absolute;inset:-3px}
