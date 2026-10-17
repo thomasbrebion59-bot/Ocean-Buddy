@@ -302,8 +302,9 @@ function applySport(id,transition,stay){
   renderSportFilters();backToWorlds();saveState();
   const render = () => {
     renderSpots();
-    /* L’accueil se refait après la scène, pas pendant : le changement d’activité reste fluide. */
-    setTimeout(renderHome,1200);
+    /* Depuis un autre écran, l’accueil se refait plus tard, hors champ. Si on reste sur l’accueil (stay), il se refait tout de
+       suite, sous la scène encore opaque : jamais de réécriture visible après coup (un seul propriétaire de l’accueil). */
+    if(stay)renderHome();else setTimeout(renderHome,1200);
   };
   if(transition){
     if(!stay)go('spots');

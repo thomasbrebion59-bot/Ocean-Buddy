@@ -162,3 +162,19 @@ test('applySport préserve les favoris et répartit le rendu sans changer la rem
   valid=false;next();await cancelled;assert.ok(!calls.includes('spots'));assert.ok(!calls.includes('home-later'));
   calls.length=0;context.apply(null);assert.equal(context.chosenSport,'all');assert.ok(calls.indexOf('spots')<calls.indexOf('go:spots'));
 });
+
+test('applySport en mode stay refait l’accueil sous la scène, sans minuteur différé',async()=>{
+  const app=fs.readFileSync(require.resolve('../app.js'),'utf8');
+  const section=app.slice(app.indexOf('function applySport('),app.indexOf('/* ====== GÉOLOCALISATION'));
+  const calls=[];let next;
+  const input={value:''},chip={classList:{remove(){}}};
+  const context={window:{OceanNavigation:{begin(){}},OceanTheme:{set(){}}},SPORTMAP:{surf:{}},activeSport:null,chosenSport:'all',currentFilter:'all',currentSearch:'',favOnly:false,nearMode:false,
+    document:{getElementById:()=>({value:'',classList:{remove(){}}}),querySelectorAll:()=>[]},renderSportFilters(){},backToWorlds(){},saveState(){},go:s=>calls.push('go:'+s),
+    renderSpots:()=>calls.push('spots'),renderHome:()=>calls.push('home'),setTimeout:()=>calls.push('home-later')};
+  vm.runInNewContext(section+';this.apply=applySport;',context);
+  const pending=context.apply('surf',{nextFrame:()=>new Promise(r=>{next=r;}),isCurrent:()=>true},true);
+  assert.ok(!calls.includes('home'));next();await pending;
+  assert.deepEqual(calls,['spots','home']);
+  calls.length=0;const p2=context.apply('surf',{nextFrame:()=>new Promise(r=>{next=r;}),isCurrent:()=>true},false);next();await p2;
+  assert.ok(calls.includes('home-later'));assert.ok(!calls.includes('home'));
+});
