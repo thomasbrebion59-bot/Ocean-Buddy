@@ -55,7 +55,7 @@
 @media(min-width:960px){.hf-hero{aspect-ratio:auto;height:520px;max-height:none}.hf-slide h2{font-size:76px}.hf-slide-tx{left:44px;bottom:48px;max-width:640px}.hf-acts{margin-inline:0;padding-inline:0}.hf-search{max-width:640px}}
 
 /* ---------- Carte du monde ---------- */
-.hf-world{margin:30px 0 4px;border-radius:var(--as-r-xl,28px);overflow:hidden;background:radial-gradient(90% 70% at 50% 16%,#2f6fe0 0%,#1b4fc4 48%,#0b2d7a 100%);color:#fff}
+.hf-world{margin:30px 0 4px;border-radius:var(--as-r-xl,28px);overflow:hidden;background:radial-gradient(90% 70% at 50% 16%,var(--g-lift,#2f6fe0) 0%,var(--g-mid,#1b4fc4) 48%,var(--t-deep) 100%);color:#fff}
 .hf-world-map{--d:232px;position:relative;height:276px;display:grid;place-items:center;overflow:hidden}
 /* Globe 3D de l’accueil : carré de la taille de la planète, transparent hors de la sphère. */
 .hf-globe{position:absolute;left:50%;top:50%;width:var(--d);height:var(--d);transform:translate(-50%,-50%);border-radius:50%;overflow:hidden;touch-action:pan-y;opacity:0;transition:opacity .45s ease}
@@ -63,7 +63,7 @@
 /* Le globe 3D prend le relais en fondu, une fois sa première image éclairée dessinée ; la sphère CSS disparaît ensuite. */
 .hf-world-map.is-live .hf-globe{opacity:1}
 .hf-world-map.is-live .hf-planet{visibility:hidden;transition:visibility 0s .45s}
-.hf-planet{position:relative;width:var(--d);height:var(--d);border-radius:50%;overflow:hidden;isolation:isolate;background:#0b2d7a;box-shadow:0 0 0 1px rgba(255,255,255,.12),0 22px 50px -12px rgba(3,16,46,.75);transform:translateZ(0)}
+.hf-planet{position:relative;width:var(--d);height:var(--d);border-radius:50%;overflow:hidden;isolation:isolate;background:var(--t-deep);box-shadow:0 0 0 1px rgba(255,255,255,.12),0 22px 50px -12px rgba(3,16,46,.75);transform:translateZ(0)}
 /* La Terre (NASA) défile en boucle : la sphère tourne sans canvas ni WebGL, donc sans à-coups. */
 .hf-planet-tex{position:absolute;inset:0;background:url(assets/globe/earth-day-4k.webp) 0 50%/calc(var(--d) * 2) var(--d) repeat-x;animation:hf-spin 48s linear infinite}
 .hf-planet-shade{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 34% 28%,rgba(255,255,255,.2) 0,rgba(255,255,255,0) 44%),radial-gradient(circle at 62% 56%,rgba(0,0,0,0) 50%,rgba(3,16,46,.6) 100%)}
@@ -131,3 +131,7 @@ html[data-act] .hf-world{background:radial-gradient(90% 70% at 50% 16%,var(--t-m
 html[data-act] .hf-plan{background:radial-gradient(140% 120% at 0% 0%,color-mix(in srgb,var(--t-acc) 20%,transparent),transparent 50%),linear-gradient(140deg,var(--t-deep) 0%,var(--t-main) 70%,var(--t-main2) 120%);box-shadow:0 22px 40px -26px var(--t-deep)}
 html[data-act] .hf-plan-cal i.on,html[data-act] .hf-plan-go{background:var(--t-acc);color:var(--t-acc-ink)}
 html[data-act] .hf-plan-tx small{color:var(--t-acc)}
+
+/* Fond d’ambiance : avec une activité, la photo floutée prend la teinte de l’activité (mélange « couleur » :
+   on garde la lumière de la photo, on change la couleur). Sans activité : photo telle quelle. */
+html[data-act] .hf-ambient::after{content:"";position:absolute;inset:0;background:var(--t-line);mix-blend-mode:color;pointer-events:none}
