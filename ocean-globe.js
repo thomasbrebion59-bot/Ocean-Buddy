@@ -563,6 +563,21 @@
     const PN={at:inst(pinGeo,'aAt',2,2),type:inst(pinGeo,'aType',1,2),c:inst(pinGeo,'aC',3,2),alpha:inst(pinGeo,'aAlpha',1,2)};
     PN.type[1]=1;
     const pinU={uRip:{value:-1},uLime:{value:col('#D7F75B')},uUser:{value:col('#2F6BFF')}};
+    /* Couleurs des pastilles de regroupement et du point « vous » : lues sur le thème de l'activité (--t-deep, --t-main2, --t-bright), repli sur le cobalt d'origine. Mises à jour sur 'ocean:sport', sans recréer le globe. */
+    const themeVar=(n,d)=>{try{return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||d;}catch(e){return d;}};
+    const applyTheme=first=>{
+      try{
+        badgeMat.uniforms.uDisk.value.set(themeVar('--t-deep','#0B2D7A'));
+        badgeMat.uniforms.uHot.value.set(themeVar('--t-main2','#1F55E0'));
+        pinU.uUser.value.set(themeVar('--t-bright','#2F6BFF'));
+      }catch(e){}
+      if(first!==true)invalidate();
+    };
+    /* Le thème change par transition CSS (400 ms, plus longue sur appareil chargé) : on relit à l'événement puis à trois échéances, pour finir sur la valeur d'arrivée. */
+    let themeTimers=[];
+    const onSport=()=>{applyTheme();themeTimers.forEach(clearTimeout);themeTimers=[520,1500,3200].map(ms=>setTimeout(applyTheme,ms));};
+    document.addEventListener('ocean:sport',onSport);
+    applyTheme(true);
     const pinMesh=new T.Mesh(pinGeo,new T.ShaderMaterial({...premult,uniforms:pinU,
       vertexShader:`attribute vec2 aAt;attribute float aType,aAlpha;attribute vec3 aC;varying vec2 vP;varying float vT,vA;varying vec3 vC;
         void main(){vP=position.xy*64.;vT=aType;vA=aAlpha;vC=aC;gl_Position=projectionMatrix*vec4(aAt+vP,0.,1.);if(aAlpha<.01)gl_Position=vec4(2.,2.,2.,1.);}`,
@@ -979,6 +994,7 @@
         if(dead)return;
         dead=true;active=false;cancelAnimationFrame(raf);raf=0;
         document.removeEventListener('visibilitychange',onVisible);
+        document.removeEventListener('ocean:sport',onSport);themeTimers.forEach(clearTimeout);
         clearTimeout(ambTimer);clearTimeout(sharpTimer);clearTimeout(restTimer);clearTimeout(hdTimer);
         Object.values(sstAnim).forEach(cancelAnimationFrame);
         ro.disconnect();
