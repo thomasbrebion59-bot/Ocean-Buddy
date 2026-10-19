@@ -14,18 +14,10 @@
   'use strict';
 
   var LANGS = {
-    fr: 'Français', en: 'English', ar: 'العربية', bn: 'বাংলা', ca: 'Català', cs: 'Čeština',
-    da: 'Dansk', de: 'Deutsch', el: 'Ελληνικά', es: 'Español', fi: 'Suomi', gu: 'ગુજરાતી',
-    he: 'עברית', hi: 'हिन्दी', hr: 'Hrvatski', hu: 'Magyar', id: 'Bahasa Indonesia', it: 'Italiano',
-    ja: '日本語', kn: 'ಕನ್ನಡ', ko: '한국어', ml: 'മലയാളം', mr: 'मराठी', ms: 'Bahasa Melayu',
-    nb: 'Norsk', nl: 'Nederlands', or: 'ଓଡ଼ିଆ', pa: 'ਪੰਜਾਬੀ', pl: 'Polski',
-    'pt-BR': 'Português (Brasil)', 'pt-PT': 'Português (Portugal)', ro: 'Română', ru: 'Русский',
-    sk: 'Slovenčina', sl: 'Slovenščina', sv: 'Svenska', ta: 'தமிழ்', te: 'తెలుగు', th: 'ไทย',
-    tr: 'Türkçe', uk: 'Українська', ur: 'اردو', vi: 'Tiếng Việt',
-    'zh-Hans': '简体中文', 'zh-Hant': '繁體中文'
+    fr: 'Français', en: 'English', es: 'Español'
   };
   var RTL = { ar: 1, he: 1, ur: 1 };
-  var VERSIONS = /*VERSIONS*/{"ar":"06996d9e89","bn":"dafc0824c6","ca":"e511afade3","cs":"a4b05c5922","da":"0afc82d468","de":"582ff28e0d","el":"16ef21a38f","en":"b6542b248b","es":"d6962199ab","fi":"6e3b4825c5","gu":"509c1f499c","he":"695e1758cd","hi":"504f2726e9","hr":"0256bb7667","hu":"a90622e4a5","id":"c1ab81711b","it":"405f335184","ja":"b0f4498515","kn":"6603418930","ko":"372992ea99","ml":"37926a38c8","mr":"006082b612","ms":"7da45c93ce","nb":"d486982f96","nl":"060a254517","or":"c3a0334076","pa":"b6f0254527","pl":"1085918a43","pt-BR":"91326b9377","pt-PT":"ab96028f8d","ro":"68061c2930","ru":"1b3c2ce31e","sk":"fec82a0106","sl":"742962d5a7","sv":"f60cb5996f","ta":"7dfa9ca56e","te":"6e03f83b17","th":"1ada615208","tr":"eb7fd1eca2","uk":"c0b4da1f99","ur":"fb76f9d1db","vi":"401b81db6d","zh-Hans":"ae88b290d8","zh-Hant":"93c679e790"}/*/VERSIONS*/;
+  var VERSIONS = /*VERSIONS*/{"en":"89fe0ea12b","es":"d5eb261680"}/*/VERSIONS*/;
   var STORE_KEY = 'oceanbuddy_lang';
 
   function resolve(tag) {
