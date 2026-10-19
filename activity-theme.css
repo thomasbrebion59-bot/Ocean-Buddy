@@ -53,6 +53,8 @@ html[data-act="windsurf"],#onb[data-act="windsurf"]{--t-main:#6c3dcd;--t-main2:#
 @property --t-edge{syntax:'<color>';inherits:true;initial-value:#517a85}
 html{transition:--t-main .4s ease,--t-main2 .4s ease,--t-deep .4s ease,--t-tint .4s ease,--t-line .4s ease,--t-page .4s ease,--t-bright .4s ease,--t-nav-b .4s ease,--t-nav-c .4s ease,--t-acc .4s ease,--t-bar .4s ease,--t-pill .4s ease,--t-veil .4s ease,--t-edge .4s ease}
 html.ob-booting,html:has(body.reduce-motion){transition:none}
+/* Changement posé sous la scène opaque de transition (activity-theme.js) : rien à voir, donc pas d’interpolation. */
+html.act-instant{transition:none}
 @media(prefers-reduced-motion:reduce){html{transition:none}}
 
 /* Fond des écrans (coque iOS, app-shell.css) : il suit la page de l’activité. */

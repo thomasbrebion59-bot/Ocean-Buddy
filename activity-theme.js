@@ -82,6 +82,13 @@
     const meta=document.querySelector('meta[name=theme-color]');
     if(id!==cur){
       cur=id;stop();list=[];
+      /* Écran couvert par la scène de transition (activity-transition.js) : la photo opaque cache tout, le fondu de
+         0,4 s n’y serait pas vu mais recalculerait le style de tout le document à chaque image (≈ 24 fois).
+         On pose les couleurs d’un coup sous la scène ; le fondu reste pour tout changement visible. */
+      if(window.OceanTransition&&window.OceanTransition.covered){
+        root.classList.add('act-instant');cancelAnimationFrame(set.i);
+        set.i=requestAnimationFrame(()=>{set.i=requestAnimationFrame(()=>root.classList.remove('act-instant'));});
+      }
       if(id){root.dataset.act=id;root.style.setProperty('--act-scene',`url("assets/transitions/${id}.webp?v=4")`);}
       else{delete root.dataset.act;root.style.removeProperty('--act-scene');}
       if(meta)meta.content=id?COLORS[id]:'#fef9eb';
