@@ -33,10 +33,10 @@ PARTAGE AVEC PRÉCAUTION
 Lorsque la communauté est disponible, lis les conseils approuvés ou connecte-toi avec ton courriel pour proposer un avis, un spot ou une copie choisie de ton voyage. Les contributions attendent une vérification humaine avant d’être visibles. Tes notes et autres détails privés ne sont partagés que si tu les sélectionnes dans l’aperçu.
 
 FAIS CONNAISSANCE AVEC POULPY
-Poulpy t’accompagne dans l’exploration. Utilise le guide intégré, ou active l’IA avec ton accord pour poser tes questions. Ses réponses peuvent contenir des erreurs et ne remplacent pas les informations locales.
+Poulpy t’accompagne dans l’exploration : il répond à tes questions directement dans l’app, à partir des fiches et des guides d’Ocean Buddy, même sans connexion. Ses conseils ne remplacent pas les informations locales.
 
 GARDE TON CARNET AVEC TOI
-Le catalogue et les photos embarquées restent consultables sans connexion. Tes favoris, voyages et notes sont conservés sur ton appareil. La météo, les tuiles de la carte, l’IA et la communauté nécessitent internet.
+Le catalogue et les photos embarquées restent consultables sans connexion. Tes favoris, voyages et notes sont conservés sur ton appareil. La météo, les tuiles de la carte et la communauté nécessitent internet.
 
 Ocean Buddy aide à préparer une sortie. Les conditions réelles, les consignes locales et ton encadrement priment toujours. L’app ne réserve pas de prestations et ne remplace ni les qualifications nécessaires, ni un outil de navigation maritime ou de plongée.
 
@@ -44,7 +44,7 @@ Ocean Buddy aide à préparer une sortie. Les conditions réelles, les consignes
 
 La lecture du catalogue et la création de voyages privés ne nécessitent pas de compte. L’accueil propose de choisir un prénom, un niveau et des activités ; ces informations restent locales. Les anciennes sessions de démonstration ne sont pas préremplies pour une nouvelle installation.
 
-Parcours conseillé : Explorer → choisir une activité → région → spot ; Voyages → créer un voyage → ajouter une étape → exporter. Ouvrir la galerie depuis la fiche, lancer et arrêter le son, puis basculer entre la carte 2D et le relief. Poulpy affiche un choix explicite au premier message. « Utiliser le guide intégré » ne transmet aucun message à l’IA ; « Autoriser Poulpy IA » envoie les messages via Netlify à OpenAI. Le choix se modifie dans Profil → Réglages.
+Parcours conseillé : Explorer → choisir une activité → région → spot ; Voyages → créer un voyage → ajouter une étape → exporter. Ouvrir la galerie depuis la fiche, lancer et arrêter le son, puis basculer entre la carte 2D et le relief. Poulpy répond directement dans l’app à partir des données d’Ocean Buddy, sans connexion et sans service d’IA ; aucun message n’est transmis.
 
 La localisation n’est demandée que pour « Autour de moi ». Sans permission, l’utilisateur peut parcourir le catalogue. L’application comporte du contenu embarqué, une persistance native des préférences et un partage natif de voyage.
 
@@ -52,7 +52,7 @@ Avant l’envoi en revue, activer et vérifier la communauté en production puis
 
 ## Déclarations à vérifier avant soumission
 
-- Confidentialité : si la communauté est activée, Supabase reçoit l’adresse e-mail et gère la session ; un pseudonyme, l’identifiant de compte, les contributions, signalements et blocages sont liés au compte. Brevo expédie les codes via la configuration SMTP, et Netlify traite les requêtes. Les messages IA sont transmis volontairement à Netlify puis OpenAI pour fournir une réponse. Vérifier les politiques effectives et la rétention des prestataires avant de remplir le questionnaire. Ne pas déclarer globalement « aucune donnée collectée ».
+- Confidentialité : si la communauté est activée, Supabase reçoit l’adresse e-mail et gère la session ; un pseudonyme, l’identifiant de compte, les contributions, signalements et blocages sont liés au compte. Brevo expédie les codes via la configuration SMTP, et Netlify traite les requêtes. Poulpy répond sur l’appareil : aucune question n’est envoyée à un service d’IA. Vérifier les politiques effectives et la rétention des prestataires avant de remplir le questionnaire. Ne pas déclarer globalement « aucune donnée collectée ».
 - Position : traitement sur l’appareil pour classer les spots proches ; coordonnées publiques des spots envoyées au fournisseur météo ; zone de carte demandée au fournisseur de tuiles.
 - La communauté suit les règles publiées, attend une approbation avant affichage, permet signalement et blocage, et propose une suppression de compte depuis l’application. Vérifier le délai réel de traitement et garder le contact d’assistance visible. Compléter le questionnaire d’âge ; l’app n’est pas présentée comme une application pour enfants.
 - Les coordonnées du responsable de la vérification et les informations légales du titulaire doivent être saisies par le titulaire ou confirmées précisément.
@@ -61,4 +61,4 @@ Avant l’envoi en revue, activer et vérifier la communauté en production puis
 
 ## Captures à produire depuis le binaire final
 
-Accueil avec Poulpy ; choix activité/région ; fiche immersive de plongée et galerie ; carte 2D puis relief terrestre ; itinéraire et aperçu de partage ; communauté modérée ; conversation après consentement. Cette version native cible l’iPhone ; vérifier les formats iPhone demandés par App Store Connect. Produire ces captures depuis la version finale et réelle de l’app, sans y montrer une fonction indisponible.
+Accueil avec Poulpy ; choix activité/région ; fiche immersive de plongée et galerie ; carte 2D puis relief terrestre ; itinéraire et aperçu de partage ; communauté modérée ; conversation avec Poulpy. Cette version native cible l’iPhone ; vérifier les formats iPhone demandés par App Store Connect. Produire ces captures depuis la version finale et réelle de l’app, sans y montrer une fonction indisponible.
