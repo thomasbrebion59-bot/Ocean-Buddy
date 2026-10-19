@@ -219,6 +219,8 @@
 
   /* ---------- Carte ---------- */
   function webgl(){try{return !!document.createElement('canvas').getContext('webgl2');}catch(_){return false;}}
+  /* warmAt : vue de départ imposée par le préchauffage sous le globe ; sinon la vue du globe, ou le monde. */
+  let warmAt=null;
   function ensureMap(){
     if(map)return Promise.resolve(map);
     if(starting)return starting;
@@ -226,7 +228,7 @@
     starting=(async()=>{
       if(!webgl())throw Error('webgl');
       const ml=await loadEngine();
-      const dive=useGlobe(),v=dive&&planet?planet.view():null;
+      const dive=useGlobe(),v=warmAt||(dive&&planet?planet.view():null);warmAt=null;
       m=new ml.Map({container:$('#spotMap'),style:dive?diveStyle(style('mercator'),M.mapZoom(DIVE_KM/side(),40)):style(globe()?'globe':'mercator'),center:v?[v.lon,v.lat]:[10,22],zoom:v?M.mapZoom(v.kmPerPx,v.lat):1.2,minZoom:0,maxZoom:17,renderWorldCopies:true,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,fadeDuration:180,maxTileCacheSize:120,locale:{'Map.Title':'Carte des spots','NavigationControl.ZoomIn':'Zoom avant','NavigationControl.ZoomOut':'Zoom arrière','AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
       m.touchZoomRotate.disableRotation();m.keyboard.disableRotation?.();
       m.addControl(new ml.AttributionControl({compact:true}),'bottom-right');
@@ -336,12 +338,51 @@
       planet=p;planet.setPadding(planetPad());
       wrap.classList.add('is-planet');
       /* La carte détaillée se prépare en arrière-plan : la première plongée est plus rapide. */
-      setTimeout(()=>{loadEngine().catch(()=>{});},2500);
+      watchGestures(host);
+      setTimeout(()=>{loadEngine().then(()=>scheduleWarm(0)).catch(()=>{});},2500);
       return p;
     });
     /* Un échec ponctuel (réseau, cache) ne condamne pas le globe : on réessaie une fois avant la carte à plat. */
     planetStarting.catch(e=>{console.warn('Globe 3D :',e);planetStarting=null;host.replaceChildren();if(++planetTries>=2){planetFailed=true;wrap?.classList.remove('is-globe','is-planet');}});
     return planetStarting;
+  }
+  /* Préchauffage : la carte détaillée (contexte WebGL, puis compilation des shaders au premier rendu, 0,5 à 1 s
+     sous ralentissement CPU) se crée cachée sous le globe, quand le globe est au repos. La première plongée
+     ne fige plus le geste. Jamais pendant un geste, un vol du globe, une scène d’activité ou hors de l’écran. */
+  let warmTimer=0,warmIdle=0,warmView=null,lastGesture=0,pointersDown=0,warmTries=0;
+  function watchGestures(host){
+    const down=()=>{pointersDown++;lastGesture=performance.now();},up=()=>{pointersDown=Math.max(0,pointersDown-1);lastGesture=performance.now();};
+    host.addEventListener('pointerdown',down,true);
+    for(const t of ['pointerup','pointercancel'])host.addEventListener(t,up,true);
+    host.addEventListener('wheel',()=>{lastGesture=performance.now();},{capture:true,passive:true});
+  }
+  /* Globe immobile entre deux relevés. Seule exception : la lente rotation d’ambiance de la vue du monde
+     (longitude seule, 0,0016° par ms dans ocean-globe.js), qui ne s’arrête jamais d’elle-même. */
+  function still(a,b){
+    if(!a)return false;
+    const dLon=Math.abs(((b.lon-a.lon)%360+540)%360-180);
+    return Math.abs(b.lat-a.lat)<1e-3&&Math.abs(b.w-a.w)<=b.w*1e-3&&dLon<=.002*(b.t-a.t)+1e-3;
+  }
+  function scheduleWarm(delay){
+    clearTimeout(warmTimer);if(warmIdle&&window.cancelIdleCallback)cancelIdleCallback(warmIdle);warmIdle=0;
+    if(map||starting||!planet||planetFailed||warmTries>=2)return;
+    warmTimer=setTimeout(()=>{
+      if(window.requestIdleCallback)warmIdle=requestIdleCallback(()=>{warmIdle=0;warm();},{timeout:2000});else warm();
+    },delay);
+  }
+  function warm(){
+    if(map||starting||!planet)return;
+    /* Le globe doit être visible et immobile : même vue à deux relevés successifs, aucun doigt posé depuis 1 s. */
+    const shown=mode==='globe'&&!diving&&!globeFrozen&&!document.hidden&&!terrainOverlay&&mapVisible()&&(stage?.clientWidth||0)>0&&(stage?.clientHeight||0)>0;
+    if(!shown){warmView=null;scheduleWarm(3000);return;}
+    const now=performance.now(),v=planet.view(),was=warmView,quiet=now-lastGesture;
+    warmView={lat:v.lat,lon:v.lon,w:v.widthKm,t:now};
+    if(pointersDown&&quiet>10000)pointersDown=0;/* relâchement perdu (élément retiré pendant le geste) */
+    if(pointersDown||quiet<1000||!still(was,warmView)){scheduleWarm(pointersDown?600:Math.max(350,1000-quiet));return;}
+    /* Même centre que le globe, à l’échelle de la plongée : tuiles et shaders utiles à la première plongée. */
+    warmAt={lat:v.lat,lon:v.lon,kmPerPx:DIVE_KM/side()};
+    warmTries++;
+    ensureMap().then(()=>{setData();}).catch(()=>{scheduleWarm(8000);});
   }
   function setMode(next){
     mode=next;clearTimeout(modeTimer);
