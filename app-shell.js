@@ -228,6 +228,10 @@
   /* ---------- Retour (navigateur, Android) : il ferme d’abord la fenêtre ouverte au premier plan ---------- */
   const visible=el=>!!el&&el.isConnected&&getComputedStyle(el).display!=='none'&&getComputedStyle(el).visibility!=='hidden';
   function closeTopOverlay(){
+    /* Couches les plus hautes d’abord : confirmation (au-dessus des Réglages), mise à jour, feuille « Choisis ton mois ». */
+    const conf=[...document.querySelectorAll('.as-confirm.open')].pop();if(conf){conf.querySelector('[data-v="0"]')?.click();return true;}
+    const upd=$('.app-update.show');if(upd){upd.querySelector('.app-update-later')?.click();return true;}
+    if(window.OceanPlan?.isOpen?.()){window.OceanPlan.close();return true;}
     if(window.OceanSurf?.isOpen?.()){window.OceanSurf.close();return true;}
     const newsEl=$('.as-news');if(newsEl){newsEl.querySelector('.as-news-later')?.click();return true;}
     const cele=$('.tb-cele');if(visible(cele)){(cele.querySelector('[data-tb-c=next]')||cele.querySelector('button:last-of-type'))?.click();return true;}
@@ -238,6 +242,7 @@
     if($('#settingsModal.open')&&typeof closeSettings==='function'){closeSettings();return true;}
     if($('#ecoInfo.open')&&typeof closeEcoLog==='function'){closeEcoLog();return true;}
     if(document.documentElement.classList.contains('voyage-open')&&window.OceanVoyage){window.OceanVoyage.close();return true;}
+    const ter=$('.terrain-overlay');if(visible(ter)){ter.querySelector('[data-terrain-close]')?.click();return true;}
     if(typeof quickGate!=='undefined'&&quickGate){document.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));return true;}
     if(typeof mapFull!=='undefined'&&mapFull&&typeof setMapFull==='function'){setMapFull(false,true);return true;}
     const card=$('#spotMapWrap .omap-card');if(body.dataset.screen==='spots'&&visible(card)&&!card.hidden){card.querySelector('.omap-card-close')?.click();return true;}

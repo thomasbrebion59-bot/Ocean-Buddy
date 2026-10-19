@@ -111,5 +111,5 @@
   });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && sheet) { e.stopPropagation(); close(); } }, true);
 
-  window.OceanPlan = { ok, active, open, button, label, apply, get state() { return state; }, set(st) { state = st && st.c && st.c.length ? st : null; save(); ensure().then(apply).catch(() => {}); } };
+  window.OceanPlan = { ok, active, open, isOpen: () => !!sheet, close: () => close(), button, label, apply, get state() { return state; }, set(st) { state = st && st.c && st.c.length ? st : null; save(); ensure().then(apply).catch(() => {}); } };
 })();
