@@ -7,13 +7,24 @@
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const M=window.OceanMapModel;
   const total=n=>n>1?`${n} spots`:`${n} spot`;
-  /* Couleurs d’activité : distinctes sur le fond clair, dans la famille cobalt / citron / corail. */
-  const COLORS={surf:'#1f55e0',bodyboard:'#4f8df7',baignade:'#0e9fc4',paddle:'#0f9e86',kayak:'#5c9e2c',snorkeling:'#f0a20c',plongee:'#0b2d7a',kitesurf:'#ff6a4d',windsurf:'#9d5be6'};
-  const color=id=>COLORS[id]||'#1f55e0';
   /* Couleurs d’interface de la carte (pastilles de regroupement, tracé) : suivent l’activité choisie. MapLibre veut
      des couleurs littérales : on lit la variable CSS, et on repeint après la transition des couleurs (400 ms). */
   const themeColor=(v,fallback)=>{try{return getComputedStyle(document.documentElement).getPropertyValue(v).trim()||fallback;}catch(e){return fallback;}};
-  document.addEventListener('ocean:sport',()=>{clearTimeout(themeColor.t);themeColor.t=setTimeout(()=>{try{if(map&&map.getLayer&&map.getLayer("clusters"))map.setPaintProperty('clusters','circle-color',themeColor('--t-deep','#0b2d7a'));}catch(e){}},520);});
+  document.addEventListener('ocean:sport',()=>{clearTimeout(themeColor.t);themeColor.t=setTimeout(()=>{try{if(map&&map.getLayer&&map.getLayer("clusters"))map.setPaintProperty('clusters','circle-color',themeColor('--t-deep','#06303e'));}catch(e){}},520);});
+  /* Palette du fond de carte (thème crème) : un seul endroit pour toutes les couleurs du style clair.
+     Étiquettes vérifiées en AA (4,5:1 mini) sur terre, sable, parcs, bâtiments et eau (contrast.mjs du chantier) ;
+     les frontières sont des traits (3:1). Les photos satellite et le globe ne sont pas recolorés. */
+  const P={
+    land:'#f8f1df',sand:'#f3e6c6',park:'#e3e9d2',wood:'#dde5c9',water:'#c6dfe3',waterFar:'#bfd9de',waterNear:'#cde4e7',building:'#efe6d2',buildingEdge:'#e0d4b9',urban:'#f1e9d6',
+    road:'#fffdf7',roadMajorFar:'#ebe3cf',ice:'#fffdf7',border:'#7f8c88',borderRegion:'#a8b3ae',
+    country:'#10262e',city:'#2b3f46',place:'#4a5a5f',sea:'#2f6470',halo:'#fef9eb',seaHalo:'#c6dfe3',
+    sky:'#fef9eb',skyHorizon:'#fef9eb',fog:'#fef9eb',
+    card:'#fffdf7',scrim:'#04141b'
+  };
+  /* Couleurs d’activité (identité) : lues dans --a-* (activity-theme.css), valeurs d’origine en repli. */
+  const COLORS_FALLBACK={surf:'#1f55e0',bodyboard:'#4f8df7',baignade:'#0e9fc4',paddle:'#0f9e86',kayak:'#5c9e2c',snorkeling:'#f0a20c',plongee:'#0b2d7a',kitesurf:'#ff6a4d',windsurf:'#9d5be6'};
+  const COLORS_CACHE={};
+  const color=id=>{const k=COLORS_FALLBACK[id]?id:'surf';return COLORS_CACHE[k]||(COLORS_CACHE[k]=themeColor('--a-'+k,COLORS_FALLBACK[k]));};
   /* Grandes régions de la liste en vue monde ; la France rejoint l’Europe. */
   const REGIONS=[
     {id:'eu',worlds:['fr','eu'],lab:'Europe',at:[14,50]},
@@ -67,28 +78,28 @@
   function style(projection){
     const name=labelName(),cls=['get','class'],src='omt';
     const text=(size,extra={})=>Object.assign({'text-field':name,'text-font':['Noto Sans Regular'],'text-size':size,'text-max-width':7},extra);
-    return {version:8,glyphs:GLYPHS,projection:{type:projection||'mercator'},sky:{'sky-color':'#eef3ff','horizon-color':'#ffffff','fog-color':'#ffffff','sky-horizon-blend':.6,'horizon-fog-blend':.6,'fog-ground-blend':1,'atmosphere-blend':['interpolate',['linear'],['zoom'],0,.9,4,.6,6,0]},sources:{omt:{type:'vector',url:TILES}},layers:[
-      {id:'land',type:'background',paint:{'background-color':'#f5f6f0'}},
-      {id:'ice',type:'fill',source:src,'source-layer':'landcover',filter:['==',cls,'ice'],paint:{'fill-color':'#fbfcff','fill-opacity':.9}},
-      {id:'wood',type:'fill',source:src,'source-layer':'landcover',minzoom:5,filter:['match',cls,['wood','forest'],true,false],paint:{'fill-color':'#e7eedf','fill-opacity':['interpolate',['linear'],['zoom'],5,0,8,.7]}},
-      {id:'sand',type:'fill',source:src,'source-layer':'landcover',minzoom:9,filter:['==',cls,'sand'],paint:{'fill-color':'#f6efd8'}},
-      {id:'park',type:'fill',source:src,'source-layer':'park',minzoom:8,paint:{'fill-color':'#e4eedc','fill-opacity':.7}},
-      {id:'urban',type:'fill',source:src,'source-layer':'landuse',minzoom:9,filter:['match',cls,['residential','suburb','neighbourhood','commercial','industrial'],true,false],paint:{'fill-color':'#eeeee8'}},
-      {id:'water',type:'fill',source:src,'source-layer':'water',filter:['!=',['get','brunnel'],'tunnel'],paint:{'fill-color':['interpolate',['linear'],['zoom'],0,'#c3d6fb',6,'#c9dbfc',12,'#cfe0fd']}},
-      {id:'river',type:'line',source:src,'source-layer':'waterway',minzoom:7,paint:{'line-color':'#c9dbfc','line-width':['interpolate',['linear'],['zoom'],7,.6,14,2.5]}},
-      {id:'building',type:'fill',source:src,'source-layer':'building',minzoom:14,paint:{'fill-color':'#e8e8e1','fill-outline-color':'#dcdcd4'}},
-      {id:'road-minor',type:'line',source:src,'source-layer':'transportation',minzoom:10,filter:['match',cls,['secondary','tertiary','minor','service'],true,false],layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':'#ffffff','line-width':['interpolate',['linear'],['zoom'],10,.5,16,6]}},
-      {id:'road-major',type:'line',source:src,'source-layer':'transportation',minzoom:6,filter:['match',cls,['motorway','trunk','primary'],true,false],layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':['interpolate',['linear'],['zoom'],6,'#e9e7df',10,'#ffffff'],'line-width':['interpolate',['linear'],['zoom'],6,.5,10,1.6,16,9]}},
-      {id:'border-region',type:'line',source:src,'source-layer':'boundary',minzoom:4,filter:['all',['match',['get','admin_level'],[3,4],true,false],['!=',['get','maritime'],1]],paint:{'line-color':'#d3d8e4','line-width':.6,'line-dasharray':[3,2]}},
-      {id:'border-country',type:'line',source:src,'source-layer':'boundary',filter:['all',['==',['get','admin_level'],2],['!=',['get','maritime'],1]],layout:{'line-join':'round'},paint:{'line-color':'#aab5cd','line-width':['interpolate',['linear'],['zoom'],1,.45,5,.9,10,1.4],'line-dasharray':['case',['==',['get','disputed'],1],['literal',[2,2]],['literal',[1,0]]]}},
-      {id:'sea-name',type:'symbol',source:src,'source-layer':'water_name',maxzoom:9,filter:['all',['match',cls,['ocean','sea','gulf','bay'],true,false],['match',['geometry-type'],['Point','MultiPoint'],true,false]],layout:text(['interpolate',['linear'],['zoom'],0,10,3,12,8,13.5],{'text-font':['Noto Sans Italic'],'text-letter-spacing':.14,'text-max-width':6,'text-padding':8}),paint:{'text-color':'#5f82cf','text-halo-color':'rgba(201,219,252,.8)','text-halo-width':1}},
-      {id:'country-major',type:'symbol',source:src,'source-layer':'place',minzoom:2,maxzoom:8,filter:['all',['==',cls,'country'],['<=',['get','rank'],2]],layout:text(['interpolate',['linear'],['zoom'],2,10,6,15],{'text-transform':'uppercase','text-letter-spacing':.08,'text-font':['Noto Sans Bold']}),paint:{'text-color':'#51607f','text-halo-color':'#f5f6f0','text-halo-width':1.3}},
-      {id:'country',type:'symbol',source:src,'source-layer':'place',minzoom:3.2,maxzoom:8,filter:['all',['==',cls,'country'],['>',['get','rank'],2]],layout:text(['interpolate',['linear'],['zoom'],3,9,7,13],{'text-transform':'uppercase','text-letter-spacing':.06,'text-font':['Noto Sans Bold']}),paint:{'text-color':'#617090','text-halo-color':'#f5f6f0','text-halo-width':1.3}},
-      {id:'state',type:'symbol',source:src,'source-layer':'place',minzoom:5.5,maxzoom:8.5,filter:['==',cls,'state'],layout:text(10,{'text-transform':'uppercase','text-letter-spacing':.08}),paint:{'text-color':'#97a2ba','text-halo-color':'#f5f6f0','text-halo-width':1}},
-      {id:'city-major',type:'symbol',source:src,'source-layer':'place',minzoom:4.5,maxzoom:7,filter:['all',['==',cls,'city'],['<=',['coalesce',['get','rank'],99],3]],layout:text(['interpolate',['linear'],['zoom'],5,10.5,7,12]),paint:{'text-color':'#34426a','text-halo-color':'#ffffff','text-halo-width':1.4}},
-      {id:'city',type:'symbol',source:src,'source-layer':'place',minzoom:7,filter:['==',cls,'city'],layout:text(['interpolate',['linear'],['zoom'],7,11.5,12,14]),paint:{'text-color':'#34426a','text-halo-color':'#ffffff','text-halo-width':1.4}},
-      {id:'town',type:'symbol',source:src,'source-layer':'place',minzoom:10,filter:['==',cls,'town'],layout:text(['interpolate',['linear'],['zoom'],10,10,14,12.5]),paint:{'text-color':'#6f7b98','text-halo-color':'#ffffff','text-halo-width':1.3}},
-      {id:'village',type:'symbol',source:src,'source-layer':'place',minzoom:12.5,filter:['match',cls,['village','suburb'],true,false],layout:text(10.5),paint:{'text-color':'#66718d','text-halo-color':'#ffffff','text-halo-width':1.2}}
+    return {version:8,glyphs:GLYPHS,projection:{type:projection||'mercator'},sky:{'sky-color':P.sky,'horizon-color':P.skyHorizon,'fog-color':P.fog,'sky-horizon-blend':.6,'horizon-fog-blend':.6,'fog-ground-blend':1,'atmosphere-blend':['interpolate',['linear'],['zoom'],0,.9,4,.6,6,0]},sources:{omt:{type:'vector',url:TILES}},layers:[
+      {id:'land',type:'background',paint:{'background-color':P.land}},
+      {id:'ice',type:'fill',source:src,'source-layer':'landcover',filter:['==',cls,'ice'],paint:{'fill-color':P.ice,'fill-opacity':.9}},
+      {id:'wood',type:'fill',source:src,'source-layer':'landcover',minzoom:5,filter:['match',cls,['wood','forest'],true,false],paint:{'fill-color':P.wood,'fill-opacity':['interpolate',['linear'],['zoom'],5,0,8,.7]}},
+      {id:'sand',type:'fill',source:src,'source-layer':'landcover',minzoom:9,filter:['==',cls,'sand'],paint:{'fill-color':P.sand}},
+      {id:'park',type:'fill',source:src,'source-layer':'park',minzoom:8,paint:{'fill-color':P.park,'fill-opacity':.7}},
+      {id:'urban',type:'fill',source:src,'source-layer':'landuse',minzoom:9,filter:['match',cls,['residential','suburb','neighbourhood','commercial','industrial'],true,false],paint:{'fill-color':P.urban}},
+      {id:'water',type:'fill',source:src,'source-layer':'water',filter:['!=',['get','brunnel'],'tunnel'],paint:{'fill-color':['interpolate',['linear'],['zoom'],0,P.waterFar,6,P.water,12,P.waterNear]}},
+      {id:'river',type:'line',source:src,'source-layer':'waterway',minzoom:7,paint:{'line-color':P.water,'line-width':['interpolate',['linear'],['zoom'],7,.6,14,2.5]}},
+      {id:'building',type:'fill',source:src,'source-layer':'building',minzoom:14,paint:{'fill-color':P.building,'fill-outline-color':P.buildingEdge}},
+      {id:'road-minor',type:'line',source:src,'source-layer':'transportation',minzoom:10,filter:['match',cls,['secondary','tertiary','minor','service'],true,false],layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':P.road,'line-width':['interpolate',['linear'],['zoom'],10,.5,16,6]}},
+      {id:'road-major',type:'line',source:src,'source-layer':'transportation',minzoom:6,filter:['match',cls,['motorway','trunk','primary'],true,false],layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':['interpolate',['linear'],['zoom'],6,P.roadMajorFar,10,P.road],'line-width':['interpolate',['linear'],['zoom'],6,.5,10,1.6,16,9]}},
+      {id:'border-region',type:'line',source:src,'source-layer':'boundary',minzoom:4,filter:['all',['match',['get','admin_level'],[3,4],true,false],['!=',['get','maritime'],1]],paint:{'line-color':P.borderRegion,'line-width':.6,'line-dasharray':[3,2]}},
+      {id:'border-country',type:'line',source:src,'source-layer':'boundary',filter:['all',['==',['get','admin_level'],2],['!=',['get','maritime'],1]],layout:{'line-join':'round'},paint:{'line-color':P.border,'line-width':['interpolate',['linear'],['zoom'],1,.45,5,.9,10,1.4],'line-dasharray':['case',['==',['get','disputed'],1],['literal',[2,2]],['literal',[1,0]]]}},
+      {id:'sea-name',type:'symbol',source:src,'source-layer':'water_name',maxzoom:9,filter:['all',['match',cls,['ocean','sea','gulf','bay'],true,false],['match',['geometry-type'],['Point','MultiPoint'],true,false]],layout:text(['interpolate',['linear'],['zoom'],0,10,3,12,8,13.5],{'text-font':['Noto Sans Italic'],'text-letter-spacing':.14,'text-max-width':6,'text-padding':8}),paint:{'text-color':P.sea,'text-halo-color':P.seaHalo,'text-halo-width':1}},
+      {id:'country-major',type:'symbol',source:src,'source-layer':'place',minzoom:2,maxzoom:8,filter:['all',['==',cls,'country'],['<=',['get','rank'],2]],layout:text(['interpolate',['linear'],['zoom'],2,10,6,15],{'text-transform':'uppercase','text-letter-spacing':.08,'text-font':['Noto Sans Bold']}),paint:{'text-color':P.country,'text-halo-color':P.halo,'text-halo-width':1.3}},
+      {id:'country',type:'symbol',source:src,'source-layer':'place',minzoom:3.2,maxzoom:8,filter:['all',['==',cls,'country'],['>',['get','rank'],2]],layout:text(['interpolate',['linear'],['zoom'],3,9,7,13],{'text-transform':'uppercase','text-letter-spacing':.06,'text-font':['Noto Sans Bold']}),paint:{'text-color':P.country,'text-halo-color':P.halo,'text-halo-width':1.3}},
+      {id:'state',type:'symbol',source:src,'source-layer':'place',minzoom:5.5,maxzoom:8.5,filter:['==',cls,'state'],layout:text(10,{'text-transform':'uppercase','text-letter-spacing':.08}),paint:{'text-color':P.place,'text-halo-color':P.halo,'text-halo-width':1}},
+      {id:'city-major',type:'symbol',source:src,'source-layer':'place',minzoom:4.5,maxzoom:7,filter:['all',['==',cls,'city'],['<=',['coalesce',['get','rank'],99],3]],layout:text(['interpolate',['linear'],['zoom'],5,10.5,7,12]),paint:{'text-color':P.city,'text-halo-color':P.halo,'text-halo-width':1.4}},
+      {id:'city',type:'symbol',source:src,'source-layer':'place',minzoom:7,filter:['==',cls,'city'],layout:text(['interpolate',['linear'],['zoom'],7,11.5,12,14]),paint:{'text-color':P.city,'text-halo-color':P.halo,'text-halo-width':1.4}},
+      {id:'town',type:'symbol',source:src,'source-layer':'place',minzoom:10,filter:['==',cls,'town'],layout:text(['interpolate',['linear'],['zoom'],10,10,14,12.5]),paint:{'text-color':P.place,'text-halo-color':P.halo,'text-halo-width':1.3}},
+      {id:'village',type:'symbol',source:src,'source-layer':'place',minzoom:12.5,filter:['match',cls,['village','suburb'],true,false],layout:text(10.5),paint:{'text-color':P.place,'text-halo-color':P.halo,'text-halo-width':1.2}}
     ]};
   }
 
@@ -105,11 +116,11 @@
     /* L’océan du globe est bleui par l’atmosphère : un voile bleu sur l’eau garde la même teinte à la plongée. */
     st.layers.splice(at<0?st.layers.length:at,0,{id:'nasa',type:'raster',source:'nasa',paint:{'raster-opacity':['interpolate',['linear'],['zoom'],za,1,z1,0],'raster-fade-duration':0,'raster-resampling':'linear'}},
       {id:'nasa-sea',type:'fill',source:'omt','source-layer':'water',filter:['!=',['get','brunnel'],'tunnel'],paint:{'fill-color':'#2a5fc4','fill-opacity':['interpolate',['linear'],['zoom'],za,.3,z1,0]}});
-    set('sea-name','text-color',Z('#E6F4F8','#5f82cf'));set('sea-name','text-halo-color',Z('rgba(2,10,30,.55)','rgba(201,219,252,.8)'));
-    for(const id of ['country-major','country','state','city-major','city']){set(id,'text-color',Z('#F4F7FF',id.startsWith('city')?'#34426a':'#51607f'));set(id,'text-halo-color',Z('rgba(2,10,30,.6)',id.startsWith('city')?'#ffffff':'#f5f6f0'));}
-    set('border-country','line-color',Z('rgba(255,255,255,.45)','#aab5cd'));
-    set('border-region','line-color',Z('rgba(255,255,255,.25)','#d3d8e4'));
-    set('road-major','line-color',Z('rgba(255,255,255,.35)','#ffffff'));
+    set('sea-name','text-color',Z('#E6F4F8',P.sea));set('sea-name','text-halo-color',Z('rgba(2,10,30,.55)',P.seaHalo));
+    for(const id of ['country-major','country','state','city-major','city']){set(id,'text-color',Z('#F4F7FF',id==='city-major'||id==='city'?P.city:id==='state'?P.place:P.country));set(id,'text-halo-color',Z('rgba(2,10,30,.6)',P.halo));}
+    set('border-country','line-color',Z('rgba(255,255,255,.45)',P.border));
+    set('border-region','line-color',Z('rgba(255,255,255,.25)',P.borderRegion));
+    set('road-major','line-color',Z('rgba(255,255,255,.35)',P.road));
     return st;
   }
 
@@ -229,20 +240,20 @@
     /* Spots regroupés de loin (comme sur le globe), séparés à partir du zoom 9. */
     map.addSource('spots',{type:'geojson',data:{type:'FeatureCollection',features:[]},promoteId:'id',buffer:32,cluster:true,clusterMaxZoom:8,clusterRadius:44});
     map.addLayer({id:'clusters',type:'circle',source:'spots',filter:['has','point_count'],paint:{
-      'circle-color':themeColor('--t-deep','#0b2d7a'),'circle-opacity':.94,'circle-stroke-color':'#ffffff','circle-stroke-width':2.5,
+      'circle-color':themeColor('--t-deep','#06303e'),'circle-opacity':.94,'circle-stroke-color':P.card,'circle-stroke-width':2.5,
       'circle-radius':['interpolate',['linear'],['get','point_count'],2,15,10,18,40,22,150,27]}});
-    map.addLayer({id:'cluster-count',type:'symbol',source:'spots',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['Noto Sans Bold'],'text-size':13,'text-allow-overlap':true},paint:{'text-color':'#ffffff'}});
+    map.addLayer({id:'cluster-count',type:'symbol',source:'spots',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['Noto Sans Bold'],'text-size':13,'text-allow-overlap':true},paint:{'text-color':themeColor('--t-on-main','#fef9eb')}});
     const H=['boolean',['feature-state','hover'],false];
     /* Un point net par spot, coloré par activité, liseré blanc ; il grossit avec le zoom. */
     map.addLayer({id:'dots',type:'circle',source:'spots',filter:['!',['has','point_count']],layout:{'circle-sort-key':['get','k']},paint:{
             'circle-radius':['interpolate',['linear'],['zoom'],0,['case',H,5.2,3],2,['case',H,5.7,3.5],5,['case',H,6.7,4.5],8,['case',H,8.0,5.8],12,['case',H,9.4,7.2],16,['case',H,10.4,8.2]],
       'circle-color':['get','c'],
-      'circle-stroke-color':'#ffffff',
+      'circle-stroke-color':P.card,
       'circle-stroke-width':['interpolate',['linear'],['zoom'],0,.9,6,1.4,12,2],
       'circle-opacity':['interpolate',['linear'],['zoom'],0,.88,6,.95,10,1],
       'circle-stroke-opacity':['interpolate',['linear'],['zoom'],0,.85,6,1],
       'circle-pitch-alignment':'map'}});
-    map.addLayer({id:'spot-label',type:'symbol',source:'spots',minzoom:8.5,filter:['!',['has','point_count']],layout:{'text-field':['get','n'],'text-font':['Noto Sans Bold'],'text-size':['interpolate',['linear'],['zoom'],8.5,11,14,12.5],'text-variable-anchor':['left','right','top','bottom'],'text-radial-offset':.85,'text-justify':'auto','text-max-width':9,'text-padding':3,'symbol-sort-key':['get','k']},paint:{'text-color':'#0b2d7a','text-halo-color':'#ffffff','text-halo-width':1.6}});
+    map.addLayer({id:'spot-label',type:'symbol',source:'spots',minzoom:8.5,filter:['!',['has','point_count']],layout:{'text-field':['get','n'],'text-font':['Noto Sans Bold'],'text-size':['interpolate',['linear'],['zoom'],8.5,11,14,12.5],'text-variable-anchor':['left','right','top','bottom'],'text-radial-offset':.85,'text-justify':'auto','text-max-width':9,'text-padding':3,'symbol-sort-key':['get','k']},paint:{'text-color':P.country,'text-halo-color':P.halo,'text-halo-width':1.6}});
     selectedMarker=new ml.Marker({element:Object.assign(document.createElement('div'),{className:'omap-selected'}),anchor:'bottom'});
     userDot=new ml.Marker({element:Object.assign(document.createElement('div'),{className:'omap-user'}),anchor:'center'});
     tip=new ml.Popup({closeButton:false,closeOnClick:false,className:'omap-tip',offset:12,maxWidth:'240px'});
@@ -745,9 +756,9 @@
         if(dead){m.remove();return;}
         m.addSource('others',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
         m.addSource('route',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
-        m.addLayer({id:'route',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':themeColor('--t-main2','#1f55e0'),'line-width':3.5,'line-opacity':.85,'line-dasharray':[1.2,1.6]}});
-        m.addLayer({id:'others',type:'circle',source:'others',paint:{'circle-radius':['interpolate',['linear'],['zoom'],4,3.4,9,5.5,13,7],'circle-color':['get','c'],'circle-stroke-color':'#fff','circle-stroke-width':1.6,'circle-opacity':.95}});
-        m.addLayer({id:'others-label',type:'symbol',source:'others',minzoom:9.5,layout:{'text-field':['get','n'],'text-font':['Noto Sans Bold'],'text-size':11,'text-variable-anchor':['left','right','top'],'text-radial-offset':.8,'text-max-width':9,'text-padding':3},paint:{'text-color':'#0b2d7a','text-halo-color':'#fff','text-halo-width':1.5}});
+        m.addLayer({id:'route',type:'line',source:'route',layout:{'line-cap':'round','line-join':'round'},paint:{'line-color':themeColor('--t-main2','#0b5a72'),'line-width':3.5,'line-opacity':.85,'line-dasharray':[1.2,1.6]}});
+        m.addLayer({id:'others',type:'circle',source:'others',paint:{'circle-radius':['interpolate',['linear'],['zoom'],4,3.4,9,5.5,13,7],'circle-color':['get','c'],'circle-stroke-color':P.card,'circle-stroke-width':1.6,'circle-opacity':.95}});
+        m.addLayer({id:'others-label',type:'symbol',source:'others',minzoom:9.5,layout:{'text-field':['get','n'],'text-font':['Noto Sans Bold'],'text-size':11,'text-variable-anchor':['left','right','top'],'text-radial-offset':.8,'text-max-width':9,'text-padding':3},paint:{'text-color':P.country,'text-halo-color':P.halo,'text-halo-width':1.5}});
         pop=new ml.Popup({closeButton:true,className:'omini-pop',maxWidth:'260px',offset:14});
         m.on('click','others',e=>{const f=e.features[0];if(f)spotPopup(f.properties.id,f.geometry.coordinates);});
         m.on('mouseenter','others',()=>{m.getCanvas().style.cursor='pointer';});m.on('mouseleave','others',()=>{m.getCanvas().style.cursor='';});
