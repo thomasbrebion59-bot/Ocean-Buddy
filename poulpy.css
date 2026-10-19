@@ -203,3 +203,6 @@
 @media(prefers-reduced-motion:reduce) { .activity-adventure,.adventure-art img { transition:none; } .activity-adventure:hover,.activity-adventure:hover .adventure-art img { transform:none; } }
 .reduce-motion .activity-adventure,.reduce-motion .adventure-art img { transition:none; }
 .reduce-motion .activity-adventure:hover,.reduce-motion .activity-adventure:hover .adventure-art img { transform:none; }
+
+/* L’icône de la carte « pourquoi » est souvent cachée : pas de flottement infini (l’animation pop reste). */
+.today-why .poulpy-mini:not(.pop){animation:none}

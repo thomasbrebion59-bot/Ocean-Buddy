@@ -67,9 +67,11 @@
 .hf-world-map.is-live .hf-planet{visibility:hidden;transition:visibility 0s .45s}
 .hf-planet{position:relative;width:var(--d);height:var(--d);border-radius:50%;overflow:hidden;isolation:isolate;background:var(--t-deep);box-shadow:0 0 0 1px color-mix(in srgb,var(--t-card) 12%,transparent),0 22px 50px -12px color-mix(in srgb,var(--t-shadow) 75%,transparent);transform:translateZ(0)}
 /* La Terre (NASA) défile en boucle : la sphère tourne sans canvas ni WebGL, donc sans à-coups. */
-.hf-planet-tex{position:absolute;inset:0;background:url(assets/globe/earth-day-4k.webp) 0 50%/calc(var(--d) * 2) var(--d) repeat-x;animation:hf-spin 48s linear infinite}
+.hf-planet-tex{position:absolute;left:0;top:0;width:calc(var(--d) * 4);height:100%;background:url(assets/globe/earth-day-4k.webp) 0 50%/calc(var(--d) * 2) var(--d) repeat-x;will-change:transform;animation:hf-spin 48s linear infinite}
+/* Le globe WebGL a pris le relais : la sphère CSS est cachée, son défilement s’arrête. */
+.hf-world-map.is-live .hf-planet-tex{animation-play-state:paused;will-change:auto}
 .hf-planet-shade{position:absolute;inset:0;border-radius:50%;pointer-events:none;background:radial-gradient(circle at 34% 28%,color-mix(in srgb,var(--t-card) 20%,transparent) 0,transparent 44%),radial-gradient(circle at 62% 56%,transparent 50%,color-mix(in srgb,var(--t-scrim) 60%,transparent) 100%)}
-@keyframes hf-spin{from{background-position:0 50%}to{background-position:calc(var(--d) * -2) 50%}}
+@keyframes hf-spin{from{transform:translate3d(0,0,0)}to{transform:translate3d(calc(var(--d) * -2),0,0)}}
 .reduce-motion .hf-planet-tex{animation:none}
 @media (prefers-reduced-motion:reduce){.hf-planet-tex{animation:none}}
 .hf-world-tx{padding:16px 18px 18px}
