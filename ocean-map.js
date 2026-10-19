@@ -299,13 +299,15 @@
   const immersive=()=>document.body.classList.contains('explore-immersive');
   let topProbe=null;
   const safeTop=()=>{if(!topProbe){topProbe=document.createElement('div');topProbe.style.cssText='position:fixed;top:0;left:0;width:0;height:env(safe-area-inset-top,0px);visibility:hidden;pointer-events:none';document.body.append(topProbe);}return topProbe.offsetHeight||0;};
+  /* Paysage téléphone : les marges verticales fixes ne doivent jamais manger plus de 55 % de la hauteur. */
+  function capV(top,bottom){const h=stage?.clientHeight||innerHeight,max=Math.round(h*.55),t=Math.min(top,max);return {top:t,bottom:Math.min(bottom,max-t)};}
   function pad(){
-    if(immersive()){const card2=card&&!card.hidden?card.offsetHeight+20:0;return {top:safeTop()+120,bottom:Math.max(card2,150)+90,left:24,right:64};}
+    if(immersive()){const card2=card&&!card.hidden?card.offsetHeight+20:0;return {...capV(safeTop()+120,Math.max(card2,150)+90),left:24,right:64};}
     const m=mobile(),w=stage?.clientWidth||0,top=m?(filters?.offsetHeight||40)+26:30;
     return {top:Math.min(top,120),bottom:m?(card&&!card.hidden?card.offsetHeight+80:80):(card&&!card.hidden?40:30),left:m?24:(card&&!card.hidden&&w>900?440:48),right:m?60:84};
   }
   /* Marges du globe : sur mobile, filtres en haut et tiroir de liste en bas. */
-  function planetPad(){if(immersive())return {top:safeTop()+110,bottom:200,left:0,right:0};return mobile()?{top:Math.min((filters?.offsetHeight||40)+18,110),bottom:64,left:0,right:0}:{top:0,bottom:0,left:0,right:0};}
+  function planetPad(){if(immersive())return {...capV(safeTop()+110,200),left:0,right:0};return mobile()?{top:Math.min((filters?.offsetHeight||40)+18,110),bottom:64,left:0,right:0}:{top:0,bottom:0,left:0,right:0};}
   /* Petit côté de la zone utile : la même mesure relie les km du globe et le zoom de la carte. */
   function side(){const p=planetPad(),w=stage?.clientWidth||innerWidth,h=stage?.clientHeight||innerHeight;return Math.max(1,Math.min(w-p.left-p.right,h-p.top-p.bottom));}
   const clampLat=lat=>Math.max(-70,Math.min(70,lat));
