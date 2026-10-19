@@ -19,7 +19,7 @@ const CHECK = process.argv.includes('--check');
 /* Fichiers dont les URL absolues suivent l'adresse publique. */
 const FILES = [
   'index.html', 'polish.js', 'photos.html', 'photo-catalog.js', 'catalog-runtime.js',
-  'data/catalog.json', 'assets/spots/sources.json', 'netlify/functions/lib/catalog.json',
+  'data/catalog.json', 'assets/spots/sources.json',
   'scripts/add_ai_images.py', 'mobile/store/app-store-fr.md',
 ];
 

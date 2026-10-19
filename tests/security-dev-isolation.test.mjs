@@ -18,9 +18,9 @@ test('every handler built in a test receives an explicit env, and the community 
   assert.deepEqual(missing,[]);
 });
 
-test('no test reads process.env or targets a real Supabase or Netlify host',()=>{
+test('no test reads process.env or targets a real Supabase host',()=>{
   for(const [name,text] of files){
     assert.doesNotMatch(text,/process\.env/,name);
-    for(const host of text.match(/https:\/\/[a-z0-9.-]+\.(?:supabase\.co|netlify\.app)/gi)||[])assert.match(host,/\/\/example\./,name+' '+host);
+    for(const host of text.match(/https:\/\/[a-z0-9.-]+\.(?:supabase\.co)/gi)||[])assert.match(host,/\/\/example\./,name+' '+host);
   }
 });

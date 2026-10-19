@@ -12,7 +12,7 @@ Une seule variable : `OB_SITE_BASE`, définie dans `scripts/site-base.cjs`.
 
 - `index.html` : `og:image`, `canonical`, JSON-LD ; `polish.js` : lien « Partager ».
 - Pages SEO `spot/`, `spots/`, `sitemap.xml`, `robots.txt` (`scripts/build-seo.cjs`).
-- Liens « source » des photos : `data/catalog.json`, `assets/spots/sources.json` et leurs copies générées (`photo-catalog.js`, `catalog-runtime.js`, `photos.html`, `netlify/functions/lib/catalog.json`).
+- Liens « source » des photos : `data/catalog.json`, `assets/spots/sources.json` et leurs copies générées (`photo-catalog.js`, `catalog-runtime.js`, `photos.html`).
 - App mobile (`scripts/build-mobile.cjs`) : pages publiques ouvertes depuis l'app (confidentialité, assistance, photos, règles) et base des mises à jour directes `OB_SITE_BASE + app-update/`, avec GitHub Pages en secours.
 - Fiche App Store (`mobile/store/app-store-fr.md`) et URL de confidentialité (`scripts/asc-privacy-url.mjs`).
 

@@ -35,5 +35,6 @@ test('public client configs only carry public values',()=>{
   assert.deepEqual(Object.keys(poulpy),['endpoint']);assert.equal(poulpy.endpoint,'');
   // A publishable key may be filled in later; it must then be the public kind, never the secret one.
   assert.ok(community.publishableKey===''||/^sb_publishable_/.test(community.publishableKey)||jwtRole(community.publishableKey).every(role=>role==='anon'));
-  assert.match(community.endpoint,/^https:\/\//);
+  // No community server today: an empty endpoint keeps the app on its "coming soon" state; a future one must be HTTPS.
+  assert.ok(community.endpoint===''||/^https:\/\//.test(community.endpoint));
 });

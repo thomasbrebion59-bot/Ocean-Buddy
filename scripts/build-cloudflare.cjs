@@ -1,6 +1,6 @@
 /* Prépare le dossier Cloudflare Pages (.cloudflare/publish) : paquet statique public + _headers (CSP avec empreinte du script de démarrage). */
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),{execFileSync}=require('node:child_process');
-const root=path.resolve(__dirname,'..'),src=path.join(root,'.netlify/publish'),dest=path.join(root,'.cloudflare/publish');
+const root=path.resolve(__dirname,'..'),src=path.join(root,'.build/static'),dest=path.join(root,'.cloudflare/publish');
 execFileSync(process.execPath,[path.join(__dirname,'build-static.cjs')],{stdio:'inherit'});
 fs.rmSync(dest,{recursive:true,force:true});fs.mkdirSync(path.dirname(dest),{recursive:true});
 fs.cpSync(src,dest,{recursive:true});

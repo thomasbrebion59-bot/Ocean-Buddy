@@ -52,7 +52,7 @@ Avant l’envoi en revue, activer et vérifier la communauté en production puis
 
 ## Déclarations à vérifier avant soumission
 
-- Confidentialité : si la communauté est activée, Supabase reçoit l’adresse e-mail et gère la session ; un pseudonyme, l’identifiant de compte, les contributions, signalements et blocages sont liés au compte. Brevo expédie les codes via la configuration SMTP, et Netlify traite les requêtes. Poulpy répond sur l’appareil : aucune question n’est envoyée à un service d’IA. Vérifier les politiques effectives et la rétention des prestataires avant de remplir le questionnaire. Ne pas déclarer globalement « aucune donnée collectée ».
+- Confidentialité : la communauté n’est pas active (aucun serveur, aucun compte, aucune contribution collectée). Poulpy répond sur l’appareil : aucune question n’est envoyée à un service d’IA. Vérifier les politiques effectives et la rétention des prestataires avant de remplir le questionnaire. Ne pas déclarer globalement « aucune donnée collectée ».
 - Position : traitement sur l’appareil pour classer les spots proches ; coordonnées publiques des spots envoyées au fournisseur météo ; zone de carte demandée au fournisseur de tuiles.
 - La communauté suit les règles publiées, attend une approbation avant affichage, permet signalement et blocage, et propose une suppression de compte depuis l’application. Vérifier le délai réel de traitement et garder le contact d’assistance visible. Compléter le questionnaire d’âge ; l’app n’est pas présentée comme une application pour enfants.
 - Les coordonnées du responsable de la vérification et les informations légales du titulaire doivent être saisies par le titulaire ou confirmées précisément.

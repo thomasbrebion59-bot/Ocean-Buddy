@@ -71,7 +71,7 @@ Lien de la fiche : https://apps.apple.com/fr/app/ocean-buddy/id6811870966
 - `sitemap.xml` et `robots.txt`. Attention : sous `github.io/Ocean-Buddy/`, Google ne lit que le `robots.txt` placé à la racine de l'hôte (qui appartient à un autre dépôt), donc ce fichier est ignoré et le sitemap n'est PAS annoncé automatiquement. Il faut le soumettre à la main dans Search Console et Bing (étape 6). Le `robots.txt` ne prendra effet qu'avec un domaine personnalisé à la racine.
 - Une bannière Smart App Banner pour les visiteurs iPhone.
 - Contrôle automatique : `node scripts/check-seo.mjs` (ou `node --test tests/seo-site.test.js`). Il vérifie les 718 pages, le sitemap, les liens, les chemins relatifs, les données structurées et l'absence de texte caché ou de fausse note.
-- Pour Netlify, `scripts/build-static.cjs` copie aussi les pages et le sitemap.
+- `scripts/build-static.cjs` (build Cloudflare) copie aussi les pages et le sitemap.
 
 ## 7. Vérifier que ça marche
 

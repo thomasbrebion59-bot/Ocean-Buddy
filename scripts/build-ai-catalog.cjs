@@ -1,4 +1,4 @@
-/* Validate the canonical catalogue, then write browser, photo and server views. */
+/* Validate the canonical catalogue, then write browser and photo views. */
 const fs=require('node:fs');
 const path=require('node:path');
 
@@ -35,15 +35,6 @@ for(const spot of catalog){
 }
 
 const photos=Object.fromEntries(catalog.filter(s=>s.photo).map(s=>[s.id,s.photo]));
-const server=catalog.map(s=>({
-  id:s.id,name:s.name,location:s.loc,world:s.world,coords:s.coords,
-  coordinatePrecision:s.coordinatePrecision,activities:s.sports,level:s.level,
-  description:s.desc,source:s.source?.url||null,sourceLabel:s.source?.label||null,
-  reviewed:s.reviewed,editorialStatus:s.editorialStatus,visit:s.visit||null,
-  photo:s.photo?{src:s.photo.src,thumb:s.photo.thumb,source:s.photo.source,author:s.photo.author,license:s.photo.license,width:s.photo.width,height:s.photo.height}:null,
-  waterType:s.waterType
-}));
 write('catalog-runtime.js','/* Generated from data/catalog.json. Edit that file, then run node scripts/build-ai-catalog.cjs. */\nwindow.OCEAN_CATALOG = '+JSON.stringify(catalog)+';\n');
 write('assets/spots/sources.json',JSON.stringify(photos,null,2)+'\n');
-write('netlify/functions/lib/catalog.json',JSON.stringify(server)+'\n');
-console.log(catalog.length+' canonical spots validated and published for browser, photos and server');
+console.log(catalog.length+' canonical spots validated and published for browser and photos');

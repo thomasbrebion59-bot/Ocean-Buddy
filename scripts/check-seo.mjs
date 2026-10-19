@@ -159,7 +159,7 @@ export function checkSeo(root = ROOT_DEFAULT) {
   if (/aggregateRating|ratingValue|reviewRating/.test(home)) errors.push('index.html: forbidden rating markup');
   if (!fs.existsSync(path.join(root, 'deep-link.js'))) warnings.push('deep-link.js: missing');
 
-  // Netlify bundle contract
+  // Static bundle contract
   const bs = fs.readFileSync(path.join(root, 'scripts/build-static.cjs'), 'utf8');
   for (const n of ['spot', 'spots', 'sitemap.xml', 'robots.txt']) if (!bs.includes(`'${n}'`)) errors.push(`build-static.cjs does not copy ${n}`);
   return { errors, warnings, stats };

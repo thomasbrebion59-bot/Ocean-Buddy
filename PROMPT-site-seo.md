@@ -7,7 +7,7 @@ Lire `AGENTS.md` avant toute action. Il contient les règles de publication et d
 
 - Demande de l'utilisateur : beaucoup de personnes ne trouvent pas Ocean Buddy sur l'App Store. Il veut un site que les moteurs de recherche indexent, et qu'en tapant « Ocean Buddy » sur Google, le site apparaisse.
 - Site existant : GitHub Pages sert la racine de `main` sur `https://thomasbrebion59-bot.github.io/Ocean-Buddy/`. Chemins relatifs obligatoires (sous-chemin `/Ocean-Buddy/`).
-- Netlify : `netlify.toml` (build = `scripts/build-ai-catalog.cjs` + `scripts/build-static.cjs` vers `.netlify/publish`). Site `exquisite-choux-61c0d9.netlify.app`, surtout pour des fonctions.
+- Cloudflare Pages : `scripts/build-cloudflare.cjs` (via `scripts/build-static.cjs` vers `.build/static`). Netlify n’est plus utilisé.
 - Problèmes : aucun `robots.txt`, aucun `sitemap.xml`, pas de `canonical`, pas de JSON-LD, pas de lien App Store ni de Smart App Banner. Le `<title>` et la meta description de `index.html` existent. Les 718 spots sont rendus en JavaScript dans une app monopage, donc presque rien n'est indexable.
 - Données : `data/catalog.json` = 718 spots `{id, name, loc, level, desc, dangers, tip, sports, world, coords, waterType, source, reviewed, editorialStatus, photo, …}`. Langues : fr (défaut), en, es (`locales/en.js`, `locales/es.js`).
 - App Store : id `6811870966`, `https://apps.apple.com/fr/app/ocean-buddy/id6811870966`, version 1.3.1 en vente.
@@ -55,7 +55,7 @@ Lire `AGENTS.md` avant toute action. Il contient les règles de publication et d
   - [ ] aucun lien interne cassé ;
   - [ ] aucun chemin absolu `/...` qui casse sous `/Ocean-Buddy/`.
 - [ ] Lighthouse SEO dans Chrome headless, sur un port autre que 8765.
-- [ ] Mettre à jour les scripts de build. GitHub Pages sert le dépôt tel quel : les pages générées sont COMMITÉES. Netlify : `scripts/build-static.cjs` doit copier `spot/`, `spots/`, `sitemap.xml`, `robots.txt`.
+- [ ] Mettre à jour les scripts de build. GitHub Pages sert le dépôt tel quel : les pages générées sont COMMITÉES. Cloudflare : `scripts/build-static.cjs` doit copier `spot/`, `spots/`, `sitemap.xml`, `robots.txt`.
 - [ ] Lancer `python3 scripts/version-assets.py` après la dernière modification JS/CSS.
 - [ ] Guide pas à pas pour l'utilisateur, dans le message final et dans `docs/seo-guide.md` :
   - [ ] valider la propriété dans Google Search Console (fichier ou balise fournis par l'utilisateur) ;
