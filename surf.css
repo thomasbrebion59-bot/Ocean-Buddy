@@ -4,7 +4,7 @@
 html.surf-open,html.surf-open body{overflow:hidden}
 .surf-cv{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;outline:none}
 .surf-probe{position:absolute;left:0;top:0;width:0;height:env(safe-area-inset-top,0px);pointer-events:none}
-.surf-x{position:absolute;z-index:3;top:calc(env(safe-area-inset-top,0px) + 8px);right:12px;width:44px;height:44px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;color:#fff;background:rgba(4,22,74,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.surf-x{position:absolute;z-index:3;top:calc(env(safe-area-inset-top,0px) + 8px);right:12px;width:44px;height:44px;border-radius:50%;border:0;display:grid;place-items:center;cursor:pointer;color:#fff;background:rgba(4,22,74,.55);box-shadow:0 0 0 1px rgba(255,255,255,.25)}
 .surf-menu,.surf-res{position:absolute;inset:0;z-index:2;display:flex;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 64px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);background:rgba(4,22,74,.35);overflow-y:auto}
 .surf-menu[hidden],.surf-res[hidden]{display:none}
 .surf-card{width:100%;max-width:380px;margin:auto;padding:20px 18px;border-radius:26px;text-align:center;background:linear-gradient(160deg,rgba(8,42,120,.94),rgba(26,90,214,.92));box-shadow:0 24px 48px -20px rgba(2,10,36,.9),0 0 0 1px rgba(255,255,255,.18)}
@@ -45,7 +45,7 @@ html.surf-open,html.surf-open body{overflow:hidden}
 .surf-ov.g16-surfeur .surf-av-m,.surf-ov.g16-surfeuse .surf-av-f{background-size:400% 400%,100% 100%}
 .surf-btns{position:absolute;z-index:2;left:0;right:0;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);display:flex;justify-content:center;gap:14px;padding:0 16px;pointer-events:none}
 .surf-btns[hidden]{display:none}
-.surf-btns button{pointer-events:auto;touch-action:none;appearance:none;border:0;width:64px;height:64px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:#fff;cursor:pointer;background:rgba(4,22,74,.5);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 0 0 2px rgba(224,255,145,.55),0 8px 18px -8px rgba(2,10,36,.8);-webkit-user-select:none;user-select:none}
+.surf-btns button{pointer-events:auto;touch-action:none;appearance:none;border:0;width:64px;height:64px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;color:#fff;cursor:pointer;background:rgba(4,22,74,.5);box-shadow:0 0 0 2px rgba(224,255,145,.55),0 8px 18px -8px rgba(2,10,36,.8);-webkit-user-select:none;user-select:none}
 .surf-btns button:active{background:rgba(224,255,145,.35)}
 .surf-btns b{font:800 14px/1 "Barlow Condensed",sans-serif;letter-spacing:.6px;text-transform:uppercase}
 .surf-btns .shake{animation:surf-shake .3s}
@@ -65,7 +65,7 @@ html.surf-open,html.surf-open body{overflow:hidden}
 .surf-pause .surf-guide{max-height:52vh}
 .surf-pause{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;padding:calc(env(safe-area-inset-top,0px) + 64px) 16px calc(env(safe-area-inset-bottom,0px) + 16px);background:rgba(4,22,74,.55);overflow-y:auto}
 .surf-pause[hidden]{display:none}
-.surf-q{position:absolute;z-index:3;top:calc(env(safe-area-inset-top,0px) + 8px);right:66px;width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;color:#fff;font:800 22px/1 "Barlow Condensed",sans-serif;background:rgba(4,22,74,.55);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.surf-q{position:absolute;z-index:3;top:calc(env(safe-area-inset-top,0px) + 8px);right:66px;width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;color:#fff;font:800 22px/1 "Barlow Condensed",sans-serif;background:rgba(4,22,74,.55);box-shadow:0 0 0 1px rgba(255,255,255,.25)}
 .surf-q[hidden]{display:none}
 .surf-q:focus-visible{outline:3px solid #e0ff91;outline-offset:2px}
 .surf-coach{position:absolute;z-index:2;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px + 64px + 14px);display:none;justify-content:center;pointer-events:none}

@@ -15,7 +15,7 @@
 .ocean-v2 #detail .hero-credit{max-width:740px;font-size:9px}
 .ocean-v2 #detail .detail-hero .back-btn,.ocean-v2 #detail .detail-hero .fav,.ocean-v2 #detail .hero-more{width:44px;height:44px}
 .ocean-v2 #detail .hero-more{top:74px}
-.ocean-v2 #detail .dfact{font-size:11px;background:color-mix(in srgb,var(--g-night2,#17355d) 70%,transparent);border:1px solid #ffffff30;backdrop-filter:blur(8px)}
+.ocean-v2 #detail .dfact{font-size:11px;background:color-mix(in srgb,var(--g-night2,#17355d) 70%,transparent);border:1px solid #ffffff30;}
 .ocean-v2 #detail .trip-add-from-spot{margin:16px 0 0;border-radius:8px;max-width:none;font-size:12px}
 .ocean-v2 #detail .field-overview:not([style*="none"]){grid-template-columns:minmax(0,1.55fr) minmax(260px,1fr);gap:0 38px;align-items:start}
 .ocean-v2 #detail .field-story{grid-column:auto;background:transparent!important;border:0;padding:12px 0 24px}

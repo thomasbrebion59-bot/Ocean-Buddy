@@ -37,7 +37,7 @@
 .voyage-id{flex:1;min-width:0}
 .voyage-id small{display:block;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#e0ff91;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .voyage-id b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:26px;font-weight:800;line-height:1.05;text-transform:uppercase;text-shadow:0 2px 16px rgba(0,0,0,.35);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.voyage-btn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);background:rgba(8,32,92,.42);color:#fff;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);transition:transform .2s,background .2s}
+.voyage-btn{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;border:1px solid rgba(255,255,255,.22);background:rgba(8,32,92,.42);color:#fff;transition:transform .2s,background .2s}
 .voyage-btn:hover{background:color-mix(in srgb,var(--t-main) 70%,transparent)}
 .voyage-btn:active{transform:scale(.92)}
 .voyage-btn[aria-pressed=true]{background:#e0ff91;color:var(--t-deep);border-color:#e0ff91}
@@ -46,7 +46,7 @@
 .voyage-tap{position:absolute;top:16%;bottom:40%;width:28%;z-index:2;border:0;background:none;color:#fff;display:flex;align-items:center;opacity:0;transition:opacity .2s}
 .voyage-tap-prev{left:0;justify-content:flex-start;padding-left:14px}
 .voyage-tap-next{right:0;justify-content:flex-end;padding-right:14px}
-.voyage-tap svg{width:44px;height:44px;padding:10px;border-radius:50%;background:rgba(8,32,92,.45);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.voyage-tap svg{width:44px;height:44px;padding:10px;border-radius:50%;background:rgba(8,32,92,.45);}
 .voyage-tap:hover,.voyage-tap:focus-visible{opacity:1}
 .voyage[data-kind=explore] .voyage-tap{top:auto;bottom:calc(env(safe-area-inset-bottom,0px) + 50%);width:auto;opacity:.9}
 
@@ -61,13 +61,13 @@
 .voyage-card h2{margin:10px 0 6px;font-family:"Barlow Condensed",sans-serif;font-size:clamp(30px,8vw,52px);font-weight:800;line-height:.95;text-transform:uppercase;letter-spacing:-.005em;text-shadow:0 4px 24px rgba(0,0,0,.35)}
 .voyage-card p{margin:0;font-size:15px;line-height:1.5;color:var(--g-pale,#e6edff);max-width:60ch;text-shadow:0 1px 10px rgba(0,0,0,.4)}
 .voyage-live{display:flex;gap:8px;margin-top:12px}
-.voyage-live span{flex:1;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px)}
+.voyage-live span{flex:1;padding:8px 10px;border-radius:14px;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.16);}
 .voyage-live small{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;font-weight:700}
 .voyage-live b{font-size:14px}
 .voyage-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .voyage-chips span{font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.18)}
 .voyage-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
-.voyage-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:14.5px;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:transform .2s}
+.voyage-cta{display:inline-flex;align-items:center;gap:8px;padding:13px 18px;border-radius:16px;border:1px solid rgba(255,255,255,.3);background:rgba(255,255,255,.14);color:#fff;font-weight:800;font-size:14.5px;transition:transform .2s}
 .voyage-cta:active{transform:scale(.96)}
 .voyage-cta-main{background:#e0ff91;border-color:#e0ff91;color:var(--t-deep)}
 .voyage-credit{margin-top:10px;font-size:11px;opacity:.7}
@@ -93,7 +93,7 @@
 .vx-layer{position:absolute;inset:0;transition:opacity .6s ease,transform .8s cubic-bezier(.22,1,.36,1),filter .6s ease}
 .vx-layer.is-entering{opacity:0;transform:scale(1.07)}
 .vx-layer.is-leaving{opacity:0;transform:scale(1.1);filter:blur(6px);pointer-events:none}
-.vx-move{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);z-index:2;padding:10px 18px 10px 40px;border-radius:999px;background:rgba(8,32,92,.62) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e0ff91' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='13' cy='4.5' r='1.8'/%3E%3Cpath d='m9.5 21 2-6 3 3v3M8 12l2.5-4.5L14 9l2.5 3M11.5 15l1-5.5'/%3E%3C/svg%3E") 12px 50%/22px no-repeat;-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font-weight:800;font-size:14px;white-space:nowrap;pointer-events:none;transition:opacity .35s;animation:vxPulse 1.2s ease-in-out infinite}
+.vx-move{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);z-index:2;padding:10px 18px 10px 40px;border-radius:999px;background:rgba(8,32,92,.62) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e0ff91' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='13' cy='4.5' r='1.8'/%3E%3Cpath d='m9.5 21 2-6 3 3v3M8 12l2.5-4.5L14 9l2.5 3M11.5 15l1-5.5'/%3E%3C/svg%3E") 12px 50%/22px no-repeat;font-weight:800;font-size:14px;white-space:nowrap;pointer-events:none;transition:opacity .35s;animation:vxPulse 1.2s ease-in-out infinite}
 @keyframes vxPulse{50%{opacity:.6}}
 .vx-move.is-done{opacity:0;animation:none}
 .vx-layer .voyage-walk{position:absolute;inset:-64px 0 0;height:calc(100% + 64px)}
@@ -101,7 +101,7 @@
 .vx-google .voyage-shade{background:linear-gradient(180deg,rgba(4,22,59,.66),transparent 17%,transparent 50%,rgba(4,22,59,.88) 80%,rgba(4,22,59,.55) 100%)}
 .vx-layer .voyage-loading{pointer-events:none}
 .vx-note .voyage-photo{filter:blur(8px) saturate(1.15) brightness(.55);animation:none;transform:scale(1.08)}
-.vx-panel{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);width:min(88vw,420px);box-sizing:border-box;display:grid;justify-items:center;gap:10px;padding:22px 20px;border-radius:24px;background:rgba(8,32,92,.62);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border:1px solid rgba(255,255,255,.2);text-align:center}
+.vx-panel{position:absolute;left:50%;top:40%;transform:translate(-50%,-50%);width:min(88vw,420px);box-sizing:border-box;display:grid;justify-items:center;gap:10px;padding:22px 20px;border-radius:24px;background:rgba(8,32,92,.78);border:1px solid rgba(255,255,255,.2);text-align:center}
 .vx-panel>svg{width:38px;height:38px;color:#e0ff91}
 .vx-panel b{font-size:18px;line-height:1.25}
 .vx-panel span{font-size:14px;line-height:1.45;color:var(--g-pale,#dfe8ff)}
@@ -133,7 +133,7 @@
 .vx-text{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 .vx-strip{display:flex;gap:8px;margin:12px -18px 0;padding:2px 18px 4px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 18px,#000 calc(100% - 18px),transparent)}
 .vx-strip::-webkit-scrollbar{display:none}
-.vx-chip{flex:none;display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 14px 0 11px;border-radius:14px;border:1px solid rgba(255,255,255,.26);background:rgba(8,32,92,.5);color:#fff;font-weight:800;font-size:13.5px;scroll-snap-align:center;-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);transition:background .2s,transform .2s}
+.vx-chip{flex:none;display:inline-flex;align-items:center;gap:7px;min-height:44px;padding:0 14px 0 11px;border-radius:14px;border:1px solid rgba(255,255,255,.26);background:rgba(8,32,92,.5);color:#fff;font-weight:800;font-size:13.5px;scroll-snap-align:center;transition:background .2s,transform .2s}
 .vx-chip svg{width:19px;height:19px}
 .vx-chip:active{transform:scale(.95)}
 .vx-chip.is-on{background:#fff;color:var(--t-deep);border-color:#fff}
