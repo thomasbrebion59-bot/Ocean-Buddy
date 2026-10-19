@@ -2,7 +2,7 @@
 
 Version du projet : 1.3.0 (build 202610071). Identifiant : `io.github.thomasbrebion59bot.oceanbuddy`.
 
-Capacitor embarque le catalogue, les photographies, les polices, Leaflet et le moteur de relief dans l’application. La météo, les tuiles cartographiques, Poulpy IA et la communauté nécessitent internet. La galerie, le son et le relief restent facultatifs. Les données du site et celles de chaque installation mobile sont séparées.
+Capacitor embarque le catalogue, les photographies, les polices, Leaflet et le moteur de relief dans l’application. La météo, les tuiles cartographiques et la communauté nécessitent internet ; Poulpy répond hors connexion. La galerie, le son et le relief restent facultatifs. Les données du site et celles de chaque installation mobile sont séparées.
 
 ## Construire
 
@@ -51,7 +51,7 @@ Scénarios : `native-returning`, `native-restore` (rechargement avec `history.st
 - Copie des données `oceanbuddy_*` dans les préférences natives et restauration au démarrage, sans remplacer les données déjà présentes.
 - Export JSON d’un voyage via la feuille de partage du téléphone.
 - Ouverture des liens externes dans le navigateur du système et bouton Retour Android.
-- Choix explicite entre guide intégré et IA avant tout envoi de message. Les questions et leur contexte passent par Netlify puis OpenAI ; aucun secret fournisseur n’est présent dans le binaire.
+- Poulpy répond sur l’appareil avec le guide intégré : aucun message n’est envoyé, aucune IA n’est utilisée.
 - Effacement des données locales dans les réglages, avec confirmation.
 - Lecture publique des contributions approuvées lorsque le service communautaire est disponible. Un courriel vérifié est nécessaire pour publier ; chaque contribution reste en attente de modération. Les anciens messages locaux ne sont jamais transférés automatiquement.
 - Création d’une copie distincte d’un voyage pour la communauté, après aperçu et choix explicite de chaque détail privé.
@@ -74,6 +74,6 @@ Le projet natif se trouve dans `android/` : `npm run open:android`. Android Stud
 
 ## Confidentialité et licences
 
-Le manifeste iOS déclare les accès UserDefaults (CA92.1) et FileTimestamp (C617.1) utilisés par Preferences et Filesystem. Il déclare l’adresse e-mail, l’identifiant de compte et les contributions liées au membre lorsque la communauté est activée, ainsi que le contenu envoyé volontairement à l’IA. Aucun suivi publicitaire n’est implémenté. Vérifier les déclarations App Store Connect contre le comportement du binaire final et les prestataires réellement configurés. La désactivation de la sauvegarde Android par l’app ne contrôle pas tous les mécanismes de transfert gérés par les fabricants.
+Le manifeste iOS déclare les accès UserDefaults (CA92.1) et FileTimestamp (C617.1) utilisés par Preferences et Filesystem. Il déclare l’adresse e-mail, l’identifiant de compte et les contributions liées au membre lorsque la communauté est activée. Poulpy ne transmet plus aucun contenu : vérifier à la prochaine version App Store que les déclarations ne citent plus l’IA. Aucun suivi publicitaire n’est implémenté. Vérifier les déclarations App Store Connect contre le comportement du binaire final et les prestataires réellement configurés. La désactivation de la sauvegarde Android par l’app ne contrôle pas tous les mécanismes de transfert gérés par les fabricants.
 
 Les photographies sont créditées dans `photos.html` et les licences de Leaflet et des polices sont copiées dans le bundle. L’app ne fait ni réservation, ni navigation maritime, ni calcul d’ordinateur de plongée.

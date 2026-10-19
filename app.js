@@ -2096,10 +2096,8 @@ function showTyping(){const c=document.getElementById('chatMsgs');const m=docume
 function hideTyping(){const t=document.getElementById('typingMsg');if(t)t.remove();}
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function pick(a){return a[Math.floor(Math.random()*a.length)];}
-/* The connected assistant is installed by poulpy-assistant.js. */
-let chatHistory=[];
-function setChatStatus(){const el=document.getElementById('chatStatus');if(el)el.textContent='Guide intégré · IA non connectée';}
-function aiFormat(t){return esc(t).replace(/\*\*(.+?)\*\*/g,'<b>$1</b>').replace(/\n/g,'<br>');}
+/* poulpy-assistant.js completes this chat; every answer comes from the guide below. */
+function setChatStatus(){const el=document.getElementById('chatStatus');if(el)el.textContent='Ton guide océan · prêt';}
 function chatSend(text){text=String(text||'').trim();if(!text)return;addMsg('user',esc(text));const reply=poulpyReply(text);addMsg('bot',reply.html,reply.btn);}
 function chatSendInput(){const i=document.getElementById('chatInput');chatSend(i.value);i.value='';}
 function quick(t){const map={spot:"Quel spot tu me conseilles aujourd'hui ?",secu:"Donne-moi un conseil de sécurité",eco:"Un geste écolo à faire ?",prog:"Où en est ma progression ?"};chatSend(map[t]);}
@@ -2383,7 +2381,7 @@ function poulpyReply(q){
    [/(aire marine protégée|aire marine protegee|réserve marine|reserve marine|zone protégée)/,"Les <b>aires marines protégées</b> laissent la vie se régénérer 🐠 : des poissons plus gros et plus nombreux, qui « débordent » ensuite vers les zones voisines. Un outil clé pour l'océan."],
    [/(mangrove)/,"Les <b>mangroves</b> (forêts les pieds dans l'eau) 🌳 sont des nurseries à poissons, protègent les côtes des tempêtes et stockent énormément de carbone. Précieuses et menacées."],
    [/(forêt de kelp|foret de kelp|laminaire|forêt d'algue)/,"Les <b>forêts de kelp</b> (grandes algues) sont des jungles sous-marines 🌿 qui abritent loutres, poissons et invertébrés, et capturent du CO₂. Superbes à explorer en palmes."],
-   [/(es.?tu une.*ia|es.?tu une vraie ia|t'es une ia|intelligence artificielle|es.?tu un robot)/,"Bonne question 🐙 ! Pour l'instant je réponds avec une base de connaissances « maison » (pas encore un vrai modèle d'IA), pour rester gratuit et instantané. Mais on peut me brancher sur une vraie IA quand l'app a un serveur 😉."],
+   [/(es.?tu une.*ia|es.?tu une vraie ia|t'es une ia|intelligence artificielle|es.?tu un robot)/,"Je suis Poulpy, le guide d'Ocean Buddy 🐙 ! Je réponds directement dans l'application, à partir de ses fiches sur les spots, les activités, la faune et la sécurité : tes messages restent sur ton appareil."],
    [/(sécur|secur|danger|noyade|risque|leash|seul|accompagn|sauvet)/,()=>({html:'🛟 '+pick(SECU)})],
    [/(écolo|ecolo|déchet|dechet|plastique|planète|planete|environ|propre|pollution|nature|protég|proteg|sauver.*océan)/,eco],
    [/(quel spot|un spot|où surfer|ou surfer|spot.*aujourd|conseille.*spot|recommand|aller surfer|meilleur spot|spot du jour|où aller|ou aller)/,spotReco],

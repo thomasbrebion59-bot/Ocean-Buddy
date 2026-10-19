@@ -1,32 +1,45 @@
-/* Audit (A-03) : une limite 429 au corps non JSON affiche bien le message de limite momentanée. */
+/* Poulpy answers on the device: the chat never calls the network and never mentions an AI service. */
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 
-function storage(){const d=new Map();return {get length(){return d.size},key:i=>[...d.keys()][i]??null,getItem:k=>d.get(k)??null,setItem:(k,v)=>d.set(k,String(v)),removeItem:k=>d.delete(k)};}
-function element(){return {textContent:'',innerHTML:'',disabled:false,hidden:true,value:'',maxLength:0,dataset:{},classList:{contains:()=>false,add(){},remove(){},toggle(){}},listeners:{},setAttribute(){},removeAttribute(){},before(){},after(){},append(){},prepend(){},replaceChildren(){},addEventListener(k,f){this.listeners[k]=f},querySelector:()=>null,querySelectorAll:()=>[],focus(){},remove(){}};}
-function assistant(response){
-  const elements=new Map(),localStorage=storage(),messages=[];
-  localStorage.setItem('oceanbuddy_ai_choice_v1','ai');
-  const doc={body:{dataset:{screen:'home'}},querySelector:s=>{if(!elements.has(s))elements.set(s,element());return elements.get(s)},querySelectorAll:()=>[],createElement:()=>element(),addEventListener(){},dispatchEvent(){}};
-  const context={document:doc,localStorage,URL,AbortSignal,AbortController,CustomEvent:class{constructor(t,o){this.type=t;this.detail=o?.detail}},setTimeout,clearTimeout,POULPY_CONFIG:{endpoint:'https://api.example.test/poulpy'},chatHistory:[],chatSeeded:false,openChat(){},closeSettings(){},toast(){},currentSpot:null,SPOTS:[],activeSport:'surf',chosenLevel:'intermediaire',addMsg:(...m)=>messages.push(m),esc:s=>s,showTyping(){},hideTyping(){},poulpyReply:()=>({html:'Guide local'}),aiFormat:s=>s,fetch:async(url,options)=>options?.method==='POST'?response():{ok:true,status:200,json:async()=>({enabled:true})}};
+const read=name=>readFileSync(new URL('../'+name,import.meta.url),'utf8');
+function element(){return {textContent:'',innerHTML:'',disabled:false,hidden:true,value:'',maxLength:0,dataset:{},className:'',classList:{contains:()=>false,add(){},remove(){},toggle(){}},listeners:{},setAttribute(){},removeAttribute(){},before(){},after(){},append(){},prepend(){},replaceChildren(){},addEventListener(k,f){this.listeners[k]=f},querySelector:()=>null,querySelectorAll:()=>[],focus(){},remove(){}};}
+function assistant(){
+  const elements=new Map(),created=[],messages=[],network=[];
+  const doc={body:{dataset:{screen:'home'}},querySelector:s=>{if(!elements.has(s))elements.set(s,element());return elements.get(s)},querySelectorAll:()=>[],createElement:()=>{const e=element();created.push(e);return e},addEventListener(){},dispatchEvent(){}};
+  const blockedNetwork=name=>(...args)=>{network.push([name,...args]);throw Error('network call');};
+  const context={document:doc,URL,setTimeout,clearTimeout,fetch:blockedNetwork('fetch'),XMLHttpRequest:blockedNetwork('xhr'),navigator:{sendBeacon:blockedNetwork('beacon')},chatSeeded:false,openChat(){},toast(){},currentSpot:null,SPOTS:[],addMsg:(...m)=>messages.push(m),esc:s=>s,poulpyReply:q=>({html:'Guide : '+q,btn:{label:'Voir le spot',onclick:'openSpotFromChat(\'bourget\')'}})};
   context.window=context;vm.createContext(context);
-  vm.runInContext(readFileSync(new URL('../privacy.js',import.meta.url),'utf8'),context);
-  vm.runInContext(readFileSync(new URL('../poulpy-assistant.js',import.meta.url),'utf8'),context);
-  return {context,messages};
+  for(const name of ['poulpy-config.js','poulpy-knowledge.js','poulpy-assistant.js'])vm.runInContext(read(name),context);
+  return {context,messages,network,created};
 }
-const LIMIT=/limite momentanée/;
-test('Poulpy client: HTML 429 shows the temporary-limit message',async()=>{
-  const a=assistant(()=>({ok:false,status:429,json:async()=>{throw new SyntaxError('Unexpected token <')}}));
-  await a.context.chatSend('Quelle marée à Biarritz ?');
-  assert.match(a.messages.filter(m=>m[0]==='bot').at(-1)[1],LIMIT);
+
+test('every question is answered by the built-in guide without any network call',()=>{
+  const a=assistant();a.context.openChat();
+  a.context.chatSend('Quel spot pour débuter à Biarritz ?');
+  a.context.chatSend('Comment observer les dauphins ?');
+  assert.deepEqual(a.network,[]);
+  const bot=a.messages.filter(m=>m[0]==='bot');
+  assert.equal(a.messages.filter(m=>m[0]==='user').length,2);
+  assert.ok(bot.some(m=>m[1]==='Guide : Quel spot pour débuter à Biarritz ?'&&m[2]?.label==='Voir le spot'),'les boutons de fiche du guide restent');
+  assert.equal(bot.length,3);
 });
-test('Poulpy client: JSON 429 still shows the temporary-limit message, a 502 does not',async()=>{
-  const a=assistant(()=>({ok:false,status:429,json:async()=>({error:'rate_limited'})}));
-  await a.context.chatSend('Quelle marée ?');
-  assert.match(a.messages.filter(m=>m[0]==='bot').at(-1)[1],LIMIT);
-  const b=assistant(()=>({ok:false,status:502,json:async()=>{throw new SyntaxError('html')}}));
-  await b.context.chatSend('Quelle marée ?');
-  assert.doesNotMatch(b.messages.filter(m=>m[0]==='bot').at(-1)[1],LIMIT);
+
+test('no consent card, no service address and no AI wording in the chat code',()=>{
+  const a=assistant();
+  assert.ok(!a.created.some(e=>e.className==='ai-consent'));
+  assert.equal(a.context.POULPY_CONFIG.endpoint,'');
+  for(const name of ['poulpy-assistant.js','poulpy-config.js','poulpy-knowledge.js','privacy.js']){
+    const code=read(name);
+    assert.doesNotMatch(code,/fetch\(|XMLHttpRequest|netlify\.app|openai/i,name);
+    assert.doesNotMatch(code.replace(/\/\(qui es-tu[^/]*\//,''),/Poulpy IA|\bIA\b|intelligence artificielle/,name);
+  }
+});
+
+test('the AI choice is gone from the settings and only the local erase remains',()=>{
+  const added=[];const doc={querySelector:()=>({before:e=>added.push(e)}),createElement:()=>element()};
+  vm.runInNewContext(read('privacy.js'),{document:doc,window:{},localStorage:{length:0},toast(){}});
+  assert.deepEqual(added.map(e=>e.textContent),['Effacer toutes mes données sur cet appareil']);
 });
