@@ -46,7 +46,8 @@ async function boot(){
     Storage.prototype[method]=function(...args){const result=original.apply(this,args);if(this===localStorage&&owned(args[0]))persist().catch(()=>{});return result;};
   }
   document.documentElement.classList.add('native-app');
-  StatusBar.setStyle({style:Style.Dark}).catch(()=>{});
+  /* Fond crème par défaut : barre d’état à texte foncé (Style.Light du plugin, à confirmer sur simulateur). */
+  StatusBar.setStyle({style:Style.Light}).catch(()=>{});
   /* L’interface 1.3 passe sous la barre d’état : textes clairs sur la Terre et les photos, foncés sur les pages claires. */
   let barStyle='';
   window.addEventListener?.('ocean:statusbar',event=>{const next=event.detail==='light'?Style.Light:Style.Dark;if(next===barStyle)return;barStyle=next;StatusBar.setStyle({style:next}).catch(()=>{});});
