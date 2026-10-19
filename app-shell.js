@@ -33,7 +33,7 @@
   ['home','spots','surf','trips','challenges','profile','community'].forEach(id=>{const b=$(`button[data-s="${id}"]`,nav);if(b)nav.append(b);});
   nav.querySelector('.sidebar-bottom')&&nav.append(nav.querySelector('.sidebar-bottom'));
   const poulpy=document.createElement('button');
-  poulpy.type='button';poulpy.className='tab-poulpy';poulpy.setAttribute('aria-label','Discuter avec Poulpy, ton guide IA');
+  poulpy.type='button';poulpy.className='tab-poulpy';poulpy.setAttribute('aria-label','Discuter avec Poulpy, ton guide océan');
   poulpy.innerHTML='<img src="assets/poulpy/scenes/travel-v2.webp" alt="" width="50" height="50" decoding="async"><i aria-hidden="true"></i>';
   poulpy.onclick=()=>{if(typeof openChat==='function')openChat();};
   nav.after(poulpy);

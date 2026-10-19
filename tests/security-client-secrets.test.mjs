@@ -31,8 +31,9 @@ test('public client configs only carry public values',()=>{
   for(const name of ['community-config.js','poulpy-config.js'])vm.runInNewContext(readFileSync(join(root,name),'utf8'),{window});
   const community=window.OCEAN_COMMUNITY_CONFIG,poulpy=window.POULPY_CONFIG;
   assert.deepEqual(Object.keys(community).sort(),['endpoint','publishableKey','supabaseUrl']);
-  assert.deepEqual(Object.keys(poulpy).sort(),['endpoint','timeoutMs']);
+  // Poulpy answers on the device: its config carries no service address at all.
+  assert.deepEqual(Object.keys(poulpy),['endpoint']);assert.equal(poulpy.endpoint,'');
   // A publishable key may be filled in later; it must then be the public kind, never the secret one.
   assert.ok(community.publishableKey===''||/^sb_publishable_/.test(community.publishableKey)||jwtRole(community.publishableKey).every(role=>role==='anon'));
-  for(const url of [community.endpoint,poulpy.endpoint])assert.match(url,/^https:\/\//);
+  assert.match(community.endpoint,/^https:\/\//);
 });

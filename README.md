@@ -28,7 +28,7 @@ Douze petits Poulpy illustrent maintenant les neuf activités et les trois nivea
 
 Dans chaque fiche, **Prends tes repères** associe une photographie ouvrable en grand, trois repères adaptés à l’activité et des explications sur le vent, les vagues, la marée, l’eau et le niveau. Les schémas interactifs sont pédagogiques : ils ne représentent ni la géographie du spot, ni une mesure locale. Les prévisions disponibles sont identifiées séparément. Le contenu est adapté aux plans d’eau intérieurs ; les sources RNLI, NOAA et Open-Meteo sont liées auprès des explications. Les onglets et le curseur de marée fonctionnent au clavier.
 
-L’intégration conversationnelle de Poulpy utilise une fonction Netlify et l’API Responses d’OpenAI. Son activation et sa configuration sont décrites dans [backend/README.md](backend/README.md). Si aucune URL de serveur n’est configurée, l’interface identifie explicitement le guide intégré.
+Poulpy répond uniquement avec le guide intégré, sur l’appareil, sans aucun service en ligne ni IA. La fonction Netlify restante ne sert qu’aux anciennes apps : voir [backend/README.md](backend/README.md).
 
 ## Voyage dans le spot
 
@@ -101,7 +101,7 @@ Les textes traduits sont conservés dans `locales/translations/<langue>.json` ; 
 - `field-guide.js`, `field-guide.css` : fiches immersives, préparation et repères pratiques.
 - `poulpy-icons.js`, `spot-immersion-model.js`, `spot-immersion.js`, `spot-immersion.css` : petits Poulpy et explications interactives des caractéristiques.
 - `spot-gallery.js`, `spot-notebook-model.js`, `spot-notebook.js` : galerie, comparaison et notes personnelles.
-- `poulpy-assistant.js`, `poulpy-config.js`, `netlify/functions/` : client et serveur de discussion.
+- `poulpy-assistant.js`, `poulpy-knowledge.js` : discussion avec Poulpy, réponses calculées sur l’appareil ; `netlify/functions/` : communauté et réponse de compatibilité Poulpy pour les anciennes apps.
 - `photo-catalog.js`, `photos.html`, `assets/spots/` : photographies locales et provenance.
 - `scripts/build_photo_catalog.py` : reconstruit le catalogue et les crédits depuis le manifeste.
 - `tests/trip-model.test.js` : validation des dates, persistance, ordre des étapes et cas d’erreur.

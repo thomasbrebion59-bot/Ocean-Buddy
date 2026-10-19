@@ -1,7 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createCommunityHandler,WRITE_LIMITS} from '../netlify/functions/lib/community-handler.mjs';
-import {createPoulpyHandler} from '../netlify/functions/lib/poulpy-core.mjs';
 import * as communityFunction from '../netlify/functions/community.mjs';
 import * as poulpyFunction from '../netlify/functions/poulpy.mjs';
 
@@ -69,13 +68,3 @@ test('reports are capped per account and per hour in the database',async()=>{
   assert.ok(!over.calls.some(call=>call.path==='/rest/v1/community_reports'&&call.method==='POST'));
 });
 
-test('Poulpy keeps its per-IP burst (6/min) and hourly (30/h) limits',async()=>{
-  let t=0;
-  const handler=createPoulpyHandler({env:{OPENAI_API_KEY:'test-key',OPENAI_MODEL:'m',POULPY_ENABLED:'true'},clock:()=>t,fetcher:async()=>reply({output:[{type:'message',content:[{type:'output_text',text:'Bonne session au spot.'}]}]})});
-  const ask=ip=>handler(new Request('https://site.example/.netlify/functions/poulpy',{method:'POST',headers:{'content-type':'application/json',origin:'https://thomasbrebion59-bot.github.io'},body:JSON.stringify({message:'Quel spot pour débuter ?'})}),{ip});
-  for(let i=0;i<6;i++)assert.equal((await ask('198.51.100.1')).status,200);
-  assert.equal((await ask('198.51.100.1')).status,429);
-  assert.equal((await ask('198.51.100.2')).status,200);
-  let ok=6;for(let minute=1;minute<10;minute++){t=minute*61000;for(let i=0;i<6;i++)if((await ask('198.51.100.1')).status===200)ok++;}
-  assert.equal(ok,30);
-});

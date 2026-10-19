@@ -42,13 +42,12 @@ test('community: provider errors never echo the service key or the provider body
   assert.deepEqual(JSON.parse(text),{error:'service_unavailable'});
 });
 
-test('poulpy: provider failure and status answers never expose the OpenAI key',async()=>{
-  const env={OPENAI_API_KEY:OPENAI,OPENAI_MODEL:'test-model',POULPY_ENABLED:'true'};
-  const handler=createPoulpyHandler({env,fetcher:async()=>{throw Error('boom '+OPENAI)}});
+test('poulpy: status and question answers carry defensive headers and never echo an old key',async()=>{
+  const handler=createPoulpyHandler({env:{OPENAI_API_KEY:OPENAI,POULPY_ENABLED:'true'}});
   const status=await handler(new Request('https://site.example/.netlify/functions/poulpy',{headers:{origin}}));
   assertDefensive(status);assert.equal(leaksSecret(await status.text()),false);
-  const failed=await handler(new Request('https://site.example/.netlify/functions/poulpy',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({message:'Quelle marée à Biarritz ?'})}),{ip:'203.0.113.9'});
-  assert.equal(failed.status,502);
-  assertDefensive(failed);
-  assert.equal(leaksSecret(await failed.text()),false);
+  const asked=await handler(new Request('https://site.example/.netlify/functions/poulpy',{method:'POST',headers:{origin,'content-type':'application/json'},body:JSON.stringify({message:'Quelle marée à Biarritz ?'})}));
+  assert.equal(asked.status,503);
+  assertDefensive(asked);
+  assert.equal(leaksSecret(await asked.text()),false);
 });
