@@ -132,11 +132,11 @@
     setTimeout(()=>ov&&open&&mode==='menu'&&ov.querySelector('[data-surf=play]').focus({preventScroll:true}),30);
   }
   function start(){
-    mode='play';menuEl.hidden=true;resEl.hidden=true;btns.hidden=false;qBtn.hidden=false;paused=false;pauseEl.hidden=true;inp.grab=false;lastGrabFail=0;G=newGame(false);lastFigSeq=0;lastFallSeq=0;input.reset();acc=0;coachOn=games<2;obsCoach=obsHint?2:0;coachStep=-2;coachT3=0;coachTo(coachOn?0:-1);
+    mode='play';menuEl.hidden=true;resEl.hidden=true;btns.hidden=false;qBtn.hidden=false;paused=false;pauseEl.hidden=true;inp.grab=false;keys.l=keys.r=keys.u=keys.d=keys.h=false;keysOn=false;lastGrabFail=0;G=newGame(false);lastFigSeq=0;lastFallSeq=0;input.reset();acc=0;coachOn=games<2;obsCoach=obsHint?2:0;coachStep=-2;coachT3=0;coachTo(coachOn?0:-1);
     cv.focus&&cv.focus({preventScroll:true});
   }
   function finish(){
-    mode='result';input.reset();inp.grab=false;btns.hidden=true;qBtn.hidden=true;coachTo(-1);coachOn=false;
+    mode='result';input.reset();inp.grab=false;keys.l=keys.r=keys.u=keys.d=keys.h=false;keysOn=false;btns.hidden=true;qBtn.hidden=true;coachTo(-1);coachOn=false;
     const sc=Math.floor(G.score),rec=sc>best;if(rec)best=sc;
     games++;if(G.bestFigPts>bestTrickPts){bestTrickPts=G.bestFigPts|0;bestTrick=G.bestFig;}if(G.bestCombo>bestCombo)bestCombo=G.bestCombo;save();
     ov.querySelector('[data-surf-count]').textContent='Figures : '+G.figCount;
@@ -158,7 +158,7 @@
     if(mode==='play'&&paused){acc=0;}
     else if(mode==='play'){
       input.poll(now);
-      if(keysOn){inp.mx=(keys.r?1:0)-(keys.l?1:0);inp.my=(keys.u?1:0)-(keys.d?1:0);inp.hold=keys.h;}
+      if(keysOn&&(keys.l||keys.r||keys.u||keys.d||keys.h)){inp.mx=(keys.r?1:0)-(keys.l?1:0);inp.my=(keys.u?1:0)-(keys.d?1:0);inp.hold=keys.h;}
     }
     while(acc>=STEP&&n<MAX_STEPS){
       if(mode==='menu'){if(demo.phase==='over')demo=G=newGame(true);render.snap(demo);M.step(demo,inp,STEP);}
@@ -183,6 +183,7 @@
     if(!open)return;
     if(e.key==='Escape'){e.preventDefault();e.stopPropagation();close();return;}
     const dn=e.type==='keydown',k=e.key;
+    if(!dn){if(k==='ArrowLeft')keys.l=false;else if(k==='ArrowRight')keys.r=false;else if(k==='ArrowUp')keys.u=false;else if(k==='ArrowDown')keys.d=false;else if(k==='Shift')keys.h=false;}
     if(mode!=='play'||paused)return;
     if(k==='ArrowLeft'){keys.l=dn;keysOn=true;}else if(k==='ArrowRight'){keys.r=dn;keysOn=true;}
     else if(k==='ArrowUp'){keys.u=dn;keysOn=true;}else if(k==='ArrowDown'){keys.d=dn;keysOn=true;}
@@ -212,4 +213,5 @@
     document.removeEventListener('visibilitychange',onVis);document.removeEventListener('keydown',onKey,true);document.removeEventListener('keyup',onKey,true);
   }
   root.OceanSurf={open:openGame,close,isOpen:()=>open,stats};
+  if(root.__SURF_TEST__)root.__surfTest={start,finish,frame,inp,keys};
 })(window);
