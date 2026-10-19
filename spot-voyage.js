@@ -165,8 +165,9 @@
     if(paused){paused=false;root.querySelectorAll('.voyage-photo,.voyage-wide').forEach(i=>i.style.animationPlayState='running');schedule();}
     else{paused=true;freeze();}
     root.classList.toggle('is-paused',!!paused);
-    const b=root.querySelector('[data-pause]');b.innerHTML=paused?icon.play:icon.pause;b.setAttribute('aria-label',paused?'Reprendre':'Mettre en pause');
+    syncPauseBtn();
   }
+  function syncPauseBtn(){const b=root.querySelector('[data-pause]');b.innerHTML=paused===true?icon.play:icon.pause;b.setAttribute('aria-label',paused===true?'Reprendre':'Mettre en pause');}
   function go(step){show(index+step);}
   function explore(start){const i=scenes.findIndex(x=>x.type==='explore');if(i<0)return;scenes[i].start=start||0;show(i);}
 
@@ -374,7 +375,7 @@
   function open(s,opts){
     if(!s)return;
     spot=s;scenes=build(s);index=0;paused=false;opener=document.activeElement;
-    ensureRoot();root.hidden=false;document.documentElement.classList.add('voyage-open');
+    ensureRoot();syncPauseBtn();root.hidden=false;document.documentElement.classList.add('voyage-open');
     const worldLab=window.worldOf?.(s.world)?.lab;
     root.querySelector('[data-place]').textContent=[s.loc,worldLab&&!String(s.loc||'').toLowerCase().includes(String(worldLab).toLowerCase())?worldLab:''].filter(Boolean).join(' · ');
     root.querySelector('[data-name]').textContent=s.name.split(' — ')[0];
