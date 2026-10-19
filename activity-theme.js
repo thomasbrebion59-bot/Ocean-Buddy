@@ -108,7 +108,8 @@
   const own=e=>e.target&&e.target.closest&&e.target.closest(ZOOMABLE);
   ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>{if(!own(e))e.preventDefault();},{passive:false}));
   document.addEventListener('touchmove',e=>{if(e.touches.length>1&&!own(e))e.preventDefault();},{passive:false});
-  /* refresh : relit le mouvement réduit (Réglages) ; arrête ou relance les particules. */
-  function refresh(){stop();start();}
+  /* refresh : relit le mouvement réduit (Réglages) ; arrête ou relance les particules. Arrêtées, elles sont aussi
+     effacées : sinon la dernière image restait figée à l’écran. */
+  function refresh(){stop();if(ctx&&W)ctx.clearRect(0,0,W,H);start();}
   window.OceanTheme={set,preview,refresh,get current(){return cur;}};
 })();

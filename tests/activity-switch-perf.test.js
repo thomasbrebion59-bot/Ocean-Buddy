@@ -111,3 +111,18 @@ test('polish.js : une carte déjà vue n’est pas re-sondée', () => {
   e.add([a]);
   assert.equal(e.probe.targets.size, 0);
 });
+
+test('« Réduire les animations » coché depuis les Réglages : particules arrêtées ET effacées', () => {
+  const e = themeEnv();
+  let reduce = false;
+  e.ctx.document.body.classList.contains = c => c === 'reduce-motion' && reduce;
+  e.ctx.OceanTheme.set('surf');
+  const planned = e.cbs.length, cleared = e.dims.clear;
+  reduce = true;
+  e.ctx.OceanTheme.refresh();
+  assert.equal(e.cbs.length, planned, 'aucune image planifiée après refresh');
+  assert.ok(e.dims.clear > cleared, 'la dernière image n’est pas laissée figée');
+  reduce = false;
+  e.ctx.OceanTheme.refresh();
+  assert.equal(e.cbs.length, planned + 1, 'décoché : les particules reprennent');
+});
