@@ -1957,7 +1957,7 @@ function logSession(){
 
 /* ================= UI ================= */
 let tt;
-function toast(msg,ms){const t=document.getElementById('toast');const m=String(msg);/* Pas de double pieuvre ni d’emoji en double en tête. */t.textContent=/^\p{Extended_Pictographic}/u.test(m)||m.includes('🐙')?m:'🐙 '+m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),ms||2600);}
+function toast(msg,ms){const t=document.getElementById('toast');const m=String(window.obT?obT(String(msg)):msg);/* Traduit avant le préfixe : le 🐙 empêcherait les gabarits « {0} XP » de s’appliquer. Pas de double pieuvre ni d’emoji en double en tête. */t.textContent=/^\p{Extended_Pictographic}/u.test(m)||m.includes('🐙')?m:'🐙 '+m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),ms||2600);}
 const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',community:'cb',trips:'tb'};
 function vibrate(pattern){try{if(navigator.userActivation&&!navigator.userActivation.hasBeenActive)return;if(navigator.vibrate)navigator.vibrate(pattern);}catch(e){}}
 const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,community:3,profile:4,trips:2,surf:1.5};
