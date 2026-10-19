@@ -117,7 +117,7 @@
     var got=quizData().badges||[];
     quizCats().forEach(function(q){
       var id='quiz-'+q.id,m=META[id]||{tier:'epic',done:''},on=got.indexOf(q.id)>=0;
-      out.push({id:id,name:'Expert '+q.label,how:'Fais un sans-faute au quiz « '+q.label+' ».',done:m.done,tier:m.tier,tierLabel:TIERS[m.tier].label,
+      out.push({id:id,name:'Expert '+q.label,how:`Fais un sans-faute au quiz « ${q.label} ».`,done:m.done,tier:m.tier,tierLabel:TIERS[m.tier].label,
         group:'quiz',groupLabel:'Expert du quiz',unlocked:on,date:dates[id]||null,img:IMG+id+'.webp',hd:IMG+id+'-hd.webp',progress:on?null:progressOf(id,c)});
     });
     return out;
@@ -146,7 +146,7 @@
   }
   function tile(b,i){
     var t='tb-t-'+b.tier;
-    var label=b.name+(b.unlocked?' — trophée '+b.tierLabel+' obtenu':' — verrouillé. '+b.how);
+    var label=b.unlocked?`${b.name} — trophée ${b.tierLabel} obtenu`:`${b.name} — verrouillé. ${b.how}`;
     return '<button type="button" class="tb-medal '+t+' '+(b.unlocked?'is-earned':'is-locked')+'" data-tb="'+esc(b.id)+'" aria-label="'+esc(label)+'">'
       +'<span class="tb-stage" style="--tb-src:url(&quot;'+esc(b.img)+'&quot;)"><img class="tb-img" src="'+esc(b.img)+'" alt="" width="512" height="512" loading="lazy" decoding="async" draggable="false">'
       +(b.unlocked?'<span class="tb-glint" style="--tb-delay:'+(i*0.9%7).toFixed(1)+'s"></span>':'<span class="tb-lock">'+ICON.lock+'</span>')+'</span>'
@@ -282,7 +282,7 @@
     var s=sheet;s.id=b.id;
     s.panel.className='tb-sheet tb-t-'+b.tier;
     s.tilt.innerHTML=medalHTML(b,{edges:true});
-    s.stage.setAttribute('aria-label','Médaille '+b.name+(b.unlocked?'':' (verrouillée)')+'. Fais-la pivoter du doigt.');
+    s.stage.setAttribute('aria-label',b.unlocked?`Médaille ${b.name}. Fais-la pivoter du doigt.`:`Médaille ${b.name} (verrouillée). Fais-la pivoter du doigt.`);
     s.body.innerHTML=sheetBody(b);
     if(b.unlocked)setTimeout(function(){if(sheet&&sheet.id===b.id)cardBlob(b.id).catch(function(){});},450);
     /* Fiche sans défilement : tout le panneau peut être glissé vers le bas. */
