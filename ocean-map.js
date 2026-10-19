@@ -205,7 +205,7 @@
     renderSportFilters();renderWorlds();renderSpots();render(false);saveState();renderHome();
     filters.querySelector(`[data-map-sport="${id||''}"]`)?.focus({preventScroll:true});
   }
-  function reset(){window.OceanNavigation?.begin();currentFilter='all';currentSearch='';favOnly=false;$('#spotSearch').value='';$('#favChip')?.classList.remove('active');document.querySelectorAll('#filters [data-f]').forEach(b=>b.classList.toggle('active',b.dataset.f==='all'));choose(null);}
+  function reset(){window.OceanNavigation?.begin();currentFilter='all';currentSearch='';favOnly=false;$('#spotSearch').value='';if(window.OceanPlan?.active?.())window.OceanPlan.set(null);const ex=document.querySelector('#spotMapWrap .ex-top input');if(ex){ex.value='';const c=ex.parentNode?.querySelector('[data-ex=clear]');if(c)c.hidden=true;}$('#favChip')?.classList.remove('active');document.querySelectorAll('#filters [data-f]').forEach(b=>b.classList.toggle('active',b.dataset.f==='all'));choose(null);}
 
   /* Hauteur : la carte occupe l’écran restant, sans passer sous la barre d’onglets. */
   function size(){
