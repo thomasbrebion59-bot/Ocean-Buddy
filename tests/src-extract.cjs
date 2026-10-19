@@ -24,3 +24,15 @@ function load(file, names, globals) {
   return ctx;
 }
 module.exports = { read, fnSource, load, root };
+/* Contexte vm avec le vrai moteur i18n.js et le dictionnaire de la langue (fr : sans dictionnaire). */
+function i18nContext(lang, globals) {
+  const doc = { readyState: 'loading', documentElement: {}, currentScript: null, addEventListener() {}, getElementById() { return null; }, title: '', write() {} };
+  const ctx = vm.createContext(Object.assign({ document: doc, localStorage: { getItem: () => lang, setItem() {} }, navigator: { languages: [lang] },
+    location: { search: '', href: 'http://x/' }, URLSearchParams, URL, Intl, Number, console, setTimeout, NodeFilter: {} }, globals));
+  ctx.window = ctx;
+  if (lang !== 'fr') vm.runInContext(read('locales/' + lang + '.js'), ctx);
+  vm.runInContext(read('i18n.js'), ctx);
+  return ctx;
+}
+function loadInto(ctx, file, names) { const src = read(file); vm.runInContext(names.map(n => fnSource(src, n)).join('\n'), ctx); return ctx; }
+module.exports.i18nContext = i18nContext; module.exports.loadInto = loadInto;
