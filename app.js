@@ -1615,9 +1615,13 @@ function renderActivityBar(){
   const a=activeSport?SPORTMAP[activeSport]:{emoji:'🌊',label:'Tous les sports'};
   el.innerHTML=`<span class="ab-l"><span class="th"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg> Ton activité</span></span><span class="ab-v">${sportIcon(activeSport||'all')} ${a.label}</span><span class="ab-c">changer <svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 9.5 12 15l5.5-5.5"/></svg></span>`;
 }
+/* body.onb-open masque le bouton Retour de l’app : il doit tomber dès que #onb est refermé, quel que soit le chemin (finishOnb, Échap, « Retour à l’application »). */
+function syncOnbOpen(){const o=document.getElementById('onb');if(!o||o.classList.contains('hide')||o.style.display==='none')document.body.classList.remove('onb-open');}
+let onbWatch=false;
 function openActivityGate(){
   quickGate=true;chosenSport=activeSport||'all';
   const o=document.getElementById('onb');o.style.display='';o.classList.remove('hide');document.body.classList.add('onb-open');
+  if(!onbWatch&&typeof MutationObserver!=='undefined'){onbWatch=true;new MutationObserver(syncOnbOpen).observe(o,{attributes:true,attributeFilter:['style','class']});}
   const t=document.getElementById('sportStepTitle');if(t)t.textContent='Quelle activité aujourd\'hui ?';
   renderSportGuide();showStep(1);
   const sel=chosenSport;document.querySelectorAll('#sportGrid .sport-card').forEach(c=>c.classList.toggle('sel',c.dataset.sp===sel));
@@ -1888,7 +1892,7 @@ function onbNext(){
 function pickLevel(el){document.querySelectorAll('.lvl-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');chosenLevel=el.dataset.lvl;}
 function finishOnb(){
   window.OceanNavigation?.begin();
-  const o=document.getElementById('onb');o.classList.add('hide');setTimeout(()=>o.style.display='none',560);
+  const o=document.getElementById('onb');o.classList.add('hide');document.body.classList.remove('onb-open');setTimeout(()=>o.style.display='none',560);
   /* Fin de l’onboarding complet ou du choix rapide d’activité : il ne reviendra plus au lancement. */
   quickGate=false;onbDone=true;saveState();
   /* A-02 : l’onboarding et le choix d’activité ouvert depuis l’accueil ramènent à l’accueil, pas à Explorer. */
