@@ -222,18 +222,19 @@
   function ensureMap(){
     if(map)return Promise.resolve(map);
     if(starting)return starting;
+    let m=null;
     starting=(async()=>{
       if(!webgl())throw Error('webgl');
       const ml=await loadEngine();
       const dive=useGlobe(),v=dive&&planet?planet.view():null;
-      const m=new ml.Map({container:$('#spotMap'),style:dive?diveStyle(style('mercator'),M.mapZoom(DIVE_KM/side(),40)):style(globe()?'globe':'mercator'),center:v?[v.lon,v.lat]:[10,22],zoom:v?M.mapZoom(v.kmPerPx,v.lat):1.2,minZoom:0,maxZoom:17,renderWorldCopies:true,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,fadeDuration:180,maxTileCacheSize:120,locale:{'Map.Title':'Carte des spots','NavigationControl.ZoomIn':'Zoom avant','NavigationControl.ZoomOut':'Zoom arrière','AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
+      m=new ml.Map({container:$('#spotMap'),style:dive?diveStyle(style('mercator'),M.mapZoom(DIVE_KM/side(),40)):style(globe()?'globe':'mercator'),center:v?[v.lon,v.lat]:[10,22],zoom:v?M.mapZoom(v.kmPerPx,v.lat):1.2,minZoom:0,maxZoom:17,renderWorldCopies:true,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,fadeDuration:180,maxTileCacheSize:120,locale:{'Map.Title':'Carte des spots','NavigationControl.ZoomIn':'Zoom avant','NavigationControl.ZoomOut':'Zoom arrière','AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
       m.touchZoomRotate.disableRotation();m.keyboard.disableRotation?.();
       m.addControl(new ml.AttributionControl({compact:true}),'bottom-right');
       m.getCanvas().setAttribute('aria-label','Carte interactive des spots. Utilise les flèches pour te déplacer, plus et moins pour zoomer.');
       await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(Error('timeout')),20000);m.once('load',()=>{clearTimeout(t);resolve();});});
       map=m;engineReady(ml);return m;
     })();
-    starting.catch(()=>{starting=null;});
+    starting.catch(()=>{try{m?.remove();}catch(_){}m=null;starting=null;});
     return starting;
   }
   function engineReady(ml){
