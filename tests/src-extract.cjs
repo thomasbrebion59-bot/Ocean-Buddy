@@ -5,7 +5,9 @@ function read(file) { return fs.readFileSync(path.join(root, file), 'utf8'); }
 function fnSource(src, name) {
   const m = new RegExp('(?:async\\s+)?function\\s+' + name + '\\s*\\(').exec(src);
   if (!m) throw new Error('fonction introuvable : ' + name);
-  let i = src.indexOf('{', m.index + m[0].length), d = 0, q = null;
+  let p = 1, k = m.index + m[0].length;
+  for (; p > 0; k++) { if (src[k] === '(') p++; else if (src[k] === ')') p--; }
+  let i = src.indexOf('{', k), d = 0, q = null;
   for (let j = i; j < src.length; j++) {
     const c = src[j];
     if (q) { if (c === '\\') j++; else if (c === q) q = null; continue; }

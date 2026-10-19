@@ -398,7 +398,7 @@ function exploreSpots(filter=currentFilter,options={}){
     &&(filter==='all'||(filter==='new'?s.catalogNew:filter==='season'?inSeason(s.id):s.level===filter))
     &&(!favorite||favs.has(s.id))
     &&(typeof OceanPlan==='undefined'||OceanPlan.ok(s))
-    &&(!search||searchable(s.name+' '+s.loc+' '+spotSports(s).map(id=>(typeof SPORTMAP!=='undefined'&&SPORTMAP[id]?.label)||id).join(' ')).includes(search)));
+    &&(!search||searchable(s.name+' '+s.loc+' '+countryOf(s)+' '+spotSports(s).map(id=>(typeof SPORTMAP!=='undefined'&&SPORTMAP[id]?.label)||id).join(' ')).includes(search)));
 }
 /* Meilleure saison (data/seasons.json, chargé par home-feed.js) : le spot est-il en saison ce mois-ci ? */
 function inSeason(id){const m=window.OCEAN_SEASONS?.[id];return !!m&&m.includes(new Date().getMonth());}
