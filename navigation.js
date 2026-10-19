@@ -87,7 +87,7 @@
     activeSport=SPORTMAP[route.sport]?route.sport:null;
     spotWorld=route.world==='all'||worldOf(route.world)?route.world:null;
     spotCountry=typeof route.country==='string'&&route.country?route.country:null;
-    currentFilter=['all','new','season','debutant','intermediaire','expert'].includes(route.filter)?route.filter:'all';
+    currentFilter=['all','new','season','debutant','intermediaire','expert','variable'].includes(route.filter)?route.filter:'all';
     currentSearch=typeof route.search==='string'?route.search:'';favOnly=!!route.favorites;nearMode=!!route.near&&!!userPos;
     spotShown=Math.max(SPOT_PAGE,Number(route.shown)||SPOT_PAGE);
     $('#spotSearch').value=currentSearch;$('#favChip').classList.toggle('active',favOnly);$('#nearBtn').classList.toggle('on',nearMode);
