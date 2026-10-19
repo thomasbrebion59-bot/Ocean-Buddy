@@ -34,6 +34,27 @@
   }
   function supported(){try{const c=document.createElement('canvas');return !!c.getContext('webgl2');}catch(_){return false;}}
 
+  /* Textures sans à-coup. Une ImageBitmap est décodée hors du fil principal ; WebGL ignore pour elle
+     UNPACK_FLIP_Y, d’où le retournement des bandes à la découpe (imageOrientation:'flipY'), vérifié une fois
+     sur deux pixels : sans cette prise en charge (ou sans createImageBitmap), le globe garde l’ancien
+     chargement (TextureLoader). Non vérifié sur Safari / WKWebView réels : ce contrôle protège l’orientation. */
+  let bitmapFlip=null;
+  function bitmapsFlip(){
+    if(!bitmapFlip)bitmapFlip=(async()=>{
+      if(typeof createImageBitmap!=='function')return false;
+      const c=document.createElement('canvas');c.width=1;c.height=2;const x=c.getContext('2d');
+      x.fillStyle='#f00';x.fillRect(0,0,1,1);x.fillStyle='#00f';x.fillRect(0,1,1,1);
+      /* Même chemin que les bandes : découpe retournée d’une ImageBitmap. */
+      const a=await createImageBitmap(c),b=await createImageBitmap(a,0,0,1,2,{imageOrientation:'flipY'});a.close?.();
+      const d=document.createElement('canvas');d.width=1;d.height=2;const y=d.getContext('2d',{willReadFrequently:true});
+      y.drawImage(b,0,0);b.close?.();
+      return y.getImageData(0,0,1,1).data[2]>200;
+    })().catch(()=>false);
+    return bitmapFlip;
+  }
+  /* Tranche de travail quand le navigateur est inactif (ou au plus tard après timeout ms). */
+  const idle=(fn,timeout=120)=>window.requestIdleCallback?requestIdleCallback(fn,{timeout}):setTimeout(fn,16);
+
   /* ---------- Soleil et ciel réels ----------
      Formules de l’Astronomical Almanac (précision ≈ 0,01°), largement suffisantes pour l’éclairage. */
   function sky(date=new Date()){
@@ -231,6 +252,8 @@
     renderer.setClearColor(0x000000,0);renderer.autoClear=false;
     renderer.outputColorSpace=T.SRGBColorSpace;
     const maxTex=renderer.capabilities.maxTextureSize;
+    /* Création du contexte WebGL et construction des scènes dans deux tâches distinctes (première activation plus douce). */
+    await new Promise(r=>setTimeout(r));
     /* Pleine définition de l’écran (jusqu’à ×3). Pendant un mouvement continu seulement, si les images
        ralentissent, la définition baisse par paliers (jamais sous 60 %) ; elle revient au repos. */
     const dprFull=Math.min(devicePixelRatio||1,3);let dprNow=dprFull,lastFrame=0,slow=0,prevAgain=false,sharpTimer=0;
@@ -903,25 +926,70 @@
       view.dist=clampDist(overviewOn?maxDist():keepKpp?distForKpp(keepKpp):view.dist);keepKpp=kpp();invalidate();scheduleLabels();
     }
     const ro=new ResizeObserver(()=>{lastTouch=performance.now();resize();});ro.observe(host);
-    function loadTexture(url,srgb){
-      return new Promise((resolve,reject)=>new T.TextureLoader().load(url,resolve,undefined,reject)).then(tex=>{
-        tex.colorSpace=srgb?T.SRGBColorSpace:T.NoColorSpace;tex.wrapS=T.RepeatWrapping;tex.wrapT=T.ClampToEdgeWrapping;
-        tex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());tex.generateMipmaps=true;tex.minFilter=T.LinearMipmapLinearFilter;tex.magFilter=T.LinearFilter;
-        return tex;
-      });
+    function texParams(tex,srgb){
+      tex.colorSpace=srgb?T.SRGBColorSpace:T.NoColorSpace;tex.wrapS=T.RepeatWrapping;tex.wrapT=T.ClampToEdgeWrapping;
+      tex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());tex.generateMipmaps=true;tex.minFilter=T.LinearMipmapLinearFilter;tex.magFilter=T.LinearFilter;
+      return tex;
     }
+    /* Ancien chargement (décodage et envoi au GPU d’un seul bloc, sur le fil principal) : repli seulement. */
+    function loadTexture(url,srgb){
+      return new Promise((resolve,reject)=>new T.TextureLoader().load(url,resolve,undefined,reject)).then(tex=>texParams(tex,srgb));
+    }
+    /* Chargement sans à-coup : décodage hors du fil principal (createImageBitmap, sans option : aucune
+       transformation de l’image entière sur le fil principal), mémoire GPU réservée sans données
+       (dataReady:false), puis envoi par bandes de 1 Mo (texSubImage2D via copyTextureToTexture), autant de
+       bandes que budget ms le permet à chaque moment d’inactivité. Chaque bande est retournée à la découpe
+       (imageOrientation:'flipY') et placée en miroir (H-y-h) : même orientation que flipY. Les mipmaps sont
+       calculées par le GPU après la dernière bande. Même format interne et mêmes filtres que loadTexture
+       (images opaques, sans profil ICC : ni prémultiplication ni conversion de couleur à faire) :
+       le rendu final est identique. La texture n’est utilisée qu’une fois complète. */
+    async function streamTexture(url,srgb,budget){
+      if(!(await bitmapsFlip()))return loadTexture(url,srgb);
+      const res=await fetch(url);if(!res.ok)throw Error('texture '+res.status);
+      const bmp=await createImageBitmap(await res.blob());
+      const W=bmp.width,H=bmp.height,strips=M.textureStrips(W,H);
+      const tex=texParams(new T.Texture({width:W,height:H}),srgb);tex.flipY=false;
+      const src=new T.Texture(),at={x:0,y:0};
+      try{
+        if(dead)throw Error('globe fermé');
+        tex.source.dataReady=false;tex.needsUpdate=true;renderer.initTexture(tex);
+        for(let i=0;i<strips.length;){
+          await new Promise(r=>idle(r));
+          if(dead)throw Error('globe fermé');
+          const t0=performance.now();
+          do{
+            const s=strips[i++];
+            src.image=await createImageBitmap(bmp,0,s.y,W,s.h,{imageOrientation:'flipY'});
+            if(dead){src.image.close?.();throw Error('globe fermé');}
+            at.y=H-s.y-s.h;tex.generateMipmaps=i===strips.length;
+            renderer.copyTextureToTexture(src,tex,null,at);
+            src.image.close?.();
+          }while(i<strips.length&&performance.now()-t0<budget);
+        }
+      }catch(e){tex.dispose();throw e;}
+      finally{bmp.close?.();src.image=null;}
+      /* dataReady reste false : la source n’est qu’une taille, three ne doit jamais tenter de la renvoyer. */
+      tex.generateMipmaps=true;
+      return tex;
+    }
+    /* En cas d’échec du chemin rapide (décodeur, mémoire), on retombe sur l’ancien chargement. */
+    const smoothTexture=(url,srgb,budget)=>streamTexture(url,srgb,budget).catch(e=>dead?Promise.reject(e):loadTexture(url,srgb));
     /* Surface (Blue Marble) et relief ; nuages et lumières de la nuit seulement quand on les affiche. */
     const conn=navigator.connection;let dead=false;
+    /* Shaders compilés pendant le chargement des textures (KHR_parallel_shader_compile si disponible) :
+       la première image n’attend plus leur compilation. Mêmes programmes que ceux de la première image. */
+    const shadersReady=Promise.all([[heavens,skyCam],[scene,camera],[overlay,ortho]].map(([s,c])=>Promise.resolve().then(()=>renderer.compileAsync(s,c)))).catch(()=>{});
     const [day,norm]=await Promise.all([
-      loadTexture(asset('assets/globe/earth-day-4k.webp'),true),
-      loadTexture(asset('assets/globe/earth-normal-4k.webp'))
+      smoothTexture(asset('assets/globe/earth-day-4k.webp'),true,10),
+      smoothTexture(asset('assets/globe/earth-normal-4k.webp'),false,10),
+      shadersReady
     ]);
     uniEarth.uDay.value=day;uniEarth.uNorm.value=norm;
     [day,norm].forEach(t=>renderer.initTexture?.(t));
     let skyLoading=null;
     function needSky(){
       if(skyLoading||!(cloudsOn||lighting==='live'))return;
-      skyLoading=loadTexture(asset('assets/globe/earth-sky-4k.webp')).then(t=>{if(dead)return;uniEarth.uSky.value=t;cloudU.uSky.value=t;invalidate();}).catch(()=>{skyLoading=null;});
+      skyLoading=smoothTexture(asset('assets/globe/earth-sky-4k.webp'),false,12).then(t=>{if(dead)return;uniEarth.uSky.value=t;cloudU.uSky.value=t;invalidate();}).catch(()=>{skyLoading=null;});
     }
     needSky();
     earth.visible=true;clouds.visible=cloudsOn;
@@ -929,7 +997,9 @@
     /* Surface 8K pour un zoom net (téléphones récents compris : textures 16K prises en charge). */
     /* Jamais pendant les 10 premières secondes de l’app (démarrage stable), ni dans l’app iOS (textures 4K seulement), ni pour le petit globe de l’accueil (hd:false). */
     let hdTimer=0;
-    if(M.wantsHd8k({hd:opts.hd,native:document.documentElement.classList.contains('native-app'),mobile,maxTex,saveData:!!conn?.saveData}))hdTimer=setTimeout(()=>loadTexture(asset('assets/globe/earth-day-8k.webp'),true).then(tex=>{if(dead){tex.dispose();return;}const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;old?.dispose();invalidate();}).catch(()=>{}),Math.max(1200,10000-performance.now()));
+    /* La 4K reste affichée pendant tout le chargement ; la 8K, décodée hors du fil principal puis envoyée par bandes
+       dans les moments d’inactivité (8 ms au plus par tranche), ne la remplace qu’une fois complète. */
+    if(M.wantsHd8k({hd:opts.hd,native:document.documentElement.classList.contains('native-app'),mobile,maxTex,saveData:!!conn?.saveData}))hdTimer=setTimeout(()=>smoothTexture(asset('assets/globe/earth-day-8k.webp'),true,8).then(tex=>{if(dead){tex.dispose();return;}const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;old?.dispose();invalidate();}).catch(()=>{}),Math.max(1200,10000-performance.now()));
     resize();applyCamera();
     /* reveal:false : la Terre apparaît directement éclairée, à sa taille (le globe de l’accueil prend le relais de la sphère CSS). */
     revealStart=reduced()||opts.reveal===false?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;starU.uI.value=.6;}

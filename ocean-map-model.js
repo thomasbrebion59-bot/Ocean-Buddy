@@ -103,5 +103,13 @@
     if(hd===false||native||saveData)return false;
     return mobile?maxTex>=16384:maxTex>=8192;
   }
-  return {wantsHd8k,group,bounds,inView,distance,top,vec,latLon,arc,wrapLon,mapZoom,kmPerPx,clusterPx,LEVELS,clusterLevels,levelFor,cap,EARTH_KM};
+  /* Bandes horizontales d'une texture envoyée au GPU par morceaux (ocean-globe.js) : au plus maxBytes
+     de pixels RGBA par bande (1 Mo par défaut : 32 lignes en 8K, 64 en 4K), sans trou ni recouvrement.
+     Au-delà de 2 Mo, un envoi peut attendre le processus GPU (mesuré : jusqu'à 88 ms pour 4 Mo). */
+  function textureStrips(width,height,maxBytes=1048576){
+    const rows=Math.max(1,Math.min(height,Math.floor(maxBytes/(Math.max(1,width)*4))));
+    const out=[];for(let y=0;y<height;y+=rows)out.push({y,h:Math.min(rows,height-y)});
+    return out;
+  }
+  return {wantsHd8k,textureStrips,group,bounds,inView,distance,top,vec,latLon,arc,wrapLon,mapZoom,kmPerPx,clusterPx,LEVELS,clusterLevels,levelFor,cap,EARTH_KM};
 });
