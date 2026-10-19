@@ -1,3 +1,4 @@
 /* @creme-tokens */
 .ai-consent{margin:10px 16px;padding:16px;border:1px solid var(--g-soft);border-radius:18px;background:var(--g-pale);color:var(--g-ink);font-size:12px;line-height:1.55;overflow-y:auto;max-height:45vh;flex-shrink:0}
 .ai-consent[hidden]{display:none}.ai-consent h3{font-size:17px;line-height:1.2;margin:0 0 9px}.ai-consent p{margin:8px 0}.ai-consent>div{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}.ai-consent button{border:1px solid var(--t-main);border-radius:12px;background:var(--t-main);color:var(--t-on-main);padding:11px 14px;font:inherit;font-weight:700;font-size:12px;cursor:pointer}.ai-consent button+button{background:var(--t-card);color:var(--t-main)}.ai-consent button:focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
+.ai-consent a{color:var(--t-main)}
