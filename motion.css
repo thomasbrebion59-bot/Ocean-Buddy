@@ -1,0 +1,23 @@
+/* Transitions Apple : courbes ressort, zoom carte -> fiche (View Transitions), entrée des grands titres.
+   Couleurs : aucune ici. Les durées restent courtes pour ne jamais laisser de fantôme. */
+:root{--ob-ease-out:cubic-bezier(.22,.8,.3,1);--ob-spring:cubic-bezier(.22,.9,.3,1.02)}
+@supports (transition-timing-function:linear(0,1)){
+  :root{--ob-spring:linear(0.000,0.019,0.068,0.137,0.219,0.306,0.394,0.480,0.561,0.636,0.703,0.763,0.814,0.859,0.896,0.926,0.951,0.971,0.987,0.998,1.007,1.013,1)}
+}
+
+/* Zoom partagé, limité à cette transition (html.ob-vt-active) pour ne pas toucher le fondu d'activité.
+   L'ancienne racine reste opaque dessous, la nouvelle se fond par-dessus : jamais de fond vide. */
+html.ob-vt-active::view-transition-old(root){animation:none;opacity:1}
+html.ob-vt-active::view-transition-group(root){animation-duration:.12s}
+html.ob-vt-active::view-transition-new(root){animation-duration:.12s;animation-timing-function:linear}
+html.ob-vt-active::view-transition{background:var(--t-bg,var(--as-bg,transparent))}
+::view-transition-group(ob-spot){animation-duration:.38s;animation-timing-function:var(--ob-spring);overflow:hidden;border-radius:22px}
+::view-transition-old(ob-spot),::view-transition-new(ob-spot){height:100%;width:100%;object-fit:cover;animation-duration:.38s;mix-blend-mode:normal}
+::view-transition-old(ob-spot){animation-name:ob-vt-out}
+::view-transition-new(ob-spot){animation-name:ob-vt-in}
+@keyframes ob-vt-out{to{opacity:0}}
+@keyframes ob-vt-in{from{opacity:0}}
+
+@media (prefers-reduced-motion:reduce){
+  ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation-duration:.001s!important}
+}

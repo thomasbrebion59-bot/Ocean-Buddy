@@ -11,7 +11,7 @@
 #surf .sf-hero-tx{position:absolute;left:20px;top:18px;color:#fff;display:grid;gap:2px;justify-items:start}
 #surf .sf-hero-tx small{font:700 12px/1 var(--body);letter-spacing:.8px;text-transform:uppercase;opacity:.9}
 #surf .sf-hero-tx h2{margin:0;font:800 64px/.9 'Barlow Condensed',var(--body);letter-spacing:-.5px;text-transform:uppercase;text-shadow:0 2px 14px rgba(11,45,122,.35)}
-#surf .sf-offline{margin-top:8px;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.22);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px);font:700 12px/1 var(--body)}
+#surf .sf-offline{margin-top:8px;display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border-radius:999px;background:rgba(255,255,255,.22);font:700 12px/1 var(--body)}
 #surf .sf-offline::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--t-acc,#e0ff91)}
 @keyframes sfDrift{from{transform:translateX(-3%)}to{transform:translateX(3%)}}
 @media(prefers-reduced-motion:reduce){#surf .sf-wave{animation:none}}

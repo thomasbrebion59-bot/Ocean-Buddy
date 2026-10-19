@@ -1992,7 +1992,8 @@ function go(s){
   if(cur)vibrate(8);
   if(HEADBUB[s])bubbles(HEADBUB[s]);
   const reduce=document.body.classList.contains('reduce-motion')||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-  if(!cur||reduce||covered){
+  /* motion.js: OceanMotion.instant = bascule immédiate pendant une View Transition (zoom carte -> fiche). */
+  if(!cur||reduce||covered||window.OceanMotion?.instant){
     wrap.querySelectorAll('.screen.active').forEach(el=>{if(el!==target){el.classList.remove('active');resetScreenLive(el);}});
     resetScreenLive(target);
     /* Garde les entrées CSS désactivées après le retrait de la photo, même sur l’écran déjà actif. */
@@ -2020,8 +2021,9 @@ function go(s){
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     /* Une navigation plus récente peut avoir remplacé ce fondu sous la scène d’activité. */
     if(request!==goSeq)return;
-    target.style.transition='transform .4s cubic-bezier(.22,.9,.3,1.02), opacity .34s ease';
-    cur.style.transition='transform .36s cubic-bezier(.4,0,.2,1), opacity .3s ease';
+    /* Courbes ressort Apple (motion.css : --ob-spring / --ob-ease-out), repli sur les anciennes courbes. */
+    target.style.transition='transform .45s var(--ob-spring,cubic-bezier(.22,.9,.3,1.02)), opacity .3s var(--ob-ease-out,ease)';
+    cur.style.transition='transform .3s var(--ob-ease-out,cubic-bezier(.4,0,.2,1)), opacity .24s var(--ob-ease-out,ease)';
     target.style.transform='translateX(0)';target.style.opacity='1';
     cur.style.transform='translateX('+(-dir*18)+'px)';cur.style.opacity='0';
   }));

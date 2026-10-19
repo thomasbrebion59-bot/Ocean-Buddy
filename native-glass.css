@@ -1,0 +1,11 @@
+/* Verre natif iOS 26 : quand le plugin OceanGlass affiche la vraie barre en verre (html.native-glass,
+   posé par native-glass.js), la barre web reste à sa place, invisible, et ne calcule plus de flou.
+   Elle ne se rétracte plus elle-même : le natif lit sa position fixe et applique le retrait. */
+@media(max-width:959px){
+  html.native-glass .ocean-v2 .nav,html.native-glass[data-act] .ocean-v2 .nav,html.native-glass .tab-poulpy,
+  html.native-glass body.tabs-tucked .ocean-v2 .nav,html.native-glass body.tabs-tucked .tab-poulpy{
+    opacity:0!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;
+    box-shadow:none!important;transform:none!important;transition:none!important}
+  /* Couleur d’accent lue sans transition en cours (le natif la recopie au moment du changement). */
+  html.native-glass .ocean-v2 .nav>button[data-s]{transition:none!important}
+}
