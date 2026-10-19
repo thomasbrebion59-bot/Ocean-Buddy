@@ -1,0 +1,31 @@
+/* Pages SEO statiques (spot/, spots/). Aucun JS. Palette crème, variables surchargeables. */
+:root{--seo-bg:#FEF9EB;--seo-ink:#074459;--seo-muted:#4d6b77;--seo-sun:#FDBB53;--seo-card:#fff;--seo-line:rgba(7,68,89,.14)}
+*{box-sizing:border-box}
+body{margin:0;background:var(--seo-bg);color:var(--seo-ink);font:16px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+a{color:var(--seo-ink)}
+.seo-top{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--seo-line)}
+.seo-top nav{display:flex;gap:16px;font-size:.9rem}
+.seo-brand{font-weight:800;text-decoration:none;font-size:1.1rem}
+.seo-main{max-width:760px;margin:0 auto;padding:16px}
+.seo-crumbs ol{list-style:none;display:flex;flex-wrap:wrap;gap:4px 8px;padding:0;margin:0 0 12px;font-size:.85rem;color:var(--seo-muted)}
+.seo-crumbs li+li::before{content:"›";margin-right:8px}
+h1{font-size:1.75rem;line-height:1.2;margin:.2em 0 .1em}
+h2{font-size:1.2rem;margin:1.6em 0 .4em}
+.seo-sub{margin:0 0 16px;color:var(--seo-muted)}
+.seo-lead{font-size:1.05rem}
+.seo-photo{margin:0 0 16px}
+.seo-photo img{display:block;width:100%;height:auto;aspect-ratio:3/2;object-fit:cover;border-radius:16px;background:var(--seo-line)}
+.seo-photo figcaption,.seo-note{font-size:.8rem;color:var(--seo-muted);margin-top:6px}
+.seo-facts{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px;margin:16px 0}
+.seo-facts div{background:var(--seo-card);border:1px solid var(--seo-line);border-radius:12px;padding:10px 12px}
+.seo-facts dt{font-size:.75rem;text-transform:uppercase;letter-spacing:.04em;color:var(--seo-muted)}
+.seo-facts dd{margin:2px 0 0;font-weight:600}
+.seo-list{padding-left:1.2em}
+.seo-cta{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:24px 0}
+.seo-open,.seo-badge{display:inline-block;padding:12px 18px;border-radius:999px;font-weight:700;text-decoration:none}
+.seo-open{background:var(--seo-sun);color:var(--seo-ink)}
+.seo-badge{background:var(--seo-ink);color:#fff}
+.seo-links{list-style:none;padding:0;margin:0;display:grid;gap:6px}
+.seo-links li{background:var(--seo-card);border:1px solid var(--seo-line);border-radius:12px;padding:10px 12px}
+.seo-links span{display:block;font-size:.85rem;color:var(--seo-muted)}
+.seo-foot{max-width:760px;margin:24px auto 0;padding:16px;font-size:.85rem;color:var(--seo-muted);border-top:1px solid var(--seo-line)}

@@ -84,9 +84,13 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="Ocean Buddy">
+<link rel="canonical" href="https://thomasbrebion59-bot.github.io/Ocean-Buddy/">
+<meta name="apple-itunes-app" content="app-id=6811870966">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://thomasbrebion59-bot.github.io/Ocean-Buddy/#website","name":"Ocean Buddy","url":"https://thomasbrebion59-bot.github.io/Ocean-Buddy/","inLanguage":"fr"},{"@type":"MobileApplication","@id":"https://thomasbrebion59-bot.github.io/Ocean-Buddy/#app","name":"Ocean Buddy","description":"Trouve ton prochain spot nautique, prépare ta session et protège l’océan avec Poulpy, ton guide Ocean Buddy.","url":"https://thomasbrebion59-bot.github.io/Ocean-Buddy/","operatingSystem":"iOS","applicationCategory":"TravelApplication","downloadUrl":"https://apps.apple.com/fr/app/ocean-buddy/id6811870966","installUrl":"https://apps.apple.com/fr/app/ocean-buddy/id6811870966"}]}</script>
 </head>
 <body class="ocean-v2" data-screen="home">
 <div id="obBoot" aria-hidden="true"><img src="assets/app/splash-poulpy.webp" alt="" width="900" height="900" decoding="sync" fetchpriority="high"></div>
+<noscript><main style="position:relative;z-index:2147483646;background:#fff;color:#0b2540;padding:24px 16px;max-width:640px;margin:0 auto;font:16px/1.5 system-ui,sans-serif"><h1>Ocean Buddy</h1><p>Ocean Buddy t’aide à trouver ton prochain spot nautique, à préparer ta session et à protéger l’océan avec Poulpy, ton guide. Le catalogue réunit des centaines de spots de surf, de plongée et d’autres activités nautiques, avec niveau, dangers et conseils pour chacun.</p><p><a href="https://apps.apple.com/fr/app/ocean-buddy/id6811870966">Télécharger Ocean Buddy sur l’App Store</a></p><h2>Quelques spots</h2><ul><li><a href="spot/hossegor/">Hossegor — La Gravière</a></li><li><a href="spot/lacanau/">Lacanau Océan</a></li><li><a href="spot/latorche/">La Torche</a></li><li><a href="spot/biarritz/">La Côte des Basques</a></li><li><a href="spot/anglet/">Les Cavaliers — Anglet</a></li><li><a href="spot/quiberon/">Port Blanc — Quiberon</a></li></ul><p><a href="sitemap.xml">Plan du site</a></p><p>Cette page a besoin de JavaScript pour afficher l’application.</p></main></noscript>
 <a class="skip-link" href="#screenWrap">Aller au contenu</a>
 <div class="phone">
   <div class="ambiance" id="ambiance"></div>
@@ -175,9 +179,9 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
       <div class="hcat" data-hcat="jour">
 <!-- conditions + spot du jour ; Poulpy est rendu dans la carte -->
       <div class="today-card" id="todayCard"></div>
-<div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9c2.2 0 2.2-2.4 4.4-2.4S8.6 9 10.8 9 13 6.6 15.2 6.6 17.4 9 19.6 9"/><path d="M2 14c2.2 0 2.2-2.4 4.4-2.4S8.6 14 10.8 14 13 11.6 15.2 11.6 17.4 14 19.6 14"/><path d="M2 19c2.2 0 2.2-2.4 4.4-2.4S8.6 19 10.8 19 13 16.6 15.2 16.6 17.4 19 19.6 19"/></svg> <span id="liveTopTitle">Conditions du moment</span></h2><a onclick="go('spots')">Voir tout →</a></div>
+<div class="sec"><h2><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M2 9c2.2 0 2.2-2.4 4.4-2.4S8.6 9 10.8 9 13 6.6 15.2 6.6 17.4 9 19.6 9"/><path d="M2 14c2.2 0 2.2-2.4 4.4-2.4S8.6 14 10.8 14 13 11.6 15.2 11.6 17.4 14 19.6 14"/><path d="M2 19c2.2 0 2.2-2.4 4.4-2.4S8.6 19 10.8 19 13 16.6 15.2 16.6 17.4 19 19.6 19"/></svg> <span id="liveTopTitle">Conditions du moment</span></h2><a href="#" onclick="go('spots');return false">Voir tout →</a></div>
       <div class="live-top" id="liveTop"></div>
-<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2.2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="#f5a623"/></svg> Défi du jour</h2><a onclick="go('challenges')">Voir tout</a></div>
+<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2.2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="#f5a623"/></svg> Défi du jour</h2><a href="#" onclick="go('challenges');return false">Voir tout</a></div>
       <div style="padding:0 16px;">
         <div class="chal" style="background:linear-gradient(135deg,#eafaf7,#fff);">
           <div class="chal-ic" style="background:#e3f7ee;color:#2faf72"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8h12l-1 11.2a1.8 1.8 0 0 1-1.8 1.6H8.8A1.8 1.8 0 0 1 7 19.2z"/><path d="M4.5 8h15M9.5 8V5.2A1.2 1.2 0 0 1 10.7 4h2.6a1.2 1.2 0 0 1 1.2 1.2V8"/><path d="M10 12v5M14 12v5"/></svg></div>
@@ -193,7 +197,7 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
         <div class="fc-best" id="fcBest"></div>
         <div class="fc-bars" id="fcBars"></div>
       </div>
-<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#1f9bbf" stroke-width="2.2" stroke-linecap="round"><path d="M2 8c2.1 0 2.1-2.4 4.3-2.4S8.4 8 10.5 8s2.1-2.4 4.3-2.4S16.9 8 19 8"/><path d="M2 13c2.1 0 2.1-2.4 4.3-2.4S8.4 13 10.5 13s2.1-2.4 4.3-2.4S16.9 13 19 13"/><path d="M2 18c2.1 0 2.1-2.4 4.3-2.4S8.4 18 10.5 18s2.1-2.4 4.3-2.4S16.9 18 19 18"/></svg> Spots près de toi</h2><a onclick="go('spots')">Carte →</a></div>
+<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#1f9bbf" stroke-width="2.2" stroke-linecap="round"><path d="M2 8c2.1 0 2.1-2.4 4.3-2.4S8.4 8 10.5 8s2.1-2.4 4.3-2.4S16.9 8 19 8"/><path d="M2 13c2.1 0 2.1-2.4 4.3-2.4S8.4 13 10.5 13s2.1-2.4 4.3-2.4S16.9 13 19 13"/><path d="M2 18c2.1 0 2.1-2.4 4.3-2.4S8.4 18 10.5 18s2.1-2.4 4.3-2.4S16.9 18 19 18"/></svg> Spots près de toi</h2><a href="#" onclick="go('spots');return false">Carte →</a></div>
       <div class="spot-list" id="homeSpots"></div>
       </div>
 
@@ -212,13 +216,14 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
         <div class="stat"><div class="ic" style="background:#e2f0f8;color:#2f8fb8"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.4" fill="#fff"/></svg></div><div class="big" id="hsSpots" data-count="7">0</div><div class="lab">Spots visités</div></div>
         <div class="stat"><div class="ic" style="background:#e7f7ef;color:#2faf72"><svg viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z" fill="currentColor"/><path d="M9 15c2-3 5-5 8-6" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg></div><div class="big" id="hsEco" data-count="23">0</div><div class="lab">Gestes écolo</div></div>
       </div>
-<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#ec5a4b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l5-5 4 4 7-7"/><path d="M16 4h4v4"/></svg> Ta progression</h2><a onclick="go('trips')">Voyages →</a></div>
+<div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#ec5a4b" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15l5-5 4 4 7-7"/><path d="M16 4h4v4"/></svg> Ta progression</h2><a href="#" onclick="go('trips');return false">Voyages →</a></div>
       <div class="prog-card" id="progCard"></div>
 <div class="quiz-launch" onclick="openQuiz()">
         <div class="ql-ic"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-3.6 10.8c.4.3.6.8.6 1.2h6c0-.4.2-.9.6-1.2A6 6 0 0 0 12 3z"/></svg></div>
         <div class="ql-tx"><b>Le Quiz de Poulpy</b><span>Teste tes connaissances océan & gagne de l'XP</span></div>
         <span class="ql-go">Jouer <svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5.5v13l10-6.5z"/></svg></span>
       </div>
+      <p class="seo-browse" style="text-align:center;font-size:13px;margin:18px 16px 8px;opacity:.85"><a href="spots/" style="color:inherit;text-decoration:underline">Parcourir tous les spots Ocean Buddy</a> · <a href="https://apps.apple.com/fr/app/ocean-buddy/id6811870966" style="color:inherit;text-decoration:underline">Télécharger sur l’App Store</a></p>
       </div>
 </section>
 
@@ -572,6 +577,7 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
 <script src="spot-data.js?v=d35a91afdaf0"></script>
 <script src="spot-plan.js?v=247e9ed950cf"></script>
 <script src="ocean-sst.js?v=d283a91350a2"></script>
+<script src="deep-link.js?v=7f961879456a"></script>
 <script src="spot-experience.js?v=7ed35b2cc972"></script>
 <script src="community-config.js?v=59d15c4cfc90"></script>
 <script src="trip-sharing.js?v=e29f4931ffd4"></script>

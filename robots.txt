@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://thomasbrebion59-bot.github.io/Ocean-Buddy/sitemap.xml
