@@ -39,6 +39,8 @@
     for(let i=0;i<n;i++){const big=cur==='plongee'&&i%7===0;list.push({x:r()*W,y:r()*H,s:big?6+r()*5:1.5+r()*4,v:big?.7+r()*.4:.2+r()*.6,p:r()*7,l:50+r()*130,a:.25+r()*.45});}
   }
   function frame(now){
+    /* « Réduire les animations » coché pendant que les particules tournent : on s’arrête et on efface. */
+    if(reduced()){stop();ctx.clearRect(0,0,W,H);return;}
     raf=requestAnimationFrame(frame);
     if(now-last<33)return;const dt=Math.min(3,(now-last)/16.7);last=now;acc+=dt;
     const kind=KIND[cur];ctx.clearRect(0,0,W,H);
@@ -93,5 +95,7 @@
   const own=e=>e.target&&e.target.closest&&e.target.closest(ZOOMABLE);
   ['gesturestart','gesturechange','gestureend'].forEach(t=>document.addEventListener(t,e=>{if(!own(e))e.preventDefault();},{passive:false}));
   document.addEventListener('touchmove',e=>{if(e.touches.length>1&&!own(e))e.preventDefault();},{passive:false});
-  window.OceanTheme={set,preview,get current(){return cur;}};
+  /* refresh : relit le mouvement réduit (Réglages) ; arrête ou relance les particules. */
+  function refresh(){stop();start();}
+  window.OceanTheme={set,preview,refresh,get current(){return cur;}};
 })();

@@ -1122,7 +1122,7 @@ function renderSessionStats(){
 function openSettings(){var i=document.getElementById('setName');if(i)i.value=userName;var r=document.getElementById('setReduce');if(r)r.checked=document.body.classList.contains('reduce-motion');document.getElementById('settingsModal').classList.add('open');}
 function closeSettings(){document.getElementById('settingsModal').classList.remove('open');}
 function saveName(){var v=(document.getElementById('setName').value||'').trim();if(!v){toast('Entre un prénom 🐙');return;}userName=v.slice(0,18);applyName();saveState();toast('Prénom enregistré ✅');closeSettings();}
-function toggleReduceMotion(on){document.body.classList.toggle('reduce-motion',!!on);try{localStorage.setItem('oceanbuddy_reduce',on?'1':'0');}catch(e){}}
+function toggleReduceMotion(on){document.body.classList.toggle('reduce-motion',!!on);try{localStorage.setItem('oceanbuddy_reduce',on?'1':'0');}catch(e){}try{window.OceanTheme?.refresh?.();}catch(e){}}
 async function resetProgress(){const q='Réinitialiser toute ta progression (XP, favoris, sessions, quiz) ?';if(!(await (window.OceanConfirm?OceanConfirm(q,{ok:'Réinitialiser',danger:true}):Promise.resolve(window.confirm(q)))))return;try{localStorage.removeItem(STORE_KEY);localStorage.removeItem('oceanbuddy_quiz_v1');localStorage.removeItem('oceanbuddy_progress_v1');localStorage.removeItem('oceanbuddy_badge_dates');localStorage.removeItem('oceanbuddy_daily');}catch(e){}await window.OceanMobile?.persist();location.reload();}
 
 /* ================= HOME DASHBOARD ================= */
