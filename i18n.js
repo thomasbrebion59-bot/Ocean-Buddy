@@ -17,7 +17,7 @@
     fr: 'Français', en: 'English', es: 'Español'
   };
   var RTL = { ar: 1, he: 1, ur: 1 };
-  var VERSIONS = /*VERSIONS*/{"en":"89fe0ea12b","es":"d5eb261680"}/*/VERSIONS*/;
+  var VERSIONS = /*VERSIONS*/{"en":"7d69ea3225","es":"528dc941ba"}/*/VERSIONS*/;
   var STORE_KEY = 'oceanbuddy_lang';
 
   function resolve(tag) {
@@ -232,9 +232,11 @@
       var m = templates[i][0].exec(nt);
       if (m) {
         var order = templates[i][2];
-        return templates[i][1].replace(/\{(\d+)\}/g, function (_, n) {
+        return templates[i][1].replace(/\{(\d+)\}/g, function (_, n, off, str) {
           var idx = order.indexOf(+n);
           var val = (idx >= 0 && m[idx + 1]) || '';
+          // Pluriel espagnol de « observación » : « observaci{8} » devient « observación » ou « observaciones ».
+          if (lang === 'es' && /observaci$/.test(str.slice(0, off))) return val === 's' ? 'ones' : 'ón';
           return value(val, nt);
         });
       }

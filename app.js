@@ -2361,7 +2361,7 @@ function poulpyReply(q){
    [/(thermocline)/,"La <b>thermocline</b> est la couche où l'eau passe brusquement du chaud (surface) au froid (profondeur) 🌡️. En plongée, on la traverse nettement en descendant !"],
    [/(montée des eaux|montee des eaux|niveau de la mer|montée du niveau)/,"Le niveau de la mer monte (~20 cm depuis 1900, et ça s'accélère) à cause de la fonte des glaces et de la dilatation de l'eau chaude 🌡️ — un enjeu majeur pour les côtes."],
    [/(\bgyre\b|tourbillon océan|tourbillon ocean)/,"Un <b>gyre</b> est un immense tourbillon de courants océaniques 🌀. C'est au centre de ces gyres que s'accumulent les déchets plastiques."],
-   [/(coriolis)/,"La <b>force de Coriolis</b>, due à la rotation de la Terre 🌍, fait tourner courants et tempêtes : sens des aiguilles d'une montre au Nord, l'inverse au Sud."],
+   [/(coriolis)/,"La <b>force de Coriolis</b>, due à la rotation de la Terre 🌍, fait dévier courants et tempêtes : vers la droite dans l'hémisphère Nord, vers la gauche dans l'hémisphère Sud."],
    [/(sargasse|mer des sargasses)/,"Les <b>sargasses</b> sont des algues brunes flottantes 🟤. En pleine mer elles abritent une vie incroyable ; échouées en masse (Caraïbes), elles posent problème."],
    [/(écume|ecume|mousse de mer)/,"L'écume blanche sur la plage 🫧, c'est de l'eau de mer riche en matières organiques (algues, plancton) fouettée par les vagues — naturelle et le plus souvent inoffensive."],
    [/(floater|top.?turn|\bsnap\b|réenroul|reenroul)/,"Le <b>top turn</b> (snap) : un virage sec en haut de la vague pour repartir vers le bas et projeter de la gerbe 💦. Le <b>floater</b> glisse sur le sommet d'une section qui ferme."],
