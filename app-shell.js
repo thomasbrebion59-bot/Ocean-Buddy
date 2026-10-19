@@ -251,10 +251,19 @@
   }
   /* Le retour du navigateur a déjà reculé dans l’historique : on referme la fenêtre puis on revient en avant,
      sans que la page sous la fenêtre change. */
-  let skipPop=false;
+  /* skipPop attend le popstate de ce retour (index d’origine) ; Avancer est compensé par un recul,
+     et une minuterie le désarme si rien n’arrive : il n’avale jamais un vrai Retour plus tard. */
+  let skipPop=null,skipTimer=0;
   window.addEventListener('popstate',e=>{
-    if(skipPop){skipPop=false;e.stopImmediatePropagation();return;}
-    if(closeTopOverlay()){e.stopImmediatePropagation();skipPop=true;history.go(1);}
+    const to=e.state?.index;
+    if(skipPop&&(skipPop.any||to===skipPop.index)){skipPop=null;clearTimeout(skipTimer);e.stopImmediatePropagation();return;}
+    skipPop=null;clearTimeout(skipTimer);
+    if(!closeTopOverlay())return;
+    e.stopImmediatePropagation();
+    const from=window.OceanNavigation?.index?.(),known=Number.isInteger(from)&&Number.isInteger(to)&&from!==to;
+    skipPop=known?{index:from}:{any:true};
+    history.go(known?from-to:1);
+    skipTimer=setTimeout(()=>{skipPop=null;},1000);
   },true);
 
   /* ---------- Confirmation dans l’app (au lieu de la fenêtre système « oceanbuddy.localhost ») ---------- */

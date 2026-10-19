@@ -120,7 +120,7 @@
   wrap.addEventListener('click',remember);
   wrap.addEventListener('input',remember);wrap.addEventListener('change',remember);
   window.addEventListener('pagehide',()=>{if(!restoring){entry={...entry,route:capture()};write();}});
-  window.OceanNavigation={begin,settled,back};
+  window.OceanNavigation={begin,settled,back,index:()=>entry.index};
   history.scrollRestoration='manual';
   /* Relance du WebView (mise à jour appliquée, sauvegarde restaurée) : l’écran revient, mais l’accueil repart en haut,
      sans défilement pendant le démarrage. */
