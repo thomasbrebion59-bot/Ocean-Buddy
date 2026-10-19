@@ -38,8 +38,8 @@ test('inline boot script is the first script of the page, before i18n.js and eve
 });
 test('the curtain is the first element of <body> and the home feed owns #home from the static HTML',()=>{
   const body=html.slice(html.indexOf('<body'));
-  assert.match(body,/^<body[^>]*>\s*<div id="obBoot"[^>]*><img src="assets\/app\/splash-poulpy\.webp"/);
-  assert.ok(fs.existsSync(path.join(__dirname,'..','assets/app/splash-poulpy.webp')));
+  assert.match(body,/^<body[^>]*>\s*<div id="obBoot"[^>]*><img src="assets\/app\/splash-logo\.webp"/);
+  assert.ok(fs.existsSync(path.join(__dirname,'..','assets/app/splash-logo.webp')));
   assert.match(html,/<section class="screen active hf-on" id="home">/);
 });
 test('OceanBoot exposes the check:boot contract and hides the page while booting',()=>{

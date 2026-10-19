@@ -17,7 +17,7 @@
   const labels = {home:'Accueil',spots:'Explorer',challenges:'Défis',community:'Communauté',profile:'Mon profil',trips:'Voyages',surf:'Jeu',detail:'Le spot'};
   const short = {home:'Accueil',spots:'Spots',challenges:'Défis',community:'Social',profile:'Profil',trips:'Voyages',surf:'Jeu'};
   const nav = $('.nav');
-  nav.insertAdjacentHTML('afterbegin', `<a class="sidebar-brand" href="#home" aria-label="Ocean Buddy — Accueil"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" loading="lazy" decoding="async"><span>OCEAN <b>BUDDY</b><small>L’OCÉAN, À TES CÔTÉS.</small></span></a><div class="sidebar-label">TON TERRAIN DE JEU</div>`);
+  nav.insertAdjacentHTML('afterbegin', `<a class="sidebar-brand" href="#home" aria-label="Ocean Buddy — Accueil"><img src="assets/brand/manta-petrole-256.png" alt="" width="47" height="47" loading="lazy" decoding="async"><span>OCEAN <b>BUDDY</b><small>L’OCÉAN, À TES CÔTÉS.</small></span></a><div class="sidebar-label">TON TERRAIN DE JEU</div>`);
   $('.sidebar-brand').addEventListener('click', e => {e.preventDefault();go('home')});
   nav.querySelectorAll('button[data-s]').forEach(button => {
     const page = button.dataset.s;
