@@ -13,7 +13,7 @@
   --as-glass:rgba(250,252,255,.8);--as-glass-strong:rgba(250,252,255,.88);
   --as-glass-border:rgba(255,255,255,.7);
   --as-glass-shadow:0 10px 34px -10px rgba(12,29,63,.28),0 1px 2px rgba(12,29,63,.06);
-  --as-blur:blur(22px) saturate(1.8);
+  --as-blur:blur(16px) saturate(1.6);
   --as-dark-glass:rgba(16,22,40,.48);--as-dark-border:rgba(255,255,255,.16);
   --as-r-xl:28px;--as-r-l:22px;--as-r-m:16px;--as-r-s:12px;
   --as-gutter:16px;--as-condensed:'Barlow Condensed','Arial Narrow',sans-serif;
@@ -389,3 +389,15 @@ html[data-act]{--g-ink:color-mix(in srgb,var(--t-deep) 85%,var(--t-main));--g-ma
 /* Loupe de la barre du haut : avec une activité, le thème la forçait en blanc alors que la barre est transparente
    (icône presque invisible sur fond clair). Elle prend la couleur de l’activité, sauf sur l’Explorer (verre sombre). */
 html[data-act] body.ocean-v2:not(.explore-immersive) .app-chrome .mobile-search{color:var(--t-main)!important}
+
+/* Fluidité : si l’utilisateur demande moins de transparence (réglage iOS « Réduire la transparence »),
+   on remplace tout verre dépoli par un fond opaque, sans flou — plus léger à composer et plus lisible. */
+@media (prefers-reduced-transparency:reduce){
+  :root{--as-glass:rgb(250,252,255);--as-glass-strong:rgb(250,252,255);--as-dark-glass:rgb(22,30,52);--as-blur:none;--glass:#fff}
+  .ocean-v2 *,.ocean-v2 *::before,.ocean-v2 *::after,.ocean-v2 .nav,.ocean-v2 .app-chrome,.toast,.quiz-modal,.aqi,.onb::before,.sd-sheet-back,.tb-scrim,.app-update,dialog::backdrop{
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  .ocean-v2 .app-chrome{background:#f3f6fd}
+  .ocean-v2 .nav{background:#fff}
+  .quiz-modal,.aqi,.sd-sheet-back,.tb-scrim,.app-update{background:rgba(6,18,44,.82)!important}
+  .toast{background:rgb(13,38,58)!important}
+}

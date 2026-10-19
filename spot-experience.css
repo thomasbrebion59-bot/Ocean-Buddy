@@ -1,4 +1,4 @@
-.hero-immersion{position:absolute;right:18px;bottom:18px;z-index:5;border:1px solid #ffffff66;border-radius:999px;padding:10px 14px;background:color-mix(in srgb,var(--g-ink,#082b55) 80%,transparent);color:#fff;font:700 11px var(--body);cursor:pointer;backdrop-filter:blur(8px);box-shadow:0 8px 22px color-mix(in srgb,var(--g-ink,#092d58) 25.10%,transparent)}.hero-immersion span{margin-left:5px;font-size:15px}.hero-immersion:hover{background:var(--t-main)}
+.hero-immersion{position:absolute;right:18px;bottom:18px;z-index:5;border:1px solid #ffffff66;border-radius:999px;padding:10px 14px;background:color-mix(in srgb,var(--g-ink,#082b55) 80%,transparent);color:#fff;font:700 11px var(--body);cursor:pointer;box-shadow:0 8px 22px color-mix(in srgb,var(--g-ink,#092d58) 25.10%,transparent)}.hero-immersion span{margin-left:5px;font-size:15px}.hero-immersion:hover{background:var(--t-main)}
 /* Better display of the curated local photography: preserve detail while
    adding a restrained editorial lift to images that arrive flat or grey. */
 .ocean-v2 .spot-photo,.ocean-v2 .hero-photo,.ocean-v2 .spot-photo-strip img{image-rendering:auto;filter:saturate(1.06) contrast(1.03)}
