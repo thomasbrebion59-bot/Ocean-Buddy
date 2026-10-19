@@ -68,7 +68,7 @@ async function boot(){
       // A system browser cannot open the private capacitor:// origin. Use the
       // matching public document for credits, support and the privacy policy.
       if(['/privacy.html','/support.html','/photos.html','/community-rules.html'].includes(url.pathname)){
-        event.preventDefault();openExternal('https://thomasbrebion59-bot.github.io/Ocean-Buddy'+url.pathname+url.hash).catch(()=>window.toast?.('Le lien ne peut pas être ouvert pour le moment.'));
+        event.preventDefault();openExternal(SITE_BASE+url.pathname.slice(1)+url.hash).catch(()=>window.toast?.('Le lien ne peut pas être ouvert pour le moment.'));
       }
     }else if(['https:','http:'].includes(url.protocol)&&url.origin!==location.origin){event.preventDefault();openExternal(url.href).catch(()=>window.toast?.('Le lien ne peut pas être ouvert pour le moment.'));}
   });
@@ -88,6 +88,9 @@ async function shareJSON(name,data){
  * puis appliqués quand la personne accepte (ou au prochain lancement). Les changements
  * natifs passent toujours par l’App Store : l’app propose alors d’ouvrir sa fiche. */
 const BUNDLE=__OB_BUNDLE__, UPDATE_BASE=__OB_UPDATE_BASE__;
+/* Secours des mises à jour directes (GitHub Pages) et adresse publique du site : voir scripts/site-base.cjs. */
+const UPDATE_FALLBACK=typeof __OB_UPDATE_FALLBACK__==='string'?__OB_UPDATE_FALLBACK__:'';
+const SITE_BASE=typeof __OB_SITE_BASE__==='string'?__OB_SITE_BASE__:'https://oceanbuddy.app/';
 const APP_STORE_ID='6811870966', STORE_URL='itms-apps://apps.apple.com/app/id'+APP_STORE_ID;
 const versionCmp=(a,b)=>{const x=String(a).split('.').map(Number),y=String(b).split('.').map(Number);for(let i=0;i<3;i++){const d=(x[i]||0)-(y[i]||0);if(d)return Math.sign(d);}return 0;};
 let liveBundle=null;
@@ -101,16 +104,19 @@ async function getJSON(url){
 async function checkLiveUpdate(){
   if(!native)return null;
   if(liveBundle)return liveBundle;
-  const [latest,info]=await Promise.all([getJSON(UPDATE_BASE+'latest.json'),App.getInfo()]);
+  // Adresse principale d'abord ; si elle ne répond pas, GitHub Pages (publié aux deux endroits).
+  let base=UPDATE_BASE,latest;
+  try{latest=await getJSON(base+'latest.json');}catch(error){if(!UPDATE_FALLBACK)throw error;base=UPDATE_FALLBACK;latest=await getJSON(base+'latest.json');}
+  const info=await App.getInfo();
   if(!latest||!(Number(latest.seq)>BUNDLE.seq))return null;
   if(versionCmp(info.version,latest.native_min)<0)return {kind:'store'};
   if(latest.native_max&&versionCmp(info.version,latest.native_max)>0)return null;
   const version=String(latest.seq);
   let bundle=(await CapacitorUpdater.list()).bundles.find(b=>b.version===version&&['pending','success'].includes(b.status));
   if(!bundle){
-    const manifest=await getJSON(UPDATE_BASE+latest.manifest);
-    bundle=await CapacitorUpdater.download({url:UPDATE_BASE+latest.manifest,version,
-      manifest:manifest.files.map(([file_name,file_hash])=>({file_name,file_hash,download_url:UPDATE_BASE+'files/'+file_hash}))});
+    const manifest=await getJSON(base+latest.manifest);
+    bundle=await CapacitorUpdater.download({url:base+latest.manifest,version,
+      manifest:manifest.files.map(([file_name,file_hash])=>({file_name,file_hash,download_url:base+'files/'+file_hash}))});
   }
   // Sans réponse de la personne, la nouvelle version s’installe dès que l’app passe en arrière-plan.
   await CapacitorUpdater.next({id:bundle.id});

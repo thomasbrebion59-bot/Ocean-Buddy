@@ -96,7 +96,7 @@
   if (navigator.onLine === false) document.body.classList.add('is-offline');
 
   /* ---- Partager un spot ---- */
-  const PUBLIC_URL = 'https://thomasbrebion59-bot.github.io/Ocean-Buddy/';
+  const PUBLIC_URL = 'https://oceanbuddy.app/';
   const hero = document.getElementById('detailHero'), fav = document.getElementById('dFav');
   if (hero && fav) {
     const btn = document.createElement('button');

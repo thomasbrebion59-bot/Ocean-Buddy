@@ -1,12 +1,12 @@
 #!/usr/bin/env node
 // Génère les pages statiques SEO : spot/<id>/, spots/<monde>/, spots/<monde>/<pays>/, sitemap.xml, robots.txt.
-// Sans dépendance, idempotent (aucune date, ordre stable). SITE_BASE surcharge l'URL publique.
+// Sans dépendance, idempotent (aucune date, ordre stable). L'URL publique vient de scripts/site-base.cjs (OB_SITE_BASE).
 'use strict';
 const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const BASE = (process.env.SITE_BASE || 'https://ocean-buddy.pages.dev/').replace(/\/?$/, '/');
+const BASE = require('./site-base.cjs').OB_SITE_BASE; // adresse publique unique (OB_SITE_BASE, ancien SITE_BASE accepté)
 const APP_ID = '6811870966';
 const STORE_URL = 'https://apps.apple.com/fr/app/ocean-buddy/id' + APP_ID;
 

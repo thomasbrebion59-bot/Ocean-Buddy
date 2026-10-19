@@ -8997,5 +8997,14 @@
  "🛟 Sécurité": "🛟 Seguridad",
  "🛹 : un": "🛹: un",
  "🛹 : une": "🛹: una",
- "🦈. La plupart nous ignorent. Évite l'aube/le crépuscule, l'eau trouble et les zones de pêche, et tout ira bien.": "🦈. La mayoría nos ignora. Evita el amanecer y el atardecer, el agua turbia y las zonas de pesca, y todo irá bien."
+ "🦈. La plupart nous ignorent. Évite l'aube/le crépuscule, l'eau trouble et les zones de pêche, et tout ira bien.": "🦈. La mayoría nos ignora. Evita el amanecer y el atardecer, el agua turbia y las zonas de pesca, y todo irá bien.",
+ "Cette page a besoin de JavaScript pour afficher l’application.": "Esta página necesita JavaScript para mostrar la aplicación.",
+ "Ocean Buddy t’aide à trouver ton prochain spot nautique, à préparer ta session et à protéger l’océan avec Poulpy, ton guide. Le catalogue réunit des centaines de spots de surf, de plongée et d’autres activités nautiques, avec niveau, dangers et conseils pour chacun.": "Ocean Buddy te ayuda a encontrar tu próximo spot acuático, preparar tu sesión y proteger el océano con Poulpy, tu guía. El catálogo reúne cientos de spots de surf, buceo y otras actividades acuáticas, cada uno con su nivel, peligros y consejos.",
+ "Parcourir tous les spots Ocean Buddy": "Explorar todos los spots de Ocean Buddy",
+ "Plan du site": "Mapa del sitio",
+ "Quelques spots": "Algunos spots",
+ "Télécharger Ocean Buddy sur l’App Store": "Descargar Ocean Buddy en la App Store",
+ "Télécharger sur l’App Store": "Descargar en la App Store",
+ "transform .3s var(--ob-ease-out,cubic-bezier(.4,0,.2,1)), opacity .24s var(--ob-ease-out,ease)": "transform .3s var(--ob-ease-out,cubic-bezier(.4,0,.2,1)), opacity .24s var(--ob-ease-out,ease)",
+ "transform .45s var(--ob-spring,cubic-bezier(.22,.9,.3,1.02)), opacity .3s var(--ob-ease-out,ease)": "transform .45s var(--ob-spring,cubic-bezier(.22,.9,.3,1.02)), opacity .3s var(--ob-ease-out,ease)"
 }

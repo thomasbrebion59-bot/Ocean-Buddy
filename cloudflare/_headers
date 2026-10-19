@@ -17,3 +17,9 @@
   Cache-Control: no-cache
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
+/app-update/latest.json
+  Cache-Control: no-cache
+/app-update/manifests/*
+  Cache-Control: no-cache
+/app-update/files/*
+  Cache-Control: public, max-age=31536000, immutable

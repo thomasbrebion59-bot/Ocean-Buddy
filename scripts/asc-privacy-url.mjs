@@ -1,14 +1,15 @@
-// Remplace l'URL de confidentialité github.io par celle de Cloudflare dans toutes les langues de la fiche App Store.
+// Remplace l'URL de confidentialité github.io par celle de l'adresse publique (OB_SITE_BASE) dans toutes les langues de la fiche App Store.
 // Lecture seule par défaut ; écrit seulement avec --apply.
-// node asc-privacy-url.mjs [--apply]
+// node scripts/asc-privacy-url.mjs [--apply]   (adresse : OB_SITE_BASE, voir scripts/site-base.cjs)
 import { createPrivateKey, sign } from 'node:crypto';
 import { readFileSync } from 'node:fs';
 import { homedir } from 'node:os';
+import site from './site-base.cjs';
 
 const KEY_ID = '8T28JHQX3P';
 const ISSUER = '7d044674-c0b4-45e2-b48b-f0d57cdb4b29';
 const KEY_PATH = `${homedir()}/Documents/OceanBuddy-signing/private_keys/AuthKey_${KEY_ID}.p8`;
-const NEW_URL = 'https://ocean-buddy.pages.dev/privacy';
+const NEW_URL = site.OB_SITE_BASE + 'privacy'; // Cloudflare Pages sert privacy.html sous /privacy;
 const APPLY = process.argv.includes('--apply');
 
 const b64 = (b) => Buffer.from(b).toString('base64url');

@@ -14,7 +14,7 @@ test('parseSpotId lit ?spot= et refuse les valeurs douteuses',()=>{
   assert.equal(parseSpotId('?spot=../x'),null);
 });
 test('index.html : balises SEO de l’accueil',()=>{
-  assert.match(html,/<link rel="canonical" href="https:\/\/ocean-buddy\.pages\.dev\/">/);
+  assert.match(html,/<link rel="canonical" href="https:\/\/oceanbuddy\.app\/">/);
   assert.match(html,/<meta name="apple-itunes-app" content="app-id=6811870966">/);
   const m=html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
   const ld=JSON.parse(m[1]);

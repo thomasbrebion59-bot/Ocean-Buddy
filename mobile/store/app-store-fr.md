@@ -10,9 +10,9 @@
 - Bundle ID proposé : io.github.thomasbrebion59bot.oceanbuddy
 - SKU proposé : OCEANBUDDY-IOS-001
 - Mots-clés : surf,plongée,snorkeling,paddle,kayak,voyage,océan,spots,itinéraire,marée
-- Site : https://thomasbrebion59-bot.github.io/Ocean-Buddy/
-- Assistance : https://thomasbrebion59-bot.github.io/Ocean-Buddy/support.html
-- Confidentialité : https://thomasbrebion59-bot.github.io/Ocean-Buddy/privacy.html
+- Site : https://oceanbuddy.app/
+- Assistance : https://oceanbuddy.app/support.html
+- Confidentialité : https://oceanbuddy.app/privacy.html
 - Contact public autorisé : oceanbuddy.contact@gmail.com
 - Prix : gratuite ; l’application actuelle ne contient pas d’achat intégré.
 - Disponibilité/pays : tous les territoires proposés par App Store Connect, sous réserve des obligations réglementaires du compte.

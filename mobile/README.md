@@ -20,7 +20,7 @@ Node 22+ et Xcode 26+ sont requis. La première version native cible l’iPhone 
 
 Depuis la 1.2.0, l’app reçoit les nouveautés du site sans repasser par Apple (`@capgo/capacitor-updater`, en mode manuel, sans serveur Capgo ni statistiques) :
 
-1. au démarrage et au retour dans l’app (30 min minimum entre deux vérifications), elle lit `app-update/latest.json` sur GitHub Pages par une requête native ;
+1. au démarrage et au retour dans l’app (30 min minimum entre deux vérifications), elle lit `app-update/latest.json` par une requête native, d’abord sur l’adresse publique (`OB_SITE_BASE`, https://oceanbuddy.app/), puis sur GitHub Pages en secours (les apps 1.2.0 à 1.3.2 ne lisent que GitHub Pages) ;
 2. si le contenu est plus récent, elle télécharge seulement les fichiers absents de l’app installée (`app-update/files/<sha256>`, chaque fichier vérifié par son empreinte) et réutilise tout le reste ;
 3. une fenêtre Poulpy propose « Mettre à jour maintenant » ; sinon, la nouvelle version s’installe dès que l’app passe en arrière-plan ;
 4. si la nouvelle version ne démarre pas (pas d’appel à `notifyAppReady` en 15 s), l’app revient seule à la version précédente.
@@ -29,8 +29,11 @@ Publier une mise à jour pour les téléphones, après une modification vérifi�
 
 ```sh
 node scripts/publish-app-update.cjs   # construit mobile/www, remplit app-update/
-git add app-update && git commit && git push origin HEAD:main
+git add app-update && git commit && git push origin HEAD:main   # GitHub Pages
+node scripts/build-cloudflare.cjs && npx wrangler pages deploy .cloudflare/publish --project-name=ocean-buddy --branch=main   # Cloudflare
 ```
+
+Chaque mise à jour est publiée aux deux endroits (voir `docs/ADRESSE-PUBLIQUE.md`).
 
 Seul le contenu web peut passer ainsi (HTML, CSS, JS, images, données). Un nouveau plugin, une autorisation ou un réglage natif exigent une version App Store. Pour chaque build envoyé à Apple, enregistrer d’abord sa référence avec `node scripts/publish-app-update.cjs --baseline <version>` (dans `mobile/ota-baselines/`), puis `npx cap sync` et archiver avec ce même `mobile/www`. Si le build ne change pas la partie native (mêmes plugins, même `capacitor.config.json`), ajouter `--same-shell <version précédente>` : les apps de cette version continuent de recevoir les mises à jour directes (cas de la 1.3.1, même coque que la 1.3.0). Les apps plus anciennes que `--native-min` (par défaut la dernière coque native) reçoivent plutôt une fenêtre « Ouvrir l’App Store » dès que l’App Store propose une version plus récente.
 
