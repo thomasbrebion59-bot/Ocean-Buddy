@@ -11,7 +11,7 @@
   /* Mouvement des particules par activité. */
   const KIND={plongee:'bubbles',snorkeling:'bubbles',baignade:'sparkle',surf:'foam',bodyboard:'foam',paddle:'sparkle',kayak:'drift',kitesurf:'wind',windsurf:'wind'};
   const WAVE='<svg viewBox="0 0 1200 150" preserveAspectRatio="none"><path d="M0 70 C100 30 200 30 300 70 S500 110 600 70 S800 30 900 70 S1100 110 1200 70 V150 H0Z"/></svg>';
-  let cur='',amb,cv,ctx,list=[],raf=0,W=0,H=0,last=0,acc=0,ink='255,255,255';
+  let cur='',amb,cv,ctx,list=[],raf=0,W=0,H=0,D=0,last=0,acc=0,ink='255,255,255';
   const reduced=()=>document.body.classList.contains('reduce-motion')||matchMedia('(prefers-reduced-motion: reduce)').matches;
   /* La couche d’ambiance n’est visible qu’à partir de 960 px (barre latérale) ; en dessous, aucun calcul d’image. */
   const wide=matchMedia('(min-width:960px)');
@@ -33,7 +33,13 @@
     const onWide=()=>{if(wide.matches){readInk();start();}else stop();};
     if(wide.addEventListener)wide.addEventListener('change',onWide);else if(wide.addListener)wide.addListener(onWide);
   }
-  function size(){if(!cv)return;const d=Math.min(2,devicePixelRatio||1);W=innerWidth;H=innerHeight;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);}
+  /* Le canevas n’est réalloué que si la fenêtre ou la densité changent : réaffecter width/height à chaque choix
+     d’activité coûtait 80 à 350 ms (banc creme-logo, scénario 3). Sinon on l’efface seulement. */
+  function size(){
+    if(!cv)return;const d=Math.min(2,devicePixelRatio||1),w=innerWidth,h=innerHeight;
+    if(w===W&&h===H&&d===D){ctx.clearRect(0,0,W,H);return;}
+    W=w;H=h;D=d;cv.width=W*d;cv.height=H*d;ctx.setTransform(d,0,0,d,0,0);
+  }
   function seed(kind){
     const r=Math.random,n=cur==='plongee'?30:({bubbles:20,sparkle:14,foam:16,drift:12,wind:12}[kind]||0);list=[];
     for(let i=0;i<n;i++){const big=cur==='plongee'&&i%7===0;list.push({x:r()*W,y:r()*H,s:big?6+r()*5:1.5+r()*4,v:big?.7+r()*.4:.2+r()*.6,p:r()*7,l:50+r()*130,a:.25+r()*.45});}
