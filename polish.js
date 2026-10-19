@@ -22,23 +22,40 @@
     });
   }, { root: wrap, rootMargin: '0px 0px -6% 0px', threshold: 0.06 }) : null;
 
-  function prepare(root, entering) {
-    if (!io || calm()) return;
-    const list = root.matches?.(CARDS) ? [root] : root.querySelectorAll?.(CARDS) || [];
+  /* Visibilité de départ lue par un IntersectionObserver, sans getBoundingClientRect : mesurer chaque carte juste
+     après un rendu forçait le style et la mise en page de tout le document (jusqu'à 1,4 s par changement
+     d'activité sous ralentissement x6, banc creme-logo). Le premier rapport arrive après la peinture : une carte
+     hors champ reçoit .rv sans qu'on la voie disparaître, une carte visible re-rendue ne clignote pas. */
+  const arriving = new WeakSet();
+  const probe = io ? new IntersectionObserver(entries => {
     let stagger = 0;
-    const view = wrap.getBoundingClientRect();
-    list.forEach(el => {
-      if (seen.has(el)) return;
-      seen.add(el);
-      const r = el.getBoundingClientRect();
+    entries.forEach(entry => {
+      const el = entry.target;
+      probe.unobserve(el);
+      const entering = arriving.has(el);
+      arriving.delete(el);
+      if (!el.isConnected || calm()) return;
+      const r = entry.boundingClientRect, view = entry.rootBounds;
       if (!r.width) return; /* écran caché : on n'anime pas ce qu'on ne voit pas */
-      const visible = r.top < view.bottom && r.bottom > view.top;
+      /* même règle qu'avant : visible dans la hauteur de #screenWrap (une carte d'un rail horizontal compte) */
+      const visible = view ? r.top < view.bottom && r.bottom > view.top : entry.isIntersecting;
       /* un contenu re-rendu sous les yeux ne clignote pas ; à l'arrivée sur
          un écran, ce qui est visible apparaît en léger décalé */
       if (visible && !entering) return;
       el.style.setProperty('--rv-delay', (visible ? Math.min(stagger++, 6) * 45 : 0) + 'ms');
       el.classList.add('rv');
       io.observe(el);
+    });
+  }, { root: wrap, threshold: 0 }) : null;
+
+  function prepare(root, entering) {
+    if (!io || calm()) return;
+    const list = root.matches?.(CARDS) ? [root] : root.querySelectorAll?.(CARDS) || [];
+    list.forEach(el => {
+      if (seen.has(el)) return;
+      seen.add(el);
+      if (entering) arriving.add(el);
+      probe.observe(el);
     });
   }
 
