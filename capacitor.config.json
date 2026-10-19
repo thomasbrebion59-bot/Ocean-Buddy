@@ -8,11 +8,13 @@
   },
   "ios": {
     "contentInset": "never",
-    "backgroundColor": "#174bd3"
+    "backgroundColor": "#174bd3",
+    "webContentsDebuggingEnabled": false
   },
   "android": {
     "backgroundColor": "#174bd3",
-    "allowMixedContent": false
+    "allowMixedContent": false,
+    "webContentsDebuggingEnabled": false
   },
   "plugins": {
     "SplashScreen": {
