@@ -1,9 +1,10 @@
-/* Ocean Blue — dernière couche de style (septembre 2026).
-   Retour au bleu cobalt d’origine : le bleu structure (navigation, héros, titres),
-   le citron vert signale l’état actif, le corail appelle à l’action. */
+/* @creme-tokens */
+/* Ocean Blue — couche de style sur base crème (octobre 2026).
+   Les couleurs viennent des jetons --t-* (activity-theme.css) : crème en fond, couleur de l’activité en accent,
+   cartes héros sombres (--t-deep vers --t-main2), --t-acc en touche, --t-cta pour l’appel à l’action. */
 :root{
   --ob-navy:var(--t-deep);--ob-navy-2:var(--t-deep-b);--ob-cobalt:var(--t-main2);--ob-blue:var(--t-bright);--ob-sky:var(--t-tint);--ob-mist:var(--t-page);
-  --ob-lime:#e0ff91;--ob-coral:#ff7a55;--ob-coral-hi:#ff916f;--ob-ink:var(--g-ink,#0f2350);--ob-muted:#5a6a8c;--ob-line:var(--g-pale,#dfe6f5);--ob-card:#fff;
+  --ob-lime:var(--t-acc);--ob-coral:var(--t-cta);--ob-coral-hi:var(--t-cta);--ob-ink:var(--t-ink);--ob-muted:var(--t-ink2);--ob-line:var(--t-line);--ob-card:var(--t-card);
   --ob-abyss:var(--ob-navy);--ob-abyss-2:var(--ob-navy-2);--ob-sand:var(--ob-mist);
   --ob-shadow:0 1px 2px color-mix(in srgb,var(--t-deep) 6%,transparent),0 14px 34px -16px color-mix(in srgb,var(--t-deep) 32%,transparent);
   --ob-shadow-lg:0 30px 60px -28px color-mix(in srgb,var(--t-deep) 55%,transparent);
@@ -12,36 +13,30 @@
 html,body{background:var(--ob-mist)}
 .ocean-v2 .screen-wrap,.ocean-v2 .screen{background:transparent}
 body.ocean-v2{color:var(--ob-ink)}
-::selection{background:var(--ob-lime);color:var(--ob-navy)}
+::selection{background:var(--t-acc);color:var(--t-acc-ink)}
 
-/* ---------- Navigation cobalt ---------- */
-.ocean-v2 .nav{background:linear-gradient(185deg,var(--t-nav-a) 0%,var(--t-nav-b) 45%,var(--t-nav-c) 100%);border-color:var(--t-nav-b)}
-.ocean-v2 .nav::before{content:"";position:absolute;inset:auto 0 0;height:220px;pointer-events:none;opacity:.22;
-  background:repeating-radial-gradient(ellipse at 50% 130%,transparent 0 16px,rgba(255,255,255,.55) 17px 18px,transparent 19px 34px)}
-.sidebar-brand>span,.sidebar-brand b{color:#fff}
-.sidebar-brand small{color:var(--g-pale,#cfdcff)}
-.sidebar-label{color:var(--g-line,#b8cbff)}
-.ocean-v2 .nav>button[data-s]{color:var(--g-pale,#dbe6ff)}
-.ocean-v2 .nav>button[data-s]:hover{background:rgba(255,255,255,.12);color:#fff}
-.ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{background:var(--ob-lime);color:var(--ob-navy);box-shadow:0 10px 24px -12px rgba(224,255,145,.9)}
-.ocean-v2 .nav>button[data-s].active:hover{background:#ecffb8;color:var(--ob-navy)}
-.ocean-v2 .nav .sidebar-poulpy{background:rgba(8,40,140,.55);border-color:rgba(255,255,255,.22)}
-.sidebar-poulpy b{color:#fff}.sidebar-poulpy span{color:var(--g-pale,#d4e0ff)}.sidebar-poulpy i{color:var(--ob-lime)}
-.ocean-v2 .nav .sidebar-settings,.ocean-v2 .nav .sidebar-user{color:var(--g-pale,#e6eeff);border-color:rgba(255,255,255,.22)}
-.sidebar-user small,.sidebar-motto{color:var(--g-line,#c2d3ff)}
-.ocean-v2 .nav .sidebar-user .user-initial{background:var(--ob-lime);color:var(--ob-navy)}
-@media (max-width:959px){
-  .ocean-v2 .nav{background:rgba(26,79,214,.94);border-color:rgba(255,255,255,.14);box-shadow:0 -10px 30px -12px color-mix(in srgb,var(--t-deep) 45%,transparent)}
-  .ocean-v2 .nav::before{display:none}
-  .ocean-v2 .nav>button[data-s]{color:var(--g-pale,#dbe6ff)}
-  .ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{background:var(--ob-lime);color:var(--ob-navy)}
-}
+/* ---------- Navigation : barre latérale (ordinateur) crème ; la barre d’onglets du téléphone est dans app-shell.css ---------- */
+.ocean-v2 .nav{background:var(--t-bar);border-color:var(--t-line)}
+.ocean-v2 .nav::before{display:none}
+.sidebar-brand>span,.sidebar-brand b{color:var(--t-deep)}
+.sidebar-brand small{color:var(--t-ink2)}
+.sidebar-label{color:var(--t-ink2)}
+.ocean-v2 .nav>button[data-s]{color:var(--t-ink)}
+.ocean-v2 .nav>button[data-s]:hover{background:var(--t-tint);color:var(--t-main)}
+.ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{background:var(--t-pill);color:var(--t-main);box-shadow:inset 3px 0 0 var(--t-main)}
+.ocean-v2 .nav>button[data-s].active:hover{background:var(--t-pill);color:var(--t-main)}
+.ocean-v2 .nav .sidebar-poulpy{background:var(--t-deep);border-color:var(--t-deep)}
+.sidebar-poulpy b{color:var(--t-on-main)}.sidebar-poulpy span{color:color-mix(in srgb,var(--t-on-main) 82%,transparent)}.sidebar-poulpy i{color:var(--t-acc)}
+.ocean-v2 .nav .sidebar-settings,.ocean-v2 .nav .sidebar-user{color:var(--t-ink);border-color:var(--t-line)}
+.sidebar-user small,.sidebar-motto{color:var(--t-ink2)}
+.ocean-v2 .nav .sidebar-user .user-initial{background:var(--t-main);color:var(--t-on-main)}
 
 /* ---------- Barre du haut ---------- */
-.ocean-v2 .app-chrome{background:rgba(243,246,253,.82);-webkit-backdrop-filter:blur(18px) saturate(1.5);backdrop-filter:blur(14px) saturate(1.4);border-color:var(--ob-line)}
-.chrome-mobile-brand,.chrome-breadcrumb b{color:var(--ob-navy)}
-.chrome-mobile-brand b,.mobile-search{color:var(--ob-cobalt)}
-.chrome-search{border-color:var(--ob-line);background:#fff}
+.ocean-v2 .app-chrome{background:var(--t-bar);-webkit-backdrop-filter:none;backdrop-filter:none;border-color:var(--t-line)}
+.chrome-mobile-brand{color:var(--t-deep)}.chrome-breadcrumb{color:var(--t-ink2)}.chrome-breadcrumb b{color:var(--t-deep)}
+.chrome-mobile-brand b,.mobile-search{color:var(--t-main)}
+.chrome-user{color:var(--t-ink)}
+.chrome-search{border-color:var(--ob-line);background:var(--t-card)}
 
 /* ---------- Titres et sections ---------- */
 .ocean-v2 .sec h2,.ocean-v2 h1,.ocean-v2 .hub-greet h2{color:var(--ob-navy)}
@@ -50,14 +45,14 @@ body.ocean-v2{color:var(--ob-ink)}
 /* ---------- Accueil : grand héros en premier ---------- */
 .ocean-v2 #home .home-intro{position:relative}
 .ocean-v2 #home #homeTop{border:0;background-color:var(--ob-navy);
-  background-image:linear-gradient(100deg,rgba(9,46,113,.86) 0%,rgba(9,46,113,.45) 55%,rgba(8,40,68,.08) 100%),url('assets/photos/hero.jpg');
+  background-image:linear-gradient(100deg,color-mix(in srgb,var(--t-deep) 86%,transparent) 0%,color-mix(in srgb,var(--t-deep) 45%,transparent) 55%,color-mix(in srgb,var(--t-scrim) 8%,transparent) 100%),url('assets/photos/hero.jpg');
   background-size:cover;background-position:center;box-shadow:var(--ob-shadow-lg)}
-.ocean-v2 #homeTop h1{color:#fffdf2;text-shadow:0 6px 30px rgba(4,22,59,.35)}
+.ocean-v2 #homeTop h1{color:color-mix(in srgb,var(--t-on-main) 86%,transparent);text-shadow:0 6px 30px color-mix(in srgb,var(--t-shadow) 35%,transparent)}
 .ocean-v2 #homeTop h1 span{color:var(--ob-lime)}
 .ocean-v2 #homeTop .hero-kicker{color:var(--ob-lime)}
-.hero-cta{background:var(--ob-coral);color:#1b1410;box-shadow:0 14px 30px -12px rgba(255,122,85,.8);transition:transform .25s cubic-bezier(.22,1,.36,1),background .2s}
+.hero-cta{background:var(--t-cta);color:var(--t-cta-ink);box-shadow:0 14px 30px -12px var(--t-glow);transition:transform .25s cubic-bezier(.22,1,.36,1),background .2s}
 .hero-cta:hover{background:var(--ob-coral-hi);transform:translateY(-2px)}
-.ocean-v2 .mascot-card{background:linear-gradient(160deg,var(--g-soft,#2a66f0),var(--t-nav-b) 55%,var(--t-nav-c));box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 .mascot-card{background:linear-gradient(160deg,var(--t-deep),var(--t-main2));color:var(--t-on-main);box-shadow:var(--ob-shadow-lg)}
 .ocean-v2 .mascot-card .poulpy-title{color:var(--ob-lime)}
 /* Le héros porte le salut : le cockpit n’en répète pas le titre. */
 #home .ocean-hub .hub-greet{display:none}
@@ -65,9 +60,9 @@ body.ocean-v2{color:var(--ob-ink)}
 
 /* Prochain départ et semaine en bleu */
 .hub-trip{background:linear-gradient(180deg,color-mix(in srgb,var(--t-deep) 20%,transparent) 0%,color-mix(in srgb,var(--t-deep) 55%,transparent) 45%,color-mix(in srgb,var(--t-deep) 95%,transparent) 100%),var(--hub-cover) center/cover no-repeat,var(--ob-navy)!important;box-shadow:0 24px 44px -24px color-mix(in srgb,var(--t-deep) 85%,transparent)}
-.hub-trip-empty{background:linear-gradient(120deg,var(--t-nav-b),var(--t-deep))!important}
+.hub-trip-empty{background:linear-gradient(120deg,var(--t-deep),var(--t-main2))!important;color:var(--t-on-main)}
 .hub-days i.on{background:var(--ob-cobalt)}
-.hub-level{background:conic-gradient(var(--ob-cobalt) calc(var(--p)*1%),var(--g-pale,#dfe6fb) 0)!important}
+.hub-level{background:conic-gradient(var(--ob-cobalt) calc(var(--p)*1%),var(--t-tint) 0)!important}
 .hub-week,.hub-spot{border-color:var(--ob-line);box-shadow:var(--ob-shadow)}
 
 /* ---------- Rail « Pars en immersion » ---------- */
@@ -79,14 +74,14 @@ body.ocean-v2{color:var(--ob-ink)}
 .ob-dive-head p{margin:6px 0 0;color:var(--ob-muted);font-size:13.5px;max-width:44ch}
 .ob-dive-track{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;margin:0 -16px;padding:4px 16px 16px;scrollbar-width:none;overscroll-behavior-x:contain}
 .ob-dive-track::-webkit-scrollbar{display:none}
-.ob-story{position:relative;flex:0 0 168px;height:280px;scroll-snap-align:start;border:0;padding:0;border-radius:24px;overflow:hidden;cursor:pointer;color:#fff;text-align:left;background:var(--ob-navy);box-shadow:var(--ob-shadow);isolation:isolate;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s}
+.ob-story{position:relative;flex:0 0 168px;height:280px;scroll-snap-align:start;border:0;padding:0;border-radius:24px;overflow:hidden;cursor:pointer;color:var(--t-on-main);text-align:left;background:var(--ob-navy);box-shadow:var(--ob-shadow);isolation:isolate;transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s}
 .ob-story:hover{transform:translateY(-4px);box-shadow:var(--ob-shadow-lg)}
 .ob-story:active{transform:scale(.97)}
 .ob-story img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:-2;transition:transform 6s ease-out}
 .ob-story:hover img{transform:scale(1.1)}
-.ob-story::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,rgba(4,22,59,.1) 30%,rgba(4,22,59,.9))}
-.ob-story-ring{position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:6px;padding:4px 9px 4px 4px;border-radius:999px;background:rgba(8,32,92,.5);font-size:10.5px;font-weight:800;letter-spacing:.06em}
-.ob-story-ring i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--ob-lime);color:var(--ob-navy)}
+.ob-story::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,color-mix(in srgb,var(--t-scrim) 10%,transparent) 30%,color-mix(in srgb,var(--t-scrim) 90%,transparent))}
+.ob-story-ring{position:absolute;top:10px;left:10px;display:flex;align-items:center;gap:6px;padding:4px 9px 4px 4px;border-radius:999px;background:color-mix(in srgb,var(--t-scrim) 50%,transparent);font-size:10.5px;font-weight:800;letter-spacing:.06em}
+.ob-story-ring i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:var(--t-acc);color:var(--t-acc-ink)}
 .ob-story-ring i svg{width:12px;height:12px}
 .ob-story-txt{position:absolute;left:12px;right:12px;bottom:12px}
 .ob-story-txt small{display:block;font-size:11px;font-weight:700;opacity:.85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -97,18 +92,18 @@ body.ocean-v2{color:var(--ob-ink)}
 /* ---------- Explorer : cartes continents et spots ---------- */
 .ocean-v2 .isl,.ocean-v2 .world-card{border-radius:var(--ob-radius);box-shadow:var(--ob-shadow);transition:transform .35s cubic-bezier(.22,1,.36,1),box-shadow .35s}
 .ocean-v2 .isl:hover{transform:translateY(-3px);box-shadow:var(--ob-shadow-lg)}
-.ocean-v2 .world-count{background:var(--ob-lime);color:var(--ob-navy)}
+.ocean-v2 .world-count{background:var(--t-acc);color:var(--t-acc-ink)}
 .ocean-v2 .explore-path{border-color:var(--ob-line);box-shadow:var(--ob-shadow)}
 .ocean-v2 .explore-path .path-number{background:var(--ob-sky);color:var(--ob-cobalt)}
 .ocean-v2 #spotsTop h1,.ocean-v2 .w-title{color:var(--ob-navy)}
 
 /* ---------- Fiche spot ---------- */
 .ocean-v2 .detail-hero{box-shadow:var(--ob-shadow-lg)}
-.ocean-v2 #detail .hero-immersion,.ocean-v2 #detail .hero-immersion span{color:var(--ob-navy)!important}
-.ocean-v2 #detail .hero-immersion{background:var(--ob-lime);color:var(--ob-navy);border-color:var(--ob-lime);font-weight:800;box-shadow:0 12px 30px -10px rgba(224,255,145,.7);animation:immPulse 2.8s ease-in-out infinite}
-.ocean-v2 .hero-immersion::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ob-coral);margin-right:8px;vertical-align:1px;box-shadow:0 0 0 0 rgba(255,122,85,.7);animation:livePing 1.8s infinite}
+.ocean-v2 #detail .hero-immersion,.ocean-v2 #detail .hero-immersion span{color:var(--t-acc-ink)!important}
+.ocean-v2 #detail .hero-immersion{background:var(--t-acc);color:var(--t-acc-ink);border-color:var(--ob-lime);font-weight:800;box-shadow:0 12px 30px -10px var(--t-glow);animation:immPulse 2.8s ease-in-out infinite}
+.ocean-v2 .hero-immersion::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--ob-coral);margin-right:8px;vertical-align:1px;box-shadow:0 0 0 0 var(--t-glow);animation:livePing 1.8s infinite}
 @keyframes immPulse{0%,100%{transform:none}50%{transform:translateY(-2px)}}
-@keyframes livePing{to{box-shadow:0 0 0 9px rgba(255,122,85,0)}}
+@keyframes livePing{to{box-shadow:0 0 0 9px transparent}}
 .ocean-v2 .dtab.active{color:var(--ob-cobalt)}
 .ocean-v2 .dtab.active::after{background:var(--ob-cobalt)}
 .ocean-v2 .block{border-radius:var(--ob-radius);border-color:var(--ob-line)}
@@ -117,93 +112,92 @@ body.ocean-v2{color:var(--ob-ink)}
 @media (prefers-reduced-motion:reduce){.ocean-v2 .hero-immersion,.ocean-v2 .hero-immersion::before{animation:none}}
 
 /* Bandeau « Voyage dans le spot » dans la fiche */
-.ob-voyage-banner{position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;margin:16px 0;padding:18px;border:0;width:100%;border-radius:24px;overflow:hidden;color:#fff;text-align:left;cursor:pointer;isolation:isolate;
+.ob-voyage-banner{position:relative;display:grid;grid-template-columns:1fr auto;align-items:center;gap:14px;margin:16px 0;padding:18px;border:0;width:100%;border-radius:24px;overflow:hidden;color:var(--t-on-main);text-align:left;cursor:pointer;isolation:isolate;
   background:linear-gradient(100deg,color-mix(in srgb,var(--t-deep) 94%,transparent),color-mix(in srgb,var(--t-main2) 72%,transparent)),var(--ob-cover,none) center/cover,var(--ob-navy);box-shadow:var(--ob-shadow-lg);transition:transform .3s cubic-bezier(.22,1,.36,1)}
 .ob-voyage-banner:hover{transform:translateY(-2px)}
 .ob-voyage-banner small{display:block;font-size:10.5px;font-weight:800;letter-spacing:.14em;color:var(--ob-lime)}
 .ob-voyage-banner b{display:block;font-family:"Barlow Condensed",sans-serif;font-size:28px;font-weight:800;line-height:1;text-transform:uppercase;margin:4px 0}
 .ob-voyage-banner em{display:block;font-style:normal;font-size:13px;opacity:.88;line-height:1.4}
-.ob-voyage-banner span.go{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--ob-lime);color:var(--ob-navy)}
+.ob-voyage-banner span.go{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;background:var(--t-acc);color:var(--t-acc-ink)}
 .ob-voyage-banner span.go svg{width:22px;height:22px}
 
 /* ---------- Boutons génériques ---------- */
-.ocean-v2 .chal-btn{background:var(--ob-cobalt);color:#fff}
-.ocean-v2 .onb .onb-btn{background:var(--ob-lime);color:var(--ob-navy);box-shadow:0 14px 34px -12px rgba(224,255,145,.75)}
-.ocean-v2 .onb .dots span.on{background:var(--ob-lime)}
-.ocean-v2 .onb .onb-kicker{color:var(--ob-lime)}
-.ocean-v2 .onb{background:radial-gradient(120% 80% at 50% 0%,var(--g-soft,#2a66f0),var(--t-nav-c) 55%,var(--t-deep))}
+.ocean-v2 .chal-btn{background:var(--t-main);color:var(--t-on-main)}
+.ocean-v2 .onb .onb-btn{background:var(--t-main);color:var(--t-on-main);box-shadow:0 14px 34px -12px var(--t-glow)}
+.ocean-v2 .onb .dots span.on{background:var(--t-main)}
+.ocean-v2 .onb{background:var(--t-page)}
 
 /* ---------- En-têtes Défis, Profil, Voyages ---------- */
-.ocean-v2 #chalTop{background:linear-gradient(90deg,color-mix(in srgb,var(--t-deep) 94%,transparent) 0%,color-mix(in srgb,var(--t-deep) 78%,transparent) 42%,color-mix(in srgb,var(--t-main2) 18%,transparent) 100%),url('assets/design/protect.webp') right 56%/cover!important;border:0!important;color:#fff;box-shadow:var(--ob-shadow-lg)}
-.ocean-v2 #profTop{background:radial-gradient(ellipse at 88% 0%,rgba(224,255,145,.22),transparent 55%),linear-gradient(125deg,var(--t-deep),var(--t-main2))!important;border:0!important;color:#fff;box-shadow:var(--ob-shadow-lg)}
-.ocean-v2 #profTop .ph-lvl{background:var(--ob-lime);color:var(--ob-navy)}
+.ocean-v2 #chalTop{background:linear-gradient(90deg,color-mix(in srgb,var(--t-deep) 94%,transparent) 0%,color-mix(in srgb,var(--t-deep) 78%,transparent) 42%,color-mix(in srgb,var(--t-main2) 18%,transparent) 100%),url('assets/design/protect.webp') right 56%/cover!important;border:0!important;color:var(--t-on-main);box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 #profTop{background:radial-gradient(ellipse at 88% 0%,color-mix(in srgb,var(--t-acc) 22%,transparent),transparent 55%),linear-gradient(125deg,var(--t-deep),var(--t-main2))!important;border:0!important;color:var(--t-on-main);box-shadow:var(--ob-shadow-lg)}
+.ocean-v2 #profTop .ph-lvl{background:var(--t-acc);color:var(--t-acc-ink)}
 
 /* ---------- Explorer : en-tête de destination lisible, états actifs cobalt ---------- */
-.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop{background-image:linear-gradient(95deg,color-mix(in srgb,var(--t-deep) 90%,transparent) 0%,color-mix(in srgb,var(--t-deep) 55%,transparent) 55%,color-mix(in srgb,var(--t-main2) 12%,transparent) 100%),var(--region-photo)!important;box-shadow:var(--ob-shadow-lg)}
-.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop h1,.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop h1 span{color:#fff!important}
-.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop .page-eyebrow{color:var(--ob-lime)}
-.ocean-v2 .chip.active,.ocean-v2 .sp-chip.active{background:var(--ob-cobalt)!important;border-color:var(--ob-cobalt)!important;color:#fff!important}
-.ocean-v2 .field-activity-option.active,.ocean-v2 [aria-pressed=true].field-activity-option{background:var(--ob-cobalt)!important;color:#fff!important}
-.ocean-v2 .im-activity-choices button[aria-pressed=true],.ocean-v2 .im-activity-choices button.active{background:var(--ob-cobalt)!important;border-color:var(--ob-cobalt)!important;color:#fff!important}
+.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop{background-image:linear-gradient(95deg,color-mix(in srgb,var(--t-scrim) 78%,transparent) 0%,color-mix(in srgb,var(--t-scrim) 58%,transparent) 55%,color-mix(in srgb,var(--t-scrim) 30%,transparent) 100%),var(--region-photo)!important;box-shadow:var(--ob-shadow-lg)}
+.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop h1,.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop h1 span{color:var(--t-on-main)!important}
+.ocean-v2:not(.is-world-picker) #spots:not(.map-mode) #spotsTop .page-eyebrow{color:var(--t-acc)}
+.ocean-v2 .chip.active,.ocean-v2 .sp-chip.active{background:var(--t-main)!important;border-color:var(--t-main)!important;color:var(--t-on-main)!important}
+.ocean-v2 .field-activity-option.active,.ocean-v2 [aria-pressed=true].field-activity-option{background:var(--t-main)!important;color:var(--t-on-main)!important}
+.ocean-v2 .im-activity-choices button[aria-pressed=true],.ocean-v2 .im-activity-choices button.active{background:var(--t-main)!important;border-color:var(--t-main)!important;color:var(--t-on-main)!important}
 
 /* ---------- Audit septembre 2026 : lisibilité et palette cobalt partout ---------- */
 [hidden]{display:none!important}
 /* Social */
 .ocean-v2 .community-hero{background:linear-gradient(115deg,var(--ob-navy),var(--ob-cobalt));box-shadow:var(--ob-shadow-lg)}
-.ocean-v2 .community-hero h1{color:#fff}
+.ocean-v2 .community-hero h1{color:var(--t-on-main)}
 .ocean-v2 .community-hero h1 b,.ocean-v2 .community-hero .community-kicker{color:var(--ob-lime)}
-.ocean-v2 .community-hero p{color:var(--g-pale,#dbe6ff)}
+.ocean-v2 .community-hero p{color:var(--t-tint)}
 @media (min-width:960px){.ocean-v2 #community{padding-left:0;padding-right:0;padding-top:18px}}
 
 /* Défis : en-tête aligné sur le contenu, encarts bleu ciel */
 .ocean-v2 #chalTop{max-width:none;margin-left:0;margin-right:0}
-.ocean-v2 #chalTop .sub{color:var(--g-pale,#dbe6ff)}
+.ocean-v2 #chalTop .sub{color:var(--t-tint)}
 .ocean-v2 .chal-xp{color:var(--ob-cobalt)}
 .ocean-v2 .chal-why{background:var(--ob-sky);color:var(--ob-muted)}.ocean-v2 .chal-why b{color:var(--ob-navy)}
 .ocean-v2 .chal-ic{color:var(--ob-navy)!important}
-.ocean-v2 .ql-tx b{color:var(--ob-navy)}.ocean-v2 .ql-tx span{color:var(--g-main,#3a4f7a)}
-.ocean-v2 .ql-ic{background:#fff;color:var(--ob-cobalt)}
+.ocean-v2 .ql-tx b{color:var(--ob-navy)}.ocean-v2 .ql-tx span{color:var(--t-main)}
+.ocean-v2 .ql-ic{background:var(--t-card);color:var(--ob-cobalt)}
 .ocean-v2 .ql-go{background:var(--ob-navy)}
-.ocean-v2 .evt{background:#fff;border-color:var(--ob-line)}
-.ocean-v2 .evt-a a.off{background:var(--ob-navy);color:#fff}
+.ocean-v2 .evt{background:var(--t-card);border-color:var(--ob-line)}
+.ocean-v2 .evt-a a.off{background:var(--ob-navy);color:var(--t-on-main)}
 .ocean-v2 .cmp-head{background:linear-gradient(120deg,var(--ob-navy),var(--ob-navy-2))}
-.ocean-v2 .cmp-head p{color:var(--g-line,#c9d6f3)}
+.ocean-v2 .cmp-head p{color:var(--t-line)}
 .ocean-v2 .cmp-pts{color:var(--ob-navy)}
 .ocean-v2 .cmp-bar{background:var(--ob-sky)}
 .ocean-v2 .cmp-fill{background:linear-gradient(90deg,var(--ob-cobalt),var(--ob-blue))}
 .ocean-v2 .cmp-rule{background:var(--ob-mist);border-color:var(--ob-line)}
 .ocean-v2 .cmp-rule .rn,.ocean-v2 .cmp-rule svg{color:var(--ob-cobalt)}
-.ocean-v2 .gsw{background:var(--ob-sky)}.ocean-v2 .gsw button{color:var(--ob-muted)}.ocean-v2 .gsw button.on{color:#fff}
-.ocean-v2 .sd.on{background:var(--ob-lime);color:var(--ob-navy)}
-.ocean-v2 .qb.got{background:var(--ob-sky);border-color:var(--g-line,#c9d6f3);color:var(--ob-navy)}
+.ocean-v2 .gsw{background:var(--ob-sky)}.ocean-v2 .gsw button{color:var(--ob-muted)}.ocean-v2 .gsw button.on{color:var(--t-on-main)}
+.ocean-v2 .sd.on{background:var(--t-acc);color:var(--t-acc-ink)}
+.ocean-v2 .qb.got{background:var(--ob-sky);border-color:var(--t-line);color:var(--ob-navy)}
 
 /* Profil : badges verrouillés lisibles, carnet vide accueillant */
-.ocean-v2 .badge .e{background:var(--ob-lime);color:var(--ob-navy)}
-.ocean-v2 .badge.locked{background:var(--ob-sky);border-color:var(--g-line,#c9d6f3);opacity:1}
-.ocean-v2 .badge.locked .e{background:#fff;color:var(--ob-cobalt)}
+.ocean-v2 .badge .e{background:var(--t-acc);color:var(--t-acc-ink)}
+.ocean-v2 .badge.locked{background:var(--ob-sky);border-color:var(--t-line);opacity:1}
+.ocean-v2 .badge.locked .e{background:var(--t-card);color:var(--ob-cobalt)}
 .ocean-v2 .badge.locked .n{color:var(--ob-navy)}
-.ocean-v2 .badge.locked .how{color:var(--g-main,#3a4f7a)}
-.sess-empty{display:flex;align-items:center;gap:16px;padding:18px 20px;border:1px solid var(--ob-line);border-radius:18px;background:linear-gradient(120deg,var(--ob-sky),#fff 70%);box-shadow:var(--ob-shadow)}
+.ocean-v2 .badge.locked .how{color:var(--t-main)}
+.sess-empty{display:flex;align-items:center;gap:16px;padding:18px 20px;border:1px solid var(--ob-line);border-radius:18px;background:linear-gradient(120deg,var(--ob-sky),var(--t-card) 70%);box-shadow:var(--ob-shadow)}
 .sess-empty img{flex:0 0 64px;width:64px;height:64px;border-radius:16px;object-fit:cover}
 .sess-empty b{display:block;color:var(--ob-navy);font:800 18px/1.15 "Barlow Condensed",sans-serif;text-transform:uppercase;letter-spacing:.01em}
 .sess-empty p{margin:4px 0 10px;color:var(--ob-muted);font-size:12.5px;line-height:1.5}
-.sess-empty-btn{border:0;border-radius:999px;padding:10px 16px;min-height:40px;background:var(--ob-coral);color:#1b1410;font-weight:800;font-size:12.5px;cursor:pointer}
+.sess-empty-btn{border:0;border-radius:999px;padding:10px 16px;min-height:40px;background:var(--t-cta);color:var(--t-cta-ink);font-weight:800;font-size:12.5px;cursor:pointer}
 .sess-empty-btn:hover{background:var(--ob-coral-hi)}
 .sess-empty-btn:focus-visible{outline:3px solid var(--ob-cobalt);outline-offset:2px}
 
 /* Cartes spot : point « en direct » discret */
-.ocean-v2 .spot-meta span.live-dot{flex:none;width:6px;height:6px;min-height:0;padding:0;border:0;border-radius:50%;background:#7bd23b;box-shadow:0 0 0 3px rgba(224,255,145,.55);align-self:center;font-size:0}
+.ocean-v2 .spot-meta span.live-dot{flex:none;width:6px;height:6px;min-height:0;padding:0;border:0;border-radius:50%;background:var(--t-ok);box-shadow:0 0 0 3px color-mix(in srgb,var(--t-ok) 28%,transparent);align-self:center;font-size:0}
 /* Niveaux : trois repères distincts dans la palette */
-.lvl-debutant{background:var(--ob-lime);color:var(--ob-navy)}
-.lvl-intermediaire{background:var(--ob-cobalt);color:#fff}
-.lvl-expert{background:var(--ob-coral);color:#1b1410}
+.lvl-debutant{background:var(--t-acc);color:var(--t-acc-ink)}
+.lvl-intermediaire{background:var(--t-main);color:var(--t-on-main)}
+.lvl-expert{background:var(--t-cta);color:var(--t-cta-ink)}
 /* Favoris centré comme les autres filtres */
 .ocean-v2 #favChip{display:inline-flex;align-items:center;gap:6px;line-height:1}
 .ocean-v2 #favChip svg{width:16px;height:16px;flex:none;display:block}
 
 /* Explorer : en-tête de la carte compact et cobalt */
 .ocean-v2 #spots.map-mode #spotsTop{background:linear-gradient(110deg,var(--ob-navy),var(--ob-cobalt))!important;padding:14px 22px!important;border-radius:16px;box-shadow:var(--ob-shadow)}
-.ocean-v2 #spots.map-mode #spotsTop h1,.ocean-v2 #spots.map-mode #spotsTop h1 span{color:#fff!important;font-size:26px}
+.ocean-v2 #spots.map-mode #spotsTop h1,.ocean-v2 #spots.map-mode #spotsTop h1 span{color:var(--t-on-main)!important;font-size:26px}
 @media (max-width:639px){
   .ocean-v2 #spots.map-mode #spotsTop,.ocean-v2 #spots.map-mode #explorePath{display:none!important}
   .ocean-v2 #spots.map-mode #wBack{margin:4px 0 0}
@@ -224,27 +218,27 @@ body.ocean-v2{color:var(--ob-ink)}
 .ocean-v2 #detail .im-terrain-copy li>span{background:var(--ob-sky);color:var(--ob-cobalt)}
 .ocean-v2 .experience-video-search>span:first-child{background:var(--ob-sky);color:var(--ob-cobalt)}
 .ocean-v2 .area-map-heading button{background:var(--ob-sky);border-color:var(--t-line);color:var(--ob-cobalt)}
-.ocean-v2 .area-map-heading button:hover{background:var(--g-pale,#d6e2ff)}
+.ocean-v2 .area-map-heading button:hover{background:var(--t-tint)}
 
 /* Accueil */
 .ocean-v2 .today-why{padding:10px 2px 0}
 .ocean-v2 .today-why .poulpy-mini{flex:0 0 40px;width:40px;height:40px;border-radius:12px;overflow:hidden}
-.ocean-v2 .th-note{background:var(--ob-lime);color:var(--ob-navy)}
+.ocean-v2 .th-note{background:var(--t-acc);color:var(--t-acc-ink)}
 @media (min-width:960px){.ocean-v2 #home #poulpySpotlight{display:none}}
 
 /* Voyages : le tampon reste entier, à côté de la carte postale */
 @media (min-width:960px){.trip-welcome .trip-stamp{display:grid;top:26px;right:calc(29% + 58px);width:104px;height:104px;font-size:14px;line-height:1.05;padding:8px;box-sizing:border-box}}
 
 /* Divers restes turquoise */
-.ocean-v2 .tide-ev.pm{background:var(--ob-sky);color:var(--ob-cobalt);border-color:var(--g-line,#c9d6f3)}
+.ocean-v2 .tide-ev.pm{background:var(--ob-sky);color:var(--ob-cobalt);border-color:var(--t-line)}
 .chrome-sound{border-color:var(--ob-line);color:var(--ob-cobalt)}
 .poulpy-chat-context{border-color:var(--ob-line);background:var(--ob-sky);color:var(--ob-cobalt)}
 .poulpy-chat-privacy{color:var(--ob-muted)}
-.trip-checklist label.done span{color:#8a97b3}
+.trip-checklist label.done span{color:var(--t-ink2)}
 .trip-spot-results em{color:var(--ob-muted)}
 .ocean-v2 #fieldOverview.is-compact .field-compare-slot{padding:0;border:0}
-.ocean-v2 #fieldOverview.is-compact .spot-compare-button{background:#fff;color:var(--ob-cobalt);border-color:var(--t-line);min-height:40px}
-.ocean-v2 #fieldOverview.is-compact .spot-compare-button.selected{background:var(--ob-cobalt);color:#fff;border-color:var(--ob-cobalt)}
+.ocean-v2 #fieldOverview.is-compact .spot-compare-button{background:var(--t-card);color:var(--ob-cobalt);border-color:var(--t-line);min-height:40px}
+.ocean-v2 #fieldOverview.is-compact .spot-compare-button.selected{background:var(--ob-cobalt);color:var(--t-on-main);border-color:var(--ob-cobalt)}
 
 /* ---------- Deuxième passe : écrans secondaires ---------- */
 /* Focus des champs : bleu cobalt, plus de halo turquoise */
@@ -270,14 +264,14 @@ input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px soli
 .ocean-v2 #detail #detailHero.illustrated-hero .hero-photo.on{filter:saturate(1.04)}
 .ocean-v2 #detail #detailHero.illustrated-hero::after{background:linear-gradient(180deg,color-mix(in srgb,var(--t-deep) 8%,transparent) 0%,color-mix(in srgb,var(--t-deep) 22%,transparent) 40%,color-mix(in srgb,var(--t-deep) 88%,transparent) 100%)}
 /* Boutons photo : blanc et citron vert plutôt que beige */
-.ocean-v2 #detail .hero-more{background:rgba(255,255,255,.94);border-color:#fff}
-.experience-photo-open strong{background:var(--ob-lime);color:var(--ob-navy)}
+.ocean-v2 #detail .hero-more{background:color-mix(in srgb,var(--t-card) 94%,transparent);border-color:var(--t-line)}
+.experience-photo-open strong{background:var(--t-acc);color:var(--t-acc-ink)}
 
 /* Recherche sans résultat : un message utile et des sorties */
-.ocean-v2 .nospot{display:flex;flex-direction:column;align-items:center;gap:6px;padding:34px 18px;border:1px dashed var(--g-line,#c9d6f3);border-radius:18px;background:var(--ob-sky);color:var(--ob-muted)}
+.ocean-v2 .nospot{display:flex;flex-direction:column;align-items:center;gap:6px;padding:34px 18px;border:1px dashed var(--t-line);border-radius:18px;background:var(--ob-sky);color:var(--ob-muted)}
 .ocean-v2 .nospot b{color:var(--ob-navy);font-size:15px}
 .ocean-v2 .nospot span{font-size:12.5px}
-.ocean-v2 .nospot button{margin:8px auto 0;min-height:42px;border-radius:999px;border:1px solid var(--t-line);background:#fff;color:var(--ob-cobalt)}
+.ocean-v2 .nospot button{margin:8px auto 0;min-height:42px;border-radius:999px;border:1px solid var(--t-line);background:var(--t-card);color:var(--ob-cobalt)}
 .ocean-v2 .nospot button+button{margin-top:0}
 
 /* Voyages */
@@ -306,10 +300,10 @@ input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px soli
 .community-dialog label.community-consent{display:block;font-weight:600;line-height:1.55}
 .community-dialog label.community-consent input{margin:0 6px 0 0;vertical-align:-2px}
 .community-share-fields fieldset{margin:0;padding:8px 12px 10px}
-.community-share-step{margin:0;padding:10px 12px;border-radius:10px;background:var(--ob-sky);color:#24526e;font-size:11px;font-weight:800}
+.community-share-step{margin:0;padding:10px 12px;border-radius:10px;background:var(--ob-sky);color:var(--t-main);font-size:11px;font-weight:800}
 
 /* Réglages : le choix de Poulpy n'est pas une action destructive */
-.ocean-v2 .set-reset.set-neutral{background:var(--ob-sky);border-color:var(--g-line,#c9d6f3);color:var(--ob-cobalt)}
+.ocean-v2 .set-reset.set-neutral{background:var(--ob-sky);border-color:var(--t-line);color:var(--ob-cobalt)}
 .set-about a{display:inline-block;padding:6px 0}
 .ai-consent h3{text-wrap:balance}
 /* Pendant l'accueil plein écran, le message se centre sur l'écran (pas de barre latérale visible) */

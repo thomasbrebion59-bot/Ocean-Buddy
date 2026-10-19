@@ -1,3 +1,4 @@
+/* @creme-tokens */
 /* Ocean Buddy — finitions : fluidité, immersion et corrections d'affichage.
    Dernière couche de styles, chargée après toutes les autres. */
 
@@ -9,7 +10,7 @@ button,a,[role=button],.spot,.isl,.chal-btn{touch-action:manipulation}
 
 /* En-tête : une ombre douce apparaît dès que le contenu défile dessous. */
 .app-chrome{transition:box-shadow .25s ease,background-color .25s ease;position:relative;z-index:30}
-body.is-scrolled .app-chrome{box-shadow:0 1px 0 rgba(8,47,59,.06),0 10px 28px -12px rgba(8,47,59,.22)}
+body.is-scrolled .app-chrome{box-shadow:0 1px 0 color-mix(in srgb,var(--t-shadow) 6%,transparent),0 10px 28px -12px color-mix(in srgb,var(--t-shadow) 22%,transparent)}
 
 /* ---------- Apparition des cartes ---------- */
 .rv{opacity:0;translate:0 18px}
@@ -31,7 +32,7 @@ img.img-ready{opacity:1;transition:opacity .5s ease}
 /* Un seul bouton retour : celui de la barre du haut suffit quand il est affiché. */
 body.has-app-back #detail .back-btn{display:none}
 /* Onglets collants de la fiche : fond opaque, le texte ne transparaît plus. */
-#dTabs{background:#f5f5f0!important;box-shadow:0 1px 0 rgba(8,47,59,.07)}
+#dTabs{background:var(--t-page)!important;box-shadow:0 1px 0 color-mix(in srgb,var(--t-shadow) 7%,transparent)}
 
 /* ---------- Barre d'onglets mobile ---------- */
 .nav .mobile-label{white-space:nowrap}
@@ -52,8 +53,8 @@ body.has-app-back #detail .back-btn{display:none}
 }
 
 /* ---------- Défis : progression réelle ---------- */
-.chal-goal{display:block;margin-top:6px;font-size:11px;font-weight:600;color:#5d7285;letter-spacing:.01em}
-.ocean-v2 .chal-btn.pending{background:var(--g-pale,#e9eef6)!important;color:#4a5d78!important;box-shadow:none!important}
+.chal-goal{display:block;margin-top:6px;font-size:11px;font-weight:600;color:var(--t-ink2);letter-spacing:.01em}
+.ocean-v2 .chal-btn.pending{background:var(--t-tint)!important;color:var(--t-ink2)!important;box-shadow:none!important}
 .chal.is-done .chal-body h4{text-decoration:none}
 .chal.is-done{opacity:.86}
 
@@ -61,11 +62,11 @@ body.has-app-back #detail .back-btn{display:none}
 .badge{position:relative}
 .badge.locked{opacity:1!important}
 .badge.locked .e{opacity:.55}
-.badge.locked .n{color:#8193a3}
-.badge .how{font-size:9px;line-height:1.25;color:#8a9aa9;margin-top:4px;padding:0 4px}
+.badge.locked .n{color:var(--t-ink2)}
+.badge .how{font-size:9px;line-height:1.25;color:var(--t-ink2);margin-top:4px;padding:0 4px}
 
 /* ---------- Série de jours ---------- */
-.sd.today .dd{box-shadow:0 0 0 2px #e0ff91,0 0 0 4px color-mix(in srgb,var(--t-main) 35%,transparent)}
+.sd.today .dd{box-shadow:0 0 0 2px var(--t-acc),0 0 0 4px color-mix(in srgb,var(--t-main) 35%,transparent)}
 
 /* ---------- Réglages ---------- */
 .set-about a{color:var(--t-main);font-weight:700;text-decoration:none;border-bottom:1px solid color-mix(in srgb,var(--t-main) 25%,transparent)}
@@ -73,31 +74,31 @@ body.has-app-back #detail .back-btn{display:none}
 .settings-btn svg{display:block;margin:auto}
 
 /* ---------- Communauté : ouverture prochaine ---------- */
-.community-service-state.is-soon{display:flex;gap:16px;align-items:flex-start;border-style:solid!important;background:linear-gradient(135deg,var(--g-pale,#eef4ff),#f6fbf4)!important}
-.community-service-state.is-soon img{width:72px;height:72px;border-radius:20px;object-fit:cover;flex:none;box-shadow:0 8px 18px -8px rgba(8,47,59,.35)}
-.community-service-state.is-soon b{display:block;font-size:17px;color:var(--g-main,#123a8f);margin-bottom:4px}
+.community-service-state.is-soon{display:flex;gap:16px;align-items:flex-start;border-style:solid!important;background:linear-gradient(135deg,var(--t-tint),var(--t-card))!important}
+.community-service-state.is-soon img{width:72px;height:72px;border-radius:20px;object-fit:cover;flex:none;box-shadow:0 8px 18px -8px color-mix(in srgb,var(--t-shadow) 35%,transparent)}
+.community-service-state.is-soon b{display:block;font-size:17px;color:var(--t-main);margin-bottom:4px}
 .community-service-state.is-soon p{margin:0 0 12px}
 .community-service-state.is-soon>div{min-width:0}
 @media (max-width:520px){.community-service-state.is-soon{flex-direction:column;gap:12px}.community-service-state.is-soon img{width:56px;height:56px;border-radius:16px}}
-.community-service-state.is-soon button{background:var(--t-main);color:#fff;border:0;border-radius:999px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer}
+.community-service-state.is-soon button{background:var(--t-main);color:var(--t-on-main);border:0;border-radius:999px;padding:10px 16px;font-weight:700;font-size:13px;cursor:pointer}
 
 /* ---------- Hors connexion ---------- */
-body.is-offline .app-chrome::after{content:'Hors connexion';position:absolute;left:50%;bottom:-11px;translate:-50% 0;background:var(--t-deep);color:#e0ff91;font:700 10px/1 var(--body,system-ui);letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;box-shadow:0 6px 16px -6px rgba(0,0,0,.35)}
+body.is-offline .app-chrome::after{content:'Hors connexion';position:absolute;left:50%;bottom:-11px;translate:-50% 0;background:var(--t-deep);color:var(--t-acc);font:700 10px/1 var(--body,system-ui);letter-spacing:.06em;text-transform:uppercase;padding:5px 10px;border-radius:999px;box-shadow:0 6px 16px -6px color-mix(in srgb,var(--t-shadow) 35%,transparent)}
 
 /* ---------- Moins d'animations ---------- */
 .reduce-motion .rv{opacity:1!important;translate:none!important}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1!important;translate:none!important}img.img-wait{opacity:1}}
 
 /* ---------- Ambiance sonore ---------- */
-.chrome-sound{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;border:1px solid #dce6e0;background:#fff;color:#50756d;cursor:pointer;transition:background-color .2s ease,color .2s ease,scale .15s ease}
+.chrome-sound{display:grid;place-items:center;flex:none;width:40px;height:40px;border-radius:50%;border:1px solid var(--t-line);background:var(--t-card);color:var(--t-ink2);cursor:pointer;transition:background-color .2s ease,color .2s ease,scale .15s ease}
 .chrome-sound svg{width:19px;height:19px}
 .chrome-sound:active{scale:.92}
-.chrome-sound.on{background:#e0ff91;border-color:#c9ec6e;color:var(--t-deep);animation:obSoundPulse 2.8s ease-in-out infinite}
-@keyframes obSoundPulse{0%,100%{box-shadow:0 0 0 0 rgba(224,255,145,.0)}50%{box-shadow:0 0 0 6px rgba(224,255,145,.45)}}
+.chrome-sound.on{background:var(--t-acc);border-color:var(--t-acc);color:var(--t-acc-ink);animation:obSoundPulse 2.8s ease-in-out infinite}
+@keyframes obSoundPulse{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 0 6px var(--t-glow)}}
 @media (max-width:639px){.chrome-sound{margin-left:auto;width:38px;height:38px}.chrome-sound+.mobile-search{margin-left:0}}
 
 /* ---------- Partage d'un spot ---------- */
-.hero-share{position:absolute;z-index:5;display:grid;place-items:center;border:0;border-radius:50%;background:rgba(255,255,255,.92);color:var(--t-deep);box-shadow:0 6px 16px rgba(0,0,0,.18);cursor:pointer;transition:scale .15s ease}
+.hero-share{position:absolute;z-index:5;display:grid;place-items:center;border:0;border-radius:50%;background:color-mix(in srgb,var(--t-card) 92%,transparent);color:var(--t-deep);box-shadow:0 6px 16px color-mix(in srgb,var(--t-shadow) 18%,transparent);cursor:pointer;transition:scale .15s ease}
 .hero-share svg{width:19px;height:19px}
 .hero-share:active{scale:.92}
 
