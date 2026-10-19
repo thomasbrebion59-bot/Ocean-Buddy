@@ -6,7 +6,7 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
-const BASE = (process.env.SITE_BASE || 'https://thomasbrebion59-bot.github.io/Ocean-Buddy/').replace(/\/?$/, '/');
+const BASE = (process.env.SITE_BASE || 'https://ocean-buddy.pages.dev/').replace(/\/?$/, '/');
 const APP_ID = '6811870966';
 const STORE_URL = 'https://apps.apple.com/fr/app/ocean-buddy/id' + APP_ID;
 

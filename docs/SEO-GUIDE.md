@@ -2,8 +2,8 @@
 
 Ce guide explique, pas à pas, ce que TU dois faire toi-même. Rien ne se fait tout seul : Google et Bing doivent d'abord connaître le site, puis l'indexer. Compte de quelques jours à quelques semaines.
 
-Adresse actuelle du site : https://thomasbrebion59-bot.github.io/Ocean-Buddy/
-Le plan du site pour les moteurs : https://thomasbrebion59-bot.github.io/Ocean-Buddy/sitemap.xml
+Adresse actuelle du site : https://ocean-buddy.pages.dev/
+Le plan du site pour les moteurs : https://ocean-buddy.pages.dev/sitemap.xml
 
 Honnêteté : personne ne peut garantir une première place sur Google pour « Ocean Buddy ». Un nom de marque rare a de bonnes chances, mais seul Google décide. On met toutes les chances de notre côté, sans triche.
 
@@ -11,7 +11,7 @@ Honnêteté : personne ne peut garantir une première place sur Google pour « O
 
 1. Va sur https://search.google.com/search-console et connecte-toi avec ton compte Google.
 2. Clique « Ajouter une propriété ».
-3. Choisis « Préfixe d'URL » et colle : `https://thomasbrebion59-bot.github.io/Ocean-Buddy/`
+3. Choisis « Préfixe d'URL » et colle : `https://ocean-buddy.pages.dev/`
 4. Google te propose des méthodes de validation. Prends « Balise HTML » (ou « Fichier HTML »).
    - Balise : copie la ligne `<meta name="google-site-verification" content="...">` et envoie-la moi. Je l'ajoute dans `index.html`.
    - Fichier : télécharge le fichier `google....html` et envoie-le moi. Je le place à la racine du dépôt.
