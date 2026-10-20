@@ -58,6 +58,11 @@ function loadState(){try{const d=JSON.parse(localStorage.getItem(STORE_KEY)||'nu
   return true;}catch(e){return false;}}
 /* Onboarding terminé : drapeau explicite, ou profil existant qui a déjà une activité ou un niveau (même règle que le rideau de démarrage, index.html). */
 function isOnboarded(d){return window.OceanBoot?.onboarded?OceanBoot.onboarded(d):!!d&&typeof d==='object'&&(d.onboarded===true||!!d.level||!!d.sport);}
+/* Relance du WebView (mise à jour appliquée, copie native restaurée puis rechargement) : navigation.js rejoue l’écran
+   de la session, activité comprise. Une route capturée avant la restauration (sport vide) effaçait le sport enregistré :
+   le choix de la personne prime, on aligne la route avant que navigation.js la lise. */
+function alignRelaunchRoute(){try{const st=history.state;if(!st||st.owner!=='oceanbuddy-navigation-v1'||!st.route)return;
+  const sport=activeSport||null;if((st.route.sport||null)!==sport)history.replaceState({...st,route:{...st.route,sport}},'');}catch(e){}}
 
 const ECO=[
   /* chaque défi porte désormais son « pourquoi ça compte » : sans lui, on
@@ -2672,6 +2677,7 @@ document.getElementById('logoOcto2').innerHTML=poulpySVG();
 document.getElementById('fabOcto').innerHTML=poulpySVG();
 document.getElementById('chatOcto').innerHTML=poulpySVG();
 const returning=loadState();
+if(returning&&onbDone)alignRelaunchRoute();
 /* Après loadState : les Points Océan s’affichaient à 0 au lancement. */
 renderCompetition();
 if(dailyDone())document.querySelectorAll('[onclick^="completeDaily"]').forEach(markDaily);

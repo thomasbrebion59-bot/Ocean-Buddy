@@ -47,7 +47,7 @@ function env(seed = {}) {
     this.api={saveState,loadState,pickSport,pickLevel,finishOnb,openActivityGate:typeof openActivityGate==='function'?openActivityGate:null,
       chooseMySport:typeof chooseMySport==='function'?chooseMySport:null,chooseMyLevel:typeof chooseMyLevel==='function'?chooseMyLevel:null,
       renderMyChoice:typeof renderMyChoice==='function'?renderMyChoice:null,
-      setQuick:v=>{quickGate=v;},get:()=>({activeSport,chosenSport,chosenLevel,onbDone})};`, ctx);
+      alignRelaunchRoute,setQuick:v=>{quickGate=v;},get:()=>({activeSport,chosenSport,chosenLevel,onbDone})};`, ctx);
   return ctx;
 }
 const stored = c => JSON.parse(c.localStorage.getItem('oceanbuddy_v1'));
@@ -121,6 +121,19 @@ test('le résumé du profil affiche le sport et le niveau enregistrés', () => {
   const a = env({ oceanbuddy_v1: JSON.stringify({ sport: 'kayak', level: 'expert', onboarded: true }) });
   a.api.loadState(); a.api.renderMyChoice();
   assert.match(a.els.get('profSportVal').innerHTML, /kayak · Expert/);
+});
+
+test('relance du WebView : la route de session ne remplace pas le sport enregistré', () => {
+  const a = env({ oceanbuddy_v1: JSON.stringify({ sport: 'kitesurf', level: 'expert', onboarded: true }) });
+  let state = { owner: 'oceanbuddy-navigation-v1', index: 2, route: { screen: 'profile', sport: null, world: 'europe' } };
+  a.history = { get state() { return state; }, replaceState: s => { state = s; } };
+  a.api.loadState(); a.api.alignRelaunchRoute();
+  assert.equal(state.route.sport, 'kitesurf');
+  assert.equal(state.route.world, 'europe', 'le reste de la route est gardé');
+  assert.equal(state.index, 2);
+  /* Une route étrangère n’est pas touchée. */
+  state = { owner: 'autre', route: { sport: null } }; a.api.alignRelaunchRoute();
+  assert.equal(state.route.sport, null);
 });
 
 /* ---------- Copie native (mobile/client.js) ---------- */
