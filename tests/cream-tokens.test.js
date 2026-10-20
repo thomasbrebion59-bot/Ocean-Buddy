@@ -3,16 +3,15 @@
    Ne comptent pas : commentaires, url(...) (SVG en data URI), propriétés mask / -webkit-mask (couleur = alpha),
    et les blocs /* @creme-exception <étiquette> *\/ … /* @creme-exception-end *\/ dont l'étiquette figure dans EXCEPTIONS.
    Migration fichier par fichier : un fichier est vérifié dès qu'il porte le marqueur /* @creme-tokens *\/ (posé par
-   le groupe qui l'a migré). Le test « tous les fichiers migrés » reste en todo jusqu'à la fin du chantier. */
+   le groupe qui l'a migré). Le test « tous les CSS d’interface migrés » est actif ; native-glass.css est exempté (MARK_EXEMPT). */
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 
 const ROOT = path.join(__dirname, '..');
-/* Fichiers de jetons : activity-theme.css (app) ; information.css (pages légales autonomes qui ne chargent pas
-   activity-theme.css : leurs constantes crème sont déclarées dans son propre :root). */
-const TOKEN_FILES = new Set(['activity-theme.css', 'information.css']);
+/* Fichier de jetons : activity-theme.css (app). */
+const TOKEN_FILES = new Set(['activity-theme.css']);
 /* Exceptions autorisées : étiquette → fichiers où elle peut apparaître, et justification. */
 const EXCEPTIONS = {
   'tb-medaille': { files: ['badges.css'], why: 'Médailles et trophées : dégradés métalliques (or, argent, bronze, irisé) = emblèmes, pas interface.' },
@@ -22,6 +21,8 @@ const EXCEPTIONS = {
   'donnees': { files: ['spot-data.css', 'spot-immersion.css'], why: 'Couleurs de données (eau/air, échelles ordinales, schémas) vérifiées daltonisme : pas des couleurs de thème.' },
   'ambiance-masquee': { files: ['base.css'], why: 'Calque .ambiance : masqué par design.css (display:none!important), illustration jamais affichée ; non supprimé faute de preuve d’absence sur tous les écrans.' }
 };
+/* Fichiers exemptés du marqueur (interdits au chantier) : aucune couleur ni flou codé en dur, vérifié par le test. */
+const MARK_EXEMPT = { 'native-glass.css': 'Verre natif : fichier interdit au chantier crème (cahier §2 r.2) ; sans aucune couleur codée en dur, vérifié par le test.' };
 const MARK = '/* @creme-tokens */';
 const COLOR = /#[0-9a-fA-F]{8}\b|#[0-9a-fA-F]{6}\b|#[0-9a-fA-F]{4}\b|#[0-9a-fA-F]{3}\b|\brgba?\(|\bhsla?\(/g;
 
@@ -78,7 +79,15 @@ test('le fichier de jetons déclare les jetons crème utilisés par les CSS', ()
   assert.deepEqual(missing, [], 'jetons utilisés mais absents de :root dans activity-theme.css');
 });
 
-test('tous les CSS d’interface sont migrés vers les jetons crème', { todo: 'retirer ce todo quand tous les groupes ont posé /* @creme-tokens */' }, () => {
-  const left = uiCss().filter(f => !fs.readFileSync(path.join(ROOT, f), 'utf8').includes(MARK));
+test('fichiers exemptés du marqueur : aucune couleur codée en dur ni flou', () => {
+  const linked = uiCss();
+  const stale = Object.keys(MARK_EXEMPT).filter(f => !linked.includes(f));
+  assert.deepEqual(stale, [], 'exemption périmée : fichier absent de index.html');
+  const bad = uiCss().filter(f => f in MARK_EXEMPT).flatMap(offenders);
+  assert.deepEqual(bad, []);
+});
+
+test('tous les CSS d’interface sont migrés vers les jetons crème', () => {
+  const left = uiCss().filter(f => !(f in MARK_EXEMPT)).filter(f => !fs.readFileSync(path.join(ROOT, f), 'utf8').includes(MARK));
   assert.deepEqual(left, []);
 });

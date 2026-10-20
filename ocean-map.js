@@ -343,7 +343,8 @@
       return p;
     });
     /* Un échec ponctuel (réseau, cache) ne condamne pas le globe : on réessaie une fois avant la carte à plat. */
-    planetStarting.catch(e=>{console.warn('Globe 3D :',e);planetStarting=null;host.replaceChildren();if(++planetTries>=2){planetFailed=true;wrap?.classList.remove('is-globe','is-planet');}});
+    /* Globe créé mais mise en place interrompue : on le détruit, sinon le nouvel essai reprendrait un globe sans canevas. */
+    planetStarting.catch(e=>{console.warn('Globe 3D :',e);planetStarting=null;if(planet){const p=planet;planet=null;try{p.destroy();}catch(_){}}host.replaceChildren();if(++planetTries>=2){planetFailed=true;wrap?.classList.remove('is-globe','is-planet');}});
     return planetStarting;
   }
   /* Préchauffage : la carte détaillée (contexte WebGL, puis compilation des shaders au premier rendu, 0,5 à 1 s

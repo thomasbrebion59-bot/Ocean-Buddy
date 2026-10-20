@@ -238,7 +238,14 @@
     #include <colorspace_fragment>
   }`;
 
+  /* Échec en cours de création (textures, moteur…) : ce qui est déjà pris (écouteurs, observateur, contexte WebGL,
+     canevas) est rendu dans l’ordre inverse avant de propager l’erreur ; sinon un globe fantôme reste vivant. */
   async function create(host,opts={}){
+    const undo=[];
+    try{return await build(host,opts,undo);}
+    catch(e){for(const f of undo.reverse())try{f();}catch(_){}throw e;}
+  }
+  async function build(host,opts,undo){
     if(!supported())throw Error('webgl2');
     const T=await loadThree();
     const mobile=matchMedia('(max-width:759px), (pointer:coarse)').matches;
@@ -246,9 +253,10 @@
     canvas.tabIndex=0;canvas.setAttribute('role','application');
     canvas.setAttribute('aria-label','Globe interactif des spots. Glisse pour tourner la Terre, pince ou utilise plus et moins pour zoomer. Au clavier : flèches pour tourner, plus et moins pour zoomer.');
     const layer=document.createElement('div');layer.className='og-layer';
-    host.append(canvas,layer);
+    host.append(canvas,layer);undo.push(()=>{canvas.remove();layer.remove();});
     /* Écrans haute densité : l’anticrénelage matériel n’apporte rien de visible et coûte cher sur téléphone. */
     const renderer=new T.WebGLRenderer({canvas,antialias:!(mobile&&(devicePixelRatio||1)>=2),alpha:true,powerPreference:'high-performance'});
+    undo.push(()=>{renderer.dispose();renderer.forceContextLoss?.();});
     renderer.setClearColor(0x000000,0);renderer.autoClear=false;
     renderer.outputColorSpace=T.SRGBColorSpace;
     const maxTex=renderer.capabilities.maxTextureSize;
@@ -403,6 +411,7 @@
     function wake(){lastTouch=performance.now();invalidate();}
     const onVisible=()=>{if(!document.hidden)wake();};
     document.addEventListener('visibilitychange',onVisible);
+    undo.push(()=>{active=false;cancelAnimationFrame(raf);raf=0;clearTimeout(ambTimer);clearTimeout(sharpTimer);clearTimeout(restTimer);document.removeEventListener('visibilitychange',onVisible);});
     const easeInOut=t=>t<.5?4*t*t*t:1-(-2*t+2)**3/2;
     function frame(now){
       raf=0;if(!active)return;
@@ -487,6 +496,12 @@
        Dessinés en WebGL dans la même image que la Terre, avec des positions calculées à chaque
        image : ils restent collés à la planète pendant les gestes, sans le moindre décalage. */
     const overlay=new T.Scene(),ortho=new T.OrthographicCamera(0,1,0,1,-1,1);
+    /* Mémoire GPU : géométries et textures de toutes les scènes (destroy() et échec de création). */
+    const freeGpu=()=>{for(const sc of [scene,heavens,overlay])sc.traverse(o=>{
+      o.geometry?.dispose();
+      for(const m of [].concat(o.material||[])){for(const u of Object.values(m.uniforms||{}))if(u?.value?.isTexture)u.value.dispose();m.dispose();}
+    });};
+    undo.push(freeGpu);
     const quad=()=>{const g=new T.InstancedBufferGeometry();g.setIndex([0,1,2,0,2,3]);g.setAttribute('position',new T.BufferAttribute(new Float32Array([-.5,-.5,0,.5,-.5,0,.5,.5,0,-.5,.5,0]),3));return g;};
     const inst=(g,name,size,count)=>{const a=new T.InstancedBufferAttribute(new Float32Array(count*size),size);a.setUsage(T.DynamicDrawUsage);g.setAttribute(name,a);return a.array;};
     const premult={side:T.DoubleSide,transparent:true,depthTest:false,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor};
@@ -600,6 +615,7 @@
     let themeTimers=[];
     const onSport=()=>{applyTheme();themeTimers.forEach(clearTimeout);themeTimers=[520,1500,3200].map(ms=>setTimeout(applyTheme,ms));};
     document.addEventListener('ocean:sport',onSport);
+    undo.push(()=>{document.removeEventListener('ocean:sport',onSport);themeTimers.forEach(clearTimeout);});
     applyTheme(true);
     const pinMesh=new T.Mesh(pinGeo,new T.ShaderMaterial({...premult,uniforms:pinU,
       vertexShader:`attribute vec2 aAt;attribute float aType,aAlpha;attribute vec3 aC;varying vec2 vP;varying float vT,vA;varying vec3 vC;
@@ -925,7 +941,7 @@
       /* Le cadre change (tiroir, rotation, plein écran) : on garde l’échelle à l’écran, ou la vue d’ensemble. */
       view.dist=clampDist(overviewOn?maxDist():keepKpp?distForKpp(keepKpp):view.dist);keepKpp=kpp();invalidate();scheduleLabels();
     }
-    const ro=new ResizeObserver(()=>{lastTouch=performance.now();resize();});ro.observe(host);
+    const ro=new ResizeObserver(()=>{lastTouch=performance.now();resize();});ro.observe(host);undo.push(()=>ro.disconnect());
     function texParams(tex,srgb){
       tex.colorSpace=srgb?T.SRGBColorSpace:T.NoColorSpace;tex.wrapS=T.RepeatWrapping;tex.wrapT=T.ClampToEdgeWrapping;
       tex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());tex.generateMipmaps=true;tex.minFilter=T.LinearMipmapLinearFilter;tex.magFilter=T.LinearFilter;
@@ -975,7 +991,8 @@
     /* En cas d’échec du chemin rapide (décodeur, mémoire), on retombe sur l’ancien chargement. */
     const smoothTexture=(url,srgb,budget)=>streamTexture(url,srgb,budget).catch(e=>dead?Promise.reject(e):loadTexture(url,srgb));
     /* Surface (Blue Marble) et relief ; nuages et lumières de la nuit seulement quand on les affiche. */
-    const conn=navigator.connection;let dead=false;
+    /* dead arrête aussi les textures encore en cours d’envoi par bandes. */
+    const conn=navigator.connection;let dead=false;undo.push(()=>{dead=true;});
     /* Shaders compilés pendant le chargement des textures (KHR_parallel_shader_compile si disponible) :
        la première image n’attend plus leur compilation. Mêmes programmes que ceux de la première image. */
     const shadersReady=Promise.all([[heavens,skyCam],[scene,camera],[overlay,ortho]].map(([s,c])=>Promise.resolve().then(()=>renderer.compileAsync(s,c)))).catch(()=>{});
@@ -996,7 +1013,7 @@
     /* Ordinateur : la surface en 8K arrive ensuite, pour des côtes plus fines au zoom. */
     /* Surface 8K pour un zoom net (téléphones récents compris : textures 16K prises en charge). */
     /* Jamais pendant les 10 premières secondes de l’app (démarrage stable), ni dans l’app iOS (textures 4K seulement), ni pour le petit globe de l’accueil (hd:false). */
-    let hdTimer=0;
+    let hdTimer=0;undo.push(()=>clearTimeout(hdTimer));
     /* La 4K reste affichée pendant tout le chargement ; la 8K, décodée hors du fil principal puis envoyée par bandes
        dans les moments d’inactivité (8 ms au plus par tranche), ne la remplace qu’une fois complète. */
     if(M.wantsHd8k({hd:opts.hd,native:document.documentElement.classList.contains('native-app'),mobile,maxTex,saveData:!!conn?.saveData}))hdTimer=setTimeout(()=>smoothTexture(asset('assets/globe/earth-day-8k.webp'),true,8).then(tex=>{if(dead){tex.dispose();return;}const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;old?.dispose();invalidate();}).catch(()=>{}),Math.max(1200,10000-performance.now()));
@@ -1069,10 +1086,7 @@
         Object.values(sstAnim).forEach(cancelAnimationFrame);
         ro.disconnect();
         /* Libère la mémoire GPU : géométries et textures de toutes les scènes, puis le contexte WebGL lui-même (limite de contextes des navigateurs). Un nouveau globe crée son propre canvas et son propre moteur. */
-        for(const sc of [scene,heavens,overlay])sc.traverse(o=>{
-          o.geometry?.dispose();
-          for(const m of [].concat(o.material||[])){for(const u of Object.values(m.uniforms||{}))if(u?.value?.isTexture)u.value.dispose();m.dispose();}
-        });
+        freeGpu();
         renderer.dispose();renderer.forceContextLoss?.();
         canvas.remove();layer.remove();
       }
