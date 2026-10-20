@@ -38,9 +38,12 @@ async function main(){
   // Numéro du contenu embarqué : les mises à jour directes (scripts/publish-app-update.cjs) le comparent à app-update/latest.json.
   const seq=Number(process.env.OB_BUNDLE_SEQ)||Number(new Date().toISOString().replace(/\D/g,'').slice(0,12));
   /* Les mises à jour directes exécutent du code : leur adresse est toujours en HTTPS et se termine par « / ». */
-  const updateBase=process.env.OB_UPDATE_BASE||'https://thomasbrebion59-bot.github.io/Ocean-Buddy/app-update/';
-  if(!/^https:\/\/[^/?#\s]+\/[^?#\s]*\/$/.test(updateBase))throw Error('OB_UPDATE_BASE doit être une adresse https:// terminée par « / » : '+updateBase);
-  await esbuild.build({entryPoints:[path.join(root,'mobile/client.js')],outfile:path.join(dest,'native.js'),bundle:true,minify:true,format:'iife',target:['safari15','chrome100'],define:{__OB_BUNDLE__:JSON.stringify({seq}),__OB_UPDATE_BASE__:JSON.stringify(updateBase)}});
+  /* Adresse publique unique (scripts/site-base.cjs) ; OB_UPDATE_BASE reste accepté pour un essai ponctuel.
+     Secours : GitHub Pages (app-update/ y est toujours publié pour les apps déjà installées). */
+  const site=require('./site-base.cjs');
+  const updateBase=process.env.OB_UPDATE_BASE||site.OB_UPDATE_BASE, updateFallback=site.LEGACY_UPDATE_BASE;
+  for(const base of [updateBase,updateFallback])if(!/^https:\/\/[^/?#\s]+\/[^?#\s]*\/$/.test(base))throw Error('OB_UPDATE_BASE doit être une adresse https:// terminée par « / » : '+base);
+  await esbuild.build({entryPoints:[path.join(root,'mobile/client.js')],outfile:path.join(dest,'native.js'),bundle:true,minify:true,format:'iife',target:['safari15','chrome100'],define:{__OB_BUNDLE__:JSON.stringify({seq}),__OB_UPDATE_BASE__:JSON.stringify(updateBase),__OB_UPDATE_FALLBACK__:JSON.stringify(updateFallback===updateBase?'':updateFallback),__OB_SITE_BASE__:JSON.stringify(site.OB_SITE_BASE)}});
   let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
   html=html.replace(/<link[^>]+https:\/\/fonts\.(?:googleapis|gstatic)\.com[^>]*>\n?/g,'');
   /* Manifeste d’application web : inutile dans l’app (et absent du paquet). */

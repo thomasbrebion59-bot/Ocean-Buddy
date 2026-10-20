@@ -56,7 +56,7 @@ for path in sorted(INBOX.glob('*')) if INBOX.is_dir() else []:
             save(image, ROOT / thumb, (640, 640))
             spot['photo'] = {
                 'ai': True, 'file': path.name, 'src': src, 'thumb': thumb, 'width': w, 'height': h,
-                'source': 'https://thomasbrebion59-bot.github.io/Ocean-Buddy/photos.html',
+                'source': 'https://oceanbuddy.app/photos.html',
                 'author': 'Illustration générée par IA (ChatGPT)', 'license': 'Illustration Ocean Buddy',
                 'caption': 'Illustration IA · ce n’est pas une photo du lieu', 'label': 'Illustration IA',
             }

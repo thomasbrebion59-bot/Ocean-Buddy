@@ -1,8 +1,8 @@
 # Ocean Buddy sur iOS et Android
 
-Version du projet : 1.3.0 (build 202610071). Identifiant : `io.github.thomasbrebion59bot.oceanbuddy`.
+Version du projet : 1.4.0 (build 202610194). Identifiant : `io.github.thomasbrebion59bot.oceanbuddy`.
 
-Capacitor embarque le catalogue, les photographies, les polices, Leaflet et le moteur de relief dans l’application. La météo, les tuiles cartographiques, Poulpy IA et la communauté nécessitent internet. La galerie, le son et le relief restent facultatifs. Les données du site et celles de chaque installation mobile sont séparées.
+Capacitor embarque le catalogue, les photographies, les polices, Leaflet et le moteur de relief dans l’application. La météo, les tuiles cartographiques et la communauté nécessitent internet ; Poulpy répond hors connexion. La galerie, le son et le relief restent facultatifs. Les données du site et celles de chaque installation mobile sont séparées.
 
 ## Construire
 
@@ -20,7 +20,7 @@ Node 22+ et Xcode 26+ sont requis. La première version native cible l’iPhone 
 
 Depuis la 1.2.0, l’app reçoit les nouveautés du site sans repasser par Apple (`@capgo/capacitor-updater`, en mode manuel, sans serveur Capgo ni statistiques) :
 
-1. au démarrage et au retour dans l’app (30 min minimum entre deux vérifications), elle lit `app-update/latest.json` sur GitHub Pages par une requête native ;
+1. au démarrage et au retour dans l’app (30 min minimum entre deux vérifications), elle lit `app-update/latest.json` par une requête native, d’abord sur l’adresse publique (`OB_SITE_BASE`, https://oceanbuddy.app/), puis sur GitHub Pages en secours (les apps 1.2.0 à 1.3.2 ne lisent que GitHub Pages) ;
 2. si le contenu est plus récent, elle télécharge seulement les fichiers absents de l’app installée (`app-update/files/<sha256>`, chaque fichier vérifié par son empreinte) et réutilise tout le reste ;
 3. une fenêtre Poulpy propose « Mettre à jour maintenant » ; sinon, la nouvelle version s’installe dès que l’app passe en arrière-plan ;
 4. si la nouvelle version ne démarre pas (pas d’appel à `notifyAppReady` en 15 s), l’app revient seule à la version précédente.
@@ -29,8 +29,11 @@ Publier une mise à jour pour les téléphones, après une modification vérifi�
 
 ```sh
 node scripts/publish-app-update.cjs   # construit mobile/www, remplit app-update/
-git add app-update && git commit && git push origin HEAD:main
+git add app-update && git commit && git push origin HEAD:main   # GitHub Pages
+node scripts/build-cloudflare.cjs && npx wrangler pages deploy .cloudflare/publish --project-name=ocean-buddy --branch=main   # Cloudflare
 ```
+
+Chaque mise à jour est publiée aux deux endroits (voir `docs/ADRESSE-PUBLIQUE.md`).
 
 Seul le contenu web peut passer ainsi (HTML, CSS, JS, images, données). Un nouveau plugin, une autorisation ou un réglage natif exigent une version App Store. Pour chaque build envoyé à Apple, enregistrer d’abord sa référence avec `node scripts/publish-app-update.cjs --baseline <version>` (dans `mobile/ota-baselines/`), puis `npx cap sync` et archiver avec ce même `mobile/www`. Si le build ne change pas la partie native (mêmes plugins, même `capacitor.config.json`), ajouter `--same-shell <version précédente>` : les apps de cette version continuent de recevoir les mises à jour directes (cas de la 1.3.1, même coque que la 1.3.0). Les apps plus anciennes que `--native-min` (par défaut la dernière coque native) reçoivent plutôt une fenêtre « Ouvrir l’App Store » dès que l’App Store propose une version plus récente.
 
@@ -51,7 +54,7 @@ Scénarios : `native-returning`, `native-restore` (rechargement avec `history.st
 - Copie des données `oceanbuddy_*` dans les préférences natives et restauration au démarrage, sans remplacer les données déjà présentes.
 - Export JSON d’un voyage via la feuille de partage du téléphone.
 - Ouverture des liens externes dans le navigateur du système et bouton Retour Android.
-- Choix explicite entre guide intégré et IA avant tout envoi de message. Les questions et leur contexte passent par Netlify puis OpenAI ; aucun secret fournisseur n’est présent dans le binaire.
+- Poulpy répond sur l’appareil avec le guide intégré : aucun message n’est envoyé, aucune IA n’est utilisée.
 - Effacement des données locales dans les réglages, avec confirmation.
 - Lecture publique des contributions approuvées lorsque le service communautaire est disponible. Un courriel vérifié est nécessaire pour publier ; chaque contribution reste en attente de modération. Les anciens messages locaux ne sont jamais transférés automatiquement.
 - Création d’une copie distincte d’un voyage pour la communauté, après aperçu et choix explicite de chaque détail privé.
@@ -63,7 +66,7 @@ L’application n’a pas encore été publiée sur un store. Une archive 1.1.0 
 1. Vérifier l’adhésion Apple Developer Program, l’équipe et l’état réel de l’application dans App Store Connect avec le compte titulaire.
 2. Vérifier dans App Store Connect que l’identifiant de l’archive signée correspond bien à la fiche de l’app.
 3. Vérifier les pages `privacy.html` et `support.html` publiées avec le contact public autorisé par le titulaire : oceanbuddy.contact@gmail.com.
-4. Configurer puis tester Supabase, Netlify et l’envoi des codes par Brevo ; vérifier la modération humaine, les signalements, le blocage et la suppression de compte avant de rendre la communauté disponible dans l’app publiée.
+4. La communauté n’a pas de serveur : elle reste en « bientôt disponible » (`community-config.js`, endpoint vide). Avant de l’ouvrir un jour, prévoir un serveur, Supabase et l’envoi des codes ; vérifier la modération humaine, les signalements, le blocage et la suppression de compte avant de rendre la communauté disponible dans l’app publiée.
 5. Contrôler les déclarations de confidentialité dans `store/app-store-fr.md`, choisir les pays de distribution et compléter les déclarations de statut du vendeur avec les informations exactes du titulaire.
 6. Tester sur un iPhone physique : localisation refusée/autorisée, export, relance, hors connexion, suppression, clavier, lecteur d’écran et interruption du son ; capturer les écrans définitifs depuis la version signée.
 7. Envoyer l’IPA vérifiée à App Store Connect lorsque la fiche, la confidentialité, les captures et la communauté seront prêtes. Passer par TestFlight avant la soumission publique.
@@ -74,6 +77,6 @@ Le projet natif se trouve dans `android/` : `npm run open:android`. Android Stud
 
 ## Confidentialité et licences
 
-Le manifeste iOS déclare les accès UserDefaults (CA92.1) et FileTimestamp (C617.1) utilisés par Preferences et Filesystem. Il déclare l’adresse e-mail, l’identifiant de compte et les contributions liées au membre lorsque la communauté est activée, ainsi que le contenu envoyé volontairement à l’IA. Aucun suivi publicitaire n’est implémenté. Vérifier les déclarations App Store Connect contre le comportement du binaire final et les prestataires réellement configurés. La désactivation de la sauvegarde Android par l’app ne contrôle pas tous les mécanismes de transfert gérés par les fabricants.
+Le manifeste iOS déclare les accès UserDefaults (CA92.1) et FileTimestamp (C617.1) utilisés par Preferences et Filesystem. Il déclare l’adresse e-mail, l’identifiant de compte et les contributions liées au membre lorsque la communauté est activée. Poulpy ne transmet plus aucun contenu : vérifier à la prochaine version App Store que les déclarations ne citent plus l’IA. Aucun suivi publicitaire n’est implémenté. Vérifier les déclarations App Store Connect contre le comportement du binaire final et les prestataires réellement configurés. La désactivation de la sauvegarde Android par l’app ne contrôle pas tous les mécanismes de transfert gérés par les fabricants.
 
 Les photographies sont créditées dans `photos.html` et les licences de Leaflet et des polices sont copiées dans le bundle. L’app ne fait ni réservation, ni navigation maritime, ni calcul d’ordinateur de plongée.

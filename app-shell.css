@@ -394,7 +394,7 @@ html[data-act] body.ocean-v2:not(.explore-immersive) .app-chrome .mobile-search{
 @media (prefers-reduced-transparency:reduce){
   :root{--as-glass:var(--t-card);--as-glass-strong:var(--t-bar);--as-dark-glass:var(--t-deep);--as-blur:none;--glass:var(--t-card)}
   .ocean-v2 *,.ocean-v2 *::before,.ocean-v2 *::after,.ocean-v2 .nav,.ocean-v2 .app-chrome,.toast,.quiz-modal,.aqi,.onb::before,.sd-sheet-back,.tb-scrim,.app-update,dialog::backdrop{
-    -webkit-backdrop-filter:none;backdrop-filter:none;}
+    -webkit-backdrop-filter:none!important;backdrop-filter:none!important}
   .ocean-v2 .app-chrome{background:var(--t-bar)}
   .ocean-v2 .nav{background:var(--t-bar)}
   .quiz-modal,.aqi,.sd-sheet-back,.tb-scrim,.app-update{background:color-mix(in srgb,var(--t-scrim) 82%,transparent)!important}

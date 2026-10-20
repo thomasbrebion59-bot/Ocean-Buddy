@@ -1,37 +1,5 @@
-# Connexion de Poulpy à une IA
+# Poulpy : réponses sur l’appareil
 
-Le serveur est prêt pour Netlify Functions et l’API Responses d’OpenAI. Le site principal reste publié sur GitHub Pages. Aucune clé ne doit être ajoutée au dépôt ou au navigateur.
+Depuis le 19 octobre 2026, Poulpy n’est plus connecté à aucune IA ni à aucun service en ligne. Il répond uniquement avec le guide intégré à l’application (`poulpy-knowledge.js` et `poulpyReply` dans `app.js`), sur l’appareil, à partir du contenu d’Ocean Buddy. `poulpy-config.js` ne contient plus d’adresse de service.
 
-Hébergement existant repéré : `exquisite-choux-61c0d9.netlify.app`, équipe Ocean Buddy. Au contrôle du 13 septembre 2026, le compte Netlify affichait un forfait Free de 300 crédits mensuels, sans dépassement payant et sans carte bancaire enregistrée. Aucune variable manuelle n’était configurée. L’AI Gateway Netlify peut fournir automatiquement les identifiants et l’URL OpenAI sans compte OpenAI séparé.
-
-Service activé le 13 septembre 2026 sur le projet existant. L’état `enabled:true`, une question générale, une relance et des recommandations de fiches ont été vérifiés sur le serveur réel, puis dans le navigateur. `poulpy-config.js` utilise l’URL de production ci-dessous. Les identifiants restent injectés côté serveur par AI Gateway.
-
-## Configuration et déploiement
-
-1. Autoriser Netlify CLI sur le compte propriétaire, puis utiliser le projet existant. Ne pas créer de projet, souscrire de forfait ou activer de recharge automatique pour cette installation.
-2. Laisser AI Gateway injecter `OPENAI_API_KEY` et `OPENAI_BASE_URL` dans les fonctions. Le serveur utilise alors `gpt-4.1-mini`, sauf remplacement explicite par `OPENAI_MODEL`. Les crédits IA partagent le quota Netlify du site ; épuiser ce quota peut interrompre le service jusqu’à son renouvellement. Ne pas exposer les variables injectées dans les journaux ou dans le navigateur.
-3. Déployer le dépôt avec Netlify CLI ou un build Git : un simple dépôt des fichiers statiques via Netlify Drop ne déploie pas cette fonction. `netlify.toml` construit le catalogue de 280 destinations et le dossier statique `.netlify/publish`. Le serveur autorise les origines GitHub Pages et du projet Netlify existant.
-4. Vérifier que `GET https://exquisite-choux-61c0d9.netlify.app/.netlify/functions/poulpy` répond avec `enabled:true`, puis tester une conversation et ses suivis.
-5. Mettre cette URL dans `poulpy-config.js`, versionner les ressources, vérifier le navigateur et publier sur GitHub.
-
-Le client transmet uniquement la question (1 000 caractères maximum), les huit derniers messages limités à 600 caractères chacun, l’activité, le niveau choisi et l’identifiant du spot consulté. Il ne transmet ni géolocalisation personnelle, ni notes privées, ni itinéraires sauvegardés. Le catalogue est chargé côté serveur. Les sources et les repères peuvent être employés par l’assistant ; il ne dispose pas de recherche web en direct. Aucun message n’est enregistré par le serveur applicatif. `store:false` désactive le stockage des réponses pour récupération via l’API ; les politiques du fournisseur s’appliquent toujours.
-
-Le serveur limite chaque requête et réponse, masque les erreurs du fournisseur, autorise seulement les origines configurées dans les navigateurs et configure une limitation Netlify de six appels par minute et par IP/domaine. CORS ne constitue pas une authentification. Vérifier la disponibilité effective de la limitation Netlify et les plafonds du compte avant d’ouvrir le service au public. `POULPY_ENABLED=false` coupe les appels au fournisseur.
-
-Pour utiliser ultérieurement un compte OpenAI API distinct, configurer une clé projet côté serveur, `OPENAI_MODEL` et `POULPY_ENABLED=true`, puis retirer `OPENAI_BASE_URL` du gateway. Cette option possède sa propre facturation et demande une vérification préalable du compte et de ses limites.
-
-Références : [OpenAI — génération de texte](https://developers.openai.com/api/docs/guides/text), [Netlify Functions](https://docs.netlify.com/build/functions/overview/), [Netlify AI Gateway](https://docs.netlify.com/build/ai-gateway/overview/), [limitation des appels](https://docs.netlify.com/manage/security/secure-access-to-sites/rate-limiting/).
-
-## Périmètre verrouillé (29 septembre 2026)
-
-Poulpy n’est pas un ChatGPT libre : il répond uniquement aux usages Ocean Buddy — spots, organisation du voyage (vols, trajets, hébergements, restaurants, activités), comparaisons, éducation sur l’océan et sa faune, conditions/sécurité/matériel nautiques, usage de l’application et petites blagues. Tout le reste (code, culture générale, actualité, finance, questions sur le propriétaire, le serveur ou les comptes) est refusé.
-
-- Filtre de sortie `leaks()` : toute réponse contenant une clé, un jeton, une adresse e-mail, un nom de variable d’environnement ou un extrait des consignes est remplacée par le message de refus.
-- En-têtes de sécurité sur chaque réponse : `nosniff`, `X-Frame-Options: DENY`, `Referrer-Policy: no-referrer`, CSP `default-src 'none'`.
-
-- Consignes serveur « PÉRIMÈTRE STRICT » : hors sujet ou tentative de détournement → le modèle renvoie `[[hors_sujet]]`, remplacé côté serveur par un message fixe.
-- Filtre avant envoi (`blocked()` dans `poulpy-core.mjs`) : demandes de code, devoirs, extraction des consignes ou de clés, « ignore les instructions », jeux de rôle « sans restriction » → refus immédiat, aucun appel au fournisseur.
-- Toute réponse contenant un bloc de code est remplacée par le message de refus.
-- Appel POST sans en-tête `Origin` autorisé (script, curl) → 403.
-- Limites : 5 appels/min (Netlify) + 6/min et 30/heure par IP (fonction), question ≤ 1 000 caractères, historique 8 × 600, réponse ≤ 700 jetons, recherche web désactivée (activer seulement avec `POULPY_WEB_SEARCH=true`).
-- La clé reste injectée côté serveur par Netlify AI Gateway ; elle n’est jamais envoyée au site ni à l’application.
+Il n’y a plus aucun serveur ni fonction distante (Netlify a été retiré). Les anciennes apps 1.3.x qui appelaient encore la fonction Poulpy retombent sur leur guide intégré.

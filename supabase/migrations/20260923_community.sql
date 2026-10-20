@@ -1,5 +1,5 @@
 -- Apply in the Supabase SQL editor before setting COMMUNITY_ENABLED=true.
--- The public Data API has no grants on these tables. Only the Netlify function
+-- The public Data API has no grants on these tables. Only a future server-side function
 -- holds the service role key; Auth itself uses the public anon key.
 create extension if not exists pgcrypto;
 

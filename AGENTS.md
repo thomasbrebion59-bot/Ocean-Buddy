@@ -13,6 +13,8 @@ L’utilisateur demande que chaque modification terminée et vérifiée de cette
 
 Les apps iOS installées (1.2.0 et plus) se mettent à jour depuis `app-update/` sur GitHub Pages. Quand une modification publiée concerne aussi l’app, lancer `node scripts/publish-app-update.cjs` avant le commit et inclure `app-update/` (voir `mobile/README.md`). Ne jamais publier ainsi un changement qui demande un nouveau plugin ou un réglage natif : il faut alors une version App Store.
 
+Adresse publique : `OB_SITE_BASE` (`scripts/site-base.cjs`, https://oceanbuddy.app/ sur Cloudflare Pages, secours https://ocean-buddy.pages.dev/). Chaque mise à jour directe est publiée aux deux endroits : GitHub Pages (`git push`, lu par les apps installées) et Cloudflare (`node scripts/build-cloudflare.cjs` puis `wrangler pages deploy`). GitHub Pages doit rester actif. Voir `docs/ADRESSE-PUBLIQUE.md`.
+
 ## À la fin d’une modification
 
 Après la dernière modification JavaScript ou CSS, exécuter `python3 scripts/version-assets.py` avant les vérifications finales et le commit. Ce script met à jour les URL des ressources dans `index.html` pour que les visiteurs reçoivent bien la nouvelle version, même si leur navigateur a conservé les anciens fichiers en cache.

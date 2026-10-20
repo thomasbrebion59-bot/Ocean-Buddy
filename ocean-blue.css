@@ -302,10 +302,7 @@ input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px soli
 .community-share-fields fieldset{margin:0;padding:8px 12px 10px}
 .community-share-step{margin:0;padding:10px 12px;border-radius:10px;background:var(--ob-sky);color:var(--t-main);font-size:11px;font-weight:800}
 
-/* Réglages : le choix de Poulpy n'est pas une action destructive */
-.ocean-v2 .set-reset.set-neutral{background:var(--ob-sky);border-color:var(--t-line);color:var(--ob-cobalt)}
 .set-about a{display:inline-block;padding:6px 0}
-.ai-consent h3{text-wrap:balance}
 /* Pendant l'accueil plein écran, le message se centre sur l'écran (pas de barre latérale visible) */
 @media (min-width:960px){body:has(#onb:not(.hide)) .toast{left:50%;max-width:calc(100vw - 60px)}}
 #communityTripPreview{margin-top:16px;padding-top:16px;border-top:1px solid var(--ob-line)}

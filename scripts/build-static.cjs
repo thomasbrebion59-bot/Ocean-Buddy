@@ -1,6 +1,6 @@
 /* An explicit public bundle: never deploy credentials, Git metadata or server source. */
 const fs=require('node:fs'),path=require('node:path');
-const root=path.resolve(__dirname,'..'),dest=path.join(root,'.netlify/publish');
+const root=path.resolve(__dirname,'..'),dest=path.join(root,'.build/static');
 fs.rmSync(dest,{recursive:true,force:true});fs.mkdirSync(dest,{recursive:true});
 const declaredScripts=new Set([...fs.readFileSync(path.join(root,'index.html'),'utf8').matchAll(/<script src="([^\"]+)"[^>]*><\/script>/g)].map(match=>match[1].split('?')[0]).filter(src=>!src.includes('/')&&src.endsWith('.js')));
 for(const item of fs.readdirSync(root,{withFileTypes:true})){
@@ -10,4 +10,7 @@ fs.cpSync(path.join(root,'assets'),path.join(dest,'assets'),{recursive:true});
 fs.mkdirSync(path.join(dest,'locales'),{recursive:true});
 for(const f of fs.readdirSync(path.join(root,'locales')))if(f.endsWith('.js'))fs.copyFileSync(path.join(root,'locales',f),path.join(dest,'locales',f));
 fs.cpSync(path.join(root,'vendor/maplibre'),path.join(dest,'vendor/maplibre'),{recursive:true});
-console.log('Static application ready in .netlify/publish');
+// SEO pages: generated and committed (spot/, spots/), plus sitemap and robots.
+for(const name of ['spot','spots']){const src=path.join(root,name);if(fs.existsSync(src))fs.cpSync(src,path.join(dest,name),{recursive:true});}
+for(const name of ['sitemap.xml','robots.txt']){const src=path.join(root,name);if(fs.existsSync(src))fs.copyFileSync(src,path.join(dest,name));}
+console.log('Static application ready in .build/static');

@@ -31,25 +31,10 @@ test('718 distinct spots: 168 historical, 112 sourced, 152 + 286 September 2026 
   assert.match(s.reviewed,/^\d{4}-\d{2}-\d{2}$/,s.id);
  }
 });
-test('browser, media and server views match the canonical catalogue exactly',()=>{
+test('browser and media views match the canonical catalogue exactly',()=>{
  const runtime={window:{}};vm.runInNewContext(fs.readFileSync(path.join(root,'catalog-runtime.js'),'utf8'),runtime);
- const server=JSON.parse(fs.readFileSync(path.join(root,'netlify/functions/lib/catalog.json'),'utf8'));
  assert.equal(JSON.stringify(runtime.window.OCEAN_CATALOG),JSON.stringify(all));
- assert.equal(server.length,all.length);
  assert.equal(JSON.stringify(photos),JSON.stringify(Object.fromEntries(all.filter(s=>s.photo).map(s=>[s.id,s.photo]))));
- for(const s of all){
-  const row=server.find(x=>x.id===s.id);assert.ok(row,s.id);
-  assert.equal(JSON.stringify(row.activities),JSON.stringify(s.sports),s.id);
-  assert.equal(row.location,s.loc,s.id);
-  assert.equal(row.description,s.desc,s.id);
-  assert.equal(JSON.stringify(row.coords),JSON.stringify(s.coords),s.id);
-  assert.equal(row.world,s.world,s.id);
-  assert.equal(row.source,s.source?.url||null,s.id);
-  assert.equal(row.photo?.src||null,photos[s.id]?.src||null,s.id);
-  assert.equal(row.photo?.thumb||null,photos[s.id]?.thumb||null,s.id);
-  assert.equal(row.editorialStatus,s.editorialStatus,s.id);
-  assert.equal(JSON.stringify(row.visit),JSON.stringify(s.visit||null),s.id);
- }
 });
 test('every spot shows access, best period and local rules without inventing missing facts',()=>{
  const guide=fs.readFileSync(path.join(root,'field-guide.js'),'utf8');
