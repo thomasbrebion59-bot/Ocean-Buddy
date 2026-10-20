@@ -33,7 +33,9 @@
   const when=t=>{const c=M.countdown(t,todayKey());return c.state==='upcoming'?(c.days===1?'Départ demain':`J-${c.days}`):c.state==='ongoing'?`Jour ${c.days} · en route`:c.state==='past'?'Voyage terminé':'';};
   const prep=t=>{const p=M.progress(t);return p.total?`<span class="trip-prep" style="--p:${p.pct}%"><i></i><small>Préparation ${p.done}/${p.total}</small></span>`:'';};
   function render(){
-    const wrap=$('#screenWrap'),scroll=wrap.scrollTop,focus=document.activeElement?.dataset.focus;
+    /* Écran Voyages caché : on ne lit ni n’écrit la position de défilement de #screenWrap (cette lecture juste
+       après innerHTML forçait une mise en page complète, 70 à 160 ms au démarrage sous x4-x6). */
+    const wrap=$('#screenWrap'),live=$('#trips').classList.contains('active'),scroll=live?wrap.scrollTop:0,focus=document.activeElement?.dataset.focus;
     if(tripMap){tripMap.destroy();tripMap=null;}
     const t=current(),saved=active();
     $('#trips').classList.toggle('has-trip',!!t);$('#trips').classList.toggle('has-saved',saved.length>0);
@@ -41,7 +43,7 @@
       ${saved.length?`<div class="trip-switch"><button class="${t?'':'active'}" data-action="overview">Mes voyages <b>${saved.length}</b></button>${saved.map(x=>`<button class="${x.id===selected?'active':''}" data-action="select" data-id="${esc(x.id)}">${esc(x.name)}</button>`).join('')}</div>`:''}
       ${t?tripDetail(t):overview(saved)}
       <p class="trip-storage">${loadError?'':I.check+' Ton carnet est enregistré sur cet appareil.'} <a href="photos.html" target="_blank" rel="noopener">Crédits photos</a></p>`;
-    wrap.scrollTop=scroll;
+    if(live)wrap.scrollTop=scroll;
     if(focus)document.querySelector(`[data-focus="${CSS.escape(focus)}"]`)?.focus({preventScroll:true});
     if(t&&view==='map')requestAnimationFrame(()=>drawMap(t));
     if(t)window.OceanSpotGuide?.fillTrip(t);
@@ -190,5 +192,8 @@
   const detailCTA=document.createElement('button');detailCTA.className='trip-add-from-spot';detailCTA.innerHTML=I.plus+' Ajouter à un voyage';detailCTA.onclick=()=>fromSpot(currentSpot);$('#dTabs').before(detailCTA);
   const homeCTA=document.createElement('button');homeCTA.className='home-trip-link';homeCTA.innerHTML=I.route+' Préparer mon voyage '+I.arrow;homeCTA.onclick=()=>go('trips');$('.hero-cta').after(homeCTA);
   window.OceanTrips={count:()=>active().length,list:()=>active(),openTrip:id=>{if(!active().some(t=>t.id===id))return;selected=id;view='itinerary';go('trips');render();$('#screenWrap').scrollTop=0;},fromSpot,open:()=>go('trips'),route:()=>({selected:current()?.id||null,view}),restoreRoute:r=>{selected=trips.some(t=>t.id===r?.selected&&!t.archived&&!t.deleted)?r.selected:null;view=r?.view==='map'?'map':'itinerary';}};
-  render();renderProfile();
+  /* Démarrage : l’écran Voyages n’est construit qu’à sa première ouverture (ocean:navigate « trips » ci-dessus),
+     sauf s’il est déjà l’écran affiché. */
+  if($('#trips').classList.contains('active'))render();
+  renderProfile();
 })();

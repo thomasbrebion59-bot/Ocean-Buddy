@@ -43,3 +43,15 @@
 @media(max-width:639px){.experience-video-search{padding:11px 12px}.experience-video-search small{font-size:8px}.spot-area-map{margin:18px 0;padding:15px;border-radius:15px}.area-map-heading{align-items:flex-start;flex-direction:column}.area-map-heading button{width:100%}.area-map-leaflet{height:245px}.area-map-footer{align-items:flex-start;flex-direction:column;gap:5px}.experience-photo-symbol{right:25px;font-size:112px}}
 @media(prefers-reduced-motion:reduce){.experience-video-search{transition:none}}
 .reduce-motion .experience-video-search{transition:none}
+/* Retour depuis une fiche : body[data-screen] passe à l'écran suivant dès le début du fondu. La fiche qui s'en va
+   (#detail.sw-live) garde sa photo jusqu'en haut et ses boutons ronds (mêmes valeurs qu'app-shell.css), sinon tout
+   son contenu descendait d'un coup pendant le fondu (CLS 0,23 sur section#detail au banc creme-logo). */
+@media(max-width:959px){
+  #detail.sw-live .detail-hero{margin:calc(-8px - var(--as-top)) calc(-1 * var(--as-gutter)) 0!important;width:calc(100% + 2 * var(--as-gutter))!important;
+    padding-top:calc(54px + var(--as-top))!important;border-radius:0 0 var(--as-r-xl) var(--as-r-xl)!important}
+  #detail.sw-live #detailHero .fav,#detail.sw-live #detailHero .hero-share{top:calc(var(--as-top) + 6px)!important;width:40px!important;height:40px!important;border-radius:50%!important;
+    background:var(--as-dark-glass)!important;border:.5px solid var(--as-dark-border)!important;color:var(--t-on-main)!important}
+  #detail.sw-live #detailHero .fav{right:12px!important}
+  #detail.sw-live #detailHero .hero-share{right:60px!important}
+  #detail.sw-live #detailHero .hero-more{top:calc(var(--as-top) + 58px)!important;right:12px!important}
+}

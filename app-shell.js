@@ -57,19 +57,25 @@
       const sec=document.getElementById(id);if(!sec)continue;
       let head=sec.querySelector(':scope>.as-large');
       if(!head){head=document.createElement('header');head.className='as-large';sec.prepend(head);}
-      const {title,sub}=make();
-      head.innerHTML=`<div><p>${esc(sub)}</p><h1>${esc(title)}</h1></div>`;
+      const {title,sub}=make(),html=`<div><p>${esc(sub)}</p><h1>${esc(title)}</h1></div>`;
+      /* Réécrit seulement si le texte change : chaque navigation refaisait les six en-têtes (et leurs traductions). */
+      if(head._obHtml!==html){head.innerHTML=html;head._obHtml=html;}
     }
   }
   largeTitles();
 
   /* ---------- Défilement : barre discrète en descendant, visible en remontant ---------- */
-  let lastY=0,acc=0;
-  wrap.addEventListener('scroll',()=>{
+  /* Une lecture de scrollTop par image (rAF) et une écriture de classe seulement quand l’état change :
+     le gestionnaire direct coûtait ~520 ms sur 10 s de défilement de l’Explorer (x4). */
+  let lastY=0,acc=0,tuckFrame=0;
+  function tuck(){
+    tuckFrame=0;
     const y=wrap.scrollTop,d=y-lastY;lastY=y;
     acc=Math.sign(d)===Math.sign(acc)?acc+d:d;
-    if(y<40||acc<-24)body.classList.remove('tabs-tucked');else if(acc>36)body.classList.add('tabs-tucked');
-  },{passive:true});
+    const was=body.classList.contains('tabs-tucked'),next=y<40||acc<-24?false:acc>36?true:was;
+    if(next!==was)body.classList.toggle('tabs-tucked',next);
+  }
+  wrap.addEventListener('scroll',()=>{if(!tuckFrame)tuckFrame=requestAnimationFrame(tuck);},{passive:true});
 
   /* ---------- Explorer : la planète en plein écran ---------- */
   const mapShown=()=>$('#mapView')?.style.display!=='none';

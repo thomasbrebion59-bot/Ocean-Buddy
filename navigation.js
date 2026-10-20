@@ -3,7 +3,7 @@
   'use strict';
   const $=s=>document.querySelector(s), wrap=$('#screenWrap');
   const marker='oceanbuddy-navigation-v1';
-  let pending=null,restoring=false,applying=false,restoreTarget=null,scrollFrame=0;
+  let pending=null,restoring=false,applying=false,restoreTarget=null,scrollFrame=0,scrollTimer=0,booted=false;
   const backButton=document.createElement('button');
   backButton.type='button';backButton.id='appBack';backButton.className='app-back';
   backButton.innerHTML='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M19 12H5m6-6-6 6 6 6"/></svg><span>Retour</span>';
@@ -70,6 +70,13 @@
     if(pending||restoring||scrollFrame)return;
     scrollFrame=requestAnimationFrame(()=>{scrollFrame=0;if(!pending&&!restoring){entry={...entry,route:capture()};write();}});
   }
+  /* Défilement : la position s’enregistre en fin de geste (scrollend, ou 220 ms sans défilement), pas à chaque image.
+     Un replaceState par image coûtait ~280 ms sur 10 s de défilement (x4) et WebKit limite ces appels (SecurityError). */
+  function rememberScroll(){
+    if(pending||restoring)return;
+    clearTimeout(scrollTimer);scrollTimer=setTimeout(()=>{scrollTimer=0;remember();},220);
+  }
+  function scrollEnded(){if(!scrollTimer)return;clearTimeout(scrollTimer);scrollTimer=0;remember();}
   function settled(){
     if(!restoring||!restoreTarget)return;
     const target=restoreTarget;
@@ -81,7 +88,11 @@
       restoreTarget=null;restoring=false;entry={...entry,route:capture()};write();update();
     });
   }
+  /* Ce que l’Explorer et l’accueil affichent : s’ils n’ont pas changé, un Retour n’a pas à les reconstruire. */
+  const exploreKey=r=>JSON.stringify([r.world||null,r.country||null,r.sport||null,r.filter||'all',r.search||'',!!r.favorites,!!r.near,Number(r.shown)||0]);
+  const homeKey=r=>JSON.stringify([r.sport||null,r.homeTab||'jour']);
   function restore(route){
+    const before=capture();
     restoring=true;applying=true;restoreTarget=route;
     window.OceanExperience?.init();
     activeSport=SPORTMAP[route.sport]?route.sport:null;
@@ -92,10 +103,14 @@
     spotShown=Math.max(SPOT_PAGE,Number(route.shown)||SPOT_PAGE);
     $('#spotSearch').value=currentSearch;$('#favChip').classList.toggle('active',favOnly);$('#nearBtn').classList.toggle('on',nearMode);
     document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f===currentFilter));
-    renderSportFilters();if(spotCountry&&spotWorld&&spotWorld!=='all')renderCountries();else renderWorlds();syncWorldUI();renderSpots(currentFilter,true);
+    const after={world:spotWorld,country:spotCountry,sport:activeSport,filter:currentFilter,search:currentSearch,favorites:favOnly,near:nearMode,shown:spotShown,homeTab:route.homeTab};
+    /* Relance du WebView : tout est reconstruit. Retour ou Avancer : seulement ce qui change (un retour de fiche
+       vers l’accueil refaisait l’Explorer, l’accueil et les voyages : ~180 ms à x4, dont 135 ms de mise en page forcée). */
+    const full=!booted,exploreChanged=full||exploreKey(before)!==exploreKey(after),homeChanged=full||homeKey(before)!==homeKey(after);
+    if(exploreChanged){renderSportFilters();if(spotCountry&&spotWorld&&spotWorld!=='all')renderCountries();else renderWorlds();syncWorldUI();renderSpots(currentFilter,true);}
     if(spotWorld)setView(route.view==='map'&&route.screen==='spots'?'map':'list'); /* pas de globe WebGL caché pendant le démarrage d’un autre écran */
     setMapFull(!!route.mapFull&&route.screen==='spots'&&route.view==='map',true);
-    showHomeCat(['jour','explorer','progres'].includes(route.homeTab)?route.homeTab:'jour');renderHome();
+    if(homeChanged){showHomeCat(['jour','explorer','progres'].includes(route.homeTab)?route.homeTab:'jour');renderHome();}
     window.OceanTrips.restoreRoute(route.trip);
     if(route.screen==='detail'&&SPOTS.some(s=>s.id===route.spot)){
       openSpot(route.spot);
@@ -114,9 +129,11 @@
   window.addEventListener('popstate',event=>{
     if(!valid(event.state))return;
     if(scrollFrame){cancelAnimationFrame(scrollFrame);scrollFrame=0;}
+    if(scrollTimer){clearTimeout(scrollTimer);scrollTimer=0;}
     pending=null;entry=event.state;restore(entry.route);
   });
-  wrap.addEventListener('scroll',remember,{passive:true});
+  wrap.addEventListener('scroll',rememberScroll,{passive:true});
+  wrap.addEventListener('scrollend',scrollEnded,{passive:true});
   wrap.addEventListener('click',remember);
   wrap.addEventListener('input',remember);wrap.addEventListener('change',remember);
   window.addEventListener('pagehide',()=>{if(!restoring){entry={...entry,route:capture()};write();}});
@@ -125,4 +142,5 @@
   /* Relance du WebView (mise à jour appliquée, sauvegarde restaurée) : l’écran revient, mais l’accueil repart en haut,
      sans défilement pendant le démarrage. */
   if(valid(history.state)&&$('#onb').classList.contains('hide')){if(entry.route.screen==='home'){entry={...entry,route:{...entry.route,scroll:0}};write();}restore(entry.route);}else {write();update();}
+  booted=true;
 })();

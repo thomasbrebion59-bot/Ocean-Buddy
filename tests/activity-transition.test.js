@@ -114,8 +114,11 @@ function navigationEnv(){
   const elements={};let covered=false,timeout=null;const frames=[];
   const make=(id,classes=[])=>{const set=new Set(classes);return {id,style:{},classList:{add:(...c)=>c.forEach(x=>set.add(x)),remove:(...c)=>c.forEach(x=>set.delete(x)),contains:c=>set.has(c)},contains:()=>false,focus(){},get active(){return set.has('active');}};};
   for(const id of ['home','spots','profile'])elements[id]=make(id,id==='home'?['active']:[]);
-  const wrap=make('screenWrap');wrap.clientHeight=600;wrap.querySelectorAll=()=>Object.values(elements).filter(x=>x.active);elements.screenWrap=wrap;
-  const context={window:{OceanTransition:{get covered(){return covered;}},dispatchEvent(){}},document:{body:{dataset:{},classList:{contains:()=>false}},getElementById:id=>elements[id],querySelector:()=>elements.home,querySelectorAll:()=>[]},CustomEvent:class{},setTimeout:fn=>{timeout=fn;return 1;},clearTimeout:()=>{timeout=null;},requestAnimationFrame:fn=>frames.push(fn),HEADBUB:{},SCREEN_ORDER:{home:0,spots:1,profile:2},vibrate(){},bubbles(){},animateCounts(){},renderProfile(){}};
+  /* go() lit les marges intérieures de #screenWrap et la largeur max. des écrans (getComputedStyle) au lieu de
+     clientHeight/offsetWidth : le faux DOM fournit ces styles calculés. */
+  const computed={paddingTop:'8px',paddingLeft:'16px',paddingRight:'16px',maxWidth:'1240px'};
+  const wrap=make('screenWrap');wrap.querySelectorAll=()=>Object.values(elements).filter(x=>x.active);elements.screenWrap=wrap;
+  const context={window:{OceanTransition:{get covered(){return covered;}},dispatchEvent(){}},document:{body:{dataset:{},classList:{contains:()=>false}},getElementById:id=>elements[id],querySelector:()=>elements.home,querySelectorAll:()=>[]},CustomEvent:class{},getComputedStyle:()=>computed,setTimeout:fn=>{timeout=fn;return 1;},clearTimeout:()=>{timeout=null;},requestAnimationFrame:fn=>frames.push(fn),HEADBUB:{},SCREEN_ORDER:{home:0,spots:1,profile:2},vibrate(){},bubbles(){},animateCounts(){},renderProfile(){}};
   vm.runInNewContext(section+';this.navigate=go;',context);
   return {elements,wrap,go:context.navigate,cover:()=>{covered=true;},drain(){while(frames.length)frames.shift()();timeout?.();}};
 }
@@ -136,8 +139,11 @@ test('le changement d’activité sur Explorer déjà actif reste instantané',(
 
 test('la navigation ordinaire conserve le fondu entre onglets',()=>{
   const e=navigationEnv();e.go('profile');assert.equal(e.elements.home.active,true);assert.equal(e.wrap.classList.contains('transitioning'),true);
+  /* Pendant le fondu, les deux écrans sont posés là où ils sont dans le flux (pas de saut de mise en page). */
+  for(const id of ['home','profile']){const st=e.elements[id].style;assert.equal(st.top,'8px');assert.equal(st.left,'16px');assert.equal(st.right,'16px');assert.equal(st.maxWidth,'1240px');}
   e.drain();assert.equal(e.elements.home.active,false);assert.equal(e.elements.profile.active,true);
   assert.equal(e.elements.profile.classList.contains('sw-covered'),false);
+  for(const id of ['home','profile']){const st=e.elements[id].style;assert.equal(st.top,'');assert.equal(st.left,'');assert.equal(st.right,'');assert.equal(st.maxWidth,'');}
 });
 
 test('applySport préserve les favoris et répartit le rendu sans changer la remise à zéro des filtres',async()=>{

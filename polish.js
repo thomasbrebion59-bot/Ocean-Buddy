@@ -93,7 +93,8 @@
     requestAnimationFrame(() => {
       ticking = false;
       const y = wrap.scrollTop;
-      document.body.classList.toggle('is-scrolled', y > 8);
+      /* classe écrite seulement quand elle change (avant : à chaque image de défilement) */
+      if (document.body.classList.contains('is-scrolled') !== y > 8) document.body.classList.toggle('is-scrolled', y > 8);
       if (calm() || document.body.dataset.screen !== 'detail') return;
       const photo = document.getElementById('dHeroPhoto');
       if (photo && y < 900) photo.style.translate = '0 ' + Math.round(y * 0.28) + 'px';

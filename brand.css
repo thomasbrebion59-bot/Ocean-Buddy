@@ -1,6 +1,7 @@
+/* @creme-tokens */
 /* Marque Ocean Buddy (manta). Couleurs : uniquement des jetons de activity-theme.css. */
-#onb .onb-logo{position:relative;display:flex;align-items:center;justify-content:center;width:112px;height:112px;margin:0 0 18px;border-radius:28px;background:var(--t-cream);box-shadow:0 0 0 1px var(--t-line)}
-#onb .onb-manta{display:block;width:88px;height:88px;object-fit:contain}
+#onb .onb-logo{position:relative;display:flex;align-items:center;justify-content:center;width:112px;height:112px;margin:0 0 18px}
+#onb .onb-manta{display:block;width:112px;height:112px;object-fit:contain}
 #onb .onb-logo .logo-svg[hidden],#logoOcto[hidden]{display:none!important}
 #homeTop .brand-manta{flex:0 0 auto;display:block;width:28px;height:28px;object-fit:contain}
 #homeTop .brand{align-items:center}
