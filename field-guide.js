@@ -68,7 +68,7 @@
     overview.innerHTML=`<span class="field-eyebrow">SITUER & COMPARER</span><a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu sur la carte</a><div class="field-compare-slot">${window.OceanNotebook?.button(s.id)||''}</div>`;
     overview.classList.add('is-compact');
     const level=s.level==='variable'?'À définir sur place':(LVLTXT[s.level]||'À confirmer');
-    $('#fieldAtAGlance').innerHTML=[['activity','Ton activité',SPORTMAP[act]?.label||'À choisir',sportIcon(act)],['water','Le cadre',isInland(s)?'Eau douce':'Mer & océan',sportIcon(isInland(s)?'kayak':'snorkeling')],['level','Repère de niveau',level,levelIcon(s.level)]].map(([key,label,value,art])=>`<button type="button" class="field-fact-card fact-${key}" data-im-open="${{activity:'terrain',water:'eau',level:'niveau'}[key]}"><span class="field-fact-icon">${art}</span><div><small>${label}</small><b>${esc(value)}</b></div></button>`).join('');
+    $('#fieldAtAGlance').innerHTML=[['activity','Ton activité',SPORTMAP[act]?.label||'À choisir',sportIcon(act)],['water','Le cadre',isInland(s)?'Plan d’eau intérieur':'Mer & océan',sportIcon(isInland(s)?'kayak':'snorkeling')],['level','Repère de niveau',level,levelIcon(s.level)]].map(([key,label,value,art])=>`<button type="button" class="field-fact-card fact-${key}" data-im-open="${{activity:'terrain',water:'eau',level:'niveau'}[key]}"><span class="field-fact-icon">${art}</span><div><small>${label}</small><b>${esc(value)}</b></div></button>`).join('');
     $('#fieldVisit').innerHTML=visitGuide(s);
     $('#fieldVisit').hidden=!visitRows(s).some(r=>r.verified);
     window.OceanNotebook?.sync();
