@@ -1,3 +1,4 @@
+/* @creme-tokens */
 /* Transitions Apple : courbes ressort, zoom carte -> fiche (View Transitions), entrée des grands titres.
    Couleurs : aucune ici. Les durées restent courtes pour ne jamais laisser de fantôme. */
 :root{--ob-ease-out:cubic-bezier(.22,.8,.3,1);--ob-spring:cubic-bezier(.22,.9,.3,1.02)}

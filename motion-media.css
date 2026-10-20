@@ -1,9 +1,10 @@
+/* @creme-tokens */
 /* Clips muets en boucle : onboarding (c1) et bande d’ambiance de l’accueil (c3).
    Toujours en position absolue : aucun décalage de mise en page. */
 .mm-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:var(--mm-poster) center/cover no-repeat}
 /* Voile léger : la lisibilité du texte blanc vient du dégradé .onb::before (allégé plus bas pour l’étape 0). */
 .mm-layer::after{content:"";position:absolute;inset:0;pointer-events:none;
-  background:color-mix(in srgb,var(--t-deep,#032d3c) 18%,transparent)}
+  background:color-mix(in srgb,var(--t-deep) 18%,transparent)}
 .mm-layer video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
 
 /* Accueil : bande derrière le grand titre, fondue dans la couleur de page. */
@@ -23,4 +24,4 @@ body.reduce-motion .mm-layer video,body.reduce-motion .mm-band video{display:non
 /* Onboarding, étape 0 avec la vidéo : voile allégé (la manta et le soleil se voient), plus sombre
    seulement derrière le titre et le bouton pour garder le texte blanc lisible. */
 .ocean-v2 .onb:has(>.mm-layer):has(.onb-step.active[data-step="0"])::before{
-  background:linear-gradient(180deg,rgba(3,15,48,.18) 0%,rgba(3,15,48,.5) 24%,rgba(3,15,48,.42) 48%,rgba(3,15,48,.12) 68%,rgba(3,15,48,.55) 100%)!important}
+  background:linear-gradient(180deg,color-mix(in srgb,var(--t-scrim) 18%,transparent) 0%,color-mix(in srgb,var(--t-scrim) 50%,transparent) 24%,color-mix(in srgb,var(--t-scrim) 42%,transparent) 48%,color-mix(in srgb,var(--t-scrim) 12%,transparent) 68%,color-mix(in srgb,var(--t-scrim) 55%,transparent) 100%)!important}
