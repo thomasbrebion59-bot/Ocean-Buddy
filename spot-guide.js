@@ -40,7 +40,9 @@
     bed:'<path d="M3 19V6M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6M7 11.5a1.5 1.5 0 1 0 0-.01"/>',
     compass:'<circle cx="12" cy="12" r="9"/><path d="m15.5 8.5-2 5-5 2 2-5 5-2Z"/>'
   };
-  const icon=(k,cls)=>svg(P[k]||P.nature,cls);
+  /* Pictos dessinés (assets/pictos/guide) : clé du guide -> fichier ; le tracé au trait reste en secours. */
+  const PIC=k=>({map:'carte',season:'saison'})[k]||(k&&k!=='ext'?'g-'+k:'');
+  const icon=(k,cls)=>{const f=PIC(P[k]?k:'nature');return window.PoulpyIcons?.has?.(f)?PoulpyIcons.svg(f,cls):svg(P[k]||P.nature,cls);};
   const lab=e=>e.labelCustom?`<span${NT}>${esc(e.label)}</span>`:esc(e.label);
   const KIND_LABEL={nature:'Nature',plage:'Plage',village:'Village',ville:'Ville',marche:'Marché',musee:'Musée',patrimoine:'Patrimoine',panorama:'Point de vue',rando:'Randonnée',ile:'Île',lac:'Lac'};
   const DIRS=['au nord','au nord-est','à l’est','au sud-est','au sud','au sud-ouest','à l’ouest','au nord-ouest'];

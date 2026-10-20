@@ -1,0 +1,57 @@
+/* @creme-tokens */
+/* Pictogrammes « Rivages découpés » (assets/pictos, registre poulpy-icons.js).
+   Couleur : aplats pétrole et soleil, jamais recolorés (pas de hue-rotate ni d'inversion).
+   Mono : silhouettes alpha en masque, teintées par la couleur du thème (--t-*). Aucune couleur codée en dur ici. */
+
+/* Picto couleur rendu dans un <svg> 24 x 24 : garde la taille CSS des anciens tracés, sans trait ni remplissage. */
+svg.oi{fill:none;stroke:none;overflow:visible}
+svg.oi image{pointer-events:none}
+
+/* ---------- Barre d'onglets : silhouette mono en masque, teinte = couleur du bouton (le verre natif lit cette couleur) ---------- */
+.ocean-v2 .nav>button[data-s] .tab-ic.tab-pic i{position:absolute;inset:1px;display:block;background:currentColor;
+  -webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;
+  transition:opacity .2s,transform .3s var(--as-spring,ease)}
+@media (prefers-reduced-motion:reduce){.ocean-v2 .nav>button[data-s] .tab-ic.tab-pic i{transition:none}}
+.reduce-motion.ocean-v2 .nav>button[data-s] .tab-ic.tab-pic i{transition:none}
+
+/* ---------- Explorer : puces d'activité au-dessus du globe (le point coloré devient la silhouette du sport,
+   de la couleur du texte de la puce : lisible sur la puce claire comme sur la puce sombre) ---------- */
+.ocean-v2 .omap-acts button[data-map-sport] i{width:20px;height:20px;border-radius:0;box-shadow:none;background:currentColor;
+  -webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat;transition:background-color .15s}
+.omap-acts button[data-map-sport=""]{--m:url("assets/pictos/sports/all-mono.webp")}
+.omap-acts button[data-map-sport=surf]{--m:url("assets/pictos/sports/surf-mono.webp")}
+.omap-acts button[data-map-sport=bodyboard]{--m:url("assets/pictos/sports/bodyboard-mono.webp")}
+.omap-acts button[data-map-sport=baignade]{--m:url("assets/pictos/sports/baignade-mono.webp")}
+.omap-acts button[data-map-sport=paddle]{--m:url("assets/pictos/sports/paddle-mono.webp")}
+.omap-acts button[data-map-sport=kayak]{--m:url("assets/pictos/sports/kayak-mono.webp")}
+.omap-acts button[data-map-sport=snorkeling]{--m:url("assets/pictos/sports/snorkeling-mono.webp")}
+.omap-acts button[data-map-sport=plongee]{--m:url("assets/pictos/sports/plongee-mono.webp")}
+.omap-acts button[data-map-sport=kitesurf]{--m:url("assets/pictos/sports/kitesurf-mono.webp")}
+.omap-acts button[data-map-sport=windsurf]{--m:url("assets/pictos/sports/windsurf-mono.webp")}
+
+/* ---------- Pictos couleur sur fond sombre (photo, bandeau, bouton plein) : petite pastille crème, sinon le pétrole disparaît ---------- */
+.ocean-v2 :is(.today-hero,#detailHero .loc,.guide-alt,.bio-head h5,.pres-hd,.eco-hd,.cmp-head h4,.field-check-emblem,.streak-card .flame,.ph-chip,.lvl-tag,.sp-chip.active) svg.oi,
+.ocean-v2 .cta img.spico{background:var(--t-card);border-radius:50%;padding:2px;box-sizing:border-box}
+.ocean-v2 :is(.today-hero,#detailHero .loc,.ph-chip) svg.oi{width:20px;height:20px;vertical-align:-5px}
+.ocean-v2 :is(.guide-alt,.bio-head h5) svg.oi{width:22px;height:22px;flex:none}
+.ocean-v2 :is(.pres-hd,.eco-hd) svg.oi{width:26px;height:26px;margin-top:0}
+
+/* ---------- Pastilles : les aplats remplissent mieux que l'ancien trait fin, on agrandit le picto dans sa tuile ---------- */
+.ocean-v2 .pstat-ic svg.oi{width:26px;height:26px}
+.ocean-v2 .chal-ic svg.oi{width:36px;height:36px}
+.ocean-v2 .chal.eco .chal-ic svg.oi{width:30px;height:30px}
+.ocean-v2 .chal-why svg.oi{width:16px;height:16px;margin-top:1px}
+.ocean-v2 .gt .gic svg.oi{width:20px;height:20px}
+.ocean-v2 .danger-item .di svg.oi{width:20px;height:20px}
+.ocean-v2 .badge .e svg.oi{width:26px;height:26px}
+.ocean-v2 .cmp-rule svg.oi{padding:2px}
+
+/* ---------- Sélection : petit rebond du picto, transform seulement ---------- */
+@keyframes oi-pop{0%{transform:scale(.82)}60%{transform:scale(1.08)}100%{transform:none}}
+.ocean-v2 .sport-card.sel .se img,.ocean-v2 .lvl-card.sel .lc-ic img,.ocean-v2 #dTabs .dtab.active img,
+.ocean-v2 .hf-act[aria-checked=true] .hf-act-ic::before{animation:oi-pop .32s ease-out}
+@media (prefers-reduced-motion:reduce){
+  .ocean-v2 .sport-card.sel .se img,.ocean-v2 .lvl-card.sel .lc-ic img,.ocean-v2 #dTabs .dtab.active img,
+  .ocean-v2 .hf-act[aria-checked=true] .hf-act-ic::before{animation:none}}
+.reduce-motion.ocean-v2 .sport-card.sel .se img,.reduce-motion.ocean-v2 .lvl-card.sel .lc-ic img,.reduce-motion.ocean-v2 #dTabs .dtab.active img,
+.reduce-motion.ocean-v2 .hf-act[aria-checked=true] .hf-act-ic::before{animation:none}

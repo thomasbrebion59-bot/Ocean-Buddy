@@ -2239,11 +2239,12 @@ cadenas:'<rect x="5" y="10.5" width="14" height="9.5" rx="2.5"/><path d="M8 10.5
 requin:'<path d="M2.5 15c4-5.5 11-8 17-4.5-1.6.4-2.8 1.4-3.4 2.8 1.7 1.6 4 1.9 6 .9-1.7 2.4-4.6 3.4-7.3 2.5-2.7 2.6-6.7 3.1-10 1.3 2-.6 3.5-2 4.2-3.8-2.2.2-4.4.1-6.5-.2z" fill="currentColor"/><path d="M12.8 9.6c.3-1.6 1.4-2.9 2.9-3.5-.1 1.5.4 2.9 1.4 4-1.5.2-3-.1-4.3-.5z" fill="currentColor"/>',
 tortue:'<ellipse cx="10.3" cy="12.5" rx="6.3" ry="4.9" fill="currentColor"/><circle cx="18.2" cy="12.2" r="2" fill="currentColor"/><ellipse cx="7.6" cy="7.6" rx="1.7" ry="1.1" fill="currentColor" transform="rotate(-25 7.6 7.6)"/><ellipse cx="7.6" cy="17.4" rx="1.7" ry="1.1" fill="currentColor" transform="rotate(25 7.6 17.4)"/><ellipse cx="3.2" cy="12.5" rx="1.5" ry=".9" fill="currentColor"/>'
 };
-function uic(key,cls){return '<svg'+(cls?' class="'+cls+'"':'')+' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+(ICON[key]||ICON.pin)+'</svg>';}
-var SURF_ICON='<svg viewBox="0 0 24 24"><path d="M4.6 19.4c-2-2-1.4-7.6 2.4-11.4S16.4 2.6 18.4 4.6 19.4 12.2 15.6 16 6.6 21.4 4.6 19.4z" fill="currentColor"/><path d="M8 16 16 8" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg>';
-var PIN_ICON='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7z"/><circle cx="12" cy="9" r="2.4" fill="#fff"/></svg>';
-var LEAF_ICON='<svg viewBox="0 0 24 24"><path d="M5 19c0-8 6-14 14-14 0 8-6 14-14 14z" fill="currentColor"/><path d="M9 15c2-3 5-5 8-6" stroke="#fff" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>';
-var HEART_ICON='<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20.2s-7.5-4.6-9.7-9.2C.6 7.6 2.3 4 5.8 3.4c2-.3 3.8.7 5 2.3l1.2 1.6 1.2-1.6c1.2-1.6 3-2.6 5-2.3 3.5.6 5.2 4.2 3.5 7.6-2.2 4.6-9.7 9.2-9.7 9.2z"/></svg>';
+/* Pictos dessinés (Rivages découpés, assets/pictos) quand ils existent ; tracé au trait sinon (commandes, flèches). */
+function uic(key,cls){var P=window.PoulpyIcons;if(P&&P.has){if(P.has(key))return P.svg(key,cls);if(!ICON[key])return P.svg('pin',cls);}return '<svg'+(cls?' class="'+cls+'"':'')+' viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">'+(ICON[key]||ICON.pin)+'</svg>';}
+var SURF_ICON=uic('surf');
+var PIN_ICON=uic('pin');
+var LEAF_ICON=uic('feuille');
+var HEART_ICON=uic('coeur');
 var GICON={
   "Type de fond":['fond','var(--k-sand)','var(--k-sand-ink)'],
   "Mar\u00e9e":['wave','var(--k-blue)','var(--k-blue-ink)'],

@@ -15,7 +15,9 @@
     windsurf:[['Choisir le créneau','Vérifier le vent et l’état de l’eau sur la durée de la session.'],['Repérer le retour','Identifier une mise à l’eau autorisée et les zones de sortie.'],['Préparer le gréement','Adapter le matériel avec l’école ou le club local.']]
   };
   const icons={pin:'<path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/>',compass:'<circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5Z"/>',check:'<rect x="4" y="4" width="16" height="17" rx="3"/><path d="M9 3h6v4H9zM8 14l3 3 5-6"/>',water:'<path d="M2 10c3-4 5 4 8 0s5 4 8 0 3 0 4 0M2 17c3-4 5 4 8 0s5 4 8 0 3 0 4 0"/>',level:'<path d="M4 20V14h4v6M10 20V9h4v11M16 20V4h4v16"/>',leaf:'<path d="M5 20C2 6 13 3 21 3c0 10-5 19-16 17Zm0 0L16 9"/>'};
-  const icon=k=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[k]||icons.compass}</svg>`;
+  /* Pictos dessinés (assets/pictos) ; le tracé reste en secours. */
+  const PIC={pin:'pin',compass:'g-compass',check:'g-check',leaf:'feuille',level:'niveau',water:'g-water'};
+  const icon=k=>window.PoulpyIcons?.has?.(PIC[k])?PoulpyIcons.svg(PIC[k]):`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons[k]||icons.compass}</svg>`;
   const voyageArt='<svg class="field-voyage-art" viewBox="0 0 250 120" fill="none" aria-hidden="true"><path d="M-10 95c40-36 63 20 100-10s70 19 95-5 55-5 80-18" stroke="#84c8ec" stroke-width="2"/><path d="M-10 111c40-36 63 20 100-10s70 19 95-5 55-5 80-18" stroke="#84c8ec" stroke-width="2"/><path d="M46 75c-35-60 100-74 110-24s65 35 61-27" stroke="#ffb477" stroke-width="2" stroke-dasharray="4 5"/><circle cx="46" cy="75" r="6" fill="#ffb477"/><path d="m216 10 8 21-9-3-7 7z" fill="#fff" stroke="#fff"/></svg>';
   const storageKey='oceanbuddy_visit_checklist_v1';
   let completed={};try{const saved=JSON.parse(localStorage.getItem(storageKey)||'{}');if(saved&&typeof saved==='object'&&!Array.isArray(saved))completed=saved;}catch(_){}
