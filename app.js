@@ -1895,7 +1895,11 @@ function renderSportGuide(){
   g.innerHTML=h;
   window.OceanPoulpy?.decorateOnboarding();
 }
-function pickSport(el,id){document.querySelectorAll('#sportGrid .sport-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');chosenSport=id;window.OceanTheme?.preview(id==='all'?null:id);}
+function pickSport(el,id){document.querySelectorAll('#sportGrid .sport-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');chosenSport=id;window.OceanTheme?.preview(id==='all'?null:id);rememberChoice();}
+/* Sport ET niveau choisis pendant l’onboarding : enregistrés tout de suite, sans attendre « Plonger dans l’app ».
+   Avant, rien n’était écrit avant ce dernier bouton : l’app fermée (ou tuée par iOS) sur l’écran « C’est parti »
+   reposait les deux questions au lancement suivant. La porte rapide (quickGate) n’enregistre qu’à sa validation. */
+function rememberChoice(){if(quickGate||!chosenSport||!chosenLevel)return;onbDone=true;saveState();}
 function showStep(n){document.querySelectorAll('.onb-step').forEach(s=>s.classList.toggle('active',+s.dataset.step===n));onbStep=n;window.OceanPoulpy?.focusOnboarding();}
 function onbNext(){
   if(onbStep===1&&!chosenSport){toast('Choisis une activité 🐙');return;}
@@ -1903,7 +1907,7 @@ function onbNext(){
   if(onbStep===2&&!chosenLevel){toast('Choisis ton niveau 🐙');return;}
   showStep(Math.min(3,onbStep+1));
 }
-function pickLevel(el){document.querySelectorAll('.lvl-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');chosenLevel=el.dataset.lvl;}
+function pickLevel(el){document.querySelectorAll('#lvlCards .lvl-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');chosenLevel=el.dataset.lvl;rememberChoice();}
 function finishOnb(){
   window.OceanNavigation?.begin();
   const o=document.getElementById('onb');o.classList.add('hide');document.body.classList.remove('onb-open');setTimeout(()=>o.style.display='none',560);

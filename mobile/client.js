@@ -31,13 +31,18 @@ async function boot(){
   // A stalled native bridge must not keep the whole interface behind the splash.
   // Until the backup answers, local data stays usable and native writes stay off.
   const hydration=Preferences.get({key:backupKey}).then(({value})=>({restored:restoreBackup(value)})).catch(()=>({restored:false}));
+  /* Profil déjà là (sport, niveau, onboarding : oceanbuddy_v1) : l’app démarre sans attendre le pont natif, le rideau
+     n’est jamais retardé. La copie native ne sert qu’à remplir les clés manquantes (jamais d’écrasement ni de rechargement).
+     Stockage du WebView vidé (iOS peut le perdre) : on attend la copie, pour que l’app relise le choix et ne repose
+     pas les questions de l’onboarding. */
+  let local=false;try{local=localStorage.getItem('oceanbuddy_v1')!==null;}catch(_){}
   let timer;
-  const result=await Promise.race([hydration,new Promise(resolve=>{timer=setTimeout(()=>resolve(null),5000);})]);
+  const result=local?null:await Promise.race([hydration,new Promise(resolve=>{timer=setTimeout(()=>resolve(null),5000);})]);
   clearTimeout(timer);
   if(result){ready=true;lastSnapshot=snapshot();}
   else hydration.then(({restored})=>{
     ready=true;lastSnapshot='';persist().catch(()=>{});
-    if(restored)location.reload();
+    if(restored&&!local)location.reload();
   });
   // All existing models retain their synchronous storage semantics. The native copy
   // follows writes, including removals, and is flushed before explicit app resets.
