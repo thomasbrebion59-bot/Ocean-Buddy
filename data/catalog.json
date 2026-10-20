@@ -28,7 +28,7 @@
         "Fonds qui changent vite, attention aux bancs de sable."
       ]
     ],
-    "tip": "Vérifie bien les baïnes avant d'entrer ! Reste toujours entre les drapeaux et n'y va jamais seul si la houle dépasse 2 m.",
+    "tip": "Vérifie bien les baïnes avant d’entrer ! Demande au poste de secours où te mettre à l’eau et ne surfe jamais seul.",
     "sports": [
       "surf"
     ],
@@ -103,7 +103,7 @@
       ],
       [
         "👥",
-        "Affluence élevée l'été, attention aux collisions."
+        "Affluence élevée l’été, attention aux collisions."
       ]
     ],
     "tip": "Spot parfait pour passer du niveau débutant à intermédiaire. Surfe le matin pour éviter la foule !",
@@ -138,8 +138,8 @@
       "height": 960,
       "thumb": "assets/spots/thumbs/lacanau.webp"
     },
-    "anecdote": "Lacanau a accueilli les premiers grands championnats de surf français et vibre chaque été au rythme du Lacanau Pro, l'une des compétitions les plus populaires du pays.",
-    "funFact": "Le Lacanau Pro (1979) est la plus vieille compétition de surf d'Europe. Pour la toute première édition, le budget a été bouclé… grâce à une tombola et à la vente de sandwichs-merguez sur la plage ! 🌭",
+    "anecdote": "Lacanau a accueilli les premiers grands championnats de surf français et vibre chaque été au rythme du Lacanau Pro, l’une des compétitions les plus populaires du pays.",
+    "funFact": "Le Lacanau Pro (1979) est la plus vieille compétition de surf d’Europe. Pour la toute première édition, le budget a été bouclé… grâce à une tombola et à la vente de sandwichs-merguez sur la plage ! 🌭",
     "zones": [
       {
         "n": "La Nord",
@@ -168,7 +168,7 @@
     "temp": "15°C",
     "tide": "Toutes marées",
     "danger": 3,
-    "desc": "Longue plage exposée à la houle de l'Atlantique, fonctionne quasiment toute l'année. Spot de référence en Bretagne pour le surf, et pour le windsurf et le kitesurf les jours de vent.",
+    "desc": "Longue plage exposée à la houle de l’Atlantique, fonctionne quasiment toute l’année. Spot de référence en Bretagne pour le surf, et pour le windsurf et le kitesurf les jours de vent.",
     "dangers": [
       [
         "💨",
@@ -176,14 +176,14 @@
       ],
       [
         "🌊",
-        "Houle puissante quand l'Atlantique se réveille."
+        "Houle puissante quand l’Atlantique se réveille."
       ],
       [
         "🥶",
         "Eau froide : combinaison indispensable."
       ]
     ],
-    "tip": "Mets une bonne combi (4/3 mini) ! La Torche reçoit toute la houle, regarde la taille annoncée avant d'y aller.",
+    "tip": "Mets une bonne combi (4/3 mini) ! La Torche reçoit toute la houle, regarde la taille annoncée avant d’y aller.",
     "sports": [
       "surf",
       "windsurf",
@@ -216,7 +216,7 @@
       "thumb": "assets/spots/thumbs/latorche.webp",
       "width": 1600
     },
-    "anecdote": "La Torche est si exposée au vent qu'elle est devenue l'un des spots de kitesurf et de windsurf les plus réputés d'Europe, avec des coupes du monde à son palmarès.",
+    "anecdote": "La Torche est si exposée au vent qu’elle est devenue l’un des spots de kitesurf et de windsurf les plus réputés d’Europe, avec des coupes du monde à son palmarès.",
     "funFact": "En 1986, La Torche a accueilli une épreuve de la Coupe du monde de windsurf dans des conditions dantesques (40 nœuds de vent). La légende Robby Naish y a brillé — tout en classant quand même le spot comme « vraiment difficile ».",
     "zones": [
       {
@@ -255,10 +255,10 @@
       ],
       [
         "👥",
-        "Très fréquenté, surtout l'été."
+        "Très fréquenté, surtout l’été."
       ]
     ],
-    "tip": "Le spot idéal pour ta première vague 🐙 ! Va-y à marée basse, l'eau est calme et l'ambiance super accueillante.",
+    "tip": "Un spot pour ta première vague. Va-y à marée basse, l’eau y est souvent plus calme et l’ambiance super accueillante.",
     "sports": [
       "surf"
     ],
@@ -289,14 +289,14 @@
       "thumb": "assets/spots/thumbs/biarritz.webp",
       "width": 1600
     },
-    "anecdote": "C'est sur la Côte des Basques qu'est né le surf en Europe, en 1957 : on la considère comme le berceau du surf du Vieux Continent.",
-    "funFact": "Le surf est arrivé ici en 1956, pendant le tournage du film « Le soleil se lève aussi » : Peter Viertel, scénariste hollywoodien qui n'avait jamais surfé, reçoit une planche et tente ses premières vagues sur la Côte des Basques. Dès 1957, on ne comptait que quatre surfeurs dans toute la France — et le premier club de surf français naîtra ici en 1959.",
+    "anecdote": "C’est sur la Côte des Basques qu’est né le surf en Europe, en 1957 : on la considère comme le berceau du surf du Vieux Continent.",
+    "funFact": "Le surf est arrivé ici en 1956, pendant le tournage du film « Le soleil se lève aussi » : Peter Viertel, scénariste hollywoodien qui n’avait jamais surfé, reçoit une planche et tente ses premières vagues sur la Côte des Basques. Dès 1957, on ne comptait que quatre surfeurs dans toute la France — et le premier club de surf français naîtra ici en 1959.",
     "fauna": "Pays Basque : dauphins, bars, et parfois des globicéphales au large.",
     "zones": [
       {
         "n": "La Côte des Basques",
         "l": "debutant",
-        "d": "spot d'apprentissage, longboard"
+        "d": "spot d’apprentissage, longboard"
       },
       {
         "n": "La Grande Plage",
@@ -320,7 +320,7 @@
     "temp": "19°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Beach break puissant et creux, le spot le plus réputé d'Anglet. Tubes rapides quand la houle rentre, terrain de jeu des surfeurs aguerris.",
+    "desc": "Beach break puissant et creux, le spot le plus réputé d’Anglet. Tubes rapides quand la houle rentre, terrain de jeu des surfeurs aguerris.",
     "dangers": [
       [
         "⚡",
@@ -335,7 +335,7 @@
         "Digues à proximité, garde tes distances."
       ]
     ],
-    "tip": "Spot costaud ! N'y va que si tu maîtrises le take-off rapide et le canard dans la mousse épaisse.",
+    "tip": "Spot costaud ! N’y va que si tu maîtrises le take-off rapide et le canard dans la mousse épaisse.",
     "sports": [
       "surf"
     ],
@@ -406,7 +406,7 @@
         "Eau fraîche selon la saison."
       ]
     ],
-    "tip": "Super spot d'initiation ! Reste au milieu de la plage, loin des rochers, et profite 🐙",
+    "tip": "Spot d’initiation. Reste au milieu de la plage, loin des rochers, et profite.",
     "sports": [
       "surf"
     ],
@@ -437,7 +437,7 @@
       "thumb": "assets/spots/thumbs/quiberon.webp",
       "width": 1600
     },
-    "anecdote": "La presqu'île de Quiberon tient au continent par un isthme parfois large de seulement 22 mètres, que la mer menace lors des grosses tempêtes.",
+    "anecdote": "La presqu’île de Quiberon tient au continent par un isthme parfois large de seulement 22 mètres, que la mer menace lors des grosses tempêtes.",
     "country": "France"
   },
   {
@@ -454,7 +454,7 @@
     "temp": "19°C",
     "tide": "Mi-marée montante",
     "danger": 3,
-    "desc": "Beach break de qualité, l'un des plus consistants des Landes. Pics variés qui conviennent aux intermédiaires cherchant à muscler leur surf.",
+    "desc": "Beach break de qualité, l’un des plus consistants des Landes. Pics variés qui conviennent aux intermédiaires cherchant à muscler leur surf.",
     "dangers": [
       [
         "🌀",
@@ -465,7 +465,7 @@
         "Peut grossir vite avec la houle."
       ]
     ],
-    "tip": "Excellent terrain de progression. Repère le sens du courant en regardant la dérive de l'écume avant d'entrer.",
+    "tip": "Excellent terrain de progression. Repère le sens du courant en regardant la dérive de l’écume avant d’entrer.",
     "sports": [
       "surf"
     ],
@@ -496,7 +496,7 @@
       "thumb": "assets/spots/thumbs/seignosse.webp",
       "width": 1600
     },
-    "anecdote": "Seignosse est bordée par l'une des plus grandes forêts plantées d'Europe, créée au 19e siècle pour fixer les dunes : ici, on surfe au milieu des pins.",
+    "anecdote": "Seignosse est bordée par l’une des plus grandes forêts plantées d’Europe, créée au 19e siècle pour fixer les dunes : ici, on surfe au milieu des pins.",
     "country": "France"
   },
   {
@@ -513,7 +513,7 @@
     "temp": "18°C",
     "tide": "Marée basse",
     "danger": 4,
-    "desc": "Spot puissant bordé par la forêt, l'un des beach breaks les plus creux des Landes. Tubes rapides quand la houle entre, très prisé des surfeurs confirmés.",
+    "desc": "Spot puissant bordé par la forêt, l’un des beach breaks les plus creux des Landes. Tubes rapides quand la houle entre, très prisé des surfeurs confirmés.",
     "dangers": [
       [
         "⚡",
@@ -528,7 +528,7 @@
         "Bancs de sable changeants."
       ]
     ],
-    "tip": "Spot sérieux ! Privilégie une houle modérée et repère les courants avant d'entrer.",
+    "tip": "Spot sérieux ! Privilégie une houle modérée et repère les courants avant d’entrer.",
     "sports": [
       "surf"
     ],
@@ -558,7 +558,7 @@
       "thumb": "assets/spots/thumbs/capbreton.webp",
       "width": 1600
     },
-    "anecdote": "Au large de Capbreton s'ouvre le Gouf, un canyon sous-marin de plus de 3000 m de profondeur qui démarre à quelques centaines de mètres du bord.",
+    "anecdote": "Au large de Capbreton s’ouvre le Gouf, un canyon sous-marin de plus de 3000 m de profondeur qui démarre à quelques centaines de mètres du bord.",
     "country": "France"
   },
   {
@@ -575,7 +575,7 @@
     "temp": "19°C",
     "tide": "Mi-marée",
     "danger": 2,
-    "desc": "Magnifique vague droite dans une baie abritée, l'une des plus belles du Pays Basque. Déroule longuement, idéale pour travailler ses courbes.",
+    "desc": "Magnifique vague droite dans une baie abritée, l’une des plus belles du Pays Basque. Déroule longuement, idéale pour travailler ses courbes.",
     "dangers": [
       [
         "🪨",
@@ -617,7 +617,7 @@
       "thumb": "assets/spots/thumbs/lafitenia.webp",
       "width": 1600
     },
-    "anecdote": "Lafitenia est l'une des plus belles droites du Pays Basque : elle déroule si longuement dans sa baie qu'on la surnomme le petit point break basque.",
+    "anecdote": "Lafitenia est l’une des plus belles droites du Pays Basque : elle déroule si longuement dans sa baie qu’on la surnomme le petit point break basque.",
     "funFact": "Au large de Saint-Jean-de-Luz, la vague géante de Belharra a été surfée pour la première fois le 22 novembre 2002 par une poignée de surfeurs (dont Peyo Lizarazu). Déferlant à environ 2,5 km du bord et pouvant atteindre 8 à 15 m, elle a placé le Pays Basque sur la carte mondiale des grosses vagues.",
     "country": "France"
   },
@@ -635,11 +635,11 @@
     "temp": "18°C",
     "tide": "Toutes marées",
     "danger": 4,
-    "desc": "Spot de grosse houle qui se réveille quand l'Atlantique gronde. Vague de reef pour surfeurs aguerris, réputée pour le gros.",
+    "desc": "Spot de grosse houle qui se réveille quand l’Atlantique gronde. Vague de reef pour surfeurs aguerris, réputée pour le gros.",
     "dangers": [
       [
         "🌊",
-        "Grosses vagues, longue rame jusqu'au pic."
+        "Grosses vagues, longue rame jusqu’au pic."
       ],
       [
         "🪨",
@@ -650,7 +650,7 @@
         "Courants importants."
       ]
     ],
-    "tip": "Réservé aux surfeurs expérimentés et en bonne forme physique. N'y va jamais seul.",
+    "tip": "Réservé aux surfeurs expérimentés et en bonne forme physique. N’y va jamais seul.",
     "sports": [
       "surf"
     ],
@@ -681,7 +681,7 @@
       "thumb": "assets/spots/thumbs/guethary.webp",
       "width": 1600
     },
-    "anecdote": "Parlementia fut l'un des premiers spots de grosses vagues domptés en France, dès les années 1960, bien avant l'ère moderne du surf de gros.",
+    "anecdote": "Parlementia fut l’un des premiers spots de grosses vagues domptés en France, dès les années 1960, bien avant l’ère moderne du surf de gros.",
     "country": "France"
   },
   {
@@ -709,7 +709,7 @@
         "Plage sauvage, peu surveillée."
       ]
     ],
-    "tip": "Spot nature superbe. Comme c'est peu surveillé, surfe accompagné.",
+    "tip": "Spot nature superbe. Comme c’est peu surveillé, surfe accompagné.",
     "sports": [
       "surf"
     ],
@@ -740,7 +740,7 @@
       "thumb": "assets/spots/thumbs/sauveterre.webp",
       "width": 1600
     },
-    "anecdote": "La plage de Sauveterre est nichée dans une réserve naturelle : on peut y croiser des chevreuils dans la forêt juste avant d'enfiler la combinaison.",
+    "anecdote": "La plage de Sauveterre est nichée dans une réserve naturelle : on peut y croiser des chevreuils dans la forêt juste avant d’enfiler la combinaison.",
     "country": "France"
   },
   {
@@ -761,14 +761,14 @@
     "dangers": [
       [
         "👥",
-        "Plage fréquentée l'été."
+        "Plage fréquentée l’été."
       ],
       [
         "🌀",
         "Quelques courants par endroits."
       ]
     ],
-    "tip": "Top pour débuter 🐙 ! Reste dans les zones surveillées et profite des petites vagues.",
+    "tip": "Pour débuter, demande au poste de secours où te mettre à l’eau, et profite des petites vagues.",
     "sports": [
       "surf"
     ],
@@ -816,7 +816,7 @@
     "temp": "15°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Plage sauvage et splendide de la presqu'île de Crozon, exposée plein ouest. Vague puissante dans un cadre totalement préservé, sans aucune construction.",
+    "desc": "Plage sauvage et splendide de la presqu’île de Crozon, exposée plein ouest. Vague puissante dans un cadre totalement préservé, sans aucune construction.",
     "dangers": [
       [
         "🌊",
@@ -828,10 +828,10 @@
       ],
       [
         "🥶",
-        "Eau froide toute l'année."
+        "Eau froide toute l’année."
       ]
     ],
-    "tip": "Spot d'engagement : seul le large encaisse. Va-y accompagné et par conditions raisonnables.",
+    "tip": "Spot d’engagement. Va-y accompagné et par conditions raisonnables.",
     "sports": [
       "surf"
     ],
@@ -863,7 +863,7 @@
       "thumb": "assets/spots/thumbs/lapalue.webp",
       "caption": "La plage de la Palue vue depuis le sentier côtier à Crozon."
     },
-    "anecdote": "La Palue est l'une des rares plages totalement sauvages de Bretagne : aucune construction à l'horizon, et une baignade réputée à vos risques et périls.",
+    "anecdote": "La Palue est l’une des rares plages totalement sauvages de Bretagne : aucune construction à l’horizon, et une baignade réputée à vos risques et périls.",
     "country": "France"
   },
   {
@@ -880,7 +880,7 @@
     "temp": "15°C",
     "tide": "Toutes marées",
     "danger": 3,
-    "desc": "Beach break breton consistant qui fonctionne par de nombreuses conditions, dans la baie d'Audierne. Bon spot pour progresser.",
+    "desc": "Beach break breton consistant qui fonctionne par de nombreuses conditions, dans la baie d’Audierne. Bon spot pour progresser.",
     "dangers": [
       [
         "💨",
@@ -939,18 +939,18 @@
     "temp": "19°C",
     "tide": "Marée montante",
     "danger": 1,
-    "desc": "Petite baie abritée près de Royan, vagues douces idéales pour l'apprentissage. Ambiance balnéaire et eau souvent calme.",
+    "desc": "Petite baie abritée près de Royan, vagues douces idéales pour l’apprentissage. Ambiance balnéaire et eau souvent calme.",
     "dangers": [
       [
         "👥",
-        "Plage très fréquentée l'été."
+        "Plage très fréquentée l’été."
       ],
       [
         "🪨",
         "Quelques rochers en bord de baie."
       ]
     ],
-    "tip": "Parfait pour débuter en douceur 🐙. Reste au centre de la baie.",
+    "tip": "Un spot pour débuter en douceur. Reste au centre de la baie.",
     "sports": [
       "surf"
     ],
@@ -982,7 +982,7 @@
       "height": 640,
       "thumb": "assets/spots/thumbs/lapalmyre.webp"
     },
-    "anecdote": "Pontaillac, à Royan, est l'un des plus vieux spots de la côte atlantique : on y surfe une vague formée par les rochers, au cœur d'une station Belle Époque.",
+    "anecdote": "Pontaillac, à Royan, est l’un des plus vieux spots de la côte atlantique : on y surfe une vague formée par les rochers, au cœur d’une station Belle Époque.",
     "country": "France"
   },
   {
@@ -1041,7 +1041,7 @@
       "thumb": "assets/spots/thumbs/mimizan.webp",
       "width": 1600
     },
-    "anecdote": "Mimizan abrite l'un des plus anciens phares des Landes ; la ville qui sentait jadis la papeterie sent aujourd'hui l'iode et la wax.",
+    "anecdote": "Mimizan abrite l’un des plus anciens phares des Landes ; la ville qui sentait jadis la papeterie sent aujourd’hui l’iode et la wax.",
     "country": "France"
   },
   {
@@ -1058,7 +1058,7 @@
     "temp": "19°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Spot puissant à la pointe du Cap Ferret, à l'entrée du bassin d'Arcachon. Vagues creuses et courants marqués, réservé aux confirmés.",
+    "desc": "Spot puissant à la pointe du Cap Ferret, à l’entrée du bassin d’Arcachon. Vagues creuses et courants marqués, réservé aux confirmés.",
     "dangers": [
       [
         "🌊",
@@ -1104,7 +1104,7 @@
       "thumb": "assets/spots/thumbs/capferret.webp",
       "width": 1600
     },
-    "anecdote": "Au Cap Ferret, on surfe l'océan le matin et on rejoint le Bassin d'Arcachon l'après-midi : une langue de sable parmi les plus mouvantes de France.",
+    "anecdote": "Au Cap Ferret, on surfe l’océan le matin et on rejoint le Bassin d’Arcachon l’après-midi : une langue de sable parmi les plus mouvantes de France.",
     "country": "France"
   },
   {
@@ -1121,7 +1121,7 @@
     "temp": "19°C",
     "tide": "Marée basse",
     "danger": 3,
-    "desc": "Beach break réputé du Pays Basque devant l'embouchure, vague de qualité quand les bancs de sable sont bien placés.",
+    "desc": "Beach break réputé du Pays Basque devant l’embouchure, vague de qualité quand les bancs de sable sont bien placés.",
     "dangers": [
       [
         "🌀",
@@ -1132,7 +1132,7 @@
         "Quelques rochers."
       ]
     ],
-    "tip": "Surfe à marée basse pour les meilleurs bancs et garde tes distances avec l'embouchure.",
+    "tip": "Surfe à marée basse pour les meilleurs bancs et garde tes distances avec l’embouchure.",
     "sports": [
       "surf"
     ],
@@ -1163,7 +1163,7 @@
       "thumb": "assets/spots/thumbs/bidart.webp",
       "width": 1600
     },
-    "anecdote": "Le spot du Pavillon Royal doit son nom à un ancien casino-hôtel de luxe fréquenté au début du 20e siècle par des têtes couronnées d'Europe.",
+    "anecdote": "Le spot du Pavillon Royal doit son nom à un ancien casino-hôtel de luxe fréquenté au début du 20e siècle par des têtes couronnées d’Europe.",
     "country": "France"
   },
   {
@@ -1180,7 +1180,7 @@
     "temp": "17°C",
     "tide": "Toutes marées",
     "danger": 4,
-    "desc": "LE spot de vagues géantes : un canyon sous-marin propulse des murs d'eau pouvant dépasser 20 m, théâtre des records mondiaux de big wave.",
+    "desc": "LE spot de vagues géantes : un canyon sous-marin propulse des murs d’eau pouvant dépasser 20 m, théâtre des records mondiaux de big wave.",
     "dangers": [
       [
         "⚡",
@@ -1191,7 +1191,7 @@
         "Courants extrêmes."
       ]
     ],
-    "tip": "Spot de très gros : à admirer depuis le phare, le surf y est réservé à l'élite mondiale.",
+    "tip": "Spot de très gros : à admirer depuis le phare, le surf y est réservé à l’élite mondiale.",
     "sports": [
       "surf"
     ],
@@ -1251,7 +1251,7 @@
     "temp": "17°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Le beach break le plus puissant d'Europe, surnommé la « Pipeline européenne » pour ses tubes parfaits et creux.",
+    "desc": "Le beach break le plus puissant d’Europe, surnommé la « Pipeline européenne » pour ses tubes parfaits et creux.",
     "dangers": [
       [
         "⚡",
@@ -1379,7 +1379,7 @@
     "temp": "16°C",
     "tide": "Marée descendante",
     "danger": 4,
-    "desc": "La gauche la plus célèbre d'Europe : une vague tubulaire parfaite qui se forme à l'embouchure de la ria de Mundaka.",
+    "desc": "La gauche la plus célèbre d’Europe : une vague tubulaire parfaite qui se forme à l’embouchure de la ria de Mundaka.",
     "dangers": [
       [
         "🌀",
@@ -1390,7 +1390,7 @@
         "Spot très convoité."
       ]
     ],
-    "tip": "Marche surtout à marée descendante avec une bonne houle ; niveau confirmé requis.",
+    "tip": "Fonctionne surtout à marée descendante avec une bonne houle ; niveau confirmé requis.",
     "sports": [
       "surf"
     ],
@@ -1444,7 +1444,7 @@
     "temp": "9°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Un reef break glacial et parfait tout au nord de l'Écosse : des tubes de droite dans une eau à faire pâlir.",
+    "desc": "Un reef break glacial et parfait tout au nord de l’Écosse : des tubes de droite dans une eau à faire pâlir.",
     "dangers": [
       [
         "🥶",
@@ -1452,10 +1452,10 @@
       ],
       [
         "🪨",
-        "Reef peu profond."
+        "Récif peu profond."
       ]
     ],
-    "tip": "Combi 5/4 + bottes + gants + cagoule obligatoires : c'est froid mais parfait.",
+    "tip": "Combi 5/4 + bottes + gants + cagoule : l’eau est froide.",
     "sports": [
       "surf"
     ],
@@ -1503,7 +1503,7 @@
     "temp": "11°C",
     "tide": "Mi-marée",
     "danger": 3,
-    "desc": "Le spot phare de l'Irlande : un reef qui offre gauche et droite dans une ambiance celtique.",
+    "desc": "Le spot phare de l’Irlande : un reef qui offre gauche et droite dans une ambiance celtique.",
     "dangers": [
       [
         "🥶",
@@ -1511,10 +1511,10 @@
       ],
       [
         "🪨",
-        "Reef."
+        "Récif."
       ]
     ],
-    "tip": "Houle régulière de l'Atlantique nord ; combinaison épaisse indispensable.",
+    "tip": "Houle régulière de l’Atlantique nord ; combinaison épaisse indispensable.",
     "sports": [
       "surf"
     ],
@@ -1561,7 +1561,7 @@
     "temp": "16°C",
     "tide": "Marée descendante",
     "danger": 3,
-    "desc": "L'une des plus belles droites d'Espagne, à l'embouchure d'une ria asturienne bordée de pins.",
+    "desc": "L’une des plus belles droites d’Espagne, à l’embouchure d’une ria asturienne bordée de pins.",
     "dangers": [
       [
         "🌀",
@@ -1572,7 +1572,7 @@
         "Eau fraîche."
       ]
     ],
-    "tip": "Marche surtout à marée descendante ; cadre superbe entre ria et forêt.",
+    "tip": "Fonctionne surtout à marée descendante ; cadre superbe entre ria et forêt.",
     "sports": [
       "surf"
     ],
@@ -1624,7 +1624,7 @@
     "dangers": [
       [
         "👥",
-        "Affluence l'été."
+        "Affluence l’été."
       ],
       [
         "🌀",
@@ -1686,7 +1686,7 @@
       ],
       [
         "🌀",
-        "Baïnes."
+        "Courants d’arrachement."
       ]
     ],
     "tip": "Bon spot de progression ; surfe le matin pour éviter la foule.",
@@ -1747,7 +1747,7 @@
         "Eau fraîche."
       ]
     ],
-    "tip": "Vagues consistantes de l'Atlantique galicien ; combinaison conseillée.",
+    "tip": "Vagues consistantes de l’Atlantique galicien ; combinaison conseillée.",
     "sports": [
       "surf"
     ],
@@ -1796,18 +1796,18 @@
     "temp": "21°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Vague de reef puissante des Canaries, l'un des spots les plus réputés et lourds d'Espagne.",
+    "desc": "Vague de reef puissante des Canaries, l’un des spots les plus réputés et lourds d’Espagne.",
     "dangers": [
       [
         "🪨",
-        "Reef volcanique tranchant."
+        "Récif volcanique tranchant."
       ],
       [
         "🌊",
         "Vague lourde."
       ]
     ],
-    "tip": "Reef costaud sur fond de lave ; réservé aux surfeurs confirmés, chausse-toi.",
+    "tip": "Reef costaud sur fond de lave ; réservé aux surfeurs confirmés, mets des chaussons.",
     "sports": [
       "surf"
     ],
@@ -1990,7 +1990,7 @@
     "temp": "13°C",
     "tide": "Toutes marées",
     "danger": 4,
-    "desc": "Un spot de grosses vagues où des murs d'eau de 15 m déferlent dans une eau froide réputée pour ses requins.",
+    "desc": "Un spot de grosses vagues où des murs d’eau de 15 m déferlent dans une eau froide réputée pour ses requins.",
     "dangers": [
       [
         "🦈",
@@ -2057,7 +2057,7 @@
     "temp": "18°C",
     "tide": "Mi-marée",
     "danger": 2,
-    "desc": "La vague parfaite de la Californie du Sud : des pics réguliers et maniables, terrain d'entraînement des pros.",
+    "desc": "La vague parfaite de la Californie du Sud : des pics réguliers et maniables, terrain d’entraînement des pros.",
     "dangers": [
       [
         "👥",
@@ -2065,10 +2065,10 @@
       ],
       [
         "🚶",
-        "Longue marche d'accès."
+        "Longue marche d’accès."
       ]
     ],
-    "tip": "Vague-école des pros pour le high-performance ; arrive tôt, c'est bondé.",
+    "tip": "Vague-école des pros pour le high-performance ; arrive tôt, c’est bondé.",
     "sports": [
       "surf"
     ],
@@ -2126,7 +2126,7 @@
         "Quelques galets."
       ]
     ],
-    "tip": "Le paradis du longboard et des débutants confirmés ; déroule à l'infini.",
+    "tip": "Le paradis du longboard et des débutants confirmés ; déroule à l’infini.",
     "sports": [
       "surf"
     ],
@@ -2184,7 +2184,7 @@
         "Courants forts."
       ]
     ],
-    "tip": "Beach break costaud et lourd ; travaille ton canard avant d'y aller.",
+    "tip": "Beach break costaud et lourd ; travaille ton canard avant d’y aller.",
     "sports": [
       "surf"
     ],
@@ -2290,7 +2290,7 @@
     "temp": "18°C",
     "tide": "Toutes marées",
     "danger": 2,
-    "desc": "La gauche la plus longue du monde : on peut y surfer une vague sur plus de 2 km sans s'arrêter.",
+    "desc": "La gauche la plus longue du monde : on peut y surfer une vague sur plus de 2 km sans s’arrêter.",
     "dangers": [
       [
         "🥶",
@@ -2407,7 +2407,7 @@
     "temp": "18°C",
     "tide": "Mi-marée",
     "danger": 3,
-    "desc": "Supertubes à J-Bay : l'une des droites les plus parfaites et rapides de la planète, étape du championnat du monde.",
+    "desc": "Supertubes à J-Bay : l’une des droites les plus parfaites et rapides de la planète, étape du championnat du monde.",
     "dangers": [
       [
         "🦈",
@@ -2492,10 +2492,10 @@
       ],
       [
         "🪨",
-        "Reef."
+        "Récif."
       ]
     ],
-    "tip": "Vague de caractère ; combinaison conseillée, l'eau du détroit de Bass est fraîche.",
+    "tip": "Vague de caractère ; combinaison conseillée, l’eau du détroit de Bass est fraîche.",
     "sports": [
       "surf"
     ],
@@ -2542,7 +2542,7 @@
     "temp": "23°C",
     "tide": "Mi-marée",
     "danger": 2,
-    "desc": "La « Superbank » de la Gold Coast : une droite de sable interminable qui peut relier plusieurs spots d'un seul ride.",
+    "desc": "La « Superbank » de la Gold Coast : une droite de sable interminable qui peut relier plusieurs spots d’un seul ride.",
     "dangers": [
       [
         "👥",
@@ -2617,7 +2617,7 @@
     "temp": "19°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Vague de reef puissante de l'ouest australien, qui marche par grosse houle dans un cadre sauvage.",
+    "desc": "Vague de reef puissante de l’ouest australien, qui marche par grosse houle dans un cadre sauvage.",
     "dangers": [
       [
         "🌊",
@@ -2675,7 +2675,7 @@
     "temp": "28°C",
     "tide": "Mi-marée",
     "danger": 3,
-    "desc": "La gauche mythique de Bali : des murs et tubes parfaits au pied de falaises couronnées d'un temple hindou.",
+    "desc": "La gauche mythique de Bali : des murs et tubes parfaits au pied de falaises couronnées d’un temple hindou.",
     "dangers": [
       [
         "🪨",
@@ -2762,7 +2762,7 @@
         "Tube creux."
       ]
     ],
-    "tip": "Marche surtout à marée haute avec de la houle ; engagement maximal.",
+    "tip": "Fonctionne surtout à marée haute avec de la houle ; engagement maximal.",
     "sports": [
       "surf"
     ],
@@ -2811,7 +2811,7 @@
     "temp": "28°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "L'une des plus belles gauches du monde, au large d'un récif fidjien, longue, creuse et puissante.",
+    "desc": "L’une des plus belles gauches du monde, au large d’un récif fidjien, longue, creuse et puissante.",
     "dangers": [
       [
         "🪨",
@@ -2882,7 +2882,7 @@
         "Vague extrêmement lourde."
       ]
     ],
-    "tip": "L'une des vagues les plus dangereuses au monde ; à voir absolument, à surfer si tu es pro.",
+    "tip": "L’une des vagues les plus dangereuses au monde ; à voir absolument, à surfer si tu es pro.",
     "sports": [
       "surf"
     ],
@@ -2923,7 +2923,7 @@
       {
         "n": "Le channel",
         "l": "intermediaire",
-        "d": "zone d'observation, accès bateau"
+        "d": "zone d’observation, accès bateau"
       }
     ],
     "country": "Polynésie française"
@@ -2942,15 +2942,15 @@
     "temp": "23°C",
     "tide": "Mi-marée",
     "danger": 2,
-    "desc": "Le spot phare de l'île de Florianópolis, beach break animé au cœur de la capitale brésilienne du surf.",
+    "desc": "Le spot phare de l’île de Florianópolis, beach break animé au cœur de la capitale brésilienne du surf.",
     "dangers": [
       [
         "🌀",
-        "Baïnes."
+        "Courants d’arrachement."
       ],
       [
         "👥",
-        "Affluence l'été."
+        "Affluence l’été."
       ]
     ],
     "tip": "Bon spot de progression dans une ambiance festive ; attention aux courants.",
@@ -3000,7 +3000,7 @@
     "temp": "28°C",
     "tide": "Mi-marée",
     "danger": 3,
-    "desc": "La droite de référence d'Amérique centrale : un point break rapide qui déroule sur les rochers de La Libertad.",
+    "desc": "La droite de référence d’Amérique centrale : un point break rapide qui déroule sur les rochers de La Libertad.",
     "dangers": [
       [
         "🪨",
@@ -3011,7 +3011,7 @@
         "Vague rapide."
       ]
     ],
-    "tip": "Belle droite de pointe ; entrée par les rochers, chausse-toi bien.",
+    "tip": "Belle droite de pointe ; entrée par les rochers, mets des chaussons.",
     "sports": [
       "surf"
     ],
@@ -3059,7 +3059,7 @@
     "temp": "17°C",
     "tide": "Mi-marée",
     "danger": 3,
-    "desc": "L'une des plus longues gauches du monde, point break parfait popularisé par le film « Endless Summer ».",
+    "desc": "L’une des plus longues gauches du monde, point break parfait popularisé par le film « Endless Summer ».",
     "dangers": [
       [
         "🪨",
@@ -3293,11 +3293,11 @@
     "temp": "17°C",
     "tide": "Mi-marée",
     "danger": 2,
-    "desc": "Le principal spot de surf d'Argentine, beach breaks variés le long de la grande station balnéaire.",
+    "desc": "Le principal spot de surf d’Argentine, beach breaks variés le long de la grande station balnéaire.",
     "dangers": [
       [
         "🌀",
-        "Baïnes."
+        "Courants d’arrachement."
       ],
       [
         "🥶",
@@ -3351,11 +3351,11 @@
     "temp": "19°C",
     "tide": "Marée basse",
     "danger": 4,
-    "desc": "Tube de reef puissant dans le désert d'Atacama, l'une des vagues les plus creuses du Chili.",
+    "desc": "Tube de reef puissant dans le désert d’Atacama, l’une des vagues les plus creuses du Chili.",
     "dangers": [
       [
         "🪨",
-        "Reef peu profond."
+        "Récif peu profond."
       ],
       [
         "⚡",
@@ -3479,7 +3479,7 @@
         "Vagues parfois molles."
       ]
     ],
-    "tip": "Spot d'initiation animé près de Tokyo ; le mont Fuji en toile de fond par temps clair.",
+    "tip": "Spot d’initiation animé près de Tokyo ; le mont Fuji en toile de fond par temps clair.",
     "sports": [
       "surf"
     ],
@@ -3585,7 +3585,7 @@
     "temp": "28°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Le tube de droite légendaire des Philippines, sur un récif au bout d'un ponton de bois.",
+    "desc": "Le tube de droite légendaire des Philippines, sur un récif au bout d’un ponton de bois.",
     "dangers": [
       [
         "⚠️",
@@ -3644,7 +3644,7 @@
     "temp": "26°C",
     "tide": "Toutes marées",
     "danger": 1,
-    "desc": "Le berceau du surf moderne : de longues vagues douces parfaites pour apprendre, face aux gratte-ciels d'Honolulu.",
+    "desc": "Le berceau du surf moderne : de longues vagues douces parfaites pour apprendre, face aux gratte-ciels d’Honolulu.",
     "dangers": [
       [
         "👥",
@@ -3655,7 +3655,7 @@
         "Récif par endroits."
       ]
     ],
-    "tip": "LE spot pour apprendre dans une eau chaude ; déroule en douceur.",
+    "tip": "Un spot pour apprendre dans une eau chaude ; déroule en douceur.",
     "sports": [
       "surf"
     ],
@@ -3713,7 +3713,7 @@
         "Conditions arctiques."
       ]
     ],
-    "tip": "Surf arctique d'exception ; combinaison 6/5 + gants + cagoule indispensables.",
+    "tip": "Surf arctique d’exception ; combinaison 6/5 + gants + cagoule indispensables.",
     "sports": [
       "surf"
     ],
@@ -3820,7 +3820,7 @@
     "temp": "28°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "L'archipel aux vagues parfaites : des tubes de récif de classe mondiale accessibles en bateau (boat trip).",
+    "desc": "L’archipel aux vagues parfaites : des tubes de récif de classe mondiale accessibles en bateau (boat trip).",
     "dangers": [
       [
         "🪨",
@@ -3939,7 +3939,7 @@
     "temp": "27°C",
     "tide": "—",
     "danger": 4,
-    "desc": "Gouffre marin circulaire de 124 m de profondeur classé à l'UNESCO. Plongée mythique parmi stalactites et requins, réservée aux confirmés.",
+    "desc": "Gouffre marin circulaire de 124 m de profondeur classé à l’UNESCO. Plongée mythique parmi stalactites et requins, réservée aux confirmés.",
     "dangers": [
       [
         "🕳️",
@@ -3999,7 +3999,7 @@
     "temp": "28°C",
     "tide": "—",
     "danger": 3,
-    "desc": "Île volcanique cernée d'un tombant vertigineux, célèbre pour ses tornades de barracudas et ses tortues vertes.",
+    "desc": "Île volcanique cernée d’un tombant vertigineux, célèbre pour ses tornades de barracudas et ses tortues vertes.",
     "dangers": [
       [
         "🌀",
@@ -4010,7 +4010,7 @@
         "Faune protégée : ne rien toucher."
       ]
     ],
-    "tip": "Permis d'accès limité chaque jour : réserve bien à l'avance.",
+    "tip": "Permis d’accès limité chaque jour : réserve bien à l’avance.",
     "sports": [
       "plongee",
       "snorkeling"
@@ -4119,11 +4119,11 @@
     "temp": "25°C",
     "tide": "—",
     "danger": 4,
-    "desc": "Cargo britannique coulé en 1941, l'une des plus belles épaves du monde : motos, camions et wagons figés sous l'eau.",
+    "desc": "Cargo britannique coulé en 1941, l’une des plus belles épaves du monde : motos, camions et wagons figés sous l’eau.",
     "dangers": [
       [
         "🚢",
-        "Pénétration d'épave réservée aux confirmés."
+        "Pénétration d’épave réservée aux confirmés."
       ],
       [
         "🌀",
@@ -4238,7 +4238,7 @@
     "temp": "26°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "Le plus grand récif corallien du monde, visible depuis l'espace. Snorkeling et plongée dans une biodiversité unique.",
+    "desc": "Le plus grand récif corallien du monde, visible depuis l’espace. Snorkeling et plongée dans une biodiversité unique.",
     "dangers": [
       [
         "🪼",
@@ -4359,7 +4359,7 @@
     "temp": "25°C",
     "tide": "—",
     "danger": 2,
-    "desc": "Cénote d'eau douce cristalline relié à un réseau de grottes, idéal pour le snorkeling et la plongée souterraine encadrée.",
+    "desc": "Cénote d’eau douce cristalline relié à un réseau de grottes, idéal pour le snorkeling et la plongée souterraine encadrée.",
     "dangers": [
       [
         "🕯️",
@@ -4420,7 +4420,7 @@
     "temp": "21°C",
     "tide": "—",
     "danger": 2,
-    "desc": "Réserve marine protégée au large de l'Estartit : mérous curieux et grottes, référence de la plongée en Méditerranée.",
+    "desc": "Réserve marine protégée au large de l’Estartit : mérous curieux et grottes, référence de la plongée en Méditerranée.",
     "dangers": [
       [
         "🚤",
@@ -4480,7 +4480,7 @@
     "temp": "22°C",
     "tide": "Faible",
     "danger": 1,
-    "desc": "Premier parc national marin d'Europe : un sentier sous-marin balisé fait découvrir herbiers et poissons en snorkeling.",
+    "desc": "Premier parc national marin d’Europe : un sentier sous-marin balisé fait découvrir herbiers et poissons en snorkeling.",
     "dangers": [
       [
         "🚤",
@@ -4544,14 +4544,14 @@
     "dangers": [
       [
         "☀️",
-        "Chaleur et longue marche d'accès."
+        "Chaleur et longue marche d’accès."
       ],
       [
         "🚤",
-        "Bateaux nombreux l'été."
+        "Bateaux nombreux l’été."
       ]
     ],
-    "tip": "Réservation d'accès parfois obligatoire l'été à Sugiton.",
+    "tip": "Réservation d’accès parfois obligatoire l’été à Sugiton.",
     "sports": [
       "plongee",
       "snorkeling",
@@ -4602,7 +4602,7 @@
     "temp": "28°C",
     "tide": "—",
     "danger": 2,
-    "desc": "Pinacle isolé en mer d'Andaman : explosion de couleurs et requins-baleines de passage, top spot thaïlandais.",
+    "desc": "Pinacle isolé en mer d’Andaman : explosion de couleurs et requins-baleines de passage, top spot thaïlandais.",
     "dangers": [
       [
         "🌀",
@@ -4662,7 +4662,7 @@
     "temp": "29°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "L'épicentre mondial de la biodiversité marine : récifs intacts et nuées de poissons au cœur du Triangle de corail.",
+    "desc": "L’épicentre mondial de la biodiversité marine : récifs intacts et nuées de poissons au cœur du Triangle de corail.",
     "dangers": [
       [
         "🌀",
@@ -4792,7 +4792,7 @@
         "Soleil très fort."
       ]
     ],
-    "tip": "Le snorkeling depuis le lagon convient à toute la famille.",
+    "tip": "Fais ton snorkeling depuis le lagon et méfie-toi des courants dans les passes.",
     "sports": [
       "plongee",
       "snorkeling",
@@ -4845,7 +4845,7 @@
     "temp": "26°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Baie volcanique en croissant, réserve marine protégée : le spot snorkeling le plus célèbre d'Hawaï.",
+    "desc": "Baie volcanique en croissant, réserve marine protégée : le spot snorkeling le plus célèbre d’Hawaï.",
     "dangers": [
       [
         "🪸",
@@ -4856,7 +4856,7 @@
         "Quota de visiteurs, réserve en ligne."
       ]
     ],
-    "tip": "Arrive tôt : l'accès est limité chaque jour.",
+    "tip": "Arrive tôt : l’accès est limité chaque jour.",
     "sports": [
       "snorkeling",
       "baignade"
@@ -4905,7 +4905,7 @@
     "temp": "28°C",
     "tide": "Faible",
     "danger": 1,
-    "desc": "Lagon plat et peu profond balayé par les alizés : paradis de l'apprentissage du windsurf, et récifs réputés pour la plongée.",
+    "desc": "Lagon plat et peu profond balayé par les alizés : paradis de l’apprentissage du windsurf, et récifs réputés pour la plongée.",
     "dangers": [
       [
         "💨",
@@ -4913,7 +4913,7 @@
       ],
       [
         "🪸",
-        "Coraux protégés tout autour de l'île."
+        "Coraux protégés tout autour de l’île."
       ]
     ],
     "tip": "Côté lagon pour débuter, côté océan pour les confirmés.",
@@ -4974,7 +4974,7 @@
       ],
       [
         "👥",
-        "Plan d'eau très fréquenté."
+        "Plan d’eau très fréquenté."
       ]
     ],
     "tip": "Débutants : choisis les jours de Poniente, plus régulier.",
@@ -5026,7 +5026,7 @@
     "temp": "20°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Immense lagune plate et peu profonde, vent thermique quasi quotidien : l'un des meilleurs spots d'apprentissage du kite au monde.",
+    "desc": "Immense lagune plate et peu profonde, vent thermique quasi quotidien : l’un des meilleurs spots d’apprentissage du kite au monde.",
     "dangers": [
       [
         "💨",
@@ -5037,7 +5037,7 @@
         "Site isolé en plein désert."
       ]
     ],
-    "tip": "Plan d'eau plat idéal pour les premières sessions.",
+    "tip": "Plan d’eau plat idéal pour les premières sessions.",
     "sports": [
       "kitesurf",
       "windsurf"
@@ -5086,18 +5086,18 @@
     "temp": "27°C",
     "tide": "Faible",
     "danger": 2,
-    "desc": "Baie animée des Caraïbes : vent thermique l'après-midi pour le kite, vagues le matin pour le surf.",
+    "desc": "Baie animée des Caraïbes : vent thermique l’après-midi pour le kite, vagues le matin pour le surf.",
     "dangers": [
       [
         "🪸",
-        "Récif à l'entrée de la baie."
+        "Récif à l’entrée de la baie."
       ],
       [
         "💨",
         "Vent qui se lève en milieu de journée."
       ]
     ],
-    "tip": "Surf le matin, kite l'après-midi quand le thermique entre.",
+    "tip": "Surf le matin, kite l’après-midi quand le thermique entre.",
     "sports": [
       "kitesurf",
       "windsurf",
@@ -5146,7 +5146,7 @@
     "temp": "26°C",
     "tide": "Variable",
     "danger": 3,
-    "desc": "Lagon turquoise au pied d'une montagne classée : flat dans le lagon et la célèbre vague 'One Eye' pour les experts.",
+    "desc": "Lagon turquoise au pied d’une montagne classée : flat dans le lagon et la célèbre vague 'One Eye' pour les experts.",
     "dangers": [
       [
         "🪸",
@@ -5207,7 +5207,7 @@
     "temp": "28°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "Spot brésilien réputé : vent puissant et régulier, lagunes d'eau douce et longues sessions downwind.",
+    "desc": "Spot brésilien réputé : vent puissant et régulier, lagunes d’eau douce et longues sessions downwind.",
     "dangers": [
       [
         "💨",
@@ -5270,14 +5270,14 @@
     "dangers": [
       [
         "💨",
-        "Vent fort l'après-midi (alizés)."
+        "Vent fort l’après-midi (alizés)."
       ],
       [
         "🌊",
         "Clapot formé dans la baie."
       ]
     ],
-    "tip": "Matinées plus calmes pour débuter, vent musclé l'après-midi.",
+    "tip": "Matinées plus calmes pour débuter, vent musclé l’après-midi.",
     "sports": [
       "windsurf",
       "kitesurf",
@@ -5386,7 +5386,7 @@
     "temp": "28°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "Village de dunes classé, vent quasi quotidien et lagunes : l'un des spots de kite les plus célèbres du Brésil.",
+    "desc": "Village de dunes classé, vent quasi quotidien et lagunes : l’un des spots de kite les plus célèbres du Brésil.",
     "dangers": [
       [
         "💨",
@@ -5457,7 +5457,7 @@
         "Grosses vagues + vent fort."
       ]
     ],
-    "tip": "Spot d'experts ; observe les locaux avant d'aller à l'eau.",
+    "tip": "Spot d’experts ; observe les locaux avant d’aller à l’eau.",
     "sports": [
       "windsurf",
       "surf",
@@ -5507,7 +5507,7 @@
     "temp": "21°C",
     "tide": "Variable",
     "danger": 3,
-    "desc": "Spot de coupe du monde de windsurf : parmi les alizés les plus forts d'Europe et des sauts spectaculaires.",
+    "desc": "Spot de coupe du monde de windsurf : parmi les alizés les plus forts d’Europe et des sauts spectaculaires.",
     "dangers": [
       [
         "💨",
@@ -5566,11 +5566,11 @@
     "temp": "20°C",
     "tide": "—",
     "danger": 1,
-    "desc": "Plus grand lac d'Italie, encadré de montagnes : vents thermiques fiables (Pelèr le matin, Ora l'après-midi), parfaits pour windsurf et paddle.",
+    "desc": "Plus grand lac d’Italie, encadré de montagnes : vents thermiques fiables (Pelèr le matin, Ora l’après-midi), parfaits pour windsurf et paddle.",
     "dangers": [
       [
         "💨",
-        "Vent qui force l'après-midi (Ora)."
+        "Vent qui force l’après-midi (Ora)."
       ],
       [
         "🏔️",
@@ -5638,7 +5638,7 @@
         "Trafic fluvial (barges)."
       ]
     ],
-    "tip": "Eau froide : combinaison conseillée même l'été.",
+    "tip": "Eau froide : combinaison conseillée même l’été.",
     "sports": [
       "windsurf",
       "kitesurf",
@@ -5687,18 +5687,18 @@
     "temp": "22°C",
     "tide": "—",
     "danger": 1,
-    "desc": "L'un des lacs les plus purs d'Europe, eau émeraude au pied des Alpes : paddle, kayak et baignade en eau calme.",
+    "desc": "L’un des lacs les plus purs d’Europe, eau émeraude au pied des Alpes : paddle, kayak et baignade en eau calme.",
     "dangers": [
       [
         "🚣",
-        "Trafic de bateaux l'été."
+        "Trafic de bateaux l’été."
       ],
       [
         "🌬️",
-        "Brise thermique l'après-midi."
+        "Brise thermique l’après-midi."
       ]
     ],
-    "tip": "Pars le matin : l'eau est un miroir parfait pour le paddle.",
+    "tip": "Pars le matin : l’eau est un miroir parfait pour le paddle.",
     "sports": [
       "paddle",
       "kayak",
@@ -5751,14 +5751,14 @@
     "dangers": [
       [
         "☀️",
-        "Forte chaleur, peu d'ombre."
+        "Forte chaleur, peu d’ombre."
       ],
       [
         "🚣",
-        "Affluence l'été, location limitée."
+        "Affluence l’été, location limitée."
       ]
     ],
-    "tip": "Loue tôt le matin, les embarcations partent vite l'été.",
+    "tip": "Loue tôt le matin, les embarcations partent vite l’été.",
     "sports": [
       "kayak",
       "paddle",
@@ -5818,7 +5818,7 @@
         "Accès en bateau seulement."
       ]
     ],
-    "tip": "Vérifie l'horaire des navettes pour le retour.",
+    "tip": "Vérifie l’horaire des navettes pour le retour.",
     "sports": [
       "paddle",
       "kayak",
@@ -5873,7 +5873,7 @@
     "dangers": [
       [
         "🚤",
-        "Beaucoup de bateaux l'été."
+        "Beaucoup de bateaux l’été."
       ],
       [
         "🪨",
@@ -5929,7 +5929,7 @@
     "temp": "23°C",
     "tide": "Faible",
     "danger": 1,
-    "desc": "Plage de sable blanc et pins parasols aux eaux turquoise, l'une des plus belles de Corse : baignade et snorkeling.",
+    "desc": "Plage de sable blanc et pins parasols aux eaux turquoise, l’une des plus belles de Corse : baignade et snorkeling.",
     "dangers": [
       [
         "☀️",
@@ -5940,7 +5940,7 @@
         "Très fréquentée en haute saison."
       ]
     ],
-    "tip": "Arrive tôt pour la place et l'eau calme.",
+    "tip": "Arrive tôt pour la place et l’eau calme.",
     "sports": [
       "baignade",
       "snorkeling",
@@ -5990,7 +5990,7 @@
     "temp": "21°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Falaises ocre et arches naturelles au-dessus d'une eau cristalline : joyau de l'Algarve pour la baignade et le kayak.",
+    "desc": "Falaises ocre et arches naturelles au-dessus d’une eau cristalline : joyau de l’Algarve pour la baignade et le kayak.",
     "dangers": [
       [
         "🪨",
@@ -6051,7 +6051,7 @@
     "temp": "23°C",
     "tide": "Faible",
     "danger": 2,
-    "desc": "Crique de l'épave, accessible uniquement par bateau, encadrée de falaises blanches et d'une eau bleu électrique.",
+    "desc": "Crique de l’épave, accessible uniquement par bateau, encadrée de falaises blanches et d’une eau bleu électrique.",
     "dangers": [
       [
         "🪨",
@@ -6062,7 +6062,7 @@
         "Accès bateau, mer parfois agitée."
       ]
     ],
-    "tip": "Pars tôt : l'après-midi la crique est bondée.",
+    "tip": "Vérifie les règles d’accès en vigueur avant de partir.",
     "sports": [
       "baignade",
       "snorkeling",
@@ -6173,7 +6173,7 @@
     "temp": "25°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Sable de silice d'un blanc pur et eaux tourbillonnantes turquoise au cœur des Whitsundays : baignade et paddle de rêve.",
+    "desc": "Sable de silice d’un blanc pur et eaux tourbillonnantes turquoise au cœur des Whitsundays : baignade et paddle de rêve.",
     "dangers": [
       [
         "🪼",
@@ -6234,7 +6234,7 @@
     "temp": "16°C",
     "tide": "Variable",
     "danger": 3,
-    "desc": "Grande baie ventée entre le cap Gris-Nez et le cap Blanc-Nez : l'un des meilleurs spots de kite et windsurf du nord, avec un peu de vague.",
+    "desc": "Grande baie ventée entre le cap Gris-Nez et le cap Blanc-Nez : l’un des meilleurs spots de kite et windsurf du nord, avec un peu de vague.",
     "dangers": [
       [
         "💨",
@@ -6245,7 +6245,7 @@
         "Forts courants à marée descendante."
       ]
     ],
-    "tip": "Repère l'horaire des marées : le plan d'eau change énormément.",
+    "tip": "Repère l’horaire des marées : le plan d’eau change énormément.",
     "sports": [
       "kitesurf",
       "windsurf",
@@ -6299,14 +6299,14 @@
     "dangers": [
       [
         "🌊",
-        "Marée qui monte vite sur l'estran plat."
+        "Marée qui monte vite sur l’estran plat."
       ],
       [
         "💨",
         "Zone partagée avec chars à voile et baigneurs."
       ]
     ],
-    "tip": "Reste près du bord à marée montante, elle remonte très vite.",
+    "tip": "Reste près du bord à marée montante : la marée remonte très vite.",
     "sports": [
       "kitesurf",
       "baignade",
@@ -6367,7 +6367,7 @@
         "Vent souvent onshore soutenu."
       ]
     ],
-    "tip": "Le meilleur plan d'eau se forme autour de la marée basse.",
+    "tip": "Le meilleur plan d’eau se forme autour de la marée basse.",
     "sports": [
       "kitesurf",
       "windsurf",
@@ -6421,14 +6421,14 @@
     "dangers": [
       [
         "🪨",
-        "Galets glissants à l'entrée."
+        "Galets glissants à l’entrée."
       ],
       [
         "🌊",
         "Courants par fort coefficient."
       ]
     ],
-    "tip": "Baignade surveillée l'été : reste entre les drapeaux.",
+    "tip": "Baignade surveillée l’été : reste entre les drapeaux.",
     "sports": [
       "kitesurf",
       "baignade",
@@ -6477,7 +6477,7 @@
     "temp": "16°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "Plage immense balayée par le vent, haut lieu du cerf-volant et du kite, avec des phoques en baie d'Authie à proximité.",
+    "desc": "Plage immense balayée par le vent, haut lieu du cerf-volant et du kite, avec des phoques en baie d’Authie à proximité.",
     "dangers": [
       [
         "🌊",
@@ -6488,7 +6488,7 @@
         "Vent fréquent et soutenu."
       ]
     ],
-    "tip": "Va observer les phoques de la baie d'Authie (à distance).",
+    "tip": "Va observer les phoques de la baie d’Authie (à distance).",
     "sports": [
       "kitesurf",
       "windsurf",
@@ -6548,7 +6548,7 @@
         "Estran plat, marée rapide."
       ]
     ],
-    "tip": "Évite la zone du chenal portuaire à l'est.",
+    "tip": "Évite la zone du chenal portuaire à l’est.",
     "sports": [
       "kitesurf",
       "baignade",
@@ -6605,10 +6605,10 @@
       ],
       [
         "🚢",
-        "Proximité de l'entrée du port."
+        "Proximité de l’entrée du port."
       ]
     ],
-    "tip": "Galets glissants : protège tes pieds à l'entrée.",
+    "tip": "Galets glissants : protège tes pieds à l’entrée.",
     "sports": [
       "kitesurf",
       "surf",
@@ -6657,7 +6657,7 @@
     "temp": "15°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "Célèbres falaises et arches de craie au-dessus d'une plage de galets : kayak au pied des aiguilles et baignade par mer calme.",
+    "desc": "Célèbres falaises et arches de craie au-dessus d’une plage de galets : kayak au pied des aiguilles et baignade par mer calme.",
     "dangers": [
       [
         "🪨",
@@ -6668,7 +6668,7 @@
         "Courants sous les arches."
       ]
     ],
-    "tip": "Sors en kayak voir l'Aiguille seulement par mer calme.",
+    "tip": "Sors en kayak voir l’Aiguille seulement par mer calme.",
     "sports": [
       "kayak",
       "baignade",
@@ -6721,14 +6721,14 @@
     "dangers": [
       [
         "🪨",
-        "Galets et entrée d'eau abrupte."
+        "Galets et entrée d’eau abrupte."
       ],
       [
         "🚢",
-        "Trafic du port à l'est de la plage."
+        "Trafic du port à l’est de la plage."
       ]
     ],
-    "tip": "Baignade surveillée l'été ; le kite se pratique à l'ouest.",
+    "tip": "Baignade surveillée l’été ; le kite se pratique à l’ouest.",
     "sports": [
       "baignade",
       "kayak",
@@ -6848,7 +6848,7 @@
         "Spot exposé, conditions changeantes."
       ]
     ],
-    "tip": "Site exposé : vérifie bien la météo et n'y va pas seul.",
+    "tip": "Site exposé : vérifie bien la météo et n’y va pas seul.",
     "sports": [
       "surf",
       "bodyboard",
@@ -6909,7 +6909,7 @@
         "Vent partagé avec les chars à voile."
       ]
     ],
-    "tip": "À marée basse l'eau est loin : surveille bien le flot.",
+    "tip": "À marée basse l’eau est loin : surveille bien le flot.",
     "sports": [
       "kitesurf",
       "baignade",
@@ -6960,11 +6960,11 @@
     "temp": "16°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "Cité corsaire face aux îles Chausey : kayak vers l'archipel et baignade, dans l'une des plus grandes marées d'Europe.",
+    "desc": "Cité corsaire face aux îles Chausey : kayak vers l’archipel et baignade, dans l’une des plus grandes marées d’Europe.",
     "dangers": [
       [
         "🌊",
-        "Marnage parmi les plus forts d'Europe."
+        "Marnage parmi les plus forts d’Europe."
       ],
       [
         "🚤",
@@ -7020,7 +7020,7 @@
     "temp": "16°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "La grande plage du Sillon face à la cité corsaire : baignade, paddle, kite et petites vagues, sous l'une des plus fortes marées du monde.",
+    "desc": "La grande plage du Sillon face à la cité corsaire : baignade, paddle, kite et petites vagues, sous l’une des plus fortes marées du monde.",
     "dangers": [
       [
         "🌊",
@@ -7031,7 +7031,7 @@
         "Brise-lames et rochers (Grand Bé)."
       ]
     ],
-    "tip": "Va au Grand Bé à pied seulement à marée basse, surveille l'heure.",
+    "tip": "Va au Grand Bé à pied seulement à marée basse, surveille l’heure.",
     "sports": [
       "baignade",
       "kayak",
@@ -7082,7 +7082,7 @@
     "temp": "16°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "Station balnéaire de la Côte d'Émeraude avec une plage exposée qui prend la houle : bon spot d'initiation au surf.",
+    "desc": "Station balnéaire de la Côte d’Émeraude avec une plage exposée qui prend la houle : bon spot d’initiation au surf.",
     "dangers": [
       [
         "🪨",
@@ -7143,7 +7143,7 @@
     "temp": "16°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Eaux claires et landes de grès rose du cap d'Erquy : criques sauvages parfaites pour le kayak, le snorkeling et la baignade.",
+    "desc": "Eaux claires et landes de grès rose du cap d’Erquy : criques sauvages parfaites pour le kayak, le snorkeling et la baignade.",
     "dangers": [
       [
         "🪨",
@@ -7204,7 +7204,7 @@
     "temp": "16°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Porte de la Côte de Granit Rose : plage de Trestraou et sentier des douaniers vers Ploumanac'h, idéal kayak, paddle et baignade.",
+    "desc": "Porte de la Côte de Granit Rose : plage de Trestraou et sentier des douaniers vers Ploumanac’h, idéal kayak, paddle et baignade.",
     "dangers": [
       [
         "🪨",
@@ -7215,7 +7215,7 @@
         "Navettes vers les Sept-Îles."
       ]
     ],
-    "tip": "En kayak, longe le granit rose jusqu'à Ploumanac'h.",
+    "tip": "En kayak, longe le granit rose jusqu’à Ploumanac’h.",
     "sports": [
       "baignade",
       "kayak",
@@ -7265,18 +7265,18 @@
     "temp": "19°C",
     "tide": "Mi-marée",
     "danger": 1,
-    "desc": "Une droite qui déroule interminablement au fond d'une baie de pêcheurs. Vague lente et docile : c'est le spot où l'on apprend à tenir une vague longtemps.",
+    "desc": "Une droite qui déroule interminablement au fond d’une baie de pêcheurs. Vague lente et docile : c’est le spot où l’on apprend à tenir une vague longtemps.",
     "dangers": [
       [
         "👥",
-        "Très fréquentée : respecte la priorité et la file d'attente au pic."
+        "Très fréquentée : respecte la priorité et la file d’attente au pic."
       ],
       [
         "🚤",
         "Port de pêche actif, ne coupe pas la route des barques."
       ]
     ],
-    "tip": "Rame jusqu'au bout de la baie et laisse-toi porter : la vague fait le travail.",
+    "tip": "Rame jusqu’au bout de la baie et laisse-toi porter : la vague fait le travail.",
     "sports": [
       "surf",
       "paddle",
@@ -7325,7 +7325,7 @@
     "temp": "18°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Une des droites tubulaires les plus rapides d'Afrique, sur un fond de dalle rocheuse. Elle ne marche que quelques jours par an, avec une grosse houle et le bon vent.",
+    "desc": "Une des droites tubulaires les plus rapides d’Afrique, sur un fond de dalle rocheuse. Elle ne marche que quelques jours par an, avec une grosse houle et le bon vent.",
     "dangers": [
       [
         "🪨",
@@ -7340,7 +7340,7 @@
         "Ne se déclenche que par forte houle : conditions sérieuses."
       ]
     ],
-    "tip": "Regarde longuement depuis la falaise avant d'y aller. Si tu hésites, c'est non.",
+    "tip": "Regarde longuement depuis la falaise avant d’y aller. Si tu hésites, c’est non.",
     "sports": [
       "surf",
       "bodyboard"
@@ -7388,18 +7388,18 @@
     "temp": "18°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "Longue plage battue par l'alizé, au sud d'Essaouira. Le vent y est presque quotidien l'après-midi : les voiles prennent le relais des planches de surf.",
+    "desc": "Longue plage battue par l’alizé, au sud d’Essaouira. Le vent y est presque quotidien l’après-midi : les voiles prennent le relais des planches de surf.",
     "dangers": [
       [
         "💨",
-        "Vent thermique très fort l'après-midi."
+        "Vent thermique très fort l’après-midi."
       ],
       [
         "🌀",
         "Courant latéral le long de la plage."
       ]
     ],
-    "tip": "Surfe le matin, navigue l'après-midi : c'est le rythme du spot.",
+    "tip": "Surfe le matin, navigue l’après-midi : c’est le rythme du spot.",
     "sports": [
       "surf",
       "kitesurf",
@@ -7450,7 +7450,7 @@
     "temp": "24°C",
     "tide": "Mi-marée",
     "danger": 3,
-    "desc": "La droite de récif rendue célèbre par le film The Endless Summer, en face de l'île de Ngor. Elle s'atteint en pirogue depuis la plage.",
+    "desc": "La droite de récif rendue célèbre par le film The Endless Summer, en face de l’île de Ngor. Elle s’atteint en pirogue depuis la plage.",
     "dangers": [
       [
         "🪨",
@@ -7458,7 +7458,7 @@
       ],
       [
         "🚤",
-        "Trafic de pirogues entre l'île et la côte."
+        "Trafic de pirogues entre l’île et la côte."
       ]
     ],
     "tip": "Prends la pirogue avec les locaux plutôt que de ramer : le courant du chenal est fort.",
@@ -7514,7 +7514,7 @@
     "dangers": [
       [
         "🪨",
-        "Récif tranchant, très peu d'eau à marée basse."
+        "Récif tranchant, très peu d’eau à marée basse."
       ],
       [
         "🌀",
@@ -7525,7 +7525,7 @@
         "Vague creuse dès que la houle monte."
       ]
     ],
-    "tip": "Entre et sors par le côté droit de la baie, là où le courant t'aide.",
+    "tip": "Entre et sors par le côté droit de la baie, là où le courant t’aide.",
     "sports": [
       "surf",
       "bodyboard"
@@ -7572,15 +7572,15 @@
     "temp": "14°C",
     "tide": "Mi-marée",
     "danger": 3,
-    "desc": "Une longue gauche de pointe sur la côte ouest, dans une eau très froide remontée par le courant de Benguela. Spot de bout du monde, peu de monde à l'eau.",
+    "desc": "Une longue gauche de pointe sur la côte ouest, dans une eau très froide remontée par le courant de Benguela. Spot de bout du monde, peu de monde à l’eau.",
     "dangers": [
       [
         "🥶",
-        "Eau souvent sous 15°C : combinaison épaisse obligatoire."
+        "Eau souvent sous 15°C : combinaison épaisse conseillée."
       ],
       [
         "🪨",
-        "Rochers à l'entrée du pic."
+        "Rochers à l’entrée du pic."
       ],
       [
         "🌀",
@@ -7648,10 +7648,10 @@
       ],
       [
         "🥶",
-        "Eau fraîche toute l'année."
+        "Eau fraîche toute l’année."
       ]
     ],
-    "tip": "Regarde le drapeau de la vigie avant d'entrer, et reste dans la zone surveillée.",
+    "tip": "Regarde le drapeau de la vigie avant d’entrer, et reste dans la zone surveillée.",
     "sports": [
       "surf",
       "bodyboard",
@@ -7701,22 +7701,22 @@
     "temp": "25°C",
     "tide": "Sans objet",
     "danger": 4,
-    "desc": "Un puits circulaire ouvert dans le récif, bordé de corail intact. Site magnifique en surface — et l'un des plus meurtriers du monde en profondeur, à cause de l'arche.",
+    "desc": "Un puits circulaire ouvert dans le récif, bordé de corail intact. Site magnifique en surface — et l’un des plus meurtriers du monde en profondeur, à cause de l’arche.",
     "dangers": [
       [
         "🕳️",
-        "L'arche profonde a fait de nombreuses victimes : elle n'est pas un objectif de loisir."
+        "L’arche profonde a fait de nombreuses victimes : elle n’est pas un objectif de loisir."
       ],
       [
         "⚠️",
-        "Profondeur trompeuse, l'eau très claire fait sous-estimer la descente."
+        "Profondeur trompeuse, l’eau très claire fait sous-estimer la descente."
       ],
       [
         "🚫",
-        "Ne plonge qu'avec un centre local et dans tes limites de brevet."
+        "Ne plonge qu’avec un centre local et dans tes limites de brevet."
       ]
     ],
-    "tip": "Le snorkeling sur le bord du trou est splendide et sans danger : il suffit largement.",
+    "tip": "Le snorkeling au bord du trou est splendide : reste en surface. Ne plonge qu’avec un centre local et dans tes limites de brevet.",
     "sports": [
       "plongee",
       "snorkeling"
@@ -7764,18 +7764,18 @@
     "temp": "27°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Une réserve marine autour d'un îlot : tortues, poissons de récif et coraux à quelques mètres du bord. L'un des meilleurs sites de snorkeling de l'océan Indien.",
+    "desc": "Une réserve marine autour d’un îlot : tortues, poissons de récif et coraux à quelques mètres du bord. L’un des meilleurs sites de snorkeling de l’océan Indien.",
     "dangers": [
       [
         "🚤",
-        "Navettes et pirogues autour de l'îlot."
+        "Navettes et pirogues autour de l’îlot."
       ],
       [
         "☀️",
-        "Aucune ombre sur la plage, soleil équatorial."
+        "Aucune ombre sur la plage."
       ]
     ],
-    "tip": "Un lycra plutôt que de la crème : le récif est protégé, et tu bronzes moins bêtement.",
+    "tip": "Un lycra plutôt que de la crème : le récif est protégé.",
     "sports": [
       "snorkeling",
       "plongee",
@@ -7905,7 +7905,7 @@
         "Pic étroit et très disputé."
       ]
     ],
-    "tip": "Session à l'aube : après 9 h le vent tourne et la vague se hache.",
+    "tip": "Session à l’aube : après 9 h le vent tourne et la vague se hache.",
     "sports": [
       "surf",
       "bodyboard"
@@ -7954,7 +7954,7 @@
     "temp": "28°C",
     "tide": "Marée haute",
     "danger": 4,
-    "desc": "Une droite de récif d'une régularité rare, dans une baie ouverte à la houle de l'océan Indien. Un tube long et lisible, mais sur un platier corallien très peu profond.",
+    "desc": "Une droite de récif d’une régularité rare, dans une baie ouverte à la houle de l’océan Indien. Un tube long et lisible, mais sur un platier corallien très peu profond.",
     "dangers": [
       [
         "🪨",
@@ -7969,7 +7969,7 @@
         "Île isolée, secours médicaux éloignés."
       ]
     ],
-    "tip": "Chaussons de récif et trousse de soin : ici, une coupure de corail s'infecte vite.",
+    "tip": "Chaussons de récif et trousse de soin : ici, une coupure de corail s’infecte vite.",
     "sports": [
       "surf"
     ],
@@ -8018,7 +8018,7 @@
     "temp": "28°C",
     "tide": "Marée montante",
     "danger": 4,
-    "desc": "Une gauche interminable qui déroule le long d'un récif, au bord d'un parc national où la jungle descend jusqu'à la plage. On n'y accède que par bateau.",
+    "desc": "Une gauche interminable qui déroule le long d’un récif, au bord d’un parc national où la jungle descend jusqu’à la plage. On n’y accède que par bateau.",
     "dangers": [
       [
         "🪨",
@@ -8084,7 +8084,7 @@
     "dangers": [
       [
         "🌀",
-        "Courants parmi les plus forts d'Indonésie, y compris descendants."
+        "Courants parmi les plus forts d’Indonésie, y compris descendants."
       ],
       [
         "🚤",
@@ -8095,7 +8095,7 @@
         "Plongée en dérive réservée aux plongeurs expérimentés."
       ]
     ],
-    "tip": "Ne plonge qu'avec un guide local : ici, la lecture des courants est un métier.",
+    "tip": "Ne plonge qu’avec un guide local : ici, la lecture des courants est un métier.",
     "sports": [
       "plongee",
       "snorkeling"
@@ -8155,7 +8155,7 @@
         "Le vide donne le vertige : surveille ton profondimètre."
       ]
     ],
-    "tip": "Longe le tombant en gardant le mur à ta droite : tu ne te perdras pas.",
+    "tip": "Longe le tombant en gardant le mur à ta droite.",
     "sports": [
       "plongee",
       "snorkeling"
@@ -8204,7 +8204,7 @@
     "temp": "28°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "Des blocs de granit posés sur le sable blanc, des gorgones et une eau très claire. Le parc national ferme une partie de l'année pour laisser le récif souffler.",
+    "desc": "Des blocs de granit posés sur le sable blanc, des gorgones et une eau très claire. Le parc national ferme une partie de l’année pour laisser le récif souffler.",
     "dangers": [
       [
         "🚫",
@@ -8215,7 +8215,7 @@
         "Courant modéré entre les blocs."
       ]
     ],
-    "tip": "Vérifie les dates d'ouverture du parc avant de réserver quoi que ce soit.",
+    "tip": "Vérifie les dates d’ouverture du parc avant de réserver quoi que ce soit.",
     "sports": [
       "plongee",
       "snorkeling",
@@ -8265,11 +8265,11 @@
     "temp": "28°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Une baie sablonneuse peu profonde où la mousse déroule doucement sur des centaines de mètres. Le spot d'apprentissage de la côte sud.",
+    "desc": "Une baie sablonneuse peu profonde où la mousse déroule doucement sur des centaines de mètres. Le spot d’apprentissage de la côte sud.",
     "dangers": [
       [
         "👥",
-        "Beaucoup d'écoles de surf au même endroit."
+        "Beaucoup d’écoles de surf au même endroit."
       ],
       [
         "🏖️",
@@ -8331,7 +8331,7 @@
     "dangers": [
       [
         "👥",
-        "Affluence forte, priorité respectée à la japonaise."
+        "Affluence forte, priorité respectée."
       ],
       [
         "🌀",
@@ -8339,7 +8339,7 @@
       ],
       [
         "⚠️",
-        "Saison des typhons en fin d'été : houle et vent brutaux."
+        "Saison des typhons en fin d’été : houle et vent brutaux."
       ]
     ],
     "tip": "Le matin en semaine, tu as la plage presque pour toi.",
@@ -8391,7 +8391,7 @@
     "temp": "26°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Un archipel de parc national à une heure de Naha, connu pour la transparence de son eau — le « bleu Kerama » — et pour ses tortues vertes qui broutent l'herbier.",
+    "desc": "Un archipel de parc national à une heure de Naha, connu pour la transparence de son eau — le « bleu Kerama » — et pour ses tortues vertes qui broutent l’herbier.",
     "dangers": [
       [
         "🚤",
@@ -8406,7 +8406,7 @@
         "Parc national : garde tes distances avec les tortues."
       ]
     ],
-    "tip": "Palme au-dessus de l'herbier sans t'y poser : c'est le garde-manger des tortues.",
+    "tip": "Palme au-dessus de l’herbier sans t’y poser : c’est le garde-manger des tortues.",
     "sports": [
       "snorkeling",
       "plongee",
@@ -8457,7 +8457,7 @@
     "temp": "27°C",
     "tide": "Variable",
     "danger": 4,
-    "desc": "La grosse droite des Caraïbes, qui ne se réveille qu'avec les houles d'hiver de l'Atlantique nord. Le spot est aussi une réserve marine de corail corne d'élan.",
+    "desc": "La grosse droite des Caraïbes, qui ne se réveille qu’avec les houles d’hiver de l’Atlantique nord. Le spot est aussi une réserve marine de corail corne d’élan.",
     "dangers": [
       [
         "🌊",
@@ -8472,7 +8472,7 @@
         "Courant de sortie le long du récif."
       ]
     ],
-    "tip": "Hors houle, c'est un site de snorkeling remarquable : le corail corne d'élan y est protégé.",
+    "tip": "Hors houle, c’est un site de snorkeling remarquable : le corail corne d’élan y est protégé.",
     "sports": [
       "surf",
       "snorkeling"
@@ -8520,22 +8520,22 @@
     "temp": "28°C",
     "tide": "Marée montante",
     "danger": 3,
-    "desc": "Une gauche de galets réputée pour sa longueur : par bonne houle du sud, une seule vague peut durer plus d'une minute.",
+    "desc": "Une gauche de galets réputée pour sa longueur : par bonne houle du sud, une seule vague peut durer plus d’une minute.",
     "dangers": [
       [
         "🪨",
-        "Fond de galets roulants à l'entrée."
+        "Fond de galets roulants à l’entrée."
       ],
       [
         "🌀",
-        "Courant qui pousse vers l'embouchure de la rivière."
+        "Courant qui pousse vers l’embouchure de la rivière."
       ],
       [
         "⚠️",
         "Village isolé, accès long par la route."
       ]
     ],
-    "tip": "Marche jusqu'au haut de la pointe et rentre à pied : ramer contre le courant t'épuisera.",
+    "tip": "Marche jusqu’au haut de la pointe et rentre à pied : ramer contre le courant t’épuisera.",
     "sports": [
       "surf"
     ],
@@ -8582,11 +8582,11 @@
     "temp": "28°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "Une baie large et sableuse, chaude toute l'année, avec des vagues d'école au centre et un estuaire bordé de mangrove à une extrémité.",
+    "desc": "Une baie large et sableuse, chaude toute l’année, avec des vagues d’école au centre et un estuaire bordé de mangrove à une extrémité.",
     "dangers": [
       [
         "🌀",
-        "Fort courant dans l'estuaire, surtout à marée descendante."
+        "Fort courant dans l’estuaire, surtout à marée descendante."
       ],
       [
         "👥",
@@ -8594,10 +8594,10 @@
       ],
       [
         "⚠️",
-        "Crocodiles signalés dans l'estuaire : on n'y nage pas."
+        "Crocodiles signalés dans l’estuaire : on n’y nage pas."
       ]
     ],
-    "tip": "Reste sur la plage principale et évite complètement l'embouchure de la rivière.",
+    "tip": "Reste sur la plage principale et évite complètement l’embouchure de la rivière.",
     "sports": [
       "surf",
       "bodyboard",
@@ -8648,7 +8648,7 @@
     "temp": "27°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Un village de la côte Pacifique devenu spot d'apprentissage : vague molle, eau tiède, et des baleines à bosse au large en hiver.",
+    "desc": "Un village de la côte Pacifique devenu spot d’apprentissage : vague molle, eau tiède, et des baleines à bosse au large en hiver.",
     "dangers": [
       [
         "👥",
@@ -8709,7 +8709,7 @@
     "temp": "17°C",
     "tide": "Variable",
     "danger": 4,
-    "desc": "Un haut-fond au large d'une île déserte, où la houle du Pacifique nord se dresse en murs énormes. Spot de très grosses vagues, accessible seulement en bateau.",
+    "desc": "Un haut-fond au large d’une île déserte, où la houle du Pacifique nord se dresse en murs énormes. Spot de très grosses vagues, accessible seulement en bateau.",
     "dangers": [
       [
         "🌊",
@@ -8724,7 +8724,7 @@
         "Aucun secours sur place."
       ]
     ],
-    "tip": "Ce n'est pas un spot où l'on se teste. On y va accompagné, ou on regarde.",
+    "tip": "Ce n’est pas un spot où l’on se teste. On y va accompagné, ou on regarde.",
     "sports": [
       "surf"
     ],
@@ -8776,18 +8776,18 @@
     "dangers": [
       [
         "🚤",
-        "Trafic de bateaux d'excursion dense en saison."
+        "Trafic de bateaux d’excursion dense en saison."
       ],
       [
         "🚫",
-        "Approche des requins-baleines réglementée : suis l'opérateur à la lettre."
+        "Approche des requins-baleines réglementée : suis l’opérateur à la lettre."
       ],
       [
         "☀",
         "Soleil intense sur le bateau."
       ]
     ],
-    "tip": "Choisis un opérateur qui limite le nombre de nageurs à l'eau : c'est le vrai critère.",
+    "tip": "Choisis un opérateur qui limite le nombre de nageurs à l’eau : c’est le vrai critère.",
     "sports": [
       "snorkeling",
       "baignade",
@@ -8838,7 +8838,7 @@
     "temp": "11°C",
     "tide": "Mi-marée",
     "danger": 3,
-    "desc": "Une plage de sable au pied de la forêt pluviale, ouverte à la houle du Pacifique nord. On y surfe toute l'année, en combinaison épaisse.",
+    "desc": "Une plage de sable au pied de la forêt pluviale, ouverte à la houle du Pacifique nord. On y surfe toute l’année, en combinaison épaisse.",
     "dangers": [
       [
         "🥶",
@@ -8902,11 +8902,11 @@
     "temp": "26°C",
     "tide": "Variable",
     "danger": 3,
-    "desc": "Une plage à vagues courtes et fréquentes, très accessible — et le lieu qui concentre le plus de morsures de requins au monde, presque toutes bénignes et liées à l'eau trouble.",
+    "desc": "Une plage à vagues courtes et fréquentes, très accessible — et le lieu qui concentre le plus de morsures de requins au monde, presque toutes bénignes et liées à l’eau trouble.",
     "dangers": [
       [
         "🦈",
-        "Morsures fréquentes près de l'embouchure : ne surfe pas dans l'eau trouble."
+        "Morsures fréquentes près de l’embouchure : ne surfe pas dans l’eau trouble."
       ],
       [
         "🌀",
@@ -8917,7 +8917,7 @@
         "Plage très fréquentée."
       ]
     ],
-    "tip": "Éloigne-toi de la jetée et de l'embouchure, et évite l'eau trouble et les bancs de poissons.",
+    "tip": "Éloigne-toi de la jetée et de l’embouchure, et évite l’eau trouble et les bancs de poissons.",
     "sports": [
       "surf",
       "bodyboard",
@@ -8966,7 +8966,7 @@
     "temp": "18°C",
     "tide": "Mi-marée",
     "danger": 2,
-    "desc": "La pointe de Long Island, où une houle d'Atlantique nord rencontre un fond de galets. Vague de longboard l'été, plus sérieuse à l'automne quand les tempêtes arrivent.",
+    "desc": "La pointe de Long Island, où une houle d’Atlantique nord rencontre un fond de galets. Vague de longboard l’été, plus sérieuse à l’automne quand les tempêtes arrivent.",
     "dangers": [
       [
         "🪨",
@@ -8981,7 +8981,7 @@
         "Eau froide hors été."
       ]
     ],
-    "tip": "L'automne est la meilleure saison : houle plus longue et beaucoup moins de monde.",
+    "tip": "L’automne est la meilleure saison : houle plus longue et beaucoup moins de monde.",
     "sports": [
       "surf",
       "bodyboard",
@@ -9031,7 +9031,7 @@
     "temp": "24°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "La côte nord du Pérou échappe au courant froid de Humboldt : ici l'eau est tiède et la gauche de pointe déroule longtemps sur le sable.",
+    "desc": "La côte nord du Pérou échappe au courant froid de Humboldt : ici l’eau est tiède et la gauche de pointe déroule longtemps sur le sable.",
     "dangers": [
       [
         "👥",
@@ -9093,11 +9093,11 @@
     "temp": "18°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "Un village de pêcheurs où l'on rame encore sur des caballitos de totora, embarcations de roseau utilisées depuis des siècles. Longue gauche douce, idéale pour progresser.",
+    "desc": "Un village de pêcheurs où l’on rame encore sur des caballitos de totora, embarcations de roseau utilisées depuis des siècles. Longue gauche douce, idéale pour progresser.",
     "dangers": [
       [
         "🥶",
-        "Courant de Humboldt : eau fraîche toute l'année."
+        "Courant de Humboldt : eau fraîche toute l’année."
       ],
       [
         "🚤",
@@ -9155,13 +9155,13 @@
     "wind": "Offshore",
     "swell": "2,0 m",
     "temp": "17°C",
-    "tide": "Marée basse",
+    "tide": "—",
     "danger": 4,
-    "desc": "Une gauche de récif très creuse qui casse en pleine ville, sur un platier peu profond. Le désert d'Atacama descend jusqu'à la plage.",
+    "desc": "Une gauche de récif très creuse qui casse en pleine ville, sur un platier peu profond. Le désert d’Atacama descend jusqu’à la plage.",
     "dangers": [
       [
         "🪨",
-        "Récif à fleur d'eau à marée basse."
+        "Récif à fleur d’eau à marée basse."
       ],
       [
         "⚡",
@@ -9172,7 +9172,7 @@
         "Eau froide malgré la latitude."
       ]
     ],
-    "tip": "Ce spot se surfe à marée haute quand on découvre : à marée basse il n'y a plus d'eau.",
+    "tip": "Ce spot se surfe à marée haute : à marée basse, il n’y a plus assez d’eau au-dessus du récif.",
     "sports": [
       "surf",
       "bodyboard"
@@ -9229,10 +9229,10 @@
       ],
       [
         "🚫",
-        "Zone de reproduction des baleines : distances d'approche réglementées."
+        "Zone de reproduction des baleines : distances d’approche réglementées."
       ]
     ],
-    "tip": "En saison, monte sur la colline plutôt que d'aller vers elles : la vue est meilleure et elles restent tranquilles.",
+    "tip": "En saison, monte sur la colline plutôt que d’aller vers les baleines : la vue est meilleure et elles restent tranquilles.",
     "sports": [
       "surf",
       "bodyboard",
@@ -9297,7 +9297,7 @@
         "Rochers volcaniques coupants."
       ]
     ],
-    "tip": "La baie des Dauphins s'observe depuis le belvédère : on n'y entre pas à l'eau, et c'est très bien ainsi.",
+    "tip": "La baie des Dauphins s’observe depuis le belvédère : on n’y entre pas à l’eau, et c’est très bien ainsi.",
     "sports": [
       "snorkeling",
       "plongee",
@@ -9348,7 +9348,7 @@
     "temp": "24°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Une grande île couverte de forêt atlantique, face au continent. Le canal abrité en fait un terrain de voile et de pagaie réputé, avec des criques accessibles seulement par l'eau.",
+    "desc": "Une grande île couverte de forêt atlantique, face au continent. Le canal abrité en fait un terrain de voile et de pagaie réputé, avec des criques accessibles seulement par l’eau.",
     "dangers": [
       [
         "🚤",
@@ -9356,7 +9356,7 @@
       ],
       [
         "💨",
-        "Vent thermique soutenu l'après-midi dans le canal."
+        "Vent thermique soutenu l’après-midi dans le canal."
       ],
       [
         "⚠️",
@@ -9414,18 +9414,18 @@
     "temp": "19°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "La plage la plus surfée d'Uruguay, à la limite entre le Río de la Plata et l'Atlantique. L'eau change de couleur selon les vents, du brun fluvial au bleu océanique.",
+    "desc": "La plage la plus surfée d’Uruguay, à la limite entre le Río de la Plata et l’Atlantique. L’eau change de couleur selon les vents, du brun fluvial au bleu océanique.",
     "dangers": [
       [
         "🌀",
-        "Courants à l'embouchure de l'arroyo."
+        "Courants à l’embouchure de l’arroyo."
       ],
       [
         "👥",
         "Très fréquentée en janvier et février."
       ]
     ],
-    "tip": "Après plusieurs jours de vent d'est, l'eau redevient claire et la vague se range.",
+    "tip": "Après plusieurs jours de vent d’est, l’eau redevient claire et la vague se range.",
     "sports": [
       "surf",
       "bodyboard",
@@ -9536,15 +9536,15 @@
     "temp": "23°C",
     "tide": "Mi-marée",
     "danger": 3,
-    "desc": "Une droite de pointe qui s'enroule au pied d'un promontoire boisé, en plein cœur de la Gold Coast. Vague rapide et très disputée.",
+    "desc": "Une droite de pointe qui s’enroule au pied d’un promontoire boisé, en plein cœur de la Gold Coast. Vague rapide et très disputée.",
     "dangers": [
       [
         "👥",
-        "Un des pics les plus compétitifs d'Australie."
+        "Un des pics les plus compétitifs d’Australie."
       ],
       [
         "🪨",
-        "Rochers à l'entrée en haut de la pointe."
+        "Rochers à l’entrée en haut de la pointe."
       ],
       [
         "🌀",
@@ -9599,22 +9599,22 @@
     "temp": "23°C",
     "tide": "Marée montante",
     "danger": 2,
-    "desc": "Une droite longue et douce qui contourne le point le plus à l'est de l'Australie. Vague de longboard par excellence ; dauphins et tortues au line-up.",
+    "desc": "Une droite longue et douce qui contourne le point le plus à l’est de l’Australie. Vague de longboard par excellence ; dauphins et tortues au line-up.",
     "dangers": [
       [
         "👥",
-        "Extrêmement fréquentée toute l'année."
+        "Extrêmement fréquentée toute l’année."
       ],
       [
         "🌀",
-        "Courant qui pousse vers l'intérieur de la baie."
+        "Courant qui pousse vers l’intérieur de la baie."
       ],
       [
         "🪨",
         "Rochers affleurants près de la pointe."
       ]
     ],
-    "tip": "Marche jusqu'au bout du sentier et entre à la pointe : ramer depuis la plage est long.",
+    "tip": "Marche jusqu’au bout du sentier et entre à la pointe : ramer depuis la plage est long.",
     "sports": [
       "surf",
       "paddle",
@@ -9665,7 +9665,7 @@
     "temp": "21°C",
     "tide": "Variable",
     "danger": 2,
-    "desc": "La plage de surf historique de Sydney, à vingt minutes de ferry du centre. Vagues régulières, sauveteurs présents, et une réserve marine à l'extrémité nord.",
+    "desc": "La plage de surf historique de Sydney, à vingt minutes de ferry du centre. Vagues régulières, sauveteurs présents, et une réserve marine à l’extrémité nord.",
     "dangers": [
       [
         "👥",
@@ -9746,7 +9746,7 @@
         "Soleil extrême, aucune ombre."
       ]
     ],
-    "tip": "Entre par les chenaux de sable : marcher sur le platier tue le corail et t'entaille les pieds.",
+    "tip": "Entre par les chenaux de sable : marcher sur le platier tue le corail et t’entaille les pieds.",
     "sports": [
       "snorkeling",
       "plongee",
@@ -9797,7 +9797,7 @@
     "temp": "17°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Une plage de sable noir volcanique au pied d'une forêt, sur la côte ouest d'Auckland. Beauté brute et courants parmi les plus traîtres du pays.",
+    "desc": "Une plage de sable noir volcanique au pied d’une forêt, sur la côte ouest d’Auckland. Beauté brute et courants parmi les plus traîtres du pays.",
     "dangers": [
       [
         "🌀",
@@ -9812,7 +9812,7 @@
         "Rochers du Lion Rock et de la pointe sud."
       ]
     ],
-    "tip": "Ne te baigne jamais hors des drapeaux : c'est la plage la plus secourue de Nouvelle-Zélande.",
+    "tip": "Ne te baigne jamais hors des drapeaux.",
     "sports": [
       "surf",
       "bodyboard"
@@ -9860,7 +9860,7 @@
     "temp": "18°C",
     "tide": "Marée montante",
     "danger": 3,
-    "desc": "À l'extrémité sud de Ninety Mile Beach, une série de pointes rocheuses enchaîne des gauches qui peuvent se relier sur des centaines de mètres.",
+    "desc": "À l’extrémité sud de Ninety Mile Beach, une série de pointes rocheuses enchaîne des gauches qui peuvent se relier sur des centaines de mètres.",
     "dangers": [
       [
         "🪨",
@@ -9875,7 +9875,7 @@
         "Région isolée, peu de monde en cas de problème."
       ]
     ],
-    "tip": "Commence par la pointe la plus au sud : c'est la plus indulgente des trois.",
+    "tip": "Commence par la pointe la plus au sud : c’est la plus indulgente des trois.",
     "sports": [
       "surf",
       "bodyboard"
@@ -9922,7 +9922,7 @@
     "temp": "28°C",
     "tide": "Marée haute",
     "danger": 4,
-    "desc": "Une gauche courte et parfaitement tubulaire qui casse sur un récif au bord d'une passe, en face de l'île de Namotu. On y accède en bateau.",
+    "desc": "Une gauche courte et parfaitement tubulaire qui casse sur un récif au bord d’une passe, en face de l’île de Namotu. On y accède en bateau.",
     "dangers": [
       [
         "🪨",
@@ -9937,7 +9937,7 @@
         "Récif isolé : blessures à soigner immédiatement."
       ]
     ],
-    "tip": "Ne surfe qu'à marée haute tant que tu ne connais pas le récif.",
+    "tip": "Ne surfe qu’à marée haute tant que tu ne connais pas le récif.",
     "sports": [
       "surf"
     ],
@@ -9985,11 +9985,11 @@
     "temp": "28°C",
     "tide": "Variable",
     "danger": 1,
-    "desc": "Un lagon fermé par une couronne de motus, autour d'un piton volcanique. Eau tiède et peu profonde, raies pastenagues et raies aigles dans les passes.",
+    "desc": "Un lagon fermé par une couronne de motus, autour d’un piton volcanique. Eau tiède et peu profonde, raies pastenagues et raies aigles dans les passes.",
     "dangers": [
       [
         "🚤",
-        "Trafic de navettes et d'excursions dans le lagon."
+        "Trafic de navettes et d’excursions dans le lagon."
       ],
       [
         "🌀",
@@ -10052,7 +10052,7 @@
     "temp": "20°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Une droite de galets au pied de falaises vertigineuses, sur la côte sud-ouest de Madère. Vague longue et puissante, qui ne se réveille que par grosse houle d'Atlantique nord.",
+    "desc": "Une droite de galets au pied de falaises vertigineuses, sur la côte sud-ouest de Madère. Vague longue et puissante, qui ne se réveille que par grosse houle d’Atlantique nord.",
     "dangers": [
       [
         "🪨",
@@ -10067,7 +10067,7 @@
         "Falaises : chutes de pierres possibles après la pluie."
       ]
     ],
-    "tip": "Repère le point de sortie avant d'entrer : sur les galets, sortir est plus dur qu'entrer.",
+    "tip": "Repère le point de sortie avant d’entrer : sur les galets, sortir est plus dur qu’entrer.",
     "sports": [
       "surf"
     ],
@@ -10114,7 +10114,7 @@
     "temp": "19°C",
     "tide": "Mi-marée",
     "danger": 2,
-    "desc": "Une plage de sable volcanique sur la côte nord de São Miguel, ouverte à toutes les houles de l'Atlantique. Les Açores captent la houle avant l'Europe continentale.",
+    "desc": "Une plage de sable volcanique sur la côte nord de São Miguel, ouverte à toutes les houles de l’Atlantique. Les Açores captent la houle avant l’Europe continentale.",
     "dangers": [
       [
         "🌀",
@@ -10243,7 +10243,7 @@
     "temp": "24°C",
     "tide": "Sans objet",
     "danger": 1,
-    "desc": "Un îlot relié à la plage par un cordon de galets, classé en réserve naturelle, au pied de Taormine et face à l'Etna. Fonds rocheux clairs et grottes marines.",
+    "desc": "Un îlot relié à la plage par un cordon de galets, classé en réserve naturelle, au pied de Taormine et face à l’Etna. Fonds rocheux clairs et grottes marines.",
     "dangers": [
       [
         "🪨",
@@ -10251,11 +10251,11 @@
       ],
       [
         "🚤",
-        "Bateaux d'excursion nombreux en été."
+        "Bateaux d’excursion nombreux en été."
       ],
       [
         "🚫",
-        "Réserve naturelle : accès réglementé à l'îlot."
+        "Réserve naturelle : accès réglementé à l’îlot."
       ]
     ],
     "tip": "Longe la côte en kayak vers le nord : les grottes bleues se visitent par mer calme.",
@@ -10309,11 +10309,11 @@
     "temp": "24°C",
     "tide": "Sans objet",
     "danger": 2,
-    "desc": "Une langue de galets qui avance dans l'Adriatique et change de forme avec les courants. Le maestral s'y lève chaque après-midi d'été : c'est le spot de voile de la Dalmatie.",
+    "desc": "Une langue de galets qui avance dans l’Adriatique et change de forme avec les courants. Le maestral s’y lève chaque après-midi d’été : c’est le spot de voile de la Dalmatie.",
     "dangers": [
       [
         "💨",
-        "Vent thermique fort et régulier l'après-midi."
+        "Vent thermique fort et régulier l’après-midi."
       ],
       [
         "🪨",
@@ -10324,7 +10324,7 @@
         "Plage très fréquentée en août."
       ]
     ],
-    "tip": "Navigue côté est de la pointe le matin, côté ouest quand le maestral s'installe.",
+    "tip": "Navigue côté est de la pointe le matin, côté ouest quand le maestral s’installe.",
     "sports": [
       "windsurf",
       "kitesurf",
@@ -10375,11 +10375,11 @@
     "temp": "24°C",
     "tide": "Sans objet",
     "danger": 2,
-    "desc": "Deux baies séparées par un promontoire : l'une pour le vent, l'autre pour se baigner. Le meltem souffle du nord tout l'été et fait de Naxos un repère de la voile en Égée.",
+    "desc": "Deux baies séparées par un promontoire : l’une pour le vent, l’autre pour se baigner. Le meltem souffle du nord tout l’été et fait de Naxos un repère de la voile en Égée.",
     "dangers": [
       [
         "💨",
-        "Meltem parfois très fort, jusqu'à plusieurs jours d'affilée."
+        "Meltem parfois très fort, jusqu’à plusieurs jours d’affilée."
       ],
       [
         "🌀",
@@ -16051,7 +16051,7 @@
         "Shore break puissant quand la houle grossit."
       ]
     ],
-    "tip": "Commence par le lac marin si tu débutes, puis passe côté océan entre les drapeaux quand la mer est calme.",
+    "tip": "Commence par le lac marin si tu débutes, puis passe côté océan quand la mer est calme, en demandant au poste de secours où te mettre à l’eau.",
     "danger": 1,
     "sky": "#cfe6f7",
     "sky2": "#8fc2e6",
@@ -17100,7 +17100,7 @@
         "Récifs de lave coupants."
       ]
     ],
-    "tip": "Les lagunes du nord sont parfaites pour les enfants ; le surf se passe côté sud.",
+    "tip": "Les lagunes du nord sont plus calmes ; le surf se passe côté sud, où le shore break est violent.",
     "danger": 2,
     "sky": "#dcebf5",
     "sky2": "#a3c6dd",
@@ -17588,7 +17588,7 @@
       ],
       [
         "☀️",
-        "Coup de soleil garanti sans protection."
+        "Coup de soleil possible sans protection."
       ]
     ],
     "tip": "L’accès est limité par créneaux en haute saison : réserve et arrive au premier bateau.",
@@ -17958,7 +17958,7 @@
         "Fonds de pierres."
       ]
     ],
-    "tip": "Porte une combinaison épaisse et des chaussons : l’eau et les pierres sont froides.",
+    "tip": "Porte une combinaison épaisse et des chaussons : l’eau est froide et le fond est fait de pierres.",
     "danger": 2,
     "sky": "#dcebf5",
     "sky2": "#a3c6dd",
@@ -20539,7 +20539,7 @@
         "Raies en bord de plage : traîne les pieds."
       ]
     ],
-    "tip": "Le vent est parallèle à la côte : idéal pour naviguer en sécurité.",
+    "tip": "Le vent est parallèle à la côte.",
     "danger": 2,
     "sky": "#ffe0cc",
     "sky2": "#f5a58d",
@@ -21026,7 +21026,7 @@
         "Courant au pic."
       ]
     ],
-    "tip": "Le vent offshore quasi constant rend les vagues propres toute la journée.",
+    "tip": "Le vent offshore rend souvent les vagues propres.",
     "danger": 2,
     "sky": "#ffe0cc",
     "sky2": "#f5a58d",
@@ -21198,7 +21198,7 @@
       "baignade"
     ],
     "level": "debutant",
-    "desc": "Petite anse de pêcheurs où les tortues broutent l’herbier à quelques mètres du bord. Une rencontre presque garantie.",
+    "desc": "Petite anse de pêcheurs où les tortues broutent l’herbier à quelques mètres du bord.",
     "dangers": [
       [
         "🐢",
@@ -22369,7 +22369,7 @@
         "Courants aux pointes."
       ]
     ],
-    "tip": "Change de plage selon le vent : il y en a toujours une abritée.",
+    "tip": "Change de plage selon le vent.",
     "danger": 1,
     "sky": "#ffe8c6",
     "sky2": "#f3b06f",
@@ -23639,7 +23639,7 @@
       "snorkeling"
     ],
     "level": "debutant",
-    "desc": "Station de nettoyage où les raies manta viennent se faire toiletter. Une rencontre presque assurée en saison.",
+    "desc": "Station de nettoyage où les raies manta viennent se faire toiletter.",
     "dangers": [
       [
         "🌀",
@@ -26206,7 +26206,7 @@
         "Nombreux bateaux de spectateurs lors des grosses sessions."
       ]
     ],
-    "tip": "Pour tous les autres, le spectacle se regarde depuis la corniche basque, entre Socoa et Hendaye, les jours de très grosse houle annoncée.",
+    "tip": "Le spectacle se regarde depuis la corniche basque, entre Socoa et Hendaye, les jours de très grosse houle annoncée.",
     "danger": 4,
     "sky": "#cfe6f7",
     "sky2": "#8fc2e6",
@@ -26444,7 +26444,7 @@
         "Nombreux bateaux au mouillage l’été."
       ]
     ],
-    "tip": "Le plus simple : la navette maritime depuis Saint-Florent jusqu’à la plage du Lotu, puis environ une heure de sentier côtier.",
+    "tip": "Accès le plus simple : la navette maritime depuis Saint-Florent jusqu’à la plage du Lotu, puis environ une heure de sentier côtier.",
     "anecdote": "Les scènes de débarquement du film « Le Jour le plus long » (1962) y ont été tournées.",
     "danger": 1,
     "sky": "#cfe6f7",
@@ -34138,7 +34138,7 @@
         "Mer agitée pendant la mousson de nord-est (novembre à février)."
       ]
     ],
-    "tip": "Viens entre mai et septembre, quand la côte est est calme, et arrive tôt : l’après-midi, le site est très fréquenté.",
+    "tip": "Viens entre mai et septembre, quand la côte orientale est calme, et arrive tôt : l’après-midi, le site est très fréquenté.",
     "danger": 1,
     "sky": "#dff5f1",
     "sky2": "#a6e0d8",
