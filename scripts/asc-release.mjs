@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import site from './site-base.cjs';
 
 const VERSION = '1.4.0';
-const BUILD = '202610194';
+const BUILD = '202610201';
 const KEY_ID = '8T28JHQX3P';
 const ISSUER = '7d044674-c0b4-45e2-b48b-f0d57cdb4b29';
 const BUNDLE_ID = 'io.github.thomasbrebion59bot.oceanbuddy';
