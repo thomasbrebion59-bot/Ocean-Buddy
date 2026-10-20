@@ -887,7 +887,7 @@ function worldLab(sid){
   return '';
 }
 function ctaLabel(act){
-  return sportIcon(act,'#fff')+' '+(SPORT_DID[act]||"J'ai pratiqué ici")
+  return sportIcon(act,'var(--t-on-main)')+' '+(SPORT_DID[act]||"J'ai pratiqué ici")
        + '<span class="cta-xp">+40 XP</span>';
 }
 function setHeroPhoto(s){
