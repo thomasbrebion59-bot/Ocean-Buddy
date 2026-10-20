@@ -133,13 +133,13 @@
     return list.slice(start).concat(list.slice(0,start)).slice(0,8);
   }
   /* Choix d’activité : une pastille par activité de SPORTS (plus « Tous »), pictogrammes plats monochromes
-     (assets/icons/*-mono.svg, sans mascotte). Rendue avec l’ouverture, sous le rideau : sa hauteur est fixe (CSS)
+     (silhouettes assets/pictos/sports/*-mono.webp en masque, sans mascotte). Rendue avec l’ouverture, sous le rideau : sa hauteur est fixe (CSS)
      et elle n’est jamais insérée après coup. La source de vérité reste activeSport (app.js) ; acts() ne fait que
      relire cet état, syncActs() met à jour les attributs sur place. */
   const curSport=()=>(typeof activeSport!=='undefined'&&activeSport)||'all';
   function actButton(id,label,on){
     const ic=id==='all'?'all':id;
-    return `<button type="button" class="hf-act" role="radio" aria-checked="${on}" tabindex="${on?0:-1}" data-hf-act="${esc(id)}"><span class="hf-act-ic" style="--ic:url('assets/icons/${esc(ic)}-mono.svg')" aria-hidden="true"></span><span class="hf-act-tx">${esc(label)}</span><svg class="hf-act-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></button>`;
+    return `<button type="button" class="hf-act" role="radio" aria-checked="${on}" tabindex="${on?0:-1}" data-hf-act="${esc(id)}"><span class="hf-act-ic" style="--ic:url('assets/pictos/sports/${esc(ic)}-mono.webp')" aria-hidden="true"></span><span class="hf-act-tx">${esc(label)}</span><svg class="hf-act-ok" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></button>`;
   }
   function acts(){
     const list=typeof SPORTS!=='undefined'?SPORTS:[],cur=curSport();
