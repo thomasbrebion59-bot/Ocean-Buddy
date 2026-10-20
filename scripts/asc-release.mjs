@@ -12,7 +12,7 @@ import { fileURLToPath } from 'node:url';
 import site from './site-base.cjs';
 
 const VERSION = '1.4.0';
-const BUILD = '202610194';
+const BUILD = '202610201';
 const KEY_ID = '8T28JHQX3P';
 const ISSUER = '7d044674-c0b4-45e2-b48b-f0d57cdb4b29';
 const BUNDLE_ID = 'io.github.thomasbrebion59bot.oceanbuddy';
@@ -32,11 +32,11 @@ const frKeywords = (fr.match(/^- Mots-clés : (.+)$/m) || [])[1].trim();
 const loc = (n) => JSON.parse(readFileSync(join(ROOT, `mobile/store/localizations/${n}.json`), 'utf8'));
 const TEXT = {
   fr: { description: frDesc, keywords: frKeywords,
-    whatsNew: 'Nouveau : verre iOS 26 pour la barre d’onglets et Poulpy, animations plus fluides, Poulpy qui répond hors ligne, application en français, anglais et espagnol. Plus d’infos sur oceanbuddy.app.' },
+    whatsNew: 'Nouveau look : nouveau logo et thème crème. Verre iOS 26 pour la barre d’onglets et Poulpy, animations plus fluides, Poulpy qui répond hors ligne, application en français, anglais et espagnol. Plus d’infos sur oceanbuddy.app.' },
   en: { ...pick(loc('en')),
-    whatsNew: 'New: iOS 26 glass look for the tab bar and Poulpy, smoother animations, Poulpy answering offline, and the app in French, English and Spanish. More at oceanbuddy.app.' },
+    whatsNew: 'New look: a new logo and a cream theme. iOS 26 glass look for the tab bar and Poulpy, smoother animations, Poulpy answering offline, and the app in French, English and Spanish. More at oceanbuddy.app.' },
   es: { ...pick(loc('es')),
-    whatsNew: 'Novedades: efecto cristal de iOS 26 en la barra de pestañas y Poulpy, animaciones más fluidas, Poulpy responde sin conexión y la app en francés, inglés y español. Más en oceanbuddy.app.' },
+    whatsNew: 'Nuevo aspecto: nuevo logo y tema crema. Efecto cristal de iOS 26 en la barra de pestañas y Poulpy, animaciones más fluidas, Poulpy responde sin conexión y la app en francés, inglés y español. Más en oceanbuddy.app.' },
 };
 function pick(l) { return { description: l.description, keywords: l.keywords, promotionalText: l.promotionalText }; }
 const DEFAULT_LOCALE = { fr: 'fr-FR', en: 'en-US', es: 'es-ES' };
