@@ -40,7 +40,7 @@
   function steps(s){
     const out=[];
     out.push({kicker:'Arrivée',title:s.name.split(' — ')[0],text:s.desc});
-    if(s.tip)out.push({kicker:'Le conseil de Poulpy',title:'Avant d’entrer dans l’eau',text:s.tip});
+    if(s.tip)out.push({kicker:'Poulpy',title:'Le conseil de Poulpy',text:s.tip});
     (s.dangers||[]).slice(0,2).forEach(d=>out.push({kicker:'À surveiller',title:d[0]+' '+(d[1].split(/[.:]/)[0]||'Sécurité'),text:d[1]}));
     if(s.anecdote)out.push({kicker:'Le saviez-vous ?',title:'Une histoire du spot',text:s.anecdote});
     return out;
