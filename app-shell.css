@@ -76,7 +76,7 @@
   .ocean-v2 .nav::before,.ocean-v2 .nav::after{display:none}
   .ocean-v2 .nav-pill{display:none}
   .ocean-v2 .nav>button[data-s],html[data-act] .ocean-v2 .nav>button[data-s]{
-    position:relative;flex:1 1 0;min-width:0;height:auto;margin:0;padding:6px 0 5px;border:0;border-radius:999px;
+    position:relative;flex:1 1 0;min-width:max-content;height:auto;margin:0;padding:5px 0 7px;border:0;border-radius:8px;
     display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
     background:transparent!important;box-shadow:none!important;color:var(--t-ink2)!important;
     font:600 10.5px/1.1 var(--body);letter-spacing:-.1px;transition:color .2s,transform .2s var(--as-spring)}
@@ -85,6 +85,8 @@
   .ocean-v2 .nav>button[data-s] .tab-ic .on{opacity:0;transform:scale(.7)}
   .ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{color:var(--t-main)!important;background:var(--t-pill)!important;box-shadow:inset 0 0 0 2px var(--t-main)!important}
   html[data-act] .ocean-v2 .nav>button[data-s].active,html[data-act] .ocean-v2 .nav>button[aria-current=page]{color:var(--t-main)!important;background:var(--t-pill)!important;box-shadow:inset 0 0 0 2px var(--t-main)!important}
+  /* Anneau de l’onglet actif : le libellé garde 5 px de marge de chaque côté (2 px d’anneau + 3 px d’air) et le bouton ne descend jamais sous cette largeur ; le rayon reste modeste pour que les coins n’entrent pas dans le texte. */
+  .ocean-v2 .nav>button[data-s].active .tab-label,.ocean-v2 .nav>button[aria-current=page] .tab-label{margin-left:5px;margin-right:5px}
   .ocean-v2 .nav>button[aria-current=page] .tab-ic .on,.ocean-v2 .nav>button.active .tab-ic .on{opacity:1;transform:none}
   .ocean-v2 .nav>button[aria-current=page] .tab-ic .off,.ocean-v2 .nav>button.active .tab-ic .off{opacity:0;transform:scale(.7)}
   .ocean-v2 .nav>button[data-s]:active{transform:scale(.92)}
