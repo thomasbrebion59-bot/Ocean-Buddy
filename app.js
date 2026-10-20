@@ -1896,7 +1896,6 @@ function renderSportGuide(){
   window.OceanPoulpy?.decorateOnboarding();
 }
 function pickSport(el,id){document.querySelectorAll('#sportGrid .sport-card').forEach(c=>c.classList.remove('sel'));el.classList.add('sel');chosenSport=id;window.OceanTheme?.preview(id==='all'?null:id);}
-function onbBubbles(){let h='';for(let i=0;i<14;i++){const s=4+Math.random()*16;h+=`<i class="obub" style="left:${Math.random()*100}%;bottom:-30px;width:${s}px;height:${s}px;animation-duration:${5+Math.random()*6}s;animation-delay:${Math.random()*6}s"></i>`;}document.getElementById('onbBubbles').innerHTML=h;}
 function showStep(n){document.querySelectorAll('.onb-step').forEach(s=>s.classList.toggle('active',+s.dataset.step===n));onbStep=n;window.OceanPoulpy?.focusOnboarding();}
 function onbNext(){
   if(onbStep===1&&!chosenSport){toast('Choisis une activité 🐙');return;}
@@ -2630,7 +2629,7 @@ try{
 }catch(e){}
 document.body.classList.add('motion-pref-checked');
 applyName();
-ambient();renderSportGuide();renderSportFilters();renderSpots();try{renderWorlds();syncWorldUI();}catch(e){}renderChallenges();renderBadges();renderQuizBadges();renderSessions();renderHome();renderProfile();renderQuick();chatDragInit();bubbles('hb');bubbles('pb');bubbles('sb');bubbles('cb');onbBubbles();animateCounts();
+ambient();renderSportGuide();renderSportFilters();renderSpots();try{renderWorlds();syncWorldUI();}catch(e){}renderChallenges();renderBadges();renderQuizBadges();renderSessions();renderHome();renderProfile();renderQuick();chatDragInit();bubbles('hb');bubbles('pb');bubbles('sb');bubbles('cb');animateCounts();
 requestAnimationFrame(()=>requestAnimationFrame(()=>updateNavPill('home')));
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{const ab=document.querySelector('.nav button.active:not(.center)');updateNavPill(ab?ab.dataset.s:'home');}).catch(()=>{});
 window.addEventListener('resize',()=>{const ab=document.querySelector('.nav button.active:not(.center)');if(ab)updateNavPill(ab.dataset.s);});
