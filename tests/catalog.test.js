@@ -129,11 +129,40 @@ test('gallery images are local, credited and attached to existing destinations',
  assert.equal(Object.values(galleries).flat().length,29);assert.equal(extra.filter(s=>s.catalogNew).length,0);assert.equal(all.filter(s=>s.catalogNew).length,additions2.length);assert.ok(additions2.every(s=>s.catalogNew));
  for(const [id,rows] of Object.entries(galleries)){assert.ok(all.some(s=>s.id===id),id);for(const p of rows){assert.ok(fs.statSync(path.join(root,p.src)).size>1000);assert.ok(p.author&&p.license);assert.equal(new URL(p.source).protocol,'https:');}}
 });
-test('an unrecognised country does not invent an emergency phone number',()=>{
+test('emergency numbers come from the country field by exact name and are never invented',()=>{
  const ctx={};vm.runInNewContext(functionSource('function countryEmergency','var SPORT_VERB')+';this.emergency=countryEmergency;',ctx);
- assert.equal(ctx.emergency('Lieu non identifié').call,null);assert.equal(ctx.emergency('Savoie, France').call,'112');
- assert.equal(ctx.emergency('Musandam, Oman').call,null);assert.equal(ctx.emergency('Lampedusa, Italie').call,'112');
- assert.equal(ctx.emergency('Basse-Californie du Sud, Mexique').sea,'Urgences : 911');assert.match(ctx.emergency('Hawaï (USA)').sea,/US Coast Guard/);
+ const e=c=>ctx.emergency(typeof c==='string'?{country:c}:c);
+ /* inconnu ou absent : « À confirmer », pas de bouton d'appel */
+ for(const x of ['Lieu non identifié','',undefined,null,{},{loc:'Savoie, France'}])assert.equal(ctx.emergency(x).call,null,JSON.stringify(x));
+ assert.equal(e('Lieu non identifié').emergency,'À confirmer');
+ /* le champ loc n'est plus lu : ni sous-chaîne, ni région */
+ assert.equal(ctx.emergency({loc:'Savoie, France',country:'Oman'}).call,null);
+ assert.equal(e('Sud de la France').call,null);assert.equal(e('Hawaï').call,null);
+ assert.equal(ctx.emergency('France').call,'112');
+ for(const c of ['France','Italie','Allemagne','Croatie'])assert.equal(e(c).call,'112',c);
+ for(const c of ['Oman','Canada','Papouasie-Nouvelle-Guinée','Maroc','Maurice','Polynésie française','Nouvelle-Calédonie','Saint-Martin','Porto Rico','Turquie','Suisse','Colombie','Costa Rica'])assert.equal(e(c).call,null,c);
+ assert.equal(e('Maroc').emergency,'À confirmer');assert.equal(e('Maurice').sea,'Repère le numéro des secours locaux avant ta sortie.');
+ assert.equal(e('Mexique').sea,'Urgences : 911');assert.match(e('États-Unis').sea,/US Coast Guard/);
+ /* casse et accents indifférents, égalité exacte sinon */
+ assert.equal(e('ÉTATS-UNIS').call,'911');assert.equal(e('etats-unis').call,'911');assert.equal(e('Îles Vierges des États-Unis').call,'911');
+ /* valeurs conservées des pays déjà connus */
+ const known={'Mexique':'911','États-Unis':'911','Australie':'000','Nouvelle-Zélande':'111','Brésil':'190','Pérou':'105','Chili':'131','Argentine':'911','Équateur':'911','Salvador':'911','Afrique du Sud':'112','Namibie':'112','Maldives':'102','Fidji':'911','Seychelles':'999','Japon':'118','Sri Lanka':'119','Philippines':'911','République dominicaine':'911','Bonaire':'911','Indonésie':'112','Thaïlande':'191','Royaume-Uni':'999','Irlande':'112','France':'112','La Réunion':'112','Portugal':'112','Espagne':'112','Italie':'112','Grèce':'112','Islande':'112','Norvège':'112'};
+ for(const [c,n] of Object.entries(known)){assert.equal(e(c).call,n,c);assert.equal(e(c).emergency,n,c);}
+ assert.equal(e('France').sea,'Secours en mer : 196 (ou VHF 16)');assert.equal(e('La Réunion').sea,'Secours en mer : 196 (ou VHF 16)');
+ /* Union européenne : 112 pour les États membres du catalogue sans entrée propre */
+ for(const c of ['Allemagne','Autriche','Chypre','Croatie','Danemark','Finlande','Hongrie','Malte','Pays-Bas','Pologne','Slovénie','Suède']){assert.equal(e(c).call,'112',c);assert.equal(e(c).sea,'Secours en mer : 112 / VHF 16',c);}
+ for(const c of ['Guadeloupe','Martinique','Mayotte']){assert.equal(e(c).call,'112',c);assert.equal(e(c).sea,'Urgences : 112',c);}
+ /* sur tout le catalogue : un numéro n'apparaît que pour un pays de la table */
+ const withCall=new Set(all.filter(s=>e(s).call).map(s=>s.country));
+ for(const c of withCall)assert.ok(c in known||['Îles Vierges des États-Unis','Allemagne','Autriche','Chypre','Croatie','Danemark','Finlande','Hongrie','Malte','Pays-Bas','Pologne','Slovénie','Suède','Guadeloupe','Martinique','Mayotte'].includes(c),c);
+});
+test('isInland reads waterType only: lake and inland are inland, sea is not',()=>{
+ const ctx={};vm.runInNewContext(functionSource('function isInland','function renderConditions')+';this.isInland=isInland;',ctx);
+ assert.equal(ctx.isInland({waterType:'inland'}),true);assert.equal(ctx.isInland({waterType:'lake'}),true);
+ assert.equal(ctx.isInland({waterType:'sea'}),false);assert.equal(ctx.isInland({}),false);assert.equal(ctx.isInland(undefined),false);
+ assert.equal(ctx.isInland({id:'annecy',waterType:'sea'}),false,'plus de liste d’identifiants');
+ for(const s of all){const inland=['lake','inland'].includes(s.waterType);assert.equal(ctx.isInland(s),inland,s.id);}
+ for(const id of ['annecy','verdon','gardalake','hoodriver','silfra','cenote_dosojos','eisbach'])assert.equal(ctx.isInland(all.find(s=>s.id===id)),true,id);
 });
 
 test('every spot has a country and sits on the right continent',()=>{
@@ -144,4 +173,18 @@ test('every spot has a country and sits on the right continent',()=>{
  for(const s of [...additions,...additions2]){assert.equal(s.editorialStatus,'unverified',s.id);assert.equal(s.source.url,null,s.id);assert.ok(s.dangers.length&&s.tip,s.id);}
  for(const s of additions2){assert.ok(s.loc.endsWith(s.country),s.id);assert.ok(['coastal-sector','lake-sector','inland-sector'].includes(s.coordinatePrecision),s.id);if(s.photo)assert.match(s.photo.license,/CC BY|CC0|Public domain|PD|Attribution/i,s.id);}
  for(const id of ['todossantos','cabopulmo'])assert.equal(all.find(s=>s.id===id).country,'Mexique',id);
+});
+test('relecture sécurité : aucun calme promis sans condition, aucun garde-côtes prêté à un numéro général',()=>{
+ /* « l’eau est calme », « les lagunes sont calmes » : seulement sous condition (quand, si, lorsque) ou en comparaison (plus calme). */
+ for(const s of all){
+  const tip=String(s.tip||'');const re=/\b(?:est|sont) calmes?\b/g;let m;
+  while((m=re.exec(tip))){assert.match(tip.slice(Math.max(0,m.index-45),m.index),/\b(?:quand|si|lorsque|lorsqu’)\b|lorsqu’/,s.id+' : '+tip);}
+ }
+ const ctx={};vm.runInNewContext(functionSource('function countryEmergency','var SPORT_VERB')+';this.emergency=countryEmergency;',ctx);
+ /* 911 est le numéro d'urgence national des Philippines, pas celui des garde-côtes. */
+ assert.equal(ctx.emergency('Philippines').sea,'Urgences : 911');
+ /* chaque texte de spot affiché (conseil, description, dangers) a sa traduction anglaise et espagnole */
+ const en=JSON.parse(fs.readFileSync(path.join(root,'locales/translations/en.json'),'utf8'));
+ const es=JSON.parse(fs.readFileSync(path.join(root,'locales/translations/es.json'),'utf8'));
+ for(const s of all)for(const x of [s.tip,s.desc,...(s.dangers||[]).map(d=>d[1])].filter(Boolean)){assert.ok(en[x],'en '+s.id+' : '+x);assert.ok(es[x],'es '+s.id+' : '+x);}
 });

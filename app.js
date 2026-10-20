@@ -235,6 +235,8 @@ function spotCardMeta(s){
   return `<span>${icoWind()} ${esc(live.wind||'—')}</span><span>${icoSwell()} ${esc(live.swell||'—')}</span><span>${icoTemp()} ${esc(live.temp||'—')}</span><span class="live-dot" title="${checked?`Modèle Open-Meteo · consulté à ${checked}`:'Modèle Open-Meteo'}"></span>`;
 }
 function spotCard(s){
+  /* Aucune ligne de danger au catalogue : la jauge ne dit pas « sans danger », elle dit « non évalué ». */
+  const unrated=!(Array.isArray(s.dangers)&&s.dangers.length),dangerLabel=unrated?'Danger non évalué':'Danger';
   let dots='';for(let i=0;i<4;i++)dots+=`<span class="dot ${i<Math.min(4,Math.max(0,Number(s.danger)||0))?'on':''}"></span>`;
   const sports=spotSports(s),sp=sports.slice(0,6).map(id=>`<span title="${esc(SPORTMAP[id].label)}">${sportIcon(id)}</span>`).join('');
   const dist=(nearMode&&userPos)?spotDist(s):null;
@@ -259,7 +261,7 @@ function spotCard(s){
       <div class="spot-meta">${spotCardMeta(s)}</div>
       <div class="spot-sports">${sp}</div>
       ${window.OceanNotebook?.button(s.id)||''}
-      <div class="danger-dots" title="Danger">${dots}</div>
+      <div class="danger-dots" title="${dangerLabel}"${unrated?` aria-label="${dangerLabel}"`:''}>${dots}</div>
     </div>
   </article>`;
 }
@@ -685,38 +687,53 @@ function spotPhotoCredit(id){
   if(photo&&(photo.ai||photo.label==='Illustration IA'))return 'Illustration IA · ce n’est pas une photo du lieu';
   return photo?photo.author+' · '+photo.license+' — Wikimedia Commons':'';
 }
-function countryEmergency(loc){
-  loc=loc.toLowerCase();var has=function(k){return loc.indexOf(k)>=0;};
-  if(has('mexique')) return {emergency:'911',sea:'Urgences : 911',call:'911'};
-  if(has('hawa')||/\busa\b/.test(loc)||has('états-unis')||has('etats-unis')||has('californie')||has('oregon')) return {emergency:'911',sea:'US Coast Guard : 911 / VHF 16',call:'911'};
-  if(has('australie')) return {emergency:'000',sea:'Secours : 000 (112 depuis un mobile)',call:'000'};
-  if(has('nouvelle-zélande')||has('new zealand')) return {emergency:'111',sea:'Garde-côtes : 111',call:'111'};
-  if(has('brésil')||has('bresil')) return {emergency:'190',sea:'SAMU : 192 · pompiers 193',call:'190'};
-  if(has('pérou')||has('perou')) return {emergency:'105',sea:'Pompiers/sauvetage : 116',call:'105'};
-  if(has('chili')) return {emergency:'131',sea:'Sauvetage maritime : 137',call:'131'};
-  if(has('argentine')) return {emergency:'911',sea:'Préfecture navale : 106',call:'911'};
-  if(has('équateur')||has('equateur')||has('galápagos')||has('galapagos')) return {emergency:'911',sea:'Urgences : 911',call:'911'};
-  if(has('salvador')) return {emergency:'911',sea:'Urgences : 911',call:'911'};
-  if(has('maroc')) return {emergency:'112',sea:'SAMU : 15 · 112 depuis un mobile',call:'112'};
-  if(has('afrique du sud')) return {emergency:'112',sea:'NSRI : 112 (mobile) / 10111',call:'112'};
-  if(has('namibie')) return {emergency:'112',sea:'Urgences : 112',call:'112'};
-  if(has('maldives')) return {emergency:'102',sea:'Garde-côtes : 191',call:'102'};
-  if(has('maurice')) return {emergency:'999',sea:'Garde-côtes : 114',call:'999'};
-  if(has('fidji')||has('fiji')) return {emergency:'911',sea:'Urgences : 911',call:'911'};
-  if(has('seychelles')) return {emergency:'999',sea:'Urgences : 999',call:'999'};
-  if(has('japon')) return {emergency:'118',sea:'Garde-côtes (Japon) : 118 · ambulance 119',call:'118'};
-  if(has('sri lanka')) return {emergency:'119',sea:'Garde-côtes : 1909',call:'119'};
-  if(has('philippines')) return {emergency:'911',sea:'Garde-côtes : 911',call:'911'};
-  if(has('dominicaine')) return {emergency:'911',sea:'Urgences : 911',call:'911'};
-  if(has('bonaire')) return {emergency:'911',sea:'Urgences : 911',call:'911'};
-  if(has('indonésie')||has('indonesie')||has('bali')) return {emergency:'112',sea:'Basarnas (secours mer) : 115',call:'112'};
-  if(has('thaïlande')||has('thailande')) return {emergency:'191',sea:'Police touristique : 1155',call:'191'};
-  if(has('royaume-uni')||has('écosse')||has('ecosse')||has('angleterre')) return {emergency:'999',sea:'HM Coastguard : 999 / VHF 16',call:'999'};
-  if(has('irlande')) return {emergency:'112',sea:'Garde-côtes : 112 / VHF 16',call:'112'};
-  if(has('france')||has('tahiti')||has('corse')||has('réunion')) return {emergency:'112',sea:'Secours en mer : 196 (ou VHF 16)',call:'112'};
-  if(has('portugal')||has('espagne')||has('italie')||has('grèce')||has('grece')||has('islande')||has('norvège')||has('norvege')) return {emergency:'112',sea:'Secours en mer : 112 / VHF 16',call:'112'};
-  return {emergency:'À confirmer',sea:'Repère le numéro des secours locaux avant ta sortie.',call:null};
+/* Numéro d'urgence selon le champ « country » du spot, par égalité exacte sur le nom normalisé
+   (minuscules, sans accents) : ni sous-chaîne, ni lecture de « loc ». `s` est un spot ou un nom de pays.
+   Un pays absent de la table reste « À confirmer », sans bouton d'appel : on n'invente jamais un numéro
+   (c'est volontairement le cas du Maroc et de Maurice : leur numéro n'est pas assez sûr). */
+function countryEmergency(s){
+  var raw=typeof s==='string'?s:(s&&s.country);
+  var key=typeof raw==='string'?raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim():'';
+  var row=Object.prototype.hasOwnProperty.call(EMERGENCY_BY_COUNTRY,key)?EMERGENCY_BY_COUNTRY[key]:null;
+  return row?{emergency:row[0],sea:row[1],call:row[0]}:{emergency:'À confirmer',sea:'Repère le numéro des secours locaux avant ta sortie.',call:null};
 }
+/* nom normalisé -> [numéro, ligne « en mer »] */
+var EMERGENCY_BY_COUNTRY=(function(){
+  var t={
+    'mexique':['911','Urgences : 911'],
+    'etats-unis':['911','US Coast Guard : 911 / VHF 16'],
+    'iles vierges des etats-unis':['911','US Coast Guard : 911 / VHF 16'],
+    'australie':['000','Secours : 000 (112 depuis un mobile)'],
+    'nouvelle-zelande':['111','Garde-côtes : 111'],
+    'bresil':['190','SAMU : 192 · pompiers 193'],
+    'perou':['105','Pompiers/sauvetage : 116'],
+    'chili':['131','Sauvetage maritime : 137'],
+    'argentine':['911','Préfecture navale : 106'],
+    'equateur':['911','Urgences : 911'],
+    'salvador':['911','Urgences : 911'],
+    'afrique du sud':['112','NSRI : 112 (mobile) / 10111'],
+    'namibie':['112','Urgences : 112'],
+    'maldives':['102','Garde-côtes : 191'],
+    'fidji':['911','Urgences : 911'],
+    'seychelles':['999','Urgences : 999'],
+    'japon':['118','Garde-côtes (Japon) : 118 · ambulance 119'],
+    'sri lanka':['119','Garde-côtes : 1909'],
+    'philippines':['911','Urgences : 911'],
+    'republique dominicaine':['911','Urgences : 911'],
+    'bonaire':['911','Urgences : 911'],
+    'indonesie':['112','Basarnas (secours mer) : 115'],
+    'thailande':['191','Police touristique : 1155'],
+    'royaume-uni':['999','HM Coastguard : 999 / VHF 16'],
+    'irlande':['112','Garde-côtes : 112 / VHF 16'],
+    'france':['112','Secours en mer : 196 (ou VHF 16)'],
+    'la reunion':['112','Secours en mer : 196 (ou VHF 16)']
+  };
+  /* États de l'Union européenne, plus l'Islande et la Norvège (EEE) : le 112 (déjà annoncé dans l'écran de sécurité). */
+  ['portugal','espagne','italie','grece','islande','norvege','allemagne','autriche','chypre','croatie','danemark','finlande','hongrie','malte','pays-bas','pologne','slovenie','suede'].forEach(function(c){t[c]=['112','Secours en mer : 112 / VHF 16'];});
+  /* Départements d'outre-mer de l'Union. */
+  ['guadeloupe','martinique','mayotte'].forEach(function(c){t[c]=['112','Urgences : 112'];});
+  return t;
+})();
 // Phrases entières pour la traduction (« J'ai » + verbe se traduirait mot à mot).
 var SPORT_DID={surf:"J'ai surfé ici",bodyboard:"J'ai ridé ici",baignade:"J'ai nagé ici",paddle:"J'ai pagayé ici",kayak:"J'ai pagayé ici",snorkeling:"J'ai fait du snorkeling ici",plongee:"J'ai plongé ici",kitesurf:"J'ai kité ici",windsurf:"J'ai navigué ici"};
 var SPORT_VERB={surf:'surfé',bodyboard:'ridé',baignade:'nagé',paddle:'pagayé',kayak:'pagayé',snorkeling:'fait du snorkeling',plongee:'plongé',kitesurf:'kité',windsurf:'navigué'};
@@ -1001,7 +1018,7 @@ function openSpot(id){
   document.getElementById('dSchool').onclick=()=>mapsSearch('école '+spLab+' cours '+near,cc);
   setHeroPhoto(s);
   document.getElementById('dLogBtn').innerHTML=ctaLabel(sp0);
-  var em=countryEmergency(s.loc);
+  var em=countryEmergency(s);
   document.getElementById('dEmerg').textContent=em.emergency;
   document.getElementById('dSea').textContent=isInland(s)?(em.call?'Secours : '+em.emergency:'Numéro local à confirmer avant la sortie.'):em.sea;
   const callButton=document.getElementById('dCall');callButton.hidden=!em.call;
@@ -1021,14 +1038,18 @@ function openSpot(id){
   /* Pas d'anecdote ni d'histoire : on masque le bloc plutôt que d'afficher une phrase de remplissage. */
   const anecBlock=document.getElementById('dAnec').closest('.anec-block');if(anecBlock)anecBlock.style.display=(ANEC[s.id]||fun)?'':'none';
   if(fun){fb.style.display='';document.getElementById('dFun').textContent=fun;}else{fb.style.display='none';}
-  document.getElementById('dTip').textContent=s.tip;
+  /* Pas de conseil : on masque tout le bloc plutôt que d'afficher un titre sans texte. */
+  var _hasTip=typeof s.tip==='string'&&s.tip.trim()!=='';
+  document.getElementById('dTip').textContent=_hasTip?s.tip:'';
+  var _tipBlock=document.getElementById('dTip').closest('.block');
+  if(_tipBlock)_tipBlock.style.display=_hasTip?'':'none';
   var _to=document.getElementById('dTipOcto');
   if(_to&&!_to.innerHTML)_to.innerHTML=octoTag();
   renderDetailFacts(s,act);
   var _tb=document.getElementById('dTideBlock');if(_tb)_tb.style.display='none';
   renderConditions(s,LIVE[s.id]?.live?LIVE[s.id]:null);fetchConditions(s);
   try{renderFaune(s);}catch(e){}
-  document.getElementById('dDangers').innerHTML=(Array.isArray(s.dangers)?s.dangers:[]).map(d=>{var m=DANGER_MAP[d[0]]||['pin','var(--k-grey)','var(--k-grey-ink)'];return `<div class="danger-item"><span class="di" style="background:${m[1]};color:${m[2]}">${uic(m[0])}</span><span>${esc(d[1])}</span></div>`;}).join('')||'<p>Vérifie les consignes locales avant ta sortie.</p>';
+  document.getElementById('dDangers').innerHTML=(Array.isArray(s.dangers)?s.dangers:[]).map(d=>{var m=dangerStyle(d[0],d[1]);return `<div class="danger-item"><span class="di" style="background:${m[1]};color:${m[2]}">${uic(m[0])}</span><span>${esc(d[1])}</span></div>`;}).join('')||'<p><b>Danger non évalué</b></p><p>Vérifie les consignes locales avant ta sortie.</p>';
   showDetailCat('infos',false);
   /* Les modules annexes (communauté, guide, carte) ne doivent jamais bloquer l’ouverture de la fiche. */
   try{window.OceanCommunity?.mountSpot(id);}catch(e){console.warn('community',e);}
@@ -1202,7 +1223,7 @@ function renderForecast(){
   document.getElementById('fcBars').innerHTML='<p class="field-forecast-empty">La houle s’affichera lorsque les données du modèle seront disponibles.</p>';
 }
 function cardinal(deg){if(deg==null||isNaN(deg))return '';return ((window.OB_I18N&&OB_I18N.lang!=='fr')?['N','NE','E','SE','S','SW','W','NW']:['N','NE','E','SE','S','SO','O','NO'])[Math.round(deg/45)%8];}
-function isInland(s){return s?.waterType==='lake'||['annecy','verdon','gardalake','hoodriver','silfra','cenote_dosojos'].includes(s?.id);}
+function isInland(s){return ['lake','inland'].includes(s?.waterType);}
 /* Météo d’un spot côtier : maille « mer » d’Open-Meteo (sinon la maille du relief voisin donnait 22 °C à Bora Bora). */
 function meteoCell(s){return isInland(s)?'land':'sea';}
 /* Aperçus de conditions : réponses gardées 30 min et pause de 2 min après un refus (429/503) du service. */
@@ -1228,7 +1249,7 @@ function renderConditions(s,live){
   const head=document.getElementById('dCondHead');
   if(head){
     const stamp=live?.fetchedAt?new Date(live.fetchedAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):null;
-    head.textContent=live?(isInland(s)?'Eau douce · vent Open-Meteo':'Prévisions du modèle · Open-Meteo')+(stamp?' · '+`consultées à ${stamp}`:''):'Prévisions du modèle indisponibles pour le moment';
+    head.textContent=live?(isInland(s)?'Plan d’eau intérieur · vent Open-Meteo':'Prévisions du modèle · Open-Meteo')+(stamp?' · '+`consultées à ${stamp}`:''):'Prévisions du modèle indisponibles pour le moment';
   }
 }
 function tideFromMarine(mar){
@@ -2137,7 +2158,7 @@ function bubbles(id){
 const QUICK=[["🏄 Quel spot aujourd'hui ?",'spot'],['🛟 Sécurité','secu'],['🌱 Geste écolo','eco'],['📈 Ma progression','prog']];
 const SECU=[
   "Avant d'entrer, observe la mer 5 min : repère les zones où l'eau retourne vers le large, ce sont les <b>baïnes</b>. Évite-les ! 🌀",
-  "Reste toujours <b>entre les drapeaux</b> et ne surfe jamais seul quand la houle est grosse.",
+  "Pour la baignade, respecte les <b>drapeaux</b> ; pour surfer, demande au <b>poste de secours</b> où te mettre à l’eau, et ne surfe jamais seul.",
   "Pris dans un courant ? <b>Ne lutte pas de face</b> : laisse-toi porter et nage parallèle à la plage pour en sortir.",
   "Au canard, garde ta planche <b>du côté de la vague</b> et protège ta tête à la remontée.",
   "Vérifie les <b>horaires de marée</b> : beaucoup de spots ne marchent qu'à marée basse ou haute. 🌙",
@@ -2292,26 +2313,126 @@ function renderGuide(s,act){
 }
 
 var LVLTXT={debutant:'Débutant',intermediaire:'Intermédiaire',expert:'Expert',variable:'Niveau à évaluer'};
-var DANGER_MAP={
-  '\ud83c\udf00':['spirale','var(--k-blue)','var(--k-blue-ink)'],
-  '\u26a1':['eclair','var(--k-sand)','var(--k-sand-ink)'],
-  '\ud83c\udfd6\ufe0f':['fond','var(--k-sand)','var(--k-sand-ink)'],
-  '\ud83c\udfdc\ufe0f':['fond','var(--k-sand)','var(--k-sand-ink)'],
-  '\ud83d\udc65':['affluence','var(--k-violet)','var(--k-violet-ink)'],
-  '\ud83d\udca8':['vent','var(--k-blue)','var(--k-blue-ink)'],
-  '\ud83c\udf0a':['wave','var(--k-blue)','var(--k-blue-ink)'],
-  '\ud83e\udea8':['rocher','var(--k-stone)','var(--k-stone-ink)'],
-  '\ud83e\udd76':['neige','var(--k-blue)','var(--k-blue-ink)'],
-  '\u2744\ufe0f':['neige','var(--k-blue)','var(--k-blue-ink)'],
-  '\ud83d\udeab':['interdit','var(--k-coral)','var(--k-coral-ink)'],
-  '\u2600\ufe0f':['soleil','var(--k-sand)','var(--k-sand-ink)'],
-  '\u26a0\ufe0f':['vigilance','var(--k-sand)','var(--k-sand-ink)'],
-  '\ud83d\udd73\ufe0f':['grotte','var(--k-stone)','var(--k-stone-ink)'],
-  '\ud83d\udea4':['bateau','var(--k-blue)','var(--k-blue-ink)'],
-  '\ud83d\udeb6':['marche','var(--k-green)','var(--k-green-ink)'],
-  '\ud83e\uddb5':['eclair','var(--k-sand)','var(--k-sand-ink)'],
-  '\ud83e\udd88':['requin','var(--k-blue)','var(--k-blue-ink)']
+/* Pictos des lignes de danger (« À surveiller »). Les emojis du catalogue sont normalisés SANS le sélecteur de
+   variante U+FE0F (dangerStyle le retire du texte cherché) : « ☀ » et « ☀️ » donnent la même entrée.
+   La couleur est un signal de gravité, jamais un décor : corail = danger sérieux (requin, crocodile, méduse,
+   cyclone, secours éloignés, interdit, santé), sable = vigilance, bleu = l'eau (courant, vent, froid, bateaux),
+   violet = affluence, vert = faune et nature, pierre = relief. Quatrième valeur à 1 : emoji trop général
+   (⚠️, bateaux, voiture…) dont le texte de la ligne peut préciser le picto. */
+var DANGER_FAMILY={
+  coral:['var(--k-coral)','var(--k-coral-ink)'],sand:['var(--k-sand)','var(--k-sand-ink)'],
+  blue:['var(--k-blue)','var(--k-blue-ink)'],violet:['var(--k-violet)','var(--k-violet-ink)'],
+  green:['var(--k-green)','var(--k-green-ink)'],stone:['var(--k-stone)','var(--k-stone-ink)']
 };
+var DANGER_MAP=(function(){
+  var m={};
+  function add(key,fam,soft,emojis){emojis.forEach(function(e){m[e]=[key,DANGER_FAMILY[fam][0],DANGER_FAMILY[fam][1],soft?1:0];});}
+  /* eau, courants, météo */
+  add('spirale','blue',0,['\u{1F300}']);                                  /* 🌀 courants, baïnes */
+  add('wave','blue',0,['\u{1F30A}','\u{1F4A7}','⏳','\u{1F9B5}']);      /* 🌊 vagues · 💧 eau · ⏳ marée · 🦵 effort */
+  add('vent','blue',0,['\u{1F4A8}','\u{1F32C}','\u{1FA81}']);              /* 💨 🌬 vent · 🪁 kite */
+  add('neige','blue',0,['\u{1F976}','❄','\u{1F9CA}']);                /* 🥶 ❄ 🧊 eau froide */
+  add('eclair','sand',0,['⚡']);                                      /* ⚡ éclairs */
+  add('orage_pluie','sand',0,['⛈']);                                 /* ⛈ orages */
+  add('pluie','blue',0,['\u{1F327}']);                                    /* 🌧 pluie, mousson, crues */
+  add('cyclone_typhon','coral',0,['\u{1F32A}']);                          /* 🌪 typhons */
+  add('soleil','sand',0,['☀']);                                      /* ☀ soleil, UV */
+  add('temperature','sand',0,['\u{1F321}']);                              /* 🌡 chaleur */
+  add('profondeur','blue',0,['⬇']);                                  /* ⬇ profondeur */
+  add('visibilite','blue',0,['\u{1F319}']);                               /* 🌙 plongée de nuit */
+  /* relief, plage, accès */
+  add('fond','sand',0,['\u{1F3D6}','\u{1F3DC}']);                          /* 🏖 🏜 fond, plage */
+  add('rocher','stone',0,['\u{1FAA8}','\u{1F9D7}','\u{1FAB5}']);           /* 🪨 rochers · 🧗 falaises · 🪵 bois flottés */
+  add('rocher','stone',1,['\u{1F3D4}','⛰']);                         /* 🏔 ⛰ montagne, altitude */
+  add('grotte','stone',0,['\u{1F573}','\u{1F56F}','\u{1F526}']);          /* 🕳 🕯 🔦 grottes, plongée en cavité */
+  add('marche','green',0,['\u{1F6B6}','\u{1F97E}','\u{1F9B6}']);          /* 🚶 🥾 🦶 marche d'accès */
+  add('flamme','coral',0,['\u{1F525}','\u{1F30B}']);                      /* 🔥 🌋 feu, volcan */
+  add('vigilance','sand',1,['⚠','ℹ','\u{1F9ED}','\u{1F697}','\u{1F699}']); /* ⚠ ℹ 🧭 🚗 🚙 */
+  add('vigilance','sand',0,['\u{1F5FF}','\u{1F3A3}','\u{1FA82}','\u{1F965}','\u{1F3AB}']); /* 🗿 🎣 🪂 🥥 🎫 */
+  add('vigilance','coral',0,['\u{1F4A3}','\u{1F43B}']);                   /* 💣 munitions · 🐻 ours */
+  add('interdit','coral',0,['\u{1F6AB}','\u{1F6B7}','\u{1F9F4}','\u{1F3AF}']); /* 🚫 🚷 🧴 🎯 interdictions */
+  add('drapeau_attention','sand',0,['\u{1F6A9}']);                        /* 🚩 drapeaux */
+  add('surveillance','sand',0,['\u{1F3CA}']);                             /* 🏊 baignade surveillée */
+  add('secours_eloignes','coral',0,['\u{1F3E5}','\u{1F691}']);            /* 🏥 🚑 secours éloignés */
+  add('sante_maladie','coral',0,['\u{1F9A0}','\u{1FA79}','\u{1F441}']);   /* 🦠 🩹 👁 santé */
+  add('moustique','sand',0,['\u{1F99F}']);                                /* 🦟 moustiques */
+  add('feuille','coral',0,['\u{1F333}']);                                 /* 🌳 mancenillier toxique */
+  /* bateaux et épaves */
+  add('bateau','blue',0,['\u{1F6A4}']);                                   /* 🚤 */
+  add('bateau','blue',1,['⛵','\u{1F6A2}','\u{1F6E5}','⛴','\u{1F6F3}','⚓','\u{1F6A3}']); /* ⛵ 🚢 🛥 ⛴ 🛳 ⚓ 🚣 */
+  /* foule */
+  add('affluence','violet',0,['\u{1F465}','\u{1F3C4}']);                   /* 👥 🏄 affluence, line-up chargé */
+  /* faune : verte quand on la protège, corail quand elle est à risque */
+  add('requin','coral',0,['\u{1F988}']);                                  /* 🦈 */
+  add('animal_a_risque','coral',0,['\u{1F40A}']);                         /* 🐊 crocodiles */
+  add('meduse','coral',0,['\u{1FABC}']);                                  /* 🪼 méduses */
+  add('reptile','coral',0,['\u{1F40D}']);                                 /* 🐍 serpents marins */
+  add('reptile','green',0,['\u{1F98E}']);                                 /* 🦎 iguanes */
+  add('tortue','green',0,['\u{1F422}']);                                  /* 🐢 */
+  add('dauphin','green',0,['\u{1F42C}']);                                 /* 🐬 */
+  add('mammifere','green',0,['\u{1F9AD}','\u{1F998}','\u{1F40B}']);        /* 🦭 🦘 🐋 */
+  add('poisson','blue',0,['\u{1F41F}','\u{1F420}']);                      /* 🐟 🐠 raies, mantas */
+  add('invertebre','green',0,['\u{1F419}']);                              /* 🐙 */
+  add('oursin','sand',0,['\u{1F994}']);                                   /* 🦔 (oursins) */
+  add('oiseau','green',0,['\u{1F9A9}','\u{1F426}','\u{1F427}']);          /* 🦩 🐦 🐧 */
+  add('corail','sand',0,['\u{1FAB8}']);                                   /* 🪸 coraux, récifs */
+  add('feuille','green',0,['\u{1F33F}']);                                 /* 🌿 herbiers, parc */
+  add('algue','green',0,['\u{1F33E}']);                                   /* 🌾 roselières */
+  return m;
+})();
+/* Repli du texte quand l'emoji est inconnu (ou « souple ») : mots entiers, sans accents ni casse, du plus grave
+   au plus courant. Dernier recours : un picto d'attention (plus l'épingle grise). */
+var DANGER_FALLBACK=['repli_attention',DANGER_FAMILY.sand[0],DANGER_FAMILY.sand[1]];
+var DANGER_WORDS=[
+  [/\brequins?\b/,'requin','coral'],
+  [/\b(?:crocodiles?|alligators?|caimans?)\b/,'animal_a_risque','coral'],
+  [/\b(?:meduses?|cubomeduses?|physalies?)\b/,'meduse','coral'],
+  [/\b(?:cyclones?|typhons?|ouragans?|tornades?|tempetes?)\b/,'cyclone_typhon','coral'],
+  [/\b(?:secours|hopital|hopitaux|isole|isolee|isoles|isolees|isolement|evacuation)\b/,'secours_eloignes','coral'],
+  [/\b(?:bateaux?|ferr(?:y|ies)|navires?|paquebots?|cargos?|barques?|navettes?|navigation|croisieres?|jet-?skis?|pirogues?|boutres?|mouillages?|pontons?|liveaboard|trafic)\b/,'bateau','blue'],
+  [/\b(?:epaves?|penetration|penetrer|penetre)\b/,'epave_penetration','coral'],
+  [/\b(?:bilharziose|paludisme|dengue|toxiques?|venimeux|venimeuse|urticant|urticante|irritante?)\b/,'sante_maladie','coral'],
+  [/\b(?:orages?|orageux|foudre|eclairs?)\b/,'orage_pluie','sand'],
+  [/\b(?:rochers?|rocheux|rocheuse|rocheuses|pierres?|falaises?|cailloux|galets|lave)\b/,'rocher','stone'],
+  [/\b(?:pluies?|pluvieux|mousson|crues?|averses?|inondations?)\b/,'pluie','blue'],
+  [/\boursins?\b/,'oursin','sand'],
+  [/\b(?:moustiques?|moucherons?)\b/,'moustique','sand'],
+  [/\b(?:coraux|corail|recifs?|reef)\b/,'corail','sand'],
+  [/\b(?:herbiers?|algues?|kelp|posidonie|roselieres?)\b/,'algue','green'],
+  [/\b(?:interdit|interdite|interdits|interdites|interdiction|obligatoire|obligatoires|permis|taxe|reglemente|reglementee|reglementes|reglementees|ferme|fermee|fermes|fermees|fermeture|autorisation)\b/,'interdit','coral'],
+  [/\b(?:courants?|baines?|arrachement|dessalage|derive)\b/,'spirale','blue'],
+  [/\b(?:vent|vents|mistral|brise|tramontane|rafales?|kite)\b/,'vent','blue'],
+  [/\b(?:froid|froide|froides|glacial|glaciale|glaciaire|fraiche|fraiches|frais|hypothermie|combinaison)\b/,'neige','blue'],
+  [/\b(?:soleil|insolation|chaleur|canicule|uv)\b/,'soleil','sand'],
+  [/\b(?:marees?)\b/,'wave','blue'],
+  [/\b(?:profond|profonde|profonds|profondes|profondeur|profondeurs|tombant)\b/,'profondeur','blue'],
+  [/\b(?:affluence|foule|frequente|frequentes|frequentee|frequentees|ecoles?|line-?up)\b/,'affluence','violet'],
+  [/\b(?:drapeaux?)\b/,'drapeau_attention','sand'],
+  [/\b(?:surveillance|surveillee|surveillees)\b/,'surveillance','sand'],
+  [/\btortues?\b/,'tortue','green'],
+  [/\bdauphins?\b/,'dauphin','green'],
+  [/\b(?:baleines?|phoques?|otaries?|lamantins?)\b/,'mammifere','green'],
+  [/\b(?:raies?|mantas?|poissons?)\b/,'poisson','blue'],
+  [/\b(?:oiseaux|manchots?|flamants?)\b/,'oiseau','green'],
+  [/\b(?:serpents?|iguanes?)\b/,'reptile','green'],
+  [/\bours\b/,'vigilance','coral']
+];
+function dangerWords(text){
+  var t=String(text==null?'':text).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().replace(/[’‘`]/g,"'");
+  for(var i=0;i<DANGER_WORDS.length;i++){
+    if(DANGER_WORDS[i][0].test(t)){var f=DANGER_FAMILY[DANGER_WORDS[i][2]];return [DANGER_WORDS[i][1],f[0],f[1]];}
+  }
+  return null;
+}
+/* [picto, fond, encre] d'une ligne de danger : l'emoji d'abord (sans U+FE0F), puis le texte, puis le repli. */
+function dangerStyle(emoji,text){
+  var e=String(emoji==null?'':emoji).replace(/️/g,'').trim();
+  var hit=Object.prototype.hasOwnProperty.call(DANGER_MAP,e)?DANGER_MAP[e]:null;
+  if(hit&&!hit[3])return [hit[0],hit[1],hit[2]];
+  var w=dangerWords(text);
+  if(w)return w;
+  return hit?[hit[0],hit[1],hit[2]]:DANGER_FALLBACK.slice();
+}
 function spotTokens(s){const t=[s.id];s.name.split('—')[0].toLowerCase().split(/[^a-zà-ÿ0-9]+/).forEach(function(w){if(w.length>=5)t.push(w);});(ALIAS[s.id]||[]).forEach(function(a){t.push(a);});return t;}
 function findSpotInQuery(q){for(const s of SPOTS){const tk=spotTokens(s);for(const k of tk){if(k.length>=4&&q.indexOf(k)>=0)return s;}}return null;}
 /* Pays et activité cités dans la question (« débuter le surf en France ») : ils restreignent les suggestions. */
@@ -2344,7 +2465,7 @@ function poulpyReply(q){
    [/\b(bonjour|salut|coucou|hello|hey|hi|yo|wesh|bonsoir)\b/,"Coucou ! 🐙 Je suis Poulpy, ton assistant océan. Demande-moi un <b>spot</b>, de la <b>technique de surf</b>, des questions sur la <b>faune marine</b>, la <b>météo des vagues</b> ou l'<b>écologie</b>… vas-y, teste-moi !"],
    [/(qui es.?tu|tu es qui|c'est quoi poulpy|qui est poulpy|présente|presente|ton nom|tu fais quoi|tu sais faire)/,"Je suis <b>Poulpy</b> 🐙, ton poulpe-assistant surf &amp; océan ! Je connais les spots, la technique, la vie marine, la météo des vagues et l'écologie. Pose-moi tout ce que tu veux sur l'océan."],
    [/(poulpe|pieuvre|octopus|tentacule|combien de c(œ|oe)ur|sang bleu)/,"Nous les poulpes, on est des cracks 🐙 : <b>3 cœurs</b>, du <b>sang bleu</b>, 8 bras couverts de ventouses qui goûtent ce qu'elles touchent, et on peut <b>changer de couleur</b> et se faufiler par un trou de la taille de notre bec !"],
-   [/(requin|shark)/,"Les requins impressionnent, mais les attaques sont <b>très rares</b> 🦈. La plupart nous ignorent. Évite l'aube/le crépuscule, l'eau trouble et les zones de pêche, et tout ira bien."],
+   [/(requin|shark)/,"Les requins impressionnent, mais les attaques sont <b>très rares</b> 🦈. La plupart nous ignorent. Évite l'aube/le crépuscule, l'eau trouble et les zones de pêche, et suis les consignes du lieu."],
    [/(dauphin|orque|cétac|cetac|marsouin)/,"Croiser des dauphins à l'eau, c'est le plus beau cadeau du surf 🐬 ! Curieux et joueurs. Reste calme, profite, et ne les poursuis pas."],
    [/(baleine|rorqual|cachalot)/,"Les baleines sont les plus grands animaux ayant jamais existé 🐋 : le rorqual bleu dépasse 30 m, et son cœur fait la taille d'une petite voiture !"],
    [/(tortue)/,"Les tortues marines existent depuis plus de 100 millions d'années 🐢. Si tu en croises : garde tes distances et ne les touche pas, elles sont protégées."],
@@ -2382,7 +2503,7 @@ function poulpyReply(q){
    [/(poisson.?pierre|rascasse|poisson.?lion|lionfish)/,"En eaux tropicales, méfie-toi du poisson-pierre et du poisson-lion : très venimeux 🐟. Ne touche rien et regarde où tu poses pieds et mains."],
    [/(blanchissement)/,"Le blanchissement, c'est quand le corail, stressé par une eau trop chaude, expulse ses algues et devient blanc 🪸. S'il dure, le corail meurt — d'où l'urgence climatique pour les récifs."],
    [/(bioluminescen|mer qui brille|eau qui brille)/,"Cette lumière bleue magique dans les vagues la nuit ✨, c'est du <b>plancton bioluminescent</b> qui s'illumine quand l'eau s'agite. Spectacle rare et féérique !"],
-   [/(beach.?break|point.?break|reef.?break|type de spot|type de vague|type de fond|fond de sable|fond rocheux)/,"3 grands types de spots 🌊 : <b>beach break</b> (fond de sable, plus sûr, idéal débutant), <b>reef break</b> (fond de récif/roche : vague précise mais coupante), <b>point break</b> (la vague déroule le long d'une pointe, longue et régulière)."],
+   [/(beach.?break|point.?break|reef.?break|type de spot|type de vague|type de fond|fond de sable|fond rocheux)/,"3 grands types de spots 🌊 : <b>beach break</b> (fond de sable), <b>reef break</b> (fond de récif/roche : vague précise mais coupante), <b>point break</b> (la vague déroule le long d'une pointe, longue et régulière)."],
    [/(banc de sable|sandbar|bancs de sable)/,"Un beach break dépend de ses <b>bancs de sable</b> : ils bougent avec les marées et les tempêtes, ce qui change la qualité des vagues d'une semaine à l'autre."],
    [/(coefficient.*mar|gros coeff|fort coeff)/,"Le <b>coefficient de marée</b> (20 à 120) indique l'amplitude : plus il est haut, plus la mer monte/descend vite et plus les <b>courants</b> sont forts. Au-delà de 90, prudence sur les spots à baïnes."],
    [/(groundswell|windswell|mer de vent|houle de fond)/,"La <b>houle de fond</b> (groundswell) vient de tempêtes lointaines : longue période, vagues propres et puissantes. La <b>mer de vent</b> est générée localement : courte période, clapot désordonné."],

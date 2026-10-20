@@ -9,7 +9,7 @@
   const levels = ['debutant','intermediaire','expert'];
   const keys = [...sports, ...levels];
   /* Pictos d'interface : clé -> famille/fichier. Les clés absentes n'ont pas de dessin (flèches, commandes). */
-  const PICTOS = 'affluence algue balai bateau bouteille cadenas camera carte coeur conditions_ok corail couronne dauphin eclair etoile feuille flamme fond grotte interdit invertebre mammifere marche materiel neige observer oiseau pin plan_eau planche poisson profondeur recycle reptile requin rocher saison soleil spirale sunrise surveillance temperature tortue trophee velo vent vigilance visibilite wave'.split(' ');
+  const PICTOS = 'affluence algue animal_a_risque balai bateau bouteille cadenas camera carte coeur conditions_ok corail couronne cyclone_typhon dauphin drapeau_attention eclair epave_penetration etoile feuille flamme fond grotte interdit invertebre mammifere marche materiel meduse moustique neige observer oiseau orage_pluie oursin pin plan_eau planche pluie poisson profondeur recycle repli_attention reptile requin rocher saison sante_maladie secours_eloignes soleil spirale sunrise surveillance temperature tortue trophee velo vent vigilance visibilite wave'.split(' ');
   const GUIDE = 'bed book calendar camping check compass food guest hostel hotel ile lac marche musee nature panorama patrimoine plage rando respect speech surfcamp village ville water'.split(' ');
   const FICHE = ['infos','saisons','meteo','activites','faune','preserver'];
   const ALIAS = {
