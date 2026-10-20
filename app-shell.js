@@ -22,11 +22,14 @@
     challenges:{label:'Défis',off:'<path d="M8 4h8v5.5a4 4 0 0 1-8 0z"/><path d="M8 5.5H4.6c0 3 1.4 4.6 3.6 5M16 5.5h3.4c0 3-1.4 4.6-3.6 5"/><path d="M12 13.5V17M8.5 20.5h7M10 17h4l.6 3.5H9.4z"/>',on:'<path d="M7.2 3.2h9.6c.4 0 .8.4.8.8v.7h2a.8.8 0 0 1 .8.8c0 3.3-1.7 5.3-4.3 5.8a5 5 0 0 1-3.3 2.9v2.6h1.9l.6 3.5h1a.8.8 0 0 1 0 1.6H7.7a.8.8 0 0 1 0-1.6h1l.6-3.5h1.9v-2.6A5 5 0 0 1 7.9 11C5.3 10.4 3.6 8.5 3.6 5.5a.8.8 0 0 1 .8-.8h2V4c0-.4.4-.8.8-.8zM5.3 6.3c.3 1.7 1.2 2.7 2.4 3.2a5 5 0 0 1-.1-1.1V6.3zm13.4 0h-2.3v2.1c0 .4 0 .8-.1 1.1 1.2-.5 2.1-1.5 2.4-3.2z"/>'},
     profile:{label:'Profil',off:'<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.8-3.8 3.8-6 7.5-6s6.7 2.2 7.5 6"/>',on:'<circle cx="12" cy="7.8" r="4.6"/><path d="M12 13.6c4.3 0 7.6 2.6 8.4 6.6a1.3 1.3 0 0 1-1.3 1.6H4.9a1.3 1.3 0 0 1-1.3-1.6c.8-4 4.1-6.6 8.4-6.6z"/>'}
   };
+  const TAB_PIC={home:'tab-accueil',spots:'tab-explorer',surf:'tab-jeu',trips:'tab-voyages',challenges:'tab-defis',profile:'tab-profil'};
   for(const b of $$('button[data-s]',nav)){
     const t=TABS[b.dataset.s];if(!t)continue;
     const desk=b.querySelector('.desktop-label')?.outerHTML||'';
     const deskIcon=b.querySelector(':scope>svg')?.outerHTML||'';
-    b.innerHTML=`${deskIcon}<span class="tab-ic">${svg(t.off,false)}${svg(t.on,true)}</span>${desk}<span class="tab-label">${t.label}</span>`;
+    /* Picto dessiné (silhouette mono en masque, teinte = couleur du bouton) ; tracé de secours sinon. */
+    const pic=TAB_PIC[b.dataset.s],ic=pic?`<i class="off" style="--m:url('assets/pictos/onglets-app/${pic}-mono.webp')" aria-hidden="true"></i><i class="on" style="--m:url('assets/pictos/onglets-app/${pic}-mono.webp')" aria-hidden="true"></i>`:`${svg(t.off,false)}${svg(t.on,true)}`;
+    b.innerHTML=`${deskIcon}<span class="tab-ic${pic?' tab-pic':''}">${ic}</span>${desk}<span class="tab-label">${t.label}</span>`;
     b.setAttribute('aria-label',t.label==='Explorer'?'Explorer la planète':t.label);
   }
   /* Ordre des onglets : Accueil, Explorer, Voyages, Défis, Profil (Communauté est dans le profil). */

@@ -74,8 +74,9 @@
     draw();
     const weatherHelp=$('#imWeatherHelp');weatherHelp.innerHTML=`${icon(a)}<span><b>Ces chiffres, ça veut dire quoi ?</b><small>Poulpy t’explique le vent${isInland(s)?' et l’eau.':', les vagues et la marée.'}</small></span>`;
     document.querySelectorAll('#dTabs .dtab').forEach(b=>{
-      const key={infos:'all',saisons:'baignade',meteo:'expert',activites:a,faune:'snorkeling',preserver:'all'}[b.dataset.cat];
-      let image=b.querySelector('.poulpy-mini');if(image)image.src=PoulpyIcons.src(key);else{b.querySelector('svg')?.remove();b.insertAdjacentHTML('afterbegin',icon(key));}
+      /* Un picto propre à chaque onglet de la fiche (assets/pictos/onglets-fiche). */
+      const f=PoulpyIcons.file('ft-'+b.dataset.cat)||PoulpyIcons.src(a);
+      let image=b.querySelector('.poulpy-mini');if(image){if(!image.src.endsWith(f))image.src=f;}else{b.querySelector('svg')?.remove();b.insertAdjacentHTML('afterbegin',`<img class="poulpy-mini ob-ico ft-ico" src="${f}" alt="" width="48" height="48" decoding="async">`);}
     });
   }
   function refreshConditions(s,data){
