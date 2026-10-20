@@ -1119,7 +1119,9 @@ function renderSessionStats(){
   el.innerHTML='<div class="ss-item"><b>'+total+'</b><span>sessions</span></div><div class="ss-item"><b>'+nspots+'</b><span>spots</span></div><div class="ss-item"><b class="ss-act">'+favLab+'</b><span>activité préférée</span></div>';
 }
 /* ===== Réglages / personnalisation ===== */
-function openSettings(){var i=document.getElementById('setName');if(i)i.value=userName;var r=document.getElementById('setReduce');if(r)r.checked=document.body.classList.contains('reduce-motion');document.getElementById('settingsModal').classList.add('open');}
+function openSettings(section){renderMyChoice(true);var i=document.getElementById('setName');if(i)i.value=userName;var r=document.getElementById('setReduce');if(r)r.checked=document.body.classList.contains('reduce-motion');document.getElementById('settingsModal').classList.add('open');
+  /* Depuis le profil : la section « Mon sport et mon niveau » s’affiche d’emblée. */
+  if(section==='sport')requestAnimationFrame(()=>{const m=document.getElementById('setMine');if(m)m.scrollIntoView({block:'start'});});}
 function closeSettings(){document.getElementById('settingsModal').classList.remove('open');}
 function saveName(){var v=(document.getElementById('setName').value||'').trim();if(!v){toast('Entre un prénom 🐙');return;}userName=v.slice(0,18);applyName();saveState();toast('Prénom enregistré ✅');closeSettings();}
 function toggleReduceMotion(on){document.body.classList.toggle('reduce-motion',!!on);try{localStorage.setItem('oceanbuddy_reduce',on?'1':'0');}catch(e){}try{window.OceanTheme?.refresh?.();}catch(e){}}
@@ -1917,6 +1919,53 @@ function finishOnb(){
   setSport(chosenSport==='all'?null:chosenSport,{stay:true});
   realHomeForecast();
 }
+/* ===== Mon sport et mon niveau : Réglages (mêmes cartes que l’onboarding) et résumé du profil =====
+   Chaque choix est enregistré tout de suite (oceanbuddy_v1, copié côté natif) et l’interface prend la couleur
+   de l’activité (fondu des jetons --t-*, sans scène de transition par-dessus les Réglages). */
+const LEVELS=[{id:'debutant',label:'Débutant',desc:'Je découvre, je veux des conditions douces.'},
+  {id:'intermediaire',label:'Intermédiaire',desc:'Je gère les bases, je progresse.'},
+  {id:'expert',label:'Expert',desc:'Je suis expérimenté et j’adapte chaque sortie.'}];
+function levelLabel(id){const l=LEVELS.find(x=>x.id===id);return l?l.label:'';}
+/* full : (re)construit les cartes des Réglages (à l’ouverture seulement : rien de plus au démarrage) ; sinon on ne fait
+   que déplacer la sélection, sans réécrire les boutons (le focus clavier reste sur la carte touchée). */
+function renderMyChoice(full){
+  const cur=activeSport&&SPORTMAP[activeSport]?activeSport:'all',sp=SPORTMAP[cur];
+  const v=document.getElementById('profSportVal');
+  if(v)v.innerHTML=esc(sp?sp.label:'Tous les sports')+(chosenLevel?' · '+esc(levelLabel(chosenLevel)):'');
+  const pi=document.getElementById('profSportIc');if(pi&&pi.dataset.sp!==cur){pi.dataset.sp=cur;pi.innerHTML=sportIcon(cur).replace('<img ','<img style="width:32px;height:32px" ');}
+  if(!full){
+    document.querySelectorAll('#setSportGrid .sport-card').forEach(c=>{const on=c.dataset.sp===cur;c.classList.toggle('sel',on);c.setAttribute('aria-pressed',String(on));});
+    document.querySelectorAll('#setLvlCards .lvl-card').forEach(c=>{const on=c.dataset.lvl===chosenLevel;c.classList.toggle('sel',on);c.setAttribute('aria-pressed',String(on));});
+    return;
+  }
+  const g=document.getElementById('setSportGrid');
+  /* Styles en ligne : les cartes de l’Explorer (spot-immersion.css) imposent 146 px de haut et des icônes de 84 px. */
+  const ic=(html,px)=>html.replace('<img ',`<img style="width:${px}px;height:${px}px;padding:0;background:none" `);
+  if(g)g.innerHTML=SPORTS.map(s=>[s.id,s.label]).concat([['all','Tout voir']]).map(([id,label])=>
+    `<button type="button" class="sport-card${id===cur?' sel':''}" data-sp="${id}" aria-pressed="${id===cur}" onclick="chooseMySport('${id}')" style="font:inherit;min-height:0;padding:8px 4px 9px;gap:4px;min-width:0">`
+    +`<span class="se" style="width:46px;height:46px;margin:0 auto;border-radius:14px;background:var(--t-tint)!important;box-shadow:none!important">${ic(sportIcon(id),34)}</span>`
+    +`<h4 style="font-size:12px!important;line-height:1.15;margin:0;max-width:100%;overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto">${esc(label)}</h4></button>`).join('');
+  const l=document.getElementById('setLvlCards');
+  if(l)l.innerHTML=LEVELS.map(x=>`<button type="button" class="lvl-card${x.id===chosenLevel?' sel':''}" data-lvl="${x.id}" aria-pressed="${x.id===chosenLevel}" onclick="chooseMyLevel('${x.id}')" style="font:inherit;width:100%;padding:10px 12px;gap:12px">`
+    +`<span class="lc-ic" style="width:44px;height:44px;border-radius:14px">${ic(levelIcon(x.id),34)}</span><span><h4 style="font-size:15px;margin:0">${esc(x.label)}</h4><p style="font-size:12px;margin:2px 0 0">${esc(x.desc)}</p></span></button>`).join('');
+}
+function chooseMySport(id){
+  if(id!=='all'&&!SPORTMAP[id])return;
+  const next=id==='all'?null:id;
+  onbDone=true;
+  if(activeSport!==next||chosenSport!==(next||'all')){
+    window.OceanTransition?.cancel?.();
+    applySport(next,null,true);
+    toast('Ton sport est enregistré ✅');
+  }else saveState();
+  renderMyChoice();
+}
+function chooseMyLevel(id){
+  if(!LEVELS.some(x=>x.id===id))return;
+  const changed=chosenLevel!==id;
+  chosenLevel=id;onbDone=true;saveState();renderMyChoice();
+  if(changed){toast('Ton niveau est enregistré ✅');try{document.dispatchEvent(new CustomEvent('ocean:level',{detail:id}));}catch(e){}}
+}
 
 /* ================= XP ================= */
 let xp=0;
@@ -2633,6 +2682,7 @@ try{
 }catch(e){}
 document.body.classList.add('motion-pref-checked');
 applyName();
+renderMyChoice();document.addEventListener('ocean:sport',()=>renderMyChoice());
 ambient();renderSportGuide();renderSportFilters();renderSpots();try{renderWorlds();syncWorldUI();}catch(e){}renderChallenges();renderBadges();renderQuizBadges();renderSessions();renderHome();renderProfile();renderQuick();chatDragInit();bubbles('hb');bubbles('pb');bubbles('sb');bubbles('cb');animateCounts();
 requestAnimationFrame(()=>requestAnimationFrame(()=>updateNavPill('home')));
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{const ab=document.querySelector('.nav button.active:not(.center)');updateNavPill(ab?ab.dataset.s:'home');}).catch(()=>{});

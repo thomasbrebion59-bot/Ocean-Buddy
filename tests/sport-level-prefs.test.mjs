@@ -87,6 +87,42 @@ test('porte rapide (« changer » depuis l’accueil) : rien n’est écrit avan
   assert.equal(stored(a).sport, 'surf', 'un aperçu annulé ne change pas l’activité enregistrée');
 });
 
+test('Réglages : changer de sport et de niveau enregistre et applique tout de suite', () => {
+  const a = env({ oceanbuddy_v1: JSON.stringify({ sport: 'surf', level: 'debutant', onboarded: true }) });
+  a.api.loadState();
+  assert.equal(typeof a.api.chooseMySport, 'function', 'chooseMySport absent d’app.js');
+  assert.equal(typeof a.api.chooseMyLevel, 'function', 'chooseMyLevel absent d’app.js');
+  a.api.chooseMySport('plongee');
+  assert.equal(stored(a).sport, 'plongee');
+  assert.equal(a.window.OceanTheme.current, 'plongee', 'l’interface prend la couleur de l’activité');
+  assert.equal(a.calls.filter(c => c.startsWith('go:')).length, 0, 'on reste dans les Réglages');
+  assert.ok(a.calls.includes('event:ocean:sport:plongee'), 'l’accueil est prévenu (pastilles)');
+  a.api.chooseMyLevel('expert');
+  assert.equal(stored(a).level, 'expert');
+  assert.equal(stored(a).sport, 'plongee');
+  /* « Tous les sports » est aussi un choix valable. */
+  a.api.chooseMySport('all');
+  assert.equal(stored(a).sport, 'all');
+  assert.equal(a.window.OceanTheme.current, '');
+  const b = env({ oceanbuddy_v1: a.localStorage.getItem('oceanbuddy_v1') }); b.api.loadState();
+  assert.deepEqual({ ...b.api.get() }, { activeSport: null, chosenSport: 'all', chosenLevel: 'expert', onbDone: true });
+  /* Valeurs inconnues ignorées. */
+  b.api.chooseMyLevel('champion'); b.api.chooseMySport('parapente');
+  assert.equal(stored(b) ? stored(b).level : 'expert', 'expert');
+});
+
+test('Réglages sans profil : un choix fait dans Réglages vaut onboarding', () => {
+  const a = env();
+  a.api.chooseMyLevel('debutant');
+  assert.ok(onboarded(stored(a)));
+});
+
+test('le résumé du profil affiche le sport et le niveau enregistrés', () => {
+  const a = env({ oceanbuddy_v1: JSON.stringify({ sport: 'kayak', level: 'expert', onboarded: true }) });
+  a.api.loadState(); a.api.renderMyChoice();
+  assert.match(a.els.get('profSportVal').innerHTML, /kayak · Expert/);
+});
+
 /* ---------- Copie native (mobile/client.js) ---------- */
 async function native(seed = {}, saved = null, options = {}) {
   const localStorage = storage(seed); const writes = []; let reloads = 0, gets = 0;

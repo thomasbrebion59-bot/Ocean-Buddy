@@ -9011,5 +9011,11 @@
  "Télécharger Ocean Buddy sur l’App Store": "Descargar Ocean Buddy en la App Store",
  "Télécharger sur l’App Store": "Descargar en la App Store",
  "transform .3s var(--ob-ease-out,cubic-bezier(.4,0,.2,1)), opacity .24s var(--ob-ease-out,ease)": "transform .3s var(--ob-ease-out,cubic-bezier(.4,0,.2,1)), opacity .24s var(--ob-ease-out,ease)",
- "transform .45s var(--ob-spring,cubic-bezier(.22,.9,.3,1.02)), opacity .3s var(--ob-ease-out,ease)": "transform .45s var(--ob-spring,cubic-bezier(.22,.9,.3,1.02)), opacity .3s var(--ob-ease-out,ease)"
+ "transform .45s var(--ob-spring,cubic-bezier(.22,.9,.3,1.02)), opacity .3s var(--ob-ease-out,ease)": "transform .45s var(--ob-spring,cubic-bezier(.22,.9,.3,1.02)), opacity .3s var(--ob-ease-out,ease)",
+ "Mon sport et mon niveau": "Mi deporte y mi nivel",
+ "Enregistré tout de suite. L’app prend la couleur de ton sport.": "Se guarda al instante. La app adopta el color de tu deporte.",
+ "Mon sport": "Mi deporte",
+ "Mon niveau": "Mi nivel",
+ "Ton sport est enregistré ✅": "Tu deporte está guardado ✅",
+ "Ton niveau est enregistré ✅": "Tu nivel está guardado ✅"
 }

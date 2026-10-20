@@ -102,9 +102,11 @@ test('app.js applies the same rule, with or without the curtain script',()=>{
   const without=vm.runInNewContext(fn+';isOnboarded',{window:{}});
   for(const [state,expected] of STATES){assert.equal(withBoot(state),expected);assert.equal(without(state),expected);}
   /* Tous les chemins qui quittent l’onboarding posent le drapeau (onboarding complet, choix rapide, « près de moi »),
-     ainsi que le choix du sport et du niveau, enregistré dès qu’il est complet (rememberChoice). */
+     ainsi que le choix du sport et du niveau, enregistré dès qu’il est complet (rememberChoice) ou fait dans Réglages. */
   assert.match(app,/function finishOnb\(\)\{[\s\S]*?onbDone=true;saveState\(\);/);
   assert.match(app,/function rememberChoice\(\)\{[^\n]*onbDone=true;saveState\(\);/);
-  assert.equal((app.match(/onbDone=true/g)||[]).length,4);
+  assert.match(app,/function chooseMySport\(id\)\{[\s\S]*?onbDone=true;/);
+  assert.match(app,/function chooseMyLevel\(id\)\{[\s\S]*?onbDone=true;saveState\(\);/);
+  assert.equal((app.match(/onbDone=true/g)||[]).length,6);
   assert.match(app,/onboarded:onbDone/);
 });
