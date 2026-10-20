@@ -7,3 +7,24 @@
 #homeTop .brand{align-items:center}
 .sidebar-brand img{object-fit:contain}
 .set-logo{display:block;width:120px;max-width:50%;height:auto;margin:14px 0 6px}
+
+/* Onboarding sur la vidéo (calque .mm-layer, motion-media.js/.css, intact) : voile crème doux derrière chaque bloc de texte.
+   Un voile par texte (pas de dégradé d’écran) : il suit les retours à la ligne, les langues et les écrans ; la manta et la
+   lumière restent visibles autour et à travers. Pseudo-élément absolu sous le texte : aucune hauteur ne change.
+   Couleur = --t-page (crème, teinté par l’activité prévisualisée). Statique : rien ne s’anime, donc rien à couper en
+   mouvement réduit (la vidéo y est remplacée par son poster, le voile reste). */
+#onb .onb-step :is(.onb-kicker,h1,h2,.tag){position:relative}
+#onb .onb-step :is(.onb-kicker,h1,h2,.tag)::before{content:"";position:absolute;z-index:-1;inset:-12px -20px;border-radius:34px;pointer-events:none;
+  background:var(--t-page);filter:blur(14px);opacity:.45}
+/* Petits textes (< 18 px) : seuil AA à 4,5, voile un peu plus dense que sur les titres (seuil à 3). */
+#onb .onb-step :is(.onb-kicker,.tag)::before{opacity:.5}
+/* Titre d’étape : il garde son padding-top (54 px) quand l’onboarding est rouvert depuis l’app ; le voile ne le couvre pas. */
+body.onb-open #onb .onb-step #sportStepTitle::before{top:42px}
+/* Petits textes (surtitre, sous-titre) : encre pleine au lieu de --t-main / --t-ink2, pour tenir AA sur l’image qui bouge derrière. */
+#onb .onb-step .tag{color:var(--t-ink)!important}
+#onb .onb-step .onb-kicker{color:var(--t-deep)!important}
+/* « Réduire la transparence » : voile quasi opaque, sans flou, au plus près du texte. */
+@media(prefers-reduced-transparency:reduce){
+  #onb .onb-step :is(.onb-kicker,h1,h2,.tag)::before{opacity:.94;filter:none;inset:-6px -14px;border-radius:24px}
+  body.onb-open #onb .onb-step #sportStepTitle::before{top:48px}
+}
