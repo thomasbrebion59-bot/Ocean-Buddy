@@ -127,7 +127,6 @@
 .sd-chip{display:inline-flex;align-items:center;gap:5px;padding:5px 9px;border-radius:999px;background:color-mix(in srgb,var(--t-card) 13%,transparent);font:700 11.5px/1 Manrope,sans-serif;color:var(--t-on-main)}
 .sd-chip .sd-ic{width:13px!important;height:13px!important}
 .sd-chip.l3,.sd-chip.l2{background:var(--t-acc);color:var(--t-deep)}
-.sd-teaser-go{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:var(--t-card);color:var(--t-deep)}
 .ocean-v2 #detail .dfact-sea{gap:6px;padding:7px 12px}
 .ocean-v2 #detail .dfact-sea .sd-ic{width:16px;height:16px;color:var(--sd-sea)}
 
@@ -225,7 +224,7 @@
 
 /* Accueil : entrée du planificateur */
 .hf-plan-sec{padding:0 16px}
-.hf-plan{appearance:none;width:100%;border:0;cursor:pointer;text-align:left;display:grid;grid-template-columns:1fr auto;grid-template-areas:"cal cal" "tx go";gap:14px 12px;align-items:end;padding:18px;border-radius:24px;color:var(--t-on-main);background:radial-gradient(140% 120% at 0% 0%,color-mix(in srgb,var(--t-acc) 20%,transparent),transparent 50%),linear-gradient(140deg,var(--t-deep) 0%,var(--g-mid) 70%,var(--t-bright) 120%);box-shadow:0 22px 40px -26px color-mix(in srgb,var(--t-deep) 90%,transparent)}
+.hf-plan{appearance:none;width:100%;border:0;cursor:pointer;text-align:left;display:grid;grid-template-columns:1fr;grid-template-areas:"cal" "tx";gap:14px 12px;align-items:end;padding:18px;border-radius:24px;color:var(--t-on-main);background:radial-gradient(140% 120% at 0% 0%,color-mix(in srgb,var(--t-acc) 20%,transparent),transparent 50%),linear-gradient(140deg,var(--t-deep) 0%,var(--g-mid) 70%,var(--t-bright) 120%);box-shadow:0 22px 40px -26px color-mix(in srgb,var(--t-deep) 90%,transparent)}
 .hf-plan-cal{grid-area:cal;display:grid;grid-template-columns:repeat(12,1fr);gap:4px}
 .hf-plan-cal i{font-style:normal;text-align:center;padding:7px 0;border-radius:8px;background:color-mix(in srgb,var(--t-card) 10%,transparent);font:800 11px/1 Manrope,sans-serif;color:color-mix(in srgb,var(--t-on-main) 75%,transparent)}
 .hf-plan-cal i.on{background:var(--t-acc);color:var(--t-deep)}
@@ -233,7 +232,6 @@
 .hf-plan-tx small{font:800 10.5px/1 Manrope,sans-serif;letter-spacing:1.3px;text-transform:uppercase;color:var(--t-acc)}
 .hf-plan-tx b{font:800 21px/1.15 Manrope,sans-serif;letter-spacing:-.5px}
 .hf-plan-tx span{font:500 13px/1.45 'DM Sans',sans-serif;color:color-mix(in srgb,var(--t-on-main) 80%,transparent)}
-.hf-plan-go{grid-area:go;width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--t-acc);color:var(--t-deep);font:800 20px/1 Manrope,sans-serif}
 .sd-sheet h3:focus{outline:none}
 @media (min-width:700px){.sd-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}.sd-facts{grid-template-columns:repeat(4,minmax(0,1fr))}}
 /* Conditions du moment comparées à la normale */

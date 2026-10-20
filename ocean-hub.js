@@ -9,7 +9,6 @@
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const icon=d=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${d}"/></svg>`;
   const I={
-    arrow:icon('M5 12h14m-6-6 6 6-6 6'),
     flame:icon('M12 21c-3.9 0-6.5-2.6-6.5-6.1 0-3.2 2.3-5.2 3.6-7.4.5 1.7 1.3 2.8 2.4 3.4.2-2.9 1.6-5.4 3.9-7.4-.2 2.9.7 4.8 2.2 6.6 1.3 1.6 2 3.1 2 4.8 0 3.5-3.4 6.1-7.6 6.1z'),
     heart:icon('M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z'),
     clock:icon('M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0'),
@@ -38,14 +37,14 @@
   function rail(title,ids,kind){
     const cards=ids.map(card).filter(Boolean);
     if(!cards.length)return '';
-    return `<section class="hub-rail" aria-label="${esc(title)}"><div class="hub-rail-head"><h3>${kind==='fav'?I.heart:I.clock}<span>${title}</span></h3>${kind==='fav'?`<button type="button" class="hub-link" data-hub="favs">Tout voir ${I.arrow}</button>`:''}</div><div class="hub-track">${cards.join('')}</div></section>`;
+    return `<section class="hub-rail" aria-label="${esc(title)}"><div class="hub-rail-head"><h3>${kind==='fav'?I.heart:I.clock}<span>${title}</span></h3>${kind==='fav'?`<button type="button" class="hub-link" data-hub="favs">Tout voir</button>`:''}</div><div class="hub-track">${cards.join('')}</div></section>`;
   }
 
   function tripCard(){
     const list=window.OceanTrips?.list?.()||[];
     const next=TripModel.nextTrip(list,todayKey());
     if(!next){
-      return `<button class="hub-trip hub-trip-empty" type="button" data-hub="new-trip"><span class="hub-trip-ic">${I.plane}</span><span><small>TON PROCHAIN DÉPART</small><b>Dessine ton prochain voyage</b><em>Choisis tes spots, l’ordre, le sac. Poulpy s’occupe du reste.</em></span>${I.arrow}</button>`;
+      return `<button class="hub-trip hub-trip-empty" type="button" data-hub="new-trip"><span class="hub-trip-ic">${I.plane}</span><span><small>TON PROCHAIN DÉPART</small><b>Dessine ton prochain voyage</b><em>Choisis tes spots, l’ordre, le sac. Poulpy s’occupe du reste.</em></span></button>`;
     }
     const t=next.trip,w=next.when,p=TripModel.progress(t);
     const first=t.steps.find(x=>spot(x.spotId));
@@ -59,7 +58,7 @@
       <span class="hub-trip-top"><small>${w.state==='ongoing'?'EN VOYAGE':'PROCHAIN DÉPART'}</small>${big}</span>
       <span class="hub-trip-body"><b translate="no">${esc(t.name)}</b><em><span>${stepsTxt}</span>${t.destination?`<span translate="no"> · ${esc(t.destination)}</span>`:''}</em>
       ${p.total?`<span class="hub-prep" style="--p:${p.pct}%"><i></i></span><small class="hub-prep-label">Préparation ${p.done}/${p.total}</small>`:''}
-      <span class="hub-cta">${nextAction} ${I.arrow}</span></span></button>`;
+      <span class="hub-cta">${nextAction}</span></span></button>`;
   }
 
   function weekStrip(){

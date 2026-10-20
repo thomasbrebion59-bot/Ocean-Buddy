@@ -27,7 +27,6 @@
 .ocean-v2 #detail .field-fact-icon .poulpy-mini{width:54px;height:54px}
 .ocean-v2 #detail .field-fact-icon{background:transparent;width:54px;height:54px;flex-shrink:0}
 .ocean-v2 #detail button.field-fact-card{cursor:pointer;text-align:left;font-family:var(--body)}
-.ocean-v2 #detail .field-fact-card small:after{content:' ↗';color:var(--t-main)}
 .ocean-v2 #detail .field-check-emblem .poulpy-mini,.ocean-v2 #detail .field-address-mark .poulpy-mini{width:48px;height:48px}
 .ocean-v2 #detail .dtab .poulpy-mini{width:29px;height:29px;margin-right:5px}
 .ocean-v2 #detail .dtab{display:inline-flex;align-items:center;gap:4px;white-space:nowrap}
@@ -106,7 +105,7 @@
 .im-link{display:inline-flex;align-items:center;gap:10px;font:700 12px var(--body);color:var(--t-main);border:0;background:none;min-height:44px;padding:9px 0;cursor:pointer}
 .im-weather-help{width:100%;display:flex;align-items:center;gap:14px;background:var(--t-tint);color:var(--t-main);border:1px solid var(--t-line);border-radius:12px;padding:13px 17px;margin:16px 0 24px;cursor:pointer;text-align:left}
 .ocean-v2 .im-weather-help .poulpy-mini{width:51px;height:51px;border-radius:13px}
-.im-weather-help b{display:block;font:700 13px/1.6 var(--body)}.im-weather-help small{display:block;font:11px/1.7 var(--body);color:var(--t-ink2)}.im-weather-help>span:last-child{margin-left:auto;font-size:25px}
+.im-weather-help b{display:block;font:700 13px/1.6 var(--body)}.im-weather-help small{display:block;font:11px/1.7 var(--body);color:var(--t-ink2)}
 .spot-immersion :focus-visible,.immersion-context :focus-visible,.im-weather-help:focus-visible{outline:3px solid var(--t-main);outline-offset:3px}
 @media(max-width:1000px){.immersion-context{align-items:start;flex-direction:column;gap:15px}.im-activity-choices{justify-content:flex-start}.im-panel{gap:22px;padding:23px}.im-heading{padding:23px}.im-terrain{gap:23px}.im-heading>p{display:none}}
 @media(max-width:700px){

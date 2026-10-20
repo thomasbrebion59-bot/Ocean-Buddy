@@ -35,7 +35,6 @@
     guest:'<path d="M3 11 12 4l9 7M5 10v10h14V10M10 20v-5h4v5"/>',
     hotel:'<path d="M4 21V4h16v17M8 8h2M14 8h2M8 12h2M14 12h2M10 21v-4h4v4"/>',
     map:'<path d="m3 6 6-2 6 2 6-2v14l-6 2-6-2-6 2V6ZM9 4v14M15 6v14"/>',
-    ext:'<path d="M7 17 17 7M8 7h9v9"/>',
     book:'<path d="M4 5c3-1 5-1 8 1 3-2 5-2 8-1v14c-3-1-5-1-8 1-3-2-5-2-8-1V5ZM12 6v14"/>',
     calendar:'<path d="M4 6h16v14H4zM8 3v5M16 3v5M4 10h16"/>',
     bed:'<path d="M3 19V6M3 15h18v4M21 15v-3a3 3 0 0 0-3-3h-7v6M7 11.5a1.5 1.5 0 1 0 0-.01"/>',
@@ -216,7 +215,7 @@
     return `<div class="guide-gauge"><div class="guide-gauge-head"><b>${rank}</b><span>Nuit la moins chère, basse saison</span></div>
       <div class="guide-gauge-track" aria-hidden="true">${values.map(v=>`<i style="left:${scale(v).toFixed(1)}%"></i>`).join('')}<em style="left:${scale(e.lo).toFixed(1)}%"><span>${e.lo} €</span></em></div>
       <div class="guide-gauge-scale" aria-hidden="true"><span>${min} €</span><span>${max} €</span></div>
-      ${cheapSpot?`<button type="button" class="guide-cheaper" data-guide-spot="${esc(cheapSpot.id)}">Plus doux dans le même pays : ${esc(cheapSpot.name.split(' — ')[0])}, dès ${cheapest.lo} € la nuit ${svg('<path d="M5 12h14m-6-6 6 6-6 6"/>')}</button>`:''}</div>`;
+      ${cheapSpot?`<button type="button" class="guide-cheaper" data-guide-spot="${esc(cheapSpot.id)}">Plus doux dans le même pays : ${esc(cheapSpot.name.split(' — ')[0])}, dès ${cheapest.lo} € la nuit</button>`:''}</div>`;
   }
   function sleepHTML(s){
     const e=estimate(s),now=monthNow(),dates=tripDates(s),pl=place(s,e);
@@ -237,7 +236,7 @@
         </div>
         <div class="guide-sleep-side">
           ${gauge(s,e)}
-          <div class="guide-search"><small>Chercher un lit près du spot</small><b class="guide-search-place">${icon('compass')}<span>${esc(pl)}</span></b>${dates?`<p class="guide-search-dates">${icon('calendar')}<span>Dates de ton voyage « ${esc(dates.name)} » : du ${esc(fmtDate(dates.checkin))} au ${esc(fmtDate(dates.checkout))}.</span></p>`:''}<div class="guide-search-links">${buttons.map(([k,label])=>`<a href="${esc(links[k])}" target="_blank" rel="noopener"><span>${label}</span>${icon('ext')}</a>`).join('')}</div><p>Recherches publiques, sans lien sponsorisé. Compare les avis et les conditions d’annulation.</p></div>
+          <div class="guide-search"><small>Chercher un lit près du spot</small><b class="guide-search-place">${icon('compass')}<span>${esc(pl)}</span></b>${dates?`<p class="guide-search-dates">${icon('calendar')}<span>Dates de ton voyage « ${esc(dates.name)} » : du ${esc(fmtDate(dates.checkin))} au ${esc(fmtDate(dates.checkout))}.</span></p>`:''}<div class="guide-search-links">${buttons.map(([k,label])=>`<a href="${esc(links[k])}" target="_blank" rel="noopener"><span>${label}</span></a>`).join('')}</div><p>Recherches publiques, sans lien sponsorisé. Compare les avis et les conditions d’annulation.</p></div>
           <div class="guide-compare-slot">${window.OceanNotebook?.button(s.id)||''}<span>Ajoute ce spot au comparateur pour mettre les budgets côte à côte.</span></div>
         </div>
       </div>`;

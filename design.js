@@ -10,7 +10,6 @@
     community:'M4 5h16v11H9l-5 4v-4H4zM8 9h8M8 13h5',
     search:'M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0m-2 5 6 6',
     settings:'m12 3 2 3 4-.1.1 4 2.9 2-2.9 2-.1 4-4-.1-2 3-2-3-4 .1-.1-4L3 12l2.9-2 .1-4 4 .1 2-3zm3 9a3 3 0 1 1-6 0 3 3 0 0 1 6 0',
-    arrow:'M5 12h14m-6-6 6 6-6 6',
     wave:'M2 9c3 0 3-3 6-3s3 3 6 3 3-3 6-3M2 16c3 0 3-3 6-3s3 3 6 3 3-3 6-3'
   };
   const icon = key => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[key] || paths.wave}"/></svg>`;
@@ -27,7 +26,7 @@
   });
   // Planning follows exploration in the main navigation.
   nav.insertBefore($('.n-trips',nav),$('.center',nav));
-  nav.insertAdjacentHTML('beforeend', `<div class="sidebar-bottom"><button class="sidebar-poulpy" type="button"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" loading="lazy" decoding="async"><b>Une question ?</b><span>Poulpy est là pour toi.</span><i>Discuter avec Poulpy ↗</i></button><button class="sidebar-settings" type="button">${icon('settings')} Réglages</button><button class="sidebar-user" type="button"><span class="user-initial"></span><span><b class="user-name"></b><small id="sidebarXp"></small></span>${icon('arrow')}</button><span class="sidebar-motto">Moins de traces. Plus de souvenirs.</span></div>`);
+  nav.insertAdjacentHTML('beforeend', `<div class="sidebar-bottom"><button class="sidebar-poulpy" type="button"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" loading="lazy" decoding="async"><b>Une question ?</b><span>Poulpy est là pour toi.</span><i>Discuter avec Poulpy</i></button><button class="sidebar-settings" type="button">${icon('settings')} Réglages</button><button class="sidebar-user" type="button"><span class="user-initial"></span><span><b class="user-name"></b><small id="sidebarXp"></small></span></button><span class="sidebar-motto">Moins de traces. Plus de souvenirs.</span></div>`);
   $('.sidebar-poulpy').onclick = openChat;
   $('.sidebar-settings').onclick = openSettings;
   $('.sidebar-user').onclick = () => go('profile');
@@ -79,7 +78,7 @@
   }
   $('#chalTop .sub').textContent='Relève des défis, gagne de l’XP et prends soin de l’océan.';
 
-  const credits=document.createElement('a');credits.className='photo-credits';credits.href='photos.html';credits.target='_blank';credits.rel='noopener';credits.textContent='Photographies & crédits ↗';$('#worldPick').append(credits);
+  const credits=document.createElement('a');credits.className='photo-credits';credits.href='photos.html';credits.target='_blank';credits.rel='noopener';credits.textContent='Photographies & crédits';$('#worldPick').append(credits);
   const photoNote=document.createElement('a');photoNote.className='hero-photo-credit';photoNote.href='photos.html';photoNote.target='_blank';photoNote.rel='noopener';photoNote.textContent='Photo · byronetmedia';$('#homeTop').append(photoNote);
   const homeStats=document.createElement('div');homeStats.className='hero-stats';homeStats.innerHTML='<span><b>'+SPOTS.length+'</b> spots</span><span><b>9</b> activités</span><span><b>1</b> océan à protéger</span>';$('#homeTop').append(homeStats);
   const worldsSync=syncWorldUI;syncWorldUI=function(){worldsSync();document.body.classList.toggle('is-world-picker',!spotWorld);window.OceanPoulpy?.refresh()};syncWorldUI();

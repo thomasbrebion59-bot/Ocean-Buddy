@@ -29,7 +29,7 @@
 .field-trip h3{font:400 42px/.98 var(--display);letter-spacing:-.5px;color:var(--t-deep2);margin:16px 0}
 .field-trip p{font-size:12px;line-height:1.8;color:var(--t-ink2);margin-bottom:20px;max-width:260px}
 .field-primary{display:flex;align-items:center;justify-content:space-between;gap:20px;width:100%;border:0;border-radius:6px;padding:15px 16px;min-height:48px;background:var(--t-main);color:var(--t-on-main);font:700 12px var(--body);cursor:pointer}
-.field-primary:hover{background:var(--t-main)}.field-primary svg,.field-text-button svg,.field-map-link svg,.field-source svg,.field-local-links svg,.field-nearby-card>svg{width:20px;height:20px;flex-shrink:0}
+.field-primary:hover{background:var(--t-main)}.field-primary svg,.field-text-button svg,.field-map-link svg,.field-source svg,.field-local-links svg{width:20px;height:20px;flex-shrink:0}
 .field-map-link{display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--t-main);text-decoration:none;font-size:12px;font-weight:700;min-height:46px;padding:14px 0 0}
 .field-map-link:hover{text-decoration:underline;text-underline-offset:4px}
 .field-reference{grid-column:1/-1;border-top:1px solid var(--rule);padding:18px 0;margin-bottom:30px;display:flex;justify-content:space-between;gap:25px;align-items:center}
@@ -45,10 +45,9 @@
 .field-nearby-card{position:relative;padding:0;background:var(--t-card);border:1px solid var(--t-line);border-radius:9px;overflow:hidden;text-align:left;cursor:pointer;transition:transform .18s}
 .field-nearby-card:hover{transform:translateY(-3px)}
 .field-nearby-card img{width:100%;height:155px;display:block;object-fit:cover}
-.field-nearby-card>span{display:block;padding:16px 42px 19px 15px}
+.field-nearby-card>span{display:block;padding:16px 15px 19px}
 .field-nearby-card small{font-size:9px;color:var(--t-ink2);display:block;margin-bottom:7px;line-height:1.4}
 .field-nearby-card b{font-size:14px;color:var(--t-deep2);display:block;line-height:1.3}
-.field-nearby-card>svg{position:absolute;right:14px;bottom:21px;color:var(--t-main)}
 .ocean-v2 #detail .field-preparation{border:0;background:transparent!important;padding:8px 0}
 .ocean-v2 #detail .field-preparation>h4{display:block;font:400 clamp(30px,3vw,42px)/1.12 var(--display);letter-spacing:-.4px;margin:0 0 24px}
 .field-preparation h4 .field-eyebrow{margin-bottom:13px}
@@ -105,7 +104,7 @@
  .ocean-v2 #detail .field-overview:not([style*="none"]){display:block}.ocean-v2 #detail .field-story{padding:3px 0 15px}.ocean-v2 #detail #dDesc{font-size:14px;line-height:1.85}.field-coordinates{font-size:9px;margin-bottom:20px}
  .ocean-v2 #detail .field-story h4{font-size:32px}.field-trip{padding:24px;margin:8px 0 24px}.field-trip h3{font-size:36px}.field-trip p{max-width:100%}
  .field-reference{display:block}.field-reference>a{display:block;text-align:left;max-width:100%;margin-top:17px}.field-section-heading{display:block}.field-section-heading>span{display:block;margin-top:10px}
- #fieldNearby{grid-template-columns:1fr;gap:12px}.field-nearby-card{display:flex;min-height:98px;align-items:center}.field-nearby-card img{width:108px;height:104px;flex-shrink:0}.field-nearby-card>span{padding:14px 36px 14px 14px}.field-nearby-card>svg{bottom:39px;right:10px}.field-nearby-card b{font-size:13px}
+ #fieldNearby{grid-template-columns:1fr;gap:12px}.field-nearby-card{display:flex;min-height:98px;align-items:center}.field-nearby-card img{width:108px;height:104px;flex-shrink:0}.field-nearby-card>span{padding:14px}.field-nearby-card b{font-size:13px}
  .ocean-v2 #detail .block{padding:22px 19px}.ocean-v2 #detail .field-preparation{padding:0;border:0}.ocean-v2 #detail .field-preparation>h4{font-size:32px}.field-guide-layout{grid-template-columns:1fr;gap:17px}.field-check{padding:19px 0;gap:13px}.field-check b{font-size:13px}.field-check small{font-size:12px}.field-address{padding:23px}.field-address h3{font-size:30px}
  .ocean-v2 #detail .field-local{grid-template-columns:1fr;gap:7px;padding:23px}.field-local h3{font-size:29px}.ocean-v2 #detail .g-sub{line-height:1.8;font-size:11px}.ocean-v2 #detail .dsports .sp{padding:11px 14px;font-size:11px}.field-eyebrow{font-size:8px}.ocean-v2 #detail .g-note{font-size:10px}
 }

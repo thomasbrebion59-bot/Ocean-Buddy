@@ -36,10 +36,8 @@
     talk: '<path d="M4 5h16v11H9l-5 4V5Z"/><path d="M8 9.5h8M8 12.5h5"/>',
     phone: '<path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/>',
     eye: '<path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/>',
-    arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
     cal: '<path d="M4 6h16v14H4zM8 3v5M16 3v5M4 10h16"/>',
     fish: '<ellipse cx="10.5" cy="12" rx="7.5" ry="4.6"/><path d="M18 12 22 8.6v6.8z"/><circle cx="6.5" cy="11.2" r=".9" fill="currentColor"/>',
-    ext: '<path d="M7 17 17 7M8 7h9v9"/>',
     table: '<path d="M3 5h18v14H3zM3 10h18M3 15h18M9 5v14"/>'
   };
 
@@ -68,7 +66,7 @@
   function rangeText(ranges) {
     if (!ranges.length) return '';
     if (ranges.length === 1 && ranges[0][0] === 0 && ranges[0][1] === 11) return 'toute l’année';
-    return ranges.map(([a, b]) => a === b ? monthName(a) : `${monthName(a)} → ${monthName(b)}`).join(' · ');
+    return ranges.map(([a, b]) => a === b ? monthName(a) : `${monthName(a)} – ${monthName(b)}`).join(' · ');
   }
   function calendar(s, c) {
     const acts = (typeof spotSports === 'function' ? spotSports(s) : s.sports).filter(a => M.year(c, a, s.level).some(v => v != null));
@@ -143,7 +141,7 @@
         g += `<circle class="sd-seadot" cx="${x(selMonth)}" cy="${y(c.sea[selMonth])}" r="4.5"/>`;
       }
       if (a.tx) g += `<circle class="sd-airdot" cx="${x(selMonth)}" cy="${y(a.tx[selMonth])}" r="4.5"/>`;
-      const legend = `<span class="sd-key"><i class="k-sea"></i>Eau</span>${a.tx ? '<span class="sd-key"><i class="k-air"></i>Air (min → max)</span>' : ''}`;
+      const legend = `<span class="sd-key"><i class="k-sea"></i>Eau</span>${a.tx ? '<span class="sd-key"><i class="k-air"></i>Air (min–max)</span>' : ''}`;
       panels.push({ title: 'Températures', legend, H, g: g + hits(H) });
     }
     const bars = (key, arr, title, unit, d = 0, cls, extra = '') => {
@@ -226,8 +224,7 @@
     host.innerHTML = `<button type="button" class="sd-teaser-btn" data-sd-open aria-label="Voir les saisons du spot">
       <span class="sd-teaser-tx"><small>${icon(I.cal)}Quand partir ? · ${esc(sportLabel(act))}</small><b>${b.ranges.length ? esc(cap(rangeText(b.ranges))) : 'Selon les conditions du jour'}</b>
       <span class="sd-teaser-strip" aria-hidden="true">${y.map((v, m) => `<i class="l${M.level(v) ?? 'x'}${m === now ? ' now' : ''}"></i>`).join('')}</span>
-      <span class="sd-teaser-meta">${lnow != null ? `<span class="sd-chip l${lnow}">En ${esc(monthName(now))} : ${esc(LEVEL_TXT[lnow].toLowerCase())}</span>` : ''}${sea}</span></span>
-      <span class="sd-teaser-go">${icon(I.arrow)}</span></button>`;
+      <span class="sd-teaser-meta">${lnow != null ? `<span class="sd-chip l${lnow}">En ${esc(monthName(now))} : ${esc(LEVEL_TXT[lnow].toLowerCase())}</span>` : ''}${sea}</span></span></button>`;
     // Repère dans l’en-tête de la fiche
     const facts = $('#dFacts');
     if (facts && c.sea) {
@@ -270,12 +267,12 @@
     try { cur = (ci.cur || []).map(k => `${new Intl.DisplayNames([lang()], { type: 'currency' }).of(k)} (${k})`).join(' · '); } catch (e) { cur = (ci.cur || []).join(' · '); }
     try { lng = (ci.lang || []).map(k => new Intl.DisplayNames([lang()], { type: 'language' }).of(k)).join(' · '); } catch (e) { lng = ''; }
     const ap = (a.ap || []).slice(0, 3).map((p, i) => `<li class="${i === 0 ? 'first' : ''}"><span class="sd-iata"${NT}>${esc(p[0])}</span><span class="sd-ap"><b${NT}>${esc(p[1])}</b><small${NT}>${esc(p[2] || '')}</small></span><span class="sd-km">${num(p[3])} km${p[4] ? '<em>international</em>' : ''}</span></li>`).join('');
-    const flights = a.ap && a.ap[0] ? `<a class="sd-link" href="https://www.google.com/travel/flights?q=${encodeURIComponent('Flights to ' + a.ap[0][0])}" target="_blank" rel="noopener noreferrer">${icon(I.plane)}Chercher un vol vers ${esc(a.ap[0][0])}${icon(I.ext, 'sm')}</a>` : '';
+    const flights = a.ap && a.ap[0] ? `<a class="sd-link" href="https://www.google.com/travel/flights?q=${encodeURIComponent('Flights to ' + a.ap[0][0])}" target="_blank" rel="noopener noreferrer">${icon(I.plane)}Chercher un vol vers ${esc(a.ap[0][0])}</a>` : '';
     host.innerHTML = `<header class="sd-head small"><p class="sd-kicker">${icon(I.plane)}Y aller</p><h3>Le voyage jusqu’au spot</h3></header>
       ${ap ? `<ul class="sd-airports" aria-label="Aéroports les plus proches">${ap}</ul>${flights}` : ''}
       <div class="sd-facts">
         ${local ? `<div>${icon(I.clock)}<small>Heure locale</small><b>${esc(local)}</b><span>${esc(diffTxt)}</span></div>` : ''}
-        ${st ? `<div>${icon(I.sun)}<small>Soleil aujourd’hui</small><b>${esc(hm(st.rise, off))} → ${esc(hm(st.set, off))}</b><span>${num((st.set - st.rise), 1)} h de jour</span></div>` : ''}
+        ${st ? `<div>${icon(I.sun)}<small>Soleil aujourd’hui</small><b>${esc(hm(st.rise, off))} – ${esc(hm(st.set, off))}</b><span>${num((st.set - st.rise), 1)} h de jour</span></div>` : ''}
         ${cur ? `<div>${icon(I.coin)}<small>Monnaie</small><b>${esc(cur)}</b></div>` : ''}
         ${lng ? `<div>${icon(I.talk)}<small>Langue</small><b>${esc(lng)}</b>${ci.tel ? `<span${NT}>${esc(ci.tel)}</span>` : ''}</div>` : ''}
       </div>
@@ -320,7 +317,7 @@
       <div class="sd-stats"><div><b>${num(w.n)}</b><small>espèces aquatiques observées à moins de ${num(w.r)} km</small></div>${w.o ? `<div><b>${num(w.o)}</b><small>espèces marines recensées par les scientifiques (OBIS)</small></div>` : ''}</div>
       ${flags.length ? `<div class="sd-flags"><h5>Quand les voir ?</h5><ul>${flags.map(flagRow).join('')}</ul></div>` : ''}
       <ul class="sd-species">${shown.map(card).join('')}</ul>
-      <a class="sd-link" href="${esc(more)}" target="_blank" rel="noopener noreferrer">${icon(I.fish)}Toutes les observations sur iNaturalist${icon(I.ext, 'sm')}</a>
+      <a class="sd-link" href="${esc(more)}" target="_blank" rel="noopener noreferrer">${icon(I.fish)}Toutes les observations sur iNaturalist</a>
       <p class="sd-src">Observations « niveau recherche » d’iNaturalist (identifications confirmées par la communauté) et Ocean Biodiversity Information System. Ce qu’on y a vu, pas une promesse de rencontre : la faune bouge avec la saison et la météo. Photos sous licence libre, crédits sur chaque image.</p>`;
   }
 

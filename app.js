@@ -253,7 +253,7 @@ function spotCard(s){
       ${s.custom?'<span class="spot-private">Spot privé</span>':''}
       ${!photo&&!s.custom?'<span class="spot-photo-pending">Photo du lieu à vérifier</span>':''}
       <div class="glass-name"><h3>${esc(s.name)}</h3><div class="gn-loc"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${esc(s.loc)}</div></div>
-      <span class="spot-go">Voir →</span>
+      <span class="spot-go">Voir</span>
     </div>
     <div class="spot-info">
       <div class="spot-meta">${spotCardMeta(s)}</div>
@@ -433,7 +433,7 @@ function renderWorlds(){
       <img class="isl-img" src="${esc(photo.src)}" alt="" loading="lazy" decoding="async">
       <span class="world-num" aria-hidden="true">${String(index+1).padStart(2,'0')}</span>
       <span class="world-count">${total} spots</span>
-      <span class="isl-plate"><span class="world-place">${esc(photo.place)}</span><b>${esc(w.lab)}</b><span class="world-sub">${esc(w.sub)}</span><span class="world-open">Explorer <span aria-hidden="true">↗</span></span></span>
+      <span class="isl-plate"><span class="world-place">${esc(photo.place)}</span><b>${esc(w.lab)}</b><span class="world-sub">${esc(w.sub)}</span><span class="world-open">Explorer</span></span>
     </button>`;
   }).join('');
   const total=document.getElementById('worldTotal');if(total){const count=exploreSpots('all',{world:'all',country:null,search:'',favorite:false}).length;total.innerHTML='<b>'+(activeSport?`${count} spots de ${SPORTMAP[activeSport].label.toLowerCase()}.`:`${count} spots.`)+'</b> <span class="wt-hint">Choisis ta destination.</span>';}
@@ -446,7 +446,7 @@ function renderCountries(){
   const names=[...new Set(scoped.map(countryOf))].sort((a,b)=>a.localeCompare(b,'fr'));
   host.innerHTML=names.map((name,index)=>{
     const sample=scoped.find(s=>countryOf(s)===name&&spotPhotoUrl(s.id,720))||scoped.find(s=>countryOf(s)===name), photo=(sample&&spotPhotoUrl(sample.id,720))||WORLD_PHOTOS[spotWorld].src;
-    return `<button class="isl country-card" onclick="openCountry(${esc(JSON.stringify(name))})" aria-label="Explorer ${esc(name)}, ${countryCount(name)} spots"><img class="isl-img" src="${esc(photo)}" alt="" loading="lazy" decoding="async"><span class="world-num" aria-hidden="true">${String(index+1).padStart(2,'0')}</span><span class="world-count">${countryCount(name)>1?`${countryCount(name)} spots`:`${countryCount(name)} spot`}</span><span class="isl-plate"><span class="world-place">${esc(worldOf(spotWorld)?.lab||'Destination')}</span><b>${esc(name)}</b><span class="world-sub">Spots et activités du pays</span><span class="world-open">Explorer <span aria-hidden="true">↗</span></span></span></button>`;
+    return `<button class="isl country-card" onclick="openCountry(${esc(JSON.stringify(name))})" aria-label="Explorer ${esc(name)}, ${countryCount(name)} spots"><img class="isl-img" src="${esc(photo)}" alt="" loading="lazy" decoding="async"><span class="world-num" aria-hidden="true">${String(index+1).padStart(2,'0')}</span><span class="world-count">${countryCount(name)>1?`${countryCount(name)} spots`:`${countryCount(name)} spot`}</span><span class="isl-plate"><span class="world-place">${esc(worldOf(spotWorld)?.lab||'Destination')}</span><b>${esc(name)}</b><span class="world-sub">Spots et activités du pays</span><span class="world-open">Explorer</span></span></button>`;
   }).join('');
   const total=document.getElementById('worldTotal');if(total){const nb=names.reduce((n,x)=>n+countryCount(x),0),nd=names.length;total.innerHTML='<b>'+`${nb} spots`+'</b> <span>'+(nd===1?`répartis dans ${nd} destination.`:`répartis dans ${nd} destinations.`)+'</span> <span>Choisis un pays.</span>';}
 }
@@ -1110,7 +1110,7 @@ function renderQuizBadges(){var el=document.getElementById('quizBadgesProfile');
   el.innerHTML=QUIZ_CATS.filter(function(c){return c.id!=='tout';}).map(function(c){var got=d.badges.indexOf(c.id)>=0;return '<div class="qb '+(got?'got':'')+'"><div class="qb-e">'+(got?'🏅':c.emoji)+'</div><div class="qb-n">'+`Expert ${c.label}`+'</div><div class="qb-s">'+(got?'Débloqué ✓':'Sans-faute requis')+'</div></div>';}).join('');}
 function renderSessions(){
   const el=document.getElementById('sessions');if(!el)return;
-  el.innerHTML=sessions.length?sessions.slice(0,8).map(function(s){var em=(s.act&&typeof SPORTMAP!=='undefined'&&SPORTMAP[s.act])?sportIcon(s.act):sportIcon('surf');return '<div class="sess"><div class="si">'+em+'</div><div class="sn">'+esc(s.spot)+'</div><div class="sd">'+esc(s.ts?new Date(s.ts).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):s.date)+'</div></div>';}).join(''):'<div class="sess-empty"><img src="assets/poulpy/scenes/surf-v2.webp" alt="" width="64" height="64" loading="lazy"><div><b>Ton carnet t’attend.</b><p>Sur la fiche d’un spot, touche « J’ai surfé ici » pour y noter ta première session.</p><button type="button" class="sess-empty-btn" onclick="go(\'spots\')">Choisir un spot →</button></div></div>';
+  el.innerHTML=sessions.length?sessions.slice(0,8).map(function(s){var em=(s.act&&typeof SPORTMAP!=='undefined'&&SPORTMAP[s.act])?sportIcon(s.act):sportIcon('surf');return '<div class="sess"><div class="si">'+em+'</div><div class="sn">'+esc(s.spot)+'</div><div class="sd">'+esc(s.ts?new Date(s.ts).toLocaleDateString('fr-FR',{day:'numeric',month:'short'}):s.date)+'</div></div>';}).join(''):'<div class="sess-empty"><img src="assets/poulpy/scenes/surf-v2.webp" alt="" width="64" height="64" loading="lazy"><div><b>Ton carnet t’attend.</b><p>Sur la fiche d’un spot, touche « J’ai surfé ici » pour y noter ta première session.</p><button type="button" class="sess-empty-btn" onclick="go(\'spots\')">Choisir un spot</button></div></div>';
   renderSessionStats();
 }
 function renderSessionStats(){
@@ -1243,7 +1243,7 @@ function tideFromMarine(mar){
   let nx=null;for(let i=idx+1;i<lv.length;i++){if(lv[i]!=null){nx=lv[i];break;}}
   let pv=null;for(let i=idx-1;i>=0;i--){if(lv[i]!=null){pv=lv[i];break;}}
   const rising=nx!=null?nx>cur:(pv!=null?cur>pv:true);
-  return rising?'Montante ↑':'Descendante ↓';
+  return rising?'Montante':'Descendante';
 }
 async function fetchConditions(s){
   const c=COORDS[s.id];if(!c)return;
@@ -1549,7 +1549,7 @@ function renderLiveTop(){
   el.innerHTML=list.map(s=>{
     const L=LIVE[s.id]||{};
     const detail=live?[L.swell,L.wind,L.temp].filter(Boolean).join(' · '):s.loc;
-    return `<button class="lt-row" onclick="openSpot(${esc(JSON.stringify(String(s.id)))})"><span class="lt-info"><b>${esc(s.name.split(' — ')[0])}</b><span>${esc(detail)}</span></span><span class="lt-badge lt-ref">Voir →</span></button>`;
+    return `<button class="lt-row" onclick="openSpot(${esc(JSON.stringify(String(s.id)))})"><span class="lt-info"><b>${esc(s.name.split(' — ')[0])}</b><span>${esc(detail)}</span></span><span class="lt-badge lt-ref">Voir</span></button>`;
   }).join('')+(live?'<p class="lt-note">Prévisions du modèle Open-Meteo.</p>':'');
 }
 function dayLabel(iso,i){if(i===0)return 'Auj';const d=new Date(iso);
@@ -1616,11 +1616,11 @@ function renderProg(){
   el.innerHTML=`
     <div class="prog-medal"><div class="lv">${L.n}</div><div class="nv">NIVEAU</div></div>
     <div class="prog-left">
-      <div class="pl-top"><span class="lvlnum">${esc(L.title)}</span><span class="lvlnext">${L.next?'→ Niv. '+L.next.n+' · '+esc(L.next.title):'Niveau maximum'}</span></div>
+      <div class="pl-top"><span class="lvlnum">${esc(L.title)}</span><span class="lvlnext">${L.next?'Prochain : Niv. '+L.next.n+' · '+esc(L.next.title):'Niveau maximum'}</span></div>
       <div class="progressbar" style="margin-top:9px"><i style="width:${L.pct}%"></i></div>
       <div class="pl-sub">${L.max?'Tu as tout débloqué. Continue à protéger l’océan !':'Plus que <b>'+L.remain+' XP</b> pour le niveau suivant'}</div>
     </div>
-    <a class="prog-next" onclick="go('challenges')"><b>Continue à progresser</b><span>Voir mes défis →</span></a>`;
+    <a class="prog-next" onclick="go('challenges')"><b>Continue à progresser</b><span>Voir mes défis</span></a>`;
   renderStreak();
 }
 function renderStreak(){
@@ -1686,7 +1686,7 @@ function welcomeText(){
   } else {
     ctx = `Explore les ${nb} spots du catalogue et prépare ton prochain voyage avec moi.`;
   }
-  return '<span>' + tete + '</span> <span>' + ctx + '</span><span class="bub-cta">Pose-moi une question →</span>';
+  return '<span>' + tete + '</span> <span>' + ctx + '</span><span class="bub-cta">Pose-moi une question</span>';
 }
 function renderWelcome(){
   var o=document.getElementById('octoHi'), b=document.getElementById('welcomeBubble');
@@ -1882,7 +1882,7 @@ function renderCompetition(){
         + '<div class="evt-d">'+e.d+'</div>'
         + '<div class="evt-a">'
         + '<a class="off" href="'+e.url+'" target="_blank" rel="noopener noreferrer">'
-        + uic('fleche')+' Site officiel</a>'
+        + 'Site officiel</a>'
         + (sp?('<button type="button" onclick="openSpot(\''+e.spot+'\');go(\'detail\')">'+uic('pin')+' Voir le spot</button>'):'')
         + '</div></div>';
     }).join('');
@@ -2212,7 +2212,7 @@ profondeur:'<path d="M12 3v13"/><path d="M7.5 12 12 16.5 16.5 12"/><path d="M5 2
 surveillance:'<path d="M6 3v18"/><path d="M6 4h11l-2.5 3.5L17 11H6"/>',
 conditions_ok:'<circle cx="12" cy="12" r="8.5"/><path d="M8.3 12.3 11 15l5-6"/>',
 vigilance:'<path d="M12 3.5 2.5 20.5h19z"/><path d="M12 9.5v5M12 17.5h.01"/>',
-pin:'<path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',etoile:'<path d="M12 3.6l2.5 5.4 5.9.7-4.4 4 1.2 5.8L12 16.6 6.8 19.5 8 13.7l-4.4-4 5.9-.7z"/>',fleche:'<path d="M5 12h13"/><path d="M12.5 6 19 12l-6.5 6"/>',feuille:'<path d="M20.2 3.8C10.4 4.4 4.6 9.4 4.6 16.6c0 1.3.2 2.4.6 3.2 7.6.5 13.1-4.6 14.4-11.6.4-2.2.6-3.4.6-4.4z"/><path d="M4.2 20.4C6 15 9.8 11.2 15.4 9"/>',niveau:'<path d="M5.5 20v-4.5M12 20V9.5M18.5 20V4.5"/>',bpoisson:'<ellipse cx="10.5" cy="12" rx="7.5" ry="4.6"/><path d="M18 12 22 8.6v6.8z"/><path d="M14.4 9.4 15.6 12l-1.2 2.6"/><circle cx="6.5" cy="11.2" r=".9" fill="currentColor"/>',mammifere:'<path d="M2.5 13.5 6 10.5v6z"/><path d="M6 13.5c2.6-3.6 7-5.4 11-4.3 2.2.6 3.8 2 4.5 3.6-1.4 2.4-4.6 3.8-8.4 3.6-3-.2-5.6-1.2-7.1-2.9z"/><path d="M12.5 9.2q.6-3 2.4-3.6-.5 1.8 0 3.6"/><circle cx="18.4" cy="12.2" r=".9" fill="currentColor"/>',reptile:'<ellipse cx="11" cy="12.5" rx="6.5" ry="5"/><path d="M17.5 12.5h3.5"/><path d="M6 8.2 4.4 6.4M6 16.8 4.4 18.6M15 8.6l1.4-1.8M15 16.4l1.4 1.8"/><path d="M8 10.5h6M8 14.5h6M11 8v9"/>',invertebre:'<path d="M12 4c4 0 6.5 2.6 6.5 6 0 3.4-2.5 5.4-6.5 5.4S5.5 13.4 5.5 10C5.5 6.6 8 4 12 4z"/><path d="M8 15q-1.5 3 0 5M12 15.4v5M16 15q1.5 3 0 5"/><circle cx="9.6" cy="9.6" r=".9" fill="currentColor"/><circle cx="14.4" cy="9.6" r=".9" fill="currentColor"/>',oiseau:'<path d="M4 14q5-7 11-7 3 0 5 2-3 1-4 3.5-1.6 4-6 4.5-4 .4-6-3z"/><path d="M8 17.5 6.5 21"/><circle cx="16.6" cy="9.4" r=".9" fill="currentColor"/>',algue:'<path d="M9 21q-3-6 0-10 3-4 0-8"/><path d="M15 21q3-5 0-9 -3-4 0-7"/><path d="M12 21q-1.6-7 0-12"/>',corail:'<path d="M12 21V11"/><path d="M12 15q-3-1.4-4-5M12 13q3-1.4 4-5"/><path d="M8 10q-2.6-.6-3-3.4M16 8q2.6-.6 3-3.4"/><path d="M6 21h12"/>',
+pin:'<path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/>',etoile:'<path d="M12 3.6l2.5 5.4 5.9.7-4.4 4 1.2 5.8L12 16.6 6.8 19.5 8 13.7l-4.4-4 5.9-.7z"/>',feuille:'<path d="M20.2 3.8C10.4 4.4 4.6 9.4 4.6 16.6c0 1.3.2 2.4.6 3.2 7.6.5 13.1-4.6 14.4-11.6.4-2.2.6-3.4.6-4.4z"/><path d="M4.2 20.4C6 15 9.8 11.2 15.4 9"/>',niveau:'<path d="M5.5 20v-4.5M12 20V9.5M18.5 20V4.5"/>',bpoisson:'<ellipse cx="10.5" cy="12" rx="7.5" ry="4.6"/><path d="M18 12 22 8.6v6.8z"/><path d="M14.4 9.4 15.6 12l-1.2 2.6"/><circle cx="6.5" cy="11.2" r=".9" fill="currentColor"/>',mammifere:'<path d="M2.5 13.5 6 10.5v6z"/><path d="M6 13.5c2.6-3.6 7-5.4 11-4.3 2.2.6 3.8 2 4.5 3.6-1.4 2.4-4.6 3.8-8.4 3.6-3-.2-5.6-1.2-7.1-2.9z"/><path d="M12.5 9.2q.6-3 2.4-3.6-.5 1.8 0 3.6"/><circle cx="18.4" cy="12.2" r=".9" fill="currentColor"/>',reptile:'<ellipse cx="11" cy="12.5" rx="6.5" ry="5"/><path d="M17.5 12.5h3.5"/><path d="M6 8.2 4.4 6.4M6 16.8 4.4 18.6M15 8.6l1.4-1.8M15 16.4l1.4 1.8"/><path d="M8 10.5h6M8 14.5h6M11 8v9"/>',invertebre:'<path d="M12 4c4 0 6.5 2.6 6.5 6 0 3.4-2.5 5.4-6.5 5.4S5.5 13.4 5.5 10C5.5 6.6 8 4 12 4z"/><path d="M8 15q-1.5 3 0 5M12 15.4v5M16 15q1.5 3 0 5"/><circle cx="9.6" cy="9.6" r=".9" fill="currentColor"/><circle cx="14.4" cy="9.6" r=".9" fill="currentColor"/>',oiseau:'<path d="M4 14q5-7 11-7 3 0 5 2-3 1-4 3.5-1.6 4-6 4.5-4 .4-6-3z"/><path d="M8 17.5 6.5 21"/><circle cx="16.6" cy="9.4" r=".9" fill="currentColor"/>',algue:'<path d="M9 21q-3-6 0-10 3-4 0-8"/><path d="M15 21q3-5 0-9 -3-4 0-7"/><path d="M12 21q-1.6-7 0-12"/>',corail:'<path d="M12 21V11"/><path d="M12 15q-3-1.4-4-5M12 13q3-1.4 4-5"/><path d="M8 10q-2.6-.6-3-3.4M16 8q2.6-.6 3-3.4"/><path d="M6 21h12"/>',
 spirale:'<path d="M12 12c-3 0-3-4 0-4s4 3 4 6-3 6-7 6-7-4-7-8 3-9 9-9"/>',
 eclair:'<path d="M13 2 4 14h6l-1 8 9-12h-6z"/>',
 rocher:'<path d="M3 17c0-2 1.6-3 3-4.6C7.6 10 9 8 12 8s4 2 5.6 4.4c1.4 1.7 3.4 2.7 3.4 4.6 0 1.7-2 3-9 3s-9-1.3-9-3z"/>',
@@ -2449,7 +2449,7 @@ function poulpyReply(q){
    [/(écume|ecume|mousse de mer)/,"L'écume blanche sur la plage 🫧, c'est de l'eau de mer riche en matières organiques (algues, plancton) fouettée par les vagues — naturelle et le plus souvent inoffensive."],
    [/(floater|top.?turn|\bsnap\b|réenroul|reenroul)/,"Le <b>top turn</b> (snap) : un virage sec en haut de la vague pour repartir vers le bas et projeter de la gerbe 💦. Le <b>floater</b> glisse sur le sommet d'une section qui ferme."],
    [/(aerial|figure aérienne|saut.*vague|décoller.*vague)/,"L'<b>aerial</b> : tu utilises la vague comme tremplin pour décoller et retomber sur la face 🛹. Niveau avancé : vitesse, lecture et… beaucoup de chutes avant d'y arriver !"],
-   [/(voyage surf|trip surf|où partir|ou partir|destination surf|partir surfer)/,"Pour un trip surf 🌴 : débutant → Portugal, Maroc, Bali, Canaries (eau douce, écoles) ; confirmé → Indonésie, Mentawai, Fidji. Vérifie la <b>saison de houle</b> avant de réserver !"],
+   [/(voyage surf|trip surf|où partir|ou partir|destination surf|partir surfer)/,"Pour un trip surf 🌴, débutant : Portugal, Maroc, Bali, Canaries (eau douce, écoles) ; confirmé : Indonésie, Mentawai, Fidji. Vérifie la <b>saison de houle</b> avant de réserver !"],
    [/(échauffement|echauffement|étirement|etirement|s'échauffer|avant de surfer)/,"Avant l'eau, échauffe épaules, dos et jambes 🤸 : rotations des bras, fentes, étirements doux. Ça améliore ta rame et réduit le risque de blessure."],
    [/(réparer.*planche|reparer.*planche|\bding\b|trou.*planche|planche cassée)/,"Un « ding » (trou) laisse entrer l'eau et abîme la planche 🛠️. Sèche-la et répare avec un kit résine (type Solarez) avant de retourner à l'eau, sinon le pâton gonfle."],
    [/(transporter.*planche|porter.*planche|sur le toit|voiture.*planche)/,"Porte ta planche sous le bras, ailerons vers l'arrière et côté toi 🏄. En voiture : sur des barres avec sangles, pont vers le bas, nose vers l'arrière."],
@@ -2606,7 +2606,7 @@ function quizSetTimed(v){quizTimed=v;renderQuizPicker();}
 function renderQuizPicker(){
   var d=quizLoad();var done=d.daily===quizToday();
   var h='<div class="quiz-head"><div class="quiz-octo">'+octoTag()+'</div><h3>Le Quiz de Poulpy</h3><p>Choisis un thème et gagne de l’XP 🌊</p></div>';
-  h+='<button class="quiz-daily'+(done?' done':'')+'" onclick="quizStartDaily()"><span class="qd-ic"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg></span><span class="qd-tx"><b>Défi du jour</b><span>'+(done?'Déjà relevé aujourd’hui ✓ · rejouable':'Bonus +30 XP au 1ᵉʳ essai !')+'</span></span><span class="qd-go">'+(done?'↻':'▶')+'</span></button>';
+  h+='<button class="quiz-daily'+(done?' done':'')+'" onclick="quizStartDaily()"><span class="qd-ic"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg></span><span class="qd-tx"><b>Défi du jour</b><span>'+(done?'Déjà relevé aujourd’hui ✓ · rejouable':'Bonus +30 XP au 1ᵉʳ essai !')+'</span></span></button>';
   h+='<div class="quiz-mode"><span>Mode</span><button class="qm-btn'+(quizTimed?'':' on')+'" onclick="quizSetTimed(false)">Normal</button><button class="qm-btn'+(quizTimed?' on':'')+'" onclick="quizSetTimed(true)">⏱️ Chrono</button></div>';
   h+='<div class="quiz-cats">'+QUIZ_CATS.map(function(c){var bs=d.best[c.id]||0;var bd=d.badges.indexOf(c.id)>=0;return '<button class="quiz-cat" onclick="quizPick(\''+c.id+'\')"><span class="qc-e">'+c.emoji+'</span><span class="qc-l">'+c.label+(bd?' 🏅':'')+'</span>'+(bs?'<span class="qc-best">★ '+bs+'</span>':'')+'</button>';}).join('')+'</div>';
   if(d.badges.length){h+='<div class="quiz-badges"><b>🏅 Tes badges :</b> '+d.badges.map(function(id){var c=QUIZ_CATS.filter(function(x){return x.id===id;})[0];return c?`Expert ${c.label}`:'';}).filter(Boolean).join(' · ')+'</div>';}
@@ -2628,7 +2628,7 @@ function renderQuizQuestion(){
   document.getElementById('quizBody').innerHTML=h;
   if(quizTimed)startQuizTimer();
 }
-function quizRevealNext(){return (quizIdx+1<quizQs.length)?'Question suivante ▶':'Voir mon score 🏁';}
+function quizRevealNext(){return (quizIdx+1<quizQs.length)?'Question suivante':'Voir mon score 🏁';}
 function quizAnswer(i){
   if(quizAnswered)return;quizAnswered=true;clearQuizTimer();
   var q=quizQs[quizIdx];var ok=i===q.k;

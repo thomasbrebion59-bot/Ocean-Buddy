@@ -3,8 +3,6 @@
   'use strict';
   const $=s=>document.querySelector(s);
   const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
-  const arrow='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg>';
-  const external='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" aria-hidden="true"><path d="M6 18 18 6M6 6h12v12"/></svg>';
   const checks={
     surf:[['Lire les conditions','Consulter la houle, le vent et la marée avant de partir.'],['Repérer la session','Identifier le pic, les zones réservées et les sorties depuis la plage.'],['Vérifier son matériel','Contrôler la planche, les ailerons et le leash.']],
     bodyboard:[['Lire les conditions','Consulter la houle, le vent et la marée.'],['Observer depuis le bord','Repérer les courants, les sorties et les autres pratiquants.'],['Vérifier son matériel','Contrôler le bodyboard, le leash et les palmes.']],
@@ -24,7 +22,7 @@
   const preparationKey=(s,act,i)=>s.id+':'+act+':'+i;
   function source(s){
     const record=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
-    return record?.url&&/^https:\/\//i.test(record.url)?`<a class="field-source" href="${esc(record.url)}" target="_blank" rel="noopener noreferrer"><span><small>SOURCE DU CATALOGUE</small><b>${esc(record.label)}</b></span>${external}</a>`:'<p class="field-source-pending">Informations éditoriales à confirmer auprès de sources locales.</p>';
+    return record?.url&&/^https:\/\//i.test(record.url)?`<a class="field-source" href="${esc(record.url)}" target="_blank" rel="noopener noreferrer"><span><small>SOURCE DU CATALOGUE</small><b>${esc(record.label)}</b></span></a>`:'<p class="field-source-pending">Informations éditoriales à confirmer auprès de sources locales.</p>';
   }
   function sourceLink(s){const html=source(s);return html.includes('field-source-pending')?'':html;}
   const frNum=(n,d)=>window.obNum?obNum(n,d):n.toFixed(d).replace('.',',');
@@ -41,7 +39,7 @@
     const record=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
     const hasFacts=rows.some(row=>row.verified);
     const date=s.visit?.reviewed?.split('-').reverse().join('/');
-    return `<span class="field-eyebrow">REPÈRES PRATIQUES</span><h3 id="fieldVisitTitle">Préparer la visite</h3><dl>${rows.map(row=>`<div class="field-visit-row${row.verified?'':' is-pending'}"><dt>${esc(row.label)}</dt><dd>${esc(row.value)}</dd></div>`).join('')}</dl>${hasFacts?`<a class="field-visit-source" href="${esc(record.url)}" target="_blank" rel="noopener noreferrer">Source : ${esc(record.label)} · consultée le ${esc(date)} ${external}</a>`:'<p class="field-visit-pending">Aucune indication pratique vérifiée pour ce spot. Consulte les informations du gestionnaire local avant le départ.</p>'}<p class="field-visit-caution">Les accès, conditions et règles peuvent changer. Vérifie les consignes en vigueur sur place.</p>`;
+    return `<span class="field-eyebrow">REPÈRES PRATIQUES</span><h3 id="fieldVisitTitle">Préparer la visite</h3><dl>${rows.map(row=>`<div class="field-visit-row${row.verified?'':' is-pending'}"><dt>${esc(row.label)}</dt><dd>${esc(row.value)}</dd></div>`).join('')}</dl>${hasFacts?`<a class="field-visit-source" href="${esc(record.url)}" target="_blank" rel="noopener noreferrer">Source : ${esc(record.label)} · consultée le ${esc(date)}</a>`:'<p class="field-visit-pending">Aucune indication pratique vérifiée pour ce spot. Consulte les informations du gestionnaire local avant le départ.</p>'}<p class="field-visit-caution">Les accès, conditions et règles peuvent changer. Vérifie les consignes en vigueur sur place.</p>`;
   }
   function mapURL(s){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.name+' '+s.loc);}
   function facts(s,act){
@@ -52,8 +50,8 @@
   function render(s,act){
     const items=(checks[act]||checks.surf).map(item=>isInland(s)?item.map(copy=>copy.replace('la marée et l’état du plan d’eau','les conditions du plan d’eau').replace('l’évolution de la mer','l’évolution du plan d’eau')):item);
     const done=items.filter((_,i)=>completed[preparationKey(s,act,i)]).length;
-    return `<div class="field-checklist"><div class="field-check-cover"><span class="field-check-emblem">${levelIcon('expert')}</span><span><small>LE DÉPART SE PRÉPARE ICI</small><b>Prêt pour la session ?</b></span></div><div class="field-list-head"><h3>Avant de partir</h3><span id="fieldProgress">${done} / ${items.length}</span></div><div class="field-progress-track" role="progressbar" aria-label="Préparation de la sortie" aria-valuemin="0" aria-valuemax="${items.length}" aria-valuenow="${done}"><i style="width:${done/items.length*100}%"></i></div>${items.map(([label,copy],i)=>`<label class="field-check"><input type="checkbox" data-visit-check="${esc(preparationKey(s,act,i))}" ${completed[preparationKey(s,act,i)]?'checked':''}><span><b>${esc(label)}</b><small>${esc(copy)}</small></span></label>`).join('')}<button class="field-text-button" data-field-action="conditions">Consulter les conditions ${arrow}</button></div>
-      <aside class="field-address"><span class="field-address-mark">${sportIcon('all')}</span><span class="field-eyebrow">TON POINT DE DÉPART</span><h3>${esc(s.name.split(' — ')[0])}</h3><dl>${facts(s,act).map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>${s.level==='variable'?'<p class="field-level-note">Choisis un secteur adapté à ton expérience avec un encadrant local.</p>':'<p class="field-level-note">Le niveau indiqué reste à confronter aux conditions et au secteur choisis.</p>'}<a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu ${external}</a>${sourceLink(s)}</aside>${window.OceanNotebook?.note(s)||''}`;
+    return `<div class="field-checklist"><div class="field-check-cover"><span class="field-check-emblem">${levelIcon('expert')}</span><span><small>LE DÉPART SE PRÉPARE ICI</small><b>Prêt pour la session ?</b></span></div><div class="field-list-head"><h3>Avant de partir</h3><span id="fieldProgress">${done} / ${items.length}</span></div><div class="field-progress-track" role="progressbar" aria-label="Préparation de la sortie" aria-valuemin="0" aria-valuemax="${items.length}" aria-valuenow="${done}"><i style="width:${done/items.length*100}%"></i></div>${items.map(([label,copy],i)=>`<label class="field-check"><input type="checkbox" data-visit-check="${esc(preparationKey(s,act,i))}" ${completed[preparationKey(s,act,i)]?'checked':''}><span><b>${esc(label)}</b><small>${esc(copy)}</small></span></label>`).join('')}<button class="field-text-button" data-field-action="conditions">Consulter les conditions</button></div>
+      <aside class="field-address"><span class="field-address-mark">${sportIcon('all')}</span><span class="field-eyebrow">TON POINT DE DÉPART</span><h3>${esc(s.name.split(' — ')[0])}</h3><dl>${facts(s,act).map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>${s.level==='variable'?'<p class="field-level-note">Choisis un secteur adapté à ton expérience avec un encadrant local.</p>':'<p class="field-level-note">Le niveau indiqué reste à confronter aux conditions et au secteur choisis.</p>'}<a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu</a>${sourceLink(s)}</aside>${window.OceanNotebook?.note(s)||''}`;
   }
   function update(s,act){
     const overview=$('#fieldOverview');if(!overview)return;
@@ -65,7 +63,7 @@
     $('#fieldIntroTitle').textContent=s.name.split(' — ')[0];
     const name=s.name+' '+s.loc;
     const activity=SPORTMAP[act]?.label||'nautique';
-    overview.innerHTML=`<span class="field-eyebrow">SITUER & COMPARER</span><a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu sur la carte ${external}</a><div class="field-compare-slot">${window.OceanNotebook?.button(s.id)||''}</div>`;
+    overview.innerHTML=`<span class="field-eyebrow">SITUER & COMPARER</span><a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu sur la carte</a><div class="field-compare-slot">${window.OceanNotebook?.button(s.id)||''}</div>`;
     overview.classList.add('is-compact');
     const level=s.level==='variable'?'À définir sur place':(LVLTXT[s.level]||'À confirmer');
     $('#fieldAtAGlance').innerHTML=[['activity','Ton activité',SPORTMAP[act]?.label||'À choisir',sportIcon(act)],['water','Le cadre',isInland(s)?'Eau douce':'Mer & océan',sportIcon(isInland(s)?'kayak':'snorkeling')],['level','Repère de niveau',level,levelIcon(s.level)]].map(([key,label,value,art])=>`<button type="button" class="field-fact-card fact-${key}" data-im-open="${{activity:'terrain',water:'eau',level:'niveau'}[key]}"><span class="field-fact-icon">${art}</span><div><small>${label}</small><b>${esc(value)}</b></div></button>`).join('');
@@ -74,14 +72,14 @@
     window.OceanNotebook?.sync();
     $('#fieldLocalSource').innerHTML=sourceLink(s);
     const photo=OceanPhotos.lead(s.id,act);
-    $('#fieldPhotoLink').href=photo?.source||'photos.html';$('#fieldPhotoLink').textContent=photo?(photo.caption?photo.caption+' · ':s.photoContext?s.photoContext+' · ':'')+'Photographie : '+photo.author+' ↗':'Crédits photographiques ↗';
+    $('#fieldPhotoLink').href=photo?.source||'photos.html';$('#fieldPhotoLink').textContent=photo?(photo.caption?photo.caption+' · ':s.photoContext?s.photoContext+' · ':'')+'Photographie : '+photo.author:'Crédits photographiques';
     $('#fieldSchoolLink').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('école '+activity+' '+name);
     $('#fieldShopLink').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('location matériel '+activity+' '+name);
     const near=SPOTS.filter(x=>x.id!==s.id&&SPOT_WORLD[x.id]===SPOT_WORLD[s.id]&&spotSports(x).includes(act)&&c&&COORDS[x.id]&&distKm(c.lat,c.lon,COORDS[x.id].lat,COORDS[x.id].lon)<=200).sort((a,b)=>{
       const ca=COORDS[a.id],cb=COORDS[b.id];if(!c||!ca||!cb)return 0;
       return distKm(c.lat,c.lon,ca.lat,ca.lon)-distKm(c.lat,c.lon,cb.lat,cb.lon);
     }).slice(0,3);
-    $('#fieldNearby').innerHTML=near.map(x=>`<button class="field-nearby-card" data-field-spot="${esc(x.id)}"><img src="${esc(spotPhotoUrl(x.id,480)||WORLD_PHOTOS[SPOT_WORLD[x.id]].src)}" alt="" loading="lazy"><span><small>${esc(x.loc)}</small><b>${esc(x.name.split(' — ')[0])}</b></span>${arrow}</button>`).join('');
+    $('#fieldNearby').innerHTML=near.map(x=>`<button class="field-nearby-card" data-field-spot="${esc(x.id)}"><img src="${esc(spotPhotoUrl(x.id,480)||WORLD_PHOTOS[SPOT_WORLD[x.id]].src)}" alt="" loading="lazy"><span><small>${esc(x.loc)}</small><b>${esc(x.name.split(' — ')[0])}</b></span></button>`).join('');
     $('#fieldNearbyBlock').hidden=!near.length;
     $('#dDangers').closest('.block').hidden=false;
   }
@@ -102,10 +100,10 @@
   $('#dGuideSub').textContent='Choisis ton activité pour préparer ta sortie.';
   guide.querySelector('.g-note').textContent='Ces cases servent à préparer ta sortie. Sur place, les consignes du gestionnaire et de l’encadrant restent prioritaires.';
   const services=$('#dShop').closest('.block');services.className='block field-local';
-  services.innerHTML=`<div><span class="field-eyebrow">SUR PLACE</span><h3>Les bonnes adresses,<br>près du spot.</h3><p>Ouvre la carte pour trouver un professionnel et vérifier ses disponibilités.</p></div><div class="field-local-links"><a id="fieldSchoolLink" target="_blank" rel="noopener"><span><b>Écoles & encadrants</b><small>Cours, briefing et sorties accompagnées</small></span>${external}</a><a id="fieldShopLink" target="_blank" rel="noopener"><span><b>Location & matériel</b><small>Préparer et vérifier ton équipement</small></span>${external}</a></div><button id="dShop" hidden></button><button id="dSchool" hidden></button>`;
+  services.innerHTML=`<div><span class="field-eyebrow">SUR PLACE</span><h3>Les bonnes adresses,<br>près du spot.</h3><p>Ouvre la carte pour trouver un professionnel et vérifier ses disponibilités.</p></div><div class="field-local-links"><a id="fieldSchoolLink" target="_blank" rel="noopener"><span><b>Écoles & encadrants</b><small>Cours, briefing et sorties accompagnées</small></span></a><a id="fieldShopLink" target="_blank" rel="noopener"><span><b>Location & matériel</b><small>Préparer et vérifier ton équipement</small></span></a></div><button id="dShop" hidden></button><button id="dSchool" hidden></button>`;
   const latest=document.createElement('section');latest.className='field-arrivals';latest.setAttribute('aria-labelledby','newPlacesHeading');
   const selection=['serreponcon','elnido','rottnest'].map(id=>SPOTS.find(s=>s.id===id)).filter(Boolean);
-  latest.innerHTML=`<div class="field-arrivals-head"><div><span class="field-eyebrow">LE CARNET S’AGRANDIT · ${SPOTS.filter(s=>s.catalogNew).length} NOUVEAUX SPOTS</span><h2 id="newPlacesHeading">Et si on partait là ?</h2></div><button class="field-text-button" data-field-action="new">Voir les nouveautés ${arrow}</button></div><div class="field-arrivals-grid">${selection.map(s=>`<button class="field-arrival" data-field-spot="${s.id}"><span class="field-arrival-image"><img src="${esc(spotPhotoUrl(s.id,720))}"${spotPhotoSrcset(s.id)} sizes="(max-width:700px) 80vw, 360px" alt="" loading="lazy" decoding="async"><span>${esc(SPORTMAP[s.sports[0]].label)}</span></span><span class="field-arrival-text"><span><small>${esc(s.loc)}</small><b>${esc(s.name.split(' — ')[0])}</b></span>${arrow}</span></button>`).join('')}</div>`;
+  latest.innerHTML=`<div class="field-arrivals-head"><div><span class="field-eyebrow">LE CARNET S’AGRANDIT · ${SPOTS.filter(s=>s.catalogNew).length} NOUVEAUX SPOTS</span><h2 id="newPlacesHeading">Et si on partait là ?</h2></div><button class="field-text-button" data-field-action="new">Voir les nouveautés</button></div><div class="field-arrivals-grid">${selection.map(s=>`<button class="field-arrival" data-field-spot="${s.id}"><span class="field-arrival-image"><img src="${esc(spotPhotoUrl(s.id,720))}"${spotPhotoSrcset(s.id)} sizes="(max-width:700px) 80vw, 360px" alt="" loading="lazy" decoding="async"><span>${esc(SPORTMAP[s.sports[0]].label)}</span></span><span class="field-arrival-text"><span><small>${esc(s.loc)}</small><b>${esc(s.name.split(' — ')[0])}</b></span></span></button>`).join('')}</div>`;
   $('.poulpy-activities').after(latest);
   const newFilter=document.createElement('button');newFilter.type='button';newFilter.className='chip';newFilter.dataset.f='new';newFilter.textContent='Nouveautés';newFilter.onclick=()=>filterSpots(newFilter,'new');$('#filters [data-f="all"]').after(newFilter);
   $('#filters').insertAdjacentHTML('afterend','<p class="field-result-count" id="spotResultCount" aria-live="polite"></p>');

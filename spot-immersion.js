@@ -4,7 +4,7 @@
   const M=window.OceanImmersionModel, $=s=>document.querySelector(s);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const icon=key=>PoulpyIcons.html(key);
-  const source=(label,url)=>`<a class="im-source" href="${url}" target="_blank" rel="noopener">${label} ↗</a>`;
+  const source=(label,url)=>`<a class="im-source" href="${url}" target="_blank" rel="noopener">${label}</a>`;
   const svg=(label,body)=>`<svg class="im-diagram" viewBox="0 0 480 260" role="img" aria-label="${esc(label)}">${body}</svg>`;
   const head=(k,t)=>`<span class="im-eyebrow">${k}</span><h4>${t}</h4>`;
   const explanation='Schéma pédagogique · il ne représente pas la géographie de ce spot.';
@@ -31,7 +31,7 @@
       <rect width="480" height="260" rx="16" fill="#eaf5ff"/><path d="${water}V260H0Z" fill="#b9e4f5"/><path d="${water}" fill="none" stroke="#1678c2" stroke-width="5"/>
       <path d="M10 101h450M10 207h450" stroke="#88b4d1" stroke-dasharray="5 6"/>
       ${wave==='height'?'<path d="M270 101v106m-7-97 7-9 7 9m-14 88 7 9 7-9" fill="none" stroke="#e96942" stroke-width="3"/><rect x="288" y="138" width="163" height="35" rx="8" fill="#fff"/><text x="302" y="160" fill="#b94a2b">HAUTEUR · mètres</text>':'<path d="M60 66h240m-230-7-10 7 10 7m220-14 10 7-10 7" fill="none" stroke="#e96942" stroke-width="3"/><text x="72" y="43" fill="#b94a2b">PÉRIODE · secondes</text><circle cx="60" cy="101" r="7" fill="#e96942"/><circle cx="300" cy="101" r="7" fill="#e96942"/>'}
-      <text x="23" y="237">${wave==='period'?'UN MÊME POINT AU FIL DU TEMPS →':'EXEMPLE · PAS UNE PRÉVISION'}</text>`);
+      <text x="23" y="237">${wave==='period'?'UN MÊME POINT AU FIL DU TEMPS':'EXEMPLE · PAS UNE PRÉVISION'}</text>`);
   }
   function tideDiagram(){
     const g=M.tideGeometry(tide);
@@ -49,8 +49,8 @@
   function choices(items,key,current){return `<div class="im-choices" role="group" aria-label="${key==='wind'?'Direction du vent dans l’exemple':key==='wave'?'Caractéristique de la vague':'Repère d’expérience'}">${items.map(([id,label])=>`<button type="button" data-im-${key}="${id}" aria-pressed="${id===current}">${key==='level'?icon(id):''}${label}</button>`).join('')}</div>`;}
   function terrain(){
     const a=M.activity(act),p=window.OceanPhotos?.lead(spot.id,act);
-    const visual=p?`<button class="im-postcard" data-im-gallery aria-label="S’immerger dans les photos de ${esc(spot.name)}"><img src="${esc(p.src)}" alt="${esc(p.caption||spot.photoContext||spot.name+' · '+spot.loc)}" loading="lazy"><span><small>${esc(spot.loc)}</small><b>Tu t’y vois déjà ?</b><span>Ouvrir les photos ↗</span></span></button>`:`<div class="im-postcard im-postcard-empty" role="img" aria-label="Illustration Ocean Buddy, photographie du lieu à vérifier"><span><small>${esc(spot.loc)}</small><b>À explorer sur place.</b><span>Photo du lieu à vérifier</span></span></div>`;
-    return `<div class="im-terrain">${visual}<div class="im-terrain-copy">${head(SPORTMAP[act].label.toUpperCase(),a.title)}<ol>${a.points.map(([t,c],i)=>`<li><span>${i+1}</span><div><b>${t}</b><p>${c}</p></div></li>`).join('')}</ol><button class="im-link" data-im-prepare>Préparer cette sortie →</button></div></div>`;
+    const visual=p?`<button class="im-postcard" data-im-gallery aria-label="S’immerger dans les photos de ${esc(spot.name)}"><img src="${esc(p.src)}" alt="${esc(p.caption||spot.photoContext||spot.name+' · '+spot.loc)}" loading="lazy"><span><small>${esc(spot.loc)}</small><b>Tu t’y vois déjà ?</b><span>Ouvrir les photos</span></span></button>`:`<div class="im-postcard im-postcard-empty" role="img" aria-label="Illustration Ocean Buddy, photographie du lieu à vérifier"><span><small>${esc(spot.loc)}</small><b>À explorer sur place.</b><span>Photo du lieu à vérifier</span></span></div>`;
+    return `<div class="im-terrain">${visual}<div class="im-terrain-copy">${head(SPORTMAP[act].label.toUpperCase(),a.title)}<ol>${a.points.map(([t,c],i)=>`<li><span>${i+1}</span><div><b>${t}</b><p>${c}</p></div></li>`).join('')}</ol><button class="im-link" data-im-prepare>Préparer cette sortie</button></div></div>`;
   }
   function panel(){
     if(topic==='terrain')return terrain();
@@ -72,7 +72,7 @@
     const options=spotSports(s);
     context.innerHTML=`<div class="im-context-title">${icon(a)}<span><small>${options.length>1?'ICI, TU AS ENVIE DE…':'L’ACTIVITÉ DU SPOT'}</small><b>${esc(SPORTMAP[a].label)}</b></span></div>${options.length>1?`<div class="im-activity-choices" role="group" aria-label="Activité sur ce spot">${options.map(id=>`<button type="button" data-im-activity="${id}" aria-pressed="${id===a}">${sportIcon(id)}<span>${esc(SPORTMAP[id].label.replace(/\s*\(.*\)/,''))}</span></button>`).join('')}</div>`:''}`;
     draw();
-    const weatherHelp=$('#imWeatherHelp');weatherHelp.innerHTML=`${icon(a)}<span><b>Ces chiffres, ça veut dire quoi ?</b><small>Poulpy t’explique le vent${isInland(s)?' et l’eau.':', les vagues et la marée.'}</small></span><span aria-hidden="true">→</span>`;
+    const weatherHelp=$('#imWeatherHelp');weatherHelp.innerHTML=`${icon(a)}<span><b>Ces chiffres, ça veut dire quoi ?</b><small>Poulpy t’explique le vent${isInland(s)?' et l’eau.':', les vagues et la marée.'}</small></span>`;
     document.querySelectorAll('#dTabs .dtab').forEach(b=>{
       const key={infos:'all',saisons:'baignade',meteo:'expert',activites:a,faune:'snorkeling',preserver:'all'}[b.dataset.cat];
       let image=b.querySelector('.poulpy-mini');if(image)image.src=PoulpyIcons.src(key);else{b.querySelector('svg')?.remove();b.insertAdjacentHTML('afterbegin',icon(key));}

@@ -17,7 +17,7 @@
     fr: 'Français', en: 'English', es: 'Español'
   };
   var RTL = { ar: 1, he: 1, ur: 1 };
-  var VERSIONS = /*VERSIONS*/{"en":"16b91077bd","es":"71cb147c71"}/*/VERSIONS*/;
+  var VERSIONS = /*VERSIONS*/{"en":"7e5562d67a","es":"fd548e1e26"}/*/VERSIONS*/;
   var STORE_KEY = 'oceanbuddy_lang';
 
   function resolve(tag) {
@@ -126,7 +126,8 @@
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', languagePicker);
   else languagePicker();
 
-  // iOS dessine ↗, ▶… en émoji bleu : le sélecteur de variation U+FE0E demande la version texte.
+  // iOS dessine ↔, ▶, ↩… en émoji bleu : le sélecteur de variation U+FE0E demande la version texte.
+  // L’interface n’a plus de flèches décoratives (↗ →) ; restent les flèches fonctionnelles (lecteur ▶, marée ↔).
   var EMOJI_ARROW = /([\u2194-\u2199\u21A9\u21AA\u25B6\u25C0])(?![\uFE0E\uFE0F])/g;
   var HAS_ARROW = /[\u2194-\u2199\u21A9\u21AA\u25B6\u25C0](?![\uFE0E\uFE0F])/;
   function textArrows(s) { return s && HAS_ARROW.test(s) ? s.replace(EMOJI_ARROW, '$1\uFE0E') : s; }

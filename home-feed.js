@@ -34,7 +34,7 @@
       while(set.has((m+1)%12)&&!seen.has((m+1)%12)){m=(m+1)%12;run.push(m);seen.add(m);}
       runs.push(run);
     }
-    return runs.map(r=>r.length===1?monthName(r[0],'short'):`${monthName(r[0],'short')} → ${monthName(r[r.length-1],'short')}`).join(' · ');
+    return runs.map(r=>r.length===1?monthName(r[0],'short'):`${monthName(r[0],'short')} – ${monthName(r[r.length-1],'short')}`).join(' · ');
   }
   /* Tirage du jour : stable dans la journée, différent le lendemain. */
   function daily(list,salt){
@@ -120,14 +120,12 @@
   function surfCard(){
     return `<section class="hf-sec hf-plan-sec hf-surf-sec" aria-label="Mini-jeu de surf"><button type="button" class="hf-plan hf-surf" data-surf-game>
       <span class="hf-surf-ic" aria-hidden="true"><svg viewBox="0 0 64 25"><path d="M2 21C12 21 14 6 26 6c9 0 10 8 6 11-3 2-7 0-6-3 1-3 6-3 8 0 2 3 1 7 10 7h20" fill="none" stroke="#e0ff91" stroke-width="3" stroke-linecap="round"/><path d="M2 24h60" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/></svg></span>
-      <span class="hf-plan-tx"><small>Nouveau · mini-jeu</small><b>Surfe la vague, même sans réseau</b><span>Choisis ton surfeur ou ta surfeuse, glisse sur la face, entre dans le tube et enchaîne les figures.</span></span>
-      <span class="hf-plan-go" aria-hidden="true">→</span></button></section>`;
+      <span class="hf-plan-tx"><small>Nouveau · mini-jeu</small><b>Surfe la vague, même sans réseau</b><span>Choisis ton surfeur ou ta surfeuse, glisse sur la face, entre dans le tube et enchaîne les figures.</span></span></button></section>`;
   }
   function planCard(m){
     return `<section class="hf-sec hf-plan-sec" aria-label="Planifier par mois"><button type="button" class="hf-plan" data-map-plan>
       <span class="hf-plan-cal" aria-hidden="true">${Array.from({length:12},(_,k)=>`<i class="${k===m?'on':''}">${esc(monthName(k,'narrow'))}</i>`).join('')}</span>
-      <span class="hf-plan-tx"><small>Nouveau · planificateur</small><b>Choisis ton mois, Poulpy trouve le spot</b><span>Eau chaude, plein soleil, belles vagues ou vent : la planète s’allume là où c’est le bon moment.</span></span>
-      <span class="hf-plan-go" aria-hidden="true">→</span></button></section>`;
+      <span class="hf-plan-tx"><small>Nouveau · planificateur</small><b>Choisis ton mois, Poulpy trouve le spot</b><span>Eau chaude, plein soleil, belles vagues ou vent : la planète s’allume là où c’est le bon moment.</span></span></button></section>`;
   }
   function heroSpots(){
     const list=HERO_IDS.map(id=>SPOTS.find(s=>s.id===id)).filter(s=>s&&photo(s));
@@ -163,7 +161,7 @@
         <div class="hf-slides" role="list">${slides.map((s,i)=>{const p=photo(s),a=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');return `<article class="hf-slide" role="listitem" data-spot="${esc(s.id)}" aria-label="${esc(String(s.name).split(' — ')[0])}, ${esc(s.country||'')}">
           <img src="${esc(p.src)}" alt="" ${i?'loading="lazy"':'fetchpriority="high" data-fade="off"'} decoding="async">
           <div class="hf-slide-tx"><span class="hf-kicker">Spot de rêve · ${i+1}/${slides.length}</span><h2>${esc(String(s.name).split(' — ')[0])}</h2><p>${esc(s.country||s.loc||'')}${a?` · ${esc(a)}`:''}</p>
-          <button type="button" class="hf-go" data-hf-open="${esc(s.id)}">Découvrir ce spot<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13"/><path d="M12.5 6 19 12l-6.5 6"/></svg></button></div>
+          <button type="button" class="hf-go" data-hf-open="${esc(s.id)}">Découvrir ce spot</button></div>
         </article>`;}).join('')}</div>
         <div class="hf-dots" aria-hidden="true">${slides.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</div>
       </div>
@@ -191,7 +189,7 @@
     return `<section class="hf-world" aria-label="La planète des spots">
       <div class="hf-world-map"><div class="hf-planet" aria-hidden="true"><div class="hf-planet-tex"></div><i class="hf-planet-shade"></i></div><div class="hf-globe" data-hf-globe></div></div>
       <div class="hf-world-tx"><span class="hf-kicker">La planète des spots</span><h2>${SPOTS.length} spots, 6 continents.</h2><p>Fais tourner la planète et pose ton doigt sur ton prochain voyage.</p>
-      <button type="button" class="hf-world-go" data-hf-go="spots">Explorer la planète<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><path d="M5 12h13"/><path d="M12.5 6 19 12l-6.5 6"/></svg></button></div>
+      <button type="button" class="hf-world-go" data-hf-go="spots">Explorer la planète</button></div>
     </section>`;
   }
   /* Globe de l’accueil : une seule instance, créée à l’approche de la carte (jamais avant la levée du rideau),

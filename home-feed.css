@@ -49,7 +49,6 @@
 .hf-slide h2{margin:10px 0 4px;font:900 48px/.92 var(--as-condensed);letter-spacing:-.8px;text-transform:uppercase;color:var(--t-on-main);text-shadow:0 4px 24px color-mix(in srgb,var(--t-shadow) 40%,transparent)}
 .hf-slide p{margin:0 0 14px;font:600 15px/1.35 var(--body);color:color-mix(in srgb,var(--t-on-main) 90%,transparent)}
 .hf-go{display:inline-flex;align-items:center;gap:8px;height:48px;padding:0 20px;border:0;border-radius:999px;background:var(--t-card);color:var(--t-ink);font:800 15px var(--body);cursor:pointer;box-shadow:0 10px 26px -10px color-mix(in srgb,var(--t-shadow) 55%,transparent)}
-.hf-go svg{width:18px;height:18px;color:var(--t-main)}
 .hf-go:active{transform:scale(.96)}
 .hf-dots{position:absolute;left:0;right:0;bottom:16px;display:flex;justify-content:center;gap:6px;pointer-events:none}
 .hf-dots i{width:6px;height:6px;border-radius:999px;background:color-mix(in srgb,var(--t-card) 50%,transparent);transition:width .3s,background .3s}
@@ -79,7 +78,6 @@
 .hf-world-tx h2{margin:10px 0 6px;font:900 32px/.95 var(--as-condensed);text-transform:uppercase;letter-spacing:-.3px}
 .hf-world-tx p{margin:0 0 14px;font:500 14.5px/1.45 var(--body);color:color-mix(in srgb,var(--t-on-main) 85%,transparent)}
 .hf-world-go{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 18px;border:0;border-radius:999px;background:var(--t-acc);color:var(--t-acc-ink);font:800 15px var(--body);cursor:pointer}
-.hf-world-go svg{width:18px;height:18px}
 
 /* ---------- Rails de photos ---------- */
 .hf-sec{margin:0}
@@ -133,7 +131,7 @@
    et le planificateur prennent la palette (--t-*, activity-theme.css). Les photos ne sont jamais teintées. */
 html[data-act] .hf-world{background:radial-gradient(90% 70% at 50% 16%,var(--t-main2) 0%,var(--t-main) 48%,var(--t-deep) 100%)}
 html[data-act] .hf-plan{background:radial-gradient(140% 120% at 0% 0%,color-mix(in srgb,var(--t-acc) 20%,transparent),transparent 50%),linear-gradient(140deg,var(--t-deep) 0%,var(--t-main) 70%,var(--t-main2) 120%);box-shadow:0 22px 40px -26px var(--t-deep)}
-html[data-act] .hf-plan-cal i.on,html[data-act] .hf-plan-go{background:var(--t-acc);color:var(--t-acc-ink)}
+html[data-act] .hf-plan-cal i.on{background:var(--t-acc);color:var(--t-acc-ink)}
 html[data-act] .hf-plan-tx small{color:var(--t-acc)}
 
 /* Fond d’ambiance : la photo floutée du spot affiché colore légèrement le haut du fond crème (avec ou sans activité).
