@@ -1200,12 +1200,14 @@ function isInland(s){return s?.waterType==='lake'||['annecy','verdon','gardalake
 function meteoCell(s){return isInland(s)?'land':'sea';}
 /* Aperçus de conditions : réponses gardées 30 min et pause de 2 min après un refus (429/503) du service. */
 var meteoPauseUntil=0;
+/* Travail non urgent (cache, accueil caché) : au repos du fil principal, pas pendant un défilement. */
+function whenIdle(fn){try{if(window.requestIdleCallback)requestIdleCallback(()=>fn(),{timeout:1500});else setTimeout(fn,200);}catch(e){fn();}}
 function meteoCached(url){
   const key='oceanbuddy_meteo:'+url;
   try{const hit=JSON.parse(sessionStorage.getItem(key)||'null');if(hit&&Date.now()-hit.t<18e5)return Promise.resolve(hit.d);}catch(e){}
   if(Date.now()<meteoPauseUntil)return Promise.resolve(null);
   return fetch(url).then(r=>{if(r.status===429||r.status===503){meteoPauseUntil=Date.now()+12e4;throw Error('busy');}if(!r.ok)throw Error('Conditions indisponibles');return r.json();})
-    .then(d=>{try{sessionStorage.setItem(key,JSON.stringify({t:Date.now(),d}));}catch(e){}return d;}).catch(()=>null);
+    .then(d=>{const t=Date.now();whenIdle(()=>{try{sessionStorage.setItem(key,JSON.stringify({t,d}));}catch(e){}});return d;}).catch(()=>null);
 }
 function renderConditions(s,live){
   const wind=live?.wind||'—',swell=live?.swell||'—',temp=live?.temp||'—',tide=live?.tide||'—';
@@ -1480,8 +1482,13 @@ function queuePreviewCondition(id){
   conditionQueue.add(id);
   if(!conditionTimer)conditionTimer=setTimeout(flushPreviewConditions,120);
 }
+/* Pendant un défilement, les prévisions attendent la fin du geste (banc creme-logo : leurs réponses
+   tombaient au milieu du défilement de l’Explorer). */
+let wrapScrolledAt=0;
+document.getElementById('screenWrap')?.addEventListener('scroll',()=>{wrapScrolledAt=performance.now();},{passive:true});
 async function flushPreviewConditions(){
   conditionTimer=null;
+  if(performance.now()-wrapScrolledAt<250){conditionTimer=setTimeout(flushPreviewConditions,250);return;}
   const ids=[...conditionQueue].slice(0,8);
   ids.forEach(id=>{conditionQueue.delete(id);conditionPending.add(id);conditionAttempted.set(id,Date.now());});
   if(!ids.length)return;
@@ -1505,6 +1512,7 @@ async function fetchPreviewConditions(spots){
   ]);
   const wa=weather?(Array.isArray(weather)?weather:[weather]):[],ma=sea?(Array.isArray(sea)?sea:[sea]):[];
   let updated=false;
+  const cards=new Map();document.querySelectorAll('.spot[data-spot-id]').forEach(card=>{const l=cards.get(card.dataset.spotId);if(l)l.push(card);else cards.set(card.dataset.spotId,[card]);});
   spots.forEach((s,index)=>{
     const wc=(wa[index]||{}).current||{},mc=(ma[marineIndex.get(s.id)]||{}).current||{},data={};
     if(wc.wind_speed_10m!=null){data.wind=(`${Math.round(wc.wind_speed_10m)} km/h ${cardinal(wc.wind_direction_10m)}`).trim();data.windK=Math.round(wc.wind_speed_10m);}
@@ -1512,10 +1520,17 @@ async function fetchPreviewConditions(spots){
     if(mc.sea_surface_temperature!=null)data.temp=`${Math.round(mc.sea_surface_temperature)}°C`;
     if(!Object.keys(data).length)return;
     LIVE[s.id]=Object.assign(LIVE[s.id]||{},data,{live:true,fetchedAt:Date.now()});
-    document.querySelectorAll('.spot[data-spot-id]').forEach(card=>{if(card.dataset.spotId===s.id){const meta=card.querySelector('.spot-meta');if(meta)meta.innerHTML=spotCardMeta(s);}});
+    (cards.get(s.id)||[]).forEach(card=>{const meta=card.querySelector('.spot-meta');if(meta)meta.innerHTML=spotCardMeta(s);});
     updated=true;
   });
-  if(updated){renderLiveTop();renderToday();window.OceanPoulpy?.refresh();}
+  if(updated)refreshLiveHome();
+}
+/* Les lots de prévisions arrivent par vagues : l’accueil (chiffres, « aujourd’hui », Poulpy) est remis à jour une fois,
+   au repos, au lieu d’une fois par lot pendant le défilement d’un autre écran. */
+let liveHomeQueued=false;
+function refreshLiveHome(){
+  if(liveHomeQueued)return;liveHomeQueued=true;
+  whenIdle(()=>{liveHomeQueued=false;renderLiveTop();renderToday();window.OceanPoulpy?.refresh();});
 }
 function renderLiveTop(){
   const el=document.getElementById('liveTop');if(!el)return;
@@ -1961,7 +1976,7 @@ function toast(msg,ms){const t=document.getElementById('toast');const m=String(w
 const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',community:'cb',trips:'tb'};
 function vibrate(pattern){try{if(navigator.userActivation&&!navigator.userActivation.hasBeenActive)return;if(navigator.vibrate)navigator.vibrate(pattern);}catch(e){}}
 const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,community:3,profile:4,trips:2,surf:1.5};
-function resetScreenLive(el){el.classList.remove('sw-live');el.style.top='';el.style.left='';el.style.right='';el.style.transform='';el.style.opacity='';el.style.transition='';}
+function resetScreenLive(el){el.classList.remove('sw-live');el.style.top='';el.style.left='';el.style.right='';el.style.maxWidth='';el.style.transform='';el.style.opacity='';el.style.transition='';}
 function updateNavPill(s){
   const pill=document.getElementById('navPill');if(!pill)return;
   const btn=document.querySelector('.nav button[data-s="'+s+'"]:not(.center)');
@@ -2013,14 +2028,21 @@ function go(s){
   const dirFrom=SCREEN_ORDER.hasOwnProperty(cur.id)?SCREEN_ORDER[cur.id]:0;
   const dirTo=SCREEN_ORDER.hasOwnProperty(s)?SCREEN_ORDER[s]:0;
   const dir=dirTo>=dirFrom?1:-1;
-  wrap.style.minHeight=wrap.clientHeight+'px';
-  wrap.classList.add('transitioning');
-  wrap.scrollTop=0;
+  /* Les deux écrans glissent hors du flux, posés exactement là où ils se trouvent dans le flux (marges intérieures
+     de #screenWrap, largeur max.) : sinon la fiche sautait de la hauteur de la barre d’état à la fin du fondu
+     (CLS 0,04 à 0,15 à l’ouverture). Lectures de style seulement : ni clientHeight ni offsetWidth, qui forçaient
+     deux mises en page complètes (168 à 321 ms à x4-x6). #screenWrap a une hauteur fixe : pas de minHeight. */
   resetScreenLive(target);
+  /* Valeurs copiées tout de suite : getComputedStyle renvoie un objet vivant, relu après l’ajout des classes. */
+  const pad=getComputedStyle(wrap),padT=pad.paddingTop,padL=pad.paddingLeft,padR=pad.paddingRight;
+  const maxT=getComputedStyle(target).maxWidth,maxC=getComputedStyle(cur).maxWidth;
+  const place=(el,max)=>{el.style.top=padT;el.style.left=padL;el.style.right=padR;el.style.maxWidth=max;};
+  wrap.classList.add('transitioning');
   target.classList.add('active');
   target.classList.add('sw-live','sw-done');cur.classList.add('sw-live','sw-done');
+  place(target,maxT);place(cur,maxC);
   target.style.opacity='0';target.style.transform='translateX('+(dir*24)+'px)';
-  void target.offsetWidth;
+  wrap.scrollTop=0;
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     /* Une navigation plus récente peut avoir remplacé ce fondu sous la scène d’activité. */
     if(request!==goSeq)return;
@@ -2034,8 +2056,8 @@ function go(s){
     goTimer=null;
     cur.classList.remove('active');
     resetScreenLive(cur);resetScreenLive(target);
-    wrap.style.minHeight='';wrap.classList.remove('transitioning');
-    wrap.scrollTop=0;
+    wrap.classList.remove('transitioning');
+    if(wrap.scrollTop)wrap.scrollTop=0;
     /* Ne reprend pas le focus à un champ déjà activé (ex. recherche ouverte depuis la loupe). */
     if(!target.contains(document.activeElement))wrap.focus({preventScroll:true});
     if(s==='home')animateCounts();
