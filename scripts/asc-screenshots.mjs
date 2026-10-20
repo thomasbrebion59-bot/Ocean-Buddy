@@ -75,7 +75,7 @@ const versions = (await get(`/v1/apps/${app.id}/appStoreVersions?filter[platform
 const version = versions.find((v) => v.attributes.versionString === VERSION);
 if (!version) throw new Error(`Version ${VERSION} introuvable`);
 console.log(`App ${app.attributes.name} · version ${VERSION} : ${version.attributes.appStoreState}`);
-if (version.attributes.appStoreState !== 'PREPARE_FOR_SUBMISSION') throw new Error('La version doit être PREPARE_FOR_SUBMISSION');
+if (!['PREPARE_FOR_SUBMISSION', 'DEVELOPER_REJECTED'].includes(version.attributes.appStoreState)) throw new Error('La version doit être modifiable (PREPARE_FOR_SUBMISSION ou DEVELOPER_REJECTED)');
 
 const locs = (await get(`/v1/appStoreVersions/${version.id}/appStoreVersionLocalizations?limit=200`)).data;
 for (const locale of LOCALES) {
