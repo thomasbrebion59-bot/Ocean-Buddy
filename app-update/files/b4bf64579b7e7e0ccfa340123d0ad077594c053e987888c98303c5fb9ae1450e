@@ -1,0 +1,27 @@
+/* @creme-tokens */
+/* Clips muets en boucle : onboarding (c1) et bande d’ambiance de l’accueil (c3).
+   Toujours en position absolue : aucun décalage de mise en page. */
+.mm-layer{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden;background:var(--mm-poster) center/cover no-repeat}
+/* Voile léger : la lisibilité du texte blanc vient du dégradé .onb::before (allégé plus bas pour l’étape 0). */
+.mm-layer::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:color-mix(in srgb,var(--t-deep) 18%,transparent)}
+.mm-layer video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 50%;display:block}
+
+/* Accueil : bande derrière le grand titre, fondue dans la couleur de page. */
+.mm-band{display:none}
+@media(max-width:959px){
+  #home.hf-on>.mm-band{display:block;position:absolute;z-index:-1;pointer-events:none;overflow:hidden;
+    left:calc(-1 * var(--as-gutter,16px));right:calc(-1 * var(--as-gutter,16px));top:calc(-8px - var(--as-top,0px));height:300px;
+    background:var(--mm-poster) 50% 62%/cover no-repeat;
+    -webkit-mask-image:linear-gradient(180deg,#000 30%,transparent);mask-image:linear-gradient(180deg,#000 30%,transparent)}
+  #home>.mm-band video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 62%;display:block}
+  /* Voile couleur de page : garde le titre lisible (AA) quelle que soit l’image. */
+  #home>.mm-band::after{content:"";position:absolute;inset:0;pointer-events:none;
+    background:linear-gradient(180deg,color-mix(in srgb,var(--as-page) 45%,transparent) 0%,color-mix(in srgb,var(--as-page) 62%,transparent) 55%,var(--as-page) 100%)}
+}
+@media(prefers-reduced-motion:reduce){.mm-layer video,.mm-band video{display:none}}
+body.reduce-motion .mm-layer video,body.reduce-motion .mm-band video{display:none}
+/* Onboarding, étape 0 avec la vidéo : voile allégé (la manta et le soleil se voient), plus sombre
+   seulement derrière le titre et le bouton pour garder le texte blanc lisible. */
+.ocean-v2 .onb:has(>.mm-layer):has(.onb-step.active[data-step="0"])::before{
+  background:linear-gradient(180deg,color-mix(in srgb,var(--t-scrim) 18%,transparent) 0%,color-mix(in srgb,var(--t-scrim) 50%,transparent) 24%,color-mix(in srgb,var(--t-scrim) 42%,transparent) 48%,color-mix(in srgb,var(--t-scrim) 12%,transparent) 68%,color-mix(in srgb,var(--t-scrim) 55%,transparent) 100%)!important}
