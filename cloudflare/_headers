@@ -17,6 +17,12 @@
   Cache-Control: no-cache
 /assets/*
   Cache-Control: public, max-age=31536000, immutable
+# Icônes de l'app : remplacées sous le même nom (logo), donc pas « immutable ».
+/assets/app/*
+  ! Cache-Control
+  Cache-Control: public, max-age=86400
+/favicon.ico
+  Cache-Control: public, max-age=86400
 /app-update/latest.json
   Cache-Control: no-cache
 /app-update/manifests/*
