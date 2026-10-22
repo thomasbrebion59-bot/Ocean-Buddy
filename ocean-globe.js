@@ -37,11 +37,14 @@
   /* Textures sans à-coup. Une ImageBitmap est décodée hors du fil principal ; WebGL ignore pour elle
      UNPACK_FLIP_Y, d’où le retournement des bandes à la découpe (imageOrientation:'flipY'), vérifié une fois
      sur deux pixels : sans cette prise en charge (ou sans createImageBitmap), le globe garde l’ancien
-     chargement (TextureLoader). Non vérifié sur Safari / WKWebView réels : ce contrôle protège l’orientation. */
+     chargement (TextureLoader). Désactivé sur WebKit (voir bitmapsFlip) ; ce contrôle protège l’orientation ailleurs. */
   let bitmapFlip=null;
   function bitmapsFlip(){
     if(!bitmapFlip)bitmapFlip=(async()=>{
       if(typeof createImageBitmap!=='function')return false;
+      /* WebKit (iPhone, iPad, Safari, WKWebView) : les bandes se posent de travers (Terre en lamelles décalées, constaté sur iPhone 22 oct.).
+         Chargement d’un seul bloc, comme avant. */
+      if(/iP(hone|ad|od)/.test(navigator.userAgent)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)||navigator.vendor==='Apple Computer, Inc.')return false;
       const c=document.createElement('canvas');c.width=1;c.height=2;const x=c.getContext('2d');
       x.fillStyle='#f00';x.fillRect(0,0,1,1);x.fillStyle='#00f';x.fillRect(0,1,1,1);
       /* Même chemin que les bandes : découpe retournée d’une ImageBitmap. */

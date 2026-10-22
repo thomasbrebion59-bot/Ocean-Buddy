@@ -60,3 +60,11 @@ test('moteur three : copyTextureToTexture et dataReady présents dans le paquet 
   const three=fs.readFileSync(path.join(__dirname,'..','vendor','three','three.globe.min.js'),'utf8');
   assert.ok(three.includes('copyTextureToTexture'));assert.ok(three.includes('dataReady'));
 });
+
+test('le chargement par bandes est coupé sur WebKit (Terre en lamelles décalées sur iPhone)', () => {
+  const src = require('fs').readFileSync(require('path').join(__dirname, '..', 'ocean-globe.js'), 'utf8');
+  const fn = src.slice(src.indexOf('function bitmapsFlip'), src.indexOf('Tranche de travail'));
+  assert.match(fn, /iP\(hone\|ad\|od\)/);
+  assert.match(fn, /Apple Computer, Inc\./);
+  assert.ok(fn.indexOf('iP(hone') < fn.indexOf("createElement('canvas')"));
+});
