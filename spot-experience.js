@@ -72,15 +72,60 @@
     ['reef', whole('recifs?|reefs?|rochers?|roches?|falaises?')],
     ['wind', whole('vents?|kites?|voiles?')]
   ];
+  /* Deux schémas hors plage, choisis avant la cascade ci-dessus.
+     passe : plongée en mer (au moins la plongée, avec ou sans snorkeling) dont les dangers citent le mot « courant ».
+     riviere : plan d’eau « inland » dont les dangers citent une eau vive, sans grotte ni cavité (cénotes, sources de plongée).
+     Ces spots n’ont aucun schéma de plage : un courant de retour serait faux pour eux. L’Eisbach (vague artificielle où la ville interdit de nager),
+     Ginnie, Bonito et Silfra n’ont jamais le schéma de rivière : un nageur emporté par le courant n’y décrirait pas le danger réel. */
+  const PASSE_WORD = whole('courants?');
+  const RIVER_WORD = whole('rapides?|crues?|courants?|siphons?|seuils?|lachers?|barrages?');
+  const CAVE_WORD = whole('grottes?|cavernes?|cavites?|galeries?');
+  const NO_RIVER = new Set(['eisbach', 'ginnie', 'bonito', 'silfra']);
   /* Un schéma de plage (courant de retour, déferlement) serait faux pour un plan d’eau intérieur ou pour la plongée et le snorkeling seuls :
      ces spots gardent un schéma de récif ou de vent si le texte le cite, sinon aucun schéma (null). */
   function safetyKind(s) {
     const sports = typeof spotSports === 'function' ? spotSports(s) : (Array.isArray(s.sports) ? s.sports : []);
     const noBeach = isInland(s) || (sports.length > 0 && sports.every(id => id === 'plongee' || id === 'snorkeling'));
     const text = plain((s.dangers || []).map(x => x[1]).join(' '));
+    if (s.waterType === 'sea' && noBeach && sports.includes('plongee') && PASSE_WORD.test(text)) return 'passe';
+    if (s.waterType === 'inland' && !NO_RIVER.has(s.id) && RIVER_WORD.test(text) && !CAVE_WORD.test(text)) return 'riviere';
     const hit = DIAGRAM_WORDS.filter(([kind]) => !noBeach || kind !== 'rip').find(([, re]) => re.test(text));
     return hit ? hit[0] : noBeach ? null : 'shore';
   }
+
+  /* Consignes sous les schémas « passe » et « rivière » : chacune est reprise de data/sources/schemas.json (clé `ref`), qui garde les citations.
+     Le navigateur ne retient que le texte, l’éditeur, l’adresse et la date de consultation.
+     « pieds en avant » ne s’écrit qu’avec « gilet » (rapides, American Whitewater) ; sans gilet, la consigne est celle de la DLRG. */
+  const SRC = {
+    dan: {u: 'https://dan.org/alert-diver/article/diving-in-currents/', l: 'Divers Alert Network (DAN)', d: '2026-10-20'},
+    danFound: {u: 'https://dan.org/alert-diver/article/prepare-to-get-found/', l: 'Divers Alert Network (DAN)', d: '2026-10-20'},
+    padi: {u: 'https://blog.padi.com/drift-diving-tips-why-you-should-try-it-how-to-stay-safe/', l: 'PADI', d: '2026-10-20'},
+    dlrg: {u: 'https://www.dlrg.de/informieren/freizeit-im-wasser/selbst-und-fremdrettung/selbstrettung-aus-stroemungen/', l: 'Deutsche Lebens-Rettungs-Gesellschaft (DLRG)', d: '2026-10-20'},
+    fire: {u: 'https://www.firescotland.gov.uk/your-safety/water-safety/', l: 'Scottish Fire and Rescue Service', d: '2026-10-20'},
+    wss: {u: 'https://www.watersafetyscotland.org.uk/advice-hub/inland-safety/', l: 'Water Safety Scotland', d: '2026-10-20'},
+    sports: {u: 'https://www.sports.gouv.fr/se-baigner-en-riviere-ou-en-lac-des-risques-souvent-sous-estimes-10177', l: 'Ministère chargé des Sports (sports.gouv.fr)', d: '2026-10-20'},
+    awSwim: {u: 'https://site-media.americanwhitewater.org/Safety-Code-24-pg-44_Swimming-Techniques.pdf', l: 'American Whitewater', d: '2026-10-20'},
+    ffck: {u: 'https://www.ffck.org/pratiquer/loisirs/eaux-vives/', l: 'Fédération française de canoë-kayak (FFCK)', d: '2026-10-20'}
+  };
+  const SAFETY_TIPS = {
+    passe: [
+      {ref: 'schema.passe.consigne1', t: 'Ne lutte pas contre le courant : économise ton énergie et signale-toi.', src: [SRC.dan, SRC.padi]},
+      {ref: 'schema.passe.consigne2', t: 'Reste groupé avec ton guide : un groupe se repère mieux depuis la surface.', src: [SRC.dan, SRC.danFound]},
+      {ref: 'schema.passe.consigne3', t: 'En plongée dérivante, emporte une bouée de surface et un signal sonore.', src: [SRC.dan, SRC.padi]},
+      {ref: 'schema.passe.consigne4', t: 'Avant d’entrer, demande le briefing : courant, entrée, sortie.', src: [SRC.dan, SRC.padi]}
+    ],
+    riviere: [
+      {ref: 'schema.riviere.consigne_courant_baigneur', t: 'Ne lutte pas : laisse-toi porter et rejoins la rive en biais.', src: [SRC.dlrg]},
+      {ref: 'schema.riviere.consigne1_generique', t: 'Porte un gilet ou une aide à la flottabilité.', src: [SRC.fire, SRC.wss]},
+      {ref: 'schema.riviere.consigne2a', t: 'Renseigne-toi sur la météo et les courants avant d’y aller.', src: [SRC.sports]},
+      {ref: 'schema.riviere.consigne2b', t: 'Évite tout ce qui dépasse dans le courant : piles de pont, rochers, buissons, arbres. Un buisson ou une branche peut devenir un piège quand l’eau va vite.', src: [SRC.dlrg]},
+      {ref: 'schema.riviere.consigne3_eau_vive_avec_gilet', t: 'Avec un gilet, dans des rapides peu profonds ou encombrés : sur le dos, pieds en avant vers l’aval. Cherche ensuite un remous pour sortir du courant.', src: [SRC.awSwim]},
+      {ref: 'schema.riviere.consigne4', t: 'Débutant : rapproche-toi d’un club ou d’un encadrant pour t’initier à la rivière.', src: [SRC.ffck]}
+    ]
+  };
+  /* « Source : {libellé} · consultée le {date} » (même clé de traduction que la fiche pratique). */
+  const cite = x => `<a class="safety-tip-source" href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">Source : ${esc(x.l)} · consultée le ${esc(x.d.split('-').reverse().join('/'))}</a>`;
+  const safetyTips = kind => SAFETY_TIPS[kind] ? `<ul class="safety-tips">${SAFETY_TIPS[kind].map(tip => `<li>${esc(tip.t)}${tip.src.map(cite).join('')}</li>`).join('')}</ul>` : '';
 
   function drawSafety(s, live, marine) {
     const host = $('#spotSafetyLive'); if (!host) return;
@@ -89,12 +134,14 @@
       rip: `<svg viewBox="0 0 420 150" role="img" aria-label="Schéma d’un courant de retour"><path class="sand" d="M0 98h420v52H0z"/><path class="sea" d="M0 0h420v98H0z"/><path class="arrow" d="M90 105V55m-9 10 9-10 9 10M210 115V45m-9 10 9-10 9 10M330 105V55m-9 10 9-10 9 10"/><path class="safe" d="M25 22h370"/><text x="18" y="18">COURANT VERS LE LARGE</text><text x="142" y="140">SORTIR SUR LE CÔTÉ · NE PAS LUTTER</text></svg>`,
       reef: `<svg viewBox="0 0 420 150" role="img" aria-label="Schéma d’un récif peu profond"><path class="sea" d="M0 0h420v105H0z"/><path class="sand" d="M0 105h420v45H0z"/><path class="reef" d="M45 105q28-40 55 0 28-55 56 0 32-48 62 0 35-60 70 0 26-38 70 0"/><path class="safe" d="M30 28q70 28 140 0t220 0"/><text x="18" y="18">PROFONDEUR VARIABLE</text><text x="128" y="140">GARDER SES DISTANCES</text></svg>`,
       wind: `<svg viewBox="0 0 420 150" role="img" aria-label="Schéma d’un vent qui pousse au large"><path class="sand" d="M0 0h95v150H0z"/><path class="sea" d="M95 0h325v150H95z"/><path class="arrow" d="M42 75h210m-18-12 18 12-18 12"/><path class="safe" d="M95 18v114"/><text x="14" y="18">RIVE</text><text x="300" y="18">LARGE</text><text x="128" y="140">PLANIFIER LE RETOUR</text></svg>`,
-      shore: `<svg viewBox="0 0 420 150" role="img" aria-label="Schéma d’une zone de déferlement"><path class="sand" d="M0 110h420v40H0z"/><path class="sea" d="M0 0h420v110H0z"/><path class="wave" d="M15 78q60-60 120 0t120 0 120 0"/><path class="safe" d="M32 126h356"/><text x="122" y="20">ZONE DE DÉFERLEMENT</text><text x="130" y="145">OBSERVER AVANT D’ENTRER</text></svg>`
+      shore: `<svg viewBox="0 0 420 150" role="img" aria-label="Schéma d’une zone de déferlement"><path class="sand" d="M0 110h420v40H0z"/><path class="sea" d="M0 0h420v110H0z"/><path class="wave" d="M15 78q60-60 120 0t120 0 120 0"/><path class="safe" d="M32 126h356"/><text x="122" y="20">ZONE DE DÉFERLEMENT</text><text x="130" y="145">OBSERVER AVANT D’ENTRER</text></svg>`,
+      passe: `<svg viewBox="0 0 420 150" role="img" aria-label="Schéma d’un courant de passe"><path class="sea" d="M0 0h420v150H0z"/><path class="sand" d="M0 150v-30q70-12 140 0t140 6 140-10v34z"/><path class="arrow" d="M30 100h270m-17-11 17 11-17 11"/><path class="reef" d="M140 74h0M170 68h0M200 76h0"/><path class="safe" d="M170 62V36"/><path class="wave" d="M170 30h0"/><text x="18" y="18">SENS DU COURANT</text><text x="186" y="34">BOUÉE EN SURFACE</text><text x="30" y="143">NE LUTTE PAS · RESTE GROUPÉ AVEC TON GUIDE</text></svg>`,
+      riviere: `<svg viewBox="0 0 420 150" role="img" aria-label="Schéma d’une rivière à courant"><path class="sand" d="M0 0h420v26H0zM0 124h420v26H0z"/><path class="sea" d="M0 26h420v98H0z"/><path class="arrow" d="M25 50h120m-16-10 16 10-16 10M25 102h120m-16-10 16 10-16 10"/><path class="safe" d="M190 76l72 48"/><path class="wave" d="M190 76h0"/><path class="reef" d="M280 26l30 56m-22-22 14-4m-4 22 16-6"/><text x="18" y="18">SENS DU COURANT</text><text x="316" y="50">ARBRE : ÉVITE</text><text x="18" y="143">NE LUTTE PAS · REJOINS LA RIVE EN BIAIS</text></svg>`
     };
     const current = live?.current && live.current !== '—' ? live.current : 'Donnée indisponible';
     const updated=Number.isFinite(live?.fetchedAt)?new Intl.DateTimeFormat('fr-FR',{dateStyle:'short',timeStyle:'short'}).format(new Date(live.fetchedAt)):'heure indisponible';
     const head = '<div><small>LECTURE DU SECTEUR</small><b>Courants & dangers à vérifier</b></div>';
-    const figure = kind ? `<div class="safety-diagram">${diagrams[kind]}</div>` : '';
+    const figure = kind ? `<div class="safety-diagram">${diagrams[kind]}</div>${safetyTips(kind)}` : '';
     /* Hors mer : ni courant marin, ni variation sur 24 h, ni marée, ni badge de modèle (mesures marines). Sans schéma, pas de carte vide. */
     if (inland) {
       host.hidden = !kind;

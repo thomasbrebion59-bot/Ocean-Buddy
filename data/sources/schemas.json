@@ -1,0 +1,440 @@
+{
+ "_meta": {
+  "groupe": "A7",
+  "date": "2026-10-22",
+  "role": "Citations complètes des consignes affichées sous les schémas « passe » et « rivière » (spot-experience.js, constante SAFETY_TIPS, clé `ref`). Jamais chargé par le navigateur : il ne garde que le texte, l'éditeur, l'adresse et la date. Le test tests/spot-safety-diagram.test.js vérifie que chaque texte et chaque adresse du code figurent ici.",
+  "regle": "Seules les entrées status « sourcé » avec verif.ok true sont affichées. Une citation courte est recopiée telle que la recherche l'a lue (WebFetch ou PDF) ; à rouvrir avant toute publication.",
+  "sources_recherche": "scratchpad/conseils2/recherche/schemas.verifie.json et manques-coherence.verifie.json (consultées le 2026-10-20)"
+ },
+ "schema.passe.consigne1": {
+  "fr": "Ne lutte pas contre le courant : économise ton énergie et signale-toi.",
+  "affiche": "passe",
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "DAN (don't fight it ; audible signal) et PADI (not swim against the current) relus : phrases exactes présentes. « économise ton énergie » vient de PADI (tire yourself out).",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://dan.org/alert-diver/article/diving-in-currents/",
+    "publisher": "Divers Alert Network (DAN)",
+    "title": "Diving in Currents (Mike Ange, Alert Diver, Q4 2010, publié le 2010-11-01)",
+    "consulted": "2026-10-20",
+    "quote": "If you make the mistake of getting down-current of the boat, and the current is too strong to swim against, don't fight it.",
+    "supports": "Face à un courant trop fort pour nager contre, DAN conseille de ne pas lutter."
+   },
+   {
+    "url": "https://blog.padi.com/drift-diving-tips-why-you-should-try-it-how-to-stay-safe/",
+    "publisher": "PADI",
+    "title": "Drift Diving Tips: Why You Should Try It & How To Stay Safe (PADI Blog, 2023-03-13)",
+    "consulted": "2026-10-20",
+    "quote": "You should not swim against the current because you’ll tire yourself out.",
+    "supports": "Nager contre le courant épuise : ne pas le faire en dérive."
+   },
+   {
+    "url": "https://dan.org/alert-diver/article/diving-in-currents/",
+    "publisher": "Divers Alert Network (DAN)",
+    "title": "Diving in Currents (Mike Ange, Alert Diver, Q4 2010, publié le 2010-11-01)",
+    "consulted": "2026-10-20",
+    "quote": "Complement the visual signal with an audible one; continue to signal the crew until you are sure they have seen you.",
+    "supports": "Une fois emporté, on signale (visuel + sonore) jusqu’à être vu."
+   }
+  ],
+  "notes": "Première ligne sous le dessin. « signale-toi » renvoie à la 3e consigne. Aucune consigne médicale. Les sources parlent de plongeurs ; pour un snorkeleur la même idée (ne pas nager contre un courant fort) n'est pas publiée par DAN dans la page lue : la consigne 4 couvre le snorkeling."
+ },
+ "schema.passe.consigne2": {
+  "fr": "Reste groupé avec ton guide : un groupe se repère mieux depuis la surface.",
+  "affiche": "passe",
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "DAN (« You should plan to stay in a group, ... ») et DAN prepare-to-get-found relus, phrases exactes. « avec ton guide » : ajout mineur, DAN parle du groupe.",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://dan.org/alert-diver/article/diving-in-currents/",
+    "publisher": "Divers Alert Network (DAN)",
+    "title": "Diving in Currents (Mike Ange, Alert Diver, Q4 2010, publié le 2010-11-01)",
+    "consulted": "2026-10-20",
+    "quote": "You should plan to stay in a group,",
+    "supports": "En plongée dérivante on prévoit de rester en groupe (extrait de phrase)."
+   },
+   {
+    "url": "https://dan.org/alert-diver/article/prepare-to-get-found/",
+    "publisher": "Divers Alert Network (DAN)",
+    "title": "Prepare to Get Found (Jack Connick, Alert Diver, Q2 2014, publié le 2014-05-01)",
+    "consulted": "2026-10-20",
+    "quote": "A large group is much easier to spot than a small one, so stick together if you’re with other divers.",
+    "supports": "Un groupe soudé est plus facile à repérer depuis la surface."
+   }
+  ],
+  "notes": "Dessin : trois plongeurs côte à côte. Réserve de relecture : « avec ton guide » n'est pas dans les citations (DAN écrit « stick together if you're with other divers ») ; la consigne reste celle du plan."
+ },
+ "schema.passe.consigne3": {
+  "fr": "En plongée dérivante, emporte une bouée de surface et un signal sonore.",
+  "affiche": "passe",
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "DAN (visual and audible signaling device on every drift dive) et PADI (DSMB) confirmés. CORRECTION : « (sifflet ou corne) » retiré, ni DAN ni PADI ne citent sifflet ou corne.",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://dan.org/alert-diver/article/diving-in-currents/",
+    "publisher": "Divers Alert Network (DAN)",
+    "title": "Diving in Currents (Mike Ange, Alert Diver, Q4 2010, publié le 2010-11-01)",
+    "consulted": "2026-10-20",
+    "quote": "you should have at least a visual and audible signaling device with you on every drift dive",
+    "supports": "Signal visuel et signal sonore pour chaque plongée dérivante (extrait de phrase)."
+   },
+   {
+    "url": "https://blog.padi.com/drift-diving-tips-why-you-should-try-it-how-to-stay-safe/",
+    "publisher": "PADI",
+    "title": "Drift Diving Tips: Why You Should Try It & How To Stay Safe (PADI Blog, 2023-03-13)",
+    "consulted": "2026-10-20",
+    "quote": "The other divers in the group should also carry delayed surface marker buoys that can be deployed if they get separated.",
+    "supports": "Bouée de surface à déploiement différé portée par chaque plongeur du groupe."
+   },
+   {
+    "url": "https://blog.padi.com/drift-diving-tips-why-you-should-try-it-how-to-stay-safe/",
+    "publisher": "PADI",
+    "title": "Drift Diving Tips: Why You Should Try It & How To Stay Safe (PADI Blog, 2023-03-13)",
+    "consulted": "2026-10-20",
+    "quote": "The dive leader of the group should use a surface marker buoy.",
+    "supports": "Le guide de palanquée utilise une bouée de surface."
+   }
+  ],
+  "notes": "« corne » et « sifflet » : DAN écrit « audible signaling device » (« whistles or horns » figure dans le résumé du cas Stranded While Drift Diving, lu mais non citable : texte protégé). Si l'on veut rester au plus près de la citation : « un signal sonore » seul. Le guide ou le centre fournit souvent le matériel : la ligne ne promet pas qu'il le fait."
+ },
+ "schema.passe.consigne4": {
+  "fr": "Avant d’entrer, demande le briefing : courant, entrée, sortie.",
+  "affiche": "passe",
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "DAN briefing, DAN snorkelers, FFESSM (page du 27 avril 2026) confirmés. PADI : la phrase continue (« ...entry and exit points are, the planned duration or distance of the dive, »), citation corrigée. DAN « sweep them out to sea » : phrase plus longue (« ...tow them under the surface or throw them onto rocks »).",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://dan.org/alert-diver/article/diving-in-currents/",
+    "publisher": "Divers Alert Network (DAN)",
+    "title": "Diving in Currents (Mike Ange, Alert Diver, Q4 2010, publié le 2010-11-01)",
+    "consulted": "2026-10-20",
+    "quote": "A detailed dive briefing should always precede a dive involving currents",
+    "supports": "Un briefing détaillé précède toute plongée avec courant (extrait de phrase)."
+   },
+   {
+    "url": "https://blog.padi.com/drift-diving-tips-why-you-should-try-it-how-to-stay-safe/",
+    "publisher": "PADI",
+    "title": "Drift Diving Tips: Why You Should Try It & How To Stay Safe (PADI Blog, 2023-03-13)",
+    "consulted": "2026-10-20",
+    "quote": "Everyone should know where the entry and exit points are, the planned duration or distance of the dive,",
+    "supports": "Tout le groupe connaît les points d’entrée et de sortie."
+   }
+  ],
+  "notes": "Ligne la plus générale : s'applique aussi au snorkeling (DAN, guide du voyageur : « seek information about local water conditions »). Pas dans le dessin. Option : ajouter la citation FFESSM (adapter sa plongée au courant) comme source française : « ffe_courant » ci-dessous.",
+  "sources_non_affichees": [
+   {
+    "url": "https://dan.org/health-medicine/travelers-medical-guide/travel-related-injuries/water-related-injuries-snorkeling-and-scuba-diving/",
+    "publisher": "Divers Alert Network (DAN)",
+    "title": "Travelers Medical Guide 5.5 : Snorkeling and Scuba Diving (page sans date)",
+    "consulted": "2026-10-20",
+    "quote": "Snorkelers should always seek information about local water conditions and hidden hazards.",
+    "supports": "Le snorkeleur s’informe des conditions locales avant d’entrer."
+   },
+   {
+    "url": "https://ffessm.fr/actualites/plonger-en-securite",
+    "publisher": "Fédération française d’études et de sports sous-marins (FFESSM)",
+    "title": "Plonger en sécurité (FFESSM, publié le 2026-04-27)",
+    "consulted": "2026-10-20",
+    "quote": "« adaptez votre plongée à votre environnement (visibilité, température de l'eau, courant, relief...) »",
+    "supports": "La fédération cite le courant parmi les éléments à prendre en compte pour adapter sa plongée."
+   },
+   {
+    "url": "https://dan.org/health-medicine/travelers-medical-guide/travel-related-injuries/water-related-injuries-snorkeling-and-scuba-diving/",
+    "publisher": "Divers Alert Network (DAN)",
+    "title": "Travelers Medical Guide 5.5 : Snorkeling and Scuba Diving (page sans date)",
+    "consulted": "2026-10-20",
+    "quote": "Strong water movement such as waves or currents can also overcome snorkelers, sweep them out to sea",
+    "supports": "Un courant fort peut emporter un snorkeleur au large (extrait de phrase)."
+   }
+  ]
+ },
+ "schema.passe.legende": {
+  "affiche": "passe",
+  "fr": "Ne lutte pas contre le courant, reste groupé avec ton guide.",
+  "dans_le_dessin": "NE LUTTE PAS · RESTE GROUPÉ AVEC TON GUIDE",
+  "appuye_sur": [
+   "schema.passe.consigne1",
+   "schema.passe.consigne2"
+  ],
+  "notes": "« laisse-toi porter » (titre de la recherche) retiré : aucune citation DAN ou PADI ne le dit pour la plongée."
+ },
+ "schema.riviere.consigne1": {
+  "fr": "Porte un gilet ou une aide à la flottabilité marquée CE.",
+  "affiche": false,
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "WebFetch de chaque URL : page existe, citation retrouvée mot pour mot et fait prouvé.",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://www.ffck.org/nos-sites/reglementation/prevention/",
+    "publisher": "Fédération française de canoë-kayak (FFCK)",
+    "title": "Sécurité | FFCK",
+    "consulted": "2026-10-20",
+    "quote": "L’aide à la flottabilité doit être marqué « CE ».",
+    "supports": "La FFCK exige une aide à la flottabilité marquée CE."
+   },
+   {
+    "url": "https://www.firescotland.gov.uk/your-safety/water-safety/",
+    "publisher": "Scottish Fire and Rescue Service (service public)",
+    "title": "Boat and water sport safety | Scottish Fire and Rescue Service",
+    "consulted": "2026-10-20",
+    "quote": "Always wear a suitable personal flotation device.",
+    "supports": "Toujours porter un équipement de flottaison adapté (sports nautiques)."
+   },
+   {
+    "url": "https://www.watersafetyscotland.org.uk/advice-hub/inland-safety/",
+    "publisher": "Water Safety Scotland (partenariat national écossais de sécurité aquatique)",
+    "title": "Inland Safety | WSS",
+    "consulted": "2026-10-20",
+    "quote": "Wear buoyancy aids/lifejackets",
+    "supports": "Porter aide à la flottabilité ou gilet près de l’eau intérieure."
+   }
+  ],
+  "notes": "Texte cité par la checklist de field-guide.js (sourceRef). « marquée CE » vient de la FFCK (France) : non repris dans le schéma, qui s'adresse à tous les pays. « Aussi pour une descente tranquille » : à retirer (non cité). La page FFCK a été lue via WebFetch ; la citation CE doit être recontrôlée en ouvrant la page. Le seuil de flottabilité (50 N / 100 N en classe III et plus) existe sur la même page FFCK, non repris."
+ },
+ "schema.riviere.consigne1_generique": {
+  "fr": "Porte un gilet ou une aide à la flottabilité.",
+  "affiche": "riviere",
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "WebFetch de chaque URL : page existe, citation retrouvée mot pour mot et fait prouvé.",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://www.firescotland.gov.uk/your-safety/water-safety/",
+    "publisher": "Scottish Fire and Rescue Service (service public)",
+    "title": "Boat and water sport safety | Scottish Fire and Rescue Service",
+    "consulted": "2026-10-20",
+    "quote": "Always wear a suitable personal flotation device.",
+    "supports": "Toujours porter un équipement de flottaison adapté (sports nautiques)."
+   },
+   {
+    "url": "https://www.watersafetyscotland.org.uk/advice-hub/inland-safety/",
+    "publisher": "Water Safety Scotland (partenariat national écossais de sécurité aquatique)",
+    "title": "Inland Safety | WSS",
+    "consulted": "2026-10-20",
+    "quote": "Wear buoyancy aids/lifejackets",
+    "supports": "Porter aide à la flottabilité ou gilet près de l’eau intérieure."
+   }
+  ],
+  "notes": "Version sans « marquée CE » : les deux sources (Scottish Fire and Rescue Service, Water Safety Scotland) parlent de gilet ou d'aide à la flottabilité sans marquage."
+ },
+ "schema.riviere.consigne2a": {
+  "fr": "Renseigne-toi sur la météo et les courants avant d’y aller.",
+  "affiche": "riviere",
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "WebFetch de chaque URL : page existe, citation retrouvée mot pour mot et fait prouvé.",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://www.sports.gouv.fr/se-baigner-en-riviere-ou-en-lac-des-risques-souvent-sous-estimes-10177",
+    "publisher": "Ministère chargé des Sports (France), sports.gouv.fr",
+    "title": "Se baigner en rivière ou en lac : des risques souvent sous-estimés",
+    "consulted": "2026-10-20",
+    "quote": "renseignez-vous sur les conditions météorologiques, les courants et les marées et vérifiez que le drapeau n'est pas rouge.",
+    "supports": "Se renseigner sur la météo et les courants avant la baignade."
+   }
+  ],
+  "notes": "Première phrase de schema.riviere.consigne2 (manques-coherence), avec sa seule citation."
+ },
+ "schema.riviere.consigne2b": {
+  "fr": "Évite tout ce qui dépasse dans le courant : piles de pont, rochers, buissons, arbres. Un buisson ou une branche peut devenir un piège quand l’eau va vite.",
+  "affiche": "riviere",
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "WebFetch de chaque URL : page existe, citation retrouvée mot pour mot et fait prouvé.",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://www.dlrg.de/informieren/freizeit-im-wasser/selbst-und-fremdrettung/selbstrettung-aus-stroemungen/",
+    "publisher": "DLRG e.V. (Deutsche Lebens-Rettungs-Gesellschaft, organisation allemande de secours aquatique)",
+    "title": "Selbstrettung aus Strömungen | DLRG e.V.",
+    "consulted": "2026-10-20",
+    "quote": "Vermeide als Schwimmer in strömenden Gewässern jede Art von Einbauten wie Brückenpfeiler, Felsen, Büsche oder Bäume.",
+    "supports": "Éviter piles de pont, rochers, buissons, arbres dans un courant."
+   },
+   {
+    "url": "https://www.dlrg.de/informieren/freizeit-im-wasser/selbst-und-fremdrettung/selbstrettung-aus-stroemungen/",
+    "publisher": "DLRG e.V. (Deutsche Lebens-Rettungs-Gesellschaft, organisation allemande de secours aquatique)",
+    "title": "Selbstrettung aus Strömungen | DLRG e.V.",
+    "consulted": "2026-10-20",
+    "quote": "Ein Busch oder ein Ast im Wasser kann bei schneller Strömung zur Todesfalle werden",
+    "supports": "Un buisson ou une branche peut être mortel dans un courant rapide."
+   }
+  ],
+  "notes": "Deuxième et troisième phrases de schema.riviere.consigne2. « Todesfalle » rendu par « piège ». La source s'adresse aux nageurs."
+ },
+ "schema.riviere.consigne_courant_baigneur": {
+  "fr": "Ne lutte pas : laisse-toi porter et rejoins la rive en biais.",
+  "affiche": "riviere",
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "WebFetch de chaque URL : page existe, citation retrouvée mot pour mot et fait prouvé.",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://www.dlrg.de/informieren/freizeit-im-wasser/selbst-und-fremdrettung/selbstrettung-aus-stroemungen/",
+    "publisher": "DLRG e.V. (Deutsche Lebens-Rettungs-Gesellschaft, organisation allemande de secours aquatique)",
+    "title": "Selbstrettung aus Strömungen | DLRG e.V.",
+    "consulted": "2026-10-20",
+    "quote": "Daher solltest du auch nie gegen die Strömung anschwimmen: Denn das ist kräftezehrend und führt selten zum Erfolg.",
+    "supports": "Ne pas nager contre le courant : épuisant et rarement efficace."
+   },
+   {
+    "url": "https://www.dlrg.de/informieren/freizeit-im-wasser/selbst-und-fremdrettung/selbstrettung-aus-stroemungen/",
+    "publisher": "DLRG e.V. (Deutsche Lebens-Rettungs-Gesellschaft, organisation allemande de secours aquatique)",
+    "title": "Selbstrettung aus Strömungen | DLRG e.V.",
+    "consulted": "2026-10-20",
+    "quote": "versuche, langsam – dabei schräg und gleichzeitig mit der Strömung – ans Ufer zu kommen.",
+    "supports": "Rejoindre la rive lentement, en biais, avec le courant."
+   }
+  ],
+  "notes": "Légende du schéma rivière (verdict_dos_pieds_aval). Version courte et sans gilet de la consigne DLRG : le repli « sur le dos, pieds en avant » (forces épuisées) n'est PAS affiché, pour que « pieds » n'apparaisse jamais sans « gilet ». Réponse à la question : « sur le dos, pieds vers l'aval » convient au baigneur sans gilet seulement en dernier recours, quand il est près de l'épuisement (DLRG), après avoir d'abord cherché à rejoindre la rive en biais avec le courant. Ce n'est pas une règle d'entrée dans l'eau. American Whitewater la donne pour des rapides peu profonds ou encombrés, avec gilet (voir item suivant) ; pour l'eau lente ou profonde AW demande de nager activement vers la rive. DLRG ne mentionne ni gilet ni « aval » en toutes lettres : « dans le sens du courant » traduit « mit der Strömung ». Ne promet pas que la manœuvre sauve.",
+  "fr_complet_non_affiche": "Si le courant t’emporte, ne lutte pas contre lui : laisse-toi porter et rejoins la rive lentement, en biais, dans le sens du courant. Si tes forces te lâchent, mets-toi sur le dos, pieds en avant, et laisse-toi porter.",
+  "sources_non_affichees": [
+   {
+    "url": "https://www.dlrg.de/informieren/freizeit-im-wasser/selbst-und-fremdrettung/selbstrettung-aus-stroemungen/",
+    "publisher": "DLRG e.V. (Deutsche Lebens-Rettungs-Gesellschaft, organisation allemande de secours aquatique)",
+    "title": "Selbstrettung aus Strömungen | DLRG e.V.",
+    "consulted": "2026-10-20",
+    "quote": "Wenn deine Kräfte in der Strömung so stark nachgelassen haben, dass du der Erschöpfung nahe bist,",
+    "supports": "Condition : forces presque épuisées dans le courant (début de la phrase suivante)."
+   },
+   {
+    "url": "https://www.dlrg.de/informieren/freizeit-im-wasser/selbst-und-fremdrettung/selbstrettung-aus-stroemungen/",
+    "publisher": "DLRG e.V. (Deutsche Lebens-Rettungs-Gesellschaft, organisation allemande de secours aquatique)",
+    "title": "Selbstrettung aus Strömungen | DLRG e.V.",
+    "consulted": "2026-10-20",
+    "quote": "leg dich auf den Rücken und lass dich mit den Füßen (und mit Blick) nach vorne treiben.",
+    "supports": "Alors se coucher sur le dos et dériver pieds en avant, regard vers l’avant."
+   }
+  ],
+  "verdict_dos_pieds_aval": "Pour un baigneur sans gilet : d'abord ne pas lutter, dériver avec le courant et rejoindre la rive en biais ; « sur le dos, pieds en avant » seulement en dernier recours, près de l'épuisement (DLRG). La consigne AW « sur le dos, pieds vers l'aval » vise des rapides peu profonds ou encombrés avec gilet : elle ne s'affiche pas seule aux baigneurs."
+ },
+ "schema.riviere.consigne3_eau_vive_avec_gilet": {
+  "fr": "Avec un gilet, dans des rapides peu profonds ou encombrés : sur le dos, pieds en avant vers l’aval. Cherche ensuite un remous pour sortir du courant.",
+  "affiche": "riviere",
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "PDF Swimming Techniques lu : dos, pieds vers l'aval = rapides peu profonds ou encombrés ; remous = nage agressive (eau lente ou rapides profonds). Le FR les enchaîne avec « ensuite » : la source demande d'alterner ; à relire.",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://site-media.americanwhitewater.org/Safety-Code-24-pg-44_Swimming-Techniques.pdf",
+    "publisher": "American Whitewater",
+    "title": "Swimming Techniques : Self-Rescue from River (American Whitewater, Safety Code 2024)",
+    "consulted": "2026-10-20",
+    "quote": "lie on your back with your feet held high and pointed downstream.",
+    "supports": "Dans des rapides peu profonds ou encombrés, nager sur le dos, pieds vers l’aval (début de phrase : « When swimming in shallow or obstructed rapids, »)."
+   },
+   {
+    "url": "https://site-media.americanwhitewater.org/Safety-Code-24-pg-44_Swimming-Techniques.pdf",
+    "publisher": "American Whitewater",
+    "title": "Swimming Techniques : Self-Rescue from River (American Whitewater, Safety Code 2024)",
+    "consulted": "2026-10-20",
+    "quote": "Watch for eddies and slackwater and use them to get out of the current.",
+    "supports": "Utiliser les remous et l’eau calme pour sortir du courant."
+   }
+  ],
+  "notes": "Seule consigne qui contient « pieds » ; « Avec un gilet » est écrit dans la phrase (le texte American Whitewater suppose un gilet). Les deux citations sont celles du PDF lu directement par la première recherche. La phrase « Dans l'eau lente ou profonde, nage plutôt vers la rive » (manques-coherence) n'est pas affichée : elle n'a pas de citation relue. Réserve de manques-coherence : Le PDF est illisible via WebFetch (polices encodées). Contenu confirmé par WebSearch : fiche AW « When swimming in shallow or obstructed rapids », pieds levés vers l'aval ; formulation exacte non relue mot pour mot. Source américaine, usage limité à l'eau vive avec gilet.",
+  "fr_non_affiche": "Avec un gilet, dans des rapides peu profonds ou encombrés : sur le dos, pieds en avant vers l’aval. Dans l’eau lente ou profonde, nage plutôt vers la rive."
+ },
+ "schema.riviere.consigne4": {
+  "fr": "Débutant : rapproche-toi d’un club ou d’un encadrant pour t’initier à la rivière.",
+  "affiche": "riviere",
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "FFCK eaux-vives : phrase présente (apostrophes typographiques). La 2e citation AW n'appuie pas l'encadrement ; seule la FFCK porte la consigne.",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://www.ffck.org/pratiquer/loisirs/eaux-vives/",
+    "publisher": "Fédération française de canoë-kayak (FFCK)",
+    "title": "Loisirs > Eaux vives (Fédération française de canoë-kayak, page sans date)",
+    "consulted": "2026-10-20",
+    "quote": "« il est indispensable pour le débutant de se rapprocher d'un club ou d'un cadre pour s'initier à la rivière. »",
+    "supports": "Le débutant s’initie à la rivière avec un club ou un cadre."
+   }
+  ],
+  "notes": "Reformulé au plus près de la citation FFCK (« se rapprocher d'un club ou d'un cadre pour s'initier à la rivière ») : « cadre » rendu par « encadrant », « guide » abandonné (non cité). Version de la recherche : « Débutant : fais-toi encadrer par un club ou un guide. ». La marge de sécurité d'American Whitewater (eau froide ou haute) n'est pas reprise.",
+  "fr_recherche": "Débutant : fais-toi encadrer par un club ou un guide."
+ },
+ "schema.riviere.consigne_eau_froide": {
+  "fr": "Si tu tombes dans l’eau froide, résiste à l’envie de nager fort : mets-toi sur le dos, bras et jambes écartés, et flotte.",
+  "affiche": false,
+  "status": "sourcé",
+  "verif": {
+   "ok": true,
+   "how": "WebFetch de chaque URL : page existe, citation retrouvée mot pour mot et fait prouvé. « jusqu’à ce que tu reprennes ton souffle » retiré : absent de la page (qui parle du choc initial d'environ 90 secondes).",
+   "consulted": "2026-10-20"
+  },
+  "consulted": "2026-10-20",
+  "sources": [
+   {
+    "url": "https://www.watersafetyscotland.org.uk/advice-hub/cold-water-shock/",
+    "publisher": "Water Safety Scotland (partenariat national écossais de sécurité aquatique, affilié à la RoSPA)",
+    "title": "Cold Water Shock | Water Safety Scotland",
+    "consulted": "2026-10-20",
+    "quote": "Fight your instinct to swim hard or thrash about.",
+    "supports": "Ne pas nager fort ni se débattre à la chute dans l’eau froide."
+   },
+   {
+    "url": "https://www.watersafetyscotland.org.uk/advice-hub/cold-water-shock/",
+    "publisher": "Water Safety Scotland (partenariat national écossais de sécurité aquatique, affilié à la RoSPA)",
+    "title": "Cold Water Shock | Water Safety Scotland",
+    "consulted": "2026-10-20",
+    "quote": "Try to remain calm, relax, turn onto your back and float with your arms and legs extended.",
+    "supports": "Rester calme, se mettre sur le dos et flotter bras et jambes écartés."
+   }
+  ],
+  "notes": "Non affichée : source générale (chute en eau froide), pas spécifique aux rivières à courant ; elle contredirait « rejoins la rive en biais » si elle apparaissait sur tous les spots rivière. Source générale (chute en eau froide), pas spécifique aux rivières à courant. À utiliser pour les eaux froides (Futaleufú, Soča) ; à ne pas confondre avec la consigne de dérive dans le courant."
+ },
+ "_dessins": {
+  "passe": "<svg viewBox=\"0 0 420 150\" role=\"img\" aria-label=\"Schéma d’une plongée dans le courant : le groupe reste ensemble et dérive avec le courant, une bouée de surface le signale\"><path class=\"sea\" d=\"M0 0h420v150H0z\"/><path class=\"sand\" d=\"M0 150v-30q70-12 140 0t140 6 140-10v34z\"/><path class=\"arrow\" d=\"M30 100h270m-17-11 17 11-17 11\"/><path class=\"reef\" d=\"M140 74h0M170 68h0M200 76h0\"/><path class=\"safe\" d=\"M170 62V36\"/><path class=\"wave\" d=\"M170 30h0\"/><text x=\"18\" y=\"18\">COURANT</text><text x=\"186\" y=\"34\">BOUÉE EN SURFACE</text><text x=\"40\" y=\"143\">RESTE AVEC LE GROUPE · NE LUTTE PAS</text></svg>",
+  "riviere": "Dessin refait : le nageur sur le dos, pieds vers l'aval et le remous (recherche) sont remplacés par une tête de nageur et un trajet en pointillés qui rejoint la berge en biais, avec le courant (DLRG). Arbre immergé conservé (DLRG : éviter arbres et buissons).",
+  "remarque": "Le dessin « passe » du dépôt reprend celui de la recherche ; la légende est celle du plan."
+ }
+}
