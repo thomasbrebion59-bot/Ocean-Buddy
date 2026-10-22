@@ -304,16 +304,27 @@ test('niveau : plongée en caverne (cenote_dosojos, grancenote) à confirmer ave
   assert.match(html,/<dt>Repère de niveau<\/dt><dd>Niveau à confirmer avec un centre local<\/dd>/);
 });
 
-test('légende de la jauge : une ligne sous le compteur, masquée tant que les points le sont',()=>{
+test('légende de la jauge : une ligne sous le compteur, visible avec les points de la liste',()=>{
   const inserted=[];
   loadGuide({},{'#spotResultCount':{insertAdjacentHTML:(where,html)=>inserted.push([where,html])}});
   assert.equal(inserted.length,1);
   assert.equal(inserted[0][0],'afterend');
   assert.match(inserted[0][1],/id="spotDangerLegend"[^>]*>Points de danger : estimation Ocean Buddy d’après les dangers listés<\/p>/);
   const css=read('field-guide.css').replace(/\/\*[\s\S]*?\*\//g,'');
-  const hide=[...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].find(m=>/\.danger-dots/.test(m[1])&&/display:none/.test(m[2]));
-  assert.ok(hide,'la règle qui masque les points existe');
-  assert.match(hide[1],/\.field-danger-legend/,'la légende suit les points : elle ne décrit jamais des points absents');
+  const rules=[...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)];
+  assert.ok(!rules.some(m=>/\.field-danger-legend/.test(m[1])&&/display:none/.test(m[2])),'la légende n’est plus masquée');
+  const show=rules.find(m=>/\.ocean-v2 \.spot \.danger-dots(,|$)/.test(m[1].trim())&&/display:flex/.test(m[2]));
+  assert.ok(show,'les points sont rendus visibles dans la liste (l’emporte sur design.css)');
+});
+
+test('onglet Le spot : colonne flex, ordre Quand partir, conseil, essentiel, danger principal, description',()=>{
+  const css=read('field-guide.css').replace(/\/\*[\s\S]*?\*\//g,'');
+  const order=sel=>{const m=[...css.matchAll(/([^{}]+)\{([^{}]*)\}/g)].find(r=>r[1].trim().endsWith('>'+sel)&&/order:\d+/.test(r[2]));return m&&+m[2].match(/order:(\d+)/)[1];};
+  const seq=['#dSeasonTeaser','.field-tip','.field-visit','.field-main-danger','.field-story'].map(order);
+  assert.ok(seq.every(Number.isInteger),'chaque bloc a un order : '+seq);
+  assert.deepEqual([...seq].sort((a,b)=>a-b),seq,'ordre croissant');
+  assert.equal(new Set(seq).size,seq.length);
+  assert.match(css,/\.dcat\[data-cat="infos"\]\.field-overview:not\(\[style\*="none"\]\)\{display:flex;flex-direction:column/);
 });
 
 /* ---------- Planificateur : « Grosse houle » ---------- */

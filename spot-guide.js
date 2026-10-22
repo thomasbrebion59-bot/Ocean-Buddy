@@ -184,14 +184,14 @@
   }
   function aroundHTML(s){
     const items=aroundItems(s),lang=entry(s.id)?.w||'en',c=coordsOf(s.id);
-    const head=`<div class="guide-chapter"><span class="guide-chapter-number">02</span><span class="guide-chapter-label">À découvrir autour</span></div><div class="guide-heading"><div><h3>${esc(aroundTitle(s))}</h3><p>Des lieux réels, à moins de 30 km, pour une demi-journée hors de l’eau.</p></div></div>`;
+    const head=`<div class="guide-chapter"><span class="guide-chapter-number">02</span><span class="guide-chapter-label">À découvrir autour</span></div><div class="guide-heading"><div><h3>${esc(aroundTitle(s))}</h3><p>Des lieux réels, à moins de 30 km, pour une demi-journée hors de l’eau.</p></div></div><button type="button" class="guide-around-toggle" data-around-toggle aria-expanded="false" aria-controls="guideAroundBody">Voir les lieux</button>`;
     if(!items.length){
       const q=k=>'https://www.google.com/maps/search/'+encodeURIComponent(k)+(c?`/@${c.lat},${c.lon},12z`:encodeURIComponent(' '+s.loc));
-      return head+`<div class="guide-around-fallback"><p>Poulpy n’a pas encore sélectionné les incontournables de ce secteur. Explore les environs sur la carte :</p><div class="guide-chips">${[['panorama','Points de vue','point de vue'],['marche','Marchés','marché'],['rando','Randonnées','randonnée'],['musee','Musées','musée']].map(([k,label,query])=>`<a href="${esc(q(query))}" target="_blank" rel="noopener">${icon(k)}<span>${label}</span></a>`).join('')}</div></div>`;
+      return head+`<div class="guide-around-body" id="guideAroundBody" hidden><div class="guide-around-fallback"><p>Poulpy n’a pas encore sélectionné les incontournables de ce secteur. Explore les environs sur la carte :</p><div class="guide-chips">${[['panorama','Points de vue','point de vue'],['marche','Marchés','marché'],['rando','Randonnées','randonnée'],['musee','Musées','musée']].map(([k,label,query])=>`<a href="${esc(q(query))}" target="_blank" rel="noopener">${icon(k)}<span>${label}</span></a>`).join('')}</div></div></div>`;
     }
-    return head+`<div class="guide-around-layout"><figure class="guide-radar-wrap">${radar(items)}<figcaption>Distances à vol d’oiseau depuis le secteur du spot. Le trajet réel peut être plus long.</figcaption></figure>
+    return head+`<div class="guide-around-body" id="guideAroundBody" hidden><div class="guide-around-layout"><figure class="guide-radar-wrap">${radar(items)}<figcaption>Distances à vol d’oiseau depuis le secteur du spot. Le trajet réel peut être plus long.</figcaption></figure>
       <ol class="guide-around-list">${items.map(x=>`<li class="guide-place" data-around-item="${x.i}"><span class="guide-place-number">${x.i}</span><div class="guide-place-body"><span class="guide-place-kind">${icon(x.k)}${esc(KIND_LABEL[x.k]||'À voir')}</span><b${NT}>${esc(x.n)}</b><p${NT}>${esc(x.d)}</p><span class="guide-place-where"${english()?NT:''}>${esc(whereText(x.km,x.deg))}</span><span class="guide-place-links"><a href="${esc(mapsUrl(x.n,s))}" target="_blank" rel="noopener">${icon('map')}<span>Voir sur la carte</span></a>${x.title?`<a href="${esc(wikiUrl(lang,x.title))}" target="_blank" rel="noopener">${icon('book')}<span>En savoir plus</span></a>`:''}</span></div></li>`).join('')}</ol></div>
-      <p class="guide-source">Lieux sélectionnés par Ocean Buddy et situés grâce aux coordonnées de Wikipédia. Vérifie horaires et accès avant de partir.</p>`;
+      <p class="guide-source">Lieux sélectionnés par Ocean Buddy et situés grâce aux coordonnées de Wikipédia. Vérifie horaires et accès avant de partir.</p></div>`;
   }
 
   /* ---------- Dormir pas cher ---------- */
@@ -315,6 +315,8 @@
   document.addEventListener('click',e=>{
     const jump=e.target.closest('[data-guide-jump]');
     if(jump){const target=document.getElementById(jump.dataset.guideJump);if(target){target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}return;}
+    const tog=e.target.closest('[data-around-toggle]');
+    if(tog){const body=document.getElementById('guideAroundBody');if(body){const open=body.hidden;body.hidden=!open;tog.setAttribute('aria-expanded',String(open));tog.textContent=open?'Masquer les lieux':'Voir les lieux';}return;}
     const go=e.target.closest('[data-guide-spot]');if(go){openSpot(go.dataset.guideSpot);return;}
     const point=e.target.closest('[data-around-point]');
     if(point){const item=document.querySelector(`[data-around-item="${point.dataset.aroundPoint}"]`);if(item){item.classList.remove('is-flash');void item.offsetWidth;item.classList.add('is-flash');item.scrollIntoView({behavior:'smooth',block:'nearest'});}}

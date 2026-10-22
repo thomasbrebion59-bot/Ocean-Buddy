@@ -289,7 +289,7 @@
   function renderGo(s, acc) {
     let host = $('#dGo');
     const prep = $('#detail .dcat[data-cat="activites"]');
-    if (!host && prep) { host = document.createElement('section'); host.id = 'dGo'; host.className = 'sd-go'; prep.prepend(host); }
+    if (!host && prep) { host = document.createElement('section'); host.id = 'dGo'; host.className = 'sd-go'; const guide = $('#dGuide'), after = guide && guide.closest('.field-preparation'); if (after && after.parentNode === prep) after.after(host); else prep.prepend(host); }
     if (!host) return;
     const a = acc && acc.spots[s.id];
     if (!a) { host.hidden = true; return; }

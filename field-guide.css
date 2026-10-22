@@ -96,7 +96,7 @@
 .spot-private{position:absolute;right:15px;top:64px;background:var(--t-card);color:var(--t-deep);border-radius:5px;padding:6px 9px;font-size:9px;font-weight:800;z-index:5}
 .spot-photo-pending{position:absolute;right:15px;top:64px;background:var(--t-card);color:var(--t-deep);border-radius:5px;padding:6px 9px;font-size:9px;font-weight:800;z-index:5}
 .ocean-v2 .lvl-variable{background:var(--t-card);color:var(--t-ink2)}.ocean-v2 .spot-preview{font-size:11px;color:var(--t-ink2)}
-.ocean-v2 .spot .danger-dots,.ocean-v2 .field-danger-legend{display:none}.ocean-v2 .spot-banner .lvl-tag{font-size:9px;border-radius:5px}
+.ocean-v2 .spot .danger-dots{display:flex;margin-top:10px;min-height:8px}.ocean-v2 .spot .danger-dots .dot{background:var(--t-line);box-shadow:none}.ocean-v2 .spot .danger-dots .dot.on{background:var(--t-danger);box-shadow:none}.ocean-v2 .spot-banner .lvl-tag{font-size:9px;border-radius:5px}
 @media(max-width:959px){.field-guide-layout{gap:23px;grid-template-columns:minmax(0,1.25fr) minmax(230px,1fr)}.ocean-v2 #detail .field-overview:not([style*="none"]){gap:0 25px;grid-template-columns:1.3fr 1fr}.field-address{padding:21px}.field-nearby-card img{height:130px}}
 @media(max-width:639px){
  .ocean-v2 #detail .detail-hero{min-height:390px;border-radius:0 0 12px 12px}.ocean-v2 #detail .detail-hero h2{font-size:38px}.ocean-v2 #detail .hero-credit{font-size:8px;line-height:1.6}
@@ -209,8 +209,7 @@
 /* Carte « Ton activité » : suit l'activité (jetons --g-*, repli = bleu d'origine sans activité). */
 .field-fact-card.fact-activity{background:var(--g-pale);border-color:var(--g-line);color:var(--g-ink)}
 
-/* Légende de la jauge de danger : une ligne pour toute la liste. Elle suit les points, masqués par la règle .danger-dots plus haut ;
-   pour les montrer, retirer .field-danger-legend de cette règle en même temps. */
+/* Légende de la jauge de danger : une ligne pour toute la liste, visible avec les points (design.css masque .danger-dots ailleurs : la règle .ocean-v2 .spot .danger-dots plus haut l'emporte dans la liste). */
 .field-danger-legend{min-height:3em;margin:0 0 12px;font-size:12px;line-height:1.5;color:var(--t-ink2)}
 /* « L’essentiel avant d’y aller » : les sources de chaque ligne, sous son texte. */
 .field-visit-cites{display:block}
@@ -223,3 +222,21 @@ span.field-visit-source{color:var(--t-ink2);text-decoration:none}
 /* Planificateur : avertissement « Grosse houle ». Sa hauteur est toujours réservée (visibility, jamais display). */
 .sd-plan-warn{margin:12px 0 0;padding:10px 12px;border:1px solid var(--t-line);border-left:3px solid var(--t-danger);border-radius:8px;background:var(--t-tint);color:var(--t-ink);font:600 13px/1.45 'DM Sans',sans-serif}
 .sd-plan-warn[aria-hidden="true"]{visibility:hidden}
+
+/* Onglet « Le spot » : colonne et ordre par CSS (aucun nœud déplacé). Quand partir, conseil, essentiel, danger principal, description, reste. */
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview:not([style*="none"]){display:flex;flex-direction:column;gap:0}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>*{order:10}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#dSeasonTeaser{order:1}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-tip{order:2}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-visit{order:3;margin-top:0;margin-bottom:16px}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-main-danger{order:4}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-story{order:5}
+.field-main-danger{margin:0 0 16px;padding:12px 14px;border:1px solid var(--t-line);border-left:3px solid var(--t-danger);border-radius:10px;background:var(--t-card);color:var(--t-ink)}
+.field-main-danger[hidden]{display:none}
+.field-main-danger-label{display:block;margin-bottom:6px;font:800 12px/1.3 var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--t-ink2)}
+.field-main-danger .danger-item{font:600 13px/1.5 var(--body)}
+/* Carte jaune « Informations éditoriales à confirmer » : simple étiquette. */
+.ocean-v2 #detail .field-story .spot-provenance{display:inline-block;margin:10px 0 0!important;padding:4px 10px;border:1px solid var(--t-line);border-radius:999px;background:transparent;font:600 12px/1.5 var(--body)}
+/* Barre d'onglets à 390 px : bord en dégradé (indice de défilement) et libellés seuls pour tout faire tenir. */
+@media(max-width:700px){.ocean-v2 #detail .dtabs{-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 26px),transparent)}}
+@media(max-width:430px){.ocean-v2 #detail .dtabs{gap:16px}.ocean-v2 #detail .dtab .ft-ico{display:none}}

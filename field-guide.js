@@ -91,6 +91,17 @@
     if(!rows.length)return head+'<p class="field-visit-pending">À vérifier localement</p>'+caution;
     return head+`<dl>${rows.map(row=>`<div class="field-visit-row"><dt>${esc(row.label)}</dt><dd>${esc(row.value)}${shared?'':`<span class="field-visit-cites">${row.src.map(visitCite).join('')}</span>`}</dd></div>`).join('')}</dl>${shared?`<span class="field-visit-cites">${rows[0].src.map(visitCite).join('')}</span>`:''}${caution}`;
   }
+  /* Une seule ligne : le premier danger du catalogue, ou à défaut du carnet (alors signalé « non vérifié »). Mêmes pastilles que la liste de l’onglet Sécurité. */
+  function mainDanger(s){
+    const ok=d=>Array.isArray(d)&&d[1];
+    const own=(Array.isArray(s.dangers)?s.dangers:[]).filter(ok);
+    const carnet=!own.length&&s.carnet&&Array.isArray(s.carnet.dangers)?s.carnet.dangers.filter(ok):[];
+    const d=own[0]||carnet[0];
+    if(!d)return '';
+    const m=typeof dangerStyle==='function'?dangerStyle(d[0],d[1]):null;
+    const dot=m&&typeof uic==='function'?`<span class="di" style="background:${m[1]};color:${m[2]}">${uic(m[0])}</span>`:'';
+    return `<span class="field-main-danger-label">Danger principal</span><div class="danger-item">${dot}<span>${esc(d[1])}</span></div>${!own.length&&typeof carnetTag==='function'?carnetTag():''}`;
+  }
   function mapURL(s){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.name+' '+s.loc);}
   /* Repère de niveau par sport : « débutant » décrit le spot, pas une plongée ou une session de kite ou de planche sans
      encadrement ; les cénotes de plongée en caverne n’ont pas de niveau annoncé ici (le catalogue garde son niveau). */
@@ -135,6 +146,8 @@
     $('#fieldAtAGlance').innerHTML=[['activity','Ton activité',SPORTMAP[act]?.label||'À choisir',sportIcon(act)],['water','Le cadre',isInland(s)?'Plan d’eau intérieur':'Mer & océan',sportIcon(isInland(s)?'kayak':'snorkeling')],['level','Repère de niveau',level,levelIcon(caveDive(s,act)?'variable':s.level)]].map(([key,label,value,art])=>`<button type="button" class="field-fact-card fact-${key}" data-im-open="${{activity:'terrain',water:'eau',level:'niveau'}[key]}"><span class="field-fact-icon">${art}</span><div><small>${label}</small><b>${esc(value)}</b></div></button>`).join('');
     $('#fieldVisit').innerHTML=visitGuide(s);
     $('#fieldVisit').hidden=!visitRows(s).some(r=>r.verified);
+    const danger=$('#fieldMainDanger');
+    if(danger){const html=mainDanger(s);danger.innerHTML=html;danger.hidden=!html;}
     window.OceanNotebook?.sync();
     $('#fieldLocalSource').innerHTML=sourceLink(s);
     const photo=OceanPhotos.lead(s.id,act);
@@ -155,7 +168,9 @@
   const intro=$('#dDesc').closest('.block');intro.className='block field-story';
   intro.querySelector('h4').innerHTML='<span class="field-eyebrow" id="fieldLocation"></span><span id="fieldIntroTitle"></span>';
   intro.insertAdjacentHTML('beforeend','<div id="fieldAtAGlance" class="field-at-a-glance" aria-label="Caractéristiques du spot"></div>');
-  intro.insertAdjacentHTML('beforeend','<section id="fieldVisit" class="field-visit" aria-labelledby="fieldVisitTitle"></section>');
+  /* « L’essentiel » et « Danger principal » sont des enfants directs de l’onglet : l’ordre vient du CSS (order), aucun nœud ne bouge ensuite. */
+  infos.insertAdjacentHTML('beforeend','<section id="fieldVisit" class="field-visit" aria-labelledby="fieldVisitTitle"></section><div id="fieldMainDanger" class="field-main-danger" hidden></div>');
+  $('#dTip')?.closest('.block')?.classList.add('field-tip');
   intro.insertAdjacentHTML('afterbegin','<div class="field-coordinates" id="fieldCoordinates"></div>');
   infos.querySelectorAll('.block').forEach(b=>{if(b!==intro)b.classList.add('field-extra');});
   infos.insertAdjacentHTML('beforeend','<aside id="fieldOverview" class="field-trip"></aside><div class="field-reference"><div id="fieldLocalSource"></div><a id="fieldPhotoLink" target="_blank" rel="noopener"></a></div><section id="fieldNearbyBlock" class="field-nearby"><div class="field-section-heading"><div><span class="field-eyebrow">PROLONGER L’ESCAPADE</span><h3>Dans les environs</h3></div><span>Même activité · rayon de 200 km</span></div><div id="fieldNearby"></div></section>');

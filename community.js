@@ -87,8 +87,10 @@
   function mountSpot(id){
     state.currentSpot=id;const host=$('#detail .detail-body');if(!host||!id)return;
     let box=$('#spotFeedback');if(!box){box=document.createElement('section');box.id='spotFeedback';box.className='community-feedback';host.append(box)}
+    box.style.display='';
     if(!SPOTS.some(s=>s.id===id&&!s.custom&&!s.archived)){box.innerHTML='<h3>Spot personnel</h3><p class="community-muted">Cette fiche privée ne reçoit pas d’avis publics.</p>';return}
-    if(state.status!=='ready'){box.innerHTML=state.status==='setup'?'<h3>Avis de la communauté</h3><p class="community-muted">Les avis des explorateurs arrivent bientôt sur chaque spot.</p>':'<h3>Avis communautaires indisponibles</h3><p class="community-muted">Le service communautaire ne répond pas pour le moment.</p>';return}
+    if(state.status!=='ready'){box.innerHTML='';box.style.display='none';return}
+    box.style.display='';
     if(!state.reviews.has(id)){
       if(state.reviewErrors.has(id)){box.innerHTML=`<h3>Avis communautaires indisponibles</h3><p class="community-muted">Impossible de charger les avis pour ce spot.</p><button class="community-private-button" data-retry-review="${esc(id)}">Réessayer</button>`;return}
       box.innerHTML='<h3>Avis de la communauté</h3><p class="community-muted" role="status">Chargement des avis…</p>';
