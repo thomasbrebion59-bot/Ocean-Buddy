@@ -1,8 +1,9 @@
 /* Ocean Data : les vraies données de chaque spot.
-   - Onglet « Saisons » : calendrier des activités, mois par mois, et normales (eau, air, soleil, pluie, houle, vent)
+   - Onglet « Saisons » : calendrier des activités, mois par mois, et normales (eau, air, soleil, pluie, houle, vent),
+     avec un repère de combinaison (seuils de Poulpy, jamais une prévision) pour les sports de glisse
    - Aperçu « Quand partir ? » dans l’onglet Le spot et repère « eau » dans l’en-tête
    - « Y aller » (onglet Préparer) : aéroports, heure locale, soleil, monnaie, langue
-   - « Observé ici » (onglet Faune) : espèces photographiées et validées autour du spot (iNaturalist), richesse marine (OBIS)
+   - « Observé ici » (onglet Faune) : espèces photographiées et validées autour du spot (iNaturalist), richesse marine (OBIS), pour les spots en mer seulement
    Données chargées à la demande : assets/data/spot-climate.js, spot-access.js, spot-wildlife.js. */
 (() => {
   'use strict';
@@ -61,8 +62,46 @@
     return l[0];
   };
 
+  /* Blocs chargés à la demande : ils gardent une hauteur réservée (classe is-pending) jusqu’à l’arrivée des données, puis se replient s’il n’y a rien. */
+  function slot(sel, parent, id, cls, pending) {
+    let host = $(sel);
+    const root = $(parent);
+    if (!host && root) { host = document.createElement('section'); host.id = id; root.prepend(host); }
+    if (!host) return null;
+    host.classList.add(cls);
+    host.classList.toggle('is-pending', !!pending);
+    if (pending) { host.hidden = false; host.innerHTML = ''; }
+    return host;
+  }
+  const teaserSlot = pending => slot('#dSeasonTeaser', '#detail .dcat[data-cat="infos"]', 'dSeasonTeaser', 'sd-teaser', pending);
+  const wildSlot = pending => slot('#dWild', '#detail .dcat[data-cat="faune"]', 'dWild', 'sd-wild', pending);
+  /* « Observé ici » remplace le repli « Pour identifier… » de l’onglet Faune : la classe du conteneur le masque en CSS, quel que soit l’ordre des rendus. */
+  const wildOn = on => { const tab = $('#detail .dcat[data-cat="faune"]'); if (tab) tab.classList.toggle('sd-has-wild', !!on); };
+
   /* ---------------- Onglet Saisons ---------------- */
   const LEVEL_TXT = ['Peu favorable', 'Possible', 'Bon', 'Top'];
+  /* Combinaison : repères de Poulpy (voir SpotDataModel.wetsuit). Chaque texte est écrit en entier pour être traduit tel quel. */
+  const SUIT_TXT = {
+    'lycra': 'shorty ou lycra',
+    'lycra,3/2': 'shorty, lycra ou 3/2',
+    '3/2': '3/2',
+    '3/2,4/3': '3/2 ou 4/3 + chaussons',
+    '4/3': '4/3 + chaussons',
+    '5/4': '5/4 + chaussons/gants/cagoule'
+  };
+  function suitLine(act, d) {
+    if (!M.SUIT_ACTS.includes(act) || d.sea == null) return '';
+    const txt = SUIT_TXT[M.wetsuit(d.sea).join(',')];
+    return txt ? `<div class="sd-suit"><b>Combinaison (repère) : ${esc(txt)}</b><small>Repère selon la température moyenne de l’eau (NOAA).</small></div>` : '';
+  }
+  /* Le carnet donne une saison mais aucun mois ne ressort des carnets et des moyennes climatiques à la fois. */
+  function seasonsGap(s) {
+    let carnet = true; // chaque fiche du catalogue a une saison de carnet (tests/spot-data-model.test.js)
+    try { const g = window.OceanSpotGuide; if (g && g.ready && g.ready()) carnet = !!g.culture(s).season; } catch (e) { carnet = true; }
+    return M.seasonsDisagree(window.OCEAN_SEASONS, s.id, carnet);
+  }
+  const CALC_NOTE = 'Calculé d’après les moyennes de plusieurs années. Ce n’est jamais une prévision.';
+  const GAP_NOTE = 'Nos carnets et les moyennes climatiques ne s’accordent pas ici : renseigne-toi sur place.';
   function rangeText(ranges) {
     if (!ranges.length) return '';
     if (ranges.length === 1 && ranges[0][0] === 0 && ranges[0][1] === 11) return 'toute l’année';
@@ -98,7 +137,7 @@
     const verdict = L == null ? '' : `<p class="sd-verdict l${L}"><b>${esc(sportLabel(act))} : ${esc(LEVEL_TXT[L].toLowerCase())}</b> en ${esc(monthName(selMonth))}${verdictWhy(act, d)}</p>`;
     return `<div class="sd-month" aria-live="polite">
       <div class="sd-month-head"><h4>En ${esc(monthName(selMonth))}</h4>${monthPicker()}</div>
-      ${verdict}
+      ${verdict}${suitLine(act, d)}
       <div class="sd-tiles">${tiles.map(t => `<div class="sd-tile k-${t[4]}">${icon(I[t[0]])}<small>${esc(t[1])}</small><b>${esc(t[2])}</b><span>${esc(t[3])}</span></div>`).join('')}</div>
     </div>`;
   }
@@ -205,15 +244,13 @@
     if (!c) { host.innerHTML = '<p class="sd-empty">Les normales climatiques de ce spot ne sont pas encore disponibles.</p>'; return; }
     const acts = typeof spotSports === 'function' ? spotSports(s) : s.sports;
     if (!selAct || !acts.includes(selAct)) selAct = curAct(s);
-    host.innerHTML = `<header class="sd-head"><p class="sd-kicker">${icon(I.cal)}Quand partir ?</p><h3>L’année à ${esc(String(s.name).split(' — ')[0])}</h3><p>Mois par mois, ce que la mer et le ciel font d’habitude ici.</p></header>
+    host.innerHTML = `<header class="sd-head"><p class="sd-kicker">${icon(I.cal)}Quand partir ?</p><h3>L’année à ${esc(String(s.name).split(' — ')[0])}</h3><p>Mois par mois, ce que la mer et le ciel font d’habitude ici.</p><p class="sd-calc">${CALC_NOTE}</p>${seasonsGap(s) ? `<p class="sd-gap">${GAP_NOTE}</p>` : ''}</header>
       ${calendar(s, c)}${monthCard(s, c)}${charts(c)}${rose(c)}${table(c)}${sources(c)}`;
   }
 
   /* Aperçu dans « Le spot » et repère dans l’en-tête */
   function renderTeaser(s, c) {
-    let host = $('#dSeasonTeaser');
-    const infos = $('#detail .dcat[data-cat="infos"]');
-    if (!host && infos) { host = document.createElement('section'); host.id = 'dSeasonTeaser'; host.className = 'sd-teaser'; infos.prepend(host); }
+    const host = teaserSlot(false);
     if (!host) return;
     if (!c) { host.hidden = true; return; }
     const act = curAct(s), y = M.year(c, act, s.level), b = M.best(y), now = new Date().getMonth();
@@ -224,7 +261,8 @@
     host.innerHTML = `<button type="button" class="sd-teaser-btn" data-sd-open aria-label="Voir les saisons du spot">
       <span class="sd-teaser-tx"><small>${icon(I.cal)}Quand partir ? · ${esc(sportLabel(act))}</small><b>${b.ranges.length ? esc(cap(rangeText(b.ranges))) : 'Selon les conditions du jour'}</b>
       <span class="sd-teaser-strip" aria-hidden="true">${y.map((v, m) => `<i class="l${M.level(v) ?? 'x'}${m === now ? ' now' : ''}"></i>`).join('')}</span>
-      <span class="sd-teaser-meta">${lnow != null ? `<span class="sd-chip l${lnow}">En ${esc(monthName(now))} : ${esc(LEVEL_TXT[lnow].toLowerCase())}</span>` : ''}${sea}</span></span></button>`;
+      <span class="sd-teaser-meta">${lnow != null ? `<span class="sd-chip l${lnow}">En ${esc(monthName(now))} : ${esc(LEVEL_TXT[lnow].toLowerCase())}</span>` : ''}${sea}</span>
+      <span class="sd-teaser-note">${CALC_NOTE}</span>${seasonsGap(s) ? `<span class="sd-teaser-note sd-gap">${GAP_NOTE}</span>` : ''}</span></button>`;
     // Repère dans l’en-tête de la fiche
     const facts = $('#dFacts');
     if (facts && c.sea) {
@@ -287,31 +325,35 @@
     return (t.n && t.n[l]) || t.en || t.sci;
   }
   function renderWild(s, W) {
-    let host = $('#dWild');
-    const tab = $('#detail .dcat[data-cat="faune"]');
-    if (!host && tab) { host = document.createElement('section'); host.id = 'dWild'; host.className = 'sd-wild'; tab.prepend(host); }
+    const host = wildSlot(false);
     if (!host) return;
     const w = W && W.spots[s.id];
-    if (!w || !w.sp || w.sp.length < 3) { host.hidden = true; return; }
-    host.hidden = false;
+    // Les relevés sont côtiers : ni lac, ni rivière, ni cénote. Sans bloc, le repli « Pour identifier… » de l’onglet reste visible.
+    if (!M.marineSpot(s) || !w || !w.sp || w.sp.length < 3) { host.hidden = true; wildOn(false); return; }
+    host.hidden = false; wildOn(true);
     const T = W.taxa;
     const list = w.sp.map(r => ({ t: T[r[0]], id: r[0], c: r[1], h: r[2] })).filter(o => o.t);
     const shown = list.filter(o => o.t.p).slice(0, 12);
     const flags = list.filter(o => o.h && o.h.some(v => v > 0)).slice(0, 3);
     const c = (typeof COORDS !== 'undefined' && COORDS[s.id]) || s.coords;
     const more = `https://www.inaturalist.org/observations?lat=${c.lat}&lng=${c.lon}&radius=${w.r}&quality_grade=research&subview=grid`;
+    // Les noms et crédits des relevés arrivent parfois déjà encodés (« Jan Ebr &amp; Ivana Ebrová ») : on décode avant d’échapper, sinon le « & » s’affiche en toutes lettres.
+    const txt = v => esc(M.decodeEntities(v));
     const card = o => {
       const st = IUCN[o.t.i];
-      return `<li class="sd-sp"><figure><img src="${esc(o.t.p[0])}" alt="${esc(spName(o.t))}" loading="lazy" decoding="async" referrerpolicy="no-referrer">${st ? `<span class="sd-iucn i-${o.t.i}">${esc(st)}</span>` : ''}</figure>
-        <div><b${isFr() ? '' : NT}>${esc(spName(o.t))}</b><i${NT}>${esc(o.t.s)}</i><small>${num(o.c)} observation${o.c > 1 ? 's' : ''}</small></div>
-        <span class="sd-credit"${NT}>${esc(o.t.p[1] || '')}</span></li>`;
+      return `<li class="sd-sp"><figure><img src="${esc(o.t.p[0])}" alt="${txt(spName(o.t))}" loading="lazy" decoding="async" referrerpolicy="no-referrer">${st ? `<span class="sd-iucn i-${o.t.i}">${esc(st)}</span>` : ''}</figure>
+        <div><b${isFr() ? '' : NT}>${txt(spName(o.t))}</b><i${NT}>${txt(o.t.s)}</i><small>${num(o.c)} observation${o.c > 1 ? 's' : ''}</small></div>
+        <span class="sd-credit"${NT}>${txt(o.t.p[1] || '')}</span></li>`;
     };
     const flagRow = o => {
       const max = Math.max(...o.h, 1), b = M.best(o.h.map(v => v / max)), peak = o.h.indexOf(max);
       const months = o.h.map(v => v / max >= .5 ? 1 : 0), rng = M.ranges(months.map((v, m) => v ? m : -1).filter(m => m >= 0));
       void b;
-      return `<li class="sd-flag"><span class="sd-flag-name"><b${isFr() ? '' : NT}>${esc(spName(o.t))}</b><small>surtout ${esc(rangeText(rng) || monthName(peak))}</small></span>
-        <span class="sd-spark" role="img" aria-label="Observations par mois, pic en ${esc(monthName(peak))}">${o.h.map((v, m) => `<i style="height:${Math.max(6, Math.round(100 * v / max))}%" class="${m === peak ? 'pk' : ''}"></i>`).join('')}</span></li>`;
+      // Sous 8 relevés, « surtout en juillet » ne repose que sur quelques photos : on le dit sous la ligne. La mention vient en dernier pour ne pas décaler les {n} des gabarits traduits au-dessus.
+      const fewTxt = o.c > 1 ? `${num(o.c)} observations seulement` : `${num(o.c)} observation seulement`;
+      const few = M.fewObs(o.c) ? `<small class="sd-few">${fewTxt}</small>` : '';
+      return `<li class="sd-flag"><span class="sd-flag-name"><b${isFr() ? '' : NT}>${txt(spName(o.t))}</b><small>surtout ${esc(rangeText(rng) || monthName(peak))}</small></span>
+        <span class="sd-spark" role="img" aria-label="Observations par mois, pic en ${esc(monthName(peak))}">${o.h.map((v, m) => `<i style="height:${Math.max(6, Math.round(100 * v / max))}%" class="${m === peak ? 'pk' : ''}"></i>`).join('')}</span>${few}</li>`;
     };
     host.innerHTML = `<header class="sd-head small"><p class="sd-kicker">${icon(I.eye)}Observé ici</p><h3>La vraie faune du coin</h3><p>Des espèces photographiées et identifiées par des plongeurs, nageurs et naturalistes autour du spot.</p></header>
       <div class="sd-stats"><div><b>${num(w.n)}</b><small>espèces aquatiques observées à moins de ${num(w.r)} km</small></div>${w.o ? `<div><b>${num(w.o)}</b><small>espèces marines recensées par les scientifiques (OBIS)</small></div>` : ''}</div>
@@ -352,12 +394,16 @@
 
   function update(s) {
     cur = s; selMonth = new Date().getMonth(); selAct = null;
-    ['#dSeasonTeaser', '#dGo', '#dWild'].forEach(k => { const e = $(k); if (e) e.hidden = true; });
+    const go = $('#dGo'); if (go) go.hidden = true;
+    // « Quand partir ? » et « Observé ici » gardent leur place le temps du chargement, puis se replient s’il n’y a rien à montrer.
+    const marine = M.marineSpot(s);
+    teaserSlot(true); wildOn(false);
+    if (marine) wildSlot(true); else { const w = $('#dWild'); if (w) w.hidden = true; }
     const host = $('#dSeasons'); if (host) host.innerHTML = '<p class="sd-empty">Chargement des normales…</p>';
     load('climate').then(C => { if (cur !== s) return; const c = C.spots[s.id]; renderSeasons(s, c); renderTeaser(s, c); if (lastLive && lastLive.s === s) live(s, lastLive.l); })
-      .catch(() => { if (host) host.innerHTML = '<p class="sd-empty">Normales indisponibles hors connexion.</p>'; });
+      .catch(() => { const t = $('#dSeasonTeaser'); if (t) t.hidden = true; if (host) host.innerHTML = '<p class="sd-empty">Normales indisponibles hors connexion.</p>'; });
     load('access').then(A => { if (cur === s) renderGo(s, A); }).catch(() => {});
-    load('wild').then(W => { if (cur === s) renderWild(s, W); }).catch(() => {});
+    if (marine) load('wild').then(W => { if (cur === s) renderWild(s, W); }).catch(() => { if (cur === s) { const w = $('#dWild'); if (w) w.hidden = true; } });
   }
   /* Conditions du moment comparées à la normale du mois (onglet Conditions). */
   let lastLive = null;

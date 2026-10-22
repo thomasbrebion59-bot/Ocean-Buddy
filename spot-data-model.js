@@ -149,11 +149,51 @@
     return { rise: (noon - 4 * ha) / 60, set: (noon + 4 * ha) / 60, noon: noon / 60 };
   }
 
+  /* Combinaison selon la température moyenne de l’eau. Seuils de la réponse « combinaison » de Poulpy (app.js), aucun autre :
+     plus de 22 °C shorty/lycra · de 17 à 21 °C une 3/2 · de 13 à 17 °C une 4/3 avec chaussons · moins de 13 °C une 5/4 avec chaussons, gants et cagoule.
+     Ses plages se chevauchent à 17 °C et laissent un trou au-dessus de 21 °C jusqu’à 22 °C : à ces bornes on rend les deux repères voisins,
+     du plus fin au plus épais, au lieu d’inventer un seuil. Vide si la température manque. */
+  const SUIT_ACTS = ['surf', 'bodyboard', 'kitesurf', 'windsurf', 'wingfoil'];
+  function wetsuit(t) {
+    if (!has(t)) return [];
+    const v = Math.round(t * 10) / 10;
+    if (v > 22) return ['lycra'];
+    if (v > 21) return ['lycra', '3/2'];
+    if (v > 17) return ['3/2'];
+    if (v === 17) return ['3/2', '4/3'];
+    return v >= 13 ? ['4/3'] : ['5/4'];
+  }
+
+  /* Observations iNaturalist : sous ce nombre, « surtout en juillet » repose sur trop peu de relevés pour être présenté sans réserve. */
+  const FEW_OBS = 8;
+  const fewObs = c => has(c) && c < FEW_OBS;
+  /* Les crédits photo arrivent déjà encodés (« Jan Ebr &amp; Ivana Ebrová ») : on décode une fois avant d’échapper pour l’affichage. */
+  const ENTITY = { amp: '&', lt: '<', gt: '>', quot: '"', apos: "'", nbsp: '\u00a0' };
+  function decodeEntities(str) {
+    return String(str == null ? '' : str).replace(/&(?:#(\d{1,7})|#x([0-9a-f]{1,6})|([a-z]{2,6}));/gi, (m, d, h, n) => {
+      if (d != null || h != null) {
+        const cp = d != null ? parseInt(d, 10) : parseInt(h, 16);
+        return cp > 0 && cp <= 0x10ffff ? String.fromCodePoint(cp) : m;
+      }
+      const hit = ENTITY[n.toLowerCase()];
+      return hit === undefined ? m : hit;
+    });
+  }
+  /* « La vraie faune du coin » vient d’observations côtières : on ne la montre que pour un spot en mer, pas pour un lac, une rivière ou un cénote. */
+  const marineSpot = s => !!s && s.waterType === 'sea';
+  /* Le carnet donne une saison, mais data/seasons.json (mois où carnet et moyennes climatiques s’accordent) n’a aucun mois pour ce spot.
+     seasons absent (pas encore chargé) : on ne dit rien. */
+  function seasonsDisagree(seasons, id, carnetSeason) {
+    if (!seasons || typeof seasons !== 'object' || !carnetSeason) return false;
+    const m = seasons[id];
+    return !(Array.isArray(m) && m.length);
+  }
+
   /* Secteur (0 = nord … 7 = nord-ouest) en angle et en mots. */
   const SECTOR_DEG = s => s * 45;
   const DIR_FROM = ['du nord', 'du nord-est', 'd’est', 'du sud-est', 'du sud', 'du sud-ouest', 'd’ouest', 'du nord-ouest'];
 
-  const api = { clamp, ramp, blend, month, score, level, year, best, ranges, LEVELS, CRITERIA, lite, matches, sunTimes, SECTOR_DEG, DIR_FROM, WATER_ACTS };
+  const api = { clamp, ramp, blend, month, score, level, year, best, ranges, LEVELS, CRITERIA, lite, matches, sunTimes, SECTOR_DEG, DIR_FROM, WATER_ACTS, SUIT_ACTS, wetsuit, FEW_OBS, fewObs, decodeEntities, marineSpot, seasonsDisagree };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.SpotDataModel = api;
 })(typeof window !== 'undefined' ? window : globalThis);
