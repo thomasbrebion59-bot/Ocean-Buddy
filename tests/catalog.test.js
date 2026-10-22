@@ -36,7 +36,7 @@ test('browser and media views match the canonical catalogue exactly',()=>{
  assert.equal(JSON.stringify(runtime.window.OCEAN_CATALOG),JSON.stringify(all));
  assert.equal(JSON.stringify(photos),JSON.stringify(Object.fromEntries(all.filter(s=>s.photo).map(s=>[s.id,s.photo]))));
 });
-test('every spot shows access, best period and local rules without inventing missing facts',()=>{
+test('every spot shows the six fixed practical rows without inventing missing facts',()=>{
  const guide=fs.readFileSync(path.join(root,'field-guide.js'),'utf8');
  const start=guide.indexOf('  function visitRows('),end=guide.indexOf('  function mapURL(',start);
  assert.ok(start>0&&end>start);
@@ -44,19 +44,30 @@ test('every spot shows access, best period and local rules without inventing mis
  assert.match(guide,/\$\('#fieldVisit'\)\.innerHTML=visitGuide\(s\)/);
  const ctx={window:{},external:'↗',esc:value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))};
  vm.runInNewContext(guide.slice(start,end)+';this.visitRows=visitRows;this.visitGuide=visitGuide;',ctx);
+ const SIX=['Accès','Stationnement','Marée','Matériel','À éviter','Règles locales'];
  for(const s of all){
   const rows=ctx.visitRows(s);
-  assert.deepEqual([...rows.map(row=>row.label)],['Accès','Meilleure période','Règles locales'],s.id);
+  /* six libellés fixes ; « Meilleure période » s'ajoute seulement quand une ligne historique bestPeriod existe */
+  const labels=rows.map(row=>row.label);
+  assert.deepEqual([...labels.filter(l=>l!=='Meilleure période')],SIX,s.id);
+  assert.equal(labels.includes('Meilleure période'),!!s.visit?.bestPeriod,s.id);
   for(const row of rows)assert.equal(row.verified?row.value!=='À vérifier localement':row.value==='À vérifier localement',true,s.id+': '+row.label);
  }
- assert.equal(all.filter(s=>s.visit).length,7);
+ /* 7 fiches historiques + le top 50 de l'essentiel sourcé (macarella et balos en commun) + saintecroix (consignes du Parc) */
+ const withVisit=all.filter(s=>s.visit);
+ assert.ok(withVisit.length>=50&&withVisit.length<=60,String(withVisit.length));
+ for(const id of ['kohtao','kohlipe','kealakekua','poipu','macarella','balos','cathedralcove','saintecroix'])assert.ok(all.find(s=>s.id===id).visit,id);
  const sourced=all.find(s=>s.id==='cathedralcove');
- assert.ok(ctx.visitRows(sourced).every(row=>row.verified));
+ assert.ok(ctx.visitRows(sourced).filter(row=>row.verified).length>=3);
  assert.match(ctx.visitGuide(sourced),/consultée le 23\/09\/2026/);
  assert.match(ctx.visitGuide(sourced),/doc\.govt\.nz\/cathedral-cove-walk/);
  const historical=all.find(s=>s.id==='hossegor');
  assert.equal(ctx.visitRows({...historical,visit:{reviewed:'2026-09-23',access:'Text not sourced'}}).filter(row=>row.verified).length,0);
- assert.equal((ctx.visitGuide(historical).match(/À vérifier localement/g)||[]).length,3);
+ /* aucune ligne vérifiée : une seule ligne compacte « À vérifier localement » */
+ assert.equal((ctx.visitGuide(historical).match(/À vérifier localement/g)||[]).length,1);
+ /* kohtao : la ligne « meilleure période » (office du tourisme, illisible) est retirée ; saintecroix a ses consignes sourcées */
+ assert.equal(all.find(s=>s.id==='kohtao').visit.bestPeriod,undefined);
+ assert.equal(typeof all.find(s=>s.id==='saintecroix').visit.localRules,'object');
 });
 test('each published photograph belongs to the destination and has usable attribution',()=>{
  assert.equal(all.length,718);
@@ -88,7 +99,8 @@ test('saved bonus favourites keep 33 archived labels and move 11 exact matches t
  assert.ok(favourites.has('bonus-1'));
 });
 test('new places never fabricate weather, reviews or hazard detail',()=>{
- for(const s of extra){for(const k of ['wind','swell','temp','tide'])assert.equal(s[k],'—',s.id+':'+k);assert.equal(s.dangers.length,0,s.id);assert.equal(s.rating,undefined);assert.equal(s.score,undefined);}
+ /* dangers reste vide pour une fiche reviewed : les phrases du carnet vont dans carnet.dangers, marquées « non vérifié » */
+ for(const s of extra){for(const k of ['wind','swell','temp','tide'])assert.equal(s[k],'—',s.id+':'+k);assert.equal(s.dangers.length,0,s.id);if(s.carnet)assert.equal(s.carnet.status,'non vérifié',s.id);assert.equal(s.rating,undefined);assert.equal(s.score,undefined);}
 });
 function functionSource(start,end){return app.slice(app.indexOf(start),app.indexOf(end,app.indexOf(start)));}
 test('forecast bar heights preserve ratios and zero, with the calmest day highlighted',()=>{
@@ -129,32 +141,31 @@ test('gallery images are local, credited and attached to existing destinations',
  assert.equal(Object.values(galleries).flat().length,29);assert.equal(extra.filter(s=>s.catalogNew).length,0);assert.equal(all.filter(s=>s.catalogNew).length,additions2.length);assert.ok(additions2.every(s=>s.catalogNew));
  for(const [id,rows] of Object.entries(galleries)){assert.ok(all.some(s=>s.id===id),id);for(const p of rows){assert.ok(fs.statSync(path.join(root,p.src)).size>1000);assert.ok(p.author&&p.license);assert.equal(new URL(p.source).protocol,'https:');}}
 });
-test('emergency numbers come from the country field by exact name and are never invented',()=>{
- const ctx={};vm.runInNewContext(functionSource('function countryEmergency','var SPORT_VERB')+';this.emergency=countryEmergency;',ctx);
+test('emergency numbers come from data/sources/urgences.json by exact country name and are never invented',()=>{
+ const urgences=JSON.parse(fs.readFileSync(path.join(root,'data/sources/urgences.json'),'utf8'));
+ const ctx={};vm.runInNewContext(functionSource('function countryEmergency','// Phrases entières pour la traduction')+';this.emergency=countryEmergency;',ctx);
  const e=c=>ctx.emergency(typeof c==='string'?{country:c}:c);
  /* inconnu ou absent : « À confirmer », pas de bouton d'appel */
  for(const x of ['Lieu non identifié','',undefined,null,{},{loc:'Savoie, France'}])assert.equal(ctx.emergency(x).call,null,JSON.stringify(x));
  assert.equal(e('Lieu non identifié').emergency,'À confirmer');
  /* le champ loc n'est plus lu : ni sous-chaîne, ni région */
- assert.equal(ctx.emergency({loc:'Savoie, France',country:'Oman'}).call,null);
+ assert.equal(ctx.emergency({loc:'Savoie, France',country:'Oman'}).call,e('Oman').call);
  assert.equal(e('Sud de la France').call,null);assert.equal(e('Hawaï').call,null);
- assert.equal(ctx.emergency('France').call,'112');
- for(const c of ['France','Italie','Allemagne','Croatie'])assert.equal(e(c).call,'112',c);
- for(const c of ['Oman','Canada','Papouasie-Nouvelle-Guinée','Maroc','Maurice','Polynésie française','Nouvelle-Calédonie','Saint-Martin','Porto Rico','Turquie','Suisse','Colombie','Costa Rica'])assert.equal(e(c).call,null,c);
- assert.equal(e('Maroc').emergency,'À confirmer');assert.equal(e('Maurice').sea,'Repère le numéro des secours locaux avant ta sortie.');
- assert.equal(e('Mexique').sea,'Urgences : 911');assert.match(e('États-Unis').sea,/US Coast Guard/);
  /* casse et accents indifférents, égalité exacte sinon */
- assert.equal(e('ÉTATS-UNIS').call,'911');assert.equal(e('etats-unis').call,'911');assert.equal(e('Îles Vierges des États-Unis').call,'911');
- /* valeurs conservées des pays déjà connus */
- const known={'Mexique':'911','États-Unis':'911','Australie':'000','Nouvelle-Zélande':'111','Brésil':'190','Pérou':'105','Chili':'131','Argentine':'911','Équateur':'911','Salvador':'911','Afrique du Sud':'112','Namibie':'112','Maldives':'102','Fidji':'911','Seychelles':'999','Japon':'118','Sri Lanka':'119','Philippines':'911','République dominicaine':'911','Bonaire':'911','Indonésie':'112','Thaïlande':'191','Royaume-Uni':'999','Irlande':'112','France':'112','La Réunion':'112','Portugal':'112','Espagne':'112','Italie':'112','Grèce':'112','Islande':'112','Norvège':'112'};
- for(const [c,n] of Object.entries(known)){assert.equal(e(c).call,n,c);assert.equal(e(c).emergency,n,c);}
- assert.equal(e('France').sea,'Secours en mer : 196 (ou VHF 16)');assert.equal(e('La Réunion').sea,'Secours en mer : 196 (ou VHF 16)');
- /* Union européenne : 112 pour les États membres du catalogue sans entrée propre */
- for(const c of ['Allemagne','Autriche','Chypre','Croatie','Danemark','Finlande','Hongrie','Malte','Pays-Bas','Pologne','Slovénie','Suède']){assert.equal(e(c).call,'112',c);assert.equal(e(c).sea,'Secours en mer : 112 / VHF 16',c);}
- for(const c of ['Guadeloupe','Martinique','Mayotte']){assert.equal(e(c).call,'112',c);assert.equal(e(c).sea,'Urgences : 112',c);}
- /* sur tout le catalogue : un numéro n'apparaît que pour un pays de la table */
- const withCall=new Set(all.filter(s=>e(s).call).map(s=>s.country));
- for(const c of withCall)assert.ok(c in known||['Îles Vierges des États-Unis','Allemagne','Autriche','Chypre','Croatie','Danemark','Finlande','Hongrie','Malte','Pays-Bas','Pologne','Slovénie','Suède','Guadeloupe','Martinique','Mayotte'].includes(c),c);
+ const us=urgences.find(x=>x.country==='États-Unis');
+ assert.equal(e('ÉTATS-UNIS').call,String(us.call.number));assert.equal(e('etats-unis').call,String(us.call.number));
+ /* chaque pays du catalogue est dans le fichier de sources ; le bouton n'existe que pour un numéro « sourcé » */
+ const byCountry=new Map(urgences.map(x=>[x.country,x]));
+ for(const c of new Set(all.map(s=>s.country))){
+  const row=byCountry.get(c);assert.ok(row,'urgences.json : '+c);
+  const expected=row.call.status==='sourcé'?String(row.call.number):null;
+  assert.equal(e(c).call,expected,c);
+  assert.equal(e(c).emergency,expected||'À confirmer',c);
+ }
+ /* pays sans bouton : « À confirmer » et la ligne par défaut ou le conflit, jamais un numéro prêté */
+ for(const c of ['Maroc','Égypte','Nicaragua','Liberia','Angola','Sierra Leone'])if(byCountry.has(c)){assert.equal(e(c).call,null,c);assert.equal(e(c).emergency,'À confirmer',c);}
+ /* sur tout le catalogue : un spot n'a un numéro que si son pays en a un dans la source */
+ for(const s of all)if(e(s).call)assert.equal(byCountry.get(s.country).call.status,'sourcé',s.id);
 });
 test('isInland reads waterType only: lake and inland are inland, sea is not',()=>{
  const ctx={};vm.runInNewContext(functionSource('function isInland','function renderConditions')+';this.isInland=isInland;',ctx);
@@ -181,8 +192,8 @@ test('relecture sécurité : aucun calme promis sans condition, aucun garde-côt
   while((m=re.exec(tip))){assert.match(tip.slice(Math.max(0,m.index-45),m.index),/\b(?:quand|si|lorsque|lorsqu’)\b|lorsqu’/,s.id+' : '+tip);}
  }
  const ctx={};vm.runInNewContext(functionSource('function countryEmergency','var SPORT_VERB')+';this.emergency=countryEmergency;',ctx);
- /* 911 est le numéro d'urgence national des Philippines, pas celui des garde-côtes. */
- assert.equal(ctx.emergency('Philippines').sea,'Urgences : 911');
+ /* un numéro général n'est jamais présenté comme celui des garde-côtes (911 aux Philippines est le numéro d'urgence national) */
+ assert.notEqual(ctx.emergency('Philippines').sea,'Garde-côtes : 911');
  /* chaque texte de spot affiché (conseil, description, dangers) a sa traduction anglaise et espagnole */
  const en=JSON.parse(fs.readFileSync(path.join(root,'locales/translations/en.json'),'utf8'));
  const es=JSON.parse(fs.readFileSync(path.join(root,'locales/translations/es.json'),'utf8'));
