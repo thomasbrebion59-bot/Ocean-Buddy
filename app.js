@@ -234,10 +234,35 @@ function spotCardMeta(s){
   const checked=live.fetchedAt?new Date(live.fetchedAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):'';
   return `<span>${icoWind()} ${esc(live.wind||'—')}</span><span>${icoSwell()} ${esc(live.swell||'—')}</span><span>${icoTemp()} ${esc(live.temp||'—')}</span><span class="live-dot" title="${checked?`Modèle Open-Meteo · consulté à ${checked}`:'Modèle Open-Meteo'}"></span>`;
 }
+/* Jauge de danger calculée : le poids le plus fort parmi les lignes de danger, de 1 à 4 (barème validé le
+   20 octobre 2026). Même normalisation que dangerWords : sans accents ni casse, mots entiers (« approche »
+   n'est pas « roche »). Le champ s.danger du catalogue n'est plus lu. Lignes du catalogue, sinon celles du
+   carnet (basis « carnet », non vérifiées) ; aucune ligne : n vaut null (« non évalué », jamais « sans danger »). */
+var DANGER_GAUGE=[
+  [4,/\b(?:mortel|mortels|mortelle|mortelles|meurtriers?|meurtrieres?|victimes?|noyades?|tres dangereu(?:x|se|ses)|requins?|crocodiles?|alligators?|cubomeduses?|meduses?[- ]boites?|irukandji|baignade interdite)\b/],
+  [3,/\b(?:baines?|arrachement|courants? (?:forts?|violents?|puissants?|de passe)|shore[- ]?break|recifs? (?:tranchants?|a fleur d'eau)|hypothermie|isole|isolee|isoles|isolees|secours eloignes?|cyclones?|typhons?|ouragans?|grottes?|cavites?|epaves?|pieges? de marees?)\b/],
+  [2,/\b(?:courants?|houles?|vents? (?:forts?|offshore)|rochers?|roches?|falaises?|chutes? de pierres|oursins?|meduses?|bateaux?|trafic|jet-?skis?|profondeurs?)\b/]
+];
+function dangerGauge(s){
+  var own=s&&Array.isArray(s.dangers)?s.dangers:[];
+  var notebook=!own.length&&s&&s.carnet&&Array.isArray(s.carnet.dangers)?s.carnet.dangers:[];
+  var lines=own.length?own:notebook,n=null;
+  for(var i=0;i<lines.length;i++){
+    var d=Array.isArray(lines[i])?lines[i][1]:lines[i],t=String(d==null?'':d).normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[’‘`]/g,"'");
+    if(!t.trim())continue;
+    var w=1;
+    for(var k=0;k<DANGER_GAUGE.length;k++)if(DANGER_GAUGE[k][1].test(t)){w=DANGER_GAUGE[k][0];break;}
+    if(n===null||w>n)n=w;
+  }
+  return {n:n,basis:own.length||!notebook.length?'catalogue':'carnet'};
+}
+window.dangerGauge=dangerGauge;
 function spotCard(s){
-  /* Aucune ligne de danger au catalogue : la jauge ne dit pas « sans danger », elle dit « non évalué ». */
-  const unrated=!(Array.isArray(s.dangers)&&s.dangers.length),dangerLabel=unrated?'Danger non évalué':'Danger';
-  let dots='';for(let i=0;i<4;i++)dots+=`<span class="dot ${i<Math.min(4,Math.max(0,Number(s.danger)||0))?'on':''}"></span>`;
+  /* Aucune ligne de danger : la jauge ne dit pas « sans danger », elle dit « non évalué ».
+     Sinon c'est une estimation d'Ocean Buddy, et celle tirée du carnet le dit aussi. */
+  const gauge=dangerGauge(s),unrated=gauge.n===null;
+  const dangerLabel=unrated?'Danger non évalué':gauge.basis==='carnet'?`Danger estimé : ${gauge.n} sur 4 · estimation Ocean Buddy · carnet non vérifié`:`Danger estimé : ${gauge.n} sur 4 · estimation Ocean Buddy`;
+  let dots='';for(let i=0;i<4;i++)dots+=`<span class="dot ${!unrated&&i<gauge.n?'on':''}"></span>`;
   const sports=spotSports(s),sp=sports.slice(0,6).map(id=>`<span title="${esc(SPORTMAP[id].label)}">${sportIcon(id)}</span>`).join('');
   const dist=(nearMode&&userPos)?spotDist(s):null;
   const photo=spotPhotoUrl(s.id,480);
@@ -261,7 +286,7 @@ function spotCard(s){
       <div class="spot-meta">${spotCardMeta(s)}</div>
       <div class="spot-sports">${sp}</div>
       ${window.OceanNotebook?.button(s.id)||''}
-      <div class="danger-dots" title="${dangerLabel}"${unrated?` aria-label="${dangerLabel}"`:''}>${dots}</div>
+      <div class="danger-dots" role="img" aria-label="${dangerLabel}" title="${unrated?'Danger non évalué':'Danger : estimation Ocean Buddy'}">${dots}</div>
     </div>
   </article>`;
 }
@@ -688,59 +713,154 @@ function spotPhotoCredit(id){
   return photo?photo.author+' · '+photo.license+' — Wikimedia Commons':'';
 }
 /* Numéro d'urgence selon le champ « country » du spot, par égalité exacte sur le nom normalisé
-   (minuscules, sans accents) : ni sous-chaîne, ni lecture de « loc ». `s` est un spot ou un nom de pays.
-   Un pays absent de la table reste « À confirmer », sans bouton d'appel : on n'invente jamais un numéro
-   (c'est volontairement le cas du Maroc et de Maurice : leur numéro n'est pas assez sûr). */
+   (minuscules, sans accents, tirets à la place des espaces) : ni sous-chaîne, ni lecture de « loc ».
+   `s` est un spot ou un nom de pays. La table vient de data/sources/urgences.json (une source citée par
+   numéro) : pas de bouton d'appel sans numéro sourcé, ni quand les sources officielles se contredisent
+   (Maroc, Égypte, Nicaragua…). La ligne sous le numéro suit un vocabulaire fermé, pour la traduction ;
+   les sigles et les numéros (CROSS, NSRI, VHF 16) passent tels quels. `checked` : date de vérification
+   du numéro affiché (bouton ou ligne), null quand aucun numéro n'est donné. */
 function countryEmergency(s){
   var raw=typeof s==='string'?s:(s&&s.country);
-  var key=typeof raw==='string'?raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim():'';
-  var row=Object.prototype.hasOwnProperty.call(EMERGENCY_BY_COUNTRY,key)?EMERGENCY_BY_COUNTRY[key]:null;
-  return row?{emergency:row[0],sea:row[1],call:row[0]}:{emergency:'À confirmer',sea:'Repère le numéro des secours locaux avant ta sortie.',call:null};
+  var key=typeof raw==='string'?raw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim().replace(/\s+/g,'-'):'';
+  var row=key&&Object.prototype.hasOwnProperty.call(EMERGENCY_BY_COUNTRY,key)?EMERGENCY_BY_COUNTRY[key]:null;
+  var call=row&&row[0]||null,n=row&&row[2];
+  var sea=!row?null
+    :row[1]==='mer16'?`Secours en mer : ${n} (ou VHF 16)`
+    :row[1]==='mer'?`Secours en mer : ${n}`
+    :row[1]==='garde'?`Garde-côtes : ${n}`
+    :row[1]==='urgences'?`Urgences : ${n}`
+    :row[1]==='ambulance'?`Ambulance : ${n}`
+    :row[1]==='conflit'?'Les sources officielles se contredisent : demande le numéro sur place.'
+    :null;
+  return {emergency:call||'À confirmer',sea:sea||'Repère le numéro des secours locaux avant ta sortie.',call:call,checked:row&&(call||n)?row[3]:null};
 }
-/* nom normalisé -> [numéro, ligne « en mer »] */
-var EMERGENCY_BY_COUNTRY=(function(){
-  var t={
-    'mexique':['911','Urgences : 911'],
-    'etats-unis':['911','US Coast Guard : 911 / VHF 16'],
-    'iles vierges des etats-unis':['911','US Coast Guard : 911 / VHF 16'],
-    'australie':['000','Secours : 000 (112 depuis un mobile)'],
-    'nouvelle-zelande':['111','Garde-côtes : 111'],
-    'bresil':['190','SAMU : 192 · pompiers 193'],
-    'perou':['105','Pompiers/sauvetage : 116'],
-    'chili':['131','Sauvetage maritime : 137'],
-    'argentine':['911','Préfecture navale : 106'],
-    'equateur':['911','Urgences : 911'],
-    'salvador':['911','Urgences : 911'],
-    'afrique du sud':['112','NSRI : 112 (mobile) / 10111'],
-    'namibie':['112','Urgences : 112'],
-    'maldives':['102','Garde-côtes : 191'],
-    'fidji':['911','Urgences : 911'],
-    'seychelles':['999','Urgences : 999'],
-    'japon':['118','Garde-côtes (Japon) : 118 · ambulance 119'],
-    'sri lanka':['119','Garde-côtes : 1909'],
-    'philippines':['911','Urgences : 911'],
-    'republique dominicaine':['911','Urgences : 911'],
-    'bonaire':['911','Urgences : 911'],
-    'indonesie':['112','Basarnas (secours mer) : 115'],
-    'thailande':['191','Police touristique : 1155'],
-    'royaume-uni':['999','HM Coastguard : 999 / VHF 16'],
-    'irlande':['112','Garde-côtes : 112 / VHF 16'],
-    'france':['112','Secours en mer : 196 (ou VHF 16)'],
-    'la reunion':['112','Secours en mer : 196 (ou VHF 16)']
-  };
-  /* États de l'Union européenne, plus l'Islande et la Norvège (EEE) : le 112 (déjà annoncé dans l'écran de sécurité). */
-  ['portugal','espagne','italie','grece','islande','norvege','allemagne','autriche','chypre','croatie','danemark','finlande','hongrie','malte','pays-bas','pologne','slovenie','suede'].forEach(function(c){t[c]=['112','Secours en mer : 112 / VHF 16'];});
-  /* Départements d'outre-mer de l'Union. */
-  ['guadeloupe','martinique','mayotte'].forEach(function(c){t[c]=['112','Urgences : 112'];});
-  return t;
-})();
+/*EMERGENCY*/
+/* Généré par scripts/build-emergency.cjs depuis data/sources/urgences.json : ne pas modifier à la main.
+   nom normalisé -> [bouton, type de ligne, valeur de la ligne, vérifié le] */
+var EMERGENCY_BY_COUNTRY={
+ "afrique-du-sud":["112","mer","NSRI 087 094 9774","2026-10-20"],
+ "allemagne":["112","mer16","+49 421 536 870","2026-10-20"],
+ "angola":[null,"conflit",null,"2026-10-20"],
+ "argentine":["911","mer","106","2026-10-20"],
+ "aruba":["911","garde","913","2026-10-20"],
+ "australie":["000","mer","1800 641 792","2026-10-20"],
+ "autriche":["112","ambulance","144","2026-10-20"],
+ "bahamas":["911",null,null,"2026-10-20"],
+ "barbade":["511",null,null,"2026-10-20"],
+ "belize":["911",null,null,"2026-10-20"],
+ "bonaire":[null,"garde","913","2026-10-20"],
+ "bresil":["192",null,null,"2026-10-20"],
+ "cambodge":["119",null,null,"2026-10-20"],
+ "canada":["911","garde","VHF 16","2026-10-20"],
+ "cap-vert":["130",null,null,"2026-10-20"],
+ "chili":["131","mer","137","2026-10-20"],
+ "chine":["120","mer","12395","2026-10-20"],
+ "chypre":["112","mer","1441","2026-10-20"],
+ "colombie":["123",null,null,"2026-10-20"],
+ "coree-du-sud":["119","mer","119","2026-10-20"],
+ "costa-rica":["911",null,null,"2026-10-20"],
+ "croatie":["112","mer16","195","2026-10-20"],
+ "cuba":["104",null,null,"2026-10-20"],
+ "curacao":["912","garde","913","2026-10-20"],
+ "danemark":["112","mer","112","2026-10-20"],
+ "dominique":["999",null,null,"2026-10-20"],
+ "egypte":[null,"conflit",null,"2026-10-20"],
+ "emirats-arabes-unis":["999","ambulance","998","2026-10-20"],
+ "equateur":["911",null,null,"2026-10-20"],
+ "espagne":["112",null,null,"2026-10-20"],
+ "etats-unis":["911","mer16","911","2026-10-20"],
+ "fidji":["911",null,null,"2026-10-20"],
+ "finlande":["112",null,null,"2026-10-20"],
+ "france":["112","mer16","196","2026-10-20"],
+ "ghana":["112","garde","112","2026-10-20"],
+ "grece":["112",null,null,"2026-10-20"],
+ "grenade":["911",null,null,"2026-10-20"],
+ "guadeloupe":["112","mer16","196","2026-10-20"],
+ "guatemala":["122",null,null,"2026-10-20"],
+ "honduras":["911",null,null,"2026-10-20"],
+ "hong-kong":["999","mer","2233 7999","2026-10-20"],
+ "hongrie":["112",null,null,"2026-10-20"],
+ "iles-caimans":["911","mer","911","2026-10-20"],
+ "iles-cook":["999",null,null,"2026-10-20"],
+ "iles-salomon":["111","mer","977","2026-10-20"],
+ "iles-turques-et-caiques":["911",null,null,"2026-10-20"],
+ "iles-vierges-britanniques":[null,"mer","VISAR 767","2026-10-20"],
+ "iles-vierges-des-etats-unis":["911",null,null,"2026-10-20"],
+ "inde":["112",null,null,"2026-10-20"],
+ "indonesie":["115","mer","Basarnas 115","2026-10-20"],
+ "irlande":["112","mer16","112","2026-10-20"],
+ "islande":["112",null,null,"2026-10-20"],
+ "israel":["101",null,null,"2026-10-20"],
+ "italie":["112","garde","1530","2026-10-20"],
+ "jamaique":["110",null,null,"2026-10-20"],
+ "japon":["119","garde","118","2026-10-20"],
+ "jordanie":["911",null,null,"2026-10-20"],
+ "kenya":["999",null,null,"2026-10-20"],
+ "la-reunion":["112","mer16","196","2026-10-20"],
+ "liberia":[null,"conflit",null,"2026-10-20"],
+ "macedoine-du-nord":["194",null,null,"2026-10-20"],
+ "madagascar":["117",null,null,"2026-10-20"],
+ "malaisie":["999","mer","999","2026-10-20"],
+ "malawi":["998",null,null,"2026-10-20"],
+ "maldives":["102","garde","191","2026-10-20"],
+ "malte":["112",null,null,"2026-10-20"],
+ "maroc":[null,"conflit",null,"2026-10-20"],
+ "martinique":["15","mer16","196","2026-10-20"],
+ "maurice":["999","garde","177","2026-10-20"],
+ "mayotte":["15",null,null,"2026-10-20"],
+ "mexique":["911",null,null,"2026-10-20"],
+ "micronesie":["911",null,null,"2026-10-20"],
+ "montenegro":["112","mer16","129","2026-10-20"],
+ "mozambique":["112",null,null,"2026-10-20"],
+ "namibie":["10111",null,null,"2026-10-20"],
+ "nicaragua":[null,"conflit",null,"2026-10-20"],
+ "norvege":["112","mer16","112","2026-10-20"],
+ "nouvelle-caledonie":["15","mer16","16","2026-10-20"],
+ "nouvelle-zelande":["111","mer16","111","2026-10-20"],
+ "oman":["9999",null,null,"2026-10-20"],
+ "palaos":["911",null,null,"2026-10-20"],
+ "panama":["911",null,null,"2026-10-20"],
+ "papouasie-nouvelle-guinee":["111",null,null,"2026-10-20"],
+ "pays-bas":["112","mer16","112","2026-10-20"],
+ "perou":["105",null,null,"2026-10-20"],
+ "philippines":["911","garde","(02) 8527-3877","2026-10-20"],
+ "pologne":["112","ambulance","999","2026-10-20"],
+ "polynesie-francaise":["15",null,null,"2026-10-20"],
+ "porto-rico":["911",null,null,"2026-10-20"],
+ "portugal":["112","mer16","+351 214 401 919","2026-10-20"],
+ "republique-dominicaine":["911",null,null,"2026-10-20"],
+ "royaume-uni":["999","mer16","999","2026-10-20"],
+ "saint-martin":["112","mer16","196","2026-10-20"],
+ "saint-vincent-et-les-grenadines":["999","garde","999","2026-10-20"],
+ "sainte-lucie":["911",null,null,"2026-10-20"],
+ "salvador":["911",null,null,"2026-10-20"],
+ "samoa":["911",null,null,"2026-10-20"],
+ "senegal":["15",null,null,"2026-10-20"],
+ "seychelles":["999",null,null,"2026-10-20"],
+ "sierra-leone":[null,"conflit",null,"2026-10-20"],
+ "slovenie":["112",null,null,"2026-10-20"],
+ "sri-lanka":["1990",null,null,"2026-10-20"],
+ "suede":["112","mer16","112","2026-10-20"],
+ "suisse":["112","ambulance","144","2026-10-20"],
+ "taiwan":["119","garde","118","2026-10-20"],
+ "tanzanie":["112",null,null,"2026-10-20"],
+ "thailande":["1669",null,null,"2026-10-20"],
+ "tonga":["911",null,null,"2026-10-20"],
+ "tunisie":["190",null,null,"2026-10-20"],
+ "turquie":["112",null,null,"2026-10-20"],
+ "uruguay":["911",null,null,"2026-10-20"],
+ "vanuatu":["115",null,null,"2026-10-20"],
+ "venezuela":["911",null,null,"2026-10-20"],
+ "vietnam":["115","mer","112","2026-10-20"]
+};
+/*/EMERGENCY*/
 // Phrases entières pour la traduction (« J'ai » + verbe se traduirait mot à mot).
 var SPORT_DID={surf:"J'ai surfé ici",bodyboard:"J'ai ridé ici",baignade:"J'ai nagé ici",paddle:"J'ai pagayé ici",kayak:"J'ai pagayé ici",snorkeling:"J'ai fait du snorkeling ici",plongee:"J'ai plongé ici",kitesurf:"J'ai kité ici",windsurf:"J'ai navigué ici"};
 var SPORT_VERB={surf:'surfé',bodyboard:'ridé',baignade:'nagé',paddle:'pagayé',kayak:'pagayé',snorkeling:'fait du snorkeling',plongee:'plongé',kitesurf:'kité',windsurf:'navigué'};
 
 /* ================= FAUNE & FLORE ================= */
 var BIOZONE={"manche_bzh":{"l":"Manche, mer du Nord & Bretagne","s":"Eaux fraîches à fort marnage, fonds de sable et de roche couverts d'algues.","sp":[["Bar européen","Dicentrarchus labrax","p","","Chasse dans l'écume et les courants de marée : les surfeurs le croisent souvent au lever du jour."],["Lieu jaune","Pollachius pollachius","p","","Poisson de roche curieux, fréquent autour des épaves et des tombants bretons."],["Vieille commune","Labrus bergylta","p","","Grosse labre colorée des champs de laminaires, chacune tient un territoire."],["Phoque veau-marin","Phoca vitulina","m","*","Colonies en baie de Somme et dans les Sept-Îles ; à observer de loin, sans l'approcher."],["Grand dauphin","Tursiops truncatus","m","*","Groupes sédentaires en Normandie et autour des Glénan."],["Araignée de mer","Maja squinado","i","","Migre vers la côte au printemps pour muer ; emblème des casiers bretons."],["Méduse boussole","Chrysaora hysoscella","i","!","Reconnaissable à ses 16 rayons bruns : urticante, on ne la touche pas."],["Laminaire digitée","Laminaria digitata","a","","Forme les forêts sous-marines découvertes aux grandes marées."],["Fucus vésiculeux","Fucus vesiculosus","a","","L'algue à vésicules qui craque sous le pied sur les rochers de l'estran."]]},"atl_iber":{"l":"Golfe de Gascogne & côtes ibériques","s":"Océan ouvert et remontées d'eau froide riches en plancton : beaucoup de vie au large.","sp":[["Bar européen","Dicentrarchus labrax","p","","Suit les bancs de sable et les baïnes, là où la vague brasse la nourriture."],["Sardine","Sardina pilchardus","p","","Les bancs argentés attirent dauphins, thons et oiseaux plongeurs."],["Maigre","Argyrosomus regius","p","","Grand poisson des estuaires landais, capable de grogner avec sa vessie natatoire."],["Dauphin commun","Delphinus delphis","m","*","Le plus fréquent du golfe ; on le voit chasser en groupes serrés."],["Poisson-lune","Mola mola","p","","Vient se chauffer à plat en surface les jours calmes : impressionnant mais inoffensif."],["Vive","Echiichthys vipera","p","!","Enfouie dans le sable, son épine dorsale est très douloureuse : traîne les pieds en entrant."],["Physalie","Physalia physalis","i","!","La « galère portugaise » arrive avec le vent d'ouest : brûlure sévère, ne jamais toucher."],["Oyat","Ammophila arenaria","a","*","L'herbe des dunes qui fixe le sable : marcher dessus détruit la dune."]]},"medit":{"l":"Méditerranée","s":"Mer chaude et claire, pauvre en plancton mais riche en espèces, autour des herbiers.","sp":[["Mérou brun","Epinephelus marginatus","p","*","Sauvé par la protection depuis 1980 ; curieux, il vient souvent voir les plongeurs."],["Saupe","Sarpa salpa","p","","Bancs dorés qui broutent l'herbier de posidonie en plein jour."],["Girelle","Coris julis","p","","Change de sexe et de couleur en grandissant : les mâles sont bleu-orange."],["Rascasse rouge","Scorpaena scrofa","p","!","Immobile et parfaitement camouflée sur la roche : ses épines sont venimeuses."],["Tortue caouanne","Caretta caretta","r","*","Pond de plus en plus souvent sur les plages du nord-ouest méditerranéen."],["Poulpe commun","Octopus vulgaris","i","","Change de couleur et de texture en une seconde ; il bouche son trou avec des coquilles."],["Grande nacre","Pinna nobilis","i","*","Le plus grand coquillage de Méditerranée, décimé depuis 2016 par un parasite."],["Posidonie","Posidonia oceanica","a","*","Ce n'est pas une algue mais une plante à fleurs : ses herbiers abritent 25 % des espèces."]]},"macaro":{"l":"Canaries & Macaronésie","s":"Îles volcaniques en plein Atlantique : eaux tièdes et tombants noirs.","sp":[["Ange de mer","Squatina squatina","p","*","Requin plat en danger critique ailleurs, encore régulier sur les fonds sableux canariens."],["Mérou des Canaries","Mycteroperca fusca","p","","Endémique de Macaronésie, souvent posé à l'entrée des grottes."],["Poisson-perroquet","Sparisoma cretense","p","","Broute la roche et fabrique du sable en la digérant."],["Tortue caouanne","Caretta caretta","r","*","Les juvéniles traversent l'Atlantique et grandissent autour des îles."],["Raie pastenague","Taeniura grabata","p","!","Posée dans le sable ; son dard est défensif, on la contourne sans la survoler."],["Dauphin tacheté","Stenella frontalis","m","*","Groupes joueurs au large, souvent visibles depuis les spots exposés."],["Cystoseire","Gongolaria abies-marina","a","","Petites forêts brunes des zones battues, en fort déclin aux Canaries."]]},"atl_nord":{"l":"Atlantique nord froid","s":"Eau froide et très oxygénée : peu d'espèces, mais des forêts d'algues et de grands animaux.","sp":[["Phoque gris","Halichoerus grypus","m","*","Colonies bruyantes sur les îlots ; curieux, il suit parfois les surfeurs."],["Requin pèlerin","Cetorhinus maximus","p","*","Deuxième plus grand poisson du monde : il filtre le plancton, bouche grande ouverte."],["Macareux moine","Fratercula arctica","o","*","Niche en terrier sur les falaises d'avril à août."],["Lompe","Cyclopterus lumpus","p","","Se colle aux rochers par une ventouse ; le mâle garde les œufs."],["Orque","Orcinus orca","m","*","Populations résidentes en Norvège, qui suivent les bancs de harengs en hiver."],["Laminaire hyperboréenne","Laminaria hyperborea","a","","Bâtit de vraies forêts sous-marines, refuge de milliers de juvéniles."],["Anémone dahlia","Urticina felina","i","","Fixée dans les cuvettes, elle se couvre de graviers pour se camoufler."]]},"redsea":{"l":"Mer Rouge","s":"Mer chaude et très salée, bordée d'un récif corallien presque continu.","sp":[["Poisson-clown à trois bandes","Amphiprion bicinctus","p","","Endémique de mer Rouge, il vit dans une anémone qui ne le pique pas."],["Napoléon","Cheilinus undulatus","p","*","Peut dépasser 2 m ; espèce menacée, protégée en Égypte."],["Poisson-lion","Pterois volitans","p","!","Magnifique et immobile : ses rayons sont venimeux, on garde ses distances."],["Requin-baleine","Rhincodon typus","p","*","Filtreur inoffensif, de passage au printemps."],["Tortue verte","Chelonia mydas","r","*","Broute les herbiers ; ne jamais la toucher ni lui barrer la remontée."],["Murène géante","Gymnothorax javanicus","p","!","Bouche ouverte pour respirer, pas pour menacer — mais elle mord si on l'approche."],["Corail de feu","Millepora dichotoma","c","!","Ce n'est pas un vrai corail : le frôler provoque une brûlure durable."],["Acropore de table","Acropora spp.","c","*","Bâtisseur du récif, très sensible au réchauffement de l'eau."]]},"carib":{"l":"Caraïbes","s":"Eaux tièdes et transparentes : récifs, herbiers et mangroves imbriqués.","sp":[["Poisson-perroquet feu","Sparisoma viride","p","*","Un seul individu produit des centaines de kilos de sable blanc par an."],["Raie pastenague américaine","Hypanus americanus","p","!","Se pose dans le sable des lagons ; on entre en traînant les pieds."],["Tarpon","Megalops atlanticus","p","","Argenté et massif, il remonte respirer à la surface."],["Poisson-lion","Pterois volitans","p","!","Espèce invasive venue du Pacifique, chassée pour protéger le récif."],["Tortue imbriquée","Eretmochelys imbricata","r","*","Broute les éponges du récif ; en danger critique."],["Lambi","Lobatus gigas","i","*","Grand coquillage rose, surexploité et désormais réglementé."],["Corail corne d'élan","Acropora palmata","c","*","Bâtisseur des crêtes récifales, décimé depuis les années 1980."],["Herbier de thalassie","Thalassia testudinum","a","","Nurserie des juvéniles et garde-manger des tortues vertes."]]},"bresil":{"l":"Côtes du Brésil","s":"Longue façade tropicale : plages de sable, récifs bas et mangroves.","sp":[["Mérou géant","Epinephelus itajara","p","*","Peut atteindre 400 kg ; pêche interdite au Brésil depuis 2002."],["Poisson-chirurgien bleu","Acanthurus coeruleus","p","","Porte un scalpel articulé à la base de la queue."],["Tortue olivâtre","Lepidochelys olivacea","r","*","Pond en masse sur les plages du nord-est."],["Dauphin de Guyane","Sotalia guianensis","m","*","Petit dauphin côtier discret, sensible au dérangement."],["Baleine à bosse","Megaptera novaeangliae","m","*","Vient mettre bas d'août à novembre au large d'Abrolhos."],["Crabe violoniste","Leptuca spp.","i","","Le mâle agite une pince démesurée sur la vase des mangroves."],["Palétuvier rouge","Rhizophora mangle","a","*","Ses racines en arceaux servent de nurserie à tout le récif."]]},"pac_trop":{"l":"Pacifique tropical","s":"Îles volcaniques cernées de récifs frangeants, en pleine eau chaude.","sp":[["Tortue verte","Chelonia mydas","r","*","La honu hawaïenne se repose sur le sable : garder 3 m de distance est la règle."],["Poisson-cocher","Zanclus cornutus","p","","Museau long et nageoire en fouet, il picore le corail par deux."],["Baliste Picasso","Rhinecanthus rectangulus","p","","Poisson-emblème d'Hawaï (humuhumunukunukuāpuaʻa), il défend son coin de récif sur les platiers du Pacifique."],["Requin à pointes noires","Carcharhinus melanopterus","p","!","Timide et commun dans les lagons ; on sort calmement de l'eau s'il insiste."],["Raie manta","Mobula alfredi","p","*","Filtre le plancton ; ses taches ventrales identifient chaque individu."],["Phoque moine d'Hawaï","Neomonachus schauinslandi","m","*","Moins de 1 500 individus : l'approcher est interdit par la loi."],["Corail corne de cerf","Pocillopora spp.","c","*","Premier bâtisseur des récifs jeunes, très sensible au blanchissement."]]},"indo_pac":{"l":"Triangle de corail","s":"La zone la plus riche du monde : plus de 600 espèces de coraux à elle seule.","sp":[["Poisson-clown","Amphiprion ocellaris","p","","Toujours dans son anémone ; le plus gros du groupe devient femelle."],["Poisson-ange empereur","Pomacanthus imperator","p","","Le juvénile, bleu à spirales blanches, ne ressemble pas à l'adulte."],["Napoléon","Cheilinus undulatus","p","*","Espèce menacée par la pêche pour l'aquarium et la restauration."],["Requin de récif à pointes blanches","Triaenodon obesus","p","!","Se repose sous les patates de corail la journée ; inoffensif si on le laisse."],["Tortue imbriquée","Eretmochelys imbricata","r","*","Bec en bec d'aigle pour extraire les éponges du récif."],["Bénitier géant","Tridacna gigas","i","*","Jusqu'à 200 kg ; sa chair colorée abrite des algues symbiotiques."],["Nudibranche","Nembrotha spp.","i","","Limace de mer fluo : ses couleurs préviennent qu'elle est toxique."],["Acropore branchu","Acropora spp.","c","*","Construit la charpente du récif ; blanchit dès +1 °C prolongé."]]},"oc_indien":{"l":"Océan Indien occidental","s":"Atolls et lagons peu profonds, sur fond de sable corallien blanc.","sp":[["Raie manta océanique","Mobula birostris","p","*","Jusqu'à 7 m d'envergure ; se rassemble sur les stations de nettoyage."],["Requin-baleine","Rhincodon typus","p","*","Filtreur pacifique ; nager devant lui est interdit aux Maldives."],["Poisson-papillon","Chaetodon spp.","p","","Vit en couple fidèle, indicateur de la santé du récif."],["Tortue verte","Chelonia mydas","r","*","Vient brouter les herbiers du lagon à marée haute."],["Murène ruban","Rhinomuraena quaesita","p","","Naît mâle noir, devient bleu puis femelle jaune."],["Poisson-pierre","Synanceia verrucosa","p","!","Le poisson le plus venimeux du monde, invisible sur le fond : ne jamais poser le pied nu."],["Corail cerveau","Platygyra spp.","c","*","Colonies massives dont les sillons évoquent un cerveau."]]},"pac_est":{"l":"Pacifique est tropical","s":"Côtes chaudes bordées de mangroves, balayées par des remontées d'eau riche.","sp":[["Raie mobula","Mobula munkiana","p","*","Saute hors de l'eau en groupes de plusieurs centaines."],["Tortue olivâtre","Lepidochelys olivacea","r","*","Pontes massives (arribadas) sur quelques plages seulement."],["Requin-marteau halicorne","Sphyrna lewini","p","!","Se rassemble en bancs au large ; espèce en danger critique."],["Dauphin tacheté pantropical","Stenella attenuata","m","*","Suit les bancs de thons, souvent en groupes de plusieurs centaines."],["Baleine à bosse","Megaptera novaeangliae","m","*","Deux populations s'y croisent, l'une du nord, l'autre du sud."],["Crocodile américain","Crocodylus acutus","r","!","Présent dans certains estuaires : se renseigner localement avant de se baigner."],["Palétuvier","Rhizophora mangle","a","*","La mangrove filtre l'eau et sert de nurserie au récif voisin."]]},"galapagos":{"l":"Galápagos","s":"Trois courants s'y rencontrent : une faune unique au monde, très protégée.","sp":[["Iguane marin","Amblyrhynchus cristatus","r","*","Le seul lézard au monde qui broute des algues en plongée."],["Otarie des Galápagos","Zalophus wollebaeki","m","*","Joueuse sous l'eau ; les mâles territoriaux se tiennent à distance."],["Manchot des Galápagos","Spheniscus mendiculus","o","*","Le seul manchot vivant au nord de l'équateur."],["Requin-marteau halicorne","Sphyrna lewini","p","!","Bancs de plusieurs centaines à Darwin et Wolf."],["Tortue verte du Pacifique","Chelonia mydas agassizii","r","*","Se nourrit dans les baies peu profondes de l'archipel."],["Poisson-lune à tête de mouton","Mola alexandrini","p","","Remonte des eaux froides pour se faire nettoyer en surface."],["Cormoran aptère","Phalacrocorax harrisi","o","*","A perdu l'usage du vol : il chasse uniquement en plongée."]]},"humboldt":{"l":"Courant de Humboldt","s":"Une des mers les plus productives du globe : eau froide, vie foisonnante.","sp":[["Anchois du Pérou","Engraulis ringens","p","","Le poisson le plus pêché de la planète ; base de toute la chaîne."],["Otarie à crinière","Otaria flavescens","m","*","Colonies bruyantes sur les rochers ; les mâles pèsent 300 kg."],["Manchot de Humboldt","Spheniscus humboldti","o","*","Niche dans le guano des îles ; population en déclin."],["Dauphin obscur","Lagenorhynchus obscurus","m","*","Acrobate, il enchaîne les sauts en groupes serrés."],["Poisson-lune","Mola mola","p","","Attiré par les eaux riches en méduses."],["Chinchorro géant","Macrocystis pyrifera","a","*","Le kelp géant pousse jusqu'à 50 cm par jour et abrite tout l'écosystème."],["Loutre de mer du Chili","Lontra felina","m","*","Le « chungungo », plus petite loutre marine du monde, très menacée."]]},"benguela":{"l":"Afrique australe","s":"Remontées d'eau glacée du Benguela : forêts de kelp et gros prédateurs.","sp":[["Otarie à fourrure du Cap","Arctocephalus pusillus","m","*","Colonies de dizaines de milliers d'individus le long de la côte."],["Grand requin blanc","Carcharodon carcharias","p","!","Présent au large ; se renseigner sur les consignes locales et les shark spotters."],["Baleine franche australe","Eubalaena australis","m","*","Vient mettre bas près du bord de juin à novembre."],["Manchot du Cap","Spheniscus demersus","o","*","En danger : la population a chuté de plus de 95 % en un siècle."],["Dauphin commun à long bec","Delphinus capensis","m","*","Suit la « sardine run », l'une des plus grandes migrations du monde."],["Kelp du Cap","Ecklonia maxima","a","","Ses stipes flottants forment des forêts denses le long des côtes rocheuses."],["Homard du Cap","Jasus lalandii","i","","Vit dans le kelp ; sa pêche est strictement encadrée."]]},"cal_kelp":{"l":"Californie","s":"Eau froide et forêts de kelp géant, parmi les habitats les plus riches du Pacifique.","sp":[["Loutre de mer","Enhydra lutris","m","*","Casse les oursins sur son ventre ; sans elle, le kelp disparaît."],["Otarie de Californie","Zalophus californianus","m","*","Bruyante sur les pontons, très rapide sous l'eau."],["Garibaldi","Hypsypops rubicundus","p","*","Poisson orange vif, emblème marin de Californie et protégé."],["Grand requin blanc","Carcharodon carcharias","p","!","Les juvéniles fréquentent les eaux peu profondes en été."],["Baleine grise","Eschrichtius robustus","m","*","Passe deux fois par an le long de la côte lors de sa migration."],["Kelp géant","Macrocystis pyrifera","a","*","Peut dépasser 30 m et pousser 50 cm par jour."],["Oursin violet","Strongylocentrotus purpuratus","i","","En surnombre, il rase les forêts de kelp et crée des « déserts d'oursins »."]]},"aus_nz":{"l":"Australie & Nouvelle-Zélande","s":"Des récifs tropicaux au nord aux forêts d'algues tempérées au sud.","sp":[["Dragon de mer feuillu","Phycodurus eques","p","*","Endémique du sud australien ; camouflé en algue, c'est le mâle qui porte les œufs."],["Requin-baleine","Rhincodon typus","p","*","Rassemblement de mars à juillet à Ningaloo."],["Dauphin de Nouvelle-Zélande","Cephalorhynchus hectori","m","*","Le plus petit dauphin marin du monde, en danger."],["Requin bouledogue","Carcharhinus leucas","p","!","Remonte dans les estuaires troubles : on évite de s'y baigner à l'aube."],["Cuboméduse","Chironex fleckeri","i","!","Au nord tropical d'octobre à mai : combinaison anti-méduse obligatoire."],["Otarie à fourrure","Arctocephalus forsteri","m","*","Recolonise peu à peu les côtes néo-zélandaises."],["Kelp taureau","Durvillaea antarctica","a","","Lanières coriaces qui encaissent les houles les plus violentes."]]},"japon":{"l":"Japon","s":"Rencontre du courant chaud Kuroshio et du courant froid Oyashio.","sp":[["Sériole du Japon","Seriola quinqueradiata","p","","Prédateur rapide qui longe les caps et les pointes exposées."],["Tortue caouanne","Caretta caretta","r","*","Le Japon accueille les principales pontes du Pacifique nord."],["Dauphin d'Indo-Pacifique","Tursiops aduncus","m","*","Groupes résidents autour des îles du sud."],["Poisson-lune","Mola mola","p","","Le Kuroshio en amène régulièrement près des côtes."],["Crabe-araignée géant","Macrocheira kaempferi","i","","Jusqu'à 3,8 m d'envergure : le plus grand arthropode vivant."],["Wakamé","Undaria pinnatifida","a","","Algue cultivée depuis des siècles, devenue invasive ailleurs dans le monde."]]},"atl_sud":{"l":"Patagonie atlantique","s":"Plateau continental froid et venteux, riche en mammifères marins.","sp":[["Baleine franche australe","Eubalaena australis","m","*","Vient se reproduire dans le golfe Nuevo de juin à décembre."],["Orque","Orcinus orca","m","*","Célèbre pour s'échouer volontairement pour attraper les jeunes otaries."],["Manchot de Magellan","Spheniscus magellanicus","o","*","Colonies de plusieurs centaines de milliers de couples."],["Otarie à crinière","Otaria flavescens","m","*","Présente toute l'année sur les plages de galets."],["Dauphin de Commerson","Cephalorhynchus commersonii","m","*","Noir et blanc, il joue volontiers dans les vagues d'étrave."],["Kelp géant","Macrocystis pyrifera","a","*","Forme des forêts jusqu'au détroit de Magellan."]]},"lac_alpin":{"l":"Lac d'eau douce","s":"Eau douce, froide et claire : rien à voir avec la mer, une faune bien à elle.","sp":[["Omble chevalier","Salvelinus alpinus","p","*","Poisson des lacs profonds et froids, indicateur d'une eau de qualité."],["Perche commune","Perca fluviatilis","p","","Chasse en bandes près des pontons et des herbiers."],["Brochet","Esox lucius","p","","Embusqué dans les roselières, c'est le grand prédateur du lac."],["Corégone","Coregonus lavaretus","p","","La « féra » des lacs alpins, pêchée depuis toujours."],["Écrevisse à pattes blanches","Austropotamobius pallipes","i","*","Espèce protégée, très sensible à la pollution."],["Roseau commun","Phragmites australis","a","*","La roselière filtre l'eau et abrite les nichées : on ne la piétine pas."],["Characée","Chara spp.","a","","Tapis d'herbiers immergés qui signalent une eau pauvre en nutriments."]]},"cenote":{"l":"Cénote (eau douce souterraine)","s":"Puits calcaire alimenté par une rivière souterraine : eau douce, claire et fraîche.","sp":[["Tétra aveugle","Astyanax mexicanus","p","*","La forme cavernicole a perdu les yeux et la pigmentation."],["Poisson-chat des cénotes","Rhamdia guatemalensis","p","","Se repère aux barbillons dans l'obscurité totale."],["Crevette de cénote","Typhlatya spp.","i","*","Translucide et minuscule, endémique du Yucatán."],["Molly du Yucatán","Poecilia velifera","p","","Vit dans la couche d'eau douce, au-dessus de l'eau salée."],["Racines aériennes","Ficus spp.","a","","Descendent parfois de 20 m pour atteindre l'eau."]]},"riviere":{"l":"Fleuve (eau douce)","s":"Eau douce courante, avec des poissons migrateurs qui font l'aller-retour vers l'océan.","sp":[["Saumon quinnat","Oncorhynchus tshawytscha","p","*","Le plus grand saumon du Pacifique ; remonte le fleuve pour se reproduire."],["Esturgeon blanc","Acipenser transmontanus","p","*","Peut vivre plus de 100 ans et dépasser 6 m."],["Truite arc-en-ciel","Oncorhynchus mykiss","p","","La forme migratrice, la steelhead, descend jusqu'à la mer."],["Pygargue à tête blanche","Haliaeetus leucocephalus","o","*","Pêche au-dessus des rapides, surtout en hiver."],["Loutre de rivière","Lontra canadensis","m","","Discrète, elle chasse dans les bras calmes."]]}};
-var SPOT_ZONE={"imsouane":"atl_iber","safi":"atl_iber","sidikaouki":"atl_iber","ngor":"macaro","ouakam":"macaro","elandsbay":"benguela","muizenberg":"benguela","dahab":"redsea","nosybe":"oc_indien","watamu":"oc_indien","keramas":"indo_pac","nias":"indo_pac","gland":"indo_pac","komodo":"indo_pac","bunaken":"indo_pac","similan":"indo_pac","weligama":"indo_pac","ichinomiya":"japon","kerama":"japon","rincon":"carib","pavones":"pac_est","tamarindo":"pac_est","sayulita":"pac_est","todossantos":"cal_kelp","islamujeres":"carib","tofino":"cal_kelp","newsmyrna":"carib","montauk":"atl_nord","mancora":"pac_est","huanchaco":"humboldt","iquique":"humboldt","praiadorosa":"bresil","noronha":"bresil","ilhabela":"bresil","puntadeleste":"atl_sud","ayampe":"pac_est","burleigh":"aus_nz","byronbay":"aus_nz","manly":"aus_nz","ningaloo":"aus_nz","piha":"aus_nz","shipwreck":"aus_nz","restaurants":"pac_trop","borabora":"pac_trop","jardimdomar":"macaro","santabarbara":"macaro","capomannu":"medit","isolabella":"medit","zlatnirat":"medit","naxos":"medit","hossegor":"atl_iber","lacanau":"atl_iber","latorche":"manche_bzh","biarritz":"atl_iber","anglet":"atl_iber","quiberon":"manche_bzh","seignosse":"atl_iber","capbreton":"atl_iber","lafitenia":"atl_iber","guethary":"atl_iber","sauveterre":"atl_iber","latranche":"atl_iber","lapalue":"manche_bzh","penhors":"manche_bzh","lapalmyre":"atl_iber","mimizan":"atl_iber","capferret":"atl_iber","bidart":"atl_iber","nazare":"atl_iber","supertubos":"atl_iber","ericeira":"atl_iber","mundaka":"atl_iber","thurso":"atl_nord","bundoran":"atl_nord","rodiles":"atl_iber","somo":"atl_iber","zarautz":"atl_iber","pantin":"atl_iber","lasanta":"macaro","anchorpoint":"atl_iber","pipeline":"pac_trop","mavericks":"cal_kelp","trestles":"cal_kelp","malibu":"cal_kelp","puerto":"pac_est","santateresa":"pac_est","chicama":"humboldt","puntadelobos":"humboldt","jbay":"benguela","bells":"aus_nz","snapper":"aus_nz","margaret":"aus_nz","uluwatu":"indo_pac","padang":"indo_pac","cloudbreak":"pac_trop","teahupoo":"pac_trop","floripa":"bresil","puntaroca":"pac_est","raglan":"aus_nz","saquarema":"bresil","montanita":"pac_est","lobitos":"humboldt","mardelplata":"atl_sud","arica":"humboldt","itacare":"bresil","shonan":"japon","arugam":"indo_pac","cloud9":"indo_pac","waikiki":"pac_trop","unstad":"atl_nord","skeletonbay":"benguela","mentawai":"indo_pac","dungeons":"benguela","bluehole_belize":"carib","sipadan":"indo_pac","rasmohammed":"redsea","thistlegorm":"redsea","tulamben":"indo_pac","greatbarrier":"aus_nz","silfra":"atl_nord","cenote_dosojos":"cenote","medes":"medit","portcros":"medit","calanques":"medit","richelieu":"indo_pac","rajaampat":"indo_pac","galapagos":"galapagos","maldives":"oc_indien","hanauma":"pac_trop","bonaire":"carib","tarifa":"medit","dakhla":"atl_iber","cabarete":"carib","lemorne":"oc_indien","cumbuco":"bresil","essaouira":"atl_iber","lafranqui":"medit","jericoacoara":"bresil","hookipa":"pac_trop","pozo":"macaro","gardalake":"lac_alpin","hoodriver":"riviere","annecy":"lac_alpin","verdon":"lac_alpin","glenan":"manche_bzh","capri":"medit","palombaggia":"medit","praia_marinha":"atl_iber","navagio":"medit","anse_source":"oc_indien","whitehaven":"aus_nz","wissant":"manche_bzh","letouquet":"manche_bzh","hardelot":"manche_bzh","wimereux":"manche_bzh","berck":"manche_bzh","malolesbains":"manche_bzh","lehavre":"manche_bzh","etretat":"manche_bzh","dieppe":"manche_bzh","siouville":"manche_bzh","vauville":"manche_bzh","hauteville":"manche_bzh","granville":"manche_bzh","saintmalo":"manche_bzh","saintlunaire":"manche_bzh","erquy":"manche_bzh","perros":"manche_bzh"};
+var SPOT_ZONE={"imsouane":"atl_iber","safi":"atl_iber","sidikaouki":"atl_iber","ngor":"macaro","ouakam":"macaro","elandsbay":"benguela","muizenberg":"benguela","dahab":"redsea","nosybe":"oc_indien","watamu":"oc_indien","keramas":"indo_pac","nias":"indo_pac","gland":"indo_pac","komodo":"indo_pac","bunaken":"indo_pac","similan":"indo_pac","weligama":"indo_pac","ichinomiya":"japon","kerama":"japon","rincon":"carib","pavones":"pac_est","tamarindo":"pac_est","sayulita":"pac_est","todossantos":"cal_kelp","islamujeres":"carib","tofino":"cal_kelp","newsmyrna":"carib","montauk":"atl_nord","mancora":"pac_est","huanchaco":"humboldt","iquique":"humboldt","praiadorosa":"bresil","noronha":"bresil","ilhabela":"bresil","puntadeleste":"atl_sud","ayampe":"pac_est","burleigh":"aus_nz","byronbay":"aus_nz","manly":"aus_nz","ningaloo":"aus_nz","piha":"aus_nz","shipwreck":"aus_nz","restaurants":"pac_trop","borabora":"pac_trop","jardimdomar":"macaro","santabarbara":"macaro","capomannu":"medit","isolabella":"medit","zlatnirat":"medit","naxos":"medit","hossegor":"atl_iber","lacanau":"atl_iber","latorche":"manche_bzh","biarritz":"atl_iber","anglet":"atl_iber","quiberon":"manche_bzh","seignosse":"atl_iber","capbreton":"atl_iber","lafitenia":"atl_iber","guethary":"atl_iber","sauveterre":"atl_iber","latranche":"atl_iber","lapalue":"manche_bzh","penhors":"manche_bzh","lapalmyre":"atl_iber","mimizan":"atl_iber","capferret":"atl_iber","bidart":"atl_iber","nazare":"atl_iber","supertubos":"atl_iber","ericeira":"atl_iber","mundaka":"atl_iber","thurso":"atl_nord","bundoran":"atl_nord","rodiles":"atl_iber","somo":"atl_iber","zarautz":"atl_iber","pantin":"atl_iber","lasanta":"macaro","anchorpoint":"atl_iber","pipeline":"pac_trop","mavericks":"cal_kelp","trestles":"cal_kelp","malibu":"cal_kelp","puerto":"pac_est","santateresa":"pac_est","chicama":"humboldt","puntadelobos":"humboldt","jbay":"benguela","bells":"aus_nz","snapper":"aus_nz","margaret":"aus_nz","uluwatu":"indo_pac","padang":"indo_pac","cloudbreak":"pac_trop","teahupoo":"pac_trop","floripa":"bresil","puntaroca":"pac_est","raglan":"aus_nz","saquarema":"bresil","montanita":"pac_est","lobitos":"humboldt","mardelplata":"atl_sud","arica":"humboldt","itacare":"bresil","shonan":"japon","arugam":"indo_pac","cloud9":"indo_pac","waikiki":"pac_trop","unstad":"atl_nord","skeletonbay":"benguela","mentawai":"indo_pac","dungeons":"benguela","bluehole_belize":"carib","sipadan":"indo_pac","rasmohammed":"redsea","thistlegorm":"redsea","tulamben":"indo_pac","greatbarrier":"aus_nz","cenote_dosojos":"cenote","medes":"medit","portcros":"medit","calanques":"medit","richelieu":"indo_pac","rajaampat":"indo_pac","galapagos":"galapagos","maldives":"oc_indien","hanauma":"pac_trop","bonaire":"carib","tarifa":"medit","dakhla":"atl_iber","cabarete":"carib","lemorne":"oc_indien","cumbuco":"bresil","essaouira":"atl_iber","lafranqui":"medit","jericoacoara":"bresil","hookipa":"pac_trop","pozo":"macaro","gardalake":"lac_alpin","hoodriver":"riviere","annecy":"lac_alpin","verdon":"lac_alpin","glenan":"manche_bzh","capri":"medit","palombaggia":"medit","praia_marinha":"atl_iber","navagio":"medit","anse_source":"oc_indien","whitehaven":"aus_nz","wissant":"manche_bzh","letouquet":"manche_bzh","hardelot":"manche_bzh","wimereux":"manche_bzh","berck":"manche_bzh","malolesbains":"manche_bzh","lehavre":"manche_bzh","etretat":"manche_bzh","dieppe":"manche_bzh","siouville":"manche_bzh","vauville":"manche_bzh","hauteville":"manche_bzh","granville":"manche_bzh","saintmalo":"manche_bzh","saintlunaire":"manche_bzh","erquy":"manche_bzh","perros":"manche_bzh"};
 var BIOCAT={
   p:['bpoisson','var(--k-blue)','var(--k-blue-ink)','Poisson'], m:['mammifere','var(--k-navy)','var(--k-navy-ink)','Mammifère'],
   r:['reptile','var(--k-green)','var(--k-green-ink)','Reptile'],  i:['invertebre','var(--k-violet)','var(--k-violet-ink)','Invertébré'],
@@ -804,10 +924,20 @@ function renderPreserve(s){
    + '</div></div>';
   return h;
 }
+/* Onglet « Préserver » : affiché seulement quand la zone du spot a ses gestes (PRESERVE). Masqué alors qu'il
+   était ouvert, on retombe sur « Le spot » sans faire défiler la page. */
+function preserveTab(on){
+  var tab=document.querySelector('#dTabs .dtab[data-cat="preserver"]');
+  if(!tab)return;
+  tab.style.display=on?'':'none';
+  if(!on&&tab.classList.contains('active'))showDetailCat('infos',false);
+}
 function renderFaune(s){
   var host=document.getElementById('dFaune'); if(!host) return;
   var z=BIOZONE[SPOT_ZONE[s.id]];
-  if(!z){host.innerHTML='<p class="field-empty">Pour identifier les espèces de ce secteur, renseigne-toi auprès d’un centre local ou du gestionnaire de l’espace naturel.</p>';document.getElementById('dPreserve').innerHTML='<div class="field-empty"><h3>Un lieu à respecter.</h3><p>Reste sur les accès autorisés, rapporte tes déchets et observe les animaux à distance.</p></div>';return;}
+  /* Pas de zone contrôlée (silfra, eaux douces…) : pas d'onglet Préserver plutôt qu'une carte générique. */
+  preserveTab(!!(z&&PRESERVE[SPOT_ZONE[s.id]]));
+  if(!z){host.innerHTML='<p class="field-empty">Pour identifier les espèces de ce secteur, renseigne-toi auprès d’un centre local ou du gestionnaire de l’espace naturel.</p>';var hp0=document.getElementById('dPreserve');if(hp0)hp0.innerHTML='';return;}
   var warn=[], flore=[], faune=[];
   /* Espèces endémiques d’Hawaï : seulement sur les spots hawaïens (le phoque moine n’existe pas à Fidji ni à Bora Bora). */
   var hawaii=/hawa/i.test((s.loc||'')+' '+(s.name||''));
@@ -993,6 +1123,10 @@ function renderDetailFacts(s,act){
   window.OceanImmersion?.update(s,act);
   window.OceanExperience?.update(s,act);
 }
+/* Étiquette des phrases reprises du carnet (champ « carnet » du catalogue) : elles ne sont jamais présentées comme vérifiées. */
+function carnetTag(id){
+  return `<small class="carnet-unverified"${id?` id="${id}"`:''} style="display:block;margin:6px 0;font-size:12px;font-weight:600;color:var(--t-ink2)">Carnet Ocean Buddy · non vérifié</small>`;
+}
 function openSpot(id){
   const s=SPOTS.find(x=>x.id===id);if(!s)return;
   window.OceanNavigation?.begin();
@@ -1021,6 +1155,11 @@ function openSpot(id){
   var em=countryEmergency(s);
   document.getElementById('dEmerg').textContent=em.emergency;
   document.getElementById('dSea').textContent=isInland(s)?(em.call?'Secours : '+em.emergency:'Numéro local à confirmer avant la sortie.'):em.sea;
+  /* Date de vérification du numéro (data/sources/urgences.json), seulement quand un numéro est affiché. */
+  var _seaEl=document.getElementById('dSea'),_ck=document.getElementById('dEmergChecked');
+  if(!_ck&&_seaEl){_ck=document.createElement('div');_ck.id='dEmergChecked';_ck.className='sc-sea';_seaEl.after(_ck);}
+  var _shown=em.checked&&(em.call||!isInland(s));
+  if(_ck){_ck.textContent=_shown?`Numéro vérifié le ${em.checked.split('-').reverse().join('/')}`:'';_ck.hidden=!_shown;}
   const callButton=document.getElementById('dCall');callButton.hidden=!em.call;
   if(em.call)callButton.href='tel:'+em.call;else callButton.removeAttribute('href');
   document.getElementById('dRescue').onclick=function(){mapsSearch('poste de secours plage sauveteurs '+near,cc);};
@@ -1038,18 +1177,28 @@ function openSpot(id){
   /* Pas d'anecdote ni d'histoire : on masque le bloc plutôt que d'afficher une phrase de remplissage. */
   const anecBlock=document.getElementById('dAnec').closest('.anec-block');if(anecBlock)anecBlock.style.display=(ANEC[s.id]||fun)?'':'none';
   if(fun){fb.style.display='';document.getElementById('dFun').textContent=fun;}else{fb.style.display='none';}
-  /* Pas de conseil : on masque tout le bloc plutôt que d'afficher un titre sans texte. */
+  /* Pas de conseil au catalogue : la phrase reprise mot pour mot du carnet, sous l'étiquette « non vérifié ».
+     Sans l'une ni l'autre, on masque tout le bloc plutôt que d'afficher un titre sans texte. */
   var _hasTip=typeof s.tip==='string'&&s.tip.trim()!=='';
-  document.getElementById('dTip').textContent=_hasTip?s.tip:'';
-  var _tipBlock=document.getElementById('dTip').closest('.block');
-  if(_tipBlock)_tipBlock.style.display=_hasTip?'':'none';
+  var _carnetTip=!_hasTip&&s.carnet&&typeof s.carnet.tip==='string'&&s.carnet.tip.trim()!==''?s.carnet.tip:'';
+  var _tipEl=document.getElementById('dTip');
+  _tipEl.textContent=_hasTip?s.tip:_carnetTip;
+  var _tipTag=document.getElementById('dTipCarnet');
+  if(!_tipTag&&_carnetTip){_tipEl.insertAdjacentHTML('afterend',carnetTag('dTipCarnet'));_tipTag=document.getElementById('dTipCarnet');}
+  if(_tipTag)_tipTag.style.display=_carnetTip?'block':'none';
+  var _tipBlock=_tipEl.closest('.block');
+  if(_tipBlock)_tipBlock.style.display=(_hasTip||_carnetTip)?'':'none';
   var _to=document.getElementById('dTipOcto');
   if(_to&&!_to.innerHTML)_to.innerHTML=octoTag();
   renderDetailFacts(s,act);
   var _tb=document.getElementById('dTideBlock');if(_tb)_tb.style.display='none';
   renderConditions(s,LIVE[s.id]?.live?LIVE[s.id]:null);fetchConditions(s);
   try{renderFaune(s);}catch(e){}
-  document.getElementById('dDangers').innerHTML=(Array.isArray(s.dangers)?s.dangers:[]).map(d=>{var m=dangerStyle(d[0],d[1]);return `<div class="danger-item"><span class="di" style="background:${m[1]};color:${m[2]}">${uic(m[0])}</span><span>${esc(d[1])}</span></div>`;}).join('')||'<p><b>Danger non évalué</b></p><p>Vérifie les consignes locales avant ta sortie.</p>';
+  /* Lignes du catalogue ; à défaut, celles du carnet, précédées une seule fois de l'étiquette « non vérifié ». */
+  const dangerRow=d=>{var m=dangerStyle(d[0],d[1]);return `<div class="danger-item"><span class="di" style="background:${m[1]};color:${m[2]}">${uic(m[0])}</span><span>${esc(d[1])}</span></div>`;};
+  const ownDangers=(Array.isArray(s.dangers)?s.dangers:[]).filter(d=>Array.isArray(d)&&d[1]);
+  const carnetDangers=!ownDangers.length&&s.carnet&&Array.isArray(s.carnet.dangers)?s.carnet.dangers.filter(d=>Array.isArray(d)&&d[1]):[];
+  document.getElementById('dDangers').innerHTML=ownDangers.map(dangerRow).join('')||(carnetDangers.length?carnetTag()+carnetDangers.map(dangerRow).join(''):'')||'<p><b>Danger non évalué</b></p><p>Vérifie les consignes locales avant ta sortie.</p>';
   showDetailCat('infos',false);
   /* Les modules annexes (communauté, guide, carte) ne doivent jamais bloquer l’ouverture de la fiche. */
   try{window.OceanCommunity?.mountSpot(id);}catch(e){console.warn('community',e);}
@@ -2670,7 +2819,7 @@ const QUIZ_BANK=[
  {c:'tech',q:'Le « tube » (barrel), c’est quand…',a:['tu tombes','la vague s’enroule au-dessus de toi','tu rames','la vague ferme'],k:1,e:'Le Graal du surfeur !'},
  {c:'tech',q:'Pour débuter, la meilleure planche est…',a:['un shortboard','une planche en mousse','un gun','une planche fine'],k:1,e:'Stable et qui pardonne les erreurs.'},
  {c:'tech',q:'La wax sert à…',a:['aller plus vite','ne pas glisser sur la planche','mieux flotter','protéger la planche'],k:1,e:'De l’accroche pour les pieds.'},
- {c:'tech',q:'Un « beach break » a un fond de…',a:['récif','sable','rochers','corail'],k:1,e:'Plus sûr, idéal pour débuter.'},
+ {c:'tech',q:'Un « beach break » a un fond de…',a:['récif','sable','rochers','corail'],k:1},
  {c:'tech',q:'Pour prendre de la vitesse sur la vague, on…',a:['freine','pompe (haut/bas)','s’assoit','rame'],k:1,e:'Comme sur une balançoire.'},
  {c:'tech',q:'Combien d’ailerons a un « thruster » ?',a:['1','2','3','4'],k:2,e:'Trois ailerons, le set-up le plus polyvalent.'},
  {c:'ocean',q:'Quelle part de la Terre est couverte par les océans ?',a:['30 %','50 %','71 %','90 %'],k:2,e:'71 % — et 97 % de l’eau de la planète.'},
@@ -2756,13 +2905,13 @@ function quizAnswer(i){
   var q=quizQs[quizIdx];var ok=i===q.k;
   document.querySelectorAll('#quizAnswers .quiz-a').forEach(function(b){var bi=+b.dataset.i;b.disabled=true;if(bi===q.k)b.classList.add('correct');else if(bi===i)b.classList.add('wrong');});
   if(ok){quizScore++;quizStreak++;}else{quizStreak=0;}
-  document.getElementById('quizFb').innerHTML='<div class="qf-res '+(ok?'good':'bad')+'">'+(ok?('✅ Bravo !'+(quizStreak>=3?' 🔥 série de '+quizStreak+' !':'')):'❌ Raté')+'</div><div class="qf-exp">💡 '+q.e+'</div><button class="quiz-next" onclick="quizNext()">'+quizRevealNext()+'</button>';
+  document.getElementById('quizFb').innerHTML='<div class="qf-res '+(ok?'good':'bad')+'">'+(ok?('✅ Bravo !'+(quizStreak>=3?' 🔥 série de '+quizStreak+' !':'')):'❌ Raté')+'</div>'+(q.e?'<div class="qf-exp">💡 '+q.e+'</div>':'')+'<button class="quiz-next" onclick="quizNext()">'+quizRevealNext()+'</button>';
 }
 function quizTimeout(){
   if(quizAnswered)return;quizAnswered=true;var q=quizQs[quizIdx];
   document.querySelectorAll('#quizAnswers .quiz-a').forEach(function(b){b.disabled=true;if(+b.dataset.i===q.k)b.classList.add('correct');});
   quizStreak=0;
-  document.getElementById('quizFb').innerHTML='<div class="qf-res bad">⏱️ Temps écoulé !</div><div class="qf-exp">💡 '+q.e+'</div><button class="quiz-next" onclick="quizNext()">'+quizRevealNext()+'</button>';
+  document.getElementById('quizFb').innerHTML='<div class="qf-res bad">⏱️ Temps écoulé !</div>'+(q.e?'<div class="qf-exp">💡 '+q.e+'</div>':'')+'<button class="quiz-next" onclick="quizNext()">'+quizRevealNext()+'</button>';
 }
 function quizNext(){clearQuizTimer();if(quizIdx+1<quizQs.length){quizIdx++;renderQuizQuestion();}else{renderQuizResult();}}
 function renderQuizResult(){
