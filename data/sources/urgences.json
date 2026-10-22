@@ -232,15 +232,13 @@
    "number": "106",
    "label": "Urgence nautique : Prefectura Naval Argentina (rivières, lacs et côtes)",
    "vhf16": false,
-   "status": "sourcé",
+   "status": "à vérifier",
    "sources": [
     2
-   ]
+   ],
+   "note": "Relecture sécurité (22 oct.) : le 106 n’apparaît dans aucune citation (la phrase retenue nomme la Prefectura Naval sans numéro) : ligne retirée jusqu’à une citation qui contient le numéro."
   },
-  "line": {
-   "kind": "mer",
-   "n": "106"
-  },
+  "line": null,
   "sources": [
    {
     "url": "https://www.argentina.gob.ar/tema/emergencias",
@@ -972,15 +970,13 @@
    "number": "137",
    "label": "Autorité maritime (Armada de Chile) : urgences en mer, plage et rochers",
    "vhf16": false,
-   "status": "sourcé",
+   "status": "à vérifier",
    "sources": [
     1
-   ]
+   ],
+   "note": "Relecture sécurité (22 oct.) : le 137 n’apparaît pas dans la citation (« llama a este número ») : ligne retirée jusqu’à une citation qui contient le numéro."
   },
-  "line": {
-   "kind": "mer",
-   "n": "137"
-  },
+  "line": null,
   "sources": [
    {
     "url": "https://www.gov.uk/foreign-travel-advice/chile/getting-help",
@@ -2736,8 +2732,10 @@
    "vhf16": false,
    "status": "sourcé",
    "sources": [
+    0,
     3
-   ]
+   ],
+   "note": "Relecture sécurité (22 oct.) : le 911 de la citation « Marine emergencies » (source 3) est celui du caisson hyperbare ; le 911 en mer est appuyé par la source 0 (« police marine unit »), ajoutée aux sources de la ligne."
   },
   "line": {
    "kind": "mer",

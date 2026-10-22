@@ -5227,7 +5227,7 @@
    "path": "tip",
    "lang": "fr",
    "file": "catalog",
-   "text": "Loue tôt le matin, les embarcations partent vite l’été. Le gilet de sauvetage ou la combinaison de flottaison est obligatoire sur les canoës, kayaks, voiliers légers, stand-up paddles, planches à voile et kite-surfs, et pour les enfants de moins de 12 ans (règle du Parc).",
+   "text": "Loue tôt le matin, les embarcations partent vite l’été. Le gilet de sauvetage ou une combinaison assurant la flottaison est obligatoire (règle du Parc).",
    "status": "sourcé",
    "checked": "2026-10-20",
    "sources": [
@@ -5242,7 +5242,8 @@
    ],
    "research": [
     "faits-1:verdon:16"
-   ]
+   ],
+   "relecture": "Relecture sécurité (22 oct.) : retrait de la liste des embarcations et des « enfants de moins de 12 ans » (la citation s’arrête avant)."
   },
   {
    "spot": "weligama",

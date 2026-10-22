@@ -389,7 +389,7 @@
   "spot": "bluehole_belize",
   "path": "tip",
   "lang": "fr",
-  "text": "Réserve ta sortie avec un opérateur enregistré et agréé : le trou se visite en bateau, sans aucune installation sur place. Tiens-toi à la profondeur annoncée par ton guide. Une taxe d’entrée de 60 BZD par jour est demandée aux non-nationaux.",
+  "text": "Réserve ta sortie avec un opérateur enregistré et agréé : le trou se visite en bateau, sans aucune installation sur place. Une taxe d’entrée de 60 BZD par jour est demandée aux non-nationaux.",
   "status": "sourcé",
   "checked": "2026-10-20",
   "sources": [
@@ -426,7 +426,8 @@
     "supports": "Aucune installation à terre."
    }
   ],
-  "research": "essentiel-1.verifie.json#bluehole_belize/tip"
+  "research": "essentiel-1.verifie.json#bluehole_belize/tip",
+  "relecture": "Relecture sécurité (22 oct.) : retrait de « Tiens-toi à la profondeur annoncée par ton guide » (aucune citation ; absent des traductions en et es)."
  },
  {
   "spot": "bluehole_belize",
@@ -1615,7 +1616,7 @@
   "spot": "gilit",
   "path": "tip",
   "lang": "fr",
-  "text": "Les sites de snorkeling s’atteignent à la nage depuis la plage. Le courant est annoncé fort entre les îles : reste près du bord et demande à un opérateur local où nager. Si tu pars en bateau, regarde si des gilets de sauvetage sont à bord.",
+  "text": "Les sites de snorkeling s’atteignent à la nage depuis la plage. Le courant est annoncé fort entre les îles : demande à un opérateur local où nager. Si tu pars en bateau, regarde si des gilets de sauvetage sont à bord.",
   "status": "mixte",
   "checked": "2026-10-20",
   "sources": [
@@ -1636,7 +1637,8 @@
     "supports": "Avant d'embarquer, vérifier la présence de gilets de sauvetage et de canots."
    }
   ],
-  "research": "essentiel-3.verifie.json#gilit/tip"
+  "research": "essentiel-3.verifie.json#gilit/tip",
+  "relecture": "Relecture sécurité (22 oct.) : retrait de « reste près du bord » (aucune citation ; absent des traductions en et es)."
  },
  {
   "spot": "gilit",
@@ -3633,7 +3635,7 @@
   "spot": "noronha",
   "path": "tip",
   "lang": "fr",
-  "text": "La baie des Dauphins est interdite d’accès : observe les dauphins depuis le belvédère (poste du Sancho, de 6 h 30 à 18 h 30). Paie la taxe d’environnement avant d’arriver et réserve l’accès à la piscine d’Atalaia (16 personnes par groupe) auprès de l’ICMBio.",
+  "text": "La baie des Dauphins est interdite d’accès : observe les dauphins depuis le belvédère (poste du Sancho, de 6 h 30 à 18 h 30). Paie la taxe d’environnement et réserve l’accès à la piscine d’Atalaia (16 personnes par groupe) auprès de l’ICMBio.",
   "status": "sourcé",
   "checked": "2026-10-20",
   "sources": [
@@ -3662,7 +3664,8 @@
     "supports": "Réservation Atalaia."
    }
   ],
-  "research": "essentiel-1.verifie.json#noronha/tip"
+  "research": "essentiel-1.verifie.json#noronha/tip",
+  "relecture": "Relecture sécurité (22 oct.) : retrait de « avant d’arriver » (aucune citation sur le moment du paiement)."
  },
  {
   "spot": "noronha",
@@ -3738,7 +3741,7 @@
   "spot": "noronha",
   "path": "visit.localRules",
   "lang": "fr",
-  "text": "Taxe d’environnement (TPA) obligatoire pour tout visiteur non résident, par jour de séjour : 105,79 R$ pour 1 jour en 2026, à payer en ligne avant le départ ou à l’arrivée. Le parc marin demande en plus un billet ICMBio. La baie des Dauphins est interdite d’accès ; l’observation se fait depuis le Mirante dos Golfinhos par le poste de contrôle du Sancho (6 h 30-18 h 30). Atalaia : accès limité à 16 personnes par groupe, avec réservation préalable auprès de l’ICMBio. La plongée avec bouteille se fait avec des plongeurs accrédités.",
+  "text": "Taxe d’environnement (TPA) obligatoire pour tout visiteur non résident, par jour de séjour : 105,79 R$ pour 1 jour en 2026. La baie des Dauphins est interdite d’accès ; l’observation se fait depuis le Mirante dos Golfinhos par le poste de contrôle du Sancho (6 h 30-18 h 30). Atalaia : accès limité à 16 personnes par groupe, avec réservation préalable auprès de l’ICMBio. La plongée avec bouteille se fait avec des plongeurs accrédités.",
   "status": "sourcé",
   "checked": "2026-10-20",
   "sources": [
@@ -3799,7 +3802,8 @@
     "supports": "Plongée bouteille accompagnée par des plongeurs accrédités."
    }
   ],
-  "research": "essentiel-1.verifie.json#noronha/visit.regles"
+  "research": "essentiel-1.verifie.json#noronha/visit.regles",
+  "relecture": "Relecture sécurité (22 oct.) : retrait de « à payer en ligne avant le départ ou à l’arrivée » et du « billet ICMBio » du parc marin (absents des citations)."
  },
  {
   "spot": "noronha",
@@ -3964,7 +3968,7 @@
   "spot": "nusapenida",
   "path": "visit.localRules",
   "lang": "fr",
-  "text": "Les touristes étrangers paient une taxe de 150 000 IDR pour entrer à Bali (règlement provincial n° 2 de 2025), à régler en ligne sur la plateforme officielle Love Bali.",
+  "text": "Les touristes étrangers paient une taxe de 150 000 IDR pour entrer à Bali, à régler en ligne sur la plateforme officielle Love Bali.",
   "status": "sourcé",
   "checked": "2026-10-20",
   "sources": [
@@ -3985,7 +3989,8 @@
     "supports": "Intitulé du règlement : taxe pour les touristes internationaux."
    }
   ],
-  "research": "essentiel-1.verifie.json#nusapenida/visit.regles"
+  "research": "essentiel-1.verifie.json#nusapenida/visit.regles",
+  "relecture": "Relecture sécurité (22 oct.) : retrait de « règlement provincial n° 2 de 2025 » (numéro absent des citations)."
  },
  {
   "spot": "ouakam",
@@ -4579,7 +4584,7 @@
   "spot": "portcros",
   "path": "tip",
   "lang": "fr",
-  "text": "Pour le sentier sous-marin, rejoins la plage de la Palud à pied (compte 40 min à 1 h) avec masque et tuba. L’été, regarde le bulletin du risque incendie avant de partir : les sentiers de l’île peuvent être fermés.",
+  "text": "Pour le sentier sous-marin, rejoins la plage de la Palud à pied (environ 40 minutes de marche, pas très facile) avec masque et tuba. L’été, regarde le bulletin du risque incendie avant de partir : les sentiers de l’île peuvent être fermés.",
   "status": "sourcé",
   "checked": "2026-10-20",
   "sources": [
@@ -4616,7 +4621,8 @@
     "supports": "Bulletin quotidien du risque incendie du 19 juin au 20 septembre."
    }
   ],
-  "research": "essentiel-2.verifie.json#portcros/tip"
+  "research": "essentiel-2.verifie.json#portcros/tip",
+  "relecture": "Relecture sécurité (22 oct.) : « compte 40 min à 1 h » remplacé par la durée citée (40 minutes de marche, pas très facile)."
  },
  {
   "spot": "portcros",
@@ -4811,7 +4817,7 @@
   "spot": "puntacarola",
   "path": "visit.localRules",
   "lang": "fr",
-  "text": "Le droit d’entrée dans l’archipel est de 200 USD pour un touriste étranger de plus de 12 ans, plus la carte de contrôle de transit. Garde 2 m de distance avec la faune, appareils photo compris. Ne la touche pas, ne la nourris pas. Pas de drone. Respecte les horaires de visite.",
+  "text": "Le droit d’entrée dans l’archipel est de 200 USD pour un touriste étranger de plus de 12 ans. Garde 2 m de distance avec la faune, appareils photo compris. Ne la touche pas, ne la nourris pas. Pas de drone. Respecte les horaires de visite.",
   "status": "sourcé",
   "checked": "2026-10-20",
   "sources": [
@@ -4856,7 +4862,8 @@
     "supports": "Photos sans flash ; pas de drones."
    }
   ],
-  "research": "essentiel-2.verifie.json#puntacarola/visit.regles"
+  "research": "essentiel-2.verifie.json#puntacarola/visit.regles",
+  "relecture": "Relecture sécurité (22 oct.) : retrait de « plus la carte de contrôle de transit » (absent des citations)."
  },
  {
   "spot": "puntadelobos",
@@ -5140,7 +5147,7 @@
   "spot": "rajaampat",
   "path": "visit.localRules",
   "lang": "fr",
-  "text": "L’enregistrement en ligne avant la visite est obligatoire (SIPARI), et le paiement des taxes se fait sans espèces par les canaux officiels. D’après la presse (janvier 2026), la taxe du régence est de 1 000 000 IDR pour un étranger (gratuit pour les moins de 12 ans), en plus des taxes provinciale et nationale : 1,7 million IDR au total.",
+  "text": "L’enregistrement en ligne avant la visite est obligatoire (SIPARI), et le paiement des taxes se fait sans espèces par les canaux officiels. D’après la presse (janvier 2026), la taxe du régence est de 1 000 000 IDR pour un étranger, en plus des taxes provinciale et nationale : 1,7 million IDR au total.",
   "status": "sourcé",
   "checked": "2026-10-20",
   "sources": [
@@ -5177,7 +5184,8 @@
     "supports": "Total des taxes d'entrée : 1,7 million IDR pour les étrangers."
    }
   ],
-  "research": "essentiel-1.verifie.json#rajaampat/visit.regles"
+  "research": "essentiel-1.verifie.json#rajaampat/visit.regles",
+  "relecture": "Relecture sécurité (22 oct.) : retrait de « gratuit pour les moins de 12 ans » (absent des citations)."
  },
  {
   "spot": "rangiroa",
@@ -5229,7 +5237,7 @@
   "spot": "rangiroa",
   "path": "tip",
   "lang": "fr",
-  "text": "Plonge dans la passe avec un club local, qui choisit le bon moment par rapport au courant (le courant entrant est la référence habituelle de la passe). Les plongées en dérive de Rangiroa sont réservées aux plongeurs de niveau 2 minimum.",
+  "text": "Plonge dans la passe avec un club local, qui choisit le bon moment par rapport au courant. Les plongées en dérive de Rangiroa sont réservées aux plongeurs de niveau 2 minimum.",
   "status": "sourcé",
   "checked": "2026-10-20",
   "sources": [
@@ -5250,7 +5258,8 @@
     "supports": "La passe de Tiputa est présentée comme idéale pour les longues plongées en dérive."
    }
   ],
-  "research": "essentiel-2.verifie.json#rangiroa/tip"
+  "research": "essentiel-2.verifie.json#rangiroa/tip",
+  "relecture": "Relecture sécurité (22 oct.) : retrait de « le courant entrant est la référence habituelle de la passe » (la citation de Tahiti Tourisme sur le courant rentrant vise Fakarava, pas Rangiroa)."
  },
  {
   "spot": "rangiroa",
