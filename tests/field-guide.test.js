@@ -211,7 +211,9 @@ test('checklist snorkeling : corail, herbier ou fonds selon les textes déjà pu
   const snork=s=>G.checklist(s,'snorkeling')[2];
   assert.match(snork(spot('tulamben')).copy,/coraux/);assert.equal(snork(spot('tulamben')).label,'Respecter le récif');
   /* macarella : le carnet dit « herbiers de posidonie » ; sans carnet publié, le geste reste générique (jamais « coraux »). */
-  const macarella=spot('macarella');
+  /* Le carnet de macarella est désormais promu dans le catalogue (herbiers de posidonie) : on le retire pour tester le geste générique. */
+  assert.equal(snork(spot('macarella')).label,'Respecter les herbiers');
+  const macarella={...spot('macarella'),carnet:undefined};
   assert.doesNotMatch(snork(macarella).copy,/coraux/);
   assert.equal(snork(macarella).label,'Respecter les fonds');
   const respect=JSON.parse(read('data/spot-guides.json')).spots.macarella.respect;
