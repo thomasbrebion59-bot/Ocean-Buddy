@@ -732,16 +732,20 @@ function countryEmergency(s){
     :row[1]==='ambulance'?`Ambulance : ${n}`
     :row[1]==='conflit'?'Les sources officielles se contredisent : demande le numéro sur place.'
     :null;
-  return {emergency:call||'À confirmer',sea:sea||'Repère le numéro des secours locaux avant ta sortie.',call:call,checked:row&&(call||n)?row[3]:null};
+  /* Autres numéros sourcés écrits à côté du bouton (police, ambulance, autre numéro général), un par ligne. */
+  var more=(call&&row&&row[4]||[]).map(function(x){
+    return x[0]==='police'?`Police : ${x[1]}`:x[0]==='ambulance'?`Ambulance : ${x[1]}`:x[0]==='aussi'?`Aussi : ${x[1]}`:null;
+  }).filter(Boolean);
+  return {emergency:call||'À confirmer',sea:sea||'Repère le numéro des secours locaux avant ta sortie.',call:call,more:more,checked:row&&(call||n)?row[3]:null};
 }
 /*EMERGENCY*/
 /* Généré par scripts/build-emergency.cjs depuis data/sources/urgences.json : ne pas modifier à la main.
-   nom normalisé -> [bouton, type de ligne, valeur de la ligne, vérifié le] */
+   nom normalisé -> [bouton, type de ligne, valeur de la ligne, vérifié le, autres numéros] */
 var EMERGENCY_BY_COUNTRY={
  "afrique-du-sud":["112","mer","NSRI 087 094 9774","2026-10-20"],
  "allemagne":["112","mer16","+49 421 536 870","2026-10-20"],
  "angola":[null,"conflit",null,"2026-10-20"],
- "argentine":["911","mer","106","2026-10-20"],
+ "argentine":[null,"mer","106","2026-10-20"],
  "aruba":["911","garde","913","2026-10-20"],
  "australie":["000","mer","1800 641 792","2026-10-20"],
  "autriche":["112","ambulance","144","2026-10-20"],
@@ -761,7 +765,7 @@ var EMERGENCY_BY_COUNTRY={
  "costa-rica":["911",null,null,"2026-10-20"],
  "croatie":["112","mer16","195","2026-10-20"],
  "cuba":["104",null,null,"2026-10-20"],
- "curacao":["912","garde","913","2026-10-20"],
+ "curacao":["912","garde","913","2026-10-20",[["police","911"]]],
  "danemark":["112","mer","112","2026-10-20"],
  "dominique":["999",null,null,"2026-10-20"],
  "egypte":[null,"conflit",null,"2026-10-20"],
@@ -788,17 +792,17 @@ var EMERGENCY_BY_COUNTRY={
  "iles-vierges-des-etats-unis":["911",null,null,"2026-10-20"],
  "inde":["112",null,null,"2026-10-20"],
  "indonesie":["115","mer","Basarnas 115","2026-10-20"],
- "irlande":["112","mer16","112","2026-10-20"],
+ "irlande":["112","mer16","112","2026-10-20",[["aussi","999"]]],
  "islande":["112",null,null,"2026-10-20"],
  "israel":["101",null,null,"2026-10-20"],
  "italie":["112","garde","1530","2026-10-20"],
- "jamaique":["110",null,null,"2026-10-20"],
+ "jamaique":["110",null,null,"2026-10-20",[["police","119"]]],
  "japon":["119","garde","118","2026-10-20"],
  "jordanie":["911",null,null,"2026-10-20"],
  "kenya":["999",null,null,"2026-10-20"],
  "la-reunion":["112","mer16","196","2026-10-20"],
  "liberia":[null,"conflit",null,"2026-10-20"],
- "macedoine-du-nord":["194",null,null,"2026-10-20"],
+ "macedoine-du-nord":["194",null,null,"2026-10-20",[["police","192"]]],
  "madagascar":["117",null,null,"2026-10-20"],
  "malaisie":["999","mer","999","2026-10-20"],
  "malawi":["998",null,null,"2026-10-20"],
@@ -812,7 +816,7 @@ var EMERGENCY_BY_COUNTRY={
  "micronesie":["911",null,null,"2026-10-20"],
  "montenegro":["112","mer16","129","2026-10-20"],
  "mozambique":["112",null,null,"2026-10-20"],
- "namibie":["10111",null,null,"2026-10-20"],
+ "namibie":["10111",null,null,"2026-10-20",[["ambulance","10177"]]],
  "nicaragua":[null,"conflit",null,"2026-10-20"],
  "norvege":["112","mer16","112","2026-10-20"],
  "nouvelle-caledonie":["15","mer16","16","2026-10-20"],
@@ -822,7 +826,7 @@ var EMERGENCY_BY_COUNTRY={
  "panama":["911",null,null,"2026-10-20"],
  "papouasie-nouvelle-guinee":["111",null,null,"2026-10-20"],
  "pays-bas":["112","mer16","112","2026-10-20"],
- "perou":["105",null,null,"2026-10-20"],
+ "perou":["106",null,null,"2026-10-20",[["police","105"]]],
  "philippines":["911","garde","(02) 8527-3877","2026-10-20"],
  "pologne":["112","ambulance","999","2026-10-20"],
  "polynesie-francaise":["15",null,null,"2026-10-20"],
@@ -844,7 +848,7 @@ var EMERGENCY_BY_COUNTRY={
  "suisse":["112","ambulance","144","2026-10-20"],
  "taiwan":["119","garde","118","2026-10-20"],
  "tanzanie":["112",null,null,"2026-10-20"],
- "thailande":["1669",null,null,"2026-10-20"],
+ "thailande":["1669",null,null,"2026-10-20",[["police","191"]]],
  "tonga":["911",null,null,"2026-10-20"],
  "tunisie":["190",null,null,"2026-10-20"],
  "turquie":["112",null,null,"2026-10-20"],
@@ -1158,6 +1162,9 @@ function openSpot(id){
   /* Date de vérification du numéro (data/sources/urgences.json), seulement quand un numéro est affiché. */
   var _seaEl=document.getElementById('dSea'),_ck=document.getElementById('dEmergChecked');
   if(!_ck&&_seaEl){_ck=document.createElement('div');_ck.id='dEmergChecked';_ck.className='sc-sea';_seaEl.after(_ck);}
+  var _more=document.getElementById('dEmergMore');
+  if(!_more&&_seaEl){_more=document.createElement('div');_more.id='dEmergMore';_seaEl.after(_more);}
+  if(_more){_more.innerHTML='';em.more.forEach(function(t){var d=document.createElement('div');d.className='sc-sea';d.textContent=t;_more.appendChild(d);});_more.hidden=!em.more.length;}
   var _shown=em.checked&&(em.call||!isInland(s));
   if(_ck){_ck.textContent=_shown?`Numéro vérifié le ${em.checked.split('-').reverse().join('/')}`:'';_ck.hidden=!_shown;}
   const callButton=document.getElementById('dCall');callButton.hidden=!em.call;

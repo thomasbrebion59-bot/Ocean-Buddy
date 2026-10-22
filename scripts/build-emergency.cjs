@@ -12,6 +12,9 @@ const SOURCE=path.join(root,'data/sources/urgences.json'),APP=path.join(root,'ap
 const DATE=/^\d{4}-\d{2}-\d{2}$/;
 /* Vocabulaire fermé des lignes (gabarits de countryEmergency) : mer, mer16, garde, urgences, ambulance, conflit. */
 const SEA_KINDS=new Set(['mer','mer16','garde','urgences']);
+/* Autres numéros sourcés écrits à côté du bouton (décision 4) : Police, Ambulance, Aussi. */
+const EXTRA_KINDS=new Set(['police','ambulance','aussi']);
+const digits=x=>String(x).replace(/\D/g,'');
 
 function countryKey(name){
   return String(name).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase().trim().replace(/\s+/g,'-');
@@ -52,6 +55,14 @@ function check(e){
       if(call.status!=='conflit')fail('ligne « conflit » sans conflit noté sur le bouton');
     }else fail('type de ligne inconnu : '+line.kind);
   }
+  for(const x of e.extra||[]){
+    if(!EXTRA_KINDS.has(x.kind))fail('type de numéro supplémentaire inconnu : '+x.kind);
+    if(!String(x.n||'').trim()||!Array.isArray(x.sources)||!x.sources.length)fail('numéro supplémentaire sans source : '+x.kind);
+    /* Chaque numéro écrit doit figurer dans la citation d'une source officielle citée. */
+    if(!x.sources.some(i=>sources[i]&&digits(sources[i].quote).includes(digits(x.n))))fail('numéro supplémentaire '+x.n+' absent des citations');
+  }
+  /* Un bouton « sourcé » doit figurer dans la citation d'au moins une de ses sources. */
+  if(call.status==='sourcé'&&!call.sources.some(i=>digits(sources[i].quote).includes(digits(call.number))))fail('numéro du bouton '+call.number+' absent des citations de sa source');
   return e;
 }
 
@@ -62,6 +73,7 @@ function rows(entries){
     if(Object.prototype.hasOwnProperty.call(out,k))throw new Error('Pays en double : '+e.country);
     const line=e.line||null;
     out[k]=[e.call.status==='sourcé'?String(e.call.number):null,line?line.kind:null,line&&line.n!=null?String(line.n):null,e.checked];
+    if(e.call.status==='sourcé'&&(e.extra||[]).length)out[k].push(e.extra.map(x=>[x.kind,String(x.n)]));
   }
   return out;
 }
@@ -69,7 +81,7 @@ function rows(entries){
 function block(entries){
   const table=rows(entries);
   const body=Object.keys(table).sort().map(k=>' '+JSON.stringify(k)+':'+JSON.stringify(table[k])).join(',\n');
-  return '/*EMERGENCY*/\n/* Généré par scripts/build-emergency.cjs depuis data/sources/urgences.json : ne pas modifier à la main.\n   nom normalisé -> [bouton, type de ligne, valeur de la ligne, vérifié le] */\nvar EMERGENCY_BY_COUNTRY={\n'+body+'\n};\n/*/EMERGENCY*/';
+  return '/*EMERGENCY*/\n/* Généré par scripts/build-emergency.cjs depuis data/sources/urgences.json : ne pas modifier à la main.\n   nom normalisé -> [bouton, type de ligne, valeur de la ligne, vérifié le, autres numéros] */\nvar EMERGENCY_BY_COUNTRY={\n'+body+'\n};\n/*/EMERGENCY*/';
 }
 
 const MARKERS=/\/\*EMERGENCY\*\/[\s\S]*?\/\*\/EMERGENCY\*\//;

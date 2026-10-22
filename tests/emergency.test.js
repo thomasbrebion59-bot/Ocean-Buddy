@@ -135,3 +135,42 @@ test('la fiche affiche la date de vérification sous le numéro',()=>{
  assert.match(open,/Numéro vérifié le \$\{em\.checked\.split\('-'\)\.reverse\(\)\.join\('\/'\)\}/);
  assert.match(open,/callButton\.hidden=!em\.call/);
 });
+
+test('décision 4 : le bouton appelle l’urgence vitale, les autres numéros sourcés sont écrits à côté',()=>{
+ const {emergency}=load();
+ const cases={
+  'Irlande':['112',['Aussi : 999']],
+  'Thaïlande':['1669',['Police : 191']],
+  'Jamaïque':['110',['Police : 119']],
+  'Curaçao':['912',['Police : 911']],
+  'Macédoine du Nord':['194',['Police : 192']],
+  'Namibie':['10111',['Ambulance : 10177']],
+  'Pérou':['106',['Police : 105']],
+ };
+ for(const [c,[call,more]] of Object.entries(cases)){
+  const r=emergency(c);
+  assert.equal(r.call,call,c);assert.deepEqual([...r.more],more,c);
+  /* chaque numéro écrit figure dans la citation d'une source de l'entrée */
+  const e=byCountry.get(c),dg=x=>String(x).replace(/\D/g,'');
+  assert.ok(e.call.sources.some(i=>dg(e.sources[i].quote).includes(dg(call))),c+' : bouton absent de la citation');
+  for(const x of e.extra)assert.ok(x.sources.some(i=>dg(e.sources[i].quote).includes(dg(x.n))),c+' : '+x.n);
+ }
+ /* pays sans autre numéro, ou sans bouton : rien en plus */
+ assert.equal(emergency('France').more.length,0);
+ for(const c of NO_BUTTON)assert.equal(emergency(c).more.length,0,c);
+ /* lignes « en mer » retirées : Mayotte, Grèce, Jamaïque */
+ for(const c of ['Mayotte','Grèce','Jamaïque']){assert.equal(emergency(c).sea,DEFAULT_LINE,c);assert.notEqual(byCountry.get(c).sea.status,'sourcé',c);}
+ assert.equal(emergency('Mayotte').call,'15');assert.equal(emergency('Grèce').call,'112');
+ /* Maroc : « à vérifier », jamais de 112 */
+ assert.equal(emergency('Maroc').call,null);
+ /* Argentine : le 911 n'est dans aucune citation, donc pas de bouton */
+ assert.equal(emergency('Argentine').call,null);
+});
+
+test('tout bouton « sourcé » figure dans la citation d’une de ses sources',()=>{
+ const dg=x=>String(x).replace(/\D/g,'');
+ for(const e of urgences)if(e.call.status==='sourcé')assert.ok(e.call.sources.some(i=>dg(e.sources[i].quote).includes(dg(e.call.number))),e.country);
+ const bad={country:'T',checked:'2026-10-20',sources:[{url:'https://x.org',consulted:'2026-10-20',quote:'Police: 191'}],call:{number:'1669',status:'sourcé',sources:[0]},line:null};
+ assert.throws(()=>build.check(bad),/absent des citations/);
+ assert.throws(()=>build.check({...bad,call:{number:'191',status:'sourcé',sources:[0]},extra:[{kind:'police',n:'999',sources:[0]}]}),/absent des citations/);
+});

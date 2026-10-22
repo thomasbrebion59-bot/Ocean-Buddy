@@ -207,11 +207,10 @@
   "country": "Argentine",
   "checked": "2026-10-20",
   "call": {
-   "number": "911",
-   "status": "sourcé",
-   "sources": [
-    0
-   ]
+   "number": null,
+   "status": "à vérifier",
+   "sources": [],
+   "note": "Le 911 ne figure dans aucune citation (la page officielle ne donne pas le numéro dans la phrase retenue) : pas de bouton, décision 4 (A3-bis)."
   },
   "general": {
    "number": "911",
@@ -1537,6 +1536,15 @@
   "notes": "FCDO : ambulance 912, pompiers 911, police 911 ; Canada : même répartition. Ce sont des pages de gouvernements étrangers ; aucun site de l'administration de Curaçao ouvert. Le siège de la Kustwacht est à Willemstad (Marinebasis Parera, gobierno.aw) : numéro de bureau non retenu. VHF 16 : non sourcé.",
   "research": [
    "urgences-G3a.verifie.json#Curaçao"
+  ],
+  "extra": [
+   {
+    "kind": "police",
+    "n": "911",
+    "sources": [
+     1
+    ]
+   }
   ]
  },
  {
@@ -3261,6 +3269,16 @@
   "notes": "App = identique (112 / garde-côtes / VHF 16). Pas de remarque.",
   "research": [
    "urgences-G1.verifie.json#Irlande"
+  ],
+  "extra": [
+   {
+    "kind": "aussi",
+    "n": "999",
+    "sources": [
+     0,
+     1
+    ]
+   }
   ]
  },
  {
@@ -3519,6 +3537,17 @@
   "research": [
    "urgences-G3b.verifie.json#Jamaïque",
    "manques-urgences.verifie.json#Jamaïque"
+  ],
+  "extra": [
+   {
+    "kind": "police",
+    "n": "119",
+    "sources": [
+     0,
+     1,
+     2
+    ]
+   }
   ]
  },
  {
@@ -3908,6 +3937,16 @@
   "research": [
    "urgences-G1.verifie.json#Macédoine du Nord",
    "manques-urgences.verifie.json#Macédoine du Nord"
+  ],
+  "extra": [
+   {
+    "kind": "police",
+    "n": "192",
+    "sources": [
+     1,
+     2
+    ]
+   }
   ]
  },
  {
@@ -4785,6 +4824,15 @@
   "research": [
    "urgences-G2.verifie.json#Namibie",
    "manques-urgences.verifie.json#Namibie"
+  ],
+  "extra": [
+   {
+    "kind": "ambulance",
+    "n": "10177",
+    "sources": [
+     1
+    ]
+   }
   ]
  },
  {
@@ -5325,10 +5373,10 @@
   "country": "Pérou",
   "checked": "2026-10-20",
   "call": {
-   "number": "105",
+   "number": "106",
    "status": "sourcé",
    "sources": [
-    0
+    1
    ]
   },
   "general": {
@@ -5374,10 +5422,19 @@
     "quote": "La Línea 106 corresponde al Servicio de Atención Móvil de Urgencia (SAMU) del Ministerio de Salud."
    }
   ],
-  "notes": "Arbitrage : garder 105 (police) sur le bouton, 106 en ambulance (FCDO), 116 pompiers. La page du Callao liste aussi « SAMU - Hospital de Emergencias José Casimiro Ulloa » au 117 (ligne d'un hôpital de Lima, pas le SAMU national) : ne pas l'utiliser. Les pages gob.pe (SAMU 106, PNP) répondent HTTP 418 / 403 : non relues. Le Canada donne 116 pour l'assistance médicale (divergence). Secours en mer (DICAPI) : rien trouvé. Citation Callao relevée via résumé WebFetch.",
+  "notes": "Arbitrage : garder 105 (police) sur le bouton, 106 en ambulance (FCDO), 116 pompiers. La page du Callao liste aussi « SAMU - Hospital de Emergencias José Casimiro Ulloa » au 117 (ligne d'un hôpital de Lima, pas le SAMU national) : ne pas l'utiliser. Les pages gob.pe (SAMU 106, PNP) répondent HTTP 418 / 403 : non relues. Le Canada donne 116 pour l'assistance médicale (divergence). Secours en mer (DICAPI) : rien trouvé. Citation Callao relevée via résumé WebFetch. Décision utilisateur 4 : le bouton appelle l’ambulance (106, FCDO), la police (105) est écrite à côté.",
   "research": [
    "urgences-G3a.verifie.json#Pérou",
    "manques-urgences.verifie.json#Pérou"
+  ],
+  "extra": [
+   {
+    "kind": "police",
+    "n": "105",
+    "sources": [
+     0
+    ]
+   }
   ]
  },
  {
@@ -6733,6 +6790,16 @@
   "research": [
    "urgences-G4.verifie.json#Thaïlande",
    "manques-urgences.verifie.json#Thaïlande"
+  ],
+  "extra": [
+   {
+    "kind": "police",
+    "n": "191",
+    "sources": [
+     0,
+     2
+    ]
+   }
   ]
  },
  {
