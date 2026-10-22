@@ -80,3 +80,32 @@ if(fs.existsSync(enFile)){
   if(next2!==code2)fs.writeFileSync(loader,next2);
   console.log(`EN : ${Object.keys(enSpots).length} carnets traduits (${missing} manquants), ${Object.keys(enCountries).length} pays · ${(Buffer.byteLength(enBody)/1024).toFixed(0)} Ko · v=${enHash}`);
 }
+
+/* Version espagnole : même forme que l’anglaise, superposée au fichier français. */
+const esFile=path.join(root,'data/spot-guides.es.json');
+if(fs.existsSync(esFile)){
+  const es=JSON.parse(fs.readFileSync(esFile,'utf8'));
+  const esSpots={};let missing=0;
+  for(const [id,g] of Object.entries(es.spots||{})){
+    const base=spots[id];if(!base){console.warn('Traducción sin carnet francés :',id);continue;}
+    const o={};
+    if(g.vibe)o.v=g.vibe;if(g.lang)o.l=g.lang;
+    if(Array.isArray(g.hello)&&g.hello.length===2)o.h=g.hello;
+    if(Array.isArray(g.food)&&g.food.length===2)o.f=g.food;
+    if(g.respect)o.r=g.respect;if(g.season)o.s=g.season;
+    if(Array.isArray(g.around)&&base.a&&g.around.length===base.a.length)o.a=g.around.map(p=>[p.n,p.d]);
+    else if(base.a)console.warn('Lugares traducidos incompletos :',id);
+    if(g.lbl)o.lbl=g.lbl;
+    esSpots[id]=o;
+  }
+  for(const id of Object.keys(spots))if(!esSpots[id])missing++;
+  const esCountries={};
+  for(const [name,c] of Object.entries(es.countries||{}))esCountries[name]={lang:c.lang,hello:c.hello,food:c.food,respect:c.respect};
+  const esBody=`/* Generated from data/spot-guides.es.json by scripts/build-spot-guides.cjs. Do not edit by hand. */\nwindow.OCEAN_SPOT_GUIDES_ES=${JSON.stringify({countries:esCountries,spots:esSpots})};\n`;
+  fs.writeFileSync(path.join(root,'assets/data/spot-guides.es.js'),esBody);
+  const esHash=crypto.createHash('sha256').update(esBody).digest('hex').slice(0,12);
+  const code3=fs.readFileSync(loader,'utf8');
+  const next3=code3.replace(/assets\/data\/spot-guides\.es\.js\?v=[0-9a-f]+/,'assets/data/spot-guides.es.js?v='+esHash);
+  if(next3!==code3)fs.writeFileSync(loader,next3);
+  console.log(`ES : ${Object.keys(esSpots).length} carnets traducidos (${missing} ausentes), ${Object.keys(esCountries).length} países · ${(Buffer.byteLength(esBody)/1024).toFixed(0)} Ko · v=${esHash}`);
+}

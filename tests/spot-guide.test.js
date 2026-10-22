@@ -84,3 +84,24 @@ test('the English guide mirrors the French one: same spots, same places, same gr
   assert.equal(M.monthsLabel([7,8],'en'),'July and August');
   assert.equal(M.monthsLabel([12,1,2],'en'),'December to February');
 });
+
+test('the Spanish guide mirrors the French one: every spot, same places, same greeting words, not English', () => {
+  const root=path.join(__dirname,'..');
+  const fr=JSON.parse(fs.readFileSync(path.join(root,'data/spot-guides.json'),'utf8'));
+  const en=JSON.parse(fs.readFileSync(path.join(root,'data/spot-guides.en.json'),'utf8'));
+  const file=path.join(root,'data/spot-guides.es.json');
+  if(!fs.existsSync(file))return;
+  const es=JSON.parse(fs.readFileSync(file,'utf8'));
+  assert.deepEqual(Object.keys(es.spots).sort(),Object.keys(fr.spots).sort());
+  for(const [id,g] of Object.entries(fr.spots)){
+    const e=es.spots[id];
+    assert.equal((e.around||[]).length,(g.around||[]).length,id);
+    if(g.hello)assert.equal(e.hello[0],g.hello[0],id);
+    for(const k of ['vibe','respect','season'])if(g[k]){assert.ok(e[k]&&e[k]!==g[k],id+' '+k);assert.notEqual(e[k],en.spots[id][k],id+' '+k+' encore en anglais');}
+  }
+  for(const name of Object.keys(fr.countries))assert.ok(es.countries[name],name);
+  assert.match(es.spots.hossegor.vibe,/Hossegor/);
+  assert.doesNotMatch(es.spots.hossegor.vibe,/\b(the|and)\b/);
+  assert.equal(M.monthsLabel([7,8],'es'),'julio y agosto');
+  assert.equal(M.monthsLabel([12,1,2],'es'),'de diciembre a febrero');
+});

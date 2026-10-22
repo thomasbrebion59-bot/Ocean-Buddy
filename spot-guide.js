@@ -6,9 +6,11 @@
   const M=window.SpotGuideModel;if(!M)return;
   const DATA_URL='assets/data/spot-guides.js?v=28697e321cbf';
   const DATA_URL_EN='assets/data/spot-guides.en.js?v=a57daa599062';
+  const DATA_URL_ES='assets/data/spot-guides.es.js?v=43392327dd32';
   /* Hors français, le contenu éditorial (esprit du lieu, lieux, libellés d’hébergement) s’affiche en anglais.
      Il est marqué translate="no" pour que i18n.js ne le retraduise pas par morceaux ; les libellés d’interface restent traduisibles. */
-  const english=()=>!!(window.OB_I18N&&OB_I18N.lang&&OB_I18N.lang!=='fr');
+  const lang=()=>(window.OB_I18N&&OB_I18N.lang)||'fr';
+  const english=()=>lang()!=='fr';
   const NT=' translate="no" data-no-i18n';
   const $=s=>document.querySelector(s);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -74,8 +76,9 @@
   function load(){
     if(data)return Promise.resolve(data);
     if(!loading)loading=(window.OCEAN_SPOT_GUIDES?Promise.resolve():inject(DATA_URL))
-      .then(()=>english()&&!window.OCEAN_SPOT_GUIDES_EN?inject(DATA_URL_EN).catch(()=>{}):null)
-      .then(()=>{const base=window.OCEAN_SPOT_GUIDES||{spots:{},countries:{}};data=english()?overlay(base,window.OCEAN_SPOT_GUIDES_EN):base;return data;})
+      .then(()=>lang()==='es'&&!window.OCEAN_SPOT_GUIDES_ES?inject(DATA_URL_ES).catch(()=>{}):null)
+      .then(()=>english()&&!window.OCEAN_SPOT_GUIDES_EN&&!(lang()==='es'&&window.OCEAN_SPOT_GUIDES_ES)?inject(DATA_URL_EN).catch(()=>{}):null)
+      .then(()=>{const base=window.OCEAN_SPOT_GUIDES||{spots:{},countries:{}};data=lang()==='es'&&window.OCEAN_SPOT_GUIDES_ES?overlay(base,window.OCEAN_SPOT_GUIDES_ES):english()?overlay(base,window.OCEAN_SPOT_GUIDES_EN):base;return data;})
       .catch(error=>{loading=null;throw error;});
     return loading;
   }
@@ -105,11 +108,13 @@
   function distance(a,b){const r=Math.PI/180,dLat=(b.lat-a.lat)*r,dLon=(b.lon-a.lon)*r,x=Math.sin(dLat/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLon/2)**2;return 6371*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
   function bearing(a,b){const r=Math.PI/180,y=Math.sin((b.lon-a.lon)*r)*Math.cos(b.lat*r),x=Math.cos(a.lat*r)*Math.sin(b.lat*r)-Math.sin(a.lat*r)*Math.cos(b.lat*r)*Math.cos((b.lon-a.lon)*r);return (Math.atan2(y,x)/r+360)%360;}
   const DIRS_EN=['north','north-east','east','south-east','south','south-west','west','north-west'];
+  const DIRS_ES=['norte','noreste','este','sureste','sur','suroeste','oeste','noroeste'];
   /* Distance et mois : fragments calculés depuis les données, en anglais hors français et marqués non traduisibles. */
-  const LG=()=>english()?'en':'fr';
+  const LG=()=>lang()==='es'&&window.OCEAN_SPOT_GUIDES_ES?'es':english()?'en':'fr';
   const months=m=>`<span${NT}>${esc(M.monthsLabel(m,LG()))}</span>`;
   const monthNow2=()=>`<span${NT}>${esc(M.monthName(monthNow(),LG()))}</span>`;
   function whereText(km,deg){
+    if(LG()==='es')return km<1?'A menos de 1 km del spot':`A ${Math.round(km)} km al ${DIRS_ES[Math.round(deg/45)%8]}`;
     if(english())return km<1?'Less than 1 km from the spot':`${Math.round(km)} km ${DIRS_EN[Math.round(deg/45)%8]}`;
     if(km<1)return 'À moins d’un kilomètre du spot';
     return `À ${Math.round(km)} km ${DIRS[Math.round(deg/45)%8]}`;

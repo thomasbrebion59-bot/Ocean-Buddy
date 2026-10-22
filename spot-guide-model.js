@@ -209,9 +209,10 @@
   function monthOf(date){const m=/^\d{4}-(\d{2})-\d{2}$/.exec(String(date||''));return m?Number(m[1]):null;}
   /* Mois de haute saison sous forme lisible : « juillet et août », « de décembre à mars ». */
   const MONTHS_EN=['January','February','March','April','May','June','July','August','September','October','November','December'];
+  const MONTHS_ES=['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
   function monthsLabel(months,lang){
     const list=validMonths(months);if(!list)return '';
-    const en=lang==='en',N=en?MONTHS_EN:MONTHS,AND=en?' and ':' et ';
+    const en=lang==='en',es=lang==='es',N=en?MONTHS_EN:es?MONTHS_ES:MONTHS,AND=en?' and ':es?' y ':' et ';
     const sorted=[...list].sort((a,b)=>a-b);
     // Cherche une suite continue, éventuellement à cheval sur l’année.
     const set=new Set(sorted);
@@ -221,13 +222,14 @@
       if(run.length===sorted.length){
         if(run.length===1)return N[run[0]-1];
         if(run.length===2)return N[run[0]-1]+AND+N[run[1]-1];
+        if(es)return 'de '+N[run[0]-1]+' a '+N[run[run.length-1]-1];
         return en?N[run[0]-1]+' to '+N[run[run.length-1]-1]:'de '+N[run[0]-1]+' à '+N[run[run.length-1]-1];
       }
     }
     const names=sorted.map(m=>N[m-1]);
     return names.slice(0,-1).join(', ')+AND+names[names.length-1];
   }
-  function monthName(m,lang){return (lang==='en'?MONTHS_EN:MONTHS)[m-1]||'';}
+  function monthName(m,lang){return (lang==='en'?MONTHS_EN:lang==='es'?MONTHS_ES:MONTHS)[m-1]||'';}
   /* Position d’un prix parmi tous les spots : part des spots plus chers (0-100). */
   function cheaperThan(value,all){
     const list=(all||[]).filter(Number.isFinite);if(!list.length||!Number.isFinite(value))return null;
