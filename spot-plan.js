@@ -75,10 +75,16 @@
       <h4>Le mois</h4>
       <div class="sd-months" role="group" aria-label="Mois">${Array.from({ length: 12 }, (_, m) => `<button type="button" data-plan-m="${m}" aria-pressed="${draft.m === m}">${esc(monthName(m, 'short'))}</button>`).join('')}</div>
       <h4>Tes envies</h4>
-      <div class="sd-crit" role="group" aria-label="Envies">${CRIT.map(c => `<button type="button" data-plan-c="${c[0]}" aria-pressed="${draft.c.includes(c[0])}">${svg(P[c[1]])}<span><b>${esc(c[2])}</b><small>${esc(c[3])}</small></span></button>`).join('')}</div>
+      <div class="sd-crit" role="group" aria-label="Envies">${CRIT.map(c => `<button type="button" data-plan-c="${c[0]}" aria-pressed="${draft.c.includes(c[0])}"${c[0] === 'big' ? ' aria-describedby="sdBigWarn"' : ''}>${svg(P[c[1]])}<span><b>${esc(c[2])}</b><small>${esc(c[3])}</small></span></button>`).join('')}</div>
+      <p class="sd-plan-warn" id="sdBigWarn" data-plan-warn role="note" aria-hidden="${!draft.c.includes('big')}">Grosse houle : pour pratiquants confirmés. Vérifie ton niveau et les conditions sur place.</p>
       <p class="sd-plan-note">D’après les normales de plusieurs années (NOAA, NASA, Copernicus) : une tendance, pas une prévision.</p>
       <div class="sd-sheet-foot"><span class="sd-count" aria-live="polite">…</span><button type="button" class="sd-clear" data-plan-clear>Effacer</button><button type="button" class="sd-go-btn" data-plan-go>Voir les spots</button></div>`;
     paintCount();
+  }
+  /* Avertissement « Grosse houle » : toujours dans la page (hauteur réservée), visible seulement quand l’envie est choisie. */
+  function paintWarn() {
+    const w = sheet?.querySelector('[data-plan-warn]');
+    if (w) w.setAttribute('aria-hidden', String(!draft.c.includes('big')));
   }
   function paintCount() {
     const el = sheet?.querySelector('.sd-count'); if (!el) return;
@@ -101,8 +107,8 @@
     if (!sheet || !sheet.contains(t)) return;
     const m = t.closest('[data-plan-m]'), c = t.closest('[data-plan-c]');
     if (m) { draft.m = +m.dataset.planM; sheet.querySelectorAll('[data-plan-m]').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.planM === draft.m))); paintCount(); }
-    if (c) { const k = c.dataset.planC, i = draft.c.indexOf(k); if (i >= 0) draft.c.splice(i, 1); else draft.c.push(k); c.setAttribute('aria-pressed', String(i < 0)); paintCount(); }
-    if (t.closest('[data-plan-clear]')) { draft.c = []; sheet.querySelectorAll('[data-plan-c]').forEach(b => b.setAttribute('aria-pressed', 'false')); paintCount(); }
+    if (c) { const k = c.dataset.planC, i = draft.c.indexOf(k); if (i >= 0) draft.c.splice(i, 1); else draft.c.push(k); c.setAttribute('aria-pressed', String(i < 0)); paintWarn(); paintCount(); }
+    if (t.closest('[data-plan-clear]')) { draft.c = []; sheet.querySelectorAll('[data-plan-c]').forEach(b => b.setAttribute('aria-pressed', 'false')); paintWarn(); paintCount(); }
     if (t.closest('[data-plan-go]')) {
       state = draft.c.length ? { m: draft.m, c: draft.c.slice() } : null; save();
       ensure().then(() => { apply(); if (typeof go === 'function' && document.body.dataset.screen !== 'spots') go('spots'); }).catch(apply);

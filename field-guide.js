@@ -3,17 +3,44 @@
   'use strict';
   const $=s=>document.querySelector(s);
   const esc=value=>String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  /* Chaque case garde son rang : la progression est enregistrée sous « id:activité:rang ». On ajoute les nouvelles cases à la fin,
+     jamais au milieu, sinon une case cochée changerait de sens. Rang d’une case : [titre, texte en mer, texte sur un plan d’eau, texte en rivière]. */
   const checks={
-    surf:[['Lire les conditions','Consulter la houle, le vent et la marée avant de partir.'],['Repérer la session','Identifier le pic, les zones réservées et les sorties depuis la plage.'],['Vérifier son matériel','Contrôler la planche, les ailerons et le leash.']],
-    bodyboard:[['Lire les conditions','Consulter la houle, le vent et la marée.'],['Observer depuis le bord','Repérer les courants, les sorties et les autres pratiquants.'],['Vérifier son matériel','Contrôler le bodyboard, le leash et les palmes.']],
-    plongee:[['Choisir la sortie','Confirmer le site, la profondeur et le niveau requis avec le centre de plongée.'],['Préparer le briefing','Vérifier le matériel, le binôme et les consignes avec l’encadrant.'],['Organiser le trajet','Confirmer le rendez-vous et les conditions de départ du bateau.']],
+    surf:[['Lire les conditions','Consulter la houle, le vent et la marée avant de partir.','Consulter le vent et la météo avant de partir.','Consulter le niveau de l’eau, le courant et la météo avant de partir.'],['Repérer la session','Identifier le pic, les zones réservées et les sorties depuis la plage.','Identifier le pic, les zones réservées et les sorties depuis la berge.'],['Vérifier son matériel','Contrôler la planche, les ailerons et le leash.']],
+    bodyboard:[['Lire les conditions','Consulter la houle, le vent et la marée.','Consulter le vent et la météo.','Consulter le niveau de l’eau, le courant et la météo.'],['Observer depuis le bord','Repérer les courants, les sorties et les autres pratiquants.'],['Vérifier son matériel','Contrôler le bodyboard, le leash et les palmes.']],
+    plongee:[['Choisir la sortie','Confirmer le site, la profondeur et le niveau requis avec le centre de plongée.'],['Préparer le briefing','Vérifier le matériel, le binôme et les consignes avec l’encadrant.'],['Organiser le trajet','Confirmer le rendez-vous et les conditions de départ du bateau.','Confirmer le rendez-vous et les conditions de départ de la sortie.']],
     snorkeling:[['Choisir la zone','Demander les conditions locales, les zones autorisées et les points de sortie.'],['Préparer sa sortie','Prévoir un binôme et un moyen de rester visible en surface.'],['Respecter le récif','Observer sans toucher les coraux ni nourrir les animaux.']],
-    paddle:[['Dessiner le parcours','Repérer le départ, le retour et les possibilités de sortie sur la côte.'],['Vérifier le vent','Consulter sa direction et son évolution sur toute la sortie.'],['Préparer son équipement','Vérifier la flottabilité et le matériel adapté au milieu avec un professionnel.']],
-    kayak:[['Dessiner le parcours','Repérer le départ, le retour et les possibilités de sortie.'],['Lire les conditions','Vérifier le vent, la marée et l’état du plan d’eau.'],['Préparer son équipement','Contrôler l’embarcation, la pagaie et l’aide à la flottabilité.']],
-    baignade:[['Choisir la zone','Repérer les zones autorisées et surveillées ainsi que les drapeaux du jour.'],['Lire les consignes locales','Vérifier les informations affichées sur la plage.'],['Prévoir le retour','Repérer un accès et rester attentif à l’évolution de la mer.']],
+    paddle:[['Dessiner le parcours','Repérer le départ, le retour et les possibilités de sortie sur la côte.','Repérer le départ, le retour et les possibilités de sortie sur la berge.'],['Vérifier le vent','Consulter sa direction et son évolution sur toute la sortie.'],['Préparer son équipement','Vérifier la flottabilité et le matériel adapté au milieu avec un professionnel.']],
+    kayak:[['Dessiner le parcours','Repérer le départ, le retour et les possibilités de sortie.'],['Lire les conditions','Vérifier le vent, la marée et l’état du plan d’eau.','Vérifier le vent et l’état du plan d’eau.','Vérifier le niveau de l’eau, le courant et la météo.'],['Préparer son équipement','Contrôler l’embarcation, la pagaie et l’aide à la flottabilité.']],
+    baignade:[['Choisir la zone','Repérer les zones autorisées et surveillées ainsi que les drapeaux du jour.'],['Lire les consignes locales','Vérifier les informations affichées sur la plage.','Vérifier les informations affichées sur place.'],['Prévoir le retour','Repérer un accès et rester attentif à l’évolution de la mer.','Repérer un accès et rester attentif à l’évolution du plan d’eau.']],
     kitesurf:[['Choisir le créneau','Vérifier le vent et ses variations avec l’école ou le club local.'],['Repérer la zone','Identifier les aires autorisées de décollage, de navigation et de retour.'],['Contrôler le matériel','Vérifier les lignes et les systèmes de sécurité avant le départ.']],
     windsurf:[['Choisir le créneau','Vérifier le vent et l’état de l’eau sur la durée de la session.'],['Repérer le retour','Identifier une mise à l’eau autorisée et les zones de sortie.'],['Préparer le gréement','Adapter le matériel avec l’école ou le club local.']]
   };
+  /* Milieu, déduit des textes déjà publiés (description, conseil, dangers, repli du carnet), par mots entiers sans accent :
+     aucune donnée nouvelle, seulement le choix du bon geste générique. */
+  const plain=text=>String(text??'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+  const hasWord=(text,words)=>new RegExp('(^|[^a-z])('+words.join('|')+')([^a-z]|$)').test(text);
+  function medium(s){
+    const text=plain([s.desc,s.tip,s.carnet?.tip,...(s.dangers||[]).map(d=>d[1]),...(s.carnet?.dangers||[]).map(d=>d[1])].join(' '));
+    const water=!isInland(s)?'mer':s.waterType==='inland'&&hasWord(text,['rapides?','crues?','courants?'])?'riviere':'lac';
+    const reef=hasWord(text,['recifs?','corails?','coraux','reefs?']),grass=hasWord(text,['herbiers?','posidonies?','algues?']);
+    return {water,bed:water==='mer'&&reef!==grass?(reef?'recif':'herbier'):'fonds'};
+  }
+  /* Respect du milieu (case n° 3 du snorkeling) : titre et geste selon le fond, sans fait ni chiffre. */
+  const BED={recif:['Respecter le récif','Observer sans toucher les coraux ni nourrir les animaux.'],herbier:['Respecter les herbiers','Observer sans toucher ni piétiner les herbiers, ni nourrir les animaux.'],fonds:['Respecter les fonds','Observer sans toucher les fonds ni nourrir les animaux.']};
+  /* Consigne gilet : la source (FFCK, Scottish Fire and Rescue Service, Water Safety Scotland) est celle de
+     data/sources/schemas.json, consigne schema.riviere.consigne1 ; le navigateur ne garde que l’URL, le libellé et la date. */
+  const VEST={label:'Équipement de flottabilité',copy:'Porte un gilet ou une aide à la flottabilité marquée CE.',sourceRef:'data/sources/schemas.json#schema.riviere.consigne1',src:[{u:'https://www.ffck.org/nos-sites/reglementation/prevention/',l:'Fédération française de canoë-kayak (FFCK)',d:'2026-10-20'},{u:'https://www.firescotland.gov.uk/your-safety/water-safety/',l:'Scottish Fire and Rescue Service',d:'2026-10-20'},{u:'https://www.watersafetyscotland.org.uk/advice-hub/inland-safety/',l:'Water Safety Scotland',d:'2026-10-20'}]};
+  function checklist(s,act){
+    const m=medium(s),column=m.water==='mer'?1:m.water==='riviere'?3:2;
+    const items=(checks[act]||checks.surf).map(row=>({label:row[0],copy:row[column]||row[column===3?2:1]||row[1]}));
+    if(act==='snorkeling')[items[2].label,items[2].copy]=BED[m.bed];
+    /* Cases ajoutées après les trois premières : leur rang reste stable pour les sorties déjà préparées. */
+    items.push({label:'Prévenir un proche',copy:'Donne ton heure de retour à quelqu’un qui reste à terre.'});
+    items.push({label:'Repérer le numéro d’urgence',copy:'Note le numéro des secours du lieu avant d’entrer dans l’eau.',action:'emergency'});
+    if(['kayak','paddle'].includes(act)||(m.water==='riviere'&&['surf','bodyboard'].includes(act)))items.push({...VEST});
+    return items;
+  }
   const icons={pin:'<path d="M12 21s7-6.5 7-12a7 7 0 1 0-14 0c0 5.5 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/>',compass:'<circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5Z"/>',check:'<rect x="4" y="4" width="16" height="17" rx="3"/><path d="M9 3h6v4H9zM8 14l3 3 5-6"/>',water:'<path d="M2 10c3-4 5 4 8 0s5 4 8 0 3 0 4 0M2 17c3-4 5 4 8 0s5 4 8 0 3 0 4 0"/>',level:'<path d="M4 20V14h4v6M10 20V9h4v11M16 20V4h4v16"/>',leaf:'<path d="M5 20C2 6 13 3 21 3c0 10-5 19-16 17Zm0 0L16 9"/>'};
   /* Pictos dessinés (assets/pictos) ; le tracé reste en secours. */
   const PIC={pin:'pin',compass:'g-compass',check:'g-check',leaf:'feuille',level:'niveau',water:'g-water'};
@@ -30,29 +57,66 @@
   const frNum=(n,d)=>window.obNum?obNum(n,d):n.toFixed(d).replace('.',',');
   function visitRows(s){
     const record=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
-    const grounded=s.editorialStatus==='reviewed'&&/^https:\/\//i.test(record?.url||'')&&/^\d{4}-\d{2}-\d{2}$/.test(s.visit?.reviewed||'');
-    return [['Accès','access'],['Meilleure période','bestPeriod'],['Règles locales','localRules']].map(([label,key])=>{
-      const value=grounded&&typeof s.visit[key]==='string'?s.visit[key].trim():'';
-      return {label,value:value||'À vérifier localement',verified:!!value};
+    const visit=s.visit&&typeof s.visit==='object'?s.visit:{};
+    const grounded=s.editorialStatus==='reviewed'&&/^https:\/\//i.test(record?.url||'')&&/^\d{4}-\d{2}-\d{2}$/.test(visit.reviewed||'');
+    /* Lignes fixes de la carte ; « Meilleure période » ne vient que des anciennes fiches sourcées, jamais des nouvelles lignes. */
+    const labels=[['Accès','access'],['Stationnement','parking'],['Marée','tide'],['Matériel','gear'],['À éviter','avoid'],['Règles locales','localRules']];
+    if(visit.bestPeriod)labels.splice(1,0,['Meilleure période','bestPeriod']);
+    return labels.map(([label,key])=>{
+      const row=visit[key];let value='',src=[];
+      if(typeof row==='string'){
+        /* Forme historique : une chaîne, appuyée par la source éditoriale de la fiche. */
+        if(grounded&&row.trim()){value=row.trim();src=[{u:record.url,l:record.label,d:visit.reviewed}];}
+      }else if(row&&typeof row==='object'){
+        /* Forme étendue : le texte et ses propres sources (https, ou les normales NOAA du catalogue), chacune datée. */
+        const text=typeof row.t==='string'?row.t.trim():'';
+        const cited=(Array.isArray(row.src)?row.src:[]).filter(x=>x&&(/^https:\/\//i.test(x.u||'')||x.u==='internal:climate')&&x.l&&/^\d{4}-\d{2}-\d{2}$/.test(x.d||''));
+        if(text&&cited.length){value=text;src=cited;}
+      }
+      return {label,key,value:value||'À vérifier localement',verified:!!value,src};
     });
   }
+  /* « Source : {libellé} · consultée le {date} » : un lien, ou le simple libellé pour les normales NOAA de climate.json. */
+  function visitCite(x){
+    const date=x.d.split('-').reverse().join('/');
+    return x.u==='internal:climate'?`<span class="field-visit-source" data-src="${esc(x.u)}">Source : ${esc(x.l)} · consultée le ${esc(date)}</span>`:`<a class="field-visit-source" href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">Source : ${esc(x.l)} · consultée le ${esc(date)}</a>`;
+  }
   function visitGuide(s){
-    const rows=visitRows(s);
-    const record=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
-    const hasFacts=rows.some(row=>row.verified);
-    const date=s.visit?.reviewed?.split('-').reverse().join('/');
-    return `<span class="field-eyebrow">REPÈRES PRATIQUES</span><h3 id="fieldVisitTitle">Préparer la visite</h3><dl>${rows.map(row=>`<div class="field-visit-row${row.verified?'':' is-pending'}"><dt>${esc(row.label)}</dt><dd>${esc(row.value)}</dd></div>`).join('')}</dl>${hasFacts?`<a class="field-visit-source" href="${esc(record.url)}" target="_blank" rel="noopener noreferrer">Source : ${esc(record.label)} · consultée le ${esc(date)}</a>`:'<p class="field-visit-pending">Aucune indication pratique vérifiée pour ce spot. Consulte les informations du gestionnaire local avant le départ.</p>'}<p class="field-visit-caution">Les accès, conditions et règles peuvent changer. Vérifie les consignes en vigueur sur place.</p>`;
+    const rows=visitRows(s).filter(row=>row.verified);
+    const key=row=>row.src.map(x=>x.u+'|'+x.d).join(',');
+    /* Mêmes sources sur toutes les lignes (anciennes fiches) : une seule mention en bas ; sinon chaque ligne cite les siennes. */
+    const shared=rows.length>0&&rows.every(row=>key(row)===key(rows[0]));
+    const head='<span class="field-eyebrow">REPÈRES PRATIQUES</span><h3 id="fieldVisitTitle">L’essentiel avant d’y aller</h3>';
+    const caution='<p class="field-visit-caution">Les accès, conditions et règles peuvent changer. Vérifie les consignes en vigueur sur place.</p>';
+    if(!rows.length)return head+'<p class="field-visit-pending">À vérifier localement</p>'+caution;
+    return head+`<dl>${rows.map(row=>`<div class="field-visit-row"><dt>${esc(row.label)}</dt><dd>${esc(row.value)}${shared?'':`<span class="field-visit-cites">${row.src.map(visitCite).join('')}</span>`}</dd></div>`).join('')}</dl>${shared?`<span class="field-visit-cites">${rows[0].src.map(visitCite).join('')}</span>`:''}${caution}`;
   }
   function mapURL(s){return 'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(s.name+' '+s.loc);}
+  /* Repère de niveau par sport : « débutant » décrit le spot, pas une plongée ou une session de kite ou de planche sans
+     encadrement ; les cénotes de plongée en caverne n’ont pas de niveau annoncé ici (le catalogue garde son niveau). */
+  const SUPERVISED=['plongee','kitesurf','windsurf'],CAVE_DIVE=['cenote_dosojos','grancenote'];
+  const caveDive=(s,act)=>act==='plongee'&&CAVE_DIVE.includes(s.id);
+  function levelNote(s,act){
+    if(caveDive(s,act))return 'Niveau à confirmer avec un centre local';
+    if(s.level==='debutant'&&SUPERVISED.includes(act))return 'Accessible aux débutants encadrés';
+    return '';
+  }
   function facts(s,act){
     const values=[['Destination',s.loc],['Activité',SPORTMAP[act]?.label||'À choisir']];
-    if(s.level!=='variable')values.push(['Repère de niveau',LVLTXT[s.level]||s.level]);
+    if(s.level!=='variable')values.push(['Repère de niveau',levelNote(s,act)||LVLTXT[s.level]||s.level]);
     return values;
   }
+  /* Source d’une case (consigne gilet) : mêmes lignes « Source : … » que la carte « L’essentiel avant d’y aller ». */
+  function checkItem(s,act,item,i){
+    const key=preparationKey(s,act,i);
+    const go=item.action==='emergency'?'<button type="button" class="field-check-go" data-field-action="emergency">Voir le numéro d’urgence</button>':'';
+    const cites=item.src?`<span class="field-visit-cites">${item.src.map(visitCite).join('')}</span>`:'';
+    return `<label class="field-check"><input type="checkbox" data-visit-check="${esc(key)}" ${completed[key]?'checked':''}><span><b>${esc(item.label)}</b><small>${esc(item.copy)}</small>${go}${cites}</span></label>`;
+  }
   function render(s,act){
-    const items=(checks[act]||checks.surf).map(item=>isInland(s)?item.map(copy=>copy.replace('la marée et l’état du plan d’eau','les conditions du plan d’eau').replace('l’évolution de la mer','l’évolution du plan d’eau')):item);
+    const items=checklist(s,act);
     const done=items.filter((_,i)=>completed[preparationKey(s,act,i)]).length;
-    return `<div class="field-checklist"><div class="field-check-cover"><span class="field-check-emblem">${levelIcon('expert')}</span><span><small>LE DÉPART SE PRÉPARE ICI</small><b>Prêt pour la session ?</b></span></div><div class="field-list-head"><h3>Avant de partir</h3><span id="fieldProgress">${done} / ${items.length}</span></div><div class="field-progress-track" role="progressbar" aria-label="Préparation de la sortie" aria-valuemin="0" aria-valuemax="${items.length}" aria-valuenow="${done}"><i style="width:${done/items.length*100}%"></i></div>${items.map(([label,copy],i)=>`<label class="field-check"><input type="checkbox" data-visit-check="${esc(preparationKey(s,act,i))}" ${completed[preparationKey(s,act,i)]?'checked':''}><span><b>${esc(label)}</b><small>${esc(copy)}</small></span></label>`).join('')}<button class="field-text-button" data-field-action="conditions">Consulter les conditions</button></div>
+    return `<div class="field-checklist"><div class="field-check-cover"><span class="field-check-emblem">${levelIcon('expert')}</span><span><small>LE DÉPART SE PRÉPARE ICI</small><b>Prêt pour la session ?</b></span></div><div class="field-list-head"><h3>Avant de partir</h3><span id="fieldProgress">${done} / ${items.length}</span></div><div class="field-progress-track" role="progressbar" aria-label="Préparation de la sortie" aria-valuemin="0" aria-valuemax="${items.length}" aria-valuenow="${done}"><i style="width:${done/items.length*100}%"></i></div>${items.map((item,i)=>checkItem(s,act,item,i)).join('')}<button class="field-text-button" data-field-action="conditions">Consulter les conditions</button></div>
       <aside class="field-address"><span class="field-address-mark">${sportIcon('all')}</span><span class="field-eyebrow">TON POINT DE DÉPART</span><h3>${esc(s.name.split(' — ')[0])}</h3><dl>${facts(s,act).map(([k,v])=>`<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join('')}</dl>${s.level==='variable'?'<p class="field-level-note">Choisis un secteur adapté à ton expérience avec un encadrant local.</p>':'<p class="field-level-note">Le niveau indiqué reste à confronter aux conditions et au secteur choisis.</p>'}<a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu</a>${sourceLink(s)}</aside>${window.OceanNotebook?.note(s)||''}`;
   }
   function update(s,act){
@@ -67,8 +131,8 @@
     const activity=SPORTMAP[act]?.label||'nautique';
     overview.innerHTML=`<span class="field-eyebrow">SITUER & COMPARER</span><a class="field-map-link" href="${mapURL(s)}" target="_blank" rel="noopener">Situer le lieu sur la carte</a><div class="field-compare-slot">${window.OceanNotebook?.button(s.id)||''}</div>`;
     overview.classList.add('is-compact');
-    const level=s.level==='variable'?'À définir sur place':(LVLTXT[s.level]||'À confirmer');
-    $('#fieldAtAGlance').innerHTML=[['activity','Ton activité',SPORTMAP[act]?.label||'À choisir',sportIcon(act)],['water','Le cadre',isInland(s)?'Plan d’eau intérieur':'Mer & océan',sportIcon(isInland(s)?'kayak':'snorkeling')],['level','Repère de niveau',level,levelIcon(s.level)]].map(([key,label,value,art])=>`<button type="button" class="field-fact-card fact-${key}" data-im-open="${{activity:'terrain',water:'eau',level:'niveau'}[key]}"><span class="field-fact-icon">${art}</span><div><small>${label}</small><b>${esc(value)}</b></div></button>`).join('');
+    const level=s.level==='variable'?'À définir sur place':(levelNote(s,act)||LVLTXT[s.level]||'À confirmer');
+    $('#fieldAtAGlance').innerHTML=[['activity','Ton activité',SPORTMAP[act]?.label||'À choisir',sportIcon(act)],['water','Le cadre',isInland(s)?'Plan d’eau intérieur':'Mer & océan',sportIcon(isInland(s)?'kayak':'snorkeling')],['level','Repère de niveau',level,levelIcon(caveDive(s,act)?'variable':s.level)]].map(([key,label,value,art])=>`<button type="button" class="field-fact-card fact-${key}" data-im-open="${{activity:'terrain',water:'eau',level:'niveau'}[key]}"><span class="field-fact-icon">${art}</span><div><small>${label}</small><b>${esc(value)}</b></div></button>`).join('');
     $('#fieldVisit').innerHTML=visitGuide(s);
     $('#fieldVisit').hidden=!visitRows(s).some(r=>r.verified);
     window.OceanNotebook?.sync();
@@ -85,7 +149,7 @@
     $('#fieldNearbyBlock').hidden=!near.length;
     $('#dDangers').closest('.block').hidden=false;
   }
-  window.OceanFieldGuide={facts,render,update,visitRows,visitGuide};
+  window.OceanFieldGuide={facts,render,update,visitRows,visitGuide,checklist,medium,levelNote};
   // Keep the existing render targets while replacing the ornamental wrappers.
   const infos=$('#detail .dcat[data-cat="infos"]');infos.classList.add('field-overview');
   const intro=$('#dDesc').closest('.block');intro.className='block field-story';
@@ -109,12 +173,15 @@
   $('.poulpy-activities').after(latest);
   const newFilter=document.createElement('button');newFilter.type='button';newFilter.className='chip';newFilter.dataset.f='new';newFilter.textContent='Nouveautés';newFilter.onclick=()=>filterSpots(newFilter,'new');$('#filters [data-f="all"]').after(newFilter);
   $('#filters').insertAdjacentHTML('afterend','<p class="field-result-count" id="spotResultCount" aria-live="polite"></p>');
+  /* Légende de la jauge de danger, une seule fois pour toute la liste (le texte du compteur est réécrit par renderSpots, d’où sa propre ligne). */
+  $('#spotResultCount').insertAdjacentHTML('afterend','<p class="field-danger-legend" id="spotDangerLegend">Points de danger : estimation Ocean Buddy d’après les dangers listés</p>');
   renderSpots(currentFilter,true);
   document.addEventListener('click',e=>{
     const action=e.target.closest('[data-field-action]');
     if(action?.dataset.fieldAction==='new'){setSport(null);openWorld('all');filterSpots(newFilter,'new');}
     if(action?.dataset.fieldAction==='trip')OceanTrips.fromSpot(currentSpot);
     if(action?.dataset.fieldAction==='conditions')showDetailCat('meteo');
+    if(action?.dataset.fieldAction==='emergency'){showDetailCat('meteo',false);requestAnimationFrame(()=>$('#dEmerg')?.scrollIntoView({block:'center',behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'}));}
     const spot=e.target.closest('[data-field-spot]');if(spot)openSpot(spot.dataset.fieldSpot);
   });
   document.addEventListener('change',e=>{

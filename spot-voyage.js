@@ -40,8 +40,13 @@
   function steps(s){
     const out=[];
     out.push({kicker:'Arrivée',title:s.name.split(' — ')[0],text:s.desc});
+    /* Fiche sans conseil ni danger au catalogue : phrases du carnet, étiquetées « non vérifié » (champ carnet). */
+    const note=s.carnet&&/^non vérifié$/.test(s.carnet.status)?s.carnet:null;
     if(s.tip)out.push({kicker:'Poulpy',title:'Le conseil de Poulpy',text:s.tip});
-    (s.dangers||[]).slice(0,2).forEach(d=>out.push({kicker:'À surveiller',title:d[0]+' '+(d[1].split(/[.:]/)[0]||'Sécurité'),text:d[1]}));
+    else if(note?.tip)out.push({kicker:'Carnet Ocean Buddy · non vérifié',title:'Le conseil du carnet',text:note.tip});
+    const hazards=(s.dangers||[]).length?s.dangers:(note?.dangers||[]);
+    const kicker=(s.dangers||[]).length?'À surveiller':'Carnet Ocean Buddy · non vérifié';
+    hazards.slice(0,2).forEach(d=>out.push({kicker,title:d[0]+' '+(d[1].split(/[.:]/)[0]||'Sécurité'),text:d[1]}));
     if(s.anecdote)out.push({kicker:'Le saviez-vous ?',title:'Une histoire du spot',text:s.anecdote});
     return out;
   }
