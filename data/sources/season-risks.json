@@ -1,0 +1,245 @@
+{
+  "kata": {
+    "spot": "kata",
+    "exclude": [4,5,6,7,8,9],
+    "kind": "saison des pluies, de mai à octobre : forts courants d’arrachement et méduses près du bord (baignade)",
+    "status": "sourcé",
+    "checked": "2026-10-20",
+    "sources": [
+      {
+        "url": "https://www.gov.uk/foreign-travel-advice/thailand/safety-and-security",
+        "publisher": "Foreign, Commonwealth & Development Office (Royaume-Uni), gov.uk",
+        "title": "Safety and security - Thailand travel advice - GOV.UK",
+        "consulted": "2026-10-20",
+        "quote": "Take care when swimming off coastal areas, especially during monsoon season. People have drowned in strong riptides.",
+        "supports": "Baignade à risque surtout en saison de mousson ; des noyades dans de forts courants d’arrachement."
+      },
+      {
+        "url": "https://www.gov.uk/foreign-travel-advice/thailand/safety-and-security",
+        "publisher": "Foreign, Commonwealth & Development Office (Royaume-Uni), gov.uk",
+        "title": "Safety and security - Thailand travel advice - GOV.UK",
+        "consulted": "2026-10-20",
+        "quote": "Jellyfish can swim close to the shore, particularly during the rainy season from May to October.",
+        "supports": "Méduses près du bord surtout pendant la saison des pluies, de mai à octobre."
+      }
+    ],
+    "research": "saisons-risk-months.json#kata/tip"
+  },
+  "whitehaven": {
+    "spot": "whitehaven",
+    "exclude": [9,10,11,0,1,2,3,4],
+    "kind": "méduses dangereuses : risque plus élevé de novembre à mai (gouvernement du Queensland) ; fréquentes dès octobre (office du tourisme des Whitsundays), octobre gardé par précaution",
+    "status": "sourcé",
+    "checked": "2026-10-20",
+    "sources": [
+      {
+        "url": "https://www.qld.gov.au/emergency/safety/recreation/dangerous-marine",
+        "publisher": "Queensland Government (Australie)",
+        "title": "Dangerous marine life - qld.gov.au",
+        "consulted": "2026-10-20",
+        "quote": "Marine stingers are present in tropical Queensland waters all year round but the risk is higher during the marine stinger season (November–May).",
+        "supports": "Méduses dangereuses toute l’année ; saison à risque plus élevé de novembre à mai."
+      },
+      {
+        "url": "https://www.tourismwhitsundays.com.au/whitehaven-beach",
+        "publisher": "Tourism Whitsundays (organisme régional officiel de promotion touristique)",
+        "title": "Whitehaven Beach & Hill Inlet | Great Barrier Reef | The Whitsundays",
+        "consulted": "2026-10-20",
+        "quote": "stingers are prevalent from October to May and may be present year-round",
+        "supports": "Les méduses sont fréquentes dès octobre et peuvent être présentes toute l’année."
+      }
+    ],
+    "research": "manques-coherence.verifie.json#whitehaven/visit.a_eviter"
+  },
+  "greatbarrier": {
+    "spot": "greatbarrier",
+    "exclude": [10,11,0,1,2,3,4],
+    "kind": "méduses dangereuses (méduse-boîte, Irukandji) : risque plus élevé de novembre à mai",
+    "status": "sourcé",
+    "checked": "2026-10-20",
+    "sources": [
+      {
+        "url": "https://www.qld.gov.au/emergency/safety/recreation/dangerous-marine",
+        "publisher": "Queensland Government (Australie)",
+        "title": "Dangerous marine life - qld.gov.au",
+        "consulted": "2026-10-20",
+        "quote": "Marine stingers are present in tropical Queensland waters all year round but the risk is higher during the marine stinger season (November–May).",
+        "supports": "Méduses dangereuses présentes toute l’année dans les eaux tropicales du Queensland, risque plus élevé de novembre à mai."
+      }
+    ],
+    "research": "saisons-risk-months.json#greatbarrier/tip"
+  },
+  "jialeshui": {
+    "spot": "jialeshui",
+    "exclude": [4,5,6,7,8,9,10],
+    "kind": "saison des typhons, de mai à novembre, surtout à partir de juillet",
+    "status": "sourcé",
+    "checked": "2026-10-20",
+    "sources": [
+      {
+        "url": "https://www.cwa.gov.tw/Data/service/Newsbb/EN/Newsbb_20250627111004.pdf",
+        "publisher": "Central Weather Administration (Taïwan)",
+        "title": "Press release, 27 June 2025 : Near-Average Typhoon Activity Forecast for 2025",
+        "consulted": "2026-10-20",
+        "quote": "As Taiwan enters typhoon season in July",
+        "supports": "La saison des typhons commence en juillet à Taïwan (communiqué de la CWA)."
+      },
+      {
+        "url": "https://www.cwa.gov.tw/Data/service/Newsbb/EN/Newsbb_20250627111004.pdf",
+        "publisher": "Central Weather Administration (Taïwan)",
+        "title": "Press release, 27 June 2025 : Near-Average Typhoon Activity Forecast for 2025",
+        "consulted": "2026-10-20",
+        "quote": "approximately 21 to 25 typhoons typically form in the WNP between June and December, with around 3 to 5 affecting the vicinity of Taiwan",
+        "supports": "Typhons du Pacifique nord-ouest : de juin à décembre, 3 à 5 par an près de Taïwan."
+      },
+      {
+        "url": "https://www.gov.uk/foreign-travel-advice/taiwan/safety-and-security",
+        "publisher": "Foreign, Commonwealth & Development Office (Royaume-Uni), gov.uk",
+        "title": "Safety and security - Taiwan travel advice - GOV.UK",
+        "consulted": "2026-10-20",
+        "quote": "The typhoon season in Taiwan normally runs from May to November.",
+        "supports": "Saison des typhons à Taïwan : normalement de mai à novembre."
+      }
+    ],
+    "research": "saisons-risk-months.json#jialeshui/tip"
+  },
+  "conchebaleines": {
+    "spot": "conchebaleines",
+    "exclude": [0,1,2,3,4,5,8,9,10,11],
+    "kind": "baignade non surveillée : les sauveteurs ne sont là qu’en juillet et en août",
+    "status": "sourcé",
+    "checked": "2026-10-20",
+    "sources": [
+      {
+        "url": "https://www.iledere.com/organiser-activites-et-loisirs/sport-et-sensation/ecoles-clubs-associations/plage-de-la-conche-des-baleines-saint-clement-des-baleines-fr-441575/",
+        "publisher": "Office de Tourisme de l’île de Ré (site officiel)",
+        "title": "Plage de la Conche des Baleines (Saint-Clément-des-Baleines) | Destination Ile de Ré – Site officiel de l’Office de Tourisme",
+        "consulted": "2026-10-20",
+        "quote": "Plage surveillée du 4 juillet au 30 août de 11h à 19h dans le secteur du Pas Zanuch",
+        "supports": "Surveillance de la plage en 2026 : du 4 juillet au 30 août, de 11 h à 19 h, au Pas de Zanuck."
+      },
+      {
+        "url": "https://www.iledere.com/sinformer/informations-locales-et-pratiques/plages-surveillees-ile-de-re/",
+        "publisher": "Office de Tourisme de l’île de Ré (site officiel)",
+        "title": "Plages surveillées île de Ré : liste, horaires et conseils baignade été",
+        "consulted": "2026-10-20",
+        "quote": "12 plages sont surveillées uniquement en juillet et en août",
+        "supports": "La Conche des Baleines fait partie des 12 plages surveillées seulement en juillet et en août ; hors de cette période la baignade n’est pas surveillée."
+      }
+    ],
+    "research": "saisons-risk-months.json#conchebaleines/tip"
+  },
+  "miyazaki": {
+    "spot": "miyazaki",
+    "exclude": [6,7,8,9],
+    "kind": "typhons, surtout de juillet à octobre",
+    "status": "sourcé",
+    "checked": "2026-10-20",
+    "sources": [
+      {
+        "url": "https://www.jma.go.jp/jma/kishou/know/typhoon/1-4.html",
+        "publisher": "Agence météorologique japonaise (JMA)",
+        "title": "台風の発生、接近、上陸、経路",
+        "consulted": "2026-10-20",
+        "quote": "発生・接近・上陸ともに、7月から10月にかけて最も多くなります。",
+        "supports": "Les typhons (formation, approche, arrivée à terre) sont les plus nombreux de juillet à octobre (moyenne 1991-2020)."
+      },
+      {
+        "url": "https://www.gov.uk/foreign-travel-advice/japan/safety-and-security",
+        "publisher": "Foreign, Commonwealth & Development Office (Royaume-Uni), gov.uk",
+        "title": "Safety and security - Japan travel advice - GOV.UK",
+        "consulted": "2026-10-20",
+        "quote": "In Japan the tropical cyclone (typhoon) season is between June and December, peaking between July and September.",
+        "supports": "Saison des typhons au Japon : de juin à décembre, avec un pic de juillet à septembre."
+      }
+    ],
+    "research": "saisons-risk-months.json#miyazaki/tip"
+  },
+  "yoshino": {
+    "spot": "yoshino",
+    "exclude": [5,6,7,8,9],
+    "kind": "méduses-boîtes (habu-kurage) : avis de la préfecture du 1er juin au 30 septembre ; typhons : les plus nombreux de juillet à octobre",
+    "status": "sourcé",
+    "checked": "2026-10-20",
+    "sources": [
+      {
+        "url": "https://www.pref.okinawa.jp/kurashikankyo/petgaiju/1018721/1005068/1005048.html",
+        "publisher": "Préfecture d’Okinawa (site officiel)",
+        "title": "ハブクラゲ等海洋危険生物",
+        "consulted": "2026-10-20",
+        "quote": "令和8年ハブクラゲ注意報（6月1日～9月30日）",
+        "supports": "Avis officiel de présence des habu-kurage (méduses-boîtes) en 2026 : du 1er juin au 30 septembre."
+      },
+      {
+        "url": "https://www.pref.okinawa.jp/kurashikankyo/petgaiju/1018721/1005068/1005048.html",
+        "publisher": "Préfecture d’Okinawa (site officiel)",
+        "title": "ハブクラゲ等海洋危険生物",
+        "consulted": "2026-10-20",
+        "quote": "県では、例年被害が多発する6月から9月までの間、ハブクラゲ発生注意報を発令し",
+        "supports": "La préfecture émet chaque année l’avis de juin à septembre, période où les piqûres sont les plus fréquentes."
+      },
+      {
+        "url": "https://www.jma.go.jp/jma/kishou/know/typhoon/1-4.html",
+        "publisher": "Agence météorologique japonaise (JMA)",
+        "title": "台風の発生、接近、上陸、経路",
+        "consulted": "2026-10-20",
+        "quote": "発生・接近・上陸ともに、7月から10月にかけて最も多くなります。",
+        "supports": "Les typhons (formation, approche, arrivée à terre) sont les plus nombreux de juillet à octobre (moyenne 1991-2020)."
+      }
+    ],
+    "research": "saisons-risk-months.json#yoshino/dangers[1]+carnet.season"
+  },
+  "turquoisebay": {
+    "spot": "turquoisebay",
+    "exclude": [10,11,0,1,2,3],
+    "kind": "méduses-boîtes et Irukandji, rares mais possibles, surtout de novembre à avril",
+    "status": "sourcé",
+    "checked": "2026-10-20",
+    "sources": [
+      {
+        "url": "https://exploreparks.dbca.wa.gov.au/tourism-region/exmouth",
+        "publisher": "Department of Biodiversity, Conservation and Attractions (Western Australia), Parks and Wildlife Service",
+        "title": "Exmouth | Explore Parks WA",
+        "consulted": "2026-10-20",
+        "quote": "Though not usually present, the potentially lethal box jellyfish and irukandji do sometimes appear in the area. They are most likely to be found from November until April.",
+        "supports": "Région d’Exmouth (Ningaloo, Cape Range) : méduses-boîtes et Irukandji rares mais possibles, surtout de novembre à avril."
+      }
+    ],
+    "research": "saisons-risk-months.json#turquoisebay/dangers[2]"
+  },
+  "anseintendance": {
+    "spot": "anseintendance",
+    "exclude": [5,6,7,8],
+    "kind": "plages exposées au sud-est peu agréables (algues rejetées) de juin à septembre ; pic de l’alizé de sud-est, mer agitée, en août",
+    "status": "sourcé",
+    "checked": "2026-10-20",
+    "sources": [
+      {
+        "url": "https://www.meteo.sc/services/climate/seychelles-climate-guide/",
+        "publisher": "Seychelles Meteorological Authority",
+        "title": "Seychelles Climate Guide",
+        "consulted": "2026-10-20",
+        "quote": "The beaches exposed to the southeast winds (south and southeast) are not very pleasant with high incidence of weeds washed onshore.",
+        "supports": "Les plages exposées au vent de sud-est (sud et sud-est) sont peu agréables en saison d’alizé."
+      },
+      {
+        "url": "https://www.meteo.sc/services/climate/seychelles-climate-guide/",
+        "publisher": "Seychelles Meteorological Authority",
+        "title": "Seychelles Climate Guide",
+        "consulted": "2026-10-20",
+        "quote": "(This condition are prevalent between June and September)",
+        "supports": "Cette situation (plages du sud et du sud-est peu agréables, côtes ouest et nord-ouest abritées) vaut de juin à septembre."
+      },
+      {
+        "url": "https://www.meteo.sc/services/climate/seychelles-climate-guide/",
+        "publisher": "Seychelles Meteorological Authority",
+        "title": "Seychelles Climate Guide",
+        "consulted": "2026-10-20",
+        "quote": "We’ve reached the peak of the Southeast Trades. Gets rather cool and very windy with rough seas.",
+        "supports": "Août : pic de l’alizé de sud-est, mer agitée."
+      }
+    ],
+    "research": "saisons-risk-months.json#anseintendance/dangers[0]",
+    "note": "Seuls les mois et les citations de meteo.sc confirmés par la vérification sont repris (juin à septembre). L’affirmation « shore break et courants » de la recherche n’est pas sourcée et n’est pas utilisée."
+  }
+}

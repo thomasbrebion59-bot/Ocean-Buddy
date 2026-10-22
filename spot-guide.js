@@ -126,7 +126,8 @@
     const tiles=[
       c.food&&['food','À goûter sur place',c.food[0],c.food[1]],
       c.respect&&['respect','Le bon geste',null,c.respect],
-      c.season&&['season','La bonne saison',null,c.season]
+      /* Texte de saison = repère indicatif : la mention est hors du bloc translate="no", elle se traduit. */
+      c.season&&['season','La bonne saison',null,c.season,'Repère indicatif, à confirmer localement.']
     ].filter(Boolean);
     return `<div class="guide-chapter"><span class="guide-chapter-number">01</span><span class="guide-chapter-label">L’esprit du lieu</span></div>
       <div class="guide-spirit-cover${photo?'':' no-photo'}">${photo?`<img src="${esc(photo)}" alt="" loading="lazy" decoding="async">`:''}
@@ -136,7 +137,7 @@
         </div>
       </div>
       ${c.vibe?`<blockquote class="guide-vibe"${NT}><svg class="guide-quote" viewBox="0 0 48 40" aria-hidden="true"><path d="M0 40V24C0 10 7 2 20 0l2 6c-7 2-11 7-11 14h9v20H0Zm26 0V24C26 10 33 2 46 0l2 6c-7 2-11 7-11 14h9v20H26Z" fill="currentColor"/></svg><p>${esc(c.vibe)}</p></blockquote>`:''}
-      ${tiles.length?`<div class="guide-tiles">${tiles.map(([k,label,title,text])=>`<article class="guide-tile tile-${k}"><span class="guide-tile-icon">${icon(k)}</span><small>${label}</small>${title?`<b${NT}>${esc(title)}</b>`:''}<p${NT}>${esc(text)}</p></article>`).join('')}</div>`:''}
+      ${tiles.length?`<div class="guide-tiles">${tiles.map(([k,label,title,text,note])=>`<article class="guide-tile tile-${k}"><span class="guide-tile-icon">${icon(k)}</span><small>${label}</small>${title?`<b${NT}>${esc(title)}</b>`:''}<p${NT}>${esc(text)}</p>${note?`<span class="guide-note">${note}</span>`:''}</article>`).join('')}</div>`:''}
       ${c.grounded?'':'<p class="guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>'}`;
   }
 

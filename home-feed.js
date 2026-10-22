@@ -1,6 +1,6 @@
 /* Ocean Buddy 1.3 — accueil « envies de départ ».
-   La vraie Terre en ouverture, puis des rails de photos : les spots dont c’est la meilleure saison
-   ce mois-ci (data/seasons.json, tiré des carnets de destination) et des collections construites
+   La vraie Terre en ouverture, puis des rails de photos : les spots où nos carnets de destination et les
+   moyennes climatiques s’accordent ce mois-ci (data/seasons.json, repère indicatif) et des collections construites
    à partir du catalogue (activités, niveau, latitude, description). Les rails changent chaque jour ;
    un spot n’apparaît qu’une fois sur la page. Seules les vraies photos servent de couverture. */
 (() => {
@@ -66,11 +66,13 @@
     {id:'nord',title:'L’été au frais',sub:'Fjords, falaises et eau vive : la tendance des « coolcations ».',
       test:s=>lat(s)>=51||lat(s)<=-44},
     {id:'debut',title:'Pour débuter en douceur',sub:'Des conditions accueillantes pour te lancer.',
-      test:s=>s.level==='debutant'&&has(s,'surf','paddle','baignade','snorkeling','kayak')},
+      /* Jauge de danger calculée (app.js) : un spot à 3 ou 4 points ne se recommande pas pour débuter. Sans la jauge, le rail reste tel quel. */
+      test:s=>s.level==='debutant'&&has(s,'surf','paddle','baignade','snorkeling','kayak')&&!(window.dangerGauge?.(s)?.n>=3)},
     {id:'iles',title:'Îles du bout du monde',sub:'Loin, très loin… et tellement beau.',
       test:s=>['oc','as','af','sa'].includes(s.world)&&/\b[îi]le|atoll|archipel/.test(text(s))}
   ];
 
+  /* seasons = mois prudents (carnet ∩ modèle climatique − mois à risque sourcés) : un repère indicatif, jamais une prévision. */
   let seasons=null,scores=null,built=false,lite=null;
   /* Normales climatiques légères (eau, soleil, houle, vent) : repères chiffrés sur les cartes et rails de données. */
   const LI={sea:0,tx:1,sun:2,wet:3,kite:4,hs:5,calm:6};
@@ -256,7 +258,7 @@
       /* Les photos en haute définition passent devant (plus belles en grand format). */
       const score=s=>{const ms=seasons[s.id];return (ms.length===12?2:0)+(ms.includes((m+11)%12)?1:0)+ms.length/24+((photo(s)?.w||0)>=1200?0:1.5)+(100-vib(s.id))/25;};
       const ordered=inSeason.map(s=>({s,k:score(s)})).sort((a,b)=>a.k-b.k).map(o=>o.s);
-      html+=rail('mois',`Où partir en ${monthName(m)} ?`,'C’est la meilleure saison pour ces spots.',pick(ordered,{n:10,perCountry:1,used}),{big:true,season:true,more:true,data:'sea'});
+      html+=rail('mois',`Où partir en ${monthName(m)} ?`,'Repère indicatif d’après nos carnets et les moyennes climatiques, à confirmer sur place.',pick(ordered,{n:10,perCountry:1,used}),{big:true,season:true,more:true,data:'sea'});
     }
     if(lite){
       html+=planCard(m);
@@ -344,7 +346,7 @@
       /* « Tout voir » : la planète n’allume que les spots en saison ce mois-ci. */
       currentFilter='season';document.querySelectorAll('#filters [data-f]').forEach(b=>b.classList.toggle('active',b.dataset.f==='season'));
       go('spots');try{renderSpots();window.OceanMap?.render?.(true);}catch(_){}
-      if(typeof toast==='function')toast(`${SPOTS.filter(s=>inSeason(s.id)).length} spots en saison ce mois-ci`);
+      if(typeof toast==='function')toast(`${SPOTS.filter(s=>inSeason(s.id)).length} spots où nos carnets et les moyennes climatiques s’accordent ce mois-ci`);
       return;
     }
     const jump=e.target.closest('[data-hf-jump]');
