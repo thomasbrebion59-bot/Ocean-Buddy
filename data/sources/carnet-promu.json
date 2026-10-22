@@ -1,0 +1,2613 @@
+[
+ {
+  "spot": "biscarrosse",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les baïnes créent des courants qui t’entraînent vers le large : surfe hors des zones de baignade et gagne la plage uniquement par les accès balisés à travers la dune.",
+  "dangers": [
+   "Les baïnes créent des courants qui t’entraînent vers le large."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les baïnes créent des courants qui t’entraînent vers le large : surfe hors des zones de baignade et gagne la plage uniquement par les accès balisés à travers la dune.",
+  "en": {
+   "tip": "Baïnes create currents that drag you out to sea: surf away from the swimming zones and reach the beach only by the marked paths through the dune.",
+   "dangers": [
+    "Baïnes create currents that drag you out to sea."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las baïnes crean corrientes que te arrastran mar adentro: surfea fuera de las zonas de baño y llega a la playa únicamente por los accesos señalizados a través de la duna.",
+   "dangers": [
+    "Las baïnes crean corrientes que te arrastran mar adentro."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "carcans",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les baïnes sont nombreuses sur cette côte : repère les courants depuis la dune avant d’aller à l’eau et reste à distance des zones de baignade surveillées.",
+  "dangers": [
+   "Les baïnes sont nombreuses sur cette côte."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les baïnes sont nombreuses sur cette côte : repère les courants depuis la dune avant d’aller à l’eau et reste à distance des zones de baignade surveillées.",
+  "en": {
+   "tip": "Baïnes are common on this coast: spot the currents from the dune before going in, and keep your distance from the lifeguarded swimming zones.",
+   "dangers": [
+    "Baïnes are common on this coast."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las baïnes son numerosas en esta costa: localiza las corrientes desde la duna antes de entrar al agua y mantente alejado de las zonas de baño vigiladas.",
+   "dangers": [
+    "Las baïnes son numerosas en esta costa."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "hourtin",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les dunes de la réserve naturelle voisine sont protégées : reste sur les sentiers balisés et ne coupe jamais à travers la végétation pour rejoindre la plage.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les dunes de la réserve naturelle voisine sont protégées : reste sur les sentiers balisés et ne coupe jamais à travers la végétation pour rejoindre la plage.",
+  "en": {
+   "tip": "The dunes of the neighbouring nature reserve are protected: stay on the marked paths and never cut through the vegetation to reach the beach.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las dunas de la reserva natural vecina están protegidas: quédate en los senderos señalizados y nunca cortes por la vegetación para llegar a la playa.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "montalivet",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "De part et d’autre de la plage centrale, de longues portions sont naturistes : respecte cet usage, et ne prends jamais de photos des baigneurs.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "De part et d’autre de la plage centrale, de longues portions sont naturistes : respecte cet usage, et ne prends jamais de photos des baigneurs.",
+  "en": {
+   "tip": "On either side of the central beach, long stretches are naturist: respect this custom, and never take photos of bathers.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "A ambos lados de la playa central, largos tramos son naturistas: respeta esa costumbre y nunca hagas fotos de los bañistas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "soulac",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "La côte recule vite ici : ne t’approche pas des pieds de dune effondrés et traverse le cordon uniquement par les accès aménagés.",
+  "dangers": [
+   "La côte recule vite ici.",
+   "Méfie-toi des courants près de l’estuaire."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "La côte recule vite ici : ne t’approche pas des pieds de dune effondrés et traverse le cordon uniquement par les accès aménagés. Méfie-toi des courants près de l’estuaire.",
+  "en": {
+   "tip": "The coast is retreating fast here: do not go near collapsed dune foots and cross the dune line only at the designated access points.",
+   "dangers": [
+    "The coast is retreating fast here.",
+    "Watch out for currents near the estuary."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "La costa retrocede rápido aquí: no te acerques a los pies de duna derrumbados y cruza el cordón únicamente por los accesos habilitados.",
+   "dangers": [
+    "La costa retrocede rápido aquí.",
+    "Desconfía de las corrientes cerca del estuario."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "penermalo",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Près de l’embouchure de la Laïta, les courants de marée sont forts : évite l’eau au jusant, et laisse de la place entre kites, planches et baigneurs.",
+  "dangers": [
+   "Près de l’embouchure de la Laïta, les courants de marée sont forts."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Près de l’embouchure de la Laïta, les courants de marée sont forts : évite l’eau au jusant, et laisse de la place entre kites, planches et baigneurs.",
+  "en": {
+   "tip": "Near the mouth of the Laïta, the tidal currents are strong: stay out of the water on the ebb, and leave room between kites, boards and swimmers.",
+   "dangers": [
+    "Near the mouth of the Laïta, the tidal currents are strong."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Cerca de la desembocadura del Laïta, las corrientes de marea son fuertes: evita el agua con la marea bajante y deja espacio entre kites, tablas y bañistas.",
+   "dangers": [
+    "Cerca de la desembocadura del Laïta, las corrientes de marea son fuertes."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "porscarn",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Sur la plage, laisse de l’espace aux écoles de surf.",
+  "dangers": [
+   "Ne t’aventure pas sur les rochers de Saint-Guénolé par forte houle : des vagues isolées y balaient les roches."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Ne t’aventure pas sur les rochers de Saint-Guénolé par forte houle : des vagues isolées y balaient les roches. Sur la plage, laisse de l’espace aux écoles de surf.",
+  "en": {
+   "tip": "On the beach, give the surf schools space.",
+   "dangers": [
+    "Do not venture onto the rocks of Saint-Guénolé in a big swell: rogue waves sweep across them."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En la playa, deja espacio a las escuelas de surf.",
+   "dangers": [
+    "No te aventures sobre las rocas de Saint-Guénolé con mucho oleaje: olas aisladas barren las rocas."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "tanchet",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "À Tanchet, la vague casse sur un fond rocheux : chausse des chaussons à marée basse, attends ton tour au pic et respecte les habitués du lieu.",
+  "dangers": [
+   "À Tanchet, la vague casse sur un fond rocheux."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "À Tanchet, la vague casse sur un fond rocheux : chausse des chaussons à marée basse, attends ton tour au pic et respecte les habitués du lieu.",
+  "en": {
+   "tip": "At Tanchet, the wave breaks over a rocky bottom: wear booties at low tide, wait your turn at the peak and respect the regulars.",
+   "dangers": [
+    "At Tanchet, the wave breaks over a rocky bottom."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En Tanchet, la ola rompe sobre un fondo rocoso: ponte escarpines con marea baja, espera tu turno en el pico y respeta a los habituales del lugar.",
+   "dangers": [
+    "En Tanchet, la ola rompe sobre un fondo rocoso."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "baleal",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les écoles de surf sont nombreuses à Baleal : si tu es autonome, éloigne-toi des groupes de débutants et laisse les vagues des pics rocheux aux habitués.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les écoles de surf sont nombreuses à Baleal : si tu es autonome, éloigne-toi des groupes de débutants et laisse les vagues des pics rocheux aux habitués.",
+  "en": {
+   "tip": "There are lots of surf schools in Baleal: if you surf independently, move away from beginner groups and leave the waves at the rocky peaks to the regulars.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Hay muchas escuelas de surf en Baleal: si surfeas por tu cuenta, aléjate de los grupos de principiantes y deja las olas de los picos rocosos a los habituales.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "arrifana",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Rejoins la plage par la route, pas par la falaise.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Tu es dans le parc naturel de la côte vicentine : dormir en van ou camper hors des aires autorisées est interdit et contrôlé. Rejoins la plage par la route, pas par la falaise.",
+  "en": {
+   "tip": "Reach the beach by the road, not down the cliff.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Llega a la playa por la carretera, no por el acantilado.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "amado",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "La plage est dans le parc naturel : reste sur les pistes existantes en voiture, ne dors pas sur le parking et laisse la végétation des falaises intacte.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "La plage est dans le parc naturel : reste sur les pistes existantes en voiture, ne dors pas sur le parking et laisse la végétation des falaises intacte.",
+  "en": {
+   "tip": "The beach is inside the natural park: keep to the existing tracks by car, do not sleep in the car park and leave the cliff vegetation intact.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "La playa está en el parque natural: mantente en las pistas existentes si vas en coche, no duermas en el aparcamiento y deja intacta la vegetación de los acantilados.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "bordeira",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Rejoins la plage par les passerelles au-dessus des dunes protégées, et méfie-toi du courant à l’embouchure de la rivière quand la marée descend.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Rejoins la plage par les passerelles au-dessus des dunes protégées, et méfie-toi du courant à l’embouchure de la rivière quand la marée descend.",
+  "en": {
+   "tip": "Reach the beach by the boardwalks over the protected dunes, and beware of the current at the river mouth when the tide is going out.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Llega a la playa por las pasarelas sobre las dunas protegidas y ten cuidado con la corriente en la desembocadura del río cuando baja la marea.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "carcavelos",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Le week-end, le line-up est bondé : garde toujours ta planche en main, ne la lâche pas sous une vague, et éloigne-toi des cours de surf installés près du bord.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Le week-end, le line-up est bondé : garde toujours ta planche en main, ne la lâche pas sous une vague, et éloigne-toi des cours de surf installés près du bord.",
+  "en": {
+   "tip": "At weekends the line-up is packed: always keep hold of your board, never let go of it under a wave, and stay clear of the surf lessons set up near the shore.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "El fin de semana el line-up está lleno: sujeta siempre tu tabla, no la sueltes bajo una ola y aléjate de las clases de surf instaladas cerca de la orilla.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "matosinhos",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "C’est la plage-école de Porto : si tu es autonome, surfe à l’écart des groupes de débutants et respecte les zones de baignade surveillées en été.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "C’est la plage-école de Porto : si tu es autonome, surfe à l’écart des groupes de débutants et respecte les zones de baignade surveillées en été.",
+  "en": {
+   "tip": "This is Porto’s beginner beach: if you surf independently, keep away from the groups of beginners and respect the lifeguarded swimming zones in summer.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Es la playa escuela de Oporto: si surfeas por tu cuenta, hazlo apartado de los grupos de principiantes y respeta las zonas de baño vigiladas en verano.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "espinho",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Quand les pêcheurs de xávega travaillent, reste à l’écart des filets et des cordages sur la plage comme dans l’eau, et laisse passer les tracteurs.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Quand les pêcheurs de xávega travaillent, reste à l’écart des filets et des cordages sur la plage comme dans l’eau, et laisse passer les tracteurs.",
+  "en": {
+   "tip": "When the xávega fishermen are working, keep clear of the nets and ropes on the beach and in the water, and let the tractors through.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Cuando los pescadores de xávega trabajan, mantente apartado de las redes y los cabos, tanto en la playa como en el agua, y deja pasar a los tractores.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "buarcos",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "La droite casse le long d’une digue et sur des rochers : chausse des chaussons, ne rame pas dans la trajectoire des surfeurs qui arrivent du pic et respecte les habitués.",
+  "dangers": [
+   "La droite casse le long d’une digue et sur des rochers."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "La droite casse le long d’une digue et sur des rochers : chausse des chaussons, ne rame pas dans la trajectoire des surfeurs qui arrivent du pic et respecte les habitués.",
+  "en": {
+   "tip": "The right breaks along a sea wall and over rocks: wear booties, don’t paddle into the path of surfers coming off the peak, and respect the regulars.",
+   "dangers": [
+    "The right breaks along a sea wall and over rocks."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "La derecha rompe a lo largo de un dique y sobre rocas: ponte escarpines, no remes en la trayectoria de los surfistas que bajan del pico y respeta a los habituales.",
+   "dangers": [
+    "La derecha rompe a lo largo de un dique y sobre rocas."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "saotorpes",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Juste au sud commence le parc naturel de la côte vicentine : ne campe pas hors des aires autorisées, ne dors pas en van sur les falaises et reste sur les sentiers.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Juste au sud commence le parc naturel de la côte vicentine : ne campe pas hors des aires autorisées, ne dors pas en van sur les falaises et reste sur les sentiers.",
+  "en": {
+   "tip": "Just to the south begins the Vicentine Coast natural park: don’t camp outside the authorised areas, don’t sleep in a van on the clifftops, and stay on the paths.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Justo al sur empieza el parque natural de la Costa Vicentina: no acampes fuera de las áreas autorizadas, no duermas en furgoneta sobre los acantilados y quédate en los senderos.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "cordoama",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "La plage est dans le parc naturel, ne dors pas sur le parking.",
+  "dangers": [
+   "Ne t’installe pas au pied des falaises : des chutes de pierres se produisent régulièrement."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Ne t’installe pas au pied des falaises : des chutes de pierres se produisent régulièrement. La plage est dans le parc naturel, ne dors pas sur le parking.",
+  "en": {
+   "tip": "The beach is inside the natural park, so don’t sleep in the car park.",
+   "dangers": [
+    "Don’t settle at the foot of the cliffs: rockfalls happen regularly."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "La playa está en el parque natural, no duermas en el aparcamiento.",
+   "dangers": [
+    "No te instales al pie de los acantilados: se producen desprendimientos de piedras con regularidad."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "elpalmar",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "En été, surfe uniquement dans les zones délimitées par les sauveteurs, et rejoins la plage par les chemins existants sans piétiner les dunes.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "En été, surfe uniquement dans les zones délimitées par les sauveteurs, et rejoins la plage par les chemins existants sans piétiner les dunes.",
+  "en": {
+   "tip": "In summer, surf only in the zones marked out by the lifeguards, and reach the beach by the existing paths without trampling the dunes.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En verano, surfea únicamente en las zonas delimitadas por los socorristas y llega a la playa por los caminos existentes sin pisar las dunas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "hierbabuena",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "La plage se trouve dans le parc naturel de La Breña : rejoins-la à pied par le sentier depuis le port, remporte tes déchets et reste sur les chemins des falaises.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "La plage se trouve dans le parc naturel de La Breña : rejoins-la à pied par le sentier depuis le port, remporte tes déchets et reste sur les chemins des falaises.",
+  "en": {
+   "tip": "The beach is inside La Breña natural park: walk there along the path from the port, take your rubbish home and stay on the clifftop trails.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "La playa se encuentra en el parque natural de La Breña: llega a pie por el sendero desde el puerto, llévate tu basura y quédate en los caminos de los acantilados.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "salinas",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "À l’est, la plage se prolonge par les dunes d’El Espartal : ne les piétine pas et emprunte les passerelles.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "À l’est, la plage se prolonge par les dunes d’El Espartal : ne les piétine pas et emprunte les passerelles. Au pic, laisse la priorité aux habitués du club local.",
+  "en": {
+   "tip": "To the east, the beach continues into the El Espartal dunes: don’t trample them and use the boardwalks.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Al este, la playa se prolonga en las dunas de El Espartal: no las pises y usa las pasarelas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "loslocos",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Le pic est très local et la plage étroite au pied des falaises : descends par l’accès aménagé, observe avant d’aller à l’eau et laisse les meilleures vagues aux habitués.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Le pic est très local et la plage étroite au pied des falaises : descends par l’accès aménagé, observe avant d’aller à l’eau et laisse les meilleures vagues aux habitués.",
+  "en": {
+   "tip": "The peak is very local and the beach is narrow below the cliffs: go down by the built access, watch before paddling out and leave the best waves to the regulars.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "El pico es muy local y la playa es estrecha al pie de los acantilados: baja por el acceso habilitado, observa antes de entrar al agua y deja las mejores olas a los habituales.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "canallave",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les dunes de Liencres sont un parc naturel : reste sur les chemins balisés.",
+  "dangers": [
+   "Méfie-toi des courants près de l’estuaire du Pas et des rochers à marée basse."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les dunes de Liencres sont un parc naturel : reste sur les chemins balisés. Méfie-toi des courants près de l’estuaire du Pas et des rochers à marée basse.",
+  "en": {
+   "tip": "The Liencres dunes are a natural park: stay on the marked paths.",
+   "dangers": [
+    "Watch out for currents near the Pas estuary and for rocks at low tide."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las dunas de Liencres son un parque natural: quédate en los caminos señalizados.",
+   "dangers": [
+    "Desconfía de las corrientes cerca del estuario del Pas y de las rocas con la marea baja."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "loredo",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les écoles de surf occupent le bord en été : si tu es autonome, va chercher les pics plus loin et laisse les débutants apprendre en sécurité.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les écoles de surf occupent le bord en été : si tu es autonome, va chercher les pics plus loin et laisse les débutants apprendre en sécurité. Traverse les dunes par les passerelles.",
+  "en": {
+   "tip": "Surf schools take over the shoreline in summer: if you surf independently, look for peaks further along and let beginners learn safely.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las escuelas de surf ocupan la orilla en verano: si surfeas por tu cuenta, busca picos más lejos y deja que los principiantes aprendan con seguridad.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "fistral",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Fistral est très fréquentée : surfe entre les drapeaux à damier noir et blanc des sauveteurs, jamais dans la zone de baignade rouge et jaune, et respecte les priorités au pic.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Fistral est très fréquentée : surfe entre les drapeaux à damier noir et blanc des sauveteurs, jamais dans la zone de baignade rouge et jaune, et respecte les priorités au pic.",
+  "en": {
+   "tip": "Fistral is very busy: surf between the black-and-white chequered lifeguard flags, never in the red-and-yellow swimming zone, and respect priority at the peak.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Fistral está muy concurrida: surfea entre las banderas de cuadros blancos y negros de los socorristas, nunca en la zona de baño roja y amarilla, y respeta las prioridades en el pico.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "polzeath",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "À marée haute, la plage se réduit et le line-up se resserre : partage les vagues avec les débutants et laisse ta voiture aux parkings plutôt que sur le sable.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "À marée haute, la plage se réduit et le line-up se resserre : partage les vagues avec les débutants et laisse ta voiture aux parkings plutôt que sur le sable.",
+  "en": {
+   "tip": "At high tide the beach shrinks and the line-up tightens: share the waves with beginners and leave your car in the car parks rather than on the sand.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Con marea alta la playa se reduce y el line-up se estrecha: comparte las olas con los principiantes y deja el coche en los aparcamientos en lugar de en la arena.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "perranporth",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les courants d’arrachement sont fréquents sur cette longue plage : surfe dans la zone surveillée à damier, et reste loin du pied des falaises minées par les anciennes galeries.",
+  "dangers": [
+   "Les courants d’arrachement sont fréquents sur cette longue plage."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les courants d’arrachement sont fréquents sur cette longue plage : surfe dans la zone surveillée à damier, et reste loin du pied des falaises minées par les anciennes galeries.",
+  "en": {
+   "tip": "Rip currents are common on this long beach: surf in the chequered lifeguarded zone, and stay well away from the foot of the cliffs undermined by old mine tunnels.",
+   "dangers": [
+    "Rip currents are common on this long beach."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las corrientes de resaca son frecuentes en esta larga playa: surfea en la zona vigilada de cuadros y mantente lejos del pie de los acantilados socavados por antiguas galerías.",
+   "dangers": [
+    "Las corrientes de resaca son frecuentes en esta larga playa."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "gwithian",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Des phoques gris se reposent dans les criques sous Godrevy : observe-les du haut des falaises en silence, sans descendre ni faire voler de drone, surtout pendant la période des petits.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Des phoques gris se reposent dans les criques sous Godrevy : observe-les du haut des falaises en silence, sans descendre ni faire voler de drone, surtout pendant la période des petits.",
+  "en": {
+   "tip": "Grey seals rest in the coves below Godrevy: watch them quietly from the clifftops, without climbing down or flying a drone, especially during the pupping season.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Hay focas grises descansando en las calas bajo Godrevy: obsérvalas en silencio desde lo alto de los acantilados, sin bajar ni hacer volar un dron, sobre todo en la época de las crías.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "sidiifni",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Le soir, la plage est le salon des familles d’Ifni : couvre-toi en quittant le sable et, vers Legzira, ne grimpe jamais sur l’arche restante, fragile.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Le soir, la plage est le salon des familles d’Ifni : couvre-toi en quittant le sable et, vers Legzira, ne grimpe jamais sur l’arche restante, fragile.",
+  "en": {
+   "tip": "In the evening, the beach is Ifni families’ living room: cover up when you leave the sand and, towards Legzira, never climb on the remaining arch, which is fragile.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Por la tarde, la playa es el salón de las familias de Ifni: cúbrete al salir de la arena y, hacia Legzira, no trepes nunca al arco que queda, que es frágil.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "mirleft",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les pistes vers les criques traversent des terres agricoles : reste sur les chemins existants, ne campe pas sauvagement près des maisons et remporte tous tes déchets.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les pistes vers les criques traversent des terres agricoles : reste sur les chemins existants, ne campe pas sauvagement près des maisons et remporte tous tes déchets.",
+  "en": {
+   "tip": "The tracks to the coves cross farmland: stay on the existing tracks, don’t wild camp near houses and take all your rubbish with you.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las pistas hacia las calas atraviesan tierras agrícolas: quédate en los caminos existentes, no acampes en libertad cerca de las casas y llévate toda tu basura.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "tamraght",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les point breaks du coin sont très fréquentés par les écoles : laisse la priorité à qui est au pic, et reste discret et couvert en traversant le village.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les point breaks du coin sont très fréquentés par les écoles : laisse la priorité à qui est au pic, et reste discret et couvert en traversant le village.",
+  "en": {
+   "tip": "The local point breaks are very busy with schools: give priority to whoever is on the peak, and stay discreet and covered up when walking through the village.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Los point breaks de la zona están muy concurridos por las escuelas: deja la prioridad a quien está en el pico y sé discreto y ve cubierto al cruzar el pueblo.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "durban",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Des filets anti-requins équipent les plages, mais ils ne suppriment pas le risque : surfe dans les secteurs surveillés entre les jetées, et ne laisse jamais tes affaires seules sur le sable.",
+  "dangers": [
+   "Des filets anti-requins équipent les plages, mais ils ne suppriment pas le risque."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Des filets anti-requins équipent les plages, mais ils ne suppriment pas le risque : surfe dans les secteurs surveillés entre les jetées, et ne laisse jamais tes affaires seules sur le sable.",
+  "en": {
+   "tip": "Shark nets are installed along the beaches, but they do not remove the risk: surf in the lifeguarded sections between the piers, and never leave your things unattended on the sand.",
+   "dangers": [
+    "Shark nets are installed along the beaches, but they do not remove the risk."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Hay redes antitiburones en las playas, pero no eliminan el riesgo: surfea en los sectores vigilados entre los espigones y nunca dejes tus cosas solas en la arena.",
+   "dangers": [
+    "Hay redes antitiburones en las playas, pero no eliminan el riesgo."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "ballito",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Surfe uniquement devant les plages équipées de filets anti-requins et de sauveteurs, et laisse les piscines naturelles aux baigneurs et aux enfants.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Surfe uniquement devant les plages équipées de filets anti-requins et de sauveteurs, et laisse les piscines naturelles aux baigneurs et aux enfants.",
+  "en": {
+   "tip": "Only surf in front of beaches with shark nets and lifeguards, and leave the natural pools to swimmers and children.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Surfea únicamente frente a las playas con redes antitiburones y socorristas, y deja las piscinas naturales a los bañistas y a los niños.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "umhlanga",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Le récif et les rochers affleurent devant la promenade : entre et sors par le sable, surfe dans la zone surveillée et suis les consignes des sauveteurs.",
+  "dangers": [
+   "Le récif et les rochers affleurent devant la promenade."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Le récif et les rochers affleurent devant la promenade : entre et sors par le sable, surfe dans la zone surveillée et suis les consignes des sauveteurs.",
+  "en": {
+   "tip": "Reef and rocks break the surface in front of the promenade: get in and out over the sand, surf in the lifeguarded zone and follow the lifeguards’ instructions.",
+   "dangers": [
+    "Reef and rocks break the surface in front of the promenade."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "El arrecife y las rocas afloran frente al paseo: entra y sal por la arena, surfea en la zona vigilada y sigue las indicaciones de los socorristas.",
+   "dangers": [
+    "El arrecife y las rocas afloran frente al paseo."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "umdloti",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les rochers et les courants sont traîtres autour de la pointe : repère les passes depuis la plage, reste près des sauveteurs et laisse la piscine naturelle aux baigneurs.",
+  "dangers": [
+   "Les rochers et les courants sont traîtres autour de la pointe."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les rochers et les courants sont traîtres autour de la pointe : repère les passes depuis la plage, reste près des sauveteurs et laisse la piscine naturelle aux baigneurs.",
+  "en": {
+   "tip": "Rocks and currents are treacherous around the point: spot the channels from the beach, stay close to the lifeguards and leave the natural pool to swimmers.",
+   "dangers": [
+    "Rocks and currents are treacherous around the point."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las rocas y las corrientes son traicioneras alrededor de la punta: localiza los canales desde la playa, quédate cerca de los socorristas y deja la piscina natural a los bañistas.",
+   "dangers": [
+    "Las rocas y las corrientes son traicioneras alrededor de la punta."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "capestfrancis",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Seal Point est un spot de récif puissant fréquenté par des locaux : attends ton tour, ne te place pas à l’intérieur, et respecte le centre de soins pour manchots près du phare.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Seal Point est un spot de récif puissant fréquenté par des locaux : attends ton tour, ne te place pas à l’intérieur, et respecte le centre de soins pour manchots près du phare.",
+  "en": {
+   "tip": "Seal Point is a powerful reef break surfed by locals: wait your turn, don’t sit on the inside, and respect the penguin rehabilitation centre near the lighthouse.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Seal Point es un spot de arrecife potente frecuentado por locales: espera tu turno, no te coloques por dentro y respeta el centro de cuidados de pingüinos cerca del faro.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "jaco",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les courants d’arrachement sont puissants à Jacó : repère les zones signalées avant d’entrer, et ne laisse rien de valeur sur le sable ni dans la voiture.",
+  "dangers": [
+   "Les courants d’arrachement sont puissants à Jacó."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les courants d’arrachement sont puissants à Jacó : repère les zones signalées avant d’entrer, et ne laisse rien de valeur sur le sable ni dans la voiture.",
+  "en": {
+   "tip": "Rip currents are powerful at Jacó: check the signposted zones before going in, and leave nothing valuable on the sand or in the car.",
+   "dangers": [
+    "Rip currents are powerful at Jacó."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las corrientes de resaca son potentes en Jacó: localiza las zonas señalizadas antes de entrar y no dejes nada de valor en la arena ni en el coche.",
+   "dangers": [
+    "Las corrientes de resaca son potentes en Jacó."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "dominical",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Le beach break de Dominical est puissant et ses courants violents : ne t’y lance pas si tu débutes, et suis les conseils des surfeurs du coin sur les passes.",
+  "dangers": [
+   "Le beach break de Dominical est puissant et ses courants violents."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Le beach break de Dominical est puissant et ses courants violents : ne t’y lance pas si tu débutes, et suis les conseils des surfeurs du coin sur les passes.",
+  "en": {
+   "tip": "Dominical’s beach break is powerful and its currents are strong: don’t go out if you’re a beginner, and follow the local surfers’ advice on the channels.",
+   "dangers": [
+    "Dominical’s beach break is powerful and its currents are strong."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "El beach break de Dominical es potente y sus corrientes son violentas: no te lances si eres principiante y sigue los consejos de los surfistas del lugar sobre los canales.",
+   "dangers": [
+    "El beach break de Dominical es potente y sus corrientes son violentas."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "playagrande",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "En saison de ponte, la plage du parc national ferme la nuit : n’y va pas après le coucher du soleil, sans lampe ni flash, sauf avec un guide agréé.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "En saison de ponte, la plage du parc national ferme la nuit : n’y va pas après le coucher du soleil, sans lampe ni flash, sauf avec un guide agréé.",
+  "en": {
+   "tip": "During nesting season, the national park beach closes at night: don’t go there after sunset, and never with a torch or flash, unless you’re with an accredited guide.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En la época de puesta, la playa del parque nacional cierra por la noche: no vayas después de la puesta de sol, sin linterna ni flash, salvo con un guía autorizado.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "langosta",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "La plage est un site de ponte protégé : pas de feu ni de lampe la nuit, et ne touche jamais aux nids ni aux jeunes tortues qui rejoignent la mer.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "La plage est un site de ponte protégé : pas de feu ni de lampe la nuit, et ne touche jamais aux nids ni aux jeunes tortues qui rejoignent la mer.",
+  "en": {
+   "tip": "The beach is a protected nesting site: no fires or torches at night, and never touch the nests or the baby turtles heading for the sea.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "La playa es un lugar de puesta protegido: nada de fuego ni de linterna por la noche, y nunca toques los nidos ni las crías de tortuga que se dirigen al mar.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "avellanas",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les pics de récif sont surfés par une communauté locale soudée : attends ton tour, respecte la priorité et roule doucement sur les pistes pour ne pas enfumer les maisons.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les pics de récif sont surfés par une communauté locale soudée : attends ton tour, respecte la priorité et roule doucement sur les pistes pour ne pas enfumer les maisons.",
+  "en": {
+   "tip": "The reef peaks are surfed by a close-knit local community: wait your turn, respect priority and drive slowly on the tracks so you don’t cover the houses in dust.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Los picos de arrecife los surfea una comunidad local muy unida: espera tu turno, respeta la prioridad y conduce despacio por las pistas para no llenar de polvo las casas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "junquillal",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Des tortues pondent sur cette plage : évite toute lumière la nuit, garde tes distances avec les nids balisés et remporte tes déchets, il n’y a presque aucune poubelle.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Des tortues pondent sur cette plage : évite toute lumière la nuit, garde tes distances avec les nids balisés et remporte tes déchets, il n’y a presque aucune poubelle.",
+  "en": {
+   "tip": "Turtles nest on this beach: avoid any light at night, keep your distance from the marked nests and take your rubbish with you, as there are hardly any bins.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las tortugas ponen huevos en esta playa: evita cualquier luz por la noche, guarda las distancias con los nidos señalizados y llévate tu basura, casi no hay papeleras.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "nosara",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les pistes du village sont poussiéreuses et partagées avec piétons et vélos : roule au pas, et ne dérange pas les singes hurleurs qui vivent dans les arbres au-dessus de la plage.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les pistes du village sont poussiéreuses et partagées avec piétons et vélos : roule au pas, et ne dérange pas les singes hurleurs qui vivent dans les arbres au-dessus de la plage.",
+  "en": {
+   "tip": "The village tracks are dusty and shared with pedestrians and cyclists: drive at walking pace, and don’t disturb the howler monkeys that live in the trees above the beach.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las pistas del pueblo son polvorientas y las comparten peatones y ciclistas: conduce al paso y no molestes a los monos aulladores que viven en los árboles sobre la playa.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "esterillos",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les plages sont peu surveillées et les courants forts : ne surfe jamais seul, et reste discret près des maisons des familles qui vivent ici toute l’année.",
+  "dangers": [
+   "Les plages sont peu surveillées et les courants forts."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les plages sont peu surveillées et les courants forts : ne surfe jamais seul, et reste discret près des maisons des familles qui vivent ici toute l’année.",
+  "en": {
+   "tip": "The beaches are rarely lifeguarded and the currents are strong: never surf alone, and keep a low profile near the homes of the families who live here all year round.",
+   "dangers": [
+    "The beaches are rarely lifeguarded and the currents are strong."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las playas están poco vigiladas y las corrientes son fuertes: nunca surfees solo y sé discreto cerca de las casas de las familias que viven aquí todo el año.",
+   "dangers": [
+    "Las playas están poco vigiladas y las corrientes son fuertes."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "bejuco",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Plage peu fréquentée et courants puissants : ne surfe pas seul, et respecte les tortues qui viennent pondre sur la côte voisine.",
+  "dangers": [
+   "Plage peu fréquentée et courants puissants."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Plage peu fréquentée et courants puissants : ne surfe pas seul, et respecte les tortues qui viennent pondre sur la côte voisine.",
+  "en": {
+   "tip": "A quiet beach with powerful currents: don’t surf alone, and respect the turtles that come to nest on the neighbouring coast.",
+   "dangers": [
+    "A quiet beach with powerful currents."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Playa poco concurrida y corrientes potentes: no surfees solo y respeta a las tortugas que vienen a desovar a la costa vecina.",
+   "dangers": [
+    "Playa poco concurrida y corrientes potentes."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "huntington",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "À l’embouchure de la Santa Ana, une zone clôturée protège les nids des sternes et gravelots : ne la franchis jamais, et n’allume de feu que dans les foyers prévus.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "À l’embouchure de la Santa Ana, une zone clôturée protège les nids des sternes et gravelots : ne la franchis jamais, et n’allume de feu que dans les foyers prévus.",
+  "en": {
+   "tip": "At the mouth of the Santa Ana, a fenced area protects the nests of terns and plovers: never cross it, and only light fires in the designated fire rings.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En la desembocadura del Santa Ana, una zona vallada protege los nidos de charranes y chorlitos: no la cruces nunca y enciende fuego solo en los hogares previstos.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "oceanbeachsf",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les courants d’arrachement y sont redoutables et la plage n’est pas surveillée comme ailleurs : n’y va pas sans solide expérience, et tiens les chiens loin des gravelots des dunes.",
+  "dangers": [
+   "Les courants d’arrachement y sont redoutables et la plage n’est pas surveillée comme ailleurs."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les courants d’arrachement y sont redoutables et la plage n’est pas surveillée comme ailleurs : n’y va pas sans solide expérience, et tiens les chiens loin des gravelots des dunes.",
+  "en": {
+   "tip": "Rip currents here are formidable and the beach isn’t lifeguarded the way others are: don’t go without solid experience, and keep dogs away from the plovers in the dunes.",
+   "dangers": [
+    "Rip currents here are formidable and the beach isn’t lifeguarded the way others are."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las corrientes de resaca son temibles y la playa no está vigilada como otras: no vayas sin sólida experiencia y mantén a los perros lejos de los chorlitos de las dunas.",
+   "dangers": [
+    "Las corrientes de resaca son temibles y la playa no está vigilada como otras."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "steamerlane",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Steamer Lane est un pic très localisé et rocheux : n’y va que si tu maîtrises l’entrée depuis les falaises, respecte scrupuleusement les priorités et garde tes distances avec les loutres de mer.",
+  "dangers": [
+   "Steamer Lane est un pic très localisé et rocheux."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Steamer Lane est un pic très localisé et rocheux : n’y va que si tu maîtrises l’entrée depuis les falaises, respecte scrupuleusement les priorités et garde tes distances avec les loutres de mer.",
+  "en": {
+   "tip": "Steamer Lane is a very localised, rocky peak: only go out if you can handle the entry from the cliffs, respect priority scrupulously and keep your distance from the sea otters.",
+   "dangers": [
+    "Steamer Lane is a very localised, rocky peak."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Steamer Lane es un pico muy local y rocoso: solo entra si dominas la entrada desde los acantilados, respeta escrupulosamente las prioridades y guarda las distancias con las nutrias marinas.",
+   "dangers": [
+    "Steamer Lane es un pico muy local y rocoso."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "lapuntilla",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "La Puntilla accueille les écoles de surf : laisse la priorité aux locaux sur le pic et repère les panneaux d’évacuation tsunami de la ville.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "La Puntilla accueille les écoles de surf : laisse la priorité aux locaux sur le pic et repère les panneaux d’évacuation tsunami de la ville.",
+  "en": {
+   "tip": "La Puntilla hosts the surf schools: give priority to locals at the peak and note the town’s tsunami evacuation signs.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "La Puntilla acoge a las escuelas de surf: deja la prioridad a los locales en el pico y localiza los carteles de evacuación por tsunami de la ciudad.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "infiernillo",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Le courant y est fort et la plage peu surveillée : ne surfe pas seul et suis les panneaux d’évacuation tsunami vers les hauteurs.",
+  "dangers": [
+   "Le courant y est fort et la plage peu surveillée."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Le courant y est fort et la plage peu surveillée : ne surfe pas seul et suis les panneaux d’évacuation tsunami vers les hauteurs.",
+  "en": {
+   "tip": "The current is strong and the beach rarely lifeguarded: don’t surf alone and follow the tsunami evacuation signs to higher ground.",
+   "dangers": [
+    "The current is strong and the beach rarely lifeguarded."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "La corriente es fuerte y la playa está poco vigilada: no surfees solo y sigue los carteles de evacuación por tsunami hacia las alturas.",
+   "dangers": [
+    "La corriente es fuerte y la playa está poco vigilada."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "matanzas",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Au bord, les barques des pêcheurs ont la priorité : grée loin de leur caleta et évite de naviguer au milieu des nageurs l’été.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Au bord, les barques des pêcheurs ont la priorité : grée loin de leur caleta et évite de naviguer au milieu des nageurs l’été.",
+  "en": {
+   "tip": "On the shore, the fishermen’s boats have priority: rig well away from their caleta and avoid sailing among swimmers in summer.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En la orilla, las barcas de los pescadores tienen prioridad: monta tu equipo lejos de su caleta y evita navegar entre los bañistas en verano.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "puertecillo",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les services sont quasi absents : apporte eau et vivres, remporte tous tes déchets et respecte les terrains privés que traverse la piste.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les services sont quasi absents : apporte eau et vivres, remporte tous tes déchets et respecte les terrains privés que traverse la piste.",
+  "en": {
+   "tip": "Services are almost non-existent: bring water and food, take all your rubbish with you and respect the private land the track crosses.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Casi no hay servicios: lleva agua y comida, llévate toda tu basura y respeta los terrenos privados que atraviesa la pista.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "renaca",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "L’été, la baignade est encadrée par les sauveteurs : surfe hors des zones balisées et laisse la priorité aux bodyboardeurs du coin sur les pics.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "L’été, la baignade est encadrée par les sauveteurs : surfe hors des zones balisées et laisse la priorité aux bodyboardeurs du coin sur les pics.",
+  "en": {
+   "tip": "In summer, swimming is supervised by lifeguards: surf outside the marked zones and give priority to local bodyboarders at the peaks.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En verano, el baño está supervisado por los socorristas: surfea fuera de las zonas señalizadas y deja la prioridad a los bodyboarders del lugar en los picos.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "elabanico",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "El Abanico casse près des rochers : observe le line-up avant d’entrer et gare-toi sur les emplacements prévus, pas devant les accès des riverains.",
+  "dangers": [
+   "El Abanico casse près des rochers."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "El Abanico casse près des rochers : observe le line-up avant d’entrer et gare-toi sur les emplacements prévus, pas devant les accès des riverains.",
+  "en": {
+   "tip": "El Abanico breaks close to the rocks: watch the line-up before going in and park in the designated spaces, not in front of residents’ entrances.",
+   "dangers": [
+    "El Abanico breaks close to the rocks."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "El Abanico rompe cerca de las rocas: observa el line-up antes de entrar y aparca en los espacios previstos, no frente a los accesos de los vecinos.",
+   "dangers": [
+    "El Abanico rompe cerca de las rocas."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "canggu",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Des cérémonies se tiennent sur la plage près du temple de Batu Bolong : reste en retrait, et au pic laisse passer les surfeurs balinais.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Des cérémonies se tiennent sur la plage près du temple de Batu Bolong : reste en retrait, et au pic laisse passer les surfeurs balinais.",
+  "en": {
+   "tip": "Ceremonies take place on the beach near Batu Bolong temple: stay back, and at the peak let Balinese surfers go first.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Se celebran ceremonias en la playa cerca del templo de Batu Bolong: mantente al margen y, en el pico, deja pasar primero a los surfistas balineses.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "kuta",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Surfe dans les zones balisées par les sauveteurs, loin des écoles.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Surfe dans les zones balisées par les sauveteurs, loin des écoles. Le jour de Nyepi, nouvel an balinais, toute l’île observe le silence : personne sur la plage.",
+  "en": {
+   "tip": "Surf in the zones marked out by lifeguards, away from the schools.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Surfea en las zonas señalizadas por los socorristas, lejos de las escuelas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "medewi",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Le fond est fait de galets et de rochers : prévois des chaussons, et laisse la place aux pêcheurs qui mettent leurs pirogues à l’eau.",
+  "dangers": [
+   "Le fond est fait de galets et de rochers."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Le fond est fait de galets et de rochers : prévois des chaussons, et laisse la place aux pêcheurs qui mettent leurs pirogues à l’eau.",
+  "en": {
+   "tip": "The bottom is made of pebbles and rocks: bring booties, and make room for the fishermen launching their canoes.",
+   "dangers": [
+    "The bottom is made of pebbles and rocks."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "El fondo es de guijarros y rocas: lleva escarpines y deja sitio a los pescadores que botan sus piraguas.",
+   "dangers": [
+    "El fondo es de guijarros y rocas."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "selongbelanak",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Lombok est majoritairement musulmane : couvre épaules et genoux hors de la plage, surtout dans les villages et pendant le ramadan.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Lombok est majoritairement musulmane : couvre épaules et genoux hors de la plage, surtout dans les villages et pendant le ramadan.",
+  "en": {
+   "tip": "Lombok is mostly Muslim: cover your shoulders and knees away from the beach, especially in the villages and during Ramadan.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Lombok es mayoritariamente musulmana: cúbrete hombros y rodillas fuera de la playa, sobre todo en los pueblos y durante el ramadán.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "kohtao",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Plusieurs clubs de l’île restaurent le corail : garde tes palmes loin du récif, ne nourris pas les poissons et ne ramasse ni coquillage ni corail.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Plusieurs clubs de l’île restaurent le corail : garde tes palmes loin du récif, ne nourris pas les poissons et ne ramasse ni coquillage ni corail.",
+  "en": {
+   "tip": "Several of the island’s clubs are restoring the coral: keep your fins away from the reef, don’t feed the fish and don’t pick up shells or coral.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Varios clubes de la isla restauran el coral: mantén las aletas lejos del arrecife, no alimentes a los peces y no recojas conchas ni coral.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "kohlipe",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Tu es dans un parc national marin : paie les droits d’entrée, ne marche jamais sur le corail à marée basse et respecte le village urak lawoi.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Tu es dans un parc national marin : paie les droits d’entrée, ne marche jamais sur le corail à marée basse et respecte le village urak lawoi.",
+  "en": {
+   "tip": "You’re in a national marine park: pay the entrance fees, never walk on the coral at low tide and respect the Urak Lawoi village.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Estás en un parque nacional marino: paga las tasas de entrada, no pises nunca el coral con la marea baja y respeta el pueblo urak lawoi.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "moalboal",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Ne poursuis pas le banc de sardines et laisse les tortues remonter respirer : pas de contact, et règle la petite taxe municipale de protection du récif.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Ne poursuis pas le banc de sardines et laisse les tortues remonter respirer : pas de contact, et règle la petite taxe municipale de protection du récif.",
+  "en": {
+   "tip": "Don’t chase the sardine school and let the turtles surface to breathe: no touching, and pay the small municipal reef protection fee.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "No persigas el banco de sardinas y deja que las tortugas suban a respirar: nada de contacto, y paga la pequeña tasa municipal de protección del arrecife.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "malapascua",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Avec les requins-renards, pas de flash ni de lampe braquée : reste derrière la ligne fixée par les guides et ne t’approche pas de la station de nettoyage.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Avec les requins-renards, pas de flash ni de lampe braquée : reste derrière la ligne fixée par les guides et ne t’approche pas de la station de nettoyage.",
+  "en": {
+   "tip": "With thresher sharks, no flash and no torch pointed at them: stay behind the line set by the guides and don’t approach the cleaning station.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Con los tiburones zorro, nada de flash ni de linterna dirigida a ellos: quédate detrás de la línea fijada por los guías y no te acerques a la estación de limpieza.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "apoisland",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Le sanctuaire est géré par les habitants : paie la taxe à l’arrivée, reste hors de la zone interdite et garde tes distances avec les tortues.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Le sanctuaire est géré par les habitants : paie la taxe à l’arrivée, reste hors de la zone interdite et garde tes distances avec les tortues.",
+  "en": {
+   "tip": "The sanctuary is managed by the islanders: pay the fee on arrival, stay out of the no-go zone and keep your distance from the turtles.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "El santuario lo gestionan los habitantes: paga la tasa a la llegada, mantente fuera de la zona prohibida y guarda las distancias con las tortugas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "coron",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Ne prélève rien sur les épaves et n’y pénètre qu’avec une formation adaptée.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Ne prélève rien sur les épaves et n’y pénètre qu’avec une formation adaptée. Sur l’île de Coron, suis les règles fixées par les Tagbanwa.",
+  "en": {
+   "tip": "Take nothing from the wrecks and only go inside them with the right training.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "No extraigas nada de los pecios y entra en ellos solo con una formación adecuada.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "bondi",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les surfeurs ont leur zone, balisée à part des drapeaux de baignade : respecte-la, et méfie-toi du puissant courant d’arrachement au sud de la plage.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les surfeurs ont leur zone, balisée à part des drapeaux de baignade : respecte-la, et méfie-toi du puissant courant d’arrachement au sud de la plage.",
+  "en": {
+   "tip": "Surfers have their own zone, marked separately from the swimming flags: respect it, and beware of the powerful rip current at the south end of the beach.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Los surfistas tienen su zona, señalizada aparte de las banderas de baño: respétala y ten cuidado con la potente corriente de resaca al sur de la playa.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "freshwater",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "La baie est petite et le line-up soudé : attends ton tour au pic et laisse la zone entre les drapeaux aux baigneurs et aux familles.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "La baie est petite et le line-up soudé : attends ton tour au pic et laisse la zone entre les drapeaux aux baigneurs et aux familles.",
+  "en": {
+   "tip": "The bay is small and the line-up close-knit: wait your turn at the peak and leave the area between the flags to swimmers and families.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "La bahía es pequeña y el line-up muy unido: espera tu turno en el pico y deja la zona entre las banderas a los bañistas y a las familias.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "noosa",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Sur les pointes bondées, rame en contournant le line-up plutôt que dans le couloir de la vague et ne double pas ceux qui attendent.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Sur les pointes bondées, rame en contournant le line-up plutôt que dans le couloir de la vague et ne double pas ceux qui attendent. Laisse les koalas du parc en paix.",
+  "en": {
+   "tip": "On the crowded points, paddle around the line-up rather than through the wave’s path, and don’t cut in front of those waiting.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En los puntos abarrotados, rema rodeando el line-up en lugar de por el pasillo de la ola y no adelantes a los que esperan.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "cottesloe",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Plage de baignade très fréquentée : surfe à l’écart des nageurs et sors aussitôt de l’eau quand la sirène d’alerte requin retentit.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Plage de baignade très fréquentée : surfe à l’écart des nageurs et sors aussitôt de l’eau quand la sirène d’alerte requin retentit.",
+  "en": {
+   "tip": "A very busy swimming beach: surf away from swimmers and get out of the water straight away when the shark alarm sounds.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Playa de baño muy concurrida: surfea apartado de los nadadores y sal del agua enseguida cuando suene la sirena de alerta de tiburón.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "whangamata",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Sur la barre, attends ton tour derrière les locaux.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Sur la barre, attends ton tour derrière les locaux. Sur les plages, contourne les zones de nidification balisées des gravelots de Nouvelle-Zélande.",
+  "en": {
+   "tip": "On the bar, wait your turn behind the locals.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En la barra, espera tu turno detrás de los locales.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "mountmaunganui",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Mauao est un lieu ancestral maori : reste sur les sentiers balisés.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Mauao est un lieu ancestral maori : reste sur les sentiers balisés. À la plage, surfe hors des drapeaux de baignade surveillés.",
+  "en": {
+   "tip": "Mauao is an ancestral Māori site: stay on the marked trails.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Mauao es un lugar ancestral maorí: quédate en los senderos señalizados.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "kealakekua",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Reste à plus de 45 mètres des dauphins, règle fédérale oblige.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Reste à plus de 45 mètres des dauphins, règle fédérale oblige. Pagayer jusqu’au monument Cook exige un permis : renseigne-toi avant.",
+  "en": {
+   "tip": "Stay more than 45 metres from the dolphins, as federal rules require.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Mantente a más de 45 metros de los delfines, lo exige la norma federal.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "poipu",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Si un phoque moine dort sur la plage, reste loin derrière la zone balisée.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Si un phoque moine dort sur la plage, reste loin derrière la zone balisée. Hawaï interdit les crèmes solaires à l’oxybenzone : choisis une crème minérale.",
+  "en": {
+   "tip": "If a monk seal is sleeping on the beach, stay well back behind the marked-off area.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Si una foca monje duerme en la playa, mantente lejos, detrás de la zona señalizada.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "labaule",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "En été, mets à l’eau et reviens par les chenaux balisés : la bande littorale est réservée aux baigneurs.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "En été, mets à l’eau et reviens par les chenaux balisés : la bande littorale est réservée aux baigneurs.",
+  "en": {
+   "tip": "In summer, launch and come back in through the marked channels: the strip along the shore is reserved for swimmers.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En verano, entra y vuelve al agua por los canales señalizados: la franja litoral está reservada a los bañistas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "hendaye",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "La plage accueille beaucoup d’écoles : laisse de l’espace aux débutants et surfe hors des zones de baignade surveillées.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "La plage accueille beaucoup d’écoles : laisse de l’espace aux débutants et surfe hors des zones de baignade surveillées.",
+  "en": {
+   "tip": "The beach hosts lots of schools: give beginners space and surf away from the lifeguarded swimming areas.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "La playa acoge a muchas escuelas: deja espacio a los principiantes y surfea fuera de las zonas de baño vigiladas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "morgat",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "N’entre dans les grottes que par mer calme et ne ramasse aucune roche : le littoral est protégé pour sa géologie.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "N’entre dans les grottes que par mer calme et ne ramasse aucune roche : le littoral est protégé pour sa géologie.",
+  "en": {
+   "tip": "Only enter the caves when the sea is calm and take no rocks: the coastline is protected for its geology.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Entra en las cuevas solo con el mar en calma y no recojas ninguna roca: el litoral está protegido por su geología.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "saintjeandeluz",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "En paddle, reste à l’écart du chenal du port où passent les bateaux de pêche, et des zones de baignade surveillées.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "En paddle, reste à l’écart du chenal du port où passent les bateaux de pêche, et des zones de baignade surveillées.",
+  "en": {
+   "tip": "On a paddleboard, keep clear of the harbour channel used by fishing boats, and of the lifeguarded swimming areas.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En paddle, mantente apartado del canal del puerto por donde pasan los barcos de pesca y de las zonas de baño vigiladas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "bourget",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Contourne les roselières du rivage, zones de nidification protégées, et garde un œil sur le vent qui peut lever vite du clapot.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Contourne les roselières du rivage, zones de nidification protégées, et garde un œil sur le vent qui peut lever vite du clapot.",
+  "en": {
+   "tip": "Steer round the reed beds along the shore, which are protected nesting areas, and keep an eye on the wind, which can quickly whip up a chop.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Rodea los carrizales de la orilla, zonas de nidificación protegidas, y vigila el viento, que puede levantar rápido oleaje.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "serreponcon",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Le niveau du lac varie avec la gestion du barrage : évite les berges vaseuses découvertes et repère ton point de sortie.",
+  "dangers": [
+   "Le niveau du lac varie avec la gestion du barrage."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Le niveau du lac varie avec la gestion du barrage : évite les berges vaseuses découvertes et repère ton point de sortie.",
+  "en": {
+   "tip": "The lake level varies with the running of the dam: avoid exposed muddy banks and pick out your exit point in advance.",
+   "dangers": [
+    "The lake level varies with the running of the dam."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "El nivel del lago varía con la gestión de la presa: evita las orillas fangosas al descubierto y localiza tu punto de salida.",
+   "dangers": [
+    "El nivel del lago varía con la gestión de la presa."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "saintecroix",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Sur les rives du parc, pas de feu ni de camping sauvage ; dans les basses gorges, avance en file sur ta droite sans t’arrêter dans les passages étroits.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Sur les rives du parc, pas de feu ni de camping sauvage ; dans les basses gorges, avance en file sur ta droite sans t’arrêter dans les passages étroits.",
+  "en": {
+   "tip": "On the park’s shores, no fires and no wild camping; in the lower gorges, paddle in single file on your right and don’t stop in the narrow passages.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En las orillas del parque, nada de fuego ni acampada libre; en las gargantas bajas, avanza en fila por tu derecha sin detenerte en los pasos estrechos.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "donnant",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les dunes de Donnant sont protégées : passe par les accès balisés, et méfie-toi des courants forts près des rochers.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les dunes de Donnant sont protégées : passe par les accès balisés, et méfie-toi des courants forts près des rochers.",
+  "en": {
+   "tip": "The Donnant dunes are protected: use the marked access paths, and beware of strong currents near the rocks.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las dunas de Donnant están protegidas: usa los accesos señalizados y ten cuidado con las corrientes fuertes cerca de las rocas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "laconcha",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Mets à l’eau hors des zones de baignade balisées ; au bar à pintxos, annonce ce que tu as pris au moment de payer.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Mets à l’eau hors des zones de baignade balisées ; au bar à pintxos, annonce ce que tu as pris au moment de payer.",
+  "en": {
+   "tip": "Launch outside the marked swimming areas; at the pintxos bar, say what you had when you pay.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Bota al agua fuera de las zonas de baño señalizadas; en el bar de pintxos, di lo que has tomado a la hora de pagar.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "macarella",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "En été, l’accès routier est régulé : viens en bus ou à pied par le Camí de Cavalls, et ne piétine pas les herbiers de posidonie.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "En été, l’accès routier est régulé : viens en bus ou à pied par le Camí de Cavalls, et ne piétine pas les herbiers de posidonie.",
+  "en": {
+   "tip": "In summer, road access is restricted: come by bus or on foot along the Camí de Cavalls, and don’t trample the posidonia seagrass meadows.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En verano, el acceso por carretera está regulado: ven en autobús o a pie por el Camí de Cavalls y no pises las praderas de posidonia.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "arrabida",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Le littoral est une réserve marine : ne prélève rien sous l’eau et, l’été, privilégie la navette, l’accès en voiture étant limité.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Le littoral est une réserve marine : ne prélève rien sous l’eau et, l’été, privilégie la navette, l’accès en voiture étant limité.",
+  "en": {
+   "tip": "The coastline is a marine reserve: take nothing from underwater and, in summer, use the shuttle bus, as car access is limited.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "El litoral es una reserva marina: no extraigas nada bajo el agua y, en verano, usa preferentemente el servicio de lanzadera, ya que el acceso en coche está limitado.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "maspalomas",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Dans la réserve des dunes, reste sur les sentiers balisés et ne construis pas d’abri de pierres : c’est interdit.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Dans la réserve des dunes, reste sur les sentiers balisés et ne construis pas d’abri de pierres : c’est interdit.",
+  "en": {
+   "tip": "In the dune reserve, stay on the marked trails and don’t build stone shelters: it is forbidden.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En la reserva de las dunas, quédate en los senderos señalizados y no construyas refugios de piedras: está prohibido.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "balos",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Site Natura 2000 : ne ramasse ni sable ni coquillages, et reste hors des dunes et des zones délimitées de la lagune.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Site Natura 2000 : ne ramasse ni sable ni coquillages, et reste hors des dunes et des zones délimitées de la lagune.",
+  "en": {
+   "tip": "A Natura 2000 site: take neither sand nor shells, and stay off the dunes and the marked-off areas of the lagoon.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Sitio Natura 2000: no recojas ni arena ni conchas y mantente fuera de las dunas y de las zonas delimitadas de la laguna.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "brela",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les pins descendent jusqu’à l’eau : aucun feu ni barbecue sur la côte, le risque d’incendie est très élevé l’été.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les pins descendent jusqu’à l’eau : aucun feu ni barbecue sur la côte, le risque d’incendie est très élevé l’été.",
+  "en": {
+   "tip": "The pines come right down to the water: no fires or barbecues on the coast, the fire risk is very high in summer.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Los pinos llegan hasta el agua: nada de fuego ni de barbacoa en la costa, el riesgo de incendio es muy alto en verano.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "diani",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Ne nourris pas les singes colobes et vervets, et ne marche pas sur le récif à marée basse.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Ne nourris pas les singes colobes et vervets, et ne marche pas sur le récif à marée basse.",
+  "en": {
+   "tip": "Don’t feed the colobus and vervet monkeys, and don’t walk on the reef at low tide.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "No alimentes a los monos colobos y vervet, y no pises el arrecife con la marea baja.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "tofo",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Avec les requins-baleines et les raies manta, aucun contact : garde tes distances, ne les poursuis pas et évite le flash.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Avec les requins-baleines et les raies manta, aucun contact : garde tes distances, ne les poursuis pas et évite le flash.",
+  "en": {
+   "tip": "With whale sharks and manta rays, no contact: keep your distance, don’t chase them and avoid using a flash.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Con los tiburones ballena y las rayas manta, ningún contacto: guarda las distancias, no los persigas y evita usar flash.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "paje",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Paje est un village musulman : couvre épaules et genoux hors de la plage, et contourne les cultures d’algues en kite.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Paje est un village musulman : couvre épaules et genoux hors de la plage, et contourne les cultures d’algues en kite.",
+  "en": {
+   "tip": "Paje is a Muslim village: cover your shoulders and knees away from the beach, and kite around the seaweed farms.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Paje es un pueblo musulmán: cúbrete hombros y rodillas fuera de la playa y rodea los cultivos de algas con el kite.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "anselazio",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Ne ramasse ni coquillages ni coraux, protégés aux Seychelles, et ne nourris pas les poissons en snorkeling.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Ne ramasse ni coquillages ni coraux, protégés aux Seychelles, et ne nourris pas les poissons en snorkeling.",
+  "en": {
+   "tip": "Don’t collect shells or coral, which are protected in the Seychelles, and don’t feed the fish when snorkelling.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "No recojas conchas ni corales, protegidos en Seychelles, y no alimentes a los peces mientras haces snorkel.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "balandra",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Ne grimpe pas sur le rocher-champignon, fragile ; l’accès à l’aire protégée est limité, viens tôt et remporte tes déchets.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Ne grimpe pas sur le rocher-champignon, fragile ; l’accès à l’aire protégée est limité, viens tôt et remporte tes déchets.",
+  "en": {
+   "tip": "Don’t climb the fragile mushroom rock; access to the protected area is limited, so come early and take your rubbish away with you.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "No trepes a la roca-seta, que es frágil; el acceso al área protegida está limitado, ven temprano y llévate tu basura.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "lajolla",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Dans la réserve sous-marine, rien ne se prélève ; garde tes distances avec les otaries et les phoques de la Cove.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Dans la réserve sous-marine, rien ne se prélève ; garde tes distances avec les otaries et les phoques de la Cove.",
+  "en": {
+   "tip": "In the underwater reserve, nothing may be taken; keep your distance from the sea lions and seals at the Cove.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En la reserva submarina no se extrae nada; guarda las distancias con los leones marinos y las focas de la Cove.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "cabopulmo",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Dans le parc national, pas de pêche ni de contact avec le récif ; plonge uniquement avec un opérateur autorisé.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Dans le parc national, pas de pêche ni de contact avec le récif ; plonge uniquement avec un opérateur autorisé.",
+  "en": {
+   "tip": "In the national park, no fishing and no contact with the reef; dive only with an authorised operator.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En el parque nacional, nada de pesca ni de contacto con el arrecife; bucea únicamente con un operador autorizado.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "akumal",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Dans la baie, suis les parcours balisés avec gilet, sans toucher ni poursuivre les tortues, et avec une crème solaire sans filtres chimiques.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Dans la baie, suis les parcours balisés avec gilet, sans toucher ni poursuivre les tortues, et avec une crème solaire sans filtres chimiques.",
+  "en": {
+   "tip": "In the bay, follow the marked routes wearing a life jacket, without touching or chasing the turtles, and with a sunscreen free of chemical filters.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En la bahía, sigue los recorridos señalizados con chaleco, sin tocar ni perseguir a las tortugas y con un protector solar sin filtros químicos.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "cozumel",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Le parc marin impose un guide agréé : ne touche pas le récif, pas de gants, et laisse-toi dériver sans t’accrocher au corail.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Le parc marin impose un guide agréé : ne touche pas le récif, pas de gants, et laisse-toi dériver sans t’accrocher au corail.",
+  "en": {
+   "tip": "The marine park requires a licensed guide: don’t touch the reef, no gloves, and let yourself drift without holding on to the coral.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "El parque marino exige un guía autorizado: no toques el arrecife, nada de guantes, y déjate llevar por la corriente sin agarrarte al coral.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "holbox",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Dans la réserve de Yum Balam, ne t’approche pas des flamants roses ; sur l’île, circule à pied, à vélo ou en voiturette.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Dans la réserve de Yum Balam, ne t’approche pas des flamants roses ; sur l’île, circule à pied, à vélo ou en voiturette.",
+  "en": {
+   "tip": "In the Yum Balam reserve, don’t go near the flamingos; on the island, get around on foot, by bike or by golf cart.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En la reserva de Yum Balam, no te acerques a los flamencos; en la isla, desplázate a pie, en bici o en carrito de golf.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "buzios",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Geribá est très fréquentée l’été : surfe loin des baigneurs, respecte les habitués au pic et ne laisse rien sans surveillance sur le sable.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Geribá est très fréquentée l’été : surfe loin des baigneurs, respecte les habitués au pic et ne laisse rien sans surveillance sur le sable.",
+  "en": {
+   "tip": "Geribá gets very busy in summer: surf away from swimmers, respect the regulars at the peak and leave nothing unattended on the sand.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Geribá está muy concurrida en verano: surfea lejos de los bañistas, respeta a los habituales en el pico y no dejes nada sin vigilancia en la arena.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "arraialdocabo",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Dans la réserve marine, la pêche est réservée aux pêcheurs artisanaux : ne ramasse rien, ne nourris pas les poissons et garde tes palmes loin du fond.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Dans la réserve marine, la pêche est réservée aux pêcheurs artisanaux : ne ramasse rien, ne nourris pas les poissons et garde tes palmes loin du fond.",
+  "en": {
+   "tip": "In the marine reserve, fishing is reserved for small-scale fishermen: take nothing, don’t feed the fish and keep your fins well away from the bottom.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En la reserva marina, la pesca está reservada a los pescadores artesanales: no recojas nada, no alimentes a los peces y mantén las aletas lejos del fondo.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "ilhagrande",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Reste sur les sentiers balisés du parc, redescends tes déchets jusqu’à Abraão et ne nourris pas les singes.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Reste sur les sentiers balisés du parc, redescends tes déchets jusqu’à Abraão et ne nourris pas les singes.",
+  "en": {
+   "tip": "Stay on the park’s marked trails, carry your rubbish back down to Abraão and don’t feed the monkeys.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Quédate en los senderos señalizados del parque, baja tu basura hasta Abraão y no alimentes a los monos.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "sanandres",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "L’archipel forme la réserve de biosphère Seaflower : ne ramasse ni corail ni coquillage et ne touche pas les raies lors des sorties.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "L’archipel forme la réserve de biosphère Seaflower : ne ramasse ni corail ni coquillage et ne touche pas les raies lors des sorties.",
+  "en": {
+   "tip": "The archipelago forms the Seaflower Biosphere Reserve: collect neither coral nor shells and don’t touch the rays on boat trips.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "El archipiélago forma la reserva de la biosfera Seaflower: no recojas ni coral ni conchas y no toques las rayas durante las salidas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "amed",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Ne marche pas sur le corail en entrant dans l’eau et laisse la place aux jukung des pêcheurs qui accostent sur les galets.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Ne marche pas sur le corail en entrant dans l’eau et laisse la place aux jukung des pêcheurs qui accostent sur les galets.",
+  "en": {
+   "tip": "Don’t walk on the coral as you get into the water, and make way for the fishermen’s jukung landing on the pebbles.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "No pises el coral al entrar en el agua y deja sitio a los jukung de los pescadores que atracan en los guijarros.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "nusapenida",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Les courants sont puissants autour de l’île : plonge avec un centre local, ne touche jamais les raies manta et garde tes distances.",
+  "dangers": [
+   "Les courants sont puissants autour de l’île."
+  ],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Les courants sont puissants autour de l’île : plonge avec un centre local, ne touche jamais les raies manta et garde tes distances.",
+  "en": {
+   "tip": "Currents are powerful around the island: dive with a local centre, never touch the manta rays and keep your distance.",
+   "dangers": [
+    "Currents are powerful around the island."
+   ],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Las corrientes son potentes alrededor de la isla: bucea con un centro local, no toques nunca las rayas manta y guarda las distancias.",
+   "dangers": [
+    "Las corrientes son potentes alrededor de la isla."
+   ],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "pemuteran",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Ne touche pas les structures métalliques de la baie : ces récifs artificiels parcourus d’un faible courant aident le corail à repousser.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Ne touche pas les structures métalliques de la baie : ces récifs artificiels parcourus d’un faible courant aident le corail à repousser.",
+  "en": {
+   "tip": "Don’t touch the metal structures in the bay: these artificial reefs, carrying a weak current, help the coral grow back.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "No toques las estructuras metálicas de la bahía: estos arrecifes artificiales, recorridos por una corriente débil, ayudan al coral a volver a crecer.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "nusalembongan",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Sur les reefs peu profonds, respecte la priorité des locaux ; à marée basse, ne piétine pas les parcelles d’algues des cultivateurs.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Sur les reefs peu profonds, respecte la priorité des locaux ; à marée basse, ne piétine pas les parcelles d’algues des cultivateurs.",
+  "en": {
+   "tip": "On the shallow reefs, give locals priority; at low tide, don’t trample the farmers’ seaweed plots.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En los arrecifes poco profundos, respeta la prioridad de los locales; con la marea baja, no pises las parcelas de algas de los cultivadores.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "elnido",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Garde sur toi le reçu de la taxe écotouristique pendant les sorties et ne pose ni pied ni pagaie sur le corail des lagons.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Garde sur toi le reçu de la taxe écotouristique pendant les sorties et ne pose ni pied ni pagaie sur le corail des lagons.",
+  "en": {
+   "tip": "Keep the eco-tourism fee receipt on you during trips and don’t put your feet or paddle on the coral in the lagoons.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Lleva contigo el recibo de la tasa ecoturística durante las salidas y no pongas ni pie ni pala sobre el coral de las lagunas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "phuquoc",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Ne sors pas les étoiles de mer de l’eau pour la photo et ne te tiens pas debout sur le corail des îlots d’An Thới.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Ne sors pas les étoiles de mer de l’eau pour la photo et ne te tiens pas debout sur le corail des îlots d’An Thới.",
+  "en": {
+   "tip": "Don’t take starfish out of the water for photos and don’t stand on the coral around the An Thới islets.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "No saques las estrellas de mar del agua para la foto y no te pongas de pie sobre el coral de los islotes de An Thới.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "abeltasman",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Réserve campings et refuges du parc auprès du DOC, remporte tous tes déchets et garde tes distances avec les otaries sur les rochers.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Réserve campings et refuges du parc auprès du DOC, remporte tous tes déchets et garde tes distances avec les otaries sur les rochers.",
+  "en": {
+   "tip": "Book the park’s campsites and huts with DOC, take all your rubbish away and keep your distance from the seals on the rocks.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Reserva los campings y refugios del parque con el DOC, llévate toda tu basura y guarda las distancias con los lobos marinos en las rocas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "cathedralcove",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Dans la réserve marine, pêche et ramassage sont interdits ; accoste sans bloquer la plage et respecte les fermetures du sentier d’accès.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Dans la réserve marine, pêche et ramassage sont interdits ; accoste sans bloquer la plage et respecte les fermetures du sentier d’accès.",
+  "en": {
+   "tip": "In the marine reserve, fishing and collecting are forbidden; land without blocking the beach and respect any closures of the access track.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "En la reserva marina, la pesca y la recolección están prohibidas; atraca sin bloquear la playa y respeta los cierres del sendero de acceso.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "rottnest",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Ne nourris ni ne touche les quokkas, c’est interdit, et en snorkeling ne marche pas sur les récifs peu profonds des zones protégées.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Ne nourris ni ne touche les quokkas, c’est interdit, et en snorkeling ne marche pas sur les récifs peu profonds des zones protégées.",
+  "en": {
+   "tip": "Don’t feed or touch the quokkas, it is forbidden, and when snorkelling don’t walk on the shallow reefs in the protected zones.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "No alimentes ni toques a los quokkas, está prohibido, y haciendo snorkel no pises los arrecifes poco profundos de las zonas protegidas.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "cablebeach",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Baigne-toi entre les drapeaux, surtout de novembre à mai quand méduses-boîtes et crocodiles peuvent approcher, et ne roule en 4x4 que sur la zone autorisée.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Baigne-toi entre les drapeaux, surtout de novembre à mai quand méduses-boîtes et crocodiles peuvent approcher, et ne roule en 4x4 que sur la zone autorisée.",
+  "en": {
+   "tip": "Swim between the flags, especially from November to May when box jellyfish and crocodiles may come close, and only drive a 4x4 in the permitted zone.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Báñate entre las banderas, sobre todo de noviembre a mayo, cuando las cubomedusas y los cocodrilos pueden acercarse, y conduce un 4x4 solo por la zona autorizada.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "herveybay",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Si une baleine approche, cesse de pagayer et laisse-la passer : l’approche des cétacés est strictement réglementée dans le parc marin.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Si une baleine approche, cesse de pagayer et laisse-la passer : l’approche des cétacés est strictement réglementée dans le parc marin.",
+  "en": {
+   "tip": "If a whale approaches, stop paddling and let it pass: approaching whales and dolphins is strictly regulated in the marine park.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Si se acerca una ballena, deja de remar y déjala pasar: el acercamiento a los cetáceos está estrictamente regulado en el parque marino.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ },
+ {
+  "spot": "noumea",
+  "path": "carnet",
+  "lang": "fr",
+  "tip": "Reste hors du chenal des navettes vers l’îlot Canard et des zones de baignade balisées ; tortues et dugongs du lagon sont protégés.",
+  "dangers": [],
+  "status": "non vérifié",
+  "checked": "2026-10-20",
+  "origin": "carnet.respect",
+  "sources": [],
+  "respect": "Reste hors du chenal des navettes vers l’îlot Canard et des zones de baignade balisées ; tortues et dugongs du lagon sont protégés.",
+  "en": {
+   "tip": "Keep out of the shuttle-boat channel to Îlot Canard and the marked swimming areas; the lagoon’s turtles and dugongs are protected.",
+   "dangers": [],
+   "origin": "spot-guides.en.json respect (phrase correspondante)"
+  },
+  "es": {
+   "tip": "Mantente fuera del canal de las lanzaderas hacia el islote Canard y de las zonas de baño señalizadas; las tortugas y los dugongs de la laguna están protegidos.",
+   "dangers": [],
+   "origin": "traduction (A2)"
+  }
+ }
+]

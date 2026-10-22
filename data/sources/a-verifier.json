@@ -1,0 +1,2744 @@
+{
+ "about": "File d’attente de la prochaine passe de recherche (lots 2 et 3, groupe A1). Une ligne = un texte de fiche ou une décision restés « à vérifier » : rien n’a été écrit dans le catalogue sans source. kind : recherche (entrée de recherche non applicable), decision (cas tranché à la main), item19-* (conseils génériques des étapes 2 et 3, non couverts par la recherche). Jamais chargé par le navigateur.",
+ "group": "A1",
+ "generated": "2026-10-22",
+ "items": [
+  {
+   "spot": "agneswater",
+   "path": "dangers[1]",
+   "raison": "« En été austral » ≈ saison de novembre à mai du Queensland ; la source parle des eaux tropicales du Queensland et Agnes Water est au sud : zone non précisée.",
+   "kind": "recherche",
+   "research": [
+    "saisons:agneswater:75"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "anglet",
+   "path": "zones[La Madrague]",
+   "raison": "Aucune source trouvée sur le niveau ou l'abri de La Madrague (la page de l'office de tourisme ne la décrit pas).",
+   "kind": "recherche",
+   "research": [
+    "faits-1:anglet:23"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "anseintendance",
+   "path": "tip",
+   "raison": "Les mois sont cohérents avec la source (novembre : vents qui tombent ; avril : mer agréable). Mais le FCDO écrit que les plages de la pointe sud ne se prêtent pas à la baignade, quelle que soit la période : à vérifier si Intendance est visée.",
+   "kind": "recherche",
+   "research": [
+    "saisons:anseintendance:7"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "anseintendance",
+   "path": "carnet.season",
+   "raison": "« La bonne saison » mai–octobre vaut pour le surf ; pour nager, la source place les mois agréables hors de l’alizé.",
+   "kind": "recherche",
+   "research": [
+    "saisons:anseintendance:9"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "anselazio",
+   "path": "dangers[+]",
+   "raison": "Aucun danger listé alors que deux attaques mortelles de requin y ont eu lieu en août 2011, avec une interdiction temporaire de baignade.",
+   "kind": "recherche",
+   "research": [
+    "faits-2:anselazio:20"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "ballito",
+   "path": "carnet.respect",
+   "raison": "« équipées de filets anti-requins » : le KZN Sharks Board dit que les filets ne forment pas une barrière complète. Ballito Bay figure bien sur sa liste officielle de 37 plages protégées. Les sauveteurs ne sont pas sourcés.",
+   "kind": "recherche",
+   "research": [
+    "faits-2:ballito:13"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "beauvallon",
+   "path": "carnet.respect",
+   "raison": "« suis les drapeaux des sauveteurs » suppose une surveillance : le FCDO dit qu'il y a peu de sauveteurs.",
+   "kind": "recherche",
+   "research": [
+    "faits-2:beauvallon:25"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "beauvallon",
+   "path": "carnet.around",
+   "raison": "Nombre d'îlots du parc de Sainte-Anne et fréquence du Bazar Labrin non vérifiés (sources officielles inaccessibles).",
+   "kind": "recherche",
+   "research": [
+    "faits-2:beauvallon:27"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "bluehole_belize",
+   "path": "tip",
+   "raison": "« Plongée technique : brevet avancé » : pas de source ; le carnet parle de 40 m, limite de plongée loisir selon les rapports (non sourcé ici).",
+   "kind": "recherche",
+   "research": [
+    "faits-2:bluehole_belize:30"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "cablebeach",
+   "path": "carnet.respect",
+   "raison": "« Surtout de novembre à mai quand méduses-boîtes et crocodiles peuvent approcher » : la source obtenue ne couvre que le Queensland ; Broome est en Australie-Occidentale.",
+   "kind": "recherche",
+   "research": [
+    "saisons:cablebeach:76"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "condao",
+   "path": "dangers[0]",
+   "raison": "« Mousson de nord-est en fin d’année » : aucune source officielle trouvée.",
+   "kind": "recherche",
+   "research": [
+    "saisons:condao:38"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "dungeons",
+   "path": "tip",
+   "raison": "« tow-in et sécurité, élite uniquement » : aucun texte officiel ne le dit.",
+   "kind": "recherche",
+   "research": [
+    "manques-faits-a:dungeons:8"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "elandsbay",
+   "path": "carnet.vibe/carnet.respect",
+   "raison": "Peintures de la grotte, lagune du Verlorenvlei, colonie de fous du Cap : non sourcés.",
+   "kind": "recherche",
+   "research": [
+    "manques-faits-a:elandsbay:11"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "ericeira",
+   "path": "level",
+   "raison": "Niveau « intermédiaire » : Turismo de Portugal range Coxos parmi les vagues les plus exigeantes de la réserve. Aucune source officielle ne donne un niveau chiffré pour Coxos.",
+   "kind": "recherche",
+   "research": [
+    "faits-2:ericeira:8"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "flypoint",
+   "path": "dangers[0]",
+   "raison": "Pas de source pour le détail de marée de Fly Point.",
+   "kind": "recherche",
+   "research": [
+    "schemas:passe:flypoint:dangers[0]:11"
+   ],
+   "item": "7B"
+  },
+  {
+   "spot": "futaleufu",
+   "path": "dangers[0]",
+   "raison": "Source seulement American Whitewater (marge de sécurité).",
+   "kind": "recherche",
+   "research": [
+    "manques-coherence:futaleufu:17"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "gland",
+   "path": "dangers[1]",
+   "raison": "« Site isolé dans un parc national, pas de secours immédiats » : non sourcé.",
+   "kind": "recherche",
+   "research": [
+    "manques-faits-a:gland:20"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "gorgestarn",
+   "path": "tip",
+   "raison": "« En fin d’été, le niveau baisse : pousser le canoë sur des seuils » : non sourcé.",
+   "kind": "recherche",
+   "research": [
+    "schemas:riviere:gorgestarn:tip:10"
+   ],
+   "item": "7B"
+  },
+  {
+   "spot": "honmun",
+   "path": "tip",
+   "raison": "« Saison des pluies (octobre à décembre environ) » : aucune source officielle trouvée.",
+   "kind": "recherche",
+   "research": [
+    "saisons:honmun:39"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "hookipa",
+   "path": "sports",
+   "raison": "Kitesurf listé sans règle trouvée.",
+   "kind": "recherche",
+   "research": [
+    "manques-faits-a:hookipa:15"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "hossegor",
+   "path": "tip",
+   "raison": "« Entre les drapeaux » (zone de baignade pour un surfeur ?) et contradiction avec le carnet de biscarrosse : relève des drapeaux et des promesses absolues.",
+   "kind": "recherche",
+   "research": [
+    "faits-1:hossegor:2"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "iquique",
+   "path": "sports",
+   "raison": "Surf et bodyboard : aucune source sur El Colegio.",
+   "kind": "recherche",
+   "research": [
+    "manques-faits-a:iquique:17"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "iquique",
+   "path": "tide/tip",
+   "raison": "Marée idéale non établie ; contradiction tip / champ tide / danger.",
+   "kind": "recherche",
+   "research": [
+    "manques-faits-a:iquique:18"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "jellyfishlake",
+   "path": "waterType",
+   "raison": "Non appliqué par A1 (essentiel prioritaire ou choix de prudence) : L'application affiche « Eau douce » pour un lac d'eau salée ; Koror State parle d'un lac marin.",
+   "kind": "recherche",
+   "research": [
+    "faits-4:jellyfishlake:38"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "jellyfishlake",
+   "path": "carnet.season",
+   "raison": "Aucune source officielle lue sur la saison (Koror State, Palau Visitors Authority : pages sans mois). Mois en désaccord avec l'onglet infos de l'application (« février → mai · novembre » dans le texte intégral des fiches).",
+   "kind": "recherche",
+   "research": [
+    "faits-4:jellyfishlake:39"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "kailua",
+   "path": "sports/desc",
+   "raison": "Le kite est mis en avant sans règle locale. Les règlements de l’État lus (§13-256-74 Kailua Ocean Waters Restricted Zones) définissent une zone A « designated for windsurfing » (sans nage lorsqu’elle est utilisée par les windsurfeurs) et une zone B d’accès pour embarcations à propulsion manuelle, sans mention du kite. Aucune source officielle actuelle trouvée sur le kite à Kailua (les articles de 2000 à 2008 évoquent des conflits d’usage et l’absence de règle de la Ville à l’époque).",
+   "kind": "recherche",
+   "research": [
+    "faits-3:kailua:9"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "klitmoller",
+   "path": "tip",
+   "raison": "Phrase maladroite (« les pierres sont froides »), signalée par les rapports.",
+   "kind": "recherche",
+   "research": [
+    "faits-1:klitmoller:28"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "kohtao",
+   "path": "dangers[+]",
+   "raison": "Non appliqué par A1 (essentiel prioritaire ou choix de prudence) : Fiche de plongée sans aucun danger ni consigne.",
+   "kind": "recherche",
+   "research": [
+    "manques-faits-b:kohtao:12"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "komodo",
+   "path": "dangers[2]",
+   "raison": "« Plongée en dérive réservée aux plongeurs expérimentés » : cohérent avec le schéma mais aucune source publiée trouvée.",
+   "kind": "recherche",
+   "research": [
+    "schemas:passe:komodo:dangers[2]:13"
+   ],
+   "item": "7B"
+  },
+  {
+   "spot": "mentawai",
+   "path": "carnet.respect",
+   "raison": "Non appliqué par A1 (essentiel prioritaire ou choix de prudence) : Aucune mention de la redevance surf. Faits datés trouvés : bylaw de 2015 (1 million IDR par 15 jours, spots limités à 25 surfeurs par jour), entrée en vigueur annoncée en 2016, projet de taxe et de gestion directe annoncé en mai 2025. Statut actuel non confirmé.",
+   "kind": "recherche",
+   "research": [
+    "manques-faits-b:mentawai:5"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "perhentian",
+   "path": "carnet.season",
+   "raison": "« Ferme presque entièrement pendant la mousson, de novembre à février » : pluies maximales de novembre à janvier (METMalaysia) ; la fermeture n’est pas sourcée. Conseil mars–octobre, carnet mai–août.",
+   "kind": "recherche",
+   "research": [
+    "saisons:perhentian:72"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "pozo",
+   "path": "wind",
+   "raison": "Valeur de condition en dur, sans source (même incohérence d'unité).",
+   "kind": "recherche",
+   "research": [
+    "faits-1:pozo:33"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "pozo",
+   "path": "dangers[1]/carnet.respect",
+   "raison": "Rochers (danger) contre galets (carnet) : contradiction possible.",
+   "kind": "recherche",
+   "research": [
+    "faits-1:pozo:34"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "praiadorosa",
+   "path": "tip",
+   "raison": "« Elles » n’a pas d’antécédent dans le tip (signalé par le rapport sécurité). Pas de problème de fond.",
+   "kind": "recherche",
+   "research": [
+    "faits-3:praiadorosa:12"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "rainbowreef",
+   "path": "tip",
+   "raison": "« Plonge avec le courant entrant pour voir les coraux ouverts » : fait biologique et horaire non sourcé.",
+   "kind": "recherche",
+   "research": [
+    "schemas:passe:rainbowreef:tip:9"
+   ],
+   "item": "7B"
+  },
+  {
+   "spot": "rangiroa",
+   "path": "tip",
+   "raison": "« Plonge avec le courant entrant » : un conseil technique de marée, aucune source trouvée. Il contredit aussi le fond du schéma (laisser le groupe et le guide décider).",
+   "kind": "recherche",
+   "research": [
+    "schemas:passe:rangiroa:tip:8"
+   ],
+   "item": "7B"
+  },
+  {
+   "spot": "redang",
+   "path": "tip",
+   "raison": "La côte est de la Malaisie péninsulaire a ses pluies maximales de novembre à janvier (METMalaysia) ; la mer forte et les hébergements fermés ne sont pas sourcés. Le conseil dit mars–octobre, le carnet avril–septembre.",
+   "kind": "recherche",
+   "research": [
+    "saisons:redang:71"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "richelieu",
+   "path": "carnet.vibe",
+   "raison": "Aucune source officielle lue ne cite les Moken, la forme en fer à cheval, ni les ports de départ (le portail DNP ne mentionne pas les Moken ; la forme en fer à cheval vient d'un site d'opérateur).",
+   "kind": "recherche",
+   "research": [
+    "faits-4:richelieu:26"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "roquegageac",
+   "path": "dangers[0]",
+   "raison": "« après la pluie » : non sourcé. « lâchers de barrage en amont » : le gestionnaire du bassin parle de variations brutales dues aux barrages, sans nommer de barrage ni de commune.",
+   "kind": "recherche",
+   "research": [
+    "schemas:riviere:roquegageac:dangers[0]:4"
+   ],
+   "item": "7B"
+  },
+  {
+   "spot": "salinasec",
+   "path": "tip",
+   "raison": "Le conseil dit « vent surtout de juin à décembre » ; le carnet retient décembre–avril (houles du nord, avant le retour du courant froid) ; le modèle place le kite en octobre seulement. Trois lectures qui ne se recoupent pas.",
+   "kind": "recherche",
+   "research": [
+    "saisons:salinasec:10"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "scandola",
+   "path": "dangers[0]",
+   "raison": "« Vent et houle peuvent se lever vite le long des falaises » : aucune source officielle trouvée.",
+   "kind": "recherche",
+   "research": [
+    "manques-faits-a:scandola:5"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "shonan",
+   "path": "tip",
+   "raison": "Vue sur le Fuji non sourcée (page officielle du tourisme de Fujisawa/Kamakura non retrouvée).",
+   "kind": "recherche",
+   "research": [
+    "faits-4:shonan:2"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "sipadan",
+   "path": "visit.closure",
+   "raison": "Fermeture annuelle annoncée en 2019 (décembre dès 2020, puis ramenée à novembre) relayée par la presse professionnelle, mais non retrouvée sur Sabah Parks. Un voyageur qui réserve en novembre ou décembre peut trouver l'île fermée.",
+   "kind": "recherche",
+   "research": [
+    "faits-4:sipadan:10"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "soca",
+   "path": "dangers[1]",
+   "raison": "Source seulement American Whitewater.",
+   "kind": "recherche",
+   "research": [
+    "manques-coherence:soca:16"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "tarpark",
+   "path": "dangers[0]",
+   "raison": "« Méduses possibles » sans période.",
+   "kind": "recherche",
+   "research": [
+    "saisons:tarpark:74"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "thousandsteps",
+   "path": "desc",
+   "raison": "Le nombre de marches n’a pas de source officielle. Les pages de tourisme et de plongée recoupées donnent 64, 67 et 72 : « environ 70 » est compatible, mais aucune source officielle (STINAPA, office du tourisme de Bonaire) n’a été trouvée.",
+   "kind": "recherche",
+   "research": [
+    "faits-3:thousandsteps:1"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "thunderball",
+   "path": "tip",
+   "raison": "Snorkeling seul : le schéma passe/dérive est un schéma de plongeur (bouée, groupe) et ne lui est pas attribué. Le conseil d'entrer à l'étale n'est pas sourcé.",
+   "kind": "recherche",
+   "research": [
+    "schemas:passe:thunderball:tip:14"
+   ],
+   "item": "7B"
+  },
+  {
+   "spot": "tioman",
+   "path": "carnet.season",
+   "raison": "« De novembre à février, la mousson du nord-est secoue la côte est » : pluies maximales de novembre à janvier côté est (METMalaysia) ; l’état de la mer n’est pas sourcé.",
+   "kind": "recherche",
+   "research": [
+    "saisons:tioman:73"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "verdon",
+   "path": "carnet.respect",
+   "raison": "Interdictions à préciser (berges des lacs et gorges) ; conseils d'accostage et de priorité non sourcés.",
+   "kind": "recherche",
+   "research": [
+    "faits-1:verdon:14"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "verdon",
+   "path": "level/waterType",
+   "raison": "Contradiction avec saintecroix (même lac, level « variable », waterType « lake ») ; « debutant » alors que la remontée des gorges dépend du vent et du gilet.",
+   "kind": "recherche",
+   "research": [
+    "faits-1:verdon:17"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "verdon",
+   "path": "carnet.vibe",
+   "raison": "Fait historique non sourcé dans la fiche (source du catalogue : Wikipédia).",
+   "kind": "recherche",
+   "research": [
+    "faits-1:verdon:19"
+   ],
+   "item": "6/10"
+  },
+  {
+   "spot": "verdon",
+   "path": "carnet.respect",
+   "raison": "Portée de l’interdiction de camping, bivouac et feux (autour du lac contre berges des lacs et gorges) : citations retrouvées mais entrée de recherche « à vérifier » ; texte laissé tel quel.",
+   "kind": "decision",
+   "research": [
+    "faits-1:verdon:14"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "roquegageac",
+   "path": "dangers[0]",
+   "raison": "« après la pluie » et « lâchers de barrage en amont » : EPIDOR parle de variations brutales sur le bassin sans nommer de barrage ni de commune ; entrée « à vérifier », texte laissé tel quel.",
+   "kind": "decision",
+   "research": [
+    "schemas:riviere:roquegageac:dangers[0]:4"
+   ],
+   "item": "7B"
+  },
+  {
+   "spot": "ericeira",
+   "path": "level",
+   "raison": "Niveau « intermediaire » pour Coxos alors que la réserve le classe au niveau 6 (vagues puissantes d’au moins 2 m) : le passage à « expert » est une décision éditoriale, non appliquée ici.",
+   "kind": "decision",
+   "research": [
+    "essentiel-2:ericeira:extra0"
+   ],
+   "item": "10"
+  },
+  {
+   "spot": "verdon",
+   "path": "level/waterType",
+   "raison": "verdon (debutant, inland) et saintecroix (variable, lake) décrivent le même plan d’eau à 4 km : niveau et type d’eau à aligner après décision produit.",
+   "kind": "decision",
+   "research": [
+    "faits-1:verdon:17"
+   ],
+   "item": "10"
+  },
+  {
+   "spot": "famara",
+   "path": "level",
+   "raison": "Débutant à 1 point alors que le carnet dit « Les courants sont forts » : niveau non sourcé.",
+   "kind": "decision",
+   "item": "10"
+  },
+  {
+   "spot": "kona",
+   "path": "level",
+   "raison": "Débutant à 1 point pour une plongée de nuit : niveau non sourcé.",
+   "kind": "decision",
+   "item": "10"
+  },
+  {
+   "spot": "puntahermosa",
+   "path": "level",
+   "raison": "Intermédiaire à 2 points alors que la description cite Pico Alto (grosses vagues) : niveau non sourcé.",
+   "kind": "decision",
+   "item": "10"
+  },
+  {
+   "spot": "tulamben",
+   "path": "carnet.season",
+   "raison": "« viens tôt le matin pour éviter la foule » contre le danger « forte affluence » : affluence du matin à vérifier sur place.",
+   "kind": "decision",
+   "item": "10"
+  },
+  {
+   "spot": "noronha",
+   "path": "tip",
+   "raison": "Version de l’essentiel (sourcée) gérée par A2 ; vérifier que le tip final ne contredit pas pipa.",
+   "kind": "decision",
+   "item": "10"
+  },
+  {
+   "spot": "poipu",
+   "path": "visit.localRules",
+   "raison": "Distance de 100 pieds avec les phoques moines : ligne historique d’une fiche reviewed (Hawai‘i Tourism Authority) ; citation non conservée dans data/sources.",
+   "kind": "decision",
+   "item": "10"
+  },
+  {
+   "spot": "kaikoura",
+   "path": "carnet.respect",
+   "raison": "« Dans la réserve marine de Hikurangi, tout prélèvement est interdit » : règle non sourcée (la distance de 20 m a été retirée).",
+   "kind": "decision",
+   "item": "10"
+  },
+  {
+   "spot": "twostep",
+   "path": "carnet.respect",
+   "raison": "« dauphins à long bec, protégés par la loi dans la baie » : règle non sourcée.",
+   "kind": "decision",
+   "item": "10"
+  },
+  {
+   "spot": "etretat",
+   "path": "carnet.respect",
+   "raison": "« Ne ramasse pas de galets, c’est interdit » : règle non sourcée.",
+   "kind": "decision",
+   "item": "10"
+  },
+  {
+   "spot": "iquique",
+   "path": "tip/tide",
+   "raison": "Marée praticable non établie (SHOA inaccessible) ; le tip « se surfe à marée haute » reste non sourcé.",
+   "kind": "decision",
+   "research": [
+    "manques-faits-a:iquique:18"
+   ],
+   "item": "10"
+  },
+  {
+   "spot": "restaurants",
+   "path": "tip",
+   "raison": "« Ne surfe qu’à marée haute » : marée de référence non sourcée (le champ tide a été vidé).",
+   "kind": "decision",
+   "research": [
+    "faits-4:restaurants:31"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "jellyfishlake",
+   "path": "waterType",
+   "raison": "Lac marin d’eau salée affiché « Eau douce » (waterType lake) : changement de modèle ou d’étiquette à faire côté code.",
+   "kind": "decision",
+   "research": [
+    "faits-4:jellyfishlake:38"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "sipadan",
+   "path": "visit.closure",
+   "raison": "Fermeture annuelle annoncée en 2019 (presse professionnelle) non retrouvée chez Sabah Parks : à confirmer avant toute ligne.",
+   "kind": "decision",
+   "research": [
+    "faits-4:sipadan:10"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "mentawai",
+   "path": "carnet.respect",
+   "raison": "Redevance surf (ordonnance de 2015, projet de taxe de mai 2025) : seules des sources de presse ; texte officiel (JDIH Mentawai) à lire.",
+   "kind": "decision",
+   "research": [
+    "manques-faits-b:mentawai:5"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "anselazio",
+   "path": "dangers[+]",
+   "raison": "Attaques de requin d’août 2011 à Praslin : la vérification ne relie pas les attaques à Anse Lazio ; ligne non ajoutée.",
+   "kind": "decision",
+   "research": [
+    "faits-2:anselazio:20"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "hookipa",
+   "path": "sports",
+   "raison": "Kitesurf listé sans règle trouvée (chapitre 13-256 sans « kite »).",
+   "kind": "decision",
+   "research": [
+    "manques-faits-a:hookipa:15"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "kailua",
+   "path": "sports/desc",
+   "raison": "Kitesurf mis en avant sans règle locale (zone A réservée au windsurf).",
+   "kind": "decision",
+   "research": [
+    "faits-3:kailua:9"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "conchebaleines",
+   "path": "tip",
+   "raison": "Dates de surveillance 2026 (4 juillet-30 août) à mettre à jour chaque année.",
+   "kind": "decision",
+   "research": [
+    "saisons:conchebaleines:11"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "eisbach",
+   "path": "tip",
+   "raison": "Règle datée (Allgemeinverfügung du 8 mai 2026) : à relire avant chaque publication.",
+   "kind": "decision",
+   "research": [
+    "schemas:riviere:eisbach:tip:15"
+   ],
+   "item": "7B"
+  },
+  {
+   "spot": "aqaba",
+   "path": "dangers[+]",
+   "raison": "Renvoi aux conseils aux voyageurs (France Diplomatie et FCDO du 10 septembre 2026) : à relire à chaque mise à jour.",
+   "kind": "decision",
+   "research": [
+    "faits-4:aqaba:4"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "sipadan",
+   "path": "dangers[+]",
+   "raison": "Conseil FCDO (est du Sabah, 19 mars 2026) : à relire à chaque mise à jour.",
+   "kind": "decision",
+   "research": [
+    "faits-4:sipadan:11"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "kohtao",
+   "path": "dangers",
+   "raison": "Consignes FCDO (centres de plongée, bateaux) non placées : fiche reviewed, tip et dangers doivent rester vides ; à placer dans carnet ou visit après décision.",
+   "kind": "decision",
+   "research": [
+    "manques-faits-b:kohtao:12"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "whitehaven",
+   "path": "visit.avoid",
+   "raison": "Ligne de manques-coherence fournie aussi par A1 : à dédoublonner avec A2 (top 50).",
+   "kind": "decision",
+   "research": [
+    "manques-coherence:whitehaven:0"
+   ],
+   "item": "11"
+  },
+  {
+   "spot": "bluehole_belize",
+   "path": "tip",
+   "raison": "Brevet exigé et profondeur de plongée (souvent 40 m ?) : aucune source officielle ; tip de l’essentiel (A2) prioritaire.",
+   "kind": "decision",
+   "research": [
+    "faits-2:bluehole_belize:30"
+   ],
+   "item": "6"
+  },
+  {
+   "spot": "lacanau",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "anglet",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "latranche",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "lapalmyre",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "nazare",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "supertubos",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "thurso",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "somo",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "pipeline",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "santateresa",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "chicama",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "snapper",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "saquarema",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "montanita",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "lobitos",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "itacare",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "shonan",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "arugam",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "waikiki",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "skeletonbay",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "rasmohammed",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "thistlegorm",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "cenote_dosojos",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "medes",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "portcros",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "calanques",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "bonaire",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "tarifa",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "dakhla",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "cabarete",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "lemorne",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "cumbuco",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "pozo",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "annecy",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "palombaggia",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "praia_marinha",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "lehavre",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "erquy",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "perros",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "imsouane",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "safi",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "sidikaouki",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "bunaken",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "weligama",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "ichinomiya",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "kerama",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "todossantos",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "islamujeres",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "huanchaco",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "praiadorosa",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "byronbay",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "ningaloo",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "shipwreck",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "borabora",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "capomannu",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "isolabella",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "zlatnirat",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "naxos",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "vieuxboucau",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "almanarre",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "porquerolles",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "rondinara",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "beauduc",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "bolonia",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "cotillo",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "medano",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "calodesmoro",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "goloritze",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "pounta",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "stiniva",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "comino",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "gozo",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "lahinch",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "mullaghmore",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "robertsport",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "cabroledo",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "aliwal",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "sodwana",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "bigbay",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "bazaruto",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "lavanono",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "mnemba",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "bluebay",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "djerba",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "sunsetbeach",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "jaws",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "pointlobos",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "hatteras",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "scorpionbay",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "ikkil",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "soupbowl",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "anakena",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "cabodelavela",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "wakatobi",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "lembeh",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "tubbataha",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "railay",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "perhentian",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "tioman",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "riyuebay",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "masirah",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "kirra",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "lordhowe",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "poorknights",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "gisborne",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "fakarava",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "coolidge",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "aitutaki",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "kavieng",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "envau",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "monteynard",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "roquegageac",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "excenevex",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "maubuisson",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "lavezzi",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "saleccia",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "santagiulia",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "bonneville",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "orientbay",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "chalupy",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "bled",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "ohrid",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "calaluna",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "tavolara",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "zingaro",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "calarossa",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "portofino",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "illetes",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "estrenc",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "capdecreus",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "lascanteras",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "viganj",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "ulcinj",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "zenobia",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "oludeniz",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "kas",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "boulders",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "proteabanks",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "kendwa",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "troubiches",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "moulaybouzerktoun",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "banda",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "balicasag",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "redang",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "tarpark",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "honmun",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "condao",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "kohrong",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "covelong",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "pigeonisland",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "yoshino",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "bonegi",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "kimbe",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "muri",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "abrolhos",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "ilhadomel",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "arpoador",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "taiba",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "guajiru",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "paraty",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "piramides",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "marmol",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "puntachoros",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "isladelaplata",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "rosario",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "marialagorda",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "jardinesreina",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "negril",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "catalina_do",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "playarincon",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "trunkbay",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "carlislebay",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "tobagocays",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "ansechastanet",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "smithsreef",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "bloodybay",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "grancenote",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "barradelacruz",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "loreto",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "atitlan",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "elparedon",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "coiba",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "sandharbor",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "crystalriver",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "ginnie",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "molokini",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "honolua",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "drytortugas",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "southpadre",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "sebastian",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "grotto",
+   "path": "tip",
+   "raison": "Variante de « arrive tôt » sans phrase prudente du carnet à remonter : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-arrive-tot",
+   "item": "19"
+  },
+  {
+   "spot": "algonquin",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "squamish",
+   "path": "tip",
+   "raison": "Conseil générique sans mot de sécurité ni de préparation : à réécrire avec source (gabarit 2026-09b).",
+   "kind": "item19-generique",
+   "item": "19"
+  },
+  {
+   "spot": "penhors",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Vent parfois fort. / Courants présents. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "bundoran",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Eau froide. / Récif. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "somo",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Affluence l’été. / Quelques courants. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "zarautz",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Très fréquenté. / Courants d’arrachement. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "pantin",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Houle puissante. / Eau fraîche. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "lasanta",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif volcanique tranchant. / Vague lourde. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "anchorpoint",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Entrée rocheuse. / Soleil intense, hydrate-toi. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "trestles",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Très fréquenté. / Longue marche d’accès. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "malibu",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Foule et localisme. / Quelques galets. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "puerto",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Vagues très puissantes. / Courants forts. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "santateresa",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courants par endroits. / Soleil intense. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "chicama",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Eau fraîche (Humboldt). / Vague épuisante. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "puntadelobos",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Houle puissante. / Rochers et falaises. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "bells",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Houle puissante. / Récif. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "margaret",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Grosses vagues. / Zone à requins. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "cloudbreak",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif au large. / Accès en bateau. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "teahupoo",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif affleurant. / Vague extrêmement lourde. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "floripa",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courants d’arrachement. / Affluence l’été. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "puntaroca",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Fond rocheux. / Vague rapide. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "raglan",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Fond rocheux. / Eau fraîche. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "saquarema",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Beach break puissant. / Courants. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "montanita",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courants. / Affluence. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "lobitos",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Eau fraîche. / Fond par endroits. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "mardelplata",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courants d’arrachement. / Eau fraîche. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "arica",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif peu profond. / Tube creux. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "itacare",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Affluence. / Quelques courants. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "shonan",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Très fréquenté. / Vagues parfois molles. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "arugam",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courants. / Soleil intense. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "cloud9",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif peu profond. / Tube puissant. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "waikiki",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Très fréquenté. / Récif par endroits. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "unstad",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Eau glaciale. / Conditions arctiques. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "mentawai",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récifs tranchants. / Accès en bateau. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "klitmoller",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Eau froide. / Fonds de pierres. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "hoddevik",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Eau très froide. / Secours éloignés. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "robertsport",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Secours éloignés. / Rochers aux pointes. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "lavanono",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Secours très éloignés. / Récif peu profond. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "bluebay",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Circulation de bateaux. / Corail fragile. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "tamarinmu",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif peu profond. / Faune protégée. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "djerba",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Vent thermique l’après-midi. / Méduses certaines années. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "kona",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Plongée de nuit. / Houle au large. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "hanalei",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Houles d’hiver puissantes. / Courants à l’embouchure. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "rinconca",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Fond de galets. / Foule importante. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "catalina",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Circulation de bateaux. / Eau fraîche. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "keylargo",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Orages d’été soudains. / Corail fragile. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "scorpionbay",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Isolement total. / Fond rocheux. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "soupbowl",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif peu profond. / Vague puissante. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "roatan",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif fragile. / Circulation de bateaux-taxis. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "bocasdeltoro",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récifs peu profonds. / Pluies fréquentes. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "popoyo",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif. / Courant au pic. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "ansedufour",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Tortues protégées. / Bateaux de pêche. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "itamambuca",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courant à l’embouchure. / Vagues creuses. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "praiamole",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Shore break. / Courants latéraux. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "maragogi",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif protégé. / Soleil intense. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "puntahermosa",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Eau fraîche. / Fonds rocheux. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "paracas",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Vent fort l’après-midi. / Réserve protégée. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "salinasec",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récifs. / Vent l’après-midi. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "nuqui",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Secours éloignés. / Pluies abondantes. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "cabodelavela",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Vent très fort. / Isolement. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "losroques",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Parc national protégé. / Soleil intense. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "lapaloma",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Eau fraîche. / Courants aux pointes. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "lakeypeak",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif. / Line-up chargé. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "lembeh",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Faune fragile. / Visibilité réduite. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "krui",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récifs. / Secours éloignés. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "tubbataha",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courants forts. / Très isolé. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "muine",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Vent fort. / Clapot. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "perhentian",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Bateaux-taxis. / Corail fragile. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "kalpitiya",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Vent fort. / Faune marine. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "cokes",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récif peu profond. / Tube puissant. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "ishigaki",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courant. / Mantas protégées. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "jialeshui",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Rochers. / Typhons. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "riyuebay",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courants. / Rochers aux extrémités. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "masirah",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Vent très fort. / Isolement. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "aqaba",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Corail protégé. / Chaleur extrême l’été. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "lennox",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Galets glissants. / Présence de requins. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "kirra",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Tube rapide. / Foule. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "luckybay",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Eau fraîche. / Faune sauvage. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "yallingup",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Présence de requins. / Récif. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "kaikoura",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Eau froide. / Otaries sauvages. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "poorknights",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Houle au large. / Débarquement interdit. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "gisborne",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courants. / Eau fraîche. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "beqa",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Grands requins. / Courants. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "rainbowreef",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courants forts. / Corail fragile. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "rangiroa",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courant très puissant. / Requins nombreux. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "fakarava",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courants de passe. / Requins. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "poe",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Vent l’après-midi. / Récif protégé. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "coolidge",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Profondeur importante. / Pénétration d’épave. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "bluecorner",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Courant très fort. / Tombant profond. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "jellyfishlake",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Accès parfois fermé. / Méduses fragiles. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  },
+  {
+   "spot": "kavieng",
+   "path": "dangers",
+   "raison": "Tous les dangers font 1 à 3 mots (« Récifs. / Isolement. ») : à préciser avec source.",
+   "kind": "item19-dangers-courts",
+   "item": "19"
+  }
+ ]
+}
