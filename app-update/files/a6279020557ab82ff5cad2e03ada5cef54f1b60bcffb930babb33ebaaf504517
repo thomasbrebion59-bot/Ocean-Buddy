@@ -1,6 +1,6 @@
 /* Ocean Buddy 1.3 — accueil « envies de départ ».
-   La vraie Terre en ouverture, puis des rails de photos : les spots dont c’est la meilleure saison
-   ce mois-ci (data/seasons.json, tiré des carnets de destination) et des collections construites
+   La vraie Terre en ouverture, puis des rails de photos : les spots où nos carnets de destination et les
+   moyennes climatiques s’accordent ce mois-ci (data/seasons.json, repère indicatif) et des collections construites
    à partir du catalogue (activités, niveau, latitude, description). Les rails changent chaque jour ;
    un spot n’apparaît qu’une fois sur la page. Seules les vraies photos servent de couverture. */
 (() => {
@@ -66,11 +66,13 @@
     {id:'nord',title:'L’été au frais',sub:'Fjords, falaises et eau vive : la tendance des « coolcations ».',
       test:s=>lat(s)>=51||lat(s)<=-44},
     {id:'debut',title:'Pour débuter en douceur',sub:'Des conditions accueillantes pour te lancer.',
-      test:s=>s.level==='debutant'&&has(s,'surf','paddle','baignade','snorkeling','kayak')},
+      /* Jauge de danger calculée (app.js) : un spot à 3 ou 4 points ne se recommande pas pour débuter. Sans la jauge, le rail reste tel quel. */
+      test:s=>s.level==='debutant'&&has(s,'surf','paddle','baignade','snorkeling','kayak')&&!(window.dangerGauge?.(s)?.n>=3)},
     {id:'iles',title:'Îles du bout du monde',sub:'Loin, très loin… et tellement beau.',
       test:s=>['oc','as','af','sa'].includes(s.world)&&/\b[îi]le|atoll|archipel/.test(text(s))}
   ];
 
+  /* seasons = mois prudents (carnet ∩ modèle climatique − mois à risque sourcés) : un repère indicatif, jamais une prévision. */
   let seasons=null,scores=null,built=false,lite=null;
   /* Normales climatiques légères (eau, soleil, houle, vent) : repères chiffrés sur les cartes et rails de données. */
   const LI={sea:0,tx:1,sun:2,wet:3,kite:4,hs:5,calm:6};
@@ -194,20 +196,48 @@
   }
   /* Globe de l’accueil : une seule instance, créée à l’approche de la carte (jamais avant la levée du rideau),
      mise en veille hors écran. La sphère CSS reste affichée jusqu’à la première image éclairée du globe. */
-  let planet=null,planetIO=null,planetBusy=false,planetOn=false;
+  let planet=null,planetIO=null,planetBusy=false,planetOn=false,planetLosses=[],planetTimer=0;
+  const homeShown=()=>body().dataset.screen==='home';
+  const planetLive=()=>planetOn&&!document.hidden&&homeShown();
+  /* Libère le globe (mémoire GPU, textures 4K) ; la sphère CSS reprend la place tant qu'il n'est pas recréé. */
+  function dropPlanet(){
+    clearTimeout(planetTimer);
+    const p=planet;planet=null;
+    home.querySelector('.hf-world-map')?.classList.remove('is-live');
+    try{p?.destroy?.();}catch(_){}
+  }
   function stopPlanet(){
-    planetIO?.disconnect();planetIO=null;planetBusy=false;planetOn=false;
-    planet?.destroy?.();planet=null;
+    planetIO?.disconnect();planetIO=null;planetBusy=false;planetOn=false;planetLosses=[];
+    dropPlanet();
   }
   function loadPlanet(host){
-    if(planetBusy||planet||!window.OceanGlobe?.supported?.())return;
-    planetBusy=true;
-    window.OceanGlobe.create(host,{lighting:'studio',clouds:false,reveal:false,hd:false,onFirstFrame:()=>{if(host.isConnected)host.closest('.hf-world-map')?.classList.add('is-live');}}).then(api=>{
-      planetBusy=false;
-      /* Le rendu a été refait entre-temps (langue) : on libère ce globe. */
-      if(!host.isConnected){api.destroy();return;}
-      planet=api;api.setActive(planetOn&&!document.hidden);
+    if(planetBusy||planet||!planetLive()||!window.OceanGlobe?.supported?.())return;
+    planetBusy=true;let made=null;
+    window.OceanGlobe.create(host,{lighting:'studio',clouds:false,reveal:false,hd:false,
+      onFirstFrame:()=>{if(host.isConnected&&made&&made===planet)host.closest('.hf-world-map')?.classList.add('is-live');},
+      onContextLost:()=>{if(made&&made===planet)onPlanetLost();}
+    }).then(api=>{
+      planetBusy=false;made=api;
+      /* Le rendu a été refait entre-temps (langue) ou l'accueil n'est plus affiché : on libère ce globe. */
+      if(!host.isConnected||!planetIO||!planetLive()){api.destroy();return;}
+      planet=api;api.setActive(true);
     }).catch(()=>{planetBusy=false;});
+  }
+  /* Contexte WebGL retiré par le système : le globe est libéré (la sphère CSS reste visible, pas de cadre vide),
+     puis recréé s'il est encore à l'écran. Plus de 3 pertes en une minute : on garde la sphère CSS. */
+  function onPlanetLost(){
+    const now=Date.now();planetLosses=[...planetLosses.filter(t=>now-t<60000),now];
+    dropPlanet();
+    if(planetLosses.length>3)return;
+    planetTimer=setTimeout(syncPlanet,700);
+  }
+  /* Accueil non affiché (Explorer, fiche…) ou page cachée : le globe est libéré ; il revient avec l'accueil. */
+  function syncPlanet(){
+    if(!planetIO)return;
+    const host=home.querySelector('[data-hf-globe]');if(!host)return;
+    if(!homeShown()||document.hidden){if(planet&&!homeShown())dropPlanet();else planet?.setActive(false);return;}
+    if(planet)planet.setActive(planetOn);
+    else if(planetOn)loadPlanet(host);
   }
   function watchPlanet(){
     if(Boot&&!Boot.lifted)return;
@@ -215,12 +245,12 @@
     const host=home.querySelector('[data-hf-globe]');if(!host||!window.IntersectionObserver)return;
     planetIO=new IntersectionObserver(([e])=>{
       planetOn=!!e?.isIntersecting;
-      if(planet)planet.setActive(planetOn&&!document.hidden);
-      else if(planetOn)loadPlanet(host);
+      syncPlanet();
     },{rootMargin:'240px 0px'});
     planetIO.observe(host);
   }
-  document.addEventListener('visibilitychange',()=>{planet?.setActive(planetOn&&!document.hidden);});
+  document.addEventListener('visibilitychange',syncPlanet);
+  window.addEventListener('ocean:navigate',()=>setTimeout(syncPlanet,0));
 
   /* Carrousel : glisser, ou défilement automatique toutes les 6 s (sauf mouvement réduit ou après un geste). */
   let heroTimer=0,lastTouch=0;
@@ -233,7 +263,8 @@
     let amb=home.querySelector('.hf-ambient');
     if(!amb){amb=document.createElement('div');amb.className='hf-ambient';amb.setAttribute('aria-hidden','true');amb.innerHTML='<img alt=""><img alt="">';home.prepend(amb);}
     let shown=-1,layer=0;
-    const ambient=i=>{if(i===shown)return;shown=i;const img=track.children[i]?.querySelector('img');if(!img)return;const els=amb.querySelectorAll('img');layer=1-layer;els[layer].src=img.currentSrc||img.src;els[layer].classList.add('on');els[1-layer].classList.remove('on');};
+    /* La première photo est déjà posée par le démarrage (index.html, élément LCP) : on la garde telle quelle. */
+    const ambient=i=>{if(i===shown)return;shown=i;const img=track.children[i]?.querySelector('img');if(!img)return;const els=amb.querySelectorAll('img');if(els[layer].classList.contains('on')&&els[layer].src===img.src)return;layer=1-layer;els[layer].src=img.currentSrc||img.src;els[layer].classList.add('on');els[1-layer].classList.remove('on');};
     ambient(0);
     track.addEventListener('scroll',()=>{const i=index();dots.forEach((d,k)=>d.classList.toggle('on',k===i));clearTimeout(ambient.t);ambient.t=setTimeout(()=>ambient(index()),120);},{passive:true});
     ['pointerdown','touchstart','wheel'].forEach(t=>track.addEventListener(t,()=>{lastTouch=Date.now();},{passive:true}));
@@ -256,7 +287,7 @@
       /* Les photos en haute définition passent devant (plus belles en grand format). */
       const score=s=>{const ms=seasons[s.id];return (ms.length===12?2:0)+(ms.includes((m+11)%12)?1:0)+ms.length/24+((photo(s)?.w||0)>=1200?0:1.5)+(100-vib(s.id))/25;};
       const ordered=inSeason.map(s=>({s,k:score(s)})).sort((a,b)=>a.k-b.k).map(o=>o.s);
-      html+=rail('mois',`Où partir en ${monthName(m)} ?`,'C’est la meilleure saison pour ces spots.',pick(ordered,{n:10,perCountry:1,used}),{big:true,season:true,more:true,data:'sea'});
+      html+=rail('mois',`Où partir en ${monthName(m)} ?`,'Repère indicatif d’après nos carnets et les moyennes climatiques, à confirmer sur place.',pick(ordered,{n:10,perCountry:1,used}),{big:true,season:true,more:true,data:'sea'});
     }
     if(lite){
       html+=planCard(m);
@@ -344,7 +375,7 @@
       /* « Tout voir » : la planète n’allume que les spots en saison ce mois-ci. */
       currentFilter='season';document.querySelectorAll('#filters [data-f]').forEach(b=>b.classList.toggle('active',b.dataset.f==='season'));
       go('spots');try{renderSpots();window.OceanMap?.render?.(true);}catch(_){}
-      if(typeof toast==='function')toast(`${SPOTS.filter(s=>inSeason(s.id)).length} spots en saison ce mois-ci`);
+      if(typeof toast==='function')toast(`${SPOTS.filter(s=>inSeason(s.id)).length} spots où nos carnets et les moyennes climatiques s’accordent ce mois-ci`);
       return;
     }
     const jump=e.target.closest('[data-hf-jump]');

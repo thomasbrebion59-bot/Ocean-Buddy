@@ -4,11 +4,13 @@
 (() => {
   'use strict';
   const M=window.SpotGuideModel;if(!M)return;
-  const DATA_URL='assets/data/spot-guides.js?v=40afa8ed4d89';
-  const DATA_URL_EN='assets/data/spot-guides.en.js?v=ef4297c61c1b';
+  const DATA_URL='assets/data/spot-guides.js?v=88c5fd5f1235';
+  const DATA_URL_EN='assets/data/spot-guides.en.js?v=abfa1b4f2079';
+  const DATA_URL_ES='assets/data/spot-guides.es.js?v=0f33dcf5db10';
   /* Hors français, le contenu éditorial (esprit du lieu, lieux, libellés d’hébergement) s’affiche en anglais.
      Il est marqué translate="no" pour que i18n.js ne le retraduise pas par morceaux ; les libellés d’interface restent traduisibles. */
-  const english=()=>!!(window.OB_I18N&&OB_I18N.lang&&OB_I18N.lang!=='fr');
+  const lang=()=>(window.OB_I18N&&OB_I18N.lang)||'fr';
+  const english=()=>lang()!=='fr';
   const NT=' translate="no" data-no-i18n';
   const $=s=>document.querySelector(s);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -74,8 +76,9 @@
   function load(){
     if(data)return Promise.resolve(data);
     if(!loading)loading=(window.OCEAN_SPOT_GUIDES?Promise.resolve():inject(DATA_URL))
-      .then(()=>english()&&!window.OCEAN_SPOT_GUIDES_EN?inject(DATA_URL_EN).catch(()=>{}):null)
-      .then(()=>{const base=window.OCEAN_SPOT_GUIDES||{spots:{},countries:{}};data=english()?overlay(base,window.OCEAN_SPOT_GUIDES_EN):base;return data;})
+      .then(()=>lang()==='es'&&!window.OCEAN_SPOT_GUIDES_ES?inject(DATA_URL_ES).catch(()=>{}):null)
+      .then(()=>english()&&!window.OCEAN_SPOT_GUIDES_EN&&!(lang()==='es'&&window.OCEAN_SPOT_GUIDES_ES)?inject(DATA_URL_EN).catch(()=>{}):null)
+      .then(()=>{const base=window.OCEAN_SPOT_GUIDES||{spots:{},countries:{}};data=lang()==='es'&&window.OCEAN_SPOT_GUIDES_ES?overlay(base,window.OCEAN_SPOT_GUIDES_ES):english()?overlay(base,window.OCEAN_SPOT_GUIDES_EN):base;return data;})
       .catch(error=>{loading=null;throw error;});
     return loading;
   }
@@ -105,11 +108,13 @@
   function distance(a,b){const r=Math.PI/180,dLat=(b.lat-a.lat)*r,dLon=(b.lon-a.lon)*r,x=Math.sin(dLat/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLon/2)**2;return 6371*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
   function bearing(a,b){const r=Math.PI/180,y=Math.sin((b.lon-a.lon)*r)*Math.cos(b.lat*r),x=Math.cos(a.lat*r)*Math.sin(b.lat*r)-Math.sin(a.lat*r)*Math.cos(b.lat*r)*Math.cos((b.lon-a.lon)*r);return (Math.atan2(y,x)/r+360)%360;}
   const DIRS_EN=['north','north-east','east','south-east','south','south-west','west','north-west'];
+  const DIRS_ES=['norte','noreste','este','sureste','sur','suroeste','oeste','noroeste'];
   /* Distance et mois : fragments calculés depuis les données, en anglais hors français et marqués non traduisibles. */
-  const LG=()=>english()?'en':'fr';
+  const LG=()=>lang()==='es'&&window.OCEAN_SPOT_GUIDES_ES?'es':english()?'en':'fr';
   const months=m=>`<span${NT}>${esc(M.monthsLabel(m,LG()))}</span>`;
   const monthNow2=()=>`<span${NT}>${esc(M.monthName(monthNow(),LG()))}</span>`;
   function whereText(km,deg){
+    if(LG()==='es')return km<1?'A menos de 1 km del spot':`A ${Math.round(km)} km al ${DIRS_ES[Math.round(deg/45)%8]}`;
     if(english())return km<1?'Less than 1 km from the spot':`${Math.round(km)} km ${DIRS_EN[Math.round(deg/45)%8]}`;
     if(km<1)return 'À moins d’un kilomètre du spot';
     return `À ${Math.round(km)} km ${DIRS[Math.round(deg/45)%8]}`;
@@ -126,7 +131,8 @@
     const tiles=[
       c.food&&['food','À goûter sur place',c.food[0],c.food[1]],
       c.respect&&['respect','Le bon geste',null,c.respect],
-      c.season&&['season','La bonne saison',null,c.season]
+      /* Texte de saison = repère indicatif : la mention est hors du bloc translate="no", elle se traduit. */
+      c.season&&['season','La bonne saison',null,c.season,'Repère indicatif, à confirmer localement.']
     ].filter(Boolean);
     return `<div class="guide-chapter"><span class="guide-chapter-number">01</span><span class="guide-chapter-label">L’esprit du lieu</span></div>
       <div class="guide-spirit-cover${photo?'':' no-photo'}">${photo?`<img src="${esc(photo)}" alt="" loading="lazy" decoding="async">`:''}
@@ -136,7 +142,7 @@
         </div>
       </div>
       ${c.vibe?`<blockquote class="guide-vibe"${NT}><svg class="guide-quote" viewBox="0 0 48 40" aria-hidden="true"><path d="M0 40V24C0 10 7 2 20 0l2 6c-7 2-11 7-11 14h9v20H0Zm26 0V24C26 10 33 2 46 0l2 6c-7 2-11 7-11 14h9v20H26Z" fill="currentColor"/></svg><p>${esc(c.vibe)}</p></blockquote>`:''}
-      ${tiles.length?`<div class="guide-tiles">${tiles.map(([k,label,title,text])=>`<article class="guide-tile tile-${k}"><span class="guide-tile-icon">${icon(k)}</span><small>${label}</small>${title?`<b${NT}>${esc(title)}</b>`:''}<p${NT}>${esc(text)}</p></article>`).join('')}</div>`:''}
+      ${tiles.length?`<div class="guide-tiles">${tiles.map(([k,label,title,text,note])=>`<article class="guide-tile tile-${k}"><span class="guide-tile-icon">${icon(k)}</span><small>${label}</small>${title?`<b${NT}>${esc(title)}</b>`:''}<p${NT}>${esc(text)}</p>${note?`<span class="guide-note">${note}</span>`:''}</article>`).join('')}</div>`:''}
       ${c.grounded?'':'<p class="guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>'}`;
   }
 
@@ -183,14 +189,14 @@
   }
   function aroundHTML(s){
     const items=aroundItems(s),lang=entry(s.id)?.w||'en',c=coordsOf(s.id);
-    const head=`<div class="guide-chapter"><span class="guide-chapter-number">02</span><span class="guide-chapter-label">À découvrir autour</span></div><div class="guide-heading"><div><h3>${esc(aroundTitle(s))}</h3><p>Des lieux réels, à moins de 30 km, pour une demi-journée hors de l’eau.</p></div></div>`;
+    const head=`<div class="guide-chapter"><span class="guide-chapter-number">02</span><span class="guide-chapter-label">À découvrir autour</span></div><div class="guide-heading"><div><h3>${esc(aroundTitle(s))}</h3><p>Des lieux réels, à moins de 30 km, pour une demi-journée hors de l’eau.</p></div></div><button type="button" class="guide-around-toggle" data-around-toggle aria-expanded="false" aria-controls="guideAroundBody">Voir les lieux</button>`;
     if(!items.length){
       const q=k=>'https://www.google.com/maps/search/'+encodeURIComponent(k)+(c?`/@${c.lat},${c.lon},12z`:encodeURIComponent(' '+s.loc));
-      return head+`<div class="guide-around-fallback"><p>Poulpy n’a pas encore sélectionné les incontournables de ce secteur. Explore les environs sur la carte :</p><div class="guide-chips">${[['panorama','Points de vue','point de vue'],['marche','Marchés','marché'],['rando','Randonnées','randonnée'],['musee','Musées','musée']].map(([k,label,query])=>`<a href="${esc(q(query))}" target="_blank" rel="noopener">${icon(k)}<span>${label}</span></a>`).join('')}</div></div>`;
+      return head+`<div class="guide-around-body" id="guideAroundBody" hidden><div class="guide-around-fallback"><p>Poulpy n’a pas encore sélectionné les incontournables de ce secteur. Explore les environs sur la carte :</p><div class="guide-chips">${[['panorama','Points de vue','point de vue'],['marche','Marchés','marché'],['rando','Randonnées','randonnée'],['musee','Musées','musée']].map(([k,label,query])=>`<a href="${esc(q(query))}" target="_blank" rel="noopener">${icon(k)}<span>${label}</span></a>`).join('')}</div></div></div>`;
     }
-    return head+`<div class="guide-around-layout"><figure class="guide-radar-wrap">${radar(items)}<figcaption>Distances à vol d’oiseau depuis le secteur du spot. Le trajet réel peut être plus long.</figcaption></figure>
+    return head+`<div class="guide-around-body" id="guideAroundBody" hidden><div class="guide-around-layout"><figure class="guide-radar-wrap">${radar(items)}<figcaption>Distances à vol d’oiseau depuis le secteur du spot. Le trajet réel peut être plus long.</figcaption></figure>
       <ol class="guide-around-list">${items.map(x=>`<li class="guide-place" data-around-item="${x.i}"><span class="guide-place-number">${x.i}</span><div class="guide-place-body"><span class="guide-place-kind">${icon(x.k)}${esc(KIND_LABEL[x.k]||'À voir')}</span><b${NT}>${esc(x.n)}</b><p${NT}>${esc(x.d)}</p><span class="guide-place-where"${english()?NT:''}>${esc(whereText(x.km,x.deg))}</span><span class="guide-place-links"><a href="${esc(mapsUrl(x.n,s))}" target="_blank" rel="noopener">${icon('map')}<span>Voir sur la carte</span></a>${x.title?`<a href="${esc(wikiUrl(lang,x.title))}" target="_blank" rel="noopener">${icon('book')}<span>En savoir plus</span></a>`:''}</span></div></li>`).join('')}</ol></div>
-      <p class="guide-source">Lieux sélectionnés par Ocean Buddy et situés grâce aux coordonnées de Wikipédia. Vérifie horaires et accès avant de partir.</p>`;
+      <p class="guide-source">Lieux sélectionnés par Ocean Buddy et situés grâce aux coordonnées de Wikipédia. Vérifie horaires et accès avant de partir.</p></div>`;
   }
 
   /* ---------- Dormir pas cher ---------- */
@@ -314,6 +320,8 @@
   document.addEventListener('click',e=>{
     const jump=e.target.closest('[data-guide-jump]');
     if(jump){const target=document.getElementById(jump.dataset.guideJump);if(target){target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}return;}
+    const tog=e.target.closest('[data-around-toggle]');
+    if(tog){const body=document.getElementById('guideAroundBody');if(body){const open=body.hidden;body.hidden=!open;tog.setAttribute('aria-expanded',String(open));tog.textContent=open?'Masquer les lieux':'Voir les lieux';}return;}
     const go=e.target.closest('[data-guide-spot]');if(go){openSpot(go.dataset.guideSpot);return;}
     const point=e.target.closest('[data-around-point]');
     if(point){const item=document.querySelector(`[data-around-item="${point.dataset.aroundPoint}"]`);if(item){item.classList.remove('is-flash');void item.offsetWidth;item.classList.add('is-flash');item.scrollIntoView({behavior:'smooth',block:'nearest'});}}
