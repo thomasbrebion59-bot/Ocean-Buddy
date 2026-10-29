@@ -28,7 +28,7 @@ test('une page par spot, avec balises essentielles et JSON-LD valide', () => {
   assert.ok(titles.size > catalog.length * 0.99, 'titres quasi tous uniques');
 });
 
-test('sitemap : XML simple, 725 spots, robots.txt', () => {
+test('sitemap : XML simple, 728 spots, robots.txt', () => {
   const sm = read('sitemap.xml');
   const locs = [...sm.matchAll(/<loc>([^<]+)<\/loc>/g)].map((m) => m[1]);
   assert.strictEqual(new Set(locs).size, locs.length);

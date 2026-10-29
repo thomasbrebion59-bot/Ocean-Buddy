@@ -4,9 +4,9 @@
 (() => {
   'use strict';
   const M=window.SpotGuideModel;if(!M)return;
-  const DATA_URL='assets/data/spot-guides.js?v=e06310e69417';
-  const DATA_URL_EN='assets/data/spot-guides.en.js?v=447f9bd55f5b';
-  const DATA_URL_ES='assets/data/spot-guides.es.js?v=0d7be22c0d59';
+  const DATA_URL='assets/data/spot-guides.js?v=88c5fd5f1235';
+  const DATA_URL_EN='assets/data/spot-guides.en.js?v=abfa1b4f2079';
+  const DATA_URL_ES='assets/data/spot-guides.es.js?v=0f33dcf5db10';
   /* Hors français, le contenu éditorial (esprit du lieu, lieux, libellés d’hébergement) s’affiche en anglais.
      Il est marqué translate="no" pour que i18n.js ne le retraduise pas par morceaux ; les libellés d’interface restent traduisibles. */
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||'fr';

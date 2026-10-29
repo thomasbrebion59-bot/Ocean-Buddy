@@ -13,22 +13,26 @@
     "temp": "18°C",
     "tide": "Mi-marée",
     "danger": 4,
-    "desc": "Beach break mythique des Landes, réputé pour ses tubes puissants et rapides. Le spot a accueilli le Quiksilver Pro France, étape française du circuit mondial, dans les années 2000. Réservé aux surfeurs confirmés.",
+    "desc": "Beach break de sable à Hossegor, aux vagues creuses, rapides et lourdes, qui cassent à gauche comme à droite. Il attire surtout des surfeurs expérimentés, par houle d’ouest correcte. Le Quiksilver Pro France, étape française du circuit mondial, a eu lieu à Hossegor dans les années 2000.",
     "dangers": [
       [
+        "🌊",
+        "Vagues puissantes et parfois dangereuses : les débutants doivent s’abstenir."
+      ],
+      [
+        "🛟",
+        "Surveillance en été seulement (en 2026, du 4 juillet au 30 août, de 11 h à 19 h) : renseigne-toi avant d’entrer hors saison."
+      ],
+      [
+        "👥",
+        "Quand le spot marche, il peut y avoir foule, et la foule peut rendre le surf risqué."
+      ],
+      [
         "🌀",
-        "Courants de baïne très forts, surtout à marée descendante."
-      ],
-      [
-        "⚡",
-        "Vagues creuses et puissantes qui ferment vite."
-      ],
-      [
-        "🏖️",
-        "Fonds qui changent vite, attention aux bancs de sable."
+        "Baïnes et courants marins qui peuvent être dangereux sur les plages des Landes, rappelle la préfecture des Landes."
       ]
     ],
-    "tip": "Vérifie bien les baïnes avant d’entrer ! Demande au poste de secours où te mettre à l’eau et ne surfe jamais seul.",
+    "tip": "Les débutants doivent s’abstenir. Observe la mer un moment avant d’entrer pour juger la taille et la puissance des vagues.",
     "sports": [
       "surf"
     ],
@@ -41,7 +45,7 @@
     "waterType": "sea",
     "source": {
       "status": "unverified",
-      "label": "Description historique Ocean Buddy · vérification externe en attente",
+      "label": "Fiche relue le 29 octobre 2026 : faits cités (Tourisme Landes, Mondo Surf, Surf-Forecast, hossegor.fr) · reste à vérifier localement",
       "url": null,
       "reviewed": null
     },
@@ -61,25 +65,42 @@
       "thumb": "assets/spots/thumbs/hossegor.webp"
     },
     "anecdote": "Dans les années 2000, Hossegor a accueilli le Quiksilver Pro France, étape du circuit mondial de la WSL. Aujourd’hui, le Quiksilver Festival y réunit des surfeurs fin septembre. Son atout : l’influence du Gouf de Capbreton sur les vagues.",
-    "fauna": "côte landaise : bars, dorades, dauphins 🐬 et de nombreux oiseaux marins.",
     "zones": [
       {
         "n": "La Gravière",
         "l": "expert",
-        "d": "tubes puissants et rapides"
-      },
-      {
-        "n": "La Centrale / La Nord",
-        "l": "intermediaire",
-        "d": "pics plus ouverts"
-      },
-      {
-        "n": "Les Culs Nus",
-        "l": "intermediaire",
-        "d": "plage moins dense"
+        "d": "vagues creuses, rapides et lourdes"
       }
     ],
-    "country": "France"
+    "country": "France",
+    "visit": {
+      "tide": {
+        "t": "Mondo Surf donne la marée basse comme la meilleure, de préférence descendante.",
+        "src": [
+          {
+            "u": "https://www.mondo.surf/surf-spot/la-graviere/guide/6348",
+            "l": "Mondo Surf (guide de spot)",
+            "d": "2026-10-29"
+          }
+        ]
+      },
+      "localRules": {
+        "t": "La plage est surveillée en été (en 2026, du 4 juillet au 30 août, de 11 h à 19 h). Les animaux n’y sont pas admis en été.",
+        "src": [
+          {
+            "u": "https://www.tourismelandes.com/?p=12933",
+            "l": "Tourisme Landes (office de tourisme)",
+            "d": "2026-10-29"
+          },
+          {
+            "u": "https://www.tourismelandes.com/?p=12933",
+            "l": "Tourisme Landes (office de tourisme)",
+            "d": "2026-10-29"
+          }
+        ]
+      },
+      "reviewed": "2026-10-29"
+    }
   },
   {
     "id": "lacanau",
@@ -448,7 +469,7 @@
     "id": "seignosse",
     "name": "Les Bourdaines — Seignosse",
     "loc": "Landes, France",
-    "level": "intermediaire",
+    "level": "variable",
     "sky": "#ffe0a8",
     "sky2": "#ffb866",
     "sea": "#2a8fb8",
@@ -458,18 +479,22 @@
     "temp": "19°C",
     "tide": "Mi-marée montante",
     "danger": 3,
-    "desc": "Beach break de qualité, l’un des plus consistants des Landes. Pics variés qui conviennent aux intermédiaires cherchant à muscler leur surf.",
+    "desc": "Plage de sable de Seignosse. Selon Surf-report, elle est accessible à tous les niveaux selon la houle, à marée haute comme à marée basse, avec des vagues amusantes et puissantes. D’après plages.tv, les bancs de sable, assez stables, donnent des conditions de surf régulières ; au-delà de vagues de 2 m, le spot sature.",
     "dangers": [
       [
         "🌀",
-        "Baïnes typiques des Landes."
+        "Baïnes et courants forts, signale Surf-report : le courant est parfois important."
       ],
       [
         "🌊",
-        "Peut grossir vite avec la houle."
+        "Le spot sature au-delà de vagues de 2 m."
+      ],
+      [
+        "🛟",
+        "Surveillance en été (en 2026, du 13 juin au 13 septembre, de 11 h à 19 h du 4 juillet au 30 août) : regarde où est le poste avant d’entrer."
       ]
     ],
-    "tip": "Excellent terrain de progression. Repère le sens du courant en regardant la dérive de l’écume avant d’entrer.",
+    "tip": "Repère les baïnes depuis la plage et fais attention au courant. Le spot est sensible au vent : il marche mieux avec un vent d’est ou sans vent.",
     "sports": [
       "surf"
     ],
@@ -482,7 +507,7 @@
     "waterType": "sea",
     "source": {
       "status": "unverified",
-      "label": "Description historique Ocean Buddy · vérification externe en attente",
+      "label": "Fiche relue le 29 octobre 2026 : faits cités (Surf-report, plages.tv, Seignosse Tourisme, Tourisme Landes) · reste à vérifier localement",
       "url": null,
       "reviewed": null
     },
@@ -500,8 +525,30 @@
       "thumb": "assets/spots/thumbs/seignosse.webp",
       "width": 1600
     },
-    "anecdote": "Seignosse est bordée par l’une des plus grandes forêts plantées d’Europe, créée au 19e siècle pour fixer les dunes : ici, on surfe au milieu des pins.",
-    "country": "France"
+    "country": "France",
+    "visit": {
+      "tide": {
+        "t": "On peut y surfer à marée haute comme à marée basse, d’après Surf-report.",
+        "src": [
+          {
+            "u": "https://www.surf-report.com/surf-info/les-bourdaines-seignosse-s1189.html",
+            "l": "Surf-report (guide de spot)",
+            "d": "2026-10-29"
+          }
+        ]
+      },
+      "localRules": {
+        "t": "La plage est surveillée en 2026 de 12 h 30 à 18 h 30 du 13 juin au 3 juillet, de 11 h à 19 h du 4 juillet au 30 août, puis de 12 h 30 à 18 h 30 du 31 août au 13 septembre.",
+        "src": [
+          {
+            "u": "https://www.tourismelandes.com/?p=12699",
+            "l": "Tourisme Landes (office de tourisme)",
+            "d": "2026-10-29"
+          }
+        ]
+      },
+      "reviewed": "2026-10-29"
+    }
   },
   {
     "id": "capbreton",
@@ -517,22 +564,30 @@
     "temp": "18°C",
     "tide": "Marée basse",
     "danger": 4,
-    "desc": "Spot puissant bordé par la forêt, l’un des beach breaks les plus creux des Landes. Tubes rapides quand la houle entre, très prisé des surfeurs confirmés.",
+    "desc": "Plage du sud de Capbreton. Tourisme Landes décrit des vagues puissantes et rapides, réservées aux surfeurs confirmés. Selon Surf-Forecast, c’est un beach break plutôt exposé, meilleur vers la marée haute, où il y a souvent du monde.",
     "dangers": [
       [
         "⚡",
-        "Vagues creuses et puissantes."
+        "Vagues puissantes et rapides, réservées aux surfeurs confirmés."
+      ],
+      [
+        "🚫",
+        "Baignade et activités nautiques interdites aux abords immédiats des blockhaus ; parapente interdit."
+      ],
+      [
+        "🛟",
+        "Huit nageurs sauveteurs surveillent la plage en été (en 2026, du 4 juillet au 30 août) : hors saison, renseigne-toi avant d’entrer."
+      ],
+      [
+        "👥",
+        "Souvent du monde dans l’eau, signale Surf-Forecast."
       ],
       [
         "🌀",
-        "Baïnes et courants forts."
-      ],
-      [
-        "🏖️",
-        "Bancs de sable changeants."
+        "Baïnes et courants marins qui peuvent être dangereux sur les plages des Landes, rappelle la préfecture des Landes."
       ]
     ],
-    "tip": "Spot sérieux ! Privilégie une houle modérée et repère les courants avant d’entrer.",
+    "tip": "Ce spot est réservé aux surfeurs confirmés. Observe la mer un moment avant d’entrer, reste loin des blockhaus (baignade et activités nautiques interdites) et mets-toi à l’eau dans la zone surveillée en été.",
     "sports": [
       "surf"
     ],
@@ -545,7 +600,7 @@
     "waterType": "sea",
     "source": {
       "status": "unverified",
-      "label": "Description historique Ocean Buddy · vérification externe en attente",
+      "label": "Fiche relue le 29 octobre 2026 : faits cités (Tourisme Landes, Surf-Forecast, Belambra) · reste à vérifier localement",
       "url": null,
       "reviewed": null
     },
@@ -562,8 +617,41 @@
       "thumb": "assets/spots/thumbs/capbreton.webp",
       "width": 1600
     },
-    "anecdote": "Au large de Capbreton s’ouvre le Gouf, un canyon sous-marin de plus de 3000 m de profondeur qui démarre à quelques centaines de mètres du bord.",
-    "country": "France"
+    "anecdote": "Au large de Capbreton s’ouvre le Gouf, un canyon sous-marin : à 300 m du rivage, le fond plonge brutalement, et le canyon atteint 4 500 m de profondeur dans la plaine abyssale du golfe de Gascogne.",
+    "country": "France",
+    "visit": {
+      "tide": {
+        "t": "Surf-Forecast donne le meilleur vers la marée haute.",
+        "src": [
+          {
+            "u": "https://www.surf-forecast.com/breaks/La-Piste",
+            "l": "Surf-Forecast (guide de spot)",
+            "d": "2026-10-29"
+          }
+        ]
+      },
+      "localRules": {
+        "t": "La baignade et les activités nautiques sont interdites aux abords immédiats des blockhaus, et le parapente est interdit. Huit nageurs sauveteurs surveillent la plage en été (en 2026, du 4 juillet au 30 août).",
+        "src": [
+          {
+            "u": "https://www.tourismelandes.com/?p=95269",
+            "l": "Tourisme Landes (office de tourisme)",
+            "d": "2026-10-29"
+          },
+          {
+            "u": "https://www.tourismelandes.com/?p=95269",
+            "l": "Tourisme Landes (office de tourisme)",
+            "d": "2026-10-29"
+          },
+          {
+            "u": "https://www.tourismelandes.com/?p=95269",
+            "l": "Tourisme Landes (office de tourisme)",
+            "d": "2026-10-29"
+          }
+        ]
+      },
+      "reviewed": "2026-10-29"
+    }
   },
   {
     "id": "lafitenia",
@@ -46071,6 +46159,196 @@
       "width": 1920,
       "height": 1440,
       "thumb": "assets/spots/thumbs/sauzaie.webp"
+    }
+  },
+  {
+    "id": "prevent",
+    "name": "Le Prévent — Capbreton",
+    "loc": "Landes, France",
+    "country": "France",
+    "world": "fr",
+    "coords": {
+      "lat": 43.6496,
+      "lon": -1.4459
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf"
+    ],
+    "level": "variable",
+    "desc": "Plage de Capbreton au sud de la jetée, entre deux épis rocheux, près des anciens blockhaus. Beach break : quand la grosse houle d’hiver dépasse les plages du nord ou que le vent du sud abîme les spots voisins, c’est une solution de repli. Les vagues y sont en général plus petites et plus douces, avec des bancs de sable parfois bien formés.",
+    "dangers": [
+      [
+        "🪨",
+        "Épis rocheux de chaque côté de la plage : garde tes distances avec les pierres."
+      ],
+      [
+        "🛟",
+        "Surveillance de la plage du 4 juillet au 30 août environ (Tourisme Landes), avec un poste partagé avec les plages voisines : hors saison, personne ne surveille."
+      ],
+      [
+        "🌀",
+        "Baïnes et courants possibles sur la côte landaise : repère-les depuis la plage."
+      ]
+    ],
+    "tip": "Regarde la mer un moment : la marée change beaucoup la façon dont la houle entre autour de la jetée. Mets-toi à l’eau dans la zone surveillée quand le poste est ouvert.",
+    "photoContext": "Plage du Prévent, Capbreton",
+    "danger": 1,
+    "sky": "#cfe6f7",
+    "sky2": "#8fc2e6",
+    "sea": "#2b86c0",
+    "sea2": "#12608f",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · octobre 2026 · d’après Tourisme Landes (Plage du Prévent), Landes Holidays et Quiksilver (webcam du Prévent) · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-10",
+    "catalogNew": true,
+    "photo": {
+      "file": "D260219-1-Plage du prévent (Capbreton).jpg",
+      "src": "assets/spots/prevent.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:D260219-1-Plage_du_prévent_(Capbreton).jpg",
+      "author": "Tangopaso",
+      "license": "Public domain",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/D260219-1-Plage_du_pr%C3%A9vent_%28Capbreton%29.jpg/1920px-D260219-1-Plage_du_pr%C3%A9vent_%28Capbreton%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1440,
+      "thumb": "assets/spots/thumbs/prevent.webp"
+    }
+  },
+  {
+    "id": "dunes",
+    "name": "Les Dunes — Brétignolles-sur-Mer",
+    "loc": "Vendée, France",
+    "country": "France",
+    "world": "fr",
+    "coords": {
+      "lat": 46.5975,
+      "lon": -1.8526
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf"
+    ],
+    "level": "variable",
+    "desc": "Beach break de sable à Brétignolles-sur-Mer, accessible par l’avenue des Dunes. Selon plages.tv, il marche à partir d’environ un mètre ; en dessous, la vague est molle et le longboard passe mieux ; au-dessus de deux mètres, elle tend à fermer. Une houle longue et régulière donne les meilleures rides.",
+    "dangers": [
+      [
+        "🌀",
+        "Courant et barre parfois difficile à passer, signale Surf-report."
+      ],
+      [
+        "🌊",
+        "Au-dessus de deux mètres, la vague ferme (plages.tv) : évite ces jours-là si tu débutes."
+      ]
+    ],
+    "tip": "Vise une houle longue d’un mètre ou plus, pas plus de deux mètres. Surf-report note un courant et une barre parfois difficile à passer : regarde où les vagues cassent avant d’entrer.",
+    "photoContext": "Plage de Brétignolles-sur-Mer",
+    "danger": 1,
+    "sky": "#cfe6f7",
+    "sky2": "#8fc2e6",
+    "sea": "#2b86c0",
+    "sea2": "#12608f",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · octobre 2026 · d’après plages.tv et Surf-report (Les Dunes) · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-10",
+    "catalogNew": true,
+    "photo": {
+      "file": "Bretignolles-sur-Mer (8840176790).jpg",
+      "src": "assets/spots/dunes.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Bretignolles-sur-Mer_(8840176790).jpg",
+      "author": "oatsy40",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Bretignolles-sur-Mer_%288840176790%29.jpg/1920px-Bretignolles-sur-Mer_%288840176790%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1080,
+      "thumb": "assets/spots/thumbs/dunes.webp"
+    }
+  },
+  {
+    "id": "budbud",
+    "name": "Bud Bud — Les Conches, Longeville-sur-Mer",
+    "loc": "Vendée, France",
+    "country": "France",
+    "world": "fr",
+    "coords": {
+      "lat": 46.3808,
+      "lon": -1.4911
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf"
+    ],
+    "level": "intermediaire",
+    "desc": "Beach break de sable aux Conches, au sud de la baie de Longeville-sur-Mer (accès 16 ou 17 par le chemin de la Forêt). Il casse à gauche et à droite, mieux à marée moyenne à haute. Selon Surf-report et Mondo Surf, c’est l’un des meilleurs beach breaks du coin, avec des vagues parfois tubulaires. Il vise les surfeurs de niveau intermédiaire à confirmé.",
+    "dangers": [
+      [
+        "🌊",
+        "Vagues puissantes quand la houle monte, plus qu’aux Conches voisins (Mondo Surf) : un guide local les décrit comme un vrai défi."
+      ],
+      [
+        "🏖️",
+        "Marée basse risquée : la vague casse sur très peu d’eau (plages.tv)."
+      ],
+      [
+        "👥",
+        "Monde dans l’eau en été, avec un peu de localisme signalé (Mondo Surf)."
+      ]
+    ],
+    "tip": "Cherche une houle d’ouest ou de sud-ouest avec un vent de nord-est à est, surtout en automne et en hiver. Les bancs de sable bougent : regarde la mer avant d’entrer.",
+    "photoContext": "Plage des Conches, Longeville-sur-Mer",
+    "danger": 2,
+    "sky": "#cfe6f7",
+    "sky2": "#8fc2e6",
+    "sea": "#2b86c0",
+    "sea2": "#12608f",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · octobre 2026 · d’après Surf-report, Mondo Surf, plages.tv et in-vendee.com (Bud Bud) · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-10",
+    "catalogNew": true,
+    "photo": {
+      "file": "Longueville Poste de secours les Conches.jpg",
+      "src": "assets/spots/budbud.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Longueville_Poste_de_secours_les_Conches.jpg",
+      "author": "PIERRE ANDRE LECLERCQ",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Longueville_Poste_de_secours_les_Conches.jpg/1920px-Longueville_Poste_de_secours_les_Conches.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1440,
+      "thumb": "assets/spots/thumbs/budbud.webp"
     }
   }
 ]

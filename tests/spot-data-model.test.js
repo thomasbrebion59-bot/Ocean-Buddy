@@ -341,3 +341,18 @@ test('coach expert : la direction du jour passe avant la direction moyenne', () 
   const t = flat({ levels: [r.levels[1]] });
   assert.ok(/Aujourd’hui, la houle arrive d’ouest/.test(t));
 });
+
+test('coach débutant : les blocs de sécurité citent leurs sources (https, datées) et les seuils maison sont annoncés indicatifs', () => {
+  const blocks = coach().levels[0].blocks, by = h => blocks.find(b => b.h === h);
+  for (const h of ['Si tu es emporté', 'Zones surveillées et drapeaux', 'Repérer une baïne ou un courant']) {
+    const b = by(h); assert.ok(b && b.src && b.src.length, h);
+    for (const s of b.src) { assert.match(s.u, /^https:\/\//); assert.match(s.d, /^\d{4}-\d{2}-\d{2}$/); assert.ok(s.l, h); }
+  }
+  const text = flat({ levels: [coach().levels[0]] });
+  assert.doesNotMatch(text, /orange/i);
+  assert.match(text, /jaune/);
+  assert.match(text, /repères indicatifs/);
+  const inter = coach({ level: 'intermediaire' }).levels[1].blocks;
+  assert.ok(inter.find(b => b.h === 'Les priorités au pic').src.length);
+  assert.match(flat({ levels: [{ blocks: inter }] }), /repères indicatifs, sans valeur officielle/);
+});

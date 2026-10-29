@@ -14,8 +14,8 @@ const extra=all.filter(s=>s.editorialStatus==='reviewed');
 const photos=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/sources.json'),'utf8'));
 const legacy=require('../legacy-spots.js');
 const sports=new Set(['surf','bodyboard','plongee','snorkeling','paddle','kayak','baignade','kitesurf','windsurf']);
-test('725 distinct spots: 168 historical, 112 sourced, 152 + 286 September 2026 additions, 7 October 2026 additions',()=>{
- assert.equal(base.length,168);assert.equal(extra.length,112);assert.equal(additions.length,152);assert.equal(additions2.length,286);assert.equal(additions3.length,7);assert.equal(all.length,725);
+test('728 distinct spots: 168 historical, 112 sourced, 152 + 286 September 2026 additions, 10 October 2026 additions',()=>{
+ assert.equal(base.length,168);assert.equal(extra.length,112);assert.equal(additions.length,152);assert.equal(additions2.length,286);assert.equal(additions3.length,10);assert.equal(all.length,728);
  assert.equal(new Set(all.map(s=>s.id)).size,all.length);
  for(const s of all){assert.ok(s.sports.length,s.id);assert.ok(s.sports.every(x=>sports.has(x)),s.id);}
  assert.deepEqual([...base.find(s=>s.id==='uluwatu').sports],['surf']);
@@ -62,7 +62,7 @@ test('every spot shows the six fixed practical rows without inventing missing fa
  assert.ok(ctx.visitRows(sourced).filter(row=>row.verified).length>=3);
  assert.match(ctx.visitGuide(sourced),/consultée le 23\/09\/2026/);
  assert.match(ctx.visitGuide(sourced),/doc\.govt\.nz\/cathedral-cove-walk/);
- const historical=all.find(s=>s.id==='hossegor');
+ const historical=all.find(s=>s.id==='uluwatu'&&!s.visit);
  assert.equal(ctx.visitRows({...historical,visit:{reviewed:'2026-09-23',access:'Text not sourced'}}).filter(row=>row.verified).length,0);
  /* aucune ligne vérifiée : une seule ligne compacte « À vérifier localement » */
  assert.equal((ctx.visitGuide(historical).match(/À vérifier localement/g)||[]).length,1);
@@ -71,7 +71,7 @@ test('every spot shows the six fixed practical rows without inventing missing fa
  assert.equal(typeof all.find(s=>s.id==='saintecroix').visit.localRules,'object');
 });
 test('each published photograph belongs to the destination and has usable attribution',()=>{
- assert.equal(all.length,725);
+ assert.equal(all.length,728);
  assert.equal(Object.keys(photos).length,all.filter(s=>s.photo).length);
  for(const id of ['tamarindo','byronbay']){const p=all.find(s=>s.id===id).photo;assert.equal(p.ai,true,id);assert.equal(p.label,'Illustration IA',id);assert.match(p.caption,/pas une photo du lieu/,id);assert.ok(photos[id],id);}
  for(const s of all.filter(s=>s.photo?.ai))assert.match(s.photo.src,/-ia\.webp$/,s.id);
@@ -202,7 +202,7 @@ test('relecture sécurité : aucun calme promis sans condition, aucun garde-côt
 });
 
 test('retours du 29 octobre 2026 : Capbreton, Seignosse, Saint-Gilles-Croix-de-Vie et voisins vendéens ont leur fiche, trouvable par la recherche',()=>{
- const ids=['santocha','estacade','estagnots','penon','saintgilles','sion','sauzaie'];
+ const ids=['santocha','estacade','estagnots','penon','saintgilles','sion','sauzaie','prevent','dunes','budbud'];
  assert.deepEqual(additions3.map(s=>s.id).sort(),[...ids].sort());
  for(const s of additions3){
   assert.equal(s.world,'fr',s.id);assert.equal(s.country,'France',s.id);assert.ok(s.photo&&/CC BY|Public domain/.test(s.photo.license),s.id);
@@ -211,7 +211,7 @@ test('retours du 29 octobre 2026 : Capbreton, Seignosse, Saint-Gilles-Croix-de-V
  /* recherche : même normalisation que searchable() de app.js (minuscules, sans accents), sur nom + région + pays */
  const norm=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
  const find=q=>all.filter(s=>norm(s.name+' '+s.loc+' '+s.country).includes(norm(q))).map(s=>s.id);
- for(const [q,id] of [['gravière','hossegor'],['graviere','hossegor'],['capbreton','capbreton'],['capbreton','santocha'],['capbreton','estacade'],['seignosse','seignosse'],['seignosse','estagnots'],['seignosse','penon'],['saint-gilles','saintgilles'],['croix-de-vie','saintgilles'],['sion','sion'],['sauzaie','sauzaie'],['bretignolles','sauzaie'],['Brétignolles','sauzaie']])assert.ok(find(q).includes(id),q+' → '+id);
+ for(const [q,id] of [['gravière','hossegor'],['graviere','hossegor'],['capbreton','capbreton'],['capbreton','santocha'],['capbreton','estacade'],['seignosse','seignosse'],['seignosse','estagnots'],['seignosse','penon'],['saint-gilles','saintgilles'],['croix-de-vie','saintgilles'],['sion','sion'],['sauzaie','sauzaie'],['bretignolles','sauzaie'],['Brétignolles','sauzaie'],['prévent','prevent'],['prevent','prevent'],['dunes','dunes'],['bretignolles','dunes'],['bud bud','budbud'],['longeville','budbud']])assert.ok(find(q).includes(id),q+' → '+id);
  /* ni doublon avec les fiches existantes, ni identifiant réutilisé */
  assert.equal(new Set(all.map(s=>s.id)).size,all.length);
  for(const id of ['hossegor','seignosse','capbreton'])assert.ok(all.find(s=>s.id===id&&s.edition===undefined),id);

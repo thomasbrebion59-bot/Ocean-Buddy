@@ -81,5 +81,40 @@
     "width": 1920,
     "height": 1440,
     "thumb": "assets/spots/thumbs/sauzaie.webp"
+  },
+  "prevent": {
+    "file": "D260219-1-Plage du prévent (Capbreton).jpg",
+    "src": "assets/spots/prevent.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:D260219-1-Plage_du_prévent_(Capbreton).jpg",
+    "author": "Tangopaso",
+    "license": "Public domain",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/D260219-1-Plage_du_pr%C3%A9vent_%28Capbreton%29.jpg/1920px-D260219-1-Plage_du_pr%C3%A9vent_%28Capbreton%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1920,
+    "height": 1440,
+    "thumb": "assets/spots/thumbs/prevent.webp"
+  },
+  "dunes": {
+    "file": "Bretignolles-sur-Mer (8840176790).jpg",
+    "src": "assets/spots/dunes.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Bretignolles-sur-Mer_(8840176790).jpg",
+    "author": "oatsy40",
+    "license": "CC BY 2.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/09/Bretignolles-sur-Mer_%288840176790%29.jpg/1920px-Bretignolles-sur-Mer_%288840176790%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1920,
+    "height": 1080,
+    "thumb": "assets/spots/thumbs/dunes.webp"
+  },
+  "budbud": {
+    "file": "Longueville Poste de secours les Conches.jpg",
+    "src": "assets/spots/budbud.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Longueville_Poste_de_secours_les_Conches.jpg",
+    "author": "PIERRE ANDRE LECLERCQ",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Longueville_Poste_de_secours_les_Conches.jpg/1920px-Longueville_Poste_de_secours_les_Conches.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1920,
+    "height": 1440,
+    "thumb": "assets/spots/thumbs/budbud.webp"
   }
 }

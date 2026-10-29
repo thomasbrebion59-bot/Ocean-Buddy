@@ -1901,36 +1901,6 @@
    ]
   },
   {
-   "spot": "hossegor",
-   "path": "desc",
-   "lang": "fr",
-   "file": "catalog",
-   "text": "Beach break mythique des Landes, réputé pour ses tubes puissants et rapides. Le spot a accueilli le Quiksilver Pro France, étape française du circuit mondial, dans les années 2000. Réservé aux surfeurs confirmés.",
-   "status": "sourcé",
-   "checked": "2026-10-20",
-   "sources": [
-    {
-     "url": "https://www.hossegor.fr/?p=1459692",
-     "publisher": "Office de tourisme / site officiel hossegor.fr",
-     "title": "Quiksilver Pro Hossegor : competition, program and info (page Quiksilver Festival 2026)",
-     "consulted": "2026-10-20",
-     "quote": "In the early 2000s, the story continues with the Quiksilver Pro France, French leg of the Championship Tour (CT).",
-     "supports": "Le Quiksilver Pro France a été une étape française du Championship Tour dans les années 2000."
-    },
-    {
-     "url": "https://www.hossegor.fr/?p=1459692",
-     "publisher": "Office de tourisme / site officiel hossegor.fr",
-     "title": "Quiksilver Pro Hossegor : competition, program and info (page Quiksilver Festival 2026)",
-     "consulted": "2026-10-20",
-     "quote": "If it is no longer included directly in the CT, the festival has perpetuated the spirit of the big events",
-     "supports": "Le Quiksilver Festival n'est plus une étape du CT ; il perpétue l'esprit des grands événements."
-    }
-   ],
-   "research": [
-    "faits-1:hossegor:0"
-   ]
-  },
-  {
    "spot": "ichinomiya",
    "path": "dangers[2]",
    "lang": "fr",
@@ -5484,6 +5454,722 @@
    "sources": [],
    "research": [],
    "origin": "carnet.respect"
+  },
+  {
+   "spot": "hossegor",
+   "path": "desc",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Beach break de sable à Hossegor, aux vagues creuses, rapides et lourdes, qui cassent à gauche comme à droite. Il attire surtout des surfeurs expérimentés, par houle d’ouest correcte. Le Quiksilver Pro France, étape française du circuit mondial, a eu lieu à Hossegor dans les années 2000.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.mondo.surf/surf-spot/la-graviere/guide/6348",
+     "publisher": "Mondo Surf (guide de spot)",
+     "title": "La Graviere surf guide",
+     "consulted": "2026-10-29",
+     "quote": "produces hollow, fast, and heavy a-frame waves.",
+     "supports": "Les vagues sont creuses, rapides et lourdes, en A."
+    },
+    {
+     "url": "https://www.mondo.surf/surf-spot/la-graviere/guide/6348",
+     "publisher": "Mondo Surf (guide de spot)",
+     "title": "La Graviere surf guide",
+     "consulted": "2026-10-29",
+     "quote": "attracting experienced surfers, particularly during decent westerly swells.",
+     "supports": "Le spot attire des surfeurs expérimentés, surtout par houle d’ouest."
+    },
+    {
+     "url": "https://www.surf-forecast.com/breaks/La-Graviere",
+     "publisher": "Surf-Forecast (guide de spot)",
+     "title": "Hossegor - La Graviere Surf Guide",
+     "consulted": "2026-10-29",
+     "quote": "The sandbar breaks offer lefts and rights.",
+     "supports": "Le banc de sable donne des gauches et des droites."
+    },
+    {
+     "url": "https://www.hossegor.fr/?p=1459692",
+     "publisher": "Office de tourisme / site officiel hossegor.fr",
+     "title": "Quiksilver Pro Hossegor : competition, program and info (page Quiksilver Festival 2026)",
+     "consulted": "2026-10-29",
+     "quote": "In the early 2000s, the story continues with the Quiksilver Pro France, French leg of the Championship Tour (CT).",
+     "supports": "Le Quiksilver Pro France a été une étape française du Championship Tour dans les années 2000."
+    }
+   ]
+  },
+  {
+   "spot": "hossegor",
+   "path": "tip",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Les débutants doivent s’abstenir. Observe la mer un moment avant d’entrer pour juger la taille et la puissance des vagues.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=12933",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Gravière (Océan)",
+     "consulted": "2026-10-29",
+     "quote": "Débutants s’abstenir",
+     "supports": "Pour le surf, les débutants doivent s’abstenir."
+    }
+   ]
+  },
+  {
+   "spot": "hossegor",
+   "path": "dangers[0]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Vagues puissantes et parfois dangereuses : les débutants doivent s’abstenir.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=12933",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Gravière (Océan)",
+     "consulted": "2026-10-29",
+     "quote": "vagues puissantes, et parfois dangereuses",
+     "supports": "La plage est décrite avec des vagues puissantes et parfois dangereuses."
+    },
+    {
+     "url": "https://www.tourismelandes.com/?p=12933",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Gravière (Océan)",
+     "consulted": "2026-10-29",
+     "quote": "Débutants s’abstenir",
+     "supports": "Pour le surf, les débutants doivent s’abstenir."
+    }
+   ]
+  },
+  {
+   "spot": "hossegor",
+   "path": "dangers[1]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Surveillance en été seulement (en 2026, du 4 juillet au 30 août, de 11 h à 19 h) : renseigne-toi avant d’entrer hors saison.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=12933",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Gravière (Océan)",
+     "consulted": "2026-10-29",
+     "quote": "surveillée du 4 juillet au 30 août, de 11h00 à 19h00",
+     "supports": "Surveillance estivale 2026 de 11 h à 19 h."
+    }
+   ]
+  },
+  {
+   "spot": "hossegor",
+   "path": "dangers[2]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Quand le spot marche, il peut y avoir foule, et la foule peut rendre le surf risqué.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.surf-forecast.com/breaks/La-Graviere",
+     "publisher": "Surf-Forecast (guide de spot)",
+     "title": "Hossegor - La Graviere Surf Guide",
+     "consulted": "2026-10-29",
+     "quote": "When it's working here, it can get crowded.",
+     "supports": "Il peut y avoir foule quand le spot marche."
+    },
+    {
+     "url": "https://www.surf-forecast.com/breaks/La-Graviere",
+     "publisher": "Surf-Forecast (guide de spot)",
+     "title": "Hossegor - La Graviere Surf Guide",
+     "consulted": "2026-10-29",
+     "quote": "Overcrowding can even make surfing hazardous.",
+     "supports": "La foule peut rendre le surf risqué."
+    }
+   ]
+  },
+  {
+   "spot": "hossegor",
+   "path": "zones[La Gravière]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "La Gravière : expert (vagues creuses, rapides et lourdes)",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.mondo.surf/surf-spot/la-graviere/guide/6348",
+     "publisher": "Mondo Surf (guide de spot)",
+     "title": "La Graviere surf guide",
+     "consulted": "2026-10-29",
+     "quote": "produces hollow, fast, and heavy a-frame waves.",
+     "supports": "Les vagues sont creuses, rapides et lourdes."
+    },
+    {
+     "url": "https://www.mondo.surf/surf-spot/la-graviere/guide/6348",
+     "publisher": "Mondo Surf (guide de spot)",
+     "title": "La Graviere surf guide",
+     "consulted": "2026-10-29",
+     "quote": "Advanced",
+     "supports": "Niveau « Advanced » (avancé) dans le guide."
+    }
+   ]
+  },
+  {
+   "spot": "hossegor",
+   "path": "visit.tide",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Mondo Surf donne la marée basse comme la meilleure, de préférence descendante.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.mondo.surf/surf-spot/la-graviere/guide/6348",
+     "publisher": "Mondo Surf (guide de spot)",
+     "title": "La Graviere surf guide",
+     "consulted": "2026-10-29",
+     "quote": "The best time to surf is during low tide when the conditions are optimal.",
+     "supports": "La marée basse est la meilleure."
+    }
+   ]
+  },
+  {
+   "spot": "hossegor",
+   "path": "visit.localRules",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "La plage est surveillée en été (en 2026, du 4 juillet au 30 août, de 11 h à 19 h). Les animaux n’y sont pas admis en été.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=12933",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Gravière (Océan)",
+     "consulted": "2026-10-29",
+     "quote": "surveillée du 4 juillet au 30 août, de 11h00 à 19h00",
+     "supports": "Surveillance estivale 2026 de 11 h à 19 h."
+    },
+    {
+     "url": "https://www.tourismelandes.com/?p=12933",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Gravière (Océan)",
+     "consulted": "2026-10-29",
+     "quote": "animaux non admis en été",
+     "supports": "Les animaux ne sont pas admis en été."
+    }
+   ]
+  },
+  {
+   "spot": "hossegor",
+   "path": "fauna",
+   "lang": "fr",
+   "file": "catalog",
+   "text": null,
+   "status": "retrait",
+   "checked": "2026-10-29",
+   "sources": [],
+   "removed": "Retrait de la ligne « faune » : aucune source citée pour bars, dorades et dauphins."
+  },
+  {
+   "spot": "seignosse",
+   "path": "desc",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Plage de sable de Seignosse. Selon Surf-report, elle est accessible à tous les niveaux selon la houle, à marée haute comme à marée basse, avec des vagues amusantes et puissantes. D’après plages.tv, les bancs de sable, assez stables, donnent des conditions de surf régulières ; au-delà de vagues de 2 m, le spot sature.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.surf-report.com/surf-info/les-bourdaines-seignosse-s1189.html",
+     "publisher": "Surf-report (guide de spot)",
+     "title": "SURF Infos : Les Bourdaines, Seignosse",
+     "consulted": "2026-10-29",
+     "quote": "Tous niveaux",
+     "supports": "Accessible à tous les niveaux."
+    },
+    {
+     "url": "https://www.surf-report.com/surf-info/les-bourdaines-seignosse-s1189.html",
+     "publisher": "Surf-report (guide de spot)",
+     "title": "SURF Infos : Les Bourdaines, Seignosse",
+     "consulted": "2026-10-29",
+     "quote": "on peut y surfer à marée haute comme à marée basse",
+     "supports": "Se surfe à marée haute comme à marée basse."
+    },
+    {
+     "url": "https://www.plages.tv/surf/spot/plage-des-bourdaines-seignosse-40510",
+     "publisher": "plages.tv (guide des plages)",
+     "title": "Surf - Plage des Bourdaines - Seignosse",
+     "consulted": "2026-10-29",
+     "quote": "saturation au-delà des vagues d’une hauteur de 2 mètres",
+     "supports": "Le spot sature au-delà de vagues de 2 m."
+    },
+    {
+     "url": "https://www.plages.tv/surf/spot/plage-des-bourdaines-seignosse-40510",
+     "publisher": "plages.tv (guide des plages)",
+     "title": "Surf - Plage des Bourdaines - Seignosse",
+     "consulted": "2026-10-29",
+     "quote": "La renommée du spot tient aux bancs de sable qui ne bougent pas trop et qui génèrent des conditions de surf régulières.",
+     "supports": "Les bancs de sable, assez stables, donnent des conditions de surf régulières."
+    }
+   ]
+  },
+  {
+   "spot": "seignosse",
+   "path": "tip",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Repère les baïnes depuis la plage et fais attention au courant. Le spot est sensible au vent : il marche mieux avec un vent d’est ou sans vent.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.surf-report.com/surf-info/les-bourdaines-seignosse-s1189.html",
+     "publisher": "Surf-report (guide de spot)",
+     "title": "SURF Infos : Les Bourdaines, Seignosse",
+     "consulted": "2026-10-29",
+     "quote": "attention au courant qui est parfois important",
+     "supports": "Le courant est parfois important."
+    },
+    {
+     "url": "https://www.surf-report.com/surf-info/les-bourdaines-seignosse-s1189.html",
+     "publisher": "Surf-report (guide de spot)",
+     "title": "SURF Infos : Les Bourdaines, Seignosse",
+     "consulted": "2026-10-29",
+     "quote": "Baïnes présentes",
+     "supports": "Des baïnes sont présentes."
+    },
+    {
+     "url": "https://www.seignosse-tourisme.com/en/sport-leisure/seignosse-les-bourdaines-seignosse-en-3738911/",
+     "publisher": "Office de tourisme de Seignosse",
+     "title": "Seignosse Les Bourdaines",
+     "consulted": "2026-10-29",
+     "quote": "Very sensitive to the wind.",
+     "supports": "Le spot est très sensible au vent ; il lui faut un vent d’est ou de l’air calme."
+    }
+   ]
+  },
+  {
+   "spot": "seignosse",
+   "path": "dangers[0]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Baïnes et courants forts, signale Surf-report : le courant est parfois important.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.surf-report.com/surf-info/les-bourdaines-seignosse-s1189.html",
+     "publisher": "Surf-report (guide de spot)",
+     "title": "SURF Infos : Les Bourdaines, Seignosse",
+     "consulted": "2026-10-29",
+     "quote": "Courants forts",
+     "supports": "Courants forts."
+    },
+    {
+     "url": "https://www.surf-report.com/surf-info/les-bourdaines-seignosse-s1189.html",
+     "publisher": "Surf-report (guide de spot)",
+     "title": "SURF Infos : Les Bourdaines, Seignosse",
+     "consulted": "2026-10-29",
+     "quote": "Baïnes présentes",
+     "supports": "Baïnes présentes."
+    },
+    {
+     "url": "https://www.surf-report.com/surf-info/les-bourdaines-seignosse-s1189.html",
+     "publisher": "Surf-report (guide de spot)",
+     "title": "SURF Infos : Les Bourdaines, Seignosse",
+     "consulted": "2026-10-29",
+     "quote": "attention au courant qui est parfois important",
+     "supports": "Le courant est parfois important."
+    }
+   ]
+  },
+  {
+   "spot": "seignosse",
+   "path": "dangers[1]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Le spot sature au-delà de vagues de 2 m.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.plages.tv/surf/spot/plage-des-bourdaines-seignosse-40510",
+     "publisher": "plages.tv (guide des plages)",
+     "title": "Surf - Plage des Bourdaines - Seignosse",
+     "consulted": "2026-10-29",
+     "quote": "saturation au-delà des vagues d’une hauteur de 2 mètres",
+     "supports": "Saturation au-delà de 2 m."
+    },
+    {
+     "url": "https://www.seignosse-tourisme.com/en/sport-leisure/seignosse-les-bourdaines-seignosse-en-3738911/",
+     "publisher": "Office de tourisme de Seignosse",
+     "title": "Seignosse Les Bourdaines",
+     "consulted": "2026-10-29",
+     "quote": "rarely works above 2 meters of swell",
+     "supports": "Le spot marche rarement au-delà de 2 m de houle."
+    }
+   ]
+  },
+  {
+   "spot": "seignosse",
+   "path": "dangers[2]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Surveillance en été (en 2026, du 13 juin au 13 septembre, de 11 h à 19 h du 4 juillet au 30 août) : regarde où est le poste avant d’entrer.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=12699",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage des Bourdaines",
+     "consulted": "2026-10-29",
+     "quote": "12h30 à 18h30 du 13 juin au 3 juillet, 11h à 19h du 4 juillet au 30 août, 12h30 à 18h30 du 31 août au 13 septembre",
+     "supports": "Horaires de surveillance 2026."
+    }
+   ]
+  },
+  {
+   "spot": "seignosse",
+   "path": "visit.tide",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "On peut y surfer à marée haute comme à marée basse, d’après Surf-report.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.surf-report.com/surf-info/les-bourdaines-seignosse-s1189.html",
+     "publisher": "Surf-report (guide de spot)",
+     "title": "SURF Infos : Les Bourdaines, Seignosse",
+     "consulted": "2026-10-29",
+     "quote": "on peut y surfer à marée haute comme à marée basse",
+     "supports": "Marée haute comme basse."
+    }
+   ]
+  },
+  {
+   "spot": "seignosse",
+   "path": "visit.localRules",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "La plage est surveillée en 2026 de 12 h 30 à 18 h 30 du 13 juin au 3 juillet, de 11 h à 19 h du 4 juillet au 30 août, puis de 12 h 30 à 18 h 30 du 31 août au 13 septembre.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=12699",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage des Bourdaines",
+     "consulted": "2026-10-29",
+     "quote": "12h30 à 18h30 du 13 juin au 3 juillet, 11h à 19h du 4 juillet au 30 août, 12h30 à 18h30 du 31 août au 13 septembre",
+     "supports": "Horaires de surveillance 2026."
+    }
+   ]
+  },
+  {
+   "spot": "seignosse",
+   "path": "anecdote",
+   "lang": "fr",
+   "file": "catalog",
+   "text": null,
+   "status": "retrait",
+   "checked": "2026-10-29",
+   "sources": [],
+   "removed": "Retrait de l’anecdote : « l’une des plus grandes forêts plantées d’Europe » et « on surfe au milieu des pins » n’ont aucune source contrôlée."
+  },
+  {
+   "spot": "capbreton",
+   "path": "desc",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Plage du sud de Capbreton. Tourisme Landes décrit des vagues puissantes et rapides, réservées aux surfeurs confirmés. Selon Surf-Forecast, c’est un beach break plutôt exposé, meilleur vers la marée haute, où il y a souvent du monde.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "Les vagues sont puissantes et rapides, réservées aux surfeurs confirmés.",
+     "supports": "Vagues puissantes et rapides, réservées aux surfeurs confirmés."
+    },
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "cette plage du sud de la commune",
+     "supports": "La plage est au sud de la commune."
+    },
+    {
+     "url": "https://www.surf-forecast.com/breaks/La-Piste",
+     "publisher": "Surf-Forecast (guide de spot)",
+     "title": "Capbreton - La Piste Surf Guide",
+     "consulted": "2026-10-29",
+     "quote": "fairly exposed beach break",
+     "supports": "Beach break plutôt exposé."
+    },
+    {
+     "url": "https://www.surf-forecast.com/breaks/La-Piste",
+     "publisher": "Surf-Forecast (guide de spot)",
+     "title": "Capbreton - La Piste Surf Guide",
+     "consulted": "2026-10-29",
+     "quote": "Best around high tide.",
+     "supports": "Meilleur vers la marée haute."
+    },
+    {
+     "url": "https://www.surf-forecast.com/breaks/La-Piste",
+     "publisher": "Surf-Forecast (guide de spot)",
+     "title": "Capbreton - La Piste Surf Guide",
+     "consulted": "2026-10-29",
+     "quote": "Often Crowded.",
+     "supports": "Souvent du monde."
+    }
+   ]
+  },
+  {
+   "spot": "capbreton",
+   "path": "tip",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Ce spot est réservé aux surfeurs confirmés. Observe la mer un moment avant d’entrer, reste loin des blockhaus (baignade et activités nautiques interdites) et mets-toi à l’eau dans la zone surveillée en été.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "Les vagues sont puissantes et rapides, réservées aux surfeurs confirmés.",
+     "supports": "Réservé aux surfeurs confirmés."
+    },
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "La baignade et les activités nautiques sont cependant interdites dans le périmètre immédiat des blockhaus, et le parapente est interdit.",
+     "supports": "Interdictions près des blockhaus."
+    },
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "Surveillance : du 4 juillet au 30 août",
+     "supports": "Surveillance en été."
+    }
+   ]
+  },
+  {
+   "spot": "capbreton",
+   "path": "dangers[0]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Vagues puissantes et rapides, réservées aux surfeurs confirmés.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "Les vagues sont puissantes et rapides, réservées aux surfeurs confirmés.",
+     "supports": "Vagues puissantes et rapides, réservées aux surfeurs confirmés."
+    }
+   ]
+  },
+  {
+   "spot": "capbreton",
+   "path": "dangers[1]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Baignade et activités nautiques interdites aux abords immédiats des blockhaus ; parapente interdit.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "La baignade et les activités nautiques sont cependant interdites dans le périmètre immédiat des blockhaus, et le parapente est interdit.",
+     "supports": "Interdictions près des blockhaus."
+    }
+   ]
+  },
+  {
+   "spot": "capbreton",
+   "path": "dangers[2]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Huit nageurs sauveteurs surveillent la plage en été (en 2026, du 4 juillet au 30 août) : hors saison, renseigne-toi avant d’entrer.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "Huit nageurs sauveteurs civils surveillent cette plage du sud de la commune",
+     "supports": "Huit sauveteurs surveillent la plage."
+    },
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "Surveillance : du 4 juillet au 30 août",
+     "supports": "Surveillance 2026."
+    }
+   ]
+  },
+  {
+   "spot": "capbreton",
+   "path": "dangers[3]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Souvent du monde dans l’eau, signale Surf-Forecast.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.surf-forecast.com/breaks/La-Piste",
+     "publisher": "Surf-Forecast (guide de spot)",
+     "title": "Capbreton - La Piste Surf Guide",
+     "consulted": "2026-10-29",
+     "quote": "Often Crowded.",
+     "supports": "Souvent du monde."
+    }
+   ]
+  },
+  {
+   "spot": "capbreton",
+   "path": "anecdote",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Au large de Capbreton s’ouvre le Gouf, un canyon sous-marin : à 300 m du rivage, le fond plonge brutalement, et le canyon atteint 4 500 m de profondeur dans la plaine abyssale du golfe de Gascogne.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.belambra.fr/guides/destinations/capbreton/gouf-de-capbreton",
+     "publisher": "Belambra (guide de destination)",
+     "title": "Le Gouf de Capbreton",
+     "consulted": "2026-10-29",
+     "quote": "À 300 m du rivage de Capbreton, le fond marin plonge brutalement.",
+     "supports": "À 300 m du rivage, le fond plonge."
+    },
+    {
+     "url": "https://www.belambra.fr/guides/destinations/capbreton/gouf-de-capbreton",
+     "publisher": "Belambra (guide de destination)",
+     "title": "Le Gouf de Capbreton",
+     "consulted": "2026-10-29",
+     "quote": "Le canyon atteint 4 500 m de profondeur dans la plaine abyssale du golfe de Gascogne",
+     "supports": "Le canyon atteint 4 500 m de profondeur."
+    }
+   ]
+  },
+  {
+   "spot": "capbreton",
+   "path": "visit.tide",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Surf-Forecast donne le meilleur vers la marée haute.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.surf-forecast.com/breaks/La-Piste",
+     "publisher": "Surf-Forecast (guide de spot)",
+     "title": "Capbreton - La Piste Surf Guide",
+     "consulted": "2026-10-29",
+     "quote": "Best around high tide.",
+     "supports": "Meilleur vers la marée haute."
+    }
+   ]
+  },
+  {
+   "spot": "capbreton",
+   "path": "visit.localRules",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "La baignade et les activités nautiques sont interdites aux abords immédiats des blockhaus, et le parapente est interdit. Huit nageurs sauveteurs surveillent la plage en été (en 2026, du 4 juillet au 30 août).",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "La baignade et les activités nautiques sont cependant interdites dans le périmètre immédiat des blockhaus, et le parapente est interdit.",
+     "supports": "Interdictions près des blockhaus."
+    },
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "Huit nageurs sauveteurs civils surveillent cette plage du sud de la commune",
+     "supports": "Huit sauveteurs surveillent la plage."
+    },
+    {
+     "url": "https://www.tourismelandes.com/?p=95269",
+     "publisher": "Tourisme Landes (office de tourisme)",
+     "title": "Plage de la Piste",
+     "consulted": "2026-10-29",
+     "quote": "Surveillance : du 4 juillet au 30 août",
+     "supports": "Surveillance 2026."
+    }
+   ]
+  },
+  {
+   "spot": "hossegor",
+   "path": "dangers[3]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Baïnes et courants marins qui peuvent être dangereux sur les plages des Landes, rappelle la préfecture des Landes.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://info.fr/40-landes-alerte-maximale-baines-week-end-3-5/",
+     "publisher": "info.fr (relais d’un communiqué de la préfecture des Landes)",
+     "title": "Landes : alerte maximale aux courants de baïnes ce week-end des 3-5 juillet",
+     "consulted": "2026-10-29",
+     "quote": "les plages des Landes sont marquées par des courants marins qui peuvent être dangereux",
+     "supports": "La préfecture des Landes rappelle que les plages des Landes sont marquées par des courants marins qui peuvent être dangereux (baïnes)."
+    }
+   ]
+  },
+  {
+   "spot": "capbreton",
+   "path": "dangers[4]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Baïnes et courants marins qui peuvent être dangereux sur les plages des Landes, rappelle la préfecture des Landes.",
+   "status": "sourcé",
+   "checked": "2026-10-29",
+   "sources": [
+    {
+     "url": "https://info.fr/40-landes-alerte-maximale-baines-week-end-3-5/",
+     "publisher": "info.fr (relais d’un communiqué de la préfecture des Landes)",
+     "title": "Landes : alerte maximale aux courants de baïnes ce week-end des 3-5 juillet",
+     "consulted": "2026-10-29",
+     "quote": "les plages des Landes sont marquées par des courants marins qui peuvent être dangereux",
+     "supports": "La préfecture des Landes rappelle que les plages des Landes sont marquées par des courants marins qui peuvent être dangereux (baïnes)."
+    }
+   ]
   }
  ]
 }

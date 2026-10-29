@@ -212,6 +212,20 @@ for (const f of HTML_FILES) {
   for (const m of html.matchAll(/<meta[^>]+(?:name|property)="(?:description|apple-mobile-web-app-title|og:title|og:description)"[^>]+content="([^"]+)"/g)) add(m[1], f);
 }
 
+// mobile/client.js : seuls les toasts (toast?.('…')) sont des textes affichés ; le reste du fichier est du code.
+for (const m of fs.readFileSync(path.join(ROOT, 'mobile', 'client.js'), 'utf8').matchAll(/toast\?*\.?\(\s*'((?:[^'\\]|\\.)*)'/g)) {
+  add(unescape(m[1]).replace(/\\'/g, "'"), 'mobile/client.js', true);
+}
+
+// Textes construits par concaténation ou par des fonctions que le scanner ne reconstitue pas :
+// ils ne sont trouvés par aucune règle ci-dessus, donc on les garde explicitement (sinon ils disparaissent
+// de locales/source/fr.json à chaque extraction). À compléter quand un texte affiché n'est pas extrait.
+//   - « Défi validé ! +{0} XP » : addXP(ch.xp, 'Défi validé ! +'+ch.xp+' XP') dans app.js
+const KEEP_KEYS = [
+  'Défi validé ! +{0} XP',
+];
+for (const k of KEEP_KEYS) add(k, 'app.js (conservé)', true);
+
 const keys = [...found.keys()].sort((a, b) => a.localeCompare(b, 'fr'));
 const outDir = path.join(ROOT, 'locales', 'source');
 fs.mkdirSync(outDir, { recursive: true });

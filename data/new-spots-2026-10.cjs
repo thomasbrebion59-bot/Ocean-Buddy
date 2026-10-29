@@ -9,7 +9,8 @@
    - Seignosse : tourismelandes.com/loisir/plage-des-bourdaines, lonelyplanet.fr/destinations/france/les-landes/seignosse, belambra.fr/guides/destinations/seignosse/plages, surf-report.com (Les Bourdaines)
    - Saint-Gilles-Croix-de-Vie : payssaintgilles-tourisme.fr (Grande Plage, Plage de la Sauzaie), atlantic-loire-valley.com
    - Sion-sur-l'Océan : fr/en.wikipedia.org (Sion-sur-l'Océan), plages.tv (Grande plage de Sion), surf-forecast.com/breaks/Sion
-   - La Sauzaie : plages.tv (Plage de la Sauzaie, surf), payssaintgilles-tourisme.fr */
+   - La Sauzaie : plages.tv (Plage de la Sauzaie, surf), payssaintgilles-tourisme.fr
+   - Ajouts du 29 oct. (2e passe) : Le Prévent (tourismelandes.com/loisir/plage-du-prevent, landes-holidays.com, quiksilver webcam ; il est à Capbreton, pas à Seignosse), Les Dunes (plages.tv, surf-report.com), Bud Bud (surf-report.com, mondo.surf, plages.tv, in-vendee.com ; aux Conches, Longeville-sur-Mer) */
 const label=(s)=>'Fiche Ocean Buddy · octobre 2026 · d’après '+s+' · à vérifier localement';
 module.exports=[
 {"id":"santocha","name":"Santocha — Capbreton","loc":"Landes, France","country":"France","world":"fr","lat":43.6458,"lon":-1.4457,"sports":["surf"],"level":"variable","waterType":"sea",
@@ -48,4 +49,22 @@ module.exports=[
  "tip":"Observe la mise à l’eau depuis la plage, entre seulement si tu sais gérer un reef et des rochers, et ne surfe pas seul.",
  "dangers":[["🪨","Mise à l’eau parmi les rochers, tout près des vagues."],["⚡","Vagues creuses sur un reef : réservé aux surfeurs confirmés."],["🛟","Plage surveillée en juillet et août seulement."]],
  "sourceLabel":label("plages.tv et l’Office de tourisme Pays de Saint-Gilles")},
+{"id":"prevent","name":"Le Prévent — Capbreton","loc":"Landes, France","country":"France","world":"fr","lat":43.6496,"lon":-1.4459,"sports":["surf"],"level":"variable","waterType":"sea",
+ "desc":"Plage de Capbreton au sud de la jetée, entre deux épis rocheux, près des anciens blockhaus. Beach break : quand la grosse houle d’hiver dépasse les plages du nord ou que le vent du sud abîme les spots voisins, c’est une solution de repli. Les vagues y sont en général plus petites et plus douces, avec des bancs de sable parfois bien formés.",
+ "tip":"Regarde la mer un moment : la marée change beaucoup la façon dont la houle entre autour de la jetée. Mets-toi à l’eau dans la zone surveillée quand le poste est ouvert.",
+ "dangers":[["🪨","Épis rocheux de chaque côté de la plage : garde tes distances avec les pierres."],["🛟","Surveillance de la plage du 4 juillet au 30 août environ (Tourisme Landes), avec un poste partagé avec les plages voisines : hors saison, personne ne surveille."],["🌀","Baïnes et courants possibles sur la côte landaise : repère-les depuis la plage."]],
+ "photoContext":"Plage du Prévent, Capbreton",
+ "sourceLabel":label("Tourisme Landes (Plage du Prévent), Landes Holidays et Quiksilver (webcam du Prévent)")},
+{"id":"dunes","name":"Les Dunes — Brétignolles-sur-Mer","loc":"Vendée, France","country":"France","world":"fr","lat":46.5975,"lon":-1.8526,"sports":["surf"],"level":"variable","waterType":"sea",
+ "desc":"Beach break de sable à Brétignolles-sur-Mer, accessible par l’avenue des Dunes. Selon plages.tv, il marche à partir d’environ un mètre ; en dessous, la vague est molle et le longboard passe mieux ; au-dessus de deux mètres, elle tend à fermer. Une houle longue et régulière donne les meilleures rides.",
+ "tip":"Vise une houle longue d’un mètre ou plus, pas plus de deux mètres. Surf-report note un courant et une barre parfois difficile à passer : regarde où les vagues cassent avant d’entrer.",
+ "dangers":[["🌀","Courant et barre parfois difficile à passer, signale Surf-report."],["🌊","Au-dessus de deux mètres, la vague ferme (plages.tv) : évite ces jours-là si tu débutes."]],
+ "photoContext":"Plage de Brétignolles-sur-Mer",
+ "sourceLabel":label("plages.tv et Surf-report (Les Dunes)")},
+{"id":"budbud","name":"Bud Bud — Les Conches, Longeville-sur-Mer","loc":"Vendée, France","country":"France","world":"fr","lat":46.3808,"lon":-1.4911,"sports":["surf"],"level":"intermediaire","waterType":"sea",
+ "desc":"Beach break de sable aux Conches, au sud de la baie de Longeville-sur-Mer (accès 16 ou 17 par le chemin de la Forêt). Il casse à gauche et à droite, mieux à marée moyenne à haute. Selon Surf-report et Mondo Surf, c’est l’un des meilleurs beach breaks du coin, avec des vagues parfois tubulaires. Il vise les surfeurs de niveau intermédiaire à confirmé.",
+ "tip":"Cherche une houle d’ouest ou de sud-ouest avec un vent de nord-est à est, surtout en automne et en hiver. Les bancs de sable bougent : regarde la mer avant d’entrer.",
+ "dangers":[["🌊","Vagues puissantes quand la houle monte, plus qu’aux Conches voisins (Mondo Surf) : un guide local les décrit comme un vrai défi."],["🏖️","Marée basse risquée : la vague casse sur très peu d’eau (plages.tv)."],["👥","Monde dans l’eau en été, avec un peu de localisme signalé (Mondo Surf)."]],
+ "photoContext":"Plage des Conches, Longeville-sur-Mer",
+ "sourceLabel":label("Surf-report, Mondo Surf, plages.tv et in-vendee.com (Bud Bud)")},
 ];

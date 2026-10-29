@@ -536,6 +536,7 @@
     stage?.querySelector('.omap-globe')?.replaceChildren();
     ensurePlanet().then(np=>{
       if(planetView)np.jumpTo(planetView);
+      planetTries=0;
       np.setPadding(planetPad());setData();
       if(selected)np.setSelected(selected);
       if(typeof userPos!=='undefined'&&userPos)np.setUser?.(userPos);

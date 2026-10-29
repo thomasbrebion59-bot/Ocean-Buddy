@@ -279,6 +279,7 @@
         out.push([`Vent de ${fmt(w, 0)} km/h.`].concat(side === 'offshore' ? ['Offshore d’après l’orientation du catalogue.'] : side === 'onshore' ? ['Onshore d’après l’orientation du catalogue.'] : side === 'cross' ? ['De travers d’après l’orientation du catalogue.'] : []).concat(['Compare avec la brise thermique de l’après-midi : une session de matin ne vaut pas celle de 16 h.']));
       }
     }
+    if (w != null && level !== 'expert') out.push('Les seuils de vent (10, 20, 30 km/h) sont des repères indicatifs, pas des limites officielles.');
     if (tide) {
       if (level === 'debutant') out.push(tide === 'Descendante' ? 'Marée descendante : l’eau qui repart se concentre dans les chenaux, les baïnes et les courants de retour sont souvent plus forts. Sois plus prudent.' : 'Marée montante : l’eau avance vers la plage, les courants de retour sont en général moins marqués. Reste vigilant malgré tout.');
       else if (level === 'intermediaire') out.push(tide === 'Descendante' ? 'Marée descendante : les bancs se découvrent et les vagues ferment plus vite. Regarde la courbe de marée plus bas pour caler ton heure.' : 'Marée montante : les vagues gagnent en rondeur à mesure que l’eau monte. Regarde la courbe de marée plus bas pour caler ton heure.');
@@ -287,6 +288,14 @@
     if (suit && level !== 'expert') out.push(`Eau à ${fmt(c.t, 0)} °C : prévois une combinaison ${suit}.`);
     return out;
   }
+
+  /* Sources des repères de sécurité (consultées le 29/10/2026) : le navigateur ne garde que l’adresse, le libellé et la date, comme SRC dans spot-experience.js.
+     Les seuils de période (8 / 9–11 / 12 s) et de vent (10 / 20 / 30 km/h) sont des repères maison : ils sont annoncés comme indicatifs, sans source. */
+  const SRC = {
+    sports: { u: 'https://www.service-public.gouv.fr/particuliers/actualites/A15715?lang=fr', l: 'Service-Public.fr (drapeaux de baignade)', d: '2026-10-29' },
+    ffs: { u: 'https://www.surfingfrance.com/actualites/federation/prevention-surf-2022-les-10-regles-d-or-d-une-pratique-sereine-du-surf.html', l: 'Fédération française de surf', d: '2026-10-29' },
+    met: { u: 'https://weather.metoffice.gov.uk/warnings-and-advice/seasonal-advice/travel/out-and-about/understanding-rip-currents', l: 'Met Office (courants de retour)', d: '2026-10-29' }
+  };
 
   function wavesStatic(level, s, c) {
     const blocks = [], zones = Array.isArray(s && s.zones) ? s.zones : [];
@@ -299,30 +308,30 @@
         'La hauteur dit la taille des vagues. La période, en secondes entre deux vagues, dit leur force : plus elle est longue, plus la vague pousse, même à hauteur égale.',
         'Cette hauteur est une valeur de modèle au large. Sur la plage, la vague peut être plus petite ou plus grosse selon les fonds et la marée.',
         'Offshore : le vent souffle de la terre vers la mer. Onshore : de la mer vers la terre. Regarde un drapeau, une fumée ou les rides sur l’eau.',
-        'Le plus simple pour débuter : peu de vent, une houle de moins d’un mètre, une période courte ou moyenne.'
+        'Le plus simple pour débuter : peu de vent, une houle de moins d’un mètre, une période courte ou moyenne. Ce sont des repères indicatifs, pas des seuils officiels.'
       ] });
       blocks.push({ h: 'Repérer une baïne ou un courant', lines: [
         'Cherche une bande où les vagues ne cassent pas, entre deux zones où ça déferle. C’est souvent un chenal où l’eau repart vers le large.',
         'Autres signes : une eau plus sombre ou trouble, de la mousse ou des débris qui s’éloignent du bord, des rides différentes autour.',
         'Sur la côte atlantique française, une baïne est une cuvette entre deux bancs de sable. Elle se remplit à marée montante et se vide vers le large par un chenal.'
-      ].concat(hit.slice(0, 2).map(d => `Pour ce spot, le carnet signale : ${d}${tag}`)) });
+      ].concat(hit.slice(0, 2).map(d => `Pour ce spot, le carnet signale : ${d}${tag}`)), src: [SRC.sports, SRC.ffs] });
       blocks.push({ h: 'Où te mettre à l’eau', lines: [
         'Entre dans une zone surveillée, près du poste de secours, et demande au sauveteur où l’eau est la plus sûre aujourd’hui.',
         'Choisis un endroit où les vagues cassent de la même façon sur toute la ligne, pas dans le chenal calme.',
         'Tant que tu apprends, reste là où tu as pied. Ne va jamais seul à l’eau.'
-      ].concat(calm.slice(0, 2).map(z => `Zone indiquée pour débuter dans le catalogue : ${z.n}${z.d ? ` (${z.d})` : ''}.`)) });
+      ].concat(calm.slice(0, 2).map(z => `Zone indiquée pour débuter dans le catalogue : ${z.n}${z.d ? ` (${z.d})` : ''}.`)), src: [SRC.sports] });
       blocks.push({ h: 'Si tu es emporté', lines: [
-        'Ne lutte pas contre le courant : tu t’épuiserais.',
-        'Garde ta planche ou ton bodyboard, ça flotte.',
+        'Reste calme et ne lutte pas contre le courant : nager contre lui t’épuiserait.',
+        'Garde ta planche ou ton bodyboard, ça flotte. Ne tente pas de rejoindre la plage à la nage sans elle.',
         'Lève un bras et appelle pour être vu.',
-        'Laisse-toi porter : un courant de retour s’arrête après la zone des vagues. Ou nage en parallèle de la plage pour sortir du courant, puis reviens en diagonale.',
-        'Ne nage pas droit vers la plage : tu irais contre le courant.'
-      ] });
+        'Si tu as pied, marche plutôt que de nager. Sinon, nage en parallèle de la plage jusqu’à être sorti du courant, puis rejoins le bord.'
+      ], src: [SRC.met, SRC.ffs] });
       blocks.push({ h: 'Zones surveillées et drapeaux', lines: [
         'Le surf et le bodyboard sont souvent cantonnés à une zone séparée des baigneurs, marquée par des drapeaux. Lis le panneau au poste.',
-        'En France, le drapeau vert, orange ou rouge dit si la baignade est permise ; les couleurs et les règles changent selon le pays et le lieu.',
-        'Si le drapeau est orange ou rouge, demande au poste ce qui est permis pour ta pratique.'
-      ] });
+        'Le surf se pratique dans une zone repérée par un drapeau à damier noir et blanc ; la zone de baignade surveillée est marquée par des drapeaux rayés jaune et rouge. Reste hors de la zone de baignade.',
+        'En France, le drapeau vert dit que la baignade est surveillée sans danger apparent, le jaune qu’elle est surveillée avec un danger limité ou marqué, le rouge qu’elle est interdite. Les règles changent selon le pays et le lieu.',
+        'Si le drapeau est jaune ou rouge, demande au poste ce qui est permis pour ta pratique.'
+      ], src: [SRC.sports, SRC.ffs] });
     } else if (level === 'intermediaire') {
       const own = zones.filter(z => z && z.n && ZONE_RANK[z.l] != null && ZONE_RANK[z.l] <= 1);
       blocks.push({ h: 'Choisir ta fenêtre', lines: [
@@ -337,14 +346,16 @@
       blocks.push({ h: 'Période et puissance', lines: [
         '8 s ou moins : mer du vent, vagues courtes et peu puissantes.',
         'De 9 à 11 s : houle correcte, de la puissance sans surprise.',
-        '12 s et plus : houle de fond, vagues plus puissantes, séries espacées. Prévois plus de rame.'
+        '12 s et plus : houle de fond, vagues plus puissantes, séries espacées. Prévois plus de rame.',
+        'Ces seuils sont des repères indicatifs, sans valeur officielle : le fond et la marée changent la vague.'
       ] });
       blocks.push({ h: 'Les priorités au pic', lines: [
-        'La vague est à celui qui est le plus proche du point de rupture, côté creux.',
-        'Ne double jamais quelqu’un qui est déjà debout sur la vague.',
-        'Pour ramer au large, passe par le côté du pic, pas au milieu de la zone de prise de vague.',
-        'Annonce-toi à voix haute. Si tu tombes, garde ta planche près de toi.'
-      ] });
+        'Une vague, un surfeur : la priorité va à celui qui est le plus à l’intérieur du déferlement, côté creux.',
+        'Ne pars jamais sur une vague s’il y a quelqu’un devant toi, en particulier quelqu’un déjà debout.',
+        'Pour ramer au large, contourne la zone de déferlement, par le côté du pic.',
+        'Annonce-toi à voix haute. Si tu tombes, garde ta planche près de toi.',
+        'Même prioritaire, évite tout danger, et surfe toujours avec un leash en bon état.'
+      ], src: [SRC.ffs] });
       blocks.push({ h: 'Choisir ta planche', lines: [
         'Vagues petites ou molles : plus de volume et plus de longueur pour accrocher les vagues tôt.',
         'Vagues creuses et puissantes : une planche plus fine et un peu plus longue aide à ramer tôt et à tenir la ligne.',
@@ -392,6 +403,7 @@
     if (kind === 'water' && c.t != null && c.t < 20 && !c.suit) lines.push(`Eau à ${fmt(c.t, 0)} °C : l’eau fraîche épuise plus vite qu’on ne le croit. Sors dès que tu as froid.`);
     if (tide) lines.push(tide === 'Descendante' ? 'Marée descendante : l’eau qui repart crée des courants vers le large, surtout dans les chenaux.' : 'Marée montante : l’eau avance vers la plage, les courants sont en général moins marqués.');
     lines.push(level === 'debutant' ? 'Entre dans une zone surveillée et demande conseil au poste de secours ou à l’école.' : level === 'expert' ? 'Prévois ton retour avant de partir et ne sors pas seul.' : 'Repère où tu pourras sortir de l’eau si le vent tombe ou tourne, et préviens un proche.');
+    if (w != null) lines.push('Les seuils de vent (10, 20, 30 km/h) sont des repères indicatifs, pas des limites officielles.');
     return [{ h: 'Lire les conditions du jour', lines }];
   }
 

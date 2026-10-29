@@ -8,7 +8,8 @@ const vm=require('node:vm');
 const root=path.join(__dirname,'..');
 const read=file=>fs.readFileSync(path.join(root,file),'utf8');
 const catalog=JSON.parse(read('data/catalog.json'));
-const spot=id=>{const s=catalog.find(x=>x.id===id);assert.ok(s,id);return s;};
+/* hossegor porte désormais des lignes « visit » sourcées (relecture du 29 oct.) : ces tests veulent une fiche historique sans visit */
+const spot=id=>{const s=catalog.find(x=>x.id===id);assert.ok(s,id);if(id==='hossegor'){const {visit,...plain}=s;return plain;}return s;};
 const {validate,validateVisit,validateCarnet}=require('../scripts/build-ai-catalog.cjs');
 
 /* ---------- Valideur du catalogue (en mémoire : rien n'est écrit) ---------- */

@@ -9,10 +9,10 @@
   'use strict';
   const M = window.SpotDataModel; if (!M) return;
   const URL = {
-    climate: 'assets/data/spot-climate.js?v=4996f5fabfda',
-    lite: 'assets/data/spot-climate-lite.js?v=8a748ff9592b',
-    access: 'assets/data/spot-access.js?v=dd26c73b04f8',
-    wild: 'assets/data/spot-wildlife.js?v=df818ae9b89a'
+    climate: 'assets/data/spot-climate.js?v=0aa30a075ee7',
+    lite: 'assets/data/spot-climate-lite.js?v=d32bc9ece90b',
+    access: 'assets/data/spot-access.js?v=ac2d352ebdf2',
+    wild: 'assets/data/spot-wildlife.js?v=ae49690fa3da'
   };
   const GLOBAL = { climate: 'OCEAN_CLIMATE', lite: 'OCEAN_CLIMATE_LITE', access: 'OCEAN_ACCESS', wild: 'OCEAN_WILDLIFE' };
   const $ = (s, r = document) => r.querySelector(s);
@@ -440,7 +440,8 @@
     try { const d = JSON.parse(localStorage.getItem('oceanbuddy_v1') || 'null'); return (d && d.level) || null; } catch (e) { return null; }
   };
   const coachLine = ln => Array.isArray(ln) ? `<li><b>${esc(ln[0])}</b> ${ln.slice(1).map(esc).join(' ')}</li>` : `<li>${esc(ln)}</li>`;
-  const coachBlocks = blocks => blocks.map(b => `<div class="sd-coach-block"><h5>${esc(b.h)}</h5><ul>${b.lines.map(coachLine).join('')}</ul></div>`).join('');
+  const coachSources = src => Array.isArray(src) ? src.filter(x => x && /^https:\/\//.test(x.u)).map(x => `<a class="sd-coach-note sd-coach-src" style="display:block;margin-top:3px;text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere" href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">Source : ${esc(x.l)} · consultée le ${esc(String(x.d || '').split('-').reverse().join('/'))}</a>`).join('') : '';
+  const coachBlocks = blocks => blocks.map(b => `<div class="sd-coach-block"><h5>${esc(b.h)}</h5><ul>${b.lines.map(coachLine).join('')}</ul>${coachSources(b.src)}</div>`).join('');
   function coachHost() {
     let host = $('#sdCoach');
     if (host) return host;

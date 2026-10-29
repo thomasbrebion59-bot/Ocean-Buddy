@@ -196,20 +196,48 @@
   }
   /* Globe de l’accueil : une seule instance, créée à l’approche de la carte (jamais avant la levée du rideau),
      mise en veille hors écran. La sphère CSS reste affichée jusqu’à la première image éclairée du globe. */
-  let planet=null,planetIO=null,planetBusy=false,planetOn=false;
+  let planet=null,planetIO=null,planetBusy=false,planetOn=false,planetLosses=[],planetTimer=0;
+  const homeShown=()=>body().dataset.screen==='home';
+  const planetLive=()=>planetOn&&!document.hidden&&homeShown();
+  /* Libère le globe (mémoire GPU, textures 4K) ; la sphère CSS reprend la place tant qu'il n'est pas recréé. */
+  function dropPlanet(){
+    clearTimeout(planetTimer);
+    const p=planet;planet=null;
+    home.querySelector('.hf-world-map')?.classList.remove('is-live');
+    try{p?.destroy?.();}catch(_){}
+  }
   function stopPlanet(){
-    planetIO?.disconnect();planetIO=null;planetBusy=false;planetOn=false;
-    planet?.destroy?.();planet=null;
+    planetIO?.disconnect();planetIO=null;planetBusy=false;planetOn=false;planetLosses=[];
+    dropPlanet();
   }
   function loadPlanet(host){
-    if(planetBusy||planet||!window.OceanGlobe?.supported?.())return;
-    planetBusy=true;
-    window.OceanGlobe.create(host,{lighting:'studio',clouds:false,reveal:false,hd:false,onFirstFrame:()=>{if(host.isConnected)host.closest('.hf-world-map')?.classList.add('is-live');}}).then(api=>{
-      planetBusy=false;
-      /* Le rendu a été refait entre-temps (langue) : on libère ce globe. */
-      if(!host.isConnected){api.destroy();return;}
-      planet=api;api.setActive(planetOn&&!document.hidden);
+    if(planetBusy||planet||!planetLive()||!window.OceanGlobe?.supported?.())return;
+    planetBusy=true;let made=null;
+    window.OceanGlobe.create(host,{lighting:'studio',clouds:false,reveal:false,hd:false,
+      onFirstFrame:()=>{if(host.isConnected&&made&&made===planet)host.closest('.hf-world-map')?.classList.add('is-live');},
+      onContextLost:()=>{if(made&&made===planet)onPlanetLost();}
+    }).then(api=>{
+      planetBusy=false;made=api;
+      /* Le rendu a été refait entre-temps (langue) ou l'accueil n'est plus affiché : on libère ce globe. */
+      if(!host.isConnected||!planetIO||!planetLive()){api.destroy();return;}
+      planet=api;api.setActive(true);
     }).catch(()=>{planetBusy=false;});
+  }
+  /* Contexte WebGL retiré par le système : le globe est libéré (la sphère CSS reste visible, pas de cadre vide),
+     puis recréé s'il est encore à l'écran. Plus de 3 pertes en une minute : on garde la sphère CSS. */
+  function onPlanetLost(){
+    const now=Date.now();planetLosses=[...planetLosses.filter(t=>now-t<60000),now];
+    dropPlanet();
+    if(planetLosses.length>3)return;
+    planetTimer=setTimeout(syncPlanet,700);
+  }
+  /* Accueil non affiché (Explorer, fiche…) ou page cachée : le globe est libéré ; il revient avec l'accueil. */
+  function syncPlanet(){
+    if(!planetIO)return;
+    const host=home.querySelector('[data-hf-globe]');if(!host)return;
+    if(!homeShown()||document.hidden){if(planet&&!homeShown())dropPlanet();else planet?.setActive(false);return;}
+    if(planet)planet.setActive(planetOn);
+    else if(planetOn)loadPlanet(host);
   }
   function watchPlanet(){
     if(Boot&&!Boot.lifted)return;
@@ -217,12 +245,12 @@
     const host=home.querySelector('[data-hf-globe]');if(!host||!window.IntersectionObserver)return;
     planetIO=new IntersectionObserver(([e])=>{
       planetOn=!!e?.isIntersecting;
-      if(planet)planet.setActive(planetOn&&!document.hidden);
-      else if(planetOn)loadPlanet(host);
+      syncPlanet();
     },{rootMargin:'240px 0px'});
     planetIO.observe(host);
   }
-  document.addEventListener('visibilitychange',()=>{planet?.setActive(planetOn&&!document.hidden);});
+  document.addEventListener('visibilitychange',syncPlanet);
+  window.addEventListener('ocean:navigate',()=>setTimeout(syncPlanet,0));
 
   /* Carrousel : glisser, ou défilement automatique toutes les 6 s (sauf mouvement réduit ou après un geste). */
   let heroTimer=0,lastTouch=0;
