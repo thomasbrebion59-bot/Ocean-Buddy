@@ -27873,7 +27873,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "En-Vau calanque 1.jpg",
       "src": "assets/spots/envau.webp",
@@ -27940,7 +27940,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -27993,7 +27993,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Ste marguerite vue de st honorat.JPG",
       "src": "assets/spots/lerins.webp",
@@ -28058,7 +28058,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Plage de Pampelonne - Vue generale.jpg",
       "src": "assets/spots/pampelonne.webp",
@@ -28121,7 +28121,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -28173,7 +28173,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Salagou Lake, Celles cf01.jpg",
       "src": "assets/spots/salagou.webp",
@@ -28239,7 +28239,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Aerial image of Lac de Monteynard-Avignonet (view from the south).jpg",
       "src": "assets/spots/monteynard.webp",
@@ -28305,7 +28305,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "0020 Pont d'Arc - Ardèche.jpg",
       "src": "assets/spots/pontdarc.webp",
@@ -28366,7 +28366,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Gageac01.jpg",
       "src": "assets/spots/roquegageac.webp",
@@ -28427,7 +28427,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -28482,7 +28482,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -28534,7 +28534,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Guerlédan 2026 01.jpg",
       "src": "assets/spots/guerledan.webp",
@@ -28597,7 +28597,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Lac de Vassivière, depuis l'île.jpg",
       "src": "assets/spots/vassiviere.webp",
@@ -28660,7 +28660,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -28709,7 +28709,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -28760,7 +28760,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Plage de la Conche des Baleines.jpg",
       "src": "assets/spots/conchebaleines.webp",
@@ -28825,7 +28825,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -28882,7 +28882,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Cala du Chiesa - îles Lavezzi.jpg",
       "src": "assets/spots/lavezzi.webp",
@@ -28948,7 +28948,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Plage de Saleccia .jpg",
       "src": "assets/spots/saleccia.webp",
@@ -29011,7 +29011,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Porto-Vecchio plage de Santa Giulia.jpg",
       "src": "assets/spots/santagiulia.webp",
@@ -29076,7 +29076,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Enrevseluj",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/01/Vue_du_Moule_%C3%A0_partir_de_la_c%C3%B4te_entre_La_Rosette_et_Palais-Sainte-Marguerite.jpg/1920px-Vue_du_Moule_%C3%A0_partir_de_la_c%C3%B4te_entre_La_Rosette_et_Palais-Sainte-Marguerite.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -29146,7 +29146,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Les portes du paradis.jpg",
       "src": "assets/spots/petiteterre.webp",
@@ -29269,7 +29269,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Plage de Grande Anse vers le sud.JPG",
       "src": "assets/spots/grandeanse_deshaies.webp",
@@ -29330,7 +29330,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -29381,7 +29381,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -29431,7 +29431,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Martinique Beach (Salines).jpg",
       "src": "assets/spots/salines_mq.webp",
@@ -29497,7 +29497,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Orient Bay, SXM island in the Caribbean.JPG",
       "src": "assets/spots/orientbay.webp",
@@ -29563,7 +29563,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "N'Gouja 2.jpg",
       "src": "assets/spots/ngouja.webp",
@@ -29663,7 +29663,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Bore Beach - panoramio.jpg",
       "src": "assets/spots/borestranda.webp",
@@ -29776,7 +29776,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Gerd Eichmann",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/Saltstraumen-34-2019-gje.jpg/1920px-Saltstraumen-34-2019-gje.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -29839,7 +29839,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Varberg Apelviken december 2011 (10).JPG",
       "src": "assets/spots/apelviken.webp",
@@ -29900,7 +29900,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -29956,7 +29956,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Bengt Nyman",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Koster%C3%B6arna_islets.jpg/1920px-Koster%C3%B6arna_islets.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -30066,7 +30066,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Ambrionix",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/68/Strand_Hvide_Sande.jpg/1920px-Strand_Hvide_Sande.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -30189,7 +30189,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Arne Müseler",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Lakolk_beach_R%C3%B8m%C3%B8_2.jpg/1920px-Lakolk_beach_R%C3%B8m%C3%B8_2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -30252,7 +30252,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Linnansaari1.jpg",
       "src": "assets/spots/linnansaari.webp",
@@ -30314,7 +30314,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Tiree - Tràigh Baile a' Mhuilinn - geograph.org.uk - 6889619.jpg",
       "src": "assets/spots/tiree.webp",
@@ -30376,7 +30376,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Mario Sánchez Prada from Staines, United Kingdom",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Freshwater_West_beach_%2815367597384%29.jpg/1920px-Freshwater_West_beach_%2815367597384%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -30438,7 +30438,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Sennen - Whitesands Beach - Doug Parry.jpg",
       "src": "assets/spots/sennen.webp",
@@ -30500,7 +30500,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Cornwall Kynance Cove 03.jpg",
       "src": "assets/spots/kynance.webp",
@@ -30560,7 +30560,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Robin Mais",
       "download": "https://upload.wikimedia.org/wikipedia/commons/2/26/Easky_Beach_-_geograph.org.uk_-_2837641.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
@@ -30659,7 +30659,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Holger Uwe Schmitt",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/%22Strandspiegel%22_03.jpg/1920px-%22Strandspiegel%22_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -30721,7 +30721,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Fantaglobe11",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/51/2017-06-04_Ellemeet_Brouwersdam_%28panorama%29.jpg/1920px-2017-06-04_Ellemeet_Brouwersdam_%28panorama%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -30783,7 +30783,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Meine Mutter (Erlaubnis liegt vor)",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/32/2016-08-02_Strand_Sankt-Peter-Ording_43.jpg/1920px-2016-08-02_Strand_Sankt-Peter-Ording_43.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -30845,7 +30845,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "kkic",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/03/Morze_Baltyckie_Chalupy.jpg/1920px-Morze_Baltyckie_Chalupy.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -30908,7 +30908,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Aerial image of the Walchensee (view from the southwest).jpg",
       "src": "assets/spots/walchensee.webp",
@@ -30968,7 +30968,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Surfer auf der Eisbachwelle Bild 3 2022-11-19.jpg",
       "src": "assets/spots/eisbach.webp",
@@ -31033,7 +31033,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Lake Silvaplana - Kite surfers' paradise.jpg",
       "src": "assets/spots/silvaplana.webp",
@@ -31095,7 +31095,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Christian Holzinger pixelatelier",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/89/Podersdorf_am_See%2C_Austria_%28Unsplash%29.jpg/1920px-Podersdorf_am_See%2C_Austria_%28Unsplash%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -31157,7 +31157,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Lake Bled from the Mountain.jpg",
       "src": "assets/spots/bled.webp",
@@ -31217,7 +31217,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Soča River Panorama.jpg",
       "src": "assets/spots/soca.webp",
@@ -31279,7 +31279,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Christo",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/19/Si%C3%B3fok%2C_Balaton%2C_85.jpg/1920px-Si%C3%B3fok%2C_Balaton%2C_85.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -31341,7 +31341,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Jocelyn Erskine-Kellie",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Kaneo%2C_Lake_Ohrid.jpg/1920px-Kaneo%2C_Lake_Ohrid.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -31403,7 +31403,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Horcrux92",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/0f/Lago_di_Como_visto_da_Colico.jpg/1920px-Lago_di_Como_visto_da_Colico.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -31464,7 +31464,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "fadda  domenico ange…",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/55/Porto_pollo_-l%27isuledda_-_panoramio.jpg/1920px-Porto_pollo_-l%27isuledda_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -31525,7 +31525,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "La Pelosa beach, north Sardinia (Italy) (24167750496).jpg",
       "src": "assets/spots/pelosa.webp",
@@ -31640,7 +31640,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Cala Luna 2017.jpg",
       "src": "assets/spots/calaluna.webp",
@@ -31702,7 +31702,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Isola di Tavolara (01).JPG",
       "src": "assets/spots/tavolara.webp",
@@ -31763,7 +31763,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "The Cosmonaut",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/93/Cala_Tonnarella_dell%27Uzzo3.jpg/1920px-Cala_Tonnarella_dell%27Uzzo3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -31824,7 +31824,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Arcona B&amp;B",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c6/Favignana_Cala_Rossa_3_-_panoramio.jpg/1920px-Favignana_Cala_Rossa_3_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -31886,7 +31886,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Lampedusa (9069354181).jpg",
       "src": "assets/spots/conigli.webp",
@@ -31946,7 +31946,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Federico-Grillo.jpg",
       "src": "assets/spots/stagnone.webp",
@@ -32008,7 +32008,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Davide Mauro",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/Porto_di_San_Fruttuoso.jpg/1920px-Porto_di_San_Fruttuoso.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -32073,7 +32073,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Polignano a mare -Lama Monachile.jpg",
       "src": "assets/spots/polignano.webp",
@@ -32135,7 +32135,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Formentera. Les Illetes. Platja de n'Adolf.jpg",
       "src": "assets/spots/illetes.webp",
@@ -32196,7 +32196,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Cala Conta 17 May 2011.JPG",
       "src": "assets/spots/calacomte.webp",
@@ -32256,7 +32256,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Yaroslav Syubayev",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a1/Es_Trenc_Winter.jpg/1920px-Es_Trenc_Winter.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -32318,7 +32318,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Pimlico27",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9b/Cap_de_Creus%2C_Catalonia.jpg/1920px-Cap_de_Creus%2C_Catalonia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -32380,7 +32380,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Küste bei Monsul14.jpg",
       "src": "assets/spots/monsul.webp",
@@ -32441,7 +32441,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "La Restinga El Hierro.JPG",
       "src": "assets/spots/larestinga.webp",
@@ -32503,7 +32503,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Bengt Nyman",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Playa_de_las_Canteras_2016_70.jpg/1920px-Playa_de_las_Canteras_2016_70.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -32563,7 +32563,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Piscinas naturais - Porto Moniz - Madeira 01.jpg",
       "src": "assets/spots/portomoniz.webp",
@@ -32625,7 +32625,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Alexkom000",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/2026-06-21_Berlengas_01.jpg/1920px-2026-06-21_Berlengas_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -32685,7 +32685,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Myrtos2.JPG",
       "src": "assets/spots/myrtos.webp",
@@ -32767,7 +32767,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Porto katsiki (Unsplash).jpg",
       "src": "assets/spots/portokatsiki.webp",
@@ -32827,7 +32827,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Vasiliki 6311.JPG",
       "src": "assets/spots/vassiliki.webp",
@@ -32888,7 +32888,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Peninsula of Prasonisi and Prasonisi Kite Beach. Rhodes, Greece.jpg",
       "src": "assets/spots/prasonisi.webp",
@@ -32948,7 +32948,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Ελαφονήσι 1287.jpg",
       "src": "assets/spots/elafonisi.webp",
@@ -33010,7 +33010,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Sailing yachts near the caves at Kleftiko on Milos Island, Greece.jpg",
       "src": "assets/spots/kleftiko.webp",
@@ -33071,7 +33071,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -33125,7 +33125,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Kamenjak fishing boat1.jpg",
       "src": "assets/spots/kamenjak.webp",
@@ -33186,7 +33186,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "2014-7-Pelješac Viganj (2a).JPG",
       "src": "assets/spots/viganj.webp",
@@ -33247,7 +33247,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -33296,7 +33296,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -33345,7 +33345,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -33395,7 +33395,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Cape Greco view 3.jpg",
       "src": "assets/spots/capegreco.webp",
@@ -33457,7 +33457,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Ölüdeniz lagoon.jpg",
       "src": "assets/spots/oludeniz.webp",
@@ -33517,7 +33517,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Alacati Bay - windsurfing competition area - panoramio.jpg",
       "src": "assets/spots/alacati.webp",
@@ -33579,7 +33579,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -33629,7 +33629,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -33680,7 +33680,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -33734,7 +33734,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Diego Delso",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9d/Flamencos_comunes_%28Phoenicopterus_roseus%29%2C_Walvis_Bay%2C_Namibia%2C_2018-08-05%2C_DD_22.jpg/1920px-Flamencos_comunes_%28Phoenicopterus_roseus%29%2C_Walvis_Bay%2C_Namibia%2C_2018-08-05%2C_DD_22.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -33795,7 +33795,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Victoria Bay, near George.jpg",
       "src": "assets/spots/victoriabay.webp",
@@ -33857,7 +33857,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Coffee Bay.jpg",
       "src": "assets/spots/coffeebay.webp",
@@ -33918,7 +33918,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -33969,7 +33969,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Simon’s Town (ZA), Boulders Beach, Penguin Colony -- 2024 -- 3401.jpg",
       "src": "assets/spots/boulders.webp",
@@ -34030,7 +34030,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "I've Got It On Film!",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/35/Protea_Banks_-_51862615669.jpg/1920px-Protea_Banks_-_51862615669.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -34094,7 +34094,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Kommetjie, Long Beach and Slangkop Lighthouse.jpg",
       "src": "assets/spots/longbeach_kom.webp",
@@ -34155,7 +34155,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Vilaculos beach Mozambique.jpg",
       "src": "assets/spots/vilankulo.webp",
@@ -34217,7 +34217,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Mafia Island (51554991378).jpg",
       "src": "assets/spots/mafia.webp",
@@ -34278,7 +34278,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Zazibar, kendwa beach (8300433141).jpg",
       "src": "assets/spots/kendwa.webp",
@@ -34339,7 +34339,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Hugh Lunnon",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Swimming_with_Dolphins.jpg/1920px-Swimming_with_Dolphins.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -34400,7 +34400,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Thomei08",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6d/Numibia.jpg/1920px-Numibia.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -34461,7 +34461,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Elphinstone Reef.jpg",
       "src": "assets/spots/elphinstone.webp",
@@ -34523,7 +34523,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Beach of Soma Bay, Egypt (51223045581).jpg",
       "src": "assets/spots/somabay.webp",
@@ -34584,7 +34584,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Windsurfer, Laguna, Dahab.jpg",
       "src": "assets/spots/dahablagoon.webp",
@@ -34646,7 +34646,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Giftun island.jpg",
       "src": "assets/spots/giftun.webp",
@@ -34707,7 +34707,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Ariarymadachoix",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/Baie_de_sakalava_09.jpg/1920px-Baie_de_sakalava_09.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -34770,7 +34770,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Ile-aux-Nattes.jpg",
       "src": "assets/spots/saintemarie.webp",
@@ -34832,7 +34832,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Turquoise waters at Trou aux Biches Beach, Mauritius (53696897047).jpg",
       "src": "assets/spots/troubiches.webp",
@@ -34893,7 +34893,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Baie Ternay, Mahe, Seychelles.jpg",
       "src": "assets/spots/baieternay.webp",
@@ -34955,7 +34955,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Anse Intendance Mahe Seychelles 1.jpg",
       "src": "assets/spots/anseintendance.webp",
@@ -35017,7 +35017,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Krabaa.anis",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/Vue_Panoramique_de_la_Plage_Tabarka.jpg/1920px-Vue_Panoramique_de_la_Plage_Tabarka.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -35079,7 +35079,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Windsurf en Moulay.jpg",
       "src": "assets/spots/moulaybouzerktoun.webp",
@@ -35142,7 +35142,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Cape McLear, Malawi (2498435659).jpg",
       "src": "assets/spots/capemaclear.webp",
@@ -35203,7 +35203,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Eilat-coral-beach-reserve-a.JPG",
       "src": "assets/spots/eilat.webp",
@@ -35267,7 +35267,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Anagoria",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/15/20211122_Sunrise_over_Dead_Sea_at_Ein_Bokek_Israel_anagoria.jpg/1920px-20211122_Sunrise_over_Dead_Sea_at_Ein_Bokek_Israel_anagoria.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -35329,7 +35329,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Tortuga carey (Eretmochelys imbricata), islas Ad Dimaniyat, Omán, 2024-08-13, DD 69.jpg",
       "src": "assets/spots/daymaniyat.webp",
@@ -35391,7 +35391,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Dhow in the fjords of Khasab, Oman - panoramio.jpg",
       "src": "assets/spots/musandam.webp",
@@ -35453,7 +35453,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "IvaTheCat",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ae/Kite_Beach_with_a_view_of_Burj_Al_Arab.jpg/1920px-Kite_Beach_with_a_view_of_Burj_Al_Arab.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -35513,7 +35513,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Emus Usboko",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Nemberala%2C_West_Rote%2C_Rote_Ndao_Regency%2C_East_Nusa_Tenggara%2C_Indonesia_-_panoramio.jpg/1920px-Nemberala%2C_West_Rote%2C_Rote_Ndao_Regency%2C_East_Nusa_Tenggara%2C_Indonesia_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -35574,7 +35574,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Sunrise Batu karas Pangandaran.jpg",
       "src": "assets/spots/batukaras.webp",
@@ -35634,7 +35634,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Gerupuk Beach.jpg",
       "src": "assets/spots/gerupuk.webp",
@@ -35696,7 +35696,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "WiDi",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6b/Banda_Pisang.jpg/1920px-Banda_Pisang.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -35757,7 +35757,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Stingless jellyfish.jpg",
       "src": "assets/spots/kakaban.webp",
@@ -35817,7 +35817,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Sims8899",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/76/Beautiful_view_from_Pura_Island_-_Alor_-_East_Nusa_Tenggara.jpg/1920px-Beautiful_view_from_Pura_Island_-_Alor_-_East_Nusa_Tenggara.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -35917,7 +35917,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "andre oortgijs",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7a/Colorful_underwater_world%2C_Mabini_Batangas_-_panoramio_%2811%29.jpg/1920px-Colorful_underwater_world%2C_Mabini_Batangas_-_panoramio_%2811%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -35978,7 +35978,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Firth McEachern",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/2e/Puerto_Galera_underwater_%282%29.jpg/1920px-Puerto_Galera_underwater_%282%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -36038,7 +36038,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Emman Asuncion Foronda",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Surfing_Capital_of_the_Northern_Philippines.jpg/1920px-Surfing_Capital_of_the_Northern_Philippines.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -36100,7 +36100,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Rbacker23",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Baler_Aurora.jpg/1920px-Baler_Aurora.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -36161,7 +36161,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -36212,7 +36212,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Pasir Panjang, Pulau Redang, Malaysia (192488359).jpg",
       "src": "assets/spots/redang.webp",
@@ -36274,7 +36274,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Manukan Island Beach.jpg",
       "src": "assets/spots/tarpark.webp",
@@ -36336,7 +36336,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Jacek Lesniowski",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/Kata_Beach_November_2011_-_panoramio.jpg/1920px-Kata_Beach_November_2011_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -36396,7 +36396,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -36446,7 +36446,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Hon Mun island (Hòn Mun), Cam Ranh, Nha Trang, Việt Nam 20140518 105634 (taken with Samsung Galaxy Note 3).jpg",
       "src": "assets/spots/honmun.webp",
@@ -36507,7 +36507,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Lan Ha Bay-Cat Ba Vietnam-Andres Larin.jpg",
       "src": "assets/spots/lanha.webp",
@@ -36568,7 +36568,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Christophe95",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/My_Khe_Beach_9.jpg/1920px-My_Khe_Beach_9.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -36630,7 +36630,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Hòn Bảy Cạnh Côn Đảo - panoramio.jpg",
       "src": "assets/spots/condao.webp",
@@ -36691,7 +36691,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Sok San Beach bay Koh Rong.jpg",
       "src": "assets/spots/kohrong.webp",
@@ -36753,7 +36753,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Biswajit Majumdar",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f4/Palolem_beach%2CGoa_-_panoramio.jpg/1920px-Palolem_beach%2CGoa_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -36814,7 +36814,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "NETRANI ISLAND(Arabian sea).jpg",
       "src": "assets/spots/netrani.webp",
@@ -36874,7 +36874,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Peaceful and spiritual destination on the banks of the sacred River Ganga.jpg",
       "src": "assets/spots/rishikesh.webp",
@@ -36934,7 +36934,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Gsnewid",
       "download": "https://upload.wikimedia.org/wikipedia/commons/1/15/Kovalam%28Covelang%29_beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
@@ -36996,7 +36996,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Abishek Palraj",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Aerial_view_of_Mirissa_beach%2C_Srilanka.jpg/1920px-Aerial_view_of_Mirissa_beach%2C_Srilanka.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -37057,7 +37057,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Pigeon Island National Park, Trincomalee.jpg",
       "src": "assets/spots/pigeonisland.webp",
@@ -37117,7 +37117,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -37167,7 +37167,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -37217,7 +37217,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Niijima Habushiura Beach.jpg",
       "src": "assets/spots/niijima.webp",
@@ -37277,7 +37277,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -37327,7 +37327,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Yoshino beach - panoramio.jpg",
       "src": "assets/spots/yoshino.webp",
@@ -37387,7 +37387,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -37436,7 +37436,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -37487,7 +37487,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -37537,7 +37537,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -37587,7 +37587,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "HK HoiHaWan.JPG",
       "src": "assets/spots/hoihawan.webp",
@@ -37653,7 +37653,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -37704,7 +37704,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -37755,7 +37755,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Lady Elliot Island.jpg",
       "src": "assets/spots/ladyelliot.webp",
@@ -37821,7 +37821,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Tangalooma Wrecks, Moreton Island.jpg",
       "src": "assets/spots/tangalooma.webp",
@@ -37884,7 +37884,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "View of Main Beach from Point Lookout (North Stradbroke Island).JPG",
       "src": "assets/spots/pointlookout.webp",
@@ -37945,7 +37945,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Australia agnes water beach.jpg",
       "src": "assets/spots/agneswater.webp",
@@ -38004,7 +38004,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Crescent Head.jpg",
       "src": "assets/spots/crescenthead.webp",
@@ -38064,7 +38064,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Angourie Point.jpg",
       "src": "assets/spots/angourie.webp",
@@ -38129,7 +38129,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "North Narrabeen sand.JPG",
       "src": "assets/spots/narrabeen.webp",
@@ -38190,7 +38190,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -38239,7 +38239,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Cape Woolamai coastline.jpg",
       "src": "assets/spots/woolamai.webp",
@@ -38299,7 +38299,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Wilsons Promontory National Park (AU), Squeaky Beach -- 2019 -- 1644.jpg",
       "src": "assets/spots/squeaky.webp",
@@ -38360,7 +38360,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Wineglass Bay Beach.jpg",
       "src": "assets/spots/wineglass.webp",
@@ -38422,7 +38422,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "00 1698 Australien - Busselton Jetty.jpg",
       "src": "assets/spots/busselton.webp",
@@ -38483,7 +38483,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Lancelin beach, 2015 (01).JPG",
       "src": "assets/spots/lancelin.webp",
@@ -38551,7 +38551,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Korkut Tas",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f0/Goat_Island_-_panoramio.jpg/1920px-Goat_Island_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -38613,7 +38613,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -38667,7 +38667,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Cruising Milford Sound NZ (26555449925).jpg",
       "src": "assets/spots/milford.webp",
@@ -38728,7 +38728,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "St. Clair Beach Dunedin.jpg",
       "src": "assets/spots/stclair.webp",
@@ -38789,7 +38789,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -38839,7 +38839,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Manta rays, Naviti island, Yasawa, Fiji (1) - August 2016.jpg",
       "src": "assets/spots/drawaqa.webp",
@@ -38969,7 +38969,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "039 Sunset at Tikehau (French Polynesia) Photo by Giles Laurent.jpg",
       "src": "assets/spots/tikehau.webp",
@@ -39057,7 +39057,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Ile des Pins - Piscine naturelle d'Oro 1.jpg",
       "src": "assets/spots/iledespins.webp",
@@ -39118,7 +39118,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Bahnfrend",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Jinek_Bay%2C_Lifou%2C_New_Caledonia%2C_2007_%285%29.JPG/1920px-Jinek_Bay%2C_Lifou%2C_New_Caledonia%2C_2007_%285%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -39182,7 +39182,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Phare Amédée New Caledonia (79554641).jpeg",
       "src": "assets/spots/amedee.webp",
@@ -39243,7 +39243,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Champagne Beach Espiritu Santo (29173575952).jpg",
       "src": "assets/spots/champagnebeach.webp",
@@ -39308,7 +39308,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Bonegi Beach.jpg",
       "src": "assets/spots/bonegi.webp",
@@ -39370,7 +39370,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -39420,7 +39420,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "amanderson2",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4c/East_view_with_fales_Taufua_Beach_Fales_Samoa.jpg/1920px-East_view_with_fales_Taufua_Beach_Fales_Samoa.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -39483,7 +39483,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Cook Islands IMG 4554 - Version 2 (8453053518).jpg",
       "src": "assets/spots/muri.webp",
@@ -39544,7 +39544,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -39595,7 +39595,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -39646,7 +39646,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Manta in German Channel Palau (12672994784).jpg",
       "src": "assets/spots/germanchannel.webp",
@@ -39710,7 +39710,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Lagoa Azul no Lençóis Maranhenses.jpg",
       "src": "assets/spots/lencois.webp",
@@ -39772,7 +39772,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Abrolhos Marine National ParkRobertoCostaPinto22.jpg",
       "src": "assets/spots/abrolhos.webp",
@@ -39833,7 +39833,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Praia Grande - Ilha do Mel.jpg",
       "src": "assets/spots/ilhadomel.webp",
@@ -39898,7 +39898,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Praia da Silveira - Garopaba - SC - panoramio.jpg",
       "src": "assets/spots/silveira.webp",
@@ -39960,7 +39960,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Rodrigo Soldon from Rio de Janeiro, Brazil",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/ac/Guarda_do_Emba%C3%BA%2C_Santa_Catarina%2C_Brasil_%283590991459%29.jpg/1920px-Guarda_do_Emba%C3%BA%2C_Santa_Catarina%2C_Brasil_%283590991459%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -40025,7 +40025,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Arpoador (67693251).jpeg",
       "src": "assets/spots/arpoador.webp",
@@ -40086,7 +40086,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Isaqui costa gomes",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/be/Taiba%2Cce.jpg/1920px-Taiba%2Cce.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -40146,7 +40146,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Katita Alves",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/74/PI_Barra_Grande_-_Piaui.jpg/1920px-PI_Barra_Grande_-_Piaui.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -40206,7 +40206,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Ilha do guajiru - itarema - ceara.jpg",
       "src": "assets/spots/guajiru.webp",
@@ -40268,7 +40268,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Lagoa do Paraiso, Jericoacoara.jpg",
       "src": "assets/spots/lagoaparaiso.webp",
@@ -40329,7 +40329,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Segunda praia - panoramio.jpg",
       "src": "assets/spots/morrosp.webp",
@@ -40391,7 +40391,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Praia do Forte - praia.JPG",
       "src": "assets/spots/praiadoforte.webp",
@@ -40455,7 +40455,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Deni Williams from São Paulo, Brasil",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/53/Paraty_-_Rio_de_Janeiro_%2822281939970%29.jpg/1920px-Paraty_-_Rio_de_Janeiro_%2822281939970%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -40516,7 +40516,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Maresias 1.jpg",
       "src": "assets/spots/maresias.webp",
@@ -40579,7 +40579,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Puerto Pirámides, Chubut Province, Argentina - panoramio.jpg",
       "src": "assets/spots/piramides.webp",
@@ -40641,7 +40641,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Bariloche, varios 1994 04.jpg",
       "src": "assets/spots/nahuelhuapi.webp",
@@ -40701,7 +40701,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Capilla de Mármol 14.jpg",
       "src": "assets/spots/marmol.webp",
@@ -40763,7 +40763,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Silvio Rossi",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/Isla_Damas.jpg/1920px-Isla_Damas.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -40824,7 +40824,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "ChatCL37S",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e8/17022010_Vista_Totoralillo.jpg/1920px-17022010_Vista_Totoralillo.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -40884,7 +40884,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Río Futaleufú - Chile.JPG",
       "src": "assets/spots/futaleufu.webp",
@@ -40945,7 +40945,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Paulakindsvater",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/50/Playa_negra.jpg/1920px-Playa_negra.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -41006,7 +41006,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Cabo Blanco Talara.jpg",
       "src": "assets/spots/caboblanco.webp",
@@ -41069,7 +41069,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Bernard Gagnon",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Boats_on_Pacasmayo_Beach.jpg/1920px-Boats_on_Pacasmayo_Beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -41130,7 +41130,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Isladelaplata.JPG",
       "src": "assets/spots/isladelaplata.webp",
@@ -41192,7 +41192,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Diego Delso",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Bah%C3%ADa_Tortuga%2C_isla_Santa_Cruz%2C_islas_Gal%C3%A1pagos%2C_Ecuador%2C_2015-07-26%2C_DD_26.JPG/1920px-Bah%C3%ADa_Tortuga%2C_isla_Santa_Cruz%2C_islas_Gal%C3%A1pagos%2C_Ecuador%2C_2015-07-26%2C_DD_26.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -41253,7 +41253,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Melissa Meadows",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/73/Scarus_ghobban_525205329.jpg/1920px-Scarus_ghobban_525205329.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -41362,7 +41362,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Islas del Rosario (140).jpg",
       "src": "assets/spots/rosario.webp",
@@ -41424,7 +41424,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -41474,7 +41474,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Costa de la Isla de Malpelo.jpg",
       "src": "assets/spots/malpelo.webp",
@@ -41536,7 +41536,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Bahía de Sapzurro y claridad marina.jpg",
       "src": "assets/spots/capurgana.webp",
@@ -41598,7 +41598,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Cabo Polonio desde el faro.jpg",
       "src": "assets/spots/cabopolonio.webp",
@@ -41664,7 +41664,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "2012-02-Maria La Gorda Pinar del Rio Kuba 02 anagoria.JPG",
       "src": "assets/spots/marialagorda.webp",
@@ -41730,7 +41730,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Alex Chernikh",
       "download": "https://upload.wikimedia.org/wikipedia/commons/9/9f/Carcharhinus_falciformis_off_Cuba.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
@@ -41793,7 +41793,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "XibalbaWikiCommons",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d1/Abudefduf_saxatilis_-_Bay_of_Pigs_-_Cuba.jpg/1920px-Abudefduf_saxatilis_-_Bay_of_Pigs_-_Cuba.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -41855,7 +41855,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "gustavo.kunst",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/fa/Negril.jpg/1920px-Negril.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -41917,7 +41917,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -41968,7 +41968,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Catalina Island, La Romana, Dominican Republic. Coast line view.jpg",
       "src": "assets/spots/catalina_do.webp",
@@ -42029,7 +42029,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Thomas Berwing",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/72/20220124-DJI_0200.jpg/1920px-20220124-DJI_0200.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -42090,7 +42090,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Jobos Beach in Isabela, Puerto Rico.jpg",
       "src": "assets/spots/jobos.webp",
@@ -42151,7 +42151,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Marco Zanferrari from Doha, Qatar",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9f/Playa_Flamenco_%2815584144756%29.jpg/1920px-Playa_Flamenco_%2815584144756%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -42211,7 +42211,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -42261,7 +42261,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Virgin Gorda - The Baths 2.jpg",
       "src": "assets/spots/thebaths.webp",
@@ -42323,7 +42323,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "RMS Rhone 2003 12.jpg",
       "src": "assets/spots/rhone.webp",
@@ -42385,7 +42385,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "StJohnTrunkBay.jpg",
       "src": "assets/spots/trunkbay.webp",
@@ -42504,7 +42504,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Carlisle Bay, Barbados.jpg",
       "src": "assets/spots/carlislebay.webp",
@@ -42565,7 +42565,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Tobagocays2018.jpg",
       "src": "assets/spots/tobagocays.webp",
@@ -42626,7 +42626,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Vicissitudes, Grenada Underwater Sculptures (SunCat) - Flickr.jpg",
       "src": "assets/spots/moliniere.webp",
@@ -42687,7 +42687,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Liam Quinn",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8c/Scotts_Head%2C_Dominica_-_Dec_29%2C_2011_%281%29.jpg/1920px-Scotts_Head%2C_Dominica_-_Dec_29%2C_2011_%281%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -42749,7 +42749,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Anse Chastanet - panoramio.jpg",
       "src": "assets/spots/ansechastanet.webp",
@@ -42810,7 +42810,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "author": "Paul Asman and Jill Lenoble",
       "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/56/Stoplight_parrotfish_Sparisoma_viride_%282443786408%29.jpg/1920px-Stoplight_parrotfish_Sparisoma_viride_%282443786408%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
@@ -42873,7 +42873,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Dean Blue Hole Long Island Bahamas 20110210.JPG",
       "src": "assets/spots/deansbluehole.webp",
@@ -42934,7 +42934,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Turtle Cove Providenciales Beach.jpg",
       "src": "assets/spots/smithsreef.webp",
@@ -42995,7 +42995,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -43050,7 +43050,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "La lobera.JPG",
       "src": "assets/spots/losislotes.webp",
@@ -43113,7 +43113,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Grand Cenote 20101006.jpg",
       "src": "assets/spots/grancenote.webp",
@@ -43173,7 +43173,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -43224,7 +43224,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Along the Malecon - Loreto - Baja California Sur - Mexico - 01 (23828035372).jpg",
       "src": "assets/spots/loreto.webp",
@@ -43286,7 +43286,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Bacalar 2020 - Public Pontoon Mexico.jpg",
       "src": "assets/spots/bacalar.webp",
@@ -43347,7 +43347,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -43402,7 +43402,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Sunset over lage Atitlan.jpg",
       "src": "assets/spots/atitlan.webp",
@@ -43463,7 +43463,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -43513,7 +43513,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Playa el tuco rocoso.jpg",
       "src": "assets/spots/eltunco.webp",
@@ -43573,7 +43573,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -43629,7 +43629,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -43679,7 +43679,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Playa Maderas, Nicaragua (Unsplash eJQlw7FifGE).jpg",
       "src": "assets/spots/maderas.webp",
@@ -43741,7 +43741,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "LacApoyo 15.jpg",
       "src": "assets/spots/apoyo.webp",
@@ -43803,7 +43803,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Isla del Coco 03.jpg",
       "src": "assets/spots/isladelcoco.webp",
@@ -43863,7 +43863,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -43912,7 +43912,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -43961,7 +43961,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Surf La Mochila.jpg",
       "src": "assets/spots/santacatalina.webp",
@@ -44024,7 +44024,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Coiba.JPG",
       "src": "assets/spots/coiba.webp",
@@ -44086,7 +44086,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Beach in San Blas Islands.jpg",
       "src": "assets/spots/sanblas.webp",
@@ -44148,7 +44148,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "GreenSeaTurtle-HolChanMarineReserve-Belize.JPG",
       "src": "assets/spots/holchan.webp",
@@ -44214,7 +44214,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Sand Harbor, Lake Tahoe, Nevada, 20220514, 04.jpg",
       "src": "assets/spots/sandharbor.webp",
@@ -44281,7 +44281,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Three Sister Springs.jpg",
       "src": "assets/spots/crystalriver.webp",
@@ -44347,7 +44347,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -44402,7 +44402,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Santa Cruz Island 6.jpg",
       "src": "assets/spots/scorpionanchorage.webp",
@@ -44466,7 +44466,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Short Sands Beach, Oregon (52048461130).jpg",
       "src": "assets/spots/shortsands.webp",
@@ -44531,7 +44531,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -44585,7 +44585,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Molokini-crater-maui.jpg",
       "src": "assets/spots/molokini.webp",
@@ -44650,7 +44650,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Honolua Bay.jpg",
       "src": "assets/spots/honolua.webp",
@@ -44716,7 +44716,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Honaunau Bay, Captain Cook (504642) (23499177034).jpg",
       "src": "assets/spots/twostep.webp",
@@ -44781,7 +44781,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -44834,7 +44834,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Sandybeach blowholeside.jpg",
       "src": "assets/spots/sandybeach.webp",
@@ -44898,7 +44898,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "SquawBaySeaCaves028-050507.jpg",
       "src": "assets/spots/apostle.webp",
@@ -44964,7 +44964,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Sleeping Bear Dunes, North Bar Lake (8741875482).jpg",
       "src": "assets/spots/northbar.webp",
@@ -45030,7 +45030,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -45085,7 +45085,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Fort-Jefferson Dry-Tortugas.jpg",
       "src": "assets/spots/drytortugas.webp",
@@ -45149,7 +45149,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -45202,7 +45202,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Sebastian Inlet, Florida 001.jpg",
       "src": "assets/spots/sebastian.webp",
@@ -45268,7 +45268,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -45322,7 +45322,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -45376,7 +45376,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -45429,7 +45429,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Bruce Peninsula National Park – The Grotto–Ontario (1).jpg",
       "src": "assets/spots/grotto.webp",
@@ -45496,7 +45496,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Canoe Lake - Algonquin Provincial Park, Ontario 01.jpg",
       "src": "assets/spots/algonquin.webp",
@@ -45561,7 +45561,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": null
   },
   {
@@ -45614,7 +45614,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-09b",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "NB - Hopewell Rocks1.jpg",
       "src": "assets/spots/hopewell.webp",
@@ -45626,6 +45626,451 @@
       "width": 1000,
       "height": 649,
       "thumb": "assets/spots/thumbs/hopewell.webp"
+    }
+  },
+  {
+    "id": "santocha",
+    "name": "Santocha — Capbreton",
+    "loc": "Landes, France",
+    "country": "France",
+    "world": "fr",
+    "coords": {
+      "lat": 43.6458,
+      "lon": -1.4457
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf"
+    ],
+    "level": "variable",
+    "desc": "Plage de sable au sud de Capbreton, orientée plein ouest. Plusieurs pics s’y forment, à gauche comme à droite.",
+    "dangers": [
+      [
+        "🌀",
+        "Les baïnes et leurs courants existent sur cette côte landaise : repère-les depuis la plage."
+      ],
+      [
+        "🌊",
+        "Plage ouverte plein ouest : quand la houle grossit, l’océan arrive de face."
+      ],
+      [
+        "🛟",
+        "Poste de secours partagé avec la plage du Prévent, surtout actif en été."
+      ]
+    ],
+    "tip": "Regarde la mer un moment avant d’entrer, repère les courants et mets-toi à l’eau dans la zone surveillée quand le poste est ouvert.",
+    "danger": 1,
+    "sky": "#cfe6f7",
+    "sky2": "#8fc2e6",
+    "sea": "#2b86c0",
+    "sea2": "#12608f",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · octobre 2026 · d’après Tourisme Landes, Belambra et Guide des Landes · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-10",
+    "catalogNew": true,
+    "photo": {
+      "file": "Surfing at Santocha.jpg",
+      "src": "assets/spots/santocha.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Surfing_at_Santocha.jpg",
+      "author": "Tangopaso",
+      "license": "Public domain",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Surfing_at_Santocha.jpg/1920px-Surfing_at_Santocha.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1440,
+      "thumb": "assets/spots/thumbs/santocha.webp"
+    }
+  },
+  {
+    "id": "estacade",
+    "name": "L’Estacade — Capbreton",
+    "loc": "Landes, France",
+    "country": "France",
+    "world": "fr",
+    "coords": {
+      "lat": 43.6544,
+      "lon": -1.4457
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade",
+      "paddle"
+    ],
+    "level": "variable",
+    "desc": "La plus petite plage de Capbreton, sur la rive sud du port, contre la jetée. Plutôt familiale que surf : les enfants, les pêcheurs à marée basse et les paddles y trouvent leur place.",
+    "dangers": [
+      [
+        "⛴️",
+        "Plage contre la jetée du port : des bateaux passent dans le chenal tout près."
+      ],
+      [
+        "🛟",
+        "Surveillance de la plage en été seulement : renseigne-toi avant de te baigner hors saison."
+      ]
+    ],
+    "tip": "Reste côté plage, loin de la jetée et du chenal du port, surtout en paddle, et surveille les bateaux.",
+    "danger": 1,
+    "sky": "#cfe6f7",
+    "sky2": "#8fc2e6",
+    "sea": "#2b86c0",
+    "sea2": "#12608f",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · octobre 2026 · d’après Tourisme Landes (Plage de l’Estacade) · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-10",
+    "catalogNew": true,
+    "photo": {
+      "file": "Capbreton Estacade 03.JPG",
+      "src": "assets/spots/estacade.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Capbreton_Estacade_03.JPG",
+      "author": "Raphael Isla",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Capbreton_Estacade_03.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "width": 1500,
+      "height": 844,
+      "thumb": "assets/spots/thumbs/estacade.webp"
+    }
+  },
+  {
+    "id": "estagnots",
+    "name": "Les Estagnots — Seignosse",
+    "loc": "Landes, France",
+    "country": "France",
+    "world": "fr",
+    "coords": {
+      "lat": 43.6873,
+      "lon": -1.4407
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf"
+    ],
+    "level": "variable",
+    "desc": "Plage de sable de Seignosse, au sud des Bourdaines. Selon Lonely Planet, c’est la plage la plus prisée des surfeurs de la commune. Un poste de secours surveille la baignade en été.",
+    "dangers": [
+      [
+        "🌀",
+        "Baïnes et courants parfois forts sur les plages de Seignosse, signale Surf-Report."
+      ],
+      [
+        "👥",
+        "Plage très prisée des surfeurs : le pic peut être chargé en saison."
+      ],
+      [
+        "🛟",
+        "Surveillance en été seulement : regarde où sont les drapeaux avant d’entrer."
+      ]
+    ],
+    "tip": "Repère les baïnes depuis la plage, entre dans l’eau dans la zone surveillée en été et garde le poste en vue.",
+    "danger": 1,
+    "sky": "#cfe6f7",
+    "sky2": "#8fc2e6",
+    "sea": "#2b86c0",
+    "sea2": "#12608f",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · octobre 2026 · d’après Lonely Planet, Belambra, Tourisme Landes et Surf-Report · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-10",
+    "catalogNew": true,
+    "photo": {
+      "file": "Plage des estagnots.jpg",
+      "src": "assets/spots/estagnots.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Plage_des_estagnots.jpg",
+      "author": "Seignossetourism",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://upload.wikimedia.org/wikipedia/commons/6/64/Plage_des_estagnots.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "width": 1239,
+      "height": 929,
+      "thumb": "assets/spots/thumbs/estagnots.webp"
+    }
+  },
+  {
+    "id": "penon",
+    "name": "Le Penon — Seignosse",
+    "loc": "Landes, France",
+    "country": "France",
+    "world": "fr",
+    "coords": {
+      "lat": 43.7094,
+      "lon": -1.4366
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf"
+    ],
+    "level": "variable",
+    "desc": "Plage du Penon, à Seignosse, au nord des Bourdaines. Un poste de secours y fonctionne en haute saison.",
+    "dangers": [
+      [
+        "🌀",
+        "Baïnes et courants parfois forts sur les plages de Seignosse, signale Surf-Report."
+      ],
+      [
+        "🛟",
+        "Poste de secours en haute saison seulement : hors saison, ne surfe pas seul."
+      ]
+    ],
+    "tip": "Repère les baïnes depuis la plage et mets-toi à l’eau près du poste de secours quand il est ouvert.",
+    "photoContext": "Plage du Penon, Seignosse",
+    "danger": 1,
+    "sky": "#cfe6f7",
+    "sky2": "#8fc2e6",
+    "sea": "#2b86c0",
+    "sea2": "#12608f",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · octobre 2026 · d’après Belambra, Tourisme Landes et Surf-Report · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-10",
+    "catalogNew": true,
+    "photo": {
+      "file": "Seignosse-franchini-photos.jpg",
+      "src": "assets/spots/penon.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Seignosse-franchini-photos.jpg",
+      "author": "Slash63",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Seignosse-franchini-photos.jpg/1920px-Seignosse-franchini-photos.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1142,
+      "thumb": "assets/spots/thumbs/penon.webp"
+    }
+  },
+  {
+    "id": "saintgilles",
+    "name": "Grande Plage — Saint-Gilles-Croix-de-Vie",
+    "loc": "Vendée, France",
+    "country": "France",
+    "world": "fr",
+    "coords": {
+      "lat": 46.6841,
+      "lon": -1.9337
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf",
+      "bodyboard",
+      "kitesurf"
+    ],
+    "level": "variable",
+    "desc": "Grande plage de sable au cœur de Saint-Gilles-Croix-de-Vie, près du remblai et du centre-ville. L’office de tourisme la dit idéale pour les sports de glisse : surf, kitesurf, bodyboard. Une école de surf y propose cours et location, et la plage porte le label Handiplage.",
+    "dangers": [
+      [
+        "👥",
+        "Plage très fréquentée en haute saison, surtout près du remblai."
+      ],
+      [
+        "🛟",
+        "Surveillance limitée à l’été : le reste de l’année, renseigne-toi avant d’entrer dans l’eau."
+      ],
+      [
+        "🪁",
+        "Surf, kitesurf et bodyboard se partagent la plage : garde tes distances."
+      ]
+    ],
+    "tip": "Entre dans l’eau dans la zone surveillée, drapeau en vue, et demande conseil à l’école de surf ou aux secouristes avant de surfer.",
+    "danger": 1,
+    "sky": "#cfe6f7",
+    "sky2": "#8fc2e6",
+    "sea": "#2b86c0",
+    "sea2": "#12608f",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · octobre 2026 · d’après l’Office de tourisme Pays de Saint-Gilles et Atlantic Loire Valley · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-10",
+    "catalogNew": true,
+    "photo": {
+      "file": "Grande Plage - Saint-Gilles-Croix-de-Vie (FR85) - 2026-08-01 - 3.jpg",
+      "src": "assets/spots/saintgilles.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Grande_Plage_-_Saint-Gilles-Croix-de-Vie_(FR85)_-_2026-08-01_-_3.jpg",
+      "author": "Chabe01",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Grande_Plage_-_Saint-Gilles-Croix-de-Vie_%28FR85%29_-_2026-08-01_-_3.jpg/1920px-Grande_Plage_-_Saint-Gilles-Croix-de-Vie_%28FR85%29_-_2026-08-01_-_3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1440,
+      "thumb": "assets/spots/thumbs/saintgilles.webp"
+    }
+  },
+  {
+    "id": "sion",
+    "name": "Grande Plage de Sion — Sion-sur-l’Océan",
+    "loc": "Vendée, France",
+    "country": "France",
+    "world": "fr",
+    "coords": {
+      "lat": 46.715,
+      "lon": -1.9795
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf",
+      "kitesurf",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Grande plage de sable de Sion-sur-l’Océan, station de Saint-Hilaire-de-Riez. Elle est surveillée en saison et compte une zone de kitesurf et un centre nautique. Selon Surf-Forecast, le surf y marche surtout en automne et en hiver ; l’été, la mer est souvent plate.",
+    "dangers": [
+      [
+        "🪁",
+        "Zone de kitesurf sur la plage : garde tes distances avec les ailes et les lignes."
+      ],
+      [
+        "🛟",
+        "Surveillance en saison seulement : hors saison, personne ne surveille la baignade."
+      ],
+      [
+        "🪨",
+        "Surf-Forecast décrit un fond de roche : repère les fonds à marée basse."
+      ]
+    ],
+    "tip": "Hors saison, entre accompagné et regarde les fonds à marée basse avant de surfer.",
+    "danger": 1,
+    "sky": "#cfe6f7",
+    "sky2": "#8fc2e6",
+    "sea": "#2b86c0",
+    "sea2": "#12608f",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · octobre 2026 · d’après plages.tv, Wikipédia et Surf-Forecast · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-10",
+    "catalogNew": true,
+    "photo": {
+      "file": "Plage de Sion.jpg",
+      "src": "assets/spots/sion.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Plage_de_Sion.jpg",
+      "author": "Yann240b",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Plage_de_Sion.jpg/1920px-Plage_de_Sion.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1080,
+      "thumb": "assets/spots/thumbs/sion.webp"
+    }
+  },
+  {
+    "id": "sauzaie",
+    "name": "La Sauzaie — Brétignolles-sur-Mer",
+    "loc": "Vendée, France",
+    "country": "France",
+    "world": "fr",
+    "coords": {
+      "lat": 46.6455,
+      "lon": -1.9013
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf"
+    ],
+    "level": "expert",
+    "desc": "Reef de la côte vendéenne, au nord de la Corniche, à Brétignolles-sur-Mer. Selon plages.tv, une houle moyenne d’ouest avec un vent d’est donne le meilleur pic, à gauche et à droite, avec des sections creuses. Le Vendée Surf Pro s’y déroule.",
+    "dangers": [
+      [
+        "🪨",
+        "Mise à l’eau parmi les rochers, tout près des vagues."
+      ],
+      [
+        "⚡",
+        "Vagues creuses sur un reef : réservé aux surfeurs confirmés."
+      ],
+      [
+        "🛟",
+        "Plage surveillée en juillet et août seulement."
+      ]
+    ],
+    "tip": "Observe la mise à l’eau depuis la plage, entre seulement si tu sais gérer un reef et des rochers, et ne surfe pas seul.",
+    "danger": 4,
+    "sky": "#cfe6f7",
+    "sky2": "#8fc2e6",
+    "sea": "#2b86c0",
+    "sea2": "#12608f",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · octobre 2026 · d’après plages.tv et l’Office de tourisme Pays de Saint-Gilles · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-10",
+    "catalogNew": true,
+    "photo": {
+      "file": "Plage de la Sauzaie nord - panoramio.jpg",
+      "src": "assets/spots/sauzaie.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Plage_de_la_Sauzaie_nord_-_panoramio.jpg",
+      "author": "Chadel",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Plage_de_la_Sauzaie_nord_-_panoramio.jpg/1920px-Plage_de_la_Sauzaie_nord_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1920,
+      "height": 1440,
+      "thumb": "assets/spots/thumbs/sauzaie.webp"
     }
   }
 ]

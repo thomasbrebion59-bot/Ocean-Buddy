@@ -32,7 +32,17 @@
     })().catch(e=>{threeLoading=null;throw e;});
     return threeLoading;
   }
-  function supported(){try{const c=document.createElement('canvas');return !!c.getContext('webgl2');}catch(_){return false;}}
+  /* Test de WebGL 2 fait une seule fois, contexte d’essai rendu aussitôt. Chaque getContext() crée un vrai contexte :
+     appelé à chaque déplacement de la carte, ce test dépassait la limite de contextes actifs (16 sous WebKit et Chrome)
+     et le navigateur retirait le plus ancien, celui du globe ou de la carte (écran bleu uni sur iPhone, 29 oct.). */
+  let webgl2=null;
+  function supported(){
+    if(webgl2===null){
+      webgl2=false;
+      try{const c=document.createElement('canvas');c.width=c.height=1;const gl=c.getContext('webgl2');webgl2=!!gl;gl?.getExtension('WEBGL_lose_context')?.loseContext();}catch(_){}
+    }
+    return webgl2;
+  }
 
   /* Textures sans à-coup. Une ImageBitmap est décodée hors du fil principal ; WebGL ignore pour elle
      UNPACK_FLIP_Y, d’où le retournement des bandes à la découpe (imageOrientation:'flipY'), vérifié une fois
@@ -267,7 +277,8 @@
     await new Promise(r=>setTimeout(r));
     /* Pleine définition de l’écran (jusqu’à ×3). Pendant un mouvement continu seulement, si les images
        ralentissent, la définition baisse par paliers (jamais sous 60 %) ; elle revient au repos. */
-    const dprFull=Math.min(devicePixelRatio||1,3);let dprNow=dprFull,lastFrame=0,slow=0,prevAgain=false,sharpTimer=0;
+    /* Téléphone : ×2 au plus (même netteté perçue, deux fois moins de mémoire GPU qu’en ×3). */
+    const dprFull=Math.min(devicePixelRatio||1,mobile?2:3);let dprNow=dprFull,lastFrame=0,slow=0,prevAgain=false,sharpTimer=0;
     const scene=new T.Scene();
     const camera=new T.PerspectiveCamera(FOV,1,.01,200);
     const col=h=>new T.Color(h);
@@ -357,7 +368,7 @@
 
     /* ---------- Caméra : centre (lat, lon) + distance au centre de la Terre (rayons) ---------- */
     const view={lat:30,lon:-8,dist:4.2};let overviewOn=false,keepKpp=0,touched=false,spin=0;
-    let W=1,H=1,pad={top:0,bottom:0,left:0,right:0},anim=null,inertia=null,dirty=true,raf=0,active=true,lastMove=0,restTimer=0,revealStart=0,approach=1,lastTick=0,ambTimer=0,lastTouch=performance.now();
+    let W=1,H=1,pad={top:0,bottom:0,left:0,right:0},anim=null,inertia=null,dirty=true,raf=0,active=true,released=false,lastMove=0,restTimer=0,revealStart=0,approach=1,lastTick=0,ambTimer=0,lastTouch=performance.now();
     /* Première image réellement dessinée (opts.onFirstFrame) : la sphère CSS de l’accueil reste affichée jusque-là. */
     let firstFrame=typeof opts.onFirstFrame==='function'?opts.onFirstFrame:null;
     const minSide=()=>Math.max(1,Math.min(W-pad.left-pad.right,H-pad.top-pad.bottom));
@@ -938,7 +949,8 @@
     function resize(){
       const r=host.getBoundingClientRect();W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
       const dpr=Math.min(devicePixelRatio||1,dprNow);
-      renderer.setPixelRatio(dpr);renderer.setSize(W,H,false);
+      /* Globe en pause longue (carte détaillée à l’écran) : tampon de dessin réduit à 1 px pour rendre la mémoire GPU. */
+      renderer.setPixelRatio(released?1:dpr);renderer.setSize(released?1:W,released?1:H,false);
       ortho.right=W;ortho.bottom=H;ortho.updateProjectionMatrix();
       dotU.uDpr.value=dpr;starU.uDpr.value=dpr;
       /* Le cadre change (tiroir, rotation, plein écran) : on garde l’échelle à l’écran, ou la vue d’ensemble. */
@@ -1032,6 +1044,13 @@
       const step=now=>{const p=Math.min(1,(now-t0)/dur),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;uniEarth[k].value=from+(to-from)*e;invalidate();if(p<1)sstAnim[k]=requestAnimationFrame(step);};
       sstAnim[k]=requestAnimationFrame(step);
     }
+    /* Perte du contexte WebGL (iOS retire les contextes quand la mémoire GPU manque) : le rendu s’arrête et
+       ocean-map.js reconstruit le globe à la même vue. Ignorée pendant la destruction volontaire (forceContextLoss). */
+    let lost=false,handed=false;
+    const onLost=e=>{e.preventDefault();if(dead||!handed||lost)return;lost=true;cancelAnimationFrame(raf);raf=0;opts.onContextLost?.();};
+    const onRestored=()=>{if(dead||!handed)return;lost=false;opts.onContextRestored?.();};
+    canvas.addEventListener('webglcontextlost',onLost);canvas.addEventListener('webglcontextrestored',onRestored);
+    undo.push(()=>{canvas.removeEventListener('webglcontextlost',onLost);canvas.removeEventListener('webglcontextrestored',onRestored);});
     const api={
       setSpots,setSelected,
       setUser(pos){user=pos?{v:M.vec(pos.lat,pos.lon)}:null;invalidate();},
@@ -1077,13 +1096,17 @@
       markers(){return {emblems:emblemsOn.map(e=>({name:e.c.name,x:e.x,y:e.y,r:e.r})),badges:shownBadges.map(b=>({n:b.total,x:b.sx,y:b.sy,size:b.sz})),labels:labels.map((l,k)=>({id:l.id,x:L.at[k*2]+L.off[k*2],y:L.at[k*2+1],visible:!!L.alpha[k]}))};},
       /* Spots affichés seuls (hors groupes), avec leur position à l’écran. */
       singles(){applyCamera();return spots.filter(s=>!hideAttr[byId.get(s.id).i]).map(s=>({id:s.id,...project(s.v)})).filter(p=>p.front&&p.facing>.12);},
-      setActive(on){active=!!on;canvas.style.visibility=on?'':'hidden';layer.style.visibility=on?'':'hidden';if(on){resize();invalidate();}else{stop();cancelAnimationFrame(raf);raf=0;}},
+      /* release : pause longue (carte détaillée à l’écran), le tampon de dessin est rendu ; il revient au resize() suivant. */
+      setActive(on,{release=false}={}){active=!!on;canvas.style.visibility=on?'':'hidden';layer.style.visibility=on?'':'hidden';if(on){released=false;resize();invalidate();}else{stop();cancelAnimationFrame(raf);raf=0;if(release){released=true;renderer.setPixelRatio(1);renderer.setSize(1,1,false);}}},
+      /* Contexte WebGL retiré par le système (mémoire GPU) : le globe ne dessine plus rien jusqu’à sa reconstruction. */
+      get lost(){return lost;},
       focus(){canvas.focus({preventScroll:true});},
       canvas,layer,
       destroy(){
         if(dead)return;
         dead=true;active=false;cancelAnimationFrame(raf);raf=0;
         document.removeEventListener('visibilitychange',onVisible);
+        canvas.removeEventListener('webglcontextlost',onLost);canvas.removeEventListener('webglcontextrestored',onRestored);
         document.removeEventListener('ocean:sport',onSport);themeTimers.forEach(clearTimeout);
         clearTimeout(ambTimer);clearTimeout(sharpTimer);clearTimeout(restTimer);clearTimeout(hdTimer);
         Object.values(sstAnim).forEach(cancelAnimationFrame);
@@ -1094,6 +1117,7 @@
         canvas.remove();layer.remove();
       }
     };
+    handed=true;
     return api;
   }
   window.OceanGlobe={create,supported,glow,GLOW,load:loadThree};

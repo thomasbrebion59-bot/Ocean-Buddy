@@ -111,5 +111,21 @@
     const out=[];for(let y=0;y<height;y+=rows)out.push({y,h:Math.min(rows,height-y)});
     return out;
   }
-  return {wantsHd8k,textureStrips,group,bounds,inView,distance,top,vec,latLon,arc,wrapLon,mapZoom,kmPerPx,clusterPx,LEVELS,clusterLevels,levelFor,cap,EARTH_KM};
+  /* ---------- Récupération après perte du contexte WebGL ---------- */
+  /* Densité de pixels des canevas WebGL : ×2 au plus sur téléphone ou tablette tactile, ×3 ailleurs. */
+  function pixelRatio(dpr,mobile){const d=Number.isFinite(dpr)&&dpr>0?dpr:1;return Math.min(d,mobile?2:3);}
+  /* Cache de tuiles de la carte détaillée : plus petit sur mobile (mémoire GPU partagée avec le globe). */
+  const tileCache=(mobile,mini=false)=>mini?(mobile?40:60):(mobile?64:120);
+  /* Pertes récentes (horodatages en ms) : reconstruction automatique tant qu’il y en a au plus max dans la fenêtre ;
+     au-delà, le système manque de mémoire de façon répétée et on propose le bouton « Recharger la carte ». */
+  function recovery(losses,now,{max=3,windowMs=60000}={}){
+    const recent=(losses||[]).filter(t=>Number.isFinite(t)&&now-t>=0&&now-t<windowMs);
+    return {recent,auto:recent.length<=max};
+  }
+  /* Tuiles en échec : on prévient quand plusieurs erreurs récentes ne sont suivies d’aucune tuile réussie. */
+  function tilesFailing(errors,lastOk,now,{windowMs=4000,min=3}={}){
+    const recent=(errors||[]).filter(t=>now-t>=0&&now-t<windowMs);
+    return recent.length>=min&&!(Number.isFinite(lastOk)&&lastOk>=recent[0]);
+  }
+  return {pixelRatio,tileCache,recovery,tilesFailing,wantsHd8k,textureStrips,group,bounds,inView,distance,top,vec,latLon,arc,wrapLon,mapZoom,kmPerPx,clusterPx,LEVELS,clusterLevels,levelFor,cap,EARTH_KM};
 });

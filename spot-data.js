@@ -395,12 +395,13 @@
   function update(s) {
     cur = s; selMonth = new Date().getMonth(); selAct = null;
     const go = $('#dGo'); if (go) go.hidden = true;
+    try { renderCoach(); } catch (e) {}
     // « Quand partir ? » et « Observé ici » gardent leur place le temps du chargement, puis se replient s’il n’y a rien à montrer.
     const marine = M.marineSpot(s);
     teaserSlot(true); wildOn(false);
     if (marine) wildSlot(true); else { const w = $('#dWild'); if (w) w.hidden = true; }
     const host = $('#dSeasons'); if (host) host.innerHTML = '<p class="sd-empty">Chargement des normales…</p>';
-    load('climate').then(C => { if (cur !== s) return; const c = C.spots[s.id]; renderSeasons(s, c); renderTeaser(s, c); if (lastLive && lastLive.s === s) live(s, lastLive.l); })
+    load('climate').then(C => { if (cur !== s) return; const c = C.spots[s.id]; renderSeasons(s, c); renderTeaser(s, c); if (lastLive && lastLive.s === s) live(s, lastLive.l); else renderCoach(); })
       .catch(() => { const t = $('#dSeasonTeaser'); if (t) t.hidden = true; if (host) host.innerHTML = '<p class="sd-empty">Normales indisponibles hors connexion.</p>'; });
     load('access').then(A => { if (cur === s) renderGo(s, A); }).catch(() => {});
     if (marine) load('wild').then(W => { if (cur === s) renderWild(s, W); }).catch(() => { if (cur === s) { const w = $('#dWild'); if (w) w.hidden = true; } });
@@ -409,6 +410,7 @@
   let lastLive = null;
   function live(s, l) {
     lastLive = { s, l };
+    try { renderCoach(); } catch (e) {}
     const C = window.OCEAN_CLIMATE;
     let host = $('#sdVsNormal');
     const w = $('#dWeather');
@@ -429,8 +431,53 @@
     host.innerHTML = rows.length ? `<p class="sd-vs-title">Aujourd’hui, comparé à la normale</p>${rows.map(r => `<div class="sd-vs-row ${r[3]}">${icon(r[0])}<span><b>${esc(r[1])}</b><small>${esc(r[2])}</small></span></div>`).join('')}` : '';
   }
 
+
+  /* ---------------- « Lire les conditions » (onglet Conditions) ----------------
+     Lecture des conditions du moment à hauteur du niveau choisi dans Réglages > « Mon sport et mon niveau » (chosenLevel, copié dans oceanbuddy_v1).
+     Sans niveau : les trois niveaux, repliés sauf le premier. Plongée : texte existant, rien ici. */
+  const myLevel = () => {
+    try { if (typeof chosenLevel !== 'undefined' && chosenLevel) return chosenLevel; } catch (e) {}
+    try { const d = JSON.parse(localStorage.getItem('oceanbuddy_v1') || 'null'); return (d && d.level) || null; } catch (e) { return null; }
+  };
+  const coachLine = ln => Array.isArray(ln) ? `<li><b>${esc(ln[0])}</b> ${ln.slice(1).map(esc).join(' ')}</li>` : `<li>${esc(ln)}</li>`;
+  const coachBlocks = blocks => blocks.map(b => `<div class="sd-coach-block"><h5>${esc(b.h)}</h5><ul>${b.lines.map(coachLine).join('')}</ul></div>`).join('');
+  function coachHost() {
+    let host = $('#sdCoach');
+    if (host) return host;
+    const anchor = $('#sdVsNormal') || $('#dWeather');
+    if (!anchor) return null;
+    host = document.createElement('section'); host.id = 'sdCoach'; host.className = 'sd-coach';
+    anchor.after(host);
+    return host;
+  }
+  function renderCoach() {
+    const s = cur; if (!s) return;
+    const host = coachHost(); if (!host) return;
+    const act = curAct(s);
+    const inland = typeof isInland === 'function' ? isInland(s) : ['lake', 'inland'].includes(s.waterType);
+    const l = lastLive && lastLive.s === s ? lastLive.l : null;
+    const parsed = M.parseLive(l);
+    const suitTxt = M.SUIT_ACTS.includes(act) && parsed.tempC != null ? SUIT_TXT[M.wetsuit(parsed.tempC).join(',')] : null;
+    const m = new Date().getMonth();
+    const r = M.coach({ act, inland, level: myLevel(), spot: s, live: l, clim: window.OCEAN_CLIMATE ? OCEAN_CLIMATE.spots[s.id] : null, m, monthName: monthName(m), fmt: num, suit: suitTxt });
+    if (!r) { host.hidden = true; host.innerHTML = ''; return; }
+    host.hidden = false;
+    const sport = sportLabel(act);
+    let body;
+    if (r.levels.length === 1) {
+      body = coachBlocks(r.levels[0].blocks);
+    } else {
+      const pick = r.selected ? r.levels.find(x => x.id === r.selected) : null;
+      const rest = r.levels.filter(x => x !== pick);
+      const more = rest.map((x, i) => `<details class="sd-coach-more"${!pick && i === 0 ? ' open' : ''}><summary><span>${pick ? 'Voir aussi' : 'Niveau'}</span> : <span>${esc(x.title)}</span></summary>${coachBlocks(x.blocks)}</details>`).join('');
+      body = (pick ? `<h4 class="sd-coach-level">${esc(pick.title)}</h4>${r.warn ? `<p class="sd-coach-warn">${esc(r.warn)}</p>` : ''}${coachBlocks(pick.blocks)}` : '<p class="sd-coach-pick">Choisis ton niveau dans Réglages, « Mon sport et mon niveau » : tu verras seulement ce qui te concerne.</p>') + more;
+    }
+    host.innerHTML = `<p class="sd-vs-title">Lire les conditions · ${esc(sport)}</p>${body}<p class="sd-coach-note">Repères pour apprendre à lire la mer, pas des consignes du lieu. Sur place, suis le poste de secours, le balisage et les drapeaux.</p>`;
+  }
+  document.addEventListener('ocean:level', () => { try { renderCoach(); } catch (e) {} });
+
   /* Changement d’activité sur la fiche : le calendrier suit. */
-  function sport() { if (!cur || !window.OCEAN_CLIMATE) return; selAct = null; const c = OCEAN_CLIMATE.spots[cur.id]; renderSeasons(cur, c); renderTeaser(cur, c); }
+  function sport() { try { renderCoach(); } catch (e) {} if (!cur || !window.OCEAN_CLIMATE) return; selAct = null; const c = OCEAN_CLIMATE.spots[cur.id]; renderSeasons(cur, c); renderTeaser(cur, c); }
 
   window.OceanSpotData = { load, update, sport, live, monthName, rangeText };
 })();

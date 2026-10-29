@@ -47,6 +47,10 @@
   const DIVE_KM=coarse?3200:2200,RISE_KM=coarse?4600:3200,WORLD_KM=7000,HOME={lat:30,lon:-8};
   let planet=null,planetStarting=null,planetFailed=false,planetTries=0,mode='globe',modeTimer=0,diving=false;
   const useGlobe=()=>!planetFailed&&!!window.OceanGlobe?.supported();
+  /* Perte du contexte WebGL (mémoire GPU sur iPhone) : restoreAt garde la caméra pour reconstruire la carte au même endroit. */
+  let mapLost=false,restoreAt=null,lossTimer=0,planetTimer=0,planetView=null,mapLosses=[],planetLosses=[];
+  let tileErrors=[],tileOk=0,tileWarned=false,tileTimer=0,noteKind='';
+  const LOSS_GRACE=700;
 
   function candidates(){const found=typeof exploreSpots==='function'?exploreSpots(currentFilter,{sport:null}):SPOTS.filter(s=>inWorld(s));return found.filter(s=>COORDS[s.id]&&Number.isFinite(COORDS[s.id].lat)&&Number.isFinite(COORDS[s.id].lon));}
   const shortName=s=>String(s.name||'').split(' — ')[0];
@@ -218,7 +222,17 @@
   }
 
   /* ---------- Carte ---------- */
-  function webgl(){try{return !!document.createElement('canvas').getContext('webgl2');}catch(_){return false;}}
+  /* Test unique de WebGL 2 (le même que le globe) : chaque getContext() crée un vrai contexte, et en créer un à chaque
+     déplacement faisait perdre ceux du globe et de la carte (limite de 16 contextes actifs, écran bleu uni sur iPhone). */
+  let webgl2=null;
+  function webgl(){
+    if(window.OceanGlobe?.supported)return window.OceanGlobe.supported();
+    if(webgl2===null){webgl2=false;try{const c=document.createElement('canvas');c.width=c.height=1;const gl=c.getContext('webgl2');webgl2=!!gl;gl?.getExtension('WEBGL_lose_context')?.loseContext();}catch(_){}}
+    return webgl2;
+  }
+  const DPR=()=>M.pixelRatio(window.devicePixelRatio,coarse);
+  /* Style lisible : la carte existe, son contexte n’est pas perdu et son style est en place (MapLibre le détruit à la perte). */
+  const styled=()=>!!map&&!mapLost&&!!map.style;
   /* warmAt : vue de départ imposée par le préchauffage sous le globe ; sinon la vue du globe, ou le monde. */
   let warmAt=null;
   function ensureMap(){
@@ -228,13 +242,15 @@
     starting=(async()=>{
       if(!webgl())throw Error('webgl');
       const ml=await loadEngine();
-      const dive=useGlobe(),v=warmAt||(dive&&planet?planet.view():null);warmAt=null;
-      m=new ml.Map({container:$('#spotMap'),style:dive?diveStyle(style('mercator'),M.mapZoom(DIVE_KM/side(),40)):style(globe()?'globe':'mercator'),center:v?[v.lon,v.lat]:[10,22],zoom:v?M.mapZoom(v.kmPerPx,v.lat):1.2,minZoom:0,maxZoom:17,renderWorldCopies:true,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,fadeDuration:180,maxTileCacheSize:120,locale:{'Map.Title':'Carte des spots','NavigationControl.ZoomIn':'Zoom avant','NavigationControl.ZoomOut':'Zoom arrière','AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
+      const dive=useGlobe(),at=restoreAt,v=warmAt||(dive&&planet?planet.view():null);warmAt=null;restoreAt=null;
+      m=new ml.Map({container:$('#spotMap'),style:dive?diveStyle(style('mercator'),M.mapZoom(DIVE_KM/side(),40)):style(globe()?'globe':'mercator'),center:at?at.center:v?[v.lon,v.lat]:[10,22],zoom:at?at.zoom:v?M.mapZoom(v.kmPerPx,v.lat):1.2,pixelRatio:DPR(),minZoom:0,maxZoom:17,renderWorldCopies:true,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,fadeDuration:180,maxTileCacheSize:M.tileCache(coarse),locale:{'Map.Title':'Carte des spots','NavigationControl.ZoomIn':'Zoom avant','NavigationControl.ZoomOut':'Zoom arrière','AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
       m.touchZoomRotate.disableRotation();m.keyboard.disableRotation?.();
       m.addControl(new ml.AttributionControl({compact:true}),'bottom-right');
       m.getCanvas().setAttribute('aria-label','Carte interactive des spots. Utilise les flèches pour te déplacer, plus et moins pour zoomer.');
-      await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(Error('timeout')),20000);m.once('load',()=>{clearTimeout(t);resolve();});});
-      map=m;engineReady(ml);return m;
+      const made=m;made.on('webglcontextlost',()=>onMapLost(made));
+      /* Contexte perdu avant même le premier rendu : échec immédiat plutôt que 20 s d’attente. */
+      await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(Error('timeout')),20000);m.once('load',()=>{clearTimeout(t);resolve();});m.once('webglcontextlost',()=>{clearTimeout(t);reject(Error('webglcontextlost'));});});
+      map=m;mapLost=false;engineReady(ml);return m;
     })();
     starting.catch(()=>{try{m?.remove();}catch(_){}m=null;starting=null;});
     return starting;
@@ -269,23 +285,28 @@
     let userZoom=false;
     map.on('zoomstart',e=>{userZoom=!!e.originalEvent;});
     map.on('zoomend',()=>{if(userZoom&&mode==='map'&&planet&&!diving&&mapWidthKm()>RISE_KM*.98)rise();userZoom=false;});
-    map.on('error',e=>{if(/glyph|font/i.test(String(e?.error?.message||'')))return;});
+    /* Tuiles ou style en échec : pas de fond vide sans explication. */
+    map.on('error',e=>{if(/glyph|font/i.test(String(e?.error?.message||'')))return;if(e?.sourceId||e?.tile)tileTrouble();});
+    map.on('sourcedata',e=>{if(e.tile)tileOk=Date.now();});
+    map.on('idle',()=>{if(tileWarned&&!M.tilesFailing(tileErrors,tileOk,Date.now()))clearNote('tiles');});
     status.hidden=true;
     updateMinZoom();
   }
   function hover(f){
+    if(!styled())return;
     const id=f?.properties.id??null;if(id===hovered)return;
     if(hovered!==null)map.setFeatureState({source:'spots',id:hovered},{hover:false});
     hovered=id;if(id!==null)map.setFeatureState({source:'spots',id},{hover:true});
   }
   /* Spots sous le doigt, du plus proche au plus lointain. */
   function pick(point,d=mobile()?15:9){
-    if(!map||!map.getLayer('dots'))return [];
+    if(!styled()||!map.getLayer('dots'))return [];
     const found=map.queryRenderedFeatures([[point.x-d,point.y-d],[point.x+d,point.y+d]],{layers:['dots']});
     const seen=new Set(),at=f=>{const p=map.project(f.geometry.coordinates);return Math.hypot(p.x-point.x,p.y-point.y);};
     return found.filter(f=>!seen.has(f.properties.id)&&seen.add(f.properties.id)).sort((a,b)=>at(a)-at(b));
   }
   function onMapClick(e){
+    if(!styled())return;
     /* Groupe de spots : on zoome jusqu’à ce qu’il s’ouvre. */
     const cl=map.queryRenderedFeatures([[e.point.x-14,e.point.y-14],[e.point.x+14,e.point.y+14]],{layers:['clusters']})[0];
     if(cl){const src=map.getSource('spots'),id=cl.properties.cluster_id;Promise.resolve(src.getClusterExpansionZoom(id)).then(z=>{map.easeTo({center:cl.geometry.coordinates,zoom:Math.min(z+.3,12),duration:650});}).catch(()=>{map.easeTo({center:cl.geometry.coordinates,zoom:map.getZoom()+2,duration:650});});return;}
@@ -326,7 +347,9 @@
     if(planetStarting)return planetStarting;
     const host=stage.querySelector('.omap-globe');
     let prefs={};try{prefs=JSON.parse(localStorage.getItem('oceanbuddy_globe')||'{}')||{};}catch(_){}
+    let made=null;
     planetStarting=window.OceanGlobe.create(host,{
+      onContextLost:()=>{if(made&&made===planet)onPlanetLost();},
       minWidthKm:DIVE_KM,lighting:prefs.light,clouds:prefs.clouds===true,
       onSelect:id=>select(id),
       onEmpty:()=>deselect(),
@@ -335,10 +358,10 @@
       /* Emblème d’un pays : on vole vers ses spots. */
       onCountry:name=>{const pts=rows.filter(s=>s.country===name).map(s=>COORDS[s.id]);if(pts.length&&planet){deselect();planet.fit(pts,{minWidthKm:planet.minWidthKm,maxWidthKm:WORLD_KM*.8});}}
     }).then(p=>{
-      planet=p;planet.setPadding(planetPad());
-      wrap.classList.add('is-planet');
+      planet=made=p;planet.setPadding(planetPad());
+      wrap.classList.toggle('is-planet',mode==='globe');
       /* La carte détaillée se prépare en arrière-plan : la première plongée est plus rapide. */
-      watchGestures(host);
+      if(!host.dataset.watched){host.dataset.watched='1';watchGestures(host);}
       setTimeout(()=>{loadEngine().then(()=>scheduleWarm(0)).catch(()=>{});},2500);
       return p;
     });
@@ -390,7 +413,7 @@
     wrap.classList.toggle('is-map',next==='map');
     wrap.classList.toggle('is-planet',next==='globe'&&!!planet);
     if(next==='globe'){planet?.setActive(true);tip?.remove();if(map)hover(null);}
-    else modeTimer=setTimeout(()=>{if(mode==='map')planet?.setActive(false);},420);
+    else modeTimer=setTimeout(()=>{if(mode==='map')planet?.setActive(false,{release:true});},420);
     worldState(true);
   }
   /* Scène d’activité à l’écran : le globe se fige (une seule scène GPU animée), puis reprend. */
@@ -431,6 +454,7 @@
   /* Remontée : le globe reprend là où la carte en est. */
   function rise({animateOut=false}={}){
     if(!planet||mode==='globe')return;
+    if(!map){tip?.remove();setMode('globe');updateList();return;}
     const c=map.getCenter();
     planet.jumpTo({lat:Math.max(-78,Math.min(78,c.lat)),lon:c.lng,widthKm:Math.max(mapWidthKm(),planet.minWidthKm)});
     tip?.remove();
@@ -440,9 +464,103 @@
     updateList();
   }
 
+  /* ---------- Récupération après perte du contexte WebGL ----------
+     iOS retire un contexte WebGL quand la mémoire GPU manque : le canevas reste vide et seul le fond bleu du cadre
+     se voit. On affiche un état clair, puis on reconstruit la carte ou le globe à la même caméra, sans recharger la page.
+     Pertes répétées (plus de 3 en une minute) : bouton « Recharger la carte ». */
+  function note(kind,html,{error=false,soft=false}={}){
+    if(!status)return;noteKind=kind;status.hidden=false;
+    status.classList.toggle('is-error',error);status.classList.toggle('is-soft',soft);
+    status.innerHTML=html;wrap?.classList.toggle('is-recovering',kind==='recover');
+  }
+  function clearNote(kind){
+    if(kind==='tiles')tileWarned=false;
+    if(!status||noteKind!==kind)return;
+    noteKind='';status.hidden=true;status.classList.remove('is-error','is-soft');status.textContent='';wrap?.classList.remove('is-recovering');
+  }
+  function recovering(){note('recover','<span class="omap-spin" aria-hidden="true"></span>Reprise de la carte…');}
+  function recoveryFailed(){
+    wrap?.classList.remove('is-recovering');
+    note('failed','<b>La carte s’est interrompue.</b><span>Le téléphone a manqué de mémoire graphique.</span><button type="button" data-omap-reload>Recharger la carte</button>',{error:true});
+    status.querySelector('[data-omap-reload]').onclick=()=>{mapLosses=[];planetLosses=[];noteKind='';reloadAll();};
+  }
+  /* Bouton « Recharger la carte » : reconstruit ce qui manque, sans recharger la page. */
+  function reloadAll(){
+    recovering();
+    if(useGlobe()&&(!planet||planet.lost))rebuildPlanet();
+    if(mode==='map'||!useGlobe())rebuildMap();else clearNote('recover');
+  }
+  /* Carte détaillée sans contexte : on l’abandonne (sa caméra est gardée pour la suivante). */
+  function dropMap(){
+    const m=map;clearTimeout(lossTimer);
+    if(m){try{const c=m.getCenter();restoreAt={center:[c.lng,c.lat],zoom:m.getZoom()};}catch(_){}}
+    map=null;starting=null;mapLost=false;lastData='';hovered=null;
+    selectedMarker=null;userDot=null;try{tip?.remove();}catch(_){}tip=null;
+    if(m){try{m.remove();}catch(_){}}
+  }
+  function onMapLost(m){
+    if(m!==map)return;
+    mapLost=true;clearTimeout(lossTimer);
+    /* Carte cachée sous le globe : on la libère, la prochaine plongée en créera une neuve. */
+    if(mode!=='map'&&planet&&!planet.lost){dropMap();restoreAt=null;return;}
+    const plan=M.recovery([...mapLosses,Date.now()],Date.now());mapLosses=plan.recent;
+    if(!plan.auto){dropMap();recoveryFailed();return;}
+    recovering();
+    /* Court délai : le système libère la mémoire avant qu’on demande un nouveau contexte. */
+    lossTimer=setTimeout(()=>{if(m===map)rebuildMap();},LOSS_GRACE);
+  }
+  function rebuildMap(){
+    if(map&&!mapLost&&noteKind==='recover'){clearNote('recover');return;}
+    if(map)dropMap();
+    recovering();
+    ensureMap().then(m=>{
+      m.resize();updateMinZoom();setData();
+      if(selected){const s=SPOTS.find(x=>x.id===selected);if(s)placeSelected(s);}
+      if(typeof userPos!=='undefined'&&userPos&&userDot)userDot.setLngLat([userPos.lon,userPos.lat]).addTo(m);
+      clearNote('recover');if(mode==='map'||!planet)updateList();
+    }).catch(()=>{recoveryFailed();});
+  }
+  function onPlanetLost(){
+    const p=planet;if(!p)return;
+    try{const v=p.view();planetView={lat:v.lat,lon:v.lon,widthKm:v.widthKm};}catch(_){}
+    const plan=M.recovery([...planetLosses,Date.now()],Date.now());planetLosses=plan.recent;
+    clearTimeout(planetTimer);
+    if(!plan.auto){if(mode==='globe')recoveryFailed();return;}
+    if(mode==='globe')recovering();
+    planetTimer=setTimeout(rebuildPlanet,LOSS_GRACE);
+  }
+  function rebuildPlanet(){
+    clearTimeout(planetTimer);
+    const p=planet;planet=null;planetStarting=null;planetData='';
+    if(p){try{p.destroy();}catch(_){}}
+    stage?.querySelector('.omap-globe')?.replaceChildren();
+    ensurePlanet().then(np=>{
+      if(planetView)np.jumpTo(planetView);
+      np.setPadding(planetPad());setData();
+      if(selected)np.setSelected(selected);
+      if(typeof userPos!=='undefined'&&userPos)np.setUser?.(userPos);
+      wrap.classList.toggle('is-planet',mode==='globe');
+      if(mode==='globe'){np.setActive(true);clearNote('recover');worldState(true);updateList();}
+      else np.setActive(false,{release:true});
+    }).catch(()=>{
+      /* Deux échecs : le globe est abandonné, la carte à plat prend tout le rôle (comme sans WebGL 2). */
+      if(planetFailed){clearNote('recover');if(mode==='globe'){mode='map';wrap.classList.remove('is-globe','is-planet','is-map');render(true);}}
+      else if(mode==='globe')recoveryFailed();
+    });
+  }
+  /* Tuiles en échec répété sans aucune réussite : message discret au lieu d’un fond muet. */
+  function tileTrouble(){
+    const now=Date.now();tileErrors=[...tileErrors.filter(t=>now-t<4000),now];
+    clearTimeout(tileTimer);
+    tileTimer=setTimeout(()=>{
+      if(noteKind&&noteKind!=='tiles')return;
+      if(M.tilesFailing(tileErrors,tileOk,Date.now())){tileWarned=true;note('tiles',navigator.onLine===false?'Hors connexion : le fond de carte ne se charge pas.':'Le fond de carte se charge mal. Vérifie ta connexion.',{soft:true});}
+    },1200);
+  }
+
   /* Projection selon la forme de l’écran ; la vue monde est recalculée à chaque changement. */
   function updateMinZoom(){
-    if(!map)return;
+    if(!styled())return;
     if(useGlobe()){
       /* Avec le globe, la carte ne sert qu’en détail : toujours à plat, jamais plus large que la remontée. */
       if(map.getProjection?.()?.type!=='mercator')map.setProjection({type:'mercator'});
@@ -467,7 +585,7 @@
       const pts=rows.map(s=>COORDS[s.id]),c=M.cap(pts);
       if(regionsMode()||!c){if(mode==='map')rise();planet.overview(HOME,animate);return;}
       /* Sélection resserrée déjà visible sur la carte détaillée : on y reste. */
-      if(mode==='map'&&c.radius*M.EARTH_KM*2.5+300<RISE_KM){
+      if(mode==='map'&&map&&c.radius*M.EARTH_KM*2.5+300<RISE_KM){
         const b=M.bounds(pts);map.fitBounds(b,{padding:pad(),maxZoom:11,animate:!!animate,duration:animate?900:0});return;
       }
       if(mode==='map')rise();
@@ -527,7 +645,7 @@
       planet.setSpots(rows.map(s=>{const c=COORDS[s.id];return {id:s.id,lat:c.lat,lon:c.lon,name:shortName(s),act:primary(s)||'surf',country:s.country};}));
       if(selected)planet.setSelected(selected);
     }
-    if(map&&key!==lastData){
+    if(styled()&&map.getSource('spots')&&key!==lastData){
       lastData=key;hovered=null;
       /* k : ordre d’affichage — le spot le plus au sud passe devant, comme une vue en perspective. */
       const feats=rows.map(s=>{const c=COORDS[s.id],a=primary(s)||'surf';return {type:'Feature',geometry:{type:'Point',coordinates:[c.lon,c.lat]},properties:{id:s.id,a,c:color(a),n:shortName(s),k:-c.lat}};});
@@ -707,6 +825,8 @@
     terrainUnderlying=[];terrainOpener=null;
     if(message&&typeof toast==='function')toast(message);
     if(map)requestAnimationFrame(()=>map?.resize());
+    /* Le globe, mis en pause sous le relief (un seul contexte animé), reprend. */
+    if(hadOverlay&&planet&&mode==='globe'&&!globeFrozen&&!planet.lost)planet.setActive(true);
     if(restoreFocus&&hadOverlay&&opener?.isConnected)opener.focus({preventScroll:true});
   }
   function distance(a,b){
@@ -731,6 +851,7 @@
     terrainUnderlying=[...wrap.querySelectorAll(':scope>.omap-panel,:scope>.omap-stage>*')].map(element=>({element,inert:element.inert,ariaHidden:element.getAttribute('aria-hidden')}));
     for(const {element} of terrainUnderlying){element.inert=true;element.setAttribute('aria-hidden','true');}
     stage.append(terrainOverlay);
+    if(planet&&mode==='globe')planet.setActive(false);
     terrainOverlay.querySelector('[data-terrain-close]').focus({preventScroll:true});
     try{
       if(!webgl())throw Error('WebGL 2 indisponible');
@@ -742,9 +863,11 @@
           osm:{type:'raster',tiles:['https://tile.openstreetmap.org/{z}/{x}/{y}.png'],tileSize:256,maxzoom:18,attribution:'© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'},
           terrain:{type:'raster-dem',url:'https://tiles.mapterhorn.com/tilejson.json',attribution:'Relief : <a href="https://mapterhorn.com/attribution/">Mapterhorn</a>'}
         },layers:[{id:'ocean-base',type:'raster',source:'osm'}],terrain:{source:'terrain',exaggeration:1}},
-        center:[point.lon,point.lat],zoom:10.2,pitch:62,bearing:-20,maxPitch:78,maxZoom:17,canvasContextAttributes:{antialias:true}
+        center:[point.lon,point.lat],zoom:10.2,pitch:62,bearing:-20,maxPitch:78,maxZoom:17,pixelRatio:DPR(),maxTileCacheSize:M.tileCache(coarse,true),canvasContextAttributes:{antialias:!coarse}
       });
       terrainMap=tmap;
+      /* Relief privé de contexte (mémoire GPU) : retour propre à la carte 2D plutôt qu’un cadre vide. */
+      tmap.on('webglcontextlost',()=>{if(generation===terrainGeneration)closeTerrain('Relief interrompu (mémoire du téléphone). Carte 2D rétablie.');});
       tmap.addControl(new maplibre.NavigationControl({visualizePitch:true}),'top-right');
       terrainOverlay.querySelector('.maplibregl-canvas')?.setAttribute('aria-label',`Carte en relief terrestre autour de ${chosen.name}`);
       for(const [selector,label] of [['.maplibregl-ctrl-zoom-in','Zoom avant'],['.maplibregl-ctrl-zoom-out','Zoom arrière'],['.maplibregl-ctrl-compass','Orienter la carte vers le nord']])terrainOverlay.querySelector(selector)?.setAttribute('aria-label',label);
@@ -776,7 +899,7 @@
      avec son cadre (onglet affiché, plein écran, rotation) et ne reste jamais blanche. */
   const GESTURES={'CooperativeGesturesHandler.WindowsHelpText':'Utilise Ctrl + molette pour zoomer la carte','CooperativeGesturesHandler.MacHelpText':'Utilise ⌘ + molette pour zoomer la carte','CooperativeGesturesHandler.MobileHelpText':'Utilise deux doigts pour déplacer la carte'};
   function mini(host,initial){
-    let cfg=initial||{},m=null,ml=null,creating=null,markers=[],pop=null,io=null,ro=null,dead=false,full=false,ready=false;
+    let cfg=initial||{},m=null,ml=null,creating=null,markers=[],pop=null,io=null,ro=null,dead=false,full=false,ready=false,lostTimer=0;
     host.classList.add('omini');host.innerHTML=`<div class="omini-canvas"></div><div class="omini-ctrls"><div class="omap-zoom"><button type="button" data-mini="in" aria-label="Zoom avant" title="Zoom avant">${icon('plus')}</button><button type="button" data-mini="out" aria-label="Zoom arrière" title="Zoom arrière">${icon('minus')}</button></div><button type="button" data-mini="fit" aria-label="Recentrer la carte" title="Recentrer">${icon('locate')}</button><button type="button" data-mini="full" aria-label="Carte en plein écran" title="Plein écran">${icon('expand')}</button></div><p class="omap-status omini-status" role="status">Chargement de la carte…</p>`;
     const canvas=host.querySelector('.omini-canvas'),status=host.querySelector('.omini-status');
     host.addEventListener('click',e=>{const b=e.target.closest('[data-mini]');if(!b||!m)return;const k=b.dataset.mini;if(k==='in')m.zoomIn();if(k==='out')m.zoomOut();if(k==='fit')frame(true);if(k==='full')setFull(!full);});
@@ -793,10 +916,12 @@
       creating=(async()=>{
         if(!webgl())throw Error('webgl');
         ml=await loadEngine();if(dead)return;
-        m=new ml.Map({container:canvas,style:style('mercator'),center:[0,20],zoom:2,maxZoom:17,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,cooperativeGestures:cfg.cooperative!==false,fadeDuration:150,maxTileCacheSize:60,locale:{...GESTURES,'AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
+        m=new ml.Map({container:canvas,style:style('mercator'),center:[0,20],zoom:2,maxZoom:17,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,cooperativeGestures:cfg.cooperative!==false,fadeDuration:150,maxTileCacheSize:M.tileCache(coarse,true),pixelRatio:DPR(),locale:{...GESTURES,'AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
         m.touchZoomRotate.disableRotation();m.keyboard.disableRotation?.();
         m.addControl(new ml.AttributionControl({compact:true}),'bottom-right');
         m.getCanvas().setAttribute('aria-label',cfg.label||'Carte du secteur');
+        /* Contexte perdu : la petite carte est reconstruite (même config) au lieu de rester vide. */
+        const made=m;made.on('webglcontextlost',()=>{if(made!==m||dead)return;clearTimeout(lostTimer);ready=false;status.hidden=false;status.classList.remove('is-error');status.textContent='Reprise de la carte…';lostTimer=setTimeout(()=>{if(made!==m||dead)return;markers=[];pop=null;try{made.remove();}catch(_){}m=null;creating=null;start();},LOSS_GRACE);});
         await new Promise((resolve,reject)=>{const t=setTimeout(()=>reject(Error('timeout')),20000);m.once('load',()=>{clearTimeout(t);resolve();});});
         if(dead){m.remove();return;}
         m.addSource('others',{type:'geojson',data:{type:'FeatureCollection',features:[]}});
@@ -867,7 +992,7 @@
     return {
       update(next){cfg={...cfg,...next};if(m)apply();else start();},
       resize(){if(m){m.resize();frame(false);}else start();},
-      destroy(){dead=true;ready=false;io?.disconnect();ro?.disconnect();if(full)setFull(false);try{m?.remove();}catch(_){}m=null;},
+      destroy(){dead=true;ready=false;clearTimeout(lostTimer);io?.disconnect();ro?.disconnect();if(full)setFull(false);try{m?.remove();}catch(_){}m=null;},
       get map(){return m;}
     };
   }

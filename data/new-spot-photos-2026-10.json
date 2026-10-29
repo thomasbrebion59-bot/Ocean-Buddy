@@ -1,0 +1,85 @@
+{
+  "santocha": {
+    "file": "Surfing at Santocha.jpg",
+    "src": "assets/spots/santocha.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Surfing_at_Santocha.jpg",
+    "author": "Tangopaso",
+    "license": "Public domain",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/Surfing_at_Santocha.jpg/1920px-Surfing_at_Santocha.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1920,
+    "height": 1440,
+    "thumb": "assets/spots/thumbs/santocha.webp"
+  },
+  "estacade": {
+    "file": "Capbreton Estacade 03.JPG",
+    "src": "assets/spots/estacade.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Capbreton_Estacade_03.JPG",
+    "author": "Raphael Isla",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/b/b1/Capbreton_Estacade_03.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "width": 1500,
+    "height": 844,
+    "thumb": "assets/spots/thumbs/estacade.webp"
+  },
+  "estagnots": {
+    "file": "Plage des estagnots.jpg",
+    "src": "assets/spots/estagnots.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Plage_des_estagnots.jpg",
+    "author": "Seignossetourism",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/6/64/Plage_des_estagnots.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "width": 1239,
+    "height": 929,
+    "thumb": "assets/spots/thumbs/estagnots.webp"
+  },
+  "penon": {
+    "file": "Seignosse-franchini-photos.jpg",
+    "src": "assets/spots/penon.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Seignosse-franchini-photos.jpg",
+    "author": "Slash63",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Seignosse-franchini-photos.jpg/1920px-Seignosse-franchini-photos.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1920,
+    "height": 1142,
+    "thumb": "assets/spots/thumbs/penon.webp"
+  },
+  "saintgilles": {
+    "file": "Grande Plage - Saint-Gilles-Croix-de-Vie (FR85) - 2026-08-01 - 3.jpg",
+    "src": "assets/spots/saintgilles.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Grande_Plage_-_Saint-Gilles-Croix-de-Vie_(FR85)_-_2026-08-01_-_3.jpg",
+    "author": "Chabe01",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/40/Grande_Plage_-_Saint-Gilles-Croix-de-Vie_%28FR85%29_-_2026-08-01_-_3.jpg/1920px-Grande_Plage_-_Saint-Gilles-Croix-de-Vie_%28FR85%29_-_2026-08-01_-_3.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1920,
+    "height": 1440,
+    "thumb": "assets/spots/thumbs/saintgilles.webp"
+  },
+  "sion": {
+    "file": "Plage de Sion.jpg",
+    "src": "assets/spots/sion.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Plage_de_Sion.jpg",
+    "author": "Yann240b",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Plage_de_Sion.jpg/1920px-Plage_de_Sion.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1920,
+    "height": 1080,
+    "thumb": "assets/spots/thumbs/sion.webp"
+  },
+  "sauzaie": {
+    "file": "Plage de la Sauzaie nord - panoramio.jpg",
+    "src": "assets/spots/sauzaie.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Plage_de_la_Sauzaie_nord_-_panoramio.jpg",
+    "author": "Chadel",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Plage_de_la_Sauzaie_nord_-_panoramio.jpg/1920px-Plage_de_la_Sauzaie_nord_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1920,
+    "height": 1440,
+    "thumb": "assets/spots/thumbs/sauzaie.webp"
+  }
+}

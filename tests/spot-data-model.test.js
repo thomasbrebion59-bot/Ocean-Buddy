@@ -196,3 +196,148 @@ test('chaque fiche du catalogue a une saison de carnet (hypothèse du message de
   const sans = cat.filter(s => !(guides[s.id] && guides[s.id].season)).map(s => s.id);
   assert.deepEqual(sans, []);
 });
+
+/* ---------- « Lire les conditions » par niveau ---------- */
+const EMOJI = /[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/u;
+const flat = r => r.levels.flatMap(l => l.blocks.flatMap(b => [b.h, ...b.lines.map(x => (Array.isArray(x) ? x.join(' ') : x))])).join('\n');
+const hossegor = { id: 'hossegor', level: 'expert', wind: 'Offshore E', editorialStatus: 'unverified',
+  dangers: [['🌀', 'Courants de baïne très forts, surtout à marée descendante.'], ['⚡', 'Vagues creuses et puissantes qui ferment vite.']],
+  zones: [{ n: 'La Gravière', l: 'expert', d: 'tubes puissants et rapides' }, { n: 'La Centrale', l: 'intermediaire', d: 'pics plus ouverts' }, { n: 'La Sud', l: 'debutant', d: 'vagues douces' }] };
+const liveNow = { wind: '18 km/h E', swell: '1,8 m', temp: '17°C', tide: 'Descendante' };
+const climP90 = { ...clim, wave: { ...clim.wave, p90: twelve(() => 3.5) } };
+const coach = (o = {}) => M.coach({ act: 'surf', level: 'debutant', spot: hossegor, live: liveNow, clim: climP90, m: 9, monthName: 'octobre', suit: '3/2', ...o });
+
+test('les textes du moment sont lus en nombres, et ce qui manque reste vide', () => {
+  assert.deepEqual(M.parseLive(liveNow), { windKmh: 18, windDir: 90, swellM: 1.8, periodS: null, swellDirDeg: null, tempC: 17, tide: 'Descendante' });
+  assert.deepEqual(M.parseLive({ wind: '—', swell: '—', temp: '—', tide: '—' }), { windKmh: null, windDir: null, swellM: null, periodS: null, swellDirDeg: null, tempC: null, tide: null });
+  assert.equal(M.parseLive(null).windKmh, null);
+  assert.equal(M.parseLive({ wind: '12 km/h NW' }).windDir, 315);
+  assert.equal(M.parseLive({ wind: '12 km/h O' }).windDir, 270);
+});
+
+test('offshore et onshore ne se déduisent que du sens offshore donné par le catalogue', () => {
+  assert.equal(M.windSide(90, 'Offshore E'), 'offshore');
+  assert.equal(M.windSide(270, 'Offshore E'), 'onshore');
+  assert.equal(M.windSide(0, 'Offshore E'), 'cross');
+  assert.equal(M.windSide(90, 'Offshore'), null);
+  assert.equal(M.windSide(90, 'Onshore 28 km/h'), null);
+  assert.equal(M.windSide(null, 'Offshore E'), null);
+});
+
+test('le débutant reçoit houle, période, vent, marée, baïne, mise à l’eau, courant et drapeaux', () => {
+  const r = coach(), text = flat({ levels: [r.levels[0]] });
+  assert.equal(r.selected, 'debutant');
+  for (const w of ['période', 'offshore', 'marée descendante', 'baïne', 'zone surveillée', 'Ne lutte pas', 'parallèle', 'Lève un bras', 'drapeau']) assert.ok(new RegExp(w, 'i').test(text), w);
+  assert.match(text, /Eau à 17 °C : prévois une combinaison 3\/2\./);
+  assert.match(text, /Zone indiquée pour débuter dans le catalogue : La Sud/);
+  assert.match(text, /le carnet signale : Courants de baïne/);
+  assert.match(text, /non vérifié/);
+  assert.match(r.warn, /classé expert/);
+});
+
+test('l’intermédiaire a la fenêtre de session, l’orientation de la houle, la période, le pic et la planche', () => {
+  const text = flat({ levels: [coach({ level: 'intermediaire' }).levels[1]] });
+  for (const w of ['Choisir ta fenêtre', 'Orientation de la houle', 'Période et puissance', 'priorités au pic', 'Choisir ta planche']) assert.ok(new RegExp(w, 'i').test(text), w);
+  assert.match(text, /arrive surtout du nord-ouest/);
+  assert.match(text, /La Centrale/);
+  assert.ok(!/La Gravière/.test(text), 'un pic expert ne figure pas dans la liste de l’intermédiaire');
+  assert.ok(!/Tant que tu apprends/.test(text));
+});
+
+test('l’expert a la lecture fine, les coefficients, les bancs, les dangers du spot et ses limites', () => {
+  const text = flat({ levels: [coach({ level: 'expert' }).levels[2]] });
+  for (const w of ['Lecture fine', 'coefficient', 'bancs', 'Dangers propres au spot', 'Limites et retour au bord']) assert.ok(new RegExp(w, 'i').test(text), w);
+  assert.match(text, /Vagues creuses et puissantes/);
+  assert.match(text, /La Gravière/);
+  assert.match(text, /dépassent 3,5 m en octobre/);
+});
+
+test('sans niveau choisi, les trois niveaux sont rendus ; avec un niveau, il est signalé', () => {
+  const none = coach({ level: null });
+  assert.equal(none.selected, null);
+  assert.deepEqual(none.levels.map(l => l.id), ['debutant', 'intermediaire', 'expert']);
+  assert.equal(coach({ level: 'n’importe quoi' }).selected, null);
+  assert.equal(coach({ level: 'expert' }).selected, 'expert');
+  assert.equal(coach({ level: 'expert' }).warn, null);
+});
+
+test('sans conditions du moment, seules les leçons générales et les normales restent', () => {
+  const r = coach({ live: null, suit: null });
+  const text = flat({ levels: [r.levels[0]] });
+  assert.ok(!/Vent de /.test(text) && !/Houle de /.test(text) && !/Eau à/.test(text));
+  assert.match(text, /En octobre, la période habituelle ici est d’environ 13 s/);
+  assert.match(text, /Ce mois-ci ici/);
+  assert.match(text, /Repérer une baïne ou un courant/);
+  const sans = coach({ live: null, clim: null, suit: null });
+  assert.ok(!/période habituelle/.test(flat({ levels: [sans.levels[0]] })));
+});
+
+test('le sens du vent n’est jamais inventé quand le catalogue ne le donne pas', () => {
+  const r = coach({ spot: { ...hossegor, wind: 'Offshore' } }), text = flat({ levels: [r.levels[0]] });
+  assert.match(text, /on ne connaît pas le sens du vent par rapport à la plage/);
+  assert.ok(!/Le vent vient de la terre \(offshore\)/.test(text));
+});
+
+test('un vent fort et une grosse houle ne sont pas présentés comme faciles pour un débutant', () => {
+  const text = flat({ levels: [coach({ live: { wind: '35 km/h O', swell: '3,1 m', temp: '17°C', tide: 'Montante' } }).levels[0]] });
+  assert.match(text, /Grosse houle/);
+  assert.match(text, /Vent fort/);
+  assert.match(text, /Reste à terre/);
+});
+
+test('plongée : texte existant ; plan d’eau : pas de houle ni de marée ; kite : vent seul', () => {
+  assert.equal(coach({ act: 'plongee' }), null);
+  assert.equal(coach({ inland: true }), null);
+  const kite = coach({ act: 'kitesurf', level: null, live: { wind: '28 km/h O', swell: '2 m', tide: 'Montante' } });
+  assert.equal(kite.kind, 'wind'); assert.equal(kite.levels.length, 1);
+  const t = flat(kite);
+  assert.match(t, /Vent soutenu/); assert.ok(!/Houle/.test(t));
+  const lake = coach({ act: 'paddle', inland: true, live: { wind: '12 km/h N', swell: '—', temp: '—', tide: 'Montante' } });
+  assert.equal(lake.kind, 'water'); assert.ok(!/Marée/.test(flat(lake)));
+});
+
+test('aucun emoji et aucune formule creuse dans les textes générés', () => {
+  for (const args of [{}, { level: 'expert' }, { level: null }, { act: 'kitesurf' }, { act: 'baignade' }, { live: null }]) {
+    const t = flat(coach(args));
+    assert.ok(!EMOJI.test(t.replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu, m => (hossegor.dangers.some(d => d[0] === m) ? '' : m))), JSON.stringify(args));
+    assert.ok(!/n’hésite pas|il est important de|il convient de|dans l’ensemble/i.test(t), JSON.stringify(args));
+  }
+});
+
+test('le conseil ne fabrique ni niveau de risque ni taille de matériel', () => {
+  const t = flat(coach({ level: null }));
+  assert.ok(!/niveau de risque|risque (faible|élevé|modéré)|\b\d['’]?\d?\s?(pieds|ft|litres?)\b/i.test(t));
+});
+
+test('coach : le conseil « eau fraîche » n’apparaît pas en eau chaude (baignade)', () => {
+  const M = require('../spot-data-model.js');
+  const mk = temp => M.coach({ act: 'baignade', inland: false, level: null, spot: {}, live: { wind: '5 km/h N', temp: temp + '°C' }, clim: null, m: 0, monthName: 'janvier' });
+  const txt = r => JSON.stringify(r.levels[0].blocks);
+  assert.ok(!/épuise/.test(txt(mk(28))));
+  assert.ok(/épuise/.test(txt(mk(15))));
+});
+
+test('période et direction du jour : lues du live, jamais devinées', () => {
+  const p = M.parseLive({ ...liveNow, period: '11,2 s', periodS: 11.2, swellDir: 'O', swellDirDeg: 275 });
+  assert.equal(p.periodS, 11.2);
+  assert.equal(p.swellDirDeg, 275);
+  assert.equal(M.parseLive({ ...liveNow, period: '9 s' }).periodS, 9);
+  assert.equal(M.parseLive({ ...liveNow, period: '—', periodS: null }).periodS, null);
+});
+
+test('coach : la période du jour remplace la normale du mois, qui reste le repli annoncé', () => {
+  const jour = flat({ levels: [coach({ live: { ...liveNow, period: '14 s', periodS: 14 } }).levels[0]] });
+  assert.ok(/environ 14 s aujourd’hui \(valeur du modèle/.test(jour));
+  assert.ok(!/période habituelle/.test(jour));
+  assert.ok(/Longue/.test(jour));
+  const repli = flat({ levels: [coach().levels[0]] });
+  assert.ok(/période habituelle ici/.test(repli) && /pas la valeur du jour/.test(repli));
+  const sansClim = flat({ levels: [coach({ clim: null, live: { ...liveNow, period: '7 s', periodS: 7 } }).levels[0]] });
+  assert.ok(/environ 7 s aujourd’hui/.test(sansClim));
+});
+
+test('coach expert : la direction du jour passe avant la direction moyenne', () => {
+  const r = coach({ level: 'intermediaire', live: { ...liveNow, swellDirDeg: 275 } });
+  const t = flat({ levels: [r.levels[1]] });
+  assert.ok(/Aujourd’hui, la houle arrive d’ouest/.test(t));
+});

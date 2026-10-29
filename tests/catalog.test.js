@@ -8,13 +8,14 @@ const app=fs.readFileSync(path.join(root,'app.js'),'utf8');
 const all=JSON.parse(fs.readFileSync(path.join(root,'data/catalog.json'),'utf8'));
 const additions=all.filter(s=>s.edition==='catalogue-2026-09');
 const additions2=all.filter(s=>s.edition==='catalogue-2026-09b');
-const base=all.filter(s=>s.editorialStatus==='unverified'&&!['catalogue-2026-09','catalogue-2026-09b'].includes(s.edition));
+const additions3=all.filter(s=>s.edition==='catalogue-2026-10');
+const base=all.filter(s=>s.editorialStatus==='unverified'&&!['catalogue-2026-09','catalogue-2026-09b','catalogue-2026-10'].includes(s.edition));
 const extra=all.filter(s=>s.editorialStatus==='reviewed');
 const photos=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/sources.json'),'utf8'));
 const legacy=require('../legacy-spots.js');
 const sports=new Set(['surf','bodyboard','plongee','snorkeling','paddle','kayak','baignade','kitesurf','windsurf']);
-test('718 distinct spots: 168 historical, 112 sourced, 152 + 286 September 2026 additions',()=>{
- assert.equal(base.length,168);assert.equal(extra.length,112);assert.equal(additions.length,152);assert.equal(additions2.length,286);assert.equal(all.length,718);
+test('725 distinct spots: 168 historical, 112 sourced, 152 + 286 September 2026 additions, 7 October 2026 additions',()=>{
+ assert.equal(base.length,168);assert.equal(extra.length,112);assert.equal(additions.length,152);assert.equal(additions2.length,286);assert.equal(additions3.length,7);assert.equal(all.length,725);
  assert.equal(new Set(all.map(s=>s.id)).size,all.length);
  for(const s of all){assert.ok(s.sports.length,s.id);assert.ok(s.sports.every(x=>sports.has(x)),s.id);}
  assert.deepEqual([...base.find(s=>s.id==='uluwatu').sports],['surf']);
@@ -70,7 +71,7 @@ test('every spot shows the six fixed practical rows without inventing missing fa
  assert.equal(typeof all.find(s=>s.id==='saintecroix').visit.localRules,'object');
 });
 test('each published photograph belongs to the destination and has usable attribution',()=>{
- assert.equal(all.length,718);
+ assert.equal(all.length,725);
  assert.equal(Object.keys(photos).length,all.filter(s=>s.photo).length);
  for(const id of ['tamarindo','byronbay']){const p=all.find(s=>s.id===id).photo;assert.equal(p.ai,true,id);assert.equal(p.label,'Illustration IA',id);assert.match(p.caption,/pas une photo du lieu/,id);assert.ok(photos[id],id);}
  for(const s of all.filter(s=>s.photo?.ai))assert.match(s.photo.src,/-ia\.webp$/,s.id);
@@ -138,7 +139,7 @@ test('visible weather keeps marine values aligned when lakes appear between coas
 });
 test('gallery images are local, credited and attached to existing destinations',()=>{
  const galleries=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/gallery-sources.json'),'utf8'));
- assert.equal(Object.values(galleries).flat().length,29);assert.equal(extra.filter(s=>s.catalogNew).length,0);assert.equal(all.filter(s=>s.catalogNew).length,additions2.length);assert.ok(additions2.every(s=>s.catalogNew));
+ assert.equal(Object.values(galleries).flat().length,29);assert.equal(extra.filter(s=>s.catalogNew).length,0);assert.equal(all.filter(s=>s.catalogNew).length,additions3.length);assert.ok(additions3.every(s=>s.catalogNew));
  for(const [id,rows] of Object.entries(galleries)){assert.ok(all.some(s=>s.id===id),id);for(const p of rows){assert.ok(fs.statSync(path.join(root,p.src)).size>1000);assert.ok(p.author&&p.license);assert.equal(new URL(p.source).protocol,'https:');}}
 });
 test('emergency numbers come from data/sources/urgences.json by exact country name and are never invented',()=>{
@@ -181,8 +182,8 @@ test('every spot has a country and sits on the right continent',()=>{
  for(const s of all.filter(s=>/hawaï|kauaʻi|oahu|maui/i.test(s.loc)))assert.equal(s.world,'na',s.id);
  for(const s of all.filter(s=>s.country==='États-Unis'))assert.equal(s.world,'na',s.id);
  for(const s of all.filter(s=>s.world==='oc'))assert.notEqual(s.country,'États-Unis',s.id);
- for(const s of [...additions,...additions2]){assert.equal(s.editorialStatus,'unverified',s.id);assert.equal(s.source.url,null,s.id);assert.ok(s.dangers.length&&s.tip,s.id);}
- for(const s of additions2){assert.ok(s.loc.endsWith(s.country),s.id);assert.ok(['coastal-sector','lake-sector','inland-sector'].includes(s.coordinatePrecision),s.id);if(s.photo)assert.match(s.photo.license,/CC BY|CC0|Public domain|PD|Attribution/i,s.id);}
+ for(const s of [...additions,...additions2,...additions3]){assert.equal(s.editorialStatus,'unverified',s.id);assert.equal(s.source.url,null,s.id);assert.ok(s.dangers.length&&s.tip,s.id);}
+ for(const s of [...additions2,...additions3]){assert.ok(s.loc.endsWith(s.country),s.id);assert.ok(['coastal-sector','lake-sector','inland-sector'].includes(s.coordinatePrecision),s.id);if(s.photo)assert.match(s.photo.license,/CC BY|CC0|Public domain|PD|Attribution/i,s.id);}
  for(const id of ['todossantos','cabopulmo'])assert.equal(all.find(s=>s.id===id).country,'Mexique',id);
 });
 test('relecture sécurité : aucun calme promis sans condition, aucun garde-côtes prêté à un numéro général',()=>{
@@ -198,4 +199,20 @@ test('relecture sécurité : aucun calme promis sans condition, aucun garde-côt
  const en=JSON.parse(fs.readFileSync(path.join(root,'locales/translations/en.json'),'utf8'));
  const es=JSON.parse(fs.readFileSync(path.join(root,'locales/translations/es.json'),'utf8'));
  for(const s of all)for(const x of [s.tip,s.desc,...(s.dangers||[]).map(d=>d[1])].filter(Boolean)){assert.ok(en[x],'en '+s.id+' : '+x);assert.ok(es[x],'es '+s.id+' : '+x);}
+});
+
+test('retours du 29 octobre 2026 : Capbreton, Seignosse, Saint-Gilles-Croix-de-Vie et voisins vendéens ont leur fiche, trouvable par la recherche',()=>{
+ const ids=['santocha','estacade','estagnots','penon','saintgilles','sion','sauzaie'];
+ assert.deepEqual(additions3.map(s=>s.id).sort(),[...ids].sort());
+ for(const s of additions3){
+  assert.equal(s.world,'fr',s.id);assert.equal(s.country,'France',s.id);assert.ok(s.photo&&/CC BY|Public domain/.test(s.photo.license),s.id);
+  assert.match(s.source.label,/octobre 2026/,s.id);assert.ok(s.coords.lat>43&&s.coords.lat<47&&s.coords.lon<-1&&s.coords.lon>-2.1,s.id);
+ }
+ /* recherche : même normalisation que searchable() de app.js (minuscules, sans accents), sur nom + région + pays */
+ const norm=v=>String(v||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();
+ const find=q=>all.filter(s=>norm(s.name+' '+s.loc+' '+s.country).includes(norm(q))).map(s=>s.id);
+ for(const [q,id] of [['gravière','hossegor'],['graviere','hossegor'],['capbreton','capbreton'],['capbreton','santocha'],['capbreton','estacade'],['seignosse','seignosse'],['seignosse','estagnots'],['seignosse','penon'],['saint-gilles','saintgilles'],['croix-de-vie','saintgilles'],['sion','sion'],['sauzaie','sauzaie'],['bretignolles','sauzaie'],['Brétignolles','sauzaie']])assert.ok(find(q).includes(id),q+' → '+id);
+ /* ni doublon avec les fiches existantes, ni identifiant réutilisé */
+ assert.equal(new Set(all.map(s=>s.id)).size,all.length);
+ for(const id of ['hossegor','seignosse','capbreton'])assert.ok(all.find(s=>s.id===id&&s.edition===undefined),id);
 });

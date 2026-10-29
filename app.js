@@ -576,7 +576,8 @@ function renderSpots(filter=currentFilter,keep){
   watchConditionCards();
 }
 function filterSpots(el,f){document.querySelectorAll('#filters .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderSpots(f);}
-function searchable(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().trim();}
+/* Traits d'union, tirets et apostrophes comptent comme des espaces, des deux côtés : « saint gilles » trouve « Saint-Gilles-Croix-de-Vie ». */
+function searchable(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[-\u2010-\u2015\x27\u2019\u2018\x60\u00b4]+/g,' ').replace(/\s+/g,' ').trim();}
 function clearSpotSearch(){const i=document.getElementById('spotSearch');if(i){i.value='';i.focus();}searchSpots('');}
 /* Garde la recherche et la destination, retire seulement le filtre d'activité. */
 function exploreAllActivities(){window.OceanNavigation?.begin();activeSport=null;chosenSport='all';renderSportFilters();renderWorlds();syncWorldUI();searchSpots(currentSearch);saveState();}
@@ -1427,7 +1428,7 @@ async function fetchConditions(s){
   try{
     const [w,mar]=await Promise.all([
       fetch(`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto&cell_selection=${meteoCell(s)}`).then(r=>r.json()).catch(()=>({})),
-      isInland(s)?Promise.resolve({}):fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&current=wave_height,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&hourly=sea_level_height_msl&forecast_days=2&timezone=auto`).then(r=>r.json()).catch(()=>({}))
+      isInland(s)?Promise.resolve({}):fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&current=wave_height,wave_period,wave_direction,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&hourly=sea_level_height_msl&forecast_days=2&timezone=auto`).then(r=>r.json()).catch(()=>({}))
     ]);
     if(currentSpot!==s.id)return;
     const wc=w.current||{},mc=mar.current||{};
@@ -1440,6 +1441,9 @@ async function fetchConditions(s){
       temp:sst!=null?`${Math.round(sst)}°C`:'—',
       current:mc.ocean_current_velocity!=null?`${num1(+mc.ocean_current_velocity)} km/h ${cardinal(mc.ocean_current_direction)}`:'—',
       currentK:mc.ocean_current_velocity!=null?+mc.ocean_current_velocity:null,
+      /* Période et direction de la houle du jour (modèle Open-Meteo, au large) : lues par « Lire les conditions ». */
+      period:mc.wave_period!=null?`${num1(+mc.wave_period)} s`:'—',periodS:mc.wave_period!=null?+mc.wave_period:null,
+      swellDir:mc.wave_direction!=null?cardinal(mc.wave_direction):'—',swellDirDeg:mc.wave_direction!=null?+mc.wave_direction:null,
       tide:tide||'—',live:true,fetchedAt:Date.now()
     };
     LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);

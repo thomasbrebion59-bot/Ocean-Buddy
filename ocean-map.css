@@ -271,3 +271,10 @@ body.omini-full{overflow:hidden}body.omini-full .nav,body.omini-full .fab,body.o
 .omap.is-globe .omap-ctrls>button:hover,.omap.is-globe .omap-zoom button:hover{background:var(--t-main2);color:var(--t-on-main)}
 .omap.is-globe .omap-zoom button+button{border-top-color:color-mix(in srgb,var(--t-on-main) 22%,transparent)}
 .omap.is-globe button:focus-visible,.omap.is-globe select:focus-visible{outline-color:var(--t-acc)}
+/* ---------- Reprise après perte du contexte WebGL (mémoire GPU) : état clair au lieu d'un bleu uni ---------- */
+.omap.is-recovering #spotMap canvas,.omap.is-recovering .og-canvas{opacity:0}
+.omap.is-recovering .omap-stage::before{content:"";position:absolute;inset:0;z-index:2;pointer-events:none;background:linear-gradient(110deg,transparent 30%,color-mix(in srgb,var(--t-on-main) 9%,transparent) 50%,transparent 70%) 0 0/250% 100%;animation:omap-sheen 1.6s linear infinite}
+.omap-status .omap-spin{display:inline-block;width:14px;height:14px;margin-inline-end:9px;vertical-align:-2px;border:2px solid color-mix(in srgb,var(--t-deep) 22%,transparent);border-top-color:var(--t-main);border-radius:50%;animation:omap-turn .8s linear infinite}
+@keyframes omap-sheen{to{background-position:-250% 0}}
+@keyframes omap-turn{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.omap.is-recovering .omap-stage::before,.omap-status .omap-spin{animation:none}}

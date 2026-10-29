@@ -48,7 +48,7 @@ for(const spot of catalog){
 const PALETTE={fr:['#cfe6f7','#8fc2e6','#2b86c0','#12608f'],eu:['#dcebf5','#a3c6dd','#22759c','#0d4767'],af:['#ffe7c4','#f7b77f','#1cadc2','#0f7b98'],na:['#ffe0cc','#f5a58d','#2f8dc6','#175f8d'],sa:['#ffe8c6','#f3b06f','#2091ba','#0d5f81'],as:['#dff5f1','#a6e0d8','#19bbb0','#0c7b81'],oc:['#d5edf9','#84c8e9','#1599d8','#0a5288']};
 const ids=new Set(catalog.map(s=>s.id));
 let added=0;
-for(const {id,name,loc,country,world,lat,lon,sports,level,waterType,desc,tip,dangers,coordinatePrecision,anecdote,fauna} of additions){
+for(const {id,name,loc,country,world,lat,lon,sports,level,waterType,desc,tip,dangers,coordinatePrecision,anecdote,fauna,zones,photoContext,sourceLabel} of additions){
   if(ids.has(id))continue;
   const [sky,sky2,sea,sea2]=PALETTE[world];
   const photo=photos[id]||null;
@@ -56,10 +56,10 @@ for(const {id,name,loc,country,world,lat,lon,sports,level,waterType,desc,tip,dan
     id,name,loc,country,world,coords:{lat,lon},
     coordinatePrecision:coordinatePrecision||(waterType==='sea'?'coastal-sector':waterType==='lake'?'lake-sector':'inland-sector'),
     sports,level,desc,dangers,tip,
-    ...(anecdote?{anecdote}:{}),...(fauna?{fauna}:{}),
+    ...(anecdote?{anecdote}:{}),...(fauna?{fauna}:{}),...(zones?{zones}:{}),...(photoContext?{photoContext}:{}),
     danger:level==='expert'?4:level==='intermediaire'?2:1,
     sky,sky2,sea,sea2,wind:'—',swell:'—',temp:'—',tide:'—',waterType,
-    source:{status:'unverified',label:'Fiche Ocean Buddy · septembre 2026 · à vérifier localement',url:null,reviewed:null},
+    source:{status:'unverified',label:sourceLabel||'Fiche Ocean Buddy · septembre 2026 · à vérifier localement',url:null,reviewed:null},
     reviewed:null,editorialStatus:'unverified',edition,catalogNew:true,
     photo
   });
