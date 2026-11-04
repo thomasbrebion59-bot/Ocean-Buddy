@@ -253,7 +253,7 @@ const SCHEMAS = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 's
 const byId = id => CATALOG.find(s => s.id === id);
 const kindOf = (L, id) => diagram(L.draw(byId(id), LIVE, MARINE).html);
 
-test('passe et rivière : le catalogue donne les 61 + 6 spots de la recherche, et aucun autre', () => {
+test('passe et rivière : le catalogue donne les 61 + 1 (Rocher du Diamant, décembre 2026) + 6 spots, et aucun autre', () => {
   const L = load();
   const passe = [], riviere = [];
   for (const s of CATALOG) {
@@ -261,7 +261,9 @@ test('passe et rivière : le catalogue donne les 61 + 6 spots de la recherche, e
     if (kind === 'passe') passe.push(s.id);
     if (kind === 'riviere') riviere.push(s.id);
   }
-  assert.equal(passe.length, 61, passe.join(','));
+  /* 61 spots de la recherche + diamant (Figaro Nautisme : le rocher est « soumis aux courants »), ajouté avec l'édition de décembre 2026 */
+  assert.equal(passe.length, 62, passe.join(','));
+  assert.ok(passe.includes('diamant'));
   assert.deepEqual(riviere.sort(), ['futaleufu', 'gorgestarn', 'pontdarc', 'rishikesh', 'roquegageac', 'soca']);
   for (const id of ['sipadan', 'saltstraumen', 'tikehau', 'rangiroa']) assert.ok(passe.includes(id), id);
   /* Un spot de passe garde ses lectures marines ; une rivière n'en a aucune. */

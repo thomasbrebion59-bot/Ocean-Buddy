@@ -7190,5 +7190,201 @@
   "research": [
    "urgences-G4.verifie.json#Vietnam"
   ]
+ },
+ {
+  "country": "Djibouti",
+  "checked": "2026-11-04",
+  "call": {
+   "number": null,
+   "status": "à vérifier",
+   "sources": [],
+   "note": "La page FCDO ne donne pas de numéro unique : ambulance, pompiers et police ont chacun le leur."
+  },
+  "general": {
+   "number": null,
+   "status": "à vérifier",
+   "sources": []
+  },
+  "medical": {
+   "number": "21 35 09 62 / 21 35 27 12",
+   "label": "Ambulance (deux numéros donnés par le FCDO)",
+   "status": "sourcé",
+   "sources": [
+    0
+   ]
+  },
+  "sea": {
+   "number": null,
+   "status": "à vérifier",
+   "vhf16": false,
+   "sources": []
+  },
+  "line": {
+   "kind": "ambulance",
+   "n": "21 35 09 62 / 21 35 27 12"
+  },
+  "sources": [
+   {
+    "url": "https://www.gov.uk/foreign-travel-advice/djibouti/getting-help",
+    "publisher": "FCDO (Foreign, Commonwealth & Development Office, Royaume-Uni)",
+    "title": "Djibouti travel advice : Getting help",
+    "consulted": "2026-11-04",
+    "quote": "Ambulance: 21 35 09 62 or 21 35 27 12 Fire: 18 Police: 17"
+   }
+  ],
+  "notes": "Pays ajouté le 2026-11-04 avec l’édition « Noël au soleil » (lecture de la page FCDO « Getting help »). Pompiers 18 et police 17 sont cités par la même page mais non repris (pas de bouton sans numéro d’appel unique). Secours en mer non trouvés.",
+  "research": []
+ },
+ {
+  "country": "Gambie",
+  "checked": "2026-11-04",
+  "call": {
+   "number": null,
+   "status": "à vérifier",
+   "sources": [],
+   "note": "Le FCDO écrit qu’il n’existe pas de numéro d’urgence national en Gambie."
+  },
+  "general": {
+   "number": null,
+   "status": "à vérifier",
+   "sources": []
+  },
+  "medical": {
+   "number": null,
+   "status": "à vérifier",
+   "sources": []
+  },
+  "sea": {
+   "number": null,
+   "status": "à vérifier",
+   "vhf16": false,
+   "sources": []
+  },
+  "line": null,
+  "sources": [
+   {
+    "url": "https://www.gov.uk/foreign-travel-advice/the-gambia/getting-help",
+    "publisher": "FCDO (Foreign, Commonwealth & Development Office, Royaume-Uni)",
+    "title": "The Gambia travel advice : Getting help",
+    "consulted": "2026-11-04",
+    "quote": "There is no equivalent to the UK’s 999 emergency number in The Gambia. Individual police stations and fire stations have their own numbers"
+   }
+  ],
+  "notes": "Pays ajouté le 2026-11-04 avec l’édition « Noël au soleil » (lecture de la page FCDO « Getting help »). Pas de numéro national : demande les numéros du poste de police ou des pompiers le plus proche, sur place.",
+  "research": []
+ },
+ {
+  "country": "Saint-Barthélemy",
+  "checked": "2026-11-04",
+  "call": {
+   "number": "112",
+   "status": "sourcé",
+   "sources": [
+    0
+   ]
+  },
+  "general": {
+   "number": "112",
+   "label": "Ambulance, pompiers, police",
+   "status": "sourcé",
+   "sources": [
+    0
+   ]
+  },
+  "medical": {
+   "number": "15",
+   "label": "Ambulance",
+   "status": "sourcé",
+   "sources": [
+    0
+   ]
+  },
+  "sea": {
+   "number": null,
+   "status": "à vérifier",
+   "vhf16": false,
+   "sources": []
+  },
+  "line": {
+   "kind": "ambulance",
+   "n": "15"
+  },
+  "extra": [
+   {
+    "kind": "police",
+    "n": "17",
+    "sources": [
+     0
+    ]
+   }
+  ],
+  "sources": [
+   {
+    "url": "https://www.gov.uk/foreign-travel-advice/st-martin-and-st-barthelemy/getting-help",
+    "publisher": "FCDO (Foreign, Commonwealth & Development Office, Royaume-Uni)",
+    "title": "St Martin and St Barthélemy travel advice : Getting help",
+    "consulted": "2026-11-04",
+    "quote": "Telephone: 112 (ambulance, fire, police) or Ambulance: 15 Fire: 18 Police: 17"
+   }
+  ],
+  "notes": "Pays ajouté le 2026-11-04 avec l’édition « Noël au soleil » (lecture de la page FCDO « Getting help »). Page commune à Saint-Martin et Saint-Barthélemy. Secours en mer non lus pour Saint-Barthélemy : non affichés.",
+  "research": []
+ },
+ {
+  "country": "Wallis-et-Futuna",
+  "checked": "2026-11-04",
+  "call": {
+   "number": "112",
+   "status": "sourcé",
+   "sources": [
+    0
+   ]
+  },
+  "general": {
+   "number": "112",
+   "label": "Ambulance, pompiers, police (depuis un fixe : 721772)",
+   "status": "sourcé",
+   "sources": [
+    0
+   ]
+  },
+  "medical": {
+   "number": "15",
+   "label": "Ambulance",
+   "status": "sourcé",
+   "sources": [
+    0
+   ]
+  },
+  "sea": {
+   "number": null,
+   "status": "à vérifier",
+   "vhf16": false,
+   "sources": []
+  },
+  "line": {
+   "kind": "ambulance",
+   "n": "15"
+  },
+  "extra": [
+   {
+    "kind": "police",
+    "n": "17",
+    "sources": [
+     0
+    ]
+   }
+  ],
+  "sources": [
+   {
+    "url": "https://www.gov.uk/foreign-travel-advice/wallis-and-futuna/getting-help",
+    "publisher": "FCDO (Foreign, Commonwealth & Development Office, Royaume-Uni)",
+    "title": "Wallis and Futuna travel advice : Getting help",
+    "consulted": "2026-11-04",
+    "quote": "Telephone: 112, or 721772 from a landline (ambulance, fire, police) or Ambulance: 15 Fire: 18 Police: 17"
+   }
+  ],
+  "notes": "Pays ajouté le 2026-11-04 avec l’édition « Noël au soleil » (lecture de la page FCDO « Getting help »). Secours en mer non lus : non affichés.",
+  "research": []
  }
 ]

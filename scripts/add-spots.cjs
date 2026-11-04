@@ -7,6 +7,8 @@
    Second batch: node scripts/add-spots.cjs data/new-spots-2026-09b.cjs data/new-spot-photos-2026-09b.json catalogue-2026-09b
    Entries are either tuples [id, name, loc, country, world, lat, lon, 'sport|sport', level, waterType, desc, tip, dangers]
    or objects with the same keys (sports as an array) plus optional coordinatePrecision, anecdote and fauna.
+   Several files of the same edition can be merged one after the other (the « Nouveau » flag is kept for every spot of the edition).
+   December 2026 (« Noël au soleil »): node scripts/add-spots.cjs data/new-spots-2026-12-<lot>.cjs data/new-spot-photos-2026-12-<lot>.json catalogue-2026-12
    Then run node scripts/build-ai-catalog.cjs. */
 const fs=require('node:fs');
 const path=require('node:path');
@@ -35,7 +37,8 @@ const RULES=[
 const HAWAII=/hawaï|kauaʻi|oahu|maui/i;
 const fresh=new Set(additions.map(a=>a.id));
 for(const spot of catalog){
-  if(!fresh.has(spot.id)&&spot.catalogNew)spot.catalogNew=false;
+  /* « Nouveau » passe à l'édition courante : les lots d'une même édition se fusionnent l'un après l'autre sans s'effacer */
+  if(!fresh.has(spot.id)&&spot.edition!==edition&&spot.catalogNew)spot.catalogNew=false;
   if(HAWAII.test(spot.loc)&&spot.world==='oc')spot.world='na';
   if(spot.country)continue;
   if(spot.world==='fr'){spot.country='France';continue;}

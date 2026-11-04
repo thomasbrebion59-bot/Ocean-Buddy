@@ -2729,6 +2729,116 @@
    "raison": "Tous les dangers font 1 à 3 mots (« Récifs. / Isolement. ») : à préciser avec source.",
    "kind": "item19-dangers-courts",
    "item": "19"
+  },
+  {
+   "spot": "artaplage",
+   "path": "urgences",
+   "raison": "Djibouti : numéros tirés de la page FCDO « Getting help » seulement (2026-11-04) ; secours en mer et pays sans numéro national (Gambie) à chercher auprès d’une source officielle locale.",
+   "kind": "recherche",
+   "research": [
+    "noel-au-soleil-2026-11"
+   ],
+   "item": "noel-2026-11"
+  },
+  {
+   "spot": "artaplage",
+   "path": "carnet.baseline",
+   "raison": "Djibouti : pas de barème d’hébergement national dans spot-guide-model.js, l’estimation retombe sur le continent (aucun prix inventé). À sourcer avant de saisir un barème.",
+   "kind": "recherche",
+   "research": [
+    "noel-au-soleil-2026-11"
+   ],
+   "item": "noel-2026-11"
+  },
+  {
+   "spot": "kotu",
+   "path": "urgences",
+   "raison": "Gambie : numéros tirés de la page FCDO « Getting help » seulement (2026-11-04) ; secours en mer et pays sans numéro national (Gambie) à chercher auprès d’une source officielle locale.",
+   "kind": "recherche",
+   "research": [
+    "noel-au-soleil-2026-11"
+   ],
+   "item": "noel-2026-11"
+  },
+  {
+   "spot": "kotu",
+   "path": "carnet.baseline",
+   "raison": "Gambie : pas de barème d’hébergement national dans spot-guide-model.js, l’estimation retombe sur le continent (aucun prix inventé). À sourcer avant de saisir un barème.",
+   "kind": "recherche",
+   "research": [
+    "noel-au-soleil-2026-11"
+   ],
+   "item": "noel-2026-11"
+  },
+  {
+   "spot": "colombier",
+   "path": "urgences",
+   "raison": "Saint-Barthélemy : numéros tirés de la page FCDO « Getting help » seulement (2026-11-04) ; secours en mer et pays sans numéro national (Gambie) à chercher auprès d’une source officielle locale.",
+   "kind": "recherche",
+   "research": [
+    "noel-au-soleil-2026-11"
+   ],
+   "item": "noel-2026-11"
+  },
+  {
+   "spot": "colombier",
+   "path": "carnet.baseline",
+   "raison": "Saint-Barthélemy : pas de barème d’hébergement national dans spot-guide-model.js, l’estimation retombe sur le continent (aucun prix inventé). À sourcer avant de saisir un barème.",
+   "kind": "recherche",
+   "research": [
+    "noel-au-soleil-2026-11"
+   ],
+   "item": "noel-2026-11"
+  },
+  {
+   "spot": "nukuhione",
+   "path": "urgences",
+   "raison": "Wallis-et-Futuna : numéros tirés de la page FCDO « Getting help » seulement (2026-11-04) ; secours en mer et pays sans numéro national (Gambie) à chercher auprès d’une source officielle locale.",
+   "kind": "recherche",
+   "research": [
+    "noel-au-soleil-2026-11"
+   ],
+   "item": "noel-2026-11"
+  },
+  {
+   "spot": "nukuhione",
+   "path": "carnet.baseline",
+   "raison": "Wallis-et-Futuna : pas de barème d’hébergement national dans spot-guide-model.js, l’estimation retombe sur le continent (aucun prix inventé). À sourcer avant de saisir un barème.",
+   "kind": "recherche",
+   "research": [
+    "noel-au-soleil-2026-11"
+   ],
+   "item": "noel-2026-11"
+  },
+  {
+   "spot": "abunuhas",
+   "path": "climate.wave",
+   "raison": "Houle des 46 spots « Noël au soleil » : ERA5 (Open-Meteo, 2023-2024) faute du cache WaveWatch III ; à refaire avec WW3 si le cache fetch-climate est reconstruit.",
+   "kind": "recherche",
+   "research": [
+    "noel-au-soleil-2026-11"
+   ],
+   "item": "noel-2026-11"
+  },
+  {
+   "spot": "boucancanot",
+   "path": "fiche",
+   "raison": "Fiche La Réunion préparée mais non publiée (arrêté préfectoral requin non vérifié) : voir data/sources/new-spots-2026-12-reunion-en-attente.json",
+   "kind": "decision",
+   "research": [
+    "noel-au-soleil-2026-11"
+   ],
+   "item": "noel-2026-11"
+  },
+  {
+   "spot": "etangsale",
+   "path": "fiche",
+   "raison": "Fiche La Réunion préparée mais non publiée (arrêté préfectoral requin non vérifié) : voir data/sources/new-spots-2026-12-reunion-en-attente.json",
+   "kind": "decision",
+   "research": [
+    "noel-au-soleil-2026-11"
+   ],
+   "item": "noel-2026-11"
   }
  ]
 }

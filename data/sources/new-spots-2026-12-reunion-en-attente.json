@@ -1,0 +1,107 @@
+{
+ "note": "Fiches préparées le 2026-11-03 mais NON publiées : l’arrêté préfectoral requin de La Réunion n’est pas vérifié sur une source officielle (voir new-spots-2026-12-reunion-requin.md). Ne pas ajouter sans lire l’arrêté sur reunion.gouv.fr.",
+ "spots": [
+  {
+   "id": "boucancanot",
+   "name": "Boucan Canot — Saint-Paul",
+   "loc": "La Réunion, France",
+   "country": "La Réunion",
+   "world": "af",
+   "lat": -21.0298,
+   "lon": 55.2247,
+   "sports": [
+    "baignade",
+    "surf",
+    "bodyboard",
+    "snorkeling"
+   ],
+   "level": "variable",
+   "waterType": "sea",
+   "desc": "Longue plage de sable blanc de Saint-Paul, sans barrière de corail, entre le cap Lahoussaye et Saint-Gilles-les-Bains. L’office de tourisme de l’Ouest annonce une zone de baignade surveillée de 10 h à 17 h 30, un filet de sécurité et une piscine naturelle de roches volcaniques, à droite de la plage. Selon Lonely Planet, ses vagues régulières en font un spot de surf et de bodyboard mythique de l’île.",
+   "tip": "Regarde la couleur du drapeau avant d’entrer et ne te baigne que dans la partie protégée par les filets. Pour le snorkeling, reste dans le périmètre des filets. Les petits peuvent nager dans la piscine naturelle, à l’abri des vagues.",
+   "dangers": [
+    [
+     "🦈",
+     "Risque requin : la préfecture n’autorise la baignade et le surf que dans des zones prévues, comme celle de Boucan Canot. Ailleurs, c’est interdit. Vérifie sur info-requin.re."
+    ],
+    [
+     "🌊",
+     "En cas de houle, les filets sont retirés pour la sécurité : sans eux, ne te mets pas à l’eau (office de tourisme de l’Ouest)."
+    ],
+    [
+     "🚫",
+     "Les plages voisines de Ti Boucan et du Cap Homard ne sont ni surveillées ni protégées : la baignade y est interdite."
+    ],
+    [
+     "🌪️",
+     "Saison des cyclones de novembre à avril, avec un risque plus fort de janvier à mars (Lonely Planet) : regarde la météo avant de partir."
+    ]
+   ],
+   "photoContext": "Plage de Boucan Canot, Saint-Paul",
+   "sourceLabel": "Fiche Ocean Buddy · décembre 2026 · d’après l’Office de Tourisme de l’Ouest, Lonely Planet et la préfecture de La Réunion · à vérifier localement"
+  },
+  {
+   "id": "etangsale",
+   "name": "Bassin Pirogue — L’Étang-Salé-les-Bains",
+   "loc": "La Réunion, France",
+   "country": "La Réunion",
+   "world": "af",
+   "lat": -21.2685,
+   "lon": 55.3318,
+   "sports": [
+    "snorkeling",
+    "baignade"
+   ],
+   "level": "variable",
+   "waterType": "sea",
+   "desc": "Bassin protégé par un lagon, à l’extrémité sud de la plage de sable noir de L’Étang-Salé-les-Bains, séparé d’elle par la pointe des Sables. Lonely Planet y signale une zone de baignade aménagée. Selon Snorkeling Report, on y voit des raies, des tortues imbriquées qui se reposent parfois sous les bateaux, et des bénitiers par centaines sur le platier.",
+   "tip": "Mets-toi à l’eau côté sud, près de la zone de mouillage des barques, puis ressors au petit ponton en bois : le courant va en général du sud vers le nord. Va-y tôt le matin pour croiser les tortues.",
+   "dangers": [
+    [
+     "🦈",
+     "La grande plage est en plein océan et concernée par le risque requin : baigne-toi seulement dans la zone aménagée du bassin (Lonely Planet)."
+    ],
+    [
+     "🌀",
+     "L’entrée du bassin est très dangereuse : forts courants, vagues et requins. Ne t’éloigne pas des zones conseillées (Snorkeling Report)."
+    ],
+    [
+     "🌊",
+     "Le Gouffre de l’Étang-Salé fait partie des secteurs particulièrement dangereux, qui concentrent la majorité des accidents (chutes à la mer), selon la préfecture de La Réunion."
+    ],
+    [
+     "🌪️",
+     "Saison des cyclones de novembre à avril, avec un risque plus fort de janvier à mars (Lonely Planet) : regarde la météo avant de partir."
+    ]
+   ],
+   "photoContext": "Bassin Pirogue, L’Étang-Salé",
+   "sourceLabel": "Fiche Ocean Buddy · décembre 2026 · d’après Lonely Planet, Snorkeling Report et la préfecture de La Réunion · à vérifier localement"
+  }
+ ],
+ "photos": {
+  "boucancanot": {
+   "file": "Baie et piscine naturelle en roches volcaniques de Boucan Canot - Saint-Gilles-les-Bains La Reunion.jpg",
+   "src": "assets/spots/boucancanot.webp",
+   "source": "https://commons.wikimedia.org/wiki/File:Baie_et_piscine_naturelle_en_roches_volcaniques_de_Boucan_Canot_-_Saint-Gilles-les-Bains_La_Reunion.jpg",
+   "author": "Clémenceau Lauret",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/48/Baie_et_piscine_naturelle_en_roches_volcaniques_de_Boucan_Canot_-_Saint-Gilles-les-Bains_La_Reunion.jpg/1280px-Baie_et_piscine_naturelle_en_roches_volcaniques_de_Boucan_Canot_-_Saint-Gilles-les-Bains_La_Reunion.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+   "width": 1280,
+   "height": 762,
+   "thumb": "assets/spots/thumbs/boucancanot.webp"
+  },
+  "etangsale": {
+   "file": "Ponton et embarcations au Bassin Pirogue - L'Étang-Salé La Réunion.jpg",
+   "src": "assets/spots/etangsale.webp",
+   "source": "https://commons.wikimedia.org/wiki/File:Ponton_et_embarcations_au_Bassin_Pirogue_-_L'%C3%89tang-Sal%C3%A9_La_R%C3%A9union.jpg",
+   "author": "Clémenceau Lauret",
+   "license": "CC BY-SA 4.0",
+   "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+   "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Ponton_et_embarcations_au_Bassin_Pirogue_-_L%27%C3%89tang-Sal%C3%A9_La_R%C3%A9union.jpg/1280px-Ponton_et_embarcations_au_Bassin_Pirogue_-_L%27%C3%89tang-Sal%C3%A9_La_R%C3%A9union.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+   "width": 1280,
+   "height": 689,
+   "thumb": "assets/spots/thumbs/etangsale.webp"
+  }
+ }
+}

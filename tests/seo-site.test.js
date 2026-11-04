@@ -5,11 +5,12 @@ const assert = require('node:assert');
 const path = require('node:path');
 const { pathToFileURL } = require('node:url');
 const root = path.resolve(__dirname, '..');
+const SPOTS = require('node:fs').existsSync(path.join(root, 'data/catalog.json')) ? JSON.parse(require('node:fs').readFileSync(path.join(root, 'data/catalog.json'), 'utf8')).length : 0;
 
 test('generated SEO site passes every check', async () => {
   const { checkSeo } = await import(pathToFileURL(path.join(root, 'scripts/check-seo.mjs')).href);
   const { errors, stats } = checkSeo(root);
-  assert.strictEqual(stats.spotPages, 728, 'one page per spot');
-  assert.ok(stats.sitemapUrls >= 728, 'sitemap lists every spot');
+  assert.strictEqual(stats.spotPages, SPOTS, 'one page per spot');
+  assert.ok(stats.sitemapUrls >= SPOTS, 'sitemap lists every spot');
   assert.deepStrictEqual(errors.slice(0, 20), []);
 });
