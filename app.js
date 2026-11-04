@@ -1112,7 +1112,6 @@ function setDetailSport(id){
   window.OceanGallery?.update(s);
   var lb=document.getElementById('dLogBtn');
   if(lb)lb.innerHTML=ctaLabel(act);
-  realForecastDetail(s,act);
   window.OceanExperience?.update(s,act);
   window.OceanPoulpy?.refresh();
   try{window.OceanSpotData?.sport();}catch(e){}
@@ -1144,7 +1143,6 @@ function openSpot(id){
   window.OceanProgress?.seeSpot(id);window.OceanHub?.visit(id);setTimeout(()=>{try{renderChallenges();checkBadges();}catch(e){}},600);
   const act=detailAct(s);
   var _df=document.getElementById('dFav');_df.innerHTML=favs.has(id)?FAV_ON:FAV_OFF;_df.classList.toggle('on',favs.has(id));
-  renderMiniForecast(s);realForecastDetail(s,act);
   document.getElementById('dName').textContent=s.name;
   document.getElementById('dLoc').innerHTML=uic('pin')+' '+esc(s.loc);
   var _eb=document.getElementById('dEyebrow');
@@ -1203,7 +1201,6 @@ function openSpot(id){
   var _to=document.getElementById('dTipOcto');
   if(_to&&!_to.innerHTML)_to.innerHTML=octoTag();
   renderDetailFacts(s,act);
-  var _tb=document.getElementById('dTideBlock');if(_tb)_tb.style.display='none';
   renderConditions(s,LIVE[s.id]?.live?LIVE[s.id]:null);fetchConditions(s);
   try{renderFaune(s);}catch(e){}
   /* Lignes du catalogue ; à défaut, celles du carnet, précédées une seule fois de l'étiquette « non vérifié ». */
@@ -1453,43 +1450,12 @@ async function fetchConditions(s){
     LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);
     renderConditions(s,o);
     window.OceanExperience?.refreshConditions(s,o,mar);
-    if(!isInland(s))renderTideChart(mar);else document.getElementById('dTideBlock').style.display='none';
   }catch(e){}
 }
-var _tideSeq=0;
-function tideExtremes(ys,times){
-  /* Extremums LOCAUX : l'ancienne version ne marquait que le max et le min
-     globaux, donc une seule PM et une seule BM sur 24 h au lieu de deux. */
-  var out=[],n=ys.length,w=2,i,j,hi,lo;
-  for(i=w;i<n-w;i++){
-    hi=true;lo=true;
-    for(j=i-w;j<=i+w;j++){ if(j===i)continue;
-      if(ys[j]>=ys[i])hi=false; if(ys[j]<=ys[i])lo=false; }
-    if(hi||lo){
-      if(out.length&&i-out[out.length-1].k<3)continue;
-      out.push({k:i,v:ys[i],t:times[i],hi:hi});
-    }
-  }
-  return out;
-}
 function num1(v){ return typeof obNum==='function'?obNum(v,1):v.toFixed(1); }
-function tideFmt(v){ return (v>=0?'+':'−')+num1(Math.abs(v))+' m'; }
-/* AFFICHER une heure : on lit la chaine telle quelle. L'API marine est appelee
-   avec timezone=auto, donc "2026-09-08T14:00" est deja l'heure murale DU SPOT ;
-   la passer par new Date() la relirait dans le fuseau du lecteur. */
-function tideHM(iso){
-  var m=/T(\d\d):(\d\d)/.exec(iso||'');
-  if(m)return (+m[1])+'h'+m[2];
-  var d=new Date(iso); if(isNaN(d.getTime()))return '';
-  return d.getHours()+'h'+(d.getMinutes()<10?'0':'')+d.getMinutes();
-}
-function tideH(iso){
-  var m=/T(\d\d)/.exec(iso||'');
-  return (m?(+m[1]):new Date(iso).getHours())+'h';
-}
-/* SITUER un instant : la meme chaine, mais convertie en instant reel grace a
-   utc_offset_seconds. Sert a trouver le point "maintenant" et a calculer le
-   compte a rebours, qui doit rester une duree vraie. */
+/* SITUER un instant : l'heure murale du spot (timezone=auto) convertie en instant reel grace a
+   utc_offset_seconds. Sert seulement a trouver le point "maintenant" pour le sens montant/descendant
+   du niveau modelise : aucun horaire de pleine ou basse mer n'est affiche (Open-Meteo le deconseille pres des cotes). */
 function tideMs(iso,off){
   if(!iso)return NaN;
   if(/(Z|[+\-]\d\d:?\d\d)$/.test(iso.slice(10)))return new Date(iso).getTime(); /* fuseau explicite */
@@ -1500,159 +1466,6 @@ function tideMs(iso,off){
 function tideOffset(mar){
   var o=mar&&mar.utc_offset_seconds;
   return (typeof o==='number')?o:-new Date().getTimezoneOffset()*60;
-}
-function tideUTC(off){
-  var s=off<0?'−':'+',a=Math.abs(off),h=Math.floor(a/3600),m=Math.round(a%3600/60);
-  return 'UTC'+s+h+(m?(':'+(m<10?'0':'')+m):'');
-}
-/* « 12 h de retard sur ton heure » : calcule, jamais ecrit en dur.
-   Les fuseaux a la demi-heure (Inde, Sri Lanka) ou au quart (Nepal, Chatham)
-   existent : "3,5 h" se lit mal, on ecrit "3 h 30". */
-function tideGap(sec){
-  var a=Math.abs(sec),h=Math.floor(a/3600),m=Math.round(a%3600/60);
-  return h+' h'+(m?(' '+(m<10?'0':'')+m):'');
-}
-function tideTz(mar){
-  var o=mar&&mar.utc_offset_seconds; if(typeof o!=='number')return '';
-  var d=o-(-new Date().getTimezoneOffset()*60);
-  return '<div class="tide-tz">'
-       + (d===0 ? 'Heures en <b>heure locale du spot</b> — la même que la tienne.'
-                : d>0 ? `Heures en <b>heure locale du spot</b> (${tideUTC(o)}) · ${tideGap(d)} d’avance sur ton heure.`
-                      : `Heures en <b>heure locale du spot</b> (${tideUTC(o)}) · ${tideGap(d)} de retard sur ton heure.`)
-       + '</div>';
-}
-function tideIn(ms){
-  var m=Math.max(0,Math.round(ms/60000)),h=Math.floor(m/60);
-  return h?`dans ${h} h ${(m%60<10?'0':'')+(m%60)}`:`dans ${m} min`;
-}
-function renderTideChart(mar){
-  var block=document.getElementById('dTideBlock'),el=document.getElementById('dTideChart');
-  if(!block||!el)return;
-  var hh=(mar&&mar.hourly)||{},t=hh.time||[],lv=hh.sea_level_height_msl||[];
-  if(!t.length||!lv.length){block.style.display='none';return;}
-  var off=tideOffset(mar);
-  var now=Date.now(),idx=0,best=1e15,i;
-  for(i=0;i<t.length;i++){var dd=Math.abs(tideMs(t[i],off)-now);if(dd<best){best=dd;idx=i;}}
-  var start=Math.max(0,idx-2),ys=[],times=[];
-  for(i=start;i<Math.min(t.length,start+25);i++){if(lv[i]==null)continue;ys.push(lv[i]);times.push(t[i]);}
-  if(ys.length<6){block.style.display='none';return;}
-
-  var n=ys.length,mn=Math.min.apply(null,ys),mx=Math.max.apply(null,ys),rng=(mx-mn)||1;
-  var nowK=Math.max(0,Math.min(n-1,idx-start));
-  var ext=tideExtremes(ys,times), next=null;
-  for(i=0;i<ext.length;i++){ if(ext[i].k>nowK){ next=ext[i]; break; } }
-  /* la pente au point courant dit si ça monte ou si ça descend */
-  var a=ys[Math.max(0,nowK-1)],b=ys[Math.min(n-1,nowK+1)],slope=b-a;
-  var etale=Math.abs(slope)<rng*0.04;
-  var state=etale?'Étale':(slope>0?'Marée montante':'Marée descendante');
-  var arrow=etale?'↔':(slope>0?'↑':'↓');
-
-  /* --- 1. la réponse en toutes lettres --- */
-  var head='<div class="tide-now"><div class="tide-state"><span class="ar">'+arrow+'</span>'+state+'</div></div>';
-  head+='<div class="tide-when">';
-  head+= next
-    ? ('<span>'+(next.hi?`Pleine mer à <b>${tideHM(next.t)}</b>`:`Basse mer à <b>${tideHM(next.t)}</b>`)+'</span> · <span>'
-       + tideIn(tideMs(next.t,off)-now)+'</span>')
-    : 'Prochaine bascule au-delà de la fenêtre affichée.';
-  head+=' <span class="tide-range">'+`marnage ${num1(mx-mn)} m`+'</span>';
-  head+=tideTz(mar)+'</div>';
-  var hd=document.getElementById('dTideHead'); if(hd)hd.innerHTML=head;
-
-  /* --- 2. la courbe --- */
-    /* La bande des graduations est SEPAREE du trace : une basse mer tombe pile sur
-     la ligne de base, son libelle a donc besoin de sa propre place en dessous,
-     sinon il se superpose aux heures (et a la courbe s'il passe au-dessus). */
-  var W=340,H=158,padL=10,padR=10,topPad=24,botPad=44;
-  function X(k){return padL+k/(n-1)*(W-padL-padR);}
-  function Y(v){return topPad+(1-(v-mn)/rng)*(H-topPad-botPad);}
-  var base=H-botPad;
-  var d='M'+X(0).toFixed(1)+' '+Y(ys[0]).toFixed(1),k;
-  for(k=1;k<n;k++)d+=' L'+X(k).toFixed(1)+' '+Y(ys[k]).toFixed(1);
-  var area=d+' L'+X(n-1).toFixed(1)+' '+base+' L'+X(0).toFixed(1)+' '+base+' Z';
-  var nowX=X(nowK);
-
-  var s='<svg viewBox="0 0 '+W+' '+H+'" class="tidechart" id="tideSvg" '
-      + 'preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg" '
-      + 'role="img" aria-label="Niveau de la mer sur 24 heures">';
-  s+='<defs><linearGradient id="tideG'+(++_tideSeq)+'" x1="0" y1="0" x2="0" y2="1">'
-   + '<stop offset="0" stop-color="#3ab5dd" stop-opacity=".42"/>'
-   + '<stop offset="1" stop-color="#3ab5dd" stop-opacity=".04"/></linearGradient></defs>';
-  /* filets pleins et discrets : jamais de pointillés pour une grille */
-  s+='<line x1="'+padL+'" y1="'+base+'" x2="'+(W-padR)+'" y2="'+base+'" stroke="#dce9f0" stroke-width="1"/>';
-  s+='<path d="'+area+'" fill="url(#tideG'+_tideSeq+')"/>';
-  s+='<path d="'+d+'" fill="none" stroke="#1583cb" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>';
-
-  /* Un point sur chaque bascule, mais UN SEUL libelle : celui de la prochaine.
-     Legender les quatre faisait collisionner les libelles de basse mer avec les
-     graduations horaires — et les quatre sont deja listees en toutes lettres
-     sous le graphique, avec leur hauteur. */
-  for(i=0;i<ext.length;i++){
-    var e=ext[i],ex=X(e.k),ey=Y(e.v),isNext=(next&&e.k===next.k);
-    s+='<circle cx="'+ex.toFixed(1)+'" cy="'+ey.toFixed(1)+'" r="'+(isNext?4.5:3.2)+'" '
-     + 'fill="'+(isNext?'#0d5f96':'#7fb6da')+'" stroke="#fff" stroke-width="2"/>';
-    if(!isNext)continue;
-    var lab=(e.hi?'PM ':'BM ')+tideHM(e.t);
-    /* pleine mer : au-dessus du point ; basse mer : dans la bande libre sous la
-       ligne de base, jamais dans le creux de la courbe */
-    var ly=e.hi?(ey-11):(base+15);
-    if(e.hi&&ly<12)ly=ey+18;
-    var anch='middle',lx=ex;
-    if(ex<44){anch='start';lx=padL;} else if(ex>W-44){anch='end';lx=W-padR;}
-    s+='<text x="'+lx.toFixed(1)+'" y="'+ly.toFixed(1)+'" font-size="10.5" font-weight="800" '
-     + 'fill="#0d5f96" text-anchor="'+anch+'">'+lab+'</text>';
-  }
-  /* maintenant : trait plein, pas pointillé */
-  s+='<line x1="'+nowX.toFixed(1)+'" y1="'+(topPad-6)+'" x2="'+nowX.toFixed(1)+'" y2="'+base+'" stroke="#ff8f7f" stroke-width="1.5"/>';
-  s+='<circle cx="'+nowX.toFixed(1)+'" cy="'+Y(ys[nowK]).toFixed(1)+'" r="5" fill="#e8503f" stroke="#fff" stroke-width="2"/>';
-  /* graduations horaires, dans leur propre bande */
-  for(k=0;k<n;k+=6){
-    s+='<text x="'+X(k).toFixed(1)+'" y="'+(H-8)+'" font-size="10" fill="#93a8b5" '
-     + 'text-anchor="'+(k===0?'start':(k>=n-6?'end':'middle'))+'">'+tideH(times[k])+'</text>';
-  }
-  /* curseur de lecture */
-  s+='<g id="tideCur" style="display:none"><line id="tideCurL" y1="'+(topPad-6)+'" y2="'+base+'" stroke="#0d5f96" stroke-width="1"/>'
-   + '<circle id="tideCurD" r="4.5" fill="#0d5f96" stroke="#fff" stroke-width="2"/></g>';
-  s+='<rect id="tideHit" x="0" y="0" width="'+W+'" height="'+H+'" fill="transparent" style="cursor:crosshair"/>';
-  s+='</svg>';
-  el.innerHTML=s;
-
-  /* --- 3. la liste des marées : l'équivalent texte de la courbe --- */
-  var lst=document.getElementById('dTideList');
-  if(lst){
-    lst.innerHTML=ext.map(function(e){
-      return '<span class="tide-ev '+(e.hi?'pm':'bm')+'"><span>'+(e.hi?'PM':'BM')+'</span>'
-           + tideHM(e.t)+' · '+tideFmt(e.v)+'</span>';
-    }).join('');
-  }
-
-  /* --- 4. lecture au doigt --- */
-  var svg=document.getElementById('tideSvg'),hit=document.getElementById('tideHit'),
-      cur=document.getElementById('tideCur'),curL=document.getElementById('tideCurL'),
-      curD=document.getElementById('tideCurD'),read=document.getElementById('dTideRead');
-  function scrub(ev){
-    if(!svg||!read)return;
-    var r=svg.getBoundingClientRect(),px=(ev.touches?ev.touches[0].clientX:ev.clientX)-r.left;
-    var kk=Math.round((px/r.width*W-padL)/(W-padL-padR)*(n-1));
-    kk=Math.max(0,Math.min(n-1,kk));
-    cur.style.display='';
-    curL.setAttribute('x1',X(kk));curL.setAttribute('x2',X(kk));
-    curD.setAttribute('cx',X(kk));curD.setAttribute('cy',Y(ys[kk]));
-    read.className='tide-read';
-    read.innerHTML='<i></i>'+tideHM(times[kk])+' · '+tideFmt(ys[kk]);
-  }
-  function unscrub(){
-    if(cur)cur.style.display='none';
-    if(read){read.className='tide-read off';
-      read.textContent='Glisse sur la courbe pour lire une heure.';}
-  }
-  if(hit){
-    hit.addEventListener('pointerdown',function(e){e.preventDefault();scrub(e);});
-    hit.addEventListener('pointermove',function(e){if(e.buttons||e.pointerType==='touch')scrub(e);});
-    hit.addEventListener('pointerup',unscrub);
-    hit.addEventListener('pointerleave',unscrub);
-    hit.addEventListener('pointercancel',unscrub);
-  }
-  block.style.display='';
 }
 function watchConditionCards(){
   if(conditionObserver)conditionObserver.disconnect();
@@ -1747,18 +1560,6 @@ function renderForecastBars(barsId,bestId,days,vals,opt){
   if(bestId)document.getElementById(bestId).innerHTML=(opt.liveOn?'<span class="live-badge"><i></i>'+(opt.badge||'Modèle Open-Meteo')+'</span>':'🤙 ')+(opt.bestLabel||'Houle la plus haute')+' : <b>'+days[bi]+'</b> · '+vals[bi].toFixed(dec)+' '+unit;
   document.getElementById(barsId).innerHTML=vals.map(function(v,i){var h=Math.round((v/max)*100);return '<div class="fc-col '+(i===bi?'best':'')+'"><div class="fc-val">'+(dec?num1(v):v.toFixed(0))+'</div><div class="fc-bar" style="height:'+h+'%"></div><div class="fc-day">'+days[i]+'</div></div>';}).join('');
 }
-function renderMiniForecast(s,calm){
-  document.getElementById('dForecast').innerHTML='<p class="field-forecast-empty">Les prévisions ne sont pas disponibles pour ce lieu pour le moment.</p>';
-  document.getElementById('dFcBest').textContent='';
-}
-
-async function fetchWindDaily(id,n){
-  const c=COORDS[id];if(!c)throw 0;
-  const url='https://api.open-meteo.com/v1/forecast?latitude='+c.lat+'&longitude='+c.lon+'&daily=wind_speed_10m_max&wind_speed_unit=kmh&timezone=auto&cell_selection=sea&forecast_days='+n;
-  const r=await fetch(url);const j=await r.json();const t=(j.daily||{}).time,v=(j.daily||{}).wind_speed_10m_max;
-  if(!v?.length||v.slice(0,n).some(x=>x==null||!Number.isFinite(+x)))throw new Error('Forecast unavailable');
-  return {days:t.slice(0,n).map((iso,i)=>dayLabel(iso,i)),vals:v.slice(0,n).map(x=>Math.max(0,Math.round(+x)))};
-}
 async function fetchWaves(id,n){
   if(isInland(SPOTS.find(s=>s.id===id)))throw new Error('Marine forecast not applicable');
   const c=COORDS[id];if(!c)throw 0;
@@ -1772,20 +1573,6 @@ function showForecastSkeleton(barsId,bestId){
   if(bestId)document.getElementById(bestId).innerHTML='<span class="live-badge"><i></i>Prévisions du modèle</span> chargement…';
   const hs=[55,78,62,90,70];
   document.getElementById(barsId).innerHTML=hs.map(h=>`<div class="fc-col"><div class="fc-bar skel" style="height:${h}%"></div><div class="fc-day skel" style="width:20px;height:9px;border-radius:4px">&nbsp;</div></div>`).join('');
-}
-var CAL_ICO='<svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="16" rx="3.2"/><path d="M3 9.5h18M8 3v4M16 3v4"/></svg> ';
-var detailForecastRequest=0;
-async function realForecastDetail(s,act){
-  const request=++detailForecastRequest;
-  var wind=(isInland(s)||act==='kitesurf'||act==='windsurf');
-  var calm=(act==='baignade'||act==='snorkeling'||act==='plongee'||act==='paddle'||act==='kayak');
-  var head=document.getElementById('dFcHead');
-  if(head)head.innerHTML=CAL_ICO+(wind?'Prévisions vent · 5 jours':(calm?'État de la mer · 5 jours':'Prévisions houle · 5 jours'));
-  showForecastSkeleton('dForecast','dFcBest');
-  try{
-    if(wind){var fw=await fetchWindDaily(s.id,5);if(currentSpot!==s.id||request!==detailForecastRequest)return;renderForecastBars('dForecast','dFcBest',fw.days,fw.vals,{unit:'km/h',liveOn:true,badge:'Modèle Open-Meteo',best:calm?'min':'max',bestLabel:calm?'Vent le plus faible':'Le plus venté'});}
-    else{var f=await fetchWaves(s.id,5);if(currentSpot!==s.id||request!==detailForecastRequest)return;renderForecastBars('dForecast','dFcBest',f.days,f.vals,{unit:'m',liveOn:true,badge:'Modèle Open-Meteo',best:calm?'min':'max',bestLabel:calm?'Houle la plus basse':'Houle la plus haute'});}
-  }catch(e){if(currentSpot===s.id&&request===detailForecastRequest)renderMiniForecast(s,calm);}
 }
 var homeForecastRequest=0;
 async function realHomeForecast(){

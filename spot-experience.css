@@ -59,3 +59,27 @@
 .safety-tips{list-style:none;margin:10px 0 0;padding:0;display:grid;gap:7px}
 .safety-tips li{padding:9px 11px;border-radius:10px;background:var(--t-card);border:1px solid var(--g-pale);font:600 12px/1.5 var(--body);color:var(--g-main)}
 .safety-tip-source{display:block;margin-top:3px;font:500 11px/1.4 var(--body);color:var(--t-ink2);text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere}
+/* Météo du spot : meilleur créneau, heure par heure (48 h), 7 jours. Textes à 11 px minimum pour l’iPhone. */
+.spot-week-head small{font-size:11px;letter-spacing:1px}.spot-week-head>span{font-size:12px;line-height:1.4}.spot-week-head>span>span{display:block}.spot-week-note{font-size:12px;line-height:1.5}
+.wx-block{margin-top:16px}.wx-sub{display:flex;align-items:baseline;justify-content:space-between;gap:10px;margin:0 0 8px}.wx-sub h4{margin:0;font:750 15px var(--body);color:var(--g-ink)}.wx-sub span{font:600 12px var(--body);color:var(--t-ink2)}
+.wx-slots{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.wx-slot{padding:11px 12px;border:1px solid var(--t-line);border-radius:13px;background:var(--t-card)}.wx-slot.is-good{border-left:4px solid var(--t-ok)}.wx-slot.is-ok{border-left:4px solid var(--t-warn)}
+.wx-slot small{display:block;font:800 11px var(--body);letter-spacing:.6px;text-transform:uppercase;color:var(--t-ink2)}.wx-slot b{display:block;margin-top:3px;font:800 21px var(--display);color:var(--t-ink)}
+.wx-slot-q{display:inline-block;margin-top:5px;padding:2px 8px;border-radius:999px;font:700 11.5px var(--body);background:var(--t-tint);color:var(--t-ink);border:1px solid var(--t-line)}.wx-slot.is-good .wx-slot-q{background:var(--t-ok);border-color:var(--t-ok);color:var(--t-cream)}
+.wx-slot p{margin:7px 0 0;font:500 12.5px/1.45 var(--body);color:var(--t-ink)}.wx-slot.is-none p{color:var(--t-ink2)}.wx-slot p.wx-slot-caution{color:var(--t-warn);font-weight:600}
+.wx-note,.wx-slot-why{margin:8px 0 0;font:12px/1.5 var(--body);color:var(--t-ink2)}.wx-slot-why{color:var(--t-ink)}
+.wx-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch;overscroll-behavior-x:contain;border:1px solid var(--t-line);border-radius:13px;background:var(--t-card)}.wx-scroll:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+.wx-table{border-collapse:separate;border-spacing:0;font:650 12.5px var(--body);color:var(--t-ink);font-variant-numeric:tabular-nums}
+.wx-table th,.wx-table td{padding:6px 3px;min-width:44px;text-align:center;white-space:nowrap;vertical-align:middle}
+.wx-table th[scope=row],.wx-table .wx-corner{position:sticky;left:0;z-index:2;min-width:56px;padding-left:9px;text-align:left;background:var(--t-card);box-shadow:1px 0 var(--t-line);font:700 12px var(--body);color:var(--t-ink2)}
+.wx-table th[scope=row] small{display:block;font:500 11px var(--body)}.wx-table td small{display:block;font:500 11px var(--body);color:var(--t-ink2)}
+.wx-days th{padding:9px 0 3px;text-align:left;border-left:1px solid var(--t-line);overflow:hidden}.wx-days th>span{position:sticky;left:66px;display:inline-block;padding:0 8px}.wx-days b{font:800 12.5px var(--body);color:var(--t-ink)}.wx-days small{display:block;font:500 11px var(--body);color:var(--t-ink2)}
+.wx-hrow th{font:750 12px var(--body);color:var(--t-ink)}
+.wx-table .is-night{background:color-mix(in srgb,var(--t-main) 10%,var(--t-card))}.wx-table .is-slot{background:color-mix(in srgb,var(--t-sun) 34%,var(--t-card))}.wx-table .is-day0{border-left:1px solid var(--t-line)}
+.wx-sky{display:inline-flex;color:var(--t-main)}.wx-sky svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}.wx-sky .wx-sun{fill:var(--t-sun)}.wx-sky .wx-fill{fill:var(--t-card)}
+.wx-v{display:inline-flex;align-items:center;gap:2px}.wx-dir{display:inline-flex;width:13px;height:13px;color:var(--t-main)}.wx-dir svg{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.wx-legend{display:flex;flex-wrap:wrap;gap:6px 14px;margin:8px 2px 0;font:12px var(--body);color:var(--t-ink2)}.wx-legend i{display:inline-block;width:12px;height:12px;margin-right:5px;border:1px solid var(--t-edge);border-radius:3px;vertical-align:-2px}.wx-legend i.is-night{background:color-mix(in srgb,var(--t-main) 10%,var(--t-card))}.wx-legend i.is-slot{background:color-mix(in srgb,var(--t-sun) 34%,var(--t-card))}
+.wx-source{margin:6px 0 0;font:11px var(--body)}.wx-source a{color:var(--t-ink2);text-decoration:underline;text-underline-offset:2px}
+.spot-week .spot-week-grid{grid-template-columns:repeat(7,minmax(122px,1fr))}.spot-week .week-day{min-width:122px;padding:11px 10px;background:var(--t-card);border-color:var(--t-line)}
+.week-day .wd-top{display:flex;align-items:center;justify-content:space-between;gap:4px}.week-day .wd-top b{font:800 12.5px var(--body);color:var(--t-ink)}.week-day .wd-top .wx-sky svg{width:24px;height:24px}
+.spot-week .week-min{font-size:12px}.spot-week .week-day dt{font-size:11px}.spot-week .week-day dd{font-size:12px;color:var(--t-ink)}
+@media(max-width:700px){.spot-week .spot-week-grid{grid-template-columns:repeat(7,122px)}.wx-slot b{font-size:19px}}

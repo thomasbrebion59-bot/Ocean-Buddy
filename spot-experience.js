@@ -159,40 +159,155 @@
     return `${window.obNum?obNum(range,2):range.toFixed(2)} m · modèle`;
   }
 
+  /* ---------- Météo du spot : meilleur créneau, heure par heure (48 h), 7 jours ----------
+     Calculs dans spot-weather-model.js ; ici seulement l’affichage. Rendu après l’ouverture de la fiche, jamais pendant. */
+  const later = fn => { try { if (window.requestIdleCallback) return requestIdleCallback(fn, {timeout: 400}); } catch (e) {} return setTimeout(fn, 30); };
+  const fmt1 = v => (window.obNum ? obNum(v, 1) : (+v).toFixed(1).replace('.', ','));
+  const round = v => (v == null ? '—' : String(Math.round(v)));
+  const hourFmt = (() => { let f = null; return h => { if (!window.OB_I18N || /^(fr|es)/.test(OB_I18N.lang || 'fr')) return `${h} h`; try { f = f || new Intl.DateTimeFormat((window.OB_I18N && OB_I18N.locale) || 'fr-FR', {hour: 'numeric', timeZone: 'UTC'}); return f.format(Date.UTC(2000, 0, 1, h)); } catch (e) { return h + ' h'; } }; })();
+  const clock = iso => { const m = /T(\d\d):(\d\d)/.exec(String(iso || '')); if (!m) return '—'; try { return new Intl.DateTimeFormat((window.OB_I18N && OB_I18N.locale) || 'fr-FR', {hour: '2-digit', minute: '2-digit', timeZone: 'UTC'}).format(Date.UTC(2000, 0, 1, +m[1], +m[2])); } catch (e) { return m[1] + ':' + m[2]; } };
+  const myLevel = () => {
+    try { if (typeof chosenLevel !== 'undefined' && chosenLevel) return chosenLevel; } catch (e) {}
+    try { const d = JSON.parse(localStorage.getItem('oceanbuddy_v1') || 'null'); return (d && d.level) || null; } catch (e) { return null; }
+  };
+  const sportName = act => { try { const x = typeof SPORTMAP !== 'undefined' && SPORTMAP[act]; if (x) return String(x.label).replace(/\s*\(.*\)/, ''); } catch (e) {} return act || ''; };
+  const levelName = lv => ({debutant: 'Débutant', intermediaire: 'Intermédiaire', expert: 'Expert'})[lv] || '';
+  /* Flèche de direction : une donnée (d’où vient le vent ou la houle), pas une décoration. */
+  const arrow = (deg, label) => { const W = window.SpotWeatherModel, r = W && W.toward(deg); if (r == null) return ''; return `<i class="wx-dir" role="img" aria-label="${esc(label)}" title="${esc(label)}"><svg viewBox="0 0 12 12" aria-hidden="true" style="transform:rotate(${Math.round(r)}deg)"><path d="M6 10.5V2M2.6 5.2 6 1.6l3.4 3.6"/></svg></i>`; };
+  const windFrom = deg => arrow(deg, `Vent de ${direction(deg)}`);
+  const swellFrom = deg => arrow(deg, `Houle de ${direction(deg)}`);
+  const SKY_LABEL = {clear: 'Ciel dégagé', night: 'Nuit claire', partly: 'Peu nuageux', partlyNight: 'Peu nuageux', cloudy: 'Nuageux', fog: 'Brouillard', drizzle: 'Bruine', rain: 'Pluie', snow: 'Neige', storm: 'Orage'};
+  const CLOUD = '<path d="M7.5 19h9.6a3.6 3.6 0 0 0 .3-7.2 5.1 5.1 0 0 0-9.8-1.1A4.2 4.2 0 0 0 7.5 19z"/>';
+  const SKY_SVG = {
+    clear: '<circle class="wx-sun" cx="12" cy="12" r="4.2"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/>',
+    night: '<path d="M19.5 14.6A7.6 7.6 0 1 1 9.4 4.5a6 6 0 0 0 10.1 10.1z"/>',
+    partly: '<circle class="wx-sun" cx="8.6" cy="8.4" r="3.2"/><path d="M8.6 2.6v1.4M3 8.4h1.4M4.6 4.4l1 1M12.6 4.4l-1 1"/><path class="wx-fill" d="M9.3 20h8.4a3.2 3.2 0 0 0 .3-6.4 4.5 4.5 0 0 0-8.6-1A3.7 3.7 0 0 0 9.3 20z"/>',
+    partlyNight: '<path d="M12.4 9.6A4.4 4.4 0 0 1 6.6 3.8a4.4 4.4 0 1 0 5.8 5.8z"/><path class="wx-fill" d="M9.3 20h8.4a3.2 3.2 0 0 0 .3-6.4 4.5 4.5 0 0 0-8.6-1A3.7 3.7 0 0 0 9.3 20z"/>',
+    cloudy: CLOUD,
+    fog: '<path d="M7.5 13h9.6a3.6 3.6 0 0 0 .3-7.2 5.1 5.1 0 0 0-9.8-1.1A4.2 4.2 0 0 0 7.5 13z"/><path d="M5 16.5h14M7.5 20h9"/>',
+    drizzle: '<path d="M7.5 15h9.6a3.6 3.6 0 0 0 .3-7.2 5.1 5.1 0 0 0-9.8-1.1A4.2 4.2 0 0 0 7.5 15z"/><path d="M8.5 18.5v.1M12 19.5v.1M15.5 18.5v.1"/>',
+    rain: '<path d="M7.5 15h9.6a3.6 3.6 0 0 0 .3-7.2 5.1 5.1 0 0 0-9.8-1.1A4.2 4.2 0 0 0 7.5 15z"/><path d="M8.5 17.5l-1 3M12.5 17.5l-1 3M16.5 17.5l-1 3"/>',
+    snow: '<path d="M7.5 15h9.6a3.6 3.6 0 0 0 .3-7.2 5.1 5.1 0 0 0-9.8-1.1A4.2 4.2 0 0 0 7.5 15z"/><path d="M8 18.5h.1M12 20h.1M16 18.5h.1M10 21.5h.1M14 21.5h.1"/>',
+    storm: '<path d="M7.5 15h9.6a3.6 3.6 0 0 0 .3-7.2 5.1 5.1 0 0 0-9.8-1.1A4.2 4.2 0 0 0 7.5 15z"/><path d="M12.6 15.5 10.4 19h3l-2 3.5"/>'
+  };
+  const skyIcon = (code, isDay) => { const W = window.SpotWeatherModel; let k = W && W.sky(code); if (!k) return '<span class="wx-sky">—</span>'; if (isDay === false && k === 'clear') k = 'night'; else if (isDay === false && k === 'partly') k = 'partlyNight'; return `<span class="wx-sky" role="img" aria-label="${esc(SKY_LABEL[k])}" title="${esc(SKY_LABEL[k])}"><svg viewBox="0 0 24 24" aria-hidden="true">${SKY_SVG[k]}</svg></span>`; };
+  const dayName = (iso, i) => (i === 1 ? 'Demain' : day(iso, i));
+
+  /* Phrases reprises telles quelles de « Lire les conditions » (spot-data-model.js) quand le vent vient de la terre. */
+  const OFFSHORE_TXT = {
+    wave: 'Le vent vient de la terre (offshore) : il lisse les vagues, mais il te pousse vers le large. Reste près du bord et ne lâche pas ta planche.',
+    other: 'Le vent vient de la terre : il te pousse vers le large et la mer paraît calme près du bord. Reste près du bord et préviens quelqu’un.'
+  };
+  function slotCard(label, r, inland) {
+    if (r.status === 'ok') {
+      const range = r.count > 1 ? `${hourFmt(+r.start.slice(11, 13))} – ${hourFmt(+r.end.slice(11, 13))}` : hourFmt(+r.start.slice(11, 13));
+      const bits = [];
+      if (r.wind) bits.push(Math.round(r.wind[0]) === Math.round(r.wind[1]) ? `Vent ${Math.round(r.wind[0])} km/h` : `Vent ${Math.round(r.wind[0])} à ${Math.round(r.wind[1])} km/h`);
+      if (r.gust != null) bits.push(`rafales jusqu’à ${Math.round(r.gust)} km/h`);
+      if (r.wave && !inland) bits.push(fmt1(r.wave[0]) === fmt1(r.wave[1]) ? `houle ${fmt1(r.wave[0])} m` : `houle ${fmt1(r.wave[0])} à ${fmt1(r.wave[1])} m`);
+      const caution = r.offshore && (r.kind !== 'wave' || r.level === 'debutant') ? `<p class="wx-slot-caution">${esc(r.kind === 'wave' ? OFFSHORE_TXT.wave : OFFSHORE_TXT.other)}</p>` : '';
+      return `<article class="wx-slot is-${r.quality}"><small>${esc(label)}</small><b>${esc(range)}</b><span class="wx-slot-q">${r.quality === 'good' ? 'Dans tes repères' : 'Possible, sans plus'}</span><p>${bits.map(b => `<span class="wx-bit">${esc(b)}</span>`).join(' · ')}</p>${caution}</article>`;
+    }
+    const why = r.status === 'night' ? 'Plus d’heure de jour aujourd’hui.' : r.status === 'nodata' ? 'Prévision incomplète pour ce jour.' : 'Aucun créneau dans tes repères ce jour-là.';
+    return `<article class="wx-slot is-none"><small>${esc(label)}</small><p>${esc(why)}</p></article>`;
+  }
+  function slotsBlock(s, act, list, nowIso, dates, inland) {
+    const W = window.SpotWeatherModel, level = myLevel();
+    const rule = W.rule(act, inland, level);
+    const sport = sportName(act), lv = rule.ok && rule.level ? levelName(rule.level) : '';
+    const head = `<div class="wx-sub"><h4>Ton meilleur créneau</h4><span>${esc(sport)}${lv ? ` · ${esc(lv)}` : ''}</span></div>`;
+    const note = '<p class="wx-note">Repère calculé sur une prévision de modèle, avec les seuils de « Lire les conditions » et en heures de jour seulement. Ce n’est pas une consigne : le poste de secours, le balisage et les drapeaux priment.</p>';
+    if (!rule.ok) {
+      const why = rule.reason === 'level' ? 'Choisis ton niveau dans Réglages, « Mon sport et mon niveau », pour voir ton meilleur créneau.'
+        : rule.reason === 'expert' ? 'Niveau expert : « Lire les conditions » ne fixe pas de seuil. Compare toi-même vent, houle et période heure par heure.'
+        : 'Pas de créneau calculé pour ce sport ici : « Lire les conditions » ne donne pas de repère chiffré. Renseigne-toi sur place.';
+      return {html: `${head}<p class="wx-slot-why">${esc(why)}</p>`, hours: new Set()};
+    }
+    const res = dates.map((date, i) => W.bestSlot(list, {act, inland, level, date, nowIso: i === 0 ? nowIso : null, catalogWind: s.wind}));
+    const hours = new Set();
+    res.forEach(r => { if (r.status === 'ok') list.forEach(x => { if (x.t >= r.start && x.t <= r.end) hours.add(x.t); }); });
+    const noLevel = !rule.level ? '<p class="wx-slot-why">Sans niveau choisi dans Réglages, le calcul reste prudent.</p>' : '';
+    return {html: `${head}<div class="wx-slots">${res.map((r, i) => slotCard(i === 0 ? 'Aujourd’hui' : 'Demain', r, inland)).join('')}</div>${noLevel}${note}`, hours};
+  }
+  function hoursTable(list, daily, inland, slotHours) {
+    if (!list.length) return '<p class="spot-week-empty">Heure par heure indisponible pour le moment.</p>';
+    const sun = new Map(daily.map(d => [d.date, d]));
+    const groups = [];
+    list.forEach(x => { const g = groups[groups.length - 1]; if (g && g.date === x.date) g.n++; else groups.push({date: x.date, n: 1}); });
+    const dayIdx = d => Math.max(0, daily.findIndex(x => x.date === d));
+    const cls = x => [x.isDay === false ? 'is-night' : '', slotHours.has(x.t) ? 'is-slot' : '', x.hour === 0 ? 'is-day0' : ''].filter(Boolean).join(' ');
+    const cell = (x, body) => `<td${cls(x) ? ` class="${cls(x)}"` : ''}>${body}</td>`;
+    const row = (label, unit, f) => `<tr><th scope="row">${label}${unit ? `<small>${unit}</small>` : ''}</th>${list.map(x => cell(x, f(x))).join('')}</tr>`;
+    const head = `<tr class="wx-days"><td class="wx-corner"></td>${groups.map(g => { const d = sun.get(g.date); return `<th scope="colgroup" colspan="${g.n}"><span><b>${esc(dayName(g.date, dayIdx(g.date)))}</b>${d && d.sunrise && g.n >= 4 ? `<small>Lever ${esc(clock(d.sunrise))} · coucher ${esc(clock(d.sunset))}</small>` : ''}</span></th>`; }).join('')}</tr>`
+      + `<tr class="wx-hrow"><th scope="row">Heure</th>${list.map(x => `<th scope="col"${cls(x) ? ` class="${cls(x)}"` : ''}>${esc(hourFmt(x.hour))}</th>`).join('')}</tr>`;
+    const body = row('Ciel', '', x => skyIcon(x.code, x.isDay))
+      + row('Air', '°C', x => (x.temp == null ? '—' : `${Math.round(x.temp)}°`))
+      + row('Vent', 'km/h', x => (x.wind == null ? '—' : `<span class="wx-v">${windFrom(x.windDir)}${Math.round(x.wind)}</span>`))
+      + row('Rafales', 'km/h', x => round(x.gust))
+      + (inland ? '' : row('Houle', 'm', x => (x.wave == null ? '—' : `<span class="wx-v">${swellFrom(x.waveDir)}${fmt1(x.wave)}</span>`)) + row('Période', 's', x => round(x.period)))
+      + row('Pluie', '%', x => `${x.pop == null ? '—' : Math.round(x.pop)}${x.rain != null && x.rain >= 0.1 ? `<small>${fmt1(x.rain)} mm</small>` : ''}`);
+    return `<div class="wx-scroll" tabindex="0" role="region" aria-label="Météo heure par heure"><table class="wx-table">${head}${body}</table></div><p class="wx-legend"><span><i class="is-night" aria-hidden="true"></i>Nuit</span>${slotHours.size ? '<span><i class="is-slot" aria-hidden="true"></i>Ton meilleur créneau</span>' : ''}<span>${inland ? 'Flèche : sens où va le vent' : 'Flèche : sens où vont le vent et la houle'}</span></p>`;
+  }
+  function weekCards(daily, inland) {
+    return `<div class="spot-week-grid">${daily.map((d, i) => `<article class="week-day ${i === 0 ? 'today' : ''}"><div class="wd-top"><b>${esc(dayName(d.date, i))}</b>${skyIcon(d.code, true)}</div><strong>${d.tmax != null ? Math.round(d.tmax) + '°' : '—'}</strong><span class="week-min">${d.tmin != null ? Math.round(d.tmin) + '°' : '—'}</span><dl>`
+      + `<div><dt>Vent</dt><dd><span class="wx-v">${windFrom(d.windDir)}${d.wind != null ? Math.round(d.wind) + ' km/h' : '—'}</span></dd></div>`
+      + `<div><dt>Rafales</dt><dd>${d.gust != null ? Math.round(d.gust) + ' km/h' : '—'}</dd></div>`
+      + (inland ? '' : `<div><dt>Houle</dt><dd>${d.wave != null ? fmt1(d.wave) + ' m' : '—'}</dd></div><div><dt>Période</dt><dd>${d.period != null ? Math.round(d.period) + ' s' : '—'}</dd></div>`)
+      + `<div><dt>Pluie</dt><dd>${d.pop != null ? Math.round(d.pop) + ' %' : '—'}</dd></div><div><dt>UV</dt><dd>${d.uv != null ? Math.round(d.uv) : '—'}</dd></div>`
+      + `<div><dt>Lever</dt><dd>${esc(clock(d.sunrise))}</dd></div><div><dt>Coucher</dt><dd>${esc(clock(d.sunset))}</dd></div></dl></article>`).join('')}</div>`;
+  }
+
+  let shown = null;
   function renderWeek(s, weather, marine, fetchedAt) {
     const host = $('#spotWeek'); if (!host) return;
-    const d = weather?.daily || {}, m = marine?.daily || {};
-    const times = d.time || m.time || [];
-    if (!times.length) { host.innerHTML = '<p class="spot-week-empty">Les prévisions détaillées se chargeront dès que le modèle répondra.</p>'; return; }
-    const w = key => d[key] || [];
-    const waves = m.wave_height_max || [];
-    const updated=fetchedAt?new Intl.DateTimeFormat('fr-FR',{dateStyle:'short',timeStyle:'short'}).format(new Date(fetchedAt)):'heure non disponible';
-    host.innerHTML = `<div class="spot-week-head"><div><small>SEMAINE DU SPOT</small><b>Vent, UV, pluie & état de la mer</b></div><span>7 jours · relevé ${esc(updated)}</span></div><div class="spot-week-grid">${times.slice(0,7).map((iso,i) => `<article class="week-day ${i===0?'today':''}"><b>${day(iso,i)}</b><strong>${w('temperature_2m_max')[i] != null ? Math.round(w('temperature_2m_max')[i])+'°' : '—'}</strong><span class="week-min">${w('temperature_2m_min')[i] != null ? Math.round(w('temperature_2m_min')[i])+'°' : '—'}</span><dl><div><dt>Vent</dt><dd>${w('wind_speed_10m_max')[i] != null ? Math.round(w('wind_speed_10m_max')[i])+' km/h' : '—'}</dd></div><div><dt>UV</dt><dd>${w('uv_index_max')[i] != null ? Math.round(w('uv_index_max')[i]*10)/10 : '—'}</dd></div><div><dt>Pluie</dt><dd>${w('precipitation_probability_max')[i] != null ? Math.round(w('precipitation_probability_max')[i])+'%' : '—'}</dd></div><div><dt>Houle</dt><dd>${waves[i] != null && !isInland(s) ? (+waves[i]).toFixed(1)+' m' : '—'}</dd></div></dl></article>`).join('')}</div><p class="spot-week-note">UV, vent et pluie : prévision météo. Houle : prévision marine. Ces valeurs de modèle sont indicatives et la lecture a été mise en cache pour une heure.</p>`;
+    const W = window.SpotWeatherModel;
+    shown = {s, weather, marine, fetchedAt};
+    const inland = isInland(s);
+    const daily = W ? W.days(weather, marine, {inland}) : [];
+    if (!W || !daily.length) { host.innerHTML = '<p class="spot-week-empty">Les prévisions détaillées se chargeront dès que le modèle répondra.</p>'; return; }
+    const off = weather && weather.utc_offset_seconds, nowIso = W.localHourIso(off);
+    const all = W.hours(weather, marine, {inland}), next = inland ? W.upcoming(all, nowIso, 48) : W.trimMarine(W.upcoming(all, nowIso, 48));
+    const today = nowIso.slice(0, 10), tomorrow = (daily.find(d => d.date > today) || {}).date;
+    const slots = slotsBlock(s, activeAct, all, nowIso, [today, tomorrow].filter(Boolean), inland);
+    const updated = fetchedAt ? new Intl.DateTimeFormat('fr-FR', {dateStyle: 'short', timeStyle: 'short'}).format(new Date(fetchedAt)) : 'heure non disponible';
+    const gap = W.tzGap(off);
+    const utc = (() => { const a = Math.abs(+off || 0), h = Math.floor(a / 3600), m = Math.round(a % 3600 / 60); return `UTC${off < 0 ? '−' : '+'}${h}${m ? ':' + String(m).padStart(2, '0') : ''}`; })();
+    host.innerHTML = `<div class="spot-week-head"><div><small>MÉTÉO DU SPOT</small><b>Quand y aller ?</b></div><span><span class="wx-stamp">Relevé ${esc(updated)}</span>${gap ? `<span class="wx-stamp">Heures locales du spot (${esc(utc)})</span>` : ''}</span></div>`
+      + `<div class="wx-block">${slots.html}</div>`
+      + `<div class="wx-block"><div class="wx-sub"><h4>Heure par heure</h4><span>48 h</span></div>${hoursTable(next, daily, inland, slots.hours)}</div>`
+      + `<div class="wx-block"><div class="wx-sub"><h4>Les 7 jours</h4><span>Max du jour</span></div>${weekCards(daily, inland)}</div>`
+      + `<p class="spot-week-note"><span class="wx-stamp-note">Valeurs de modèle, indicatives, gardées une heure.</span>${inland ? '' : ' <span class="wx-stamp-note">Près des côtes, la précision des vagues est limitée. Pour la marée, consulte l’annuaire local.</span>'}</p>`
+      + '<p class="wx-source"><a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Prévisions Open-Meteo (CC BY 4.0)</a></p>';
   }
 
   function isInland(s) { return typeof window.isInland === 'function' ? window.isInland(s) : ['lake', 'inland'].includes(s?.waterType); }
-  async function loadWeek(s, act) {
+  /* Un appel prévision + un appel marine (heure par heure sur 48 h et 7 jours), gardés une heure et partagés entre ouvertures simultanées.
+     Hors connexion ou modèle muet : message simple, la fiche reste utilisable. */
+  const HOURLY = 'temperature_2m,wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,precipitation,precipitation_probability,is_day';
+  const DAILY = 'temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,weather_code,sunrise,sunset';
+  function loadWeek(s, act) {
+    const host = $('#spotWeek');
     const c = typeof COORDS !== 'undefined' ? COORDS[s.id] : null;
-    if (!c) { $('#spotWeek').innerHTML='<p class="spot-week-empty">Position non vérifiée : aucune prévision affichée pour ce spot.</p>'; return; }
+    if (!c) { if (host) host.innerHTML = '<p class="spot-week-empty">Position non vérifiée : aucune prévision affichée pour ce spot.</p>'; return; }
     const key = `${s.id}:${new Date().toISOString().slice(0,10)}`;
     const n = ++request;
-    const stored=cache.get(key);
-    if(stored&&Date.now()-stored.fetchedAt<60*60*1000){renderWeek(s,stored.weather,stored.marine,stored.fetchedAt);return;}
-    $('#spotWeek').innerHTML = '<div class="spot-week-loading"><i></i><span>Chargement des 7 jours du spot…</span></div>';
-    try {
-      const weatherUrl = `${api}?latitude=${c.lat}&longitude=${c.lon}&daily=temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max,wind_speed_10m_max,wind_direction_10m_dominant,weather_code&wind_speed_unit=kmh&cell_selection=${typeof isInland==='function'&&isInland(s)?'land':'sea'}&forecast_days=7&timezone=auto`;
-      const marineUrl = `${marineApi}?latitude=${c.lat}&longitude=${c.lon}&daily=wave_height_max&forecast_days=7&timezone=auto`;
-      const getJson=async url=>{const response=await fetch(url);if(!response.ok)throw Error(`Prévision HTTP ${response.status}`);return response.json();};
-      if(!pending.has(key))pending.set(key,(async()=>{
-        const weather=await getJson(weatherUrl);
-        const marine=isInland(s)?{}:await getJson(marineUrl).catch(()=>({}));
-        const result={weather,marine,fetchedAt:Date.now()};cache.set(key,result);return result;
-      })().finally(()=>pending.delete(key)));
-      const {weather,marine,fetchedAt}=await pending.get(key);
+    const stored = cache.get(key);
+    if (stored && Date.now() - stored.fetchedAt < 60*60*1000) { later(() => { if (n === request && activeSpot?.id === s.id) renderWeek(s, stored.weather, stored.marine, stored.fetchedAt); }); return; }
+    if (host) host.innerHTML = '<div class="spot-week-loading"><i></i><span>Chargement de la météo du spot…</span></div>';
+    const inland = isInland(s);
+    const weatherUrl = `${api}?latitude=${c.lat}&longitude=${c.lon}&hourly=${HOURLY}&forecast_hours=48&daily=${DAILY}&wind_speed_unit=kmh&cell_selection=${inland ? 'land' : 'sea'}&forecast_days=7&timezone=auto`;
+    const marineUrl = `${marineApi}?latitude=${c.lat}&longitude=${c.lon}&hourly=wave_height,wave_period,wave_direction&past_hours=1&forecast_hours=49&daily=wave_height_max,wave_period_max&forecast_days=7&timezone=auto&cell_selection=sea`;
+    const getJson = async url => { const response = await fetch(url); if (!response.ok) throw Error(`Prévision HTTP ${response.status}`); return response.json(); };
+    if (!pending.has(key)) pending.set(key, Promise.all([getJson(weatherUrl), inland ? Promise.resolve({}) : getJson(marineUrl).catch(() => ({}))])
+      .then(([weather, marine]) => { const result = {weather, marine, fetchedAt: Date.now()}; cache.set(key, result); return result; })
+      .finally(() => pending.delete(key)));
+    pending.get(key).then(({weather, marine, fetchedAt}) => {
       if (n !== request || activeSpot?.id !== s.id) return;
-      renderWeek(s, weather, marine, fetchedAt);
-    } catch (_) { if (n === request) $('#spotWeek').innerHTML = '<p class="spot-week-empty">Prévisions détaillées indisponibles pour le moment. Réessaie avec une connexion.</p>'; }
+      later(() => { if (n === request && activeSpot?.id === s.id) renderWeek(s, weather, marine, fetchedAt); });
+    }).catch(() => { if (n === request && $('#spotWeek')) $('#spotWeek').innerHTML = '<p class="spot-week-empty">Prévisions détaillées indisponibles pour le moment. Réessaie avec une connexion.</p>'; });
   }
+  /* Niveau changé dans Réglages : le créneau suit, sans nouvel appel. */
+  document.addEventListener('ocean:level', () => { try { if (shown && activeSpot?.id === shown.s.id) renderWeek(shown.s, shown.weather, shown.marine, shown.fetchedAt); } catch (e) {} });
 
   function openImmersion(s) { if(window.OceanVoyage)window.OceanVoyage.open(s);else window.OceanGallery?.open(s,0,{immersive:true}); }
 

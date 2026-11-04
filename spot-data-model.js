@@ -282,7 +282,7 @@
     if (w != null && level !== 'expert') out.push('Les seuils de vent (10, 20, 30 km/h) sont des repères indicatifs, pas des limites officielles.');
     if (tide) {
       if (level === 'debutant') out.push(tide === 'Descendante' ? 'Marée descendante : l’eau qui repart se concentre dans les chenaux, les baïnes et les courants de retour sont souvent plus forts. Sois plus prudent.' : 'Marée montante : l’eau avance vers la plage, les courants de retour sont en général moins marqués. Reste vigilant malgré tout.');
-      else if (level === 'intermediaire') out.push(tide === 'Descendante' ? 'Marée descendante : les bancs se découvrent et les vagues ferment plus vite. Regarde la courbe de marée plus bas pour caler ton heure.' : 'Marée montante : les vagues gagnent en rondeur à mesure que l’eau monte. Regarde la courbe de marée plus bas pour caler ton heure.');
+      else if (level === 'intermediaire') out.push(tide === 'Descendante' ? 'Marée descendante : les bancs se découvrent et les vagues ferment plus vite. Prends les heures de marée dans l’annuaire local pour caler ta session.' : 'Marée montante : les vagues gagnent en rondeur à mesure que l’eau monte. Prends les heures de marée dans l’annuaire local pour caler ta session.');
       else out.push([tide === 'Descendante' ? 'Marée descendante.' : 'Marée montante.', 'Le coefficient du jour n’est pas calculé ici : prends-le dans l’annuaire de marées local. Un coefficient élevé veut dire plus de courant et des bancs qui changent vite.']);
     }
     if (suit && level !== 'expert') out.push(`Eau à ${fmt(c.t, 0)} °C : prévois une combinaison ${suit}.`);
@@ -337,7 +337,7 @@
       blocks.push({ h: 'Choisir ta fenêtre', lines: [
         'Croise marée et vent : note l’heure où le vent est le plus faible, souvent tôt le matin, et la marée où le banc travaille le mieux.',
         'Le vent monte souvent l’après-midi. Une bonne fenêtre peut se fermer en une heure.',
-        'Regarde la courbe de marée de l’onglet : elle te donne les heures de pleine et de basse mer.'
+        'Prends les heures de pleine et de basse mer dans l’annuaire de marées local : le modèle de l’app ne les donne pas de façon fiable près des côtes.'
       ] });
       if (c.dirTxt) blocks.push({ h: 'Orientation de la houle', lines: [
         c.dirToday ? `Aujourd’hui, la houle arrive ${c.dirTxt} (valeur du modèle, au large).` : `En ${c.mon}, la houle arrive surtout ${c.dirTxt} (moyenne de plusieurs années).`,
