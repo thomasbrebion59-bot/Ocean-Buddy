@@ -558,7 +558,9 @@ function renderSpots(filter=currentFilter,keep){
   const resultCount=document.getElementById('spotResultCount');
   if(resultCount){const n=list.length,one=n===1;resultCount.textContent=filter==='new'
     ?(q?(one?`${n} nouveau spot trouvé`:`${n} nouveaux spots trouvés`):(one?`${n} nouveau spot à explorer`:`${n} nouveaux spots à explorer`))
-    :(q?(one?`${n} spot trouvé`:`${n} spots trouvés`):(one?`${n} spot à explorer`:`${n} spots à explorer`));}
+    :(q?(one?`${n} spot trouvé`:`${n} spots trouvés`):(one?`${n} spot à explorer`:`${n} spots à explorer`));
+    /* Sport actif : puce effaçable (la liste n’a plus de sélecteur de sport ; la recherche garde ton sport). */
+    if(activeSport&&typeof SPORTMAP!=='undefined'&&SPORTMAP[activeSport]){const c=document.createElement('button');c.type='button';c.className='sr-sport-chip';c.setAttribute('aria-label','Retirer le filtre '+SPORTMAP[activeSport].label);c.textContent=SPORTMAP[activeSport].label+' \u00d7';c.onclick=exploreAllActivities;resultCount.append(' ',c);}}
   var _h;
   if(!list.length){
     const oldFavorites=favOnly&&[...favs].some(id=>window.OceanLegacySpots?.archive(id)&&!window.OceanLegacySpots?.canonicalId(id));
