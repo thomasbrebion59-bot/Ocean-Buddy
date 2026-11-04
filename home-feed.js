@@ -79,32 +79,32 @@
   const val=(s,k,m)=>{const r=lite?.[s.id];const a=r&&r[LI[k]];return a?a[m]:null;};
   const DI={sea:'<path d="M14 14.8V5a2 2 0 0 0-4 0v9.8a4 4 0 1 0 4 0z"/>',wave:'<path d="M2 15c2.2 0 2.2-2 4.4-2s2.2 2 4.4 2 2.2-2 4.4-2 2.2 2 4.4 2"/><path d="M6 10c1-3 4-5 7-5 2 0 3.6 1 4.6 2.4"/>',wind:'<path d="M3 8h11a3 3 0 1 0-3-3"/><path d="M3 12h16a3 3 0 1 1-3 3"/>',sun:'<circle cx="12" cy="12" r="4"/><path d="M12 3v2M12 19v2M3 12h2M19 12h2"/>'};
   const num=(v,d=0)=>fmt('n'+d,()=>new Intl.NumberFormat(lang(),{maximumFractionDigits:d,minimumFractionDigits:d})).format(v);
-  function dataChip(s,kind){
-    const m=new Date().getMonth();let v=null,t='';
+  function dataChip(s,kind,month){
+    const m=month??new Date().getMonth();let v=null,t='';
     if(kind==='sea'){v=val(s,'sea',m);t=v==null?'':`${num(v)} °C`;}
     else if(kind==='wave'){v=val(s,'hs',m);t=v==null?'':`${num(v/10,1)} m`;}
     else if(kind==='wind'){v=val(s,'kite',m);t=v==null?'':`${num(v)} %`;}
     if(!t)return '';
-    return `<span class="hf-data" title="${kind==='sea'?'Eau ce mois-ci':kind==='wave'?'Houle moyenne au large ce mois-ci':'Jours de vent fort ce mois-ci'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">${DI[kind]}</svg>${esc(t)}</span>`;
+    return `<span class="hf-data" title="${kind==='sea'?(m===new Date().getMonth()?'Eau ce mois-ci':m===0?'Eau en janvier':'Eau en décembre'):kind==='wave'?'Houle moyenne au large ce mois-ci':'Jours de vent fort ce mois-ci'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">${DI[kind]}</svg>${esc(t)}</span>`;
   }
   /* Éclat de la photo (data/photo-scores.json) : les rails commencent par les images les plus lumineuses et colorées. */
   const vib=id=>scores?.[id]??55;
   const bright=list=>list.map((x,i)=>({x,i,k:Math.round(vib(x.id)/20)})).sort((a,b)=>b.k-a.k||a.i-b.i).map(o=>o.x);
   /* Pastilles d’une carte (donnée du mois, saison, activités) : aussi refaites sur place quand les données arrivent tard. */
-  function chips(s,data,season){
+  function chips(s,data,season,month){
     const acts=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');
-    return `${data?dataChip(s,data):''}${season?`<span class="hf-season">${esc(season)}</span>`:''}${acts?`<span>${esc(acts)}</span>`:''}`;
+    return `${data?dataChip(s,data,month):''}${season?`<span class="hf-season">${esc(season)}</span>`:''}${acts?`<span>${esc(acts)}</span>`:''}`;
   }
-  function card(s,{big=false,season=null,data=null,wantSeason=false}={}){
+  function card(s,{big=false,season=null,data=null,wantSeason=false,month=null}={}){
     const p=photo(s);if(!p)return '';
     const fav=typeof favs!=='undefined'&&favs.has(s.id);
-    return `<article class="hf-card${big?' big':''}" data-spot="${esc(s.id)}"${data?` data-hf-data="${data}"`:''}${wantSeason?' data-hf-season':''} role="listitem" tabindex="0" aria-label="${esc(s.name)}, ${esc(s.country||'')}">
+    return `<article class="hf-card${big?' big':''}" data-spot="${esc(s.id)}"${data?` data-hf-data="${data}"`:''}${month!=null?` data-hf-m="${month}"`:''}${wantSeason?' data-hf-season':''} role="listitem" tabindex="0" aria-label="${esc(s.name)}, ${esc(s.country||'')}">
       <img src="${esc(big?p.src:p.thumb)}" alt="" loading="lazy" decoding="async">
       <button type="button" class="hf-fav${fav?' on':''}" data-fav="${esc(s.id)}" aria-label="${fav?'Retirer des favoris':'Ajouter aux favoris'} : ${esc(s.name)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4S3.8 14.9 3.8 9.4A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.2 2.8c0 5.5-8.2 11-8.2 11z"/></svg></button>
       <div class="hf-card-tx">
         <small>${esc(s.country||s.loc||'')}</small>
         <h3>${esc(String(s.name).split(' — ')[0])}</h3>
-        <p>${chips(s,data,season)}</p>
+        <p>${chips(s,data,season,month)}</p>
       </div>
     </article>`;
   }
@@ -276,11 +276,170 @@
   }
   const body=()=>document.body;
 
+  /* ---------- Mode Noël (noel-model.js) ----------
+     Du 15 novembre au 6 janvier (date de l’appareil) : un titre de saison sous une fine guirlande, des paillettes dorées
+     qui tombent lentement sur le haut de l’accueil, la rangée « Noël au soleil » et le calendrier de l’Avent (du 1er au
+     24 décembre ; avant, une carte annonce son ouverture). html.ob-noel donne au reste de l’interface ses touches
+     dorées (noel.css).
+     Bandeau et calque posés avec l’ouverture, rangée et Avent avec le fil : tout est en place sous le rideau, à hauteur
+     fixe (home-feed.css). Hors mode, rien n’est créé ni écouté. Réglage « Ambiance de Noël » : localStorage oceanbuddy_noel. */
+  const NM=window.NoelModel;
+  const noelStored=()=>{try{return localStorage.getItem(NM.STORE);}catch(_){return null;}};
+  const noelState=()=>NM?NM.state({now:new Date(),search:location.search,stored:noelStored()}):{on:false,period:false,forced:null};
+  let noel=noelState(),noelIds=[];
+  /* Essai avec une date forcée (?saison=noel&jour=…) : l’en-tête de l’accueil (app-shell.js, chargé après) affiche la même date. */
+  if(noel.forced==='noel'&&noel.period)window.OB_NOEL_TODAY=noel.date;
+  function noelTitle(){
+    const g=NM.greeting(noel.date);if(!g)return '';
+    if(g.kind==='countdown')return g.n===1?'Plus qu’un jour avant Noël':`Plus que ${g.n} jours avant Noël`;
+    return g.kind==='noel'?'Joyeux Noël':g.kind==='fetes'?'Belles fêtes':'Bonne année';
+  }
+  /* Guirlande : un fil et deux rangs d’ampoules dessinés par des masques CSS (couleurs de la marque, sans image). */
+  function noelTop(){
+    return `<div class="hf-noel-top"><span class="hf-noel-garland" aria-hidden="true"><i class="hf-noel-wire"></i><i class="hf-noel-bulbs"></i><i class="hf-noel-bulbs hf-noel-bulbs-b"></i></span><p class="hf-noel-title">${esc(noelTitle())}</p></div>`;
+  }
+  /* Bandeau et calque des paillettes : ajoutés ou retirés selon le mode (au montage, ou quand le réglage change). */
+  function syncNoel(){
+    document.documentElement.classList.toggle('ob-noel',!!noel.on);
+    const top=$('.hf-top',home);if(!top)return;
+    const band=$('.hf-noel-top',top);
+    if(noel.on&&!band){const t=document.createElement('div');t.innerHTML=noelTop();top.prepend(t.firstElementChild);}
+    else if(!noel.on&&band)band.remove();
+    if(noel.on&&!sky){
+      sky=document.createElement('canvas');sky.className='hf-noel-sky';sky.setAttribute('aria-hidden','true');
+      (home.querySelector(':scope>.hf-ambient')||home.firstElementChild)?.after(sky);
+      watchSky();
+    }else if(!noel.on&&sky){stopSky();sky.remove();sky=null;}
+  }
+  /* Rangée « Noël au soleil » : bonne saison ET eau ≥ 24 °C (normales NOAA), triée par score photo. */
+  function noelSection(pool,used){
+    noelIds=[];
+    if(!noel.on||!NM||!seasons||!lite)return '';
+    const m=NM.railMonth(noel.date);
+    const list=NM.sunnySpots(pool,{seasons,sea:(s,mm)=>val(s,'sea',mm),scores,month:m});
+    noelIds=list.map(s=>s.id);
+    const cards=pick(list,{n:10,perCountry:1,used}).map(s=>card(s,{data:'sea',month:m})).filter(Boolean);
+    if(cards.length<3){noelIds=[];return '';}
+    /* Deux blocs distincts : le calendrier de l’Avent (sa propre section, hors .hf-sec pour que les « Envies du moment »
+       viennent après la rangée), puis la rangée « Noël au soleil » (titre, sous-titre, cartes). */
+    return `${advent()}<section class="hf-sec hf-noel" data-hf="noel" aria-label="Noël au soleil">
+      <div class="as-sec"><h2>Noël au soleil<small>${m===11?'Eau à 24 °C ou plus en décembre (normales NOAA, valeur indicative) et bonne saison selon nos carnets.':'Eau à 24 °C ou plus en janvier (normales NOAA, valeur indicative) et bonne saison selon nos carnets.'}</small></h2></div>
+      <div class="hf-rail" role="list">${cards.join('')}</div>
+    </section>`;
+  }
+  /* Calendrier de l’Avent : 24 cases ; les jours passés et la case du jour s’ouvrent, les jours futurs restent fermés. */
+  const aventYear=()=>noel.date.getFullYear();
+  const aventOpened=()=>{try{return NM.readOpened(localStorage.getItem(NM.AVENT),aventYear());}catch(_){return {};}};
+  const shortName=s=>String(s.name).split(' — ')[0];
+  function aventCase(c,opened){
+    if(c.state==='future')return `<button type="button" class="hf-avent-day is-future" disabled aria-label="Case du ${c.day} décembre, pas encore ouverte"><b>${c.day}</b></button>`;
+    const s=opened[c.day]&&SPOTS.find(x=>x.id===opened[c.day]),p=s&&photo(s),today=c.state==='today'?' is-today':'';
+    if(p)return `<button type="button" class="hf-avent-day is-open${today}" data-hf-avent="${c.day}" aria-label="Case du ${c.day} décembre, déjà ouverte : ${esc(shortName(s))}"><img src="${esc(p.thumb)}" alt="" loading="lazy" decoding="async"><b>${c.day}</b></button>`;
+    return `<button type="button" class="hf-avent-day${today}" data-hf-avent="${c.day}" aria-label="${today?`Case du jour, ${c.day} décembre : ouvrir le spot surprise`:`Case du ${c.day} décembre : ouvrir le spot surprise`}"><b>${c.day}</b></button>`;
+  }
+  function advent(){
+    if(noelIds.length<3)return '';
+    /* Avant le 1er décembre : même en-tête, et une carte à la place de la rangée (même hauteur). */
+    if(NM.adventSoon(noel.date))return `<section class="hf-avent" data-hf-avent-sec aria-label="Calendrier de l’Avent"><div class="as-sec"><h2>Calendrier de l’Avent<small>Une case par jour du 1er au 24 décembre : un spot au soleil à découvrir.</small></h2></div>
+      <div class="hf-avent-row"><p class="hf-avent-soon">Le calendrier de l’Avent ouvre le 1er décembre</p></div></section>`;
+    const days=NM.adventDays(noel.date);if(!days)return '';
+    const opened=aventOpened();
+    return `<section class="hf-avent" data-hf-avent-sec aria-label="Calendrier de l’Avent"><div class="as-sec"><h2>Calendrier de l’Avent<small>Une case par jour jusqu’au 24 décembre : un spot au soleil à découvrir.</small></h2></div>
+      <div class="hf-avent-row" role="group" aria-label="Calendrier de l’Avent">${days.map(c=>aventCase(c,opened)).join('')}</div></section>`;
+  }
+  /* La case du jour reste visible dans la rangée (défilement horizontal de la rangée seulement, jamais la page). */
+  function aventToday(){
+    const row=home.querySelector('.hf-avent-row'),on=row?.querySelector('.is-today');
+    if(row&&on)row.scrollLeft=Math.max(0,on.offsetLeft-row.clientWidth/2+on.offsetWidth/2);
+  }
+  /* Ouvrir une case : tirage déterministe du jour (jamais deux fois le même spot), mémorisé, puis la fiche du spot. */
+  function openAvent(btn){
+    if(!NM||!noel.on)return;
+    const day=+btn.dataset.hfAvent,y=aventYear(),days=NM.adventDays(noel.date);
+    if(!days||!days[day-1]||days[day-1].state==='future')return;
+    const opened=aventOpened(),id=NM.adventPick(day,y,noelIds,opened);if(!id)return;
+    if(opened[day]!==id){opened[day]=id;try{localStorage.setItem(NM.AVENT,NM.writeOpened(opened,y));}catch(_){}}
+    const s=SPOTS.find(x=>x.id===id),p=s&&photo(s);
+    if(p&&!btn.classList.contains('is-open')){
+      const img=document.createElement('img');img.alt='';img.decoding='async';img.src=p.thumb;
+      btn.prepend(img);btn.classList.add('is-open');btn.setAttribute('aria-label',`Case du ${day} décembre, déjà ouverte : ${shortName(s)}`);
+    }
+    if(typeof vibrate==='function')vibrate(8);
+    if(typeof openSpot==='function')openSpot(id);
+  }
+  /* Paillettes : un canevas léger (une trentaine de points, 30 images/s) seulement sur le haut de l’accueil.
+     Arrêté sous le rideau, onglet caché, hors accueil, hors écran ou en mouvement réduit (le canevas est alors vidé). */
+  let sky=null,skyCtx=null,skyRun=0,skyIO=null,skyOn=false,skyLast=0,skyW=0,skyH=0,skyCols=null,flakes=[],skyBound=false;
+  const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches||body().classList.contains('reduce-motion');
+  const skyLive=()=>!!sky&&noel.on&&skyOn&&!document.hidden&&homeShown()&&!reduced()&&!(Boot&&!Boot.lifted);
+  function skySize(){
+    const w=sky.clientWidth,h=sky.clientHeight,r=Math.min(2,window.devicePixelRatio||1);
+    if(!w||!h)return false;
+    if(w!==skyW||h!==skyH){
+      skyW=w;skyH=h;sky.width=Math.round(w*r);sky.height=Math.round(h*r);
+      skyCtx=sky.getContext('2d');skyCtx?.setTransform(r,0,0,r,0,0);
+      const n=Math.max(16,Math.min(40,Math.round(w/14)));
+      flakes=Array.from({length:n},()=>flake(true));
+    }
+    return !!skyCtx;
+  }
+  function flake(anywhere){
+    const R=Math.random;
+    return {x:R()*skyW,y:anywhere?R()*skyH:-6-R()*30,r:.8+R()*1.5,vy:9+R()*14,amp:4+R()*12,f:.4+R()*.7,ph:R()*6.3,spin:1.2+R()*2.4,tw:R()*6.3,a:.45+R()*.45,gold:R()<.72};
+  }
+  function skyClear(){if(skyCtx)skyCtx.clearRect(0,0,skyW,skyH);}
+  function skyFrame(t){
+    skyRun=0;
+    if(!skyLive()){skyClear();return;}
+    skyRun=requestAnimationFrame(skyFrame);
+    if(skyLast&&t-skyLast<32)return;
+    const dt=skyLast?Math.min(.08,(t-skyLast)/1000):.032;skyLast=t;
+    if(!skySize())return;
+    if(!skyCols){const cs=getComputedStyle(document.documentElement);skyCols=[cs.getPropertyValue('--t-sun').trim()||'gold',cs.getPropertyValue('--t-on-main').trim()||'white'];}
+    const c=skyCtx;c.clearRect(0,0,skyW,skyH);
+    for(const f of flakes){
+      f.y+=f.vy*dt;f.ph+=f.f*dt;f.tw+=f.spin*dt;
+      if(f.y>skyH+6)Object.assign(f,flake(false));
+      const w=f.r*(.3+.7*Math.abs(Math.cos(f.tw)));
+      c.globalAlpha=f.a*(.65+.35*Math.sin(f.tw*1.7));c.fillStyle=skyCols[f.gold?0:1];
+      c.beginPath();c.ellipse(f.x+Math.sin(f.ph)*f.amp,f.y,w,f.r,0,0,6.2832);c.fill();
+    }
+    c.globalAlpha=1;
+  }
+  function syncSky(){
+    if(skyLive()){if(!skyRun){skyLast=0;skyRun=requestAnimationFrame(skyFrame);}}
+    else{if(skyRun){cancelAnimationFrame(skyRun);skyRun=0;}skyClear();}
+  }
+  function stopSky(){skyIO?.disconnect();skyIO=null;skyOn=false;syncSky();}
+  function watchSky(){
+    if(!sky)return;
+    skyIO?.disconnect();
+    if(window.IntersectionObserver){skyIO=new IntersectionObserver(([e])=>{skyOn=!!e?.isIntersecting;syncSky();});skyIO.observe(sky);}else skyOn=true;
+    if(skyBound)return;skyBound=true;
+    document.addEventListener('visibilitychange',syncSky);
+    window.addEventListener('ocean:navigate',()=>setTimeout(syncSky,0));
+    matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change',syncSky);
+    document.getElementById('setReduce')?.addEventListener('change',()=>setTimeout(syncSky,0));
+    window.addEventListener('resize',()=>{skyW=0;},{passive:true});
+    document.addEventListener('ocean:sport',()=>{skyCols=null;});
+  }
+  /* Réglage « Ambiance de Noël » : proposé seulement pendant la période (ou en essai), activé par défaut. */
+  const noelRow=document.getElementById('setNoelRow'),noelBox=document.getElementById('setNoel');
+  if(NM&&noelRow&&noelBox&&noel.period){
+    noelRow.hidden=false;noelBox.checked=noel.on;
+    noelBox.addEventListener('change',()=>{
+      try{localStorage.setItem(NM.STORE,noelBox.checked?'on':'off');}catch(_){}
+      noel=noelState();if(built)mount();else syncNoel();syncSky();
+    });
+  }
+  /* ---------- Fin du mode Noël ---------- */
+
   function render(){
     const used=new Set();
     const pool=bright(daily(SPOTS.filter(s=>photo(s)),'pool'));
     const m=new Date().getMonth();
-    let html='';
+    /* Mode Noël : la rangée « Noël au soleil » (et l’Avent) ouvre le fil ; ses spots ne reviennent pas plus bas. */
+    let html=noelSection(pool,used);
     if(seasons){
       /* Saison qui commence ce mois-ci d’abord, puis saison en cours ; les saisons courtes passent devant « toute l’année ». */
       const inSeason=pool.filter(s=>seasons[s.id]?.includes(m));
@@ -327,10 +486,10 @@
     if($('.hf-top',home))return;
     const tmp=document.createElement('div');tmp.innerHTML=hero();
     ($('.as-large',home)||home.firstElementChild)?.after(tmp.firstElementChild);
-    home.classList.add('hf-on');syncActs();
+    home.classList.add('hf-on');syncActs();syncNoel();
   }
   function mount(){
-    mountHero();
+    mountHero();syncNoel();
     let feed=$('.hf-feed',home);
     if(!feed){feed=document.createElement('div');feed.className='hf-feed';$('.hf-top',home).after(feed);}
     /* Les sections placées entre les rails (activités, immersion) sortent du fil avant le nouveau rendu. */
@@ -341,7 +500,7 @@
     const firstRail=feed.querySelector('.hf-sec');const mm=document.createElement('div');mm.innerHTML=moods(feed);if(mm.firstElementChild)(firstRail||feed.firstElementChild)?.after(mm.firstElementChild);
     /* La carte du monde vient après les deux premiers rails. */
     const second=feed.querySelectorAll('.hf-sec')[1];const wc=document.createElement('div');wc.innerHTML=worldCard();(second||feed.lastElementChild)?.after(wc.firstElementChild);
-    order();bindHero();watchPlanet();built=true;
+    order();bindHero();watchPlanet();aventToday();built=true;
   }
   /* Données arrivées après le montage : sous le rideau, le fil est remonté (invisible) ; après la levée, seules les
      pastilles des cartes déjà affichées changent, sur place (aucune section ajoutée, retirée ni déplacée). */
@@ -350,7 +509,7 @@
     const byId=new Map(SPOTS.map(s=>[s.id,s]));
     home.querySelectorAll('.hf-feed .hf-card[data-spot]').forEach(c=>{
       const s=byId.get(c.dataset.spot),p=c.querySelector('.hf-card-tx p');if(!s||!p)return;
-      p.innerHTML=chips(s,c.dataset.hfData||null,c.hasAttribute('data-hf-season')?seasonLabel(seasons?.[s.id]):null);
+      p.innerHTML=chips(s,c.dataset.hfData||null,c.hasAttribute('data-hf-season')?seasonLabel(seasons?.[s.id]):null,c.dataset.hfM!=null?+c.dataset.hfM:null);
     });
   }
   /* Accueil prêt : la photo d’ouverture est décodée et les polices des titres chargées (avec un plafond). */
@@ -366,6 +525,8 @@
 
   /* Interactions : ouvrir un spot, favoris, boutons du héros. */
   home.addEventListener('click',e=>{
+    const av=e.target.closest('[data-hf-avent]');
+    if(av){openAvent(av);return;}
     const fav=e.target.closest('[data-fav]');
     if(fav){e.stopPropagation();const id=fav.dataset.fav;if(typeof toggleFav==='function'){toggleFav(id,e);}const on=typeof favs!=='undefined'&&favs.has(id);fav.classList.toggle('on',on);if(typeof vibrate==='function')vibrate(8);return;}
     const surf=e.target.closest('[data-surf-game]');
@@ -426,7 +587,7 @@
     return ready();
   }).catch(e=>{setTimeout(()=>{throw e;});Boot?.done('feed');});
   /* Globe et premier défilement automatique : seulement après la levée du rideau. */
-  Boot?.after(()=>{lastTouch=Date.now();watchPlanet();});
+  Boot?.after(()=>{lastTouch=Date.now();watchPlanet();syncSky();});
   /* Langue changée : on reconstruit (noms des mois). */
   window.addEventListener('ocean:lang',()=>{if(built)mount();});
   window.OceanHomeFeed={refresh:mount,seasonLabel,syncActs};

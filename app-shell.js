@@ -41,7 +41,8 @@
   poulpy.onclick=()=>{if(typeof openChat==='function')openChat();};
   nav.after(poulpy);
   /* ---------- Grands titres ---------- */
-  const today=()=>new Intl.DateTimeFormat(document.documentElement.lang||'fr',{weekday:'long',day:'numeric',month:'long'}).format(new Date());
+  /* Mode Noël en essai (?saison=noel&jour=…) : même date que le compte à rebours (home-feed.js pose OB_NOEL_TODAY). */
+  const today=()=>new Intl.DateTimeFormat(document.documentElement.lang||'fr',{weekday:'long',day:'numeric',month:'long'}).format(window.OB_NOEL_TODAY||new Date());
   function greet(){
     const h=new Date().getHours(),name=typeof userName==='string'&&userName&&userName!=='Explorateur'?userName:'';
     const hello=h<5?'Bonne nuit':h<12?'Bonjour':h<18?'Bon après-midi':'Bonsoir';
