@@ -35,7 +35,7 @@
     const image=photo(s);
     const count=window.OceanPhotos?.list(s.id,act)?.length||0;
     const query=encodeURIComponent([s.name,s.loc,act,'spot'].filter(Boolean).join(' '));
-    return `<div class="experience-heading"><span><small>LE SPOT EN IMAGES</small><b>Approche-toi du lieu.</b></span><i>${count?(count>1?`${count} photos locales`:`${count} photo locale`):'Aucune photo locale'}</i></div><button type="button" class="experience-photo-open ${image?'':'no-image'}" data-experience-open>${image?`<img src="${esc(image.thumb||image.src)}" alt="" loading="lazy">`:'<span class="experience-photo-symbol" aria-hidden="true">◎</span>'}<span><b>${image?`Explorer ${esc(s.name)}`:`Découvrir ${esc(s.name)} en images`}</b><small>${image?'Photos créditées · tu peux en chercher d’autres dans la galerie.':'Aucune image locale pour ce lieu. Cherche des photos réutilisables avec leurs crédits.'}</small><strong>${image?'Entrer dans le décor':'Trouver des photos'}</strong></span></button>${window.OceanVoyage?'<button type="button" class="experience-video-search experience-explore-360" data-experience-explore><span aria-hidden="true">360°</span><span><b>Balade-toi sur le spot en 360°</b><small>Parking, plage, point de vue et, quand elles existent, des vues dans l’eau · chargées à la demande</small></span></button>':''}<a class="experience-video-search" href="https://www.youtube.com/results?search_query=${query}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></span><span><b>Voir des vidéos du spot</b><small>Ouvre les vidéos proposées sur YouTube · lecture à la demande</small></span></a>`;
+    return `<div class="experience-heading"><span><small>LE SPOT EN IMAGES</small><b>Approche-toi du lieu.</b></span><i>${count?(count>1?`${count} photos locales`:`${count} photo locale`):'Aucune photo locale'}</i></div><button type="button" class="experience-photo-open ${image?'':'no-image'}" data-experience-open>${image?`<img src="${esc(image.thumb||image.src)}" alt="" loading="lazy">`:'<span class="experience-photo-symbol" aria-hidden="true">◎</span>'}<span><b>${image?`Les photos de ${esc(s.name)}`:`Découvrir ${esc(s.name)} en images`}</b><small>${image?'Photos créditées. Tu peux en chercher d’autres.':'Aucune photo locale. Cherche des photos libres, avec leurs crédits.'}</small><strong>${image?'Voir les photos':'Trouver des photos'}</strong></span></button><a class="experience-video-search" href="https://www.youtube.com/results?search_query=${query}" target="_blank" rel="noopener noreferrer"><span aria-hidden="true"><svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor"><path d="M8 5.5v13l11-6.5z"/></svg></span><span><b>Voir des vidéos du spot</b><small>Ouvre les vidéos proposées sur YouTube · lecture à la demande</small></span></a>`;
   }
 
   /* Carte du secteur : même moteur que la carte des spots, créée quand elle devient visible. */
@@ -221,13 +221,13 @@
       const why = rule.reason === 'level' ? 'Choisis ton niveau dans Réglages, « Mon sport et mon niveau », pour voir ton meilleur créneau.'
         : rule.reason === 'expert' ? 'Niveau expert : « Lire les conditions » ne fixe pas de seuil. Compare toi-même vent, houle et période heure par heure.'
         : 'Pas de créneau calculé pour ce sport ici : « Lire les conditions » ne donne pas de repère chiffré. Renseigne-toi sur place.';
-      return {html: `${head}<p class="wx-slot-why">${esc(why)}</p>`, hours: new Set()};
+      return {html: `${head}<p class="wx-slot-why">${esc(why)}</p>`, hours: new Set(), rule, today: null};
     }
     const res = dates.map((date, i) => W.bestSlot(list, {act, inland, level, date, nowIso: i === 0 ? nowIso : null, catalogWind: s.wind}));
     const hours = new Set();
     res.forEach(r => { if (r.status === 'ok') list.forEach(x => { if (x.t >= r.start && x.t <= r.end) hours.add(x.t); }); });
     const noLevel = !rule.level ? '<p class="wx-slot-why">Sans niveau choisi dans Réglages, le calcul reste prudent.</p>' : '';
-    return {html: `${head}<div class="wx-slots">${res.map((r, i) => slotCard(i === 0 ? 'Aujourd’hui' : 'Demain', r, inland)).join('')}</div>${noLevel}${note}`, hours};
+    return {html: `${head}<div class="wx-slots">${res.map((r, i) => slotCard(i === 0 ? 'Aujourd’hui' : 'Demain', r, inland)).join('')}</div>${noLevel}${note}`, hours, rule, today: res[0] || null};
   }
   function hoursTable(list, daily, inland, slotHours) {
     if (!list.length) return '<p class="spot-week-empty">Heure par heure indisponible pour le moment.</p>';
@@ -264,11 +264,14 @@
     shown = {s, weather, marine, fetchedAt};
     const inland = isInland(s);
     const daily = W ? W.days(weather, marine, {inland}) : [];
-    if (!W || !daily.length) { host.innerHTML = '<p class="spot-week-empty">Les prévisions détaillées se chargeront dès que le modèle répondra.</p>'; return; }
+    const toBefore = (rule, today) => { try { window.OceanBefore?.slot(s, rule, today, hourFmt); } catch (e) {} };
+    if (!W || !daily.length) { host.innerHTML = '<p class="spot-week-empty">Les prévisions détaillées se chargeront dès que le modèle répondra.</p>'; toBefore(null); return; }
     const off = weather && weather.utc_offset_seconds, nowIso = W.localHourIso(off);
     const all = W.hours(weather, marine, {inland}), next = inland ? W.upcoming(all, nowIso, 48) : W.trimMarine(W.upcoming(all, nowIso, 48));
     const today = nowIso.slice(0, 10), tomorrow = (daily.find(d => d.date > today) || {}).date;
     const slots = slotsBlock(s, activeAct, all, nowIso, [today, tomorrow].filter(Boolean), inland);
+    /* Bandeau « Avant d’y aller » : le créneau d’aujourd’hui déjà calculé ici, sans nouvel appel. */
+    toBefore(slots.rule, slots.today);
     const updated = fetchedAt ? new Intl.DateTimeFormat('fr-FR', {dateStyle: 'short', timeStyle: 'short'}).format(new Date(fetchedAt)) : 'heure non disponible';
     const gap = W.tzGap(off);
     const utc = (() => { const a = Math.abs(+off || 0), h = Math.floor(a / 3600), m = Math.round(a % 3600 / 60); return `UTC${off < 0 ? '−' : '+'}${h}${m ? ':' + String(m).padStart(2, '0') : ''}`; })();
@@ -304,7 +307,7 @@
     pending.get(key).then(({weather, marine, fetchedAt}) => {
       if (n !== request || activeSpot?.id !== s.id) return;
       later(() => { if (n === request && activeSpot?.id === s.id) renderWeek(s, weather, marine, fetchedAt); });
-    }).catch(() => { if (n === request && $('#spotWeek')) $('#spotWeek').innerHTML = '<p class="spot-week-empty">Prévisions détaillées indisponibles pour le moment. Réessaie avec une connexion.</p>'; });
+    }).catch(() => { if (n === request && activeSpot?.id === s.id) { try { window.OceanBefore?.slot(s, null); } catch (e) {} } if (n === request && $('#spotWeek')) $('#spotWeek').innerHTML = '<p class="spot-week-empty">Prévisions détaillées indisponibles pour le moment. Réessaie avec une connexion.</p>'; });
   }
   /* Niveau changé dans Réglages : le créneau suit, sans nouvel appel. */
   document.addEventListener('ocean:level', () => { try { if (shown && activeSpot?.id === shown.s.id) renderWeek(shown.s, shown.weather, shown.marine, shown.fetchedAt); } catch (e) {} });
@@ -314,8 +317,10 @@
   function update(s, act) {
     activeSpot=s;activeAct=act;ensureExperiencePanel();
     const hasPhoto=!!photo(s),btn=$('#dImmersionBtn'),panel=$('#spotVideoPanel');
-    if(btn){btn.hidden=false;btn.disabled=false;btn.onclick=()=>openImmersion(s);}
-    if(panel){panel.hidden=false;panel.innerHTML=videoPanel(s,act);panel.querySelector('[data-experience-open]')?.addEventListener('click',()=>openImmersion(s));panel.querySelector('[data-experience-explore]')?.addEventListener('click',()=>window.OceanVoyage?.open(s,{explore:true}));}
+    /* Une seule entrée vers l’immersion : la bannière « Vis … » (ocean-home.js), posée juste avant ce panneau.
+       Le bouton « Mode immersion » du haut reste masqué ; ici, la photo ouvre la galerie de l’app. */
+    if(btn){btn.hidden=true;btn.onclick=null;}
+    if(panel){panel.hidden=false;panel.innerHTML=videoPanel(s,act);panel.querySelector('[data-experience-open]')?.addEventListener('click',()=>{if(window.OceanGallery)window.OceanGallery.open(s,0);else openImmersion(s);});}
     updateAreaMap(s);
     drawSafety(s,window.LIVE?.[s.id]);loadWeek(s,act);
   }

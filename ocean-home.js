@@ -28,12 +28,13 @@
       <div class="ob-dive-track">${picks().map((s,i)=>`<button type="button" class="ob-story${i===0?' is-lead':''}" data-voyage="${esc(s.id)}" aria-label="Voyage immersif : ${esc(s.name)}"><img src="${esc(photo(s.id,i===0?1280:720))}" alt="" loading="lazy" decoding="async"><span class="ob-story-ring"><i>${sphere(s.id)?orbit:play}</i>${sphere(s.id)?'360°':panos[s.id]?.length?'PANORAMA':'IMMERSION'}</span><span class="ob-story-txt"><small>${esc(s.loc)}</small><b>${esc(s.name.split(' — ')[0])}</b></span></button>`).join('')}</div>`;
   }
 
-  /* Bandeau d’entrée dans chaque fiche. */
+  /* Bandeau d’entrée dans chaque fiche (la seule : le bouton « Mode immersion » du haut est retiré). */
   function banner(s){
     const detail=$('#detail .detail-body');if(!detail||!s)return;
     let b=$('#obVoyageBanner');
     if(!b){b=document.createElement('button');b.type='button';b.id='obVoyageBanner';b.className='ob-voyage-banner';
-      const anchor=$('#dTabs');anchor?anchor.before(b):detail.prepend(b);
+      /* Seule entrée vers l’immersion de la fiche : dans l’onglet « Le spot », juste avant « Le spot en images ». */
+      const anchor=$('#spotVideoPanel')||$('#dTabs');anchor?anchor.before(b):detail.prepend(b);
       b.addEventListener('click',()=>{const cur=byId(b.dataset.spot);if(cur)window.OceanVoyage?.open(cur);});}
     const pano=sphere(s.id),wide=(window.OCEAN_PANORAMAS?.[s.id]||[]).length;
     b.dataset.spot=s.id;b.style.setProperty('--ob-cover',`url("${photo(s.id,1280)}")`);

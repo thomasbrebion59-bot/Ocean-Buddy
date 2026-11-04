@@ -118,7 +118,8 @@
     document.body.appendChild(layer);setTimeout(()=>layer.remove(),1900);
   }
 
-  /* Fiche spot : une barre d’action qui apparaît une fois le grand visuel dépassé. */
+  /* Fiche spot : la barre d’action du bas, seule place du ♥ et de « Ajouter à un voyage » (sans doublon dans la fiche).
+     Elle reste affichée sur toute la fiche ; la barre d’onglets se range pendant ce temps (app-shell.css). */
   function mountSpotBar(){
     const detail=$('#detail'),hero=$('#detailHero'),wrap=$('#screenWrap');if(!detail||!hero||!wrap)return;
     const bar=document.createElement('div');bar.className='spot-bar';bar.setAttribute('role','toolbar');bar.setAttribute('aria-label','Actions du spot');
@@ -128,9 +129,9 @@
     bar.querySelector('.spot-bar-fav').onclick=e=>{toggleFav(currentSpot,e);sync();};
     bar.querySelector('.spot-bar-trip').onclick=()=>window.OceanTrips?.fromSpot(currentSpot);
     let ticking=false;
-    const check=()=>{ticking=false;const visible=document.body.dataset.screen==='detail'&&hero.getBoundingClientRect().bottom<80;if(visible&&!bar.classList.contains('show'))sync();bar.classList.toggle('show',visible);};
+    const check=()=>{ticking=false;const visible=document.body.dataset.screen==='detail';if(visible)sync();bar.classList.toggle('show',visible);};
     wrap.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(check);}},{passive:true});
-    window.addEventListener('ocean:navigate',()=>{bar.classList.remove('show');});
+    window.addEventListener('ocean:navigate',e=>{bar.classList.toggle('show',e.detail==='detail');requestAnimationFrame(check);});
     document.getElementById('dFav')?.addEventListener('click',()=>setTimeout(sync,0));
   }
 

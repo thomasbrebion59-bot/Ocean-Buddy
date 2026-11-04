@@ -121,11 +121,12 @@
     btn.type = 'button'; btn.className = 'hero-share'; btn.setAttribute('aria-label', 'Partager ce spot'); btn.title = 'Partager ce spot';
     btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12.5V19a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6.5"/></svg>';
     fav.after(btn);
-    /* aligné à gauche du cœur, quelle que soit la mise en page (mobile, tablette, ordinateur) */
+    /* aligné à gauche du cœur, quelle que soit la mise en page (mobile, tablette, ordinateur) ;
+       quand le cœur du haut est masqué (il vit dans la barre d’actions du bas), le partage prend sa place. */
     const place = () => {
-      const cs = getComputedStyle(fav), size = fav.getBoundingClientRect().width;
+      const cs = getComputedStyle(fav), hidden = cs.display === 'none', size = hidden ? parseFloat(cs.width) : fav.getBoundingClientRect().width;
       if (!size || cs.right === 'auto') return;
-      btn.style.top = cs.top; btn.style.right = (parseFloat(cs.right) + size + 10) + 'px';
+      btn.style.top = cs.top; btn.style.right = (hidden ? parseFloat(cs.right) : parseFloat(cs.right) + size + 10) + 'px';
       btn.style.width = btn.style.height = size + 'px';
     };
     if ('ResizeObserver' in window) new ResizeObserver(place).observe(fav);
@@ -134,9 +135,17 @@
     btn.addEventListener('click', async () => {
       const spot = (window.SPOTS || []).find(x => x.id === window.currentSpot) || (typeof SPOTS !== 'undefined' && SPOTS.find(x => x.id === currentSpot));
       if (!spot) return;
+      /* Lien vers la page publique du spot (spot/<id>/, générée par scripts/build-seo.cjs avec son image d’aperçu) :
+         toujours l’adresse publique, jamais localhost ni le chargeur de l’app. Spot privé ou absent du catalogue publié :
+         ancien lien #spot= (toujours lu à l’ouverture, plus bas). */
+      const published = !spot.custom && Array.isArray(window.OCEAN_CATALOG) && window.OCEAN_CATALOG.some(x => x.id === spot.id);
+      const pretty = published && window.SpotFitModel ? window.SpotFitModel.shareUrl(PUBLIC_URL, spot.id) : null;
       const base = /^https?:$/.test(location.protocol) && !/^(localhost|127\.0\.0\.1)$/.test(location.hostname) ? location.origin + location.pathname : PUBLIC_URL;
-      const url = base + '#spot=' + encodeURIComponent(spot.id);
-      const text = spot.name + ' — à découvrir sur Ocean Buddy 🌊';
+      const url = pretty || base + '#spot=' + encodeURIComponent(spot.id);
+      const LV = { debutant: 'débutant', intermediaire: 'intermédiaire', expert: 'expert' };
+      const sport = typeof spotSports === 'function' && typeof SPORTMAP !== 'undefined' ? (spotSports(spot).map(id => SPORTMAP[id] && SPORTMAP[id].label.replace(/\s*\(.*\)/, ''))[0] || '') : '';
+      const tr = t => { try { return window.OB_I18N && OB_I18N.t ? OB_I18N.t(t) : t; } catch (_) { return t; } };
+      const text = [spot.name, LV[spot.level] && tr(LV[spot.level]), sport && tr(sport)].filter(Boolean).join(' · ');
       try {
         if (navigator.share) { await navigator.share({ title: spot.name, text, url }); return; }
         await navigator.clipboard.writeText(text + ' ' + url); say('Lien du spot copié !');

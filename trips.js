@@ -189,7 +189,7 @@
   });
   $('#tripContent').addEventListener('submit',e=>{if(e.target.id==='tripCheckForm'){e.preventDefault();const label=$('#newCheck').value.trim();if(label)update(t=>({...t,checklist:[...t.checklist,{id:M.uid(),label,done:false}]}));}});
   window.addEventListener('ocean:navigate',e=>{if(e.detail==='trips')render()});
-  const detailCTA=document.createElement('button');detailCTA.className='trip-add-from-spot';detailCTA.innerHTML=I.plus+' Ajouter à un voyage';detailCTA.onclick=()=>fromSpot(currentSpot);$('#dTabs').before(detailCTA);
+  /* Fiche spot : « Ajouter à un voyage » n’existe plus qu’une fois, dans la barre d’actions du bas (ocean-hub.js). */
   const homeCTA=document.createElement('button');homeCTA.className='home-trip-link';homeCTA.innerHTML=I.route+' Préparer mon voyage';homeCTA.onclick=()=>go('trips');$('.hero-cta').after(homeCTA);
   window.OceanTrips={count:()=>active().length,list:()=>active(),openTrip:id=>{if(!active().some(t=>t.id===id))return;selected=id;view='itinerary';go('trips');render();$('#screenWrap').scrollTop=0;},fromSpot,open:()=>go('trips'),route:()=>({selected:current()?.id||null,view}),restoreRoute:r=>{selected=trips.some(t=>t.id===r?.selected&&!t.archived&&!t.deleted)?r.selected:null;view=r?.view==='map'?'map':'itinerary';}};
   /* Démarrage : l’écran Voyages n’est construit qu’à sa première ouverture (ocean:navigate « trips » ci-dessus),
