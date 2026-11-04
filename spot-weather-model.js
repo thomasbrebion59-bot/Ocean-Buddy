@@ -41,15 +41,23 @@
   const hourOf = iso => { const m = /T(\d\d)/.exec(String(iso || '')); return m ? +m[1] : null; };
   const minutesOf = iso => { const m = /T(\d\d):(\d\d)/.exec(String(iso || '')); return m ? +m[1] * 60 + +m[2] : null; };
 
-  /* Lignes horaires fusionnées (prévision + marine), alignées sur l’heure locale du spot. Sans marine (plan d’eau intérieur) : vagues nulles. */
+  /* Instant réel (ms) d’une heure murale renvoyée avec timezone=auto. Les deux API peuvent choisir un fuseau différent
+     pour le même point (vu à Dakhla : prévision UTC+0, marine UTC+1) : on aligne donc sur l’instant, jamais sur le texte. */
+  function instant(iso, offsetSec) {
+    const m = /^(\d{4})-(\d\d)-(\d\d)T(\d\d):(\d\d)/.exec(String(iso || ''));
+    return m ? Date.UTC(+m[1], +m[2] - 1, +m[3], +m[4], +m[5]) - (has(offsetSec) ? +offsetSec : 0) * 1000 : NaN;
+  }
+  /* Lignes horaires fusionnées (prévision + marine), alignées sur l’instant ; t reste l’heure locale de la prévision.
+     Sans marine (plan d’eau intérieur) : vagues nulles. */
   function hours(weather, marine, opts) {
     const o = opts || {}, h = (weather && weather.hourly) || {}, mh = o.inland ? {} : ((marine && marine.hourly) || {});
     const times = Array.isArray(h.time) ? h.time : [];
-    const mIndex = new Map((Array.isArray(mh.time) ? mh.time : []).map((t, i) => [t, i]));
+    const wOff = weather && weather.utc_offset_seconds, mOff = marine && has(marine.utc_offset_seconds) ? marine.utc_offset_seconds : wOff;
+    const mIndex = new Map((Array.isArray(mh.time) ? mh.time : []).map((t, i) => [instant(t, mOff), i]));
     const days = (weather && weather.daily) || {};
     const sun = new Map((days.time || []).map((d, i) => [d, { rise: minutesOf((days.sunrise || [])[i]), set: minutesOf((days.sunset || [])[i]) }]));
     return times.map((t, i) => {
-      const j = mIndex.has(t) ? mIndex.get(t) : -1, date = dateOf(t), s = sun.get(date);
+      const k = instant(t, wOff), j = mIndex.has(k) ? mIndex.get(k) : -1, date = dateOf(t), s = sun.get(date);
       let day = at(h.is_day, i);
       if (day == null && s && s.rise != null && s.set != null) { const mn = minutesOf(t); day = mn >= s.rise && mn < s.set ? 1 : 0; }
       return {
@@ -67,6 +75,15 @@
     let i = list.findIndex(x => String(x.t).slice(0, 13) >= k);
     if (i < 0) i = list.length;
     return list.slice(i, i + (n || 48));
+  }
+
+  /* Pas de trou visible : en mer, on retire les heures du bord de la fenêtre où la marine n’a pas encore (ou plus) de valeur. */
+  function trimMarine(list) {
+    if (!list.some(x => x.wave != null)) return list;
+    let a = 0, b = list.length;
+    while (a < b && list[a].wave == null) a++;
+    while (b > a && list[b - 1].wave == null) b--;
+    return list.slice(a, b);
   }
 
   /* Résumé des 7 jours. La période et la direction viennent des mêmes variables que la lecture du jour (wave_*). */
@@ -192,7 +209,7 @@
     return +offsetSec + d.getTimezoneOffset() * 60;
   }
 
-  const api = { toward, cardinal, sky, STORM, localHourIso, dateOf, hourOf, minutesOf, hours, upcoming, days, verdict, rule, bestSlot, tzGap, GOOD, OK, NO };
+  const api = { toward, cardinal, sky, STORM, localHourIso, dateOf, hourOf, minutesOf, instant, hours, upcoming, trimMarine, days, verdict, rule, bestSlot, tzGap, GOOD, OK, NO };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.SpotWeatherModel = api;
 })(typeof window !== 'undefined' ? window : globalThis);

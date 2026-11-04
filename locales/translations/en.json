@@ -10312,5 +10312,9 @@
  "Vent {0} km/h": "Wind {0} km/h",
  "Vent de {0}": "Wind from {0}",
  "Près des côtes, la précision des vagues est limitée. Pour la marée, prends l’annuaire local.": "Near the coast, wave accuracy is limited. For the tide, check the local tide tables.",
- "Valeurs de modèle, indicatives, gardées une heure.": "Model values, for guidance only, kept for one hour."
+ "Valeurs de modèle, indicatives, gardées une heure.": "Model values, for guidance only, kept for one hour.",
+ "Marée descendante : les bancs se découvrent et les vagues ferment plus vite. Prends les heures de marée dans l’annuaire local pour caler ta session.": "Falling tide: the sandbanks are exposed and waves close out faster. Check the tide times in the local tide tables to plan your session.",
+ "Marée montante : les vagues gagnent en rondeur à mesure que l’eau monte. Prends les heures de marée dans l’annuaire local pour caler ta session.": "Rising tide: waves get rounder as the water comes in. Check the tide times in the local tide tables to plan your session.",
+ "Prends les heures de pleine et de basse mer dans l’annuaire de marées local : le modèle de l’app ne les donne pas de façon fiable près des côtes.": "Get high and low tide times from the local tide tables: the app's model does not give them reliably near the coast.",
+ "Près des côtes, la précision des vagues est limitée. Pour la marée, consulte l’annuaire local.": "Near the coast, wave accuracy is limited. For the tide, check the local tide tables."
 }

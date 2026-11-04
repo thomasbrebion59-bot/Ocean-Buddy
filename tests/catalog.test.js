@@ -107,7 +107,7 @@ function functionSource(start,end){return app.slice(app.indexOf(start),app.index
 test('forecast bar heights preserve ratios and zero, with the calmest day highlighted',()=>{
  const elements={bars:{},best:{}};
  const ctx={document:{getElementById:id=>elements[id]}};
- vm.runInNewContext(functionSource('function renderForecastBars','function renderMiniForecast')+';this.render=renderForecastBars;',ctx);
+ vm.runInNewContext(functionSource('function renderForecastBars','async function fetchWaves')+';this.render=renderForecastBars;',ctx);
  ctx.render('bars','best',['Auj','Lun','Mar'],[0,7,14],{unit:'km/h',best:'min',bestLabel:'Vent le plus faible'});
  assert.deepEqual([...elements.bars.innerHTML.matchAll(/height:(\d+)%/g)].map(m=>Number(m[1])),[0,50,100]);
  assert.match(elements.bars.innerHTML,/^<div class="fc-col best">/);

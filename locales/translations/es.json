@@ -10312,5 +10312,9 @@
  "Vent {0} km/h": "Viento {0} km/h",
  "Vent de {0}": "Viento del {0}",
  "Près des côtes, la précision des vagues est limitée. Pour la marée, prends l’annuaire local.": "Cerca de la costa, la precisión de las olas es limitada. Para la marea, consulta la tabla de mareas local.",
- "Valeurs de modèle, indicatives, gardées une heure.": "Valores de modelo, orientativos, guardados una hora."
+ "Valeurs de modèle, indicatives, gardées une heure.": "Valores de modelo, orientativos, guardados una hora.",
+ "Marée descendante : les bancs se découvrent et les vagues ferment plus vite. Prends les heures de marée dans l’annuaire local pour caler ta session.": "Marea bajando: los bancos quedan al descubierto y las olas cierran más rápido. Consulta las horas de marea en la tabla de mareas local para elegir tu sesión.",
+ "Marée montante : les vagues gagnent en rondeur à mesure que l’eau monte. Prends les heures de marée dans l’annuaire local pour caler ta session.": "Marea subiendo: las olas se vuelven más redondas a medida que sube el agua. Consulta las horas de marea en la tabla de mareas local para elegir tu sesión.",
+ "Prends les heures de pleine et de basse mer dans l’annuaire de marées local : le modèle de l’app ne les donne pas de façon fiable près des côtes.": "Consulta las horas de pleamar y bajamar en la tabla de mareas local: el modelo de la app no las da de forma fiable cerca de la costa.",
+ "Près des côtes, la précision des vagues est limitée. Pour la marée, consulte l’annuaire local.": "Cerca de la costa, la precisión de las olas es limitada. Para la marea, consulta la tabla de mareas local."
 }

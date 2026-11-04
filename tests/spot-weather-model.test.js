@@ -55,6 +55,24 @@ test('heures : prévision et marine fusionnées sur la même heure locale', () =
   assert.equal(l[30].date, '2026-07-11');
 });
 
+test('prévision et marine dans deux fuseaux différents (Dakhla) : alignées sur l’instant, pas sur le texte', () => {
+  const f = forecast(), m = marine({wave: i => i / 10});
+  f.utc_offset_seconds = 0;
+  m.utc_offset_seconds = 3600;
+  m.hourly.time = m.hourly.time.map(t => iso(Number(Object.keys(f.hourly.time).find(i => f.hourly.time[i] === t)) + 1));
+  const l = W.hours(f, m, {});
+  assert.equal(l[0].wave, 0, '15:00 UTC+0 = 16:00 UTC+1 : même instant, même valeur');
+  assert.equal(l[5].wave, 0.5);
+});
+
+test('pas de trou : les heures du bord sans houle sont retirées, le milieu est gardé', () => {
+  const l = list({}, {wave: i => (i < 2 || i > 45 ? null : 0.8)});
+  const t = W.trimMarine(l);
+  assert.equal(t[0].t, l[2].t);
+  assert.equal(t[t.length - 1].t, l[45].t);
+  assert.equal(W.trimMarine(W.hours(forecast(), {}, {})).length, 48, 'sans aucune donnée marine : rien n’est retiré');
+});
+
 test('plan d’eau intérieur : aucune donnée de houle, même si la réponse marine en contient', () => {
   const l = W.hours(forecast(), marine(), {inland: true});
   assert.ok(l.every(x => x.wave == null && x.period == null && x.waveDir == null));
@@ -209,7 +227,9 @@ function render(spot, act, level) {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'spot-experience.js'), 'utf8'), sb);
   sb.OceanExperience.update(spot, act);
   const html = () => els['#spotWeek'].innerHTML;
-  return new Promise(r => setTimeout(r, 80)).then(() => ({html: html(), calls, sb, listeners, els}));
+  /* Le rendu est différé (après l’ouverture de la fiche) : on attend qu’il arrive, sans délai fixe fragile. */
+  const until = async () => { for (let i = 0; i < 200 && !/wx-block|spot-week-empty/.test(html()); i++) await new Promise(r => setTimeout(r, 10)); };
+  return until().then(() => ({html: html(), calls, sb, listeners, els}));
 }
 
 test('fiche : un appel prévision + un appel marine, heure par heure et 7 jours, source citée', async () => {
@@ -221,6 +241,7 @@ test('fiche : un appel prévision + un appel marine, heure par heure et 7 jours,
   for (const s of ['Ton meilleur créneau', 'Heure par heure', 'Rafales', 'Houle', 'Période', 'Les 7 jours', 'Lever', 'Prévisions Open-Meteo (CC BY 4.0)', 'le poste de secours, le balisage et les drapeaux priment']) assert.ok(html.includes(s), s);
   assert.ok(/href="https:\/\/open-meteo\.com\/"/.test(html));
   assert.ok(!/Pleine mer|Basse mer/.test(html));
+  assert.ok(calls.some(u => /marine-api.*past_hours=1&forecast_hours=49/.test(u)), 'la marine couvre toute la fenêtre de la prévision');
 });
 
 test('fiche : lac sans houle ; plongée sans créneau ; niveau changé = nouveau rendu sans nouvel appel', async () => {
@@ -251,6 +272,15 @@ test('fiche : hors connexion, message simple et fiche intacte', async () => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'spot-experience.js'), 'utf8'), sb);
   sb.OceanExperience.update({id: 'x', name: 'X', waterType: 'sea', sports: ['surf']}, 'surf');
   assert.ok(els['#spotWeek'].innerHTML.includes('Chargement'), 'chargement affiché tout de suite, rendu après');
-  await new Promise(r => setTimeout(r, 30));
+  for (let i = 0; i < 200 && !els['#spotWeek'].innerHTML.includes('indisponibles'); i++) await new Promise(r => setTimeout(r, 10));
   assert.ok(els['#spotWeek'].innerHTML.includes('indisponibles pour le moment'));
+});
+
+test('aucun horaire de pleine ou basse mer tiré du niveau modélisé ; plus de doublon « 5 jours » dans la fiche', () => {
+  const root = path.join(__dirname, '..');
+  const app = fs.readFileSync(path.join(root, 'app.js'), 'utf8'), html = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
+  assert.ok(!/Pleine mer à|Basse mer à|renderTideChart/.test(app));
+  assert.ok(!/id="dTideBlock"|id="dFcHead"|id="dForecast"/.test(html));
+  assert.ok(!/courbe de marée/.test(fs.readFileSync(path.join(root, 'spot-data-model.js'), 'utf8')), '« Lire les conditions » ne renvoie plus vers une courbe retirée');
+  assert.ok(/id="fcBars"/.test(html), 'les prévisions de l’accueil restent');
 });

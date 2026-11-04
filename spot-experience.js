@@ -266,17 +266,17 @@
     const daily = W ? W.days(weather, marine, {inland}) : [];
     if (!W || !daily.length) { host.innerHTML = '<p class="spot-week-empty">Les prévisions détaillées se chargeront dès que le modèle répondra.</p>'; return; }
     const off = weather && weather.utc_offset_seconds, nowIso = W.localHourIso(off);
-    const all = W.hours(weather, marine, {inland}), next = W.upcoming(all, nowIso, 48);
+    const all = W.hours(weather, marine, {inland}), next = inland ? W.upcoming(all, nowIso, 48) : W.trimMarine(W.upcoming(all, nowIso, 48));
     const today = nowIso.slice(0, 10), tomorrow = (daily.find(d => d.date > today) || {}).date;
     const slots = slotsBlock(s, activeAct, all, nowIso, [today, tomorrow].filter(Boolean), inland);
     const updated = fetchedAt ? new Intl.DateTimeFormat('fr-FR', {dateStyle: 'short', timeStyle: 'short'}).format(new Date(fetchedAt)) : 'heure non disponible';
     const gap = W.tzGap(off);
-    const utc = typeof tideUTC === 'function' ? tideUTC(off) : `UTC${off >= 0 ? '+' : '−'}${Math.abs(off) / 3600}`;
+    const utc = (() => { const a = Math.abs(+off || 0), h = Math.floor(a / 3600), m = Math.round(a % 3600 / 60); return `UTC${off < 0 ? '−' : '+'}${h}${m ? ':' + String(m).padStart(2, '0') : ''}`; })();
     host.innerHTML = `<div class="spot-week-head"><div><small>MÉTÉO DU SPOT</small><b>Quand y aller ?</b></div><span><span class="wx-stamp">Relevé ${esc(updated)}</span>${gap ? `<span class="wx-stamp">Heures locales du spot (${esc(utc)})</span>` : ''}</span></div>`
       + `<div class="wx-block">${slots.html}</div>`
       + `<div class="wx-block"><div class="wx-sub"><h4>Heure par heure</h4><span>48 h</span></div>${hoursTable(next, daily, inland, slots.hours)}</div>`
       + `<div class="wx-block"><div class="wx-sub"><h4>Les 7 jours</h4><span>Max du jour</span></div>${weekCards(daily, inland)}</div>`
-      + `<p class="spot-week-note"><span class="wx-stamp-note">Valeurs de modèle, indicatives, gardées une heure.</span>${inland ? '' : ' <span class="wx-stamp-note">Près des côtes, la précision des vagues est limitée. Pour la marée, prends l’annuaire local.</span>'}</p>`
+      + `<p class="spot-week-note"><span class="wx-stamp-note">Valeurs de modèle, indicatives, gardées une heure.</span>${inland ? '' : ' <span class="wx-stamp-note">Près des côtes, la précision des vagues est limitée. Pour la marée, consulte l’annuaire local.</span>'}</p>`
       + '<p class="wx-source"><a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Prévisions Open-Meteo (CC BY 4.0)</a></p>';
   }
 
@@ -296,7 +296,7 @@
     if (host) host.innerHTML = '<div class="spot-week-loading"><i></i><span>Chargement de la météo du spot…</span></div>';
     const inland = isInland(s);
     const weatherUrl = `${api}?latitude=${c.lat}&longitude=${c.lon}&hourly=${HOURLY}&forecast_hours=48&daily=${DAILY}&wind_speed_unit=kmh&cell_selection=${inland ? 'land' : 'sea'}&forecast_days=7&timezone=auto`;
-    const marineUrl = `${marineApi}?latitude=${c.lat}&longitude=${c.lon}&hourly=wave_height,wave_period,wave_direction&forecast_hours=48&daily=wave_height_max,wave_period_max&forecast_days=7&timezone=auto&cell_selection=sea`;
+    const marineUrl = `${marineApi}?latitude=${c.lat}&longitude=${c.lon}&hourly=wave_height,wave_period,wave_direction&past_hours=1&forecast_hours=49&daily=wave_height_max,wave_period_max&forecast_days=7&timezone=auto&cell_selection=sea`;
     const getJson = async url => { const response = await fetch(url); if (!response.ok) throw Error(`Prévision HTTP ${response.status}`); return response.json(); };
     if (!pending.has(key)) pending.set(key, Promise.all([getJson(weatherUrl), inland ? Promise.resolve({}) : getJson(marineUrl).catch(() => ({}))])
       .then(([weather, marine]) => { const result = {weather, marine, fetchedAt: Date.now()}; cache.set(key, result); return result; })
