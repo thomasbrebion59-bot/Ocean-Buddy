@@ -9,9 +9,9 @@
   'use strict';
   const M = window.SpotDataModel; if (!M) return;
   const URL = {
-    climate: 'assets/data/spot-climate.js?v=0aa30a075ee7',
-    lite: 'assets/data/spot-climate-lite.js?v=d32bc9ece90b',
-    access: 'assets/data/spot-access.js?v=ac2d352ebdf2',
+    climate: 'assets/data/spot-climate.js?v=07e6bc70b41e',
+    lite: 'assets/data/spot-climate-lite.js?v=29f4a93a08a0',
+    access: 'assets/data/spot-access.js?v=7b6ca736746a',
     wild: 'assets/data/spot-wildlife.js?v=ae49690fa3da'
   };
   const GLOBAL = { climate: 'OCEAN_CLIMATE', lite: 'OCEAN_CLIMATE_LITE', access: 'OCEAN_ACCESS', wild: 'OCEAN_WILDLIFE' };

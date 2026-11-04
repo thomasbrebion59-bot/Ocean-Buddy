@@ -768,6 +768,7 @@ var EMERGENCY_BY_COUNTRY={
  "cuba":["104",null,null,"2026-10-20"],
  "curacao":["912","garde","913","2026-10-20",[["police","911"]]],
  "danemark":["112","mer","112","2026-10-20"],
+ "djibouti":[null,"ambulance","21 35 09 62 / 21 35 27 12","2026-11-04"],
  "dominique":["999",null,null,"2026-10-20"],
  "egypte":[null,"conflit",null,"2026-10-20"],
  "emirats-arabes-unis":["999","ambulance","998","2026-10-20"],
@@ -777,6 +778,7 @@ var EMERGENCY_BY_COUNTRY={
  "fidji":["911",null,null,"2026-10-20"],
  "finlande":["112",null,null,"2026-10-20"],
  "france":["112","mer16","196","2026-10-20"],
+ "gambie":[null,null,null,"2026-11-04"],
  "ghana":["112","garde","112","2026-10-20"],
  "grece":["112",null,null,"2026-10-20"],
  "grenade":["911",null,null,"2026-10-20"],
@@ -835,6 +837,7 @@ var EMERGENCY_BY_COUNTRY={
  "portugal":["112","mer16","+351 214 401 919","2026-10-20"],
  "republique-dominicaine":["911",null,null,"2026-10-20"],
  "royaume-uni":["999","mer16","999","2026-10-20"],
+ "saint-barthelemy":["112","ambulance","15","2026-11-04",[["police","17"]]],
  "saint-martin":["112","mer16","196","2026-10-20"],
  "saint-vincent-et-les-grenadines":["999","garde","999","2026-10-20"],
  "sainte-lucie":["911",null,null,"2026-10-20"],
@@ -856,7 +859,8 @@ var EMERGENCY_BY_COUNTRY={
  "uruguay":["911",null,null,"2026-10-20"],
  "vanuatu":["115",null,null,"2026-10-20"],
  "venezuela":["911",null,null,"2026-10-20"],
- "vietnam":["115","mer","112","2026-10-20"]
+ "vietnam":["115","mer","112","2026-10-20"],
+ "wallis-et-futuna":["112","ambulance","15","2026-11-04",[["police","17"]]]
 };
 /*/EMERGENCY*/
 // Phrases entières pour la traduction (« J'ai » + verbe se traduirait mot à mot).

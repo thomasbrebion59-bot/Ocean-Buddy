@@ -9,13 +9,17 @@ const all=JSON.parse(fs.readFileSync(path.join(root,'data/catalog.json'),'utf8')
 const additions=all.filter(s=>s.edition==='catalogue-2026-09');
 const additions2=all.filter(s=>s.edition==='catalogue-2026-09b');
 const additions3=all.filter(s=>s.edition==='catalogue-2026-10');
-const base=all.filter(s=>s.editorialStatus==='unverified'&&!['catalogue-2026-09','catalogue-2026-09b','catalogue-2026-10'].includes(s.edition));
+const additions4=all.filter(s=>s.edition==='catalogue-2026-12');
+/* Lots « Noël au soleil » (data/new-spots-2026-12-<lot>.cjs) : ajouter un lot ne demande aucun changement ici. */
+const lots4=fs.readdirSync(path.join(root,'data')).filter(f=>/^new-spots-2026-12-.+\.cjs$/.test(f)).flatMap(f=>require(path.join(root,'data',f)).map(s=>s.id));
+const TOTAL=728+lots4.length;
+const base=all.filter(s=>s.editorialStatus==='unverified'&&!['catalogue-2026-09','catalogue-2026-09b','catalogue-2026-10','catalogue-2026-12'].includes(s.edition));
 const extra=all.filter(s=>s.editorialStatus==='reviewed');
 const photos=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/sources.json'),'utf8'));
 const legacy=require('../legacy-spots.js');
 const sports=new Set(['surf','bodyboard','plongee','snorkeling','paddle','kayak','baignade','kitesurf','windsurf']);
-test('728 distinct spots: 168 historical, 112 sourced, 152 + 286 September 2026 additions, 10 October 2026 additions',()=>{
- assert.equal(base.length,168);assert.equal(extra.length,112);assert.equal(additions.length,152);assert.equal(additions2.length,286);assert.equal(additions3.length,10);assert.equal(all.length,728);
+test('distinct spots: 168 historical, 112 sourced, 152 + 286 September 2026 additions, 10 October 2026 additions, December 2026 additions',()=>{
+ assert.equal(base.length,168);assert.equal(extra.length,112);assert.equal(additions.length,152);assert.equal(additions2.length,286);assert.equal(additions3.length,10);assert.deepEqual(additions4.map(s=>s.id).sort(),[...lots4].sort());assert.equal(all.length,TOTAL);
  assert.equal(new Set(all.map(s=>s.id)).size,all.length);
  for(const s of all){assert.ok(s.sports.length,s.id);assert.ok(s.sports.every(x=>sports.has(x)),s.id);}
  assert.deepEqual([...base.find(s=>s.id==='uluwatu').sports],['surf']);
@@ -71,7 +75,7 @@ test('every spot shows the six fixed practical rows without inventing missing fa
  assert.equal(typeof all.find(s=>s.id==='saintecroix').visit.localRules,'object');
 });
 test('each published photograph belongs to the destination and has usable attribution',()=>{
- assert.equal(all.length,728);
+ assert.equal(all.length,TOTAL);
  assert.equal(Object.keys(photos).length,all.filter(s=>s.photo).length);
  for(const id of ['tamarindo','byronbay']){const p=all.find(s=>s.id===id).photo;assert.equal(p.ai,true,id);assert.equal(p.label,'Illustration IA',id);assert.match(p.caption,/pas une photo du lieu/,id);assert.ok(photos[id],id);}
  for(const s of all.filter(s=>s.photo?.ai))assert.match(s.photo.src,/-ia\.webp$/,s.id);
@@ -139,7 +143,7 @@ test('visible weather keeps marine values aligned when lakes appear between coas
 });
 test('gallery images are local, credited and attached to existing destinations',()=>{
  const galleries=JSON.parse(fs.readFileSync(path.join(root,'assets/spots/gallery-sources.json'),'utf8'));
- assert.equal(Object.values(galleries).flat().length,29);assert.equal(extra.filter(s=>s.catalogNew).length,0);assert.equal(all.filter(s=>s.catalogNew).length,additions3.length);assert.ok(additions3.every(s=>s.catalogNew));
+ assert.equal(Object.values(galleries).flat().length,29);assert.equal(extra.filter(s=>s.catalogNew).length,0);assert.equal(all.filter(s=>s.catalogNew).length,additions4.length);assert.ok(additions4.every(s=>s.catalogNew));assert.ok(additions3.every(s=>!s.catalogNew));
  for(const [id,rows] of Object.entries(galleries)){assert.ok(all.some(s=>s.id===id),id);for(const p of rows){assert.ok(fs.statSync(path.join(root,p.src)).size>1000);assert.ok(p.author&&p.license);assert.equal(new URL(p.source).protocol,'https:');}}
 });
 test('emergency numbers come from data/sources/urgences.json by exact country name and are never invented',()=>{
@@ -182,8 +186,8 @@ test('every spot has a country and sits on the right continent',()=>{
  for(const s of all.filter(s=>/hawaï|kauaʻi|oahu|maui/i.test(s.loc)))assert.equal(s.world,'na',s.id);
  for(const s of all.filter(s=>s.country==='États-Unis'))assert.equal(s.world,'na',s.id);
  for(const s of all.filter(s=>s.world==='oc'))assert.notEqual(s.country,'États-Unis',s.id);
- for(const s of [...additions,...additions2,...additions3]){assert.equal(s.editorialStatus,'unverified',s.id);assert.equal(s.source.url,null,s.id);assert.ok(s.dangers.length&&s.tip,s.id);}
- for(const s of [...additions2,...additions3]){assert.ok(s.loc.endsWith(s.country),s.id);assert.ok(['coastal-sector','lake-sector','inland-sector'].includes(s.coordinatePrecision),s.id);if(s.photo)assert.match(s.photo.license,/CC BY|CC0|Public domain|PD|Attribution/i,s.id);}
+ for(const s of [...additions,...additions2,...additions3,...additions4]){assert.equal(s.editorialStatus,'unverified',s.id);assert.equal(s.source.url,null,s.id);assert.ok(s.dangers.length&&s.tip,s.id);}
+ for(const s of [...additions2,...additions3,...additions4]){assert.ok(s.loc.endsWith(s.country),s.id);assert.ok(['coastal-sector','lake-sector','inland-sector'].includes(s.coordinatePrecision),s.id);if(s.photo)assert.match(s.photo.license,/CC BY|CC0|Public domain|PD|Attribution/i,s.id);}
  for(const id of ['todossantos','cabopulmo'])assert.equal(all.find(s=>s.id===id).country,'Mexique',id);
 });
 test('relecture sécurité : aucun calme promis sans condition, aucun garde-côtes prêté à un numéro général',()=>{
@@ -215,4 +219,19 @@ test('retours du 29 octobre 2026 : Capbreton, Seignosse, Saint-Gilles-Croix-de-V
  /* ni doublon avec les fiches existantes, ni identifiant réutilisé */
  assert.equal(new Set(all.map(s=>s.id)).size,all.length);
  for(const id of ['hossegor','seignosse','capbreton'])assert.ok(all.find(s=>s.id===id&&s.edition===undefined),id);
+});
+
+test('lots « Noël au soleil » de décembre 2026 : sourcés, crédités, traduits, sans les fiches de La Réunion en attente',()=>{
+ assert.ok(additions4.length>=34);
+ const en=JSON.parse(fs.readFileSync(path.join(root,'locales/translations/en.json'),'utf8'));
+ const es=JSON.parse(fs.readFileSync(path.join(root,'locales/translations/es.json'),'utf8'));
+ for(const s of additions4){
+  assert.match(s.source.label,/décembre 2026/,s.id);assert.equal(s.source.url,null,s.id);assert.equal(s.catalogNew,true,s.id);
+  assert.ok(Number.isFinite(s.coords.lat)&&Number.isFinite(s.coords.lon),s.id);
+  if(s.photo){assert.match(s.photo.license,/CC BY|CC0|Public domain/i,s.id);assert.ok(s.photo.author&&s.photo.source.startsWith('https://commons.wikimedia.org/'),s.id);assert.ok(fs.existsSync(path.join(root,s.photo.src))&&fs.existsSync(path.join(root,s.photo.thumb)),s.id);}
+  /* le pays seul (« Cap-Vert », « Saint-Martin », « Wallis-et-Futuna ») n'est pas extrait par i18n-extract (mot composé sans accent) : il reste en français, comme avant */
+  for(const x of [s.name,s.loc,s.source.label,s.fauna,s.photoContext].filter(Boolean)){assert.ok(en[x],'en '+s.id+' : '+x);assert.ok(es[x],'es '+s.id+' : '+x);}
+ }
+ /* arrêté requin de La Réunion non vérifié : ces deux fiches restent en attente (data/sources/new-spots-2026-12-reunion-en-attente.json) */
+ for(const id of ['boucancanot','etangsale'])assert.ok(!all.some(s=>s.id===id),id);
 });

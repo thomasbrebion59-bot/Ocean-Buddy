@@ -1,0 +1,121 @@
+{
+  "flicenflac": {
+    "file": "Flic en Flac beach .jpg",
+    "src": "assets/spots/flicenflac.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Flic_en_Flac_beach_.jpg",
+    "author": "Gavish Barosee",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Flic_en_Flac_beach_.jpg/1280px-Flic_en_Flac_beach_.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1280,
+    "height": 960,
+    "thumb": "assets/spots/thumbs/flicenflac.webp"
+  },
+  "bellemare": {
+    "file": "Mauritius belle mare beach.jpg",
+    "src": "assets/spots/bellemare.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Mauritius_belle_mare_beach.jpg",
+    "author": "Arne Müseler",
+    "license": "CC BY-SA 3.0 de",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Mauritius_belle_mare_beach.jpg/1280px-Mauritius_belle_mare_beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1280,
+    "height": 959,
+    "thumb": "assets/spots/thumbs/bellemare.webp"
+  },
+  "unawatuna": {
+    "file": "Unawatuna.jpg",
+    "src": "assets/spots/unawatuna.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Unawatuna.jpg",
+    "author": "Bernard Gagnon",
+    "license": "CC BY-SA 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/Unawatuna.jpg/1280px-Unawatuna.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1280,
+    "height": 874,
+    "thumb": "assets/spots/thumbs/unawatuna.webp"
+  },
+  "kovalam": {
+    "file": "Kovalam beach trivandrum kerala.jpg",
+    "src": "assets/spots/kovalam.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Kovalam_beach_trivandrum_kerala.jpg",
+    "author": "Georgeumartin",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/Kovalam_beach_trivandrum_kerala.jpg/1280px-Kovalam_beach_trivandrum_kerala.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1280,
+    "height": 640,
+    "thumb": "assets/spots/thumbs/kovalam.webp"
+  },
+  "agonda": {
+    "file": "Sunset at Agonda Beach.jpg",
+    "src": "assets/spots/agonda.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Sunset_at_Agonda_Beach.jpg",
+    "author": "Mahabalaindia",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Sunset_at_Agonda_Beach.jpg/1280px-Sunset_at_Agonda_Beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1280,
+    "height": 823,
+    "thumb": "assets/spots/thumbs/agonda.webp"
+  },
+  "kosurin": {
+    "file": "Mai Ngam Beach.jpg",
+    "src": "assets/spots/kosurin.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Mai_Ngam_Beach.jpg",
+    "author": "The Cosmonaut",
+    "license": "CC BY-SA 2.5 ca",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5/ca/deed.en",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Mai_Ngam_Beach.jpg/1280px-Mai_Ngam_Beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1280,
+    "height": 680,
+    "thumb": "assets/spots/thumbs/kosurin.webp"
+  },
+  "payar": {
+    "file": "Malaysia Pulau Payar.JPG",
+    "src": "assets/spots/payar.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Malaysia_Pulau_Payar.JPG",
+    "author": "Shmunmun (Shahnoor Habib Munmun)",
+    "license": "Public domain",
+    "download": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Malaysia_Pulau_Payar.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+    "width": 1280,
+    "height": 960,
+    "thumb": "assets/spots/thumbs/payar.webp"
+  },
+  "alona": {
+    "file": "Alona Beach 01.jpg",
+    "src": "assets/spots/alona.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Alona_Beach_01.jpg",
+    "author": "Roel Balingit",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/Alona_Beach_01.jpg/1280px-Alona_Beach_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1280,
+    "height": 853,
+    "thumb": "assets/spots/thumbs/alona.webp"
+  },
+  "wadishab": {
+    "file": "Wadi Shab, Oman.jpg",
+    "src": "assets/spots/wadishab.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Wadi_Shab,_Oman.jpg",
+    "author": "Uhooep",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Wadi_Shab%2C_Oman.jpg/1280px-Wadi_Shab%2C_Oman.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1280,
+    "height": 853,
+    "thumb": "assets/spots/thumbs/wadishab.webp"
+  },
+  "maafushi": {
+    "file": "Kaafu Atoll, Maldives - panoramio (24).jpg",
+    "src": "assets/spots/maafushi.webp",
+    "source": "https://commons.wikimedia.org/wiki/File:Kaafu_Atoll,_Maldives_-_panoramio_(24).jpg",
+    "author": "goldpicasa",
+    "license": "CC BY 3.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+    "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Kaafu_Atoll%2C_Maldives_-_panoramio_%2824%29.jpg/1280px-Kaafu_Atoll%2C_Maldives_-_panoramio_%2824%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "width": 1280,
+    "height": 849,
+    "thumb": "assets/spots/thumbs/maafushi.webp"
+  }
+}

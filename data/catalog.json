@@ -45766,7 +45766,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-10",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Surfing at Santocha.jpg",
       "src": "assets/spots/santocha.webp",
@@ -45826,7 +45826,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-10",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Capbreton Estacade 03.JPG",
       "src": "assets/spots/estacade.webp",
@@ -45890,7 +45890,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-10",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Plage des estagnots.jpg",
       "src": "assets/spots/estagnots.webp",
@@ -45951,7 +45951,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-10",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Seignosse-franchini-photos.jpg",
       "src": "assets/spots/penon.webp",
@@ -46017,7 +46017,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-10",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Grande Plage - Saint-Gilles-Croix-de-Vie (FR85) - 2026-08-01 - 3.jpg",
       "src": "assets/spots/saintgilles.webp",
@@ -46083,7 +46083,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-10",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Plage de Sion.jpg",
       "src": "assets/spots/sion.webp",
@@ -46147,7 +46147,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-10",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Plage de la Sauzaie nord - panoramio.jpg",
       "src": "assets/spots/sauzaie.webp",
@@ -46212,7 +46212,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-10",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "D260219-1-Plage du prévent (Capbreton).jpg",
       "src": "assets/spots/prevent.webp",
@@ -46272,7 +46272,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-10",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Bretignolles-sur-Mer (8840176790).jpg",
       "src": "assets/spots/dunes.webp",
@@ -46337,7 +46337,7 @@
     "reviewed": null,
     "editorialStatus": "unverified",
     "edition": "catalogue-2026-10",
-    "catalogNew": true,
+    "catalogNew": false,
     "photo": {
       "file": "Longueville Poste de secours les Conches.jpg",
       "src": "assets/spots/budbud.webp",
@@ -46349,6 +46349,3044 @@
       "width": 1920,
       "height": 1440,
       "thumb": "assets/spots/thumbs/budbud.webp"
+    }
+  },
+  {
+    "id": "snoopyisland",
+    "name": "Snoopy Island — Al Aqah",
+    "loc": "Fujairah, Émirats arabes unis",
+    "country": "Émirats arabes unis",
+    "world": "as",
+    "coords": {
+      "lat": 25.4922,
+      "lon": 56.3642
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "plongee",
+      "kayak"
+    ],
+    "level": "debutant",
+    "desc": "Petit îlot rocheux au large d’Al Aqah, sur la côte nord de Fujairah, dans le golfe d’Oman. Sa forme évoque Snoopy allongé sur le dos. Il se trouve à environ 200 m de la plage, selon Square Yards, et on y fait du snorkeling, de la plongée et du kayak autour du récif. Property Finder y cite tortues, murènes, raies, poulpes et poissons-clowns, et dit les petits fonds entre la plage et l’île très appréciés des familles.",
+    "dangers": [
+      [
+        "🪨",
+        "Roches tranchantes sur l’île : Square Yards conseille de porter des chaussures."
+      ],
+      [
+        "🚫",
+        "Il est interdit de faire le tour de l’île, pour ne pas abîmer le récif (Square Yards)."
+      ],
+      [
+        "🛥️",
+        "Square Yards signale des quads sur la plage et des jet-skis dans l’eau le matin ; c’est plus calme en semaine."
+      ]
+    ],
+    "tip": "Marche jusqu’à l’île à marée basse, ou nage un peu à marée haute. Ne fais pas le tour de l’île, pour protéger le récif, et mets des chaussures contre les roches coupantes.",
+    "photoContext": "Snoopy Island depuis la plage d’Al Aqah, Fujairah",
+    "danger": 1,
+    "sky": "#dff5f1",
+    "sky2": "#a6e0d8",
+    "sea": "#19bbb0",
+    "sea2": "#0c7b81",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia, Property Finder et Square Yards · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Pristine blue waters of Snoopy Island.jpg",
+      "src": "assets/spots/snoopyisland.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Pristine_blue_waters_of_Snoopy_Island.jpg",
+      "author": "Wongleejean",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/Pristine_blue_waters_of_Snoopy_Island.jpg/1280px-Pristine_blue_waters_of_Snoopy_Island.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/snoopyisland.webp"
+    }
+  },
+  {
+    "id": "corralejo",
+    "name": "Grandes Playas — Corralejo",
+    "loc": "Fuerteventura, Canaries, Espagne",
+    "country": "Espagne",
+    "world": "eu",
+    "coords": {
+      "lat": 28.7152,
+      "lon": -13.8393
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf",
+      "kitesurf",
+      "windsurf",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Succession de plages de sable blanc au pied de la plus grande zone de dunes des Canaries, dans le parc naturel de Corralejo, au sud de la ville, avec vue sur Lobos et Lanzarote. Selon The Surf Atlas, Flag Beach est le repaire des windsurfeurs, où le vent s’engouffre entre Fuerteventura et Lobos, et Playa del Moro donne de bons beach breaks quand une grosse houle de nord-ouest arrive. Beach Atlas note que la houle d’automne et d’hiver plaît aux surfeurs expérimentés.",
+    "dangers": [
+      [
+        "🌊",
+        "La houle d’automne et d’hiver peut rendre la baignade déconseillée (Beach Atlas) : regarde les drapeaux avant d’entrer."
+      ],
+      [
+        "🌀",
+        "Courants possibles à Playa del Moro, avertit The Surf Atlas."
+      ],
+      [
+        "🪁",
+        "Flag Beach est très ventée : le vent hache les vagues et la plage se partage avec windsurfeurs et kitesurfeurs (The Surf Atlas)."
+      ]
+    ],
+    "tip": "Choisis ta plage selon le vent et la houle du jour, et regarde les drapeaux et la surveillance sur place : Beach Atlas rappelle qu’ils varient d’une plage à l’autre. En décembre et janvier, l’eau est fraîche : environ 20 °C puis 19 °C d’après Climats et Voyages.",
+    "photoContext": "Flag Beach (Kite Beach), Grandes Playas de Corralejo",
+    "danger": 1,
+    "sky": "#dcebf5",
+    "sky2": "#a3c6dd",
+    "sea": "#22759c",
+    "sea2": "#0d4767",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Beach Atlas, The Surf Atlas, Wikipédia et Climats et Voyages · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Flag Beach (Kite Beach) Corralejo Fuerteventura (33896528842).jpg",
+      "src": "assets/spots/corralejo.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Flag_Beach_(Kite_Beach)_Corralejo_Fuerteventura_(33896528842).jpg",
+      "author": "Thomas Tolkien",
+      "license": "CC BY 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/2.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f1/Flag_Beach_%28Kite_Beach%29_Corralejo_Fuerteventura_%2833896528842%29.jpg/1280px-Flag_Beach_%28Kite_Beach%29_Corralejo_Fuerteventura_%2833896528842%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 848,
+      "thumb": "assets/spots/thumbs/corralejo.webp"
+    }
+  },
+  {
+    "id": "baiadasgatas",
+    "name": "Baía das Gatas — São Vicente",
+    "loc": "São Vicente, Cap-Vert",
+    "country": "Cap-Vert",
+    "world": "af",
+    "coords": {
+      "lat": 16.9031,
+      "lon": -24.9072
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "kitesurf",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Baie de São Vicente, à 15 km à l’est de Mindelo, que Wikivoyage décrit comme une immense piscine naturelle. Selon IKSurfmag, c’est le seul plan d’eau plat permanent du Cap-Vert, avec de l’eau à hauteur de genou à la taille ; il est minuscule : deux kites suffisent à le remplir. Le festival de musique de la Baía das Gatas a lieu chaque année début août, à la pleine lune.",
+    "dangers": [
+      [
+        "🪨",
+        "À l’ouest de la baie, on marche sur des pierres irrégulières et souvent instables (Wikivoyage)."
+      ],
+      [
+        "🌊",
+        "Dans les piscines naturelles de l’ouest, la mer se brise en gerbes qui peuvent dépasser 5 m (Wikivoyage) : garde tes distances."
+      ],
+      [
+        "💨",
+        "Les alizés soufflent régulièrement à plus de 25 nœuds à São Vicente (IKSurfmag) : choisis ton matériel en conséquence."
+      ]
+    ],
+    "tip": "Pour le kite, prévois peu de place sur l’eau. Si tu vas voir les vagues à l’ouest de la baie, prends une veste coupe-vent et de bonnes chaussures de marche.",
+    "photoContext": "Vue aérienne de la baie et du village de Baía das Gatas, São Vicente",
+    "danger": 1,
+    "sky": "#ffe7c4",
+    "sky2": "#f7b77f",
+    "sea": "#1cadc2",
+    "sea2": "#0f7b98",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après IKSurfmag et Wikivoyage · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Baia das gatas.jpg",
+      "src": "assets/spots/baiadasgatas.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Baia_das_gatas.jpg",
+      "author": "Henryk Kotowski (compte Commons « Kotoviski », auteur déduit de la description du fichier)",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://upload.wikimedia.org/wikipedia/commons/6/69/Baia_das_gatas.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=original",
+      "width": 1000,
+      "height": 665,
+      "thumb": "assets/spots/thumbs/baiadasgatas.webp"
+    }
+  },
+  {
+    "id": "agadir",
+    "name": "Plage d’Agadir",
+    "loc": "Agadir, Maroc",
+    "country": "Maroc",
+    "world": "af",
+    "coords": {
+      "lat": 30.3976,
+      "lon": -9.6001
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade",
+      "paddle"
+    ],
+    "level": "variable",
+    "desc": "Longue baie de sable fin au pied de la corniche d’Agadir : plus de 10 km selon Lonely Planet, qui la dit protégée des vents. On s’y baigne, on joue au beach-volley, on fait du jet-ski et du paddle. Wikipédia en fait une destination de soleil d’hiver : en janvier, il fait 20,5 °C à midi en moyenne. La mer reste fraîche, environ 18,5 °C en décembre et 17,5 °C en janvier (Climats et Voyages).",
+    "dangers": [
+      [
+        "🌀",
+        "Après de fortes pluies, des trous et des courants dangereux sont apparus entre l’hôtel Amadil et l’hôtel Robinson, vers l’oued El Houar (Le360, 2025)."
+      ],
+      [
+        "🛟",
+        "Les plages sont surveillées, mais les sauveteurs manquent (Le360). Un plongeur cité par l’article dit qu’ils travaillent de 8 h à 20 h, et un couple a dû être sauvé vers 21 h."
+      ],
+      [
+        "🏴",
+        "Des drapeaux noirs et des panneaux marquent les zones interdites à la baignade (Le360) : respecte-les."
+      ]
+    ],
+    "tip": "Baigne-toi quand les maîtres-nageurs sont là, respecte les drapeaux et les panneaux, et ne nage pas la nuit.",
+    "photoContext": "Plage d’Agadir et la colline de la Kasbah",
+    "danger": 1,
+    "sky": "#ffe7c4",
+    "sky2": "#f7b77f",
+    "sea": "#1cadc2",
+    "sea2": "#0f7b98",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia, Lonely Planet, Le360 et Climats et Voyages · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Agadir beach 2015.jpeg",
+      "src": "assets/spots/agadir.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Agadir_beach_2015.jpeg",
+      "author": "Dan Lundberg",
+      "license": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/87/Agadir_beach_2015.jpeg/1280px-Agadir_beach_2015.jpeg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/agadir.webp"
+    }
+  },
+  {
+    "id": "artaplage",
+    "name": "Arta Plage — requins-baleines",
+    "loc": "Golfe de Tadjourah, Djibouti",
+    "country": "Djibouti",
+    "world": "af",
+    "coords": {
+      "lat": 11.5849,
+      "lon": 42.8272
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "plongee"
+    ],
+    "level": "variable",
+    "desc": "Plage de la baie d’Arta, dans le golfe de Tadjourah. Selon Lonely Planet, des groupes de requins-baleines traversent le golfe chaque année de novembre à janvier ; le guide cite la baie de Ghoubbet. Un décret de 2023 protège les zones d’attraction de l’aire marine protégée d’Arta Plage et fixe la saison touristique du 15 octobre au 15 mars, avec possibilité de l’ajuster.",
+    "dangers": [
+      [
+        "🧭",
+        "L’accès aux zones d’observation des requins-baleines est contrôlé pendant la saison (décret 2023-362, résumé sur LEAP/PNUE)."
+      ],
+      [
+        "💨",
+        "Des vents d’hiver peuvent encore perturber les sorties en mer en décembre et janvier (Partirou)."
+      ],
+      [
+        "🚤",
+        "Wikipédia cite un rapport de 2006 : 65 % des requins-baleines de la baie d’Arta étaient blessés, dans un contexte de cicatrices d’hélice répandues. Reste loin des bateaux en mouvement."
+      ]
+    ],
+    "tip": "Passe par un opérateur déclaré : pendant la saison, l’Agence nationale du tourisme et les garde-côtes contrôlent l’accès aux zones d’observation. Vérifie les dates de saison avant de partir.",
+    "danger": 1,
+    "sky": "#ffe7c4",
+    "sky2": "#f7b77f",
+    "sea": "#1cadc2",
+    "sea2": "#0f7b98",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Lonely Planet, LEAP (PNUE), PADI, Partirou et Wikipédia · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": null
+  },
+  {
+    "id": "bandarkhayran",
+    "name": "Bandar Khayran",
+    "loc": "Mascate, Oman",
+    "country": "Oman",
+    "world": "as",
+    "coords": {
+      "lat": 23.5014,
+      "lon": 58.7325
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "plongee",
+      "kayak"
+    ],
+    "level": "variable",
+    "desc": "Série de baies abritées de sable blanc et de criques désertes, à 25 km au sud-est de Mascate, accessibles surtout en bateau. Lonely Planet décrit un récif de corail peu profond, de 15 m de profondeur moyenne, bon pour tous les plongeurs, avec de grosses murènes dans les trous du corail. La lagune bordée de mangrove est aussi un lieu de snorkeling réputé ; au coucher du soleil, des sorties en kayak passent dans le plancton lumineux.",
+    "dangers": [
+      [
+        "🚤",
+        "Les criques s’atteignent surtout en bateau (Lonely Planet) : réserve ta sortie et le retour avant de partir."
+      ],
+      [
+        "🥶",
+        "La visibilité va de 5 à 30 m et l’eau de 19 à 28 °C selon les sites d’Oman (Lonely Planet) : adapte ta combinaison à la saison."
+      ]
+    ],
+    "tip": "Pars en bateau depuis Bandar Jissah ou Bandar Al Rowdha, avec un opérateur. Prévois une combinaison : l’eau d’Oman va de 19 à 28 °C selon Lonely Planet.",
+    "photoContext": "Baies de Bandar Khayran vues du ciel",
+    "danger": 1,
+    "sky": "#dff5f1",
+    "sky2": "#a6e0d8",
+    "sea": "#19bbb0",
+    "sea2": "#0c7b81",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Lonely Planet, Experience Oman et Wikipédia · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Bandar Khayran, Muscat, Sultanate of Oman.jpg",
+      "src": "assets/spots/bandarkhayran.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Bandar_Khayran,_Muscat,_Sultanate_of_Oman.jpg",
+      "author": "Erfan.arafat",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a4/Bandar_Khayran%2C_Muscat%2C_Sultanate_of_Oman.jpg/1280px-Bandar_Khayran%2C_Muscat%2C_Sultanate_of_Oman.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 720,
+      "thumb": "assets/spots/thumbs/bandarkhayran.webp"
+    }
+  },
+  {
+    "id": "abunuhas",
+    "name": "Sha’ab Abu Nuhas — épaves",
+    "loc": "Mer Rouge, Égypte",
+    "country": "Égypte",
+    "world": "af",
+    "coords": {
+      "lat": 27.567,
+      "lon": 33.917
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "plongee"
+    ],
+    "level": "variable",
+    "desc": "Récif triangulaire du nord de la mer Rouge, au nord-ouest de l’île de Shadwan, au large d’Hurghada. Il avance dans la route des cargos vers le canal de Suez et a piégé au moins sept navires. Divernet cite quatre épaves à plonger : le Giannis D (1983), le Carnatic (1869), le Chrisoula K, aussi appelé Marcus (1981), et le Kimon M (1978). On y va en bateau, à la journée ou en safari.",
+    "dangers": [
+      [
+        "🕳️",
+        "Salle des machines du Chrisoula K : l’entrée est étroite et l’intérieur est extrêmement sombre (Divernet)."
+      ],
+      [
+        "⬇️",
+        "Les épaves reposent de 12 à 32 m : le Carnatic à 26 m, le Chrisoula K entre 26 et 28 m, le Kimon M entre 30 et 32 m (Divernet)."
+      ],
+      [
+        "🚢",
+        "Le récif avance dans la route des cargos vers le canal de Suez (Wikipédia) : rejoins-le avec un bateau de plongée, pas seul."
+      ]
+    ],
+    "tip": "Réserve avec un centre de plongée d’Hurghada. N’entre dans une épave qu’avec la formation adaptée, et prends trois lampes pour la salle des machines du Chrisoula K, comme le conseille Divernet. À Hurghada, la mer est à 23 °C en décembre et 22 °C en janvier (Wikipédia).",
+    "photoContext": "Épave du Carnatic, Sha’ab Abu Nuhas",
+    "danger": 1,
+    "sky": "#ffe7c4",
+    "sky2": "#f7b77f",
+    "sea": "#1cadc2",
+    "sea2": "#0f7b98",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Divernet et Wikipédia · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Ship wreck Carnatic 2017-04-22 Egypt-7947.jpg",
+      "src": "assets/spots/abunuhas.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Ship_wreck_Carnatic_2017-04-22_Egypt-7947.jpg",
+      "author": "W.Strickling",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6e/Ship_wreck_Carnatic_2017-04-22_Egypt-7947.jpg/1280px-Ship_wreck_Carnatic_2017-04-22_Egypt-7947.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 959,
+      "thumb": "assets/spots/thumbs/abunuhas.webp"
+    }
+  },
+  {
+    "id": "kotu",
+    "name": "Kotu Beach",
+    "loc": "Kombo Saint Mary, Gambie",
+    "country": "Gambie",
+    "world": "af",
+    "coords": {
+      "lat": 13.4651,
+      "lon": -16.7042
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Plage bordée de cocotiers dans la station balnéaire de Kotu, à 17 km de Banjul. Access Gambia décrit un sable de bonne qualité mais une eau sableuse, avec de petites lagunes bien plus calmes près de l’hôtel Palm Beach. L’Atlantique y va du calme plat au clapot. Des maîtres-nageurs surveillent depuis leur poste et hissent des drapeaux selon les conditions.",
+    "dangers": [
+      [
+        "📉",
+        "Le fond reste peu profond jusqu’à environ 25 m du bord, puis tombe brutalement (Access Gambia)."
+      ],
+      [
+        "🌀",
+        "Courants de fond parfois puissants et grosses vagues : demande conseil avant de te baigner (Access Gambia)."
+      ],
+      [
+        "🪼",
+        "Des physalies passent parfois et des raies pastenagues plus rarement : mets des sandales contre les oursins (Access Gambia)."
+      ]
+    ],
+    "tip": "Regarde les drapeaux des maîtres-nageurs avant d’entrer : rouge, tu ne te baignes pas ; jaune, tu restes près du bord ; vert, c’est permis (Access Gambia). Ne nage pas seul.",
+    "photoContext": "Plage de Kotu, Gambie",
+    "danger": 1,
+    "sky": "#ffe7c4",
+    "sky2": "#f7b77f",
+    "sea": "#1cadc2",
+    "sea2": "#0f7b98",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Access Gambia, Wikipédia et Climats et Voyages · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Gambia - panoramio.jpg",
+      "src": "assets/spots/kotu.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Gambia_-_panoramio.jpg",
+      "author": "Peter Millican",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Gambia_-_panoramio.jpg/1280px-Gambia_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 910,
+      "thumb": "assets/spots/thumbs/kotu.webp"
+    }
+  },
+  {
+    "id": "capskirring",
+    "name": "Cap Skirring",
+    "loc": "Casamance, Sénégal",
+    "country": "Sénégal",
+    "world": "af",
+    "coords": {
+      "lat": 12.3815,
+      "lon": -16.7445
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade",
+      "surf"
+    ],
+    "level": "variable",
+    "desc": "Station balnéaire du sud de la Casamance, près de la Guinée-Bissau. Wikipédia y voit les traces d’un ancien système volcanique : ses rochers freinent les courants de l’Atlantique et ont façonné les anses des plages. Selon Surf-Forecast, c’est un beach break et un reef assez exposés, aux vagues irrégulières, à gauche comme à droite, avec très peu de monde même quand ça marche.",
+    "dangers": [
+      [
+        "🌬️",
+        "Aucun abri contre les vents de travers sur cette côte exposée (Surf-Forecast)."
+      ],
+      [
+        "🪨",
+        "Des reefs cassent au large, à gauche et à droite (Surf-Forecast) : ne surfe pas là sans connaître le fond."
+      ]
+    ],
+    "tip": "Pour surfer, vise une houle d’ouest avec un vent d’est-nord-est (Surf-Forecast). En décembre et janvier, la mer est à 26 °C puis 23 °C en moyenne et il ne pleut pas (Climats et Voyages).",
+    "photoContext": "Plage de Cap Skirring",
+    "danger": 1,
+    "sky": "#ffe7c4",
+    "sky2": "#f7b77f",
+    "sea": "#1cadc2",
+    "sea2": "#0f7b98",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia, Surf-Forecast et Climats et Voyages · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Cap-Skirring-Beach-2007.jpg",
+      "src": "assets/spots/capskirring.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Cap-Skirring-Beach-2007.jpg",
+      "author": "Bjørn Christian Tørrissen",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c3/Cap-Skirring-Beach-2007.jpg/1280px-Cap-Skirring-Beach-2007.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 726,
+      "thumb": "assets/spots/thumbs/capskirring.webp"
+    }
+  },
+  {
+    "id": "papagayo",
+    "name": "Playa de Papagayo — Playa Blanca",
+    "loc": "Lanzarote, Canaries, Espagne",
+    "country": "Espagne",
+    "world": "eu",
+    "coords": {
+      "lat": 28.8424,
+      "lon": -13.7881
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade",
+      "snorkeling"
+    ],
+    "level": "debutant",
+    "desc": "Crique de sable blanc de 120 m, dans le monument naturel de Los Ajaches, au sud de Lanzarote. Selon Hello Canary Islands, l’eau claire et vert émeraude reste immobile toute la journée comme dans une piscine, et la crique est bien abritée du vent. Le site vante le snorkeling et les baignades d’enfants. Il y a un petit bar sur la colline et un parking ; l’accès en voiture n’est pas gratuit.",
+    "dangers": [
+      [
+        "🛟",
+        "Plage sans surveillance, signale Hello Canary Islands (« sin vigilancia »)."
+      ],
+      [
+        "🥶",
+        "L’eau est fraîche en hiver : 20 °C en décembre, 19 °C en janvier (Climats et Voyages)."
+      ],
+      [
+        "🚗",
+        "La piste d’accès est cahoteuse (Wikipédia) : roule doucement."
+      ]
+    ],
+    "tip": "Il n’y a pas de poste de secours : reste près du bord et ne nage pas seul. En décembre et janvier, l’eau est fraîche : environ 20 °C puis 19 °C d’après Climats et Voyages.",
+    "photoContext": "Playa de Papagayo, Playa Blanca, Lanzarote",
+    "danger": 1,
+    "sky": "#dcebf5",
+    "sky2": "#a3c6dd",
+    "sea": "#22759c",
+    "sea2": "#0d4767",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Hello Canary Islands, Wikipédia et Climats et Voyages · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Playa Papagayo 2014 01.jpg",
+      "src": "assets/spots/papagayo.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Playa_Papagayo_2014_01.jpg",
+      "author": "Axel Cotón Gutiérrez",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f8/Playa_Papagayo_2014_01.jpg/1280px-Playa_Papagayo_2014_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 768,
+      "thumb": "assets/spots/thumbs/papagayo.webp"
+    }
+  },
+  {
+    "id": "samadai",
+    "name": "Sha’ab Samadai — Dolphin House",
+    "loc": "Marsa Alam, Égypte",
+    "country": "Égypte",
+    "world": "af",
+    "coords": {
+      "lat": 24.9789,
+      "lon": 34.9942
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "plongee"
+    ],
+    "level": "intermediaire",
+    "desc": "Récif en fer à cheval à une quinzaine de kilomètres au sud-est de Marsa Alam, parc national depuis 2004 selon Snorkeling Report. Un groupe de dauphins à long bec (spinner) s’y est installé : on les voit presque chaque jour. Les sorties partent de Marsa Alam et comptent en général deux arrêts de snorkeling : la zone des dauphins, puis les pinacles de corail voisins.",
+    "dangers": [
+      [
+        "🐬",
+        "La zone A, au nord, est interdite à toute activité : les dauphins s’y reposent (Snorkeling Report)."
+      ],
+      [
+        "🦺",
+        "Gilet flottant obligatoire dans l’eau : il empêche aussi de plonger en apnée (Snorkeling Report)."
+      ],
+      [
+        "⬇️",
+        "Dans la zone des dauphins, le fond peut descendre à 25 m ; Snorkeling Report demande un niveau intermédiaire."
+      ]
+    ],
+    "tip": "Réserve une sortie à la journée : l’accès est réglementé. Mets le gilet flottant obligatoire et ne cherche jamais à toucher ni à poursuivre les dauphins.",
+    "photoContext": "Récif Sha’ab Samadai, Marsa Alam",
+    "danger": 2,
+    "sky": "#ffe7c4",
+    "sky2": "#f7b77f",
+    "sea": "#1cadc2",
+    "sea2": "#0f7b98",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Snorkeling Report et Wikipédia · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": null
+  },
+  {
+    "id": "shela",
+    "name": "Shela Beach — Lamu",
+    "loc": "Île de Lamu, Kenya",
+    "country": "Kenya",
+    "world": "af",
+    "coords": {
+      "lat": -2.2936,
+      "lon": 40.9155
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Plage de sable blanc de 12 km sur l’île de Lamu, au Kenya, bordée de hautes dunes selon Rough Guides. Lonely Planet la dit assez vaste pour qu’on y trouve un coin isolé en marchant un peu. Le village de Shela, derrière la plage, a une mosquée du vendredi de 1829 et son minaret de 18 m. En décembre et janvier, la mer est à 28 °C et 27,5 °C en moyenne (Climats et Voyages).",
+    "dangers": [
+      [
+        "🌀",
+        "Forts courants d’arrachement par endroits, surtout autour de l’hôtel The Fort (Lonely Planet)."
+      ],
+      [
+        "🕳️",
+        "Le chenal de Shela (Mlango wa Shella) est l’un des « chenaux tueurs » de Lamu, aux courants violents et aux fortes vagues (Daily Nation)."
+      ],
+      [
+        "⚠️",
+        "Daily Nation rapporte des noyades à Shela, dont celles de trois membres d’un groupe d’église en sortie."
+      ]
+    ],
+    "tip": "Avant de nager, demande conseil sur place : Lonely Planet signale de forts courants, surtout près de l’hôtel The Fort.",
+    "photoContext": "Plage de Shela, île de Lamu",
+    "danger": 1,
+    "sky": "#ffe7c4",
+    "sky2": "#f7b77f",
+    "sea": "#1cadc2",
+    "sea2": "#0f7b98",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Lonely Planet, Rough Guides, Daily Nation et Climats et Voyages · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Camel at Shella Beach in Lamu.jpg",
+      "src": "assets/spots/shela.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Camel_at_Shella_Beach_in_Lamu.jpg",
+      "author": "Khalifa2023",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b8/Camel_at_Shella_Beach_in_Lamu.jpg/1280px-Camel_at_Shella_Beach_in_Lamu.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/shela.webp"
+    }
+  },
+  {
+    "id": "gordonsbay",
+    "name": "Gordons Bay — Coogee",
+    "loc": "Coogee, Sydney, Nouvelle-Galles du Sud, Australie",
+    "country": "Australie",
+    "world": "oc",
+    "coords": {
+      "lat": -33.9148,
+      "lon": 151.2613
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "plongee",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Petite baie de Sydney entre Clovelly et Coogee, encadrée de deux falaises, que l’on ne rejoint qu’à pied par le sentier côtier. Un parcours sous-marin de 600 m, à faire seul en snorkeling ou en plongée, la traverse : des bidons remplis de béton reliés par des chaînes et des plaques sur la vie marine le jalonnent. À Sydney, la mer est à 22,8 °C en moyenne en janvier (seatemperatu.re).",
+    "dangers": [
+      [
+        "🛟",
+        "Baie non surveillée : ni sauveteurs ni maîtres-nageurs sur place."
+      ],
+      [
+        "🪨",
+        "Entrée par les rochers : algues et roche glissent, et le ressac peut rendre la sortie difficile."
+      ],
+      [
+        "🪼",
+        "Physalies (bluebottles) et requins sont rares, mais des panneaux les signalent."
+      ],
+      [
+        "🚫",
+        "Réserve aquatique de Bronte–Coogee : pêche sous-marine interdite, et le blue groper est protégé."
+      ]
+    ],
+    "tip": "Viens par un jour clair et ensoleillé, regarde plusieurs séries de vagues avant d’entrer et prévois de marcher : il n’y a pas de parking au bord de l’eau, seulement aux plages de Coogee et de Clovelly. Les week-ends chauds, la baie est plus fréquentée.",
+    "fauna": "blue gropers (protégés), seiches, labres et raies.",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia (Gordon’s Bay), Secret Sydney, Abyss et seatemperatu.re · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "(1)Gordons Bay Coogee-1.jpg",
+      "src": "assets/spots/gordonsbay.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:(1)Gordons_Bay_Coogee-1.jpg",
+      "author": "Sardaka",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/80/%281%29Gordons_Bay_Coogee-1.jpg/1280px-%281%29Gordons_Bay_Coogee-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 856,
+      "thumb": "assets/spots/thumbs/gordonsbay.webp"
+    }
+  },
+  {
+    "id": "julianrocks",
+    "name": "Julian Rocks (Nguthungulli) — Byron Bay",
+    "loc": "Byron Bay, Nouvelle-Galles du Sud, Australie",
+    "country": "Australie",
+    "world": "oc",
+    "coords": {
+      "lat": -28.6115,
+      "lon": 153.6289
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "plongee"
+    ],
+    "level": "variable",
+    "desc": "Deux petits îlots rocheux à 2,5 km de Byron Bay, dans la réserve de Nguthungulli et le parc marin du cap Byron. On les rejoint par une courte traversée en bateau. Selon Visit NSW, c’est le point le plus au sud pour de nombreuses espèces d’eau chaude : tortues caouannes, requins-léopards, raies manta. Les requins gris nourrice, d’eau plus fraîche, y passent aussi. Selon Visit NSW, la fin de l’été donne l’eau la plus chaude et la meilleure visibilité ; à Byron Bay, la mer est à 25,9 °C en moyenne en janvier (seatemperature.info).",
+    "dangers": [
+      [
+        "🚤",
+        "Accès en bateau : les rochers sont à 2,5 km de la côte."
+      ],
+      [
+        "🚫",
+        "Collecter ou détruire des animaux est interdit, et la pêche sous-marine aussi. Toute pêche est bannie à moins de 500 m des rochers."
+      ],
+      [
+        "🦈",
+        "Habitat important du requin gris nourrice : garde tes distances avec la faune."
+      ],
+      [
+        "ℹ️",
+        "Les rochers ont une grande importance pour le peuple Arakwal : les aînés demandent qu’ils soient protégés de tout mauvais usage."
+      ]
+    ],
+    "tip": "Les requins-léopards se voient surtout de décembre à mai aux Needles, selon byronbay.com. Renseigne-toi auprès d’un opérateur de Byron Bay pour la traversée, et ne touche ni ne prélève rien : la réserve est protégée.",
+    "fauna": "tortues, raies manta, requins-léopards, requins gris nourrice, wobbegongs et nudibranches.",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia (réserve Nguthungulli Julian Rocks), Visit NSW, byronbay.com, NSW Government et seatemperature.info · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Into The Light (Julian Rocks).jpg",
+      "src": "assets/spots/julianrocks.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Into_The_Light_(Julian_Rocks).jpg",
+      "author": "JulianGWilson",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/97/Into_The_Light_%28Julian_Rocks%29.jpg/1280px-Into_The_Light_%28Julian_Rocks%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 853,
+      "thumb": "assets/spots/thumbs/julianrocks.webp"
+    }
+  },
+  {
+    "id": "fourmilebeach",
+    "name": "Four Mile Beach — Port Douglas",
+    "loc": "Port Douglas, Queensland, Australie",
+    "country": "Australie",
+    "world": "oc",
+    "coords": {
+      "lat": -16.5071,
+      "lon": 145.4674
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Longue plage de sable doré bordée de palmiers, à Port Douglas, dans le nord du Queensland. Une zone de baignade protégée par un filet anti-méduses est installée dans l’eau pendant la saison des méduses, et des sauveteurs patrouillent à certaines heures (Douglas Shire Council). Dans la région de Cairns, la mer est à 29,3 °C en moyenne en janvier (seatemperatu.re).",
+    "dangers": [
+      [
+        "🪼",
+        "Saison des méduses (stingers) en général de novembre à mai : décembre et janvier en font partie. Le filet protège bien contre la méduse-boîte, mais pas à 100 %."
+      ],
+      [
+        "🚩",
+        "La plage peut fermer quand des méduses sont présentes : en janvier 2020, une méduse Irukandji trouvée dans le filet a fait fermer la plage 24 heures."
+      ],
+      [
+        "🛟",
+        "Les sauveteurs ne patrouillent qu’à certaines heures : renseigne-toi avant d’entrer dans l’eau."
+      ]
+    ],
+    "tip": "Baigne-toi seulement dans le filet, entre les drapeaux rouge et jaune, et demande conseil aux sauveteurs. Pendant la saison des méduses, mets une combinaison intégrale (néoprène ou lycra) et entre dans l’eau doucement.",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Douglas Shire Council, Wikipédia (Port Douglas), Newsport et seatemperatu.re · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Four Mile Beach, Port Douglas, Queensland, 2020 03.jpg",
+      "src": "assets/spots/fourmilebeach.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Four_Mile_Beach,_Port_Douglas,_Queensland,_2020_03.jpg",
+      "author": "Kgbo",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Four_Mile_Beach%2C_Port_Douglas%2C_Queensland%2C_2020_03.jpg/1280px-Four_Mile_Beach%2C_Port_Douglas%2C_Queensland%2C_2020_03.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/fourmilebeach.webp"
+    }
+  },
+  {
+    "id": "geoffreybay",
+    "name": "Geoffrey Bay — Magnetic Island",
+    "loc": "Magnetic Island, Queensland, Australie",
+    "country": "Australie",
+    "world": "oc",
+    "coords": {
+      "lat": -19.1531,
+      "lon": 146.8678
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Baie à grande plage de sable sur Magnetic Island, à 8 km de Townsville, devant Arcadia. L’épave du voilier Moltke repose dans la baie. Un parcours de snorkeling part de Marine Parade, à environ 400 m du rivage, avec quatre bouées numérotées : on y voit des bénitiers géants et, par temps clair, l’épave. Le site de tourisme de l’île décrit un environnement idéal pour nager toute l’année.",
+    "dangers": [
+      [
+        "🪼",
+        "Saison des méduses de novembre à avril : porte une combinaison anti-méduses (stinger suit)."
+      ],
+      [
+        "🪸",
+        "Ne te tiens pas debout sur le corail et ne t’accroche pas aux bouées du parcours."
+      ],
+      [
+        "⚠️",
+        "Le snorkeling peut être fatigant même par eau calme : prudence si tu débutes ou si tu as un souci de santé."
+      ]
+    ],
+    "tip": "Mets une combinaison anti-méduses de novembre à avril. L’eau se trouble pendant et après les vents de sud-est, et les marées très hautes ou très basses autour des nouvelles et pleines lunes sont à éviter.",
+    "fauna": "bénitiers géants.",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après This Is Magnetic Island et Wikipédia (Geoffrey Bay, Magnetic Island) · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Geoffrey Bay, Magnetic Island.JPG",
+      "src": "assets/spots/geoffreybay.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Geoffrey_Bay,_Magnetic_Island.JPG",
+      "author": "ROxBo at English Wikipedia",
+      "license": "Public domain",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Geoffrey_Bay%2C_Magnetic_Island.JPG/1280px-Geoffrey_Bay%2C_Magnetic_Island.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/geoffreybay.webp"
+    }
+  },
+  {
+    "id": "hamelinbay",
+    "name": "Hamelin Bay — Margaret River",
+    "loc": "Margaret River, Australie-Occidentale, Australie",
+    "country": "Australie",
+    "world": "oc",
+    "coords": {
+      "lat": -34.2199,
+      "lon": 115.0311
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Grande baie de sable ouverte, entre le cap Leeuwin et le cap Naturaliste, à une demi-heure de route de Margaret River. Elle est célèbre pour ses raies, qui mesurent jusqu’à deux mètres de large et nagent autour des baigneurs. On y nage et on y fait du snorkeling ; plusieurs épaves reposent au large. Dans la région, l’été est chaud, souvent ensoleillé, avec des brises marines (Wikipédia, Margaret River).",
+    "dangers": [
+      [
+        "🐟",
+        "Raies sauvages : ne les harcèle pas et ne les touche pas."
+      ],
+      [
+        "🪨",
+        "Récifs et rochers dans la baie, très exposée au mauvais temps : elle est connue pour ses naufrages."
+      ],
+      [
+        "🔥",
+        "Interdictions totales de feu fréquentes au camping : reste sur les sentiers balisés, car les falaises de calcaire peuvent être dangereuses."
+      ]
+    ],
+    "tip": "Laisse les raies venir à toi, sans les poursuivre ni les toucher. Va-y tôt le matin, avant la foule, la marée et le vent.",
+    "fauna": "raies sauvages, parfois jusqu’à 2 m d’envergure, qui nagent près du bord.",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Tourism Western Australia, Perth Is OK et Wikipédia (Hamelin Bay, Margaret River) · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Hamelin Bay, Western Australia, February 2021 01.jpg",
+      "src": "assets/spots/hamelinbay.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Hamelin_Bay,_Western_Australia,_February_2021_01.jpg",
+      "author": "Calistemon",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/41/Hamelin_Bay%2C_Western_Australia%2C_February_2021_01.jpg/1280px-Hamelin_Bay%2C_Western_Australia%2C_February_2021_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/hamelinbay.webp"
+    }
+  },
+  {
+    "id": "surfersparadise",
+    "name": "Surfers Paradise — Gold Coast",
+    "loc": "Gold Coast, Queensland, Australie",
+    "country": "Australie",
+    "world": "oc",
+    "coords": {
+      "lat": -27.9973,
+      "lon": 153.4315
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Plage d’environ 2 km, la plus connue du Queensland selon Surf Life Saving Australia, devant la station de Surfers Paradise, sur la Gold Coast. Trois tours de surveillance (34, 35 et 36), sur l’Esplanade, sont tenues par des lifeguards de 8 h à 17 h, tous les jours de l’année (Ville de Gold Coast). Sur la Gold Coast, la mer est à 25,8 °C en moyenne en janvier (seatemperatu.re).",
+    "dangers": [
+      [
+        "🌀",
+        "Plage dominée par les courants d’arrachement : ils sont présents dès que les vagues déferlent, et de profonds chenaux peuvent partir du rivage."
+      ],
+      [
+        "🛟",
+        "Un poste peut fermer quand les conditions sont dangereuses ou pour des travaux : vérifie que la plage est surveillée avant d’entrer."
+      ],
+      [
+        "👥",
+        "Selon Surf Life Saving Australia, c’est l’une des plages les plus aménagées et les plus utilisées d’Australie."
+      ]
+    ],
+    "tip": "Baigne-toi entre les drapeaux rouge et jaune, devant une des tours. Si tu surfes, observe la mer avant d’entrer : en cas de doute, ne rame pas.",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après la Ville de Gold Coast, Surf Life Saving Australia et seatemperatu.re · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Surfers Paradise, Gold Coast, Australia (Ank Kumar) 01.jpg",
+      "src": "assets/spots/surfersparadise.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Surfers_Paradise,_Gold_Coast,_Australia_(Ank_Kumar)_01.jpg",
+      "author": "Ank Kumar",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d6/Surfers_Paradise%2C_Gold_Coast%2C_Australia_%28Ank_Kumar%29_01.jpg/1280px-Surfers_Paradise%2C_Gold_Coast%2C_Australia_%28Ank_Kumar%29_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 853,
+      "thumb": "assets/spots/thumbs/surfersparadise.webp"
+    }
+  },
+  {
+    "id": "maupiti",
+    "name": "Lagon de Maupiti — plage de Tereia",
+    "loc": "Maupiti, Polynésie française",
+    "country": "Polynésie française",
+    "world": "oc",
+    "coords": {
+      "lat": -16.4488,
+      "lon": -152.2749
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "plongee",
+      "baignade",
+      "kayak"
+    ],
+    "level": "variable",
+    "desc": "Île à 40 km de Bora Bora, avec l’un des plus beaux lagons de Polynésie selon Tahiti Tourisme. Tereia est « l’unique plage de l’île principale », de sable blanc et d’eau peu profonde (Routard). À marée basse, on peut rejoindre à pied le motu Auira depuis Tereia. Le lagon abrite une station de nettoyage des raies manta. À Bora Bora, à 40 km, la mer est à 28 °C en décembre et à 29 °C en janvier (Climats et Voyages).",
+    "dangers": [
+      [
+        "🌪️",
+        "Les cyclones se forment de novembre à avril, surtout de décembre à mars, et les averses sont parfois abondantes en décembre et janvier, parmi les mois les plus pluvieux."
+      ],
+      [
+        "⏳",
+        "La traversée à pied vers le motu Auira n’est possible qu’à marée basse : regarde la marée avant de partir."
+      ],
+      [
+        "🐟",
+        "Les raies manta sont fragiles et sensibles au dérangement : pas de contact."
+      ]
+    ],
+    "tip": "Près des raies manta, l’apnée est interdite : ne les touche pas, regarde-les à distance et laisse-les venir à toi. Le club de plongée de l’île organise des sorties en plongée ou en snorkeling.",
+    "fauna": "raies manta et requins à pointes noires.",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Tahiti Tourisme, Routard, Climats et Voyages et Lonely Planet · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Maupiti, Polynésie Française (30599653413).jpg",
+      "src": "assets/spots/maupiti.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Maupiti,_Polyn%C3%A9sie_Fran%C3%A7aise_(30599653413).jpg",
+      "author": "Pom' from France, European Union",
+      "license": "Public domain",
+      "download": "https://upload.wikimedia.org/wikipedia/commons/7/75/Maupiti%2C_Polyn%C3%A9sie_Fran%C3%A7aise_%2830599653413%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "width": 1250,
+      "height": 1250,
+      "thumb": "assets/spots/thumbs/maupiti.webp"
+    }
+  },
+  {
+    "id": "avea",
+    "name": "Baie d’Avea — Huahine",
+    "loc": "Huahine, Polynésie française",
+    "country": "Polynésie française",
+    "world": "oc",
+    "coords": {
+      "lat": -16.8075,
+      "lon": -150.9795
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "baignade"
+    ],
+    "level": "debutant",
+    "desc": "Longue plage du sud de Huahine, dans le district de Parea. Tahiti Tourisme l’appelle « la plage de la forêt » : elle s’étend sur plusieurs kilomètres et convient à la baignade et à la détente. Snorkeling Report classe le spot débutant : petits récifs avec jardins d’anémones et poissons-clowns, entre 1 et 6 m de profondeur, et un banc de sable que des raies traversent parfois. On entre dans l’eau par la plage publique, un peu au sud de l’hôtel Le Mahana. Dans les îles de la Société, la mer est à 28 à 29 °C en décembre et en janvier (Climats et Voyages : Papeete et Bora Bora).",
+    "dangers": [
+      [
+        "🌪️",
+        "Les cyclones se forment de novembre à avril, surtout de décembre à mars, et décembre et janvier comptent parmi les mois les plus pluvieux."
+      ],
+      [
+        "⚠️",
+        "Vérifie la réglementation locale (espèces protégées, zones interdites) : visibilité et état du récif peuvent changer."
+      ],
+      [
+        "🚗",
+        "La plage est à environ 30 minutes en voiture de Fare (45 minutes en scooter) : prévois ton transport."
+      ]
+    ],
+    "tip": "Gare-toi au bord de la plage, entre par la plage publique et regarde la mer avant d’y aller : la note débutant ne vaut que par mer calme, sans vent fort, houle, forte marée ni pluie.",
+    "fauna": "poissons-clowns dans les anémones et raies qui traversent parfois le banc de sable.",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Tahiti Tourisme (plage d’Avea), Snorkeling Report (baie d’Avea), Climats et Voyages et Lonely Planet · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Plage d'Avea Huahine.jpg",
+      "src": "assets/spots/avea.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Plage_d%27Avea_Huahine.jpg",
+      "author": "Apollo11 at French Wikipedia",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/e7/Plage_d%27Avea_Huahine.jpg/1280px-Plage_d%27Avea_Huahine.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 841,
+      "thumb": "assets/spots/thumbs/avea.webp"
+    }
+  },
+  {
+    "id": "mouli",
+    "name": "Pont de Mouli — Ouvéa",
+    "loc": "Ouvéa, Nouvelle-Calédonie",
+    "country": "Nouvelle-Calédonie",
+    "world": "oc",
+    "coords": {
+      "lat": -20.6982,
+      "lon": 166.4736
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade",
+      "snorkeling"
+    ],
+    "level": "variable",
+    "desc": "Plage de sable blanc d’environ six kilomètres, prolongement de celle de Fayaoué, dans le lagon d’Ouvéa, inscrit au patrimoine mondial de l’UNESCO en 2008. Le lagon y est calme et peu profond, et l’accès à la plage est libre et gratuit. Au bout de la route, le pont de Mouli (180 m, inauguré en décembre 2023) permet de voir tortues, raies et poissons, attirés par le courant, sans se mouiller.",
+    "dangers": [
+      [
+        "🚫",
+        "Baignade interdite dans la baie de Lékiny, réserve coutumière."
+      ],
+      [
+        "ℹ️",
+        "Mouli est un district coutumier : respecte les usages locaux, dont le salut traditionnel en entrant dans la tribu."
+      ],
+      [
+        "🌀",
+        "Un courant passe sous le pont, c’est ce qui attire la faune : renseigne-toi sur place avant de nager près du pont."
+      ],
+      [
+        "🌪️",
+        "Les cyclones se forment de novembre à mi-mai, plus probables de fin décembre à début avril."
+      ]
+    ],
+    "tip": "Explore les eaux claires près du pont, ou observe depuis le pont. Pour les falaises de Lékiny et les sorties en bateau, il est nécessaire de faire appel à un guide local.",
+    "fauna": "tortues, raies et poissons près du pont.",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Routard (presqu’île de Mouli), Wikipédia (Ouvéa) et Climats et Voyages · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Pont de Mouli 2023.jpg",
+      "src": "assets/spots/mouli.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Pont_de_Mouli_2023.jpg",
+      "author": "Aloncq",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b2/Pont_de_Mouli_2023.jpg/1280px-Pont_de_Mouli_2023.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/mouli.webp"
+    }
+  },
+  {
+    "id": "kanumera",
+    "name": "Baie de Kanuméra — Île des Pins",
+    "loc": "Île des Pins, Nouvelle-Calédonie",
+    "country": "Nouvelle-Calédonie",
+    "world": "oc",
+    "coords": {
+      "lat": -22.6619,
+      "lon": 167.4446
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "baignade",
+      "kayak"
+    ],
+    "level": "debutant",
+    "desc": "Petite baie de sable blanc et fin, au sud de l’Île des Pins, voisine de la baie de Kuto et bordée de pins colonnaires et de cocotiers. Un rocher de corail, relié à la plage par un banc de sable, la coupe en deux : il est sacré. Le récif descend à 3–5 m, avec poissons-clowns, poissons-papillons et parfois une tortue ou une raie. Snorkeling Report classe le spot débutant, avec une entrée facile depuis la plage. À Nouméa, la mer est à environ 27 °C en janvier (Climats et Voyages).",
+    "dangers": [
+      [
+        "🚫",
+        "Rocher sacré (tabou) : ne monte pas dessus, par respect pour les coutumes locales."
+      ],
+      [
+        "🏖️",
+        "Pas de surveillance ni de toilettes publiques sur place."
+      ],
+      [
+        "⚠️",
+        "La note débutant ne vaut que par bon temps : pas par mer agitée, grand vent, houle, fortes marées ou pluie."
+      ],
+      [
+        "🌪️",
+        "Les cyclones se forment de novembre à mi-mai, plus probables de fin décembre à début avril."
+      ]
+    ],
+    "tip": "Entre dans l’eau juste à gauche du rocher, en le regardant depuis la plage. Il est interdit de palmer sur une bande d’une dizaine de mètres le long du rocher : nage sans palmes dans cette zone.",
+    "fauna": "poissons-clowns, poissons-papillons, et parfois une tortue marine ou une raie.",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Routard (anse de Kanuméra et baie de Kuto), Snorkeling Report et Climats et Voyages · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Kanumera Bay, Isle of Pines, New Caledonia, 2007 (1).JPG",
+      "src": "assets/spots/kanumera.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Kanumera_Bay,_Isle_of_Pines,_New_Caledonia,_2007_(1).JPG",
+      "author": "Bahnfrend",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Kanumera_Bay%2C_Isle_of_Pines%2C_New_Caledonia%2C_2007_%281%29.JPG/1280px-Kanumera_Bay%2C_Isle_of_Pines%2C_New_Caledonia%2C_2007_%281%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 851,
+      "thumb": "assets/spots/thumbs/kanumera.webp"
+    }
+  },
+  {
+    "id": "ilotmaitre",
+    "name": "Îlot Maître — Nouméa",
+    "loc": "Nouméa, Nouvelle-Calédonie",
+    "country": "Nouvelle-Calédonie",
+    "world": "oc",
+    "coords": {
+      "lat": -22.3339,
+      "lon": 166.4069
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "kitesurf",
+      "windsurf"
+    ],
+    "level": "variable",
+    "desc": "Îlot de 700 m sur 150 m dans le lagon de Nouméa, au cœur d’une réserve marine de 200 hectares, entouré d’un récif de corail. Des bateaux-taxis font la navette depuis l’Anse Vata. Près du ponton, les herbiers peu profonds (1 à 2 m) attirent des tortues vertes ; Snorkeling Report juge le spot accessible aux débutants par temps calme. Sur la côte est, le lagon exposé aux alizés sert au kitesurf, à la planche à voile et au wing foil. À Nouméa, la mer est à environ 27 °C en janvier (Climats et Voyages).",
+    "dangers": [
+      [
+        "⛴️",
+        "Le récif devant le ponton est sur le passage des bateaux qui accostent : signale-toi."
+      ],
+      [
+        "🪁",
+        "La côte est, exposée aux alizés, est fréquentée par les kitesurfeurs quand il y a du vent."
+      ],
+      [
+        "🐢",
+        "Réserve marine : tortues vertes, et parfois requins de récif à pointes blanches et raies. Garde tes distances."
+      ],
+      [
+        "🌪️",
+        "Les cyclones se forment de novembre à mi-mai, plus probables de fin décembre à début avril."
+      ]
+    ],
+    "tip": "Pour le snorkeling, choisis les herbiers et le récif près du ponton. Évite la zone plate à l’est, face à l’hôtel, quand il y a du vent : les kitesurfeurs s’y retrouvent.",
+    "fauna": "tortues vertes, parfois requins de récif à pointes blanches et raies.",
+    "photoContext": "Îlot Maître, lagon de Nouméa",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia (îlot Maître), Snorkeling Report et Climats et Voyages · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Gosh - Flickr - XPinger (Chris Sutton).jpg",
+      "src": "assets/spots/ilotmaitre.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Gosh_-_Flickr_-_XPinger_(Chris_Sutton).jpg",
+      "author": "XPinger (Chris Sutton)",
+      "license": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f0/Gosh_-_Flickr_-_XPinger_%28Chris_Sutton%29.jpg/1280px-Gosh_-_Flickr_-_XPinger_%28Chris_Sutton%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 853,
+      "thumb": "assets/spots/thumbs/ilotmaitre.webp"
+    }
+  },
+  {
+    "id": "nukuhione",
+    "name": "Nukuhione — lagon de Wallis",
+    "loc": "Wallis, Wallis-et-Futuna",
+    "country": "Wallis-et-Futuna",
+    "world": "oc",
+    "coords": {
+      "lat": -13.2739,
+      "lon": -176.1332
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "plongee",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Îlot du lagon de Wallis, dans le district de Hahake, qui appartient au village de Liku. France.fr le cite, avec Nukuhifala, parmi les deux îlots où l’on plonge : très peu de gros prédateurs, mais des récifs coralliens magnifiques, et des plages désertes. Selon Wikipédia, le « trou du diable », un tombant du récif, est au nord de l’îlot et le « trou de la tortue », un autre tombant, au sud. À Wallis, la mer est à 29 °C en décembre et en janvier (Climats et Voyages).",
+    "dangers": [
+      [
+        "🌪️",
+        "Cyclones de novembre à mi-mai, plus probables de fin décembre à début avril. Wallis est très pluvieuse : environ 345 mm en décembre et 395 mm en janvier."
+      ],
+      [
+        "🪼",
+        "Des méduses bleues ont déjà envahi le lagon de Wallis ; celles échouées ont causé des brûlures au contact."
+      ],
+      [
+        "🚤",
+        "Les plongées se font surtout en bateau, dans le lagon ou près des récifs."
+      ],
+      [
+        "ℹ️",
+        "L’îlot appartient au village de Liku : renseigne-toi avant d’y accoster."
+      ]
+    ],
+    "tip": "Plonge avec un professionnel local : les services de plongée de l’île sont limités, il est conseillé de réserver à l’avance.",
+    "danger": 1,
+    "sky": "#d5edf9",
+    "sky2": "#84c8e9",
+    "sea": "#1599d8",
+    "sea2": "#0a5288",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après France.fr, Wikipédia (Nukuhione), PADI, Les Nouvelles Calédoniennes et Climats et Voyages · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "WALLIS - Nukuhione.jpg",
+      "src": "assets/spots/nukuhione.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:WALLIS_-_Nukuhione.jpg",
+      "author": "Anne Caillaud",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1c/WALLIS_-_Nukuhione.jpg/1280px-WALLIS_-_Nukuhione.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/nukuhione.webp"
+    }
+  },
+  {
+    "id": "flicenflac",
+    "name": "Flic en Flac — plage publique",
+    "loc": "Rivière Noire, Maurice",
+    "country": "Maurice",
+    "world": "af",
+    "coords": {
+      "lat": -20.2811,
+      "lon": 57.3646
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade",
+      "snorkeling",
+      "plongee"
+    ],
+    "level": "variable",
+    "desc": "Plage publique de sable blanc sur la côte ouest de Maurice, avec un lagon protégé par les récifs de corail (Wikipédia). Snorkeling Report décrit un lagon d’environ 300 mètres de large, avec des massifs de corail à quelques dizaines de mètres du bord, des poissons-papillons, des idoles des Maures et parfois de petites murènes. Wikipédia ajoute que le site est réputé pour la plongée, avec ses grottes et ses épaves.",
+    "dangers": [
+      [
+        "🪸",
+        "Près de la barrière, l’eau devient peu profonde : tu peux te blesser et casser les coraux (Snorkeling Report)."
+      ],
+      [
+        "🌪️",
+        "Des cyclones passent parfois entre janvier et mars. Ils perturbent la météo environ trois jours, avec de fortes pluies (Wikipédia)."
+      ],
+      [
+        "👥",
+        "Plage publique fréquentée toute l’année par des familles du coin et des touristes (Wikipédia)."
+      ]
+    ],
+    "tip": "Pour le snorkeling, rejoins le côté nord de la plage publique et reste loin des zones les moins profondes près de la barrière : tu pourrais te blesser et abîmer le corail.",
+    "photoContext": "Plage de Flic en Flac",
+    "danger": 1,
+    "sky": "#ffe7c4",
+    "sky2": "#f7b77f",
+    "sea": "#1cadc2",
+    "sea2": "#0f7b98",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia et Snorkeling Report · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Flic en Flac beach .jpg",
+      "src": "assets/spots/flicenflac.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Flic_en_Flac_beach_.jpg",
+      "author": "Gavish Barosee",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6c/Flic_en_Flac_beach_.jpg/1280px-Flic_en_Flac_beach_.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/flicenflac.webp"
+    }
+  },
+  {
+    "id": "bellemare",
+    "name": "Belle Mare — plage publique",
+    "loc": "Flacq, Maurice",
+    "country": "Maurice",
+    "world": "af",
+    "coords": {
+      "lat": -20.1911,
+      "lon": 57.7752
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade",
+      "snorkeling"
+    ],
+    "level": "variable",
+    "desc": "Plage publique de la côte est de Maurice, longue de plusieurs kilomètres et protégée par une barrière de corail. Le Routard décrit un lagon calme et cristallin, ombragé par des filaos. Snorkeling Report la dit sauvage et relativement peu fréquentée : une partie de la plage est publique, l’autre occupée par des hôtels.",
+    "dangers": [
+      [
+        "🚤",
+        "Beaucoup de bateaux et de jet-skis circulent dans le lagon : palmer depuis le bord n’est pas conseillé (Snorkeling Report)."
+      ],
+      [
+        "🌪️",
+        "Des cyclones passent parfois entre janvier et mars. Ils perturbent la météo environ trois jours, avec de fortes pluies (Wikipédia)."
+      ]
+    ],
+    "tip": "Pour voir le récif, qui commence à environ 500 m de la plage, monte à bord d’un bateau : des guides et des pêcheurs proposent la sortie sur place (Snorkeling Report).",
+    "photoContext": "Plage de Belle Mare",
+    "danger": 1,
+    "sky": "#ffe7c4",
+    "sky2": "#f7b77f",
+    "sea": "#1cadc2",
+    "sea2": "#0f7b98",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après le Routard, Snorkeling Report et Wikipédia · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Mauritius belle mare beach.jpg",
+      "src": "assets/spots/bellemare.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Mauritius_belle_mare_beach.jpg",
+      "author": "Arne Müseler",
+      "license": "CC BY-SA 3.0 de",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/dd/Mauritius_belle_mare_beach.jpg/1280px-Mauritius_belle_mare_beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 959,
+      "thumb": "assets/spots/thumbs/bellemare.webp"
+    }
+  },
+  {
+    "id": "unawatuna",
+    "name": "Unawatuna",
+    "loc": "Province du Sud, Sri Lanka",
+    "country": "Sri Lanka",
+    "world": "as",
+    "coords": {
+      "lat": 6.0082,
+      "lon": 80.2444
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade",
+      "snorkeling",
+      "plongee"
+    ],
+    "level": "variable",
+    "desc": "Baie de près d’un kilomètre, à environ 5 km au sud-est de Galle (Wikipédia). Selon le Routard, la plage principale est protégée par un récif et on peut s’y baigner une grande partie de l’année. À 3 km, Jungle Beach est une petite crique entourée de forêt : Wikivoyage la cite comme le meilleur endroit du coin pour le snorkeling. Le Routard mentionne aussi la plongée sur les récifs et sur l’épave du SS Rangoon.",
+    "dangers": [
+      [
+        "🌀",
+        "Comme sur une grande partie de la côte sud, de forts courants peuvent être présents : renseigne-toi sur les conditions avant d’entrer dans l’eau (Routard)."
+      ],
+      [
+        "🐢",
+        "À Dalawella, plage voisine, ne touche pas les tortues et garde une distance respectueuse (Routard)."
+      ],
+      [
+        "👥",
+        "De décembre à avril, c’est la haute saison touristique : la plage est plus fréquentée (Routard)."
+      ]
+    ],
+    "tip": "Pour le snorkeling, va à Jungle Beach, en bateau, en tuk-tuk ou à pied : la baie y est abritée des vagues et des courants d’Unawatuna (Wikivoyage).",
+    "photoContext": "Plage d’Unawatuna",
+    "danger": 1,
+    "sky": "#dff5f1",
+    "sky2": "#a6e0d8",
+    "sea": "#19bbb0",
+    "sea2": "#0c7b81",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après le Routard, Wikivoyage et Wikipédia · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Unawatuna.jpg",
+      "src": "assets/spots/unawatuna.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Unawatuna.jpg",
+      "author": "Bernard Gagnon",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/83/Unawatuna.jpg/1280px-Unawatuna.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 874,
+      "thumb": "assets/spots/thumbs/unawatuna.webp"
+    }
+  },
+  {
+    "id": "kovalam",
+    "name": "Lighthouse Beach — Kovalam",
+    "loc": "Kerala, Inde",
+    "country": "Inde",
+    "world": "as",
+    "coords": {
+      "lat": 8.3853,
+      "lon": 76.979
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade",
+      "surf",
+      "bodyboard"
+    ],
+    "level": "variable",
+    "desc": "La plus grande et la plus animée des trois plages de Kovalam, au sud, près du phare de Vizhinjam. Le Routard note que des écoles proposent des initiations au surf et au bodyboard, et que les baies aux eaux calmes se prêtent à la baignade. Selon Wikivoyage, les eaux peu profondes et les petites vagues attirent beaucoup de voyageurs occidentaux.",
+    "dangers": [
+      [
+        "🌀",
+        "Les courants peuvent être dangereux à Kovalam (Routard)."
+      ],
+      [
+        "👥",
+        "Lighthouse Beach est la plage la plus populaire de Kovalam : prévois du monde (Routard)."
+      ],
+      [
+        "🌧️",
+        "La mousson, de juin à septembre, limite certaines activités nautiques : la période idéale va de septembre à mars (Routard)."
+      ]
+    ],
+    "tip": "Le surf et le bodyboard dépendent beaucoup de l’état de la mer et de la saison : demande aux écoles locales avant de te lancer. Pour plus de calme, le Routard préfère Eve’s Beach et Ashok Beach.",
+    "photoContext": "Lighthouse Beach, Kovalam",
+    "danger": 1,
+    "sky": "#dff5f1",
+    "sky2": "#a6e0d8",
+    "sea": "#19bbb0",
+    "sea2": "#0c7b81",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après le Routard, Wikipédia et Wikivoyage · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Kovalam beach trivandrum kerala.jpg",
+      "src": "assets/spots/kovalam.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Kovalam_beach_trivandrum_kerala.jpg",
+      "author": "Georgeumartin",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3c/Kovalam_beach_trivandrum_kerala.jpg/1280px-Kovalam_beach_trivandrum_kerala.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 640,
+      "thumb": "assets/spots/thumbs/kovalam.webp"
+    }
+  },
+  {
+    "id": "agonda",
+    "name": "Plage d’Agonda",
+    "loc": "Goa, Inde",
+    "country": "Inde",
+    "world": "as",
+    "coords": {
+      "lat": 15.0423,
+      "lon": 73.9865
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Plage publique d’environ 3 km dans le sud de Goa, au cœur du village d’Agonda. Le Routard la dit plus calme que sa voisine Palolem. Une colline au sud domine la plage et, au nord, Cola Beach garde un lagon. Des sorties en bateau permettent de voir des dauphins au large.",
+    "dangers": [
+      [
+        "🌀",
+        "La plage est idéale pour se baigner, mais reste prudent face aux courants marins (Routard)."
+      ],
+      [
+        "🐢",
+        "Les tortues olivâtres sont protégées : des zones sont aménagées pour protéger leurs nids (Routard)."
+      ]
+    ],
+    "tip": "Reste en dehors des zones aménagées pour protéger les nids de tortues olivâtres, qui pondent surtout d’octobre à avril (Routard).",
+    "photoContext": "Plage d’Agonda, Goa",
+    "danger": 1,
+    "sky": "#dff5f1",
+    "sky2": "#a6e0d8",
+    "sea": "#19bbb0",
+    "sea2": "#0c7b81",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après le Routard et Wikipédia · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Sunset at Agonda Beach.jpg",
+      "src": "assets/spots/agonda.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Sunset_at_Agonda_Beach.jpg",
+      "author": "Mahabalaindia",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7d/Sunset_at_Agonda_Beach.jpg/1280px-Sunset_at_Agonda_Beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 823,
+      "thumb": "assets/spots/thumbs/agonda.webp"
+    }
+  },
+  {
+    "id": "kosurin",
+    "name": "Mu Ko Surin — Ko Surin Nuea",
+    "loc": "Phang Nga, Thaïlande",
+    "country": "Thaïlande",
+    "world": "as",
+    "coords": {
+      "lat": 9.4349,
+      "lon": 97.8605
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "plongee"
+    ],
+    "level": "variable",
+    "desc": "Archipel de granit de la mer d’Andaman, à 55 km de la côte thaïlandaise, protégé par le parc national de Mu Ko Surin. Wikivoyage parle de plages de carte postale et d’un excellent snorkeling, l’activité principale des visiteurs, devant la plongée. Selon Wikipédia, le parc compte plus de 260 espèces de poissons de récif et 68 espèces de coraux. Le camping de Mai Ngam est sur Ko Surin Nuea.",
+    "dangers": [
+      [
+        "⛈️",
+        "Le parc n’ouvre qu’en saison sèche, en général du 15 octobre au 15 mai (Wikipédia), et peut fermer plus tôt selon la météo. Wikivoyage donne le 16 novembre : vérifie avant de partir."
+      ],
+      [
+        "🚤",
+        "Les sites de plongée ne se rejoignent qu’en bateau, et la plongée est interdite dans certaines zones du parc (Wikipédia)."
+      ],
+      [
+        "🚫",
+        "Presque toutes les terres sont interdites aux visiteurs, sauf le village moken et le camping (Wikipédia)."
+      ]
+    ],
+    "tip": "Les îles se rejoignent en bateau rapide depuis Khao Lak ou Khura Buri, ou en croisière de plusieurs jours. Tu paies le droit d’entrée du parc au centre d’accueil de Khura Buri ou au quartier général, sur Ko Surin Nuea (Wikipédia).",
+    "photoContext": "Plage de Mai Ngam, Ko Surin Nuea",
+    "danger": 1,
+    "sky": "#dff5f1",
+    "sky2": "#a6e0d8",
+    "sea": "#19bbb0",
+    "sea2": "#0c7b81",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia et Wikivoyage · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Mai Ngam Beach.jpg",
+      "src": "assets/spots/kosurin.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Mai_Ngam_Beach.jpg",
+      "author": "The Cosmonaut",
+      "license": "CC BY-SA 2.5 ca",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.5/ca/deed.en",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/33/Mai_Ngam_Beach.jpg/1280px-Mai_Ngam_Beach.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 680,
+      "thumb": "assets/spots/thumbs/kosurin.webp"
+    }
+  },
+  {
+    "id": "payar",
+    "name": "Parc marin de Pulau Payar — Langkawi",
+    "loc": "Kedah, Malaisie",
+    "country": "Malaisie",
+    "world": "as",
+    "coords": {
+      "lat": 6.0626,
+      "lon": 100.0401
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "plongee"
+    ],
+    "level": "variable",
+    "desc": "Parc marin autour de l’île de Payar, à 35 km au sud de Langkawi, accessible uniquement par la mer. Wikipédia décrit des eaux abritées, idéales pour le snorkeling, la plongée et la baignade, et un site de plongée, le « Coral Garden », couvert de coraux mous multicolores. Selon le Routard, on croise souvent de jeunes requins à pointe noire près des pontons, dans les eaux peu profondes.",
+    "dangers": [
+      [
+        "🚫",
+        "Le parc est fermé aux visiteurs les mardis et mercredis, et chaque année de début mars à fin mai (Routard)."
+      ],
+      [
+        "👥",
+        "Le nombre de visiteurs est limité chaque semaine : renseigne-toi auprès des opérateurs agréés (Routard)."
+      ],
+      [
+        "🪸",
+        "Les coraux ont blanchi en 2010 et 2016 : des zones touchées ont été fermées pour les laisser se refaire (Wikipédia, Routard)."
+      ]
+    ],
+    "tip": "Passe par un opérateur agréé : le parc n’autorise que ceux qui sont enregistrés. Les bateaux partent de Kuah et la traversée dure environ une heure (Routard).",
+    "photoContext": "Pulau Payar, Langkawi",
+    "danger": 1,
+    "sky": "#dff5f1",
+    "sky2": "#a6e0d8",
+    "sea": "#19bbb0",
+    "sea2": "#0c7b81",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après le Routard et Wikipédia · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Malaysia Pulau Payar.JPG",
+      "src": "assets/spots/payar.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Malaysia_Pulau_Payar.JPG",
+      "author": "Shmunmun (Shahnoor Habib Munmun)",
+      "license": "Public domain",
+      "download": "https://upload.wikimedia.org/wikipedia/commons/f/f8/Malaysia_Pulau_Payar.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/payar.webp"
+    }
+  },
+  {
+    "id": "alona",
+    "name": "Alona Beach — Panglao",
+    "loc": "Bohol, Philippines",
+    "country": "Philippines",
+    "world": "as",
+    "coords": {
+      "lat": 9.5484,
+      "lon": 123.7734
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "plongee",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Plage de sable blanc d’environ un kilomètre, au sud-ouest de l’île de Panglao, entre des falaises rocheuses (Wikipédia). Le Routard en fait le cœur touristique de l’île, avec des restaurants et des centres de plongée. Wikipédia la place près d’un récif de corail, réputé pour le snorkeling et surtout la plongée : tortues, bancs de poissons et corail noir.",
+    "dangers": [
+      [
+        "🌀",
+        "Le courant sous l’eau peut être assez fort par moments et rendre l’eau trouble (Wikipédia)."
+      ],
+      [
+        "🌪️",
+        "Décembre peut amener un typhon : Rai (Odette) a frappé les Philippines en décembre 2021, avec le plus de morts à Bohol (Wikipédia)."
+      ],
+      [
+        "🪸",
+        "L’accès à la réserve marine est limité chaque jour (Wikipédia)."
+      ]
+    ],
+    "tip": "Tu peux explorer les fonds depuis la plage. Napaling Reef, sur Panglao, est connu pour son banc de sardines, même avec un simple équipement de snorkeling (Routard).",
+    "photoContext": "Alona Beach, Panglao",
+    "danger": 1,
+    "sky": "#dff5f1",
+    "sky2": "#a6e0d8",
+    "sea": "#19bbb0",
+    "sea2": "#0c7b81",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia et le Routard · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Alona Beach 01.jpg",
+      "src": "assets/spots/alona.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Alona_Beach_01.jpg",
+      "author": "Roel Balingit",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/20/Alona_Beach_01.jpg/1280px-Alona_Beach_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 853,
+      "thumb": "assets/spots/thumbs/alona.webp"
+    }
+  },
+  {
+    "id": "wadishab",
+    "name": "Wadi Shab — Tiwi",
+    "loc": "Tiwi, Oman",
+    "country": "Oman",
+    "world": "as",
+    "coords": {
+      "lat": 22.8397,
+      "lon": 59.2467
+    },
+    "coordinatePrecision": "inland-sector",
+    "sports": [
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Canyon du Hajar oriental qui débouche dans le golfe d’Oman, à environ une heure de Mascate. Selon le Routard, des piscines d’eau naturelles forment un canyon au milieu des rochers, avec des palmiers au bord de l’eau. Une grotte se cache derrière une cascade, accessible seulement à la nage. Wikipédia précise qu’on peut franchir l’embouchure du wadi par la route ou en barque.",
+    "dangers": [
+      [
+        "🌧️",
+        "Évite d’y aller après de fortes pluies : le risque d’inondation peut être élevé (Routard)."
+      ],
+      [
+        "🥾",
+        "Il faut marcher 45 minutes à 1 heure, sur des sentiers rocheux et des zones humides, avant d’atteindre les piscines (Routard)."
+      ],
+      [
+        "🕳️",
+        "La grotte derrière la cascade n’est accessible qu’en nageant (Routard)."
+      ]
+    ],
+    "tip": "Mets des chaussures de marche solides et des sandales aquatiques, et pars tôt le matin pour éviter la chaleur de midi (Routard).",
+    "photoContext": "Wadi Shab, Oman",
+    "danger": 1,
+    "sky": "#dff5f1",
+    "sky2": "#a6e0d8",
+    "sea": "#19bbb0",
+    "sea2": "#0c7b81",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "inland",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après le Routard et Wikipédia · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Wadi Shab, Oman.jpg",
+      "src": "assets/spots/wadishab.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Wadi_Shab,_Oman.jpg",
+      "author": "Uhooep",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c2/Wadi_Shab%2C_Oman.jpg/1280px-Wadi_Shab%2C_Oman.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 853,
+      "thumb": "assets/spots/thumbs/wadishab.webp"
+    }
+  },
+  {
+    "id": "maafushi",
+    "name": "Maafushi — atoll de Malé Sud",
+    "loc": "Atoll de Malé Sud, Maldives",
+    "country": "Maldives",
+    "world": "as",
+    "coords": {
+      "lat": 3.9412,
+      "lon": 73.49
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Île habitée de l’atoll de Malé Sud, à environ 26 km au sud de Malé (Wikipédia). Le Routard la décrit comme la plus grande et la plus développée des îles habitées de l’atoll, avec des hébergements, des restaurants, des boutiques et des plages aménagées pour les visiteurs. Sur l’atoll, les récifs sont souvent accessibles depuis la plage des îles locales.",
+    "dangers": [
+      [
+        "🌀",
+        "Dans les passes de l’atoll, les courants sont parfois forts (Routard)."
+      ]
+    ],
+    "tip": "Pour les plus beaux jardins de corail, prends une excursion en bateau. Une sortie populaire mène à un banc de sable (Routard).",
+    "photoContext": "Plage de Maafushi",
+    "danger": 1,
+    "sky": "#dff5f1",
+    "sky2": "#a6e0d8",
+    "sea": "#19bbb0",
+    "sea2": "#0c7b81",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après le Routard et Wikipédia · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Kaafu Atoll, Maldives - panoramio (24).jpg",
+      "src": "assets/spots/maafushi.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Kaafu_Atoll,_Maldives_-_panoramio_(24).jpg",
+      "author": "goldpicasa",
+      "license": "CC BY 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/46/Kaafu_Atoll%2C_Maldives_-_panoramio_%2824%29.jpg/1280px-Kaafu_Atoll%2C_Maldives_-_panoramio_%2824%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 849,
+      "thumb": "assets/spots/thumbs/maafushi.webp"
+    }
+  },
+  {
+    "id": "paindesucre",
+    "name": "Pain de Sucre — Terre-de-Haut (Les Saintes)",
+    "loc": "Terre-de-Haut, Les Saintes, Guadeloupe",
+    "country": "Guadeloupe",
+    "world": "na",
+    "coords": {
+      "lat": 15.8635,
+      "lon": -61.5988
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Petite crique de sable au pied de la colline volcanique du Pain de Sucre, à Terre-de-Haut. Le Comité du tourisme des Îles de Guadeloupe parle d’eaux cristallines et de cocotiers, et range le snorkeling ici parmi les meilleurs des Saintes : poissons tropicaux, coraux et étoiles de mer. On y va à pied en 30 à 45 minutes depuis le bourg, ou en excursion en bateau. Décembre et janvier tombent dans la saison sèche (de décembre à mai), avec une mer à 27 °C.",
+    "dangers": [
+      [
+        "🛟",
+        "Plage non surveillée : sois prudent, surtout avec de jeunes enfants ou si tu t’éloignes du bord."
+      ],
+      [
+        "🥾",
+        "La fin du chemin est une descente caillouteuse : mets des chaussures fermées."
+      ],
+      [
+        "🪸",
+        "Observe coraux et poissons sans les toucher, avec une crème solaire respectueuse des récifs."
+      ],
+      [
+        "🌿",
+        "Des sargasses s’échouent par moments en Guadeloupe : en mai 2026, la préfecture a lancé une veille sanitaire, avec une pré-alerte à Grande-Anse, sur Terre-de-Bas. Renseigne-toi avant de partir."
+      ]
+    ],
+    "tip": "Mets des chaussures fermées pour la descente caillouteuse, reste près du bord avec des enfants et observe coraux et poissons sans les toucher.",
+    "photoContext": "Plage du Pain de Sucre, Terre-de-Haut",
+    "danger": 1,
+    "sky": "#ffe0cc",
+    "sky2": "#f5a58d",
+    "sea": "#2f8dc6",
+    "sea2": "#175f8d",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après le Comité du tourisme des Îles de Guadeloupe et L’Info Durable · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Pain de sucre - Saintes.jpg",
+      "src": "assets/spots/paindesucre.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Pain_de_sucre_-_Saintes.jpg",
+      "author": "Blejuez",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://upload.wikimedia.org/wikipedia/commons/0/06/Pain_de_sucre_-_Saintes.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail_unscaled",
+      "width": 1024,
+      "height": 683,
+      "thumb": "assets/spots/thumbs/paindesucre.webp"
+    }
+  },
+  {
+    "id": "caravelle",
+    "name": "Plage de la Caravelle — Sainte-Anne",
+    "loc": "Sainte-Anne, Grande-Terre, Guadeloupe",
+    "country": "Guadeloupe",
+    "world": "na",
+    "coords": {
+      "lat": 16.2182,
+      "lon": -61.3945
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "windsurf",
+      "kitesurf",
+      "paddle",
+      "snorkeling",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Plage de sable blanc à l’entrée de Sainte-Anne, entre Le Gosier et Saint-François. Une barrière de corail la protège : l’eau est calme et peu profonde, et les cocotiers donnent de l’ombre. Le Comité du tourisme des Îles de Guadeloupe y annonce des conditions idéales pour la planche à voile, le kitesurf et le paddle, avec du matériel à louer sur place, et un lagon à explorer au masque et au tuba (poissons-perroquets, poissons-chirurgiens, parfois une tortue). Décembre et janvier tombent dans la saison sèche (de décembre à mai), avec une mer à 27 °C.",
+    "dangers": [
+      [
+        "🪁",
+        "Planche à voile, kitesurf, paddle et jet-ski se pratiquent dans le même lagon : garde tes distances."
+      ],
+      [
+        "🌿",
+        "Des sargasses s’échouent par moments en Guadeloupe : en mai 2026, la préfecture a lancé une veille sanitaire, avec une pré-alerte au lagon de Saint-François, plus à l’est. Renseigne-toi avant de partir."
+      ]
+    ],
+    "tip": "Le matériel de planche à voile, de kitesurf et de paddle se loue sur place : demande conseil avant de partir au large.",
+    "photoContext": "Plage de la Caravelle, Sainte-Anne",
+    "danger": 1,
+    "sky": "#ffe0cc",
+    "sky2": "#f5a58d",
+    "sea": "#2f8dc6",
+    "sea2": "#175f8d",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après le Comité du tourisme des Îles de Guadeloupe et L’Info Durable · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Plage de la Caravelle St-Anne (6).jpg",
+      "src": "assets/spots/caravelle.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Plage_de_la_Caravelle_St-Anne_(6).jpg",
+      "author": "Tournasol7",
+      "license": "CC BY 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/f2/Plage_de_la_Caravelle_St-Anne_%286%29.jpg/1280px-Plage_de_la_Caravelle_St-Anne_%286%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 840,
+      "thumb": "assets/spots/thumbs/caravelle.webp"
+    }
+  },
+  {
+    "id": "feuillere",
+    "name": "Plage de la Feuillère — Marie-Galante",
+    "loc": "Capesterre, Marie-Galante, Guadeloupe",
+    "country": "Guadeloupe",
+    "world": "na",
+    "coords": {
+      "lat": 15.8884,
+      "lon": -61.223
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "kitesurf",
+      "snorkeling",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Plage de sable fin et d’eau turquoise à Capesterre, à Marie-Galante. Selon le Comité du tourisme des Îles de Guadeloupe, les alizés constants en font un spot de kitesurf réputé, et les herbiers marins abritent poissons colorés et tortues, à découvrir au masque et au tuba. On y arrive en voiture depuis le bourg, et un parking gratuit borde la plage. Décembre et janvier tombent dans la saison sèche (de décembre à mai), avec une mer à 27 °C.",
+    "dangers": [
+      [
+        "🛟",
+        "Plage non surveillée : reste vigilant, surtout avec des enfants ou des nageurs moins expérimentés."
+      ],
+      [
+        "🪁",
+        "Spot de kitesurf par alizés constants : garde tes distances avec les ailes."
+      ],
+      [
+        "🌿",
+        "Les herbiers marins sont fragiles : ne les piétine pas."
+      ],
+      [
+        "🌿",
+        "Des sargasses s’échouent par moments en Guadeloupe : en mai 2026, la préfecture a lancé une veille sanitaire. Renseigne-toi avant de partir."
+      ]
+    ],
+    "tip": "Baigne-toi près du rivage, surtout par mer calme, et regarde les herbiers depuis la surface plutôt que de les piétiner.",
+    "photoContext": "Plage de la Feuillère, Capesterre-de-Marie-Galante",
+    "danger": 1,
+    "sky": "#ffe0cc",
+    "sky2": "#f5a58d",
+    "sea": "#2f8dc6",
+    "sea2": "#175f8d",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après le Comité du tourisme des Îles de Guadeloupe et L’Info Durable · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Plage Feuillere.jpg",
+      "src": "assets/spots/feuillere.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Plage_Feuillere.jpg",
+      "author": "Smiley (auteur présumé d’après les droits d’auteur indiqués sur Commons)",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "http://creativecommons.org/licenses/by-sa/3.0/",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/99/Plage_Feuillere.jpg/1280px-Plage_Feuillere.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 853,
+      "thumb": "assets/spots/thumbs/feuillere.webp"
+    }
+  },
+  {
+    "id": "souffleur",
+    "name": "Plage du Souffleur — Port-Louis",
+    "loc": "Port-Louis, Grande-Terre, Guadeloupe",
+    "country": "Guadeloupe",
+    "world": "na",
+    "coords": {
+      "lat": 16.4286,
+      "lon": -61.5357
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "surf",
+      "snorkeling",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Plage de sable doré à Port-Louis, sur la côte nord-ouest de Grande-Terre, bordée de cocotiers et de raisiniers. Selon le Comité du tourisme des Îles de Guadeloupe, l’eau est calme et limpide, avec du snorkeling près des zones rocheuses (poissons tropicaux, oursins, coraux). Après une courte marche, un spot de surf prisé des surfeurs t’attend. Décembre et janvier tombent dans la saison sèche (de décembre à mai), avec une mer à 27 °C.",
+    "dangers": [
+      [
+        "🛟",
+        "La plage n’est pas officiellement surveillée : sois vigilant, surtout hors des zones fréquentées ou par temps agité."
+      ],
+      [
+        "🪨",
+        "Le snorkeling se fait près des zones rocheuses et le spot de surf est à une courte marche : regarde la mer avant d’entrer."
+      ],
+      [
+        "🌿",
+        "Des sargasses s’échouent par moments en Guadeloupe : en mai 2026, la préfecture a lancé une veille sanitaire. Renseigne-toi avant de partir."
+      ]
+    ],
+    "tip": "Baigne-toi dans les zones fréquentées, surtout par temps agité, et prends une crème solaire respectueuse des récifs.",
+    "photoContext": "Plage du Souffleur, Port-Louis",
+    "danger": 1,
+    "sky": "#ffe0cc",
+    "sky2": "#f5a58d",
+    "sea": "#2f8dc6",
+    "sea2": "#175f8d",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après le Comité du tourisme des Îles de Guadeloupe et L’Info Durable · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Port Louis beach (guadeloupe).jpg",
+      "src": "assets/spots/souffleur.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Port_Louis_beach_(guadeloupe).jpg",
+      "author": "DUKEOFGUADELOUPE971",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/cd/Port_Louis_beach_%28guadeloupe%29.jpg/1280px-Port_Louis_beach_%28guadeloupe%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/souffleur.webp"
+    }
+  },
+  {
+    "id": "fondsblancs",
+    "name": "Baignoire de Joséphine — Le François",
+    "loc": "Baie du François, Martinique",
+    "country": "Martinique",
+    "world": "na",
+    "coords": {
+      "lat": 14.6285,
+      "lon": -60.8495
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade",
+      "snorkeling"
+    ],
+    "level": "variable",
+    "desc": "Haut-fond de sable blanc dans la baie du François, entre l’îlet Oscar et l’îlet Thierry. Martinique Tourisme en fait le Fond Blanc le plus célèbre de l’île : l’eau est claire, chaude et très peu profonde, et on a pied en pleine mer. On y va en bateau ou en catamaran, pour se baigner ou nager avec masque et tuba. La saison sèche court de décembre à mai environ.",
+    "dangers": [
+      [
+        "🚤",
+        "On ne rejoint les Fonds Blancs qu’en bateau ou en catamaran."
+      ],
+      [
+        "🪸",
+        "Les Fonds Blancs sont fragiles : suis les consignes des guides pour les préserver."
+      ],
+      [
+        "☀️",
+        "Le soleil tape fort sur l’eau : lunettes, chapeau et crème solaire biodégradable."
+      ],
+      [
+        "🌿",
+        "Les sargasses touchent la façade atlantique de la Martinique : en 2025, les premières arrivées datent de décembre 2024, selon Météo-France Martinique. Regarde son bulletin avant de partir."
+      ]
+    ],
+    "tip": "Prends des chaussures d’eau pour marcher sur les fonds et une crème solaire biodégradable, et suis les consignes des guides.",
+    "photoContext": "Baignoire de Joséphine, baie du François",
+    "danger": 1,
+    "sky": "#ffe0cc",
+    "sky2": "#f5a58d",
+    "sea": "#2f8dc6",
+    "sea2": "#175f8d",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Martinique Tourisme et Météo-France Martinique · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Baignoire de Josephine.jpg",
+      "src": "assets/spots/fondsblancs.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Baignoire_de_Josephine.jpg",
+      "author": "Mickaël BRUNO",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c1/Baignoire_de_Josephine.jpg/1280px-Baignoire_de_Josephine.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 853,
+      "thumb": "assets/spots/thumbs/fondsblancs.webp"
+    }
+  },
+  {
+    "id": "diamant",
+    "name": "Rocher du Diamant — Le Diamant",
+    "loc": "Le Diamant, Martinique",
+    "country": "Martinique",
+    "world": "na",
+    "coords": {
+      "lat": 14.4432,
+      "lon": -61.0391
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "plongee"
+    ],
+    "level": "variable",
+    "desc": "Îlot inhabité de 175 m de haut, à environ 2 km de la côte, face à la commune du Diamant. Selon Figaro Nautisme, c’est l’un des sites de plongée emblématiques de la Martinique : tombants, platier, arche et faille sous-marine, éponges, gorgones, coraux, et des tortues régulièrement. Les plongées se font dans une vingtaine de mètres, mais les parois descendent bien plus bas, jusqu’à 40 m, voire 60 m. La saison sèche court de décembre à mai environ, avec une mer calme côté Caraïbes.",
+    "dangers": [
+      [
+        "🌀",
+        "Le rocher est soumis aux courants."
+      ],
+      [
+        "🚫",
+        "Débarquement et mouillage interdits en dehors des bouées réservées."
+      ],
+      [
+        "🧭",
+        "Les parois plongent jusqu’à 40 m, voire 60 m selon la face : reste dans les limites de ta certification."
+      ]
+    ],
+    "tip": "Renseigne-toi sur le courant avant la sortie et choisis une plongée adaptée à ton brevet.",
+    "photoContext": "Rocher du Diamant, Le Diamant",
+    "danger": 1,
+    "sky": "#ffe0cc",
+    "sky2": "#f5a58d",
+    "sea": "#2f8dc6",
+    "sea2": "#175f8d",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Figaro Nautisme, Wikipédia et Martinique Tourisme · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Diamond Rock aerial.jpg",
+      "src": "assets/spots/diamant.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Diamond_Rock_aerial.jpg",
+      "author": "Mickaël BRUNO",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5f/Diamond_Rock_aerial.jpg/1280px-Diamond_Rock_aerial.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 719,
+      "thumb": "assets/spots/thumbs/diamant.webp"
+    }
+  },
+  {
+    "id": "colombier",
+    "name": "Anse de Colombier — Saint-Barthélemy",
+    "loc": "Colombier, Saint-Barthélemy",
+    "country": "Saint-Barthélemy",
+    "world": "na",
+    "coords": {
+      "lat": 17.9242,
+      "lon": -62.8709
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Longue plage de sable blanc sous le vent, à l’extrême nord-ouest de Saint-Barth, dans la réserve naturelle marine. C’est la dernière plage de l’île non desservie par une route : on y vient à pied ou en bateau. Wikipédia décrit une baie aux eaux calmes, avec des formations rocheuses et un herbier visité par des tortues vertes, idéale pour le snorkeling. La saison sèche et douce va de décembre à mai, et la mer peut monter à 29 °C, selon Saint-Barth Tourisme.",
+    "dangers": [
+      [
+        "🥾",
+        "Le sentier facile part de Petite Anse (environ 20 minutes) ; celui qui part du sommet du Colombier n’est pas recommandé aux personnes âgées et aux jeunes enfants."
+      ],
+      [
+        "⛵",
+        "Certains jours, surtout le dimanche, le mouillage est plein de bateaux : fais attention aux embarcations."
+      ],
+      [
+        "🐢",
+        "Plage dans la réserve naturelle marine : respecte les tortues et les herbiers."
+      ]
+    ],
+    "tip": "Si tu viens à pied, emporte de l’eau, un chapeau et de bonnes chaussures : il n’y a ni installation ni beaucoup d’ombre sur la plage.",
+    "photoContext": "Anse de Colombier, Saint-Barthélemy",
+    "danger": 1,
+    "sky": "#ffe0cc",
+    "sky2": "#f5a58d",
+    "sea": "#2f8dc6",
+    "sea2": "#175f8d",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia et Saint-Barth Tourisme · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Anse Colombier anchorage, St. Barths - panoramio.jpg",
+      "src": "assets/spots/colombier.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Anse_Colombier_anchorage,_St._Barths_-_panoramio.jpg",
+      "author": "SV Zanshin",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c8/Anse_Colombier_anchorage%2C_St._Barths_-_panoramio.jpg/1280px-Anse_Colombier_anchorage%2C_St._Barths_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 848,
+      "thumb": "assets/spots/thumbs/colombier.webp"
+    }
+  },
+  {
+    "id": "tintamarre",
+    "name": "Île Tintamarre — Saint-Martin",
+    "loc": "Île Tintamarre, Saint-Martin",
+    "country": "Saint-Martin",
+    "world": "na",
+    "coords": {
+      "lat": 18.1189,
+      "lon": -62.9804
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Île inhabitée à environ 3 km au nord-est de Saint-Martin, dans la réserve naturelle nationale. On mouille au sud-ouest, devant la Baie Blanche et sa plage de sable blanc. La réserve décrit un très joli site de snorkeling le long de la pointe nord, à quelques coups de palmes, et l’office de tourisme parle d’une eau claire où l’on croise parfois une tortue. La saison sèche, de décembre à avril, est la plus agréable : soleil presque constant et très peu de pluie.",
+    "dangers": [
+      [
+        "⚓",
+        "Réserve naturelle : 17 bouées jaunes sont installées, et un bateau de moins de 33 pieds peut jeter l’ancre seulement sur un fond de sable."
+      ],
+      [
+        "🐦",
+        "Seul lieu de nidification du noddi brun, une espèce en danger : respecte la tranquillité de la zone."
+      ],
+      [
+        "🚫",
+        "Dans la réserve, prendre de l’argile et mouiller à North Curve Bay sont interdits."
+      ],
+      [
+        "💨",
+        "Île très exposée aux éléments : soleil fort et vents puissants, selon l’office de tourisme."
+      ],
+      [
+        "🥾",
+        "Mets au moins des tongs pour marcher derrière la plage."
+      ]
+    ],
+    "tip": "En bateau, amarre-toi à l’une des bouées jaunes de la réserve ; si tu mouilles, reste sur le sable.",
+    "photoContext": "Plage de l’île Tintamarre, Saint-Martin",
+    "danger": 1,
+    "sky": "#ffe0cc",
+    "sky2": "#f5a58d",
+    "sea": "#2f8dc6",
+    "sea2": "#175f8d",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après la Réserve naturelle de Saint-Martin, l’office de tourisme de Saint-Martin et Wikipédia · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Tintamarre Island.jpg",
+      "src": "assets/spots/tintamarre.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Tintamarre_Island.jpg",
+      "author": "maggieandcharles",
+      "license": "CC BY-SA 2.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/2.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bf/Tintamarre_Island.jpg/1280px-Tintamarre_Island.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 875,
+      "thumb": "assets/spots/thumbs/tintamarre.webp"
+    }
+  },
+  {
+    "id": "creolerock",
+    "name": "Rocher Créole — Grand-Case",
+    "loc": "Grand-Case, Saint-Martin",
+    "country": "Saint-Martin",
+    "world": "na",
+    "coords": {
+      "lat": 18.1179,
+      "lon": -63.0561
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "plongee",
+      "snorkeling"
+    ],
+    "level": "variable",
+    "desc": "Îlot rocheux de Saint-Martin, au large de Grand-Case, entièrement protégé dans la réserve naturelle nationale. La réserve le range parmi les meilleurs sites de plongée du côté français, pour les débutants comme pour les confirmés : l’eau y est peu profonde, idéale pour apprendre à plonger, avec ou sans bouteille. Des fous bruns et des phaétons nichent sur le rocher. La saison sèche, de décembre à avril, est la plus agréable : soleil presque constant et très peu de pluie.",
+    "dangers": [
+      [
+        "⚓",
+        "Mouillage sur les bouées de la réserve seulement : prends la bonne pour ne pas abîmer les mouillages."
+      ],
+      [
+        "🚫",
+        "Moteurs interdits à moins de 30 m de la plage ; débarquer sur la plage et escalader le rocher aussi."
+      ],
+      [
+        "🐦",
+        "Fous bruns et phaétons nichent sur le rocher : ne le grimpe pas."
+      ]
+    ],
+    "tip": "Amarre-toi sur la bonne bouée : jaune pour les bateaux de plaisance, blanche « diving only » pour les clubs de plongée, blanche « dinghy only » pour les annexes.",
+    "photoContext": "Rocher Créole, Saint-Martin",
+    "danger": 1,
+    "sky": "#ffe0cc",
+    "sky2": "#f5a58d",
+    "sea": "#2f8dc6",
+    "sea2": "#175f8d",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après la Réserve naturelle de Saint-Martin, Wikipédia et l’office de tourisme de Saint-Martin · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Rocher Creole.jpg",
+      "src": "assets/spots/creolerock.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Rocher_Creole.jpg",
+      "author": "Florian-Zet",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/d/d7/Rocher_Creole.jpg/1280px-Rocher_Creole.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 757,
+      "thumb": "assets/spots/thumbs/creolerock.webp"
+    }
+  },
+  {
+    "id": "lasgatas",
+    "name": "Playa Las Gatas — Zihuatanejo",
+    "loc": "Zihuatanejo, Guerrero, Mexique",
+    "country": "Mexique",
+    "world": "na",
+    "coords": {
+      "lat": 17.6209,
+      "lon": -101.5515
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "snorkeling",
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Plage de l’autre côté de la baie de Zihuatanejo, atteinte en bateau depuis le ponton de la ville. Un récif de corail et une barrière de pierre construite par l’homme calment les vagues : Wikipédia en fait la plage de snorkeling la plus populaire de Zihuatanejo, avec des poissons tropicaux le long du brise-lames et beaucoup de coraux. Lonely Planet ajoute que les enfants peuvent s’y baigner. Selon WeatherSpark, la saison des pluies va de début juin à mi-octobre, et l’eau est autour de 29 °C en décembre et de 28 °C en janvier.",
+    "dangers": [
+      [
+        "🦔",
+        "Oursins dans l’eau, signale Lonely Planet."
+      ],
+      [
+        "🌊",
+        "Plage à l’entrée de la baie, ouverte aux brises de l’océan : les vagues y sont plus fortes, mais moins que sur les plages face au large, grâce au récif et à la barrière de pierre."
+      ],
+      [
+        "🚤",
+        "Pas de route goudronnée : on y vient en bateau, ou par un petit sentier rocheux depuis Playa La Ropa."
+      ],
+      [
+        "👥",
+        "Plage encombrée de transats et de restaurants, note Lonely Planet."
+      ]
+    ],
+    "tip": "Prends un bateau au ponton de Zihuatanejo : le matériel de snorkeling se loue dans les cabanes de la plage.",
+    "photoContext": "Playa Las Gatas, Zihuatanejo",
+    "danger": 1,
+    "sky": "#ffe0cc",
+    "sky2": "#f5a58d",
+    "sea": "#2f8dc6",
+    "sea2": "#175f8d",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Lonely Planet, Wikipédia et WeatherSpark · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Playa Las Gatas - panoramio.jpg",
+      "src": "assets/spots/lasgatas.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Playa_Las_Gatas_-_panoramio.jpg",
+      "author": "jc_castaneda",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ee/Playa_Las_Gatas_-_panoramio.jpg/1280px-Playa_Las_Gatas_-_panoramio.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/lasgatas.webp"
+    }
+  },
+  {
+    "id": "carneiros",
+    "name": "Praia dos Carneiros — Tamandaré",
+    "loc": "Tamandaré, Pernambuco, Brésil",
+    "country": "Brésil",
+    "world": "sa",
+    "coords": {
+      "lat": -8.6967,
+      "lon": -35.0887
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade",
+      "snorkeling"
+    ],
+    "level": "variable",
+    "desc": "Plage de sable clair et de hauts cocotiers à Tamandaré, à environ 113 km de Recife. Selon Wikipédia, l’eau y est calme et chaude presque toute l’année : l’embouchure du rio Formoso et une grande barrière de récifs forment des piscines naturelles à marée basse. La petite chapelle São Benedito est considérée comme la carte postale du lieu. Meilleure période de septembre à février, et octobre à décembre sont les mois les plus ensoleillés.",
+    "dangers": [
+      [
+        "🪸",
+        "Ne marche pas sur les récifs : tu abîmes la faune fragile."
+      ],
+      [
+        "🚶",
+        "Par la terre, on passe par une propriété privée avec des restaurants à consommation minimale ; l’autre accès est le bateau, ou environ 7 km de marche sur le sable depuis Tamandaré."
+      ],
+      [
+        "🌧️",
+        "Les jours de pluie, le débit du fleuve augmente et l’eau de l’estuaire change de couleur et de température."
+      ]
+    ],
+    "tip": "Vise la marée basse pour les piscines naturelles, emporte masque et tuba, et ne marche pas sur les récifs.",
+    "photoContext": "Praia dos Carneiros, Tamandaré",
+    "danger": 1,
+    "sky": "#ffe8c6",
+    "sky2": "#f3b06f",
+    "sea": "#2091ba",
+    "sea2": "#0d5f81",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia (portugais) et 360 Meridianos · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "Praia dos Carneiros o Paraíso Brasileiro.jpg",
+      "src": "assets/spots/carneiros.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:Praia_dos_Carneiros_o_Para%C3%ADso_Brasileiro.jpg",
+      "author": "Wagner Friaça",
+      "license": "CC BY-SA 3.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/3.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/90/Praia_dos_Carneiros_o_Para%C3%ADso_Brasileiro.jpg/1280px-Praia_dos_Carneiros_o_Para%C3%ADso_Brasileiro.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 855,
+      "thumb": "assets/spots/thumbs/carneiros.webp"
+    }
+  },
+  {
+    "id": "saona",
+    "name": "Île Saona",
+    "loc": "La Altagracia, République dominicaine",
+    "country": "République dominicaine",
+    "world": "na",
+    "coords": {
+      "lat": 18.1556,
+      "lon": -68.6994
+    },
+    "coordinatePrecision": "coastal-sector",
+    "sports": [
+      "baignade"
+    ],
+    "level": "variable",
+    "desc": "Île de 110 km² à 2,4 km de la côte sud-est de la République dominicaine, dans le parc national Cotubanamá. Le ministère du Tourisme dominicain la dit connue pour ses plages, ses palmiers et ses piscines naturelles. Selon Wikipédia, elle est entourée de bancs de sable et de récifs coralliens, et les plages les plus ouvertes sont au sud et à l’ouest. Selon le ministère, le temps est plus sec de décembre à avril à Bayahibe, et décembre à début mars sont les mois les plus agréables du pays.",
+    "dangers": [
+      [
+        "🚤",
+        "L’île se rejoint en bateau, depuis Bayahibe."
+      ],
+      [
+        "🐢",
+        "Aire protégée et site de ponte des tortues marines le plus important du pays : respecte la faune et les consignes du parc."
+      ],
+      [
+        "👥",
+        "Plus d’un million de visiteurs par an, selon Wikipédia : attends-toi à du monde."
+      ]
+    ],
+    "tip": "Passe par une excursion en bateau depuis Bayahibe, le principal point d’accès : les départs ont lieu tous les jours.",
+    "photoContext": "Île Saona, République dominicaine",
+    "danger": 1,
+    "sky": "#ffe0cc",
+    "sky2": "#f5a58d",
+    "sea": "#2f8dc6",
+    "sea2": "#175f8d",
+    "wind": "—",
+    "swell": "—",
+    "temp": "—",
+    "tide": "—",
+    "waterType": "sea",
+    "source": {
+      "status": "unverified",
+      "label": "Fiche Ocean Buddy · décembre 2026 · d’après Wikipédia et le ministère du Tourisme de la République dominicaine · à vérifier localement",
+      "url": null,
+      "reviewed": null
+    },
+    "reviewed": null,
+    "editorialStatus": "unverified",
+    "edition": "catalogue-2026-12",
+    "catalogNew": true,
+    "photo": {
+      "file": "2023 - Saona Island - 15.jpg",
+      "src": "assets/spots/saona.webp",
+      "source": "https://commons.wikimedia.org/wiki/File:2023_-_Saona_Island_-_15.jpg",
+      "author": "Oleg Yunakov",
+      "license": "CC BY-SA 4.0",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "download": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/2023_-_Saona_Island_-_15.jpg/1280px-2023_-_Saona_Island_-_15.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+      "width": 1280,
+      "height": 960,
+      "thumb": "assets/spots/thumbs/saona.webp"
     }
   }
 ]

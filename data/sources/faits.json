@@ -6170,6 +6170,66 @@
      "supports": "La préfecture des Landes rappelle que les plages des Landes sont marquées par des courants marins qui peuvent être dangereux (baïnes)."
     }
    ]
+  },
+  {
+   "spot": "samadai",
+   "path": "tip",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Réserve une sortie à la journée : l’accès est réglementé. Mets le gilet flottant obligatoire et ne cherche jamais à toucher ni à poursuivre les dauphins.",
+   "status": "sourcé",
+   "checked": "2026-11-04",
+   "sources": [
+    {
+     "url": "https://www.snorkeling-report.com/spot/snorkeling-shaab-samadai-dolphin-house/",
+     "publisher": "Snorkeling Report (guide de snorkeling)",
+     "title": "Snorkeling Shaab Samadai (Dolphin House), Marsa Alam, Egypt",
+     "consulted": "2026-11-04",
+     "quote": "Access to this site, declared as a National Park since 2004, is regulated. To get there, you will need to book a day boat trip that includes snorkeling a with dolphins activity.",
+     "supports": "Accès réglementé ; sortie à la journée à réserver."
+    },
+    {
+     "url": "https://www.snorkeling-report.com/spot/snorkeling-shaab-samadai-dolphin-house/",
+     "publisher": "Snorkeling Report (guide de snorkeling)",
+     "title": "Snorkeling Shaab Samadai (Dolphin House), Marsa Alam, Egypt",
+     "consulted": "2026-11-04",
+     "quote": "Wearing a floating vest, provided by your guide, is mandatory in the water.",
+     "supports": "Gilet flottant obligatoire dans l’eau."
+    },
+    {
+     "url": "https://www.snorkeling-report.com/spot/snorkeling-shaab-samadai-dolphin-house/",
+     "publisher": "Snorkeling Report (guide de snorkeling)",
+     "title": "Snorkeling Shaab Samadai (Dolphin House), Marsa Alam, Egypt",
+     "consulted": "2026-11-04",
+     "quote": "It is prohibited to try to interact with the dolphins, for example, to try to touch them or to chase them.",
+     "supports": "Interdit de toucher les dauphins ou de les poursuivre."
+    }
+   ],
+   "research": [
+    "noel-au-soleil-2026-11:samadai"
+   ]
+  },
+  {
+   "spot": "samadai",
+   "path": "dangers[1]",
+   "lang": "fr",
+   "file": "catalog",
+   "text": "Gilet flottant obligatoire dans l’eau : il empêche aussi de plonger en apnée (Snorkeling Report).",
+   "status": "sourcé",
+   "checked": "2026-11-04",
+   "sources": [
+    {
+     "url": "https://www.snorkeling-report.com/spot/snorkeling-shaab-samadai-dolphin-house/",
+     "publisher": "Snorkeling Report (guide de snorkeling)",
+     "title": "Snorkeling Shaab Samadai (Dolphin House), Marsa Alam, Egypt",
+     "consulted": "2026-11-04",
+     "quote": "The mandatory floating vest also prevents snorkelers from skindiving.",
+     "supports": "Le gilet flottant obligatoire empêche de plonger en apnée."
+    }
+   ],
+   "research": [
+    "noel-au-soleil-2026-11:samadai"
+   ]
   }
  ]
 }
