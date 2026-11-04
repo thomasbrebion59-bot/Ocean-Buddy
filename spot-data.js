@@ -252,12 +252,15 @@
   function renderTeaser(s, c) {
     const host = teaserSlot(false);
     if (!host) return;
-    if (!c) { host.hidden = true; return; }
+    const before = (text, lv) => { try { window.OceanBefore?.season(s, text, lv); } catch (e) {} };
+    if (!c) { host.hidden = true; before(null); return; }
     const act = curAct(s), y = M.year(c, act, s.level), b = M.best(y), now = new Date().getMonth();
-    if (!y.some(v => v != null)) { host.hidden = true; return; }
+    if (!y.some(v => v != null)) { host.hidden = true; before(null); return; }
     host.hidden = false;
     const sea = c.sea ? `<span class="sd-chip">${icon(I.temp)}Eau ${num(Math.min(...c.sea))}–${num(Math.max(...c.sea))} °C</span>` : '';
     const lnow = M.level(y[now]);
+    /* Bandeau « Avant d’y aller » : la même phrase que la puce du mois ci-dessous. */
+    before(lnow != null ? `En ${monthName(now)} : ${LEVEL_TXT[lnow].toLowerCase()}` : null, lnow);
     host.innerHTML = `<button type="button" class="sd-teaser-btn" data-sd-open aria-label="Voir les saisons du spot">
       <span class="sd-teaser-tx"><small>${icon(I.cal)}Quand partir ? · ${esc(sportLabel(act))}</small><b>${b.ranges.length ? esc(cap(rangeText(b.ranges))) : 'Selon les conditions du jour'}</b>
       <span class="sd-teaser-strip" aria-hidden="true">${y.map((v, m) => `<i class="l${M.level(v) ?? 'x'}${m === now ? ' now' : ''}"></i>`).join('')}</span>
@@ -402,7 +405,7 @@
     if (marine) wildSlot(true); else { const w = $('#dWild'); if (w) w.hidden = true; }
     const host = $('#dSeasons'); if (host) host.innerHTML = '<p class="sd-empty">Chargement des normales…</p>';
     load('climate').then(C => { if (cur !== s) return; const c = C.spots[s.id]; renderSeasons(s, c); renderTeaser(s, c); if (lastLive && lastLive.s === s) live(s, lastLive.l); else renderCoach(); })
-      .catch(() => { const t = $('#dSeasonTeaser'); if (t) t.hidden = true; if (host) host.innerHTML = '<p class="sd-empty">Normales indisponibles hors connexion.</p>'; });
+      .catch(() => { const t = $('#dSeasonTeaser'); if (t) t.hidden = true; try { if (cur === s) window.OceanBefore?.season(s, null); } catch (e) {} if (host) host.innerHTML = '<p class="sd-empty">Normales indisponibles hors connexion.</p>'; });
     load('access').then(A => { if (cur === s) renderGo(s, A); }).catch(() => {});
     if (marine) load('wild').then(W => { if (cur === s) renderWild(s, W); }).catch(() => { if (cur === s) { const w = $('#dWild'); if (w) w.hidden = true; } });
   }

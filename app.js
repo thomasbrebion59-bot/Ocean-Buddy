@@ -275,7 +275,7 @@ function spotCard(s){
       <div class="spot-shade"></div>
       <button class="fav" aria-label="${favs.has(s.id)?'Retirer des favoris':'Ajouter aux favoris'}" aria-pressed="${favs.has(s.id)}" onclick="toggleFav(${idArg},event)">${favs.has(s.id)?FAV_ON:FAV_OFF}</button>
       ${dist!=null?`<span class="dist-tag"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${fmtDist(dist)}</span>`:''}
-      <span class="lvl-tag lvl-${level}">${levelMark}${esc(levelText)}</span>
+      <span class="lvl-tag lvl-${level}">${levelMark}${esc(levelText)}</span>${window.OceanBefore?.cardPill(s)||''}
       ${s.catalogNew?'<span class="catalog-new">Nouveau</span>':''}
       ${s.custom?'<span class="spot-private">Spot privé</span>':''}
       ${!photo&&!s.custom?'<span class="spot-photo-pending">Photo du lieu à vérifier</span>':''}
@@ -1140,9 +1140,8 @@ function setHeroPhoto(s){
   }
   if(cred)cred.textContent=spotPhotoCredit(s.id)
     ||"Illustration Ocean Buddy — photo du lieu à venir";
-  if(more)more.onclick=function(){
-    window.open('https://www.google.com/search?tbm=isch&q='
-      +encodeURIComponent(s.name.split(' — ')[0]+' '+s.loc),'_blank');};
+  /* Les photos s'ouvrent dans la galerie de l'app (OceanGallery.update pose le bouton), plus dans Google Images. */
+  if(more)more.onclick=function(){window.OceanGallery?.open(s);};
   window.OceanGallery?.update(s);
 }
 /* L'activite choisie ici ne vaut QUE pour la fiche ouverte : changer de sport
@@ -1272,6 +1271,7 @@ function openSpot(id){
   var _to=document.getElementById('dTipOcto');
   if(_to&&!_to.innerHTML)_to.innerHTML=octoTag();
   renderDetailFacts(s,act);
+  try{window.OceanBefore?.update(s);}catch(e){console.warn('avant',e);}
   renderConditions(s,LIVE[s.id]?.live?LIVE[s.id]:null);fetchConditions(s);
   try{renderFaune(s);}catch(e){}
   /* Lignes du catalogue ; à défaut, celles du carnet, précédées une seule fois de l'étiquette « non vérifié ». */
@@ -1506,7 +1506,7 @@ async function fetchConditions(s){
     const wc=w.current||{},mc=mar.current||{};
     const ws=wc.wind_speed_10m,wd=wc.wind_direction_10m,wv=mc.wave_height,sst=mc.sea_surface_temperature;
     const tide=tideFromMarine(mar);
-    if(ws==null&&wv==null&&sst==null&&!tide)return;
+    if(ws==null&&wv==null&&sst==null&&!tide){if(!LIVE[s.id]?.live)window.OceanBefore?.live(s,null);return;}
     const o={
       wind:ws!=null?(`${Math.round(ws)} km/h ${cardinal(wd)}`).trim():'—',
       swell:wv!=null?`${num1(+wv)} m`:'—',
@@ -1521,7 +1521,8 @@ async function fetchConditions(s){
     LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);
     renderConditions(s,o);
     window.OceanExperience?.refreshConditions(s,o,mar);
-  }catch(e){}
+    window.OceanBefore?.live(s,o);
+  }catch(e){try{if(currentSpot===s.id&&!LIVE[s.id]?.live)window.OceanBefore?.live(s,null);}catch(_){}}
 }
 function num1(v){ return typeof obNum==='function'?obNum(v,1):v.toFixed(1); }
 /* SITUER un instant : l'heure murale du spot (timezone=auto) convertie en instant reel grace a
