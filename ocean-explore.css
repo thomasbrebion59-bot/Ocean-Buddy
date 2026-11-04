@@ -115,3 +115,42 @@
 .spot-gallery .gallery-thumbs button.gallery-find:hover{background:linear-gradient(145deg,var(--t-bright),var(--t-deep-b));border-style:solid}
 .spot-gallery .gallery-thumbs button.gallery-find:disabled{opacity:.7}
 @media(max-width:639px){.spot-gallery .gallery-thumbs button.gallery-find{flex-basis:128px;height:72px;padding:7px 9px}.gallery-empty{padding:20px}.gallery-empty b{font-size:31px}.gallery-empty span{font-size:11px}}
+
+/* ---------- Liste d’Explorer en lignes compactes (spotRow, app.js) ----------
+   Vignette 84 px, nom, lieu et activités, repères sur une ligne (niveau, saison, distance), cœur et jauge de danger.
+   Environ quatre spots par écran de téléphone ; trois colonnes sur ordinateur. Contrastes : texte encre sur carte ou
+   teinte, jamais du texte clair sur une couleur de niveau (la couleur n’est qu’une pastille). */
+.ocean-v2 #spotList{gap:10px}
+@media(max-width:759px){.ocean-v2 #spotList{gap:8px;margin:10px 0}}
+#spotList .spot-row{position:relative;display:flex;align-items:center;gap:12px;min-height:100px;box-sizing:border-box;padding:8px 10px 8px 8px;border:1px solid var(--t-line);border-radius:16px;
+  background:var(--t-card);color:var(--t-ink);cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 6px 16px -14px color-mix(in srgb,var(--t-shadow,var(--t-deep)) 55%,transparent);transition:transform .18s,border-color .18s}
+#spotList .spot-row:hover{border-color:color-mix(in srgb,var(--t-main) 45%,var(--t-line))}
+#spotList .spot-row:active{transform:scale(.985)}
+#spotList .spot-row:focus-visible{outline:3px solid var(--t-main);outline-offset:2px}
+#spotList .sr-img{flex:none;width:84px;height:84px;border-radius:12px;overflow:hidden;background:var(--t-tint)}
+#spotList .sr-img img{display:block;width:100%;height:100%;object-fit:cover}
+#spotList .sr-tx{flex:1;min-width:0;display:grid;gap:3px}
+#spotList .sr-tx b{font:800 16px/1.2 var(--body);color:var(--t-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#spotList .sr-tx small{font:600 12.5px/1.3 var(--body);color:var(--t-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#spotList .sr-tags{display:flex;flex-wrap:nowrap;gap:5px;margin-top:3px;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,#000 88%,transparent);mask-image:linear-gradient(90deg,#000 88%,transparent)}
+[dir=rtl] #spotList .sr-tags{-webkit-mask-image:linear-gradient(270deg,#000 88%,transparent);mask-image:linear-gradient(270deg,#000 88%,transparent)}
+#spotList .sr-tags>span{flex:none;display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 8px;border-radius:999px;background:var(--t-tint);color:var(--t-ink);font:700 12px/1 var(--body);white-space:nowrap}
+#spotList .sr-lvl::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--t-ink2)}
+#spotList .sr-lvl[data-lvl=debutant]::before{background:var(--t-ok)}
+#spotList .sr-lvl[data-lvl=intermediaire]::before{background:var(--t-sun)}
+#spotList .sr-lvl[data-lvl=expert]::before{background:var(--t-cta)}
+#spotList .sr-tags .sr-season{background:var(--t-acc);color:var(--t-acc-ink)}
+#spotList .sr-tags .sr-warn{background:color-mix(in srgb,var(--t-danger) 14%,var(--t-card));color:var(--t-ink)}
+#spotList .sr-side{flex:none;display:flex;flex-direction:column;align-items:center;gap:8px;align-self:stretch;justify-content:center}
+#spotList .sr-fav{display:grid;place-items:center;width:44px;height:44px;padding:0;border:0;border-radius:50%;background:none;color:var(--t-ink2);cursor:pointer}
+#spotList .sr-fav.on{color:var(--t-danger)}
+#spotList .sr-fav svg{width:22px;height:22px}
+#spotList .sr-fav:focus-visible{outline:3px solid var(--t-main);outline-offset:0}
+.ocean-v2 #spotList .spot-row .danger-dots{display:flex;gap:3px;margin:0;min-height:8px}
+.ocean-v2 #spotList .spot-row .danger-dots .dot{width:7px;height:7px;background:var(--t-line);box-shadow:none}
+.ocean-v2 #spotList .spot-row .danger-dots .dot.on{background:var(--t-danger)}
+
+/* Puce du sport actif au-dessus de la liste (effaçable). */
+.sr-sport-chip{margin-left:6px;min-height:32px;padding:4px 12px;border:1px solid var(--t-line);border-radius:999px;background:var(--t-card);color:var(--t-ink);font:inherit;font-weight:600;cursor:pointer}
+.sr-sport-chip:focus-visible{outline:3px solid var(--t-main);outline-offset:2px}

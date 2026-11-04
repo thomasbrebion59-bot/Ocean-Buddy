@@ -329,7 +329,7 @@ function applySport(id,transition,stay){
   document.getElementById('spotSearch').value='';
   document.getElementById('favChip')?.classList.remove('active');
   document.getElementById('nearBtn')?.classList.remove('on');
-  document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
+  if(typeof syncFilterChips==='function')syncFilterChips();else document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
   /* backToWorlds rend déjà les destinations : évite de reconstruire deux fois les mêmes cartes. */
   renderSportFilters();backToWorlds();saveState();
   const render = () => {
@@ -365,12 +365,13 @@ function hideOnb(){const o=document.getElementById('onb');o.classList.add('hide'
 function goNearMe(){
   requestGeo(()=>{
     window.OceanNavigation?.begin();
-    nearMode=true;chosenSport='all';activeSport=null;quickGate=false;onbDone=true;hideOnb();
+    /* Le sport choisi reste (avant, « près de moi » l’effaçait) ; sans sport choisi, toutes les activités. */
+    nearMode=true;if(!activeSport||chosenSport==='all'){chosenSport='all';activeSport=null;}quickGate=false;onbDone=true;hideOnb();
     currentFilter='all';currentSearch='';favOnly=false;
     document.getElementById('spotSearch').value='';
     document.getElementById('favChip').classList.remove('active');
     document.getElementById('nearBtn').classList.add('on');
-    document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
+    syncFilterChips();
     openWorld('all');
     renderSportFilters();renderSpots();saveState();renderHome();
     go('spots');setView('map');centerOnUser();
@@ -390,7 +391,9 @@ function toggleNear(){
 /* La liste rendait les 118 spots d'un coup : 30 000 px de défilement et
    118 images chargées pour en voir trois. On en montre 12, le reste à la
    demande — et tout changement de filtre repart de 12. */
-var SPOT_PAGE=12, spotShown=SPOT_PAGE;
+/* Lignes compactes (vignette + repères) : 30 par page, et la page suivante se charge seule à l’approche du bas
+   (le bouton reste pour le clavier et les lecteurs d’écran). */
+var SPOT_PAGE=30, spotShown=SPOT_PAGE;
 function moreSpots(){ spotShown+=SPOT_PAGE; renderSpots(currentFilter,true); }
 /* ====== SEPT MONDES ======
    L'écran ouvrait sur 118 fiches à faire défiler : un inventaire, pas un choix.
@@ -424,10 +427,13 @@ function exploreSpots(filter=currentFilter,options={}){
   const value=(key,fallback)=>Object.prototype.hasOwnProperty.call(options,key)?options[key]:fallback;
   const world=value('world',spotWorld),country=value('country',spotCountry),sport=value('sport',activeSport);
   const search=searchable(value('search',currentSearch)),favorite=value('favorite',favOnly);
+  /* Filtres combinables (spot-rank-model.js) : niveaux (plusieurs à la fois), « en saison », « nouveautés ». */
+  const SR=typeof SpotRank!=='undefined'?SpotRank:null,fparts=filter&&filter!=='all'?(SR?SR.parseFilter(filter):null):null;
+  const fpass=s=>filter==='all'||!filter?true:SR?SR.matchFilter(s,fparts,{inSeason:x=>inSeason(x.id)}):(filter==='new'?s.catalogNew:filter==='season'?inSeason(s.id):s.level===filter);
   return SPOTS.filter(s=>(!world||world==='all'||SPOT_WORLD[s.id]===world)
     &&(!country||countryOf(s)===country)
     &&(!sport||spotSports(s).includes(sport))
-    &&(filter==='all'||(filter==='new'?s.catalogNew:filter==='season'?inSeason(s.id):s.level===filter))
+    &&fpass(s)
     &&(!favorite||favs.has(s.id))
     &&(typeof OceanPlan==='undefined'||OceanPlan.ok(s))
     &&(!search||searchable(s.name+' '+s.loc+' '+countryOf(s)+' '+spotSports(s).map(id=>(typeof SPORTMAP!=='undefined'&&SPORTMAP[id]?.label)||id).join(' ')).includes(search)));
@@ -545,11 +551,16 @@ function renderSpots(filter=currentFilter,keep){
   currentFilter=filter;const q=currentSearch;
   if(!keep) spotShown=SPOT_PAGE;
   let list=exploreSpots(filter);
+  /* « Près de moi » : distance seule. Sinon, pertinence (spot-rank-model.js) : ton niveau, la saison du mois, la
+     proximité si ta position est déjà connue, puis la photo. Aucun appel réseau, aucune demande de position. */
   if(nearMode&&userPos)list=list.slice().sort((a,b)=>(spotDist(a)??9e9)-(spotDist(b)??9e9));
+  else if(typeof SpotRank!=='undefined')list=SpotRank.rank(list,spotRankCtx());
   const resultCount=document.getElementById('spotResultCount');
   if(resultCount){const n=list.length,one=n===1;resultCount.textContent=filter==='new'
     ?(q?(one?`${n} nouveau spot trouvé`:`${n} nouveaux spots trouvés`):(one?`${n} nouveau spot à explorer`:`${n} nouveaux spots à explorer`))
-    :(q?(one?`${n} spot trouvé`:`${n} spots trouvés`):(one?`${n} spot à explorer`:`${n} spots à explorer`));}
+    :(q?(one?`${n} spot trouvé`:`${n} spots trouvés`):(one?`${n} spot à explorer`:`${n} spots à explorer`));
+    /* Sport actif : puce effaçable (la liste n’a plus de sélecteur de sport ; la recherche garde ton sport). */
+    if(activeSport&&typeof SPORTMAP!=='undefined'&&SPORTMAP[activeSport]){const c=document.createElement('button');c.type='button';c.className='sr-sport-chip';c.setAttribute('aria-label','Retirer le filtre '+SPORTMAP[activeSport].label);c.textContent=SPORTMAP[activeSport].label+' \u00d7';c.onclick=exploreAllActivities;resultCount.append(' ',c);}}
   var _h;
   if(!list.length){
     const oldFavorites=favOnly&&[...favs].some(id=>window.OceanLegacySpots?.archive(id)&&!window.OceanLegacySpots?.canonicalId(id));
@@ -560,10 +571,10 @@ function renderSpots(filter=currentFilter,keep){
       +(activeSport&&(q||(favOnly&&favs.size))?'<button onclick="exploreAllActivities()">Chercher dans toutes les activités</button>':'')
       +(oldFavorites?'<button onclick="go(\'profile\')">Voir mes favoris archivés</button>':'')+((spotWorld&&spotWorld!=='all'&&currentSearch)?'<button onclick="openWorld(\'all\')">Chercher dans tous les spots</button>':'')+'</div>';
   }else{
-    var _v=list.slice(0,spotShown);
-    _h=_v.map(spotCard).join('');
+    var _v=list.slice(0,spotShown),_ctx=spotRankCtx();
+    _h=_v.map(s=>spotRow(s,_ctx)).join('');
     if(list.length>spotShown){
-      _h+='<button class="more-spots" onclick="moreSpots()">'
+      _h+='<button class="more-spots" data-more-spots onclick="moreSpots()">'
         + `Voir ${Math.min(SPOT_PAGE,list.length-spotShown)} spots de plus`
         + '<span>'+spotShown+' / '+list.length+'</span></button>';
     }else if(list.length>SPOT_PAGE){
@@ -571,11 +582,70 @@ function renderSpots(filter=currentFilter,keep){
     }
   }
   document.getElementById('spotList').innerHTML=_h;
+  watchMoreSpots();
   const home=(nearMode&&userPos)?SPOTS.slice().sort((a,b)=>(spotDist(a)??9e9)-(spotDist(b)??9e9)).slice(0,3):SPOTS.slice(0,3);
   document.getElementById('homeSpots').innerHTML=home.map(spotCard).join('');
   watchConditionCards();
 }
-function filterSpots(el,f){document.querySelectorAll('#filters .chip').forEach(c=>c.classList.remove('active'));el.classList.add('active');renderSpots(f);}
+/* Filtres combinables : chaque puce (niveau, « En saison », « Nouveautés ») s’ajoute aux autres ; « Tous » efface tout.
+   only=true impose ce seul filtre (« Voir les nouveautés »). Le menu de la planète lit et écrit le même currentFilter. */
+function filterSpots(el,f,only){
+  window.OceanNavigation?.begin();
+  const next=typeof SpotRank==='undefined'?f:only?SpotRank.normFilter(f):SpotRank.toggleFilter(currentFilter,f);
+  currentFilter=next;syncFilterChips();renderSpots(next);
+  if(document.getElementById('mapView')?.style.display!=='none')renderMap(true);
+}
+function syncFilterChips(){
+  const has=part=>typeof SpotRank!=='undefined'?SpotRank.hasPart(currentFilter,part):currentFilter===part;
+  document.querySelectorAll('#filters [data-f]').forEach(el=>{const on=has(el.dataset.f);el.classList.toggle('active',on);el.setAttribute('aria-pressed',String(on));});
+}
+/* Contexte du classement partagé (spot-rank-model.js) : sport, niveau enregistré, mois, saisons et éclat des photos déjà
+   chargés par l’accueil, position seulement si elle est déjà connue. Les favoris ne comptent pas ici : un cœur touché
+   ne déplace pas la ligne sous le doigt. La jauge de danger est mise en cache par spot. */
+const RANK_GAUGE=new Map();
+function spotRankCtx(){
+  const pos=userPos&&Number.isFinite(userPos.lat)?{lat:userPos.lat,lon:userPos.lon}:null;
+  return {sport:activeSport||'all',strict:false,level:(typeof chosenLevel!=='undefined'&&chosenLevel)||null,month:new Date().getMonth(),
+    seasons:window.OCEAN_SEASONS||null,photo:window.OCEAN_PHOTO_SCORES||null,pos,coords:s=>COORDS[s.id]||s.coords,
+    gauge:s=>{if(!RANK_GAUGE.has(s.id))RANK_GAUGE.set(s.id,dangerGauge(s).n);return RANK_GAUGE.get(s.id);}};
+}
+/* Ligne compacte de la liste d’Explorer : vignette, nom, lieu, repères (niveau, saison, distance), jauge de danger, favori.
+   Environ quatre spots par écran de téléphone (la grande carte spotCard reste pour l’accueil et le comparateur).
+   « Comparer » reste sur la fiche du spot. */
+function spotRow(s,ctx){
+  const gauge=dangerGauge(s),unrated=gauge.n===null;
+  const dangerLabel=unrated?'Danger non évalué':gauge.basis==='carnet'?`Danger estimé : ${gauge.n} sur 4 · estimation Ocean Buddy · carnet non vérifié`:`Danger estimé : ${gauge.n} sur 4 · estimation Ocean Buddy`;
+  let dots='';for(let i=0;i<4;i++)dots+=`<span class="dot ${!unrated&&i<gauge.n?'on':''}"></span>`;
+  const why=typeof SpotRank!=='undefined'?SpotRank.explain(s,ctx||spotRankCtx()):{};
+  const sports=spotSports(s),photo=spotPhotoUrl(s.id,240),fav=favs.has(s.id);
+  const idArg=esc(JSON.stringify(String(s.id))),level=['debutant','intermediaire','expert','variable'].includes(s.level)?s.level:'variable';
+  const dist=(nearMode&&userPos)?spotDist(s):why.dist;
+  const tags=[`<span class="sr-lvl" data-lvl="${level}">${esc(lvlLabel[level])}</span>`];
+  if(why.tier===0&&ctx&&ctx.level)tags.push('<span class="sr-warn">Au-dessus de ton niveau</span>');
+  if(why.inSeason)tags.push('<span class="sr-season">En saison</span>');
+  if(dist!=null)tags.push(`<span>${fmtDist(dist)}</span>`);
+  if(s.catalogNew)tags.push('<span class="sr-new">Nouveau</span>');
+  if(s.custom)tags.push('<span>Spot privé</span>');
+  const acts=sports.slice(0,3).map(id=>SPORTMAP[id].label).join(' · ');
+  return `<article class="spot-row" data-spot-id="${esc(s.id)}" tabindex="0" role="button" aria-label="Découvrir ${esc(s.name)}" onclick="openSpot(${idArg})" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openSpot(${idArg})}">
+    <span class="sr-img">${photo?`<img src="${esc(photo)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:''}</span>
+    <span class="sr-tx"><b>${esc(s.name)}</b><small>${esc(s.loc||countryOf(s))}${acts?` · ${esc(acts)}`:''}</small>
+      <span class="sr-tags">${tags.join('')}</span></span>
+    <span class="sr-side"><button class="sr-fav${fav?' on':''}" aria-label="${fav?'Retirer des favoris':'Ajouter aux favoris'}" aria-pressed="${fav}" onclick="toggleFav(${idArg},event)">${fav?FAV_ON:FAV_OFF}</button>
+      <span class="danger-dots" role="img" aria-label="${dangerLabel}" title="${unrated?'Danger non évalué':'Danger : estimation Ocean Buddy'}">${dots}</span></span>
+  </article>`;
+}
+/* Chargement continu : le bouton « Voir N spots de plus » se déclenche seul quand il approche de l’écran
+   (il reste utilisable au clavier et avec un lecteur d’écran). */
+let moreObserver=null;
+function watchMoreSpots(){
+  if(!('IntersectionObserver' in window))return;
+  if(!moreObserver)moreObserver=new IntersectionObserver(entries=>{
+    entries.forEach(e=>{if(e.isIntersecting&&e.target.isConnected&&document.body.dataset.screen==='spots'){moreObserver.unobserve(e.target);moreSpots();}});
+  },{rootMargin:'0px 0px 600px 0px'});
+  moreObserver.disconnect();
+  const b=document.querySelector('#spotList [data-more-spots]');if(b)moreObserver.observe(b);
+}
 /* Traits d'union, tirets et apostrophes comptent comme des espaces, des deux côtés : « saint gilles » trouve « Saint-Gilles-Croix-de-Vie ». */
 function searchable(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[-\u2010-\u2015\x27\u2019\u2018\x60\u00b4]+/g,' ').replace(/\s+/g,' ').trim();}
 function clearSpotSearch(){const i=document.getElementById('spotSearch');if(i){i.value='';i.focus();}searchSpots('');}
@@ -584,7 +654,8 @@ function exploreAllActivities(){window.OceanNavigation?.begin();activeSport=null
 function searchSpots(q){currentSearch=(q||'').toLowerCase().trim();renderSpots();if(document.getElementById('mapView').style.display!=='none')renderMap(true);}
 function toggleFav(id,ev){if(ev)ev.stopPropagation();
   if(favs.has(id))favs.delete(id);else favs.add(id);
-  renderSpots();renderMap(true);saveState();
+  /* La liste garde sa longueur (avant, un cœur touché repliait la liste à la première page). */
+  renderSpots(currentFilter,true);renderMap(true);saveState();
   const df=document.getElementById('dFav');if(df&&currentSpot===id)df.innerHTML=favs.has(id)?FAV_ON:FAV_OFF;df.classList.toggle('on',favs.has(id));
   toast(favs.has(id)?'Ajouté à tes favoris ❤️':'Retiré des favoris');
 }

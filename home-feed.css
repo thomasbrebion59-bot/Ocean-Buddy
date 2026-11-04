@@ -200,3 +200,32 @@ html[data-act] #home .as-large p{color:var(--t-deep)}
 .hf-avent-soon::before{content:"";flex:none;width:12px;height:12px;background:color-mix(in srgb,var(--t-sun) 75%,var(--t-deep));
   -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M5 0L6.2 3.8L10 5L6.2 6.2L5 10L3.8 6.2L0 5L3.8 3.8Z'/%3E%3C/svg%3E") center/contain no-repeat;
   mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M5 0L6.2 3.8L10 5L6.2 6.2L5 10L3.8 6.2L0 5L3.8 3.8Z'/%3E%3C/svg%3E") center/contain no-repeat}
+
+/* ---------- « Pour toi aujourd’hui » (home-feed.js, spot-rank-model.js) ----------
+   Trois lignes de 84 px, hauteur réservée même sans spot (message à la même hauteur) : posée avec le fil sous le rideau,
+   remplacée sur place quand le niveau change, jamais plus haute ni plus basse. Repères sur une seule ligne. */
+.hf-foryou .as-sec{margin-top:26px}
+.hf-fy-list{display:grid;grid-template-columns:minmax(0,1fr);gap:8px;min-height:268px;align-content:start}
+.hf-fy{position:relative;display:flex;align-items:center;gap:12px;height:84px;box-sizing:border-box;padding:8px 50px 8px 8px;border:1px solid var(--t-line);border-radius:var(--as-r-m,16px);
+  background:var(--t-card);color:var(--t-ink);cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 8px 20px -16px color-mix(in srgb,var(--t-shadow) 55%,transparent);transition:transform .2s}
+.hf-fy:active{transform:scale(.985)}
+.hf-fy:focus-visible{outline:3px solid var(--t-main);outline-offset:2px}
+.hf-fy>img{flex:none;width:68px;height:68px;border-radius:var(--as-r-s,12px);object-fit:cover;background:var(--t-tint)}
+.hf-fy-tx{flex:1;min-width:0;display:grid;gap:2px}
+.hf-fy-tx b{font:800 16px/1.2 var(--body);color:var(--t-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hf-fy-tx small{font:600 12.5px/1.25 var(--body);color:var(--t-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.hf-fy-why{display:flex;flex-wrap:nowrap;gap:5px;margin:4px 0 0;overflow:hidden;
+  -webkit-mask-image:linear-gradient(90deg,black 88%,transparent);mask-image:linear-gradient(90deg,black 88%,transparent)}
+.hf-fy-why span{flex:none;display:inline-flex;align-items:center;gap:4px;height:22px;padding:0 8px;border-radius:999px;background:var(--t-tint);color:var(--t-ink);font:700 12px/1 var(--body);white-space:nowrap}
+.hf-fy-why .hf-season{background:var(--t-acc);color:var(--t-acc-ink)}
+.hf-fy-why .hf-data svg{width:13px;height:13px;flex:none}
+.hf-fy .hf-fav{top:50%;right:4px;width:44px;height:44px;transform:translateY(-50%);background:none;color:var(--t-ink2)}
+.hf-fy .hf-fav:active{transform:translateY(-50%) scale(.88)}
+.hf-fy-empty{display:grid;place-content:center;gap:10px;min-height:268px;margin:0;padding:16px;box-sizing:border-box;border:1px dashed var(--t-line);border-radius:var(--as-r-m,16px);
+  text-align:center;font:600 14px/1.4 var(--body);color:var(--t-ink2)}
+.hf-fy-empty button{justify-self:center;min-height:44px;padding:0 18px;border:0;border-radius:999px;background:var(--t-main);color:var(--t-on-main);font:750 14px var(--body);cursor:pointer}
+@media(min-width:960px){.hf-fy-list{grid-template-columns:repeat(3,minmax(0,1fr));min-height:84px}.hf-fy-empty{grid-column:1/-1;min-height:84px}}
+/* « Pour toi aujourd’hui » remplace le « Spot du jour » et la liste « À découvrir » (trois premiers spots du catalogue)
+   de l’ancien onglet « Aujourd’hui » : masqués par CSS dès le premier rendu (aucun décalage après la levée). */
+#home.hf-on #todayCard,#home.hf-on .hf-legacy-live,#home.hf-on #liveTop{display:none!important}
+#home.hf-on .hcat[data-hcat=jour]:not([style*="none"]){display:block!important}
