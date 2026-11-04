@@ -123,7 +123,7 @@
 .ocean-v2 #spotList{gap:10px}
 @media(max-width:759px){.ocean-v2 #spotList{gap:8px;margin:10px 0}}
 #spotList .spot-row{position:relative;display:flex;align-items:center;gap:12px;min-height:100px;box-sizing:border-box;padding:8px 10px 8px 8px;border:1px solid var(--t-line);border-radius:16px;
-  background:var(--t-card);color:var(--t-ink);cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 6px 16px -14px color-mix(in srgb,var(--t-shadow,#000) 55%,transparent);transition:transform .18s,border-color .18s}
+  background:var(--t-card);color:var(--t-ink);cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 6px 16px -14px color-mix(in srgb,var(--t-shadow,var(--t-deep)) 55%,transparent);transition:transform .18s,border-color .18s}
 #spotList .spot-row:hover{border-color:color-mix(in srgb,var(--t-main) 45%,var(--t-line))}
 #spotList .spot-row:active{transform:scale(.985)}
 #spotList .spot-row:focus-visible{outline:3px solid var(--t-main);outline-offset:2px}

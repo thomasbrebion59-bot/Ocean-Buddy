@@ -329,7 +329,7 @@ function applySport(id,transition,stay){
   document.getElementById('spotSearch').value='';
   document.getElementById('favChip')?.classList.remove('active');
   document.getElementById('nearBtn')?.classList.remove('on');
-  syncFilterChips();
+  if(typeof syncFilterChips==='function')syncFilterChips();else document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
   /* backToWorlds rend déjà les destinations : évite de reconstruire deux fois les mêmes cartes. */
   renderSportFilters();backToWorlds();saveState();
   const render = () => {
