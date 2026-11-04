@@ -9,7 +9,7 @@
 .fit-pill.fit-fit{background:var(--t-acc);color:var(--t-deep)}
 .fit-pill.fit-stretch{background:var(--t-card);color:var(--t-deep);border-color:var(--t-warn)}
 .fit-pill.fit-above{background:var(--t-danger);color:var(--t-on-alert)}
-.spot .fit-pill.is-card{position:absolute;z-index:4;left:13px;top:58px;box-shadow:0 4px 10px color-mix(in srgb,var(--t-shadow) 22%,transparent)}
+.spot .fit-pill.is-card{position:absolute;z-index:4;left:13px;top:66px;box-shadow:0 4px 10px color-mix(in srgb,var(--t-shadow) 22%,transparent)}
 
 /* ---------- Bandeau « Avant d’y aller » ---------- */
 #detail .d-before{margin:14px 0 12px;padding:12px 14px 14px;border-radius:16px;background:var(--t-card);border:1px solid var(--t-line);color:var(--t-ink)}
