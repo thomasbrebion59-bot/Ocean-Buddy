@@ -34,6 +34,8 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
    demandée tout de suite (preload) puis posée sur l’image statique de #home dès que l’analyseur l’atteint, sans attendre les scripts ;
    home-feed.js reprend ce fond et la première photo du carrousel est la même URL. Liste générée par scripts/build-home-ambient.py. */
 var A=/*ambient*/[['rajaampat','assets/spots/rajaampat.jpg'],['borabora','assets/spots/borabora.jpg'],['noronha','assets/spots/noronha.jpg'],['navagio','assets/spots/navagio.jpg'],['whitehaven','assets/spots/whitehaven.jpg'],['macarella','assets/spots/macarella.webp'],['tikehau','assets/spots/tikehau.webp'],['myrtos','assets/spots/myrtos.webp'],['nusapenida','assets/spots/nusapenida.webp'],['trunkbay','assets/spots/trunkbay.webp'],['pelosa','assets/spots/pelosa.webp'],['losroques','assets/spots/losroques.webp']]/*/ambient*/,mo;
+try{var sv=JSON.parse(localStorage.getItem('oceanbuddy_v1')||'null');if(sv&&sv.sport&&sv.sport!=='all')A=[];}catch(e){}
+/* Sport enregistré : le carrousel suit ce sport (home-feed.js), la photo générale du jour n’est ni demandée ni posée. */
 if(A.length&&window.MutationObserver){(function(u){var l=document.createElement('link');l.rel='preload';l.as='image';l.href=u;l.setAttribute('fetchpriority','high');document.head.appendChild(l);
   mo=new MutationObserver(function(){var i=document.querySelector('#home>.hf-ambient>img');if(!i)return;mo.disconnect();if(!i.getAttribute('src'))i.src=u;});
   mo.observe(d,{childList:true,subtree:true});addEventListener('DOMContentLoaded',function(){mo.disconnect();});})(A[new Date().getDate()%A.length][1]);}
@@ -624,7 +626,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="ocean-home.js?v=66b713d3ce09"></script>
 <script src="badges.js?v=c91e7eb4bb16"></script>
 <script src="noel-model.js?v=e20ee64f411f"></script>
-<script src="home-feed.js?v=a05dc4cf4a26"></script>
+<script src="home-feed.js?v=32d29dbb6fa8"></script>
 <script src="passport.js?v=f578917c0f7a"></script>
 <script src="surf-model.js?v=db29a0e31c9a"></script>
 <script src="surf-render.js?v=f094a635d338"></script>

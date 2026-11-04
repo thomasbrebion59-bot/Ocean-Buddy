@@ -129,10 +129,27 @@
       <span class="hf-plan-cal" aria-hidden="true">${Array.from({length:12},(_,k)=>`<i class="${k===m?'on':''}">${esc(monthName(k,'narrow'))}</i>`).join('')}</span>
       <span class="hf-plan-tx"><small>Nouveau · planificateur</small><b>Choisis ton mois, Poulpy trouve le spot</b><span>Eau chaude, plein soleil, belles vagues ou vent : la planète s’allume là où c’est le bon moment.</span></span></button></section>`;
   }
+  /* Spots de rêve : la sélection du jour (HERO_IDS) pour « Tous » ; pour un sport choisi, des spots de ce sport (la
+     sélection d’abord, puis le reste du catalogue, les photos HD devant, tirage du jour, 2 par pays au plus). Moins de
+     HERO_MIN spots avec photo pour ce sport : on garde la sélection générale. Le choix est fait à la construction de
+     l’accueil, sous le rideau, et ne dépend d’aucune donnée asynchrone (saisons, éclat) : aucun remplacement visible. */
+  const HERO_MIN=4;
   function heroSpots(){
-    const list=HERO_IDS.map(id=>SPOTS.find(s=>s.id===id)).filter(s=>s&&photo(s));
-    const start=new Date().getDate()%Math.max(1,list.length);
-    return list.slice(start).concat(list.slice(0,start)).slice(0,8);
+    const day=new Date().getDate(),rot=l=>{const k=day%Math.max(1,l.length);return l.slice(k).concat(l.slice(0,k));};
+    const base=HERO_IDS.map(id=>SPOTS.find(s=>s.id===id)).filter(s=>s&&photo(s));
+    const sp=curSport();
+    if(sp!=='all'){
+      const mine=base.filter(s=>has(s,sp)),seen=new Set(mine.map(s=>s.id));
+      const rest=daily(SPOTS.filter(s=>!seen.has(s.id)&&photo(s)&&has(s,sp)),'hero'+sp);
+      const hd=rest.filter(s=>photo(s).w>=1200).concat(rest.filter(s=>photo(s).w<1200));
+      const out=[],per=new Map();
+      for(const s of rot(mine).concat(hd)){
+        if(out.length>=8)break;
+        const c=s.country||'';if((per.get(c)||0)>=2)continue;per.set(c,(per.get(c)||0)+1);out.push(s);
+      }
+      if(out.length>=HERO_MIN)return out;
+    }
+    return rot(base).slice(0,8);
   }
   /* Choix d’activité : une pastille par activité de SPORTS (plus « Tous »), pictogrammes plats monochromes
      (silhouettes assets/pictos/sports/*-mono.webp en masque, sans mascotte). Rendue avec l’ouverture, sous le rideau : sa hauteur est fixe (CSS)
@@ -154,20 +171,31 @@
     const row=on?.parentElement;
     if(row&&on){const a=on.offsetLeft,w=on.offsetWidth;if(a<row.scrollLeft||a+w>row.scrollLeft+row.clientWidth)row.scrollLeft=Math.max(0,a-16);}
   }
-  function hero(){
-    const n=SPOTS.length,slides=heroSpots();
-    return `<section class="hf-top" aria-label="Trouve ton spot">
-      <button type="button" class="hf-search" data-hf-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span><b>Où veux-tu aller ?</b><small>${n} spots · plages, lagons, vagues, récifs</small></span></button>
-      ${acts()}
-      <div class="hf-hero" data-hf-hero>
+  let heroSport=null;
+  function heroBox(){
+    const slides=heroSpots();heroSport=curSport();
+    return `<div class="hf-hero" data-hf-hero>
         <div class="hf-slides" role="list">${slides.map((s,i)=>{const p=photo(s),a=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');return `<article class="hf-slide" role="listitem" data-spot="${esc(s.id)}" aria-label="${esc(String(s.name).split(' — ')[0])}, ${esc(s.country||'')}">
           <img src="${esc(p.src)}" alt="" ${i?'loading="lazy"':'fetchpriority="high" data-fade="off"'} decoding="async">
           <div class="hf-slide-tx"><span class="hf-kicker">Spot de rêve · ${i+1}/${slides.length}</span><h2>${esc(String(s.name).split(' — ')[0])}</h2><p>${esc(s.country||s.loc||'')}${a?` · ${esc(a)}`:''}</p>
           <button type="button" class="hf-go" data-hf-open="${esc(s.id)}">Découvrir ce spot</button></div>
         </article>`;}).join('')}</div>
         <div class="hf-dots" aria-hidden="true">${slides.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</div>
-      </div>
+      </div>`;
+  }
+  function hero(){
+    const n=SPOTS.length;
+    return `<section class="hf-top" aria-label="Trouve ton spot">
+      <button type="button" class="hf-search" data-hf-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span><b>Où veux-tu aller ?</b><small>${n} spots · plages, lagons, vagues, récifs</small></span></button>
+      ${acts()}
+      ${heroBox()}
     </section>`;
+  }
+  /* Changement de sport (sous la scène de transition) : le carrousel est reconstruit à la même place et à la même
+     hauteur (CSS), puis relié. Même sport : rien ne bouge. */
+  function syncHero(){
+    const box=home.querySelector('[data-hf-hero]');if(!box||heroSport===curSport())return;
+    const tmp=document.createElement('div');tmp.innerHTML=heroBox();box.replaceWith(tmp.firstElementChild);bindHero();
   }
   /* Envies du moment : quatre grandes tuiles photo qui mènent aux collections. */
   const MOOD_COVER={lagons:'whitehaven',legendes:'teahupoo',plongees:'ermitage',iles:'tikehau',nord:'lofoten',debut:'macarella'};
@@ -570,7 +598,7 @@
     home.classList.add('hf-on');syncActs();syncNoel();
   }
   function mount(){
-    mountHero();syncNoel();
+    mountHero();syncHero();syncNoel();
     let feed=$('.hf-feed',home);
     if(!feed){feed=document.createElement('div');feed.className='hf-feed';$('.hf-top',home).after(feed);}
     /* Les sections placées entre les rails (activités, immersion) sortent du fil avant le nouveau rendu. */
