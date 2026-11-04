@@ -216,6 +216,9 @@
     /* Sur mobile, la puce reste aussi en dehors du fondu au bord du défileur. */
     const a=on.getBoundingClientRect(),b=bar.getBoundingClientRect(),rtl=getComputedStyle(bar).direction==='rtl',edge=mobile()?28:2;
     const left=b.left+(rtl?edge:2),right=b.right-(rtl?2:edge);
+    /* La rangée commence à son début (« Tout explorer » entier) tant que la puce active y est visible ; on ne fait défiler que si elle est hors champ. */
+    const x0=rtl?0:a.left-b.left+bar.scrollLeft,x1=x0+a.width;
+    if(!rtl&&x0>=2&&x1<=bar.clientWidth-(edge-2)){bar.scrollLeft=0;return;}
     if(a.left<left)bar.scrollLeft-=left-a.left;else if(a.right>right)bar.scrollLeft+=a.right-right;
   }
   function choose(id){

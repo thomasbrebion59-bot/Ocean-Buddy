@@ -285,3 +285,11 @@ body.omini-full{overflow:hidden}body.omini-full .nav,body.omini-full .fab,body.o
 @keyframes omap-sheen{to{background-position:-250% 0}}
 @keyframes omap-turn{to{transform:rotate(360deg)}}
 @media(prefers-reduced-motion:reduce){.omap.is-recovering .omap-stage::before,.omap-status .omap-spin{animation:none}}
+
+/* QA 4 nov. : le compteur ne touche plus le bord de la puce (Explorer, panneau ordinateur). */
+.omap-acts button{padding-inline-end:16px}
+.omap-panel .omap-acts button{padding:0 16px 0 11px}
+@media(pointer:fine){.omap-panel .omap-acts button{padding:0 16px 0 11px}}
+/* Panneau ordinateur : les activités passent sur leur propre ligne (plus de colonne étroite coupée par le bord du panneau). */
+.omap-panel .omap-acts{flex:1 1 100%;min-width:0}
+.omap-panel .omap-acts button{max-width:100%}

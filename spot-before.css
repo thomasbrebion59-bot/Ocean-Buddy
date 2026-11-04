@@ -69,3 +69,24 @@
 @media(max-width:959px){
   body[data-screen=detail] #detailHero .back-btn,body[data-screen=detail] #detailHero .hero-share,#detail.sw-live #detailHero .hero-share{width:44px!important;height:44px!important}
 }
+
+/* ---------- Rien sous la barre d’actions (QA 4 nov.) ---------- */
+/* Téléphone : espace réservé en bas de la fiche = barre + sa marge + zone sûre, pour que la fin du contenu défile au-dessus. */
+@media(max-width:959px){
+  .ocean-v2 #detail{padding-bottom:calc(var(--as-tab-bottom,14px) + var(--as-tab-h,62px) + 36px)}
+}
+/* Ordinateur : barre compacte (♥ + bouton), alignée à droite, sans le nom : elle ne recouvre plus les colonnes du bandeau. */
+@media(min-width:960px){
+  .spot-bar{width:auto;padding:8px}
+  .spot-bar-name{display:none}
+  .ocean-v2 #detail{padding-bottom:calc(32px + 96px + env(safe-area-inset-bottom,0px))}
+}
+/* Les ancres ne passent pas sous l’en-tête et les onglets collants. */
+@media(max-width:959px){
+  .ocean-v2 #detail [id],.ocean-v2 #detail .block,.ocean-v2 #detail section{scroll-margin-top:calc(52px + var(--as-top,0px) + 72px)}
+}
+@media(min-width:960px){
+  .ocean-v2 #detail [id],.ocean-v2 #detail .block,.ocean-v2 #detail section{scroll-margin-top:84px}
+}
+/* Onglet cliqué : l’ancre remonte de la hauteur de l’en-tête collant, le titre de la section reste visible sous les onglets. */
+@media(max-width:959px){#detailTabsAnchor{position:relative;top:calc(-1 * (52px + var(--as-top,0px)))}}
