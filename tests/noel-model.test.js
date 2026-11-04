@@ -209,6 +209,15 @@ test('touches de Noël sur toute l’interface : seulement sous html.ob-noel (co
   for(const sel of rules)for(const part of sel.split(','))assert.match(part.trim(),/^html\.ob-noel /,'règle hors mode Noël : '+part);
 });
 
+test('Avent et « Noël au soleil » : deux blocs distincts, jamais imbriqués ; date forcée reprise par l’en-tête',()=>{
+  const i=feed.indexOf('function noelSection'),body=feed.slice(i,feed.indexOf('function aventCase'));
+  assert.match(body,/return `\$\{advent\(\)\}<section class="hf-sec hf-noel"/,'Avent avant la rangée, hors de sa section');
+  assert.doesNotMatch(body.slice(body.indexOf('<section class="hf-sec hf-noel"')),/advent\(\)/);
+  assert.doesNotMatch(feed,/class="hf-avent[^"]*hf-sec/,'l’Avent n’est pas une .hf-sec (les envies du moment suivent la rangée)');
+  assert.match(feed,/if\(noel\.forced==='noel'&&noel\.period\)window\.OB_NOEL_TODAY=noel\.date;/);
+  assert.match(read('app-shell.js'),/format\(window\.OB_NOEL_TODAY\|\|new Date\(\)\)/);
+});
+
 test('CSS de Noël : jetons uniquement, animations coupées en mouvement réduit',()=>{
   assert.match(css,/\.hf-noel-top/);
   assert.match(css,/@media\s*\(prefers-reduced-motion:\s*reduce\)\{[^}]*\.hf-noel/);

@@ -287,6 +287,8 @@
   const noelStored=()=>{try{return localStorage.getItem(NM.STORE);}catch(_){return null;}};
   const noelState=()=>NM?NM.state({now:new Date(),search:location.search,stored:noelStored()}):{on:false,period:false,forced:null};
   let noel=noelState(),noelIds=[];
+  /* Essai avec une date forcée (?saison=noel&jour=…) : l’en-tête de l’accueil (app-shell.js, chargé après) affiche la même date. */
+  if(noel.forced==='noel'&&noel.period)window.OB_NOEL_TODAY=noel.date;
   function noelTitle(){
     const g=NM.greeting(noel.date);if(!g)return '';
     if(g.kind==='countdown')return g.n===1?'Plus qu’un jour avant Noël':`Plus que ${g.n} jours avant Noël`;
@@ -318,9 +320,10 @@
     noelIds=list.map(s=>s.id);
     const cards=pick(list,{n:10,perCountry:1,used}).map(s=>card(s,{data:'sea',month:m})).filter(Boolean);
     if(cards.length<3){noelIds=[];return '';}
-    return `<section class="hf-sec hf-noel" data-hf="noel" aria-label="Noël au soleil">
+    /* Deux blocs distincts : le calendrier de l’Avent (sa propre section, hors .hf-sec pour que les « Envies du moment »
+       viennent après la rangée), puis la rangée « Noël au soleil » (titre, sous-titre, cartes). */
+    return `${advent()}<section class="hf-sec hf-noel" data-hf="noel" aria-label="Noël au soleil">
       <div class="as-sec"><h2>Noël au soleil<small>${m===11?'Eau à 24 °C ou plus en décembre (normales NOAA, valeur indicative) et bonne saison selon nos carnets.':'Eau à 24 °C ou plus en janvier (normales NOAA, valeur indicative) et bonne saison selon nos carnets.'}</small></h2></div>
-      ${advent()}
       <div class="hf-rail" role="list">${cards.join('')}</div>
     </section>`;
   }
@@ -337,12 +340,12 @@
   function advent(){
     if(noelIds.length<3)return '';
     /* Avant le 1er décembre : même en-tête, et une carte à la place de la rangée (même hauteur). */
-    if(NM.adventSoon(noel.date))return `<div class="hf-avent"><p class="hf-avent-h"><b>Calendrier de l’Avent</b><span>Une case par jour du 1er au 24 décembre : un spot au soleil à découvrir.</span></p>
-      <div class="hf-avent-row"><p class="hf-avent-soon">Le calendrier de l’Avent ouvre le 1er décembre</p></div></div>`;
+    if(NM.adventSoon(noel.date))return `<section class="hf-avent" data-hf-avent-sec aria-label="Calendrier de l’Avent"><div class="as-sec"><h2>Calendrier de l’Avent<small>Une case par jour du 1er au 24 décembre : un spot au soleil à découvrir.</small></h2></div>
+      <div class="hf-avent-row"><p class="hf-avent-soon">Le calendrier de l’Avent ouvre le 1er décembre</p></div></section>`;
     const days=NM.adventDays(noel.date);if(!days)return '';
     const opened=aventOpened();
-    return `<div class="hf-avent"><p class="hf-avent-h"><b>Calendrier de l’Avent</b><span>Une case par jour jusqu’au 24 décembre : un spot au soleil à découvrir.</span></p>
-      <div class="hf-avent-row" role="group" aria-label="Calendrier de l’Avent">${days.map(c=>aventCase(c,opened)).join('')}</div></div>`;
+    return `<section class="hf-avent" data-hf-avent-sec aria-label="Calendrier de l’Avent"><div class="as-sec"><h2>Calendrier de l’Avent<small>Une case par jour jusqu’au 24 décembre : un spot au soleil à découvrir.</small></h2></div>
+      <div class="hf-avent-row" role="group" aria-label="Calendrier de l’Avent">${days.map(c=>aventCase(c,opened)).join('')}</div></section>`;
   }
   /* La case du jour reste visible dans la rangée (défilement horizontal de la rangée seulement, jamais la page). */
   function aventToday(){
