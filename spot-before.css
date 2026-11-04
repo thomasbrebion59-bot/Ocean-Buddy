@@ -12,12 +12,14 @@
 .spot .fit-pill.is-card{position:absolute;z-index:4;left:13px;top:58px;box-shadow:0 4px 10px color-mix(in srgb,var(--t-shadow) 22%,transparent)}
 
 /* ---------- Bandeau « Avant d’y aller » ---------- */
-#detail .d-before{margin:16px 0 14px;padding:14px 16px 16px;border-radius:16px;background:var(--t-card);border:1px solid var(--t-line);color:var(--t-ink)}
+#detail .d-before{margin:14px 0 12px;padding:12px 14px 14px;border-radius:16px;background:var(--t-card);border:1px solid var(--t-line);color:var(--t-ink)}
 #detail .db-head{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
 #detail .db-head h3{margin:0;font:800 17px/1.2 var(--body);color:var(--t-ink);letter-spacing:-.2px}
-#detail .db-note{margin:6px 0 10px;font-size:12px;line-height:1.4;color:var(--t-ink2)}
-#detail .db-rows{display:grid;gap:0;border-top:1px solid var(--t-line)}
-#detail .db-row{display:grid;grid-template-columns:96px 1fr;gap:10px;align-items:baseline;padding:8px 0;border-bottom:1px solid var(--t-line);min-height:20px}
+#detail .db-note{margin:4px 0 8px;font-size:12px;line-height:1.4;color:var(--t-ink2)}
+/* Danger et « Maintenant » sur toute la largeur, saison et créneau côte à côte : le bandeau reste court. */
+#detail .db-rows{display:grid;grid-template-columns:1fr 1fr;column-gap:12px;border-top:1px solid var(--t-line)}
+#detail .db-row{grid-column:1/-1;display:flex;flex-direction:column;gap:2px;padding:7px 0;border-bottom:1px solid var(--t-line);min-height:40px;min-width:0}
+#detail .db-row.db-half{grid-column:auto}
 #detail .db-k{font:700 12px/1.3 var(--body);color:var(--t-ink2)}
 #detail .db-v{font-size:13px;line-height:1.4;color:var(--t-ink);display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;min-width:0}
 #detail .db-v b{font-weight:800}
@@ -26,12 +28,12 @@
 #detail .db-dots{display:inline-flex;gap:3px}
 #detail .db-dots i{width:8px;height:8px;border-radius:50%;background:var(--t-line)}
 #detail .db-dots i.on{background:var(--t-danger)}
-#detail .db-danger-text{flex-basis:100%;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#detail .db-danger-text{flex-basis:100%;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
 #detail .db-carnet{flex-basis:100%;font-size:11px;font-weight:600;color:var(--t-ink2)}
 #detail .db-season{font-weight:700}
 #detail .db-q{font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--t-tint);color:var(--t-deep)}
 #detail .db-q.is-good{background:var(--t-acc)}
-#detail .db-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+#detail .db-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
 #detail .db-btn{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:0 16px;border-radius:12px;font:800 14px/1 var(--body);
   text-decoration:none;cursor:pointer;border:1px solid var(--t-line);background:var(--t-tint);color:var(--t-deep)}
 #detail .db-call{background:var(--t-danger);border-color:var(--t-danger);color:var(--t-on-alert)}
@@ -52,8 +54,14 @@
 @media(max-width:959px){
   body[data-screen=detail] .ocean-v2 .nav,body.ocean-v2[data-screen=detail] .nav{display:none!important}
   body[data-screen=detail] .spot-bar{bottom:var(--as-tab-bottom,14px);right:calc(16px + var(--as-tab-h,62px) + 8px);left:12px;min-height:var(--as-tab-h,62px)}
-  body[data-screen=detail] .spot-bar-name{font-size:14px}
+  /* Le nom est déjà en grand dans la fiche : sur téléphone, la place va au bouton. */
+  body[data-screen=detail] .spot-bar-name{display:none}
+  body[data-screen=detail] .spot-bar{padding-left:8px}
+  body[data-screen=detail] .spot-bar-trip{flex:1}
   /* Onglets de la fiche collés sous l’en-tête translucide. */
   .ocean-v2 #detail .dtabs{top:calc(52px + var(--as-top,0px));z-index:6}
 }
 @media(min-width:960px){.ocean-v2 #detail .dtabs{top:0;z-index:6}}
+/* Ligne « Danger » : libellé et jauge sur une ligne, danger principal dessous. */
+#detail .db-row.db-danger{flex-direction:row;flex-wrap:wrap;align-items:center;column-gap:10px}
+#detail .db-row.db-danger>.db-v{display:contents}

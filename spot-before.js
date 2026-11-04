@@ -61,14 +61,14 @@
     if (!r || r.kind === 'nolevel') return '<p class="db-note">Choisis ton niveau dans Réglages, « Mon sport et mon niveau », pour savoir si ce spot te correspond.</p>';
     if (r.kind === 'unrated') return '<p class="db-note">Danger non évalué ici : renseigne-toi sur place avant d’entrer.</p>';
     if (r.kind === 'zones') return '<p class="db-note">Le niveau change selon la zone : demande sur place laquelle te correspond.</p>';
-    return `<p class="db-note">D’après ton niveau (${esc(LEVEL[lv] || '')}) et la jauge de danger : un repère, pas une garantie.</p>`;
+    return `<p class="db-note">D’après ton niveau (${esc(LEVEL[lv] || '')}) : un repère, pas une garantie.</p>`;
   }
 
   function dangerLine(s) {
     const g = gaugeOf(s), d = F ? F.mainDanger(s) : null;
     const gauge = g.n == null ? '<b>Danger non évalué</b>' : `${dots(g.n)}<b>${g.n} sur 4</b>`;
     const text = d ? `<span class="db-danger-text">${esc(d.text)}</span>${d.basis === 'carnet' ? '<small class="db-carnet">Carnet Ocean Buddy · non vérifié</small>' : ''}` : '';
-    return `<div class="db-row db-danger"><span class="db-k">Danger</span><span class="db-v"><span class="db-gauge" role="img" aria-label="${g.n == null ? 'Danger non évalué' : `Danger estimé : ${g.n} sur 4 · estimation Ocean Buddy`}">${gauge}</span>${text}</span></div>`;
+    return `<div class="db-row db-danger" data-before="danger"><span class="db-k">Danger</span><span class="db-v"><span class="db-gauge" role="img" aria-label="${g.n == null ? 'Danger non évalué' : `Danger estimé : ${g.n} sur 4 · estimation Ocean Buddy`}">${gauge}</span>${text}</span></div>`;
   }
 
   function emergency(s) {
@@ -84,9 +84,9 @@
     const r = fitOf(s), pill = F && F.shown(r) ? `<span class="fit-pill fit-${r.kind}">${esc(LABEL[r.kind])}</span>` : '';
     el.innerHTML = `<div class="db-head"><h3 id="dBeforeTitle">Avant d’y aller</h3>${pill}</div>${fitBlock(s)}`
       + `<div class="db-rows">${dangerLine(s)}`
-      + '<div class="db-row" data-before="season"><span class="db-k">Saison</span><span class="db-v db-wait">Chargement…</span></div>'
-      + '<div class="db-row" data-before="live"><span class="db-k">Maintenant</span><span class="db-v db-wait">Chargement…</span></div>'
-      + '<div class="db-row" data-before="slot"><span class="db-k">Ton créneau</span><span class="db-v db-wait">Chargement…</span></div></div>'
+      + '<div class="db-row db-half" data-before="season"><span class="db-k">Saison</span><span class="db-v db-wait">Chargement…</span></div>'
+      + '<div class="db-row db-half" data-before="slot"><span class="db-k">Ton créneau</span><span class="db-v db-wait">Chargement…</span></div>'
+      + '<div class="db-row" data-before="live"><span class="db-k">Maintenant</span><span class="db-v db-wait">Chargement…</span></div></div>'
       + emergency(s);
     const L = typeof LIVE !== 'undefined' ? LIVE[s.id] : null;
     if (L && L.live) live(s, L);
