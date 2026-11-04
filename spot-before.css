@@ -65,3 +65,7 @@
 /* Ligne « Danger » : libellé et jauge sur une ligne, danger principal dessous. */
 #detail .db-row.db-danger{flex-direction:row;flex-wrap:wrap;align-items:center;column-gap:10px}
 #detail .db-row.db-danger>.db-v{display:contents}
+/* Zones de toucher : retour et partage de la photo à 44 px sur téléphone. */
+@media(max-width:959px){
+  body[data-screen=detail] #detailHero .back-btn,body[data-screen=detail] #detailHero .hero-share,#detail.sw-live #detailHero .hero-share{width:44px!important;height:44px!important}
+}

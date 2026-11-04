@@ -10,7 +10,7 @@ const path = require('node:path');
 const ROOT = path.join(__dirname, '..');
 const FILES = ['community.css', 'trips.css'];
 const MIN_PX = 12;
-const FILES_11 = ['field-guide.css', 'spot-data.css', 'spot-experience.css', 'spot-guide.css', 'spot-immersion.css', 'spot-voyage.css', 'polish.css'];
+const FILES_11 = ['field-guide.css', 'spot-data.css', 'spot-experience.css', 'spot-guide.css', 'spot-immersion.css', 'spot-voyage.css', 'polish.css', 'spot-before.css'];
 const MIN_PX_11 = 11;
 /* Exceptions justifiées : { fichier: [[sélecteur exact, raison]] }. Chaque exception doit exister encore (sous 11 px). */
 const EXCEPTIONS_11 = {
