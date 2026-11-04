@@ -63,7 +63,7 @@
 .voyage-card p{margin:0;font-size:15px;line-height:1.5;color:var(--g-pale);max-width:60ch;text-shadow:0 1px 10px color-mix(in srgb,var(--t-shadow) 40%,transparent)}
 .voyage-live{display:flex;gap:8px;margin-top:12px}
 .voyage-live span{flex:1;padding:8px 10px;border-radius:14px;background:color-mix(in srgb,var(--t-card) 12%,transparent);border:1px solid color-mix(in srgb,var(--t-line) 16%,transparent);}
-.voyage-live small{display:block;font-size:10px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;font-weight:700}
+.voyage-live small{display:block;font-size:11px;letter-spacing:.1em;text-transform:uppercase;opacity:.75;font-weight:700}
 .voyage-live b{font-size:14px}
 .voyage-chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
 .voyage-chips span{font-size:12px;font-weight:700;padding:6px 10px;border-radius:999px;background:color-mix(in srgb,var(--t-card) 14%,transparent);border:1px solid color-mix(in srgb,var(--t-line) 18%,transparent)}
@@ -148,7 +148,7 @@
 @media (min-width:960px){[dir=rtl] .vx-map{left:32px}[dir=rtl] .vx-panel{left:calc(50% - 180px)}}
 /* Entrée « Balade-toi sur le spot en 360° » sur la fiche spot (reprend le style du lien vidéo). */
 button.experience-explore-360{width:100%;font:inherit;text-align:start;cursor:pointer}
-.experience-explore-360>span:first-child{font-size:10px!important;font-weight:800}
+.experience-explore-360>span:first-child{font-size:11px!important;font-weight:800}
 
 /* @creme-exception voyage-scene */
 .vx-land{fill:#e9d8ae}
@@ -158,5 +158,5 @@ button.experience-explore-360{width:100%;font:inherit;text-align:start;cursor:po
 .vx-dot{fill:var(--t-deep);stroke:#fff;stroke-width:1.6}
 .vx-dot.is-water{fill:var(--g-soft,#2f9bff)}
 .vx-dot.is-on{fill:#e0ff91;stroke:var(--t-deep);stroke-width:2}
-.vx-n{font:800 10px "DM Sans",sans-serif;fill:var(--t-deep);text-anchor:middle}
+.vx-n{font:800 11px "DM Sans",sans-serif;fill:var(--t-deep);text-anchor:middle}
 /* @creme-exception-end */

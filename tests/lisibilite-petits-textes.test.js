@@ -1,4 +1,5 @@
-/* Lisibilité : aucun texte explicite sous 12 px dans community.css et trips.css.
+/* Lisibilité : aucun texte explicite sous 12 px dans community.css et trips.css,
+   et sous 11 px dans les 7 CSS de la fiche spot (FILES_11).
    Hors commentaires, ni font-size ni raccourci font ne descendent sous le plancher (px, rem et em comptés en base 16).
    Pour clamp(), seul le minimum (premier argument) compte. Les tailles héritées ou en mots-clés ne sont pas vérifiées. */
 const test = require('node:test');
@@ -9,6 +10,14 @@ const path = require('node:path');
 const ROOT = path.join(__dirname, '..');
 const FILES = ['community.css', 'trips.css'];
 const MIN_PX = 12;
+const FILES_11 = ['field-guide.css', 'spot-data.css', 'spot-experience.css', 'spot-guide.css', 'spot-immersion.css', 'spot-voyage.css', 'polish.css'];
+const MIN_PX_11 = 11;
+/* Exceptions justifiées : { fichier: [[sélecteur exact, raison]] }. Chaque exception doit exister encore (sous 11 px). */
+const EXCEPTIONS_11 = {
+  'spot-data.css': [
+    ['.hf-plan-tx small', "sélecteur de l'accueil (.hf-) : non modifié pour éviter un décalage de l'accueil"],
+  ],
+};
 
 function strip(css) { return css.replace(/\/\*[\s\S]*?\*\//g, ' '); }
 function toPx(token) {
@@ -56,6 +65,18 @@ for (const file of FILES) {
     assert.ok(decls.filter(d => d.px !== null).length > 10, 'le lecteur de CSS ne trouve presque aucune taille : test vide');
     const small = decls.filter(d => d.px !== null && d.px < MIN_PX);
     assert.deepEqual(small.map(d => `${d.selector} { ${d.prop}: ${d.value} }`), []);
+  });
+}
+
+for (const file of FILES_11) {
+  test(`${file} : aucune taille de police explicite sous ${MIN_PX_11}px`, () => {
+    const decls = declarations(fs.readFileSync(path.join(ROOT, file), 'utf8'));
+    assert.ok(decls.filter(d => d.px !== null).length > 3, 'le lecteur de CSS ne trouve presque aucune taille : test vide');
+    const allowed = (EXCEPTIONS_11[file] || []).map(e => e[0]);
+    const small = decls.filter(d => d.px !== null && d.px < MIN_PX_11);
+    const smallSelectors = new Set(small.map(d => d.selector));
+    for (const sel of allowed) assert.ok(smallSelectors.has(sel), `exception morte (plus sous ${MIN_PX_11}px) : ${sel}`);
+    assert.deepEqual(small.filter(d => !allowed.includes(d.selector)).map(d => `${d.selector} { ${d.prop}: ${d.value} }`), []);
   });
 }
 
