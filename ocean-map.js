@@ -161,8 +161,18 @@
     $('#mapBar')?.remove();
     panel.querySelector('.omap-sheet-head').addEventListener('click',()=>setSheet(!sheetOpen));
     panel.addEventListener('click',onPanelClick);
-    filters.addEventListener('click',e=>{const b=e.target.closest('[data-map-sport]');if(b)choose(b.dataset.mapSport||null);});
-    filters.addEventListener('change',e=>{if(!e.target.matches('[data-map-level]'))return;window.OceanNavigation?.begin();currentFilter=e.target.value;document.querySelectorAll('#filters [data-f]').forEach(b=>b.classList.toggle('active',b.dataset.f===currentFilter));renderSpots();render(false);filters.querySelector('select')?.focus({preventScroll:true});});
+    filters.addEventListener('click',e=>{
+      const b=e.target.closest('[data-map-sport]');if(b){choose(b.dataset.mapSport||null);return;}
+      /* « En saison » et « Nouveaux » s’ajoutent au niveau choisi (même filtre que la liste d’Explorer). */
+      const t=e.target.closest('[data-map-filter]');if(!t)return;
+      const part=t.dataset.mapFilter;setFilter(window.SpotRank?window.SpotRank.toggleFilter(currentFilter,part):part);
+      filters.querySelector(`[data-map-filter="${part}"]`)?.focus({preventScroll:true});
+    });
+    /* Le menu ne choisit que le niveau : la saison et les nouveautés déjà actives restent. */
+    filters.addEventListener('change',e=>{if(!e.target.matches('[data-map-level]'))return;
+      const v=e.target.value,R=window.SpotRank;if(v==='multi')return;
+      setFilter(R?R.formatFilter({...R.parseFilter(currentFilter),levels:v==='all'?[]:[v]}):v);
+      filters.querySelector('select')?.focus({preventScroll:true});});
     ctrls.addEventListener('click',e=>{
       const b=e.target.closest('[data-omap]');if(!b)return;const k=b.dataset.omap,onGlobe=mode==='globe'&&planet;
       if(!onGlobe&&!map)return;
@@ -191,9 +201,13 @@
   function renderFilters(){
     const base=candidates(),count=id=>id?base.filter(s=>spotSports(s).includes(id)).length:base.length;
     const scroll=filters.querySelector('.omap-acts')?.scrollLeft||0;
-    const levels=[['all','Tous les niveaux'],['season','En saison ce mois-ci'],['debutant','Débutant'],['intermediaire','Intermédiaire'],['expert','Expert'],['variable','Niveau à évaluer'],['new','Nouveaux spots']];
-    filters.innerHTML=`${window.OceanPlan?.button()||''}<label class="omap-level"><span class="omap-sr">Niveau</span><select data-map-level aria-label="Niveau">${levels.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}</select></label><div class="omap-acts" role="group" aria-label="Activités">${[{id:'',label:'Tout explorer'},...SPORTS].map(s=>{const n=count(s.id);return `<button type="button" data-map-sport="${s.id}" aria-pressed="${(activeSport||'')===s.id}" ${n||!s.id?'':'disabled'} style="--c:${s.id?color(s.id):'var(--t-deep,#0b2d7a)'}"><i aria-hidden="true"></i><span>${esc(s.label)}</span><small>${n}</small></button>`;}).join('')}</div>`;
-    filters.querySelector('select').value=currentFilter;filters.querySelector('.omap-acts').scrollLeft=scroll;
+    /* Niveau dans le menu ; « En saison » et « Nouveaux » en interrupteurs à côté : les trois se combinent. */
+    const levels=[['all','Tous les niveaux'],['debutant','Débutant'],['intermediaire','Intermédiaire'],['expert','Expert'],['variable','Niveau à évaluer']];
+    const toggles=[['season','En saison'],['new','Nouveaux']];
+    const R=window.SpotRank,p=R?R.parseFilter(currentFilter):{levels:levels.some(([v])=>v===currentFilter&&v!=='all')?[currentFilter]:[],season:currentFilter==='season',fresh:currentFilter==='new'};
+    const lv=p.levels.length>1?'multi':p.levels[0]||'all',on={season:p.season,new:p.fresh};
+    filters.innerHTML=`${window.OceanPlan?.button()||''}<label class="omap-level"><span class="omap-sr">Niveau</span><select data-map-level aria-label="Niveau">${levels.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}${lv==='multi'?'<option value="multi">Plusieurs niveaux</option>':''}</select></label>${toggles.map(([v,l])=>`<button type="button" class="omap-toggle" data-map-filter="${v}" aria-pressed="${on[v]}">${l}</button>`).join('')}<div class="omap-acts" role="group" aria-label="Activités">${[{id:'',label:'Tout explorer'},...SPORTS].map(s=>{const n=count(s.id);return `<button type="button" data-map-sport="${s.id}" aria-pressed="${(activeSport||'')===s.id}" ${n||!s.id?'':'disabled'} style="--c:${s.id?color(s.id):'var(--t-deep,#0b2d7a)'}"><i aria-hidden="true"></i><span>${esc(s.label)}</span><small>${n}</small></button>`;}).join('')}</div>`;
+    filters.querySelector('select').value=lv;filters.querySelector('.omap-acts').scrollLeft=scroll;
     revealActivity();
   }
   function revealActivity(){
@@ -209,7 +223,8 @@
     renderSportFilters();renderWorlds();renderSpots();render(false);saveState();renderHome();
     filters.querySelector(`[data-map-sport="${id||''}"]`)?.focus({preventScroll:true});
   }
-  function reset(){window.OceanNavigation?.begin();currentFilter='all';currentSearch='';favOnly=false;$('#spotSearch').value='';if(window.OceanPlan?.active?.())window.OceanPlan.set(null);const ex=document.querySelector('#spotMapWrap .ex-top input');if(ex){ex.value='';const c=ex.parentNode?.querySelector('[data-ex=clear]');if(c)c.hidden=true;}$('#favChip')?.classList.remove('active');document.querySelectorAll('#filters [data-f]').forEach(b=>b.classList.toggle('active',b.dataset.f==='all'));choose(null);}
+  function setFilter(f){window.OceanNavigation?.begin();currentFilter=f;if(typeof syncFilterChips==='function')syncFilterChips();renderSpots();render(false);}
+  function reset(){window.OceanNavigation?.begin();currentFilter='all';currentSearch='';favOnly=false;$('#spotSearch').value='';if(window.OceanPlan?.active?.())window.OceanPlan.set(null);const ex=document.querySelector('#spotMapWrap .ex-top input');if(ex){ex.value='';const c=ex.parentNode?.querySelector('[data-ex=clear]');if(c)c.hidden=true;}$('#favChip')?.classList.remove('active');if(typeof syncFilterChips==='function')syncFilterChips();choose(null);}
 
   /* Hauteur : la carte occupe l’écran restant, sans passer sous la barre d’onglets. */
   function size(){

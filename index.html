@@ -196,7 +196,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
       <div class="hcat" data-hcat="jour">
 <!-- conditions + spot du jour ; Poulpy est rendu dans la carte -->
       <div class="today-card" id="todayCard"></div>
-<div class="sec"><h2><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/wave.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> <span id="liveTopTitle">Conditions du moment</span></h2><a href="#" onclick="go('spots');return false">Voir tout</a></div>
+<div class="sec hf-legacy-live"><h2><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/wave.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> <span id="liveTopTitle">Conditions du moment</span></h2><a href="#" onclick="go('spots');return false">Voir tout</a></div>
       <div class="live-top" id="liveTop"></div>
 <div class="sec"><h2><svg viewBox="0 0 24 24" fill="none" stroke="#f5a623" stroke-width="2.2"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1.2" fill="#f5a623"/></svg> Défi du jour</h2><a href="#" onclick="go('challenges');return false">Voir tout</a></div>
       <div style="padding:0 16px;">
@@ -277,11 +277,11 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
       <button id="vtMap" onclick="setView('map')" style="display:none"></button>
       <div id="listView">
         <div class="filters" id="filters">
-          <div class="chip active" data-f="all" onclick="filterSpots(this,'all')"><img class="poulpy-mini" src="assets/poulpy/scenes/travel-v2.webp" alt="" width="80" height="80">Tous</div>
-          <div class="chip" data-f="debutant" onclick="filterSpots(this,'debutant')"><img class="poulpy-mini ob-ico level-poulpy" src="assets/pictos/niveaux/debutant.webp" alt="" width="80" height="80" loading="lazy" decoding="async">Débutant</div>
-          <div class="chip" data-f="intermediaire" onclick="filterSpots(this,'intermediaire')"><img class="poulpy-mini ob-ico level-poulpy" src="assets/pictos/niveaux/intermediaire.webp" alt="" width="80" height="80" loading="lazy" decoding="async">Intermédiaire</div>
-          <div class="chip" data-f="expert" onclick="filterSpots(this,'expert')"><img class="poulpy-mini ob-ico level-poulpy" src="assets/pictos/niveaux/expert.webp" alt="" width="80" height="80" loading="lazy" decoding="async">Expert</div>
-          <div class="chip season-chip" data-f="season" onclick="filterSpots(this,'season')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg> En saison</div>
+          <button type="button" class="chip active" data-f="all" aria-pressed="true" onclick="filterSpots(this,'all')"><img class="poulpy-mini" src="assets/poulpy/scenes/travel-v2.webp" alt="" width="80" height="80">Tous</button>
+          <button type="button" class="chip" data-f="debutant" aria-pressed="false" onclick="filterSpots(this,'debutant')"><img class="poulpy-mini ob-ico level-poulpy" src="assets/pictos/niveaux/debutant.webp" alt="" width="80" height="80" loading="lazy" decoding="async">Débutant</button>
+          <button type="button" class="chip" data-f="intermediaire" aria-pressed="false" onclick="filterSpots(this,'intermediaire')"><img class="poulpy-mini ob-ico level-poulpy" src="assets/pictos/niveaux/intermediaire.webp" alt="" width="80" height="80" loading="lazy" decoding="async">Intermédiaire</button>
+          <button type="button" class="chip" data-f="expert" aria-pressed="false" onclick="filterSpots(this,'expert')"><img class="poulpy-mini ob-ico level-poulpy" src="assets/pictos/niveaux/expert.webp" alt="" width="80" height="80" loading="lazy" decoding="async">Expert</button>
+          <button type="button" class="chip season-chip" data-f="season" aria-pressed="false" onclick="filterSpots(this,'season')"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.2M12 19.3v2.2M2.5 12h2.2M19.3 12h2.2M5.3 5.3l1.6 1.6M17.1 17.1l1.6 1.6M18.7 5.3l-1.6 1.6M6.9 17.1l-1.6 1.6"/></svg> En saison</button>
           <div class="chip plan-chip" data-map-plan role="button" tabindex="0"><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/guide/g-calendar.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> <span>Quand ?</span></div>
           <div class="chip fav-chip" id="favChip" onclick="toggleFavFilter()"><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/coeur.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> Favoris</div>
         </div>
@@ -582,6 +582,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="activity-transition.js?v=9115991e9dfb"></script>
 <script src="spot-photos.js?v=7db07d494e54"></script>
 <script src="progression.js?v=573fcb54b5ba"></script>
+<script src="spot-rank-model.js?v=0"></script>
 <script src="app.js?v=d746600b1f24"></script>
 <script src="private-spots.js?v=683221818ade"></script>
 <script src="poulpy-knowledge.js?v=00c4ab3bd0f8"></script>

@@ -193,7 +193,7 @@
   renderSpots(currentFilter,true);
   document.addEventListener('click',e=>{
     const action=e.target.closest('[data-field-action]');
-    if(action?.dataset.fieldAction==='new'){setSport(null);openWorld('all');filterSpots(newFilter,'new');}
+    if(action?.dataset.fieldAction==='new'){setSport(null);openWorld('all');filterSpots(newFilter,'new',true);}
     if(action?.dataset.fieldAction==='trip')OceanTrips.fromSpot(currentSpot);
     if(action?.dataset.fieldAction==='conditions')showDetailCat('meteo');
     if(action?.dataset.fieldAction==='emergency'){showDetailCat('meteo',false);requestAnimationFrame(()=>$('#dEmerg')?.scrollIntoView({block:'center',behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'}));}

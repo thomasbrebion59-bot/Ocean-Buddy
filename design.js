@@ -35,12 +35,16 @@
   $('.phone').insertBefore(chrome,$('#screenWrap'));
   $('.chrome-user').onclick = () => go('profile');
   $('.chrome-user').insertAdjacentHTML('beforebegin',`<button class="mobile-search" aria-label="Rechercher un spot">${icon('search')}</button>`);
+  /* Recherche de l’accueil (et loupe du haut) : tous les continents, filtres remis à zéro, mais le sport choisi et ses
+     couleurs restent (il s’affiche en puce effaçable au-dessus de la liste ; sans résultat dans ce sport, la liste
+     propose « Chercher dans toutes les activités »). Avant, le sport était effacé et le thème remis au neutre. */
   function searchEverywhere(query=''){
     window.OceanNavigation?.begin();
-    activeSport=null;chosenSport='all';window.OceanTheme?.set?.(null);currentFilter='all';favOnly=false;nearMode=false;currentSearch='';
+    currentFilter='all';favOnly=false;nearMode=false;currentSearch='';
     $('#favChip').classList.remove('active');$('#nearBtn').classList.remove('on');
-    document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
-    renderSportFilters();renderWorlds();
+    if(typeof syncFilterChips==='function')syncFilterChips();
+    else document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f==='all'));
+    renderWorlds();
     go('spots');openWorld('all');setView('list');$('#spotSearch').value=query;searchSpots(query);$('#spotSearch').focus();
   }
   $('.mobile-search').onclick = () => searchEverywhere();

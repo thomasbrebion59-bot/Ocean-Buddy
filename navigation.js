@@ -98,11 +98,12 @@
     activeSport=SPORTMAP[route.sport]?route.sport:null;
     spotWorld=route.world==='all'||worldOf(route.world)?route.world:null;
     spotCountry=typeof route.country==='string'&&route.country?route.country:null;
-    currentFilter=['all','new','season','debutant','intermediaire','expert','variable'].includes(route.filter)?route.filter:'all';
+    /* Filtres combinables (« debutant,season ») et anciennes routes à une seule valeur : même lecture (spot-rank-model.js). */
+    currentFilter=window.SpotRank?.normFilter?.(route.filter)||(['all','new','season','debutant','intermediaire','expert','variable'].includes(route.filter)?route.filter:'all');
     currentSearch=typeof route.search==='string'?route.search:'';favOnly=!!route.favorites;nearMode=!!route.near&&!!userPos;
     spotShown=Math.max(SPOT_PAGE,Number(route.shown)||SPOT_PAGE);
     $('#spotSearch').value=currentSearch;$('#favChip').classList.toggle('active',favOnly);$('#nearBtn').classList.toggle('on',nearMode);
-    document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f===currentFilter));
+    if(typeof syncFilterChips==='function')syncFilterChips();else document.querySelectorAll('#filters [data-f]').forEach(el=>el.classList.toggle('active',el.dataset.f===currentFilter));
     const after={world:spotWorld,country:spotCountry,sport:activeSport,filter:currentFilter,search:currentSearch,favorites:favOnly,near:nearMode,shown:spotShown,homeTab:route.homeTab};
     /* Relance du WebView : tout est reconstruit. Retour ou Avancer : seulement ce qui change (un retour de fiche
        vers l’accueil refaisait l’Explorer, l’accueil et les voyages : ~180 ms à x4, dont 135 ms de mise en page forcée). */

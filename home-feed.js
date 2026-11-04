@@ -434,12 +434,93 @@
   }
   /* ---------- Fin du mode Noël ---------- */
 
+  /* ---------- « Pour toi aujourd’hui » (spot-rank-model.js) ----------
+     Trois spots pour le sport et le niveau enregistrés : à ton niveau d’abord (jamais un spot déconseillé par la jauge de
+     danger), puis en saison ce mois-ci, puis les plus proches si la position est déjà connue (elle n’est jamais demandée
+     ici), puis l’éclat de la photo ; un tirage du jour fait tourner les spots équivalents. Aucun appel réseau : seuls les
+     repères déjà chargés (saisons, normales légères) sont lus. La section est posée avec le fil, sous le rideau, à hauteur
+     fixe (home-feed.css) ; un changement de niveau remplace ses trois lignes sur place, à la même hauteur. */
+  const Rank=window.SpotRank;
+  const curLevel=()=>(typeof chosenLevel!=='undefined'&&chosenLevel)||null;
+  const LEVEL_TX={debutant:'Débutant',intermediaire:'Intermédiaire',expert:'Expert',variable:'Niveau à évaluer'};
+  const today=()=>{const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/86400000);};
+  function rankCtx(){
+    const pos=typeof userPos!=='undefined'&&userPos&&Number.isFinite(userPos.lat)?{lat:userPos.lat,lon:userPos.lon}:null;
+    return {sport:curSport(),level:curLevel(),month:new Date().getMonth(),seasons,photo:scores,pos,
+      favs:typeof favs!=='undefined'?favs:null,coords:s=>COORDS[s.id]||s.coords,gauge:s=>window.dangerGauge?.(s)?.n??null,
+      hasPhoto:s=>!!photo(s),day:today(),jitter:30};
+  }
+  function forYouSub(){
+    const sp=curSport(),lv=curLevel();
+    return `${sp==='all'?'Toutes les activités':sportLabel(sp)||'Toutes les activités'} · ${lv?LEVEL_TX[lv]:'Tous niveaux'}`;
+  }
+  /* Repères d’une ligne : niveau du spot, saison du mois, eau du mois, distance (si connue). Une seule ligne, sans retour. */
+  function fyChips(s,why){
+    const m=new Date().getMonth(),lv=LEVEL_TX[s.level]||LEVEL_TX.variable,out=[`<span class="hf-fy-lv">${esc(lv)}</span>`];
+    if(why.inSeason)out.push(`<span class="hf-season">En saison en ${esc(monthName(m))}</span>`);
+    else if(why.seasonKnown){const t=seasonLabel(seasons?.[s.id]);if(t)out.push(`<span>${esc(t)}</span>`);}
+    const sea=dataChip(s,'sea',m);if(sea)out.push(sea);
+    if(why.dist!=null)out.push(`<span>${esc(why.dist<20?num(why.dist,1):num(Math.round(why.dist)))} km</span>`);
+    return out.join('');
+  }
+  function fyRow({spot:s,why}){
+    const p=photo(s),fav=typeof favs!=='undefined'&&favs.has(s.id),name=shortName(s);
+    const act=curSport()!=='all'?sportLabel(curSport()):(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');
+    return `<article class="hf-fy" data-spot="${esc(s.id)}" role="listitem" tabindex="0" aria-label="${esc(name)}, ${esc(s.country||'')}">
+      <img src="${esc(p.thumb)}" alt="" loading="lazy" decoding="async">
+      <div class="hf-fy-tx"><b>${esc(name)}</b><small>${esc(s.country||s.loc||'')}${act?` · ${esc(act)}`:''}</small><p class="hf-fy-why">${fyChips(s,why)}</p></div>
+      <button type="button" class="hf-fav${fav?' on':''}" data-fav="${esc(s.id)}" aria-label="${fav?'Retirer des favoris':'Ajouter aux favoris'} : ${esc(name)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4S3.8 14.9 3.8 9.4A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.2 2.8c0 5.5-8.2 11-8.2 11z"/></svg></button>
+    </article>`;
+  }
+  function fyList(picks){
+    if(picks.length)return picks.map(fyRow).join('');
+    return `<p class="hf-fy-empty">Pas encore de spot pour ce choix. <button type="button" data-hf-profile>Change ton sport ou ton niveau</button></p>`;
+  }
+  /* used : spots déjà montrés plus haut (Noël) ; les trois spots choisis ne reviennent pas dans les rangées suivantes. */
+  function forYouSection(used){
+    if(!Rank)return '';
+    const picks=Rank.forYou(SPOTS,rankCtx(),{n:3,perCountry:1,used});
+    picks.forEach(p=>used.add(p.spot.id));
+    return `<section class="hf-sec hf-foryou" data-hf="pourtoi" aria-label="Pour toi aujourd’hui">
+      <div class="as-sec"><h2>Pour toi aujourd’hui<small data-hf-fy-sub>${esc(forYouSub())}</small></h2><button type="button" data-hf-profile aria-label="Modifier mon sport et mon niveau">Modifier</button></div>
+      <div class="hf-fy-list" role="list">${fyList(picks)}</div>
+    </section>`;
+  }
+  /* Niveau changé (Réglages) : les trois lignes sont remplacées sur place, la section garde sa hauteur. */
+  function updateForYou(){
+    const sec=home.querySelector('[data-hf="pourtoi"]');if(!sec||!Rank)return;
+    const others=new Set([...home.querySelectorAll('.hf-feed [data-spot]')].filter(el=>!sec.contains(el)).map(el=>el.dataset.spot));
+    const list=sec.querySelector('.hf-fy-list'),sub=sec.querySelector('[data-hf-fy-sub]');
+    if(list)list.innerHTML=fyList(Rank.forYou(SPOTS,rankCtx(),{n:3,perCountry:1,used:others}));
+    if(sub)sub.textContent=forYouSub();
+  }
+  /* Données arrivées après la levée : seuls les repères des lignes changent (saison, eau), sur place. */
+  function lateForYou(){
+    if(!Rank)return;const ctx=rankCtx(),byId=new Map(SPOTS.map(s=>[s.id,s]));
+    home.querySelectorAll('.hf-fy[data-spot]').forEach(r=>{const s=byId.get(r.dataset.spot),p=r.querySelector('.hf-fy-why');if(s&&p)p.innerHTML=fyChips(s,Rank.explain(s,ctx));});
+  }
+  /* Profil pour lequel le fil a été construit : un changement de sport le reconstruit (action volontaire, sous la scène
+     de transition d’activité ou hors de l’accueil), un changement de niveau ne refait que « Pour toi ». */
+  let builtSport=null,builtLevel=null;
+  function profileChanged(){
+    if(!built)return;
+    if(curSport()!==builtSport){mount();if(Boot&&!Boot.lifted)ready();return;}
+    if((curLevel()||'')!==builtLevel){builtLevel=curLevel()||'';updateForYou();}
+  }
+  /* ---------- Fin de « Pour toi aujourd’hui » ---------- */
+
   function render(){
     const used=new Set();
-    const pool=bright(daily(SPOTS.filter(s=>photo(s)),'pool'));
+    const all=bright(daily(SPOTS.filter(s=>photo(s)),'pool'));
+    /* Rangées filtrées par le sport choisi (« Tous » : tout le catalogue) ; une rangée de moins de 3 cartes disparaît
+       (pas de « Belle houle » pour un plongeur). Le mode Noël garde tout le catalogue : les cases de l’Avent ne
+       changent pas avec le sport. */
+    const sp=curSport(),pool=sp==='all'?all:all.filter(s=>has(s,sp));
     const m=new Date().getMonth();
-    /* Mode Noël : la rangée « Noël au soleil » (et l’Avent) ouvre le fil ; ses spots ne reviennent pas plus bas. */
-    let html=noelSection(pool,used);
+    /* Mode Noël : la rangée « Noël au soleil » (et l’Avent) ouvre le fil ; ses spots ne reviennent pas plus bas.
+       Puis « Pour toi aujourd’hui ». */
+    let html=noelSection(all,used);
+    html+=forYouSection(used);
     if(seasons){
       /* Saison qui commence ce mois-ci d’abord, puis saison en cours ; les saisons courtes passent devant « toute l’année ». */
       const inSeason=pool.filter(s=>seasons[s.id]?.includes(m));
@@ -497,10 +578,11 @@
     stopPlanet();
     feed.innerHTML=render();
     /* Envies du moment juste après le premier rail, la carte du monde après le deuxième. */
-    const firstRail=feed.querySelector('.hf-sec');const mm=document.createElement('div');mm.innerHTML=moods(feed);if(mm.firstElementChild)(firstRail||feed.firstElementChild)?.after(mm.firstElementChild);
+    const rails=feed.querySelectorAll('.hf-sec:not([data-hf="pourtoi"])');
+    const firstRail=rails[0];const mm=document.createElement('div');mm.innerHTML=moods(feed);if(mm.firstElementChild)(firstRail||feed.firstElementChild)?.after(mm.firstElementChild);
     /* La carte du monde vient après les deux premiers rails. */
-    const second=feed.querySelectorAll('.hf-sec')[1];const wc=document.createElement('div');wc.innerHTML=worldCard();(second||feed.lastElementChild)?.after(wc.firstElementChild);
-    order();bindHero();watchPlanet();aventToday();built=true;
+    const second=rails[1];const wc=document.createElement('div');wc.innerHTML=worldCard();(second||feed.lastElementChild)?.after(wc.firstElementChild);
+    order();bindHero();watchPlanet();aventToday();built=true;builtSport=curSport();builtLevel=curLevel()||'';
   }
   /* Données arrivées après le montage : sous le rideau, le fil est remonté (invisible) ; après la levée, seules les
      pastilles des cartes déjà affichées changent, sur place (aucune section ajoutée, retirée ni déplacée). */
@@ -511,6 +593,7 @@
       const s=byId.get(c.dataset.spot),p=c.querySelector('.hf-card-tx p');if(!s||!p)return;
       p.innerHTML=chips(s,c.dataset.hfData||null,c.hasAttribute('data-hf-season')?seasonLabel(seasons?.[s.id]):null,c.dataset.hfM!=null?+c.dataset.hfM:null);
     });
+    lateForYou();
   }
   /* Accueil prêt : la photo d’ouverture est décodée et les polices des titres chargées (avec un plafond). */
   function settle(){
@@ -529,12 +612,14 @@
     if(av){openAvent(av);return;}
     const fav=e.target.closest('[data-fav]');
     if(fav){e.stopPropagation();const id=fav.dataset.fav;if(typeof toggleFav==='function'){toggleFav(id,e);}const on=typeof favs!=='undefined'&&favs.has(id);fav.classList.toggle('on',on);if(typeof vibrate==='function')vibrate(8);return;}
+    const prof=e.target.closest('[data-hf-profile]');
+    if(prof){if(typeof openSettings==='function')openSettings('sport');return;}
     const surf=e.target.closest('[data-surf-game]');
     if(surf){go('surf');return;}
     const more=e.target.closest('[data-hf-more]');
     if(more){
       /* « Tout voir » : la planète n’allume que les spots en saison ce mois-ci. */
-      currentFilter='season';document.querySelectorAll('#filters [data-f]').forEach(b=>b.classList.toggle('active',b.dataset.f==='season'));
+      currentFilter='season';if(typeof syncFilterChips==='function')syncFilterChips();else document.querySelectorAll('#filters [data-f]').forEach(b=>b.classList.toggle('active',b.dataset.f==='season'));
       go('spots');try{renderSpots();window.OceanMap?.render?.(true);}catch(_){}
       if(typeof toast==='function')toast(`${SPOTS.filter(s=>inSeason(s.id)).length} spots où nos carnets et les moyennes climatiques s’accordent ce mois-ci`);
       return;
@@ -555,11 +640,11 @@
     if(open&&typeof openSpot==='function'){openSpot(open.dataset.hfOpen||open.dataset.spot);return;}
     const go2=e.target.closest('[data-hf-go]');
     if(go2){if(go2.dataset.hfGo==='trips'){go('trips');}else{go('spots');}return;}
-    const card=e.target.closest('.hf-card[data-spot]');
+    const card=e.target.closest('.hf-card[data-spot],.hf-fy[data-spot]');
     if(card&&typeof openSpot==='function'){openSpot(card.dataset.spot);}
   });
   home.addEventListener('keydown',e=>{
-    if((e.key==='Enter'||e.key===' ')&&e.target.matches('.hf-card')){e.preventDefault();e.target.click();return;}
+    if((e.key==='Enter'||e.key===' ')&&e.target.matches('.hf-card,.hf-fy')){e.preventDefault();e.target.click();return;}
     /* Groupe radio : les flèches déplacent le focus, Espace ou Entrée choisit (motif ARIA « radio group »). */
     if(e.target.matches('.hf-act')&&['ArrowRight','ArrowLeft','ArrowDown','ArrowUp','Home','End'].includes(e.key)){
       const all=[...home.querySelectorAll('.hf-act')],i=all.indexOf(e.target),rtl=getComputedStyle(e.target).direction==='rtl';
@@ -569,14 +654,16 @@
     }
   });
   /* L’activité a changé ailleurs (barre des sports, Explorer, carte, navigation) : la rangée suit, sans rendu. */
-  document.addEventListener('ocean:sport',()=>syncActs());
+  document.addEventListener('ocean:sport',()=>{syncActs();profileChanged();});
+  /* Niveau changé dans Réglages : seul « Pour toi aujourd’hui » change, sur place. */
+  document.addEventListener('ocean:level',profileChanged);
   /* Scène interrompue ou annulée avant le changement : la pastille revient à l’activité réellement appliquée. */
   document.addEventListener('ocean:transition',e=>{if(!e.detail)syncActs();});
 
   /* Démarrage : un seul montage visible. Saisons, éclat des photos et normales légères sont attendus ensemble
      (au plus jusqu’à 3 s après le début du démarrage), puis le fil est monté une fois et le rideau peut se lever. */
   const data=Promise.all([
-    Promise.all(['data/seasons.json','data/photo-scores.json'].map(u=>fetch(u).then(r=>r.ok?r.json():null).catch(()=>null))).then(([d,sc])=>{seasons=d;scores=sc;window.OCEAN_SEASONS=d;}),
+    Promise.all(['data/seasons.json','data/photo-scores.json'].map(u=>fetch(u).then(r=>r.ok?r.json():null).catch(()=>null))).then(([d,sc])=>{seasons=d;scores=sc;window.OCEAN_SEASONS=d;window.OCEAN_PHOTO_SCORES=sc;}),
     (window.OceanSpotData?window.OceanSpotData.load('lite'):Promise.reject(Error('lite'))).then(d=>{lite=d;},()=>{})
   ]);
   const have=()=>[!!seasons,!!scores,!!lite].join();
