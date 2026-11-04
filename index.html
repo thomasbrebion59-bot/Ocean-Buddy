@@ -39,7 +39,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
   mo.observe(d,{childList:true,subtree:true});addEventListener('DOMContentLoaded',function(){mo.disconnect();});})(A[new Date().getDate()%A.length][1]);}
 })();</script>
 <noscript><style>#obBoot{display:none}</style></noscript>
-<script src="i18n.js?v=d720abf22c07"></script>
+<script src="i18n.js?v=839683e90948"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
 <meta name="theme-color" content="#fef9eb">
@@ -73,7 +73,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <link rel="stylesheet" href="app-update.css?v=6d599b619d1e">
 <link rel="stylesheet" href="i18n.css?v=1a1d3d765232">
 <link rel="stylesheet" href="badges.css?v=1cf71d16a755">
-<link rel="stylesheet" href="home-feed.css?v=3cb19d279423">
+<link rel="stylesheet" href="home-feed.css?v=947830f17b29">
 <link rel="stylesheet" href="surf.css?v=3ce10699afd6">
 <link rel="stylesheet" href="surf-tab.css?v=b8ebffc8da38">
 <link rel="stylesheet" href="app-shell.css?v=ef6506a7d079">
@@ -83,6 +83,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <link rel="stylesheet" href="spot-data.css?v=c5777e90c81f">
 <link rel="stylesheet" href="brand.css?v=0d498cc50f5b">
 <link rel="stylesheet" href="icons.css?v=71179c5f65be">
+<link rel="stylesheet" href="noel.css?v=1214eb1206a1">
 <link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ocean Buddy">
@@ -554,6 +555,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
       <label class="set-lab" for="setLang">Langue</label>
       <select id="setLang" class="set-input set-lang" translate="no"></select>
       <label class="set-toggle"><span>Réduire les animations</span><input type="checkbox" id="setReduce" onchange="toggleReduceMotion(this.checked)"></label>
+      <label class="set-toggle" id="setNoelRow" hidden><span>Ambiance de Noël</span><input type="checkbox" id="setNoel"></label>
       <button class="set-reset" onclick="resetProgress()">Réinitialiser ma progression</button>
       <img class="set-logo" src="assets/brand/logo-complet-640.png" alt="Ocean Buddy" width="640" height="604" loading="lazy" decoding="async">
       <div class="set-about"><b>Ocean Buddy</b><br>Explore. Progresse. Protège.<br><br>Météo & marées : Open-Meteo.<br>Carte : OpenStreetMap. Photos : Wikimedia Commons et Unsplash.<br><a href="photos.html" target="_blank" rel="noopener">Photographes et licences</a><br><a href="privacy.html" target="_blank" rel="noopener">Confidentialité</a> · <a href="support.html" target="_blank" rel="noopener">Assistance</a><br><b>Poulpy</b> répond à tes questions directement sur ton appareil, même hors connexion.</div>
@@ -618,7 +620,8 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="app-update.js?v=1ddfa6391360"></script>
 <script src="ocean-home.js?v=04d4c46ee3b5"></script>
 <script src="badges.js?v=c91e7eb4bb16"></script>
-<script src="home-feed.js?v=a6279020557a"></script>
+<script src="noel-model.js?v=e20ee64f411f"></script>
+<script src="home-feed.js?v=425fa3fe35d9"></script>
 <script src="passport.js?v=f578917c0f7a"></script>
 <script src="surf-model.js?v=db29a0e31c9a"></script>
 <script src="surf-render.js?v=f094a635d338"></script>
