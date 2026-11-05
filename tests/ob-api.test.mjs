@@ -288,7 +288,7 @@ test('production : jeton Supabase vérifié par JWKS (ES256), HS256 et mauvais �
   assert.ok('__Host-ob_at' in d.jar && '__Secure-ob_rt' in d.jar);
   assert.equal((await d.call('GET', '/api/v1/me')).data.mode, 'production');
   const bearer = async (t) => (await device(w, env, { origin: null, base: 'https://oceanbuddy.app', ip: '192.0.2.99' }).call('GET', '/api/v1/me', undefined, { authorization: 'Bearer ' + t })).status;
-  assert.equal(await bearer(await token({ iss: 'https://autre.supabase.co/auth/v1' })), 401);
+  assert.equal(await bearer(await token({ iss: 'https://example2.example.co/auth/v1' })), 401);
   assert.equal(await bearer(await token({ role: 'anon' })), 401);
   assert.equal(await bearer(await token({ exp: Math.floor(c.t / 1000) - 1 })), 401);
   const hs = (await token()).split('.'); hs[0] = Buffer.from(JSON.stringify({ alg: 'HS256', kid: 'k1' })).toString('base64url');

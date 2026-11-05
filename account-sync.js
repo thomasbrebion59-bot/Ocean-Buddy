@@ -186,7 +186,7 @@
     if(!st.linked){
       html+='<p class="oba-set-text">Garde tes voyages, tes sessions et tes badges, même si tu changes d’appareil.</p><button type="button" class="oba-set-main" data-a="login">Créer mon compte ou me connecter</button>';
     }else{
-      html+=`<p class="oba-set-text">Connecté${me&&me.user&&me.user.email?` : <b translate="no">${esc(me.user.email)}</b>`:''}</p>`;
+      html+=`<p class="oba-set-text"><span>Connecté</span>${me&&me.user&&me.user.email?` <b translate="no">${esc(me.user.email)}</b>`:''}</p>`;
       if(me&&!me.consent)html+='<p class="oba-set-text">La sauvegarde n’est pas activée.</p><button type="button" class="oba-set-main" data-a="consent">Activer la sauvegarde</button>';
       else html+=`<p class="oba-set-text">Dernière sauvegarde : <span>${esc(ago(st.lastSync))}</span></p><button type="button" class="oba-set-main" data-a="sync">Synchroniser maintenant</button>`;
       html+='<div class="oba-set-row"><button type="button" class="oba-set-btn" data-a="export">Exporter mes données</button><button type="button" class="oba-set-btn" data-a="logout">Se déconnecter</button></div>';

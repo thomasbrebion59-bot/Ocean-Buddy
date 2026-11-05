@@ -19,7 +19,7 @@
 (() => {
   'use strict';
   const ACCOUNT={enabled:false,hosts:['oceanbuddy.app']};
-  const ACCOUNT_V='';
+  const ACCOUNT_V='7db9de7519cb';
   function accountEnabled(cfg,loc,storage,mobile){
     if(mobile&&mobile.native)return !!(cfg.enabled&&mobile.capabilities&&mobile.capabilities.account===true);
     if(loc.protocol==='capacitor:')return false;
@@ -29,7 +29,7 @@
     return !!cfg.enabled&&loc.protocol==='https:'&&cfg.hosts.includes(loc.hostname);
   }
   window.OceanAccountGate={enabled:accountEnabled};
-  if(!accountEnabled(ACCOUNT,location,window.localStorage,window.OceanMobile))return;
+  if(typeof location==='undefined'||!accountEnabled(ACCOUNT,location,window.localStorage,window.OceanMobile))return;
   const load=()=>{const add=(src,next)=>{const s=document.createElement('script');s.src=src+(ACCOUNT_V?'?v='+ACCOUNT_V:'');s.async=false;if(next)s.onload=next;document.body.append(s);};
     add('account-sync-model.js',()=>add('account-sync.js'));};
   const later=()=>setTimeout(()=>{(window.requestIdleCallback||setTimeout)(load,{timeout:3000});},1500);
