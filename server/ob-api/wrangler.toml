@@ -15,7 +15,7 @@ ALLOWED_ORIGINS = "https://oceanbuddy.app"
 # Origines de l'app native (étape 3, version 1.5.0), séparées par des virgules ; vide = aucune.
 NATIVE_ORIGINS = ""
 # À REMPLIR : adresse du projet Supabase (région UE), ex. https://abcdefghijkl.supabase.co
-SUPABASE_URL = ""
+SUPABASE_URL = "https://qmngkojxupxfphypubph.supabase.co"
 # Disjoncteur : e-mails de connexion envoyés par jour (Resend gratuit : 100/jour).
 EMAIL_DAILY_BUDGET = "80"
 # Secrets (JAMAIS dans ce fichier) :
