@@ -28,7 +28,7 @@ EMAIL_DAILY_BUDGET = "80"
 [[d1_databases]]
 binding = "DB"
 database_name = "ob-comptes"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "8d0ed5e6-88ea-47f5-a4c2-be6a7390cd50"
 migrations_dir = "migrations"
 
 # Limites de débit atomiques (Durable Object, stockage SQLite, offert sur le plan gratuit).
