@@ -1,0 +1,14 @@
+{
+  "name": "ob-api",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "API des comptes Ocean Buddy (Cloudflare Worker + D1). Tests : npm test à la racine du dépôt.",
+  "scripts": {
+    "dev": "wrangler dev --local --port 8787",
+    "db:local": "wrangler d1 migrations apply ob-comptes --local"
+  },
+  "devDependencies": {
+    "wrangler": "4.157.0"
+  }
+}

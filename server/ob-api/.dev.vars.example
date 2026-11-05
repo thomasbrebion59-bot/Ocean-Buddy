@@ -1,0 +1,6 @@
+# Copier vers .dev.vars (ignoré par git). ESSAI LOCAL UNIQUEMENT : faux fournisseur d'identité, code 123456.
+# Ces réglages ne sont acceptés que sur http://localhost ou http://127.0.0.1 et sans SUPABASE_URL :
+# ailleurs, le Worker refuse toutes les requêtes (500 « misconfigured »). Ne JAMAIS les mettre dans wrangler.toml.
+OB_ENV=local
+OB_DEV_FAKE_IDP=1
+ALLOWED_ORIGINS=http://localhost:8788,http://127.0.0.1:8788

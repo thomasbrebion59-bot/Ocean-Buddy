@@ -1,0 +1,53 @@
+# Worker « ob-api » : comptes Ocean Buddy. Valeurs de PRODUCTION, sûres par défaut.
+# Rien n'est déployé tant que le fondateur n'a pas suivi Ocean-Buddy-orga-docs/comptes/A-FAIRE-FONDATEUR.md.
+# Essai local : copier .dev.vars.example vers .dev.vars (ignoré par git), puis `node scripts/compte-essai.mjs` à la racine.
+name = "ob-api"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = false
+
+# À décommenter le jour de la mise en service (même domaine que le site : cookies HttpOnly possibles).
+# routes = [ { pattern = "oceanbuddy.app/api/*", zone_name = "oceanbuddy.app" } ]
+
+[vars]
+OB_ENV = "production"
+ALLOWED_ORIGINS = "https://oceanbuddy.app"
+# Origines de l'app native (étape 3, version 1.5.0), séparées par des virgules ; vide = aucune.
+NATIVE_ORIGINS = ""
+# À REMPLIR : adresse du projet Supabase (région UE), ex. https://abcdefghijkl.supabase.co
+SUPABASE_URL = ""
+# Disjoncteur : e-mails de connexion envoyés par jour (Resend gratuit : 100/jour).
+EMAIL_DAILY_BUDGET = "80"
+# Secrets (JAMAIS dans ce fichier) :
+#   npx wrangler secret put SUPABASE_PUBLISHABLE_KEY   (clé publique sb_publishable_…, gardée côté serveur quand même)
+#   npx wrangler secret put SUPABASE_SECRET_KEY        (clé secrète sb_secret_… : seulement pour supprimer un compte)
+#   npx wrangler secret put HASH_KEY                   (32 caractères aléatoires ou plus : openssl rand -hex 32)
+
+# Données des comptes. Créer la base en UE : npx wrangler d1 create ob-comptes --jurisdiction eu
+# puis remplacer database_id par l'identifiant affiché. Retour arrière : D1 Time Travel (7 jours en gratuit).
+[[d1_databases]]
+binding = "DB"
+database_name = "ob-comptes"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+# Limites de débit atomiques (Durable Object, stockage SQLite, offert sur le plan gratuit).
+[[durable_objects.bindings]]
+name = "GUARD"
+class_name = "Guard"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Guard"]
+
+# Reprise des suppressions d'identité en attente et purge des suppressions de plus de 90 jours.
+[triggers]
+crons = ["17 3 * * *"]
+
+# Journaux : seuls les événements anonymes écrits par le Worker ; journal d'invocation automatique désactivé.
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[observability.logs]
+invocation_logs = false
