@@ -7,7 +7,7 @@ compatibility_date = "2026-10-01"
 workers_dev = false
 
 # À décommenter le jour de la mise en service (même domaine que le site : cookies HttpOnly possibles).
-# routes = [ { pattern = "oceanbuddy.app/api/*", zone_name = "oceanbuddy.app" } ]
+routes = [ { pattern = "oceanbuddy.app/api/*", zone_name = "oceanbuddy.app" } ]
 
 [vars]
 OB_ENV = "production"

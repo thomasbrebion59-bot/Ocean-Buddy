@@ -9,8 +9,8 @@ const gate=(()=>{const ctx=vm.createContext({});vm.runInContext(fnSource(privacy
 const mem=(init={})=>{const m=new Map(Object.entries(init));return {getItem:k=>m.has(k)?m.get(k):null,setItem:(k,v)=>m.set(k,String(v)),m};};
 const loc=u=>{const x=new URL(u);return {protocol:x.protocol,hostname:x.hostname,search:x.search};};
 
-test('le drapeau du compte est désactivé par défaut',()=>{
-  assert.match(privacy,/const ACCOUNT=\{enabled:false,hosts:\['oceanbuddy\.app'\]\};/);
+test('le compte est allumé uniquement pour oceanbuddy.app (mise en service du 5 nov. 2026)',()=>{
+  assert.match(privacy,/const ACCOUNT=\{enabled:true,hosts:\['oceanbuddy\.app'\]\};/);
   const off={enabled:false,hosts:['oceanbuddy.app']};
   assert.equal(gate(off,loc('https://oceanbuddy.app/'),mem(),undefined),false);
   assert.equal(gate(off,loc('http://localhost:8080/'),mem(),undefined),false,'check:boot et le site local restent inchangés');

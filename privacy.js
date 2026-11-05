@@ -18,7 +18,7 @@
    Le code du compte se charge APRÈS la levée du rideau (OceanBoot.after) et n'écrit jamais sur l'accueil. */
 (() => {
   'use strict';
-  const ACCOUNT={enabled:false,hosts:['oceanbuddy.app']};
+  const ACCOUNT={enabled:true,hosts:['oceanbuddy.app']};
   const ACCOUNT_V='7db9de7519cb';
   function accountEnabled(cfg,loc,storage,mobile){
     if(mobile&&mobile.native)return !!(cfg.enabled&&mobile.capabilities&&mobile.capabilities.account===true);
