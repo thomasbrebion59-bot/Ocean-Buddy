@@ -5,7 +5,7 @@ function copyLocales(dest){fs.mkdirSync(path.join(dest,'locales'),{recursive:tru
 async function main(){
   fs.rmSync(dest,{recursive:true,force:true});fs.mkdirSync(dest,{recursive:true});
   const declaredScripts=new Set([...fs.readFileSync(path.join(root,'index.html'),'utf8').matchAll(/<script src="([^\"]+)"[^>]*><\/script>/g)].map(match=>match[1].split('?')[0]).filter(src=>!src.includes('/')&&src.endsWith('.js')));
-  for(const item of fs.readdirSync(root,{withFileTypes:true}))if(item.isFile()&&(/\.(html|css|ico)$/.test(item.name)||declaredScripts.has(item.name)))fs.copyFileSync(path.join(root,item.name),path.join(dest,item.name));
+  for(const item of fs.readdirSync(root,{withFileTypes:true}))if(item.isFile()&&(/\.(html|css|ico)$/.test(item.name)||declaredScripts.has(item.name)||['account-sync-model.js','account-sync.js'].includes(item.name)))fs.copyFileSync(path.join(root,item.name),path.join(dest,item.name));
   /* Fichiers sources de la marque (gros PNG et JPG de travail) : inutiles dans l’app, exclus du paquet. */
   const brandSource=/^(manta-[^/]*-source\.[a-z]+|manta-app-icon-[^/]*\.png)$/;
   fs.cpSync(path.join(root,'assets'),path.join(dest,'assets'),{recursive:true,filter:src=>!(path.dirname(src)===path.join(root,'assets','brand')&&brandSource.test(path.basename(src)))});

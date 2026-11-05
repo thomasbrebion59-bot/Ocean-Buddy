@@ -11,3 +11,27 @@
   };
   document.querySelector('.set-about').before(erase);
 })();
+
+/* Compte et sauvegarde (compte gratuit, facultatif). DRAPEAU DÉSACTIVÉ par défaut : rien n'est chargé ni affiché tant que
+   le serveur ob-api n'est pas en service (Ocean-Buddy-orga-docs/comptes/A-FAIRE-FONDATEUR.md). Essai local seulement :
+   http://localhost…/?compte=essai (scripts/compte-essai.mjs). App native : jamais avant la capacité « account » (version 1.5.0).
+   Le code du compte se charge APRÈS la levée du rideau (OceanBoot.after) et n'écrit jamais sur l'accueil. */
+(() => {
+  'use strict';
+  const ACCOUNT={enabled:false,hosts:['oceanbuddy.app']};
+  const ACCOUNT_V='';
+  function accountEnabled(cfg,loc,storage,mobile){
+    if(mobile&&mobile.native)return !!(cfg.enabled&&mobile.capabilities&&mobile.capabilities.account===true);
+    if(loc.protocol==='capacitor:')return false;
+    if(loc.protocol==='http:'&&(loc.hostname==='localhost'||loc.hostname==='127.0.0.1')){
+      try{if(/(?:^|[?&])compte=essai(?:&|$)/.test(loc.search))storage.setItem('ob_account_dev','1');return storage.getItem('ob_account_dev')==='1';}catch(_){return false;}
+    }
+    return !!cfg.enabled&&loc.protocol==='https:'&&cfg.hosts.includes(loc.hostname);
+  }
+  window.OceanAccountGate={enabled:accountEnabled};
+  if(!accountEnabled(ACCOUNT,location,window.localStorage,window.OceanMobile))return;
+  const load=()=>{const add=(src,next)=>{const s=document.createElement('script');s.src=src+(ACCOUNT_V?'?v='+ACCOUNT_V:'');s.async=false;if(next)s.onload=next;document.body.append(s);};
+    add('account-sync-model.js',()=>add('account-sync.js'));};
+  const later=()=>setTimeout(()=>{(window.requestIdleCallback||setTimeout)(load,{timeout:3000});},1500);
+  if(window.OceanBoot&&OceanBoot.after)OceanBoot.after(later);else addEventListener('ocean:home-ready',later,{once:true});
+})();

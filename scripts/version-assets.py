@@ -15,6 +15,20 @@ def version(match):
     digest = hashlib.sha256(asset.read_bytes()).hexdigest()[:12]
     return f'{attribute}="{filename}?v={digest}"'
 
+# Compte et sauvegarde : privacy.js charge lui-même account-sync-model.js et account-sync.js après la levée du rideau ;
+# leur empreinte commune change l'adresse de ces deux fichiers à chaque nouvelle version.
+privacy = root / 'privacy.js'
+account_files = [root / 'account-sync-model.js', root / 'account-sync.js']
+if privacy.exists() and all(f.exists() for f in account_files):
+    h = hashlib.sha256()
+    for f in account_files:
+        h.update(f.name.encode()); h.update(f.read_bytes())
+    code = privacy.read_text()
+    stamped = re.sub(r"const ACCOUNT_V='[^']*';", f"const ACCOUNT_V='{h.hexdigest()[:12]}';", code)
+    if stamped != code:
+        privacy.write_text(stamped)
+        print('Version des fichiers du compte mise à jour.')
+
 # Globe 3D : ocean-globe.js charge lui-même son moteur et ses textures ; une empreinte commune
 # de ces fichiers change leur adresse à chaque nouvelle version (le cache hors ligne les garde sinon).
 globe = root / 'ocean-globe.js'
