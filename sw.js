@@ -63,6 +63,7 @@ self.addEventListener('fetch',event=>{
   const request=event.request;
   if(request.method!=='GET'||request.headers.has('authorization'))return;
   const url=new URL(request.url);
+  if(url.origin===location.origin&&url.pathname.startsWith('/api/'))return; /* API du compte : jamais en cache (lien de connexion, session) */
   if(request.mode==='navigate'&&url.origin===location.origin){event.respondWith(networkFirst(request));return;}
   if(url.origin===location.origin){
     /* Moteur de carte local (non versionné) : réponse immédiate, rafraîchie en arrière-plan. */
