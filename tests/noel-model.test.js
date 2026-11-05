@@ -204,9 +204,9 @@ test('touches de Noël sur toute l’interface : seulement sous html.ob-noel (co
   const n=read('noel.css');
   assert.ok(html.includes('href="noel.css'),'noel.css lié');
   assert.match(feed,/classList\.toggle\('ob-noel',!!noel\.on\)/);
-  const rules=n.replace(/\/\*[\s\S]*?\*\//g,'').split('}').map(r=>r.split('{')[0].trim()).filter(r=>r&&!r.startsWith(':root'));
+  const rules=n.replace(/\/\*[\s\S]*?\*\//g,'').replace(/@keyframes[^{]*\{(?:[^{}]*\{[^}]*\})*\s*\}/g,'').split('}').map(r=>r.split('{').slice(-2)[0].trim().replace(/^@media\s*\([^)]*\)\s*\{?/,'').trim()).filter(r=>r&&!r.startsWith(':root'));
   assert.ok(rules.length>=6);
-  for(const sel of rules)for(const part of sel.split(','))assert.match(part.trim(),/^html\.ob-noel /,'règle hors mode Noël : '+part);
+  for(const sel of rules)for(const part of sel.split(','))assert.match(part.trim(),/^html\.ob-noel(?: |::|:has\()/,'règle hors mode Noël : '+part);
 });
 
 test('Avent et « Noël au soleil » : deux blocs distincts, jamais imbriqués ; date forcée reprise par l’en-tête',()=>{
