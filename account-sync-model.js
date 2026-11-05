@@ -1,0 +1,231 @@
+/* Compte et sauvegarde : modèle PUR de la synchronisation (aucun accès au réseau ni au DOM).
+   Partagé par l'app (account-sync.js, chargé après la levée du rideau) et le serveur ob-api (server/ob-api).
+   - collect(storage) : lit les clés locales d'activité (lecture seule) et les découpe en éléments « genre:id ».
+   - apply(storage, items) : réécrit ces clés AUX FORMATS EXISTANTS (rien d'autre n'est touché).
+   - scan / merge : détection des changements par empreinte et règles de fusion du plan (§8) :
+     1. le plus récent gagne, élément par élément (voyage perdant gardé en copie dans la Corbeille) ;
+     2. supprimer est une modification ;
+     3. les progressions ne reculent jamais (maximum ou union) ;
+     4. les réglages d'appareil (langue, son, Street View…) ne sont jamais lus ni envoyés. */
+(function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.OceanAccountModel=api;})(typeof globalThis!=='undefined'?globalThis:this,()=>{
+  'use strict';
+  const KEYS={main:'oceanbuddy_v1',trips:'oceanbuddy_trips_v1',notebook:'oceanbuddy_spot_notebook_v1',progress:'oceanbuddy_progress_v1',
+    quiz:'oceanbuddy_quiz_v1',badgeDates:'oceanbuddy_badge_dates',daily:'oceanbuddy_daily',surf:'oceanbuddy_surf',checklist:'oceanbuddy_visit_checklist_v1'};
+  /* Genres acceptés par le serveur (liste fermée) ; « progress » = fusion monotone, jamais de recul. */
+  const KINDS=['profile','fav','session','trip','note','progress','misc'];
+  const PROGRESS_IDS=['main','xp','eco','quiz','badge_dates','surf','checklist'];
+  const ID_RE=/^[A-Za-z0-9_.:-]{1,80}$/;
+  const LIMITS={itemBytes:32768,itemsPerPush:100,itemsPerAccount:2000,accountBytes:5*1024*1024,requestBytes:262144};
+  const NOTE_MAX=1800,COPY_SUFFIX=' (copie de l’autre appareil)';
+
+  /* ---------- outils ---------- */
+  const isObj=v=>!!v&&typeof v==='object'&&!Array.isArray(v);
+  function stable(v){
+    if(Array.isArray(v))return '['+v.map(stable).join(',')+']';
+    if(isObj(v))return '{'+Object.keys(v).sort().filter(k=>v[k]!==undefined).map(k=>JSON.stringify(k)+':'+stable(v[k])).join(',')+'}';
+    return JSON.stringify(v===undefined?null:v);
+  }
+  /* Empreinte rapide (cyrb53) de la forme canonique : sert seulement à repérer un changement. */
+  function hash(v){
+    if(v==null)return null;
+    const s=stable(v);let h1=0xdeadbeef,h2=0x41c6ce57;
+    for(let i=0;i<s.length;i++){const c=s.charCodeAt(i);h1=Math.imul(h1^c,2654435761);h2=Math.imul(h2^c,1597334677);}
+    h1=Math.imul(h1^(h1>>>16),2246822507)^Math.imul(h2^(h2>>>13),3266489909);
+    h2=Math.imul(h2^(h2>>>16),2246822507)^Math.imul(h1^(h1>>>13),3266489909);
+    return (4294967296*(2097151&h2)+(h1>>>0)).toString(36);
+  }
+  const keyOf=(kind,id)=>kind+':'+id;
+  function splitKey(key){const i=key.indexOf(':');return {kind:key.slice(0,i),id:key.slice(i+1)};}
+  const safeId=s=>String(s??'').replace(/[^A-Za-z0-9_.:-]/g,'_').slice(0,80);
+  function readJSON(storage,key){try{const raw=storage.getItem(key);return raw==null?null:JSON.parse(raw);}catch(_){return null;}}
+  const byteLength=s=>typeof TextEncoder!=='undefined'?new TextEncoder().encode(s).length:Buffer.byteLength(s);
+
+  /* Un élément reçu (du serveur ou d'un client) : forme minimale exigée avant de l'écrire. */
+  function validItem(kind,id,data){
+    if(!KINDS.includes(kind)||!ID_RE.test(String(id))||!isObj(data))return false;
+    if(kind==='progress'&&!PROGRESS_IDS.includes(id))return false;
+    if(kind==='trip')return typeof data.id==='string'&&data.id===id&&Array.isArray(data.steps)&&Array.isArray(data.checklist);
+    if(kind==='note')return typeof data.text==='string'&&data.text.length<=NOTE_MAX;
+    if(kind==='session')return typeof data.ts==='number'||typeof data.id==='string';
+    if(kind==='misc')return id==='daily'&&typeof data.v==='string'&&data.v.length<=40;
+    if(kind==='profile')return id==='me';
+    return true;
+  }
+
+  /* ---------- lecture des clés locales ---------- */
+  function sessionKey(s){return safeId((Number(s.ts)||0)+'-'+(s.id||s.spot||''));}
+  function collect(storage){
+    const out={};
+    const main=readJSON(storage,KEYS.main);
+    if(isObj(main)){
+      const p={};for(const k of ['name','level','sport','onboarded'])if(main[k]!==undefined&&main[k]!==null&&main[k]!=='')p[k]=main[k];
+      if(Object.keys(p).length)out['profile:me']=p;
+      if(Array.isArray(main.favs))for(const f of main.favs)if(typeof f==='string'&&ID_RE.test(f))out['fav:'+f]={};
+      if(Array.isArray(main.sessions))for(const s of main.sessions)if(isObj(s))out['session:'+sessionKey(s)]=s;
+      if(typeof main.xp==='number'&&main.xp>0)out['progress:xp']={xp:main.xp};
+      if(Array.isArray(main.eco)&&main.eco.length)out['progress:eco']={list:main.eco};
+    }
+    const trips=readJSON(storage,KEYS.trips);
+    if(isObj(trips)&&Array.isArray(trips.trips))for(const t of trips.trips)if(isObj(t)&&typeof t.id==='string'&&ID_RE.test(t.id))out['trip:'+t.id]=t;
+    const nb=readJSON(storage,KEYS.notebook);
+    if(isObj(nb)&&isObj(nb.notes))for(const [id,text] of Object.entries(nb.notes))if(typeof text==='string'&&text.trim()&&ID_RE.test(id))out['note:'+id]={text:text.slice(0,NOTE_MAX)};
+    const blobs=[['main',KEYS.progress],['quiz',KEYS.quiz],['badge_dates',KEYS.badgeDates],['surf',KEYS.surf],['checklist',KEYS.checklist]];
+    for(const [id,key] of blobs){const v=readJSON(storage,key);if(isObj(v)&&Object.keys(v).length)out['progress:'+id]=v;}
+    try{const d=storage.getItem(KEYS.daily);if(d)out['misc:daily']={v:String(d).slice(0,40)};}catch(_){}
+    return out;
+  }
+
+  /* ---------- écriture aux formats existants ---------- */
+  /* Renvoie la liste des clés réellement modifiées. Les champs inconnus de oceanbuddy_v1 et la
+     sélection « comparer » du carnet sont conservés ; l'ordre existant des listes est respecté. */
+  function apply(storage,items){
+    const changed=[];
+    const put=(key,value)=>{const next=typeof value==='string'?value:JSON.stringify(value);let cur=null;try{cur=storage.getItem(key);}catch(_){}
+      if(cur!==next){storage.setItem(key,next);changed.push(key);}};
+    const drop=key=>{let cur=null;try{cur=storage.getItem(key);}catch(_){}if(cur!=null){storage.removeItem(key);changed.push(key);}};
+    const of=kind=>Object.keys(items).filter(k=>k.startsWith(kind+':')).map(k=>[splitKey(k).id,items[k]]);
+    /* oceanbuddy_v1 */
+    const main=readJSON(storage,KEYS.main),base=isObj(main)?{...main}:null;
+    const favIds=of('fav').map(([id])=>id),sessions=of('session').map(([,s])=>s),prof=items['profile:me'];
+    const hasMain=base||prof||favIds.length||sessions.length||items['progress:xp']||items['progress:eco'];
+    if(hasMain){
+      const next=base||{xp:0,favs:[],sessions:[],level:null,sport:null,name:'',eco:[],onboarded:false};
+      const known=Array.isArray(next.favs)?next.favs.filter(f=>favIds.includes(f)):[];
+      next.favs=[...known,...favIds.filter(f=>!known.includes(f))];
+      const oldOrder=Array.isArray(next.sessions)?next.sessions.map(sessionKey):[];
+      next.sessions=sessions.slice().sort((a,b)=>{const ia=oldOrder.indexOf(sessionKey(a)),ib=oldOrder.indexOf(sessionKey(b));
+        if(ia>=0&&ib>=0)return ia-ib;return (Number(b.ts)||0)-(Number(a.ts)||0);});
+      for(const k of ['name','level','sport','onboarded'])if(prof&&prof[k]!==undefined)next[k]=prof[k];
+      next.xp=items['progress:xp']?Number(items['progress:xp'].xp)||0:(base?next.xp:0);
+      next.eco=items['progress:eco']&&Array.isArray(items['progress:eco'].list)?items['progress:eco'].list:(Array.isArray(next.eco)?next.eco:[]);
+      if(base&&!items['progress:eco'])next.eco=[];
+      put(KEYS.main,next);
+    }
+    /* voyages */
+    const tripItems=of('trip').map(([,t])=>t),tripsNow=readJSON(storage,KEYS.trips);
+    if(tripItems.length||isObj(tripsNow)){
+      const order=isObj(tripsNow)&&Array.isArray(tripsNow.trips)?tripsNow.trips.map(t=>t&&t.id):[];
+      const list=tripItems.slice().sort((a,b)=>{const ia=order.indexOf(a.id),ib=order.indexOf(b.id);if(ia>=0&&ib>=0)return ia-ib;if(ia>=0)return -1;if(ib>=0)return 1;return 0;});
+      put(KEYS.trips,{...(isObj(tripsNow)?tripsNow:{}),version:1,trips:list});
+    }
+    /* notes du carnet (la sélection « comparer » reste propre à l'appareil) */
+    const nb=readJSON(storage,KEYS.notebook),notes={};for(const [id,n] of of('note'))notes[id]=n.text;
+    if(Object.keys(notes).length||isObj(nb))put(KEYS.notebook,{compare:isObj(nb)&&Array.isArray(nb.compare)?nb.compare:[],notes});
+    const blobs=[['main',KEYS.progress],['quiz',KEYS.quiz],['badge_dates',KEYS.badgeDates],['surf',KEYS.surf],['checklist',KEYS.checklist]];
+    for(const [id,key] of blobs){const v=items['progress:'+id];if(v)put(key,v);else if(readJSON(storage,key)!=null&&!isObj(readJSON(storage,key)))continue;}
+    if(items['misc:daily'])put(KEYS.daily,items['misc:daily'].v);
+    return changed;
+  }
+
+  /* ---------- fusion monotone des progressions ---------- */
+  function monotone(a,b,path){
+    if(a===undefined||a===null)return b;if(b===undefined||b===null)return a;
+    if(typeof a==='number'&&typeof b==='number')return Math.max(a,b);
+    if(typeof a==='boolean'&&typeof b==='boolean')return a||b;
+    if(Array.isArray(a)&&Array.isArray(b)){
+      const seen=new Set(),out=[];for(const v of [...a,...b]){const k=stable(v);if(!seen.has(k)){seen.add(k);out.push(v);}}
+      return out.every(v=>typeof v==='string')&&path==='days'?out.sort().slice(-120):out;
+    }
+    if(isObj(a)&&isObj(b)){const out={};for(const k of new Set([...Object.keys(a),...Object.keys(b)]))out[k]=monotone(a[k],b[k],k);return out;}
+    /* Chaînes (personnage choisi, défi du jour…) : la plus « grande » reste stable des deux côtés ; dates AAAA-MM-JJ comparables. */
+    if(typeof a==='string'&&typeof b==='string')return a>=b?a:b;
+    return b;
+  }
+  function mergeProgress(id,a,b){
+    if(!isObj(a))return isObj(b)?b:{};if(!isObj(b))return a;
+    if(id==='badge_dates'){const out={...a};for(const [k,v] of Object.entries(b))out[k]=out[k]&&out[k]<=v?out[k]:v;return out;}
+    if(id==='quiz'){const out=monotone(a,b,'');/* défi du jour : « AAAA-M-J » n'est pas triable, le plus récent l'emporte ailleurs */return out;}
+    return monotone(a,b,'');
+  }
+
+  /* ---------- détection des changements locaux ---------- */
+  /* state.shadow[key] = {h, u} : empreinte et date de la dernière version commune avec le serveur.
+     state.pend[key] = {h, u} : changement local pas encore envoyé, daté au moment où il est repéré. */
+  function freshState(){return {v:1,lastRev:0,shadow:{},pend:{}};}
+  function scan(local,state,now){
+    const s={...freshState(),...state,shadow:{...(state&&state.shadow)},pend:{...(state&&state.pend)}};
+    for(const key of new Set([...Object.keys(local),...Object.keys(s.shadow)])){
+      const h=hash(local[key]),base=s.shadow[key]?s.shadow[key].h:null;
+      if(h===base){delete s.pend[key];continue;}
+      if(!s.pend[key]||s.pend[key].h!==h)s.pend[key]={h,u:now};
+    }
+    return s;
+  }
+
+  /* ---------- fusion avec les éléments reçus du serveur ---------- */
+  /* remote : [{kind,id,data,u,deleted,rev}] ; first : première connexion de cet appareil (l'ombre est vide :
+     en cas de conflit la version du compte gagne et la version locale est gardée, voyage en Corbeille, note ajoutée).
+     Renvoie {local, state, push:[…], summary}. */
+  function merge(local,remote,state,{now,first=false}={}){
+    const out={...local},s={...state,shadow:{...state.shadow},pend:{...state.pend}};
+    const summary={fromAccount:{trips:0,favs:0,sessions:0,notes:0},keptLocal:{trips:0},copies:0,progress:false};
+    let maxRev=s.lastRev||0;
+    for(const r of remote){
+      maxRev=Math.max(maxRev,Number(r.rev)||0);
+      const key=keyOf(r.kind,r.id);
+      if(!r.deleted&&!validItem(r.kind,r.id,r.data))continue;
+      const L=out[key],P=s.pend[key],ru=Number(r.u)||0;
+      if(r.kind==='progress'){
+        const m=mergeProgress(r.id,L,r.deleted?null:r.data);
+        out[key]=m;s.shadow[key]={h:hash(r.deleted?null:r.data),u:ru};
+        if(hash(m)!==hash(r.data))s.pend[key]={h:hash(m),u:Math.max(now,ru+1)};else delete s.pend[key];
+        if(hash(m)!==hash(L))summary.progress=true;
+        continue;
+      }
+      const remoteWins=!P||first||ru>=P.u;
+      if(remoteWins){
+        if(P&&L&&!r.deleted&&hash(L)!==hash(r.data)){
+          if(r.kind==='trip'){
+            const copyId=safeId(r.id+'-copie-'+hash(L).slice(0,6));
+            if(!out['trip:'+copyId]){out['trip:'+copyId]={...L,id:copyId,name:String(L.name||'Mon voyage').slice(0,70-COPY_SUFFIX.length)+COPY_SUFFIX,deleted:true};summary.copies++;}
+          }else if(r.kind==='note'&&!String(r.data.text).includes(L.text)){
+            r={...r,data:{text:(r.data.text+'\n\n— '+L.text).slice(0,NOTE_MAX)}};
+            s.pend[key]={h:hash(r.data),u:Math.max(now,ru+1)};
+          }
+        }
+        if(!L&&!r.deleted){if(r.kind==='trip')summary.fromAccount.trips++;else if(r.kind==='fav')summary.fromAccount.favs++;else if(r.kind==='session')summary.fromAccount.sessions++;else if(r.kind==='note')summary.fromAccount.notes++;}
+        if(r.deleted)delete out[key];else out[key]=r.data;
+        s.shadow[key]={h:r.deleted?null:hash(r.data),u:ru};
+        if(!(s.pend[key]&&s.pend[key].h===hash(out[key])&&r.kind==='note'&&first))delete s.pend[key];
+      }else{
+        /* La version locale est plus récente : elle reste en attente d'envoi ; on retient la base serveur. */
+        s.shadow[key]={h:r.deleted?null:hash(r.data),u:ru};
+      }
+    }
+    /* Une note fusionnée garde son attente ; les copies de voyage créées sont des ajouts locaux. */
+    for(const key of Object.keys(out))if(!s.shadow[key]&&!s.pend[key])s.pend[key]={h:hash(out[key]),u:now};
+    for(const key of Object.keys(s.pend)){const h=hash(out[key]);if(h!==s.pend[key].h)s.pend[key]={h,u:s.pend[key].u};
+      if(s.shadow[key]&&s.shadow[key].h===h)delete s.pend[key];}
+    for(const key of Object.keys(s.pend))if(key.startsWith('trip:')&&out[key])summary.keptLocal.trips++;
+    s.lastRev=maxRev;
+    const push=Object.keys(s.pend).map(key=>{const {kind,id}=splitKey(key);return out[key]?{kind,id,data:out[key],u:s.pend[key].u,deleted:false}:{kind,id,data:{},u:s.pend[key].u,deleted:true};});
+    return {local:out,state:s,push,summary};
+  }
+
+  /* Après l'envoi : les éléments acceptés deviennent la nouvelle base commune. */
+  function acknowledge(state,results){
+    const s={...state,shadow:{...state.shadow},pend:{...state.pend}};
+    for(const r of results||[]){const key=keyOf(r.kind,r.id),p=s.pend[key];if(!p)continue;
+      if(r.status==='ok'){s.shadow[key]={h:p.h,u:Number(r.u)||p.u};delete s.pend[key];}}
+    return s;
+  }
+
+  /* Contrôle d'un élément envoyé au serveur (même règles des deux côtés). */
+  function checkPushItem(it){
+    if(!isObj(it))return 'item';
+    if(!KINDS.includes(it.kind))return 'kind';
+    if(typeof it.id!=='string'||!ID_RE.test(it.id))return 'id';
+    if(!Number.isFinite(it.u)||it.u<0)return 'u';
+    if(typeof it.deleted!=='boolean')return 'deleted';
+    if(it.deleted)return it.kind==='progress'?'kind':null;
+    if(!validItem(it.kind,it.id,it.data))return 'data';
+    if(byteLength(JSON.stringify(it.data))>LIMITS.itemBytes)return 'size';
+    return null;
+  }
+
+  /* Copie de sécurité de toutes les clés synchronisées, avant la première fusion. */
+  function snapshot(storage){const raw={};for(const key of Object.values(KEYS)){try{const v=storage.getItem(key);if(v!=null)raw[key]=v;}catch(_){}}return raw;}
+  function restoreSnapshot(storage,raw){for(const key of Object.values(KEYS)){if(raw&&typeof raw[key]==='string')storage.setItem(key,raw[key]);else storage.removeItem(key);}}
+
+  return {KEYS,KINDS,PROGRESS_IDS,ID_RE,LIMITS,stable,hash,collect,apply,scan,merge,acknowledge,mergeProgress,validItem,checkPushItem,freshState,snapshot,restoreSnapshot,keyOf,splitKey};
+});
