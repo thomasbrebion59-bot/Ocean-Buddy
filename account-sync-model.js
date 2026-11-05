@@ -112,7 +112,7 @@
     const nb=readJSON(storage,KEYS.notebook),notes={};for(const [id,n] of of('note'))notes[id]=n.text;
     if(Object.keys(notes).length||isObj(nb))put(KEYS.notebook,{compare:isObj(nb)&&Array.isArray(nb.compare)?nb.compare:[],notes});
     const blobs=[['main',KEYS.progress],['quiz',KEYS.quiz],['badge_dates',KEYS.badgeDates],['surf',KEYS.surf],['checklist',KEYS.checklist]];
-    for(const [id,key] of blobs){const v=items['progress:'+id];if(v)put(key,v);else if(readJSON(storage,key)!=null&&!isObj(readJSON(storage,key)))continue;}
+    for(const [id,key] of blobs){const v=items['progress:'+id];if(v)put(key,v);}
     if(items['misc:daily'])put(KEYS.daily,items['misc:daily'].v);
     return changed;
   }
@@ -160,7 +160,7 @@
     const out={...local},s={...state,shadow:{...state.shadow},pend:{...state.pend}};
     const summary={fromAccount:{trips:0,favs:0,sessions:0,notes:0},keptLocal:{trips:0},copies:0,progress:false};
     let maxRev=s.lastRev||0;
-    for(const r of remote){
+    for(let r of remote){
       maxRev=Math.max(maxRev,Number(r.rev)||0);
       const key=keyOf(r.kind,r.id);
       if(!r.deleted&&!validItem(r.kind,r.id,r.data))continue;
@@ -172,7 +172,7 @@
         if(hash(m)!==hash(L))summary.progress=true;
         continue;
       }
-      const remoteWins=!P||first||ru>=P.u;
+      const remoteWins=!P||first||ru>=P.u,serverHash=r.deleted?null:hash(r.data);let keepPend=false;
       if(remoteWins){
         if(P&&L&&!r.deleted&&hash(L)!==hash(r.data)){
           if(r.kind==='trip'){
@@ -180,13 +180,13 @@
             if(!out['trip:'+copyId]){out['trip:'+copyId]={...L,id:copyId,name:String(L.name||'Mon voyage').slice(0,70-COPY_SUFFIX.length)+COPY_SUFFIX,deleted:true};summary.copies++;}
           }else if(r.kind==='note'&&!String(r.data.text).includes(L.text)){
             r={...r,data:{text:(r.data.text+'\n\n— '+L.text).slice(0,NOTE_MAX)}};
-            s.pend[key]={h:hash(r.data),u:Math.max(now,ru+1)};
+            keepPend=true;
           }
         }
         if(!L&&!r.deleted){if(r.kind==='trip')summary.fromAccount.trips++;else if(r.kind==='fav')summary.fromAccount.favs++;else if(r.kind==='session')summary.fromAccount.sessions++;else if(r.kind==='note')summary.fromAccount.notes++;}
         if(r.deleted)delete out[key];else out[key]=r.data;
-        s.shadow[key]={h:r.deleted?null:hash(r.data),u:ru};
-        if(!(s.pend[key]&&s.pend[key].h===hash(out[key])&&r.kind==='note'&&first))delete s.pend[key];
+        s.shadow[key]={h:serverHash,u:ru};
+        if(keepPend)s.pend[key]={h:hash(r.data),u:Math.max(now,ru+1)};else delete s.pend[key];
       }else{
         /* La version locale est plus récente : elle reste en attente d'envoi ; on retient la base serveur. */
         s.shadow[key]={h:r.deleted?null:hash(r.data),u:ru};
@@ -196,7 +196,7 @@
     for(const key of Object.keys(out))if(!s.shadow[key]&&!s.pend[key])s.pend[key]={h:hash(out[key]),u:now};
     for(const key of Object.keys(s.pend)){const h=hash(out[key]);if(h!==s.pend[key].h)s.pend[key]={h,u:s.pend[key].u};
       if(s.shadow[key]&&s.shadow[key].h===h)delete s.pend[key];}
-    for(const key of Object.keys(s.pend))if(key.startsWith('trip:')&&out[key])summary.keptLocal.trips++;
+    for(const key of Object.keys(s.pend))if(key.startsWith('trip:')&&out[key]&&!out[key].deleted)summary.keptLocal.trips++;
     s.lastRev=maxRev;
     const push=Object.keys(s.pend).map(key=>{const {kind,id}=splitKey(key);return out[key]?{kind,id,data:out[key],u:s.pend[key].u,deleted:false}:{kind,id,data:{},u:s.pend[key].u,deleted:true};});
     return {local:out,state:s,push,summary};
