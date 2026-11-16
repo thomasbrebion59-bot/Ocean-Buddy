@@ -62,3 +62,66 @@ test('les fichiers du compte partent avec le site et reçoivent une empreinte de
   assert.match(read('scripts/build-static.cjs'),/'account-sync-model\.js','account-sync\.js'/);
   assert.match(read('scripts/version-assets.py'),/ACCOUNT_V/);
 });
+
+test('première ouverture : un seul écran « Crée ton compte » avec l’adresse e-mail, « Plus tard » bien visible, sans clavier d’office',()=>{
+  const src=read('account-sync.js');
+  const invite=src.slice(src.indexOf('    invite(){'),src.indexOf('    email(){'));
+  assert.match(invite,/Crée ton compte/);assert.match(invite,/favoris, tes voyages et ton passeport sur tous tes appareils/);
+  assert.match(invite,/\$\{emailField\(\)\}/);assert.match(invite,/class="oba-main">Recevoir mon code/);assert.match(invite,/class="oba-later">Plus tard/);
+  assert.match(invite,/\{focus:false\}/,'pas de clavier qui surgit à la première ouverture');
+  assert.match(invite,/oba-later'\)\.onclick=closeSheet/);
+  /* Clavier e-mail, code à usage unique, zones tactiles de 44 px au moins. */
+  assert.match(src,/id="obaEmail" class="oba-input" type="email" inputmode="email" autocomplete="email" autocapitalize="off"/);
+  assert.match(src,/id="obaCode"[^>]*inputmode="numeric" autocomplete="one-time-code"/);
+  for(const cls of ['oba-main','oba-later','oba-x','oba-link','oba-snack-go'])assert.match(src,new RegExp(`\\.${cls}(,[^{]*)?\\{[^}]*(min-height:(4[4-9]|5\\d)px|height:44px)`),cls);
+  /* Proposée une seule fois (marque « invite »), après l'onboarding. */
+  assert.match(src,/patch\(\{invite:\{at:Date\.now\(\)\}\}\);openSheet\('invite'\)/);
+  assert.match(src,/if\(st\.linked\|\|st\.invite\)return;/);
+});
+
+test('un seul rappel discret plus tard (3e favori ou premier voyage), jamais en boucle, jamais avant l’invitation',()=>{
+  const src=read('account-sync.js');
+  const w=src.slice(src.indexOf('function watchReminder'),src.indexOf('function snack('));
+  assert.match(w,/if\(load\(\)\.remindTrip\)return;/);assert.match(w,/if\(!st\.invite\|\|overlayOpen\(\)\|\|typing\(\)\|\|document\.querySelector\('#toast\.show'\)\)return;/);
+  assert.match(w,/f>=3&&f>start\.favs\?'fav'/);assert.match(w,/clearInterval\(timer\);patch\(\{remindTrip:Date\.now\(\)\}\);snack\(why\)/);
+  assert.doesNotMatch(src,/watchFirstTrip/);
+});
+
+test('app iPhone : le compte passe par OceanMobile.account (Trousseau), jamais par fetch ni par un jeton visible',()=>{
+  const src=read('account-sync.js');
+  assert.match(src,/NATIVE=!!\(MOB&&MOB\.native&&MOB\.capabilities&&MOB\.capabilities\.account===true&&MOB\.account/);
+  assert.match(src,/if\(NATIVE\)return MOB\.account\.request\(path,\{method,body\}\);/);
+  assert.match(src,/if\(NATIVE&&typeof MOB\.shareJSON==='function'\)\{await MOB\.shareJSON\('ocean-buddy-export',data\)/);
+  /* « Effacer toutes mes données sur cet appareil » déconnecte aussi le compte (cookies ou Trousseau). */
+  assert.match(read('privacy.js'),/await window\.OceanAccount\?\.forget\?\.\(\)/);
+  const client=read('mobile/client.js');
+  assert.match(client,/Capacitor\.isPluginAvailable\('OceanAccount'\)\?registerPlugin\('OceanAccount'\)/);
+  assert.match(client,/const capabilities=Object\.freeze\(\{account:!!accountPlugin\}\)/);
+  assert.doesNotMatch(client,/localStorage\.setItem\([^)]*(access|refresh|token)/i);
+  assert.doesNotMatch(client,/Preferences\.set\(\{key:[^}]*(token|session)/i);
+  assert.doesNotMatch(client,/console\.(log|info|warn|error)\([^)]*(session|token)/i);
+});
+
+test('plugin Swift OceanAccount : Trousseau « cet appareil seulement », effacé à la réinstallation, enregistré et compilé',()=>{
+  const swift=read('ios/App/App/OceanAccount.swift');
+  assert.match(swift,/kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly/);
+  assert.match(swift,/public let jsName = "OceanAccount"/);
+  for(const m of ['getTokens','setTokens','clearTokens'])assert.match(swift,new RegExp(`CAPPluginMethod\\(name: "${m}"`));
+  assert.doesNotMatch(swift,/CAPPluginMethod\(name: "load"/,'load() est réservé au cycle de vie du plugin');
+  assert.match(swift,/override public func load\(\)[\s\S]{0,400}installMarker[\s\S]{0,300}deleteAll\(\)/);
+  assert.doesNotMatch(swift,/UserDefaults[^\n]*(access|refresh)/,'aucun jeton dans les préférences');
+  assert.doesNotMatch(swift,/\b(print|NSLog|os_log|Logger)\b/,'aucun journal');
+  assert.doesNotMatch(swift,/URLSession|URLRequest/,'aucun appel réseau dans le plugin');
+  assert.match(read('ios/App/App/OceanGlass.swift'),/bridge\?\.registerPluginInstance\(OceanAccountPlugin\(\)\)/);
+  const pbx=read('ios/App/App.xcodeproj/project.pbxproj');
+  assert.match(pbx,/OceanAccount\.swift in Sources \*\/ = \{isa = PBXBuildFile/);
+  assert.equal((pbx.match(/OceanAccount\.swift in Sources/g)||[]).length,2,'déclaré et compilé');
+});
+
+test('paquet mobile : API du compte en https sur oceanbuddy.app ; l’essai local en http est refusé ailleurs que sur localhost',()=>{
+  const b=read('scripts/build-mobile.cjs');
+  assert.match(b,/const accountApi=process\.env\.OB_ACCOUNT_API\|\|site\.OB_SITE_BASE\+'api\/v1';/);
+  assert.match(b,/__OB_ACCOUNT_API__:JSON\.stringify\(accountApi\)/);
+  assert.match(b,/accountApi:'essai-local'/);
+  assert.equal(require('../scripts/site-base.cjs').OB_SITE_BASE,'https://oceanbuddy.app/');
+});
