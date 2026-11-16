@@ -2078,10 +2078,17 @@ const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',community:'cb',
 function vibrate(pattern){try{if(navigator.userActivation&&!navigator.userActivation.hasBeenActive)return;if(navigator.vibrate)navigator.vibrate(pattern);}catch(e){}}
 const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,community:3,profile:4,trips:2,surf:1.5};
 function resetScreenLive(el){el.classList.remove('sw-live');el.style.top='';el.style.left='';el.style.right='';el.style.maxWidth='';el.style.transform='';el.style.opacity='';el.style.transition='';}
+/* Durée d’un changement d’écran (ms) : sous 350 ms, l’écran suivant répond tout de suite. */
+const GO_MS=340;let goAnims=[];
+function stopGoAnims(){const l=goAnims;goAnims=[];l.forEach(a=>{try{a.cancel();}catch(_){}});}
+let navPillHidden=null;
 function updateNavPill(s){
   const pill=document.getElementById('navPill');if(!pill)return;
   const btn=document.querySelector('.nav button[data-s="'+s+'"]:not(.center)');
   if(!btn){pill.style.opacity='0';return;}
+  /* Pastille masquée (coque actuelle) : pas de mesure, donc pas de mise en page forcée à chaque changement d’onglet. */
+  if(navPillHidden==null)navPillHidden=getComputedStyle(pill).display==='none';
+  if(navPillHidden)return;
   const left=btn.offsetLeft+(btn.offsetWidth-42)/2;
   const colors={home:'rgba(17,117,189,.14)',spots:'rgba(31,155,191,.14)',profile:'rgba(155,107,209,.16)',trips:'rgba(33,84,221,.16)',surf:'rgba(31,155,191,.16)'};
   pill.style.transform='translateX('+left+'px)';
@@ -2103,6 +2110,7 @@ function go(s){
   liveScreenId=s;
   document.body.dataset.screen=s;
   window.dispatchEvent(new CustomEvent("ocean:navigate",{detail:s}));
+  stopGoAnims();
   if(goTimer){clearTimeout(goTimer);goTimer=null;
     wrap.querySelectorAll('.screen.active').forEach(el=>{if(el!==target&&el!==cur){el.classList.remove('active');resetScreenLive(el);}});
     if(cur)resetScreenLive(cur);
@@ -2130,34 +2138,51 @@ function go(s){
   const dirFrom=SCREEN_ORDER.hasOwnProperty(cur.id)?SCREEN_ORDER[cur.id]:0;
   const dirTo=SCREEN_ORDER.hasOwnProperty(s)?SCREEN_ORDER[s]:0;
   const dir=dirTo>=dirFrom?1:-1;
-  /* Les deux écrans glissent hors du flux, posés exactement là où ils se trouvent dans le flux (marges intérieures
-     de #screenWrap, largeur max.) : sinon la fiche sautait de la hauteur de la barre d’état à la fin du fondu
-     (CLS 0,04 à 0,15 à l’ouverture). Lectures de style seulement : ni clientHeight ni offsetWidth, qui forçaient
-     deux mises en page complètes (168 à 321 ms à x4-x6). #screenWrap a une hauteur fixe : pas de minHeight. */
+  /* Seul l’écran qui part sort du flux, posé exactement là où il se trouvait (marges intérieures de #screenWrap,
+     largeur max.). Celui qui arrive reste dans le flux, à sa place définitive : il n’est mis en page qu’une fois,
+     et la fin du glissement ne déclenche plus aucune mise en page (avant : les deux écrans passaient en absolu puis
+     revenaient dans le flux, soit une seconde mise en page complète en fin de transition, jusqu’à 186 ms à x4 au
+     retour vers l’accueil). Lectures de style seulement, faites avant toute écriture : ni clientHeight ni offsetWidth. */
   resetScreenLive(target);
-  /* Valeurs copiées tout de suite : getComputedStyle renvoie un objet vivant, relu après l’ajout des classes. */
   const pad=getComputedStyle(wrap),padT=pad.paddingTop,padL=pad.paddingLeft,padR=pad.paddingRight;
-  const maxT=getComputedStyle(target).maxWidth,maxC=getComputedStyle(cur).maxWidth;
-  const place=(el,max)=>{el.style.top=padT;el.style.left=padL;el.style.right=padR;el.style.maxWidth=max;};
+  const maxC=getComputedStyle(cur).maxWidth;
   wrap.classList.add('transitioning');
-  target.classList.add('active');
-  target.classList.add('sw-live','sw-done');cur.classList.add('sw-live','sw-done');
-  place(target,maxT);place(cur,maxC);
-  target.style.opacity='0';target.style.transform='translateX('+(dir*24)+'px)';
+  target.classList.add('active','sw-done');cur.classList.add('sw-live','sw-done');
+  cur.style.top=padT;cur.style.left=padL;cur.style.right=padR;cur.style.maxWidth=maxC;
   wrap.scrollTop=0;
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    /* Une navigation plus récente peut avoir remplacé ce fondu sous la scène d’activité. */
-    if(request!==goSeq)return;
-    /* Courbes ressort Apple (motion.css : --ob-spring / --ob-ease-out), repli sur les anciennes courbes. */
-    target.style.transition='transform .45s var(--ob-spring,cubic-bezier(.22,.9,.3,1.02)), opacity .3s var(--ob-ease-out,ease)';
-    cur.style.transition='transform .3s var(--ob-ease-out,cubic-bezier(.4,0,.2,1)), opacity .24s var(--ob-ease-out,ease)';
-    target.style.transform='translateX(0)';target.style.opacity='1';
-    cur.style.transform='translateX('+(-dir*18)+'px)';cur.style.opacity='0';
-  }));
+  /* Fiche : poussée plus franche (comme une pile iOS) ; onglets : glissement court. */
+  const far=s==='detail'||cur.id==='detail',inX=dir*(far?44:22),outX=-dir*(far?26:14);
+  const OM=window.OceanMotion||{},spring=OM.snap||'cubic-bezier(.2,.9,.25,1)',easeOut=OM.easeOut||'cubic-bezier(.22,.8,.3,1)';
+  let waapi=false;
+  if(typeof target.animate==='function'){
+    /* Web Animations : part dès la première image (plus d’attente de deux images), sur le compositeur (transform/opacity),
+       sans style en ligne à nettoyer. Courbes partagées de motion.js (OceanMotion.snap / easeOut). */
+    try{
+      const run=(el,frames,duration,easing,fill)=>{let a;try{a=el.animate(frames,{duration,easing,fill});}catch(_){a=el.animate(frames,{duration,easing:'cubic-bezier(.22,.9,.3,1)',fill});}goAnims.push(a);};
+      /* Explorer : ses calques sont en position fixe (planète plein écran). Une animation de transform en ferait leur
+         bloc conteneur et les rognerait pendant le glissement : fondu seul pour cet écran. */
+      if(s!=='spots')run(target,[{transform:'translate3d('+inX+'px,0,0)'},{transform:'translate3d(0,0,0)'}],GO_MS,spring,'backwards');
+      run(target,[{opacity:0},{opacity:1}],Math.round(GO_MS*.6),easeOut,'backwards');
+      if(cur.id!=='spots')run(cur,[{transform:'translate3d(0,0,0)'},{transform:'translate3d('+outX+'px,0,0)'}],Math.round(GO_MS*.7),easeOut,'forwards');
+      run(cur,[{opacity:1},{opacity:0}],Math.round(GO_MS*.5),easeOut,'forwards');
+      waapi=true;
+    }catch(_){stopGoAnims();}
+  }
+  if(!waapi){
+    target.style.opacity='0';target.style.transform='translateX('+inX+'px)';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      /* Une navigation plus récente peut avoir remplacé ce fondu sous la scène d’activité. */
+      if(request!==goSeq)return;
+      target.style.transition='transform '+GO_MS+'ms var(--ob-snap,cubic-bezier(.2,.9,.25,1)), opacity '+Math.round(GO_MS*.6)+'ms var(--ob-ease-out,ease)';
+      cur.style.transition='transform '+Math.round(GO_MS*.7)+'ms var(--ob-ease-out,cubic-bezier(.4,0,.2,1)), opacity '+Math.round(GO_MS*.5)+'ms var(--ob-ease-out,ease)';
+      target.style.transform='translateX(0)';target.style.opacity='1';
+      cur.style.transform='translateX('+outX+'px)';cur.style.opacity='0';
+    }));
+  }
   goTimer=setTimeout(()=>{
     if(request!==goSeq)return;
     goTimer=null;
-    cur.classList.remove('active');
+    cur.classList.remove('active');stopGoAnims();
     resetScreenLive(cur);resetScreenLive(target);
     wrap.classList.remove('transitioning');
     if(wrap.scrollTop)wrap.scrollTop=0;
@@ -2166,7 +2191,7 @@ function go(s){
     if(s==='home')animateCounts();
     if(s==='profile')renderProfile();
     window.OceanNavigation?.settled();
-  },420);
+  },GO_MS+20);
 }
 function countUp(el){const t=+el.dataset.count;let c=0;const step=Math.max(1,Math.ceil(t/22));
   const id=setInterval(()=>{c+=step;if(c>=t){c=t;clearInterval(id);}el.textContent=c;},30);}
@@ -2837,7 +2862,7 @@ renderMyChoice();document.addEventListener('ocean:sport',()=>renderMyChoice());
 ambient();renderSportGuide();renderSportFilters();renderSpots();try{renderWorlds();syncWorldUI();}catch(e){}renderChallenges();renderBadges();renderQuizBadges();renderSessions();renderHome();renderProfile();renderQuick();chatDragInit();bubbles('hb');bubbles('pb');bubbles('sb');bubbles('cb');animateCounts();
 requestAnimationFrame(()=>requestAnimationFrame(()=>updateNavPill('home')));
 if(document.fonts&&document.fonts.ready)document.fonts.ready.then(()=>{const ab=document.querySelector('.nav button.active:not(.center)');updateNavPill(ab?ab.dataset.s:'home');}).catch(()=>{});
-window.addEventListener('resize',()=>{const ab=document.querySelector('.nav button.active:not(.center)');if(ab)updateNavPill(ab.dataset.s);});
+window.addEventListener('resize',()=>{navPillHidden=null;const ab=document.querySelector('.nav button.active:not(.center)');if(ab)updateNavPill(ab.dataset.s);});
 /* Une personne qui revient arrive directement dans l'app : l'activité se
    change depuis l'accueil ou l'étape 1 d'Explorer, sans barrière à chaque visite. */
 if(returning&&onbDone){

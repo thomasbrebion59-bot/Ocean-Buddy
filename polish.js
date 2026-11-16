@@ -11,6 +11,9 @@
 
   /* ---- Cartes qui apparaissent au défilement ---- */
   const CARDS = '.activity-adventure,.field-arrival,.isl,.spot,.block,.field-nearby-card,.trip-idea,.trip-saved-card,.pstat,.chal,.badge,.evt,.community-panel,.sess,.qb';
+  /* Sections du fil de l’accueil : seulement celles qui sont sous l’écran au moment du rendu (jamais ce qui est déjà
+     visible, donc rien ne bouge à la levée du rideau). Elles apparaissent une seule fois, en arrivant au défilement. */
+  const BELOW = '.hf-feed>section';
   const seen = new WeakSet();
   const io = 'IntersectionObserver' in window ? new IntersectionObserver(entries => {
     entries.forEach(entry => {
@@ -57,6 +60,12 @@
       if (entering) arriving.add(el);
       probe.observe(el);
     });
+    const below = root.matches?.(BELOW) ? [root] : root.querySelectorAll?.(BELOW) || [];
+    below.forEach(el => {
+      if (seen.has(el)) return;
+      seen.add(el);
+      probe.observe(el);
+    });
   }
 
   /* ---- Images en fondu ---- */
@@ -86,6 +95,10 @@
   images(wrap);
 
   /* ---- En-tête réactif et parallaxe du panorama ---- */
+  /* Parallaxe du panorama : animation liée au défilement (polish.css) quand le navigateur sait le faire, entièrement
+     sur le compositeur. Sinon, repli ci-dessous (une écriture de style par image). */
+  let cssParallax = false;
+  try { cssParallax = !!(window.CSS && CSS.supports && CSS.supports('animation-timeline', '--ob-wrap') && CSS.supports('animation-range', '0px 900px')); } catch (_) {}
   let ticking = false;
   function onScroll() {
     if (ticking) return;
@@ -95,7 +108,7 @@
       const y = wrap.scrollTop;
       /* classe écrite seulement quand elle change (avant : à chaque image de défilement) */
       if (document.body.classList.contains('is-scrolled') !== y > 8) document.body.classList.toggle('is-scrolled', y > 8);
-      if (calm() || document.body.dataset.screen !== 'detail') return;
+      if (cssParallax || document.body.dataset.screen !== 'detail' || calm()) return;
       const photo = document.getElementById('dHeroPhoto');
       if (photo && y < 900) photo.style.translate = '0 ' + Math.round(y * 0.28) + 'px';
     });

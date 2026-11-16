@@ -1010,8 +1010,9 @@
   .spot-banner svg.scene{filter:saturate(1.08) contrast(1.03);}
   /* CTA : dégradé + balayage lumineux */
   .cta{background:linear-gradient(135deg,var(--t-bright),var(--t-main))!important;box-shadow:0 16px 34px color-mix(in srgb,var(--t-shadow) 42%,transparent),inset 0 1px 0 color-mix(in srgb,var(--t-card) 32%,transparent)!important;position:relative;overflow:hidden;}
-  .cta::after{content:"";position:absolute;top:0;left:-60%;width:45%;height:100%;background:linear-gradient(100deg,transparent,color-mix(in srgb,var(--t-card) 50%,transparent),transparent);transform:skewX(-20deg);animation:ctaSweep 4.5s ease-in-out infinite;pointer-events:none;}
-  @keyframes ctaSweep{0%{left:-60%;}45%,100%{left:150%;}}
+  .cta::after{content:"";position:absolute;top:0;left:0;width:45%;height:100%;background:linear-gradient(100deg,transparent,color-mix(in srgb,var(--t-card) 50%,transparent),transparent);transform:translateX(-134%) skewX(-20deg);animation:ctaSweep 4.5s ease-in-out infinite;pointer-events:none;}
+  /* transform seulement : animer « left » refaisait la mise en page de la fiche à chaque image, en continu. */
+  @keyframes ctaSweep{0%{transform:translateX(-134%) skewX(-20deg);}45%,100%{transform:translateX(334%) skewX(-20deg);}}
   /* champ de recherche */
   .search{box-shadow:0 8px 20px color-mix(in srgb,var(--t-shadow) 8%,transparent),inset 0 1px 0 color-mix(in srgb,var(--t-card) 85%,transparent)!important;}
   /* toast verre */
@@ -1148,7 +1149,8 @@
   /* ===== FLUIDITÉ — transitions d'écran & nav glissante ===== */
   .screen-wrap{position:relative;}
   .screen-wrap.transitioning{overflow:hidden;}
-  .screen.sw-live{position:absolute;top:0;left:0;right:0;}
+  /* !important : #home.hf-on (position:relative) gardait l’accueil dans le flux et le décalait de 16 px / 8 px au départ. */
+  .screen.sw-live{position:absolute!important;top:0;left:0;right:0;}
   .screen.sw-live.active,.screen.sw-live.active>*,.screen.sw-done.active,.screen.sw-done.active>*{animation:none!important;} /* évite le conflit + le rejeu de l'entrée CSS d'origine */
   /* L’activité a été préparée sous la photo : aucune entrée différée du décor ou des destinations. */
   .screen.sw-covered.active #spotsTop,.screen.sw-covered.active .worlds>*{animation:none!important;}
