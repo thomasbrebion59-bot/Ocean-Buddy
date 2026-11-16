@@ -2162,7 +2162,8 @@ function go(s){
       /* Explorer : ses calques sont en position fixe (planète plein écran). Une animation de transform en ferait leur
          bloc conteneur et les rognerait pendant le glissement : fondu seul pour cet écran. */
       if(s!=='spots')run(target,[{transform:'translate3d('+inX+'px,0,0)'},{transform:'translate3d(0,0,0)'}],GO_MS,spring,'backwards');
-      run(target,[{opacity:0},{opacity:1}],Math.round(GO_MS*.6),easeOut,'backwards');
+      /* En quittant Explorer, la planète disparaît d’un coup (app-shell) : fondu d’arrivée plus court, pas de vide. */
+      run(target,[{opacity:0},{opacity:1}],Math.round(GO_MS*(cur.id==='spots'?.35:.6)),easeOut,'backwards');
       if(cur.id!=='spots')run(cur,[{transform:'translate3d(0,0,0)'},{transform:'translate3d('+outX+'px,0,0)'}],Math.round(GO_MS*.7),easeOut,'forwards');
       run(cur,[{opacity:1},{opacity:0}],Math.round(GO_MS*.5),easeOut,'forwards');
       waapi=true;

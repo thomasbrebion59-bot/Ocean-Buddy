@@ -18,7 +18,7 @@ body.is-scrolled .app-chrome{box-shadow:0 1px 0 color-mix(in srgb,var(--t-shadow
 
 /* ---------- Images en fondu ---------- */
 img.img-wait{opacity:0}
-img.img-ready{opacity:1;transition:opacity .5s ease}
+img.img-ready{opacity:1;transition:opacity .32s var(--ob-ease-out,ease)}
 
 /* ---------- Retour tactile ---------- */
 .spot,.isl,.activity-adventure,.trip-idea,.trip-saved-card,.field-nearby-card,.pstat,.sport-card,.lvl-card{transition:scale .18s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease,border-color .2s ease}
