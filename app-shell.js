@@ -189,8 +189,8 @@
     const s=pool[Math.floor(Math.random()*pool.length)],c=COORDS[s.id];
     recent.push(s.id);if(recent.length>12)recent.shift();
     if(typeof vibrate==='function')vibrate([8,30,8]);
-    const fly=()=>window.OceanMap.globe.flyTo({lat:c.lat,lon:c.lon,widthKm:2600},{duration:2600,done:()=>window.OceanMap.select(s.id)});
-    if($('#spotMapWrap')?.classList.contains('is-map')){window.OceanMap.overview();setTimeout(fly,450);}else fly();
+    /* Un seul vol continu : la planète tourne vers le spot et la caméra plonge dessus (ocean-map.js). */
+    window.OceanMap.select(s.id,{fly:true});
     if(typeof toast==='function')toast(`Cap sur ${String(s.name).split(' — ')[0]} !`);
   }
   const mapWrap=$('#spotMapWrap');

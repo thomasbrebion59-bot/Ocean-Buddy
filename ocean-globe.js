@@ -96,7 +96,7 @@
   const EARTH_V=`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
   const EARTH_F=`
     uniform sampler2D uDay,uNorm,uSky;uniform vec3 uSun,uCam;
-    uniform float uCloudOff,uCloudA,uRelief,uNight,uExpo,uSpec,uReveal,uStudio;
+    uniform float uCloudOff,uCloudA,uRelief,uNight,uExpo,uSpec,uReveal,uStudio,uGlint;
     uniform sampler2D uSst;uniform float uSstA,uSstM;
     varying vec3 vPos;
     ${GEO}
@@ -140,6 +140,8 @@
       float F=.02+.98*pow(1.-vh,5.),a2=.07,dd=nh*nh*(a2-1.)+1.;
       float glint=a2/(PI*dd*dd)*F*max(mu,0.)/max(4.*ndv,.25);
       col+=water*uSpec*glint*sunC*(1.-.85*cs);
+      /* Lumière studio : un reflet large et doux du soleil sur l’océan, qui donne son volume à la planète. */
+      col+=water*uStudio*uGlint*(pow(nh,90.)*.1+pow(nh,18.)*.032)*vec3(.62,.8,1.)*(1.-.85*cs);
       col+=water*(.02+.98*pow(1.-ndv,5.))*vec3(.3,.5,.95)*.3*smoothstep(-.05,.3,mu);
       /* Nuit : lumières des villes, voilées par les nuages. */
       col+=vec3(1.,.64,.33)*sk.r*sk.r*(1.-smoothstep(-.16,.05,mu))*(1.-.7*cs)*uNight*(1.-uStudio);
@@ -197,7 +199,7 @@
       if(b<1.)discard;
       /* Densité au point le plus bas du rayon : décroissance exponentielle avec l’altitude. */
       float h=clamp((b-1.)/(uTop-1.),0.,1.);
-      float dens=exp(-h*3.4)*(1.-smoothstep(.75,1.,h));
+      float dens=exp(-h*4.2)*(1.-smoothstep(.7,1.,h));
       float mu=dot(pc/b,uSun),ct=dot(d,uSun);
       float lit=smoothstep(-.32,.22,mu);
       float phase=.75*(1.+ct*ct)+.5*pow(max(ct,0.),10.);
@@ -216,27 +218,29 @@
       #include <colorspace_fragment>
     }`;
   const DOT_V=`
-    attribute vec3 color;attribute float hide;
+    attribute vec3 color;attribute float hide,boost;
     uniform vec3 uCam;uniform float uHalo,uDpr;
-    varying vec3 vColor;varying float vA,vHide;
+    varying vec3 vColor;varying float vA,vHide,vB;
     void main(){
       vec4 mv=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*mv;
       float facing=dot(normalize(position),normalize(uCam-position));
-      vA=smoothstep(.0,.16,facing);vHide=hide;
+      vA=smoothstep(.0,.16,facing);vHide=hide;vB=boost;
       gl_PointSize=uHalo*uDpr;vColor=color;
     }`;
   const DOT_F=`
-    uniform vec3 uWhite;uniform float uCore,uHalo,uRing,uHaloA;
-    varying vec3 vColor;varying float vA,vHide;
+    uniform vec3 uWhite;uniform float uCore,uHalo,uRing,uHaloA,uSeason;
+    varying vec3 vColor;varying float vA,vHide,vB;
     void main(){
       /* Spot absorbé par un groupe : il disparaît, halo compris (le badge le représente). */
       if(vA<.01||vHide>.5)discard;
       float r=length(gl_PointCoord*2.-1.)*uHalo*.5;
-      float c=uCore*.5;
+      /* Spots de la saison (quand la donnée existe) : liseré blanc et lueur un peu plus présente ; les autres restent sobres. */
+      float c=uCore*.5*(1.-.14*uSeason*(1.-vB));
+      float rw=max(uRing,vB*uSeason*1.1);
       float core=(1.-smoothstep(c-.7,c+.7,r))*(1.-vHide);
-      float disk=uRing>0.?(1.-smoothstep(c+uRing-.7,c+uRing+.7,r))*(1.-vHide):core;
+      float disk=rw>0.?(1.-smoothstep(c+rw-.7,c+rw+.7,r))*(1.-vHide):core;
       float ring=disk-core;
-      float halo=pow(max(1.-r/(uHalo*.5),0.),2.)*uHaloA*(1.-disk)*(1.-.65*vHide);
+      float halo=pow(max(1.-r/(uHalo*.5),0.),2.)*uHaloA*(1.+1.6*vB*uSeason)*(1.-disk)*(1.-.65*vHide);
       vec3 rgb=(vColor*core+uWhite*ring)+vColor*halo;
       /* Halo opaque partiel (et non additif) : là où les spots s’empilent, la lueur tend vers
          la couleur de l’activité au lieu de saturer en blanc. */
@@ -288,7 +292,7 @@
     const sunDir=new T.Vector3(),studioSun=new T.Vector3(-.38,.36,.85).normalize();
     const uniEarth={
       uDay:{value:null},uNorm:{value:null},uSky:{value:null},uSun:{value:sunDir},uCam:{value:new T.Vector3()},
-      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:3.2},uReveal:{value:0},uStudio:{value:lighting==='studio'?1:0},
+      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:3.2},uGlint:{value:1},uReveal:{value:0},uStudio:{value:lighting==='studio'?1:0},
       uSst:{value:null},uSstA:{value:0},uSstM:{value:new Date().getMonth()}
     };
     const seg=mobile?128:192;
@@ -298,7 +302,7 @@
     const cloudU={uSky:{value:null},uSun:{value:sunDir},uCam:uniEarth.uCam,uCloudOff:uniEarth.uCloudOff,uCloudA:uniEarth.uCloudA,uExpo:uniEarth.uExpo};
     const clouds=new T.Mesh(new T.SphereGeometry(1.0045,seg,seg/2),new T.ShaderMaterial({uniforms:cloudU,vertexShader:EARTH_V,fragmentShader:CLOUD_F,transparent:true,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor}));
     clouds.visible=false;clouds.renderOrder=1;scene.add(clouds);
-    const atmoU={uCam:uniEarth.uCam,uSun:{value:sunDir},uTop:{value:1.03},uI:{value:.95}};
+    const atmoU={uCam:uniEarth.uCam,uSun:{value:sunDir},uTop:{value:1.03},uI:{value:.8}};
     const atmo=new T.Mesh(new T.SphereGeometry(1,96,48),new T.ShaderMaterial({uniforms:atmoU,vertexShader:ATMO_V,fragmentShader:ATMO_F,side:T.BackSide,transparent:true,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor}));
     atmo.renderOrder=2;scene.add(atmo);
     /* Ciel : voie lactée et étoiles réelles, tournant avec l’heure sidérale (repère équatorial). */
@@ -347,7 +351,7 @@
     }
 
     /* ---------- Spots ---------- */
-    const dotU={uCam:{value:new T.Vector3()},uHalo:{value:12},uCore:{value:4},uRing:{value:0},uHaloA:{value:.18},uDpr:{value:1},uWhite:{value:col('#ffffff')}};
+    const dotU={uCam:{value:new T.Vector3()},uHalo:{value:12},uCore:{value:4},uRing:{value:0},uHaloA:{value:.18},uSeason:{value:0},uDpr:{value:1},uWhite:{value:col('#ffffff')}};
     const dotMat=new T.ShaderMaterial({uniforms:dotU,vertexShader:DOT_V,fragmentShader:DOT_F,transparent:true,depthTest:false,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor});
     let dots=null,spots=[],byId=new Map(),levels=[],level=-1,hideAttr=null;
 
@@ -355,9 +359,10 @@
       spots=list.filter(s=>Number.isFinite(s.lat)&&Number.isFinite(s.lon)).map(s=>({...s,v:M.vec(s.lat,s.lon)}));
       byId=new Map(spots.map((s,i)=>[s.id,{...s,i}]));
       if(dots){scene.remove(dots);dots.geometry.dispose();}
-      const n=spots.length,pos=new Float32Array(n*3),c=new Float32Array(n*3);hideAttr=new Float32Array(n);
-      spots.forEach((s,i)=>{pos.set([s.v[0]*1.001,s.v[1]*1.001,s.v[2]*1.001],i*3);const k=col(glow(s.act));c.set([k.r,k.g,k.b],i*3);});
-      const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(pos,3));g.setAttribute('color',new T.BufferAttribute(c,3));g.setAttribute('hide',new T.BufferAttribute(hideAttr,1));
+      const n=spots.length,pos=new Float32Array(n*3),c=new Float32Array(n*3),boost=new Float32Array(n);hideAttr=new Float32Array(n);
+      spots.forEach((s,i)=>{pos.set([s.v[0]*1.001,s.v[1]*1.001,s.v[2]*1.001],i*3);const k=col(glow(s.act));c.set([k.r,k.g,k.b],i*3);boost[i]=s.season?1:0;});
+      dotU.uSeason.value=spots.some(s=>s.season)?1:0;
+      const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(pos,3));g.setAttribute('color',new T.BufferAttribute(c,3));g.setAttribute('hide',new T.BufferAttribute(hideAttr,1));g.setAttribute('boost',new T.BufferAttribute(boost,1));
       dots=new T.Points(g,dotMat);dots.renderOrder=3;dots.frustumCulled=false;scene.add(dots);
       levels=M.clusterLevels(spots);level=-1;refreshCountries();
       badges=[];shownBadges=[];labels=[];hotBadge=null;
@@ -368,6 +373,8 @@
 
     /* ---------- Caméra : centre (lat, lon) + distance au centre de la Terre (rayons) ---------- */
     const view={lat:30,lon:-8,dist:4.2};let overviewOn=false,keepKpp=0,touched=false,spin=0;
+    /* flying : la caméra est pilotée de l’extérieur (plongée vers un spot, ocean-map.js) ; ovA : opacité des groupes et étiquettes. */
+    let flying=false,ovA=1,ovBusy=false,ovT=0,splitBusy=false;
     let W=1,H=1,pad={top:0,bottom:0,left:0,right:0},anim=null,inertia=null,dirty=true,raf=0,active=true,released=false,lastMove=0,restTimer=0,revealStart=0,approach=1,lastTick=0,ambTimer=0,lastTouch=performance.now();
     /* Première image réellement dessinée (opts.onFirstFrame) : la sphère CSS de l’accueil reste affichée jusque-là. */
     let firstFrame=typeof opts.onFirstFrame==='function'?opts.onFirstFrame:null;
@@ -443,7 +450,8 @@
       }else if(inertia){
         const dt=Math.min(40,now-inertia.t);inertia.t=now;
         view.lat+=inertia.vLat*dt;view.lon+=inertia.vLon*dt;
-        const k=Math.pow(.99,dt);inertia.vLat*=k;inertia.vLon*=k;
+        /* Glisse d’environ 300 ms de constante de temps : la Terre ralentit comme un objet lourd, sans s’arrêter net. */
+        const k=Math.pow(.9966,dt);inertia.vLat*=k;inertia.vLon*=k;
         if(Math.hypot(inertia.vLat,inertia.vLon)<.02*kpp()/KM/RAD){inertia=null;moved('inertia');}else again=true;
         dirty=true;
       }
@@ -460,13 +468,15 @@
       const shown=canvas.clientWidth>0&&!document.hidden,awake=now-lastTouch<60000;
       if(active&&shown&&awake&&!reduced()){
         if(cloudsOn){uniEarth.uCloudOff.value=(uniEarth.uCloudOff.value+dt*4.5e-7)%1;ambient=true;}
-        if(!touched&&!anim&&!inertia&&!revealStart&&widthKm()>9000){view.lon+=dt*.0016;ambient=true;}
+        if(!touched&&!flying&&!anim&&!inertia&&!revealStart&&widthKm()>9000){view.lon+=dt*.0016;ambient=true;}
+        /* Spot choisi : son halo respire doucement tant qu’il est à l’écran. */
+        if(selected&&!flying){pinU.uT.value=(now%60000)/1000;ambient=true;}
         if(ambient)dirty=true;
       }
       if(dirty){dirty=false;draw();if(firstFrame){const f=firstFrame;firstFrame=null;requestAnimationFrame(()=>f());}}
-      prevAgain=again||emblemAnim;
+      prevAgain=again||emblemAnim||ovBusy||splitBusy;
       if(!prevAgain&&dprNow<dprFull){clearTimeout(sharpTimer);sharpTimer=setTimeout(()=>{if(!raf){dprNow=dprFull;slow=0;resize();}},350);}
-      if(emblemAnim){dirty=true;again=true;}
+      if(emblemAnim||ovBusy||splitBusy){dirty=true;again=true;}
       if(again)raf=requestAnimationFrame(frame);
       /* Animation de fond : environ 30 images par seconde suffisent pour des mouvements aussi lents. */
       else if(ambient){clearTimeout(ambTimer);ambTimer=setTimeout(()=>{if(!raf&&active)raf=requestAnimationFrame(frame);},33);}
@@ -491,11 +501,13 @@
       /* Échelle espace → continent → région : points, liserés et halo s’adaptent en continu. */
       const s=Math.max(0,Math.min(1,(Math.log(8000)-Math.log(Math.max(w,1)))/(Math.log(8000)-Math.log(1500))));
       const far=Math.max(0,Math.min(1,(Math.log(Math.max(w,1))-Math.log(8000))/Math.log(2)));
-      dotU.uCore.value=4+2*(1-far)+2*s;dotU.uHalo.value=12+4*(1-far)+4*s+2;dotU.uRing.value=s>.6?1:0;dotU.uHaloA.value=mobile?.07:.16;
+      dotU.uCore.value=5+2*(1-far)+2.5*s;dotU.uHalo.value=14+4*(1-far)+5*s+2;dotU.uRing.value=s>.6?1:0;dotU.uHaloA.value=mobile?.1:.16;
+      /* Le reflet du soleil s’estompe en approchant : de près, il laverait la côte. */
+      uniEarth.uGlint.value=1-.85*Math.min(1,s*1.6);
       /* Nuages : pleins vus de l’espace, ils s’effacent en approchant des côtes pour laisser voir les spots. */
       uniEarth.uCloudA.value=cloudsOn?.88*Math.max(0,Math.min(1,(Math.log(w)-Math.log(1900))/Math.log(3.2))):0;
       /* Atmosphère : environ 3 % du rayon, jamais moins d’une dizaine de pixels à l’écran. */
-      const top=1+Math.max(.028,(mobile?11:15)*k*approach/KM);atmoU.uTop.value=top;atmo.scale.setScalar(top);
+      const top=1+Math.max(.024,(mobile?8:11)*k*approach/KM);atmoU.uTop.value=top;atmo.scale.setScalar(top);
       /* Relief un peu plus marqué en approchant (montagnes, falaises). */
       uniEarth.uRelief.value=.85+.5*s;
       borderMat.opacity=.16*Math.max(0,Math.min(1,(Math.log(9000)-Math.log(w))/Math.log(2)));
@@ -614,7 +626,7 @@
     const pinGeo=quad();pinGeo.instanceCount=2;
     const PN={at:inst(pinGeo,'aAt',2,2),type:inst(pinGeo,'aType',1,2),c:inst(pinGeo,'aC',3,2),alpha:inst(pinGeo,'aAlpha',1,2)};
     PN.type[1]=1;
-    const pinU={uRip:{value:-1},uLime:{value:col('#D7F75B')},uUser:{value:col('#2F6BFF')}};
+    const pinU={uT:{value:0},uRip:{value:-1},uLime:{value:col('#D7F75B')},uUser:{value:col('#2F6BFF')}};
     /* Couleurs des pastilles de regroupement et du point « vous » : lues sur le thème de l'activité (--t-deep, --t-main2, --t-bright), repli sur le cobalt d'origine. Mises à jour sur 'ocean:sport', sans recréer le globe. */
     const themeVar=(n,d)=>{try{return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||d;}catch(e){return d;}};
     const applyTheme=first=>{
@@ -634,13 +646,14 @@
     const pinMesh=new T.Mesh(pinGeo,new T.ShaderMaterial({...premult,uniforms:pinU,
       vertexShader:`attribute vec2 aAt;attribute float aType,aAlpha;attribute vec3 aC;varying vec2 vP;varying float vT,vA;varying vec3 vC;
         void main(){vP=position.xy*64.;vT=aType;vA=aAlpha;vC=aC;gl_Position=projectionMatrix*vec4(aAt+vP,0.,1.);if(aAlpha<.01)gl_Position=vec4(2.,2.,2.,1.);}`,
-      fragmentShader:`uniform float uRip;uniform vec3 uLime,uUser;varying vec2 vP;varying float vT,vA;varying vec3 vC;
+      fragmentShader:`uniform float uRip,uT;uniform vec3 uLime,uUser;varying vec2 vP;varying float vT,vA;varying vec3 vC;
         float ring(float r,float a,float b,float aa){return (1.-smoothstep(b-aa,b,r))*smoothstep(a-aa,a,r);}
         void main(){
           float r=length(vP),aa=max(fwidth(r),.35);vec3 c;float a;
           if(vT<.5){
             float core=1.-smoothstep(9.-aa,9.,r),lime=ring(r,9.,11.,aa),dark=ring(r,11.,12.,aa);
-            float halo=(1.-smoothstep(11.,18.,r))*.16*(1.-core-lime-dark);
+            float beat=.5+.5*sin(uT*2.6);
+            float halo=(1.-smoothstep(11.,18.+7.*beat,r))*(.16+.12*beat)*(1.-core-lime-dark);
             c=vC*core+uLime*lime+uLime*halo;a=core+lime+dark*.5+halo;
             if(uRip>=0.){float rr=6.+16.*uRip;float w=ring(r,rr-.75,rr+.75,aa)*(1.-uRip)*.8;c+=uLime*w;a+=w;}
           }else{
@@ -665,6 +678,9 @@
     function applyLevel(lv){
       level=lv;const groups=levels[lv]||[];hideAttr.fill(0);
       const prev=new Map(badges.map(b=>[b.key,b]));
+      /* Scission et fusion : un groupe qui apparaît part de la position du groupe dont il vient. */
+      const parentOf=new Map();for(const b of badges)for(const id of b.g.ids)parentOf.set(id,b);
+      const born=performance.now(),animate=badges.length>0&&!reduced();
       badges=[];
       for(const g of groups){
         if(g.n<3)continue;
@@ -674,7 +690,8 @@
         const colors=top.map(([a])=>col(glow(a)));let f=0;const fr=top.map(([,n])=>(f+=n/g.n));
         while(fr.length<3){fr.push(fr[fr.length-1]??0);colors.push(colors[colors.length-1]??col('#ffffff'));}
         const key=g.key+':'+g.n;
-        badges.push({key,g,n:g.n,v:M.vec(g.lat,g.lon),colors,fr,host:prev.get(key)?.host||null});
+        const old=prev.get(key),parent=old?null:parentOf.get(g.ids[0]);
+        badges.push({key,g,n:g.n,v:M.vec(g.lat,g.lon),colors,fr,host:old?.host||null,born:old?old.born:animate?born:0,from:old?old.from:animate&&parent&&parent.n>g.n?parent.v:null});
       }
       badges.sort((a,b)=>b.n-a.n||(a.key<b.key?-1:1));
       dots.geometry.attributes.hide.needsUpdate=true;
@@ -686,8 +703,14 @@
     function layoutOverlay(){
       const gap=mobile?10:6,sp=selected&&byId.has(selected)?project(byId.get(selected).v):null;
       const shown=[];
+      const tNow=performance.now(),dtO=Math.min(64,tNow-(ovT||tNow));ovT=tNow;
+      const ovTarget=flying?0:1;ovA+=(ovTarget-ovA)*Math.min(1,dtO/90);if(Math.abs(ovA-ovTarget)<.02){ovA=ovTarget;ovBusy=false;}else ovBusy=true;
+      splitBusy=false;
       for(const b of badges){
-        const p=project(b.v);b.p=p;b.total=b.n;b.members=null;b.absorbed=false;
+        let v=b.v;b.e=1;
+        if(b.born){const t=(tNow-b.born)/280;if(t>=1){b.born=0;b.from=null;}else{splitBusy=true;const e=1-Math.pow(1-t,3);b.e=e;
+          if(b.from){const f=b.from,x=f[0]+(v[0]-f[0])*e,y=f[1]+(v[1]-f[1])*e,z=f[2]+(v[2]-f[2])*e,l=Math.hypot(x,y,z)||1;v=[x/l,y/l,z/l];}}}
+        const p=project(v);b.p=p;b.total=b.n;b.members=null;b.absorbed=false;
         b.on=p.front&&p.facing>=.12&&p.x>-40&&p.x<W+40&&p.y>-40&&p.y<H+40;
       }
       for(const b of badges){
@@ -704,7 +727,7 @@
         /* 8 px libres autour du spot choisi : c’est le badge qui s’écarte, jamais le spot. */
         if(sp&&sp.front){const dx=x-sp.x,dy=y-sp.y,d=Math.hypot(dx,dy),min=sz/2+12+8;if(d<min){if(d>.5){x=sp.x+dx*min/d;y=sp.y+dy*min/d;}else y=sp.y-min;}}
         b.sx=x;b.sy=y;b.sz=sz;
-        B.at[i*2]=x;B.at[i*2+1]=y;B.size[i]=sz;B.alpha[i]=1;B.hot[i]=hotBadge===b.key?1:0;
+        B.at[i*2]=x;B.at[i*2+1]=y;B.size[i]=sz*(.7+.3*b.e);B.alpha[i]=ovA*b.e;B.hot[i]=hotBadge===b.key?1:0;
         b.colors.forEach((c,k)=>{const arr=[B.c1,B.c2,B.c3][k];arr[i*3]=c.r;arr[i*3+1]=c.g;arr[i*3+2]=c.b;});
         B.f[i*3]=b.fr[0];B.f[i*3+1]=b.fr[1];B.f[i*3+2]=b.fr[2];
         const digits=String(Math.min(999,b.total));B.num[i*4]=digits.length;for(let k=0;k<3;k++)B.num[i*4+1+k]=+(digits[k]||0);
@@ -738,7 +761,7 @@
       }
       /* Étiquettes : suivent leur spot à chaque image. */
       labels.forEach((l,k)=>{const s=byId.get(l.id);const p=s&&project(s.v);const on=p&&p.front&&p.facing>=.12&&!hideAttr[s.i]&&l.id!==hovered;
-        L.at[k*2]=p?p.x:0;L.at[k*2+1]=p?p.y:0;L.alpha[k]=on?1:0;});
+        L.at[k*2]=p?p.x:0;L.at[k*2+1]=p?p.y:0;L.alpha[k]=on?ovA:0;});
       labelGeo.instanceCount=labels.length;['aAt','aAlpha','aOff','aSz','aUV'].forEach(n=>labelGeo.attributes[n].needsUpdate=true);
       /* Spot choisi et position. */
       if(sp){PN.at[0]=sp.x;PN.at[1]=sp.y;PN.alpha[0]=sp.front&&sp.facing>=.05?1:0;const c=col(glow(byId.get(selected).act));PN.c[0]=c.r;PN.c[1]=c.g;PN.c[2]=c.b;}else PN.alpha[0]=0;
@@ -754,7 +777,10 @@
       const cur=widthKm(),fit=Math.max(c.radius*KM*2.9,1);
       /* On zoome au moins assez pour que le groupe s’ouvre. */
       const target=Math.min(cur/2.4,fit);
-      if(target<(opts.minWidthKm||600)){flyTo({lat:c.lat,lon:c.lon,widthKm:opts.minWidthKm||600},{done:()=>opts.onDive?.({lat:c.lat,lon:c.lon,kmPerPx:Math.max(target,40)/minSide(),reason:'cluster'})});return;}
+      if(target<(opts.minWidthKm||600)){
+        /* Groupe serré : la carte détaillée peut prendre tout le vol en charge (plongée continue). */
+        if(opts.onDive?.({lat:c.lat,lon:c.lon,kmPerPx:Math.max(target,40)/minSide(),reason:'cluster',direct:true})===true)return;
+        flyTo({lat:c.lat,lon:c.lon,widthKm:opts.minWidthKm||600},{done:()=>opts.onDive?.({lat:c.lat,lon:c.lon,kmPerPx:Math.max(target,40)/minSide(),reason:'cluster'})});return;}
       flyTo({lat:c.lat,lon:c.lon,widthKm:target});
     }
     const badgeAt=(x,y)=>shownBadges.find(b=>Math.hypot(b.sx-x,b.sy-y)<b.sz/2+(mobile?8:3));
@@ -887,14 +913,18 @@
       const dt=Math.max(1,now-drag.t);drag.v.push({t:now,lat:(view.lat-before.lat)/dt,lon:M.wrapLon(view.lon-before.lon)/dt});drag.v=drag.v.filter(x=>now-x.t<90);
       drag.last=p;drag.t=now;invalidate();
     });
+    /* Pincé au-delà de la planète entière : au relâchement, elle revient à sa taille, en douceur. */
+    const springBack=()=>{if(ptrs.size||view.dist<=maxDist()*1.01)return false;flyTo({lat:view.lat,lon:view.lon,dist:maxDist()},{duration:420,done:()=>{overviewOn=true;}});return true;};
     const end=e=>{
       if(!ptrs.has(e.pointerId))return;
       const p=local(e);ptrs.delete(e.pointerId);
       canvas.classList.remove('is-grabbing');
       if(pinch){if(ptrs.size<2){pinch=null;moved('zoom');if(overshoot>.35)dive('pinch');overshoot=0;
+        if(springBack())return;
         if(ptrs.size===1){const q=[...ptrs.values()][0];drag={g:pick(q.x,q.y),last:q,t:performance.now(),v:[],moved:true};}}return;}
       if(!drag)return;
       const d=drag;drag=null;
+      if(d.moved&&springBack())return;
       if(!d.moved&&tapStart&&e.type==='pointerup'&&performance.now()-tapStart.t<600){tap(p,e.pointerType);return;}
       const recent=d.v.filter(x=>performance.now()-x.t<80);
       if(recent.length&&!reduced()&&performance.now()-d.t<60){
@@ -1075,6 +1105,17 @@
       /* Point de la Terre où le soleil est au zénith en ce moment. */
       sun(){return sky().sun;},
       wake,
+      /* Vol piloté de l’extérieur (plongée vers un spot) : pose() place la caméra et dessine dans la même image,
+         sans la limite de zoom du globe (la carte prend le relais en fondu) ; settle() rend la main aux gestes. */
+      setFlying(on){flying=!!on;if(flying){stop();touched=true;spin=0;setHover(null);}lastTouch=performance.now();invalidate();},
+      get flying(){return flying;},
+      pose(p){
+        if(dead||lost||!active)return;
+        anim=null;inertia=null;lastTouch=performance.now();
+        view.lat=p.lat;view.lon=p.lon;view.dist=Math.max(1.0004,Math.min(maxDist()*1.35,distForKpp(p.kmPerPx)));
+        dirty=false;draw();
+      },
+      settle(){flying=false;view.dist=clampDist(view.dist);invalidate();moved('fly');},
       jumpTo(t){stop();lastTouch=performance.now();if(t.lat!=null)view.lat=t.lat;if(t.lon!=null)view.lon=t.lon;view.dist=clampDist(t.dist||distForWidth(t.widthKm||widthKm()));invalidate();moved('jump');},
       /* Cadre un ensemble de points (km de marge compris) ; renvoie la largeur visée. */
       fit(points,{animate=true,minWidthKm=0,maxWidthKm=Infinity,done}={}){
