@@ -1,0 +1,30 @@
+# Configuration d'ESSAI LOCAL du Worker ob-api (scripts/compte-essai.mjs) : faux fournisseur d'identité, code 123456.
+# Séparée de wrangler.toml (production) : le mode essai exige l'ABSENCE de SUPABASE_URL, que wrangler.toml définit.
+# Jamais déployée : pas de route, pas de workers.dev, pas de tâche planifiée, base D1 locale seulement (identifiant fictif).
+# Le faux fournisseur n'est de toute façon accepté que sur http://localhost ou 127.0.0.1 (server/ob-api/src/index.js, devMode).
+name = "ob-api-essai"
+main = "src/index.js"
+compatibility_date = "2026-10-01"
+workers_dev = false
+
+[vars]
+OB_ENV = "local"
+OB_DEV_FAKE_IDP = "1"
+# Remplacée au lancement par compte-essai.mjs (port du site d'essai).
+ALLOWED_ORIGINS = "http://localhost:8788,http://127.0.0.1:8788"
+NATIVE_ORIGINS = ""
+EMAIL_DAILY_BUDGET = "80"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ob-comptes-essai"
+database_id = "00000000-0000-4000-8000-000000000000"
+migrations_dir = "migrations"
+
+[[durable_objects.bindings]]
+name = "GUARD"
+class_name = "Guard"
+
+[[migrations]]
+tag = "v1"
+new_sqlite_classes = ["Guard"]

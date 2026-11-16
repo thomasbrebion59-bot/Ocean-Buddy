@@ -1,7 +1,8 @@
 // ob-api : API des comptes Ocean Buddy (Cloudflare Worker, route oceanbuddy.app/api/*).
 // - Identité : Supabase Auth (code / lien e-mail), vérifiée ici par signature (JWKS) ; aucune clé Supabase dans l'app.
 // - Données : D1 (Cloudflare), une ligne par élément synchronisé ; retour arrière par D1 Time Travel.
-// - Web : jetons dans des cookies HttpOnly posés par ce Worker ; app native : en-tête Authorization (Trousseau, étape 3).
+// - Web : jetons dans des cookies HttpOnly posés par ce Worker ; app iPhone (1.5.0) : requêtes CapacitorHttp sans Origin,
+//   jetons rendus dans le corps (client:"native") puis gardés dans le Trousseau iOS, envoyés en Authorization: Bearer.
 // - Limites de débit partout (Durable Object Guard), journaux sans donnée personnelle, échec fermé si mal configuré.
 // Règles : ~/Projects/REGLES-SECURITE-COMPTES.md ; plan : Ocean-Buddy-orga-docs/comptes/PLAN-COMPTE.md.
 
@@ -260,10 +261,13 @@ async function otpVerify(ctx) {
   return loginResponse(ctx, s, body);
 }
 const TOKEN_HASH_RE = /^[A-Za-z0-9_-]{10,200}$/;
+/* Lien de l'e-mail : réservé au site. Dans l'app iPhone, on tape le code à 6 chiffres (le lien ouvrirait Safari, pas l'app,
+   et le confirmer consommerait le code). La page le dit avant le bouton. */
 function confirmPage(tokenHash) {
   const html = `<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ocean Buddy</title>
-<style>body{font:16px/1.5 system-ui,sans-serif;background:#fef9eb;color:#0b2a4a;display:grid;place-items:center;min-height:100vh;margin:0;padding:16px}main{max-width:420px;text-align:center}button{font:inherit;font-weight:700;border:0;border-radius:14px;background:#0b4f8a;color:#fff;padding:14px 22px;min-height:48px;cursor:pointer}small{display:block;margin-top:18px;color:#56708a}</style></head>
-<body><main><h1>Ocean Buddy</h1><p>Confirme ta connexion à ton compte.<br><span lang="en">Confirm your sign-in.</span> · <span lang="es">Confirma tu inicio de sesión.</span></p>
+<style>body{font:16px/1.5 system-ui,sans-serif;background:#fef9eb;color:#0b2a4a;display:grid;place-items:center;min-height:100vh;margin:0;padding:16px}main{max-width:420px;text-align:center}button{font:inherit;font-weight:700;border:0;border-radius:14px;background:#0b4f8a;color:#fff;padding:14px 22px;min-height:48px;cursor:pointer}small{display:block;margin-top:18px;color:#56708a}.app{margin:0 0 18px;padding:12px 14px;border-radius:14px;background:#fff;font-size:14px}</style></head>
+<body><main><h1>Ocean Buddy</h1><p class="app"><b>Dans l’app iPhone ?</b> Retourne dans l’app et tape le code à 6 chiffres de l’e-mail, sans toucher ce bouton.<br><span lang="en">Using the iPhone app? Go back to the app and type the 6-digit code from the e-mail instead.</span><br><span lang="es">¿Usas la app de iPhone? Vuelve a la app y escribe el código de 6 cifras del correo.</span></p>
+<p>Sur le site : confirme ta connexion à ton compte.<br><span lang="en">On the website: confirm your sign-in.</span> · <span lang="es">En la web: confirma tu inicio de sesión.</span></p>
 <form method="post" action="/api/v1/auth/confirm"><input type="hidden" name="token_hash" value="${tokenHash}"><button type="submit">Confirmer ma connexion</button></form>
 <small>Si tu n’as rien demandé, ferme simplement cette page.</small></main></body></html>`;
   return new Response(html, {

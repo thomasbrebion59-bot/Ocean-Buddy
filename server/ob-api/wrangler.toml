@@ -1,6 +1,6 @@
 # Worker « ob-api » : comptes Ocean Buddy. Valeurs de PRODUCTION, sûres par défaut.
 # Rien n'est déployé tant que le fondateur n'a pas suivi Ocean-Buddy-orga-docs/comptes/A-FAIRE-FONDATEUR.md.
-# Essai local : copier .dev.vars.example vers .dev.vars (ignoré par git), puis `node scripts/compte-essai.mjs` à la racine.
+# Essai local : `node scripts/compte-essai.mjs` à la racine (configuration séparée wrangler.essai.toml, sans SUPABASE_URL).
 name = "ob-api"
 main = "src/index.js"
 compatibility_date = "2026-10-01"
