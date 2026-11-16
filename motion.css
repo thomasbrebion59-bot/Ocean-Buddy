@@ -1,9 +1,13 @@
 /* @creme-tokens */
 /* Transitions Apple : courbes ressort, zoom carte -> fiche (View Transitions), entrée des grands titres.
    Couleurs : aucune ici. Les durées restent courtes pour ne jamais laisser de fantôme. */
-:root{--ob-ease-out:cubic-bezier(.22,.8,.3,1);--ob-spring:cubic-bezier(.22,.9,.3,1.02)}
+:root{--ob-ease-out:cubic-bezier(.22,.8,.3,1);--ob-spring:cubic-bezier(.22,.9,.3,1.02);--ob-snap:cubic-bezier(.2,.9,.25,1);
+  /* Durées partagées : appui très court, relâché en ressort, feuilles et écrans sous 350 ms. */
+  --ob-t-press:.11s;--ob-t-release:.34s;--ob-t-sheet:.34s}
 @supports (transition-timing-function:linear(0,1)){
-  :root{--ob-spring:linear(0.000,0.019,0.068,0.137,0.219,0.306,0.394,0.480,0.561,0.636,0.703,0.763,0.814,0.859,0.896,0.926,0.951,0.971,0.987,0.998,1.007,1.013,1)}
+  :root{--ob-spring:linear(0.000,0.019,0.068,0.137,0.219,0.306,0.394,0.480,0.561,0.636,0.703,0.763,0.814,0.859,0.896,0.926,0.951,0.971,0.987,0.998,1.007,1.013,1);
+    /* Ressort amorti (sans rebond), départ vif : écrans, feuilles, relâché des cartes. */
+    --ob-snap:linear(0,.076,.228,.391,.538,.658,.752,.823,.875,.913,.940,.959,.972,.981,.988,.992,.995,.997,.998,.999,1)}
 }
 
 /* Zoom partagé, limité à cette transition (html.ob-vt-active) pour ne pas toucher le fondu d'activité.
@@ -18,6 +22,24 @@ html.ob-vt-active::view-transition{background:var(--t-page,var(--as-bg,transpare
 ::view-transition-new(ob-spot){animation-name:ob-vt-in}
 @keyframes ob-vt-out{to{opacity:0}}
 @keyframes ob-vt-in{from{opacity:0}}
+
+/* ---------- Retour tactile : appui net, relâché en ressort ----------
+   Les échelles restent celles de chaque composant ; seules la courbe et les durées sont communes.
+   Uniquement des éléments dont la transition ne porte que sur transform. */
+.hf-card,.hf-fy,.hf-mood,.hf-go,.hf-search{transition:transform var(--ob-t-release) var(--ob-snap)}
+.hf-card:active,.hf-fy:active,.hf-mood:active,.hf-go:active,.hf-search:active{transition-duration:var(--ob-t-press);transition-timing-function:var(--ob-ease-out)}
+/* Onglets de la fiche et puces : même réponse à l'appui. */
+.dtab,.htab{transition:transform var(--ob-t-release) var(--ob-snap),background-color .2s ease,color .2s ease,border-color .2s ease}
+.dtab:active,.htab:active{transform:scale(.95);transition-duration:var(--ob-t-press),.2s,.2s,.2s}
+
+/* ---------- Feuilles : même ressort que les écrans ---------- */
+.sd-sheet{transition:transform var(--ob-t-sheet) var(--ob-snap)}
+.chat-sheet{transition:transform var(--ob-t-sheet) var(--ob-snap),opacity .2s var(--ob-ease-out)}
+
+@media (prefers-reduced-motion:reduce){
+  .hf-card,.hf-fy,.hf-mood,.hf-go,.hf-search,.dtab,.htab,.sd-sheet,.chat-sheet{transition:none}
+}
+.reduce-motion .hf-card,.reduce-motion .hf-fy,.reduce-motion .hf-mood,.reduce-motion .hf-go,.reduce-motion .hf-search,.reduce-motion .dtab,.reduce-motion .htab,.reduce-motion .sd-sheet,.reduce-motion .chat-sheet{transition:none}
 
 @media (prefers-reduced-motion:reduce){
   ::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation-duration:.001s!important}

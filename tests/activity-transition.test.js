@@ -139,11 +139,39 @@ test('le changement d’activité sur Explorer déjà actif reste instantané',(
 
 test('la navigation ordinaire conserve le fondu entre onglets',()=>{
   const e=navigationEnv();e.go('profile');assert.equal(e.elements.home.active,true);assert.equal(e.wrap.classList.contains('transitioning'),true);
-  /* Pendant le fondu, les deux écrans sont posés là où ils sont dans le flux (pas de saut de mise en page). */
-  for(const id of ['home','profile']){const st=e.elements[id].style;assert.equal(st.top,'8px');assert.equal(st.left,'16px');assert.equal(st.right,'16px');assert.equal(st.maxWidth,'1240px');}
+  /* Pendant le fondu, seul l’écran qui part sort du flux, posé là où il se trouvait ; celui qui arrive reste dans
+     le flux, à sa place définitive (aucune mise en page en fin de transition). */
+  {const st=e.elements.home.style;assert.equal(st.top,'8px');assert.equal(st.left,'16px');assert.equal(st.right,'16px');assert.equal(st.maxWidth,'1240px');}
+  assert.equal(e.elements.home.classList.contains('sw-live'),true);
+  assert.equal(e.elements.profile.classList.contains('sw-live'),false);assert.equal(e.elements.profile.style.top,'');
+  assert.equal(e.elements.profile.classList.contains('sw-done'),true);
   e.drain();assert.equal(e.elements.home.active,false);assert.equal(e.elements.profile.active,true);
   assert.equal(e.elements.profile.classList.contains('sw-covered'),false);
   for(const id of ['home','profile']){const st=e.elements[id].style;assert.equal(st.top,'');assert.equal(st.left,'');assert.equal(st.right,'');assert.equal(st.maxWidth,'');}
+});
+
+test('avec Web Animations, go anime transform et opacity seulement et annule tout à la navigation suivante',()=>{
+  const e=navigationEnv();const anims=[];
+  for(const id of ['home','spots','profile'])e.elements[id].animate=(frames,opts)=>{const a={id,frames,opts,cancelled:false,cancel(){a.cancelled=true;}};anims.push(a);return a;};
+  e.go('profile');
+  assert.equal(anims.length,4);
+  assert.ok(anims.every(a=>a.frames.every(f=>Object.keys(f).every(k=>k==='transform'||k==='opacity'))));
+  assert.ok(anims.every(a=>a.opts.duration<=350),'aucune animation ne dépasse 350 ms');
+  /* Pas de style en ligne à nettoyer sur l’écran qui arrive. */
+  assert.equal(e.elements.profile.style.opacity,'');assert.equal(e.elements.profile.style.transform,'');
+  e.go('home');
+  assert.ok(anims.slice(0,4).every(a=>a.cancelled),'les animations du fondu précédent sont annulées');
+  e.drain();assert.equal(e.elements.home.active,true);assert.equal(e.elements.profile.active,false);
+  assert.ok(anims.every(a=>a.cancelled));
+});
+
+test('Explorer n’est jamais animé en transform (ses calques sont en position fixe)',()=>{
+  const e=navigationEnv();const anims=[];
+  for(const id of ['home','spots','profile'])e.elements[id].animate=(frames,opts)=>{const a={id,frames,cancel(){}};anims.push(a);return a;};
+  e.go('spots');
+  assert.deepEqual(anims.filter(a=>a.id==='spots').map(a=>Object.keys(a.frames[0]).join()),['opacity']);
+  e.drain();anims.length=0;e.go('profile');
+  assert.deepEqual(anims.filter(a=>a.id==='spots').map(a=>Object.keys(a.frames[0]).join()),['opacity']);
 });
 
 test('applySport préserve les favoris et répartit le rendu sans changer la remise à zéro des filtres',async()=>{

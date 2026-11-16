@@ -5,6 +5,13 @@
   const root=document.documentElement;
   const M=window.OceanMotion=window.OceanMotion||{};
   M.instant=false;
+  /* Courbes partagées (mêmes valeurs que --ob-spring / --ob-ease-out de motion.css), lues par go() pour ses Web Animations. */
+  const LINEAR='linear(0.000,0.019,0.068,0.137,0.219,0.306,0.394,0.480,0.561,0.636,0.703,0.763,0.814,0.859,0.896,0.926,0.951,0.971,0.987,0.998,1.007,1.013,1)';
+  let linearOK=false;try{linearOK=!!(window.CSS&&CSS.supports&&CSS.supports('transition-timing-function',LINEAR));}catch(_){}
+  M.spring=linearOK?LINEAR:'cubic-bezier(.22,.9,.3,1.02)';
+  /* Ressort amorti, départ vif (--ob-snap). */
+  M.snap=linearOK?'linear(0,.076,.228,.391,.538,.658,.752,.823,.875,.913,.940,.959,.972,.981,.988,.992,.995,.997,.998,.999,1)':'cubic-bezier(.2,.9,.25,1)';
+  M.easeOut='cubic-bezier(.22,.8,.3,1)';
 
   function reduced(){
     return document.body.classList.contains('reduce-motion')||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
