@@ -563,8 +563,10 @@
     const c=map.getCenter(),sd=side(),world=planet.maxWidthKm/sd;
     const here={lat:c.lat,lon:c.lng,kmPerPx:M.kmPerPx(map.getZoom(),clampLat(c.lat))};
     /* Carte déjà presque à l’échelle du globe : le relais simple suffit. */
-    if(calm()||here.kmPerPx>DIVE_KM/sd/2.8)return false;
+    if(here.kmPerPx>DIVE_KM/sd/2.8)return false;
     const g=target||{lat:Math.max(-78,Math.min(78,c.lat)),lon:c.lng,kmPerPx:Math.max(RISE_KM*1.2/sd,Math.min(world,diveOrigin?.kmPerPx||world))};
+    /* Mouvement réduit : retour direct au globe, sans vol. */
+    if(calm()){deselect();rise();planet.jumpTo({lat:g.lat,lon:g.lon,widthKm:g.kmPerPx*sd});if(toOverview)planet.overview({lat:g.lat,lon:g.lon},false);return true;}
     const padB=map.getPadding?.()||pad();
     deselect();
     startFlight({plan:flightPlan(g,here),dir:-1,spot:null,padA:planetPad(),padB,overview:toOverview?{lat:g.lat,lon:g.lon}:null});
@@ -659,7 +661,9 @@
   function levelMap(){
     if(!styled()||flight)return;
     if(map.getPitch()<.5)return;
-    if(map.isMoving())map.once('moveend',()=>setTimeout(levelMap,0));else map.easeTo({pitch:0,duration:300});
+    /* Le geste qui a interrompu le vol peut aussi arrêter ce redressement : on vérifie de nouveau à chaque fin de mouvement. */
+    if(!map.isMoving())map.easeTo({pitch:0,duration:300});
+    map.once('moveend',()=>setTimeout(levelMap,0));
   }
   /* Fermer l’aperçu juste après une plongée : on remonte vers le globe ; sinon l’aperçu se ferme simplement. */
   function closeCard(){
@@ -850,9 +854,11 @@
   let planetData='';
   function setData(){
     const key=activeSport+'|'+rows.map(s=>s.id).join(',');
-    if(planet&&key!==planetData){
-      planetData=key;
-      planet.setSpots(rows.map(s=>{const c=COORDS[s.id];return {id:s.id,lat:c.lat,lon:c.lon,name:shortName(s),act:primary(s)||'surf',country:s.country};}));
+    /* Spots de la saison (data/seasons.json, mois en cours) : mis en avant sobrement sur le globe. */
+    const seasons=window.OCEAN_SEASONS||null,month=new Date().getMonth(),pKey=key+'|'+(seasons?month:'');
+    if(planet&&pKey!==planetData){
+      planetData=pKey;
+      planet.setSpots(rows.map(s=>{const c=COORDS[s.id];return {id:s.id,lat:c.lat,lon:c.lon,name:shortName(s),act:primary(s)||'surf',country:s.country,season:!!seasons?.[s.id]?.includes(month)};}));
       if(selected)planet.setSelected(selected);
     }
     if(styled()&&map.getSource('spots')&&key!==lastData){

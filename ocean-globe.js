@@ -96,7 +96,7 @@
   const EARTH_V=`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
   const EARTH_F=`
     uniform sampler2D uDay,uNorm,uSky;uniform vec3 uSun,uCam;
-    uniform float uCloudOff,uCloudA,uRelief,uNight,uExpo,uSpec,uReveal,uStudio;
+    uniform float uCloudOff,uCloudA,uRelief,uNight,uExpo,uSpec,uReveal,uStudio,uGlint;
     uniform sampler2D uSst;uniform float uSstA,uSstM;
     varying vec3 vPos;
     ${GEO}
@@ -140,6 +140,8 @@
       float F=.02+.98*pow(1.-vh,5.),a2=.07,dd=nh*nh*(a2-1.)+1.;
       float glint=a2/(PI*dd*dd)*F*max(mu,0.)/max(4.*ndv,.25);
       col+=water*uSpec*glint*sunC*(1.-.85*cs);
+      /* Lumière studio : un reflet large et doux du soleil sur l’océan, qui donne son volume à la planète. */
+      col+=water*uStudio*uGlint*(pow(nh,90.)*.1+pow(nh,18.)*.032)*vec3(.62,.8,1.)*(1.-.85*cs);
       col+=water*(.02+.98*pow(1.-ndv,5.))*vec3(.3,.5,.95)*.3*smoothstep(-.05,.3,mu);
       /* Nuit : lumières des villes, voilées par les nuages. */
       col+=vec3(1.,.64,.33)*sk.r*sk.r*(1.-smoothstep(-.16,.05,mu))*(1.-.7*cs)*uNight*(1.-uStudio);
@@ -197,7 +199,7 @@
       if(b<1.)discard;
       /* Densité au point le plus bas du rayon : décroissance exponentielle avec l’altitude. */
       float h=clamp((b-1.)/(uTop-1.),0.,1.);
-      float dens=exp(-h*3.4)*(1.-smoothstep(.75,1.,h));
+      float dens=exp(-h*4.2)*(1.-smoothstep(.7,1.,h));
       float mu=dot(pc/b,uSun),ct=dot(d,uSun);
       float lit=smoothstep(-.32,.22,mu);
       float phase=.75*(1.+ct*ct)+.5*pow(max(ct,0.),10.);
@@ -216,27 +218,29 @@
       #include <colorspace_fragment>
     }`;
   const DOT_V=`
-    attribute vec3 color;attribute float hide;
+    attribute vec3 color;attribute float hide,boost;
     uniform vec3 uCam;uniform float uHalo,uDpr;
-    varying vec3 vColor;varying float vA,vHide;
+    varying vec3 vColor;varying float vA,vHide,vB;
     void main(){
       vec4 mv=modelViewMatrix*vec4(position,1.);gl_Position=projectionMatrix*mv;
       float facing=dot(normalize(position),normalize(uCam-position));
-      vA=smoothstep(.0,.16,facing);vHide=hide;
+      vA=smoothstep(.0,.16,facing);vHide=hide;vB=boost;
       gl_PointSize=uHalo*uDpr;vColor=color;
     }`;
   const DOT_F=`
-    uniform vec3 uWhite;uniform float uCore,uHalo,uRing,uHaloA;
-    varying vec3 vColor;varying float vA,vHide;
+    uniform vec3 uWhite;uniform float uCore,uHalo,uRing,uHaloA,uSeason;
+    varying vec3 vColor;varying float vA,vHide,vB;
     void main(){
       /* Spot absorbé par un groupe : il disparaît, halo compris (le badge le représente). */
       if(vA<.01||vHide>.5)discard;
       float r=length(gl_PointCoord*2.-1.)*uHalo*.5;
-      float c=uCore*.5;
+      /* Spots de la saison (quand la donnée existe) : liseré blanc et lueur un peu plus présente ; les autres restent sobres. */
+      float c=uCore*.5*(1.-.14*uSeason*(1.-vB));
+      float rw=max(uRing,vB*uSeason*1.1);
       float core=(1.-smoothstep(c-.7,c+.7,r))*(1.-vHide);
-      float disk=uRing>0.?(1.-smoothstep(c+uRing-.7,c+uRing+.7,r))*(1.-vHide):core;
+      float disk=rw>0.?(1.-smoothstep(c+rw-.7,c+rw+.7,r))*(1.-vHide):core;
       float ring=disk-core;
-      float halo=pow(max(1.-r/(uHalo*.5),0.),2.)*uHaloA*(1.-disk)*(1.-.65*vHide);
+      float halo=pow(max(1.-r/(uHalo*.5),0.),2.)*uHaloA*(1.+1.6*vB*uSeason)*(1.-disk)*(1.-.65*vHide);
       vec3 rgb=(vColor*core+uWhite*ring)+vColor*halo;
       /* Halo opaque partiel (et non additif) : là où les spots s’empilent, la lueur tend vers
          la couleur de l’activité au lieu de saturer en blanc. */
@@ -288,7 +292,7 @@
     const sunDir=new T.Vector3(),studioSun=new T.Vector3(-.38,.36,.85).normalize();
     const uniEarth={
       uDay:{value:null},uNorm:{value:null},uSky:{value:null},uSun:{value:sunDir},uCam:{value:new T.Vector3()},
-      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:3.2},uReveal:{value:0},uStudio:{value:lighting==='studio'?1:0},
+      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:3.2},uGlint:{value:1},uReveal:{value:0},uStudio:{value:lighting==='studio'?1:0},
       uSst:{value:null},uSstA:{value:0},uSstM:{value:new Date().getMonth()}
     };
     const seg=mobile?128:192;
@@ -298,7 +302,7 @@
     const cloudU={uSky:{value:null},uSun:{value:sunDir},uCam:uniEarth.uCam,uCloudOff:uniEarth.uCloudOff,uCloudA:uniEarth.uCloudA,uExpo:uniEarth.uExpo};
     const clouds=new T.Mesh(new T.SphereGeometry(1.0045,seg,seg/2),new T.ShaderMaterial({uniforms:cloudU,vertexShader:EARTH_V,fragmentShader:CLOUD_F,transparent:true,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor}));
     clouds.visible=false;clouds.renderOrder=1;scene.add(clouds);
-    const atmoU={uCam:uniEarth.uCam,uSun:{value:sunDir},uTop:{value:1.03},uI:{value:.95}};
+    const atmoU={uCam:uniEarth.uCam,uSun:{value:sunDir},uTop:{value:1.03},uI:{value:.8}};
     const atmo=new T.Mesh(new T.SphereGeometry(1,96,48),new T.ShaderMaterial({uniforms:atmoU,vertexShader:ATMO_V,fragmentShader:ATMO_F,side:T.BackSide,transparent:true,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor}));
     atmo.renderOrder=2;scene.add(atmo);
     /* Ciel : voie lactée et étoiles réelles, tournant avec l’heure sidérale (repère équatorial). */
@@ -347,7 +351,7 @@
     }
 
     /* ---------- Spots ---------- */
-    const dotU={uCam:{value:new T.Vector3()},uHalo:{value:12},uCore:{value:4},uRing:{value:0},uHaloA:{value:.18},uDpr:{value:1},uWhite:{value:col('#ffffff')}};
+    const dotU={uCam:{value:new T.Vector3()},uHalo:{value:12},uCore:{value:4},uRing:{value:0},uHaloA:{value:.18},uSeason:{value:0},uDpr:{value:1},uWhite:{value:col('#ffffff')}};
     const dotMat=new T.ShaderMaterial({uniforms:dotU,vertexShader:DOT_V,fragmentShader:DOT_F,transparent:true,depthTest:false,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor});
     let dots=null,spots=[],byId=new Map(),levels=[],level=-1,hideAttr=null;
 
@@ -355,9 +359,10 @@
       spots=list.filter(s=>Number.isFinite(s.lat)&&Number.isFinite(s.lon)).map(s=>({...s,v:M.vec(s.lat,s.lon)}));
       byId=new Map(spots.map((s,i)=>[s.id,{...s,i}]));
       if(dots){scene.remove(dots);dots.geometry.dispose();}
-      const n=spots.length,pos=new Float32Array(n*3),c=new Float32Array(n*3);hideAttr=new Float32Array(n);
-      spots.forEach((s,i)=>{pos.set([s.v[0]*1.001,s.v[1]*1.001,s.v[2]*1.001],i*3);const k=col(glow(s.act));c.set([k.r,k.g,k.b],i*3);});
-      const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(pos,3));g.setAttribute('color',new T.BufferAttribute(c,3));g.setAttribute('hide',new T.BufferAttribute(hideAttr,1));
+      const n=spots.length,pos=new Float32Array(n*3),c=new Float32Array(n*3),boost=new Float32Array(n);hideAttr=new Float32Array(n);
+      spots.forEach((s,i)=>{pos.set([s.v[0]*1.001,s.v[1]*1.001,s.v[2]*1.001],i*3);const k=col(glow(s.act));c.set([k.r,k.g,k.b],i*3);boost[i]=s.season?1:0;});
+      dotU.uSeason.value=spots.some(s=>s.season)?1:0;
+      const g=new T.BufferGeometry();g.setAttribute('position',new T.BufferAttribute(pos,3));g.setAttribute('color',new T.BufferAttribute(c,3));g.setAttribute('hide',new T.BufferAttribute(hideAttr,1));g.setAttribute('boost',new T.BufferAttribute(boost,1));
       dots=new T.Points(g,dotMat);dots.renderOrder=3;dots.frustumCulled=false;scene.add(dots);
       levels=M.clusterLevels(spots);level=-1;refreshCountries();
       badges=[];shownBadges=[];labels=[];hotBadge=null;
@@ -496,11 +501,13 @@
       /* Échelle espace → continent → région : points, liserés et halo s’adaptent en continu. */
       const s=Math.max(0,Math.min(1,(Math.log(8000)-Math.log(Math.max(w,1)))/(Math.log(8000)-Math.log(1500))));
       const far=Math.max(0,Math.min(1,(Math.log(Math.max(w,1))-Math.log(8000))/Math.log(2)));
-      dotU.uCore.value=4+2*(1-far)+2*s;dotU.uHalo.value=12+4*(1-far)+4*s+2;dotU.uRing.value=s>.6?1:0;dotU.uHaloA.value=mobile?.07:.16;
+      dotU.uCore.value=5+2*(1-far)+2.5*s;dotU.uHalo.value=14+4*(1-far)+5*s+2;dotU.uRing.value=s>.6?1:0;dotU.uHaloA.value=mobile?.1:.16;
+      /* Le reflet du soleil s’estompe en approchant : de près, il laverait la côte. */
+      uniEarth.uGlint.value=1-.85*Math.min(1,s*1.6);
       /* Nuages : pleins vus de l’espace, ils s’effacent en approchant des côtes pour laisser voir les spots. */
       uniEarth.uCloudA.value=cloudsOn?.88*Math.max(0,Math.min(1,(Math.log(w)-Math.log(1900))/Math.log(3.2))):0;
       /* Atmosphère : environ 3 % du rayon, jamais moins d’une dizaine de pixels à l’écran. */
-      const top=1+Math.max(.028,(mobile?11:15)*k*approach/KM);atmoU.uTop.value=top;atmo.scale.setScalar(top);
+      const top=1+Math.max(.024,(mobile?8:11)*k*approach/KM);atmoU.uTop.value=top;atmo.scale.setScalar(top);
       /* Relief un peu plus marqué en approchant (montagnes, falaises). */
       uniEarth.uRelief.value=.85+.5*s;
       borderMat.opacity=.16*Math.max(0,Math.min(1,(Math.log(9000)-Math.log(w))/Math.log(2)));
@@ -906,16 +913,18 @@
       const dt=Math.max(1,now-drag.t);drag.v.push({t:now,lat:(view.lat-before.lat)/dt,lon:M.wrapLon(view.lon-before.lon)/dt});drag.v=drag.v.filter(x=>now-x.t<90);
       drag.last=p;drag.t=now;invalidate();
     });
+    /* Pincé au-delà de la planète entière : au relâchement, elle revient à sa taille, en douceur. */
+    const springBack=()=>{if(ptrs.size||view.dist<=maxDist()*1.01)return false;flyTo({lat:view.lat,lon:view.lon,dist:maxDist()},{duration:420,done:()=>{overviewOn=true;}});return true;};
     const end=e=>{
       if(!ptrs.has(e.pointerId))return;
       const p=local(e);ptrs.delete(e.pointerId);
       canvas.classList.remove('is-grabbing');
       if(pinch){if(ptrs.size<2){pinch=null;moved('zoom');if(overshoot>.35)dive('pinch');overshoot=0;
-        /* Pincé au-delà de la planète entière : elle revient à sa taille, en douceur. */
-        if(!ptrs.size&&view.dist>maxDist()*1.01){flyTo({lat:view.lat,lon:view.lon,dist:maxDist()},{duration:420});return;}
+        if(springBack())return;
         if(ptrs.size===1){const q=[...ptrs.values()][0];drag={g:pick(q.x,q.y),last:q,t:performance.now(),v:[],moved:true};}}return;}
       if(!drag)return;
       const d=drag;drag=null;
+      if(d.moved&&springBack())return;
       if(!d.moved&&tapStart&&e.type==='pointerup'&&performance.now()-tapStart.t<600){tap(p,e.pointerType);return;}
       const recent=d.v.filter(x=>performance.now()-x.t<80);
       if(recent.length&&!reduced()&&performance.now()-d.t<60){
