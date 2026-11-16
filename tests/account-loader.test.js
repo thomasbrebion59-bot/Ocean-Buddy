@@ -93,7 +93,10 @@ test('app iPhone : le compte passe par OceanMobile.account (Trousseau), jamais p
   assert.match(src,/if\(NATIVE\)return MOB\.account\.request\(path,\{method,body\}\);/);
   assert.match(src,/if\(NATIVE&&typeof MOB\.shareJSON==='function'\)\{await MOB\.shareJSON\('ocean-buddy-export',data\)/);
   /* « Effacer toutes mes données sur cet appareil » déconnecte aussi le compte (cookies ou Trousseau). */
-  assert.match(read('privacy.js'),/await window\.OceanAccount\?\.forget\?\.\(\)/);
+  assert.match(read('privacy.js'),/if\(window\.OceanAccount\?\.forget\)await OceanAccount\.forget\(\);else if\(window\.OceanMobile\?\.account\)await OceanMobile\.account\.request\('\/auth\/logout'/);
+  assert.match(src,/then\(\(\)=>true,x=>x&&x\.status===401\?false:null\)/,'une coupure réseau ne délie pas le compte');
+  /* Journaux natifs de Capacitor coupés : « TO JS » recopierait le début des réponses (jetons). */
+  assert.equal(JSON.parse(read('capacitor.config.json')).loggingBehavior,'none');
   const client=read('mobile/client.js');
   assert.match(client,/Capacitor\.isPluginAvailable\('OceanAccount'\)\?registerPlugin\('OceanAccount'\)/);
   assert.match(client,/const capabilities=Object\.freeze\(\{account:!!accountPlugin\}\)/);

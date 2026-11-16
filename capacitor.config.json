@@ -3,6 +3,7 @@
   "appName": "Ocean Buddy",
   "webDir": "mobile/www",
   "backgroundColor": "#FEF9EB",
+  "loggingBehavior": "none",
   "server": {
     "hostname": "oceanbuddy.localhost"
   },

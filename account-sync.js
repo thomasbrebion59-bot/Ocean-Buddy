@@ -39,8 +39,11 @@
     try{return await raw(path,opts);}
     catch(e){
       if(e.status!==401||path.startsWith('/auth/'))throw e;
-      refreshing??=raw('/auth/refresh',{method:'POST',body:{}}).then(()=>true,()=>false).finally(()=>setTimeout(()=>{refreshing=null;},0));
-      if(!(await refreshing)){patch({linked:false});renderSettings();throw e;}
+      /* Délier seulement si la session est refusée (401) ; une coupure réseau ou un 429/503 garde la connexion. */
+      refreshing??=raw('/auth/refresh',{method:'POST',body:{}}).then(()=>true,x=>x&&x.status===401?false:null).finally(()=>setTimeout(()=>{refreshing=null;},0));
+      const ok=await refreshing;
+      if(ok===false){patch({linked:false});renderSettings();throw e;}
+      if(!ok)throw e;
       return raw(path,opts);
     }
   }
@@ -352,6 +355,6 @@
   else{maybeInvite();watchReminder();}
 
   /* forget : déconnexion de cet appareil (cookies ou Trousseau), appelée avant « Effacer toutes mes données sur cet appareil ». */
-  const forget=async()=>{if(!load().linked)return;try{await raw('/auth/logout',{method:'POST',body:{}});}catch(_){}save({...M.freshState(),invite:load().invite,linked:false});me=null;};
+  const forget=async()=>{try{await raw('/auth/logout',{method:'POST',body:{}});}catch(_){}save({...M.freshState(),invite:load().invite,linked:false});me=null;};
   window.OceanAccount={open:()=>openSheet(load().linked?'consent':'invite'),sync:()=>sync({apply:'now'}),state:load,forget};
 })();

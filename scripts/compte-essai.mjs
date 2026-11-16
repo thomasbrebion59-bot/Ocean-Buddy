@@ -74,7 +74,8 @@ http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://${req.headers.host}`);
   if (url.pathname.startsWith('/api/')) return relay(req, res, url.pathname + url.search, false);
   if (url.pathname.startsWith('/__natif/api/')) return relay(req, res, url.pathname.slice('/__natif'.length) + url.search, true);
-  let base = root, rel = decodeURIComponent(url.pathname);
+  let base = root, rel;
+  try { rel = decodeURIComponent(url.pathname); } catch { res.writeHead(400); res.end(); return; }
   if (rel === '/natif' || rel.startsWith('/natif/')) { base = www; rel = rel.slice('/natif'.length) || '/'; }
   let file = path.normalize(path.join(base, rel));
   if (!file.startsWith(base + path.sep) && file !== base) { res.writeHead(403); res.end(); return; }
