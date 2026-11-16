@@ -9,7 +9,9 @@
     try{sessionStorage.removeItem('ob_community_session_v1')}catch(_){}
     try{await window.OceanMobile?.persist();location.reload();}catch(_){toast('La copie native n’a pas pu être effacée. Réessaie avant de fermer l’application.');}
   };
-  document.querySelector('.set-about').before(erase);
+  /* Rubrique « Mes données » des Réglages, sous « Réinitialiser ma progression ». */
+  const reset=document.querySelector('#settingsModal .set-reset');
+  if(reset)reset.after(erase);else document.querySelector('.set-about').before(erase);
 })();
 
 /* Compte et sauvegarde (compte gratuit, facultatif). DRAPEAU DÉSACTIVÉ par défaut : rien n'est chargé ni affiché tant que
