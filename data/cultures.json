@@ -2719,6 +2719,27 @@
      "url": "https://en.wikipedia.org/wiki/Old_City_of_Acre"
     }
    },
+   "fete": {
+    "title": {
+     "fr": "La Nuit blanche de Tel Aviv",
+     "en": "Tel Aviv White Night",
+     "es": "La Noche Blanca de Tel Aviv"
+    },
+    "when": {
+     "fr": "juin",
+     "en": "June",
+     "es": "junio"
+    },
+    "text": {
+     "fr": "Depuis 2003, la ville reste ouverte toute la nuit : concerts de plage, expositions, opéra, cinéma et yoga au lever du soleil.",
+     "en": "Since 2003 the city stays open all night: beach concerts, exhibitions, opera, cinema and sunrise yoga at the port.",
+     "es": "Desde 2003 la ciudad abre toda la noche: conciertos en la playa, exposiciones, ópera, cine y yoga al amanecer."
+    },
+    "source": {
+     "label": "Israel Forever, Tel Aviv White Night",
+     "url": "https://israelforever.org/state/tel_aviv_white_night_laila_lavan/"
+    }
+   },
    "thanks": {
     "word": "Todá",
     "lang": {
@@ -4898,6 +4919,27 @@
      "url": "https://en.wikipedia.org/wiki/Fautasi"
     }
    },
+   "fete": {
+    "title": {
+     "fr": "Teuila Festival",
+     "en": "Teuila Festival",
+     "es": "Festival Teuila"
+    },
+    "when": {
+     "fr": "début septembre",
+     "en": "early September",
+     "es": "principios de septiembre"
+    },
+    "text": {
+     "fr": "Depuis 1991 à Apia : danse siva, danse du couteau de feu, démonstrations de tatouage et de sculpture.",
+     "en": "Since 1991 in Apia: siva dance, fire-knife dancing, tattooing and carving demonstrations.",
+     "es": "Desde 1991 en Apia: danza siva, danza del cuchillo de fuego y demostraciones de tatuaje y talla."
+    },
+    "source": {
+     "label": "Samoa Tourism",
+     "url": "https://www.samoa.travel/whats-on/events-calendar/teuila-festival-2019-09-01"
+    }
+   },
    "thanks": {
     "word": "Fa’afetai",
     "lang": {
@@ -4979,6 +5021,27 @@
     "source": {
      "label": "Wikipédia, Aldabra",
      "url": "https://fr.wikipedia.org/wiki/Aldabra"
+    }
+   },
+   "fete": {
+    "title": {
+     "fr": "Festival Kreol",
+     "en": "Festival Kreol",
+     "es": "Festival Kreol"
+    },
+    "when": {
+     "fr": "octobre",
+     "en": "October",
+     "es": "octubre"
+    },
+    "text": {
+     "fr": "Depuis 1985, parades, cuisine, mode, musique et art célèbrent la culture créole : le premier festival au monde dédié à ce patrimoine.",
+     "en": "Since 1985, parades, food, fashion, music and art celebrate Creole culture: the first festival in the world devoted to it.",
+     "es": "Desde 1985, desfiles, cocina, moda, música y arte celebran la cultura criolla: el primer festival del mundo dedicado a ella."
+    },
+    "source": {
+     "label": "Africanews, Seychelles marks 40 years of Kreol festival",
+     "url": "https://www.africanews.com/2025/10/29/seychelles-marks-40-years-of-kreol-festival-with-vibrant-tribute-to-identity-and-heritage/"
     }
    },
    "thanks": {
