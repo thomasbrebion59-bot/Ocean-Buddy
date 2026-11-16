@@ -203,7 +203,16 @@ body .omap .omap-status.is-error{background:var(--t-card);color:var(--t-deep)}
 .omap.is-globe{--og-label:color-mix(in srgb,var(--t-scrim) 94%,transparent);--og-lime:var(--t-acc)}
 .omap.is-globe .omap-stage{background:radial-gradient(120% 95% at 50% 46%,var(--g-night2) 0%,var(--g-night) 55%,var(--t-scrim) 100%)}
 .ocean-v2 .omap.is-globe #spotMap{background:var(--t-bright)}
-.ocean-v2 .omap.is-planet #spotMap,.ocean-v2 .omap.is-planet #spotMap *{visibility:hidden!important;transition:visibility 0s .36s}
+.ocean-v2 .omap.is-planet:not(.is-handover) #spotMap,.ocean-v2 .omap.is-planet:not(.is-handover) #spotMap *{visibility:hidden!important;transition:visibility 0s .36s}
+/* Plongée cinématique : le globe et la carte sont visibles ensemble, l’opacité du globe est pilotée image par image. */
+.omap.is-flying .omap-globe{visibility:visible;transition:none;will-change:opacity}
+.omap.is-flying.is-map .omap-globe{pointer-events:none}
+.omap.is-flying .omap-credit,.omap.is-flying .maplibregl-ctrl-attrib{opacity:0}
+.omap-card.is-waiting{opacity:0;transform:translateY(calc(100% + 130px));pointer-events:none;animation:none}
+.omap-card.is-landing{animation:omap-land .6s cubic-bezier(.2,.85,.25,1) both}
+@keyframes omap-land{from{opacity:0;transform:translateY(calc(100% + 130px))}35%{opacity:1}to{opacity:1;transform:none}}
+.omap.is-jump #spotMap{animation:omap-fade .34s ease-out}
+@keyframes omap-fade{from{opacity:0}to{opacity:1}}
 .omap .omap-globe{position:absolute;inset:0;z-index:1;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s .35s}
 .omap.is-planet .omap-globe{opacity:1;visibility:visible;transition:opacity .35s ease}
 .og-canvas{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:none;outline:none;cursor:grab;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}

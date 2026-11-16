@@ -120,6 +120,9 @@
     /* L’océan du globe est bleui par l’atmosphère : un voile bleu sur l’eau garde la même teinte à la plongée. */
     st.layers.splice(at<0?st.layers.length:at,0,{id:'nasa',type:'raster',source:'nasa',paint:{'raster-opacity':['interpolate',['linear'],['zoom'],za,1,z1,0],'raster-fade-duration':0,'raster-resampling':'linear'}},
       {id:'nasa-sea',type:'fill',source:'omt','source-layer':'water',filter:['!=',['get','brunnel'],'tunnel'],paint:{'fill-color':'#2a5fc4','fill-opacity':['interpolate',['linear'],['zoom'],za,.3,z1,0]}});
+    /* Sous les images satellite, la terre et l’eau du fond clair prennent des tons sombres : une tuile satellite
+       pas encore arrivée (plongée ou remontée rapide) laisse voir un fond proche, jamais un carré clair. */
+    set('land','background-color',Z('#2f3a2a',P.land));set('water','fill-color',Z('#020416',P.water));set('wood','fill-color',Z('#2c4530',P.wood));set('ice','fill-color',Z('#dfe6ea',P.ice));
     set('sea-name','text-color',Z('#E6F4F8',P.sea));set('sea-name','text-halo-color',Z('rgba(2,10,30,.55)',P.seaHalo));
     for(const id of ['country-major','country','state','city-major','city']){set(id,'text-color',Z('#F4F7FF',id==='city-major'||id==='city'?P.city:id==='state'?P.place:P.country));set(id,'text-halo-color',Z('rgba(2,10,30,.6)',P.halo));}
     set('border-country','line-color',Z('rgba(255,255,255,.45)',P.border));
@@ -182,7 +185,10 @@
       if(k==='locate')locate();
     });
     card.addEventListener('click',onCardClick);
-    wrap.addEventListener('keydown',e=>{if(e.key==='Escape'&&!card.hidden&&!terrainOverlay){e.stopPropagation();deselect(true);}});
+    /* Un geste sur la planète ou la carte interrompt une plongée en cours. */
+    const cut=e=>{if(flight&&e.target.closest?.('.omap-globe,#spotMap'))endFlight(true);};
+    stage.addEventListener('pointerdown',cut,true);stage.addEventListener('wheel',cut,{capture:true,passive:true});
+    wrap.addEventListener('keydown',e=>{if(e.key==='Escape'&&!card.hidden&&!terrainOverlay){e.stopPropagation();closeCard();}});
     addEventListener('resize',()=>{if(!mapVisible())return;syncMode();size();planet?.setPadding(planetPad());map?.resize();updateMinZoom();revealActivity();});
     return true;
   }
@@ -264,6 +270,8 @@
       m=new ml.Map({container:$('#spotMap'),style:dive?diveStyle(style('mercator'),M.mapZoom(DIVE_KM/side(),40)):style(globe()?'globe':'mercator'),center:at?at.center:v?[v.lon,v.lat]:[10,22],zoom:at?at.zoom:v?M.mapZoom(v.kmPerPx,v.lat):1.2,pixelRatio:DPR(),minZoom:0,maxZoom:17,renderWorldCopies:true,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,fadeDuration:180,maxTileCacheSize:M.tileCache(coarse),locale:{'Map.Title':'Carte des spots','NavigationControl.ZoomIn':'Zoom avant','NavigationControl.ZoomOut':'Zoom arrière','AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
       m.touchZoomRotate.disableRotation();m.keyboard.disableRotation?.();
       m.addControl(new ml.AttributionControl({compact:true}),'bottom-right');
+      /* Sources repliées derrière le bouton « i » dès l’ouverture (elles restent à un toucher). */
+      {const a=m.getContainer().querySelector('.maplibregl-ctrl-attrib');a?.classList.remove('maplibregl-compact-show');a?.removeAttribute('open');}
       m.getCanvas().setAttribute('aria-label','Carte interactive des spots. Utilise les flèches pour te déplacer, plus et moins pour zoomer.');
       const made=m;made.on('webglcontextlost',()=>onMapLost(made));
       /* Contexte perdu avant même le premier rendu : échec immédiat plutôt que 20 s d’attente. */
@@ -273,13 +281,23 @@
     starting.catch(()=>{try{m?.remove();}catch(_){}m=null;starting=null;});
     return starting;
   }
+  /* Pendant une plongée, les points et groupes de la carte restent invisibles ; ils reviennent en fondu à l’arrivée. */
+  const FADE={duration:380,delay:0},DOT_OPACITY=['interpolate',['linear'],['zoom'],0,.88,6,.95,10,1],DOT_STROKE=['interpolate',['linear'],['zoom'],0,.85,6,1];
+  function spotLayers(on){
+    if(!styled()||!map.getLayer('dots'))return;
+    try{
+      map.setPaintProperty('clusters','circle-opacity',on?.94:0);map.setPaintProperty('clusters','circle-stroke-opacity',on?1:0);
+      map.setPaintProperty('cluster-count','text-opacity',on?1:0);map.setPaintProperty('spot-label','text-opacity',on?1:0);
+      map.setPaintProperty('dots','circle-opacity',on?DOT_OPACITY:0);map.setPaintProperty('dots','circle-stroke-opacity',on?DOT_STROKE:0);
+    }catch(_){}
+  }
   function engineReady(ml){
     /* Spots regroupés de loin (comme sur le globe), séparés à partir du zoom 9. */
     map.addSource('spots',{type:'geojson',data:{type:'FeatureCollection',features:[]},promoteId:'id',buffer:32,cluster:true,clusterMaxZoom:8,clusterRadius:44});
     map.addLayer({id:'clusters',type:'circle',source:'spots',filter:['has','point_count'],paint:{
-      'circle-color':themeColor('--t-deep','#06303e'),'circle-opacity':.94,'circle-stroke-color':P.card,'circle-stroke-width':2.5,
+      'circle-color':themeColor('--t-deep','#06303e'),'circle-opacity':.94,'circle-opacity-transition':FADE,'circle-stroke-opacity':1,'circle-stroke-opacity-transition':FADE,'circle-stroke-color':P.card,'circle-stroke-width':2.5,
       'circle-radius':['interpolate',['linear'],['get','point_count'],2,15,10,18,40,22,150,27]}});
-    map.addLayer({id:'cluster-count',type:'symbol',source:'spots',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['Noto Sans Bold'],'text-size':13,'text-allow-overlap':true},paint:{'text-color':themeColor('--t-on-main','#fef9eb')}});
+    map.addLayer({id:'cluster-count',type:'symbol',source:'spots',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['Noto Sans Bold'],'text-size':13,'text-allow-overlap':true},paint:{'text-color':themeColor('--t-on-main','#fef9eb'),'text-opacity':1,'text-opacity-transition':FADE}});
     const H=['boolean',['feature-state','hover'],false];
     /* Un point net par spot, coloré par activité, liseré blanc ; il grossit avec le zoom. */
     map.addLayer({id:'dots',type:'circle',source:'spots',filter:['!',['has','point_count']],layout:{'circle-sort-key':['get','k']},paint:{
@@ -287,10 +305,10 @@
       'circle-color':['get','c'],
       'circle-stroke-color':P.card,
       'circle-stroke-width':['interpolate',['linear'],['zoom'],0,.9,6,1.4,12,2],
-      'circle-opacity':['interpolate',['linear'],['zoom'],0,.88,6,.95,10,1],
-      'circle-stroke-opacity':['interpolate',['linear'],['zoom'],0,.85,6,1],
+      'circle-opacity':DOT_OPACITY,'circle-opacity-transition':FADE,
+      'circle-stroke-opacity':DOT_STROKE,'circle-stroke-opacity-transition':FADE,
       'circle-pitch-alignment':'map'}});
-    map.addLayer({id:'spot-label',type:'symbol',source:'spots',minzoom:8.5,filter:['!',['has','point_count']],layout:{'text-field':['get','n'],'text-font':['Noto Sans Bold'],'text-size':['interpolate',['linear'],['zoom'],8.5,11,14,12.5],'text-variable-anchor':['left','right','top','bottom'],'text-radial-offset':.85,'text-justify':'auto','text-max-width':9,'text-padding':3,'symbol-sort-key':['get','k']},paint:{'text-color':P.country,'text-halo-color':P.halo,'text-halo-width':1.6}});
+    map.addLayer({id:'spot-label',type:'symbol',source:'spots',minzoom:8.5,filter:['!',['has','point_count']],layout:{'text-field':['get','n'],'text-font':['Noto Sans Bold'],'text-size':['interpolate',['linear'],['zoom'],8.5,11,14,12.5],'text-variable-anchor':['left','right','top','bottom'],'text-radial-offset':.85,'text-justify':'auto','text-max-width':9,'text-padding':3,'symbol-sort-key':['get','k']},paint:{'text-color':P.country,'text-halo-color':P.halo,'text-halo-width':1.6,'text-opacity':1,'text-opacity-transition':FADE}});
     selectedMarker=new ml.Marker({element:Object.assign(document.createElement('div'),{className:'omap-selected'}),anchor:'bottom'});
     userDot=new ml.Marker({element:Object.assign(document.createElement('div'),{className:'omap-user'}),anchor:'center'});
     tip=new ml.Popup({closeButton:false,closeOnClick:false,className:'omap-tip',offset:12,maxWidth:'240px'});
@@ -298,7 +316,7 @@
     map.on('mousemove',e=>{const f=pick(e.point)[0];map.getCanvas().style.cursor=f?'pointer':'';hover(f);if(f&&matchMedia('(hover:hover)').matches&&f.properties.id!==selected){tip.setLngLat(f.geometry.coordinates).setText(f.properties.n).addTo(map);}else tip.remove();});
     map.on('mouseout',()=>{tip.remove();hover(null);});
     map.on('zoom',()=>worldState());
-    map.on('moveend',()=>{if(mode!=='map')return;clearTimeout(listTimer);listTimer=setTimeout(updateList,80);updateMinZoom();});
+    map.on('moveend',()=>{if(mode!=='map'||flight)return;clearTimeout(listTimer);listTimer=setTimeout(updateList,80);updateMinZoom();});
     /* En dézoomant (geste de l’utilisateur), la carte rend la main au globe. */
     let userZoom=false;
     map.on('zoomstart',e=>{userZoom=!!e.originalEvent;});
@@ -447,7 +465,10 @@
   document.addEventListener('ocean:transition-ready',resumeGlobe);
   /* Plongée : la carte reprend le centre et l’échelle exacts du globe, puis poursuit le zoom. */
   function dive(v,target){
-    if(diving||!planet)return;diving=true;
+    if(diving||!planet)return;
+    /* Groupe de spots serré : un seul vol continu jusqu’à la carte rapprochée. */
+    if(v.direct)return flyToPose(v);
+    diving=true;
     const slow=setTimeout(()=>{status.hidden=false;status.classList.add('is-soft');status.textContent='Plongée vers la carte détaillée…';},250);
     ensureMap().then(m=>{
       m.resize();
@@ -471,7 +492,7 @@
   }
   /* Remontée : le globe reprend là où la carte en est. */
   function rise({animateOut=false}={}){
-    if(!planet||mode==='globe')return;
+    if(!planet||mode==='globe'||flight)return;
     if(!map){tip?.remove();setMode('globe');updateList();return;}
     const c=map.getCenter();
     planet.jumpTo({lat:Math.max(-78,Math.min(78,c.lat)),lon:c.lng,widthKm:Math.max(mapWidthKm(),planet.minWidthKm)});
@@ -480,6 +501,174 @@
     if(animateOut)planet.zoomOut();
     if(selected)planet.setSelected(selected);
     updateList();
+  }
+
+  /* ---------- Plongée cinématique vers un spot ----------
+     Toucher un spot depuis le globe lance un seul vol continu (plan de vol : OceanMapModel.divePlan) : la planète
+     tourne vers le spot par le plus court chemin, la caméra descend, le globe s’efface en fondu sur la carte
+     satellite qui suit exactement la même caméra, puis la carte rapprochée arrive et l’aperçu du spot monte du bas.
+     La remontée lit le même plan à l’envers. Un geste interrompt le vol là où il en est. Aucun contexte WebGL
+     n’est créé : le globe et la carte existants sont simplement pilotés ensemble, image par image. */
+  const ARRIVE_ZOOM=10.6;
+  let flight=null,diveOrigin=null,lastFlight=null;
+  const calm=()=>matchMedia('(prefers-reduced-motion: reduce)').matches||document.body.classList.contains('reduce-motion');
+  const globeHost=()=>stage?.querySelector('.omap-globe');
+  const lerpPad=(a,b,t)=>({top:a.top+(b.top-a.top)*t,bottom:a.bottom+(b.bottom-a.bottom)*t,left:a.left+(b.left-a.left)*t,right:a.right+(b.right-a.right)*t});
+  function flightPlan(globePose,mapPose){
+    const sd=side();
+    return M.divePlan(globePose,mapPose,{side:sd,handHi:DIVE_KM/sd,handLo:DIVE_KM/sd/2.6,worldKpp:planet.maxWidthKm/sd});
+  }
+  function revealCard(){
+    if(!card||card.hidden||!card.classList.contains('is-waiting'))return;
+    card.classList.remove('is-waiting');card.classList.add('is-landing');
+  }
+  /* Plongée vers un spot ; false si elle ne peut pas partir (pas de globe, déjà en vol…). */
+  function plunge(id){
+    const s=SPOTS.find(x=>x.id===id),c=s&&COORDS[s.id];
+    if(!s||!c||!planet||planet.lost||mode!=='globe'||diving||terrainOverlay||!stage?.clientWidth)return false;
+    const v=planet.view();
+    selected=id;tip?.remove();planet.setSelected(id);setSheet(false);
+    renderCard(s,true);
+    list?.querySelectorAll('.omap-item').forEach(b=>b.classList.toggle('is-on',b.dataset.spot===id));
+    diveOrigin={lat:v.lat,lon:v.lon,kmPerPx:v.kmPerPx,spot:id};
+    const to={lat:c.lat,lon:c.lon,kmPerPx:M.kmPerPx(ARRIVE_ZOOM,clampLat(c.lat))};
+    if(calm()){jumpToSpot(s,c);return true;}
+    startFlight({plan:flightPlan({lat:v.lat,lon:v.lon,kmPerPx:v.kmPerPx},to),dir:1,spot:s,padA:planetPad(),padB:pad()});
+    return true;
+  }
+  /* Mouvement réduit (ou repli) : saut direct sur la carte rapprochée, avec un simple fondu. */
+  function jumpToSpot(s,c){
+    diving=true;
+    ensureMap().then(m=>{
+      diving=false;if(selected!==s.id)return;
+      m.resize();m.jumpTo({center:[c.lon,c.lat],zoom:ARRIVE_ZOOM,pitch:0,padding:pad()});
+      updateMinZoom();setData();placeSelected(s);
+      wrap.classList.add('is-jump');setTimeout(()=>wrap?.classList.remove('is-jump'),420);
+      setMode('map');revealCard();updateList();
+    }).catch(()=>{diving=false;revealCard();});
+  }
+  /* Vol vers une pose de carte sans spot choisi (groupe de spots ouvert depuis le globe). */
+  function flyToPose(v){
+    if(!planet||planet.lost||mode!=='globe'||diving||calm())return false;
+    const g=planet.view(),lat=clampLat(v.lat);
+    const kpp=Math.max(v.kmPerPx,M.kmPerPx(12,lat));
+    diveOrigin=null;
+    startFlight({plan:flightPlan({lat:g.lat,lon:g.lon,kmPerPx:g.kmPerPx},{lat:v.lat,lon:v.lon,kmPerPx:kpp}),dir:1,spot:null,padA:planetPad(),padB:pad()});
+    return true;
+  }
+  /* Remontée vers le globe : même plan, lu à l’envers. target : pose du globe à l’arrivée (par défaut au-dessus
+     de la carte, à l’altitude d’où l’on avait plongé). */
+  function ascend(target,{overview:toOverview=false}={}){
+    if(!planet||planet.lost||!styled()||mode!=='map'||diving||terrainOverlay)return false;
+    const c=map.getCenter(),sd=side(),world=planet.maxWidthKm/sd;
+    const here={lat:c.lat,lon:c.lng,kmPerPx:M.kmPerPx(map.getZoom(),clampLat(c.lat))};
+    /* Carte déjà presque à l’échelle du globe : le relais simple suffit. */
+    if(calm()||here.kmPerPx>DIVE_KM/sd/2.8)return false;
+    const g=target||{lat:Math.max(-78,Math.min(78,c.lat)),lon:c.lng,kmPerPx:Math.max(RISE_KM*1.2/sd,Math.min(world,diveOrigin?.kmPerPx||world))};
+    const padB=map.getPadding?.()||pad();
+    deselect();
+    startFlight({plan:flightPlan(g,here),dir:-1,spot:null,padA:planetPad(),padB,overview:toOverview?{lat:g.lat,lon:g.lon}:null});
+    return true;
+  }
+  function startFlight(f){
+    const now=performance.now();
+    const me=flight={...f,start:now,t0:now,last:now,ready:false,failed:false,swapped:false,held:0,stage:0,pose:null,raf:0,hand:1};
+    /* Instant où le globe commence à s’effacer : la carte cachée se prépare avant. */
+    me.handPose=me.plan.to;for(let i=0;i<=120;i++){const q=M.diveAt(me.plan,M.diveProgress(i/120,1));if(q.globe<1){me.hand=i/120;me.handPose=q;break;}}
+    diving=true;clearTimeout(modeTimer);
+    wrap.classList.add('is-flying');status.hidden=true;
+    planet.setFlying(true);
+    if(me.dir>0){
+      ensureMap().then(m=>{
+        if(flight!==me)return;
+        m.stop();m.resize();m.setMinZoom(0);setData();spotLayers(false);selectedMarker?.remove();
+        me.ready=true;
+      }).catch(()=>{if(flight===me)me.failed=true;});
+    }else{
+      map.stop();map.setMinZoom(0);spotLayers(false);
+      planet.setActive(true);planet.setSelected(null);
+      me.ready=true;
+    }
+    me.raf=requestAnimationFrame(flightStep);
+  }
+  function flightStep(now){
+    const f=flight;if(!f)return;f.raf=0;
+    if(!planet||planet.lost||(f.ready&&!styled())){endFlight(true);return;}
+    const dt=now-f.last;f.last=now;
+    /* Image très en retard (onglet masqué, à-coup) : le vol reprend où il en était, sans saut. */
+    if(dt>140)f.t0+=dt-34;
+    let t=Math.min(1,(now-f.t0)/f.plan.ms),p=M.diveAt(f.plan,M.diveProgress(t,f.dir));
+    const host=globeHost(),plan=f.plan,toMap=f.dir>0;
+    if(toMap&&!f.swapped){
+      /* Carte indisponible : on reste sur le globe, au-dessus du spot. */
+      if(f.failed||f.held>5000){endFlight(true);if(typeof toast==='function')toast('Carte détaillée indisponible pour le moment.');return;}
+      /* Le globe ne s’efface que sur une carte prête : sinon le vol attend à cette altitude (jamais d’écran vide). */
+      const loaded=f.ready&&f.stage>=3&&map.areTilesLoaded?.()!==false;
+      if(p.globe<1&&!f.go){
+        if(loaded||(f.ready&&f.held>=450))f.go=true;
+        else{f.t0+=dt;f.held+=dt;t=Math.min(1,(now-f.t0)/plan.ms);p=f.pose&&f.pose.globe>=1?f.pose:{...p,globe:1};}
+      }
+    }
+    f.pose=p;
+    wrap.classList.toggle('is-handover',p.globe<1);
+    if(p.globe>0){planet.pose(p);host.style.opacity=p.globe<1?p.globe.toFixed(3):'1';}
+    if(f.ready){
+      const follow=()=>map.jumpTo({center:[p.lon,p.lat],zoom:M.mapZoom(p.kmPerPx,clampLat(p.lat)),pitch:p.pitch,padding:lerpPad(f.padA,f.padB,p.low*p.low*(3-2*p.low))});
+      if(p.globe<1)follow();
+      else if(toMap){
+        /* Carte cachée sous le globe : elle charge d’abord la vue exacte du relais, puis celle de l’arrivée, et revient
+           attendre au relais (tuiles déjà en mémoire) juste avant que le globe ne s’efface. */
+        const to=plan.to,h=f.handPose,rest=()=>map.jumpTo({center:[h.lon,h.lat],zoom:M.mapZoom(h.kmPerPx,clampLat(h.lat)),pitch:0,padding:f.padA});
+        if(f.stage===0){f.stage=1;rest();}
+        else if(f.stage===1&&f.spot&&t<f.hand-.1&&map.areTilesLoaded?.()){f.stage=2;map.jumpTo({center:[to.lon,to.lat],zoom:M.mapZoom(to.kmPerPx,clampLat(to.lat)),pitch:0,padding:f.padB});}
+        else if(f.stage<3&&t>f.hand-.03){f.stage=3;rest();}
+      }
+    }
+    if(toMap){
+      if(p.globe<=0&&!f.swapped){f.swapped=true;host.style.opacity='0';if(f.spot)placeSelected(f.spot);setMode('map');}
+      if(f.spot&&t>=plan.cardAt)revealCard();
+    }else if(p.globe>=1&&!f.swapped){f.swapped=true;setMode('globe');}
+    if(t>=1){endFlight(false);return;}
+    f.raf=requestAnimationFrame(flightStep);
+  }
+  /* Fin du vol (arrivée, interruption par un geste, ou abandon) : chaque moteur retrouve son état normal. */
+  function endFlight(interrupted){
+    const f=flight;if(!f)return;
+    cancelAnimationFrame(f.raf);flight=null;diving=false;
+    lastFlight={dir:f.dir,held:Math.round(f.held),ms:Math.round(performance.now()-f.start),planMs:f.plan.ms,interrupted:!!interrupted};
+    wrap.classList.remove('is-flying','is-handover');
+    const host=globeHost(),p=f.pose,onGlobe=!planet?.lost&&(!f.ready||!styled()||(interrupted?(p?p.globe>=.5:f.dir>0):f.dir<0));
+    if(host)host.style.opacity='';
+    if(onGlobe){
+      if(mode!=='globe')setMode('globe');
+      planet.setActive(true);planet.settle();
+      if(!interrupted&&f.overview)planet.overview(f.overview,false);
+      if(styled()){if(map.getPitch())map.jumpTo({pitch:0});updateMinZoom();spotLayers(true);}
+    }else{
+      planet?.setFlying(false);
+      if(f.spot&&mode!=='map')placeSelected(f.spot);
+      setMode('map');
+      if(interrupted)levelMap();
+      else if(f.dir>0){const to=f.plan.to;map.jumpTo({center:[to.lon,to.lat],zoom:M.mapZoom(to.kmPerPx,clampLat(to.lat)),pitch:0,padding:f.padB});}
+      updateMinZoom();spotLayers(true);
+    }
+    if(f.dir>0)revealCard();
+    updateList();
+  }
+  /* Carte laissée inclinée par un vol interrompu : elle se remet à plat dès que le geste la relâche. */
+  function levelMap(){
+    if(!styled()||flight)return;
+    if(map.getPitch()<.5)return;
+    if(map.isMoving())map.once('moveend',()=>setTimeout(levelMap,0));else map.easeTo({pitch:0,duration:300});
+  }
+  /* Fermer l’aperçu juste après une plongée : on remonte vers le globe ; sinon l’aperçu se ferme simplement. */
+  function closeCard(){
+    const o=diveOrigin,id=selected,c=id&&COORDS[id];
+    if(o&&c&&o.spot===id&&mode==='map'&&styled()&&!diving){
+      const at=map.getCenter(),near=Math.abs(at.lat-c.lat)<.25&&Math.abs(M.wrapLon(at.lng-c.lon))<.35&&Math.abs(map.getZoom()-ARRIVE_ZOOM)<1.2;
+      if(near&&ascend()){diveOrigin=null;return;}
+    }
+    deselect(true);
   }
 
   /* ---------- Récupération après perte du contexte WebGL ----------
@@ -579,7 +768,7 @@
 
   /* Projection selon la forme de l’écran ; la vue monde est recalculée à chaque changement. */
   function updateMinZoom(){
-    if(!styled())return;
+    if(!styled()||flight)return;
     if(useGlobe()){
       /* Avec le globe, la carte ne sert qu’en détail : toujours à plat, jamais plus large que la remontée. */
       if(map.getProjection?.()?.type!=='mercator')map.setProjection({type:'mercator'});
@@ -602,7 +791,9 @@
     if(planet){
       deselect();
       const pts=rows.map(s=>COORDS[s.id]),c=M.cap(pts);
-      if(regionsMode()||!c){if(mode==='map')rise();planet.overview(HOME,animate);return;}
+      if(regionsMode()||!c){
+        if(mode==='map'&&animate&&ascend({lat:HOME.lat,lon:HOME.lon,kmPerPx:planet.maxWidthKm/side()},{overview:true}))return;
+        if(mode==='map')rise();planet.overview(HOME,animate);return;}
       /* Sélection resserrée déjà visible sur la carte détaillée : on y reste. */
       if(mode==='map'&&map&&c.radius*M.EARTH_KM*2.5+300<RISE_KM){
         const b=M.bounds(pts);map.fitBounds(b,{padding:pad(),maxZoom:11,animate:!!animate,duration:animate?900:0});return;
@@ -715,6 +906,10 @@
   }
   function select(id,{fly=false}={}){
     const s=SPOTS.find(x=>x.id===id),c=s&&COORDS[s.id];if(!s||!c||(!map&&!planet))return;
+    /* Depuis le globe : plongée cinématique jusqu’au spot. */
+    if(flight)endFlight(true);
+    if(mode==='globe'&&plunge(id))return;
+    if(mode==='map')diveOrigin=null;
     selected=id;tip?.remove();
     placeSelected(s);planet?.setSelected(id);
     renderCard(s);
@@ -730,6 +925,7 @@
     list?.querySelectorAll('.omap-item').forEach(b=>b.classList.toggle('is-on',b.dataset.spot===id));
   }
   function deselect(focusMap){
+    if(flight&&flight.dir>0&&flight.spot)endFlight(true);
     if(!selected&&card?.hidden)return;
     selected=null;selectedMarker?.remove();planet?.setSelected(null);if(card){card.hidden=true;card.innerHTML='';}
     wrap?.classList.remove('has-card');
@@ -742,10 +938,10 @@
     const html=part(window.icoWind,live.wind)+part(window.icoSwell,live.swell)+part(window.icoTemp,live.temp);
     return html?`<p class="omap-live" title="Modèle Open-Meteo">${html}</p>`:'';
   }
-  function renderCard(s){
+  function renderCard(s,waiting=false){
     const acts=spotSports(s),lvl=levelOf(s),reg=regionOf(s);
-    card.innerHTML=`<button type="button" class="omap-card-close" data-card="close" aria-label="Fermer l’aperçu">${icon('close')}</button><div class="omap-card-top"><img class="omap-card-photo" src="${esc(photoOf(s))}" alt="" width="96" height="96" decoding="async"><div class="omap-card-text"><small>${esc(countryOf(s))}${reg?` · ${esc(reg.lab)}`:''}</small><h3>${esc(s.name)}</h3><p class="omap-card-acts">${acts.slice(0,4).map(id=>`<span style="--c:${color(id)}"${id===activeSport?' class="is-on"':''}><i aria-hidden="true"></i>${esc(SPORTMAP[id].label)}</span>`).join('')}${acts.length>4?`<span class="omap-more-acts">+${acts.length-4}</span>`:''}</p><p class="omap-card-meta"><span class="omap-lvl lvl-${lvl}">${esc(lvlLabel[lvl]||'Niveau à évaluer')}</span></p>${liveLine(s)}</div></div><div class="omap-card-actions"><button type="button" class="omap-go" data-card="open">Voir la fiche ${icon('arrow')}</button><button type="button" class="omap-trip" data-card="trip">${icon('trip')}Ajouter à un voyage</button><button type="button" class="omap-relief" data-card="relief" aria-label="Relief 3D" title="Relief 3D">${icon('relief')}</button></div>`;
-    card.dataset.spot=s.id;card.hidden=false;wrap.classList.add('has-card');
+    card.innerHTML=`<button type="button" class="omap-card-close" data-card="close" aria-label="Fermer l’aperçu">${icon('close')}</button><div class="omap-card-top"><img class="omap-card-photo" src="${esc(photoOf(s))}" alt="" width="96" height="96" decoding="async"><div class="omap-card-text"><small>${esc(countryOf(s))}${reg?` · ${esc(reg.lab)}`:''}</small><h3>${esc(s.name)}</h3><p class="omap-card-acts">${acts.slice(0,4).map(id=>`<span style="--c:${color(id)}"${id===activeSport?' class="is-on"':''}><i aria-hidden="true"></i>${esc(SPORTMAP[id].label)}</span>`).join('')}${acts.length>4?`<span class="omap-more-acts">+${acts.length-4}</span>`:''}</p><p class="omap-card-meta"><span class="omap-lvl lvl-${lvl}">${esc(lvlLabel[lvl]||'Niveau à évaluer')}</span></p>${liveLine(s)}</div></div><div class="omap-card-actions"><button type="button" class="omap-go" data-card="open">Voir le spot ${icon('arrow')}</button><button type="button" class="omap-trip" data-card="trip">${icon('trip')}Ajouter à un voyage</button><button type="button" class="omap-relief" data-card="relief" aria-label="Relief 3D" title="Relief 3D">${icon('relief')}</button></div>`;
+    card.dataset.spot=s.id;card.classList.remove('is-landing');card.classList.toggle('is-waiting',!!waiting);card.hidden=false;wrap.classList.add('has-card');
     card.querySelector('img').addEventListener('error',e=>{e.target.src=typeof spotIllustration==='function'?spotIllustration(s.id):'assets/poulpy/scenes/travel-v2.webp';},{once:true});
   }
   function showStack(ids){
@@ -753,13 +949,13 @@
     if(spots.length===1){select(spots[0].id);return;}
     deselect();
     card.innerHTML=`<button type="button" class="omap-card-close" data-card="close" aria-label="Fermer l’aperçu">${icon('close')}</button><h3 class="omap-stack-title">${spots.length>1?`${spots.length} spots ici`:'1 spot ici'}</h3><p class="omap-stack-sub">Choisis celui que tu veux voir.</p><ul class="omap-items">${spots.map(item).join('')}</ul>`;
-    card.hidden=false;wrap.classList.add('has-card');
+    card.classList.remove('is-waiting','is-landing');card.hidden=false;wrap.classList.add('has-card');
   }
   function onCardClick(e){
     const b=e.target.closest('[data-card],[data-spot]');if(!b)return;
     if(b.dataset.spot){select(b.dataset.spot,{fly:mode==='map'&&!!map&&map.getZoom()<9});return;}
     const id=card.dataset.spot,k=b.dataset.card;
-    if(k==='close'){deselect(true);return;}
+    if(k==='close'){closeCard();return;}
     if(k==='open'){window.OceanNavigation?.begin();if(mapFull)setMapFull(false,true);openSpot(id);return;}
     if(k==='trip'){window.OceanTrips?.fromSpot(id);return;}
     if(k==='relief'){const s=SPOTS.find(x=>x.id===id);if(s)startTerrain(s);}
@@ -1015,5 +1211,5 @@
       get map(){return m;}
     };
   }
-  window.OceanMap={render,fit,mini,color,revealActivity,startTerrain,closeTerrain,showUser,select,overview:()=>overview(true),region:zoomRegion,count:()=>rows.length,get map(){return map;},get globe(){return planet;}};
+  window.OceanMap={dive:id=>select(id),rise:()=>ascend(),get flying(){return !!flight;},get lastFlight(){return lastFlight;},render,fit,mini,color,revealActivity,startTerrain,closeTerrain,showUser,select,overview:()=>overview(true),region:zoomRegion,count:()=>rows.length,get map(){return map;},get globe(){return planet;}};
 })();

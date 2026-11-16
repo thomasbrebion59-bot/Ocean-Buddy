@@ -63,3 +63,90 @@ test('levelFor picks the nearest scale geometrically',()=>{
   assert.equal(M.levelFor(1e6),M.LEVELS.length-1);
   assert.equal(M.levelFor(1e-6),0);
 });
+
+/* ---------- Plongée cinématique : plan de vol (ocean-map-model.js) ---------- */
+const WORLD = { lat: 30, lon: -5, kmPerPx: 28.7 };
+const OPTS = { side: 430, handHi: 7.44, handLo: 2.86, worldKpp: 28.7 };
+const spotPose = (lat, lon) => ({ lat, lon, kmPerPx: M.kmPerPx(10.6, lat) });
+const near = (a, b, eps, msg) => assert.ok(Math.abs(a - b) <= eps, `${msg || ''} ${a} ≠ ${b}`);
+
+test('slerp : extrémités exactes et plus court chemin à travers la ligne de date', () => {
+  const a = { lat: -17.5, lon: -149.8 }, b = { lat: -33.9, lon: 151.3 };
+  const s0 = M.slerp(a, b, 0), s1 = M.slerp(a, b, 1), mid = M.slerp(a, b, .5);
+  near(s0.lat, a.lat, 1e-6); near(s0.lon, a.lon, 1e-6); near(s1.lat, b.lat, 1e-6); near(s1.lon, b.lon, 1e-6);
+  /* Tahiti → Sydney : on passe par le Pacifique (longitude proche de ±180), jamais par l’Afrique. */
+  assert.ok(Math.abs(mid.lon) > 150, 'milieu du trajet côté Pacifique : ' + mid.lon);
+  /* Le milieu est à égale distance des deux bouts, et le trajet ne s’allonge pas. */
+  near(M.arc(a, mid), M.arc(mid, b), 1e-9); near(M.arc(a, mid) + M.arc(mid, b), M.arc(a, b), 1e-9);
+});
+
+test('slerp : points confondus ou opposés sans valeur invalide', () => {
+  const p = M.slerp({ lat: 10, lon: 20 }, { lat: 10, lon: 20 }, .3);
+  near(p.lat, 10, 1e-9); near(p.lon, 20, 1e-9);
+  const q = M.slerp({ lat: 0, lon: 0 }, { lat: 0, lon: 180 }, .5);
+  assert.ok(Number.isFinite(q.lat) && Number.isFinite(q.lon));
+});
+
+test('plan de vol : durée entre 1,6 et 2,4 s, plus longue pour un trajet lointain', () => {
+  const far = M.divePlan(WORLD, spotPose(-8.8, 115.1), OPTS), close = M.divePlan({ lat: 43.6, lon: -1.4, kmPerPx: 8 }, spotPose(43.66, -1.44), OPTS);
+  for (const p of [far, close]) assert.ok(p.ms >= 1600 && p.ms <= 2400, 'durée ' + p.ms);
+  assert.ok(far.ms > close.ms);
+});
+
+test('trajectoire : part de la vue du globe, arrive exactement sur le spot', () => {
+  const to = spotPose(-8.8, 115.1), plan = M.divePlan(WORLD, to, OPTS);
+  const a = M.diveAt(plan, 0), b = M.diveAt(plan, 1);
+  near(a.lat, WORLD.lat, 1e-6); near(a.lon, WORLD.lon, 1e-6); near(a.kmPerPx, WORLD.kmPerPx, 1e-9);
+  near(b.lat, to.lat, 1e-6); near(b.lon, to.lon, 1e-6); near(b.kmPerPx, to.kmPerPx, 1e-12);
+  assert.equal(a.globe, 1); assert.equal(b.globe, 0); near(a.pitch, 0, 1e-9); near(b.pitch, 0, 1e-9);
+});
+
+test('trajectoire : descente continue, sans à-coup, la planète tourne par le plus court chemin', () => {
+  const to = spotPose(-8.8, 115.1), plan = M.divePlan(WORLD, to, OPTS), N = 400;
+  let prev = M.diveAt(plan, 0), travelled = 0, maxStep = 0, maxZoomStep = 0;
+  for (let i = 1; i <= N; i++) {
+    const p = M.diveAt(plan, i / N);
+    assert.ok(p.kmPerPx <= prev.kmPerPx + 1e-9, 'la caméra ne remonte jamais (vue de départ déjà large)');
+    assert.ok(p.globe <= prev.globe + 1e-9, 'le fondu ne revient pas en arrière');
+    assert.ok(M.arc(p, to) <= M.arc(prev, to) + 1e-9, 'on se rapproche toujours du spot');
+    assert.ok(p.pitch >= 0 && p.pitch <= plan.pitch + 1e-9);
+    const step = M.arc(prev, p); travelled += step; maxStep = Math.max(maxStep, step);
+    maxZoomStep = Math.max(maxZoomStep, Math.abs(Math.log2(prev.kmPerPx / p.kmPerPx)));
+    prev = p;
+  }
+  near(travelled, plan.angle, 1e-6, 'longueur parcourue = grand cercle');
+  /* À 60 images par seconde (un pas sur 144 pour 2,4 s), moins de 3° de rotation et 0,2 niveau de zoom par image. */
+  assert.ok(maxStep * 400 / 144 < 3 * Math.PI / 180, 'rotation par image ' + maxStep);
+  assert.ok(maxZoomStep * 400 / 144 < .2, 'zoom par image ' + maxZoomStep);
+});
+
+test('trajectoire : la rotation est presque finie quand le globe laisse la place à la carte', () => {
+  const to = spotPose(-8.8, 115.1), plan = M.divePlan(WORLD, to, OPTS);
+  let hand = null;
+  for (let i = 0; i <= 400 && !hand; i++) { const p = M.diveAt(plan, i / 400); if (p.globe < 1) hand = p; }
+  assert.ok(hand, 'relais introuvable');
+  assert.ok(M.arc(hand, to) < plan.angle * .12, 'reste à tourner au relais : ' + M.arc(hand, to) / plan.angle);
+  /* Inclinaison seulement une fois sur la carte. */
+  for (let i = 0; i <= 100; i++) { const p = M.diveAt(plan, i / 100); if (p.globe > 0) near(p.pitch, 0, 1e-9, 'pas d’inclinaison tant que le globe est visible'); }
+});
+
+test('trajet long vu de près : la caméra prend de la hauteur puis redescend', () => {
+  const from = { lat: 44, lon: -3, kmPerPx: 8.2 }, plan = M.divePlan(from, spotPose(-8.8, 115.1), OPTS);
+  assert.ok(plan.lift > 0);
+  let top = 0; for (let i = 0; i <= 100; i++) top = Math.max(top, M.diveAt(plan, i / 100).kmPerPx);
+  assert.ok(top > from.kmPerPx * 1.5 && top <= OPTS.worldKpp * 1.01, 'altitude maximale ' + top);
+  /* Spot voisin : aucune prise de hauteur. */
+  assert.equal(M.divePlan(from, spotPose(43.66, -1.44), OPTS).lift, 0);
+});
+
+test('avancement : la descente va de 0 à 1, la remontée relit le même trajet à l’envers', () => {
+  assert.equal(M.diveProgress(0, 1), 0); assert.equal(M.diveProgress(1, 1), 1);
+  assert.equal(M.diveProgress(0, -1), 1); assert.equal(M.diveProgress(1, -1), 0);
+  let d = 0, r = 1;
+  for (let i = 1; i <= 50; i++) { const a = M.diveProgress(i / 50, 1), b = M.diveProgress(i / 50, -1); assert.ok(a > d && b < r); d = a; r = b; }
+  /* Hors bornes : valeurs bloquées. */
+  assert.equal(M.diveProgress(-1, 1), 0); assert.equal(M.diveProgress(3, 1), 1);
+  const plan = M.divePlan(WORLD, spotPose(43.66, -1.44), OPTS);
+  const up0 = M.diveAt(plan, M.diveProgress(0, -1)), up1 = M.diveAt(plan, M.diveProgress(1, -1));
+  near(up0.kmPerPx, plan.to.kmPerPx, 1e-12); near(up1.kmPerPx, plan.from.kmPerPx, 1e-9); assert.equal(up1.globe, 1);
+});

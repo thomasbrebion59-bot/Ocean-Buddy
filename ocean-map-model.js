@@ -111,6 +111,49 @@
     const out=[];for(let y=0;y<height;y+=rows)out.push({y,h:Math.min(rows,height-y)});
     return out;
   }
+  /* ---------- Plongée cinématique : du globe à la carte rapprochée, en un seul vol ----------
+     Un plan de vol relie deux poses {lat,lon,kmPerPx}. La planète tourne par le plus court chemin (grand cercle),
+     la caméra descend en échelle logarithmique (vitesse de zoom perçue régulière, départ et arrivée en douceur),
+     prend de la hauteur si le trajet est long vu de près, et s’incline légèrement pendant la descente sur la carte.
+     « globe » (1 → 0) dit quelle part de l’image revient au globe : le fondu ne dépend que de l’altitude, il est
+     donc identique à la descente et à la remontée (plan lu à l’envers : diveAt(plan,1-t)). */
+  const clamp01=t=>Math.max(0,Math.min(1,t));
+  const smoother=t=>t*t*t*(t*(t*6-15)+10);
+  /* Point à la fraction t du plus court chemin entre a et b sur la sphère. */
+  function slerp(a,b,t){
+    const p=vec(a.lat,a.lon),q=vec(b.lat,b.lon),d=Math.acos(Math.max(-1,Math.min(1,p[0]*q[0]+p[1]*q[1]+p[2]*q[2])));
+    if(d<1e-6)return {lat:b.lat,lon:wrapLon(b.lon)};
+    /* Points presque opposés : le grand cercle n’est pas défini, on passe par le méridien de départ. */
+    if(Math.PI-d<1e-4)return {lat:a.lat+(b.lat-a.lat)*t,lon:wrapLon(a.lon+wrapLon(b.lon-a.lon)*t)};
+    const s=Math.sin(d),x=Math.sin((1-t)*d)/s,y=Math.sin(t*d)/s;
+    return latLon([p[0]*x+q[0]*y,p[1]*x+q[1]*y,p[2]*x+q[2]*y]);
+  }
+  /* side : petit côté utile de l’écran (px) ; handHi → handLo : km/px entre lesquels le globe laisse la place à la carte ;
+     worldKpp : km/px de la planète entière ; pitch : inclinaison maximale (degrés) pendant la descente. */
+  function divePlan(from,to,{side=400,handHi=8,handLo=3.6,worldKpp=28,pitch=26,minMs=1600,maxMs=2400}={}){
+    const angle=arc(from,to),far=clamp01(angle/RAD/100);
+    const k0=Math.max(1e-4,from.kmPerPx),k1=Math.max(1e-4,to.kmPerPx);
+    const octaves=Math.abs(Math.log2(k0/k1));
+    /* Trajet long vu de près : on remonte jusqu’à voir à peu près tout le parcours (jamais plus haut que la planète entière). */
+    const need=Math.min(worldKpp,angle*EARTH_KM*1.25/Math.max(1,side));
+    const lift=Math.max(0,Math.log(need/Math.max(k0,k1)));
+    const ms=Math.round(Math.max(minMs,Math.min(maxMs,1450+520*far+48*octaves+180*Math.min(1,lift))));
+    return {from:{lat:from.lat,lon:from.lon,kmPerPx:k0},to:{lat:to.lat,lon:to.lon,kmPerPx:k1},angle,octaves,lift,ms,
+      warp:1+.4*far,turn:.42+.18*far,handHi:Math.max(handHi,handLo*1.2),handLo,pitch,cardAt:.72};
+  }
+  /* Avancement le long du plan selon le temps écoulé (0 → 1) : la descente (dir > 0) démarre franchement dès le toucher
+     et se pose en douceur ; la remontée (dir < 0) relit le même trajet à l’envers et décolle sans attendre. */
+  function diveProgress(t,dir=1){t=clamp01(t);return dir>0?t**.82:1-t**.7;}
+  function diveAt(plan,t){
+    t=clamp01(t);
+    const a=Math.log(plan.from.kmPerPx),b=Math.log(plan.to.kmPerPx),u=Math.min(1,t/plan.turn);
+    const hump=Math.sin(Math.PI*u)**2;
+    const logk=a+(b-a)*smoother(t**plan.warp)+plan.lift*hump;
+    const at=slerp(plan.from,plan.to,smoother(u));
+    const hi=Math.log(plan.handHi),lo=Math.log(plan.handLo),low=Math.min(a,b);
+    const g=clamp01((logk-lo)/(hi-lo)),w=lo>low?clamp01((lo-logk)/(lo-low)):0;
+    return {lat:at.lat,lon:at.lon,kmPerPx:Math.exp(logk),globe:g*g*(3-2*g),pitch:plan.pitch*Math.sin(Math.PI*w)**2,low:w};
+  }
   /* ---------- Récupération après perte du contexte WebGL ---------- */
   /* Densité de pixels des canevas WebGL : ×2 au plus sur téléphone ou tablette tactile, ×3 ailleurs. */
   function pixelRatio(dpr,mobile){const d=Number.isFinite(dpr)&&dpr>0?dpr:1;return Math.min(d,mobile?2:3);}
@@ -127,5 +170,5 @@
     const recent=(errors||[]).filter(t=>now-t>=0&&now-t<windowMs);
     return recent.length>=min&&!(Number.isFinite(lastOk)&&lastOk>=recent[0]);
   }
-  return {pixelRatio,tileCache,recovery,tilesFailing,wantsHd8k,textureStrips,group,bounds,inView,distance,top,vec,latLon,arc,wrapLon,mapZoom,kmPerPx,clusterPx,LEVELS,clusterLevels,levelFor,cap,EARTH_KM};
+  return {slerp,divePlan,diveAt,diveProgress,pixelRatio,tileCache,recovery,tilesFailing,wantsHd8k,textureStrips,group,bounds,inView,distance,top,vec,latLon,arc,wrapLon,mapZoom,kmPerPx,clusterPx,LEVELS,clusterLevels,levelFor,cap,EARTH_KM};
 });
