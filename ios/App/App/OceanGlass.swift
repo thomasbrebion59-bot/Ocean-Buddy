@@ -711,9 +711,11 @@ final class GlassTabButton: UIControl {
     }
 }
 
-/// Contrôleur racine : celui de Capacitor, avec le plugin local enregistré.
+/// Contrôleur racine : celui de Capacitor, avec les plugins locaux enregistrés
+/// (verre natif, et compte : jetons dans le Trousseau, voir OceanAccount.swift).
 class OceanBridgeViewController: CAPBridgeViewController {
     override open func capacitorDidLoad() {
         bridge?.registerPluginInstance(OceanGlassPlugin())
+        bridge?.registerPluginInstance(OceanAccountPlugin())
     }
 }

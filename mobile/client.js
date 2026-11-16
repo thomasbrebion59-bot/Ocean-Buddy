@@ -1,4 +1,4 @@
-import { Capacitor, CapacitorHttp } from '@capacitor/core';
+import { Capacitor, CapacitorHttp, registerPlugin } from '@capacitor/core';
 import { App } from '@capacitor/app';
 import { Browser } from '@capacitor/browser';
 import { Geolocation } from '@capacitor/geolocation';
@@ -141,6 +141,48 @@ async function checkStoreUpdate(){
 }
 const openStore=()=>{location.href=STORE_URL;};
 
-window.OceanMobile={native,boot,persist,openExternal,shareJSON,appReady,bundle:BUNDLE,
+/* Compte gratuit (version 1.5.0 et plus). Le plugin Swift OceanAccount garde les jetons dans le Trousseau iOS ;
+ * sans lui (apps 1.4.x qui reçoivent ce même code par mise à jour directe), capabilities.account reste faux et
+ * l'interface du compte ne se charge pas (privacy.js). Requêtes natives (CapacitorHttp) : ni Origin ni cookie,
+ * le Worker rend les jetons dans le corps ; ils passent ici, vont au Trousseau et ne sont JAMAIS rendus à la page,
+ * ni écrits dans localStorage, les Préférences ou un journal. account-sync.js ne voit que {ok:true}. */
+const ACCOUNT_API=typeof __OB_ACCOUNT_API__==='string'?__OB_ACCOUNT_API__:SITE_BASE+'api/v1';
+const accountPlugin=native&&typeof Capacitor.isPluginAvailable==='function'&&Capacitor.isPluginAvailable('OceanAccount')?registerPlugin('OceanAccount'):null;
+const ACCOUNT_PATH=/^\/(?:health|me|consent|sync\/(?:pull|push)|account(?:\/export)?|auth\/(?:otp\/request|otp\/verify|refresh|logout))$/;
+let session=null,sessionRead=null;
+const accountError=(code,status)=>{const e=Error(code);e.code=code;e.status=status;return e;};
+function readSession(){
+  sessionRead??=accountPlugin.getTokens().then(t=>{session=t&&typeof t.access==='string'&&typeof t.refresh==='string'?{access:t.access,refresh:t.refresh}:null;},()=>{session=null;sessionRead=null;});
+  return sessionRead.then(()=>session);
+}
+async function keepSession(t){await accountPlugin.setTokens({access:t.access_token,refresh:t.refresh_token});session={access:t.access_token,refresh:t.refresh_token};sessionRead=Promise.resolve();}
+async function forgetSession(){session=null;sessionRead=Promise.resolve();try{await accountPlugin.clearTokens();}catch(_){}}
+async function accountRequest(path,{method='GET',body}={}){
+  if(!accountPlugin)throw accountError('unavailable',0);
+  if(!ACCOUNT_PATH.test(path))throw accountError('not_found',404);
+  const login=path==='/auth/otp/verify'||path==='/auth/refresh',s=await readSession();
+  let data=body;
+  if(path==='/auth/otp/verify')data={...(body||{}),client:'native'};
+  if(path==='/auth/refresh'){if(!s)throw accountError('unauthenticated',401);data={client:'native',refresh_token:s.refresh};}
+  const headers={'Content-Type':'application/json',Accept:'application/json'};
+  if(s&&!login&&!path.startsWith('/auth/otp/'))headers.Authorization='Bearer '+s.access;
+  let r;
+  try{r=await CapacitorHttp.request({url:ACCOUNT_API+path,method,headers,data,responseType:'json',connectTimeout:15000,readTimeout:30000});}
+  catch(_){if(path==='/auth/logout')await forgetSession();throw accountError('network',0);}
+  let out=r.data;if(typeof out==='string'){try{out=out?JSON.parse(out):null;}catch(_){out=null;}}
+  const ok=r.status>=200&&r.status<300;
+  if(login&&ok){
+    if(!out||typeof out.access_token!=='string'||typeof out.refresh_token!=='string')throw accountError('unavailable',502);
+    try{await keepSession(out);}catch(_){throw accountError('keychain',500);}
+    out={ok:true};
+  }
+  if((path==='/auth/refresh'&&r.status===401)||path==='/auth/logout'||(path==='/account'&&method==='DELETE'&&ok))await forgetSession();
+  if(!ok)throw accountError(out&&typeof out.error==='string'?out.error:'http_'+r.status,r.status);
+  return out;
+}
+const capabilities=Object.freeze({account:!!accountPlugin});
+
+window.OceanMobile={native,boot,persist,openExternal,shareJSON,appReady,bundle:BUNDLE,capabilities,
+  ...(accountPlugin?{account:Object.freeze({request:accountRequest})}:{}),
   updates:{checkLive:checkLiveUpdate,applyLive:applyLiveUpdate,checkStore:checkStoreUpdate,openStore},
   getCurrentPosition:(success,failure,options)=>Geolocation.getCurrentPosition(options).then(success).catch(failure)};
