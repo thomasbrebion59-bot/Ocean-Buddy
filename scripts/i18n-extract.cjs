@@ -13,6 +13,7 @@ const ROOT = path.join(__dirname, '..');
 const SKIP_JS = new Set([
   'i18n.js', 'sw.js', 'photo-catalog.js', 'community-config.js', 'poulpy-config.js',
   'community 2.js',
+  'cultures-model.js', // modèle pur : messages de validation (build-cultures) et mots de comparaison, jamais affichés
 ]);
 const HTML_FILES = ['index.html', 'support.html', 'privacy.html', 'community-rules.html', 'photos.html'];
 

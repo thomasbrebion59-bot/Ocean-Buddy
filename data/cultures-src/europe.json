@@ -1,0 +1,1510 @@
+{
+ "France": {
+  "sea": {
+   "title": {
+    "fr": "Cordouan, phare en pleine mer",
+    "en": "Cordouan, a lighthouse at sea",
+    "es": "Cordouan, faro en mar abierto"
+   },
+   "text": {
+    "fr": "À 7 km des côtes, le phare de Cordouan (1584-1611) est classé à l'UNESCO depuis 2021 : c'est le dernier phare de France encore habité.",
+    "en": "7 km offshore, Cordouan lighthouse (1584-1611) became a UNESCO site in 2021. It is the last inhabited lighthouse in France.",
+    "es": "A 7 km de la costa, el faro de Cordouan (1584-1611) es Patrimonio Mundial desde 2021 y es el último faro habitado de Francia."
+   },
+   "source": {
+    "label": "Wikipedia, Cordouan Lighthouse",
+    "url": "https://en.wikipedia.org/wiki/Cordouan_Lighthouse"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le carnaval de Dunkerque",
+    "en": "Dunkirk Carnival",
+    "es": "El carnaval de Dunkerque"
+   },
+   "when": {
+    "fr": "février-mars (autour du mardi gras)",
+    "en": "February-March (around Shrove Tuesday)",
+    "es": "febrero-marzo (en torno al martes de carnaval)"
+   },
+   "text": {
+    "fr": "Né de la fête des marins partant pêcher le hareng en Islande, il anime la ville de bandes costumées derrière leur clique.",
+    "en": "Born from the party held for sailors leaving to fish herring off Iceland, it fills the town with costumed bands led by a music clique.",
+    "es": "Nació de la fiesta de los marinos que partían a pescar arenque a Islandia; bandas disfrazadas desfilan tras su música."
+   },
+   "source": {
+    "label": "Wikipédia, Carnaval de Dunkerque",
+    "url": "https://fr.wikipedia.org/wiki/Carnaval_de_Dunkerque"
+   }
+  },
+  "thanks": {
+   "word": "Merci",
+   "lang": {
+    "fr": "français",
+    "en": "French",
+    "es": "francés"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Portugal": {
+  "sea": {
+   "title": {
+    "fr": "Les moliceiros d'Aveiro",
+    "en": "Aveiro's moliceiros",
+    "es": "Los moliceiros de Aveiro"
+   },
+   "text": {
+    "fr": "Ces barques de pin à fond plat ramassaient le moliço, une herbe marine servant d'engrais, dans la ria d'Aveiro. Elles en sont le symbole.",
+    "en": "These shallow pinewood boats raked moliço, a seagrass used as fertiliser, from the Ria de Aveiro lagoon. They are now its symbol.",
+    "es": "Estas barcas de pino de poco calado recogían el moliço, una hierba marina usada como abono, en la ría de Aveiro. Hoy son su símbolo."
+   },
+   "source": {
+    "label": "Wikipedia, Moliço",
+    "url": "https://en.wikipedia.org/wiki/Moliceiro"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "La Saint-Jean de Porto",
+    "en": "Porto's São João festival",
+    "es": "La fiesta de San Juan de Oporto"
+   },
+   "when": {
+    "fr": "nuit du 23 juin",
+    "en": "night of 23 June",
+    "es": "noche del 23 de junio"
+   },
+   "text": {
+    "fr": "Toute la nuit, sardines grillées, ballons lumineux, feux d'artifice et marteaux en plastique : on fête l'été jusqu'au lever du soleil.",
+    "en": "All night: grilled sardines, glowing balloons, fireworks and plastic hammers. Many walk to the coast to see the sunrise.",
+    "es": "Toda la noche: sardinas asadas, globos luminosos, fuegos artificiales y martillos de plástico, hasta ver amanecer."
+   },
+   "source": {
+    "label": "Wikipedia, Festa de São João do Porto",
+    "url": "https://en.wikipedia.org/wiki/Festa_de_São_João_do_Porto"
+   }
+  },
+  "thanks": {
+   "word": "Obrigado",
+   "lang": {
+    "fr": "portugais",
+    "en": "Portuguese",
+    "es": "portugués"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Espagne": {
+  "sea": {
+   "title": {
+    "fr": "La tour d'Hercule",
+    "en": "Tower of Hercules",
+    "es": "La Torre de Hércules"
+   },
+   "text": {
+    "fr": "À La Corogne, ce phare romain de la fin du Ier siècle est le seul encore utilisé pour la navigation. UNESCO depuis 2009.",
+    "en": "In A Coruña, this Roman lighthouse from the late 1st century is the only one preserved and still used at sea. UNESCO since 2009.",
+    "es": "En A Coruña, este faro romano de finales del siglo I es el único conservado que aún guía a los barcos. Patrimonio Mundial desde 2009."
+   },
+   "source": {
+    "label": "Wikipedia, Tower of Hercules",
+    "url": "https://en.wikipedia.org/wiki/Tower_of_Hercules"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Les Fallas de Valence",
+    "en": "Las Fallas of Valencia",
+    "es": "Las Fallas de Valencia"
+   },
+   "when": {
+    "fr": "14 au 19 mars",
+    "en": "14-19 March",
+    "es": "del 14 al 19 de marzo"
+   },
+   "text": {
+    "fr": "Des monuments satiriques de ninots sont brûlés à la fin de la fête, inscrite à l'UNESCO en 2016, avec défilés et fanfares.",
+    "en": "Satirical ninot monuments are burned at the end of the festival, UNESCO-listed in 2016, alongside parades and brass bands.",
+    "es": "Monumentos satíricos de ninots se queman al final de la fiesta, Patrimonio Inmaterial de la UNESCO desde 2016."
+   },
+   "source": {
+    "label": "UNESCO, Fallas festivity in Valencia",
+    "url": "https://ich.unesco.org/en/RL/fallas-festivity-in-valencia-00859"
+   }
+  },
+  "thanks": {
+   "word": "Gracias",
+   "lang": {
+    "fr": "espagnol",
+    "en": "Spanish",
+    "es": "español"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Royaume-Uni": {
+  "sea": {
+   "title": {
+    "fr": "Le pilot gig de Cornouailles",
+    "en": "The Cornish pilot gig",
+    "es": "El pilot gig de Cornualles"
+   },
+   "text": {
+    "fr": "Ce canot de 9,8 m à six avirons menait les pilotes aux navires ; des championnats du monde se disputent aux îles Scilly depuis 1990.",
+    "en": "This 9.8 m six-oared boat once took pilots out to ships. World championships have been rowed in the Isles of Scilly since 1990.",
+    "es": "Esta barca de seis remos y 9,8 m llevaba prácticos a los barcos. Desde 1990 hay campeonatos mundiales en las islas Sorlingas."
+   },
+   "source": {
+    "label": "Wikipedia, Cornish pilot gig",
+    "url": "https://en.wikipedia.org/wiki/Cornish_pilot_gig"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Up Helly Aa, Shetland",
+    "en": "Up Helly Aa, Shetland",
+    "es": "Up Helly Aa, Shetland"
+   },
+   "when": {
+    "fr": "dernier mardi de janvier (Lerwick)",
+    "en": "last Tuesday of January (Lerwick)",
+    "es": "último martes de enero (Lerwick)"
+   },
+   "text": {
+    "fr": "À Lerwick, des centaines de guizers défilent aux torches puis les jettent dans une galère viking, brûlée pour clore Yule.",
+    "en": "In Lerwick, hundreds of guizers march with torches, then throw them into a Viking galley that is burned to end the Yule season.",
+    "es": "En Lerwick, cientos de guizers desfilan con antorchas y las lanzan a una galera vikinga que arde al cerrar el Yule."
+   },
+   "source": {
+    "label": "Wikipedia, Up Helly Aa",
+    "url": "https://en.wikipedia.org/wiki/Up_Helly_Aa"
+   }
+  },
+  "thanks": {
+   "word": "Thank you",
+   "lang": {
+    "fr": "anglais",
+    "en": "English",
+    "es": "inglés"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Irlande": {
+  "sea": {
+   "title": {
+    "fr": "Le curach, bateau de l'Ouest",
+    "en": "The currach, boat of the west",
+    "es": "El curach, barca del oeste"
+   },
+   "text": {
+    "fr": "Sa charpente de bois était recouverte de peaux, aujourd'hui de toile goudronnée. On le voit surtout sur la côte ouest, aux îles d'Aran.",
+    "en": "Its wooden frame was once covered in hides, now tarred canvas. It is seen mostly on the west coast, including the Aran Islands.",
+    "es": "Su armazón de madera se cubría de pieles, hoy de lona alquitranada. Se ve sobre todo en la costa oeste, como en las islas Aran."
+   },
+   "source": {
+    "label": "Wikipedia, Currach",
+    "url": "https://en.wikipedia.org/wiki/Currach"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "La foire de Puck",
+    "en": "Puck Fair",
+    "es": "La feria de Puck"
+   },
+   "when": {
+    "fr": "10 au 12 août",
+    "en": "10-12 August",
+    "es": "del 10 al 12 de agosto"
+   },
+   "text": {
+    "fr": "À Killorglin (Kerry), une chèvre sauvage est couronnée « roi Puck » ; foire aux chevaux et fête durent trois jours, depuis au moins 1613.",
+    "en": "In Killorglin, Kerry, a wild goat is crowned 'King Puck' to open three days of horse fairs and festivities, traced back to 1613.",
+    "es": "En Killorglin (Kerry), una cabra salvaje es coronada «rey Puck» e inicia tres días de ferias y fiestas, con origen en 1613."
+   },
+   "source": {
+    "label": "Wikipedia, Puck Fair",
+    "url": "https://en.wikipedia.org/wiki/Puck_Fair"
+   }
+  },
+  "thanks": {
+   "word": "Go raibh maith agat",
+   "lang": {
+    "fr": "irlandais",
+    "en": "Irish",
+    "es": "irlandés"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Norvège": {
+  "sea": {
+   "title": {
+    "fr": "Hurtigruten, la ligne côtière",
+    "en": "Hurtigruten, the coastal route",
+    "es": "Hurtigruten, la ruta costera"
+   },
+   "text": {
+    "fr": "Depuis 1893, des navires relient Bergen à Kirkenes avec 34 escales vers le nord, en service quotidien toute l'année.",
+    "en": "Since 1893, ships have linked Bergen and Kirkenes with 34 northbound calls, running daily all year round.",
+    "es": "Desde 1893, sus barcos unen Bergen y Kirkenes con 34 escalas hacia el norte, cada día del año."
+   },
+   "source": {
+    "label": "Wikipedia, Hurtigruten",
+    "url": "https://en.wikipedia.org/wiki/Hurtigruten"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Syttende mai",
+    "en": "Syttende mai",
+    "es": "Syttende mai"
+   },
+   "when": {
+    "fr": "17 mai",
+    "en": "17 May",
+    "es": "17 de mayo"
+   },
+   "text": {
+    "fr": "Fête nationale : défilés d'enfants avec fanfares et drapeaux depuis 1864, beaucoup en bunad, le costume traditionnel.",
+    "en": "National Day: children's parades with bands and flags since 1864, many people wearing the traditional bunad costume.",
+    "es": "Fiesta nacional: desfiles infantiles con bandas y banderas desde 1864; muchos visten el bunad, el traje tradicional."
+   },
+   "source": {
+    "label": "Wikipedia, Constitution Day (Norway)",
+    "url": "https://en.wikipedia.org/wiki/Constitution_Day_(Norway)"
+   }
+  },
+  "thanks": {
+   "word": "Takk",
+   "lang": {
+    "fr": "norvégien",
+    "en": "Norwegian",
+    "es": "noruego"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Islande": {
+  "sea": {
+   "title": {
+    "fr": "Surtsey, île née de la mer",
+    "en": "Surtsey, an island born of the sea",
+    "es": "Surtsey, isla nacida del mar"
+   },
+   "text": {
+    "fr": "En 1963, une éruption sous-marine a fait surgir Surtsey au sud de l'Islande. Classée à l'UNESCO en 2008, seuls quelques scientifiques peuvent y aborder.",
+    "en": "In 1963 an undersea eruption raised Surtsey off southern Iceland. UNESCO-listed in 2008, only a few scientists may land there.",
+    "es": "En 1963 una erupción submarina hizo surgir Surtsey al sur de Islandia. Es Patrimonio Mundial desde 2008 y solo unos científicos pueden pisarla."
+   },
+   "source": {
+    "label": "Wikipedia, Surtsey",
+    "url": "https://en.wikipedia.org/wiki/Surtsey"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le Þorrablót",
+    "en": "Þorrablót",
+    "es": "El Þorrablót"
+   },
+   "when": {
+    "fr": "mi-janvier à mi-février",
+    "en": "mid-January to mid-February",
+    "es": "mediados de enero a mediados de febrero"
+   },
+   "text": {
+    "fr": "Un dîner d'hiver avec discours et poèmes, dédié au mois de Þorri ; sa forme moderne date du XIXe siècle, des étudiants à Copenhague en 1873.",
+    "en": "A midwinter dinner with speeches and poems, named for the month of Þorri. Its modern form dates from the 19th century.",
+    "es": "Una cena de pleno invierno con discursos y poemas, dedicada al mes de Þorri; su forma moderna nace en el siglo XIX."
+   },
+   "source": {
+    "label": "Wikipedia, Þorrablót",
+    "url": "https://en.wikipedia.org/wiki/Þorrablót"
+   }
+  },
+  "thanks": {
+   "word": "Takk fyrir",
+   "lang": {
+    "fr": "islandais",
+    "en": "Icelandic",
+    "es": "islandés"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Italie": {
+  "sea": {
+   "title": {
+    "fr": "La gondole vénitienne",
+    "en": "The Venetian gondola",
+    "es": "La góndola veneciana"
+   },
+   "text": {
+    "fr": "Longue de 11 m, asymétrique, elle avance à une seule rame posée sur la forcola. Elle est noire selon une ancienne loi de Venise.",
+    "en": "Up to 11 m long and asymmetrical, it is moved by one oar resting on a carved forcola. An old Venetian law made it black.",
+    "es": "De hasta 11 m y asimétrica, avanza con un solo remo apoyado en la forcola. Una antigua ley veneciana la quiso negra."
+   },
+   "source": {
+    "label": "Wikipedia, Gondola",
+    "url": "https://en.wikipedia.org/wiki/Gondola"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le carnaval de Venise",
+    "en": "Venice Carnival",
+    "es": "El carnaval de Venecia"
+   },
+   "when": {
+    "fr": "février-début mars (jusqu'au mardi gras)",
+    "en": "February-early March (until Shrove Tuesday)",
+    "es": "febrero-principios de marzo (hasta el martes de carnaval)"
+   },
+   "text": {
+    "fr": "Masques documentés dès le XIIIe siècle : bauta, colombina, médecin de la peste. Interdit en 1797, le carnaval renaît en 1979.",
+    "en": "Masks are documented since the 13th century: bauta, colombina, plague doctor. Banned in 1797, the carnival was revived in 1979.",
+    "es": "Hay máscaras documentadas desde el siglo XIII: bauta, colombina, médico de la peste. Prohibido en 1797, renació en 1979."
+   },
+   "source": {
+    "label": "Wikipedia, Carnival of Venice",
+    "url": "https://en.wikipedia.org/wiki/Venetian_Carnival"
+   }
+  },
+  "thanks": {
+   "word": "Grazie",
+   "lang": {
+    "fr": "italien",
+    "en": "Italian",
+    "es": "italiano"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Grèce": {
+  "sea": {
+   "title": {
+    "fr": "Le caïque, bateau de pêche",
+    "en": "The caique fishing boat",
+    "es": "El caique, barca de pesca"
+   },
+   "text": {
+    "fr": "Ce bateau de bois, souvent blanc aux liserés colorés, pêche depuis toujours en mer Égée et Ionienne ; certains font aujourd'hui des excursions.",
+    "en": "This wooden boat, often white with bright strakes, has long fished the Aegean and Ionian seas. Some now run island excursions.",
+    "es": "Esta barca de madera, a menudo blanca con franjas de colores, pesca en el Egeo y el Jónico; algunas hacen hoy excursiones."
+   },
+   "source": {
+    "label": "Wikipedia, Caïque",
+    "url": "https://en.wikipedia.org/wiki/Caïque"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le carnaval de Patras",
+    "en": "Patras Carnival",
+    "es": "El carnaval de Patras"
+   },
+   "when": {
+    "fr": "17 janvier jusqu'au Lundi pur (date variable)",
+    "en": "17 January to Clean Monday (date varies)",
+    "es": "del 17 de enero al Lunes Limpio (fecha variable)"
+   },
+   "text": {
+    "fr": "Chasse au trésor en ville, grand défilé de chars satiriques et groupes costumés ; le roi du carnaval est brûlé sur le port.",
+    "en": "A city treasure hunt, a grand parade of satirical floats and costumed groups, and the Carnival King burned at the port.",
+    "es": "Búsqueda del tesoro por la ciudad, gran desfile de carrozas satíricas y grupos disfrazados; el rey del carnaval arde en el puerto."
+   },
+   "source": {
+    "label": "Wikipedia, Patras Carnival",
+    "url": "https://en.wikipedia.org/wiki/Patras_Carnival"
+   }
+  },
+  "thanks": {
+   "word": "Efcharistó",
+   "lang": {
+    "fr": "grec",
+    "en": "Greek",
+    "es": "griego"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Croatie": {
+  "sea": {
+   "title": {
+    "fr": "La gajeta de Betina",
+    "en": "The Betina gajeta",
+    "es": "La gajeta de Betina"
+   },
+   "text": {
+    "fr": "À Betina, île de Murter, on construit en bois la gajeta, voilier de 5 à 8 m ; ce savoir-faire est protégé comme patrimoine immatériel de Croatie.",
+    "en": "In Betina on Murter island, the gajeta, a 5-8 m wooden sailboat, is still built, a craft protected as Croatian intangible heritage.",
+    "es": "En Betina, isla de Murter, se construye la gajeta, velero de madera de 5 a 8 m, oficio protegido como patrimonio inmaterial croata."
+   },
+   "source": {
+    "label": "Betina Museum of Wooden Shipbuilding",
+    "url": "https://www.mbdb.hr/en/betina-museum-of-wooden-shipbuilding/"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "L'Alka de Sinj",
+    "en": "Sinjska alka",
+    "es": "La Alka de Sinj"
+   },
+   "when": {
+    "fr": "un dimanche de début août",
+    "en": "a Sunday in early August",
+    "es": "un domingo de principios de agosto"
+   },
+   "text": {
+    "fr": "Des cavaliers lancent leur lance au galop sur un anneau de fer suspendu : un tournoi né en 1715, inscrit à l'UNESCO en 2010.",
+    "en": "Riders gallop down a 160 m course aiming lances at a hanging iron ring, a tournament of 1715, UNESCO-listed in 2010.",
+    "es": "Jinetes al galope lanzan su lanza contra un anillo de hierro colgante: torneo de 1715, Patrimonio Inmaterial desde 2010."
+   },
+   "source": {
+    "label": "Wikipedia, Sinjska alka",
+    "url": "https://en.wikipedia.org/wiki/Sinjska_alka"
+   }
+  },
+  "thanks": {
+   "word": "Hvala",
+   "lang": {
+    "fr": "croate",
+    "en": "Croatian",
+    "es": "croata"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Malte": {
+  "sea": {
+   "title": {
+    "fr": "Le luzzu maltais",
+    "en": "The Maltese luzzu",
+    "es": "El luzzu maltés"
+   },
+   "text": {
+    "fr": "Ce bateau de pêche coloré porte deux yeux peints à la proue pour protéger les pêcheurs. Marsaxlokk en compte le plus grand nombre.",
+    "en": "This colourful fishing boat has two eyes painted on its bow, said to protect fishermen. Marsaxlokk has the most luzzijiet.",
+    "es": "Esta colorida barca de pesca lleva dos ojos pintados en la proa, que protegerían a los pescadores. Marsaxlokk concentra más."
+   },
+   "source": {
+    "label": "Wikipedia, Luzzu",
+    "url": "https://en.wikipedia.org/wiki/Luzzu"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le carnaval de Malte",
+    "en": "Maltese Carnival",
+    "es": "El carnaval de Malta"
+   },
+   "when": {
+    "fr": "semaine avant le mercredi des Cendres",
+    "en": "week before Ash Wednesday",
+    "es": "semana anterior al Miércoles de Ceniza"
+   },
+   "text": {
+    "fr": "Célébré depuis le XVIe siècle, il se concentre à La Valette ; à Nadur, sur Gozo, un carnaval spontané joue la satire et les costumes.",
+    "en": "Celebrated since 1535, it centres on Valletta; in Nadur, on Gozo, a spontaneous carnival is known for satire and costumes.",
+    "es": "Se celebra desde 1535 y se concentra en La Valeta; en Nadur, en Gozo, hay un carnaval espontáneo de sátira y disfraces."
+   },
+   "source": {
+    "label": "Wikipedia, Maltese Carnival",
+    "url": "https://en.wikipedia.org/wiki/Maltese_Carnival"
+   }
+  },
+  "thanks": {
+   "word": "Grazzi",
+   "lang": {
+    "fr": "maltais",
+    "en": "Maltese",
+    "es": "maltés"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Danemark": {
+  "sea": {
+   "title": {
+    "fr": "Les drakkars de Roskilde",
+    "en": "Roskilde's Viking ships",
+    "es": "Los drakkars de Roskilde"
+   },
+   "text": {
+    "fr": "Vers 1070, cinq navires vikings furent coulés dans le fjord pour barrer l'accès à la ville ; retrouvés en 1962, ils sont exposés à Roskilde.",
+    "en": "Around 1070, five Viking ships were sunk in the fjord to block the way to the town. Found in 1962, they are shown in Roskilde.",
+    "es": "Hacia 1070 se hundieron cinco barcos vikingos en el fiordo para cerrar el paso a la ciudad. Hallados en 1962, se exponen en Roskilde."
+   },
+   "source": {
+    "label": "Wikipedia, Viking Ship Museum (Roskilde)",
+    "url": "https://en.wikipedia.org/wiki/Viking_Ship_Museum_(Roskilde)"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le festival de Roskilde",
+    "en": "Roskilde Festival",
+    "es": "El festival de Roskilde"
+   },
+   "when": {
+    "fr": "fin juin-début juillet",
+    "en": "late June-early July",
+    "es": "finales de junio-principios de julio"
+   },
+   "text": {
+    "fr": "Né en 1971 et géré sans but lucratif, c'est l'un des plus grands festivals de musique d'Europe, avec plus de 130 000 personnes.",
+    "en": "Started in 1971 and run as a non-profit, it is one of Europe's largest music festivals, with over 130,000 attendees.",
+    "es": "Nació en 1971 y se gestiona sin ánimo de lucro; es uno de los mayores festivales de Europa, con más de 130 000 asistentes."
+   },
+   "source": {
+    "label": "Wikipedia, Roskilde Festival",
+    "url": "https://en.wikipedia.org/wiki/Roskilde_Festival"
+   }
+  },
+  "thanks": {
+   "word": "Tak",
+   "lang": {
+    "fr": "danois",
+    "en": "Danish",
+    "es": "danés"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Allemagne": {
+  "sea": {
+   "title": {
+    "fr": "La mer des Wadden",
+    "en": "The Wadden Sea",
+    "es": "El mar de Wadden"
+   },
+   "text": {
+    "fr": "Au rythme des marées, des vasières s'étendent sur 500 km de côte. Marcher sur le fond à marée basse (Wattwandern) s'y pratique, notamment à Borkum.",
+    "en": "With the tides, mudflats stretch along 500 km of coast. Walking the seabed at low tide (Wattwandern) is popular, e.g. near Borkum.",
+    "es": "Con las mareas aparecen llanos de lodo en 500 km de costa. Caminar por el fondo con marea baja (Wattwandern) es popular, p. ej. en Borkum."
+   },
+   "source": {
+    "label": "Wikipedia, Wadden Sea",
+    "url": "https://en.wikipedia.org/wiki/Wadden_Sea"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "La Semaine de Kiel",
+    "en": "Kiel Week",
+    "es": "La Semana de Kiel"
+   },
+   "when": {
+    "fr": "dernière semaine de juin",
+    "en": "last week of June",
+    "es": "última semana de junio"
+   },
+   "text": {
+    "fr": "Née en 1882 avec 20 yachts, c'est l'une des plus grandes régates du monde, qui finit par un feu d'artifice.",
+    "en": "Begun in 1882 with 20 yachts, it is one of the world's largest sailing events and ends with a fireworks display.",
+    "es": "Nació en 1882 con 20 veleros; es una de las mayores regatas del mundo y termina con fuegos artificiales."
+   },
+   "source": {
+    "label": "Wikipedia, Kieler Woche",
+    "url": "https://en.wikipedia.org/wiki/Kieler_Woche"
+   }
+  },
+  "thanks": {
+   "word": "Danke",
+   "lang": {
+    "fr": "allemand",
+    "en": "German",
+    "es": "alemán"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Pays-Bas": {
+  "sea": {
+   "title": {
+    "fr": "Les Travaux du Delta",
+    "en": "The Delta Works",
+    "es": "Las Obras del Delta"
+   },
+   "text": {
+    "fr": "Après la tempête de 1953, des barrages et écluses ont été bâtis jusqu'en 1997. La barrière de l'Escaut oriental ne se ferme que si la mer monte de 3 m.",
+    "en": "After the 1953 North Sea flood, dams, sluices and barriers were built until 1997. The Oosterschelde barrier closes only if the sea rises 3 m.",
+    "es": "Tras la inundación de 1953 se construyeron diques y compuertas hasta 1997. La barrera del Escalda Oriental solo cierra si el mar sube 3 m."
+   },
+   "source": {
+    "label": "Wikipedia, Delta Works",
+    "url": "https://en.wikipedia.org/wiki/Delta_Works"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Koningsdag, le jour du Roi",
+    "en": "King's Day",
+    "es": "El Día del Rey"
+   },
+   "when": {
+    "fr": "27 avril",
+    "en": "27 April",
+    "es": "27 de abril"
+   },
+   "text": {
+    "fr": "Tout le pays se teint en orange et le vrijmarkt autorise chacun à vendre ses objets d'occasion dans la rue, sans permis ni TVA.",
+    "en": "The country turns orange and the vrijmarkt lets anyone sell used goods in the street without a permit or VAT.",
+    "es": "El país se tiñe de naranja y el vrijmarkt permite vender objetos usados en la calle sin permiso ni IVA."
+   },
+   "source": {
+    "label": "Wikipedia, King's Day",
+    "url": "https://en.wikipedia.org/wiki/King's_Day"
+   }
+  },
+  "thanks": {
+   "word": "Dank je",
+   "lang": {
+    "fr": "néerlandais",
+    "en": "Dutch",
+    "es": "neerlandés"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Suède": {
+  "sea": {
+   "title": {
+    "fr": "Le Vasa, navire du XVIIe siècle",
+    "en": "The Vasa, a 17th-century warship",
+    "es": "El Vasa, buque del siglo XVII"
+   },
+   "text": {
+    "fr": "Coulé dès sa première sortie en 1628 à Stockholm, le Vasa a été renfloué en 1961 presque intact et se visite au musée Vasa.",
+    "en": "Sunk on its maiden voyage in Stockholm in 1628, the Vasa was raised in 1961 largely intact and can be visited at the Vasa Museum.",
+    "es": "Hundido en su primer viaje en Estocolmo en 1628, el Vasa fue reflotado en 1961 casi intacto y se visita en el Museo Vasa."
+   },
+   "source": {
+    "label": "Wikipedia, Vasa (ship)",
+    "url": "https://en.wikipedia.org/wiki/Vasa_(ship)"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Midsommar",
+    "en": "Midsommar",
+    "es": "Midsommar"
+   },
+   "when": {
+    "fr": "vendredi entre le 19 et le 25 juin",
+    "en": "Friday between 19 and 25 June",
+    "es": "viernes entre el 19 y el 25 de junio"
+   },
+   "text": {
+    "fr": "On danse en rond autour d'un mât fleuri, couronne de fleurs dans les cheveux, avec hareng mariné, pommes de terre nouvelles et fraises.",
+    "en": "People dance in rings around a flower-decked pole, wearing flower wreaths, with pickled herring, new potatoes and strawberries.",
+    "es": "Se baila en corro en torno a un mástil florido, con coronas de flores, arenque en vinagre, patatas nuevas y fresas."
+   },
+   "source": {
+    "label": "Wikipedia (sv), Midsommar",
+    "url": "https://sv.wikipedia.org/wiki/Midsommar"
+   }
+  },
+  "thanks": {
+   "word": "Tack",
+   "lang": {
+    "fr": "suédois",
+    "en": "Swedish",
+    "es": "sueco"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Finlande": {
+  "sea": {
+   "title": {
+    "fr": "Kvarken, terre qui monte",
+    "en": "Kvarken, land rising from the sea",
+    "es": "Kvarken, tierra que emerge"
+   },
+   "text": {
+    "fr": "Depuis la fin de la glaciation, la terre remonte d'environ 10 mm par an à Kvarken : plus de 5 600 petites îles, classées à l'UNESCO.",
+    "en": "Since the Ice Age the land has risen about 10 mm a year at Kvarken, among the fastest on Earth: over 5,600 small islands, UNESCO-listed.",
+    "es": "Desde la glaciación la tierra sube unos 10 mm al año en Kvarken, con más de 5600 islotes. Es Patrimonio Mundial de la UNESCO."
+   },
+   "source": {
+    "label": "Wikipedia, Kvarken Archipelago",
+    "url": "https://en.wikipedia.org/wiki/Kvarken_Archipelago"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Vappu",
+    "en": "Vappu",
+    "es": "Vappu"
+   },
+   "when": {
+    "fr": "30 avril - 1er mai",
+    "en": "30 April - 1 May",
+    "es": "30 de abril - 1 de mayo"
+   },
+   "text": {
+    "fr": "Les étudiants coiffent la statue Havis Amanda à Helsinki, on porte la casquette d'étudiant, boit du sima et mange des tippaleipä.",
+    "en": "Helsinki's Havis Amanda statue gets a student cap, people wear student caps, drink homemade sima and eat tippaleipä funnel cake.",
+    "es": "En Helsinki se pone la gorra a la estatua Havis Amanda; se bebe sima casero y se come tippaleipä."
+   },
+   "source": {
+    "label": "Wikipedia, Vappu",
+    "url": "https://en.wikipedia.org/wiki/Vappu"
+   }
+  },
+  "thanks": {
+   "word": "Kiitos",
+   "lang": {
+    "fr": "finnois",
+    "en": "Finnish",
+    "es": "finés"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Pologne": {
+  "sea": {
+   "title": {
+    "fr": "Dar Pomorza, la Frégate blanche",
+    "en": "Dar Pomorza, the White Frigate",
+    "es": "Dar Pomorza, la Fragata Blanca"
+   },
+   "text": {
+    "fr": "Ce trois-mâts de 1909 a fait le tour du monde en 1934-1935, premier navire à pavillon polonais à le faire. Il est musée à Gdynia.",
+    "en": "This 1909 full-rigger sailed round the world in 1934-35, the first Polish-flagged ship to do so. It is now a museum ship in Gdynia.",
+    "es": "Este velero de 1909 dio la vuelta al mundo en 1934-35, el primero con bandera polaca. Hoy es un buque museo en Gdynia."
+   },
+   "source": {
+    "label": "Wikipedia, Dar Pomorza",
+    "url": "https://en.wikipedia.org/wiki/Dar_Pomorza"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Wianki à Cracovie",
+    "en": "Wianki in Kraków",
+    "es": "Wianki en Cracovia"
+   },
+   "when": {
+    "fr": "autour du solstice d'été (juin)",
+    "en": "around the summer solstice (June)",
+    "es": "en torno al solsticio de verano (junio)"
+   },
+   "text": {
+    "fr": "Sur la Vistule au pied du Wawel, on laisse flotter des couronnes de fleurs ; concerts, concours de la plus belle couronne et feu d'artifice.",
+    "en": "On the Vistula below Wawel Hill, flower wreaths are floated on the river, with concerts, a best-wreath contest and fireworks.",
+    "es": "En el Vístula, al pie del Wawel, flotan coronas de flores; hay conciertos, concurso de la mejor corona y fuegos artificiales."
+   },
+   "source": {
+    "label": "Wikipedia, Wianki",
+    "url": "https://en.wikipedia.org/wiki/Wianki"
+   }
+  },
+  "thanks": {
+   "word": "Dziękuję",
+   "lang": {
+    "fr": "polonais",
+    "en": "Polish",
+    "es": "polaco"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Suisse": {
+  "sea": {
+   "title": {
+    "fr": "Les bateaux Belle Époque du Léman",
+    "en": "Lake Geneva's Belle Époque steamers",
+    "es": "Los vapores Belle Époque del Lemán"
+   },
+   "text": {
+    "fr": "Huit bateaux à roues à aubes bâtis entre 1904 et 1927 sillonnent encore le Léman ; la flotte est classée monument historique depuis 2011.",
+    "en": "Eight paddle steamers built between 1904 and 1927 still sail Lake Geneva; the fleet has been a listed historic monument since 2011.",
+    "es": "Ocho vapores de ruedas construidos entre 1904 y 1927 siguen surcando el Lemán; la flota es monumento histórico desde 2011."
+   },
+   "source": {
+    "label": "Wikipédia, CGN (Léman)",
+    "url": "https://fr.wikipedia.org/wiki/Compagnie_générale_de_navigation_sur_le_lac_Léman"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "La Fête des Vignerons",
+    "en": "Fête des Vignerons",
+    "es": "La Fête des Vignerons"
+   },
+   "when": {
+    "fr": "environ une fois par génération (dernière en 2019)",
+    "en": "about once a generation (latest in 2019)",
+    "es": "una vez por generación (la última en 2019)"
+   },
+   "text": {
+    "fr": "À Vevey, au bord du Léman, un grand spectacle célèbre le vin ; inscrite à l'UNESCO en 2016, c'est la première tradition suisse listée.",
+    "en": "In Vevey on Lake Geneva, a huge show celebrates winegrowing; UNESCO-listed in 2016, the first Swiss tradition on the list.",
+    "es": "En Vevey, a orillas del Lemán, un gran espectáculo celebra el vino; Patrimonio Inmaterial de la UNESCO desde 2016."
+   },
+   "source": {
+    "label": "Wikipedia, Fête des Vignerons",
+    "url": "https://en.wikipedia.org/wiki/Fête_des_Vignerons"
+   }
+  },
+  "thanks": {
+   "word": "Danke",
+   "lang": {
+    "fr": "allemand",
+    "en": "German",
+    "es": "alemán"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Autriche": {
+  "sea": {
+   "title": {
+    "fr": "Le lac de Neusiedl",
+    "en": "Lake Neusiedl",
+    "es": "El lago Neusiedl"
+   },
+   "text": {
+    "fr": "Ce lac de steppe profond d'environ 1 m, bordé de roseaux, est surnommé la « mer des Viennois » ; voile et planche s'y pratiquent. UNESCO en 2001.",
+    "en": "About 1 m deep and ringed by reeds, this steppe lake is the 'Sea of the Viennese', popular for sailing and windsurfing. UNESCO 2001.",
+    "es": "Este lago de estepa, de 1 m de profundidad media y rodeado de cañas, es el «mar de los vieneses», ideal para vela y windsurf."
+   },
+   "source": {
+    "label": "Wikipedia, Lake Neusiedl",
+    "url": "https://en.wikipedia.org/wiki/Lake_Neusiedl"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le Festival de Salzbourg",
+    "en": "Salzburg Festival",
+    "es": "El Festival de Salzburgo"
+   },
+   "when": {
+    "fr": "fin juillet à fin août",
+    "en": "late July to late August",
+    "es": "finales de julio a finales de agosto"
+   },
+   "text": {
+    "fr": "Fondé en 1920, il dure environ cinq semaines ; musique, théâtre et opéras de Mozart, avec Jedermann joué sur le parvis de la cathédrale.",
+    "en": "Founded in 1920, it runs about five weeks of music and drama, with Mozart operas and Jedermann on the cathedral square.",
+    "es": "Fundado en 1920, dura unas cinco semanas de música y teatro, con óperas de Mozart y Jedermann ante la catedral."
+   },
+   "source": {
+    "label": "Wikipedia, Salzburg Festival",
+    "url": "https://en.wikipedia.org/wiki/Salzburg_Festival"
+   }
+  },
+  "thanks": {
+   "word": "Danke",
+   "lang": {
+    "fr": "allemand",
+    "en": "German",
+    "es": "alemán"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Slovénie": {
+  "sea": {
+   "title": {
+    "fr": "Les salines de Sečovlje",
+    "en": "The Sečovlje salt pans",
+    "es": "Las salinas de Sečovlje"
+   },
+   "text": {
+    "fr": "Actives depuis le XIIIe siècle, ces salines produisent encore le sel de Piran de façon traditionnelle ; c'est un parc paysager et un site Ramsar.",
+    "en": "Working since the 13th century, these salt pans still make Piran salt the traditional way. They are a landscape park and Ramsar wetland.",
+    "es": "Activas desde el siglo XIII, estas salinas aún producen sal de Piran de forma tradicional; son parque paisajístico y humedal Ramsar."
+   },
+   "source": {
+    "label": "Wikipédia, Salines de Sečovlje",
+    "url": "https://fr.wikipedia.org/wiki/Salines_de_Sečovlje"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Kurentovanje à Ptuj",
+    "en": "Kurentovanje in Ptuj",
+    "es": "Kurentovanje en Ptuj"
+   },
+   "when": {
+    "fr": "onze jours avant le mercredi des Cendres (février)",
+    "en": "eleven days before Ash Wednesday (February)",
+    "es": "once días antes del Miércoles de Ceniza (febrero)"
+   },
+   "text": {
+    "fr": "Les kurents, vêtus de peau de mouton et de grosses cloches, chassent l'hiver par leur vacarme ; la tradition est inscrite à l'UNESCO depuis 2017.",
+    "en": "Kurents in sheepskin and big bells make noise to chase winter away. Their door-to-door rounds were UNESCO-listed in 2017.",
+    "es": "Los kurents, con piel de oveja y grandes cascabeles, espantan el invierno con su estruendo; Patrimonio Inmaterial de la UNESCO en 2017."
+   },
+   "source": {
+    "label": "Wikipedia, Kurentovanje",
+    "url": "https://en.wikipedia.org/wiki/Kurentovanje"
+   }
+  },
+  "thanks": {
+   "word": "Hvala",
+   "lang": {
+    "fr": "slovène",
+    "en": "Slovene",
+    "es": "esloveno"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Hongrie": {
+  "sea": {
+   "title": {
+    "fr": "Le lac Balaton",
+    "en": "Lake Balaton",
+    "es": "El lago Balatón"
+   },
+   "text": {
+    "fr": "Le plus grand lac d'Europe centrale (600 km²) est peu profond, 3,3 m en moyenne : voile, pêche et sports nautiques à Siófok ou Keszthely.",
+    "en": "Central Europe's largest lake (600 km²) is shallow, 3.3 m on average, with sailing and fishing at resorts like Siófok and Keszthely.",
+    "es": "El mayor lago de Europa central (600 km²) es poco profundo, de 3,3 m de media; se navega y pesca en Siófok o Keszthely."
+   },
+   "source": {
+    "label": "Wikipedia, Lake Balaton",
+    "url": "https://en.wikipedia.org/wiki/Lake_Balaton"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Busójárás à Mohács",
+    "en": "Busójárás in Mohács",
+    "es": "Busójárás en Mohács"
+   },
+   "when": {
+    "fr": "fin du carnaval (février), six jours",
+    "en": "end of Carnival (February), six days",
+    "es": "fin del carnaval (febrero), seis días"
+   },
+   "text": {
+    "fr": "Des busós masqués défilent à Mohács avec musique et danses pour clore l'hiver ; la fête est inscrite à l'UNESCO depuis 2009.",
+    "en": "Masked busós parade through Mohács with music and dancing to end the winter. The festival has been UNESCO-listed since 2009.",
+    "es": "Los busós enmascarados desfilan por Mohács con música y bailes para cerrar el invierno; Patrimonio Inmaterial desde 2009."
+   },
+   "source": {
+    "label": "Wikipedia, Busójárás",
+    "url": "https://en.wikipedia.org/wiki/Busójárás"
+   }
+  },
+  "thanks": {
+   "word": "Köszönöm",
+   "lang": {
+    "fr": "hongrois",
+    "en": "Hungarian",
+    "es": "húngaro"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Macédoine du Nord": {
+  "sea": {
+   "title": {
+    "fr": "Le lac d'Ohrid",
+    "en": "Lake Ohrid",
+    "es": "El lago Ohrid"
+   },
+   "text": {
+    "fr": "Un des plus anciens lacs du monde (3 à 5 millions d'années), profond de 288 m, avec plus de 200 espèces endémiques. UNESCO depuis 1979.",
+    "en": "One of the world's oldest lakes (3-5 million years), 288 m deep, with over 200 endemic species. UNESCO-listed since 1979.",
+    "es": "Uno de los lagos más antiguos (3 a 5 millones de años), de 288 m de profundidad y más de 200 especies endémicas. UNESCO desde 1979."
+   },
+   "source": {
+    "label": "Wikipedia, Lake Ohrid",
+    "url": "https://en.wikipedia.org/wiki/Lake_Ohrid"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le carnaval de Vevčani",
+    "en": "Vevčani Carnival",
+    "es": "El carnaval de Vevčani"
+   },
+   "when": {
+    "fr": "mi-janvier (nouvel an julien, 14 janvier)",
+    "en": "mid-January (Julian New Year, 14 January)",
+    "es": "mediados de enero (año nuevo juliano, 14 de enero)"
+   },
+   "text": {
+    "fr": "Des masques et costumes traditionnels ou modernes, et de la satire sociale, marquent le nouvel an julien ; l'usage se dit vieux de 1 400 ans.",
+    "en": "Traditional and modern costumes, masks and satire mark the Julian New Year; the carnival is claimed to be over 1,400 years old.",
+    "es": "Máscaras, disfraces tradicionales y modernos y sátira marcan el año nuevo juliano; se dice que tiene más de 1400 años."
+   },
+   "source": {
+    "label": "Wikipedia, Vevčani",
+    "url": "https://en.wikipedia.org/wiki/Vevčani"
+   }
+  },
+  "thanks": {
+   "word": "Blagodaram",
+   "lang": {
+    "fr": "macédonien",
+    "en": "Macedonian",
+    "es": "macedonio"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Monténégro": {
+  "sea": {
+   "title": {
+    "fr": "Perast et son îlot artificiel",
+    "en": "Perast and its artificial islet",
+    "es": "Perast y su islote artificial"
+   },
+   "text": {
+    "fr": "Dans la baie de Kotor, l'îlot de Notre-Dame-du-Rocher a été agrandi à coups de roches jetées et de vieux navires chargés de pierres.",
+    "en": "In the Bay of Kotor, the islet of Our Lady of the Rocks was built up by dumping rocks and sinking old stone-laden ships.",
+    "es": "En la bahía de Kotor, el islote de Nuestra Señora de las Rocas se levantó arrojando rocas y hundiendo viejos barcos cargados de piedras."
+   },
+   "source": {
+    "label": "Wikipedia, Our Lady of the Rocks",
+    "url": "https://en.wikipedia.org/wiki/Our_Lady_of_the_Rocks"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "La Fašinada de Perast",
+    "en": "The Fašinada of Perast",
+    "es": "La Fašinada de Perast"
+   },
+   "when": {
+    "fr": "22 juillet, au coucher du soleil",
+    "en": "22 July, at sunset",
+    "es": "22 de julio, al atardecer"
+   },
+   "text": {
+    "fr": "Chaque année, les habitants sortent en barques et jettent des pierres à la mer pour élargir l'îlot, selon un usage qui remonte à 1452.",
+    "en": "Each year residents go out in boats and throw stones into the sea to widen the islet, a custom tied to the legend of 1452.",
+    "es": "Cada año los vecinos salen en barcas y arrojan piedras al mar para ensanchar el islote, costumbre ligada a la leyenda de 1452."
+   },
+   "source": {
+    "label": "Wikipedia, Our Lady of the Rocks",
+    "url": "https://en.wikipedia.org/wiki/Our_Lady_of_the_Rocks"
+   }
+  },
+  "thanks": {
+   "word": "Hvala",
+   "lang": {
+    "fr": "monténégrin",
+    "en": "Montenegrin",
+    "es": "montenegrino"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Chypre": {
+  "sea": {
+   "title": {
+    "fr": "Le navire de Kyrénia",
+    "en": "The Kyrenia ship",
+    "es": "El barco de Kyrenia"
+   },
+   "text": {
+    "fr": "Cette épave de marchand grec du IVe siècle av. J.-C., chargée de vin et d'amphores, a été trouvée en 1965 par un plongeur ; elle est au château de Kyrénia.",
+    "en": "This 4th-century BC Greek merchant wreck, carrying wine and amphoras, was found in 1965 by a diver. It is shown in Kyrenia Castle.",
+    "es": "Este pecio mercante griego del siglo IV a. C., con vino y ánforas, lo halló un buzo en 1965; se expone en el castillo de Kyrenia."
+   },
+   "source": {
+    "label": "Wikipedia, Kyrenia ship",
+    "url": "https://en.wikipedia.org/wiki/Kyrenia_ship"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le carnaval de Limassol",
+    "en": "Limassol Carnival",
+    "es": "El carnaval de Limasol"
+   },
+   "when": {
+    "fr": "février-mars (dix jours avant le Carême)",
+    "en": "February-March (ten days before Lent)",
+    "es": "febrero-marzo (diez días antes de la Cuaresma)"
+   },
+   "text": {
+    "fr": "Dix jours de costumes et de satire, avec le Roi du carnaval et un grand défilé de plus de 150 chars sur l'avenue Makariou.",
+    "en": "Ten days of costumes and satire, with the Carnival King and a grand parade of over 150 floats on Makariou Avenue.",
+    "es": "Diez días de disfraces y sátira, con el Rey del Carnaval y un gran desfile de más de 150 carrozas en la avenida Makariou."
+   },
+   "source": {
+    "label": "Wikipedia, Limassol Carnival Festival",
+    "url": "https://en.wikipedia.org/wiki/Limassol_Carnival_Festival"
+   }
+  },
+  "thanks": {
+   "word": "Efcharistó",
+   "lang": {
+    "fr": "grec",
+    "en": "Greek",
+    "es": "griego"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Turquie": {
+  "sea": {
+   "title": {
+    "fr": "Le gulet turc",
+    "en": "The Turkish gulet",
+    "es": "El gulet turco"
+   },
+   "text": {
+    "fr": "Ce voilier en bois à deux mâts, de 14 à 35 m, se construit surtout à Bodrum et Marmaris ; les croisières bleues l'ont rendu célèbre.",
+    "en": "This two-masted wooden sailing vessel, 14-35 m long, is built mainly in Bodrum and Marmaris, and famed for 'blue cruises'.",
+    "es": "Este velero de madera de dos mástiles, de 14 a 35 m, se construye sobre todo en Bodrum y Marmaris; los «cruceros azules» lo hicieron famoso."
+   },
+   "source": {
+    "label": "Wikipedia, Gulet",
+    "url": "https://en.wikipedia.org/wiki/Gulet"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Kırkpınar, la lutte à l'huile",
+    "en": "Kırkpınar oil wrestling",
+    "es": "Kırkpınar, lucha con aceite"
+   },
+   "when": {
+    "fr": "généralement fin juin, trois jours",
+    "en": "usually late June, three days",
+    "es": "normalmente a finales de junio, tres días"
+   },
+   "text": {
+    "fr": "À Edirne, des pehlivans en short de cuir s'enduisent d'huile d'olive pour lutter trois jours ; inscrit à l'UNESCO en 2010.",
+    "en": "In Edirne, wrestlers in leather shorts pour olive oil over themselves and compete for three days. UNESCO-listed in 2010.",
+    "es": "En Edirne, luchadores con pantalón de cuero se untan de aceite de oliva y compiten tres días. UNESCO desde 2010."
+   },
+   "source": {
+    "label": "Wikipedia, Kırkpınar",
+    "url": "https://en.wikipedia.org/wiki/Kırkpınar"
+   }
+  },
+  "thanks": {
+   "word": "Teşekkür ederim",
+   "lang": {
+    "fr": "turc",
+    "en": "Turkish",
+    "es": "turco"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Israël": {
+  "sea": {
+   "title": {
+    "fr": "Saint-Jean-d'Acre, port millénaire",
+    "en": "Acre, a port for millennia",
+    "es": "Acre, un puerto milenario"
+   },
+   "text": {
+    "fr": "Port depuis l'âge du bronze, la vieille ville d'Acre garde ses halles croisées et ses remparts ottomans. UNESCO depuis 2001.",
+    "en": "A port since the Bronze Age, Acre's old city keeps its Crusader halls and Ottoman walls. UNESCO-listed since 2001.",
+    "es": "Puerto desde la Edad del Bronce, el casco antiguo de Acre conserva salas cruzadas y murallas otomanas. UNESCO desde 2001."
+   },
+   "source": {
+    "label": "Wikipedia, Old City of Acre",
+    "url": "https://en.wikipedia.org/wiki/Old_City_of_Acre"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "La Nuit blanche de Tel Aviv",
+    "en": "Tel Aviv White Night",
+    "es": "La Noche Blanca de Tel Aviv"
+   },
+   "when": {
+    "fr": "juin",
+    "en": "June",
+    "es": "junio"
+   },
+   "text": {
+    "fr": "Depuis 2003, la ville reste ouverte toute la nuit : concerts de plage, expositions, opéra, cinéma et yoga au lever du soleil.",
+    "en": "Since 2003 the city stays open all night: beach concerts, exhibitions, opera, cinema and sunrise yoga at the port.",
+    "es": "Desde 2003 la ciudad abre toda la noche: conciertos en la playa, exposiciones, ópera, cine y yoga al amanecer."
+   },
+   "source": {
+    "label": "Israel Forever, Tel Aviv White Night",
+    "url": "http://israelforever.org/state/tel_aviv_white_night_laila_lavan/"
+   }
+  },
+  "thanks": {
+   "word": "Todá",
+   "lang": {
+    "fr": "hébreu",
+    "en": "Hebrew",
+    "es": "hebreo"
+   },
+   "source": {
+    "label": "Wiktionary, תודה",
+    "url": "https://en.wiktionary.org/wiki/תודה"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Jordanie": {
+  "sea": {
+   "title": {
+    "fr": "Aqaba, la porte de la mer Rouge",
+    "en": "Aqaba, Jordan's Red Sea port",
+    "es": "Áqaba, el puerto del mar Rojo"
+   },
+   "text": {
+    "fr": "Seule ville côtière de Jordanie, Aqaba (l'antique Ayla) compte plus de 30 sites de plongée et des récifs sur plus de 25 km.",
+    "en": "Jordan's only coastal city, Aqaba (ancient Ayla) has over 30 dive sites and fringing reefs stretching more than 25 km.",
+    "es": "Única ciudad costera de Jordania, Áqaba (la antigua Ayla) tiene más de 30 sitios de buceo y arrecifes de más de 25 km."
+   },
+   "source": {
+    "label": "Wikipedia, Aqaba",
+    "url": "https://en.wikipedia.org/wiki/Aqaba"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le festival de Jerash",
+    "en": "Jerash Festival",
+    "es": "El festival de Jerash"
+   },
+   "when": {
+    "fr": "fin juillet-début août",
+    "en": "late July-early August",
+    "es": "finales de julio-principios de agosto"
+   },
+   "text": {
+    "fr": "Fondé en 1981 dans la cité antique de Jerash, ce festival de culture et d'arts réunit artistes jordaniens, arabes et étrangers.",
+    "en": "Founded in 1981 in the ancient city of Jerash, this festival of culture and arts hosts Jordanian, Arab and foreign artists.",
+    "es": "Fundado en 1981 en la antigua ciudad de Jerash, reúne a artistas jordanos, árabes y extranjeros."
+   },
+   "source": {
+    "label": "Wikipedia, Jerash Festival",
+    "url": "https://en.wikipedia.org/wiki/Jerash_Festival"
+   }
+  },
+  "thanks": {
+   "word": "Shukran",
+   "lang": {
+    "fr": "arabe",
+    "en": "Arabic",
+    "es": "árabe"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Oman": {
+  "sea": {
+   "title": {
+    "fr": "Le boutre, voilier de l'océan Indien",
+    "en": "The dhow, sail of the Indian Ocean",
+    "es": "El dhow, velero del Índico"
+   },
+   "text": {
+    "fr": "Ces voiliers de commerce relient depuis longtemps l'Arabie à l'Afrique de l'Est, poussés par la mousson ; on en construit et répare à Sour.",
+    "en": "These trading sailboats long linked Arabia and East Africa on the monsoon winds; dhows are built and repaired in Sur, Oman.",
+    "es": "Estos veleros mercantes unen desde hace siglos Arabia y África oriental con los monzones; en Sur (Omán) se construyen y reparan."
+   },
+   "source": {
+    "label": "Wikipedia, Dhow",
+    "url": "https://en.wikipedia.org/wiki/Dhow"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le Festival de Mascate",
+    "en": "Muscat Festival",
+    "es": "El Festival de Mascate"
+   },
+   "when": {
+    "fr": "janvier-février",
+    "en": "January-February",
+    "es": "enero-febrero"
+   },
+   "text": {
+    "fr": "Dans un grand village d'artisanat du parc Al Qurm, on découvre la vie traditionnelle omanaise, ses métiers et ses spectacles culturels.",
+    "en": "In a large heritage village in Al Qurm Natural Park, you can see traditional Omani life, crafts and cultural shows.",
+    "es": "En un gran pueblo artesanal del parque Al Qurm se descubren la vida tradicional omaní, sus oficios y espectáculos culturales."
+   },
+   "source": {
+    "label": "Oman Ministry of Heritage and Tourism, Muscat Festival",
+    "url": "https://mht.gov.om/media-center/events/muscat-festival/"
+   }
+  },
+  "thanks": {
+   "word": "Shukran",
+   "lang": {
+    "fr": "arabe",
+    "en": "Arabic",
+    "es": "árabe"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ },
+ "Émirats arabes unis": {
+  "sea": {
+   "title": {
+    "fr": "La pêche des perles du Golfe",
+    "en": "Pearl diving in the Gulf",
+    "es": "La pesca de perlas del Golfo"
+   },
+   "text": {
+    "fr": "Avant le pétrole, la perle faisait vivre l'Arabie orientale : plongeurs, capitaines (nakhuda) et équipages partaient en mer des mois entiers.",
+    "en": "Before oil, pearls fed Eastern Arabia: divers, captains (nakhuda) and crews set out to sea for months, peaking around 1912.",
+    "es": "Antes del petróleo, las perlas sustentaban Arabia oriental: buzos, capitanes (nakhuda) y tripulaciones pasaban meses en el mar."
+   },
+   "source": {
+    "label": "Wikipedia, Pearl hunting",
+    "url": "https://en.wikipedia.org/wiki/Pearl_hunting"
+   }
+  },
+  "fete": {
+   "title": {
+    "fr": "Le Festival d'Al Dhafra",
+    "en": "Al Dhafra Festival",
+    "es": "El Festival de Al Dhafra"
+   },
+   "when": {
+    "fr": "fin octobre à fin janvier",
+    "en": "late October to late January",
+    "es": "finales de octubre a finales de enero"
+   },
+   "text": {
+    "fr": "Organisé par l'Autorité du patrimoine d'Abou Dhabi, il propose concours de chameaux, souks traditionnels et vente de dattes.",
+    "en": "Run by the Abu Dhabi Heritage Authority, it has camel contests, traditional souks and a date auction.",
+    "es": "Organizado por la Autoridad de Patrimonio de Abu Dabi, ofrece concursos de camellos, zocos tradicionales y subasta de dátiles."
+   },
+   "source": {
+    "label": "Gulf News, Al Dhafra Festival",
+    "url": "https://gulfnews.com/uae/people/al-dhafra-festival-where-culture-creativity-and-camels-take-centre-stage-1.500321122"
+   }
+  },
+  "thanks": {
+   "word": "Shukran",
+   "lang": {
+    "fr": "arabe",
+    "en": "Arabic",
+    "es": "árabe"
+   },
+   "source": {
+    "label": "Wiktionary, thank you (translations)",
+    "url": "https://en.wiktionary.org/wiki/thank_you"
+   }
+  },
+  "reviewed": "2026-11-16"
+ }
+}

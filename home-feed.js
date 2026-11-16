@@ -537,6 +537,11 @@
   }
   /* ---------- Fin de « Pour toi aujourd’hui » ---------- */
 
+  /* Tour du monde des cultures (cultures-boot.js) : rangée de pays et « Le mot du jour », à hauteur fixe (cultures.css) ;
+     cultures.js, chargé après la levée du rideau, y pose les mots et le jeu sur place. */
+  function culturesSection(){
+    return window.OceanCultures?.homeHTML?.({spots:SPOTS,photo,score:vib,day:new Date(),lang:lang()})||'';
+  }
   function render(){
     const used=new Set();
     const all=bright(daily(SPOTS.filter(s=>photo(s)),'pool'));
@@ -557,6 +562,7 @@
       const ordered=inSeason.map(s=>({s,k:score(s)})).sort((a,b)=>a.k-b.k).map(o=>o.s);
       html+=rail('mois',`Où partir en ${monthName(m)} ?`,'Repère indicatif d’après nos carnets et les moyennes climatiques, à confirmer sur place.',pick(ordered,{n:10,perCountry:1,used}),{big:true,season:true,more:true,data:'sea'});
     }
+    html+=culturesSection();
     if(lite){
       html+=planCard(m);
       html+=surfCard();

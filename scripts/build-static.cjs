@@ -4,7 +4,7 @@ const root=path.resolve(__dirname,'..'),dest=path.join(root,'.build/static');
 fs.rmSync(dest,{recursive:true,force:true});fs.mkdirSync(dest,{recursive:true});
 const declaredScripts=new Set([...fs.readFileSync(path.join(root,'index.html'),'utf8').matchAll(/<script src="([^\"]+)"[^>]*><\/script>/g)].map(match=>match[1].split('?')[0]).filter(src=>!src.includes('/')&&src.endsWith('.js')));
 for(const item of fs.readdirSync(root,{withFileTypes:true})){
-  if(item.isFile()&&(/\.(html|css|ico)$/.test(item.name)||declaredScripts.has(item.name)||['.nojekyll','sw.js','manifest.webmanifest','account-sync-model.js','account-sync.js'].includes(item.name)))fs.copyFileSync(path.join(root,item.name),path.join(dest,item.name));
+  if(item.isFile()&&(/\.(html|css|ico)$/.test(item.name)||declaredScripts.has(item.name)||['.nojekyll','sw.js','manifest.webmanifest','account-sync-model.js','account-sync.js','cultures-model.js','cultures.js'].includes(item.name)))fs.copyFileSync(path.join(root,item.name),path.join(dest,item.name));
 }
 fs.cpSync(path.join(root,'assets'),path.join(dest,'assets'),{recursive:true});
 fs.mkdirSync(path.join(dest,'locales'),{recursive:true});

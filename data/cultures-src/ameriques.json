@@ -1,0 +1,1833 @@
+{
+  "États-Unis": {
+    "sea": {
+      "title": {
+        "fr": "Santa Cruz, 1885 : trois princes surfent",
+        "en": "Santa Cruz, 1885: three princes surf",
+        "es": "Santa Cruz, 1885: tres príncipes surfean"
+      },
+      "text": {
+        "fr": "En 1885, trois jeunes princes hawaïens surfent à l'embouchure de la San Lorenzo, à Santa Cruz, sur des planches en séquoia.",
+        "en": "In 1885, three young Hawaiian princes surfed the mouth of the San Lorenzo River in Santa Cruz on redwood boards.",
+        "es": "En 1885, tres jóvenes príncipes hawaianos surfearon en la desembocadura del San Lorenzo, en Santa Cruz, sobre tablas de secuoya."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Surfing",
+        "url": "https://en.wikipedia.org/wiki/Surfing"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Mardi Gras à La Nouvelle-Orléans",
+        "en": "Mardi Gras in New Orleans",
+        "es": "Mardi Gras en Nueva Orleans"
+      },
+      "when": {
+        "fr": "février ou mars (date variable)",
+        "en": "February or March (variable)",
+        "es": "febrero o marzo (variable)"
+      },
+      "text": {
+        "fr": "La saison du Carnaval débute le 6 janvier et culmine avec le Mardi gras ; les défilés de krewes existent depuis 1856.",
+        "en": "Carnival season opens on January 6 and peaks on Mardi Gras; krewe parades have run since 1856.",
+        "es": "La temporada de Carnaval abre el 6 de enero y culmina en Mardi Gras; los desfiles de krewes existen desde 1856."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Mardi Gras in New Orleans",
+        "url": "https://en.wikipedia.org/wiki/Mardi_Gras_in_New_Orleans"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Mexique": {
+    "sea": {
+      "title": {
+        "fr": "Le partage du poisson des Comcaac",
+        "en": "Sharing the catch: the Comcaac",
+        "es": "Compartir la pesca: los comcaac"
+      },
+      "text": {
+        "fr": "Sur le golfe de Californie, la coutume comcaac canoaa an hant cooit permet de demander du poisson à toute barque qui rentre.",
+        "en": "On the Gulf of California, the Comcaac custom canoaa an hant cooit lets anyone ask for fish from any returning boat.",
+        "es": "En el golfo de California, la costumbre comcaac canoaa an hant cooit permite pedir pescado a cualquier barca que regresa."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Seri people",
+        "url": "https://en.wikipedia.org/wiki/Seri_people"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "La Guelaguetza d'Oaxaca",
+        "en": "The Guelaguetza of Oaxaca",
+        "es": "La Guelaguetza de Oaxaca"
+      },
+      "when": {
+        "fr": "juillet",
+        "en": "July",
+        "es": "julio"
+      },
+      "text": {
+        "fr": "Les deux lundis après le 16 juillet, danses costumées, cuisine et artisanat sur la colline du Cerro del Fortín.",
+        "en": "On the two Mondays after July 16: costumed dances, food and crafts on Cerro del Fortín hill.",
+        "es": "Los dos lunes después del 16 de julio: danzas con trajes, comida y artesanía en el Cerro del Fortín."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Guelaguetza",
+        "url": "https://en.wikipedia.org/wiki/Guelaguetza"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Costa Rica": {
+    "sea": {
+      "title": {
+        "fr": "Tortuguero, plage des tortues vertes",
+        "en": "Tortuguero, green turtle beach",
+        "es": "Tortuguero, playa de tortugas verdes"
+      },
+      "text": {
+        "fr": "À Tortuguero, tortues vertes, luths, caouannes et imbriquées viennent pondre, surtout de février à juillet, sous accès réglementé.",
+        "en": "At Tortuguero, green, leatherback, loggerhead and hawksbill turtles nest, mostly February to July, with regulated access.",
+        "es": "En Tortuguero anidan tortugas verdes, laúd, boba y carey, sobre todo de febrero a julio, con acceso regulado."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Tortuguero National Park",
+        "url": "https://en.wikipedia.org/wiki/Tortuguero_National_Park"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Salvador": {
+    "sea": {
+      "title": {
+        "fr": "Le wharf de La Libertad",
+        "en": "La Libertad's pier",
+        "es": "El muelle de La Libertad"
+      },
+      "text": {
+        "fr": "Le wharf de La Libertad, premier port du pays (1869), sert de marché aux poissons ; Punta Roca y fait la capitale du surf.",
+        "en": "La Libertad's pier, the country's first port (1869), doubles as a fish market; Punta Roca makes it the surf capital.",
+        "es": "El muelle de La Libertad, primer puerto del país (1869), es también mercado de pescado; Punta Roca lo hace capital del surf."
+      },
+      "source": {
+        "label": "Wikipédia (EN), La Libertad, El Salvador",
+        "url": "https://en.wikipedia.org/wiki/La_Libertad,_El_Salvador"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Le Festival des hamacs",
+        "en": "Festival of the Hammocks",
+        "es": "Festival de las Hamacas"
+      },
+      "when": {
+        "fr": "novembre",
+        "en": "November",
+        "es": "noviembre"
+      },
+      "text": {
+        "fr": "À Concepción Quezaltepeque, le festival célèbre les hamacs entre le premier et le second week-end de novembre, depuis 1989.",
+        "en": "In Concepción Quezaltepeque, the hammock festival runs between the first and second weekends of November, since 1989.",
+        "es": "En Concepción Quezaltepeque, el festival de las hamacas se celebra entre el primer y el segundo fin de semana de noviembre desde 1989."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Culture of El Salvador",
+        "url": "https://en.wikipedia.org/wiki/Culture_of_El_Salvador"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Belize": {
+    "sea": {
+      "title": {
+        "fr": "La Grande Barrière de corail",
+        "en": "The Belize Barrier Reef",
+        "es": "La Barrera de Coral de Belice"
+      },
+      "text": {
+        "fr": "Classée à l'UNESCO en 1996, la barrière longe le pays sur environ 300 km ; Cousteau a rendu célèbre le Grand Trou bleu en 1970.",
+        "en": "UNESCO-listed in 1996, the reef runs about 300 km along the coast; Cousteau made the Great Blue Hole famous in 1970.",
+        "es": "Patrimonio UNESCO en 1996, el arrecife recorre unos 300 km de costa; Cousteau hizo famoso el Gran Agujero Azul en 1970."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Belize Barrier Reef",
+        "url": "https://en.wikipedia.org/wiki/Belize_Barrier_Reef"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Garifuna Settlement Day",
+        "en": "Garifuna Settlement Day",
+        "es": "Día del Asentamiento Garífuna"
+      },
+      "when": {
+        "fr": "19 novembre",
+        "en": "November 19",
+        "es": "19 de noviembre"
+      },
+      "text": {
+        "fr": "Fête nationale à Dangriga : défilés, musique et danses rappellent l'installation du peuple garifuna au Belize.",
+        "en": "A public holiday centred on Dangriga: parades, music and dance mark the Garifuna people's settlement in Belize.",
+        "es": "Fiesta nacional centrada en Dangriga: desfiles, música y danza recuerdan el asentamiento del pueblo garífuna en Belice."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Garifuna Settlement Day",
+        "url": "https://en.wikipedia.org/wiki/Garifuna_Settlement_Day"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Bonaire": {
+    "sea": {
+      "title": {
+        "fr": "Un parc marin pionnier",
+        "en": "A pioneering marine park",
+        "es": "Un parque marino pionero"
+      },
+      "text": {
+        "fr": "Créé en 1979, le Parc marin de Bonaire compte 86 sites de plongée publics, dont beaucoup accessibles depuis la plage.",
+        "en": "Founded in 1979, Bonaire National Marine Park has 86 public dive sites, many reachable from the shore.",
+        "es": "Creado en 1979, el Parque Marino de Bonaire tiene 86 sitios de buceo públicos, muchos accesibles desde la orilla."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Bonaire National Marine Park",
+        "url": "https://en.wikipedia.org/wiki/Bonaire_National_Marine_Park"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Dia di Rincon",
+        "en": "Dia di Rincon",
+        "es": "Dia di Rincon"
+      },
+      "when": {
+        "fr": "30 avril",
+        "en": "April 30",
+        "es": "30 de abril"
+      },
+      "text": {
+        "fr": "Fête de Rincon : drapeau, spectacles et défilé, pour fêter la fin de la récolte (Simadan) depuis 1989.",
+        "en": "Rincon's day: flag raising, performances and a parade celebrating the end of harvest (Simadan), since 1989.",
+        "es": "Día de Rincon: izado de bandera, espectáculos y desfile por el fin de la cosecha (Simadan), desde 1989."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Rincon, Bonaire",
+        "url": "https://en.wikipedia.org/wiki/Rincon,_Bonaire"
+      }
+    },
+    "thanks": {
+      "word": "Danki",
+      "lang": {
+        "fr": "papiamento",
+        "en": "Papiamento",
+        "es": "papiamento"
+      },
+      "source": {
+        "label": "Wikipédia (EN), Papiamento",
+        "url": "https://en.wikipedia.org/wiki/Papiamento"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "République dominicaine": {
+    "sea": {
+      "title": {
+        "fr": "Les baleines de la baie de Samaná",
+        "en": "Whales of Samaná Bay",
+        "es": "Las ballenas de la bahía de Samaná"
+      },
+      "text": {
+        "fr": "La baie de Samaná est une zone de reproduction importante des baleines à bosse dans les Caraïbes, très prisée des observateurs.",
+        "en": "Samaná Bay is an important humpback whale breeding area in the Caribbean, popular with whale-watchers.",
+        "es": "La bahía de Samaná es una zona importante de cría de ballenas jorobadas en el Caribe, muy visitada por observadores."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Samaná Bay",
+        "url": "https://en.wikipedia.org/wiki/Samaná_Bay"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Le Carnaval de février",
+        "en": "February Carnival",
+        "es": "El Carnaval de febrero"
+      },
+      "when": {
+        "fr": "février",
+        "en": "February",
+        "es": "febrero"
+      },
+      "text": {
+        "fr": "En février, le Carnaval anime les rues du pays : défilés, danses, musique et fêtes gourmandes.",
+        "en": "In February, Carnival fills streets nationwide with parades, dancing, music and food festivals.",
+        "es": "En febrero, el Carnaval llena las calles del país de desfiles, bailes, música y fiestas gastronómicas."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Culture of the Dominican Republic",
+        "url": "https://en.wikipedia.org/wiki/Culture_of_the_Dominican_Republic"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Porto Rico": {
+    "sea": {
+      "title": {
+        "fr": "Mosquito Bay, la baie qui brille",
+        "en": "Mosquito Bay, the glowing bay",
+        "es": "Mosquito Bay, la bahía luminosa"
+      },
+      "text": {
+        "fr": "À Vieques, des dinoflagellés font briller l'eau en bleu au moindre mouvement ; Guinness l'a classée baie la plus lumineuse en 2006.",
+        "en": "On Vieques, dinoflagellates make the water glow blue when disturbed; Guinness named it the brightest bay in 2006.",
+        "es": "En Vieques, los dinoflagelados hacen brillar el agua en azul al moverla; Guinness la nombró la bahía más brillante en 2006."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Vieques",
+        "url": "https://en.wikipedia.org/wiki/Vieques,_Puerto_Rico"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Fiestas de la Calle San Sebastián",
+        "en": "Calle San Sebastián Festival",
+        "es": "Fiestas de la Calle San Sebastián"
+      },
+      "when": {
+        "fr": "janvier",
+        "en": "January",
+        "es": "enero"
+      },
+      "text": {
+        "fr": "Troisième week-end de janvier à Old San Juan : artisanat, concerts et parade des cabezudos ; plus de 200 000 visiteurs.",
+        "en": "Third weekend of January in Old San Juan: crafts, concerts and the cabezudos parade; over 200,000 visitors.",
+        "es": "Tercer fin de semana de enero en el Viejo San Juan: artesanía, conciertos y comparsa de cabezudos; más de 200 000 visitantes."
+      },
+      "source": {
+        "label": "Wikipédia (EN), San Sebastián Street Festival",
+        "url": "https://en.wikipedia.org/wiki/San_Sebastián_Street_Festival"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Canada": {
+    "sea": {
+      "title": {
+        "fr": "Les canoës des Haïdas",
+        "en": "Haida canoes",
+        "es": "Las canoas haida"
+      },
+      "text": {
+        "fr": "Marins réputés, les Haïdas sculptaient des canoës de cèdre pour naviguer de Haida Gwaii jusqu'à l'actuel État de Washington.",
+        "en": "Renowned seafarers, the Haida carved canoes and travelled from Haida Gwaii as far as present-day Washington State.",
+        "es": "Reconocidos navegantes, los haida tallaban canoas y viajaban desde Haida Gwaii hasta el actual estado de Washington."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Haida people",
+        "url": "https://en.wikipedia.org/wiki/Haida_people"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Le Carnaval de Québec",
+        "en": "Quebec Winter Carnival",
+        "es": "El Carnaval de Quebec"
+      },
+      "when": {
+        "fr": "février",
+        "en": "February",
+        "es": "febrero"
+      },
+      "text": {
+        "fr": "Fête d'hiver avec Bonhomme Carnaval et son palais de glace ; célébrée chaque année depuis 1955.",
+        "en": "Winter festival with Bonhomme Carnaval and the Ice Palace; held every year since 1955.",
+        "es": "Fiesta de invierno con Bonhomme Carnaval y su palacio de hielo; se celebra cada año desde 1955."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Quebec Winter Carnival",
+        "url": "https://en.wikipedia.org/wiki/Quebec_Winter_Carnival"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Barbade": {
+    "sea": {
+      "title": {
+        "fr": "Le poisson volant, plat national",
+        "en": "Flying fish, the national dish",
+        "es": "El pez volador, plato nacional"
+      },
+      "text": {
+        "fr": "Le cou-cou au poisson volant est le plat national ; le vendredi soir, la fish fry d'Oistins réunit habitants et visiteurs.",
+        "en": "Cou-cou and flying fish is the national dish; on Friday nights the Oistins fish fry draws locals and visitors.",
+        "es": "El cou-cou con pez volador es el plato nacional; los viernes por la noche, la fish fry de Oistins reúne a locales y visitantes."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Culture of Barbados",
+        "url": "https://en.wikipedia.org/wiki/Culture_of_Barbados"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Crop Over",
+        "en": "Crop Over",
+        "es": "Crop Over"
+      },
+      "when": {
+        "fr": "fin mai à août",
+        "en": "late May to August",
+        "es": "finales de mayo a agosto"
+      },
+      "text": {
+        "fr": "Fête de la fin de la récolte de canne, avec point d'orgue le Kadooment Day, début août.",
+        "en": "Celebrates the end of the sugarcane harvest, climaxing with Kadooment Day in early August.",
+        "es": "Celebra el fin de la cosecha de caña, con Kadooment Day a principios de agosto como punto culminante."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Culture of Barbados",
+        "url": "https://en.wikipedia.org/wiki/Culture_of_Barbados"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Aruba": {
+    "fete": {
+      "title": {
+        "fr": "Le Carnaval d'Aruba",
+        "en": "Aruba Carnival",
+        "es": "El Carnaval de Aruba"
+      },
+      "when": {
+        "fr": "janvier à février (date variable)",
+        "en": "January to February (variable)",
+        "es": "enero a febrero (variable)"
+      },
+      "text": {
+        "fr": "De début janvier au mardi gras, avec un grand défilé le dernier dimanche ; né dans les années 1950.",
+        "en": "From early January to Fat Tuesday, with a grand parade on the last Sunday; it began in the 1950s.",
+        "es": "Desde principios de enero hasta el martes de carnaval, con gran desfile el último domingo; nació en los años 1950."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Aruba",
+        "url": "https://en.wikipedia.org/wiki/Aruba"
+      }
+    },
+    "thanks": {
+      "word": "Danki",
+      "lang": {
+        "fr": "papiamento",
+        "en": "Papiamento",
+        "es": "papiamento"
+      },
+      "source": {
+        "label": "Wikipédia (EN), Papiamento",
+        "url": "https://en.wikipedia.org/wiki/Papiamento"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Curaçao": {
+    "sea": {
+      "title": {
+        "fr": "Le parc marin sous-marin",
+        "en": "The Underwater Marine Park",
+        "es": "El Parque Marino submarino"
+      },
+      "text": {
+        "fr": "Sur la côte sud, le Parc marin sous-marin s'étend sur 20 km, avec jusqu'à 30 m de visibilité pour les plongeurs.",
+        "en": "On the south coast, the Underwater Marine Park stretches 20 km, with up to 30 m visibility for divers.",
+        "es": "En la costa sur, el Parque Marino submarino se extiende 20 km, con hasta 30 m de visibilidad para los buzos."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Curaçao",
+        "url": "https://en.wikipedia.org/wiki/Curaçao"
+      }
+    },
+    "thanks": {
+      "word": "Danki",
+      "lang": {
+        "fr": "papiamento",
+        "en": "Papiamento",
+        "es": "papiamento"
+      },
+      "source": {
+        "label": "Wikipédia (EN), Papiamento",
+        "url": "https://en.wikipedia.org/wiki/Papiamento"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Îles Caïmans": {
+    "sea": {
+      "title": {
+        "fr": "Stingray City",
+        "en": "Stingray City",
+        "es": "Stingray City"
+      },
+      "text": {
+        "fr": "Depuis les années 1980, des plongeurs y nourrissent les raies au calmar ; elles y reviennent toute l'année.",
+        "en": "Since the 1980s divers have fed squid to stingrays here; the rays now gather all year round.",
+        "es": "Desde los años 1980 los buzos alimentan aquí a las rayas con calamar; ahora se reúnen todo el año."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Cayman Islands",
+        "url": "https://en.wikipedia.org/wiki/Cayman_Islands"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Pirates Week",
+        "en": "Pirates Week",
+        "es": "Pirates Week"
+      },
+      "when": {
+        "fr": "novembre",
+        "en": "November",
+        "es": "noviembre"
+      },
+      "text": {
+        "fr": "Festival de 11 jours lancé en 1977 pour animer la basse saison : costumes, défilés et animations sur toute l'île.",
+        "en": "An 11-day festival launched in 1977 to energise the low season, with costumes and events across the islands.",
+        "es": "Festival de 11 días lanzado en 1977 para animar la temporada baja, con disfraces y actos por las islas."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Cayman Islands",
+        "url": "https://en.wikipedia.org/wiki/Cayman_Islands"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Honduras": {
+    "sea": {
+      "title": {
+        "fr": "Roatán, au bord du grand récif",
+        "en": "Roatán, beside the great reef",
+        "es": "Roatán, junto al gran arrecife"
+      },
+      "text": {
+        "fr": "Roatán borde le récif mésoaméricain, deuxième barrière du monde ; le Roatán Marine Park veille sur ses récifs depuis 2005.",
+        "en": "Roatán sits on the Mesoamerican Barrier Reef, the world's second largest; Roatán Marine Park has guarded it since 2005.",
+        "es": "Roatán está en el Arrecife Mesoamericano, segunda barrera del mundo; el Roatán Marine Park lo protege desde 2005."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Roatán",
+        "url": "https://en.wikipedia.org/wiki/Roatán"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Le Gran Carnaval de La Ceiba",
+        "en": "La Ceiba Grand Carnival",
+        "es": "El Gran Carnaval de La Ceiba"
+      },
+      "when": {
+        "fr": "mai",
+        "en": "May",
+        "es": "mayo"
+      },
+      "text": {
+        "fr": "Le troisième ou quatrième samedi de mai, grand défilé de chars sur l'avenida San Isidro et fête dans les rues.",
+        "en": "On the third or fourth Saturday of May, a big float parade on Avenida San Isidro and street parties.",
+        "es": "El tercer o cuarto sábado de mayo, gran desfile de carrozas en la avenida San Isidro y fiesta en las calles."
+      },
+      "source": {
+        "label": "Wikipédia (EN), La Ceiba",
+        "url": "https://en.wikipedia.org/wiki/La_Ceiba"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Panama": {
+    "sea": {
+      "title": {
+        "fr": "Les Gunas et leurs îles",
+        "en": "The Guna and their islands",
+        "es": "Los guna y sus islas"
+      },
+      "text": {
+        "fr": "Les Gunas vivent surtout sur de petites îles de Guna Yala, pêchent depuis des pirogues creusées à la main et tissent des molas.",
+        "en": "The Guna live mostly on small islands of Guna Yala, fish from hand-built dugout canoes and make molas.",
+        "es": "Los guna viven sobre todo en pequeñas islas de Guna Yala, pescan desde canoas hechas a mano y elaboran molas."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Guna people",
+        "url": "https://en.wikipedia.org/wiki/Guna_people"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Nicaragua": {
+    "sea": {
+      "title": {
+        "fr": "Corn Islands, île de la langouste",
+        "en": "Corn Islands, lobster islands",
+        "es": "Corn Islands, islas de la langosta"
+      },
+      "text": {
+        "fr": "Aux Corn Islands, la pêche à la langouste et aux crevettes est devenue l'activité phare des années 1960-70 ; la soupe de crabe est typique.",
+        "en": "On the Corn Islands, lobster and shrimp fishing became the main industry in the 1960s and 70s; crab soup is typical.",
+        "es": "En las Corn Islands, la pesca de langosta y camarón se volvió la industria principal en los años 60 y 70; la sopa de cangrejo es típica."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Corn Islands",
+        "url": "https://en.wikipedia.org/wiki/Corn_Islands"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Palo de Mayo",
+        "en": "Palo de Mayo",
+        "es": "Palo de Mayo"
+      },
+      "when": {
+        "fr": "mai",
+        "en": "May",
+        "es": "mayo"
+      },
+      "text": {
+        "fr": "Danse et fête afro-caribéenne de tout le mois de mai, née à Bluefields sur la côte caraïbe.",
+        "en": "An Afro-Caribbean dance and month-long May festival born in Bluefields on the Caribbean coast.",
+        "es": "Danza y fiesta afrocaribeña de todo el mes de mayo, nacida en Bluefields, en la costa caribe."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Palo de Mayo",
+        "url": "https://en.wikipedia.org/wiki/Palo_de_Mayo"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Guadeloupe": {
+    "sea": {
+      "title": {
+        "fr": "La saintoise, barque des Saintes",
+        "en": "The saintoise, boat of Les Saintes",
+        "es": "La saintoise, barca de Les Saintes"
+      },
+      "text": {
+        "fr": "Conçue aux Saintes par des charpentiers bretons, cette barque à voile est devenue un sport depuis le Tour de Guadeloupe de 2001.",
+        "en": "Designed in Les Saintes by Breton shipwrights, this sailing boat became a sport after the first Tour de Guadeloupe in 2001.",
+        "es": "Diseñada en Les Saintes por carpinteros bretones, esta barca de vela es hoy un deporte desde el primer Tour de Guadalupe en 2001."
+      },
+      "source": {
+        "label": "Wikipédia (FR), Saintoise",
+        "url": "https://fr.wikipedia.org/wiki/Saintoise"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Le Carnaval de Guadeloupe",
+        "en": "Guadeloupe Carnival",
+        "es": "El Carnaval de Guadalupe"
+      },
+      "when": {
+        "fr": "janvier à février/mars (date variable)",
+        "en": "January to February/March (variable)",
+        "es": "enero a febrero/marzo (variable)"
+      },
+      "text": {
+        "fr": "Du premier dimanche de janvier au mercredi des Cendres, défilés chaque dimanche ; Vaval, roi du carnaval, est brûlé à la fin.",
+        "en": "From the first Sunday of January to Ash Wednesday, with weekly parades; King Vaval is burned at the end.",
+        "es": "Del primer domingo de enero al miércoles de ceniza, con desfiles cada domingo; el rey Vaval se quema al final."
+      },
+      "source": {
+        "label": "Wikipédia (FR), Carnaval de Guadeloupe",
+        "url": "https://fr.wikipedia.org/wiki/Carnaval_de_Guadeloupe"
+      }
+    },
+    "thanks": {
+      "word": "Merci",
+      "lang": {
+        "fr": "français",
+        "en": "French",
+        "es": "francés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), merci",
+        "url": "https://en.wiktionary.org/wiki/merci"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Martinique": {
+    "sea": {
+      "title": {
+        "fr": "La yole ronde",
+        "en": "The yole ronde",
+        "es": "La yole ronde"
+      },
+      "text": {
+        "fr": "Voilier né au XVIIe siècle, la yole ronde se construit sans plan ; l'UNESCO a inscrit son savoir-faire en décembre 2020.",
+        "en": "A sailing boat born in the 17th century and built without plans; UNESCO listed the know-how in December 2020.",
+        "es": "Velero nacido en el siglo XVII y construido sin planos; la UNESCO inscribió su saber hacer en diciembre de 2020."
+      },
+      "source": {
+        "label": "Wikipédia (FR), Yole ronde",
+        "url": "https://fr.wikipedia.org/wiki/Yole_ronde"
+      }
+    },
+    "thanks": {
+      "word": "Merci",
+      "lang": {
+        "fr": "français",
+        "en": "French",
+        "es": "francés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), merci",
+        "url": "https://en.wiktionary.org/wiki/merci"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Bahamas": {
+    "fete": {
+      "title": {
+        "fr": "Junkanoo",
+        "en": "Junkanoo",
+        "es": "Junkanoo"
+      },
+      "when": {
+        "fr": "26 décembre et 1er janvier",
+        "en": "December 26 and January 1",
+        "es": "26 de diciembre y 1 de enero"
+      },
+      "text": {
+        "fr": "Parade de masques, tambours et danses ; inscrit au patrimoine immatériel de l'UNESCO en 2023.",
+        "en": "A parade of masks, drums and dance; inscribed on UNESCO's intangible heritage list in 2023.",
+        "es": "Desfile de máscaras, tambores y danza; inscrito en el patrimonio inmaterial de la UNESCO en 2023."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Junkanoo",
+        "url": "https://en.wikipedia.org/wiki/Junkanoo"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Saint-Martin": {
+    "sea": {
+      "title": {
+        "fr": "Une réserve de 3 054 hectares",
+        "en": "A 3,054-hectare reserve",
+        "es": "Una reserva de 3054 hectáreas"
+      },
+      "text": {
+        "fr": "Créée en 1998, la réserve protège récifs, herbiers et mangroves ; le plateau voisin accueille la reproduction des baleines à bosse.",
+        "en": "Created in 1998, the reserve protects reefs, seagrass and mangroves; the nearby shelf is a humpback whale breeding area.",
+        "es": "Creada en 1998, la reserva protege arrecifes, praderas y manglares; la plataforma vecina es zona de cría de ballenas jorobadas."
+      },
+      "source": {
+        "label": "Wikipédia (FR), Saint-Martin",
+        "url": "https://fr.wikipedia.org/wiki/Saint-Martin_(Antilles_françaises)"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "La fête de Grand-Case",
+        "en": "Grand-Case festival",
+        "es": "La fiesta de Grand-Case"
+      },
+      "when": {
+        "fr": "21 juillet",
+        "en": "July 21",
+        "es": "21 de julio"
+      },
+      "text": {
+        "fr": "Chaque 21 juillet, la fête de Grand-Case propose notamment une course de voiles traditionnelles.",
+        "en": "Each July 21, the Grand-Case festival includes a traditional sailing race.",
+        "es": "Cada 21 de julio, la fiesta de Grand-Case incluye una regata de velas tradicionales."
+      },
+      "source": {
+        "label": "Wikipédia (FR), Saint-Martin",
+        "url": "https://fr.wikipedia.org/wiki/Saint-Martin_(Antilles_françaises)"
+      }
+    },
+    "thanks": {
+      "word": "Merci",
+      "lang": {
+        "fr": "français",
+        "en": "French",
+        "es": "francés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), merci",
+        "url": "https://en.wiktionary.org/wiki/merci"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Cuba": {
+    "sea": {
+      "title": {
+        "fr": "Le Malecón de La Havane",
+        "en": "Havana's Malecón",
+        "es": "El Malecón de La Habana"
+      },
+      "text": {
+        "fr": "Digue de 8 km commencée en 1901 pour protéger la ville de la mer ; la nuit, des familles y pêchent encore.",
+        "en": "An 8 km seawall begun in 1901 to protect the city from the sea; at night, families still fish from it.",
+        "es": "Muro de 8 km iniciado en 1901 para proteger la ciudad del mar; de noche, familias aún pescan en él."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Malecón, Havana",
+        "url": "https://en.wikipedia.org/wiki/Malecón,_Havana"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Le Carnaval de Santiago de Cuba",
+        "en": "Santiago de Cuba Carnival",
+        "es": "El Carnaval de Santiago de Cuba"
+      },
+      "when": {
+        "fr": "juillet",
+        "en": "July",
+        "es": "julio"
+      },
+      "text": {
+        "fr": "Environ du 18 au 27 juillet, comparsas et congas ; ses racines remontent aux fêtes d'été du XVIIIe siècle.",
+        "en": "Around July 18-27, with comparsas and congas; its roots go back to 18th-century summer festivities.",
+        "es": "Hacia el 18-27 de julio, con comparsas y congas; sus raíces se remontan a las fiestas de verano del siglo XVIII."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Carnival of Santiago de Cuba",
+        "url": "https://en.wikipedia.org/wiki/Carnival_of_Santiago_de_Cuba"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Jamaïque": {
+    "sea": {
+      "title": {
+        "fr": "Port Royal, la ville engloutie",
+        "en": "Port Royal, the sunken city",
+        "es": "Port Royal, la ciudad hundida"
+      },
+      "text": {
+        "fr": "Le 7 juin 1692, un séisme et un tsunami engloutissent en partie Port Royal, repaire de corsaires ; l'UNESCO l'a classée en 2025.",
+        "en": "On 7 June 1692 an earthquake and tsunami sank much of Port Royal, a privateer base; UNESCO listed it in 2025.",
+        "es": "El 7 de junio de 1692, un terremoto y un tsunami hundieron gran parte de Port Royal, base de corsarios; la UNESCO la inscribió en 2025."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Port Royal",
+        "url": "https://en.wikipedia.org/wiki/Port_Royal"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Reggae Sumfest",
+        "en": "Reggae Sumfest",
+        "es": "Reggae Sumfest"
+      },
+      "when": {
+        "fr": "mi-juillet",
+        "en": "mid-July",
+        "es": "mediados de julio"
+      },
+      "text": {
+        "fr": "Grand festival de reggae à Montego Bay, organisé chaque année depuis 1993.",
+        "en": "A major reggae festival in Montego Bay, held every year since 1993.",
+        "es": "Gran festival de reggae en Montego Bay, celebrado cada año desde 1993."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Reggae Sumfest",
+        "url": "https://en.wikipedia.org/wiki/Reggae_Sumfest"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Îles Vierges britanniques": {
+    "sea": {
+      "title": {
+        "fr": "L'épave du RMS Rhone",
+        "en": "The wreck of the RMS Rhone",
+        "es": "El naufragio del RMS Rhone"
+      },
+      "text": {
+        "fr": "Coulé par l'ouragan du 29 octobre 1867 près de Salt Island, le Rhone repose entre 9 et 26 m de fond : une plongée classique.",
+        "en": "Sunk by the hurricane of 29 October 1867 off Salt Island, the Rhone lies in 9-26 m of water, a classic dive.",
+        "es": "Hundido por el huracán del 29 de octubre de 1867 junto a Salt Island, el Rhone yace entre 9 y 26 m: una inmersión clásica."
+      },
+      "source": {
+        "label": "Wikipédia (EN), RMS Rhone",
+        "url": "https://en.wikipedia.org/wiki/RMS_Rhone"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "BVI Spring Regatta & Sailing Festival",
+        "en": "BVI Spring Regatta & Sailing Festival",
+        "es": "BVI Spring Regatta & Sailing Festival"
+      },
+      "when": {
+        "fr": "date variable",
+        "en": "variable date",
+        "es": "fecha variable"
+      },
+      "text": {
+        "fr": "Régate et fête de la voile organisées depuis 1972 dans l'une des grandes destinations de croisière du monde.",
+        "en": "A regatta and sailing festival held since 1972 in one of the world's major sailing destinations.",
+        "es": "Regata y festival de vela celebrados desde 1972 en uno de los grandes destinos de navegación del mundo."
+      },
+      "source": {
+        "label": "Wikipédia (EN), British Virgin Islands",
+        "url": "https://en.wikipedia.org/wiki/British_Virgin_Islands"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Îles Vierges des États-Unis": {
+    "sea": {
+      "title": {
+        "fr": "Le sentier sous-marin de Trunk Bay",
+        "en": "Trunk Bay's underwater trail",
+        "es": "El sendero submarino de Trunk Bay"
+      },
+      "text": {
+        "fr": "Dans le parc national créé en 1956, un sentier de snorkeling longe le récif de Trunk Bay.",
+        "en": "In the national park founded in 1956, a snorkeling trail follows Trunk Bay's coral reef.",
+        "es": "En el parque nacional creado en 1956, un sendero de snorkel recorre el arrecife de Trunk Bay."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Virgin Islands National Park",
+        "url": "https://en.wikipedia.org/wiki/Virgin_Islands_National_Park"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Saint-Vincent-et-les-Grenadines": {
+    "sea": {
+      "title": {
+        "fr": "Bequia, île de charpentiers de marine",
+        "en": "Bequia, island of boatbuilders",
+        "es": "Bequia, isla de constructores de barcos"
+      },
+      "text": {
+        "fr": "Grâce au cèdre et à un port abrité, Bequia a construit et réparé des bateaux en bois ; la goélette Friendship Rose y est née.",
+        "en": "With cedar and a sheltered harbour, Bequia built and repaired wooden boats; the schooner Friendship Rose was built here.",
+        "es": "Con cedro y un puerto abrigado, Bequia construyó y reparó barcos de madera; aquí se construyó la goleta Friendship Rose."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Bequia",
+        "url": "https://en.wikipedia.org/wiki/Bequia"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Easter Regatta de Bequia",
+        "en": "Bequia Easter Regatta",
+        "es": "Regata de Pascua de Bequia"
+      },
+      "when": {
+        "fr": "Pâques (date variable)",
+        "en": "Easter (variable)",
+        "es": "Pascua (variable)"
+      },
+      "text": {
+        "fr": "Régate et festival de musique parmi les temps forts de l'année sur l'île.",
+        "en": "A regatta and music festival, one of the island's busiest times of the year.",
+        "es": "Regata y festival de música, uno de los momentos más animados del año en la isla."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Bequia",
+        "url": "https://en.wikipedia.org/wiki/Bequia"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Grenade": {
+    "sea": {
+      "title": {
+        "fr": "Le parc de sculptures sous-marin",
+        "en": "The Underwater Sculpture Park",
+        "es": "El parque de esculturas submarino"
+      },
+      "text": {
+        "fr": "Ouvert en 2006 dans la baie de Molinere, il compte plus de 65 sculptures de Jason deCaires Taylor, moulées sur des habitants.",
+        "en": "Opened in 2006 in Molinere Bay, it holds over 65 sculptures by Jason deCaires Taylor, cast from local people.",
+        "es": "Abierto en 2006 en la bahía de Molinere, reúne más de 65 esculturas de Jason deCaires Taylor, moldeadas de vecinos."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Molinere Underwater Sculpture Park",
+        "url": "https://en.wikipedia.org/wiki/Molinere_Underwater_Sculpture_Park"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Spicemas",
+        "en": "Spicemas",
+        "es": "Spicemas"
+      },
+      "when": {
+        "fr": "août",
+        "en": "August",
+        "es": "agosto"
+      },
+      "text": {
+        "fr": "Le carnaval de Grenade, en août, au rythme du soca, du calypso, du kaiso et du reggae.",
+        "en": "Grenada's Carnival, in August, to the beat of soca, calypso, kaiso and reggae.",
+        "es": "El carnaval de Granada, en agosto, al ritmo de soca, calipso, kaiso y reggae."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Grenada",
+        "url": "https://en.wikipedia.org/wiki/Grenada"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Dominique": {
+    "sea": {
+      "title": {
+        "fr": "Des cachalots à l'année",
+        "en": "Sperm whales all year",
+        "es": "Cachalotes todo el año"
+      },
+      "text": {
+        "fr": "Un groupe de cachalots vit toute l'année dans les eaux de l'île, ce qui attire les amateurs d'observation des baleines.",
+        "en": "A group of sperm whales lives in the island's waters all year, drawing whale-watching visitors.",
+        "es": "Un grupo de cachalotes vive todo el año en las aguas de la isla y atrae a los aficionados a observar ballenas."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Dominica",
+        "url": "https://en.wikipedia.org/wiki/Dominica"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "World Creole Music Festival",
+        "en": "World Creole Music Festival",
+        "es": "World Creole Music Festival"
+      },
+      "when": {
+        "fr": "octobre",
+        "en": "October",
+        "es": "octubre"
+      },
+      "text": {
+        "fr": "Trois jours de musique créole à Roseau, le dernier week-end d'octobre, depuis 1997.",
+        "en": "Three days of Creole music in Roseau on the last weekend of October, since 1997.",
+        "es": "Tres días de música criolla en Roseau, el último fin de semana de octubre, desde 1997."
+      },
+      "source": {
+        "label": "Wikipédia (EN), World Creole Music Festival",
+        "url": "https://en.wikipedia.org/wiki/World_Creole_Music_Festival"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Sainte-Lucie": {
+    "sea": {
+      "title": {
+        "fr": "Les Pitons, patrimoine mondial",
+        "en": "The Pitons, World Heritage",
+        "es": "Los Pitones, Patrimonio Mundial"
+      },
+      "text": {
+        "fr": "Sur la côte sud-ouest, le Petit Piton (743 m) et le Gros Piton (798 m) sont classés à l'UNESCO depuis 2004.",
+        "en": "On the southwest coast, Petit Piton (743 m) and Gros Piton (798 m) have been UNESCO-listed since 2004.",
+        "es": "En la costa suroeste, el Petit Piton (743 m) y el Gros Piton (798 m) son Patrimonio UNESCO desde 2004."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Pitons Management Area",
+        "url": "https://en.wikipedia.org/wiki/Pitons_Management_Area"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Saint Lucia Jazz & Arts Festival",
+        "en": "Saint Lucia Jazz & Arts Festival",
+        "es": "Saint Lucia Jazz & Arts Festival"
+      },
+      "when": {
+        "fr": "mai",
+        "en": "May",
+        "es": "mayo"
+      },
+      "text": {
+        "fr": "Festival de jazz et d'arts créé en 1992 pour prolonger la saison touristique jusqu'en mai.",
+        "en": "A jazz and arts festival created in 1992 to extend the tourist season into May.",
+        "es": "Festival de jazz y artes creado en 1992 para prolongar la temporada turística hasta mayo."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Saint Lucia Jazz & Arts Festival",
+        "url": "https://en.wikipedia.org/wiki/Saint_Lucia_Jazz_%26_Arts_Festival"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Îles Turques-et-Caïques": {
+    "sea": {
+      "title": {
+        "fr": "Le sel et le lambi",
+        "en": "Salt and conch",
+        "es": "La sal y el cobo"
+      },
+      "text": {
+        "fr": "Le sel a longtemps été exporté depuis les îles ; la cuisine repose sur le lambi, en beignets ou en salade.",
+        "en": "Salt was a major export for years; local cooking is built on conch, in fritters or salad.",
+        "es": "La sal fue durante años una exportación clave; la cocina se basa en el cobo, en buñuelos o ensalada."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Turks and Caicos Islands",
+        "url": "https://en.wikipedia.org/wiki/Turks_and_Caicos_Islands"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), thank you",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Guatemala": {
+    "sea": {
+      "title": {
+        "fr": "Livingston, accessible par bateau",
+        "en": "Livingston, reached by boat",
+        "es": "Livingston, accesible en barco"
+      },
+      "text": {
+        "fr": "Ville garifuna à l'embouchure du Río Dulce, Livingston n'a aucune route : on y arrive en bateau depuis Puerto Barrios.",
+        "en": "A Garifuna town at the mouth of the Río Dulce, Livingston has no road link: you arrive by boat from Puerto Barrios.",
+        "es": "Pueblo garífuna en la desembocadura del Río Dulce, Livingston no tiene carretera: se llega en lancha desde Puerto Barrios."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Livingston, Guatemala",
+        "url": "https://en.wikipedia.org/wiki/Livingston,_Guatemala"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Saint-Barthélemy": {
+    "sea": {
+      "title": {
+        "fr": "Pêche au large et réserve marine",
+        "en": "Offshore fishing and marine reserve",
+        "es": "Pesca de altura y reserva marina"
+      },
+      "text": {
+        "fr": "La pêche au large se pratique depuis Lorient, Flamands et Corossol ; une réserve marine, créée en 1999, protège récifs et tortues.",
+        "en": "Deep-sea fishing is practised from Lorient, Flamands and Corossol; a marine reserve founded in 1999 protects reefs and turtles.",
+        "es": "La pesca de altura se practica desde Lorient, Flamands y Corossol; una reserva marina de 1999 protege arrecifes y tortugas."
+      },
+      "source": {
+        "label": "Wikipédia (FR), Saint-Barthélemy",
+        "url": "https://fr.wikipedia.org/wiki/Saint-Barthélemy_(Antilles_françaises)"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Les Voiles de Saint-Barth",
+        "en": "Les Voiles de St. Barth",
+        "es": "Les Voiles de St. Barth"
+      },
+      "when": {
+        "fr": "avril",
+        "en": "April",
+        "es": "abril"
+      },
+      "text": {
+        "fr": "Régate qui rassemble les voiliers en avril, avec d'autres courses au programme du printemps.",
+        "en": "A regatta gathering sailing yachts in April, among other spring races.",
+        "es": "Regata que reúne veleros en abril, junto a otras carreras de primavera."
+      },
+      "source": {
+        "label": "Wikipédia (FR), Saint-Barthélemy",
+        "url": "https://fr.wikipedia.org/wiki/Saint-Barthélemy_(Antilles_françaises)"
+      }
+    },
+    "thanks": {
+      "word": "Merci",
+      "lang": {
+        "fr": "français",
+        "en": "French",
+        "es": "francés"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), merci",
+        "url": "https://en.wiktionary.org/wiki/merci"
+      }
+    },
+    "reviewed": "2026-11-16",
+    "base": {
+      "lang": {
+        "fr": "français (patois et créole locaux)",
+        "en": "French (local patois and Creole)",
+        "es": "francés (patois y criollo locales)"
+      },
+      "hello": {
+        "word": "Bonjour",
+        "gloss": {
+          "fr": "bonjour",
+          "en": "hello, good day",
+          "es": "hola, buen día"
+        }
+      },
+      "source": {
+        "label": "Wikipédia (FR) + Wiktionnaire (EN)",
+        "url": "https://fr.wikipedia.org/wiki/Saint-Barthélemy_(Antilles_françaises)"
+      }
+    }
+  },
+  "Pérou": {
+    "sea": {
+      "title": {
+        "fr": "Les caballitos de totora",
+        "en": "Caballitos de totora",
+        "es": "Los caballitos de totora"
+      },
+      "text": {
+        "fr": "À Huanchaco, des pêcheurs chevauchent des embarcations en roseau totora, une tradition vieille d'environ 3 000 ans.",
+        "en": "At Huanchaco, fishers ride reed boats made of totora, a tradition about 3,000 years old.",
+        "es": "En Huanchaco, los pescadores montan embarcaciones de totora, una tradición de unos 3000 años."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Caballito de totora",
+        "url": "https://en.wikipedia.org/wiki/Caballito_de_totora"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Inti Raymi",
+        "en": "Inti Raymi",
+        "es": "Inti Raymi"
+      },
+      "when": {
+        "fr": "24 juin",
+        "en": "June 24",
+        "es": "24 de junio"
+      },
+      "text": {
+        "fr": "Fête du solstice d'hiver à Cusco : reconstitution de rites incas avec plus de 800 figurants, à Sacsayhuamán.",
+        "en": "Winter solstice festival in Cusco: a staging of Inca rituals with 800+ performers at Sacsayhuamán.",
+        "es": "Fiesta del solsticio de invierno en Cusco: recreación de ritos incas con más de 800 artistas en Sacsayhuamán."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Inti Raymi",
+        "url": "https://en.wikipedia.org/wiki/Inti_Raymi"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Chili": {
+    "sea": {
+      "title": {
+        "fr": "Les palafitos de Chiloé",
+        "en": "The palafitos of Chiloé",
+        "es": "Los palafitos de Chiloé"
+      },
+      "text": {
+        "fr": "Sur l'archipel de Chiloé, des maisons sur pilotis, typiques de l'architecture chilote, bordent l'eau à Castro et à Chonchi.",
+        "en": "On the Chiloé archipelago, stilt houses typical of Chilote architecture line the water in Castro and Chonchi.",
+        "es": "En el archipiélago de Chiloé, casas sobre pilotes típicas de la arquitectura chilota bordean el agua en Castro y Chonchi."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Palafito",
+        "url": "https://en.wikipedia.org/wiki/Palafito"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Les Fiestas Patrias",
+        "en": "Fiestas Patrias",
+        "es": "Las Fiestas Patrias"
+      },
+      "when": {
+        "fr": "septembre (18-19)",
+        "en": "September (18-19)",
+        "es": "septiembre (18-19)"
+      },
+      "text": {
+        "fr": "Cueca, fondas et ramadas, empanadas, cerfs-volants et jeux traditionnels autour du 18 septembre.",
+        "en": "Cueca dancing, fondas and ramadas, empanadas, kites and traditional games around 18 September.",
+        "es": "Cueca, fondas y ramadas, empanadas, volantines y juegos tradicionales en torno al 18 de septiembre."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Fiestas Patrias (Chile)",
+        "url": "https://en.wikipedia.org/wiki/Fiestas_Patrias_(Chile)"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Brésil": {
+    "sea": {
+      "title": {
+        "fr": "La jangada, radeau à voile",
+        "en": "The jangada, sailing raft",
+        "es": "La jangada, balsa de vela"
+      },
+      "text": {
+        "fr": "Dans le Nordeste, la jangada est un radeau de bois à voile triangulaire, assemblé sans clou, avec un équipage de 3 à 5 pêcheurs.",
+        "en": "In the Northeast, the jangada is a wooden sailing raft with a triangular sail, built without nails, crewed by 3 to 5 fishers.",
+        "es": "En el Nordeste, la jangada es una balsa de madera con vela triangular, sin clavos, con tripulación de 3 a 5 pescadores."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Jangada",
+        "url": "https://en.wikipedia.org/wiki/Jangada"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Le Carnaval",
+        "en": "Carnival",
+        "es": "El Carnaval"
+      },
+      "when": {
+        "fr": "février ou mars (date variable)",
+        "en": "February or March (variable)",
+        "es": "febrero o marzo (variable)"
+      },
+      "text": {
+        "fr": "Avant le Carême, les écoles de samba défilent au Sambodrome de Rio pendant quatre nuits.",
+        "en": "Before Lent, samba schools parade at Rio's Sambadrome over four nights.",
+        "es": "Antes de la Cuaresma, las escuelas de samba desfilan en el Sambódromo de Río durante cuatro noches."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Carnival in Brazil",
+        "url": "https://en.wikipedia.org/wiki/Carnival_in_Brazil"
+      }
+    },
+    "thanks": {
+      "word": "Obrigado / Obrigada",
+      "lang": {
+        "fr": "portugais",
+        "en": "Portuguese",
+        "es": "portugués"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), obrigado",
+        "url": "https://en.wiktionary.org/wiki/obrigado"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Équateur": {
+    "sea": {
+      "title": {
+        "fr": "Les plongeurs de Spondylus",
+        "en": "The Spondylus divers",
+        "es": "Los buceadores de Spondylus"
+      },
+      "text": {
+        "fr": "La culture manteño plongeait pour le Spondylus, coquillage violet et orange utilisé comme monnaie et échangé jusqu'au Mexique.",
+        "en": "The Manteño culture dived for Spondylus, a purple and orange shell used as currency and traded as far as Mexico.",
+        "es": "La cultura manteña buceaba por el Spondylus, concha púrpura y naranja usada como moneda y comerciada hasta México."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Manteño culture",
+        "url": "https://en.wikipedia.org/wiki/Manteño_culture"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Inti Raymi",
+        "en": "Inti Raymi",
+        "es": "Inti Raymi"
+      },
+      "when": {
+        "fr": "juin",
+        "en": "June",
+        "es": "junio"
+      },
+      "text": {
+        "fr": "Fête andine du solstice d'hiver, célébrée le 22 juin en Équateur et associée au sanjuanito.",
+        "en": "Andean winter solstice festival, observed on June 22 in Ecuador and linked to the sanjuanito.",
+        "es": "Fiesta andina del solsticio de invierno, el 22 de junio en Ecuador y ligada al sanjuanito."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Inti Raymi",
+        "url": "https://en.wikipedia.org/wiki/Inti_Raymi"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Argentine": {
+    "sea": {
+      "title": {
+        "fr": "Les baleines de la péninsule Valdés",
+        "en": "Whales of Península Valdés",
+        "es": "Las ballenas de Península Valdés"
+      },
+      "text": {
+        "fr": "Classée à l'UNESCO en 1999, elle abrite une zone de reproduction majeure de baleines franches australes, de mai à décembre.",
+        "en": "UNESCO-listed in 1999, it hosts a major southern right whale breeding ground, from May to December.",
+        "es": "Patrimonio UNESCO desde 1999, alberga una zona clave de cría de ballenas francas australes, de mayo a diciembre."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Península Valdés",
+        "url": "https://en.wikipedia.org/wiki/Península_Valdés"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "La Fiesta de la Vendimia",
+        "en": "The Grape Harvest Festival",
+        "es": "La Fiesta de la Vendimia"
+      },
+      "when": {
+        "fr": "début mars",
+        "en": "early March",
+        "es": "principios de marzo"
+      },
+      "text": {
+        "fr": "À Mendoza, fête des vendanges et du vin avec défilés ; premier festival officiel en 1936.",
+        "en": "In Mendoza, a wine and grape-harvest festival with parades; first official edition in 1936.",
+        "es": "En Mendoza, fiesta de la vendimia y el vino con desfiles; primera edición oficial en 1936."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Fiesta Nacional de la Vendimia",
+        "url": "https://en.wikipedia.org/wiki/Fiesta_Nacional_de_la_Vendimia"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Uruguay": {
+    "sea": {
+      "title": {
+        "fr": "L'île aux Loups de mer",
+        "en": "Isla de Lobos sea lions",
+        "es": "La Isla de Lobos"
+      },
+      "text": {
+        "fr": "Près de Punta del Este, l'île abrite une immense colonie d'otaries et de phoques, et un phare de 1858 haut de 59 m.",
+        "en": "Off Punta del Este, the island holds a huge sea lion and fur seal colony and an 1858 lighthouse 59 m high.",
+        "es": "Frente a Punta del Este, la isla alberga una enorme colonia de lobos marinos y un faro de 1858 de 59 m."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Isla de Lobos",
+        "url": "https://en.wikipedia.org/wiki/Isla_de_Lobos"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Les Llamadas du candombe",
+        "en": "Candombe Llamadas",
+        "es": "Las Llamadas del candombe"
+      },
+      "when": {
+        "fr": "janvier à février",
+        "en": "January to February",
+        "es": "enero a febrero"
+      },
+      "text": {
+        "fr": "Défilé de tambours du candombe à Montevideo pendant le Carnaval ; candombe inscrit à l'UNESCO en 2009.",
+        "en": "A candombe drum parade in Montevideo during Carnival; candombe was UNESCO-listed in 2009.",
+        "es": "Desfile de tambores de candombe en Montevideo durante el Carnaval; candombe inscrito por la UNESCO en 2009."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Candombe",
+        "url": "https://en.wikipedia.org/wiki/Candombe"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Colombie": {
+    "fete": {
+      "title": {
+        "fr": "Le Carnaval de Barranquilla",
+        "en": "Barranquilla Carnival",
+        "es": "El Carnaval de Barranquilla"
+      },
+      "when": {
+        "fr": "février ou mars (date variable)",
+        "en": "February or March (variable)",
+        "es": "febrero o marzo (variable)"
+      },
+      "text": {
+        "fr": "Quatre jours avant le mercredi des Cendres, avec la Bataille des fleurs et les marimondas ; UNESCO en 2003.",
+        "en": "Four days before Ash Wednesday, with the Battle of Flowers and marimondas; UNESCO-listed in 2003.",
+        "es": "Cuatro días antes del miércoles de ceniza, con la Batalla de Flores y las marimondas; UNESCO en 2003."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Barranquilla Carnival",
+        "url": "https://en.wikipedia.org/wiki/Barranquilla_Carnival"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Venezuela": {
+    "sea": {
+      "title": {
+        "fr": "L'archipel de Los Roques",
+        "en": "Los Roques Archipelago",
+        "es": "El archipiélago de Los Roques"
+      },
+      "text": {
+        "fr": "Parc national depuis 1972, Los Roques compte environ 350 îles et îlots ; des pêcheurs de Margarita y vivent depuis longtemps.",
+        "en": "A national park since 1972, Los Roques has about 350 islands and cays; fishers from Margarita settled there long ago.",
+        "es": "Parque nacional desde 1972, Los Roques tiene unas 350 islas y cayos; pescadores de Margarita viven allí desde hace tiempo."
+      },
+      "source": {
+        "label": "Wikipédia (EN), Los Roques Archipelago",
+        "url": "https://en.wikipedia.org/wiki/Los_Roques_Archipelago"
+      }
+    },
+    "thanks": {
+      "word": "Gracias",
+      "lang": {
+        "fr": "espagnol",
+        "en": "Spanish",
+        "es": "español"
+      },
+      "source": {
+        "label": "Wiktionnaire (EN), gracias",
+        "url": "https://en.wiktionary.org/wiki/gracias"
+      }
+    },
+    "reviewed": "2026-11-16"
+  }
+}

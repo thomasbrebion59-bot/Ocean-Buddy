@@ -1,0 +1,1224 @@
+{
+  "Maroc": {
+    "sea": {
+      "title": {
+        "fr": "Essaouira, la cité des vents",
+        "en": "Essaouira, the city of winds",
+        "es": "Esauira, la ciudad de los vientos"
+      },
+      "text": {
+        "fr": "Port de l'Atlantique fortifié depuis 1764 par le sultan Mohammed III, la médina d'Essaouira est inscrite à l'UNESCO depuis 2001.",
+        "en": "A fortified Atlantic port since 1764 under Sultan Mohammed III, Essaouira's medina has been a UNESCO site since 2001.",
+        "es": "Puerto atlántico fortificado desde 1764 por el sultán Mohamed III, la medina de Esauira es sitio UNESCO desde 2001."
+      },
+      "source": {
+        "label": "Wikipédia, Médina d'Essaouira",
+        "url": "https://fr.wikipedia.org/wiki/M%C3%A9dina_d%27Essaouira"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Festival Gnaoua et Musiques du monde",
+        "en": "Gnaoua World Music Festival",
+        "es": "Festival Gnaoua y Músicas del Mundo"
+      },
+      "when": {
+        "fr": "juin",
+        "en": "June",
+        "es": "junio"
+      },
+      "text": {
+        "fr": "Depuis 1998, Essaouira réunit chaque juin des musiciens gnaoua et des artistes invités du monde entier pour des concerts partagés.",
+        "en": "Since 1998, every June Essaouira brings Gnaoua musicians and guest artists from around the world together for shared concerts.",
+        "es": "Desde 1998, cada junio Esauira reúne a músicos gnaoua y artistas invitados de todo el mundo en conciertos compartidos."
+      },
+      "source": {
+        "label": "Wikipédia, Festival Gnaoua et Musiques du monde",
+        "url": "https://fr.wikipedia.org/wiki/Festival_Gnaoua_et_Musiques_du_monde"
+      }
+    },
+    "thanks": {
+      "word": "Choukran",
+      "lang": {
+        "fr": "arabe marocain",
+        "en": "Moroccan Arabic",
+        "es": "árabe marroquí"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (arabe marocain : šukran)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Afrique du Sud": {
+    "sea": {
+      "title": {
+        "fr": "La Sardine Run",
+        "en": "The Sardine Run",
+        "es": "La Sardine Run"
+      },
+      "text": {
+        "fr": "De mai à juillet, des bancs de sardines longent la côte du KwaZulu-Natal, suivis par dauphins, fous du Cap et baleines de Bryde.",
+        "en": "From May to July, sardine shoals travel up the KwaZulu-Natal coast, followed by dolphins, Cape gannets and Bryde's whales.",
+        "es": "De mayo a julio, bancos de sardinas recorren la costa de KwaZulu-Natal, seguidos por delfines, alcatraces del Cabo y ballenas de Bryde."
+      },
+      "source": {
+        "label": "Wikipedia, Sardine run",
+        "url": "https://en.wikipedia.org/wiki/Sardine_run"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Kaapse Klopse, carnaval du Cap",
+        "en": "Kaapse Klopse, Cape Town carnival",
+        "es": "Kaapse Klopse, carnaval del Cabo"
+      },
+      "when": {
+        "fr": "2 janvier",
+        "en": "2 January",
+        "es": "2 de enero"
+      },
+      "text": {
+        "fr": "Chaque 2 janvier, jusqu'à 13 000 ménestrels en costumes colorés défilent au Cap : le « second Nouvel An ».",
+        "en": "Every 2 January, up to 13,000 minstrels in bright costumes parade through Cape Town: the \"second New Year\".",
+        "es": "Cada 2 de enero, hasta 13 000 músicos con trajes coloridos desfilan por Ciudad del Cabo: el «segundo Año Nuevo»."
+      },
+      "source": {
+        "label": "Wikipédia, Kaapse Klopse",
+        "url": "https://fr.wikipedia.org/wiki/Kaapse_Klopse"
+      }
+    },
+    "thanks": {
+      "word": "Ngiyabonga",
+      "lang": {
+        "fr": "zoulou",
+        "en": "Zulu",
+        "es": "zulú"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (zoulou)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Namibie": {
+    "sea": {
+      "title": {
+        "fr": "La côte des Squelettes",
+        "en": "The Skeleton Coast",
+        "es": "La Costa de los Esqueletos"
+      },
+      "text": {
+        "fr": "Brouillard, rochers et épaves : elle doit son nom aux ossements de baleines et de phoques. Les San l'appellent « le pays créé dans la colère ».",
+        "en": "Fog, rocks and wrecks: its name comes from whale and seal bones. The San call it \"the land God made in anger\".",
+        "es": "Niebla, rocas y naufragios: su nombre viene de huesos de ballenas y focas. Los san la llaman «la tierra creada con ira»."
+      },
+      "source": {
+        "label": "Wikipédia, Côte des Squelettes",
+        "url": "https://fr.wikipedia.org/wiki/C%C3%B4te_des_Squelettes"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Windhoek Karneval (WIKA)",
+        "en": "Windhoek Karneval (WIKA)",
+        "es": "Windhoek Karneval (WIKA)"
+      },
+      "when": {
+        "fr": "mars-avril",
+        "en": "March-April",
+        "es": "marzo-abril"
+      },
+      "text": {
+        "fr": "Dix jours de carnaval d'inspiration allemande à Windhoek : défilé de chars, bal, fête de la bière et carnaval des enfants.",
+        "en": "Ten days of German-style carnival in Windhoek: float parade, ball, beer festival and children's carnival.",
+        "es": "Diez días de carnaval de tradición alemana en Windhoek: desfile de carrozas, baile, fiesta de la cerveza y carnaval infantil."
+      },
+      "source": {
+        "label": "O&L Group, Windhoek Karneval WIKA",
+        "url": "https://www.ol.na/windhoek-karneval-wika-2024-celebrating-70-years-of-tradition-joy-and-culture-significance/"
+      }
+    },
+    "thanks": {
+      "word": "Tangi",
+      "lang": {
+        "fr": "oshiwambo",
+        "en": "Oshiwambo",
+        "es": "oshiwambo"
+      },
+      "source": {
+        "label": "Discover Africa, Languages of Namibia",
+        "url": "https://www.discoverafrica.com/safaris/namibia/languages-of-namibia/"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Égypte": {
+    "sea": {
+      "title": {
+        "fr": "La felouque du Nil",
+        "en": "The Nile felucca",
+        "es": "La faluca del Nilo"
+      },
+      "text": {
+        "fr": "Voilier arabe de 8 à 13 m pour une dizaine de passagers, la felouque est typique du Nil et se voit aussi en mer Rouge et en Méditerranée orientale.",
+        "en": "An Arab sailboat of 8 to 13 m carrying about ten passengers, the felucca is typical of the Nile and also seen on the Red Sea and eastern Mediterranean.",
+        "es": "Velero árabe de 8 a 13 m para unos diez pasajeros, la faluca es típica del Nilo y también del mar Rojo y el Mediterráneo oriental."
+      },
+      "source": {
+        "label": "Wikipédia, Felouque",
+        "url": "https://fr.wikipedia.org/wiki/Felouque"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Sham el-Nessim",
+        "en": "Sham el-Nessim",
+        "es": "Sham el-Nessim"
+      },
+      "when": {
+        "fr": "printemps, lundi de Pâques orthodoxe",
+        "en": "spring, Orthodox Easter Monday",
+        "es": "primavera, lunes de Pascua ortodoxa"
+      },
+      "text": {
+        "fr": "Au début du printemps, les Égyptiens de toutes confessions pique-niquent dehors, souvent au bord du Nil, et colorent des œufs durs.",
+        "en": "At the start of spring, Egyptians of all faiths picnic outdoors, often along the Nile, and dye boiled eggs.",
+        "es": "Al comenzar la primavera, egipcios de todas las religiones hacen picnic al aire libre, a menudo junto al Nilo, y tiñen huevos duros."
+      },
+      "source": {
+        "label": "Wikipedia, Sham Ennessim",
+        "url": "https://en.wikipedia.org/wiki/Sham_el-Nessim"
+      }
+    },
+    "thanks": {
+      "word": "Shukran",
+      "lang": {
+        "fr": "arabe égyptien",
+        "en": "Egyptian Arabic",
+        "es": "árabe egipcio"
+      },
+      "source": {
+        "label": "Wiktionary, شكرا",
+        "url": "https://en.wiktionary.org/wiki/%D8%B4%D9%83%D8%B1%D8%A7"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Maurice": {
+    "sea": {
+      "title": {
+        "fr": "Aapravasi Ghat, port des engagés",
+        "en": "Aapravasi Ghat, port of arrival",
+        "es": "Aapravasi Ghat, puerto de llegada"
+      },
+      "text": {
+        "fr": "Entre 1834 et 1910, des travailleurs engagés indiens ont débarqué ici à Port-Louis. Le site est inscrit à l'UNESCO depuis 2006.",
+        "en": "Between 1834 and 1910, Indian indentured workers landed here in Port Louis. The site has been on the UNESCO list since 2006.",
+        "es": "Entre 1834 y 1910, trabajadores indios contratados desembarcaron aquí, en Port Louis. El sitio es patrimonio UNESCO desde 2006."
+      },
+      "source": {
+        "label": "Wikipédia, Aapravasi Ghat",
+        "url": "https://fr.wikipedia.org/wiki/Aapravasi_Ghat"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Fête du Printemps (Nouvel An chinois)",
+        "en": "Spring Festival (Chinese New Year)",
+        "es": "Fiesta de la Primavera (Año Nuevo chino)"
+      },
+      "when": {
+        "fr": "janvier ou février",
+        "en": "January or February",
+        "es": "enero o febrero"
+      },
+      "text": {
+        "fr": "Jour férié à Maurice, la Fête du Printemps suit le calendrier lunaire : elle tombe en janvier ou en février selon les années.",
+        "en": "A public holiday in Mauritius, the Spring Festival follows the lunar calendar and falls in January or February.",
+        "es": "Día festivo en Mauricio, la Fiesta de la Primavera sigue el calendario lunar y cae en enero o febrero según el año."
+      },
+      "source": {
+        "label": "Wikipedia, Public holidays in Mauritius",
+        "url": "https://en.wikipedia.org/wiki/Public_holidays_in_Mauritius"
+      }
+    },
+    "thanks": {
+      "word": "Mersi",
+      "lang": {
+        "fr": "créole mauricien",
+        "en": "Mauritian Creole",
+        "es": "criollo mauriciano"
+      },
+      "source": {
+        "label": "Wiktionary, mersi",
+        "url": "https://en.wiktionary.org/wiki/mersi"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Seychelles": {
+    "sea": {
+      "title": {
+        "fr": "Aldabra, l'atoll des tortues",
+        "en": "Aldabra, the tortoise atoll",
+        "es": "Aldabra, el atolón de las tortugas"
+      },
+      "text": {
+        "fr": "Classé UNESCO en 1982, le plus grand atoll surélevé du monde abrite la plus grande population de tortues géantes des Seychelles.",
+        "en": "A UNESCO site since 1982, the world's largest raised atoll shelters the largest population of giant tortoises in Seychelles.",
+        "es": "Patrimonio UNESCO desde 1982, el mayor atolón elevado del mundo alberga la mayor población de tortugas gigantes de Seychelles."
+      },
+      "source": {
+        "label": "Wikipédia, Aldabra",
+        "url": "https://fr.wikipedia.org/wiki/Aldabra"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Festival Kreol",
+        "en": "Festival Kreol",
+        "es": "Festival Kreol"
+      },
+      "when": {
+        "fr": "octobre",
+        "en": "October",
+        "es": "octubre"
+      },
+      "text": {
+        "fr": "Depuis 1985, parades, cuisine, mode, musique et art célèbrent la culture créole : le premier festival au monde dédié à ce patrimoine.",
+        "en": "Since 1985, parades, food, fashion, music and art celebrate Creole culture: the first festival in the world devoted to it.",
+        "es": "Desde 1985, desfiles, cocina, moda, música y arte celebran la cultura criolla: el primer festival del mundo dedicado a ella."
+      },
+      "source": {
+        "label": "Africanews, Seychelles marks 40 years of Kreol festival",
+        "url": "http://www.africanews.com/2025/10/29/seychelles-marks-40-years-of-kreol-festival-with-vibrant-tribute-to-identity-and-heritage/"
+      }
+    },
+    "thanks": {
+      "word": "Mersi",
+      "lang": {
+        "fr": "créole seychellois",
+        "en": "Seychellois Creole",
+        "es": "criollo seychellense"
+      },
+      "source": {
+        "label": "Wiktionary, mersi",
+        "url": "https://en.wiktionary.org/wiki/mersi"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Sénégal": {
+    "sea": {
+      "title": {
+        "fr": "Saint-Louis et ses pêcheurs",
+        "en": "Saint-Louis and its fishers",
+        "es": "San Luis y sus pescadores"
+      },
+      "text": {
+        "fr": "Fondée en 1659 sur une île du fleuve (UNESCO, 2000), Saint-Louis garde une grande tradition de pêche, notamment à Guet Ndar.",
+        "en": "Founded in 1659 on a river island (UNESCO, 2000), Saint-Louis keeps a strong fishing tradition, notably in Guet Ndar.",
+        "es": "Fundada en 1659 en una isla del río (UNESCO, 2000), San Luis conserva una gran tradición pesquera, sobre todo en Guet Ndar."
+      },
+      "source": {
+        "label": "Wikipédia, Saint-Louis (Sénégal)",
+        "url": "https://fr.wikipedia.org/wiki/Saint-Louis_(S%C3%A9n%C3%A9gal)"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Festival de jazz de Saint-Louis",
+        "en": "Saint-Louis Jazz Festival",
+        "es": "Festival de jazz de San Luis"
+      },
+      "when": {
+        "fr": "date variable",
+        "en": "date varies",
+        "es": "fecha variable"
+      },
+      "text": {
+        "fr": "Depuis le début des années 1990, la ville vibre au jazz, avec des groupes de Saint-Louis puis de Dakar et d'artistes invités.",
+        "en": "Since the early 1990s the city has swung to jazz, with bands from Saint-Louis, then Dakar, and guest artists.",
+        "es": "Desde principios de los años 90 la ciudad vibra con el jazz, con grupos de San Luis y luego de Dakar y artistas invitados."
+      },
+      "source": {
+        "label": "Wikipédia, Festival international de jazz de Saint-Louis",
+        "url": "https://fr.wikipedia.org/wiki/Festival_international_de_jazz_de_Saint-Louis"
+      }
+    },
+    "thanks": {
+      "word": "Jërëjëf",
+      "lang": {
+        "fr": "wolof",
+        "en": "Wolof",
+        "es": "wolof"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (wolof)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Madagascar": {
+    "sea": {
+      "title": {
+        "fr": "Les Vezo, peuple de la mer",
+        "en": "The Vezo, people of the sea",
+        "es": "Los vezo, pueblo del mar"
+      },
+      "text": {
+        "fr": "Sur la côte ouest, les Vezo vivent de la pêche en mer. Leur nom signifie « ceux qui pêchent », et aussi « lutter avec la mer ».",
+        "en": "On the west coast, the Vezo live from sea fishing. Their name means \"the people who fish\" and also \"to struggle with the sea\".",
+        "es": "En la costa oeste, los vezo viven de la pesca en el mar. Su nombre significa «los que pescan» y también «luchar con el mar»."
+      },
+      "source": {
+        "label": "Wikipedia, Vezo people",
+        "url": "https://en.wikipedia.org/wiki/Vezo_people"
+      }
+    },
+    "thanks": {
+      "word": "Misaotra",
+      "lang": {
+        "fr": "malgache",
+        "en": "Malagasy",
+        "es": "malgache"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (malgache)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Kenya": {
+    "sea": {
+      "title": {
+        "fr": "Lamu, ville swahilie insulaire",
+        "en": "Lamu, a Swahili island town",
+        "es": "Lamu, ciudad suajili insular"
+      },
+      "text": {
+        "fr": "Fondée vers 1370, Lamu est la plus ancienne ville du Kenya habitée sans interruption. Son fort domine le front de mer ; site UNESCO.",
+        "en": "Founded around 1370, Lamu is Kenya's oldest continuously inhabited town. Its fort overlooks the seafront; a UNESCO site.",
+        "es": "Fundada hacia 1370, Lamu es la ciudad habitada de forma continua más antigua de Kenia. Su fuerte domina el frente marítimo; sitio UNESCO."
+      },
+      "source": {
+        "label": "Wikipedia, Lamu",
+        "url": "https://en.wikipedia.org/wiki/Lamu"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Lamu Cultural Festival",
+        "en": "Lamu Cultural Festival",
+        "es": "Festival Cultural de Lamu"
+      },
+      "when": {
+        "fr": "novembre",
+        "en": "November",
+        "es": "noviembre"
+      },
+      "text": {
+        "fr": "Chaque novembre, Lamu célèbre son patrimoine et ses traditions côtières lors d'un festival à l'ambiance de carnaval.",
+        "en": "Each November, Lamu celebrates its heritage and coastal traditions in a festival with a carnival atmosphere.",
+        "es": "Cada noviembre, Lamu celebra su patrimonio y sus tradiciones costeras en un festival de ambiente carnavalesco."
+      },
+      "source": {
+        "label": "The Star, A glimpse of Lamu Cultural Festival",
+        "url": "https://www.the-star.co.ke/news/2024-12-19-photos-a-glimpse-of-lamu-cultural-festival"
+      }
+    },
+    "thanks": {
+      "word": "Asante",
+      "lang": {
+        "fr": "swahili",
+        "en": "Swahili",
+        "es": "suajili"
+      },
+      "source": {
+        "label": "Wiktionary, asante",
+        "url": "https://en.wiktionary.org/wiki/asante"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Mozambique": {
+    "sea": {
+      "title": {
+        "fr": "L'île de Mozambique",
+        "en": "Island of Mozambique",
+        "es": "La isla de Mozambique"
+      },
+      "text": {
+        "fr": "Fondée au plus tard au XIVe siècle, port portugais dès 1507, cette île classée UNESCO a donné son nom au pays.",
+        "en": "Founded by the 14th century at the latest and a Portuguese port from 1507, this UNESCO island gave the country its name.",
+        "es": "Fundada a más tardar en el siglo XIV y puerto portugués desde 1507, esta isla UNESCO dio nombre al país."
+      },
+      "source": {
+        "label": "Wikipedia, Island of Mozambique",
+        "url": "https://en.wikipedia.org/wiki/Mozambique_Island"
+      }
+    },
+    "thanks": {
+      "word": "Obrigado",
+      "lang": {
+        "fr": "portugais (obrigada pour une femme)",
+        "en": "Portuguese (obrigada for a woman)",
+        "es": "portugués (obrigada si eres mujer)"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (portugais)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Tanzanie": {
+    "sea": {
+      "title": {
+        "fr": "Stone Town, ville de Zanzibar",
+        "en": "Stone Town, Zanzibar",
+        "es": "Stone Town, Zanzíbar"
+      },
+      "text": {
+        "fr": "Classée UNESCO en 2000, elle mêle influences arabes, perses, indiennes et européennes ; ses portes en bois sculpté sont célèbres.",
+        "en": "A UNESCO site since 2000, it blends Arab, Persian, Indian and European influences; its carved wooden doors are famous.",
+        "es": "Patrimonio UNESCO desde 2000, mezcla influencias árabes, persas, indias y europeas; sus puertas de madera tallada son famosas."
+      },
+      "source": {
+        "label": "Wikipedia, Stone Town",
+        "url": "https://en.wikipedia.org/wiki/Stone_Town"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Mwaka Kogwa",
+        "en": "Mwaka Kogwa",
+        "es": "Mwaka Kogwa"
+      },
+      "when": {
+        "fr": "juillet",
+        "en": "July",
+        "es": "julio"
+      },
+      "text": {
+        "fr": "À Zanzibar, ce Nouvel An shirazi se fête en juillet : « bain de l'année », avec un combat amical à coups de tiges de bananier.",
+        "en": "In Zanzibar this Shirazi New Year is held in July: the \"year's bath\", with a playful fight using banana stalks.",
+        "es": "En Zanzíbar, este Año Nuevo shirazi se celebra en julio: el «baño del año», con una pelea amistosa con tallos de banano."
+      },
+      "source": {
+        "label": "Wikipédia, Mwaka Kogwa",
+        "url": "https://fr.wikipedia.org/wiki/Mwaka_Kogwa"
+      }
+    },
+    "thanks": {
+      "word": "Asante",
+      "lang": {
+        "fr": "swahili",
+        "en": "Swahili",
+        "es": "suajili"
+      },
+      "source": {
+        "label": "Wiktionary, asante",
+        "url": "https://en.wiktionary.org/wiki/asante"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Cap-Vert": {
+    "sea": {
+      "title": {
+        "fr": "Cidade Velha, escale de l'Atlantique",
+        "en": "Cidade Velha, Atlantic port",
+        "es": "Cidade Velha, puerto atlántico"
+      },
+      "text": {
+        "fr": "Fondée au XVe siècle sur l'île de Santiago, première ville coloniale européenne sous les tropiques, UNESCO 2009 ; lieu de mémoire de la traite.",
+        "en": "Founded in the 15th century on Santiago, the first European colonial town in the tropics, UNESCO 2009; a place of memory of the slave trade.",
+        "es": "Fundada en el siglo XV en Santiago, primera ciudad colonial europea en los trópicos, UNESCO 2009; lugar de memoria de la trata."
+      },
+      "source": {
+        "label": "Wikipédia, Cidade Velha",
+        "url": "https://fr.wikipedia.org/wiki/Cidade_Velha"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Festival de Baía das Gatas",
+        "en": "Baía das Gatas Festival",
+        "es": "Festival de Baía das Gatas"
+      },
+      "when": {
+        "fr": "août, week-end de pleine lune",
+        "en": "August, full-moon weekend",
+        "es": "agosto, fin de semana de luna llena"
+      },
+      "text": {
+        "fr": "Depuis 1984, trois jours de musique sur la plage de Baía das Gatas (São Vicente), surnommés le « Woodstock africain ».",
+        "en": "Since 1984, three days of music on the beach at Baía das Gatas (São Vicente), nicknamed \"Africa's Woodstock\".",
+        "es": "Desde 1984, tres días de música en la playa de Baía das Gatas (São Vicente), apodados el «Woodstock africano»."
+      },
+      "source": {
+        "label": "Wikipedia, Festival de Baía das Gatas",
+        "url": "https://en.wikipedia.org/wiki/Festival_de_Ba%C3%ADa_das_Gatas"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Ghana": {
+    "sea": {
+      "title": {
+        "fr": "Cape Coast Castle",
+        "en": "Cape Coast Castle",
+        "es": "Castillo de Cape Coast"
+      },
+      "text": {
+        "fr": "Comptoir fortifié de la côte de l'Or, portugais dès 1555 puis suédois, classé UNESCO en 1979 : lieu de mémoire de la traite atlantique.",
+        "en": "A fortified Gold Coast trading post, Portuguese from 1555 then Swedish, UNESCO-listed in 1979: a place of memory of the Atlantic slave trade.",
+        "es": "Puesto fortificado de la Costa de Oro, portugués desde 1555 y luego sueco, UNESCO en 1979: lugar de memoria de la trata atlántica."
+      },
+      "source": {
+        "label": "Wikipedia, Cape Coast Castle",
+        "url": "https://en.wikipedia.org/wiki/Cape_Coast_Castle"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Homowo",
+        "en": "Homowo",
+        "es": "Homowo"
+      },
+      "when": {
+        "fr": "fin avril-mai",
+        "en": "late April-May",
+        "es": "finales de abril-mayo"
+      },
+      "text": {
+        "fr": "Chez les Ga d'Accra, Homowo rappelle une ancienne famine : son nom signifie « huer la faim ». Il s'ouvre avec les semailles.",
+        "en": "Among the Ga of Accra, Homowo recalls an old famine: its name means \"to hoot at hunger\". It opens with the planting.",
+        "es": "Entre los ga de Accra, Homowo recuerda una antigua hambruna: su nombre significa «abucheo al hambre». Se abre con la siembra."
+      },
+      "source": {
+        "label": "Wikipedia, Homowo",
+        "url": "https://en.wikipedia.org/wiki/Homowo"
+      }
+    },
+    "thanks": {
+      "word": "Medaase",
+      "lang": {
+        "fr": "twi",
+        "en": "Twi",
+        "es": "twi"
+      },
+      "source": {
+        "label": "Wiktionary, medaase",
+        "url": "https://en.wiktionary.org/wiki/medaase"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Liberia": {
+    "sea": {
+      "title": {
+        "fr": "Les marins kru",
+        "en": "The Kru mariners",
+        "es": "Los marinos kru"
+      },
+      "text": {
+        "fr": "Pêcheurs et navigateurs réputés de l'Atlantique, les Kru étaient engagés comme marins libres sur les navires et se sont installés le long de la côte.",
+        "en": "Renowned Atlantic fishers and navigators, the Kru were hired as free sailors on ships and settled along the West African coast.",
+        "es": "Pescadores y navegantes famosos del Atlántico, los kru eran marinos libres contratados en barcos y se asentaron por la costa."
+      },
+      "source": {
+        "label": "Wikipedia, Kru people",
+        "url": "https://en.wikipedia.org/wiki/Kru_people"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Angola": {
+    "sea": {
+      "title": {
+        "fr": "L'île de Luanda et le nzimbu",
+        "en": "Luanda Island and the nzimbu",
+        "es": "La isla de Luanda y el nzimbu"
+      },
+      "text": {
+        "fr": "Sur cette langue de sable de Luanda, les Portugais récoltaient des nzimbu, coquillages marins qui servaient de monnaie dans la région du Kongo.",
+        "en": "On this sandy spit off Luanda, the Portuguese gathered nzimbu, sea snail shells that served as currency in the Kongo region.",
+        "es": "En esta lengua de arena de Luanda, los portugueses recogían nzimbu, caracoles marinos que servían de moneda en la región del Kongo."
+      },
+      "source": {
+        "label": "Wikipedia, Luanda Island",
+        "url": "https://en.wikipedia.org/wiki/Luanda_Island"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Carnaval de Luanda",
+        "en": "Luanda Carnival",
+        "es": "Carnaval de Luanda"
+      },
+      "when": {
+        "fr": "février",
+        "en": "February",
+        "es": "febrero"
+      },
+      "text": {
+        "fr": "En février, des groupes défilent sur la Nova Marginal au rythme du semba et de la kazukuta, sur des thèmes de musique, de nature ou d'histoire.",
+        "en": "In February, groups parade along the Nova Marginal to semba and kazukuta, with themes of music, nature or history.",
+        "es": "En febrero, grupos desfilan por la Nova Marginal al ritmo de semba y kazukuta, con temas de música, naturaleza o historia."
+      },
+      "source": {
+        "label": "Ver Angola, Carnaval de Luanda",
+        "url": "https://www.verangola.net/va/pt/022026/Cultura/47765/Carnaval-de-Luanda-grupos-da-classe-A-transformam-Nova-Marginal-em-palco-de-folia-e-identidade-nacional.htm"
+      }
+    },
+    "thanks": {
+      "word": "Obrigado",
+      "lang": {
+        "fr": "portugais (obrigada pour une femme)",
+        "en": "Portuguese (obrigada for a woman)",
+        "es": "portugués (obrigada si eres mujer)"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (portugais)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "La Réunion": {
+    "sea": {
+      "title": {
+        "fr": "La réserve marine de La Réunion",
+        "en": "Réunion's marine reserve",
+        "es": "La reserva marina de La Reunión"
+      },
+      "text": {
+        "fr": "Autour de l'île, lagons et tombants abritent plus de 1 200 espèces de poissons, protégés par la réserve naturelle marine.",
+        "en": "Around the island, lagoons and drop-offs shelter over 1,200 fish species, protected by the marine nature reserve.",
+        "es": "Alrededor de la isla, lagunas y acantilados submarinos albergan más de 1200 especies de peces, protegidas por la reserva marina."
+      },
+      "source": {
+        "label": "Wikipédia, La Réunion",
+        "url": "https://fr.wikipedia.org/wiki/La_R%C3%A9union"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Dipavali à Saint-Pierre",
+        "en": "Dipavali in Saint-Pierre",
+        "es": "Dipavali en Saint-Pierre"
+      },
+      "when": {
+        "fr": "novembre",
+        "en": "November",
+        "es": "noviembre"
+      },
+      "text": {
+        "fr": "Les familles tamoules fêtent la lumière : défilé de chars illuminés sur le front de mer, gastronomie, danses et musique.",
+        "en": "Tamil families celebrate the festival of light: a parade of lit-up floats on the seafront, food, dance and music.",
+        "es": "Las familias tamiles celebran la luz: desfile de carrozas iluminadas en el paseo marítimo, gastronomía, danzas y música."
+      },
+      "source": {
+        "label": "Routard, Dipavali à Saint-Pierre",
+        "url": "https://www.routard.com/fr/agenda/a/dipavali-a-saint-pierre"
+      }
+    },
+    "thanks": {
+      "word": "Mèrsi",
+      "lang": {
+        "fr": "créole réunionnais",
+        "en": "Reunionese Creole",
+        "es": "criollo reunionés"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (créole réunionnais)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Tunisie": {
+    "sea": {
+      "title": {
+        "fr": "La pêche à la charfia",
+        "en": "Charfia fishing",
+        "es": "La pesca de la charfia"
+      },
+      "text": {
+        "fr": "Aux Kerkennah, des pièges fixes en palmes capturent le poisson sur des fonds d'un à deux mètres ; les parcelles de mer sont louées aux enchères.",
+        "en": "In Kerkennah, fixed palm-frond traps catch fish in waters one to two metres deep; sea plots are leased at auction.",
+        "es": "En Kerkennah, trampas fijas de palma capturan peces en fondos de uno a dos metros; las parcelas de mar se alquilan en subasta."
+      },
+      "source": {
+        "label": "Wikipédia, Îles Kerkennah",
+        "url": "https://fr.wikipedia.org/wiki/%C3%8Eles_Kerkennah"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Festival international de Carthage",
+        "en": "Carthage International Festival",
+        "es": "Festival Internacional de Cartago"
+      },
+      "when": {
+        "fr": "juillet-août",
+        "en": "July-August",
+        "es": "julio-agosto"
+      },
+      "text": {
+        "fr": "Depuis 1964, musique, théâtre et danse chaque été autour du théâtre antique de Carthage, au bord de la mer.",
+        "en": "Since 1964, music, theatre and dance every summer at the ancient theatre of Carthage, by the sea.",
+        "es": "Desde 1964, música, teatro y danza cada verano en el teatro antiguo de Cartago, junto al mar."
+      },
+      "source": {
+        "label": "Wikipédia, Festival international de Carthage",
+        "url": "https://fr.wikipedia.org/wiki/Festival_international_de_Carthage"
+      }
+    },
+    "thanks": {
+      "word": "Aychek",
+      "lang": {
+        "fr": "arabe tunisien",
+        "en": "Tunisian Arabic",
+        "es": "árabe tunecino"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (arabe tunisien : ʕayšek)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Mayotte": {
+    "sea": {
+      "title": {
+        "fr": "Le lagon de Mayotte",
+        "en": "Mayotte's lagoon",
+        "es": "La laguna de Mayotte"
+      },
+      "text": {
+        "fr": "Une barrière de corail d'environ 160 km encercle l'un des lagons les plus vastes du monde, avec par endroits une rare double barrière.",
+        "en": "A coral barrier of about 160 km encircles one of the world's largest lagoons, with a rare double barrier in places.",
+        "es": "Una barrera de coral de unos 160 km rodea una de las lagunas más grandes del mundo, con una rara doble barrera en algunos tramos."
+      },
+      "source": {
+        "label": "Wikipédia, Mayotte",
+        "url": "https://fr.wikipedia.org/wiki/Mayotte"
+      }
+    },
+    "thanks": {
+      "word": "Marahaba",
+      "lang": {
+        "fr": "shimaoré",
+        "en": "Shimaore",
+        "es": "shimaoré"
+      },
+      "source": {
+        "label": "Evaneos, Vocabulaire pour un voyage à Mayotte",
+        "url": "https://www.evaneos.fr/mayotte/voyage/vocabulaire-de-survie/"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Sierra Leone": {
+    "sea": {
+      "title": {
+        "fr": "Bunce Island",
+        "en": "Bunce Island",
+        "es": "Isla Bunce"
+      },
+      "text": {
+        "fr": "Sur l'estuaire de la Rokel, ce fort bâti vers 1670 est un lieu de mémoire de la traite atlantique ; des Afro-Américains y ont des ancêtres.",
+        "en": "On the Rokel estuary, this fort built around 1670 is a place of memory of the Atlantic slave trade; many African Americans have ancestors here.",
+        "es": "En el estuario del Rokel, este fuerte de hacia 1670 es lugar de memoria de la trata atlántica; muchos afroamericanos tienen aquí ancestros."
+      },
+      "source": {
+        "label": "Wikipedia, Bunce Island",
+        "url": "https://en.wikipedia.org/wiki/Bunce_Island"
+      }
+    },
+    "thanks": {
+      "word": "Tɛnki",
+      "lang": {
+        "fr": "krio",
+        "en": "Krio",
+        "es": "krio"
+      },
+      "source": {
+        "label": "Wikivoyage, Krio phrasebook",
+        "url": "https://en.wikivoyage.org/wiki/Krio_phrasebook"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Malawi": {
+    "sea": {
+      "title": {
+        "fr": "Le lac Malawi",
+        "en": "Lake Malawi",
+        "es": "El lago Malaui"
+      },
+      "text": {
+        "fr": "Troisième lac d'Afrique (580 km de long), aux eaux claires : environ 800 espèces de cichlidés décrites, presque toutes endémiques.",
+        "en": "Africa's third-largest lake (580 km long), with clear water: about 800 described cichlid species, almost all endemic.",
+        "es": "Tercer lago de África (580 km de largo), de aguas claras: unas 800 especies de cíclidos descritas, casi todas endémicas."
+      },
+      "source": {
+        "label": "Wikipédia, Lac Malawi",
+        "url": "https://fr.wikipedia.org/wiki/Lac_Malawi"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Lake of Stars",
+        "en": "Lake of Stars",
+        "es": "Lake of Stars"
+      },
+      "when": {
+        "fr": "date variable",
+        "en": "date varies",
+        "es": "fecha variable"
+      },
+      "text": {
+        "fr": "Depuis 2004, ce festival de musique de trois jours se tient sur les rives du lac, avec des artistes d'Afrique et d'Europe.",
+        "en": "Since 2004, this three-day music festival has been held on the lake shore, with artists from Africa and Europe.",
+        "es": "Desde 2004, este festival de música de tres días se celebra a orillas del lago, con artistas de África y Europa."
+      },
+      "source": {
+        "label": "Wikipedia, Lake of Stars Festival",
+        "url": "https://en.wikipedia.org/wiki/Lake_of_Stars_Festival"
+      }
+    },
+    "thanks": {
+      "word": "Zikomo",
+      "lang": {
+        "fr": "chichewa",
+        "en": "Chichewa",
+        "es": "chichewa"
+      },
+      "source": {
+        "label": "Wiktionary, zikomo",
+        "url": "https://en.wiktionary.org/wiki/zikomo"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Djibouti": {
+    "sea": {
+      "title": {
+        "fr": "Le boutre, voilier de la mer Rouge",
+        "en": "The dhow, Red Sea sailboat",
+        "es": "El dhow, velero del mar Rojo"
+      },
+      "text": {
+        "fr": "Voilier en bois à voile trapézoïdale né en mer Rouge, le boutre sert à la pêche, au cabotage et au transport, de Djibouti à Madagascar.",
+        "en": "A wooden sailboat with a trapezoid sail born in the Red Sea, the dhow serves for fishing, coastal trade and transport, from Djibouti to Madagascar.",
+        "es": "Velero de madera con vela trapezoidal nacido en el mar Rojo, el dhow sirve para pescar, hacer cabotaje y transportar, de Yibuti a Madagascar."
+      },
+      "source": {
+        "label": "Wikipédia, Boutre",
+        "url": "https://fr.wikipedia.org/wiki/Boutre"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Fest'Horn",
+        "en": "Fest'Horn",
+        "es": "Fest'Horn"
+      },
+      "when": {
+        "fr": "mi-décembre",
+        "en": "mid-December",
+        "es": "mediados de diciembre"
+      },
+      "text": {
+        "fr": "Chaque année à la mi-décembre, Fest'Horn célèbre la musique à Djibouti.",
+        "en": "Every year in mid-December, Fest'Horn celebrates music in Djibouti.",
+        "es": "Cada año a mediados de diciembre, Fest'Horn celebra la música en Yibuti."
+      },
+      "source": {
+        "label": "iExplore, Djibouti festivals and events",
+        "url": "https://www.iexplore.com/articles/travel-guides/africa/djibouti/festivals-and-events"
+      }
+    },
+    "thanks": {
+      "word": "Mahadsanid",
+      "lang": {
+        "fr": "somali",
+        "en": "Somali",
+        "es": "somalí"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (somali)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "base": {
+      "lang": {
+        "fr": "Somali et afar sont les langues maternelles les plus parlées ; l'arabe a aussi une grande importance.",
+        "en": "Somali and Afar are the most widely spoken mother tongues; Arabic is also important.",
+        "es": "El somalí y el afar son las lenguas maternas más habladas; el árabe también es importante."
+      },
+      "hello": {
+        "word": "As-salamu alaykum",
+        "gloss": {
+          "fr": "« la paix soit sur toi » ; on répond « wa alaykumu s-salam »",
+          "en": "\"peace be upon you\"; the reply is \"wa alaykumu s-salam\"",
+          "es": "«la paz sea contigo»; se responde «wa alaykumu s-salam»"
+        }
+      },
+      "food": {
+        "name": {
+          "fr": "Lahoh",
+          "en": "Lahoh",
+          "es": "Lahoh"
+        },
+        "text": {
+          "fr": "Pain-crêpe proche de l'injera, au petit-déjeuner avec du thé (shaah) ou du café (buna).",
+          "en": "A pancake-like bread similar to injera, eaten at breakfast with tea (shaah) or coffee (buna).",
+          "es": "Pan tipo crepe parecido al injera, en el desayuno con té (shaah) o café (buna)."
+        }
+      },
+      "respect": {
+        "fr": "Environ 98 % de la population est musulmane : commence par saluer avec « as-salamu alaykum ».",
+        "en": "About 98% of people are Muslim: start by greeting with \"as-salamu alaykum\".",
+        "es": "Cerca del 98 % de la población es musulmana: empieza saludando con «as-salamu alaykum»."
+      },
+      "source": {
+        "label": "Wikipédia, Culture de Djibouti et Cuisine djiboutienne",
+        "url": "https://en.wikipedia.org/wiki/Culture_of_Djibouti"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Gambie": {
+    "sea": {
+      "title": {
+        "fr": "L'île Kunta Kinteh",
+        "en": "Kunta Kinteh Island",
+        "es": "La isla Kunta Kinteh"
+      },
+      "text": {
+        "fr": "À 30 km de l'embouchure du fleuve Gambie, l'ancienne île James (UNESCO, 2003) est un lieu de mémoire du commerce atlantique.",
+        "en": "Some 30 km from the mouth of the Gambia River, the former James Island (UNESCO, 2003) is a place of memory of Atlantic trade.",
+        "es": "A unos 30 km de la desembocadura del río Gambia, la antigua isla James (UNESCO, 2003) es lugar de memoria del comercio atlántico."
+      },
+      "source": {
+        "label": "Wikipedia, Kunta Kinteh Island",
+        "url": "https://en.wikipedia.org/wiki/Kunta_Kinteh_Island"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Kartong Festival",
+        "en": "Kartong Festival",
+        "es": "Kartong Festival"
+      },
+      "when": {
+        "fr": "date variable",
+        "en": "date varies",
+        "es": "fecha variable"
+      },
+      "text": {
+        "fr": "Dans le village côtier de Kartong, près de la Casamance, ce festival annuel d'une semaine rassemble danses et musiques.",
+        "en": "In the coastal village of Kartong, near Casamance, this annual week-long festival brings together dance and music.",
+        "es": "En el pueblo costero de Kartong, cerca de Casamance, este festival anual de una semana reúne danza y música."
+      },
+      "source": {
+        "label": "Music In Africa, Kartong Festival",
+        "url": "https://www.musicinafrica.net/node/4902"
+      }
+    },
+    "thanks": {
+      "word": "Abaraka",
+      "lang": {
+        "fr": "mandingue",
+        "en": "Mandinka",
+        "es": "mandinga"
+      },
+      "source": {
+        "label": "Wikipedia, Mandinka language",
+        "url": "https://en.wikipedia.org/wiki/Mandinka_language"
+      }
+    },
+    "base": {
+      "lang": {
+        "fr": "L'anglais est la langue officielle ; le mandingue (ethnie la plus nombreuse), le wolof, le pulaar, le serer et le diola sont aussi parlés.",
+        "en": "English is the official language; Mandinka (the largest ethnic group), Wolof, Pulaar, Serer and Jola are also spoken.",
+        "es": "El inglés es el idioma oficial; también se hablan mandinga (la etnia mayor), wólof, pulaar, serer y jola."
+      },
+      "hello": {
+        "word": "As-salamu alaykum",
+        "gloss": {
+          "fr": "« la paix soit sur toi » ; on répond « wa alaykumu s-salam »",
+          "en": "\"peace be upon you\"; the reply is \"wa alaykumu s-salam\"",
+          "es": "«la paz sea contigo»; se responde «wa alaykumu s-salam»"
+        }
+      },
+      "food": {
+        "name": {
+          "fr": "Domoda",
+          "en": "Domoda",
+          "es": "Domoda"
+        },
+        "text": {
+          "fr": "Ragoût d'arachide avec viande ou poisson et légumes, considéré comme le plat national.",
+          "en": "A peanut stew with meat or fish and vegetables, regarded as the national dish.",
+          "es": "Guiso de cacahuete con carne o pescado y verduras, considerado el plato nacional."
+        }
+      },
+      "respect": {
+        "fr": "Environ 96 % de la population est musulmane : commence par saluer avec « as-salamu alaykum ».",
+        "en": "About 96% of people are Muslim: start by greeting with \"as-salamu alaykum\".",
+        "es": "Cerca del 96 % de la población es musulmana: empieza saludando con «as-salamu alaykum»."
+      },
+      "source": {
+        "label": "Wikipédia, Gambie et Cuisine gambienne",
+        "url": "https://en.wikipedia.org/wiki/Gambia"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Maldives": {
+    "sea": {
+      "title": {
+        "fr": "Le dhoni, bateau de pêche",
+        "en": "The dhoni fishing boat",
+        "es": "El dhoni, barco de pesca"
+      },
+      "text": {
+        "fr": "Le dhoni est le bateau de pêche traditionnel. La pêche est la deuxième industrie du pays, et le poisson avec le riz fait le repas du quotidien.",
+        "en": "The dhoni is the traditional fishing boat. Fishing is the country's second-largest industry, and fish with rice is the everyday meal.",
+        "es": "El dhoni es el barco de pesca tradicional. La pesca es la segunda industria del país, y pescado con arroz es la comida diaria."
+      },
+      "source": {
+        "label": "Wikipedia, Culture of the Maldives",
+        "url": "https://en.wikipedia.org/wiki/Culture_of_the_Maldives"
+      }
+    },
+    "thanks": {
+      "word": "Shukuriyaa",
+      "lang": {
+        "fr": "dhivehi",
+        "en": "Dhivehi",
+        "es": "dhivehi"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (dhivehi : šukuriyyā)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Sri Lanka": {
+    "sea": {
+      "title": {
+        "fr": "Les pêcheurs sur échasses",
+        "en": "The stilt fishermen",
+        "es": "Los pescadores sobre zancos"
+      },
+      "text": {
+        "fr": "Près de Weligama, des pêcheurs plantent un pieu dans l'eau et, perchés sur une traverse, lancent leur canne de bambou au-delà des vagues.",
+        "en": "Near Weligama, fishermen plant a pole in chest-deep water and, perched on a crossbar, cast bamboo rods past the surf.",
+        "es": "Cerca de Weligama, los pescadores clavan un palo en el agua y, sentados en un travesaño, lanzan cañas de bambú más allá de las olas."
+      },
+      "source": {
+        "label": "Wikipedia, Weligama",
+        "url": "https://en.wikipedia.org/wiki/Weligama"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Aluth Avurudda, Nouvel An cinghalais",
+        "en": "Sinhala New Year (Aluth Avurudda)",
+        "es": "Año Nuevo cingalés (Aluth Avurudda)"
+      },
+      "when": {
+        "fr": "13-14 avril",
+        "en": "13-14 April",
+        "es": "13-14 de abril"
+      },
+      "text": {
+        "fr": "Deux jours fériés vers le 13-14 avril : les familles se retrouvent et la plupart des commerces ferment environ une semaine.",
+        "en": "Two public holidays around 13-14 April: families gather and most shops close for about a week.",
+        "es": "Dos días festivos hacia el 13-14 de abril: las familias se reúnen y la mayoría de los comercios cierra casi una semana."
+      },
+      "source": {
+        "label": "Wikipedia, Sinhalese New Year",
+        "url": "https://en.wikipedia.org/wiki/Sinhalese_New_Year"
+      }
+    },
+    "thanks": {
+      "word": "Istuti",
+      "lang": {
+        "fr": "cingalais",
+        "en": "Sinhala",
+        "es": "cingalés"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (cingalais)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Inde": {
+    "sea": {
+      "title": {
+        "fr": "Le kettuvallam du Kerala",
+        "en": "The Kerala kettuvallam",
+        "es": "El kettuvallam de Kerala"
+      },
+      "text": {
+        "fr": "Coque en bois liée de fibre de coco, il transportait riz et épices du Kuttanad au port de Cochin avant de devenir maison flottante.",
+        "en": "A wooden hull lashed with coconut fibre, it carried rice and spices from Kuttanad to Kochi port before becoming a houseboat.",
+        "es": "Casco de madera atado con fibra de coco, llevaba arroz y especias de Kuttanad al puerto de Cochín antes de ser casa flotante."
+      },
+      "source": {
+        "label": "Wikipédia, Kettuvallam",
+        "url": "https://fr.wikipedia.org/wiki/Kettuvallam"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Nehru Trophy Boat Race",
+        "en": "Nehru Trophy Boat Race",
+        "es": "Nehru Trophy Boat Race"
+      },
+      "when": {
+        "fr": "août (2e samedi)",
+        "en": "August (2nd Saturday)",
+        "es": "agosto (2.º sábado)"
+      },
+      "text": {
+        "fr": "Sur le lac Punnamada, près d'Alappuzha, des « bateaux-serpents » (chundan vallam) s'affrontent chaque année depuis 1952.",
+        "en": "On Punnamada Lake near Alappuzha, \"snake boats\" (chundan vallam) race every year since 1952.",
+        "es": "En el lago Punnamada, cerca de Alappuzha, los «barcos serpiente» (chundan vallam) compiten cada año desde 1952."
+      },
+      "source": {
+        "label": "Wikipedia, Nehru Trophy Boat Race",
+        "url": "https://en.wikipedia.org/wiki/Nehru_Trophy_Boat_Race"
+      }
+    },
+    "thanks": {
+      "word": "Dhanyavād",
+      "lang": {
+        "fr": "hindi",
+        "en": "Hindi",
+        "es": "hindi"
+      },
+      "source": {
+        "label": "Wiktionary, thank you (hindi)",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  }
+}

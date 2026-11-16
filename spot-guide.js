@@ -143,7 +143,8 @@
       </div>
       ${c.vibe?`<blockquote class="guide-vibe"${NT}><svg class="guide-quote" viewBox="0 0 48 40" aria-hidden="true"><path d="M0 40V24C0 10 7 2 20 0l2 6c-7 2-11 7-11 14h9v20H0Zm26 0V24C26 10 33 2 46 0l2 6c-7 2-11 7-11 14h9v20H26Z" fill="currentColor"/></svg><p>${esc(c.vibe)}</p></blockquote>`:''}
       ${tiles.length?`<div class="guide-tiles">${tiles.map(([k,label,title,text,note])=>`<article class="guide-tile tile-${k}"><span class="guide-tile-icon">${icon(k)}</span><small>${label}</small>${title?`<b${NT}>${esc(title)}</b>`:''}<p${NT}>${esc(text)}</p>${note?`<span class="guide-note">${note}</span>`:''}</article>`).join('')}</div>`:''}
-      ${c.grounded?'':'<p class="guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>'}`;
+      ${c.grounded?'':'<p class="guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>'}
+      ${typeof OceanCultures!=='undefined'&&country(s)?`<button type="button" class="guide-cult" data-cult-open="${esc(country(s))}" data-cult-from="spot"><img src="assets/pictos/guide/g-speech.webp" alt="" width="44" height="44" loading="lazy" decoding="async"><span><small>Tour du monde des cultures</small><b${NT}>${esc(OceanCultures.discover(country(s)))}</b></span></button>`:''}`;
   }
 
   /* ---------- À découvrir autour ---------- */

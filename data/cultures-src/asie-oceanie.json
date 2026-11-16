@@ -1,0 +1,1275 @@
+{
+  "Indonésie": {
+    "sea": {
+      "title": {
+        "fr": "Le pinisi de Sulawesi",
+        "en": "The pinisi of Sulawesi",
+        "es": "El pinisi de Sulawesi"
+      },
+      "text": {
+        "fr": "Dans la région de Bulukumba, on construit à la main de grands voiliers en bois, les pinisi. Cet art est inscrit à l’UNESCO depuis 2017.",
+        "en": "Around Bulukumba, shipwrights hand-build large wooden sailing ships called pinisi. This craft has been on UNESCO’s heritage list since 2017.",
+        "es": "En la zona de Bulukumba se construyen a mano grandes veleros de madera, los pinisi. Este arte figura en la lista de la UNESCO desde 2017."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Pinisi"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Bau Nyale",
+        "en": "Bau Nyale",
+        "es": "Bau Nyale"
+      },
+      "when": {
+        "fr": "février ou mars",
+        "en": "February or March",
+        "es": "febrero o marzo"
+      },
+      "text": {
+        "fr": "À Lombok, on récolte de nuit les nyale, des vers marins, sur la plage de Seger, avec chants, danses et courses de bateaux.",
+        "en": "On Lombok, people gather nyale sea worms at night on Seger Beach, with songs, dances and boat races.",
+        "es": "En Lombok se recogen de noche los nyale, gusanos marinos, en la playa de Seger, con cantos, bailes y regatas."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Bau_Nyale"
+      }
+    },
+    "thanks": {
+      "word": "Terima kasih",
+      "lang": {
+        "fr": "indonésien",
+        "en": "Indonesian",
+        "es": "indonesio"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/terima_kasih"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Japon": {
+    "sea": {
+      "title": {
+        "fr": "Les ama, plongeuses en apnée",
+        "en": "The ama free-divers",
+        "es": "Las ama, buceadoras en apnea"
+      },
+      "text": {
+        "fr": "Les ama plongent sans bouteille pour pêcher ormeaux et fruits de mer. Selon la tradition, elles pratiquent ce métier depuis environ 2 000 ans.",
+        "en": "Ama dive without tanks to gather abalone and seafood. Tradition says they have done so for about 2,000 years.",
+        "es": "Las ama bucean sin botellas para recoger abulones y mariscos. Según la tradición, lo hacen desde hace unos 2000 años."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Ama_(diver)"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Festival de la neige de Sapporo",
+        "en": "Sapporo Snow Festival",
+        "es": "Festival de la Nieve de Sapporo"
+      },
+      "when": {
+        "fr": "février",
+        "en": "February",
+        "es": "febrero"
+      },
+      "text": {
+        "fr": "Chaque février, Sapporo expose statues de neige et sculptures de glace au parc Odori. La première édition date de 1950.",
+        "en": "Every February, Sapporo shows snow statues and ice sculptures in Odori Park. The first edition was in 1950.",
+        "es": "Cada febrero, Sapporo exhibe estatuas de nieve y esculturas de hielo en el parque Odori. La primera edición fue en 1950."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Sapporo_Snow_Festival"
+      }
+    },
+    "thanks": {
+      "word": "Arigatō",
+      "lang": {
+        "fr": "japonais",
+        "en": "Japanese",
+        "es": "japonés"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/ありがとう"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Philippines": {
+    "sea": {
+      "title": {
+        "fr": "La vinta de Mindanao",
+        "en": "The vinta of Mindanao",
+        "es": "La vinta de Mindanao"
+      },
+      "text": {
+        "fr": "Cette pirogue à balancier porte une voile rayée de rouge, bleu, vert, jaune et blanc. Les motifs identifient souvent une famille.",
+        "en": "This outrigger boat carries a sail striped in red, blue, green, yellow and white. The patterns often identify a family.",
+        "es": "Esta embarcación con balancín lleva una vela a rayas rojas, azules, verdes, amarillas y blancas. Los diseños suelen identificar a una familia."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Vinta"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Kadayawan",
+        "en": "Kadayawan",
+        "es": "Kadayawan"
+      },
+      "when": {
+        "fr": "août",
+        "en": "August",
+        "es": "agosto"
+      },
+      "text": {
+        "fr": "À Davao, cette fête remercie la nature pour ses dons et met à l’honneur les cultures autochtones de la région.",
+        "en": "In Davao, this festival gives thanks for nature’s gifts and showcases the region’s indigenous cultures.",
+        "es": "En Davao, esta fiesta agradece los dones de la naturaleza y honra las culturas indígenas de la región."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Kadayawan_Festival"
+      }
+    },
+    "thanks": {
+      "word": "Salamat",
+      "lang": {
+        "fr": "tagalog",
+        "en": "Tagalog",
+        "es": "tagalo"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/salamat"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Malaisie": {
+    "sea": {
+      "title": {
+        "fr": "Les Bajau Laut de Sabah",
+        "en": "The Bajau Laut of Sabah",
+        "es": "Los bajau laut de Sabah"
+      },
+      "text": {
+        "fr": "Des familles bajau laut vivent sur des bateaux-maisons et voyagent en groupe. À Semporna, la Regatta Lepa met ces bateaux décorés à l’honneur.",
+        "en": "Bajau Laut families live on houseboats and travel in groups. In Semporna, the Regatta Lepa celebrates these decorated boats.",
+        "es": "Familias bajau laut viven en casas flotantes y viajan en grupo. En Semporna, la Regatta Lepa celebra estas embarcaciones decoradas."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Bajau_people"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Rainforest World Music Festival",
+        "en": "Rainforest World Music Festival",
+        "es": "Rainforest World Music Festival"
+      },
+      "when": {
+        "fr": "juin ou juillet",
+        "en": "June or July",
+        "es": "junio o julio"
+      },
+      "text": {
+        "fr": "Depuis 1998, trois jours de concerts et d’ateliers au Sarawak Cultural Village, au pied du mont Santubong.",
+        "en": "Since 1998, three days of concerts and workshops at the Sarawak Cultural Village, at the foot of Mount Santubong.",
+        "es": "Desde 1998, tres días de conciertos y talleres en el Sarawak Cultural Village, al pie del monte Santubong."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Rainforest_World_Music_Festival"
+      }
+    },
+    "thanks": {
+      "word": "Terima kasih",
+      "lang": {
+        "fr": "malais",
+        "en": "Malay",
+        "es": "malayo"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/terima_kasih"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Thaïlande": {
+    "sea": {
+      "title": {
+        "fr": "Le bateau à longue queue",
+        "en": "The longtail boat",
+        "es": "El bote de cola larga"
+      },
+      "text": {
+        "fr": "Un moteur de voiture sur une perche pivotante, une hélice au bout d’un long arbre : la formule est née à Sing Buri dans les années 1930.",
+        "en": "A car engine on a pivoting pole, a propeller at the end of a long shaft: the design began in Sing Buri in the 1930s.",
+        "es": "Un motor de coche sobre un poste giratorio y una hélice al final de un eje largo: nació en Sing Buri en los años 1930."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Longtail_boat"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Loy Krathong",
+        "en": "Loy Krathong",
+        "es": "Loy Krathong"
+      },
+      "when": {
+        "fr": "novembre (pleine lune)",
+        "en": "November (full moon)",
+        "es": "noviembre (luna llena)"
+      },
+      "text": {
+        "fr": "À la pleine lune, on dépose sur l’eau un krathong, petit panier de feuilles de bananier, en faisant un vœu.",
+        "en": "At full moon, people float a krathong, a small banana-leaf basket, on the water and make a wish.",
+        "es": "En luna llena se deposita en el agua un krathong, una cestita de hojas de banano, pidiendo un deseo."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Loy_Krathong"
+      }
+    },
+    "thanks": {
+      "word": "Khop khun",
+      "lang": {
+        "fr": "thaï",
+        "en": "Thai",
+        "es": "tailandés"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/ขอบคุณ"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Vietnam": {
+    "sea": {
+      "title": {
+        "fr": "Le thúng chai, bateau-panier",
+        "en": "The thúng chai basket boat",
+        "es": "El thúng chai, barco cesta"
+      },
+      "text": {
+        "fr": "Ce petit bateau rond en bambou tressé est rendu étanche à la résine et à l’huile de coco. Les pêcheurs côtiers l’utilisent encore.",
+        "en": "This small round boat of woven bamboo is waterproofed with resin and coconut oil, and coastal fishers still use it.",
+        "es": "Este pequeño bote redondo de bambú trenzado se impermeabiliza con resina y aceite de coco. Los pescadores costeros aún lo usan."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Basket_boat"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Tết Trung Thu",
+        "en": "Tết Trung Thu",
+        "es": "Tết Trung Thu"
+      },
+      "when": {
+        "fr": "septembre ou octobre",
+        "en": "September or October",
+        "es": "septiembre u octubre"
+      },
+      "text": {
+        "fr": "Fête des enfants à la pleine lune : défilés de lanternes, gâteaux de lune et danses du lion.",
+        "en": "Children’s festival at full moon: lantern parades, mooncakes and lion dances.",
+        "es": "Fiesta infantil en luna llena: desfiles de farolillos, pasteles de luna y danzas del león."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Mid-Autumn_Festival"
+      }
+    },
+    "thanks": {
+      "word": "Cảm ơn",
+      "lang": {
+        "fr": "vietnamien",
+        "en": "Vietnamese",
+        "es": "vietnamita"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/cảm_ơn"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Taïwan": {
+    "sea": {
+      "title": {
+        "fr": "Les bateaux tatala des Tao",
+        "en": "The Tao people’s tatala boats",
+        "es": "Los barcos tatala de los tao"
+      },
+      "text": {
+        "fr": "Les Tao de l’île des Orchidées assemblent des bateaux en planches, peints de rouge, blanc et noir et ornés de motifs de vagues.",
+        "en": "The Tao of Orchid Island build plank boats painted red, white and black and decorated with wave motifs.",
+        "es": "Los tao de la isla de las Orquídeas ensamblan barcos de tablones, pintados de rojo, blanco y negro, con motivos de olas."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Tao_people"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Fête des lanternes",
+        "en": "Lantern Festival",
+        "es": "Fiesta de los Faroles"
+      },
+      "when": {
+        "fr": "février",
+        "en": "February",
+        "es": "febrero"
+      },
+      "text": {
+        "fr": "Des lanternes géantes partout, et à Pingxi des lanternes célestes ornées de vœux s’envolent par milliers.",
+        "en": "Giant lanterns everywhere, and in Pingxi thousands of sky lanterns covered in wishes are released.",
+        "es": "Faroles gigantes por todas partes y, en Pingxi, miles de faroles aéreos con deseos echan a volar."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Taiwan_Lantern_Festival"
+      }
+    },
+    "thanks": {
+      "word": "Xièxie",
+      "lang": {
+        "fr": "mandarin",
+        "en": "Mandarin",
+        "es": "mandarín"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/謝謝"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Chine": {
+    "sea": {
+      "title": {
+        "fr": "La pêche au cormoran",
+        "en": "Cormorant fishing",
+        "es": "La pesca con cormoranes"
+      },
+      "text": {
+        "fr": "Sur la rivière Li, à Guilin, un collier léger retient les gros poissons que le cormoran rapporte. La pratique a plus de mille ans.",
+        "en": "On the Li River near Guilin, a loose snare holds the larger fish a cormorant brings back. The practice is over a thousand years old.",
+        "es": "En el río Li, cerca de Guilin, un lazo suelto retiene los peces grandes que trae el cormorán. La práctica tiene más de mil años."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Cormorant_fishing"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Fête des bateaux-dragons",
+        "en": "Dragon Boat Festival",
+        "es": "Festival del Bote del Dragón"
+      },
+      "when": {
+        "fr": "mai ou juin (date variable)",
+        "en": "May or June (date varies)",
+        "es": "mayo o junio (fecha variable)"
+      },
+      "text": {
+        "fr": "Courses de bateaux-dragons et zongzi, des boulettes de riz en feuilles. Inscrite à l’UNESCO en 2009.",
+        "en": "Dragon boat races and zongzi, rice dumplings in leaves. Listed by UNESCO in 2009.",
+        "es": "Regatas de botes del dragón y zongzi, bolas de arroz en hojas. Inscrita por la UNESCO en 2009."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Dragon_Boat_Festival"
+      }
+    },
+    "thanks": {
+      "word": "Xièxie",
+      "lang": {
+        "fr": "mandarin",
+        "en": "Mandarin",
+        "es": "mandarín"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/謝謝"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Cambodge": {
+    "sea": {
+      "title": {
+        "fr": "Le Tonlé Sap qui change de sens",
+        "en": "The Tonlé Sap’s changing flow",
+        "es": "El Tonlé Sap que cambia de sentido"
+      },
+      "text": {
+        "fr": "Chaque année, la rivière Tonlé Sap coule vers le lac pendant six mois puis en sens inverse. Des villages flottants y vivent de la pêche.",
+        "en": "Each year the Tonlé Sap River flows into the lake for six months, then back out. Floating villages live from fishing.",
+        "es": "Cada año el río Tonlé Sap fluye hacia el lago seis meses y luego en sentido contrario. Aldeas flotantes viven de la pesca."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Tonlé_Sap"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Bon Om Touk",
+        "en": "Bon Om Touk",
+        "es": "Bon Om Touk"
+      },
+      "when": {
+        "fr": "octobre ou novembre",
+        "en": "October or November",
+        "es": "octubre o noviembre"
+      },
+      "text": {
+        "fr": "Trois jours de courses de bateaux-dragons à Phnom Penh, à la fin de la mousson, quand le courant du Tonlé Sap s’inverse.",
+        "en": "Three days of dragon boat races in Phnom Penh at the end of the monsoon, when the Tonlé Sap reverses.",
+        "es": "Tres días de regatas de botes del dragón en Phnom Penh al final del monzón, cuando el Tonlé Sap invierte su curso."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Bon_Om_Touk"
+      }
+    },
+    "thanks": {
+      "word": "Aw kun",
+      "lang": {
+        "fr": "khmer",
+        "en": "Khmer",
+        "es": "jemer"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/អរគុណ"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Corée du Sud": {
+    "sea": {
+      "title": {
+        "fr": "Les haenyeo de Jeju",
+        "en": "The haenyeo of Jeju",
+        "es": "Las haenyeo de Jeju"
+      },
+      "text": {
+        "fr": "Les haenyeo, « femmes de la mer », plongent en apnée jusqu’à 20 m pour récolter ormeaux et algues. Leur savoir-faire est à l’UNESCO depuis 2016.",
+        "en": "The haenyeo, “sea women”, free-dive down to 20 m to gather abalone and seaweed. Their craft has been UNESCO-listed since 2016.",
+        "es": "Las haenyeo, «mujeres del mar», bucean en apnea hasta 20 m para recoger abulones y algas. Su saber está en la UNESCO desde 2016."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Haenyeo"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Festival de la boue de Boryeong",
+        "en": "Boryeong Mud Festival",
+        "es": "Festival del Barro de Boryeong"
+      },
+      "when": {
+        "fr": "juillet",
+        "en": "July",
+        "es": "julio"
+      },
+      "text": {
+        "fr": "Depuis 1998, la plage de Daecheon accueille bains de boue, toboggans et peinture corporelle, puis des feux d’artifice.",
+        "en": "Since 1998, Daecheon Beach hosts mud pools, mud slides and body painting, ending with fireworks.",
+        "es": "Desde 1998, la playa de Daecheon ofrece piscinas de barro, toboganes y pintura corporal, con fuegos artificiales."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Boryeong_Mud_Festival"
+      }
+    },
+    "thanks": {
+      "word": "Gamsahamnida",
+      "lang": {
+        "fr": "coréen",
+        "en": "Korean",
+        "es": "coreano"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/감사합니다"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Hong Kong": {
+    "sea": {
+      "title": {
+        "fr": "Les familles des jonques",
+        "en": "Hong Kong’s boat families",
+        "es": "Las familias de las barcas"
+      },
+      "text": {
+        "fr": "Des familles de la mer (Tanka) ont longtemps vécu de la pêche sur des jonques, notamment à Aberdeen, Cheung Chau et Tai O.",
+        "en": "Boat families (Tanka) long lived and fished from boats, notably at Aberdeen, Cheung Chau and Tai O.",
+        "es": "Familias de la mar (tanka) vivieron y pescaron mucho tiempo en barcas, sobre todo en Aberdeen, Cheung Chau y Tai O."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Tanka_people"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Courses de bateaux-dragons",
+        "en": "Dragon Boat Races",
+        "es": "Regatas de botes del dragón"
+      },
+      "when": {
+        "fr": "juin (date variable)",
+        "en": "June (date varies)",
+        "es": "junio (fecha variable)"
+      },
+      "text": {
+        "fr": "Plus de 4 500 pagayeurs se disputent la course dans le port Victoria. L’édition 2026 était la 50e.",
+        "en": "Over 4,500 paddlers race in Victoria Harbour. The 2026 edition was the 50th.",
+        "es": "Más de 4500 remeros compiten en el puerto Victoria. La edición de 2026 fue la 50.ª."
+      },
+      "source": {
+        "label": "TTG Asia",
+        "url": "https://www.ttgasia.com/2026/07/02/hong-kong-dragon-boat-races-mark-50th-anniversary/"
+      }
+    },
+    "thanks": {
+      "word": "Dōjeh",
+      "lang": {
+        "fr": "cantonais",
+        "en": "Cantonese",
+        "es": "cantonés"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/多謝"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Australie": {
+    "sea": {
+      "title": {
+        "fr": "Les pièges à anguilles de Budj Bim",
+        "en": "The Budj Bim eel traps",
+        "es": "Las trampas de anguilas de Budj Bim"
+      },
+      "text": {
+        "fr": "Les Gunditjmara ont aménagé canaux et digues pour piéger des anguilles, un système vieux de 6 600 ans. Patrimoine mondial depuis 2019.",
+        "en": "The Gunditjmara built channels and weirs to trap eels, a system up to 6,600 years old. World Heritage since 2019.",
+        "es": "Los gunditjmara construyeron canales y presas para atrapar anguilas, un sistema de hasta 6600 años. Patrimonio Mundial desde 2019."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Budj_Bim"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Vivid Sydney",
+        "en": "Vivid Sydney",
+        "es": "Vivid Sydney"
+      },
+      "when": {
+        "fr": "mai–juin",
+        "en": "May–June",
+        "es": "mayo–junio"
+      },
+      "text": {
+        "fr": "Trois semaines de lumière : installations, projections sur les bâtiments et concerts, depuis 2009.",
+        "en": "Three weeks of light: installations, building projections and concerts, since 2009.",
+        "es": "Tres semanas de luz: instalaciones, proyecciones sobre edificios y conciertos, desde 2009."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Vivid_Sydney"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Fidji": {
+    "sea": {
+      "title": {
+        "fr": "Le drua, double pirogue",
+        "en": "The drua double canoe",
+        "es": "El drua, canoa doble"
+      },
+      "text": {
+        "fr": "Cette double pirogue à voile pouvait atteindre 30 m et porter plus de 200 personnes. Un nouveau drua a été lancé en 2016.",
+        "en": "This double-hulled sailing canoe could reach 30 m and carry over 200 people. A new drua was launched in 2016.",
+        "es": "Esta canoa doble de vela podía alcanzar 30 m y llevar a más de 200 personas. En 2016 se botó un nuevo drua."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Drua"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Hibiscus Festival",
+        "en": "Hibiscus Festival",
+        "es": "Festival del Hibisco"
+      },
+      "when": {
+        "fr": "fin août–septembre",
+        "en": "late August–September",
+        "es": "finales de agosto–septiembre"
+      },
+      "text": {
+        "fr": "À Suva, défilé de chars et élection de Miss Hibiscus. La première édition date de 1956.",
+        "en": "In Suva, a float parade and the crowning of Miss Hibiscus. The first edition was in 1956.",
+        "es": "En Suva, desfile de carrozas y coronación de Miss Hibisco. La primera edición fue en 1956."
+      },
+      "source": {
+        "label": "Fiji Times",
+        "url": "https://www.fijitimes.com.fj/70-years-of-hibiscus-tradition/"
+      }
+    },
+    "thanks": {
+      "word": "Vinaka",
+      "lang": {
+        "fr": "fidjien",
+        "en": "Fijian",
+        "es": "fiyiano"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/vinaka"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Polynésie française": {
+    "sea": {
+      "title": {
+        "fr": "Hawaiki Nui Va’a",
+        "en": "Hawaiki Nui Va’a",
+        "es": "Hawaiki Nui Va’a"
+      },
+      "text": {
+        "fr": "Des équipes de pirogues à balancier relient en trois jours Huahine, Raiatea, Taha’a puis Bora Bora. Plus de cent équipes y participent.",
+        "en": "Outrigger canoe teams link Huahine, Raiatea, Taha’a and Bora Bora over three days. More than a hundred teams take part.",
+        "es": "Equipos de piraguas con balancín unen en tres días Huahine, Raiatea, Taha’a y Bora Bora. Participan más de cien equipos."
+      },
+      "source": {
+        "label": "Tahiti Tourisme (blog)",
+        "url": "https://blog.tahiti.com/2012/09/20/the-history-of-tahitis-hawaiki-nui-vaa/"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Heiva i Tahiti",
+        "en": "Heiva i Tahiti",
+        "es": "Heiva i Tahiti"
+      },
+      "when": {
+        "fr": "juillet",
+        "en": "July",
+        "es": "julio"
+      },
+      "text": {
+        "fr": "Danses, chants et sports traditionnels autour du 14 juillet, dans une tradition née en 1881. Le nom Heiva date de 1985.",
+        "en": "Dance, song and traditional sports around 14 July, a tradition that began in 1881. The name Heiva dates from 1985.",
+        "es": "Danzas, cantos y deportes tradicionales en torno al 14 de julio, tradición nacida en 1881. El nombre Heiva data de 1985."
+      },
+      "source": {
+        "label": "Heiva i Tahiti",
+        "url": "https://www.heiva.org/en/140-years-of-heiva-i-tahiti/"
+      }
+    },
+    "thanks": {
+      "word": "Māuruuru",
+      "lang": {
+        "fr": "tahitien",
+        "en": "Tahitian",
+        "es": "tahitiano"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/mauruuru"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Nouvelle-Zélande": {
+    "sea": {
+      "title": {
+        "fr": "Les waka maoris",
+        "en": "Māori waka",
+        "es": "Los waka maoríes"
+      },
+      "text": {
+        "fr": "Les grands waka taua mesuraient jusqu’à 40 m pour 80 pagayeurs. Le waka hourua Te Aurere a traversé le Pacifique avec la navigation traditionnelle.",
+        "en": "Large waka taua reached 40 m with up to 80 paddlers. The waka hourua Te Aurere has crossed the Pacific using traditional navigation.",
+        "es": "Los grandes waka taua medían hasta 40 m con 80 remeros. El waka hourua Te Aurere cruzó el Pacífico con navegación tradicional."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Waka_(canoe)"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Matariki",
+        "en": "Matariki",
+        "es": "Matariki"
+      },
+      "when": {
+        "fr": "juin ou juillet",
+        "en": "June or July",
+        "es": "junio o julio"
+      },
+      "text": {
+        "fr": "Le Nouvel An maori suit le lever des Pléiades : observation des étoiles et concerts. Férié depuis 2022.",
+        "en": "The Māori New Year follows the rising of the Pleiades: stargazing and concerts. A public holiday since 2022.",
+        "es": "El Año Nuevo maorí sigue la salida de las Pléyades: observación de estrellas y conciertos. Festivo desde 2022."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Matariki"
+      }
+    },
+    "thanks": {
+      "word": "Thank you",
+      "lang": {
+        "fr": "anglais",
+        "en": "English",
+        "es": "inglés"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/thank_you"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Nouvelle-Calédonie": {
+    "sea": {
+      "title": {
+        "fr": "Le lagon et sa barrière",
+        "en": "The lagoon and its barrier reef",
+        "es": "La laguna y su barrera"
+      },
+      "text": {
+        "fr": "Une barrière d’environ 1 500 km entoure le lagon, classé UNESCO en 2008. Dugongs et tortues vertes y vivent.",
+        "en": "A barrier reef about 1,500 km long encloses the lagoon, UNESCO-listed in 2008. Dugongs and green turtles live there.",
+        "es": "Una barrera de unos 1500 km rodea la laguna, inscrita en la UNESCO en 2008. Allí viven dugongos y tortugas verdes."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Lagoons_of_New_Caledonia"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Foire de Bourail",
+        "en": "Bourail Fair",
+        "es": "Feria de Bourail"
+      },
+      "when": {
+        "fr": "août",
+        "en": "August",
+        "es": "agosto"
+      },
+      "text": {
+        "fr": "Depuis 1977, à Bourail : concours d’élevage, rodéo, artisanat et produits locaux, autour du 15 août.",
+        "en": "Since 1977, in Bourail: livestock shows, rodeo, crafts and local products, around 15 August.",
+        "es": "Desde 1977, en Bourail: concursos de ganado, rodeo, artesanía y productos locales, hacia el 15 de agosto."
+      },
+      "source": {
+        "label": "Wikipédia",
+        "url": "https://fr.wikipedia.org/wiki/Foire_de_Bourail"
+      }
+    },
+    "thanks": {
+      "word": "Merci",
+      "lang": {
+        "fr": "français",
+        "en": "French",
+        "es": "francés"
+      },
+      "source": {
+        "label": "Wiktionnaire",
+        "url": "https://fr.wiktionary.org/wiki/merci"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Vanuatu": {
+    "sea": {
+      "title": {
+        "fr": "La Water Music de Gaua",
+        "en": "Gaua’s Water Music",
+        "es": "La Water Music de Gaua"
+      },
+      "text": {
+        "fr": "À Gaua, dans les îles Banks, les femmes pratiquent la Water Music. Le spectacle, d’environ 30 minutes, se découvre au village de Lembot.",
+        "en": "On Gaua in the Banks Islands, women perform Water Music. The show, about 30 minutes long, can be seen in Lembot village.",
+        "es": "En Gaua, en las islas Banks, las mujeres practican la Water Music. El espectáculo, de unos 30 minutos, se ve en el pueblo de Lembot."
+      },
+      "source": {
+        "label": "Vanuatu Tourism",
+        "url": "https://www.vanuatu.travel/en/lembot-water-music"
+      }
+    },
+    "thanks": {
+      "word": "Tangkyu",
+      "lang": {
+        "fr": "bislama",
+        "en": "Bislama",
+        "es": "bislama"
+      },
+      "source": {
+        "label": "Wikivoyage",
+        "url": "https://en.wikivoyage.org/wiki/Bislama_phrasebook"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Palaos": {
+    "sea": {
+      "title": {
+        "fr": "Les Rock Islands",
+        "en": "The Rock Islands",
+        "es": "Las Rock Islands"
+      },
+      "text": {
+        "fr": "Entre 250 et 300 îlots calcaires, dont un lac aux méduses sans dard propre à Palau. Le site est classé UNESCO depuis 2012.",
+        "en": "Between 250 and 300 limestone islets, including a lake of stingless jellyfish found only in Palau. UNESCO-listed since 2012.",
+        "es": "Entre 250 y 300 islotes calizos, con un lago de medusas sin aguijón propias de Palaos. Inscrito en la UNESCO desde 2012."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Rock_Islands"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Olechotel Belau",
+        "en": "Olechotel Belau Fair",
+        "es": "Feria Olechotel Belau"
+      },
+      "when": {
+        "fr": "octobre",
+        "en": "October",
+        "es": "octubre"
+      },
+      "text": {
+        "fr": "Le jour de l’Indépendance, chacun des 16 États présente danses, chants, plats traditionnels, sculpture et tissage.",
+        "en": "On Independence Day, each of the 16 states presents dances, chants, traditional dishes, carving and weaving.",
+        "es": "El Día de la Independencia, cada uno de los 16 estados presenta danzas, cantos, platos típicos, talla y tejido."
+      },
+      "source": {
+        "label": "Island Times",
+        "url": "https://islandtimes.org/community-celebrates-palaus-31st-independence-day-with-olchotel-belau-fair/"
+      }
+    },
+    "thanks": {
+      "word": "Sulang",
+      "lang": {
+        "fr": "palauan",
+        "en": "Palauan",
+        "es": "palauano"
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Palauan_language"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Samoa": {
+    "sea": {
+      "title": {
+        "fr": "Le fautasi",
+        "en": "The fautasi",
+        "es": "El fautasi"
+      },
+      "text": {
+        "fr": "Cette longue pirogue d’environ 30 m avance avec jusqu’à 50 rameurs, au rythme d’un tambour. Des courses ont lieu en juin.",
+        "en": "This longboat, about 30 m long, is rowed by up to 50 people to a drum beat. Races take place in June.",
+        "es": "Esta larga embarcación de unos 30 m avanza con hasta 50 remeros, al ritmo de un tambor. Hay regatas en junio."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Fautasi"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Teuila Festival",
+        "en": "Teuila Festival",
+        "es": "Festival Teuila"
+      },
+      "when": {
+        "fr": "début septembre",
+        "en": "early September",
+        "es": "principios de septiembre"
+      },
+      "text": {
+        "fr": "Depuis 1991 à Apia : danse siva, danse du couteau de feu, démonstrations de tatouage et de sculpture.",
+        "en": "Since 1991 in Apia: siva dance, fire-knife dancing, tattooing and carving demonstrations.",
+        "es": "Desde 1991 en Apia: danza siva, danza del cuchillo de fuego y demostraciones de tatuaje y talla."
+      },
+      "source": {
+        "label": "Samoa Tourism",
+        "url": "http://www.samoa.travel/whats-on/events-calendar/teuila-festival-2019-09-01"
+      }
+    },
+    "thanks": {
+      "word": "Fa’afetai",
+      "lang": {
+        "fr": "samoan",
+        "en": "Samoan",
+        "es": "samoano"
+      },
+      "source": {
+        "label": "Wiktionnaire / Wiktionary",
+        "url": "https://en.wiktionary.org/wiki/fa'afetai"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Tonga": {
+    "sea": {
+      "title": {
+        "fr": "La kalia, double pirogue",
+        "en": "The kalia double canoe",
+        "es": "La kalia, canoa doble"
+      },
+      "text": {
+        "fr": "Au XVIIIe siècle, la kalia atteignait 35 m, avec deux coques inégales et un mât mobile. Elle pouvait porter plus de 100 hommes.",
+        "en": "In the 18th century the kalia reached 35 m, with two unequal hulls and a movable mast. It could carry over 100 people.",
+        "es": "En el siglo XVIII la kalia alcanzaba 35 m, con dos cascos desiguales y un mástil móvil. Podía llevar a más de 100 personas."
+      },
+      "source": {
+        "label": "Living Oceans Foundation",
+        "url": "https://www.livingoceansfoundation.org/sailing-tonga"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Heilala Festival",
+        "en": "Heilala Festival",
+        "es": "Festival Heilala"
+      },
+      "when": {
+        "fr": "fin juin–début juillet",
+        "en": "late June–early July",
+        "es": "finales de junio–principios de julio"
+      },
+      "text": {
+        "fr": "Une semaine de culture et de musique à Nuku’alofa, autour de l’anniversaire du roi le 4 juillet.",
+        "en": "A week of culture and music in Nuku’alofa around the king’s birthday on 4 July.",
+        "es": "Una semana de cultura y música en Nuku’alofa en torno al cumpleaños del rey, el 4 de julio."
+      },
+      "source": {
+        "label": "RNZ",
+        "url": "https://www.rnz.co.nz/international/pacific-news/149285/tonga's-heilala-festival-gets-underway-this-weekend"
+      }
+    },
+    "thanks": {
+      "word": "Malo",
+      "lang": {
+        "fr": "tongien",
+        "en": "Tongan",
+        "es": "tongano"
+      },
+      "source": {
+        "label": "Wikivoyage",
+        "url": "https://en.wikivoyage.org/wiki/Tongan_phrasebook"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Îles Cook": {
+    "sea": {
+      "title": {
+        "fr": "Te Au o Tonga",
+        "en": "Te Au o Tonga",
+        "es": "Te Au o Tonga"
+      },
+      "text": {
+        "fr": "Cette double pirogue de 22 m, construite en 1994, sert à enseigner la navigation polynésienne. Elle est basée à Aitutaki depuis 2002.",
+        "en": "This 22 m double-hulled canoe, built in 1994, teaches Polynesian navigation. It has been based in Aitutaki since 2002.",
+        "es": "Esta canoa doble de 22 m, construida en 1994, sirve para enseñar la navegación polinesia. Está en Aitutaki desde 2002."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Te_Au_o_Tonga"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Te Maeva Nui",
+        "en": "Te Maeva Nui",
+        "es": "Te Maeva Nui"
+      },
+      "when": {
+        "fr": "fin juillet–début août",
+        "en": "late July–early August",
+        "es": "finales de julio–principios de agosto"
+      },
+      "text": {
+        "fr": "Autour du 4 août, les îles rivalisent amicalement en spectacles et en plats à Rarotonga.",
+        "en": "Around 4 August, the islands compete in friendly rivalry with performances and food in Rarotonga.",
+        "es": "En torno al 4 de agosto, las islas compiten amistosamente con espectáculos y comida en Rarotonga."
+      },
+      "source": {
+        "label": "Asia Pacific Report",
+        "url": "https://asiapacificreport.nz/2025/07/21/cook-islanders-flock-from-outer-islands-for-60th-anniversary-celebrations/"
+      }
+    },
+    "thanks": {
+      "word": "Meitaki",
+      "lang": {
+        "fr": "maori des îles Cook",
+        "en": "Cook Islands Māori",
+        "es": "maorí de las islas Cook"
+      },
+      "source": {
+        "label": "TravelOnline",
+        "url": "https://www.travelonline.com/cook-islands/language"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Papouasie-Nouvelle-Guinée": {
+    "sea": {
+      "title": {
+        "fr": "Le kula de Milne Bay",
+        "en": "The Milne Bay kula",
+        "es": "El kula de Milne Bay"
+      },
+      "text": {
+        "fr": "18 communautés d’îles s’échangent par pirogue colliers de coquillages rouges et bracelets blancs, en sens opposés.",
+        "en": "18 island communities exchange red shell necklaces and white shell armbands by canoe, in opposite directions.",
+        "es": "18 comunidades insulares intercambian en canoa collares de conchas rojos y brazaletes blancos, en sentidos opuestos."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Kula_Ring"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Goroka Show",
+        "en": "Goroka Show",
+        "es": "Goroka Show"
+      },
+      "when": {
+        "fr": "septembre",
+        "en": "September",
+        "es": "septiembre"
+      },
+      "text": {
+        "fr": "Depuis 1956, une centaine de tribus se retrouvent à Goroka pour chanter, danser et partager leur culture.",
+        "en": "Since 1956, about 100 tribes gather in Goroka to sing, dance and share their culture.",
+        "es": "Desde 1956, un centenar de tribus se reúnen en Goroka para cantar, bailar y compartir su cultura."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Goroka_Show"
+      }
+    },
+    "thanks": {
+      "word": "Tenkiu",
+      "lang": {
+        "fr": "tok pisin",
+        "en": "Tok Pisin",
+        "es": "tok pisin"
+      },
+      "source": {
+        "label": "Wikivoyage",
+        "url": "https://en.wikivoyage.org/wiki/Tok_Pisin_phrasebook"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Îles Salomon": {
+    "sea": {
+      "title": {
+        "fr": "Le lagon de Marovo",
+        "en": "Marovo Lagoon",
+        "es": "La laguna de Marovo"
+      },
+      "text": {
+        "fr": "Environ 700 km² de lagon protégé par une double barrière de récifs. Les habitants y pêchent et sculptent l’ébène.",
+        "en": "About 700 km² of lagoon enclosed by a double barrier reef. Residents fish there and carve ebony.",
+        "es": "Unos 700 km² de laguna protegida por una doble barrera de arrecifes. Sus habitantes pescan y tallan ébano."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Marovo_Lagoon"
+      }
+    },
+    "thanks": {
+      "word": "Tanggio",
+      "lang": {
+        "fr": "pijin",
+        "en": "Solomon Pijin",
+        "es": "pijin salomonense"
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Solomon_Islands_Pijin"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Micronésie": {
+    "sea": {
+      "title": {
+        "fr": "Naviguer sans instruments",
+        "en": "Navigating without instruments",
+        "es": "Navegar sin instrumentos"
+      },
+      "text": {
+        "fr": "Des navigateurs de Satawal, comme Mau Piailug, traversent l’océan avec les étoiles, les houles et les oiseaux.",
+        "en": "Navigators from Satawal, like Mau Piailug, cross the ocean using stars, swells and birds.",
+        "es": "Navegantes de Satawal, como Mau Piailug, cruzan el océano guiándose por estrellas, oleaje y aves."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Micronesian_navigation"
+      }
+    },
+    "fete": {
+      "title": {
+        "fr": "Yap Day",
+        "en": "Yap Day",
+        "es": "Día de Yap"
+      },
+      "when": {
+        "fr": "1er mars",
+        "en": "1 March",
+        "es": "1 de marzo"
+      },
+      "text": {
+        "fr": "Depuis 1968, danses, jeux, monnaie de pierre et construction de pirogues célèbrent la culture yapaise.",
+        "en": "Since 1968, dances, games, stone money and canoe building celebrate Yapese culture.",
+        "es": "Desde 1968, danzas, juegos, dinero de piedra y construcción de canoas celebran la cultura de Yap."
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Yap_Day"
+      }
+    },
+    "thanks": {
+      "word": "Kalahngan",
+      "lang": {
+        "fr": "pohnpeien",
+        "en": "Pohnpeian",
+        "es": "pohnpeiano"
+      },
+      "source": {
+        "label": "Wikipedia",
+        "url": "https://en.wikipedia.org/wiki/Pohnpeian_language"
+      }
+    },
+    "reviewed": "2026-11-16"
+  },
+  "Wallis-et-Futuna": {
+    "sea": {
+      "title": {
+        "fr": "La course de pirogues",
+        "en": "The outrigger race",
+        "es": "La carrera de piraguas"
+      },
+      "text": {
+        "fr": "La course de pirogues à balancier, fakatete à Wallis et kumete à Futuna, est aujourd’hui un sport nautique.",
+        "en": "The outrigger canoe race, called fakatete on Wallis and kumete on Futuna, is now a water sport.",
+        "es": "La carrera de piraguas con balancín, fakatete en Wallis y kumete en Futuna, es hoy un deporte náutico."
+      },
+      "source": {
+        "label": "Wallis et Futuna Tourisme",
+        "url": "https://wallis-futuna.travel/en/discover-our-islands/traditional-skills-crafts"
+      }
+    },
+    "thanks": {
+      "word": "Mālō tou ofa",
+      "lang": {
+        "fr": "wallisien",
+        "en": "Wallisian",
+        "es": "wallisiano"
+      },
+      "source": {
+        "label": "Cyril Jarnias",
+        "url": "https://www.jarniascyril.com/?p=16991"
+      }
+    },
+    "base": {
+      "lang": {
+        "fr": "Wallisien (’uvea), futunien et français sont les langues officielles.",
+        "en": "Wallisian (’Uvean), Futunian and French are the official languages.",
+        "es": "El wallisiano (’uveano), el futuniano y el francés son lenguas oficiales."
+      },
+      "hello": {
+        "word": "Mālō te maʻuli",
+        "gloss": {
+          "fr": "bonjour",
+          "en": "hello",
+          "es": "hola"
+        }
+      },
+      "food": {
+        "name": {
+          "fr": "Taro et igname",
+          "en": "Taro and yam",
+          "es": "Taro e ñame"
+        },
+        "text": {
+          "fr": "Taro, igname et patate douce sont la base des repas ; le poisson est très consommé sur la côte d’Uvea.",
+          "en": "Taro, yams and sweet potatoes are the staples; fish is widely eaten along Uvea’s coast.",
+          "es": "Taro, ñame y batata son la base de las comidas; el pescado se consume mucho en la costa de Uvea."
+        }
+      },
+      "respect": {
+        "fr": "La coutume compte beaucoup ; le rituel du kava est important, surtout à Futuna. Observe avant de participer.",
+        "en": "Custom matters a great deal, and the kava ritual is important, especially on Futuna. Observe before joining in.",
+        "es": "La costumbre importa mucho y el ritual del kava es importante, sobre todo en Futuna. Observa antes de participar."
+      },
+      "source": {
+        "label": "Wikivoyage",
+        "url": "https://en.wikivoyage.org/wiki/Wallis_and_Futuna"
+      }
+    },
+    "reviewed": "2026-11-16"
+  }
+}
