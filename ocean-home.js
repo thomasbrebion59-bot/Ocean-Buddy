@@ -20,9 +20,10 @@
     const home=$('#home');if(!home)return;
     let host=$('#obDive');
     if(!host){host=document.createElement('section');host.id='obDive';host.className='ob-dive';host.setAttribute('aria-labelledby','obDiveTitle');
-      /* Place réservée par home-feed.js dans le fil de l’accueil (créée avant ce module sur un appareil lent). */
+      /* Place réservée par home-feed.js dans le fil de l’accueil (créée avant ce module sur un appareil lent). La section se
+         pose devant la marque cachée, sans la retirer : rien n’est enlevé du fil après la levée du rideau (check:boot). */
       const mark=home.querySelector('[data-hf-slot="immersion"]'),anchor=$('#oceanHub')||home.querySelector('.home-intro');
-      if(mark)mark.replaceWith(host);else if(anchor)anchor.after(host);else home.prepend(host);
+      if(mark)mark.before(host);else if(anchor)anchor.after(host);else home.prepend(host);
       host.addEventListener('click',e=>{const b=e.target.closest('[data-voyage]');if(!b)return;const s=byId(b.dataset.voyage);if(s)window.OceanVoyage?.open(s);});}
     const panos=window.OCEAN_PANORAMAS||{};
     const total=(typeof SPOTS!=='undefined'?SPOTS.length:0);

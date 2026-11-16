@@ -667,7 +667,7 @@
     if(heroEl.nextElementSibling!==feed)heroEl.after(feed);
     for(const [k,sel] of Object.entries(OWNED)){
       /* Élément pas encore créé (l’immersion peut arriver après le montage sur un appareil lent) : la marque cachée
-         reste, et le module la remplace à sa création (ocean-home.js). */
+         reste, et le module se pose devant elle à sa création (ocean-home.js), sans rien retirer du fil. */
       const mark=feed.querySelector(`[data-hf-slot="${k}"]`),el=$(sel,home);
       if(mark&&el)mark.replaceWith(el);
     }
