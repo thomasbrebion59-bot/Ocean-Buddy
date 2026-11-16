@@ -10897,5 +10897,16 @@
  "Tes droits : dans Profil → Réglages → Mon compte et sauvegarde, tu peux exporter toutes tes données (fichier JSON), te déconnecter, désactiver la sauvegarde ou supprimer ton compte (un nouveau code reçu par e-mail est demandé pour confirmer). Tu peux modifier tes informations directement dans l’application. Pour toute autre demande concernant ces données, écris à": "Tus derechos: en Perfil → Ajustes → Mi cuenta y copia de seguridad, puedes exportar todos tus datos (archivo JSON), cerrar sesión, desactivar la copia de seguridad o eliminar tu cuenta (se pide un nuevo código recibido por correo para confirmar). Puedes modificar tu información directamente en la aplicación. Para cualquier otra solicitud sobre estos datos, escribe a",
  "Ton prénom, ton niveau, tes activités, tes favoris, tes voyages, tes notes, tes sessions et ta progression sont enregistrés localement. Sans compte, rien de tout cela ne quitte ton appareil ; si tu crées un compte et actives la sauvegarde, une partie de ces données est copiée sur un serveur (voir « Compte et sauvegarde »). Dans l’application mobile, une copie locale dans les préférences de l’app permet de conserver ces informations lors des mises à jour.": "Tu nombre, nivel, actividades, favoritos, viajes, notas, sesiones y progresión se guardan localmente. Sin cuenta, nada de esto sale de tu dispositivo; si creas una cuenta y activas la copia de seguridad, una parte de estos datos se copia en un servidor (consulta «Cuenta y copia de seguridad»). En la aplicación móvil, una copia local en las preferencias de la app conserva esta información durante las actualizaciones.",
  "Tu peux explorer les spots et préparer tes voyages sans compte. Un compte gratuit et facultatif permet de sauvegarder ton activité et de la retrouver sur un autre appareil.": "Puedes explorar spots y preparar tus viajes sin cuenta. Una cuenta gratuita y opcional permite guardar tu actividad y recuperarla en otro dispositivo.",
- "Version du 5 novembre 2026. Éditeur et contact : Thomas Brebion,": "Versión del 5 de noviembre de 2026. Editor y contacto: Thomas Brebion,"
+ "Version du 5 novembre 2026. Éditeur et contact : Thomas Brebion,": "Versión del 5 de noviembre de 2026. Editor y contacto: Thomas Brebion,",
+ "À propos": "Acerca de",
+ "Accès rapide": "Acceso rápido",
+ "Affichage et son": "Pantalla y sonido",
+ "Aucun pour l’instant": "Ninguno por ahora",
+ "En voyage": "De viaje",
+ "Mes données": "Mis datos",
+ "Ouvrir": "Abrir",
+ "Plus d’idées de départ": "Más ideas de viaje",
+ "Prénom, langue, animations, mes données": "Nombre, idioma, animaciones, mis datos",
+ "Reprendre : {1}": "Reanudar: {1}",
+ "Ta semaine, ton prochain départ et tes spots": "Tu semana, tu próximo viaje y tus spots"
 }

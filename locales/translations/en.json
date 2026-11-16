@@ -10897,5 +10897,16 @@
  "Tes droits : dans Profil → Réglages → Mon compte et sauvegarde, tu peux exporter toutes tes données (fichier JSON), te déconnecter, désactiver la sauvegarde ou supprimer ton compte (un nouveau code reçu par e-mail est demandé pour confirmer). Tu peux modifier tes informations directement dans l’application. Pour toute autre demande concernant ces données, écris à": "Your rights: in Profile → Settings → My account and backup, you can export all your data (JSON file), sign out, turn off backup or delete your account (a new code received by e-mail is required to confirm). You can edit your information directly in the app. For any other request about this data, write to",
  "Ton prénom, ton niveau, tes activités, tes favoris, tes voyages, tes notes, tes sessions et ta progression sont enregistrés localement. Sans compte, rien de tout cela ne quitte ton appareil ; si tu crées un compte et actives la sauvegarde, une partie de ces données est copiée sur un serveur (voir « Compte et sauvegarde »). Dans l’application mobile, une copie locale dans les préférences de l’app permet de conserver ces informations lors des mises à jour.": "Your first name, level, activities, favourites, trips, notes, sessions and progress are stored locally. Without an account, none of this leaves your device; if you create an account and turn on backup, part of this data is copied to a server (see “Account and backup”). In the mobile app, a local copy in the app’s preferences keeps this information across updates.",
  "Tu peux explorer les spots et préparer tes voyages sans compte. Un compte gratuit et facultatif permet de sauvegarder ton activité et de la retrouver sur un autre appareil.": "You can explore spots and plan your trips without an account. A free, optional account lets you back up your activity and find it again on another device.",
- "Version du 5 novembre 2026. Éditeur et contact : Thomas Brebion,": "Version of 5 November 2026. Publisher and contact: Thomas Brebion,"
+ "Version du 5 novembre 2026. Éditeur et contact : Thomas Brebion,": "Version of 5 November 2026. Publisher and contact: Thomas Brebion,",
+ "À propos": "About",
+ "Accès rapide": "Quick access",
+ "Affichage et son": "Display and sound",
+ "Aucun pour l’instant": "None yet",
+ "En voyage": "On your trip",
+ "Mes données": "My data",
+ "Ouvrir": "Open",
+ "Plus d’idées de départ": "More trip ideas",
+ "Prénom, langue, animations, mes données": "First name, language, animations, my data",
+ "Reprendre : {1}": "Resume: {1}",
+ "Ta semaine, ton prochain départ et tes spots": "Your week, your next trip and your spots"
 }
