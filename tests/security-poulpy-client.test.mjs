@@ -39,7 +39,8 @@ test('no consent card, no service address and no AI wording in the chat code',()
 });
 
 test('the AI choice is gone from the settings and only the local erase remains',()=>{
-  const added=[];const doc={querySelector:()=>({before:e=>added.push(e)}),createElement:()=>element()};
+  /* « Effacer » se range sous « Réinitialiser ma progression » (rubrique « Mes données ») : after, sinon before. */
+  const added=[];const doc={querySelector:()=>({before:e=>added.push(e),after:e=>added.push(e)}),createElement:()=>element()};
   vm.runInNewContext(read('privacy.js'),{document:doc,window:{},localStorage:{length:0},toast(){}});
   assert.deepEqual(added.map(e=>e.textContent),['Effacer toutes mes données sur cet appareil']);
 });

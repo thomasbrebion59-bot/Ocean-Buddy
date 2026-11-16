@@ -20,7 +20,9 @@
     const home=$('#home');if(!home)return;
     let host=$('#obDive');
     if(!host){host=document.createElement('section');host.id='obDive';host.className='ob-dive';host.setAttribute('aria-labelledby','obDiveTitle');
-      const anchor=$('#oceanHub')||home.querySelector('.home-intro');anchor?anchor.after(host):home.prepend(host);
+      /* Place réservée par home-feed.js dans le fil de l’accueil (créée avant ce module sur un appareil lent). */
+      const mark=home.querySelector('[data-hf-slot="immersion"]'),anchor=$('#oceanHub')||home.querySelector('.home-intro');
+      if(mark)mark.replaceWith(host);else if(anchor)anchor.after(host);else home.prepend(host);
       host.addEventListener('click',e=>{const b=e.target.closest('[data-voyage]');if(!b)return;const s=byId(b.dataset.voyage);if(s)window.OceanVoyage?.open(s);});}
     const panos=window.OCEAN_PANORAMAS||{};
     const total=(typeof SPOTS!=='undefined'?SPOTS.length:0);

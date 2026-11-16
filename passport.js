@@ -23,7 +23,7 @@
     let card=$('#oceanPassport');
     if(!card){
       card=document.createElement('section');card.id='oceanPassport';card.className='pp';card.setAttribute('aria-label','Mon passeport océan');
-      /* Entre la vitrine des trophées et « Mes statistiques ». */
+      /* Juste avant « Mes statistiques » : sous « Mon sport et mon niveau », avant les chiffres et la vitrine des trophées. */
       const stats=$('#profStats'),head=stats?.previousElementSibling?.matches('.sec')?stats.previousElementSibling:stats;
       if(head)head.before(card);else profile.append(card);
     }

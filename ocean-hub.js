@@ -84,7 +84,9 @@
     const name=typeof userName==='string'&&userName&&userName!=='Explorateur'?userName:'';
     const date=new Date().toLocaleDateString(document.documentElement.lang||'fr-FR',{weekday:'long',day:'numeric',month:'long'});
     host.classList.toggle('is-new',!returning);
-    host.innerHTML=`<div class="hub-greet"><div><small>${esc(date)}</small><h2><span>${hello()}</span>${name?`<span translate="no">, ${esc(name)}</span>`:''}<span class="hub-dot">.</span></h2></div>${levelRing()}</div>
+    /* Titre de section (comme les autres blocs de l’accueil) : le cockpit vient après « Pour toi » et « Où partir ». */
+    host.innerHTML=`<div class="as-sec hub-title"><h2>Ton espace<small>Ta semaine, ton prochain départ et tes spots</small></h2></div>
+      <div class="hub-greet"><div><small>${esc(date)}</small><h2><span>${hello()}</span>${name?`<span translate="no">, ${esc(name)}</span>`:''}<span class="hub-dot">.</span></h2></div>${levelRing()}</div>
       ${weekStrip()}
       ${returning?tripCard():''}
       ${rail('Reprendre là où tu t’es arrêté',recentIds,'recent')}
@@ -101,7 +103,7 @@
       else if(b.dataset.trip)window.OceanTrips?.openTrip(b.dataset.trip);
       else if(b.dataset.hub==='new-trip')go('trips');
       else if(b.dataset.hub==='profile')go('profile');
-      else if(b.dataset.hub==='favs'){go('spots');try{openWorld('all');setView('list');if(!favOnly)toggleFavFilter();}catch(err){}}
+      else if(b.dataset.hub==='favs'){if(typeof openFavorites==='function')openFavorites();else{go('spots');try{openWorld('all');setView('list');if(!favOnly)toggleFavFilter();}catch(err){}}}
     });
     render();
   }

@@ -228,7 +228,10 @@ html[data-act] #home .as-large p{color:var(--t-deep)}
 /* « Pour toi aujourd’hui » remplace le « Spot du jour » et la liste « À découvrir » (trois premiers spots du catalogue)
    de l’ancien onglet « Aujourd’hui » : masqués par CSS dès le premier rendu (aucun décalage après la levée). */
 #home.hf-on #todayCard,#home.hf-on .hf-legacy-live,#home.hf-on #liveTop{display:none!important}
-#home.hf-on .hcat[data-hcat=jour]:not([style*="none"]){display:block!important}
+/* Ancien tableau de bord du bas (onglets « Aujourd’hui · Explorer · Ma progression ») : il doublait l’accueil (série,
+   « Pour toi »), le profil (statistiques) et les Défis (quiz ; le « Défi du jour » répète « Beach Clean Express » des
+   défis écolo). Masqué par CSS dès le premier rendu, comme les blocs ci-dessus : aucun décalage après la levée. */
+#home.hf-on #homeTabs,#home.hf-on .hcat{display:none!important}
 
 /* QA 4 nov. : la dernière pastille se raccourcit avec des points de suspension au lieu d’être coupée net par le fondu. */
 .hf-fy-why{-webkit-mask-image:none;mask-image:none}

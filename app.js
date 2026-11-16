@@ -297,6 +297,8 @@ let conditionObserver=null,conditionTimer=null;
 var FAV_ON='<svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 20.4S3.8 14.9 3.8 9.4A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.2 2.8c0 5.5-8.2 11-8.2 11z"/></svg>';
 var FAV_OFF='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20.4S3.8 14.9 3.8 9.4A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.2 2.8c0 5.5-8.2 11-8.2 11z"/></svg>';
 function toggleFavFilter(){favOnly=!favOnly;const c=document.getElementById('favChip');if(c)c.classList.toggle('active',favOnly);renderSpots();renderMap(true);if(favOnly&&!favs.size)toast('Touche le ❤️ d’un spot pour l’ajouter');}
+/* Mes favoris en un geste (raccourci de l’accueil, cockpit, profil) : la liste d’Explorer filtrée sur tes favoris. */
+function openFavorites(){go('spots');try{openWorld('all');setView('list');if(!favOnly)toggleFavFilter();}catch(e){}}
 function renderSportFilters(){
   const el=document.getElementById('sportFilters');if(!el)return;
   let h='<div class="chip sp-chip'+(activeSport?'':' active')+'" onclick="setSport(null)">'+sportIcon('all')+' Tous</div>';
@@ -568,6 +570,7 @@ function renderSpots(filter=currentFilter,keep){
     const hint=q?'Essaie un pays, une région ou un autre nom.':favOnly&&!favs.size?'Touche le cœur d’un spot pour le retrouver ici.':'';
     _h='<div class="nospot"><b>'+title+'</b>'+(hint?'<span>'+hint+'</span>':'')
       +(q?'<button onclick="clearSpotSearch()">Effacer la recherche</button>':'')
+      +(favOnly&&!favs.size&&!q?'<button onclick="toggleFavFilter()">Voir tous les spots</button>':'')
       +(activeSport&&(q||(favOnly&&favs.size))?'<button onclick="exploreAllActivities()">Chercher dans toutes les activités</button>':'')
       +(oldFavorites?'<button onclick="go(\'profile\')">Voir mes favoris archivés</button>':'')+((spotWorld&&spotWorld!=='all'&&currentSearch)?'<button onclick="openWorld(\'all\')">Chercher dans tous les spots</button>':'')+'</div>';
   }else{
@@ -1345,7 +1348,7 @@ function renderProfile(){
   var bt=document.getElementById('profBadges');if(bt)bt.textContent=(appB+quizB);
   var spotsSet={};sessions.forEach(function(s){spotsSet[s.spot]=1;});
   var grid=document.getElementById('profStats');
-  if(grid)grid.innerHTML=pstatTile(sportIcon(activeSport||'surf'),'var(--k-blue)','var(--k-blue-ink)',sessions.length,'Sessions')+pstatTile(PIN_ICON,'var(--k-blue)','var(--k-blue-ink)',Object.keys(spotsSet).length,'Spots visités')+pstatTile(LEAF_ICON,'var(--k-green)','var(--k-green-ink)',ecoLog.length,'Gestes écolo','showEcoLog()')+pstatTile(HEART_ICON,'var(--k-pink)','var(--k-pink-ink)',favs.size,'Favoris');
+  if(grid)grid.innerHTML=pstatTile(sportIcon(activeSport||'surf'),'var(--k-blue)','var(--k-blue-ink)',sessions.length,'Sessions')+pstatTile(PIN_ICON,'var(--k-blue)','var(--k-blue-ink)',Object.keys(spotsSet).length,'Spots visités')+pstatTile(LEAF_ICON,'var(--k-green)','var(--k-green-ink)',ecoLog.length,'Gestes écolo','showEcoLog()')+pstatTile(HEART_ICON,'var(--k-pink)','var(--k-pink-ink)',favs.size,'Favoris','openFavorites()');
   renderArchivedFavorites();
 }
 function renderArchivedFavorites(){

@@ -183,10 +183,53 @@
         <div class="hf-dots" aria-hidden="true">${slides.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</div>
       </div>`;
   }
+  /* ---------- Raccourcis en un geste (home-layout-model.js) ----------
+     Juste sous la recherche : « Mes favoris » (toujours), le dernier spot ouvert et le prochain voyage. La rangée est
+     posée avec l’ouverture, sous le rideau, à hauteur fixe (organisation.css) ; ensuite seul son contenu change, sur
+     place (retour à l’accueil, cœur touché) : rien ne se décale. */
+  const Layout=window.HomeLayout;
+  let knownIds=null;
+  const known=id=>{if(!knownIds)knownIds=new Set(SPOTS.map(s=>s.id));return knownIds.has(id);};
+  const dayKey=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+  const QI={
+    fav:'<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4S3.8 14.9 3.8 9.4A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.2 2.8c0 5.5-8.2 11-8.2 11z"/></svg>',
+    trip:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 14l7-2 4-8 2 1-2 7 6 2 1 3-8-1-3 5-2-1 1-5-5 1z"/></svg>',
+    clock:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" aria-hidden="true"><path d="M12 7v5l3 2M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0"/></svg>'
+  };
+  function quickItems(){
+    if(!Layout)return [];
+    let next=null;try{next=typeof TripModel!=='undefined'&&window.OceanTrips?TripModel.nextTrip(window.OceanTrips.list(),dayKey()):null;}catch(_){}
+    return Layout.quick({favs:typeof favs!=='undefined'?favs:[],recent:window.OceanHub?.recent?.()||[],known,next});
+  }
+  function quickTile(q){
+    if(q.kind==='favs'){
+      const sub=!q.count?'Aucun pour l’instant':q.count>1?`${q.count} spots`:'1 spot';
+      return `<button type="button" class="hf-q" data-hf-q="favs"><span class="hf-q-ic is-fav">${QI.fav}</span><span class="hf-q-tx"><b>Mes favoris</b><small>${esc(sub)}</small></span></button>`;
+    }
+    if(q.kind==='recent'){
+      const s=SPOTS.find(x=>x.id===q.id),p=s&&photo(s);if(!s)return '';
+      return `<button type="button" class="hf-q" data-hf-open="${esc(s.id)}" aria-label="Reprendre : ${esc(shortName(s))}"><span class="hf-q-ic${p?' is-photo':''}">${p?`<img src="${esc(p.thumb)}" alt="" decoding="async">`:QI.clock}</span><span class="hf-q-tx"><b>Reprendre</b><small translate="no">${esc(shortName(s))}</small></span></button>`;
+    }
+    if(q.kind==='trip'){
+      const when=q.state==='upcoming'?(q.days===1?'Départ demain':`J-${q.days}`):q.state==='ongoing'?'En voyage':'';
+      return `<button type="button" class="hf-q" data-hf-trip="${esc(q.id)}"><span class="hf-q-ic">${QI.trip}</span><span class="hf-q-tx"><b>Mon voyage</b><small>${when?`${esc(when)} · `:''}<span translate="no">${esc(q.name)}</span></small></span></button>`;
+    }
+    return '';
+  }
+  const quickHtml=()=>quickItems().map(quickTile).join('');
+  function quickRow(){return Layout?`<div class="hf-quick" data-hf-quick role="group" aria-label="Accès rapide">${quickHtml()}</div>`:'';}
+  /* Mise à jour sur place, seulement si le contenu a changé (même hauteur, aucune section ajoutée ni retirée). */
+  function syncQuick(){
+    const row=home.querySelector('[data-hf-quick]');if(!row)return;
+    const h=quickHtml();if(row._obHtml!==h){row.innerHTML=h;row._obHtml=h;}
+  }
+  /* ---------- Fin des raccourcis ---------- */
+
   function hero(){
     const n=SPOTS.length;
     return `<section class="hf-top" aria-label="Trouve ton spot">
       <button type="button" class="hf-search" data-hf-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span><b>Où veux-tu aller ?</b><small>${n} spots · plages, lagons, vagues, récifs</small></span></button>
+      ${quickRow()}
       ${acts()}
       ${heroBox()}
     </section>`;
@@ -537,6 +580,26 @@
   }
   /* ---------- Fin de « Pour toi aujourd’hui » ---------- */
 
+  /* « Plus d’idées de départ » : les collections et les rangées de données hors sujet pour ton sport, repliées sous un
+     seul bouton. Déplier est un geste volontaire (le contenu s’ouvre sous le bouton, rien au-dessus ne bouge). */
+  function plusSection(list){
+    if(!list.length)return '';
+    return `<section class="hf-plus" data-hf="plus" aria-label="Plus d’idées de départ">
+      <button type="button" class="hf-plus-btn" data-hf-fold aria-expanded="false" aria-controls="hfPlusBody"><span class="hf-plus-tx"><b>Plus d’idées de départ</b><small>${list.map(x=>`<span>${esc(x.title)}</span>`).join(' · ')}</small></span><span class="hf-plus-n" aria-hidden="true">${list.length}</span></button>
+      <div class="hf-plus-body" id="hfPlusBody" hidden>${list.map(x=>x.html).join('')}</div>
+    </section>`;
+  }
+  /* Ouvre (ou referme) le repli ; open=true seulement pour atteindre une rangée repliée (tuiles « Envies du moment »). */
+  function fold(open){
+    const box=home.querySelector('[data-hf="plus"]'),body=box?.querySelector('.hf-plus-body'),btn=box?.querySelector('[data-hf-fold]');if(!body||!btn)return;
+    const next=open==null?body.hidden:!!open;
+    body.hidden=!next;btn.setAttribute('aria-expanded',String(next));
+  }
+  /* Blocs posés par d’autres scripts (cockpit, immersion, nouveaux spots, Poulpy) : une place réservée dans le fil,
+     remplacée par l’élément lui-même au montage (order). */
+  const slot=k=>`<i data-hf-slot="${k}" hidden></i>`;
+  const OWNED={espace:'#oceanHub',immersion:'#obDive',nouveautes:'.field-arrivals',poulpy:'#poulpySpotlight'};
+
   function render(){
     const used=new Set();
     const all=bright(daily(SPOTS.filter(s=>photo(s)),'pool'));
@@ -545,55 +608,70 @@
        changent pas avec le sport. */
     const sp=curSport(),pool=sp==='all'?all:all.filter(s=>has(s,sp));
     const m=new Date().getMonth();
-    /* Mode Noël : la rangée « Noël au soleil » (et l’Avent) ouvre le fil ; ses spots ne reviennent pas plus bas.
-       Puis « Pour toi aujourd’hui ». */
-    let html=noelSection(all,used);
-    html+=forYouSection(used);
+    /* Les blocs sont calculés dans l’ordre historique (Noël, « Pour toi », le mois, les données, les collections) pour
+       garder les mêmes spots (un spot n’apparaît qu’une fois sur la page), puis posés dans l’ordre de HomeLayout.ORDER. */
+    const B={},plus=[];
+    B.noel=noelSection(all,used);
+    B.pourtoi=forYouSection(used);
     if(seasons){
       /* Saison qui commence ce mois-ci d’abord, puis saison en cours ; les saisons courtes passent devant « toute l’année ». */
       const inSeason=pool.filter(s=>seasons[s.id]?.includes(m));
       /* Les photos en haute définition passent devant (plus belles en grand format). */
       const score=s=>{const ms=seasons[s.id];return (ms.length===12?2:0)+(ms.includes((m+11)%12)?1:0)+ms.length/24+((photo(s)?.w||0)>=1200?0:1.5)+(100-vib(s.id))/25;};
       const ordered=inSeason.map(s=>({s,k:score(s)})).sort((a,b)=>a.k-b.k).map(o=>o.s);
-      html+=rail('mois',`Où partir en ${monthName(m)} ?`,'Repère indicatif d’après nos carnets et les moyennes climatiques, à confirmer sur place.',pick(ordered,{n:10,perCountry:1,used}),{big:true,season:true,more:true,data:'sea'});
+      B.mois=rail('mois',`Où partir en ${monthName(m)} ?`,'Repère indicatif d’après nos carnets et les moyennes climatiques, à confirmer sur place.',pick(ordered,{n:10,perCountry:1,used}),{big:true,season:true,more:true,data:'sea'});
     }
     if(lite){
-      html+=planCard(m);
-      html+=surfCard();
-      /* Rails de données : la mer chaude, la houle et le vent du mois, d’après les normales de plusieurs années. */
+      B.plan=planCard(m);
+      B.jeu=surfCard();
+      /* Rails de données : la mer chaude, la houle et le vent du mois, d’après les normales de plusieurs années.
+         Seules celles qui concernent ton sport restent dépliées (HomeLayout.railShown). */
+      const data=[];
       const warm=pool.filter(s=>(val(s,'sea',m)??0)>=26).sort((a,b)=>Math.round(vib(b.id)/25)-Math.round(vib(a.id)/25)||val(b,'sea',m)-val(a,'sea',m));
-      html+=rail('chaud',`La mer la plus chaude en ${monthName(m)}`,'26 °C et plus d’après les normales NOAA : on y entre sans frissonner.',pick(warm,{n:10,perCountry:1,used}),{data:'sea'});
+      data.push(['chaud',`La mer la plus chaude en ${monthName(m)}`,rail('chaud',`La mer la plus chaude en ${monthName(m)}`,'26 °C et plus d’après les normales NOAA : on y entre sans frissonner.',pick(warm,{n:10,perCountry:1,used}),{data:'sea'})]);
       const swell=pool.filter(s=>has(s,'surf','bodyboard')&&(val(s,'hs',m)??0)>=14&&(val(s,'hs',m)??0)<=32).sort((a,b)=>val(b,'hs',m)-val(a,'hs',m));
-      html+=rail('houle',`Belle houle en ${monthName(m)}`,'Les spots de surf qui reçoivent le plus de vagues ce mois-ci, au large.',pick(swell,{n:10,perCountry:2,used}),{data:'wave',season:true});
+      data.push(['houle',`Belle houle en ${monthName(m)}`,rail('houle',`Belle houle en ${monthName(m)}`,'Les spots de surf qui reçoivent le plus de vagues ce mois-ci, au large.',pick(swell,{n:10,perCountry:2,used}),{data:'wave',season:true})]);
       const wind=pool.filter(s=>has(s,'kitesurf','windsurf')&&(val(s,'kite',m)??0)>=60).sort((a,b)=>val(b,'kite',m)-val(a,'kite',m));
-      html+=rail('vent',`Du vent en ${monthName(m)}`,'Kite et windsurf : vent soutenu plus d’un jour sur deux.',pick(wind,{n:10,perCountry:2,used}),{data:'wind'});
+      data.push(['vent',`Du vent en ${monthName(m)}`,rail('vent',`Du vent en ${monthName(m)}`,'Kite et windsurf : vent soutenu plus d’un jour sur deux.',pick(wind,{n:10,perCountry:2,used}),{data:'wind'})]);
+      const shown=Layout?.railShown||(()=>true);
+      B.donnees=data.filter(([id,,h])=>h&&shown(id,sp)).map(([,,h])=>h).join('');
+      for(const [id,title,h] of data)if(h&&!shown(id,sp))plus.push({title,html:h});
     }
     for(const c of COLLECTIONS){
-      const items=pick(pool.filter(c.test),{n:10,perCountry:2,used});
-      html+=rail(c.id,c.title,c.sub,items,{season:true});
+      const h=rail(c.id,c.title,c.sub,pick(pool.filter(c.test),{n:10,perCountry:2,used}),{season:true});
+      if(h)plus.push({title:c.title,html:h});
     }
-    return html;
+    B.plus=plusSection(plus);
+    B.planete=worldCard();
+    B.envies=slot('envies');
+    /* Emplacement réservé à la rangée « Tour du monde des cultures » et à la carte « Le mot du jour » (branche
+       decouverte-cultures) : à la fusion, leur appel se range ici (B.cultures=…), pas ailleurs dans le fil. */
+    B.cultures='';
+    for(const k of Object.keys(OWNED))B[k]=slot(k);
+    const ORDER=Layout?.ORDER||['pourtoi','noel','mois','plan','cultures','espace','planete','envies','immersion','donnees','plus','nouveautes','jeu','poulpy'];
+    return ORDER.map(k=>B[k]||'').join('');
   }
 
-  /* Ordre : titre, Terre, cockpit (série, favoris), rails ; les activités et l’immersion après deux rails.
+  /* Ordre (HomeLayout.ORDER) : ouverture (recherche, raccourcis, activités, spots de rêve), « Pour toi », Noël, le mois,
+     « Quand ? », ton espace, la planète, les envies, l’immersion, les données, le repli, les nouveautés, le jeu, Poulpy.
      home-feed.js est le seul à ordonner l’accueil, une fois, au montage (sous le rideau de démarrage). */
   function order(){
-    const large=$('.as-large',home),heroEl=$('.hf-top',home),hub=$('#oceanHub',home),feed=$('.hf-feed',home);
+    const large=$('.as-large',home),heroEl=$('.hf-top',home),feed=$('.hf-feed',home);
     if(!heroEl||!feed)return;
     if(large&&large.nextElementSibling!==heroEl)large.after(heroEl);
     if(heroEl.nextElementSibling!==feed)heroEl.after(feed);
-    /* Le cockpit (série, favoris, reprendre) vient après les envies du moment. */
-    const anchor=feed.querySelector('.hf-moods')||feed.querySelector('.hf-sec');
-    if(hub&&anchor&&anchor.nextElementSibling!==hub)anchor.after(hub);
-    const acts=$('.poulpy-activities',home),intro=$('.home-intro',home),dive=$('#obDive',home);
-    let tail=feed.querySelector('.hf-world')||feed.querySelectorAll('.hf-sec')[1]||feed.lastElementChild;
-    const after=(el)=>{if(!el)return;if(tail&&tail.nextElementSibling!==el)tail.after(el);tail=el;};
-    if(tail&&tail.parentElement===feed){const rest=[...feed.children].slice([...feed.children].indexOf(tail)+1).filter(el=>el!==hub);after(acts);after(intro);after(dive);rest.forEach(after);}
+    for(const [k,sel] of Object.entries(OWNED)){
+      /* Élément pas encore créé (l’immersion peut arriver après le montage sur un appareil lent) : la marque cachée
+         reste, et le module la remplace à sa création (ocean-home.js). */
+      const mark=feed.querySelector(`[data-hf-slot="${k}"]`),el=$(sel,home);
+      if(mark&&el)mark.replaceWith(el);
+    }
   }
   /* Ouverture (recherche, spots de rêve) : posée dès l’exécution du script pour que sa photo se charge pendant l’attente des données. */
   function mountHero(){
     if($('.hf-top',home))return;
     const tmp=document.createElement('div');tmp.innerHTML=hero();
+    const q=$('[data-hf-quick]',tmp);if(q)q._obHtml=quickHtml();
     ($('.as-large',home)||home.firstElementChild)?.after(tmp.firstElementChild);
     home.classList.add('hf-on');syncActs();syncNoel();
   }
@@ -601,16 +679,15 @@
     mountHero();syncHero();syncNoel();
     let feed=$('.hf-feed',home);
     if(!feed){feed=document.createElement('div');feed.className='hf-feed';$('.hf-top',home).after(feed);}
-    /* Les sections placées entre les rails (activités, immersion) sortent du fil avant le nouveau rendu. */
-    for(const el of [$('#oceanHub',home),$('#obDive',home),$('.home-intro',home),$('.poulpy-activities',home)])if(el&&feed.contains(el))feed.after(el);
+    /* Les sections posées par d’autres scripts (cockpit, immersion, nouveautés, Poulpy ; anciennes sections masquées)
+       sortent du fil avant le nouveau rendu, puis reprennent leur place réservée (order). */
+    for(const el of [...Object.values(OWNED).map(s=>$(s,home)),$('.home-intro',home),$('.poulpy-activities',home)])if(el&&feed.contains(el))feed.after(el);
     stopPlanet();
     feed.innerHTML=render();
-    /* Envies du moment juste après le premier rail, la carte du monde après le deuxième. */
-    const rails=feed.querySelectorAll('.hf-sec:not([data-hf="pourtoi"])');
-    const firstRail=rails[0];const mm=document.createElement('div');mm.innerHTML=moods(feed);if(mm.firstElementChild)(firstRail||feed.firstElementChild)?.after(mm.firstElementChild);
-    /* La carte du monde vient après les deux premiers rails. */
-    const second=rails[1];const wc=document.createElement('div');wc.innerHTML=worldCard();(second||feed.lastElementChild)?.after(wc.firstElementChild);
-    order();bindHero();watchPlanet();aventToday();built=true;builtSport=curSport();builtLevel=curLevel()||'';
+    /* Envies du moment : quatre tuiles vers les collections (repliées plus bas), à leur place réservée. */
+    const mark=feed.querySelector('[data-hf-slot="envies"]');
+    if(mark){const mm=moods(feed);if(mm)mark.insertAdjacentHTML('afterend',mm);mark.remove();}
+    order();bindHero();watchPlanet();aventToday();syncQuick();built=true;builtSport=curSport();builtLevel=curLevel()||'';
   }
   /* Données arrivées après le montage : sous le rideau, le fil est remonté (invisible) ; après la levée, seules les
      pastilles des cartes déjà affichées changent, sur place (aucune section ajoutée, retirée ni déplacée). */
@@ -639,7 +716,14 @@
     const av=e.target.closest('[data-hf-avent]');
     if(av){openAvent(av);return;}
     const fav=e.target.closest('[data-fav]');
-    if(fav){e.stopPropagation();const id=fav.dataset.fav;if(typeof toggleFav==='function'){toggleFav(id,e);}const on=typeof favs!=='undefined'&&favs.has(id);fav.classList.toggle('on',on);if(typeof vibrate==='function')vibrate(8);return;}
+    if(fav){e.stopPropagation();const id=fav.dataset.fav;if(typeof toggleFav==='function'){toggleFav(id,e);}const on=typeof favs!=='undefined'&&favs.has(id);fav.classList.toggle('on',on);if(typeof vibrate==='function')vibrate(8);syncQuick();return;}
+    /* Raccourcis : « Mes favoris » ouvre la liste filtrée sur tes favoris ; « Mon voyage » ouvre le voyage. */
+    const quick=e.target.closest('[data-hf-q]');
+    if(quick){if(quick.dataset.hfQ==='favs'&&typeof openFavorites==='function')openFavorites();return;}
+    const trip=e.target.closest('[data-hf-trip]');
+    if(trip){window.OceanTrips?.openTrip?.(trip.dataset.hfTrip);return;}
+    const fd=e.target.closest('[data-hf-fold]');
+    if(fd){fold();return;}
     const prof=e.target.closest('[data-hf-profile]');
     if(prof){if(typeof openSettings==='function')openSettings('sport');return;}
     const surf=e.target.closest('[data-surf-game]');
@@ -653,7 +737,7 @@
       return;
     }
     const jump=e.target.closest('[data-hf-jump]');
-    if(jump){const sec=home.querySelector(`[data-hf="${jump.dataset.hfJump}"]`);sec?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});return;}
+    if(jump){const sec=home.querySelector(`[data-hf="${jump.dataset.hfJump}"]`);if(sec?.closest('.hf-plus-body'))fold(true);sec?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});return;}
     const act=e.target.closest('[data-hf-act]');
     if(act){
       /* Depuis l’accueil, on reste sur l’accueil : seule l’interface prend les couleurs de l’activité. */
@@ -685,6 +769,8 @@
   document.addEventListener('ocean:sport',()=>{syncActs();profileChanged();});
   /* Niveau changé dans Réglages : seul « Pour toi aujourd’hui » change, sur place. */
   document.addEventListener('ocean:level',profileChanged);
+  /* Retour à l’accueil : les raccourcis reprennent le dernier spot ouvert, tes favoris et ton voyage, sur place. */
+  window.addEventListener('ocean:navigate',e=>{if(e.detail==='home')syncQuick();});
   /* Scène interrompue ou annulée avant le changement : la pastille revient à l’activité réellement appliquée. */
   document.addEventListener('ocean:transition',e=>{if(!e.detail)syncActs();});
 

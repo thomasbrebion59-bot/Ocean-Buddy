@@ -66,7 +66,8 @@
 
   const eco=document.createElement('aside');eco.className='poulpy-eco-banner';
   eco.innerHTML=`${image('eco')}<div><span class="section-kicker">L’OCÉAN NOUS DONNE TANT</span><h2>À nous de lui rendre.</h2><p>Un déchet ramassé, une bonne habitude partagée. <br>Avec Poulpy, chaque geste compte.</p></div><span class="eco-seal" aria-hidden="true">EXPLORE<br>PROGRESSE<br><b>PROTÈGE.</b></span>`;
-  $('#chalTop').after(eco);
+  /* Défis : le Quiz vient juste sous l’en-tête ; ce bandeau introduit les défis écolo, juste avant leur sélecteur. */
+  const gsw=document.querySelector('#challenges .gsw');if(gsw)gsw.before(eco);else $('#chalTop').after(eco);
 
   // Native dialog supplies focus trapping, Escape and an inert background.
   const dialog=document.createElement('dialog');dialog.className='poulpy-dialog';dialog.id='poulpyDialog';dialog.setAttribute('aria-labelledby','poulpyDialogTitle');
@@ -84,7 +85,8 @@
   });
   const profileCard=document.createElement('button');profileCard.type='button';profileCard.className='poulpy-profile-card';profileCard.onclick=openWardrobe;
   profileCard.innerHTML=`<span class="profile-poulpy-art">${image('travel','personal-poulpy',false)}</span><span><span class="section-kicker">TON COMPAGNON D’AVENTURE</span><strong>Ton Poulpy, ton style.</strong><span id="poulpyPreference"></span></span><span class="profile-customize">Choisir</span>`;
-  $('#profTop').after(profileCard);
+  /* Profil : le style de Poulpy se range avec les réglages, en bas (ton sport et ton passeport d’abord). */
+  const profSet=document.getElementById('profSettings');if(profSet)profSet.before(profileCard);else $('#profTop').after(profileCard);
   document.querySelectorAll('.chrome-user,.sidebar-user').forEach(button=>button.insertAdjacentHTML('afterbegin',image('travel','personal-poulpy',false)));
 
   // Illustrate the existing onboarding controls without changing their behaviour.
