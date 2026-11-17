@@ -224,6 +224,9 @@
       if(h===base||(h===null&&key.startsWith('progress:'))){delete s.pend[key];continue;}
       if(!s.pend[key]||s.pend[key].h!==h)s.pend[key]={h,u:now};
     }
+    /* Attente d'une progression qui n'est plus sur l'appareil ni dans la base commune (notée quand le serveur l'annonçait,
+       ou données locales effacées) : abandonnée, sinon elle partirait « supprimée » et bloquerait tout l'envoi. */
+    for(const key of Object.keys(s.pend))if(key.startsWith('progress:')&&local[key]===undefined)delete s.pend[key];
     return s;
   }
 
@@ -273,7 +276,7 @@
       if(s.shadow[key]&&s.shadow[key].h===h)delete s.pend[key];}
     for(const key of Object.keys(s.pend))if(key.startsWith('trip:')&&out[key]&&!out[key].deleted)summary.keptLocal.trips++;
     s.lastRev=maxRev;
-    const push=Object.keys(s.pend).map(key=>{const {kind,id}=splitKey(key);return out[key]?{kind,id,data:out[key],u:s.pend[key].u,deleted:false}:{kind,id,data:{},u:s.pend[key].u,deleted:true};});
+    const push=Object.keys(s.pend).filter(key=>out[key]||!key.startsWith('progress:')).map(key=>{const {kind,id}=splitKey(key);return out[key]?{kind,id,data:out[key],u:s.pend[key].u,deleted:false}:{kind,id,data:{},u:s.pend[key].u,deleted:true};});
     return {local:out,state:s,push,summary};
   }
 

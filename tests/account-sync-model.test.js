@@ -241,3 +241,22 @@ test('privacy.html énumère chaque clé copiée sur le compte (tampons des cult
   const at=html.indexOf('<section id="compte">'),sec=html.slice(at,html.indexOf('</section>',at));
   for(const key of Object.values(M.KEYS))assert.ok(sec.includes('<li>'+key+' : '),key);
 });
+
+test('progression en attente sans base commune, puis absente (retour arrière du Worker, données locales effacées) : jamais envoyée comme supprimée',()=>{
+  /* Tampon gagné hors ligne pendant que le Worker annonçait « cultures » : l'attente est notée, rien n'est encore envoyé.
+     Au retour, le Worker n'annonce plus « cultures » : sans garde, l'envoi contenait une progression « supprimée »,
+     que tout Worker refuse (400 invalid_item_kind) ; tout l'envoi (favoris, voyages) était alors bloqué pour toujours. */
+  const ls=store({oceanbuddy_v1:{favs:['a','b']},oceanbuddy_cultures_v1:{v:1,stamps:{Japon:'2026-11-17'},quiz:null,run:0,best:0,last:null}});
+  let st={...M.freshState(),lastRev:5};
+  st=M.scan(M.forServer(M.collect(ls),M.PROGRESS_IDS),st,1000);
+  assert.ok(st.pend['progress:cultures']);
+  const local=M.forServer(M.collect(ls),[]);
+  const sc=M.scan(local,st,2000);
+  assert.equal(sc.pend['progress:cultures'],undefined);
+  const mg=M.merge(local,[],sc,{now:2000});
+  assert.deepEqual(mg.push.map(p=>p.kind+':'+p.id).sort(),['fav:a','fav:b']);
+  for(const p of mg.push)assert.equal(M.checkPushItem(p),null);
+  /* Même garde dans merge seul (attente déjà présente, appareil sans la progression). */
+  const mg2=M.merge(local,[],{...sc,pend:{...sc.pend,'progress:checklist':{h:'x',u:1}}},{now:2100});
+  assert.ok(!mg2.push.some(p=>p.kind==='progress'&&p.deleted));
+});
