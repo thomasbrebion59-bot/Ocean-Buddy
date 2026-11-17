@@ -254,7 +254,11 @@
     if(webgl2===null){webgl2=false;try{const c=document.createElement('canvas');c.width=c.height=1;const gl=c.getContext('webgl2');webgl2=!!gl;gl?.getExtension('WEBGL_lose_context')?.loseContext();}catch(_){}}
     return webgl2;
   }
-  const DPR=()=>M.pixelRatio(window.devicePixelRatio,coarse);
+  /* Mémoire graphique courte : dès qu’un contexte WebGL a été retiré par le système, les canevas suivants (carte, globe,
+     relief, petites cartes) repassent à ×2 au plus sur téléphone, jusqu’à la fermeture de l’onglet ou de l’app. */
+  let gpuTight=false;try{gpuTight=sessionStorage.getItem('oceanbuddy_gpu_tight')==='1';}catch(_){}
+  function tighten(){if(gpuTight)return;gpuTight=true;try{sessionStorage.setItem('oceanbuddy_gpu_tight','1');}catch(_){}}
+  const DPR=()=>M.pixelRatio(window.devicePixelRatio,coarse,gpuTight);
   /* Style lisible : la carte existe, son contexte n’est pas perdu et son style est en place (MapLibre le détruit à la perte). */
   const styled=()=>!!map&&!mapLost&&!!map.style;
   /* warmAt : vue de départ imposée par le préchauffage sous le globe ; sinon la vue du globe, ou le monde. */
@@ -386,7 +390,7 @@
     let made=null;
     planetStarting=window.OceanGlobe.create(host,{
       onContextLost:()=>{if(made&&made===planet)onPlanetLost();},
-      minWidthKm:DIVE_KM,lighting:prefs.light,clouds:prefs.clouds===true,
+      minWidthKm:DIVE_KM,lighting:prefs.light,clouds:prefs.clouds===true,tight:gpuTight,
       onSelect:id=>select(id),
       onEmpty:()=>deselect(),
       onView:()=>{if(mode!=='globe')return;worldState();clearTimeout(listTimer);listTimer=setTimeout(updateList,90);},
@@ -566,7 +570,8 @@
     if(here.kmPerPx>DIVE_KM/sd/2.8)return false;
     const g=target||{lat:Math.max(-78,Math.min(78,c.lat)),lon:c.lng,kmPerPx:Math.max(RISE_KM*1.2/sd,Math.min(world,diveOrigin?.kmPerPx||world))};
     /* Mouvement réduit : retour direct au globe, sans vol. */
-    if(calm()){deselect();rise();planet.jumpTo({lat:g.lat,lon:g.lon,widthKm:g.kmPerPx*sd});if(toOverview)planet.overview({lat:g.lat,lon:g.lon},false);return true;}
+    if(calm()){deselect();rise();planet.jumpTo({lat:g.lat,lon:g.lon,widthKm:g.kmPerPx*sd});if(toOverview)planet.overview({lat:g.lat,lon:g.lon},false);
+      wrap.classList.add('is-jump');setTimeout(()=>wrap?.classList.remove('is-jump'),420);return true;}
     const padB=map.getPadding?.()||pad();
     deselect();
     startFlight({plan:flightPlan(g,here),dir:-1,spot:null,padA:planetPad(),padB,overview:toOverview?{lat:g.lat,lon:g.lon}:null});
@@ -574,7 +579,7 @@
   }
   function startFlight(f){
     const now=performance.now();
-    const me=flight={...f,start:now,t0:now,last:now,ready:false,failed:false,swapped:false,held:0,stage:0,pose:null,raf:0,hand:1};
+    const me=flight={...f,start:now,t0:now,last:now,ready:false,failed:false,swapped:false,held:0,stage:0,pose:null,raf:0,hand:1,rate:1,restAt:0,tOk:0};
     /* Instant où le globe commence à s’effacer : la carte cachée se prépare avant. */
     me.handPose=me.plan.to;for(let i=0;i<=120;i++){const q=M.diveAt(me.plan,M.diveProgress(i/120,1));if(q.globe<1){me.hand=i/120;me.handPose=q;break;}}
     diving=true;clearTimeout(modeTimer);
@@ -599,18 +604,29 @@
     const dt=now-f.last;f.last=now;
     /* Image très en retard (onglet masqué, à-coup) : le vol reprend où il en était, sans saut. */
     if(dt>140)f.t0+=dt-34;
-    let t=Math.min(1,(now-f.t0)/f.plan.ms),p=M.diveAt(f.plan,M.diveProgress(t,f.dir));
-    const host=globeHost(),plan=f.plan,toMap=f.dir>0;
-    if(toMap&&!f.swapped){
+    const host=globeHost(),plan=f.plan,toMap=f.dir>0,step=Math.min(dt,34);
+    let t=Math.min(1,(now-f.t0)/plan.ms),aim=1;
+    if(toMap&&!f.swapped&&!f.go){
       /* Carte indisponible : on reste sur le globe, au-dessus du spot. */
       if(f.failed||f.held>5000){endFlight(true);if(typeof toast==='function')toast('Carte détaillée indisponible pour le moment.');return;}
-      /* Le globe ne s’efface que sur une carte prête : sinon le vol attend à cette altitude (jamais d’écran vide). */
-      const loaded=f.ready&&f.stage>=3&&map.areTilesLoaded?.()!==false;
-      if(p.globe<1&&!f.go){
-        if(loaded||(f.ready&&f.held>=450))f.go=true;
-        else{f.t0+=dt;f.held+=dt;t=Math.min(1,(now-f.t0)/plan.ms);p=f.pose&&f.pose.globe>=1?f.pose:{...p,globe:1};}
-      }
+      /* Le globe ne s’efface que sur une carte prête (jamais d’écran vide). Si elle ne l’est pas encore à l’approche du
+         relais, la chute ralentit en douceur et plane juste au-dessus, au lieu de se figer d’un coup en pleine vitesse ;
+         elle reprend son élan progressivement dès que la carte est là (ou après 330 ms perdues : avec le ralentissement
+         et la reprise, l’attente totale reste d’environ 450 ms, comme avant). */
+      const loaded=f.ready&&f.stage>=3&&now-f.restAt>50&&map.areTilesLoaded?.()!==false;
+      if(loaded||(f.ready&&f.held>=330))f.go=true;
+      else aim=M.diveBrake(t,f.hand);
     }
+    /* Allure du vol (1 = temps réel) : elle rejoint sa cible sans à-coup, plus vite pour freiner que pour repartir. */
+    f.rate+=(aim-f.rate)*(1-Math.exp(-step/(aim<f.rate?60:130)));
+    if(f.rate>.999)f.rate=1;
+    else{const lost=step*(1-f.rate);f.t0+=lost;f.held+=lost;t=Math.min(1,(now-f.t0)/plan.ms);}
+    let p=M.diveAt(plan,M.diveProgress(t,f.dir));
+    /* Dernier garde-fou : au seuil du relais sans carte prête, le vol attend à cette altitude. */
+    if(toMap&&!f.swapped&&!f.go&&p.globe<1){
+      f.held+=step*f.rate;f.rate=0;t=f.tOk;f.t0=now-t*plan.ms;p=M.diveAt(plan,M.diveProgress(t,f.dir));
+      if(p.globe<1)p={...p,globe:1};
+    }else if(p.globe>=1)f.tOk=t;
     f.pose=p;
     wrap.classList.toggle('is-handover',p.globe<1);
     if(p.globe>0){planet.pose(p);host.style.opacity=p.globe<1?p.globe.toFixed(3):'1';}
@@ -619,11 +635,12 @@
       if(p.globe<1)follow();
       else if(toMap){
         /* Carte cachée sous le globe : elle charge d’abord la vue exacte du relais, puis celle de l’arrivée, et revient
-           attendre au relais (tuiles déjà en mémoire) juste avant que le globe ne s’efface. */
-        const to=plan.to,h=f.handPose,rest=()=>map.jumpTo({center:[h.lon,h.lat],zoom:M.mapZoom(h.kmPerPx,clampLat(h.lat)),pitch:0,padding:f.padA});
+           attendre au relais (tuiles déjà en mémoire) un peu avant que le globe ne s’efface : quand tout est prêt, le
+           feu vert tombe avant la zone de freinage et la chute ne ralentit pas du tout. */
+        const to=plan.to,h=f.handPose,rest=()=>{f.restAt=now;map.jumpTo({center:[h.lon,h.lat],zoom:M.mapZoom(h.kmPerPx,clampLat(h.lat)),pitch:0,padding:f.padA});};
         if(f.stage===0){f.stage=1;rest();}
-        else if(f.stage===1&&f.spot&&t<f.hand-.1&&map.areTilesLoaded?.()){f.stage=2;map.jumpTo({center:[to.lon,to.lat],zoom:M.mapZoom(to.kmPerPx,clampLat(to.lat)),pitch:0,padding:f.padB});}
-        else if(f.stage<3&&t>f.hand-.03){f.stage=3;rest();}
+        else if(f.stage===1&&f.spot&&t<f.hand-.2&&map.areTilesLoaded?.()){f.stage=2;map.jumpTo({center:[to.lon,to.lat],zoom:M.mapZoom(to.kmPerPx,clampLat(to.lat)),pitch:0,padding:f.padB});}
+        else if(f.stage<3&&t>f.hand-.11){f.stage=3;rest();}
       }
     }
     if(toMap){
@@ -712,7 +729,7 @@
   }
   function onMapLost(m){
     if(m!==map)return;
-    mapLost=true;clearTimeout(lossTimer);
+    mapLost=true;clearTimeout(lossTimer);tighten();
     /* Carte cachée sous le globe : on la libère, la prochaine plongée en créera une neuve. */
     if(mode!=='map'&&planet&&!planet.lost){dropMap();restoreAt=null;return;}
     const plan=M.recovery([...mapLosses,Date.now()],Date.now());mapLosses=plan.recent;
@@ -734,6 +751,7 @@
   }
   function onPlanetLost(){
     const p=planet;if(!p)return;
+    tighten();
     try{const v=p.view();planetView={lat:v.lat,lon:v.lon,widthKm:v.widthKm};}catch(_){}
     const plan=M.recovery([...planetLosses,Date.now()],Date.now());planetLosses=plan.recent;
     clearTimeout(planetTimer);

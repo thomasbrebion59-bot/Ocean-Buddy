@@ -215,7 +215,7 @@ test('explorer-carte-spots-5 : création réussie puis destroy() libère toujour
 /* ensurePlanet() de ocean-map.js avec un globe p dont la mise en place échoue (planetPad() lève). */
 function carte(p, host) {
   return load('ocean-map.js', ['ensurePlanet'], {
-    planet: null, planetStarting: null, planetFailed: false, planetTries: 0, DIVE_KM: 600, WORLD_KM: 20000, rows: [],
+    planet: null, planetStarting: null, planetFailed: false, planetTries: 0, gpuTight: false, DIVE_KM: 600, WORLD_KM: 20000, rows: [],
     stage: { querySelector: () => host }, localStorage: { getItem: () => null },
     window: { OceanGlobe: { create: async () => p } },
     planetPad() { throw Error('marges'); },

@@ -211,8 +211,12 @@ body .omap .omap-status.is-error{background:var(--t-card);color:var(--t-deep)}
 .omap-card.is-waiting{opacity:0;transform:translateY(calc(100% + 130px));pointer-events:none;animation:none}
 .omap-card.is-landing{animation:omap-land .6s cubic-bezier(.2,.85,.25,1) both}
 @keyframes omap-land{from{opacity:0;transform:translateY(calc(100% + 130px))}35%{opacity:1}to{opacity:1;transform:none}}
-.omap.is-jump #spotMap{animation:omap-fade .34s ease-out}
+/* Mouvement réduit : pas de vol. La carte (à l’aller), le globe (au retour) et l’aperçu du spot arrivent par un fondu
+   simple ; ces trois fondus restent actifs malgré la règle générale qui coupe animations et transitions. */
+.omap.is-jump #spotMap,.omap.is-jump.is-planet .omap-globe{animation:omap-fade .34s ease-out!important}
 @keyframes omap-fade{from{opacity:0}to{opacity:1}}
+@media(prefers-reduced-motion:reduce){.omap .omap-card.is-landing{animation:omap-fade .3s ease-out both!important}}
+body.reduce-motion .omap .omap-card.is-landing{animation:omap-fade .3s ease-out both!important}
 .omap .omap-globe{position:absolute;inset:0;z-index:1;opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s .35s}
 .omap.is-planet .omap-globe{opacity:1;visibility:visible;transition:opacity .35s ease}
 .og-canvas{position:absolute;inset:0;display:block;width:100%;height:100%;touch-action:none;outline:none;cursor:grab;-webkit-tap-highlight-color:transparent;user-select:none;-webkit-user-select:none}
