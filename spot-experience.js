@@ -221,7 +221,9 @@
       const why = rule.reason === 'level' ? 'Choisis ton niveau dans Réglages, « Mon sport et mon niveau », pour voir ton meilleur créneau.'
         : rule.reason === 'expert' ? 'Niveau expert : « Lire les conditions » ne fixe pas de seuil. Compare toi-même vent, houle et période heure par heure.'
         : 'Pas de créneau calculé pour ce sport ici : « Lire les conditions » ne donne pas de repère chiffré. Renseigne-toi sur place.';
-      return {html: `${head}<p class="wx-slot-why">${esc(why)}</p>`, hours: new Set(), rule, today: null};
+      /* Sans niveau : la phrase ouvre directement « Mon sport et mon niveau » (spot-before.js, data-open-level). */
+      const whyHtml = rule.reason === 'level' ? `<button type="button" class="wx-slot-why wx-level" data-open-level>${esc(why)}</button>` : `<p class="wx-slot-why">${esc(why)}</p>`;
+      return {html: `${head}${whyHtml}`, hours: new Set(), rule, today: null};
     }
     const res = dates.map((date, i) => W.bestSlot(list, {act, inland, level, date, nowIso: i === 0 ? nowIso : null, catalogWind: s.wind}));
     const hours = new Set();
@@ -275,10 +277,10 @@
     const updated = fetchedAt ? new Intl.DateTimeFormat('fr-FR', {dateStyle: 'short', timeStyle: 'short'}).format(new Date(fetchedAt)) : 'heure non disponible';
     const gap = W.tzGap(off);
     const utc = (() => { const a = Math.abs(+off || 0), h = Math.floor(a / 3600), m = Math.round(a % 3600 / 60); return `UTC${off < 0 ? '−' : '+'}${h}${m ? ':' + String(m).padStart(2, '0') : ''}`; })();
-    host.innerHTML = `<div class="spot-week-head"><div><small>MÉTÉO DU SPOT</small><b>Quand y aller ?</b></div><span><span class="wx-stamp">Relevé ${esc(updated)}</span>${gap ? `<span class="wx-stamp">Heures locales du spot (${esc(utc)})</span>` : ''}</span></div>`
+    host.innerHTML = `<div class="spot-week-head"><div><small>MÉTÉO DU SPOT</small><b>Cette semaine</b></div><span><span class="wx-stamp">Relevé ${esc(updated)}</span>${gap ? `<span class="wx-stamp">Heures locales du spot (${esc(utc)})</span>` : ''}</span></div>`
       + `<div class="wx-block">${slots.html}</div>`
-      + `<div class="wx-block"><div class="wx-sub"><h4>Heure par heure</h4><span>48 h</span></div>${hoursTable(next, daily, inland, slots.hours)}</div>`
-      + `<div class="wx-block"><div class="wx-sub"><h4>Les 7 jours</h4><span>Max du jour</span></div>${weekCards(daily, inland)}</div>`
+      + `<div class="wx-block wx-hours"><div class="wx-sub"><h4>Heure par heure</h4><span>48 h</span></div>${hoursTable(next, daily, inland, slots.hours)}</div>`
+      + `<div class="wx-block wx-week"><div class="wx-sub"><h4>Les 7 jours</h4><span>Max du jour</span></div>${weekCards(daily, inland)}</div>`
       + `<p class="spot-week-note"><span class="wx-stamp-note">Valeurs de modèle, indicatives, gardées une heure.</span>${inland ? '' : ' <span class="wx-stamp-note">Près des côtes, la précision des vagues est limitée. Pour la marée, consulte l’annuaire local.</span>'}</p>`
       + '<p class="wx-source"><a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Prévisions Open-Meteo (CC BY 4.0)</a></p>';
   }
