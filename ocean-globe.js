@@ -113,20 +113,25 @@
       return c;
     }
     vec2 sstUV(float m,vec2 uv){return vec2((mod(m,4.)+uv.x)/4.,(2.-floor(m/4.)+uv.y)/3.);}
+    /* Interpolation bicubique de Catmull-Rom en 9 lectures bilinéaires (les 16 pixels voisins, regroupés deux à deux). */
+    vec3 bicubic(sampler2D tex,vec2 uv,vec2 size){
+      vec2 sp=uv*size,tc=floor(sp-.5)+.5,f=sp-tc;
+      vec2 w0=f*(-.5+f*(1.-.5*f)),w1=1.+f*f*(-2.5+1.5*f),w2=f*(.5+f*(2.-1.5*f)),w3=f*f*(-.5+.5*f);
+      vec2 w12=w1+w2,t0=(tc-1.)/size,t3=(tc+2.)/size,t12=(tc+w2/w12)/size;
+      return textureLod(tex,vec2(t0.x,t0.y),0.).rgb*w0.x*w0.y+textureLod(tex,vec2(t12.x,t0.y),0.).rgb*w12.x*w0.y+textureLod(tex,vec2(t3.x,t0.y),0.).rgb*w3.x*w0.y
+        +textureLod(tex,vec2(t0.x,t12.y),0.).rgb*w0.x*w12.y+textureLod(tex,vec2(t12.x,t12.y),0.).rgb*w12.x*w12.y+textureLod(tex,vec2(t3.x,t12.y),0.).rgb*w3.x*w12.y
+        +textureLod(tex,vec2(t0.x,t3.y),0.).rgb*w0.x*w3.y+textureLod(tex,vec2(t12.x,t3.y),0.).rgb*w12.x*w3.y+textureLod(tex,vec2(t3.x,t3.y),0.).rgb*w3.x*w3.y;
+    }
     void main(){
       vec3 n=normalize(vPos);vec2 uv,dx,dy;geo(n,uv,dx,dy);
       vec3 albedo=textureGrad(uDay,uv,dx,dy).rgb;
-      /* Vue de près, l’image de la Terre est agrandie (moins d’un pixel d’image par pixel d’écran) et l’interpolation
-         adoucit côtes et reliefs. On raffermit alors les contours (masque flou : écart à la moyenne des quatre voisins),
-         en proportion de l’agrandissement, borné pour ne créer ni liseré ni bruit. Sans effet vu de loin. */
+      /* Vue de près, l’image de la Terre est agrandie (moins d’un pixel d’image par pixel d’écran) : l’interpolation
+         linéaire adoucit côtes et reliefs et laisse deviner la grille des pixels de l’image. On passe alors, en
+         proportion de l’agrandissement, à une interpolation bicubique (Catmull-Rom, 9 lectures) : contours plus fermes,
+         dégradés continus, aucun carré visible. Sans effet vu de loin (l’image y est réduite, pas agrandie). */
       float tpp=max(length(dx*uDaySize),length(dy*uDaySize));
-      float crisp=uCrisp*(1.-smoothstep(.5,1.,tpp));
-      if(crisp>.01){
-        vec2 o=1./uDaySize;
-        vec3 soft=(textureGrad(uDay,uv+vec2(o.x,0.),dx,dy).rgb+textureGrad(uDay,uv-vec2(o.x,0.),dx,dy).rgb
-          +textureGrad(uDay,uv+vec2(0.,o.y),dx,dy).rgb+textureGrad(uDay,uv-vec2(0.,o.y),dx,dy).rgb)*.25;
-        albedo=max(albedo+clamp((albedo-soft)*crisp,-.06,.06),0.);
-      }
+      float crisp=uCrisp*(1.-smoothstep(.55,1.,tpp));
+      if(crisp>.01)albedo=mix(albedo,max(bicubic(uDay,uv,uDaySize),0.),crisp);
       vec3 nm=textureGrad(uNorm,uv,dx,dy).rgb;
       vec3 sk=textureGrad(uSky,uv,dx,dy).rgb;
       float water=smoothstep(.25,.75,nm.b);
@@ -309,7 +314,7 @@
     const sunDir=new T.Vector3(),studioSun=new T.Vector3(-.38,.36,.85).normalize();
     const uniEarth={
       uDay:{value:null},uNorm:{value:null},uSky:{value:null},uSun:{value:sunDir},uCam:{value:new T.Vector3()},
-      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:3.2},uGlint:{value:1},uCrisp:{value:1.4},uDaySize:{value:new T.Vector2(4096,2048)},uReveal:{value:0},uStudio:{value:lighting==='studio'?1:0},
+      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:3.2},uGlint:{value:1},uCrisp:{value:1},uDaySize:{value:new T.Vector2(4096,2048)},uReveal:{value:0},uStudio:{value:lighting==='studio'?1:0},
       uSst:{value:null},uSstA:{value:0},uSstM:{value:new Date().getMonth()}
     };
     const seg=mobile?128:192;

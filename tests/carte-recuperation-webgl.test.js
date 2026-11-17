@@ -245,6 +245,9 @@ test('pression mémoire : densité plafonnée, cache réduit, globe libéré sou
   assert.match(fnSource(globe, 'pace'), /if\(!moving\|\|gap>100\)return;/);
   assert.match(fnSource(globe, 'pace'), /const floor=Math\.max\(1,dprFull\*\.6\);/);
   assert.match(fnSource(globe, 'sharpen'), /dprNow=dprFull;/);
+  /* Image de la Terre agrandie : interpolation bicubique (pas de masque de netteté, qui faisait ressortir la grille des pixels). */
+  assert.match(globe, /if\(crisp>\.01\)albedo=mix\(albedo,max\(bicubic\(uDay,uv,uDaySize\),0\.\),crisp\);/);
+  assert.doesNotMatch(globe, /tex\.anisotropy=Math\.min\(8,/);
   /* La destruction volontaire (forceContextLoss) ne déclenche pas de reconstruction. */
   assert.match(globe, /if\(dead\|\|!handed\|\|lost\)return;/);
   assert.match(globe, /handed=true;\s*return api;/);
