@@ -96,7 +96,7 @@
   const EARTH_V=`varying vec3 vPos;void main(){vPos=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
   const EARTH_F=`
     uniform sampler2D uDay,uNorm,uSky;uniform vec3 uSun,uCam;
-    uniform float uCloudOff,uCloudA,uRelief,uNight,uExpo,uSpec,uReveal,uStudio,uGlint;
+    uniform float uCloudOff,uCloudA,uRelief,uNight,uExpo,uSpec,uReveal,uStudio,uGlint,uCrisp;uniform vec2 uDaySize;
     uniform sampler2D uSst;uniform float uSstA,uSstM;
     varying vec3 vPos;
     ${GEO}
@@ -116,6 +116,17 @@
     void main(){
       vec3 n=normalize(vPos);vec2 uv,dx,dy;geo(n,uv,dx,dy);
       vec3 albedo=textureGrad(uDay,uv,dx,dy).rgb;
+      /* Vue de près, l’image de la Terre est agrandie (moins d’un pixel d’image par pixel d’écran) et l’interpolation
+         adoucit côtes et reliefs. On raffermit alors les contours (masque flou : écart à la moyenne des quatre voisins),
+         en proportion de l’agrandissement, borné pour ne créer ni liseré ni bruit. Sans effet vu de loin. */
+      float tpp=max(length(dx*uDaySize),length(dy*uDaySize));
+      float crisp=uCrisp*(1.-smoothstep(.5,1.,tpp));
+      if(crisp>.01){
+        vec2 o=1./uDaySize;
+        vec3 soft=(textureGrad(uDay,uv+vec2(o.x,0.),dx,dy).rgb+textureGrad(uDay,uv-vec2(o.x,0.),dx,dy).rgb
+          +textureGrad(uDay,uv+vec2(0.,o.y),dx,dy).rgb+textureGrad(uDay,uv-vec2(0.,o.y),dx,dy).rgb)*.25;
+        albedo=max(albedo+clamp((albedo-soft)*crisp,-.06,.06),0.);
+      }
       vec3 nm=textureGrad(uNorm,uv,dx,dy).rgb;
       vec3 sk=textureGrad(uSky,uv,dx,dy).rgb;
       float water=smoothstep(.25,.75,nm.b);
@@ -196,7 +207,10 @@
       vec3 d=normalize(vW-uCam);
       vec3 pc=uCam+d*max(-dot(uCam,d),0.);
       float b=length(pc);
-      if(b<1.)discard;
+      /* Limbe lissé : l’atmosphère recouvre le dernier pixel de la planète en proportion (rampe d’un pixel autour du
+         bord), au lieu de s’arrêter net sur le contour en facettes de la sphère. */
+      float cover=clamp((b-1.)/max(fwidth(b),1e-6)+.5,0.,1.);
+      if(cover<=0.)discard;
       /* Densité au point le plus bas du rayon : décroissance exponentielle avec l’altitude. */
       float h=clamp((b-1.)/(uTop-1.),0.,1.);
       float dens=exp(-h*4.2)*(1.-smoothstep(.7,1.,h));
@@ -204,7 +218,7 @@
       float lit=smoothstep(-.32,.22,mu);
       float phase=.75*(1.+ct*ct)+.5*pow(max(ct,0.),10.);
       vec3 c=mix(vec3(.55,.78,1.),vec3(.2,.45,1.),smoothstep(0.,.45,h))*dens*lit*sunTint(mu+.08)*phase*uI;
-      gl_FragColor=vec4(c,0.);
+      gl_FragColor=vec4(c*cover,0.);
       #include <colorspace_fragment>
     }`;
   const SKY_V=`varying vec3 vD;void main(){vD=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`;
@@ -271,7 +285,9 @@
     canvas.setAttribute('aria-label','Globe interactif des spots. Glisse pour tourner la Terre, pince ou utilise plus et moins pour zoomer. Au clavier : flèches pour tourner, plus et moins pour zoomer.');
     const layer=document.createElement('div');layer.className='og-layer';
     host.append(canvas,layer);undo.push(()=>{canvas.remove();layer.remove();});
-    /* Écrans haute densité : l’anticrénelage matériel n’apporte rien de visible et coûte cher sur téléphone. */
+    /* Téléphones à écran dense : pas d’anticrénelage matériel (quatre échantillons par pixel, soit quatre fois la mémoire
+       du tampon en ×3). Le seul bord franc de l’image, le limbe de la planète contre l’atmosphère, est lissé dans le
+       shader de l’atmosphère (ATMO_F) ; pastilles, repères et halos sont lissés par calcul. */
     const renderer=new T.WebGLRenderer({canvas,antialias:!(mobile&&(devicePixelRatio||1)>=2),alpha:true,powerPreference:'high-performance'});
     undo.push(()=>{renderer.dispose();renderer.forceContextLoss?.();});
     renderer.setClearColor(0x000000,0);renderer.autoClear=false;
@@ -279,10 +295,11 @@
     const maxTex=renderer.capabilities.maxTextureSize;
     /* Création du contexte WebGL et construction des scènes dans deux tâches distinctes (première activation plus douce). */
     await new Promise(r=>setTimeout(r));
-    /* Pleine définition de l’écran (jusqu’à ×3). Pendant un mouvement continu seulement, si les images
-       ralentissent, la définition baisse par paliers (jamais sous 60 %) ; elle revient au repos. */
-    /* Téléphone : ×2 au plus (même netteté perçue, deux fois moins de mémoire GPU qu’en ×3). */
-    const dprFull=Math.min(devicePixelRatio||1,mobile?2:3);let dprNow=dprFull,lastFrame=0,slow=0,prevAgain=false,sharpTimer=0;
+    /* Pleine définition de l’écran, téléphones ×3 compris : à ×2 sur un écran ×3, chaque pixel dessiné était étiré
+       sur 1,5 pixel réel et la planète, les côtes et les chiffres paraissaient mous. Pendant un mouvement continu
+       seulement, si les images ralentissent, la définition baisse par paliers (jamais sous 60 %) ; elle revient,
+       nette, dès l’arrêt. opts.tight (mémoire graphique déjà retirée une fois par le système) : ×2 au plus sur téléphone. */
+    const dprFull=M.pixelRatio(devicePixelRatio,mobile,opts.tight===true);let dprNow=dprFull,motionDpr=dprFull,gesture=false,lastFrame=0,slow=0,prevAgain=false,sharpTimer=0,snapTimer=0,dprEff=1,camKey='',camStill=false,dead=false,lost=false,handed=false;
     const scene=new T.Scene();
     const camera=new T.PerspectiveCamera(FOV,1,.01,200);
     const col=h=>new T.Color(h);
@@ -292,7 +309,7 @@
     const sunDir=new T.Vector3(),studioSun=new T.Vector3(-.38,.36,.85).normalize();
     const uniEarth={
       uDay:{value:null},uNorm:{value:null},uSky:{value:null},uSun:{value:sunDir},uCam:{value:new T.Vector3()},
-      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:3.2},uGlint:{value:1},uReveal:{value:0},uStudio:{value:lighting==='studio'?1:0},
+      uCloudOff:{value:0},uCloudA:{value:cloudsOn?.9:0},uRelief:{value:1},uNight:{value:1.25},uExpo:{value:1.32},uSpec:{value:3.2},uGlint:{value:1},uCrisp:{value:1.4},uDaySize:{value:new T.Vector2(4096,2048)},uReveal:{value:0},uStudio:{value:lighting==='studio'?1:0},
       uSst:{value:null},uSstA:{value:0},uSstM:{value:new Date().getMonth()}
     };
     const seg=mobile?128:192;
@@ -303,7 +320,7 @@
     const clouds=new T.Mesh(new T.SphereGeometry(1.0045,seg,seg/2),new T.ShaderMaterial({uniforms:cloudU,vertexShader:EARTH_V,fragmentShader:CLOUD_F,transparent:true,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor}));
     clouds.visible=false;clouds.renderOrder=1;scene.add(clouds);
     const atmoU={uCam:uniEarth.uCam,uSun:{value:sunDir},uTop:{value:1.03},uI:{value:.8}};
-    const atmo=new T.Mesh(new T.SphereGeometry(1,96,48),new T.ShaderMaterial({uniforms:atmoU,vertexShader:ATMO_V,fragmentShader:ATMO_F,side:T.BackSide,transparent:true,depthWrite:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor}));
+    const atmo=new T.Mesh(new T.SphereGeometry(1,96,48),new T.ShaderMaterial({uniforms:atmoU,vertexShader:ATMO_V,fragmentShader:ATMO_F,side:T.BackSide,transparent:true,depthWrite:false,depthTest:false,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor}));
     atmo.renderOrder=2;scene.add(atmo);
     /* Ciel : voie lactée et étoiles réelles, tournant avec l’heure sidérale (repère équatorial). */
     const heavens=new T.Scene(),skyCam=new T.PerspectiveCamera(FOV,1,.5,200);
@@ -432,13 +449,35 @@
     function wake(){lastTouch=performance.now();invalidate();}
     const onVisible=()=>{if(!document.hidden)wake();};
     document.addEventListener('visibilitychange',onVisible);
-    undo.push(()=>{active=false;cancelAnimationFrame(raf);raf=0;clearTimeout(ambTimer);clearTimeout(sharpTimer);clearTimeout(restTimer);document.removeEventListener('visibilitychange',onVisible);});
+    undo.push(()=>{active=false;cancelAnimationFrame(raf);raf=0;clearTimeout(ambTimer);clearTimeout(sharpTimer);clearTimeout(snapTimer);clearTimeout(restTimer);document.removeEventListener('visibilitychange',onVisible);});
     const easeInOut=t=>t<.5?4*t*t*t:1-(-2*t+2)**3/2;
+    /* Résolution adaptative : pendant un mouvement continu (doigt qui tourne la Terre, lancer, vol, plongée pilotée par
+       pose()), si une dizaine d’images de suite passent sous ~45 i/s, la définition baisse d’un cran de 18 % (jamais sous
+       60 % ni sous 1). Seul le tampon de dessin change. motionDpr retient la définition qui tenait la cadence : le
+       mouvement suivant repart de là, un cran plus haut, au lieu de refaire toute la descente. */
+    function pace(now,moving){
+      const gap=now-lastFrame;lastFrame=now;
+      if(!moving||gap>100)return;
+      if(dprNow>motionDpr){dprNow=motionDpr;slow=0;applyDpr();return;}
+      slow=slow*.9+(gap>21?.1:0);
+      const floor=Math.max(1,dprFull*.6);
+      if(slow>.6&&dprNow>floor){dprNow=motionDpr=Math.max(floor,dprNow*.82);slow=0;applyDpr();}
+    }
+    /* Retour à la pleine définition 350 ms après l’arrêt : tampon redimensionné et image redessinée dans la même tâche,
+       l’écran ne montre jamais de canevas vide. */
+    function sharpen(){
+      clearTimeout(sharpTimer);
+      sharpTimer=setTimeout(()=>{
+        if(raf||flying||gesture||!active||released||dead||lost||dprNow>=dprFull)return;
+        dprNow=dprFull;motionDpr=Math.min(dprFull,motionDpr+.25);slow=0;applyDpr();dirty=false;draw();
+      },350);
+    }
     function frame(now){
       raf=0;if(!active)return;
-      /* Résolution adaptative : si les images s’enchaînent sous ~45 i/s, on baisse d’un cran (jamais sous 1). */
-      if(prevAgain&&lastFrame){slow=slow*.9+(now-lastFrame>21?.1:0);const floor=Math.max(1,dprFull*.6);if(slow>.6&&dprNow>floor){dprNow=Math.max(floor,dprNow-.25);slow=0;resize();}}
-      lastFrame=now;
+      /* Vol piloté de l’extérieur : pose() dessine déjà chaque image ; cette boucle ne redessine pas la même image une
+         seconde fois (elle le faisait pendant toute l’onde de sélection, soit deux rendus complets par image de plongée). */
+      if(flying){prevAgain=false;return;}
+      pace(now,prevAgain||gesture);
       let again=false;
       if(anim){
         const t=Math.min(1,(now-anim.t0)/anim.ms),e=easeInOut(t);
@@ -449,10 +488,19 @@
         dirty=true;
       }else if(inertia){
         const dt=Math.min(40,now-inertia.t);inertia.t=now;
+        /* Élan du pincement : le zoom continue un court instant dans son sens (80 ms de constante de temps, un cinquième
+           de plus au maximum), autour du point pincé : le geste ne s’arrête plus net sous les doigts. */
+        if(inertia.vZ){
+          const lim=Math.max(maxDist(),inertia.d0);
+          view.dist=Math.max(minDist(),Math.min(lim,1+Math.exp(Math.log(view.dist-1)+inertia.vZ*dt)));
+          if(!inertia.g||!anchor(inertia.g,inertia.x,inertia.y))applyCamera();
+          inertia.vZ*=Math.pow(.9876,dt);if(Math.abs(inertia.vZ)<4e-5||view.dist<=minDist()||view.dist>=lim)inertia.vZ=0;
+        }
         view.lat+=inertia.vLat*dt;view.lon+=inertia.vLon*dt;
-        /* Glisse d’environ 300 ms de constante de temps : la Terre ralentit comme un objet lourd, sans s’arrêter net. */
-        const k=Math.pow(.9966,dt);inertia.vLat*=k;inertia.vLon*=k;
-        if(Math.hypot(inertia.vLat,inertia.vLon)<.02*kpp()/KM/RAD){inertia=null;moved('inertia');}else again=true;
+        /* Glisse d’environ 360 ms de constante de temps (300 auparavant) : la Terre garde un peu plus son élan, comme un
+           objet lourd, ralentit régulièrement et se pose sans s’arrêter net. */
+        const k=Math.pow(.9972,dt);inertia.vLat*=k;inertia.vLon*=k;
+        if(!inertia.vZ&&Math.hypot(inertia.vLat,inertia.vLon)<.02*kpp()/KM/RAD){inertia=null;moved('inertia');}else again=true;
         dirty=true;
       }
       if(arcFade){const t=(now-arcFade)/300;arcMat.opacity=.85*Math.max(0,1-t);if(t>=1){arcFade=0;arcLine.visible=false;}else again=true;dirty=true;}
@@ -475,7 +523,7 @@
       }
       if(dirty){dirty=false;draw();if(firstFrame){const f=firstFrame;firstFrame=null;requestAnimationFrame(()=>f());}}
       prevAgain=again||emblemAnim||ovBusy||splitBusy;
-      if(!prevAgain&&dprNow<dprFull){clearTimeout(sharpTimer);sharpTimer=setTimeout(()=>{if(!raf){dprNow=dprFull;slow=0;resize();}},350);}
+      if(!prevAgain&&!gesture&&dprNow<dprFull)sharpen();
       if(emblemAnim||ovBusy||splitBusy){dirty=true;again=true;}
       if(again)raf=requestAnimationFrame(frame);
       /* Animation de fond : environ 30 images par seconde suffisent pour des mouvements aussi lents. */
@@ -535,8 +583,9 @@
     try{await Promise.race([document.fonts?.load(`700 12px ${bodyFont}`),new Promise(r=>setTimeout(r,800))]);}catch(_){}
     const TS=Math.min(3,Math.ceil(devicePixelRatio||1));
     /* Chiffres : un atlas de 10 glyphes, les nombres sont composés dans le shader. */
-    const digitAdv=(()=>{const c=document.createElement('canvas').getContext('2d');c.font=`700 ${12*TS}px ${bodyFont}`;return [...'0123456789'].map(d=>c.measureText(d).width/TS);})();
-    const digitW=Math.ceil(Math.max(...digitAdv))+2;
+    const digitAdv=(()=>{const c=document.createElement('canvas').getContext('2d');c.font=`700 ${12*TS}px ${bodyFont}`;return [...'0123456789'].map(d=>2*Math.round(c.measureText(d).width/2)/TS);})();
+    /* Chasses arrondies à deux pixels de texture et cases de largeur paire : chaque chiffre reste centré sur un pixel entier. */
+    const digitW=2*Math.ceil((Math.max(...digitAdv)+2)/2);
     const digitTex=(()=>{
       const c=document.createElement('canvas');c.width=10*digitW*TS;c.height=16*TS;const x=c.getContext('2d');
       x.font=`700 ${12*TS}px ${bodyFont}`;x.fillStyle='#fff';x.textAlign='center';x.textBaseline='middle';
@@ -666,13 +715,15 @@
     pinMesh.frustumCulled=false;pinMesh.renderOrder=3;overlay.add(pinMesh);
 
     let badges=[],labels=[],selected=null,hovered=null,hotBadge=null,user=null,ripStart=0;
+    /* Bulles en HTML : translation arrondie au pixel de l’écran, un texte posé entre deux pixels serait flou. */
+    const cssPx=v=>{const d=devicePixelRatio||1;return Math.round(v*d)/d;};
     const hovEl=document.createElement('div');hovEl.className='og-hover';hovEl.hidden=true;hovEl.innerHTML='<i></i><b></b>';
     const tipEl=document.createElement('div');tipEl.className='og-country';tipEl.hidden=true;
     layer.append(hovEl,tipEl);
     function countryTip(em,p){
       tipEl.hidden=!em;if(!em)return;
       tipEl.textContent=`${em.c.name} · ${em.c.n>1?em.c.n+' spots':'1 spot'}`;
-      tipEl.style.transform=`translate(${em.x.toFixed(1)}px,${(em.y-em.r-8).toFixed(1)}px)`;
+      tipEl.style.transform=`translate(${cssPx(em.x)}px,${cssPx(em.y-em.r-8)}px)`;
     }
 
     function applyLevel(lv){
@@ -700,7 +751,14 @@
     const sizeFor=n=>Math.round(Math.min(38,28+Math.log2(n/3+1)*3.4));
     /* Chaque image : projection, fusion des badges qui se touchent (avec un léger effet de seuil
        pour éviter le clignotement), écart autour du spot choisi, puis écriture des attributs. */
+    /* Au repos, pastilles et étiquettes se calent sur la grille des pixels de l’écran : chiffres et lettres tombent pile
+       sur les pixels de leur texture (sinon l’interpolation les adoucit). En mouvement, positions exactes : aucun saut.
+       Une image de plus est dessinée 140 ms après le dernier mouvement pour poser ce calage. */
     function layoutOverlay(){
+      const key=view.lat+'|'+view.lon+'|'+view.dist+'|'+spin+'|'+approach+'|'+W+'|'+H+'|'+dprEff;
+      camStill=key===camKey&&!flying;
+      if(!camStill){camKey=key;clearTimeout(snapTimer);snapTimer=setTimeout(invalidate,140);}
+      const snap=camStill?v=>Math.round(v*dprEff)/dprEff:v=>v;
       const gap=mobile?10:6,sp=selected&&byId.has(selected)?project(byId.get(selected).v):null;
       const shown=[];
       const tNow=performance.now(),dtO=Math.min(64,tNow-(ovT||tNow));ovT=tNow;
@@ -726,7 +784,7 @@
         const sz=sizeFor(b.total);let x=b.p.x,y=b.p.y;
         /* 8 px libres autour du spot choisi : c’est le badge qui s’écarte, jamais le spot. */
         if(sp&&sp.front){const dx=x-sp.x,dy=y-sp.y,d=Math.hypot(dx,dy),min=sz/2+12+8;if(d<min){if(d>.5){x=sp.x+dx*min/d;y=sp.y+dy*min/d;}else y=sp.y-min;}}
-        b.sx=x;b.sy=y;b.sz=sz;
+        x=snap(x);y=snap(y);b.sx=x;b.sy=y;b.sz=sz;
         B.at[i*2]=x;B.at[i*2+1]=y;B.size[i]=sz*(.7+.3*b.e);B.alpha[i]=ovA*b.e;B.hot[i]=hotBadge===b.key?1:0;
         b.colors.forEach((c,k)=>{const arr=[B.c1,B.c2,B.c3][k];arr[i*3]=c.r;arr[i*3+1]=c.g;arr[i*3+2]=c.b;});
         B.f[i*3]=b.fr[0];B.f[i*3+1]=b.fr[1];B.f[i*3+2]=b.fr[2];
@@ -761,13 +819,15 @@
       }
       /* Étiquettes : suivent leur spot à chaque image. */
       labels.forEach((l,k)=>{const s=byId.get(l.id);const p=s&&project(s.v);const on=p&&p.front&&p.facing>=.12&&!hideAttr[s.i]&&l.id!==hovered;
-        L.at[k*2]=p?p.x:0;L.at[k*2+1]=p?p.y:0;L.alpha[k]=on?ovA:0;});
+        /* Coin haut gauche de l’étiquette sur un pixel entier de l’écran. */
+        const ox=L.off[k*2]-L.sz[k*2]/2;
+        L.at[k*2]=p?snap(p.x+ox)-ox:0;L.at[k*2+1]=p?snap(p.y-12)+12:0;L.alpha[k]=on?ovA:0;});
       labelGeo.instanceCount=labels.length;['aAt','aAlpha','aOff','aSz','aUV'].forEach(n=>labelGeo.attributes[n].needsUpdate=true);
       /* Spot choisi et position. */
       if(sp){PN.at[0]=sp.x;PN.at[1]=sp.y;PN.alpha[0]=sp.front&&sp.facing>=.05?1:0;const c=col(glow(byId.get(selected).act));PN.c[0]=c.r;PN.c[1]=c.g;PN.c[2]=c.b;}else PN.alpha[0]=0;
       if(user){const p=project(user.v);PN.at[2]=p.x;PN.at[3]=p.y;PN.alpha[1]=p.front&&p.facing>=.05?1:0;}else PN.alpha[1]=0;
       ['aAt','aAlpha','aC','aType'].forEach(n=>pinGeo.attributes[n].needsUpdate=true);
-      if(hovered&&byId.has(hovered)){const p=project(byId.get(hovered).v);hovEl.style.visibility=p.front&&!anim&&!inertia&&!drag?'':'hidden';hovEl.style.transform=`translate(${p.x.toFixed(1)}px,${p.y.toFixed(1)}px)`;}
+      if(hovered&&byId.has(hovered)){const p=project(byId.get(hovered).v);hovEl.style.visibility=p.front&&!anim&&!inertia&&!drag?'':'hidden';hovEl.style.transform=`translate(${cssPx(p.x)}px,${cssPx(p.y)}px)`;}
     }
     let shownBadges=[],layoutT=0;
     const emblemAt=(x,y)=>emblemsOn.find(e=>e.c&&Math.hypot(e.x-x,e.y-y)<Math.max(e.r,mobile?20:0)&&eState.get(e.c.name)?.a>.5);
@@ -874,7 +934,7 @@
     }
 
     /* ---------- Gestes ---------- */
-    const ptrs=new Map();let drag=null,pinch=null,overshoot=0,wheelTimer=0,tapStart=null;
+    const ptrs=new Map();let drag=null,pinch=null,overshoot=0,wheelTimer=0,tapStart=null,fling=null;
     const local=e=>{const r=canvas.getBoundingClientRect();return {x:e.clientX-r.left,y:e.clientY-r.top};};
     canvas.addEventListener('pointerdown',e=>{
       lastTouch=performance.now();
@@ -883,7 +943,7 @@
       try{canvas.setPointerCapture(e.pointerId);}catch(_){}stop();
       const p=local(e);ptrs.set(e.pointerId,p);
       if(ptrs.size===1){drag={g:pick(p.x,p.y),last:p,t:performance.now(),v:[],moved:false};tapStart={...p,t:performance.now()};}
-      else if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),mid:{x:(a.x+b.x)/2,y:(a.y+b.y)/2}};pinch.g=pick(pinch.mid.x,pinch.mid.y);drag=null;tapStart=null;overshoot=0;}
+      else if(ptrs.size===2){const [a,b]=[...ptrs.values()];pinch={d:Math.hypot(a.x-b.x,a.y-b.y),mid:{x:(a.x+b.x)/2,y:(a.y+b.y)/2},v:[]};pinch.g=pick(pinch.mid.x,pinch.mid.y);drag=null;tapStart=null;overshoot=0;fling=null;}
     });
     canvas.addEventListener('pointermove',e=>{
       const p=local(e);
@@ -900,13 +960,15 @@
         const [a,b]=[...ptrs.values()],d=Math.hypot(a.x-b.x,a.y-b.y),mid={x:(a.x+b.x)/2,y:(a.y+b.y)/2};
         const want=1+(view.dist-1)*pinch.d/Math.max(1,d),min=minDist();
         if(want<min&&d>pinch.d)overshoot+=Math.log(d/pinch.d);
+        const z0=Math.log(view.dist-1),tz=performance.now();
         view.dist=clampDist(want);pinch.d=d;
+        pinch.v.push({t:tz,dz:Math.log(view.dist-1)-z0});pinch.v=pinch.v.filter(x=>tz-x.t<110);gesture=true;
         if(pinch.g)anchor(pinch.g,mid.x,mid.y);else{applyCamera();pinch.g=pick(mid.x,mid.y);}
         pinch.mid=mid;invalidate();return;
       }
       if(!drag)return;
       if(!drag.moved&&Math.hypot(p.x-tapStart.x,p.y-tapStart.y)<5)return;
-      drag.moved=true;setHover(null);canvas.classList.add('is-grabbing');
+      drag.moved=true;gesture=true;setHover(null);canvas.classList.add('is-grabbing');
       const before={lat:view.lat,lon:view.lon},now=performance.now();
       if(drag.g&&anchor(drag.g,p.x,p.y)){/* le point saisi reste sous le doigt */}
       else{const k=kpp()/KM/RAD;view.lon-=(p.x-drag.last.x)*k/Math.max(.2,Math.cos(view.lat*RAD));view.lat+=(p.y-drag.last.y)*k;applyCamera();drag.g=pick(p.x,p.y);}
@@ -919,18 +981,26 @@
       if(!ptrs.has(e.pointerId))return;
       const p=local(e);ptrs.delete(e.pointerId);
       canvas.classList.remove('is-grabbing');
-      if(pinch){if(ptrs.size<2){pinch=null;moved('zoom');if(overshoot>.35)dive('pinch');overshoot=0;
+      if(!ptrs.size)gesture=false;
+      if(pinch){if(ptrs.size<2){
+        /* Vitesse de zoom des 110 dernières ms : elle donnera un court élan au relâchement du dernier doigt. */
+        {const nowP=performance.now(),rec=pinch.v.filter(x=>nowP-x.t<110);
+          if(rec.length>1){const span=Math.max(16,nowP-rec[0].t),v=rec.reduce((a,x)=>a+x.dz,0)/span;fling={v:Math.max(-.0025,Math.min(.0025,v)),g:pinch.g,x:pinch.mid.x,y:pinch.mid.y,t:nowP};}else fling=null;}
+        pinch=null;moved('zoom');if(overshoot>.35){fling=null;dive('pinch');}overshoot=0;
         if(springBack())return;
         if(ptrs.size===1){const q=[...ptrs.values()][0];drag={g:pick(q.x,q.y),last:q,t:performance.now(),v:[],moved:true};}}return;}
       if(!drag)return;
       const d=drag;drag=null;
       if(d.moved&&springBack())return;
+      if(fling){const f=fling,nowF=performance.now();fling=null;
+        if(nowF-f.t<160&&Math.abs(f.v)>3e-4&&!reduced()&&!flying){inertia={vLat:0,vLon:0,vZ:f.v,g:f.g,x:f.x,y:f.y,d0:view.dist,t:nowF};invalidate();return;}}
       if(!d.moved&&tapStart&&e.type==='pointerup'&&performance.now()-tapStart.t<600){tap(p,e.pointerType);return;}
       const recent=d.v.filter(x=>performance.now()-x.t<80);
       if(recent.length&&!reduced()&&performance.now()-d.t<60){
         let vLat=recent.reduce((s,x)=>s+x.lat,0)/recent.length,vLon=recent.reduce((s,x)=>s+x.lon,0)/recent.length;
-        /* Lancer plafonné à ~2,5 px/ms : un geste vif fait glisser la Terre sans la faire tourner de moitié. */
-        const cap=2.5*kpp()/KM/RAD,sp=Math.hypot(vLat,vLon*Math.cos(view.lat*RAD));
+        /* Lancer plafonné à ~2,1 px/ms (la glisse dure un peu plus longtemps, la distance maximale reste la même) : un
+           geste vif fait glisser la Terre sans la faire tourner de moitié. */
+        const cap=2.1*kpp()/KM/RAD,sp=Math.hypot(vLat,vLon*Math.cos(view.lat*RAD));
         if(sp>cap){vLat*=cap/sp;vLon*=cap/sp;}
         if(sp>cap*.08){inertia={vLat,vLon,t:performance.now()};invalidate();return;}
       }
@@ -976,20 +1046,24 @@
     function dive(reason){opts.onDive?.({...getView(),reason});}
 
     /* ---------- Taille, textures, cycle de vie ---------- */
-    function resize(){
-      const r=host.getBoundingClientRect();W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
-      const dpr=Math.min(devicePixelRatio||1,dprNow);
+    /* Tampon de dessin à la définition courante (dprNow), sans toucher à la caméra. */
+    function applyDpr(){
+      const dpr=dprEff=Math.min(devicePixelRatio||1,dprNow);
       /* Globe en pause longue (carte détaillée à l’écran) : tampon de dessin réduit à 1 px pour rendre la mémoire GPU. */
       renderer.setPixelRatio(released?1:dpr);renderer.setSize(released?1:W,released?1:H,false);
-      ortho.right=W;ortho.bottom=H;ortho.updateProjectionMatrix();
       dotU.uDpr.value=dpr;starU.uDpr.value=dpr;
+    }
+    function resize(){
+      const r=host.getBoundingClientRect();W=Math.max(1,Math.round(r.width));H=Math.max(1,Math.round(r.height));
+      applyDpr();
+      ortho.right=W;ortho.bottom=H;ortho.updateProjectionMatrix();
       /* Le cadre change (tiroir, rotation, plein écran) : on garde l’échelle à l’écran, ou la vue d’ensemble. */
       view.dist=clampDist(overviewOn?maxDist():keepKpp?distForKpp(keepKpp):view.dist);keepKpp=kpp();invalidate();scheduleLabels();
     }
     const ro=new ResizeObserver(()=>{lastTouch=performance.now();resize();});ro.observe(host);undo.push(()=>ro.disconnect());
     function texParams(tex,srgb){
       tex.colorSpace=srgb?T.SRGBColorSpace:T.NoColorSpace;tex.wrapS=T.RepeatWrapping;tex.wrapT=T.ClampToEdgeWrapping;
-      tex.anisotropy=Math.min(8,renderer.capabilities.getMaxAnisotropy());tex.generateMipmaps=true;tex.minFilter=T.LinearMipmapLinearFilter;tex.magFilter=T.LinearFilter;
+      tex.anisotropy=renderer.capabilities.getMaxAnisotropy();tex.generateMipmaps=true;tex.minFilter=T.LinearMipmapLinearFilter;tex.magFilter=T.LinearFilter;
       return tex;
     }
     /* Ancien chargement (décodage et envoi au GPU d’un seul bloc, sur le fil principal) : repli seulement. */
@@ -1037,7 +1111,7 @@
     const smoothTexture=(url,srgb,budget)=>streamTexture(url,srgb,budget).catch(e=>dead?Promise.reject(e):loadTexture(url,srgb));
     /* Surface (Blue Marble) et relief ; nuages et lumières de la nuit seulement quand on les affiche. */
     /* dead arrête aussi les textures encore en cours d’envoi par bandes. */
-    const conn=navigator.connection;let dead=false;undo.push(()=>{dead=true;});
+    const conn=navigator.connection;undo.push(()=>{dead=true;});
     /* Shaders compilés pendant le chargement des textures (KHR_parallel_shader_compile si disponible) :
        la première image n’attend plus leur compilation. Mêmes programmes que ceux de la première image. */
     const shadersReady=Promise.all([[heavens,skyCam],[scene,camera],[overlay,ortho]].map(([s,c])=>Promise.resolve().then(()=>renderer.compileAsync(s,c)))).catch(()=>{});
@@ -1046,7 +1120,8 @@
       smoothTexture(asset('assets/globe/earth-normal-4k.webp'),false,10),
       shadersReady
     ]);
-    uniEarth.uDay.value=day;uniEarth.uNorm.value=norm;
+    const daySize=t=>{const i=t?.image||t?.source?.data;if(i?.width)uniEarth.uDaySize.value.set(i.width,i.height);};
+    uniEarth.uDay.value=day;uniEarth.uNorm.value=norm;daySize(day);
     [day,norm].forEach(t=>renderer.initTexture?.(t));
     let skyLoading=null;
     function needSky(){
@@ -1061,7 +1136,7 @@
     let hdTimer=0;undo.push(()=>clearTimeout(hdTimer));
     /* La 4K reste affichée pendant tout le chargement ; la 8K, décodée hors du fil principal puis envoyée par bandes
        dans les moments d’inactivité (8 ms au plus par tranche), ne la remplace qu’une fois complète. */
-    if(M.wantsHd8k({hd:opts.hd,native:document.documentElement.classList.contains('native-app'),mobile,maxTex,saveData:!!conn?.saveData}))hdTimer=setTimeout(()=>smoothTexture(asset('assets/globe/earth-day-8k.webp'),true,8).then(tex=>{if(dead){tex.dispose();return;}const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;old?.dispose();invalidate();}).catch(()=>{}),Math.max(1200,10000-performance.now()));
+    if(M.wantsHd8k({hd:opts.hd,native:document.documentElement.classList.contains('native-app'),mobile,maxTex,saveData:!!conn?.saveData}))hdTimer=setTimeout(()=>smoothTexture(asset('assets/globe/earth-day-8k.webp'),true,8).then(tex=>{if(dead){tex.dispose();return;}const old=uniEarth.uDay.value;uniEarth.uDay.value=tex;daySize(tex);old?.dispose();invalidate();}).catch(()=>{}),Math.max(1200,10000-performance.now()));
     resize();applyCamera();
     /* reveal:false : la Terre apparaît directement éclairée, à sa taille (le globe de l’accueil prend le relais de la sphère CSS). */
     revealStart=reduced()||opts.reveal===false?0:performance.now();if(!revealStart){uniEarth.uReveal.value=1;starU.uI.value=.6;}
@@ -1076,7 +1151,6 @@
     }
     /* Perte du contexte WebGL (iOS retire les contextes quand la mémoire GPU manque) : le rendu s’arrête et
        ocean-map.js reconstruit le globe à la même vue. Ignorée pendant la destruction volontaire (forceContextLoss). */
-    let lost=false,handed=false;
     const onLost=e=>{e.preventDefault();if(dead||!handed||lost)return;lost=true;cancelAnimationFrame(raf);raf=0;opts.onContextLost?.();};
     const onRestored=()=>{if(dead||!handed)return;lost=false;opts.onContextRestored?.();};
     canvas.addEventListener('webglcontextlost',onLost);canvas.addEventListener('webglcontextrestored',onRestored);
@@ -1112,10 +1186,11 @@
       pose(p){
         if(dead||lost||!active)return;
         anim=null;inertia=null;lastTouch=performance.now();
+        const now=performance.now();pace(now,now-lastFrame<100);
         view.lat=p.lat;view.lon=p.lon;view.dist=Math.max(1.0004,Math.min(maxDist()*1.35,distForKpp(p.kmPerPx)));
         dirty=false;draw();
       },
-      settle(){flying=false;view.dist=clampDist(view.dist);invalidate();moved('fly');},
+      settle(){flying=false;view.dist=clampDist(view.dist);invalidate();moved('fly');if(dprNow<dprFull)sharpen();},
       jumpTo(t){stop();lastTouch=performance.now();if(t.lat!=null)view.lat=t.lat;if(t.lon!=null)view.lon=t.lon;view.dist=clampDist(t.dist||distForWidth(t.widthKm||widthKm()));invalidate();moved('jump');},
       /* Cadre un ensemble de points (km de marge compris) ; renvoie la largeur visée. */
       fit(points,{animate=true,minWidthKm=0,maxWidthKm=Infinity,done}={}){
@@ -1149,7 +1224,7 @@
         document.removeEventListener('visibilitychange',onVisible);
         canvas.removeEventListener('webglcontextlost',onLost);canvas.removeEventListener('webglcontextrestored',onRestored);
         document.removeEventListener('ocean:sport',onSport);themeTimers.forEach(clearTimeout);
-        clearTimeout(ambTimer);clearTimeout(sharpTimer);clearTimeout(restTimer);clearTimeout(hdTimer);
+        clearTimeout(ambTimer);clearTimeout(sharpTimer);clearTimeout(snapTimer);clearTimeout(restTimer);clearTimeout(hdTimer);
         Object.values(sstAnim).forEach(cancelAnimationFrame);
         ro.disconnect();
         /* Libère la mémoire GPU : géométries et textures de toutes les scènes, puis le contexte WebGL lui-même (limite de contextes des navigateurs). Un nouveau globe crée son propre canvas et son propre moteur. */

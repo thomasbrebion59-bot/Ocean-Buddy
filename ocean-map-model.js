@@ -144,6 +144,9 @@
   /* Avancement le long du plan selon le temps écoulé (0 → 1) : la descente (dir > 0) démarre franchement dès le toucher
      et se pose en douceur ; la remontée (dir < 0) relit le même trajet à l’envers et décolle sans attendre. */
   function diveProgress(t,dir=1){t=clamp01(t);return dir>0?t**.82:1-t**.7;}
+  /* Allure visée (0 → 1) à l’approche du relais globe → carte tant que la carte n’est pas prête : pleine vitesse
+     jusqu’à 7 % du vol avant le relais (hand), puis ralentissement régulier jusqu’à planer juste au-dessus. */
+  function diveBrake(t,hand,span=.07){return clamp01((hand-t)/span);}
   function diveAt(plan,t){
     t=clamp01(t);
     const a=Math.log(plan.from.kmPerPx),b=Math.log(plan.to.kmPerPx),u=Math.min(1,t/plan.turn);
@@ -155,8 +158,10 @@
     return {lat:at.lat,lon:at.lon,kmPerPx:Math.exp(logk),globe:g*g*(3-2*g),pitch:plan.pitch*Math.sin(Math.PI*w)**2,low:w};
   }
   /* ---------- Récupération après perte du contexte WebGL ---------- */
-  /* Densité de pixels des canevas WebGL : ×2 au plus sur téléphone ou tablette tactile, ×3 ailleurs. */
-  function pixelRatio(dpr,mobile){const d=Number.isFinite(dpr)&&dpr>0?dpr:1;return Math.min(d,mobile?2:3);}
+  /* Densité de pixels des canevas WebGL : celle de l’écran, jusqu’à ×3 (un iPhone ×3 dessiné en ×2 donne une image molle).
+     tight : le système a déjà retiré un contexte WebGL (mémoire graphique courte) ; téléphones et tablettes tactiles
+     reviennent alors à ×2 au plus, soit 2,25 fois moins de pixels à garder en mémoire. */
+  function pixelRatio(dpr,mobile,tight=false){const d=Number.isFinite(dpr)&&dpr>0?dpr:1;return Math.min(d,mobile&&tight?2:3);}
   /* Cache de tuiles de la carte détaillée : plus petit sur mobile (mémoire GPU partagée avec le globe). */
   const tileCache=(mobile,mini=false)=>mini?(mobile?40:60):(mobile?64:120);
   /* Pertes récentes (horodatages en ms) : reconstruction automatique tant qu’il y en a au plus max dans la fenêtre ;
@@ -170,5 +175,5 @@
     const recent=(errors||[]).filter(t=>now-t>=0&&now-t<windowMs);
     return recent.length>=min&&!(Number.isFinite(lastOk)&&lastOk>=recent[0]);
   }
-  return {slerp,divePlan,diveAt,diveProgress,pixelRatio,tileCache,recovery,tilesFailing,wantsHd8k,textureStrips,group,bounds,inView,distance,top,vec,latLon,arc,wrapLon,mapZoom,kmPerPx,clusterPx,LEVELS,clusterLevels,levelFor,cap,EARTH_KM};
+  return {slerp,divePlan,diveAt,diveProgress,diveBrake,pixelRatio,tileCache,recovery,tilesFailing,wantsHd8k,textureStrips,group,bounds,inView,distance,top,vec,latLon,arc,wrapLon,mapZoom,kmPerPx,clusterPx,LEVELS,clusterLevels,levelFor,cap,EARTH_KM};
 });

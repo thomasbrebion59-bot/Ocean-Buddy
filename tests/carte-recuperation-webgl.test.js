@@ -24,8 +24,12 @@ function fakeDocument() {
   return { document, stats };
 }
 
-test('modèle : densité de pixels plafonnée à ×2 sur mobile, ×3 ailleurs', () => {
-  assert.equal(M.pixelRatio(3, true), 2);
+test('modèle : densité de pixels de l’écran jusqu’à ×3 ; ×2 au plus sur mobile quand la mémoire graphique a manqué', () => {
+  /* Un téléphone ×3 est dessiné en ×3 (en ×2, l’image était étirée sur 1,5 pixel réel, donc molle). */
+  assert.equal(M.pixelRatio(3, true), 3);
+  assert.equal(M.pixelRatio(3, true, true), 2, 'contexte déjà retiré une fois : retour à ×2');
+  assert.equal(M.pixelRatio(2, true, true), 2);
+  assert.equal(M.pixelRatio(3, false, true), 3, 'ordinateur : inchangé');
   assert.equal(M.pixelRatio(3, false), 3);
   assert.equal(M.pixelRatio(1.5, true), 1.5);
   assert.equal(M.pixelRatio(4, false), 3);
@@ -92,7 +96,7 @@ test('aucun autre getContext("webgl2") ne traîne dans la carte et le globe', ()
 });
 
 /* ---------- Reconstruction de la carte détaillée et du globe ---------- */
-const NAMES = ['note', 'clearNote', 'recovering', 'recoveryFailed', 'reloadAll', 'dropMap', 'onMapLost', 'rebuildMap', 'onPlanetLost', 'rebuildPlanet'];
+const NAMES = ['tighten', 'note', 'clearNote', 'recovering', 'recoveryFailed', 'reloadAll', 'dropMap', 'onMapLost', 'rebuildMap', 'onPlanetLost', 'rebuildPlanet'];
 function classList() { const set = new Set(); return { set, add: (...c) => c.forEach(x => set.add(x)), remove: (...c) => c.forEach(x => set.delete(x)), toggle(c, on) { if (on === undefined) on = !set.has(c); if (on) set.add(c); else set.delete(c); return on; }, contains: c => set.has(c) }; }
 function fakeStatus() {
   const el = { hidden: true, classList: classList(), textContent: '', _html: '', button: null };
@@ -113,7 +117,7 @@ function setup(over = {}) {
     setTimeout: (fn, ms) => { timers.push({ fn, ms }); return timers.length; }, clearTimeout() {},
     SPOTS: [], selected: null, userDot: null, selectedMarker: {}, tip: null, hovered: null, lastData: 'x', planetData: 'x',
     map: null, starting: null, mapLost: false, restoreAt: null, lossTimer: 0, planetTimer: 0, planetView: null,
-    mapLosses: [], planetLosses: [], noteKind: '', mode: 'map', planet: null, planetStarting: null, planetFailed: false,
+    mapLosses: [], planetLosses: [], noteKind: '', gpuTight: false, mode: 'map', planet: null, planetStarting: null, planetFailed: false,
     LOSS_GRACE: 700, useGlobe: () => true,
     ensureMap() { log.ensureMap.push(ctx.restoreAt); const m = fakeMap(); ctx.map = m; ctx.restoreAt = null; return Promise.resolve(m); },
     ensurePlanet() { log.ensurePlanet++; const p = fakePlanet(); ctx.planet = p; return Promise.resolve(p); },
@@ -132,6 +136,7 @@ test('carte perdue à l’écran : état « Reprise », puis nouvelle carte à l
   const old = fakeMap({ lng: -1.44, lat: 43.66, zoom: 9.3 });ctx.map = old;
   ctx.onMapLost(old);
   assert.equal(ctx.mapLost, true);
+  assert.equal(ctx.gpuTight, true, 'mémoire graphique courte : les canevas suivants repassent à ×2 au plus sur téléphone');
   assert.equal(status.hidden, false);
   assert.match(status.innerHTML, /Reprise de la carte/);
   assert.ok(wrap.classList.contains('is-recovering'), 'le cadre montre un état de reprise, pas un bleu uni');
@@ -179,6 +184,7 @@ test('un événement d’une ancienne carte n’agit pas sur la carte courante',
   const current = fakeMap();ctx.map = current;
   ctx.onMapLost(fakeMap());
   assert.equal(ctx.mapLost, false);
+  assert.equal(ctx.gpuTight, false);
   assert.equal(current.removed, 0);
   assert.equal(status.hidden, true);
 });
@@ -187,6 +193,7 @@ test('globe perdu : détruit, recréé à la même vue, actif seulement en mode 
   const { ctx, log, status, flush } = setup({ mode: 'globe' });
   const old = fakePlanet();ctx.planet = old;
   ctx.onPlanetLost();
+  assert.equal(ctx.gpuTight, true, 'globe perdu : le globe recréé est dessiné en ×2 au plus sur téléphone');
   assert.match(status.innerHTML, /Reprise de la carte/);
   await flush();
   assert.equal(old.destroyed, 1);
@@ -227,7 +234,17 @@ test('pression mémoire : densité plafonnée, cache réduit, globe libéré sou
   assert.match(src, /planet\?\.setActive\(false,\{release:true\}\)/);
   assert.match(fnSource(src, 'startTerrain'), /planet\.setActive\(false\)/);
   assert.match(fnSource(src, 'startTerrain'), /webglcontextlost/);
-  assert.match(globe, /dprFull=Math\.min\(devicePixelRatio\|\|1,mobile\?2:3\)/);
+  /* Densité : celle de l’écran, sauf après une perte de contexte (gpuTight), où carte et globe repassent à ×2 sur téléphone. */
+  assert.match(src, /const DPR=\(\)=>M\.pixelRatio\(window\.devicePixelRatio,coarse,gpuTight\);/);
+  assert.match(fnSource(src, 'ensurePlanet'), /tight:gpuTight/);
+  assert.match(globe, /dprFull=M\.pixelRatio\(devicePixelRatio,mobile,opts\.tight===true\)/);
+  /* Pas d’anticrénelage matériel sur téléphone à écran dense (mémoire du tampon ×4) : le limbe est lissé dans le shader. */
+  assert.match(globe, /antialias:!\(mobile&&\(devicePixelRatio\|\|1\)>=2\)/);
+  assert.match(globe, /float cover=clamp\(\(b-1\.\)\/max\(fwidth\(b\),1e-6\)\+\.5,0\.,1\.\);/);
+  /* La définition ne baisse que pendant un mouvement et revient au repos ; jamais sous 60 %. */
+  assert.match(fnSource(globe, 'pace'), /if\(!moving\|\|gap>100\)return;/);
+  assert.match(fnSource(globe, 'pace'), /const floor=Math\.max\(1,dprFull\*\.6\);/);
+  assert.match(fnSource(globe, 'sharpen'), /dprNow=dprFull;/);
   /* La destruction volontaire (forceContextLoss) ne déclenche pas de reconstruction. */
   assert.match(globe, /if\(dead\|\|!handed\|\|lost\)return;/);
   assert.match(globe, /handed=true;\s*return api;/);
