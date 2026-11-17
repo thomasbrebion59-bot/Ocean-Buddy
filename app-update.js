@@ -34,8 +34,9 @@
       close();
     });
   }
-  // Le téléchargement se fait tout de suite ; la fenêtre attend la fin de l’accueil et la fermeture de « Crée ton compte » (.oba).
-  function showWhenFree(kind,version){if(onboarding()||document.hidden||document.querySelector('.oba')){setTimeout(()=>showWhenFree(kind,version),5000);return;}show(kind,version);}
+  // Le téléchargement se fait tout de suite ; la fenêtre attend la fin de l’accueil, la fermeture de « Crée ton compte » (.oba)
+  // et celle des feuilles <dialog> (page d’un pays, voyage…), qui passeraient sinon par-dessus elle.
+  function showWhenFree(kind,version){if(onboarding()||document.hidden||document.querySelector('.oba,dialog[open]')){setTimeout(()=>showWhenFree(kind,version),5000);return;}show(kind,version);}
   async function check(){
     if(running||open||document.hidden)return;
     running=true;lastCheck=Date.now();

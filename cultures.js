@@ -218,7 +218,8 @@
   }
   function open(c,{from='',opener:o=null}={}){
     return load().then(()=>{
-      if(!data[c])return;
+      /* Pays connu seulement (propriété propre) : un lien #culture=constructor ouvrait une page « Object ». */
+      if(typeof c!=='string'||!Object.prototype.hasOwnProperty.call(data,c))return;
       const isNew=addStamp(c);
       if(o&&!(dlg&&dlg.contains(o)))opener=o;else if(!dlg?.open)opener=document.activeElement;
       current=c;show(pageHTML(c,{fresh:isNew}));

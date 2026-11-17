@@ -205,6 +205,23 @@ test('globe perdu : détruit, recréé à la même vue, actif seulement en mode 
   assert.ok(!s2.wrap.classList.contains('is-planet'), 'la carte détaillée reste visible');
 });
 
+test('globe perdu pendant une plongée posée sur la carte : le message de reprise s’efface', async () => {
+  /* Perte en mode globe (message affiché), puis la plongée se pose sur une carte qui marche (mode carte). */
+  const { ctx, status, flush } = setup({ mode: 'globe' });
+  ctx.planet = fakePlanet();ctx.onPlanetLost();
+  assert.match(status.innerHTML, /Reprise de la carte/);
+  ctx.mode = 'map';ctx.map = fakeMap();
+  await flush();
+  assert.equal(ctx.planet.active, false);
+  assert.equal(status.hidden, true, 'pas de « Reprise de la carte… » figé sur une carte qui marche');
+});
+
+test('plongée : globe perdu avant que la carte soit prête, on reste en mode globe (jamais ni globe ni carte)', () => {
+  const src = read('ocean-map.js'), end = fnSource(src, 'endFlight');
+  assert.match(end, /usable=f\.ready&&styled\(\)/);
+  assert.match(end, /onGlobe=!usable\|\|/);
+});
+
 test('globe impossible à recréer deux fois : repli sur la carte à plat', async () => {
   const { ctx, log, flush } = setup({ mode: 'globe', ensurePlanet() { ctx.planetFailed = true; return Promise.reject(Error('webgl')); } });
   ctx.planet = fakePlanet();ctx.onPlanetLost();

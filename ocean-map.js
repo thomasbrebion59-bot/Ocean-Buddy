@@ -639,12 +639,13 @@
     cancelAnimationFrame(f.raf);flight=null;diving=false;
     lastFlight={dir:f.dir,held:Math.round(f.held),ms:Math.round(performance.now()-f.start),planMs:f.plan.ms,interrupted:!!interrupted};
     wrap.classList.remove('is-flying','is-handover');
-    const host=globeHost(),p=f.pose,onGlobe=!planet?.lost&&(!f.ready||!styled()||(interrupted?(p?p.globe>=.5:f.dir>0):f.dir<0));
+    /* Carte pas encore prête : on reste sur le globe, même s’il vient de perdre son contexte (la reprise le reconstruit
+       en mode globe) ; sinon l’écran restait vide, ni globe ni carte, avec « Reprise de la carte… » affiché. */
+    const usable=f.ready&&styled(),host=globeHost(),p=f.pose,onGlobe=!usable||(!planet?.lost&&(interrupted?(p?p.globe>=.5:f.dir>0):f.dir<0));
     if(host)host.style.opacity='';
     if(onGlobe){
       if(mode!=='globe')setMode('globe');
-      planet.setActive(true);planet.settle();
-      if(!interrupted&&f.overview)planet.overview(f.overview,false);
+      if(planet&&!planet.lost){planet.setActive(true);planet.settle();if(!interrupted&&f.overview)planet.overview(f.overview,false);}
       if(styled()){if(map.getPitch())map.jumpTo({pitch:0});updateMinZoom();spotLayers(true);}
     }else{
       planet?.setFlying(false);
@@ -753,11 +754,13 @@
       if(typeof userPos!=='undefined'&&userPos)np.setUser?.(userPos);
       wrap.classList.toggle('is-planet',mode==='globe');
       if(mode==='globe'){np.setActive(true);clearNote('recover');worldState(true);updateList();}
-      else np.setActive(false,{release:true});
+      /* Globe perdu pendant une plongée qui s’est posée sur la carte : la carte marche, le message de reprise s’en va. */
+      else{np.setActive(false,{release:true});if(map&&!mapLost)clearNote('recover');}
     }).catch(()=>{
       /* Deux échecs : le globe est abandonné, la carte à plat prend tout le rôle (comme sans WebGL 2). */
       if(planetFailed){clearNote('recover');if(mode==='globe'){mode='map';wrap.classList.remove('is-globe','is-planet','is-map');render(true);}}
       else if(mode==='globe')recoveryFailed();
+      else if(map&&!mapLost)clearNote('recover');
     });
   }
   /* Tuiles en échec répété sans aucune réussite : message discret au lieu d’un fond muet. */
