@@ -127,6 +127,27 @@ test('fusion côté serveur : le plus récent gagne, horloge bornée, progressio
   assert.equal((await push([{ kind: 'progress', id: 'xp', data: {}, u: 1, deleted: true }])).data.error, 'invalid_item_kind');
 });
 
+test('tampons des cultures : annoncés par pull, fusionnés sans perte côté serveur, forme anormale refusée', async () => {
+  const c = clock(), w = createWorker({ now: c.now }), env = devEnv();
+  const d = await device(w, env).ready('lea@example.com');
+  const push = (items) => d.call('POST', '/api/v1/sync/push', { items });
+  const cult = (stamps, extra = {}) => ({ v: 1, stamps, quiz: null, run: 0, best: 0, last: null, ...extra });
+  const p0 = (await d.call('POST', '/api/v1/sync/pull', { since: 0 })).data;
+  assert.ok(p0.accept.progress.includes('cultures'), 'le Worker annonce qu’il sait recevoir les tampons');
+  assert.equal((await push([{ kind: 'progress', id: 'cultures', data: cult({ Portugal: '2026-11-10', Japon: '2026-11-12' }), u: c.t, deleted: false }])).status, 200);
+  /* Un appareil en retard (date plus ancienne pour le Portugal, sans le Japon) : union, date la plus ancienne. */
+  const r = await push([{ kind: 'progress', id: 'cultures', data: cult({ Portugal: '2026-11-08', Maroc: '2026-11-11' }), u: c.t - 5000, deleted: false }]);
+  assert.equal(r.data.results[0].status, 'ok');
+  const items = Object.fromEntries((await d.call('POST', '/api/v1/sync/pull', { since: 0 })).data.items.map((i) => [i.kind + ':' + i.id, i]));
+  assert.deepEqual(items['progress:cultures'].data.stamps, { Portugal: '2026-11-08', Maroc: '2026-11-11', Japon: '2026-11-12' });
+  /* Forme anormale : refusée, et le lot entier avec elle (règle commune du Worker). */
+  const bad = await push([fav('f1', c.t), { kind: 'progress', id: 'cultures', data: cult({ Portugal: '2026-13-01' }), u: c.t, deleted: false }]);
+  assert.equal(bad.status, 400); assert.equal(bad.data.error, 'invalid_item_data'); assert.equal(bad.res.headers.get('x-ob-item'), '1');
+  assert.equal((await push([{ kind: 'progress', id: 'cultures', data: {}, u: 1, deleted: true }])).data.error, 'invalid_item_kind', 'jamais supprimés');
+  const ex = (await d.call('GET', '/api/v1/account/export')).data;
+  assert.ok(ex.items.some((i) => i.kind === 'progress' && i.id === 'cultures'), 'les tampons sont dans l’export');
+});
+
 test('tirage par pages sans couper un envoi en deux', async () => {
   const w = createWorker(), env = devEnv();
   const d = await device(w, env).ready('lea@example.com');

@@ -3,7 +3,8 @@
      goûter, bon geste, tradition de la mer, fête, spots du pays, prochaine escale. Chaque fait des fiches culturelles
      affiche sa source (lien discret). Ouvrir la page donne le tampon du pays.
    - Accueil : remplit sur place, sans changer leur hauteur, les mots des cartes et le jeu « Le mot du jour ».
-   - Profil : bloc « Cultures découvertes X / N » (tampons, localStorage oceanbuddy_cultures_v1, appareil seulement).
+   - Profil : bloc « Cultures découvertes X / N » (tampons, localStorage oceanbuddy_cultures_v1 ; copiés sur le compte
+     si la sauvegarde est activée, voir account-sync-model.js).
    - Explorer : un bandeau « Découvrir <pays> » quand la recherche ou la destination nomme un pays.
    Données : assets/data/cultures.<langue>.json (scripts/build-cultures.cjs), demandées une seule fois. */
 (() => {

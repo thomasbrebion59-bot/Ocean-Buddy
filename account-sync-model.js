@@ -6,17 +6,25 @@
      1. le plus récent gagne, élément par élément (voyage perdant gardé en copie dans la Corbeille) ;
      2. supprimer est une modification ;
      3. les progressions ne reculent jamais (maximum ou union) ;
-     4. les réglages d'appareil (langue, son, Street View…) ne sont jamais lus ni envoyés. */
+     4. les réglages d'appareil (langue, son, Street View…) ne sont jamais lus ni envoyés.
+   Compatibilité : un serveur refuse TOUT un envoi qui contient un seul id inconnu (400 invalid_item_data, Worker du 5 nov.).
+   Un id de progression ajouté après la première mise en ligne (ex. « cultures ») ne part donc que si le serveur l'annonce
+   dans sa réponse à pull (accept.progress) : voir forServer. Un client plus ancien ignore un élément qu'il ne connaît pas. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.OceanAccountModel=api;})(typeof globalThis!=='undefined'?globalThis:this,()=>{
   'use strict';
   const KEYS={main:'oceanbuddy_v1',trips:'oceanbuddy_trips_v1',notebook:'oceanbuddy_spot_notebook_v1',progress:'oceanbuddy_progress_v1',
-    quiz:'oceanbuddy_quiz_v1',badgeDates:'oceanbuddy_badge_dates',daily:'oceanbuddy_daily',surf:'oceanbuddy_surf',checklist:'oceanbuddy_visit_checklist_v1'};
+    quiz:'oceanbuddy_quiz_v1',badgeDates:'oceanbuddy_badge_dates',daily:'oceanbuddy_daily',surf:'oceanbuddy_surf',checklist:'oceanbuddy_visit_checklist_v1',
+    cultures:'oceanbuddy_cultures_v1'};
   /* Genres acceptés par le serveur (liste fermée) ; « progress » = fusion monotone, jamais de recul. */
   const KINDS=['profile','fav','session','trip','note','progress','misc'];
-  const PROGRESS_IDS=['main','xp','eco','quiz','badge_dates','surf','checklist'];
+  const PROGRESS_IDS=['main','xp','eco','quiz','badge_dates','surf','checklist','cultures'];
+  /* Ids que TOUS les serveurs acceptent (Worker mis en ligne le 5 nov.) ; les autres attendent l'annonce du serveur. */
+  const PROGRESS_BASE=['main','xp','eco','quiz','badge_dates','surf','checklist'];
   const ID_RE=/^[A-Za-z0-9_.:-]{1,80}$/;
   const LIMITS={itemBytes:32768,itemsPerPush:100,itemsPerAccount:2000,accountBytes:5*1024*1024,requestBytes:262144};
   const NOTE_MAX=1800,COPY_SUFFIX=' (copie de l’autre appareil)';
+  /* Tampons des cultures : 118 pays au catalogue (noms français de 31 caractères au plus), mots de 19 caractères au plus. */
+  const CULT={stamps:300,name:60,word:40,count:100000,bytes:24000};
 
   /* ---------- outils ---------- */
   const isObj=v=>!!v&&typeof v==='object'&&!Array.isArray(v);
@@ -44,12 +52,66 @@
   function validItem(kind,id,data){
     if(!KINDS.includes(kind)||!ID_RE.test(String(id))||!isObj(data))return false;
     if(kind==='progress'&&!PROGRESS_IDS.includes(id))return false;
+    if(kind==='progress'&&id==='cultures')return validCultures(data);
     if(kind==='trip')return typeof data.id==='string'&&data.id===id&&Array.isArray(data.steps)&&Array.isArray(data.checklist);
     if(kind==='note')return typeof data.text==='string'&&data.text.length<=NOTE_MAX;
     if(kind==='session')return typeof data.ts==='number'||typeof data.id==='string';
     if(kind==='misc')return id==='daily'&&typeof data.v==='string'&&data.v.length<=40;
     if(kind==='profile')return id==='me';
     return true;
+  }
+
+  /* ---------- tampons des cultures (format de cultures-model.js : {v, stamps, quiz, run, best, last}) ---------- */
+  const DAY_RE=/^(\d{4})-(\d\d)-(\d\d)$/;
+  /* Jour AAAA-MM-JJ réel (2020 à 2099) : les dates se comparent alors comme des chaînes. */
+  function isDay(v){
+    const m=typeof v==='string'&&DAY_RE.exec(v);if(!m)return false;
+    const y=+m[1],mo=+m[2],d=+m[3];
+    return y>=2020&&y<=2099&&mo>=1&&mo<=12&&d>=1&&d<=new Date(Date.UTC(y,mo,0)).getUTCDate();
+  }
+  const isName=k=>typeof k==='string'&&k.length>0&&k.length<=CULT.name&&!/[\u0000-\u001f\u007f]/.test(k)&&!['__proto__','constructor','prototype'].includes(k);
+  const isCount=n=>Number.isInteger(n)&&n>=0&&n<=CULT.count;
+  function quizOk(q){
+    return isObj(q)&&isDay(q.d)&&isName(q.c)&&typeof q.a==='string'&&q.a.length<=CULT.name&&typeof q.w==='string'&&q.w.length<=CULT.word&&
+      (q.k==='hello'||q.k==='thanks')&&typeof q.ok==='boolean';
+  }
+  /* Élément reçu ou envoyé : forme exacte exigée, sinon refusé en entier (un client à jour n'envoie que la forme nettoyée). */
+  function validCultures(d){
+    if(!isObj(d)||(d.stamps!==undefined&&!isObj(d.stamps)))return false;
+    const st=Object.entries(d.stamps||{});
+    if(st.length>CULT.stamps||!st.every(([k,v])=>isName(k)&&isDay(v)))return false;
+    if(d.quiz!=null&&!quizOk(d.quiz))return false;
+    if((d.run!==undefined&&!isCount(d.run))||(d.best!==undefined&&!isCount(d.best)))return false;
+    return d.last==null||isDay(d.last);
+  }
+  /* Forme nettoyée et bornée (lecture locale, résultat d'une fusion) : entrées anormales retirées, 300 tampons au plus
+     (les plus anciens d'abord), 24 Ko au plus ; aucun champ inconnu. */
+  function cleanCultures(d){
+    const out={v:1,stamps:{},quiz:null,run:0,best:0,last:null};if(!isObj(d))return out;
+    const st=(isObj(d.stamps)?Object.entries(d.stamps):[]).filter(([k,v])=>isName(k)&&isDay(v))
+      .sort((a,b)=>a[1]<b[1]?-1:a[1]>b[1]?1:a[0]<b[0]?-1:a[0]>b[0]?1:0);
+    let bytes=0;
+    for(const [k,v] of st.slice(0,CULT.stamps)){bytes+=byteLength(JSON.stringify(k))+16;if(bytes>CULT.bytes)break;out.stamps[k]=v;}
+    if(quizOk(d.quiz))out.quiz={d:d.quiz.d,c:d.quiz.c,a:d.quiz.a,w:d.quiz.w,k:d.quiz.k,ok:d.quiz.ok};
+    out.run=isCount(d.run)?d.run:0;out.best=Math.max(out.run,isCount(d.best)?d.best:0);
+    out.last=isDay(d.last)?d.last:null;
+    return out;
+  }
+  const hasCultures=c=>Object.keys(c.stamps).length>0||!!c.quiz||c.best>0;
+  /* Fusion de deux appareils, sans perte et dans n'importe quel ordre :
+     - tampons : union des pays, la date la plus ancienne est gardée (un appareil en retard n'efface jamais un tampon) ;
+     - mot du jour : le résultat du jour le plus récent (le jeu du jour ne se rejoue pas sur un autre appareil) ;
+       même jour sur les deux appareils : la bonne réponse est gardée (son tampon l'est de toute façon) ;
+     - série : celle de la dernière bonne réponse ; remise à zéro si le mot du jour gardé, plus récent, est raté. */
+  function mergeCultures(a,b){
+    const A=cleanCultures(a),B=cleanCultures(b),stamps={...A.stamps};
+    for(const [k,v] of Object.entries(B.stamps))if(!stamps[k]||v<stamps[k])stamps[k]=v;
+    let quiz=A.quiz||B.quiz;
+    if(A.quiz&&B.quiz)quiz=A.quiz.d!==B.quiz.d?(A.quiz.d>B.quiz.d?A.quiz:B.quiz):A.quiz.ok!==B.quiz.ok?(A.quiz.ok?A.quiz:B.quiz):(stable(A.quiz)>=stable(B.quiz)?A.quiz:B.quiz);
+    const last=A.last&&B.last?(A.last>=B.last?A.last:B.last):(A.last||B.last);
+    let run=A.last===B.last?Math.max(A.run,B.run):last===A.last?A.run:B.run;
+    if(quiz&&!quiz.ok&&(!last||quiz.d>last))run=0;
+    return cleanCultures({stamps,quiz,run,best:Math.max(A.best,B.best,run),last});
   }
 
   /* ---------- lecture des clés locales ---------- */
@@ -72,6 +134,7 @@
     const blobs=[['main',KEYS.progress],['quiz',KEYS.quiz],['badge_dates',KEYS.badgeDates],['surf',KEYS.surf],['checklist',KEYS.checklist]];
     for(const [id,key] of blobs){const v=readJSON(storage,key);if(isObj(v)&&Object.keys(v).length)out['progress:'+id]=v;}
     try{const d=storage.getItem(KEYS.daily);if(d)out['misc:daily']={v:String(d).slice(0,40)};}catch(_){}
+    const cult=cleanCultures(readJSON(storage,KEYS.cultures));if(hasCultures(cult))out['progress:cultures']=cult;
     return out;
   }
 
@@ -114,6 +177,15 @@
     const blobs=[['main',KEYS.progress],['quiz',KEYS.quiz],['badge_dates',KEYS.badgeDates],['surf',KEYS.surf],['checklist',KEYS.checklist]];
     for(const [id,key] of blobs){const v=items['progress:'+id];if(v)put(key,v);}
     if(items['misc:daily'])put(KEYS.daily,items['misc:daily'].v);
+    /* Tampons : toujours fusionnés avec ceux de l'appareil (jamais remplacés) ; rien n'est écrit si rien ne change.
+       Un tampon local hors des bornes de la sauvegarde (date d'une horloge déréglée…) reste sur l'appareil. */
+    if(items['progress:cultures']){
+      const cur=readJSON(storage,KEYS.cultures),next=mergeCultures(cur,items['progress:cultures']);
+      if(hash(next)!==hash(cleanCultures(cur))){
+        const extra={};if(isObj(cur)&&isObj(cur.stamps))for(const [k,v] of Object.entries(cur.stamps))if(typeof k==='string'&&k&&typeof v==='string'&&/^\d{4}-\d\d-\d\d$/.test(v)&&!next.stamps[k])extra[k]=v;
+        put(KEYS.cultures,{...next,stamps:{...extra,...next.stamps}});
+      }
+    }
     return changed;
   }
 
@@ -132,6 +204,7 @@
     return b;
   }
   function mergeProgress(id,a,b){
+    if(id==='cultures')return mergeCultures(a,b);
     if(!isObj(a))return isObj(b)?b:{};if(!isObj(b))return a;
     if(id==='badge_dates'){const out={...a};for(const [k,v] of Object.entries(b))out[k]=out[k]&&out[k]<=v?out[k]:v;return out;}
     if(id==='quiz'){const out=monotone(a,b,'');/* défi du jour : « AAAA-M-J » n'est pas triable, le plus récent l'emporte ailleurs */return out;}
@@ -146,7 +219,9 @@
     const s={...freshState(),...state,shadow:{...(state&&state.shadow)},pend:{...(state&&state.pend)}};
     for(const key of new Set([...Object.keys(local),...Object.keys(s.shadow)])){
       const h=hash(local[key]),base=s.shadow[key]?s.shadow[key].h:null;
-      if(h===base){delete s.pend[key];continue;}
+      /* Une progression absente de l'appareil (ou que ce serveur ne connaît pas) n'est pas une suppression :
+         le serveur refuse de supprimer une progression, et refuserait alors tout l'envoi. */
+      if(h===base||(h===null&&key.startsWith('progress:'))){delete s.pend[key];continue;}
       if(!s.pend[key]||s.pend[key].h!==h)s.pend[key]={h,u:now};
     }
     return s;
@@ -210,6 +285,19 @@
     return s;
   }
 
+  /* Ids de progression annoncés par le serveur dans sa réponse à pull ({accept:{progress:[…]}}) ; [] pour un serveur ancien. */
+  function serverAccepts(res){
+    const p=isObj(res)&&isObj(res.accept)&&Array.isArray(res.accept.progress)?res.accept.progress:[];
+    return p.filter(id=>typeof id==='string'&&PROGRESS_IDS.includes(id));
+  }
+  /* Ne garde que ce que le serveur sait recevoir : les ids d'origine, plus ceux qu'il annonce. Le reste n'existe pas pour
+     la synchronisation (ni envoyé, ni compté comme supprimé) et reste intact sur l'appareil. */
+  function forServer(items,accepted){
+    const ok=new Set([...PROGRESS_BASE,...(Array.isArray(accepted)?accepted:[])]),out={};
+    for(const [key,v] of Object.entries(items||{})){const {kind,id}=splitKey(key);if(kind!=='progress'||ok.has(id))out[key]=v;}
+    return out;
+  }
+
   /* Contrôle d'un élément envoyé au serveur (même règles des deux côtés). */
   function checkPushItem(it){
     if(!isObj(it))return 'item';
@@ -227,5 +315,6 @@
   function snapshot(storage){const raw={};for(const key of Object.values(KEYS)){try{const v=storage.getItem(key);if(v!=null)raw[key]=v;}catch(_){}}return raw;}
   function restoreSnapshot(storage,raw){for(const key of Object.values(KEYS)){if(raw&&typeof raw[key]==='string')storage.setItem(key,raw[key]);else storage.removeItem(key);}}
 
-  return {KEYS,KINDS,PROGRESS_IDS,ID_RE,LIMITS,stable,hash,collect,apply,scan,merge,acknowledge,mergeProgress,validItem,checkPushItem,freshState,snapshot,restoreSnapshot,keyOf,splitKey};
+  return {KEYS,KINDS,PROGRESS_IDS,PROGRESS_BASE,ID_RE,LIMITS,CULT,stable,hash,collect,apply,scan,merge,acknowledge,mergeProgress,validItem,checkPushItem,
+    freshState,snapshot,restoreSnapshot,keyOf,splitKey,cleanCultures,mergeCultures,serverAccepts,forServer};
 });
