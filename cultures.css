@@ -239,3 +239,5 @@ html.cult-open{overflow:hidden}
   .cult-card,.cult-choice,.cult-sheet.is-in,.cult-stamp.is-fresh,.cult-choice.is-wrong{animation:none;transition:none}
 }
 .reduce-motion .cult-card,.reduce-motion .cult-choice,.reduce-motion .cult-sheet.is-in,.reduce-motion .cult-stamp.is-fresh,.reduce-motion .cult-choice.is-wrong{animation:none;transition:none}
+/* Carnet de tampons : le nom du pays doit tenir en entier dans le petit tampon (plus de « E… »). */
+.cult-ix .cult-stamp b{max-width:88%;font-size:9px;letter-spacing:.1px;overflow-wrap:normal;word-break:normal;-webkit-line-clamp:3}
