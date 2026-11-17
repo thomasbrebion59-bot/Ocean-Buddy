@@ -43,7 +43,14 @@ async function main(){
   const site=require('./site-base.cjs');
   const updateBase=process.env.OB_UPDATE_BASE||site.OB_UPDATE_BASE, updateFallback=site.LEGACY_UPDATE_BASE;
   for(const base of [updateBase,updateFallback])if(!/^https:\/\/[^/?#\s]+\/[^?#\s]*\/$/.test(base))throw Error('OB_UPDATE_BASE doit être une adresse https:// terminée par « / » : '+base);
-  await esbuild.build({entryPoints:[path.join(root,'mobile/client.js')],outfile:path.join(dest,'native.js'),bundle:true,minify:true,format:'iife',target:['safari15','chrome100'],define:{__OB_BUNDLE__:JSON.stringify({seq}),__OB_UPDATE_BASE__:JSON.stringify(updateBase),__OB_UPDATE_FALLBACK__:JSON.stringify(updateFallback===updateBase?'':updateFallback),__OB_SITE_BASE__:JSON.stringify(site.OB_SITE_BASE)}});
+  /* API du compte (app 1.5.0 et plus, plugin OceanAccount) : toujours https://oceanbuddy.app/api/v1, même domaine que le site.
+     OB_ACCOUNT_API ne sert qu'à l'essai LOCAL (scripts/compte-essai.mjs, simulateur) : http://localhost ou 127.0.0.1 seulement,
+     et le paquet est alors marqué « accountApi: essai-local » dans bundle.json. Jamais pour une version publiée. */
+  const accountApi=process.env.OB_ACCOUNT_API||site.OB_SITE_BASE+'api/v1';
+  const localAccountApi=!!process.env.OB_ACCOUNT_API;
+  if(!/^https:\/\/[^/?#\s]+\/[^?#\s]*[^/?#\s]$/.test(accountApi)&&!(localAccountApi&&/^http:\/\/(localhost|127\.0\.0\.1)(:\d+)?\/[^?#\s]*[^/?#\s]$/.test(accountApi)))throw Error('API du compte invalide (https://…/api/v1, ou http://localhost pour l’essai local) : '+accountApi);
+  if(localAccountApi)console.warn('ATTENTION : paquet d’ESSAI LOCAL, API du compte = '+accountApi+' (ne jamais publier ce paquet).');
+  await esbuild.build({entryPoints:[path.join(root,'mobile/client.js')],outfile:path.join(dest,'native.js'),bundle:true,minify:true,format:'iife',target:['safari15','chrome100'],define:{__OB_BUNDLE__:JSON.stringify({seq}),__OB_UPDATE_BASE__:JSON.stringify(updateBase),__OB_UPDATE_FALLBACK__:JSON.stringify(updateFallback===updateBase?'':updateFallback),__OB_SITE_BASE__:JSON.stringify(site.OB_SITE_BASE),__OB_ACCOUNT_API__:JSON.stringify(accountApi)}});
   let html=fs.readFileSync(path.join(dest,'index.html'),'utf8');
   html=html.replace(/<link[^>]+https:\/\/fonts\.(?:googleapis|gstatic)\.com[^>]*>\n?/g,'');
   /* Manifeste d’application web : inutile dans l’app (et absent du paquet). */
@@ -57,7 +64,7 @@ async function main(){
   const loader=`<script src="native.js"></script><script>OceanMobile.boot().then(()=>new Promise((resolve,reject)=>{let last;for(const src of ${JSON.stringify(scripts)}){const s=document.createElement('script');s.src=src;s.async=false;s.onerror=reject;document.body.append(s);last=s;}last.onload=resolve;})).then(()=>OceanMobile.appReady()).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script>`;
   html=html.replace('</body>',loader+'</body>');fs.writeFileSync(path.join(dest,'index.html'),html);
   if(/https:\/\/(fonts\.|unpkg\.com)/.test(html))throw Error('Remote boot dependencies remain');
-  fs.writeFileSync(path.join(dest,'bundle.json'),JSON.stringify({seq})+'\n');
+  fs.writeFileSync(path.join(dest,'bundle.json'),JSON.stringify(localAccountApi?{seq,accountApi:'essai-local'}:{seq})+'\n');
   console.log(`Mobile bundle ${seq} ready: ${scripts.length} local scripts, fonts and map engine included.`);
 }
 main().catch(error=>{console.error(error);process.exit(1)});

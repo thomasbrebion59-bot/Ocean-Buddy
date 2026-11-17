@@ -51,6 +51,13 @@ test('le faux fournisseur est impossible à activer hors essai local (échec fer
   assert.ok(existsSync(join(serverDir, '.dev.vars.example')));
   const tracked = execFileSync('git', ['ls-files', 'server/ob-api'], { cwd: join(serverDir, '..', '..') }).toString();
   assert.doesNotMatch(tracked, /\.dev\.vars(\n|$)/);
+  // Essai local : configuration À PART (wrangler.essai.toml), sans SUPABASE_URL ni route ni tâche planifiée.
+  const essai = readFileSync(join(serverDir, 'wrangler.essai.toml'), 'utf8').replace(/^#.*$/gm, '');
+  assert.match(essai, /^OB_ENV = "local"$/m); assert.match(essai, /^OB_DEV_FAKE_IDP = "1"$/m);
+  for (const bad of [/SUPABASE_URL/, /^routes\s*=/m, /^\[triggers\]/m, /oceanbuddy\.app/, /workers_dev\s*=\s*true/]) assert.doesNotMatch(essai, bad);
+  const essaiScript = readFileSync(join(serverDir, '..', '..', 'scripts', 'compte-essai.mjs'), 'utf8');
+  assert.match(essaiScript, /CONFIG = 'wrangler\.essai\.toml'/);
+  assert.doesNotMatch(essaiScript, /'deploy'/);
 });
 
 test('production mal configurée : toutes les routes refusent (500 misconfigured)', async () => {
@@ -296,4 +303,80 @@ test('production : jeton Supabase vérifié par JWKS (ES256), HS256 et mauvais �
   const none = (await token()).split('.'); none[0] = Buffer.from(JSON.stringify({ alg: 'none' })).toString('base64url');
   assert.equal(await bearer(none[0] + '.' + none[1] + '.'), 401);
   assert.equal(jwksCalls, 1, 'clés publiques gardées en cache');
+});
+
+/* App iPhone (version 1.5.0) : requêtes CapacitorHttp (URLSession) = ni Origin, ni cookie, ni en-tête X-OB-CSRF ;
+   jetons rendus dans le corps puis gardés dans le Trousseau (plugin OceanAccount), envoyés en Authorization: Bearer. */
+function nativeApp(w, env, ip = '198.51.100.40') {
+  const d = device(w, env, { origin: null, ip, base: 'http://localhost:8787' });
+  const call = (method, path, body, token) => d.call(method, path, body, { 'x-ob-csrf': null, ...(token ? { authorization: 'Bearer ' + token } : {}) });
+  return { d, call };
+}
+
+test('app native : cycle complet sans Origin ni cookie (code e-mail, sauvegarde, export, rafraîchissement, déconnexion)', async () => {
+  const c = clock(), w = createWorker({ now: c.now }), env = devEnv();
+  const { d, call } = nativeApp(w, env);
+  assert.equal((await call('POST', '/api/v1/auth/otp/request', { email: 'surf@example.com' })).status, 202);
+  const login = await call('POST', '/api/v1/auth/otp/verify', { email: 'surf@example.com', code: '123456', client: 'native' });
+  assert.equal(login.status, 200);
+  assert.equal(typeof login.data.access_token, 'string'); assert.equal(typeof login.data.refresh_token, 'string');
+  assert.deepEqual(login.res.headers.getSetCookie(), [], 'aucun cookie pour l’app');
+  let at = login.data.access_token, rt = login.data.refresh_token;
+  assert.equal((await call('POST', '/api/v1/consent', { version: '2026-11' }, at)).status, 200);
+  const push = await call('POST', '/api/v1/sync/push', { items: [fav('nazare', 1)] }, at);
+  assert.equal(push.status, 200); assert.equal(push.data.results[0].status, 'ok');
+  assert.equal((await call('POST', '/api/v1/sync/pull', { since: 0 }, at)).data.items.length, 1);
+  const exp = await call('GET', '/api/v1/account/export', undefined, at);
+  assert.equal(exp.status, 200); assert.equal(exp.data.account.email, 'surf@example.com'); assert.equal(exp.data.items.length, 1);
+  // Sans jeton : refusé, même sans Origin.
+  assert.equal((await call('POST', '/api/v1/sync/pull', { since: 0 })).status, 401);
+  // Jeton expiré, puis rafraîchissement avec le jeton du Trousseau (corps), toujours sans cookie.
+  c.t += 2 * 3600_000;
+  assert.equal((await call('GET', '/api/v1/me', undefined, at)).data.error, 'token_expired');
+  const r = await call('POST', '/api/v1/auth/refresh', { client: 'native', refresh_token: rt });
+  assert.equal(r.status, 200); assert.equal(typeof r.data.access_token, 'string');
+  assert.deepEqual(r.res.headers.getSetCookie(), []);
+  at = r.data.access_token; rt = r.data.refresh_token;
+  assert.equal((await call('GET', '/api/v1/me', undefined, at)).data.user.email, 'surf@example.com');
+  assert.equal((await call('POST', '/api/v1/auth/refresh', { client: 'native', refresh_token: 'pas-un-jeton' })).status, 401);
+  assert.equal((await call('POST', '/api/v1/auth/refresh', { client: 'native' })).status, 401);
+  assert.equal((await call('POST', '/api/v1/auth/logout', {}, at)).status, 200);
+  assert.deepEqual(d.jar, {});
+});
+
+test('app native : suppression du compte avec un nouveau code, jetons jamais rendus à une page web', async () => {
+  const c = clock(), w = createWorker({ now: c.now }), env = devEnv();
+  const { call } = nativeApp(w, env);
+  const first = await call('POST', '/api/v1/auth/otp/verify', { email: 'del@example.com', code: '123456', client: 'native' });
+  await call('POST', '/api/v1/consent', { version: '2026-11' }, first.data.access_token);
+  c.t += 11 * 60_000;
+  const late = await call('DELETE', '/api/v1/account', undefined, first.data.access_token);
+  assert.equal(late.data.error, 'reauth_required');
+  const again = await call('POST', '/api/v1/auth/otp/verify', { email: 'del@example.com', code: '123456', client: 'native' });
+  const del = await call('DELETE', '/api/v1/account', undefined, again.data.access_token);
+  assert.equal(del.status, 200); assert.equal(del.data.deleted, true);
+  assert.equal(env.DB.raw.prepare('SELECT COUNT(*) n FROM accounts').get().n, 0);
+  // Origine de la WebView (capacitor://…) : refusée tant que NATIVE_ORIGINS est vide ; l'app passe par CapacitorHttp, sans Origin.
+  const webview = device(w, env, { origin: 'capacitor://oceanbuddy.localhost', ip: '198.51.100.41' });
+  assert.equal((await webview.call('POST', '/api/v1/auth/otp/verify', { email: 'del@example.com', code: '123456', client: 'native' })).data.error, 'forbidden_origin');
+  const pre = await w.fetch(new Request('http://localhost:8787/api/v1/auth/otp/verify', { method: 'OPTIONS', headers: { origin: 'capacitor://oceanbuddy.localhost' } }), env);
+  assert.equal(pre.status, 403); assert.equal(pre.headers.get('access-control-allow-origin'), null);
+  // Une page web autorisée qui se dit « native » reçoit des cookies, jamais les jetons en clair (rafraîchissement compris).
+  const web = device(w, env, { ip: '198.51.100.42' });
+  const asNative = await web.call('POST', '/api/v1/auth/otp/verify', { email: 'web@example.com', code: '123456', client: 'native' });
+  assert.equal(asNative.data.access_token, undefined); assert.ok('ob_at' in web.jar);
+  const rf = await web.call('POST', '/api/v1/auth/refresh', { client: 'native' });
+  assert.equal(rf.status, 200); assert.equal(rf.data.access_token, undefined);
+  // Jeton Bearer volé utilisé depuis une origine étrangère : refusé.
+  const evil = device(w, env, { origin: 'https://evil.example', ip: '198.51.100.43' });
+  assert.equal((await evil.call('GET', '/api/v1/me', undefined, { authorization: 'Bearer ' + again.data.access_token })).status, 403);
+});
+
+test('lien de l’e-mail : la page dit aux utilisateurs de l’app de taper le code (FR/EN/ES)', async () => {
+  const w = createWorker(), env = devEnv();
+  const r = await w.fetch(new Request('http://localhost:8787/api/v1/auth/confirm?token_hash=abcdefghijklmnop', { headers: { 'cf-connecting-ip': '198.51.100.50' } }), env);
+  assert.equal(r.status, 200);
+  const html = await r.text();
+  assert.match(html, /Dans l’app iPhone \?/); assert.match(html, /Using the iPhone app\?/); assert.match(html, /¿Usas la app de iPhone\?/);
+  assert.match(html, /name="token_hash" value="abcdefghijklmnop"/);
 });

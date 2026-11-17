@@ -1,4 +1,5 @@
-# Copier vers .dev.vars (ignoré par git). ESSAI LOCAL UNIQUEMENT : faux fournisseur d'identité, code 123456.
+# Modèle seulement : scripts/compte-essai.mjs n'en a plus besoin (il lit wrangler.essai.toml, sans SUPABASE_URL).
+# Si tu le copies vers .dev.vars (ignoré par git) : ESSAI LOCAL UNIQUEMENT, faux fournisseur d'identité, code 123456.
 # Ces réglages ne sont acceptés que sur http://localhost ou http://127.0.0.1 et sans SUPABASE_URL :
 # ailleurs, le Worker refuse toutes les requêtes (500 « misconfigured »). Ne JAMAIS les mettre dans wrangler.toml.
 OB_ENV=local

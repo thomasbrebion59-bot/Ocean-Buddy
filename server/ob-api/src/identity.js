@@ -48,7 +48,11 @@ export function supabaseIdentity({ url, publishableKey, secretKey, fetcher }) {
     findKey,
     async requestOtp(email) {
       const r = await call("/otp", { body: { email, create_user: true } });
-      if (!r.ok) throw new IdpError("otp_failed", 502);
+      if (!r.ok) {
+        // Diagnostic sans donnée personnelle : statut et code d'erreur technique du fournisseur.
+        console.error(JSON.stringify({ evt: "idp", op: "otp", status: r.status, code: String(r.data?.error_code ?? "").slice(0, 60) }));
+        throw new IdpError("otp_failed", 502);
+      }
     },
     async verifyOtp(email, code) {
       const r = await call("/verify", { body: { type: "email", email, token: code } });

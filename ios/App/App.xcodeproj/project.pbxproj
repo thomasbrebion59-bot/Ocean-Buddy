@@ -19,6 +19,7 @@
 		9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9582B6822FE993A50072D4E8 /* SceneDelegate.swift */; };
 		C1A000000000000000000002 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = C1A000000000000000000001 /* InfoPlist.strings */; };
 		A1B2C3D42FF0000100000002 /* OceanGlass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D42FF0000100000001 /* OceanGlass.swift */; };
+		A1B2C3D42FF0000200000002 /* OceanAccount.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1B2C3D42FF0000200000001 /* OceanAccount.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -38,6 +39,7 @@
 		C1A00000000000000000000B /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		C1A00000000000000000000C /* es */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = es; path = es.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		A1B2C3D42FF0000100000001 /* OceanGlass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanGlass.swift; sourceTree = "<group>"; };
+		A1B2C3D42FF0000200000001 /* OceanAccount.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OceanAccount.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -74,6 +76,7 @@
 			children = (
 				9582B6822FE993A50072D4E8 /* SceneDelegate.swift */,
 				A1B2C3D42FF0000100000001 /* OceanGlass.swift */,
+				A1B2C3D42FF0000200000001 /* OceanAccount.swift */,
 				50379B222058CBB4000EE86E /* capacitor.config.json */,
 				504EC3071FED79650016851F /* AppDelegate.swift */,
 				504EC30B1FED79650016851F /* Main.storyboard */,
@@ -176,6 +179,7 @@
 				504EC3081FED79650016851F /* AppDelegate.swift in Sources */,
 				9582B6832FE993A70072D4E8 /* SceneDelegate.swift in Sources */,
 				A1B2C3D42FF0000100000002 /* OceanGlass.swift in Sources */,
+				A1B2C3D42FF0000200000002 /* OceanAccount.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
