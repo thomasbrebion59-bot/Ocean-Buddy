@@ -5,11 +5,13 @@
    - discover(pays) : « Découvrir l’Indonésie », « Discover the Philippines », « Descubre Japón ».
    - cultures-model.js et cultures.js se chargent après la levée du rideau (OceanBoot.after, puis au repos),
      ou tout de suite au premier toucher d’un élément « culture » (data-cult-open, data-cult-index, data-cult-choice).
-   - Lien partagé #culture=<pays> : la page du pays s’ouvre après la levée du rideau. */
+   - Lien partagé #culture=<pays> : la page du pays s’ouvre après la levée du rideau et, chez un nouveau visiteur, après
+     l’onboarding ; app déjà ouverte, le même lien suivi dans l’onglet (hashchange) l’ouvre aussi.
+   - Hors connexion : « Le mot du jour » l’indique et se remplit au retour du réseau (événement online, un seul essai). */
 (() => {
   'use strict';
   /* Empreinte des fichiers chargés à la demande : écrite par scripts/build-cultures.cjs. */
-  const V='50c74ed6f2ab';
+  const V='b2340c2e4c72';
   const api=window.OceanCultures={};
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||document.documentElement.lang||'fr';
@@ -115,15 +117,50 @@
     ensure().then(v=>v.open(t.dataset.cultOpen,{from:t.dataset.cultFrom||'',opener:t})).catch(fail);
   });
 
+  /* ---------- Hors connexion : « Le mot du jour » le dit, même hauteur ; la carte reste à remplir (is-wait) ---------- */
+  function offline(){
+    try{
+      const body=document.querySelector('[data-cult-quiz-body].is-wait');if(!body)return;
+      body.removeAttribute('aria-busy');const q=body.querySelector('.cult-quiz-q');if(q)q.textContent='Le mot du jour arrive dès que tu es en ligne.';
+    }catch(_){}
+  }
+  /* Retour du réseau : un seul nouvel essai par coupure (une seule écoute, jamais de boucle de requêtes). */
+  let waitNet=false;
+  function whenOnline(fn){if(waitNet)return;waitNet=true;addEventListener('online',()=>{waitNet=false;fn();},{once:true});}
+
+  /* ---------- Lien #culture=<pays> ---------- */
+  /* Première visite : l’onboarding (#onb) passe d’abord ; la page du pays s’ouvre quand il se ferme (comme deep-link.js). */
+  const onbVisible=()=>{const o=document.getElementById('onb');return !!o&&o.style.display!=='none'&&!o.classList.contains('hide');};
+  /* replaceState ne déclenche pas hashchange : aucune boucle. */
+  const cleanHash=()=>{if(/^#culture=/.test(location.hash||''))try{history.replaceState(history.state,'',location.pathname+location.search);}catch(_){}};
+  let pending=null,onbWatch=null;
+  function openLink(name){
+    pending=name;if(onbWatch)return;
+    const fire=()=>{onbWatch=null;const c=pending;pending=null;if(c==null)return;cleanHash();ensure().then(v=>v.open(c,{from:'link'})).catch(fail);};
+    if(!onbVisible())return fire();
+    if(typeof MutationObserver!=='function')return;
+    onbWatch=new MutationObserver(()=>{if(onbVisible())return;onbWatch.disconnect();setTimeout(fire,300);});
+    onbWatch.observe(document.getElementById('onb'),{attributes:true,attributeFilter:['class','style']});
+  }
+  /* Seuls les pays des données ouvrent une page (v.open) ; un lien mal encodé est simplement retiré de l’adresse. */
+  function fromHash(){
+    const m=/^#culture=(.+)$/.exec(location.hash||'');if(!m)return false;
+    let c=null;try{c=decodeURIComponent(m[1]);}catch(_){}
+    if(c)openLink(c);else cleanHash();
+    return true;
+  }
+
   /* ---------- Après la levée du rideau : mots de l’accueil, recherche, passeport ; lien #culture= ---------- */
+  let hashOn=false;
   const later=()=>{
-    const deep=/^#culture=(.+)$/.exec(location.hash||'');
-    const go=()=>ensure().then(v=>{v.start?.();if(deep){try{history.replaceState(history.state,'',location.pathname+location.search);}catch(_){}v.open(decodeURIComponent(deep[1]),{from:'link'});}}).catch(()=>{});
-    if(deep)setTimeout(go,300);else setTimeout(()=>{(window.requestIdleCallback||setTimeout)(go,{timeout:2500});},900);
+    const go=()=>ensure().then(v=>v.start?.()).catch(()=>{offline();whenOnline(go);});
+    if(/^#culture=/.test(location.hash||''))setTimeout(()=>{go();fromHash();},300);else setTimeout(()=>{(window.requestIdleCallback||setTimeout)(go,{timeout:2500});},900);
+    /* App déjà ouverte : un lien #culture=<pays> suivi dans le même onglet ouvre aussi la page du pays. */
+    if(!hashOn){hashOn=true;addEventListener('hashchange',fromHash);}
   };
   if(window.OceanBoot&&OceanBoot.after)OceanBoot.after(later);else if(document.readyState==='complete')setTimeout(later,0);else addEventListener('load',later,{once:true});
 
-  Object.assign(api,{V,discover,homeHTML,homePicks,ensure,
+  Object.assign(api,{V,discover,homeHTML,homePicks,ensure,offline,whenOnline,
     open:(name,o)=>ensure().then(v=>v.open(name,o||{})),
     openIndex:()=>ensure().then(v=>v.openIndex())});
 })();

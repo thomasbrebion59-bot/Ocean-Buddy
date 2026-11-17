@@ -139,12 +139,29 @@
     close:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg>',
     share:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5"/><path d="M5 12.5V19a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-6.5"/></svg>'
   };
+  /* Explorer : le globe 3D se fige sous la feuille et reprend à sa fermeture. Même signal que la scène d’activité
+     (ocean-map.js : pause seulement en mode globe, reprise seulement s’il a été figé ; la carte détaillée garde sa pause
+     longue). Pause après l’entrée de la feuille, qui laisse voir l’écran dessous pendant son fondu. */
+  let frozen=false,freezeT=0;
+  function freeze(on){
+    clearTimeout(freezeT);if(!!on===frozen)return;frozen=!!on;
+    try{document.dispatchEvent(new CustomEvent('ocean:transition',{detail:frozen}));}catch(_){}
+    /* Retour : la vie au repos du globe repart (sans effet si la carte détaillée est affichée). */
+    if(!frozen)try{window.OceanMap?.globe?.wake?.();}catch(_){}
+  }
+  /* Barre Fermer / Partager, collée en haut de la feuille : sombre sur la photo, claire et pleine une fois la photo passée. */
+  let barRaf=0;
+  function syncBar(){
+    barRaf=0;const box=dlg&&$('[data-cult-scroll]',dlg),hero=box&&$('.cult-hero',box),btn=box&&$('.cult-bar>.cult-icon',box);if(!hero||!btn)return;
+    btn.parentNode.classList.toggle('is-solid',hero.getBoundingClientRect().bottom<btn.getBoundingClientRect().bottom+6);
+  }
   function sheet(){
     if(dlg)return dlg;
     dlg=document.createElement('dialog');dlg.className='cult-sheet';dlg.setAttribute('aria-labelledby','cultTitle');
     dlg.innerHTML='<div class="cult-scroll" data-cult-scroll></div>';
     document.body.append(dlg);
-    dlg.addEventListener('close',()=>{document.documentElement.classList.remove('cult-open');current=null;const o=opener;opener=null;if(o?.isConnected)try{o.focus({preventScroll:true});}catch(_){}});
+    $('[data-cult-scroll]',dlg).addEventListener('scroll',()=>{if(!barRaf)barRaf=requestAnimationFrame(syncBar);},{passive:true});
+    dlg.addEventListener('close',()=>{freeze(false);document.documentElement.classList.remove('cult-open');current=null;const o=opener;opener=null;if(o?.isConnected)try{o.focus({preventScroll:true});}catch(_){}});
     dlg.addEventListener('click',e=>{
       if(e.target.closest('[data-cult-close]')){dlg.close();return;}
       if(e.target.closest('[data-cult-share]')){share(current);return;}
@@ -157,9 +174,9 @@
     const d=sheet(),box=$('[data-cult-scroll]',d);
     box.innerHTML=html;
     if(label)d.setAttribute('aria-label',label);else d.removeAttribute('aria-label');
-    if(!d.open){try{d.showModal();}catch(_){d.setAttribute('open','');}}
+    if(!d.open){try{d.showModal();}catch(_){d.setAttribute('open','');}freezeT=setTimeout(()=>{if(d.open)freeze(true);},reduced()?0:380);}
     /* Chaque page s’ouvre en haut (la feuille garde sinon la position de la page précédente). */
-    box.scrollTop=0;requestAnimationFrame(()=>{box.scrollTop=0;});
+    box.scrollTop=0;requestAnimationFrame(()=>{box.scrollTop=0;syncBar();});
     document.documentElement.classList.add('cult-open');
     d.classList.remove('is-in');void d.offsetWidth;d.classList.add('is-in');
     $('.cult-close',d)?.focus({preventScroll:true});
@@ -190,9 +207,9 @@
     if(e.thanks)words.push(`<article class="cult-word is-thanks"><small>Pour dire merci</small><b${NT}>${qw(e.thanks.word)}</b><p${NT}>${esc(e.thanks.lang)}</p>${srcLink(e.thanks.src)}</article>`);
     const pic=(f,cls='')=>`<img class="cult-pic${cls}" src="assets/pictos/${f}.webp" alt="" width="44" height="44" loading="lazy" decoding="async">`;
     const next=M.nextCountry(names(),s,c,new Date()),nv=next&&cover(next);
-    return `<header class="cult-hero${cv?'':' no-photo'}">
+    return `<div class="cult-bar"><button type="button" class="cult-icon cult-close" data-cult-close aria-label="Fermer">${ICON.close}</button>${navigator.share||navigator.clipboard?`<button type="button" class="cult-icon" data-cult-share aria-label="Partager ce pays">${ICON.share}</button>`:''}</div>
+      <header class="cult-hero${cv?'':' no-photo'}">
         ${cv?`<img class="cult-hero-img" src="${esc(cv.p.src)}" alt="" decoding="async" fetchpriority="high">`:''}
-        <div class="cult-bar"><button type="button" class="cult-icon cult-close" data-cult-close aria-label="Fermer">${ICON.close}</button>${navigator.share||navigator.clipboard?`<button type="button" class="cult-icon" data-cult-share aria-label="Partager ce pays">${ICON.share}</button>`:''}</div>
         <div class="cult-hero-tx">
           <span class="cult-kicker">Tour du monde des cultures</span>
           <h1 id="cultTitle"${NT}>${esc(name)}</h1>
@@ -235,8 +252,8 @@
     /* Dans chaque continent, les pays tamponnés d’abord (du plus récent au plus ancien), puis les autres par nom. */
     for(const c of all.sort((a,b)=>(s.stamps[b]||'').localeCompare(s.stamps[a]||'')||local(a).localeCompare(local(b),LG()))){const w=data?.[c]?.w==='fr'?'eu':data?.[c]?.w||'eu';(by.get(w)||by.get('eu')).push(c);}
     const item=c=>{const cv=cover(c),on=!!s.stamps[c];return `<button type="button" class="cult-ix${on?' is-on':''}" data-cult-open="${esc(c)}" data-cult-from="index"${NT}>${cv?`<img src="${esc(cv.p.thumb)}" alt="" loading="lazy" decoding="async">`:'<i></i>'}<span><b>${esc(local(c))}</b>${word(c)?`<em>${qw(word(c))}</em>`:''}</span>${on?stampHTML(c,s.stamps[c]):''}</button>`;};
-    return `<header class="cult-ixhead">
-        <div class="cult-bar is-solid"><button type="button" class="cult-icon cult-close" data-cult-close aria-label="Fermer">${ICON.close}</button></div>
+    return `<div class="cult-bar is-solid is-ix"><button type="button" class="cult-icon cult-close" data-cult-close aria-label="Fermer">${ICON.close}</button></div>
+      <header class="cult-ixhead">
         <span class="cult-kicker">Tour du monde des cultures</span>
         <h1 id="cultTitle">Mes tampons</h1>
         <p class="cult-ixcount"><b>${n}</b><span>/${all.length}</span> <span>pays découverts</span></p>
@@ -314,9 +331,9 @@
       const list=$('#spotList');if(list)new MutationObserver(()=>syncBanner()).observe(list,{childList:true});
       $('#spotSearch')?.addEventListener('input',()=>setTimeout(syncBanner,0));
     }).catch(()=>{
-      /* Hors connexion sur le site : le jeu l’indique, sans changer la hauteur de la carte. */
-      const body=$('[data-cult-quiz-body].is-wait');if(body){body.classList.remove('is-wait');body.removeAttribute('aria-busy');const q=body.querySelector('.cult-quiz-q');if(q)q.textContent='Le mot du jour arrive dès que tu es en ligne.';}
-      started=false;
+      /* Hors connexion sur le site : le jeu l’indique, sans changer la hauteur de la carte (qui reste à remplir) ;
+         au retour du réseau, un seul nouvel essai remplit les mots et le jeu sur place (fillHome). */
+      started=false;api.offline?.();api.whenOnline?.(start);
     });
   }
   /* Changement de jour pendant que l’app reste ouverte : le jeu de la veille laisse place au nouveau mot. */
