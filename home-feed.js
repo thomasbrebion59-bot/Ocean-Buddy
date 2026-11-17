@@ -586,13 +586,13 @@
     return window.OceanCultures?.homeHTML?.({spots:SPOTS,photo,score:vib,day:new Date(),lang:lang()})||'';
   }
 
-  /* « Plus d’idées de départ » : les collections et les rangées de données hors sujet pour ton sport, repliées sous un
-     seul bouton. Déplier est un geste volontaire (le contenu s’ouvre sous le bouton, rien au-dessus ne bouge). */
-  function plusSection(list){
-    if(!list.length)return '';
+  /* « Plus d’idées de départ » : tout ce qui n’est pas dans les six premières sections (HomeLayout.FOLDED), replié sous
+     un seul bouton. Déplier est un geste volontaire (le contenu s’ouvre sous le bouton, rien au-dessus ne bouge). */
+  function plusSection(parts){
+    if(!parts.length)return '';
     return `<section class="hf-plus" data-hf="plus" aria-label="Plus d’idées de départ">
-      <button type="button" class="hf-plus-btn" data-hf-fold aria-expanded="false" aria-controls="hfPlusBody"><span class="hf-plus-tx"><b>Plus d’idées de départ</b><small>${list.map(x=>`<span>${esc(x.title)}</span>`).join(' · ')}</small></span><span class="hf-plus-n" aria-hidden="true">${list.length}</span></button>
-      <div class="hf-plus-body" id="hfPlusBody" hidden>${list.map(x=>x.html).join('')}</div>
+      <button type="button" class="hf-plus-btn" data-hf-fold aria-expanded="false" aria-controls="hfPlusBody"><span class="hf-plus-tx"><b>Plus d’idées de départ</b><small>La planète, l’immersion, les envies du moment, le mini-jeu et Poulpy</small></span><span class="hf-plus-n" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></button>
+      <div class="hf-plus-body" id="hfPlusBody" hidden>${parts.join('')}</div>
     </section>`;
   }
   /* Ouvre (ou referme) le repli ; open=true seulement pour atteindre une rangée repliée (tuiles « Envies du moment »). */
@@ -647,13 +647,17 @@
       const h=rail(c.id,c.title,c.sub,pick(pool.filter(c.test),{n:10,perCountry:2,used}),{season:true});
       if(h)plus.push({title:c.title,html:h});
     }
-    B.plus=plusSection(plus);
+    B.collections=plus.map(x=>x.html).join('');
     B.planete=worldCard();
     B.envies=slot('envies');
     /* « Tour du monde des cultures » et « Le mot du jour » (cultures-boot.js), à hauteur fixe ; place dans HomeLayout.ORDER. */
     B.cultures=culturesSection();
     for(const k of Object.keys(OWNED))B[k]=slot(k);
-    const ORDER=Layout?.ORDER||['pourtoi','noel','mois','plan','cultures','espace','planete','envies','immersion','donnees','plus','nouveautes','jeu','poulpy'];
+    /* Moins d’informations d’un coup : ORDER = sections visibles, FOLDED = blocs repliés sous « Plus d’idées de départ »
+       (les places réservées des autres scripts y sont aussi : ils s’y posent sans rien décaler, la section est fermée). */
+    const ORDER=Layout?.ORDER||['pourtoi','noel','mois','cultures','espace','plus'];
+    const FOLDED=Layout?.FOLDED||['plan','planete','envies','immersion','donnees','collections','nouveautes','jeu','poulpy'];
+    B.plus=plusSection(FOLDED.map(k=>B[k]||'').filter(Boolean));
     return ORDER.map(k=>B[k]||'').join('');
   }
 

@@ -181,11 +181,14 @@
       return '<section class="tb-group" aria-label="'+gr[1]+'"><div class="tb-group-h"><h3>'+gr[1]+'</h3><span>'+n+' / '+items.length+'</span></div>'
         +'<div class="tb-grid">'+items.map(tile).join('')+'</div></section>';
     }).join('');
+    /* Moins d’informations d’un coup : la vitrine montre le total et le prochain trophée ; les raretés et toutes les
+       médailles se déplient d’un toucher (replis.js). Ouvert reste ouvert si la vitrine est redessinée. */
+    var was=document.getElementById('tbAll'),unfolded=!!(was&&!was.hidden);
     el.innerHTML='<div class="tb-shelf">'
       +'<div class="tb-head">'+ring(got,L.length)
-      +'<div><p class="tb-eyebrow">Ma vitrine</p><p class="tb-title">'+`${got} / ${L.length} trophées`+'</p><p class="tb-next">'+next+'</p></div>'
-      +'<div class="tb-tiers">'+tiers+'</div></div>'
-      +groups+'</div>';
+      +'<div><p class="tb-eyebrow">Ma vitrine</p><p class="tb-title">'+`${got} / ${L.length} trophées`+'</p><p class="tb-next">'+next+'</p></div></div>'
+      +`<button type="button" class="obf-more tb-more" data-obf aria-expanded="${unfolded}" aria-controls="tbAll"><span class="obf-lab">Tous les trophées</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>`
+      +`<div class="obf-zone tb-all" id="tbAll"${unfolded?'':' hidden'}><div class="tb-tiers">${tiers}</div>${groups}</div></div>`;
     if(!el.dataset.tbBound){
       el.dataset.tbBound='1';
       el.addEventListener('click',function(e){var b=e.target.closest&&e.target.closest('[data-tb]');if(b){e.preventDefault();open(b.getAttribute('data-tb'),b);}});

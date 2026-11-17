@@ -1,0 +1,108 @@
+/* @creme-tokens */
+/* Moins d’informations d’un coup (replis.js) : sommaire et sections repliables de la fiche spot, replis simples du
+   profil, du jeu et des défis. Jetons de thème uniquement (--t-*), courbes et durées de motion.css. */
+
+/* ---------- Fiche spot, onglet « Le spot » : sommaire puis sections ----------
+   Ordre par CSS (aucun nœud déplacé) : tête de section, puis ses membres ; un membre n’apparaît que si sa section est
+   ouverte (data-open de l’onglet). « Quand partir ? » double la ligne Saison d’« Avant d’y aller » et l’onglet Saisons :
+   il reste dans l’onglet Saisons. Tout élément inconnu passe après le sommaire, visible. */
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>*{order:90}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#dSeasonTeaser{display:none}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-label{order:1}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-head[data-obf-group="lieu"]{order:10}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-story{order:11;align-self:stretch;min-width:0}
+/* (align-self : la description prenait la largeur de sa rangée de repères, 710 px sur un écran de 430 px, et sortait
+   de l’écran. Étirée à la largeur de la colonne, elle revient à la ligne ; la rangée de pastilles défile.) */
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#guideSpirit{order:12}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.anec-block{order:13}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-reference{order:14}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-head[data-obf-group="pratique"]{order:20}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-tip{order:21}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-visit{order:22}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-main-danger{order:23}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#spotImmersion{order:24}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-head[data-obf-group="autour"]{order:30}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#fieldOverview{order:31}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#guideAround{order:32}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#guideSleep{order:33}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#fieldNearbyBlock{order:34}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-head[data-obf-group="images"]{order:40}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#obVoyageBanner{order:41}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#spotVideoPanel{order:42}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#spotAreaMap{order:43}
+
+/* Sections fermées : leurs membres ne sont pas rendus (display, jamais retirés du DOM). */
+#detail .dcat[data-cat="infos"]:not([data-open~="lieu"])>:is(.field-story,#guideSpirit,.anec-block,.field-reference),
+#detail .dcat[data-cat="infos"]:not([data-open~="pratique"])>:is(.field-tip,#fieldVisit,#fieldMainDanger,#spotImmersion),
+#detail .dcat[data-cat="infos"]:not([data-open~="autour"])>:is(#fieldOverview,#guideAround,#guideSleep,#fieldNearbyBlock),
+#detail .dcat[data-cat="infos"]:not([data-open~="images"])>:is(#obVoyageBanner,#spotVideoPanel,#spotAreaMap){display:none!important}
+/* Section ouverte : fondu montant (opacité et transform), une fois à l’ouverture. */
+#detail .dcat[data-cat="infos"][data-open~="lieu"]>:is(.field-story,#guideSpirit,.anec-block,.field-reference),
+#detail .dcat[data-cat="infos"][data-open~="pratique"]>:is(.field-tip,#fieldVisit,#fieldMainDanger,#spotImmersion),
+#detail .dcat[data-cat="infos"][data-open~="autour"]>:is(#fieldOverview,#guideAround,#guideSleep,#fieldNearbyBlock),
+#detail .dcat[data-cat="infos"][data-open~="images"]>:is(#obVoyageBanner,#spotVideoPanel,#spotAreaMap){animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-snap,ease) backwards}
+
+/* Le danger principal se lit en entier dans « Avant d’y aller » (son bloc détaillé est replié dans « Infos pratiques ») :
+   jusqu’à trois lignes au lieu d’une ligne coupée. Posé dès le rendu de la fiche, sans attente réseau. */
+#detail .d-before .db-danger-text{-webkit-line-clamp:3}
+
+.obf-label{margin:6px 2px 10px;font:800 12px/1.3 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--t-ink2)}
+.obf-head{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;box-sizing:border-box;margin:0 0 10px;padding:10px 12px 10px 16px;
+  border:1px solid var(--t-line);border-radius:16px;background:var(--t-card);color:var(--t-ink);font:inherit;text-align:left;cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:transform var(--ob-t-release,.34s) var(--ob-snap,ease),border-color .2s ease}
+.obf-head:active{transform:scale(.985);transition-duration:var(--ob-t-press,.11s),.2s}
+.obf-head:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+.obf-head[aria-expanded="true"]{border-color:var(--t-main);margin-bottom:14px}
+.obf-tx{display:grid;gap:2px;min-width:0;flex:1}
+.obf-tx b{font:800 16px/1.25 var(--body);color:var(--t-deep,var(--t-ink))}
+.obf-tx small{font:600 13px/1.35 var(--body);color:var(--t-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.obf-chev{flex:none;display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--t-tint);color:var(--t-main)}
+.obf-chev svg{width:19px;height:19px;transition:transform var(--ob-t-release,.34s) var(--ob-snap,ease)}
+.obf-head[aria-expanded="true"] .obf-chev{background:var(--t-main);color:var(--t-on-main)}
+.obf-head[aria-expanded="true"] .obf-chev svg{transform:rotate(180deg)}
+/* Une section ouverte se détache de la tête suivante. */
+#detail .dcat[data-cat="infos"][data-open]:not([data-open=""])>.obf-head[aria-expanded="true"]~.obf-head{margin-top:0}
+
+/* ---------- Replis simples : bouton « Voir… » + zone [hidden] ---------- */
+.obf-more{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:4px 0 0;padding:0 16px 0 18px;border:1px solid var(--t-line);border-radius:999px;
+  background:var(--t-card);color:var(--t-main);font:800 14px/1.2 var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:transform var(--ob-t-release,.34s) var(--ob-snap,ease)}
+.obf-more:active{transform:scale(.97);transition-duration:var(--ob-t-press,.11s)}
+.obf-more:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+.obf-more svg{width:18px;height:18px;transition:transform var(--ob-t-release,.34s) var(--ob-snap,ease)}
+.obf-more[aria-expanded="true"] svg{transform:rotate(180deg)}
+.obf-zone[hidden]{display:none!important}
+.obf-zone:not([hidden]){animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-snap,ease) backwards}
+
+/* Profil : vitrine des trophées (badges.js) ; raretés et médailles repliées sous « Tous les trophées ». */
+.tb-shelf .tb-more{margin:0 18px 18px;background:color-mix(in srgb,var(--t-on-main) 10%,transparent);border-color:color-mix(in srgb,var(--t-on-main) 30%,transparent);color:var(--t-on-main)}
+.tb-all .tb-tiers{margin:0;padding:0 18px 14px}
+/* Profil : « Mes statistiques » sur une seule rangée de quatre (au lieu de deux rangées de grandes tuiles). */
+.ocean-v2 #profile .prof-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+.ocean-v2 #profile .pstat{padding:12px 4px 10px;gap:2px}
+.ocean-v2 #profile .pstat-ic{width:30px;height:30px;margin-bottom:2px}
+.ocean-v2 #profile .pstat-v{font-size:26px}
+.ocean-v2 #profile .pstat-l{line-height:1.2}
+
+/* Jeu : les trois gestes de base, puis « Toutes les figures ». */
+#surf .sf-how-more{margin-top:12px}
+#surf #sfHowMore{margin-top:12px}
+
+/* Défis : « Pourquoi ça compte » se déplie d’un toucher (élément details natif, accessible au clavier). */
+details.chal-why{display:block;padding:0}
+details.chal-why>summary{display:flex;align-items:center;gap:8px;min-height:40px;padding:0 12px;list-style:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+details.chal-why>summary::-webkit-details-marker{display:none}
+details.chal-why>summary::after{content:"";flex:none;margin-left:auto;width:7px;height:7px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:translateY(-2px) rotate(45deg);transition:transform var(--ob-t-release,.34s) var(--ob-snap,ease)}
+details.chal-why[open]>summary::after{transform:translateY(2px) rotate(225deg)}
+details.chal-why>summary:focus-visible{outline:2px solid var(--t-main);outline-offset:2px;border-radius:13px}
+details.chal-why>summary svg{margin-top:0}
+details.chal-why>span{display:block;padding:0 12px 11px 33px}
+details.chal-why[open]>span{animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-snap,ease) backwards}
+
+@keyframes obFoldIn{from{opacity:0;transform:translateY(8px)}}
+@media (prefers-reduced-motion:reduce){
+  #detail .dcat[data-cat="infos"]>*,.obf-zone,details.chal-why>span{animation:none!important}
+  .obf-head,.obf-chev svg,.obf-more,.obf-more svg,details.chal-why>summary::after{transition:none}
+}
+.reduce-motion #detail .dcat[data-cat="infos"]>*,.reduce-motion .obf-zone,.reduce-motion details.chal-why>span{animation:none!important}
+.reduce-motion .obf-head,.reduce-motion .obf-chev svg,.reduce-motion .obf-more,.reduce-motion .obf-more svg,.reduce-motion details.chal-why>summary::after{transition:none}

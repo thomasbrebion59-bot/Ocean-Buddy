@@ -1328,7 +1328,7 @@ function renderChallenges(){
       ${b.bar}
     </div>
     ${b.btn}
-    <div class="chal-why">${uic('feuille')}<span><b>Pourquoi ça compte —</b> ${ch.why}</span></div>
+    <details class="chal-why"><summary>${uic('feuille')}<b>Pourquoi ça compte</b></summary><span>${ch.why}</span></details>
   </div>`;};
   document.getElementById('ecoChallenges').innerHTML=ECO.map(e).join('');
   document.getElementById('surfChallenges').innerHTML=SURF.map(c).join('');

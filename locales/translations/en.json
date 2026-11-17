@@ -10973,5 +10973,18 @@
  "Où et par qui : les données sauvegardées sont enregistrées dans une base Cloudflare D1 (juridiction Union européenne) et transitent par un Worker Cloudflare sur oceanbuddy.app, c’est-à-dire par le réseau de Cloudflare. Elles sont rattachées à un identifiant de compte aléatoire, sans adresse e-mail ni adresse IP. Supabase (projet hébergé à Francfort, Union européenne) vérifie seulement ton identité : il traite ton adresse e-mail, ton identifiant de compte et les codes de connexion. Resend (région Union européenne) envoie les e-mails de connexion. Ton navigateur et l’application ne parlent qu’à oceanbuddy.app, jamais directement à Supabase.": "Where and by whom: the saved data is stored in a Cloudflare D1 database (European Union jurisdiction) and passes through a Cloudflare Worker on oceanbuddy.app, that is, through Cloudflare’s network. It is tied to a random account identifier, with no e-mail address or IP address. Supabase (project hosted in Frankfurt, European Union) only verifies your identity: it processes your e-mail address, your account identifier and sign-in codes. Resend (European Union region) sends the sign-in e-mails. Your browser and the app only talk to oceanbuddy.app, never directly to Supabase.",
  "Retrouve tes favoris, tes voyages et ton passeport sur tous tes appareils.": "Find your favourites, trips and passport on all your devices.",
  "Version du 16 novembre 2026. Éditeur et contact : Thomas Brebion,": "Version of 16 November 2026. Publisher and contact: Thomas Brebion,",
- "Dans l’application ou sur le site, ouvre Profil → Réglages → Mon compte et sauvegarde → Supprimer mon compte, puis confirme ; un nouveau code envoyé par e-mail peut t’être demandé. Ton compte et les données sauvegardées sur le serveur sont effacés. Les données de ton appareil restent en place, sauf si tu choisis aussi de les effacer. Si tu ne peux plus te connecter, demande la suppression à": "In the app or on the website, open Profile → Settings → My account and backup → Delete my account, then confirm; you may be asked for a new code sent by e-mail. Your account and the data saved on the server are erased. The data on your device stays in place, unless you also choose to erase it. If you can no longer sign in, request deletion from"
+ "Dans l’application ou sur le site, ouvre Profil → Réglages → Mon compte et sauvegarde → Supprimer mon compte, puis confirme ; un nouveau code envoyé par e-mail peut t’être demandé. Ton compte et les données sauvegardées sur le serveur sont effacés. Les données de ton appareil restent en place, sauf si tu choisis aussi de les effacer. Si tu ne peux plus te connecter, demande la suppression à": "In the app or on the website, open Profile → Settings → My account and backup → Delete my account, then confirm; you may be asked for a new code sent by e-mail. Your account and the data saved on the server are erased. The data on your device stays in place, unless you also choose to erase it. If you can no longer sign in, request deletion from",
+ "Dans cette fiche": "In this guide",
+ "Le lieu": "The place",
+ "Description, esprit du lieu et anecdotes": "Description, spirit of the place and stories",
+ "Infos pratiques": "Practical info",
+ "Marée, règles locales, danger et conseils": "Tide, local rules, hazards and tips",
+ "Dormir et alentours": "Where to stay and nearby",
+ "Nuits pas chères, lieux et spots voisins": "Cheap nights, nearby places and spots",
+ "Photos et carte": "Photos and map",
+ "Photos, vidéos et carte du secteur": "Photos, videos and area map",
+ "La planète, l’immersion, les envies du moment, le mini-jeu et Poulpy": "The planet, immersion, moods of the moment, the mini-game and Poulpy",
+ "Pourquoi ça compte": "Why it matters",
+ "Tous les trophées": "All trophies",
+ "Toutes les figures": "All tricks"
 }

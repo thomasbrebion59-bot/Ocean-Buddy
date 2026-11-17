@@ -41,7 +41,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
   mo.observe(d,{childList:true,subtree:true});addEventListener('DOMContentLoaded',function(){mo.disconnect();});})(A[new Date().getDate()%A.length][1]);}
 })();</script>
 <noscript><style>#obBoot{display:none}</style></noscript>
-<script src="i18n.js?v=b04033c9a3f0"></script>
+<script src="i18n.js?v=b97ba6aee9e1"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
 <meta name="theme-color" content="#fef9eb">
@@ -87,8 +87,9 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <link rel="stylesheet" href="icons.css?v=71179c5f65be">
 <link rel="stylesheet" href="noel.css?v=a9562e8ab4c8">
 <link rel="stylesheet" href="spot-before.css?v=67d54cbddbe0">
-<link rel="stylesheet" href="organisation.css?v=0368de145eed">
+<link rel="stylesheet" href="organisation.css?v=d0f1deca3c06">
 <link rel="stylesheet" href="cultures.css?v=425927021dc4">
+<link rel="stylesheet" href="replis.css?v=284f892028f9">
 <link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ocean Buddy">
@@ -488,6 +489,10 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
             <li><b>Glisse</b><span>Déplace ton doigt pour guider la planche sur la vague.</span></li>
             <li><b>Saut</b><span>Touche l’écran ou appuie sur le bouton Saut.</span></li>
             <li><b>360</b><span>Touche deux fois l’écran ou appuie sur le bouton 360.</span></li>
+          </ul>
+          <!-- Moins d’informations d’un coup : les trois gestes de base, puis les autres figures repliées (replis.js). -->
+          <button type="button" class="obf-more sf-how-more" data-obf aria-expanded="false" aria-controls="sfHowMore"><span class="obf-lab">Toutes les figures</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></button>
+          <ul class="sf-how obf-zone" id="sfHowMore" hidden>
             <li><b>Grab</b><span>Appuie sur le bouton Grab en l’air. Maintenu, il devient un Tail grab.</span></li>
             <li><b>Cutback</b><span>Trace une petite diagonale rapide avec le doigt.</span></li>
             <li><b>Snap</b><span>Change brusquement de direction en haut de la vague.</span></li>
@@ -605,7 +610,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="spot-photos.js?v=7db07d494e54"></script>
 <script src="progression.js?v=573fcb54b5ba"></script>
 <script src="spot-rank-model.js?v=475e2af88a53"></script>
-<script src="app.js?v=225655b97809"></script>
+<script src="app.js?v=8cb8e135d4e6"></script>
 <script src="spot-fit-model.js?v=23cae691490e"></script>
 <script src="spot-before.js?v=26f3f8cb4ff6"></script>
 <script src="private-spots.js?v=683221818ade"></script>
@@ -643,11 +648,11 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="spot-voyage.js?v=b766207df851"></script>
 <script src="app-update.js?v=dbb24da386e0"></script>
 <script src="ocean-home.js?v=5b1c975669f1"></script>
-<script src="badges.js?v=c91e7eb4bb16"></script>
+<script src="badges.js?v=10b5ef4592b4"></script>
 <script src="noel-model.js?v=e20ee64f411f"></script>
 <script src="cultures-boot.js?v=a5ea8976d241"></script>
-<script src="home-layout-model.js?v=35601e84ff61"></script>
-<script src="home-feed.js?v=3b9f1814bdf5"></script>
+<script src="home-layout-model.js?v=64a32c69ddc3"></script>
+<script src="home-feed.js?v=03b62da07a1c"></script>
 <script src="passport.js?v=055be0942070"></script>
 <script src="surf-model.js?v=db29a0e31c9a"></script>
 <script src="surf-render.js?v=f094a635d338"></script>
@@ -659,5 +664,6 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="native-glass.js?v=1e031ad3005b"></script>
 <script src="motion.js?v=a5223f9fa935"></script>
 <script src="motion-media.js?v=21145e2c7af3"></script>
+<script src="replis.js?v=38ee91627116"></script>
 </body>
 </html>

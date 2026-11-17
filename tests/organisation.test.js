@@ -8,16 +8,18 @@ const L = require('../home-layout-model.js');
 const root = path.join(__dirname, '..');
 const read = f => fs.readFileSync(path.join(root, f), 'utf8');
 
-test('ordre de l’accueil : pour toi, puis où partir maintenant, puis ton espace, puis la découverte', () => {
-  const o = L.ORDER, at = k => o.indexOf(k);
+test('ordre de l’accueil : six sections au plus, le reste replié sous « Plus d’idées de départ », rien de perdu', () => {
+  const o = L.ORDER, f = L.FOLDED, at = k => o.indexOf(k), fat = k => f.indexOf(k);
   assert.equal(o[0], 'pourtoi', '« Pour toi aujourd’hui » ouvre le fil');
-  assert.equal(new Set(o).size, o.length, 'pas de doublon');
-  for (const k of ['pourtoi', 'noel', 'mois', 'plan', 'cultures', 'espace', 'planete', 'envies', 'immersion', 'donnees', 'plus', 'nouveautes', 'jeu', 'poulpy']) assert.ok(at(k) >= 0, k);
-  assert.ok(at('noel') < at('mois') && at('mois') < at('plan'), 'Noël, le mois puis « Quand ? »');
-  assert.ok(at('plan') < at('espace') && at('espace') < at('planete'), 'ton espace entre la décision et la découverte');
-  assert.ok(at('envies') < at('plus'), 'les tuiles « Envies du moment » précèdent les collections repliées');
-  assert.ok(at('cultures') > at('mois') && at('cultures') < at('espace'), 'place réservée aux cultures dans la découverte');
-  assert.equal(o[o.length - 1], 'poulpy');
+  assert.ok(o.length <= 6, 'six sections visibles au plus (le repli compris)');
+  assert.equal(o[o.length - 1], 'plus', 'le repli ferme le fil');
+  assert.equal(new Set([...o, ...f]).size, o.length + f.length, 'pas de doublon, aucun bloc à la fois visible et replié');
+  /* Tous les blocs d’avant restent atteignables : visibles, ou repliés (un toucher). */
+  for (const k of ['pourtoi', 'noel', 'mois', 'plan', 'cultures', 'espace', 'planete', 'envies', 'immersion', 'donnees', 'collections', 'nouveautes', 'jeu', 'poulpy']) assert.ok(at(k) >= 0 || fat(k) >= 0, k);
+  assert.ok(at('noel') < at('mois') && at('mois') < at('cultures') && at('cultures') < at('espace'), 'Noël, le mois, les cultures puis ton espace');
+  assert.ok(fat('envies') < fat('collections'), 'les tuiles « Envies du moment » précèdent les collections');
+  assert.ok(fat('plan') === 0, '« Choisis ton mois » ouvre le repli');
+  assert.equal(f[f.length - 1], 'poulpy');
 });
 
 test('rangées dépliées : seulement celles de ton sport ; collections toujours repliées', () => {
@@ -65,6 +67,8 @@ test('accueil : raccourcis posés avec l’ouverture, à hauteur fixe, mis à jo
 test('accueil : un seul ordre (HomeLayout.ORDER), blocs des autres scripts à leur place réservée, repli fermé au départ', () => {
   const render = feed.slice(feed.indexOf('function render(){'), feed.indexOf('function order(){'));
   assert.match(render, /Layout\?\.ORDER/);
+  assert.match(render, /Layout\?\.FOLDED/);
+  assert.match(render, /B\.plus=plusSection\(FOLDED\.map/, 'les blocs repliés sont posés dans le repli, à la construction (sous le rideau)');
   assert.match(render, /noelSection\(all,used\)[\s\S]*forYouSection\(used\)/, 'mêmes spots qu’avant : Noël puis « Pour toi » calculés dans cet ordre');
   assert.match(feed, /<div class="hf-plus-body" id="hfPlusBody" hidden>/);
   assert.match(feed, /aria-expanded="false" aria-controls="hfPlusBody"/);

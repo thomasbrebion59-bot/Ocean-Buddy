@@ -21,7 +21,7 @@
 .hf-q-tx small{font:600 12.5px/1.25 var(--body);color:var(--t-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 @media(min-width:960px){.hf-quick{margin-inline:0;padding-inline:0;max-width:640px}}
 
-/* ---------- Accueil : « Plus d’idées de départ » (collections et rangées hors sujet, repliées) ---------- */
+/* ---------- Accueil : « Plus d’idées de départ » (tout ce qui suit les six premières sections, replié) ---------- */
 .hf-plus{margin:30px 0 6px}
 .hf-plus-btn{display:flex;align-items:center;gap:14px;width:100%;min-height:72px;box-sizing:border-box;padding:12px 14px 12px 18px;border:1px solid var(--t-line);border-radius:var(--as-r-l,22px);
   background:var(--t-card);color:var(--t-ink);text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 10px 30px -18px color-mix(in srgb,var(--t-shadow) 45%,transparent)}
@@ -32,8 +32,15 @@
 .hf-plus-tx b{font:800 18px/1.2 var(--body);color:var(--t-ink)}
 .hf-plus-tx small{font:600 13px/1.35 var(--body);color:var(--t-ink2);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
 .hf-plus-n{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--t-tint);color:var(--t-main);font:800 15px/1 var(--body)}
+.hf-plus-n svg{width:20px;height:20px;transition:transform var(--ob-t-release,.34s) var(--ob-snap,ease)}
 .hf-plus-btn[aria-expanded="true"] .hf-plus-n{background:var(--t-main);color:var(--t-on-main)}
+.hf-plus-btn[aria-expanded="true"] .hf-plus-n svg{transform:rotate(180deg)}
 .hf-plus-body>.hf-sec:first-child .as-sec{margin-top:18px}
+/* Dépli : simple fondu montant (opacité et transform seulement, @keyframes obFoldIn dans replis.css), rien au-dessus
+   du bouton ne bouge. */
+.hf-plus-body:not([hidden]){animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-snap,ease) backwards}
+@media (prefers-reduced-motion:reduce){.hf-plus-body:not([hidden]){animation:none}.hf-plus-n svg{transition:none}}
+.reduce-motion .hf-plus-body:not([hidden]){animation:none}
 
 /* ---------- Accueil : « Ton espace » (ocean-hub.js), titré comme les autres blocs ---------- */
 .ocean-hub .hub-title{grid-column:1/-1;margin:16px 2px 0}
