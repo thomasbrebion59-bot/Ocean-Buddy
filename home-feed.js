@@ -267,7 +267,7 @@
   }
   /* Globe de l’accueil : une seule instance, créée à l’approche de la carte (jamais avant la levée du rideau),
      mise en veille hors écran. La sphère CSS reste affichée jusqu’à la première image éclairée du globe. */
-  let planet=null,planetIO=null,planetBusy=false,planetOn=false,planetLosses=[],planetTimer=0;
+  let planet=null,planetIO=null,planetBusy=false,planetOn=false,planetLosses=[],planetTimer=0,planetFrozen=false;
   const homeShown=()=>body().dataset.screen==='home';
   const planetLive=()=>planetOn&&!document.hidden&&homeShown();
   /* Libère le globe (mémoire GPU, textures 4K) ; la sphère CSS reprend la place tant qu'il n'est pas recréé. */
@@ -291,7 +291,7 @@
       planetBusy=false;made=api;
       /* Le rendu a été refait entre-temps (langue) ou l'accueil n'est plus affiché : on libère ce globe. */
       if(!host.isConnected||!planetIO||!planetLive()){api.destroy();return;}
-      planet=api;api.setActive(true);
+      planet=api;api.setActive(!planetFrozen);
     }).catch(()=>{planetBusy=false;});
   }
   /* Contexte WebGL retiré par le système : le globe est libéré (la sphère CSS reste visible, pas de cadre vide),
@@ -307,8 +307,8 @@
     if(!planetIO)return;
     const host=home.querySelector('[data-hf-globe]');if(!host)return;
     if(!homeShown()||document.hidden){if(planet&&!homeShown())dropPlanet();else planet?.setActive(false);return;}
-    if(planet)planet.setActive(planetOn);
-    else if(planetOn)loadPlanet(host);
+    if(planet)planet.setActive(planetOn&&!planetFrozen);
+    else if(planetOn&&!planetFrozen)loadPlanet(host);
   }
   function watchPlanet(){
     if(Boot&&!Boot.lifted)return;
@@ -322,6 +322,10 @@
   }
   document.addEventListener('visibilitychange',syncPlanet);
   window.addEventListener('ocean:navigate',()=>setTimeout(syncPlanet,0));
+  /* Page d’un pays ou scène d’activité par-dessus (ocean:transition) : le globe se fige dessous, comme celui d’Explorer,
+     puis reprend ; « transition-ready » le rend avant le fondu de sortie de la scène. */
+  document.addEventListener('ocean:transition',e=>{planetFrozen=!!e.detail;syncPlanet();});
+  document.addEventListener('ocean:transition-ready',()=>{if(planetFrozen){planetFrozen=false;syncPlanet();}});
 
   /* Carrousel : glisser, ou défilement automatique toutes les 6 s (sauf mouvement réduit ou après un geste). */
   let heroTimer=0,lastTouch=0;
