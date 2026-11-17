@@ -9,6 +9,7 @@
 import Model from "../../../account-sync-model.js";
 import { verifyJwt, authTime, JwtError } from "./jwt.js";
 import { supabaseIdentity, devIdentity, IdpError } from "./identity.js";
+import { supabaseKeepAlive } from "./keepalive.js";
 export { Guard } from "./guard.js";
 
 const M = Model;
@@ -571,8 +572,28 @@ export function createWorker(overrides = {}) {
     return response;
   }
 
-  /** Tâche planifiée : reprend les suppressions d'identité en attente, purge les suppressions de plus de 90 jours. */
+  /** Maintien de Supabase (offre gratuite : pause après 7 jours calmes) : une demande sans effet par jour, clé publique seule.
+   *  Jamais en essai local ni sans adresse Supabase ; ne fait jamais échouer la tâche planifiée ; aucune clé ni adresse dans le journal. */
+  async function keepSupabaseAwake(env) {
+    try {
+      if (env.OB_ENV === "local" || !env.SUPABASE_URL) return;
+      if (devMode(env, new URL("https://oceanbuddy.app/"))) return;
+      const results = await supabaseKeepAlive({
+        url: env.SUPABASE_URL,
+        publishableKey: env.SUPABASE_PUBLISHABLE_KEY,
+        table: env.SUPABASE_KEEPALIVE_TABLE,
+        fetcher: deps.fetcher,
+        timeoutMs: deps.keepAliveTimeoutMs,
+      });
+      for (const r of results) logEvent({ evt: "keepalive", route: r.probe, status: r.status, reason: r.reason });
+    } catch {
+      /* jamais bloquant */
+    }
+  }
+
+  /** Tâche planifiée : maintien de Supabase, reprend les suppressions d'identité en attente, purge les suppressions de plus de 90 jours. */
   async function scheduled(env) {
+    await keepSupabaseAwake(env);
     const db = env.DB;
     await db.prepare("DELETE FROM sync_items WHERE deleted = 1 AND updated_at < ?1").bind(deps.now() - TOMBSTONE_DAYS * DAY).run();
     let idp;
