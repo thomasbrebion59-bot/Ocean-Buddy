@@ -18,6 +18,9 @@ NATIVE_ORIGINS = ""
 SUPABASE_URL = "https://qmngkojxupxfphypubph.supabase.co"
 # Disjoncteur : e-mails de connexion envoyés par jour (Resend gratuit : 100/jour).
 EMAIL_DAILY_BUDGET = "80"
+# Maintien de l'offre gratuite de Supabase (tâche planifiée) : petite table lue une fois par jour, en plus de l'appel
+# d'authentification sans effet. SQL de création : Ocean-Buddy-orga-docs/comptes/SUPABASE-MAINTIEN.md. Sans la table : simple 404 journalisé.
+SUPABASE_KEEPALIVE_TABLE = "ob_keepalive"
 # Secrets (JAMAIS dans ce fichier) :
 #   npx wrangler secret put SUPABASE_PUBLISHABLE_KEY   (clé publique sb_publishable_…, gardée côté serveur quand même)
 #   npx wrangler secret put SUPABASE_SECRET_KEY        (clé secrète sb_secret_… : seulement pour supprimer un compte)
