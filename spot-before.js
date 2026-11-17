@@ -58,7 +58,8 @@
 
   function fitBlock(s) {
     const r = fitOf(s), lv = userLevel();
-    if (!r || r.kind === 'nolevel') return '<p class="db-note">Choisis ton niveau dans Réglages, « Mon sport et mon niveau », pour savoir si ce spot te correspond.</p>';
+    /* Une seule invitation, d’un toucher : elle ouvre « Mon sport et mon niveau » (la case « Ton créneau » ne la répète pas). */
+    if (!r || r.kind === 'nolevel') return '<button type="button" class="db-level" data-open-level>Choisis ton niveau pour savoir si ce spot te correspond</button>';
     if (r.kind === 'unrated') return '<p class="db-note">Danger non évalué ici : renseigne-toi sur place avant d’entrer.</p>';
     if (r.kind === 'zones') return '<p class="db-note">Le niveau change selon la zone : demande sur place laquelle te correspond.</p>';
     return `<p class="db-note">D’après ton niveau (${esc(LEVEL[lv] || '')}) : un repère, pas une garantie.</p>`;
@@ -130,7 +131,7 @@
       return;
     }
     const why = x.status === 'norule'
-      ? (x.reason === 'level' ? 'Choisis ton niveau pour le voir' : x.reason === 'expert' ? 'À juger toi-même heure par heure' : 'Pas de repère chiffré pour ce sport')
+      ? (x.reason === 'level' ? 'Dépend de ton niveau' : x.reason === 'expert' ? 'À juger toi-même heure par heure' : 'Pas de repère chiffré pour ce sport')
       : x.status === 'night' ? 'Plus d’heure de jour aujourd’hui'
       : x.status === 'none' ? 'Aucun aujourd’hui dans tes repères'
       : 'Prévision incomplète';
@@ -140,6 +141,12 @@
   function update(s) { try { render(s); } catch (e) { console.warn('avant d’y aller', e); } }
   /* Niveau changé dans Réglages : la pastille et l’explication suivent (le créneau est recalculé par spot-experience.js). */
   document.addEventListener('ocean:level', () => { try { if (spot && document.body.dataset.screen === 'detail') { const keep = host && host.querySelectorAll('[data-before] .db-v'); const saved = keep ? [...keep].map(v => [v.parentNode.dataset.before, v.innerHTML, v.classList.contains('db-wait')]) : []; render(spot); saved.forEach(([k, h, wait]) => { if (!wait) setRow(k, h); }); } } catch (e) {} });
+
+  /* Invitation au niveau (bandeau, créneau de l’onglet Conditions) : Réglages ouverts sur « Mon sport et mon niveau ». */
+  document.addEventListener('click', e => {
+    if (!e.target.closest('[data-open-level]')) return;
+    try { if (typeof openSettings === 'function') openSettings('sport'); } catch (err) {}
+  });
 
   window.OceanBefore = {update, live, season, slot, cardPill, openSafety};
 })();

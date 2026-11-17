@@ -2,6 +2,7 @@
    - Fiche spot, onglet « Le spot » : après la photo, le nom, le niveau et « Avant d’y aller », un sommaire court de
      quatre sections repliées (Le lieu, Infos pratiques, Dormir et alentours, Photos et carte). Aucun nœud des autres
      modules n’est déplacé ni retiré : l’ordre et le repli passent par CSS (replis.css, attribut data-open de l’onglet).
+     Les autres onglets (Saisons, Conditions, Préparer, Faune) suivent le même principe : voir TAB_GROUPS plus bas.
      Les avertissements de sécurité et les sources restent dans leur section, à un toucher ; le danger, le numéro
      d’urgence et « Sécurité & secours » restent visibles dans « Avant d’y aller ».
    - Ailleurs (profil, jeu, défis) : boutons [data-obf] avec aria-controls, la zone liée porte l’attribut hidden.
@@ -17,7 +18,7 @@
     { id: 'lieu', title: 'Le lieu', sub: 'Description, esprit du lieu et anecdotes', members: ['.field-story', '#guideSpirit', '.anec-block', '.field-reference'] },
     { id: 'pratique', title: 'Infos pratiques', sub: 'Marée, règles locales, danger et conseils', members: ['.field-tip', '#fieldVisit', '#fieldMainDanger', '#spotImmersion'] },
     { id: 'autour', title: 'Dormir et alentours', sub: 'Nuits pas chères, lieux et spots voisins', members: ['#fieldOverview', '#guideAround', '#guideSleep', '#fieldNearbyBlock'] },
-    { id: 'images', title: 'Photos et carte', sub: 'Photos, vidéos et carte du secteur', members: ['#obVoyageBanner', '#spotVideoPanel', '#spotAreaMap'] }
+    { id: 'images', title: 'Photos et carte', sub: 'Photos, vidéos et carte du secteur', members: ['#spotPhotoStrip', '#obVoyageBanner', '#spotVideoPanel', '#spotAreaMap'] }
   ];
   const infos = () => $('#detail .dcat[data-cat="infos"]');
   const ids = { '.field-story': 'fieldStory', '.anec-block': 'dAnecBlock', '.field-reference': 'fieldReference', '.field-tip': 'fieldTip' };
@@ -66,7 +67,7 @@
   }
   document.addEventListener('click', e => {
     const head = e.target.closest('.obf-head[data-obf-group]');
-    if (head) { setGroup(head.dataset.obfGroup, head.getAttribute('aria-expanded') !== 'true'); return; }
+    if (head && head.closest('.dcat')?.dataset.cat === 'infos') { setGroup(head.dataset.obfGroup, head.getAttribute('aria-expanded') !== 'true'); return; }
   });
   /* Phase de capture : la section cible s’ouvre AVANT que le module ne fasse défiler jusqu’à elle. */
   document.addEventListener('click', e => {
@@ -74,13 +75,89 @@
     if (jump) { reveal(document.getElementById(jump.dataset.guideJump)); return; }
     if (e.target.closest('[data-im-open],#imWeatherHelp')) reveal($('#spotImmersion'));
   }, true);
+  /* ---------- Autres onglets de la fiche (demande du 17 novembre) ----------
+     Chaque onglet répond d’abord à une question (réponse courte visible), puis le détail se range dans des sections
+     repliées, avec les mêmes têtes que « Le spot ». Les modules réécrivent leur contenu à chaque spot (innerHTML) :
+     les têtes sont reposées devant le premier membre présent de leur groupe, et un membre replié porte l’attribut
+     data-obf-shut (display:none dans replis.css). Rien n’est retiré du DOM ni déplacé.
+     JAMAIS repliés : dangers et vigilance, « Courants & dangers à vérifier », « Sécurité & secours », numéro d’urgence,
+     espèces « À connaître avant de te mettre à l’eau », avertissements de créneau. */
+  const TAB_GROUPS = {
+    saisons: [
+      { id: 'courbes', title: 'L’année en courbes', sub: 'Températures, soleil, pluie, houle, vent et sources', members: ['#dSeasons>.sd-charts', '#dSeasons>.sd-rose', '#dSeasons>.sd-table', '#dSeasons>.sd-src'] }
+    ],
+    meteo: [
+      { id: 'heures', title: 'Heure par heure', sub: 'Le détail des prochaines 48 heures', members: ['#spotWeek>.wx-hours'] },
+      { id: 'lire', title: 'Lire les conditions', sub: 'Comprendre le vent, la houle et la marée', members: ['#sdCoach', '#imWeatherHelp'] }
+    ],
+    activites: [
+      { id: 'depart', title: 'Ton point de départ et tes notes', sub: 'Situer le lieu, ton carnet', members: ['#dGuide>.field-address', '#dGuide>.field-notebook'] },
+      { id: 'surplace', title: 'Heure, soleil, monnaie et langue', sub: 'Ce qui change sur place', members: ['#dGo>.sd-facts'] },
+      { id: 'adresses', title: 'Écoles, location et zones', sub: 'Trouver un encadrant ou du matériel', members: ['#dZonesBlock', '.field-local'] }
+    ],
+    faune: [
+      { id: 'photos', title: 'Les espèces photographiées ici', sub: 'Photos, observations et sources', members: ['#dWild>.sd-species', '#dWild>.sd-link', '#dWild>.sd-src'] },
+      { id: 'typiques', title: 'Les espèces typiques de la zone', sub: 'À observer, flore et fonds', members: ['#bioObserve', '#bioFlore', '#dFaune>.bio-note'] }
+    ]
+  };
+  const tabOf = cat => $(`#detail .dcat[data-cat="${cat}"]`);
+  const absent = el => !!el.closest('[hidden]') || el.style.display === 'none';
+  function makeHead(g) {
+    const head = document.createElement('button'); head.type = 'button'; head.className = 'obf-head';
+    head.dataset.obfGroup = g.id; head.setAttribute('aria-expanded', 'false');
+    head.innerHTML = `<span class="obf-tx"><b>${g.title}</b><small>${g.sub}</small></span><span class="obf-chev">${chevron}</span>`;
+    return head;
+  }
+  /* Idempotent : ne touche au DOM que si une tête manque ou n’est plus devant son premier membre. */
+  function mountTab(cat) {
+    const tab = tabOf(cat); if (!tab) return;
+    const open = openSet(tab);
+    for (const g of TAB_GROUPS[cat]) {
+      const els = g.members.flatMap(s => [...tab.querySelectorAll(s)]);
+      const shown = els.filter(e => !absent(e));
+      let head = tab.querySelector(`.obf-head[data-obf-group="${g.id}"]`);
+      const first = shown[0] || els[0];
+      if (!head && !first) continue;
+      if (!head) head = makeHead(g);
+      if (first && first.previousElementSibling !== head) first.before(head);
+      const on = open.has(g.id);
+      els.forEach((e, i) => {
+        if (on) e.removeAttribute('data-obf-shut'); else if (!e.hasAttribute('data-obf-shut')) e.setAttribute('data-obf-shut', '');
+        if (!e.id) e.id = `obf-${g.id}-${i}`;
+      });
+      if (head.getAttribute('aria-expanded') !== String(on)) head.setAttribute('aria-expanded', String(on));
+      head.setAttribute('aria-controls', els.map(e => e.id).join(' '));
+      head.hidden = !shown.length;
+    }
+  }
+  function setTabGroup(cat, id, open) {
+    const tab = tabOf(cat); if (!tab || !TAB_GROUPS[cat]) return;
+    const set = openSet(tab); if (open) set.add(id); else set.delete(id);
+    tab.dataset.open = [...set].join(' ');
+    mountTab(cat);
+  }
+  function closeTabs() { for (const cat in TAB_GROUPS) { const t = tabOf(cat); if (t) t.dataset.open = ''; mountTab(cat); } }
+  document.addEventListener('click', e => {
+    const head = e.target.closest('#detail .dcat:not([data-cat="infos"]) .obf-head[data-obf-group]'); if (!head) return;
+    const cat = head.closest('.dcat')?.dataset.cat;
+    setTabGroup(cat, head.dataset.obfGroup, head.getAttribute('aria-expanded') !== 'true');
+  });
+  /* Les modules réécrivent leurs blocs à l’arrivée des données : les têtes et les replis sont reposés dans la même tâche,
+     avant l’affichage (microtâche), donc sans saut visible. */
+  let queued = false;
+  const body = $('#detail .detail-body');
+  if (body && 'MutationObserver' in window) new MutationObserver(() => {
+    if (queued) return; queued = true;
+    queueMicrotask(() => { queued = false; for (const cat in TAB_GROUPS) mountTab(cat); });
+  }).observe(body, { childList: true, subtree: true });
+
   /* Nouveau spot : tout replié, sommaire en place. Même spot (retour) : l’état reste celui laissé. */
   let lastSpot = null;
   window.addEventListener('ocean:navigate', e => {
     if (e.detail !== 'detail') return;
     let cur = null; try { cur = typeof currentSpot !== 'undefined' ? currentSpot : null; } catch (_) {}
-    if (cur === lastSpot && infos()?.querySelector('.obf-head')) { mount(); return; }
-    lastSpot = cur; closeAll();
+    if (cur === lastSpot && infos()?.querySelector('.obf-head')) { mount(); for (const cat in TAB_GROUPS) mountTab(cat); return; }
+    lastSpot = cur; closeAll(); closeTabs();
   });
 
   /* ---------- Replis simples : bouton [data-obf] + aria-controls, zone [hidden] ---------- */
@@ -93,5 +170,5 @@
     const b = e.target.closest('button[data-obf]'); if (b) toggle(b);
   });
 
-  window.OceanReplis = { mount, setGroup, closeAll, reveal, toggle, GROUPS };
+  window.OceanReplis = { mount, setGroup, closeAll, reveal, toggle, GROUPS, TAB_GROUPS, mountTab, setTabGroup };
 })();

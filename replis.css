@@ -27,6 +27,7 @@
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#guideSleep{order:33}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#fieldNearbyBlock{order:34}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-head[data-obf-group="images"]{order:40}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#spotPhotoStrip{order:40;align-self:stretch;min-width:0}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#obVoyageBanner{order:41}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#spotVideoPanel{order:42}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#spotAreaMap{order:43}
@@ -35,12 +36,12 @@
 #detail .dcat[data-cat="infos"]:not([data-open~="lieu"])>:is(.field-story,#guideSpirit,.anec-block,.field-reference),
 #detail .dcat[data-cat="infos"]:not([data-open~="pratique"])>:is(.field-tip,#fieldVisit,#fieldMainDanger,#spotImmersion),
 #detail .dcat[data-cat="infos"]:not([data-open~="autour"])>:is(#fieldOverview,#guideAround,#guideSleep,#fieldNearbyBlock),
-#detail .dcat[data-cat="infos"]:not([data-open~="images"])>:is(#obVoyageBanner,#spotVideoPanel,#spotAreaMap){display:none!important}
+#detail .dcat[data-cat="infos"]:not([data-open~="images"])>:is(#spotPhotoStrip,#obVoyageBanner,#spotVideoPanel,#spotAreaMap){display:none!important}
 /* Section ouverte : fondu montant (opacité et transform), une fois à l’ouverture. */
 #detail .dcat[data-cat="infos"][data-open~="lieu"]>:is(.field-story,#guideSpirit,.anec-block,.field-reference),
 #detail .dcat[data-cat="infos"][data-open~="pratique"]>:is(.field-tip,#fieldVisit,#fieldMainDanger,#spotImmersion),
 #detail .dcat[data-cat="infos"][data-open~="autour"]>:is(#fieldOverview,#guideAround,#guideSleep,#fieldNearbyBlock),
-#detail .dcat[data-cat="infos"][data-open~="images"]>:is(#obVoyageBanner,#spotVideoPanel,#spotAreaMap){animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-snap,ease) backwards}
+#detail .dcat[data-cat="infos"][data-open~="images"]>:is(#spotPhotoStrip,#obVoyageBanner,#spotVideoPanel,#spotAreaMap){animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-snap,ease) backwards}
 
 /* Le danger principal se lit en entier dans « Avant d’y aller » (son bloc détaillé est replié dans « Infos pratiques ») :
    jusqu’à trois lignes au lieu d’une ligne coupée. Posé dès le rendu de la fiche, sans attente réseau. */
@@ -106,3 +107,9 @@ details.chal-why[open]>span{animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-s
 }
 .reduce-motion #detail .dcat[data-cat="infos"]>*,.reduce-motion .obf-zone,.reduce-motion details.chal-why>span{animation:none!important}
 .reduce-motion .obf-head,.reduce-motion .obf-chev svg,.reduce-motion .obf-more,.reduce-motion .obf-more svg,.reduce-motion details.chal-why>summary::after{transition:none}
+
+/* ---------- fiches-organisation : sections repliées des autres onglets de la fiche (replis.js, TAB_GROUPS) ----------
+   Un membre replié porte data-obf-shut (jamais retiré du DOM). Les têtes reprennent le style .obf-head ci-dessus. */
+#detail .dcat [data-obf-shut]{display:none!important}
+#detail .dcat:not([data-cat="infos"]) .obf-head{margin:12px 0}
+#detail .dcat:not([data-cat="infos"]) .obf-head[hidden]{display:none}

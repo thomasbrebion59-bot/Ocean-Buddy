@@ -279,7 +279,7 @@ function spotCard(s){
       ${s.catalogNew?'<span class="catalog-new">Nouveau</span>':''}
       ${s.custom?'<span class="spot-private">Spot privé</span>':''}
       ${!photo&&!s.custom?'<span class="spot-photo-pending">Photo du lieu à vérifier</span>':''}
-      <div class="glass-name"><h3>${esc(s.name)}</h3><div class="gn-loc"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${esc(s.loc)}</div></div>
+      <div class="glass-name"><h3>${window.SpotName?SpotName.html(s.name):esc(s.name)}</h3><div class="gn-loc"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.3"/></svg> ${esc(s.loc)}</div></div>
       <span class="spot-go">Voir</span>
     </div>
     <div class="spot-info">
@@ -1036,15 +1036,8 @@ function renderFaune(s){
   var h='<div class="bio-head"><h5>'+uic('bpoisson')+' '+z.l+'</h5><p>'+z.s+'</p>'
        +'<span class="bio-chip">'+species.length+' espèces typiques</span><a class="bio-chip act" href="#" onclick="return presScroll()">Préserver ce spot</a></div>';
 
-  if(faune.length){
-    var hero=faune.shift();
-    h+=bioSec('À observer')
-     + '<div class="bio-hero">'
-     + bioPh(hero,'<div class="bio-cap"><h6>'+hero[0]+'</h6><div class="bio-sci">'+hero[1]+'</div></div>')
-     + '<p class="bio-t">'+hero[4]+'</p></div>';
-    if(faune.length) h+=bioGridMore(faune);
-  }
-  if(flore.length) h+=bioSec('Flore &amp; fonds')+bioGrid(flore,'');
+  /* Les espèces à connaître avant d'entrer (piqûres, morsures) passent juste après la zone, toujours visibles ;
+     « À observer » et « Flore & fonds » sont regroupés (#bioObserve, #bioFlore) pour être repliés par replis.js. */
   if(warn.length){
     h+=bioSec('À connaître avant de te mettre à l\'eau')+'<div class="bio-warn">'
      + warn.map(function(sp){
@@ -1052,6 +1045,16 @@ function renderFaune(s){
               + '<div class="bio-sci">'+sp[1]+'</div><div class="bio-t">'+sp[4]+'</div></div></div>';
        }).join('')+'</div>';
   }
+  if(faune.length){
+    var hero=faune.shift();
+    h+='<div id="bioObserve" class="bio-part">'+bioSec('À observer')
+     + '<div class="bio-hero">'
+     + bioPh(hero,'<div class="bio-cap"><h6>'+hero[0]+'</h6><div class="bio-sci">'+hero[1]+'</div></div>')
+     + '<p class="bio-t">'+hero[4]+'</p></div>';
+    if(faune.length) h+=bioGridMore(faune);
+    h+='</div>';
+  }
+  if(flore.length) h+='<div id="bioFlore" class="bio-part">'+bioSec('Flore &amp; fonds')+bioGrid(flore,'')+'</div>';
   h+='<p class="bio-note"><b>Espèces typiques de cette zone, pas une liste garantie sur cette plage.</b> '
    + 'La faune change avec la saison, l\'heure et la météo. Observe sans toucher ni nourrir. '
    + 'Photos : Wikimedia Commons.</p>';
@@ -1171,7 +1174,8 @@ function renderDetailSports(s,act){
 }
 function renderGuideSub(s,act){
   var e=document.getElementById('dGuideSub'); if(!e)return;
-  e.textContent=spotSports(s).length<2?'Quelques points à vérifier pour préparer ta sortie.':'Choisis ton activité pour adapter ta préparation.';
+  /* Un seul sport : pas de sous-titre (il répétait le titre « Préparer ta session. ») ; le paragraphe vide est masqué. */
+  e.textContent=spotSports(s).length<2?'':'Choisis ton activité pour adapter ta préparation.';
 }
 function setDetailSport(id){
   var s=SPOTS.find(function(x){return x.id===currentSpot;}); if(!s)return;
@@ -1216,7 +1220,8 @@ function openSpot(id){
   window.OceanProgress?.seeSpot(id);window.OceanHub?.visit(id);setTimeout(()=>{try{renderChallenges();checkBadges();}catch(e){}},600);
   const act=detailAct(s);
   var _df=document.getElementById('dFav');_df.innerHTML=favs.has(id)?FAV_ON:FAV_OFF;_df.classList.toggle('on',favs.has(id));
-  document.getElementById('dName').textContent=s.name;
+  /* Nom sur deux lignes (nom, puis précision en plus petit), sans le tiret décoratif : spot-name.js. */
+  if(window.SpotName)SpotName.set(document.getElementById('dName'),s.name);else document.getElementById('dName').textContent=s.name;
   document.getElementById('dLoc').innerHTML=uic('pin')+' '+esc(s.loc);
   var _eb=document.getElementById('dEyebrow');
   if(_eb)_eb.textContent=worldLab(s.id);

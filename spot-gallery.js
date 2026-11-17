@@ -125,7 +125,7 @@
   window.addEventListener('pagehide',stopSound);
   function update(s){
     const all=photos(s),first=all[0],more=$('#dHeroMore'),photo=$('#dHeroPhoto'),credit=$('#dHeroCred');
-    let strip=$('#spotPhotoStrip');if(!strip){strip=document.createElement('section');strip.id='spotPhotoStrip';strip.className='spot-photo-strip';strip.setAttribute('aria-label','Le spot en images');$('#detailHero')?.after(strip);}
+    let strip=$('#spotPhotoStrip');if(!strip){strip=document.createElement('section');strip.id='spotPhotoStrip';strip.className='spot-photo-strip';strip.setAttribute('aria-label','Le spot en images');/* Rangé dans la section « Photos et carte » de l’onglet Le spot (replis.js) : la photo du haut ouvre déjà la galerie. */const tab=$('#detail .dcat[data-cat="infos"]');if(tab)tab.append(strip);else $('#detailHero')?.after(strip);}
     if(!first){
       if(more){more.hidden=false;more.setAttribute('aria-label','Chercher des photos de '+s.name);more.title='Chercher des photos de ce spot';more.innerHTML='<span>Chercher des photos</span><b>de ce lieu</b>';more.onclick=()=>open(s);}
       /* Pas de photo du lieu : l'illustration Poulpy de l'activité remplace le dessin générique. */
