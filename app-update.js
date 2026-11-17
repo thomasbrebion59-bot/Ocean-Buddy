@@ -34,8 +34,8 @@
       close();
     });
   }
-  // Le téléchargement se fait tout de suite ; la fenêtre attend la fin de l’accueil.
-  function showWhenFree(kind,version){if(onboarding()||document.hidden){setTimeout(()=>showWhenFree(kind,version),5000);return;}show(kind,version);}
+  // Le téléchargement se fait tout de suite ; la fenêtre attend la fin de l’accueil et la fermeture de « Crée ton compte » (.oba).
+  function showWhenFree(kind,version){if(onboarding()||document.hidden||document.querySelector('.oba')){setTimeout(()=>showWhenFree(kind,version),5000);return;}show(kind,version);}
   async function check(){
     if(running||open||document.hidden)return;
     running=true;lastCheck=Date.now();

@@ -23,7 +23,7 @@
 (() => {
   'use strict';
   const ACCOUNT={enabled:true,hosts:['oceanbuddy.app']};
-  const ACCOUNT_V='7db9de7519cb';
+  const ACCOUNT_V='5173b002318f';
   function accountEnabled(cfg,loc,storage,mobile){
     if(mobile&&mobile.native)return !!(cfg.enabled&&mobile.capabilities&&mobile.capabilities.account===true);
     if(loc.protocol==='capacitor:')return false;

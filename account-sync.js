@@ -49,7 +49,8 @@
   }
 
   /* ---------- synchronisation ---------- */
-  const overlayOpen=()=>!!document.querySelector('.oba,.as-confirm,.quiz-modal.open,.aqi.open')||document.body.classList.contains('onb-open');
+  /* Fenêtres déjà ouvertes : l'invitation attend (mise à jour de l'app et trophée compris : jamais deux feuilles à la fois). */
+  const overlayOpen=()=>!!document.querySelector('.oba,.as-confirm,.quiz-modal.open,.aqi.open,.app-update,.tb-cele')||document.body.classList.contains('onb-open');
   const typing=()=>{const a=document.activeElement;return !!a&&(a.tagName==='INPUT'||a.tagName==='TEXTAREA'||a.isContentEditable);};
   /* Moment sûr pour recharger : app en arrière-plan, ou tout début de visite sans geste, sans fenêtre ouverte, sans saisie. */
   function safeNow(mode){if(mode==='now')return true;if(mode==='never')return false;
