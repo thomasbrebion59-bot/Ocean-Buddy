@@ -199,7 +199,7 @@
   }
   function spotCard(x){
     const s=x.s,sports=(s.sports||[]).slice(0,2).map(id=>(typeof SPORTMAP!=='undefined'&&SPORTMAP[id]?.label)||'').filter(Boolean).join(' · ');
-    return `<button type="button" class="cult-spot" data-cult-spot="${esc(s.id)}">${x.p?`<img src="${esc(x.p.thumb)}" alt="" loading="lazy" decoding="async">`:''}<span><b${NT}>${esc(shortName(s))}</b>${sports?`<small>${esc(sports)}</small>`:''}</span></button>`;
+    return `<button type="button" class="cult-spot" data-cult-spot="${esc(s.id)}">${x.p?`<img src="${esc(x.p.thumb)}"${window.OceanPhotos?.sharp?.(x.p,'344px')||''} alt="" loading="lazy" decoding="async">`:''}<span><b${NT}>${esc(shortName(s))}</b>${sports?`<small>${esc(sports)}</small>`:''}</span></button>`;
   }
   function pageHTML(c,{fresh=false}={}){
     const e=data?.[c]||{},cv=cover(c),s=read(),list=spotsOf(c),name=local(c);
