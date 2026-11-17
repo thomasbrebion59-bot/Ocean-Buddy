@@ -222,8 +222,11 @@ for (const m of fs.readFileSync(path.join(ROOT, 'mobile', 'client.js'), 'utf8').
 // ils ne sont trouvés par aucune règle ci-dessus, donc on les garde explicitement (sinon ils disparaissent
 // de locales/source/fr.json à chaque extraction). À compléter quand un texte affiché n'est pas extrait.
 //   - « Défi validé ! +{0} XP » : addXP(ch.xp, 'Défi validé ! +'+ch.xp+' XP') dans app.js
+//   - « pays » et « continents » : libellés d’un seul mot des chiffres du passeport (passport.js, stat(…, 'pays'))
 const KEEP_KEYS = [
   'Défi validé ! +{0} XP',
+  'pays',
+  'continents',
 ];
 for (const k of KEEP_KEYS) add(k, 'app.js (conservé)', true);
 

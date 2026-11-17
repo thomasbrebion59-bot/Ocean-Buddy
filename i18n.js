@@ -17,7 +17,7 @@
     fr: 'Français', en: 'English', es: 'Español'
   };
   var RTL = { ar: 1, he: 1, ur: 1 };
-  var VERSIONS = /*VERSIONS*/{"en":"beb04601de","es":"46d4bda898"}/*/VERSIONS*/;
+  var VERSIONS = /*VERSIONS*/{"en":"ea77b0ef69","es":"85da37141e"}/*/VERSIONS*/;
   var STORE_KEY = 'oceanbuddy_lang';
 
   function resolve(tag) {
