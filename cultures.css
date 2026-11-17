@@ -109,10 +109,15 @@ html.cult-open{overflow:hidden}
 .cult-hero.no-photo{min-height:340px;background:linear-gradient(150deg,var(--t-deep) 0%,var(--t-main2) 100%)}
 .cult-hero-img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
 .cult-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,color-mix(in srgb,var(--t-scrim) 45%,transparent) 0%,transparent 26%,transparent 42%,color-mix(in srgb,var(--t-scrim) 88%,transparent) 100%)}
-.cult-bar{position:absolute;z-index:2;top:calc(env(safe-area-inset-top,0px) + 10px);left:14px;right:14px;display:flex;justify-content:space-between;pointer-events:none}
+/* Barre Fermer / Partager : collée en haut de la feuille pendant tout le défilement (iPhone : ni Échap ni geste retour),
+   sous la zone sûre. Hauteur nulle dans le flux, avant le héros : rien ne bouge, les boutons débordent par-dessus.
+   Sombre et translucide sur la photo ; claire et pleine (is-solid) une fois la photo passée sous la barre (cultures.js). */
+.cult-bar{position:sticky;z-index:5;top:calc(env(safe-area-inset-top,0px) + 10px);height:0;margin:0 14px;display:flex;align-items:flex-start;justify-content:space-between;pointer-events:none}
+.cult-bar.is-ix{width:min(692px,calc(100% - 28px));margin:0 auto}
 .cult-bar>*{pointer-events:auto}
-.cult-icon{display:grid;place-items:center;width:44px;height:44px;margin:0;padding:0;border:0;border-radius:50%;cursor:pointer;color:var(--t-on-main);
-  background:color-mix(in srgb,var(--t-scrim) 52%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--t-card) 18%,transparent)}
+.cult-icon{flex:none;display:grid;place-items:center;width:44px;height:44px;margin:0;padding:0;border:0;border-radius:50%;cursor:pointer;color:var(--t-on-main);
+  background:color-mix(in srgb,var(--t-scrim) 52%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--t-card) 18%,transparent);
+  transition:background-color .2s,color .2s,box-shadow .2s}
 .cult-icon svg{width:21px;height:21px}
 .cult-icon:focus-visible{outline:2px solid var(--t-sun);outline-offset:2px}
 .cult-hero-tx{position:relative;padding:0 20px 46px;max-width:720px;width:100%;box-sizing:border-box;margin:0 auto}
@@ -173,7 +178,7 @@ html.cult-open{overflow:hidden}
 .cult-foot{margin:4px 4px 0;font:500 12.5px/1.45 var(--body);color:var(--t-ink2)}
 /* Carnet de tampons */
 .cult-ixhead{position:relative;padding:calc(env(safe-area-inset-top,0px) + 66px) 20px 18px;max-width:720px;margin:0 auto;box-sizing:border-box}
-.cult-bar.is-solid .cult-icon{background:var(--t-card);color:var(--t-ink);box-shadow:0 0 0 1px var(--t-line)}
+.cult-bar.is-solid .cult-icon{background:var(--t-card);color:var(--t-ink);box-shadow:0 0 0 1px var(--t-line),0 8px 18px -10px color-mix(in srgb,var(--t-shadow) 55%,transparent)}
 .cult-ixhead h1{margin:12px 0 4px;font:900 46px/.92 var(--as-condensed);text-transform:uppercase;letter-spacing:-.4px;color:var(--t-ink)}
 .cult-ixcount{margin:0 0 10px;font:600 15px/1.2 var(--body);color:var(--t-ink2)}
 .cult-ixcount b{font:900 34px/1 var(--as-condensed);color:var(--t-main)}
@@ -236,8 +241,8 @@ html.cult-open{overflow:hidden}
 
 /* ---------- Mouvement réduit ---------- */
 @media(prefers-reduced-motion:reduce){
-  .cult-card,.cult-choice,.cult-sheet.is-in,.cult-stamp.is-fresh,.cult-choice.is-wrong{animation:none;transition:none}
+  .cult-card,.cult-choice,.cult-sheet.is-in,.cult-stamp.is-fresh,.cult-choice.is-wrong,.cult-icon{animation:none;transition:none}
 }
-.reduce-motion .cult-card,.reduce-motion .cult-choice,.reduce-motion .cult-sheet.is-in,.reduce-motion .cult-stamp.is-fresh,.reduce-motion .cult-choice.is-wrong{animation:none;transition:none}
+.reduce-motion .cult-card,.reduce-motion .cult-choice,.reduce-motion .cult-sheet.is-in,.reduce-motion .cult-stamp.is-fresh,.reduce-motion .cult-choice.is-wrong,.reduce-motion .cult-icon{animation:none;transition:none}
 /* Carnet de tampons : le nom du pays doit tenir en entier dans le petit tampon (plus de « E… »). */
 .cult-ix .cult-stamp b{max-width:88%;font-size:9px;letter-spacing:.1px;overflow-wrap:normal;word-break:normal;-webkit-line-clamp:3}

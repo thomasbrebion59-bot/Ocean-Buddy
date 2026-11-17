@@ -19,6 +19,10 @@
  *
  * Seul le contenu web change ainsi. Nouveau plugin, autorisation ou réglage natif
  * => nouvelle version App Store, puis --baseline et --native-min de cette version.
+ *
+ * Garde-fou : un paquet d’essai local (construit avec OB_ACCOUNT_API, marqué accountApi « essai-local » dans
+ * mobile/www/bundle.json par scripts/build-mobile.cjs) n’est jamais publié ni enregistré comme référence : le script
+ * s’arrête en erreur avant toute écriture. Pas d’option pour l’ignorer.
  */
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto'),{spawnSync}=require('node:child_process');
 const root=path.resolve(__dirname,'..'),www=path.join(root,'mobile/www'),out=path.join(root,'app-update'),baseDir=path.join(root,'mobile/ota-baselines');
@@ -26,10 +30,26 @@ const arg=name=>{const i=process.argv.indexOf(name);return i>0?process.argv[i+1]
 const cmp=(a,b)=>{const x=a.split('.').map(Number),y=b.split('.').map(Number);for(let i=0;i<3;i++){const d=(x[i]||0)-(y[i]||0);if(d)return Math.sign(d);}return 0;};
 const KEEP=4;
 
+/* Refuse (Error en français) un paquet d’essai local ou un paquet sans bundle.json lisible. Ne lit que bundle.json. */
+function assertPackageIsPublishable(wwwDir=www){
+  const file=path.join(wwwDir,'bundle.json');
+  let info;
+  try{info=JSON.parse(fs.readFileSync(file,'utf8'));}
+  catch{throw Error('Publication refusée : mobile/www/bundle.json est introuvable ou illisible, le paquet mobile n’est pas valide. Relance la construction (scripts/build-mobile.cjs) puis réessaie.');}
+  if(info&&info.accountApi==='essai-local')throw Error('Publication refusée : ce paquet mobile est un paquet d’ESSAI LOCAL (bundle.json : accountApi « essai-local », construit avec OB_ACCOUNT_API). Il pointe vers un serveur de compte local et ne doit jamais être publié ni servir de référence native. Retire OB_ACCOUNT_API de l’environnement, reconstruis le paquet (node scripts/build-mobile.cjs), puis relance la publication.');
+}
+/* Même refus avant même de construire : OB_ACCOUNT_API défini produirait un paquet d’essai local. */
+function assertEnvironmentIsPublishable(env=process.env){
+  if(env.OB_ACCOUNT_API)throw Error('Publication refusée : la variable d’environnement OB_ACCOUNT_API est définie (essai local du compte) et produirait un paquet d’essai local. Retire-la de l’environnement (unset OB_ACCOUNT_API) puis relance la publication.');
+}
+function refuse(error){console.error('\n'+error.message+'\nRien n’a été publié ni enregistré comme référence. / Nothing was published.');process.exit(1);}
+
 function build(){
   const seq=Number(new Date().toISOString().replace(/\D/g,'').slice(0,12));
   const r=spawnSync(process.execPath,[path.join(root,'scripts/build-mobile.cjs')],{stdio:'inherit',env:{...process.env,OB_BUNDLE_SEQ:String(seq)}});
   if(r.status!==0)process.exit(r.status||1);
+  /* Le paquet vient d’être reconstruit : on vérifie ce qui va réellement partir, avant le contrôle de démarrage et toute écriture. */
+  try{assertPackageIsPublishable();}catch(e){refuse(e);}
   return seq;
 }
 // Garde-fou de démarrage : aucune publication si le démarrage de mobile/www régresse (voir mobile/README.md). Pas d’option pour l’ignorer.
@@ -49,41 +69,48 @@ function hashes(){
   return files;
 }
 
-const baselineVersion=arg('--baseline');
-if(baselineVersion){
-  if(!/^\d+\.\d+\.\d+$/.test(baselineVersion))throw Error('Version attendue : 1.2.0');
+function main(){
+  /* Le plus tôt possible : avant de lire les références ou de construire quoi que ce soit. */
+  try{assertEnvironmentIsPublishable();}catch(e){refuse(e);}
+  const baselineVersion=arg('--baseline');
+  if(baselineVersion){
+    if(!/^\d+\.\d+\.\d+$/.test(baselineVersion))throw Error('Version attendue : 1.2.0');
+    const seq=build();bootGate();const files=hashes();
+    fs.mkdirSync(baseDir,{recursive:true});
+    /* --same-shell 1.3.0 : ce build ne change que le contenu web embarqué (même coque native),
+       les apps 1.3.0 restent donc servies par les mises à jour directes. */
+    const shell=arg('--same-shell');
+    if(shell&&!fs.existsSync(path.join(baseDir,shell+'.json')))throw Error('Référence inconnue pour --same-shell : '+shell);
+    fs.writeFileSync(path.join(baseDir,baselineVersion+'.json'),JSON.stringify({native:baselineVersion,...(shell?{shell}:{}),seq,files},null,0)+'\n');
+    console.log(`Référence ${baselineVersion} (contenu ${seq}, ${Object.keys(files).length} fichiers). Lancer maintenant : npx cap sync, puis archiver dans Xcode.`);
+    process.exit(0);
+  }
+
+  const baselines=fs.existsSync(baseDir)?fs.readdirSync(baseDir).filter(f=>f.endsWith('.json')).map(f=>JSON.parse(fs.readFileSync(path.join(baseDir,f),'utf8'))):[];
+  if(!baselines.length)throw Error('Aucune référence native : lancer d’abord --baseline <version> pour le build envoyé à Apple.');
+  /* Par défaut : la coque native la plus récente (une référence « --same-shell » renvoie à la coque qu’elle partage). */
+  const newest=baselines.slice().sort((a,b)=>cmp(a.native,b.native)).at(-1);
+  const nativeMin=arg('--native-min')||newest.shell||newest.native;
+  const supported=baselines.filter(b=>cmp(b.native,nativeMin)>=0);
+  if(!supported.length)throw Error('Aucune référence pour '+nativeMin);
+
   const seq=build();bootGate();const files=hashes();
-  fs.mkdirSync(baseDir,{recursive:true});
-  /* --same-shell 1.3.0 : ce build ne change que le contenu web embarqué (même coque native),
-     les apps 1.3.0 restent donc servies par les mises à jour directes. */
-  const shell=arg('--same-shell');
-  if(shell&&!fs.existsSync(path.join(baseDir,shell+'.json')))throw Error('Référence inconnue pour --same-shell : '+shell);
-  fs.writeFileSync(path.join(baseDir,baselineVersion+'.json'),JSON.stringify({native:baselineVersion,...(shell?{shell}:{}),seq,files},null,0)+'\n');
-  console.log(`Référence ${baselineVersion} (contenu ${seq}, ${Object.keys(files).length} fichiers). Lancer maintenant : npx cap sync, puis archiver dans Xcode.`);
-  process.exit(0);
+  // Un fichier doit être hébergé dès qu’une app compatible ne l’a pas, au même chemin, à l’identique.
+  const needed=Object.entries(files).filter(([p,h])=>supported.some(b=>b.files[p]!==h));
+  fs.mkdirSync(path.join(out,'files'),{recursive:true});fs.mkdirSync(path.join(out,'manifests'),{recursive:true});
+  let bytes=0;
+  for(const [p,h] of needed){const dest=path.join(out,'files',h);bytes+=fs.statSync(path.join(www,p)).size;if(!fs.existsSync(dest))fs.copyFileSync(path.join(www,p),dest);}
+  const manifestName=`manifests/${seq}.json`;
+  fs.writeFileSync(path.join(out,manifestName),JSON.stringify({seq,native_min:nativeMin,files:Object.entries(files),hosted:needed.map(([,h])=>h)})+'\n');
+  fs.writeFileSync(path.join(out,'latest.json'),JSON.stringify({seq,native_min:nativeMin,manifest:manifestName,download_files:needed.length,download_bytes:bytes},null,2)+'\n');
+
+  // Ménage : garder les derniers manifestes et les fichiers qu’ils utilisent.
+  const manifests=fs.readdirSync(path.join(out,'manifests')).filter(f=>/^\d+\.json$/.test(f)).sort();
+  for(const old of manifests.slice(0,-KEEP))fs.rmSync(path.join(out,'manifests',old));
+  const used=new Set(manifests.slice(-KEEP).flatMap(f=>JSON.parse(fs.readFileSync(path.join(out,'manifests',f),'utf8')).hosted||[]));
+  for(const f of fs.readdirSync(path.join(out,'files')))if(!used.has(f))fs.rmSync(path.join(out,'files',f));
+  console.log(`Mise à jour ${seq} prête pour les apps ≥ ${nativeMin} : ${needed.length} fichiers à télécharger (${(bytes/1e6).toFixed(1)} Mo). Committer app-update/ puis pousser sur main.`);
 }
 
-const baselines=fs.existsSync(baseDir)?fs.readdirSync(baseDir).filter(f=>f.endsWith('.json')).map(f=>JSON.parse(fs.readFileSync(path.join(baseDir,f),'utf8'))):[];
-if(!baselines.length)throw Error('Aucune référence native : lancer d’abord --baseline <version> pour le build envoyé à Apple.');
-/* Par défaut : la coque native la plus récente (une référence « --same-shell » renvoie à la coque qu’elle partage). */
-const newest=baselines.slice().sort((a,b)=>cmp(a.native,b.native)).at(-1);
-const nativeMin=arg('--native-min')||newest.shell||newest.native;
-const supported=baselines.filter(b=>cmp(b.native,nativeMin)>=0);
-if(!supported.length)throw Error('Aucune référence pour '+nativeMin);
-
-const seq=build();bootGate();const files=hashes();
-// Un fichier doit être hébergé dès qu’une app compatible ne l’a pas, au même chemin, à l’identique.
-const needed=Object.entries(files).filter(([p,h])=>supported.some(b=>b.files[p]!==h));
-fs.mkdirSync(path.join(out,'files'),{recursive:true});fs.mkdirSync(path.join(out,'manifests'),{recursive:true});
-let bytes=0;
-for(const [p,h] of needed){const dest=path.join(out,'files',h);bytes+=fs.statSync(path.join(www,p)).size;if(!fs.existsSync(dest))fs.copyFileSync(path.join(www,p),dest);}
-const manifestName=`manifests/${seq}.json`;
-fs.writeFileSync(path.join(out,manifestName),JSON.stringify({seq,native_min:nativeMin,files:Object.entries(files),hosted:needed.map(([,h])=>h)})+'\n');
-fs.writeFileSync(path.join(out,'latest.json'),JSON.stringify({seq,native_min:nativeMin,manifest:manifestName,download_files:needed.length,download_bytes:bytes},null,2)+'\n');
-
-// Ménage : garder les derniers manifestes et les fichiers qu’ils utilisent.
-const manifests=fs.readdirSync(path.join(out,'manifests')).filter(f=>/^\d+\.json$/.test(f)).sort();
-for(const old of manifests.slice(0,-KEEP))fs.rmSync(path.join(out,'manifests',old));
-const used=new Set(manifests.slice(-KEEP).flatMap(f=>JSON.parse(fs.readFileSync(path.join(out,'manifests',f),'utf8')).hosted||[]));
-for(const f of fs.readdirSync(path.join(out,'files')))if(!used.has(f))fs.rmSync(path.join(out,'files',f));
-console.log(`Mise à jour ${seq} prête pour les apps ≥ ${nativeMin} : ${needed.length} fichiers à télécharger (${(bytes/1e6).toFixed(1)} Mo). Committer app-update/ puis pousser sur main.`);
+module.exports={assertPackageIsPublishable,assertEnvironmentIsPublishable};
+if(require.main===module)main();

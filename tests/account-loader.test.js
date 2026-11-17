@@ -82,8 +82,10 @@ test('première ouverture : un seul écran « Crée ton compte » avec l’adres
 test('un seul rappel discret plus tard (3e favori ou premier voyage), jamais en boucle, jamais avant l’invitation',()=>{
   const src=read('account-sync.js');
   const w=src.slice(src.indexOf('function watchReminder'),src.indexOf('function snack('));
-  assert.match(w,/if\(load\(\)\.remindTrip\)return;/);assert.match(w,/if\(!st\.invite\|\|overlayOpen\(\)\|\|typing\(\)\|\|document\.querySelector\('#toast\.show'\)\)return;/);
-  assert.match(w,/f>=3&&f>start\.favs\?'fav'/);assert.match(w,/clearInterval\(timer\);patch\(\{remindTrip:Date\.now\(\)\}\);snack\(why\)/);
+  assert.match(w,/if\(load\(\)\.remindTrip\)return;/);assert.match(w,/if\(!st\.invite\)return;/);
+  assert.match(w,/const calm=\(\)=>!\(overlayOpen\(\)\|\|typing\(\)\|\|document\.querySelector\('#toast\.show'\)\);/);
+  assert.match(w,/f>=3&&f>start\.favs\?'fav'/);assert.match(w,/stop\(\);patch\(\{remindTrip:Date\.now\(\)\}\);snack\(why\)/);
+  assert.doesNotMatch(w,/setInterval/,'aucune lecture périodique (voir tests/account-reminder.test.js)');
   assert.doesNotMatch(src,/watchFirstTrip/);
 });
 

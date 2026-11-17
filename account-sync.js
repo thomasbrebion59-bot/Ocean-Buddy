@@ -275,18 +275,31 @@
     else setTimeout(show,1200);
   }
   /* Un seul rappel, discret, jamais en boucle : au 3e favori ou au premier voyage, seulement si l'invitation a déjà été
-     proposée et refusée. (Le champ « remindTrip » garde son nom : il marque le rappel déjà fait, même ancien.) */
+     proposée et refusée. (Le champ « remindTrip » garde son nom : il marque le rappel déjà fait, même ancien.)
+     Aucune lecture périodique : on écoute les écritures de localStorage sur les deux clés d'activité (favoris, voyages).
+     Seulement si un rappel est dû mais que l'écran n'est pas calme (message, fenêtre ouverte, saisie), on réessaie toutes
+     les 1,5 s, 40 fois au plus (un nouveau changement relance). Tout s'arrête dès que la décision est prise. */
   function watchReminder(){
     const count=(key,pick)=>{try{const d=JSON.parse(localStorage.getItem(key)||'null');return pick(d);}catch(_){return 0;}};
     const favs=()=>count(M.KEYS.main,d=>d&&Array.isArray(d.favs)?d.favs.length:0);
     const trips=()=>count(M.KEYS.trips,d=>d&&Array.isArray(d.trips)?d.trips.filter(x=>x&&!x.deleted).length:0);
     if(load().remindTrip)return;
-    const start={favs:favs(),trips:trips()};
-    const timer=setInterval(()=>{const st=load();if(st.linked||st.remindTrip){clearInterval(timer);return;}
-      if(!st.invite||overlayOpen()||typing()||document.querySelector('#toast.show'))return;
+    let ls=null;try{ls=localStorage;}catch(_){}
+    const proto=typeof Storage==='function'?Storage.prototype:null;if(!ls||!proto)return;
+    const start={favs:favs(),trips:trips()},watched=[M.KEYS.main,M.KEYS.trips],original=proto.setItem;
+    let timer=0,tries=0,stopped=false;
+    const calm=()=>!(overlayOpen()||typing()||document.querySelector('#toast.show'));
+    const stop=()=>{stopped=true;clearTimeout(timer);if(proto.setItem===listen)proto.setItem=original;};
+    const check=()=>{timer=0;const st=load();if(st.linked||st.remindTrip){stop();return;}
+      if(!st.invite)return;
       const f=favs(),t=trips(),why=f>=3&&f>start.favs?'fav':t>start.trips?'trip':null;
       if(!why){start.favs=Math.min(start.favs,f);start.trips=Math.min(start.trips,t);return;}
-      clearInterval(timer);patch({remindTrip:Date.now()});snack(why);},8000);
+      if(!calm()){if(tries++<40)timer=setTimeout(check,1500);return;}
+      stop();patch({remindTrip:Date.now()});snack(why);};
+    /* Même précédent que mobile/client.js : l'écriture a lieu d'abord ; la vérification est regroupée et décalée. */
+    const listen=function(key){const r=original.apply(this,arguments);
+      if(!stopped&&this===ls&&watched.includes(key)){tries=0;clearTimeout(timer);timer=setTimeout(check,400);}return r;};
+    proto.setItem=listen;
   }
   function snack(why){
     const s=document.createElement('div');s.className='oba-snack';s.setAttribute('role','status');
