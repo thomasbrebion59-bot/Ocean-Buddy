@@ -80,9 +80,9 @@
         "es": "2 de enero"
       },
       "text": {
-        "fr": "Chaque 2 janvier, jusqu'à 13 000 ménestrels en costumes colorés défilent au Cap : le « second Nouvel An ».",
-        "en": "Every 2 January, up to 13,000 minstrels in bright costumes parade through Cape Town: the \"second New Year\".",
-        "es": "Cada 2 de enero, hasta 13 000 músicos con trajes coloridos desfilan por Ciudad del Cabo: el «segundo Año Nuevo»."
+        "fr": "Chaque 2 janvier, plus de 13 000 ménestrels en costumes colorés défilent au Cap : le « second Nouvel An ».",
+        "en": "Every 2 January, more than 13,000 minstrels in bright costumes parade through Cape Town: the \"second New Year\".",
+        "es": "Cada 2 de enero, más de 13 000 músicos con trajes coloridos desfilan por Ciudad del Cabo: el «segundo Año Nuevo»."
       },
       "source": {
         "label": "Wikipédia, Kaapse Klopse",
@@ -139,18 +139,6 @@
       "source": {
         "label": "O&L Group, Windhoek Karneval WIKA",
         "url": "https://www.ol.na/windhoek-karneval-wika-2024-celebrating-70-years-of-tradition-joy-and-culture-significance/"
-      }
-    },
-    "thanks": {
-      "word": "Tangi",
-      "lang": {
-        "fr": "oshiwambo",
-        "en": "Oshiwambo",
-        "es": "oshiwambo"
-      },
-      "source": {
-        "label": "Discover Africa, Languages of Namibia",
-        "url": "https://www.discoverafrica.com/safaris/namibia/languages-of-namibia/"
       }
     },
     "reviewed": "2026-11-16"
@@ -813,18 +801,6 @@
         "url": "https://fr.wikipedia.org/wiki/Mayotte"
       }
     },
-    "thanks": {
-      "word": "Marahaba",
-      "lang": {
-        "fr": "shimaoré",
-        "en": "Shimaore",
-        "es": "shimaoré"
-      },
-      "source": {
-        "label": "Evaneos, Vocabulaire pour un voyage à Mayotte",
-        "url": "https://www.evaneos.fr/mayotte/voyage/vocabulaire-de-survie/"
-      }
-    },
     "reviewed": "2026-11-16"
   },
   "Sierra Leone": {
@@ -925,27 +901,6 @@
       "source": {
         "label": "Wikipédia, Boutre",
         "url": "https://fr.wikipedia.org/wiki/Boutre"
-      }
-    },
-    "fete": {
-      "title": {
-        "fr": "Fest'Horn",
-        "en": "Fest'Horn",
-        "es": "Fest'Horn"
-      },
-      "when": {
-        "fr": "mi-décembre",
-        "en": "mid-December",
-        "es": "mediados de diciembre"
-      },
-      "text": {
-        "fr": "Chaque année à la mi-décembre, Fest'Horn célèbre la musique à Djibouti.",
-        "en": "Every year in mid-December, Fest'Horn celebrates music in Djibouti.",
-        "es": "Cada año a mediados de diciembre, Fest'Horn celebra la música en Yibuti."
-      },
-      "source": {
-        "label": "iExplore, Djibouti festivals and events",
-        "url": "https://www.iexplore.com/articles/travel-guides/africa/djibouti/festivals-and-events"
       }
     },
     "thanks": {
