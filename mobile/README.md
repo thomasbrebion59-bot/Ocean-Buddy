@@ -1,6 +1,6 @@
 # Ocean Buddy sur iOS et Android
 
-Version du projet : 1.4.0 (build 202610194). Identifiant : `io.github.thomasbrebion59bot.oceanbuddy`.
+Version du projet : 1.5.0 (build 202611171). Identifiant : `io.github.thomasbrebion59bot.oceanbuddy`.
 
 Capacitor embarque le catalogue, les photographies, les polices, Leaflet et le moteur de relief dans l’application. La météo, les tuiles cartographiques et la communauté nécessitent internet ; Poulpy répond hors connexion. La galerie, le son et le relief restent facultatifs. Les données du site et celles de chaque installation mobile sont séparées.
 
@@ -56,6 +56,7 @@ Scénarios : `native-returning`, `native-restore` (rechargement avec `history.st
 - Ouverture des liens externes dans le navigateur du système et bouton Retour Android.
 - Poulpy répond sur l’appareil avec le guide intégré : aucun message n’est envoyé, aucune IA n’est utilisée.
 - Effacement des données locales dans les réglages, avec confirmation.
+- Compte gratuit et facultatif (1.5.0 et plus) : plugin Swift local `OceanAccount`, jetons gardés dans le Trousseau iOS (cet appareil seulement), requêtes natives vers `oceanbuddy.app/api/v1`. Sans le plugin (apps 1.4.x qui reçoivent le même code web par mise à jour directe), l’interface du compte ne se charge pas. La 1.5.0 est une nouvelle coque native : sa référence se fait sans `--same-shell`.
 - Lecture publique des contributions approuvées lorsque le service communautaire est disponible. Un courriel vérifié est nécessaire pour publier ; chaque contribution reste en attente de modération. Les anciens messages locaux ne sont jamais transférés automatiquement.
 - Création d’une copie distincte d’un voyage pour la communauté, après aperçu et choix explicite de chaque détail privé.
 

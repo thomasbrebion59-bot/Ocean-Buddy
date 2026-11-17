@@ -1,4 +1,4 @@
-// Prépare la version App Store 1.4.1 d'Ocean Buddy (App Store Connect API, clé « Ocean Buddy CI »).
+// Prépare la version App Store 1.5.0 d'Ocean Buddy (App Store Connect API, clé « Ocean Buddy CI »).
 // Lecture seule par défaut ; n'écrit qu'avec --apply.
 //   node scripts/asc-release.mjs                         # état + ce qui serait fait (GET uniquement)
 //   node scripts/asc-release.mjs --apply                 # crée la version, localisations fr/en/es, confidentialité
@@ -11,8 +11,8 @@ import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import site from './site-base.cjs';
 
-const VERSION = '1.4.1';
-const BUILD = '202610291';
+const VERSION = '1.5.0';
+const BUILD = '202611171';
 const KEY_ID = '8T28JHQX3P';
 const ISSUER = '7d044674-c0b4-45e2-b48b-f0d57cdb4b29';
 const BUNDLE_ID = 'io.github.thomasbrebion59bot.oceanbuddy';
@@ -29,14 +29,16 @@ if ((ATTACH || SUBMIT) && !APPLY) console.log('(--attach-build / --submit demand
 const fr = readFileSync(join(ROOT, 'mobile/store/app-store-fr.md'), 'utf8');
 const frDesc = fr.split('## Description\n')[1].split('\n## ')[0].trim();
 const frKeywords = (fr.match(/^- Mots-clés : (.+)$/m) || [])[1].trim();
+const frPromo = (fr.match(/^- Texte promotionnel : (.+)$/m) || [])[1]?.trim();
 const loc = (n) => JSON.parse(readFileSync(join(ROOT, `mobile/store/localizations/${n}.json`), 'utf8'));
 const TEXT = {
   fr: { description: frDesc, keywords: frKeywords,
-    whatsNew: 'Carte plus stable : fini l’écran bleu en changeant de spot. Dix nouveaux spots dans les Landes et en Vendée (Capbreton, Seignosse, Saint-Gilles-Croix-de-Vie…). Conditions du jour expliquées selon ton niveau, du débutant à l’expert, avec les sources officielles de sécurité.' },
+    promotionalText: frPromo,
+    whatsNew: 'Voyage avant même de partir : découvre les cultures de 118 pays. Chaque pays a sa page, un mot du jour à deviner et des tampons à collectionner. Dans Explorer, la planète plonge vers le spot que tu touches. Les fiches de spots sont plus claires : moins de texte, mieux rangées. Et si tu le souhaites, crée un compte gratuit pour retrouver tes favoris et tes voyages sur un autre appareil.' },
   en: { ...pick(loc('en')),
-    whatsNew: 'A steadier map: no more blue screen when switching spots. Ten new spots in the Landes and Vendée (Capbreton, Seignosse, Saint-Gilles-Croix-de-Vie…). Today’s conditions explained for your level, from beginner to expert, with official safety sources.' },
+    whatsNew: 'Travel before you even leave: discover the cultures of 118 countries. Every country has its own page, a word of the day to guess and stamps to collect. In Explore, the planet now dives toward the spot you tap. Spot pages are clearer, with less text and a tidier layout. And if you like, create a free account to find your favorites and trips on another device.' },
   es: { ...pick(loc('es')),
-    whatsNew: 'Mapa más estable: se acabó la pantalla azul al cambiar de spot. Diez spots nuevos en las Landas y la Vendée (Capbreton, Seignosse, Saint-Gilles-Croix-de-Vie…). Las condiciones del día explicadas según tu nivel, de principiante a experto, con fuentes oficiales de seguridad.' },
+    whatsNew: 'Viaja antes de salir: descubre las culturas de 118 países. Cada país tiene su página, una palabra del día para adivinar y sellos para coleccionar. En Explorar, el planeta se sumerge hacia el spot que tocas. Las fichas de los spots son más claras: menos texto y mejor ordenadas. Y si quieres, crea una cuenta gratuita para recuperar tus favoritos y tus viajes en otro dispositivo.' },
 };
 function pick(l) { return { description: l.description, keywords: l.keywords, promotionalText: l.promotionalText }; }
 const DEFAULT_LOCALE = { fr: 'fr-FR', en: 'en-US', es: 'es-ES' };
