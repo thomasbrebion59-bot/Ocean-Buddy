@@ -67,6 +67,9 @@ html.ob-noel .ocean-v2 .nav::after{display:block!important;content:"";position:a
   html.ob-noel .ocean-v2 .app-chrome::after{content:"";position:absolute;left:0;right:0;bottom:-16px;height:18px;pointer-events:none;z-index:2;
     background:var(--noel-bulbs-h) 0 0/64px 18px repeat-x;animation:noel-twinkle 4.2s ease-in-out infinite -1.4s}
   html.ob-noel body[data-screen=home] .ocean-v2 .app-chrome::after,html.ob-noel body[data-screen=home] .app-chrome::after{display:none}
+  /* En haut de page, la guirlande de l’en-tête passait dans le grand titre (« Profil », « Défis », « Voyages ») :
+     elle n’apparaît qu’une fois la page défilée, quand l’en-tête est une barre et le grand titre parti. */
+  html.ob-noel body:not(.is-scrolled) .app-chrome::after{display:none}
 }
 @media(min-width:960px){
   html.ob-noel .ocean-v2 .nav::after{top:70px;bottom:70px;right:-1px;left:auto;width:18px;background:var(--noel-bulbs-v) 0 0/18px 64px repeat-y}
@@ -83,6 +86,9 @@ html.ob-noel .as-sec h2::after{content:"";position:absolute;left:0;top:-23px;wid
 html.ob-noel::after{content:"";position:fixed;left:0;top:-260px;width:100%;height:calc(100% + 260px);z-index:4;pointer-events:none;
   background:var(--noel-snow) 0 0/260px 260px repeat;opacity:.42;animation:noel-snow 26s linear infinite;will-change:transform}
 @keyframes noel-snow{to{transform:translate3d(-30px,260px,0)}}
+/* Explorer : la planète occupe tout l’écran, les flocons passaient par-dessus. Calque retiré sur cet écran (il n’est
+   alors ni dessiné ni animé). :has() : Safari 15.4 et plus ; un navigateur plus ancien garde simplement les flocons. */
+html.ob-noel:has(body[data-screen="spots"])::after{display:none}
 @media(prefers-reduced-motion:reduce){
   html.ob-noel .ocean-v2 .nav::after,html.ob-noel .ocean-v2 .app-chrome::after{animation:none}
   html.ob-noel::after{animation:none;opacity:.3}

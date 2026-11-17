@@ -13,7 +13,7 @@
 html,body{height:100%;background:var(--foam);color:var(--ink)}
 body.ocean-v2{font:400 14px/1.5 var(--body);-webkit-font-smoothing:antialiased;letter-spacing:0}
 button,input,select,textarea{font:inherit}button,a,[role=button]{touch-action:manipulation}
-button{cursor:pointer}button:disabled{cursor:default}button,a{transition:background .2s,color .2s,transform .2s,box-shadow .2s}
+button{cursor:pointer}button:disabled{cursor:default}button,a{transition:background .2s,color .2s,transform .2s,box-shadow .2s,scale var(--ob-t-release,.34s) var(--ob-snap,ease)}
 button:hover:not(:disabled){filter:brightness(.985)}
 button:focus-visible,a:focus-visible,[tabindex]:focus-visible{outline:3px solid var(--t-line);outline-offset:4px}
 input:focus-visible{outline:3px solid color-mix(in srgb,var(--t-line) 28%,transparent);outline-offset:2px}
@@ -156,8 +156,25 @@ h1,h2,h3,h4{line-height:1.2;letter-spacing:-.6px}svg{flex-shrink:0}
  .ocean-v2 .chat-sheet{left:12px;right:12px;width:auto;bottom:calc(83px + env(safe-area-inset-bottom));height:calc(100dvh - 105px);max-width:none;border-radius:20px;z-index:155}.ocean-v2 .chat-head{padding:17px}.ocean-v2 .chat-msgs{padding:17px}.ocean-v2 .chat-input input{font-size:16px}.ocean-v2 .chat-input button{min-height:45px}.ocean-v2 .quiz-modal,.ocean-v2 .aqi{padding:13px;align-items:center}.ocean-v2 .quiz-card,.ocean-v2 .aqi-card{padding:28px 21px;border-radius:20px;max-height:calc(100dvh - 28px)}.ocean-v2 .quiz-q{font-size:17px}.ocean-v2 .quiz-opt{font-size:12px}.ocean-v2 .set-input{font-size:16px}.ocean-v2 .onb{padding:28px 22px;background-position:58% center}.ocean-v2 .onb .logo-svg{width:180px;height:180px;margin-bottom:10px}.ocean-v2 .onb h1{font-size:40px;letter-spacing:-1.9px;max-width:340px}.onb-kicker{font-size:7px;letter-spacing:2px}.ocean-v2 .onb .tag{font-size:12px;line-height:1.8;max-width:320px}.ocean-v2 .onb h2{font-size:25px}.ocean-v2 .sport-grid{grid-template-columns:1fr 1fr;max-height:43dvh;gap:9px;margin:20px 0 10px}.ocean-v2 .sport-card{min-height:86px;padding:10px 6px}.ocean-v2 .sport-card h4{font-size:11px}.ocean-v2 .sport-card p{font-size:9px}.ocean-v2 .onb-near{font-size:9px;line-height:1.7;padding:3px 12px}.ocean-v2 .onb .dots{margin:17px 0}.ocean-v2 .onb-btn{font-size:12px;padding:15px 21px}.ocean-v2 .lvl-card{padding:16px;gap:13px}.ocean-v2 .lvl-card h4{font-size:14px}.ocean-v2 .lvl-card p{font-size:10px}
 }
 @media(max-width:359px){.ocean-v2 .htab{font-size:9px}.ocean-v2 .htab svg{display:none}.ocean-v2 #homeTop h1{font-size:44px}.ocean-v2 #home #homeTop{padding:22px!important}.poulpy-title{font-size:15px}.poulpy-eyebrow{font-size:5.5px}.ocean-v2 .dtab{font-size:8px;padding:9px 7px}.ocean-v2 .today-head .d{display:none}.ocean-v2 .nav{padding-left:10px;padding-right:10px}.ocean-v2 .nav>button[data-s]{font-size:8px}.ocean-v2 .topbar h1{font-size:26px}.ocean-v2 .isl-plate b{font-size:11px}}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
-.reduce-motion *,.reduce-motion *::before,.reduce-motion *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+/* Mouvement réduit (réglage du téléphone, ou « Réduire les animations » dans Réglages) : plus aucun déplacement, mais
+   les fondus courts restent, pour qu’un écran ou une feuille ne surgisse pas d’un coup.
+   - transitions : seules l’opacité et les couleurs passent encore, en 160 ms ; transform, scale, translate et les
+     dimensions changent d’un coup ;
+   - animations : coupées, sauf là où une feuille, un onglet ou un repli apparaît : l’entrée qui glissait y est
+     remplacée par un fondu pur de 160 ms (classe d’exception .ob-fade pour un nouveau composant). Le changement
+     d’écran reçoit le même fondu dans go() (app.js). */
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;scroll-behavior:auto!important;
+    transition-property:opacity,color,background-color,border-color,fill,stroke,box-shadow,visibility!important;transition-duration:.16s!important;transition-delay:0s!important;transition-timing-function:ease-out!important}
+  .ob-fade,.onb-step.active,.quiz-modal.open,.aqi.open,.quiz-modal.ob-closing,.aqi.ob-closing,.quiz-modal.open>.quiz-card,.aqi.open>.aqi-card,.quiz-modal.ob-closing>.quiz-card,.aqi.ob-closing>.aqi-card,.cult-sheet.is-in,#detail .dcat,#home .hcat,#detail .db-v:not(.db-wait),.obf-zone:not([hidden]),.hf-plus-body:not([hidden]),details.chal-why[open]>span,.msg{
+    animation:ob-fade-in .16s ease-out backwards!important}
+  .quiz-modal.ob-closing,.aqi.ob-closing,.quiz-modal.ob-closing>.quiz-card,.aqi.ob-closing>.aqi-card{animation:ob-fade-out .16s ease-out forwards!important}
+}
+.reduce-motion *,.reduce-motion *::before,.reduce-motion *::after{animation:none!important;scroll-behavior:auto!important;
+  transition-property:opacity,color,background-color,border-color,fill,stroke,box-shadow,visibility!important;transition-duration:.16s!important;transition-delay:0s!important;transition-timing-function:ease-out!important}
+.reduce-motion :is(.ob-fade,.onb-step.active,.quiz-modal.open,.aqi.open,.quiz-modal.open>.quiz-card,.aqi.open>.aqi-card,.cult-sheet.is-in,#detail .dcat,#home .hcat,#detail .db-v:not(.db-wait),.obf-zone:not([hidden]),.hf-plus-body:not([hidden]),details.chal-why[open]>span,.msg){
+  animation:ob-fade-in .16s ease-out backwards!important}
+.reduce-motion :is(.quiz-modal.ob-closing,.aqi.ob-closing,.quiz-modal.ob-closing>.quiz-card,.aqi.ob-closing>.aqi-card){animation:ob-fade-out .16s ease-out forwards!important}
 /* Final interaction and responsive refinements. */
 .mobile-search{display:none}
 .ocean-v2 .nav .sidebar-poulpy{display:block;height:auto;flex:none;padding:24px 14px 16px;text-align:left;background:var(--t-deep);color:color-mix(in srgb,var(--t-on-main) 86%,transparent);border:1px solid color-mix(in srgb,var(--t-main) 27%,transparent);border-radius:15px;margin-bottom:22px;box-shadow:none}

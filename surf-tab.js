@@ -15,6 +15,9 @@
   function drawFrame(canvas,img){
     const w=img.naturalWidth,h=img.naturalHeight;if(!w||!h)return;
     const cell=w/h>=2?h:w/4;
+    /* Netteté : le canevas (96 pt à l’écran) est dessiné à la densité de l’écran, sans dépasser la case de l’atlas. */
+    const px=Math.min(Math.round(cell),Math.round(96*(window.devicePixelRatio||1)));
+    if(px>canvas.width){canvas.width=px;canvas.height=px;}
     const ctx=canvas.getContext('2d');if(!ctx)return;
     ctx.clearRect(0,0,canvas.width,canvas.height);
     ctx.imageSmoothingQuality='high';
