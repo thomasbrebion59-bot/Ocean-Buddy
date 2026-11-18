@@ -418,6 +418,18 @@
     });
   },true); /* phase de capture : certains cœurs arrêtent la propagation de leur clic */
 
+  /* ================= Anneau de focus : au clavier seulement ================= */
+  /* Après un toucher, l’app déplace parfois le focus elle-même, pour le clavier et les lecteurs d’écran (bouton de
+     fermeture d’une feuille, « Découvrir » du mot du jour). Le moteur de l’iPhone dessine alors l’anneau de focus
+     comme au clavier (essai dans WKWebView, 18 nov. 2026) : un cercle coloré apparaissait autour d’un bouton que
+     personne n’avait visé. La classe ob-touch est posée au premier toucher ou clic et retirée dès qu’une touche de
+     déplacement sert (Tab, flèches) : l’anneau reste entier au clavier (motion.css). */
+  const FOCUS_KEYS=/^(Tab|Arrow(Up|Down|Left|Right))$/;
+  function pointerMode(e){if(e&&e.isPrimary===false)return;root.classList.add('ob-touch');}
+  function keyMode(e){if(e&&FOCUS_KEYS.test(e.key||''))root.classList.remove('ob-touch');}
+  window.addEventListener('pointerdown',pointerMode,{capture:true,passive:true});
+  window.addEventListener('keydown',keyMode,{capture:true,passive:true});
+
   function wrapAll(){wrapOpenSpot();wrapGo();wrapDetailTabs();softClose('closeSettings','settingsModal');softClose('closeQuiz','quizModal');softClose('closeEcoLog','ecoInfo');}
   wrapAll();
   window.addEventListener('load',wrapAll);

@@ -350,3 +350,27 @@ test('retour pendant le vol d’ouverture : le vol de retour repart de la taille
   assert.ok(go.indexOf('resumeAt()') > 0 && go.indexOf('resumeAt()') < go.indexOf('if(!nested)endFlight();'), 'lu avant endFlight');
   assert.match(go, /drive\(f,land,1,at\);/);
 });
+
+test('anneau de focus : masqué après un toucher, entier dès que le clavier sert, jamais sur les champs', () => {
+  const src = motionJs.slice(motionJs.indexOf('  const FOCUS_KEYS='), motionJs.indexOf('  function wrapAll(){'));
+  const classes = new Set(), on = {};
+  const ctx = { root: { classList: { add: c => classes.add(c), remove: c => classes.delete(c) } }, window: { addEventListener: (n, fn, o) => { on[n] = { fn, o }; } } };
+  vm.runInNewContext(src, ctx);
+  assert.ok(on.pointerdown.o.capture && on.keydown.o.capture, 'en phase de capture : avant tout arrêt de propagation');
+  assert.ok(!classes.has('ob-touch'), 'au départ (clavier possible) : anneaux visibles');
+  on.pointerdown.fn({ pointerType: 'touch', isPrimary: true });
+  assert.ok(classes.has('ob-touch'), 'un toucher : anneaux masqués');
+  for (const key of ['a', 'Enter', ' ', 'Escape', 'Backspace']) { on.keydown.fn({ key }); assert.ok(classes.has('ob-touch'), 'saisie ou validation, pas un déplacement : ' + key); }
+  on.keydown.fn({ key: 'Tab' });
+  assert.ok(!classes.has('ob-touch'), 'Tab : anneaux de retour');
+  on.pointerdown.fn({ pointerType: 'mouse', isPrimary: true }); assert.ok(classes.has('ob-touch'));
+  on.keydown.fn({ key: 'ArrowDown' }); assert.ok(!classes.has('ob-touch'), 'flèches : anneaux de retour');
+  on.pointerdown.fn({ pointerType: 'touch', isPrimary: false }); assert.ok(!classes.has('ob-touch'), 'second doigt ignoré');
+  /* CSS : seule la couleur de l’anneau s’efface (aucune règle d’anneau n’est retirée), et pas sur les champs. */
+  const css = read('motion.css');
+  const rule = css.match(/html\.ob-touch :focus-visible([^{]*)\{([^}]*)\}/);
+  assert.ok(rule, 'règle présente');
+  assert.equal(rule[2], 'outline-color:transparent!important');
+  for (const field of ['input', 'textarea', 'select', '[contenteditable]']) assert.ok(rule[1].includes(':not(' + field + ')'), 'champ épargné : ' + field);
+  assert.doesNotMatch(css + read('design.css'), /:focus-visible[^{]*\{[^}]*outline:\s*(0|none)\b/, 'aucun anneau supprimé pour le clavier');
+});
