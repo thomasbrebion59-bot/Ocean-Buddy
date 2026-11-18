@@ -13,6 +13,9 @@
 .ocean-v2 .ab-v .poulpy-mini{width:44px;height:44px;margin-right:5px}
 .ocean-v2 .compare-sport .poulpy-mini{width:32px;height:32px}
 .ocean-v2 .trip-level .poulpy-mini{width:30px;height:30px;margin:3px 5px 3px 0}
+/* Étape d’un voyage : la marge en % (img.ob-ico, plus bas) se calculait sur la largeur de .trip-level (~350 px), soit 63 px de chaque côté :
+   un rond vide de 126 px. Marge en px, comme dans la fiche ; l’icône garde ses 30 px, alignée sur « Expert · Surf ». */
+.ocean-v2 .trip-level img.ob-ico:not(.spico){padding:5px;vertical-align:middle}
 .ocean-v2 .lpin .poulpy-mini{width:24px;height:24px;display:block}
 .ocean-v2 .lpop-sp{display:flex;flex-wrap:wrap;gap:5px}.ocean-v2 .lpop-sp .poulpy-mini{width:34px;height:34px}
 .ocean-v2 .lpop em .poulpy-mini{width:28px;height:28px;margin-right:5px}
