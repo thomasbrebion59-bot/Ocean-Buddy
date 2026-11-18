@@ -8,6 +8,10 @@ const MAPPOS={lapalue:{x:48.9,y:12.5},latorche:{x:50.6,y:16.1},penhors:{x:53.3,y
 const favs=new Set();
 const sessions=[];
 let userName='Explorateur';
+/* Prénom par défaut : « Explorateur » est un mot français, montré dans la langue de l’interface (« Explorer », « Explorador »)
+   dans Réglages, le profil, l’onboarding et « Bon retour ». Un prénom saisi par l’utilisateur n’est jamais traduit : le titre
+   du profil est exclu de la traduction automatique (index.html, translate="no"), qui changeait « Rider » en « Surfista ». */
+function shownName(){return userName==='Explorateur'&&typeof window.obT==='function'?window.obT('Explorateur'):userName;}
 /* Le compteur de gestes écolo était une décoration : 23, écrit en dur,
    relié à rien. C'est maintenant un carnet, comme celui des sessions —
    on peut le toucher et voir ce qu'on a fait. */
@@ -41,7 +45,7 @@ function showEcoLog(){
 function closeEcoLog(){
   var o=document.getElementById('ecoInfo'); if(o)o.classList.remove('open');
 }
-function applyName(){var hh=document.getElementById('homeHello');if(hh)hh.textContent='Salut '+userName;var pn=document.getElementById('profName');if(pn)pn.textContent=userName;var rt=document.getElementById('readyTitle');if(rt)rt.textContent='C’est parti, '+userName+' !';}
+function applyName(){var nm=shownName();var hh=document.getElementById('homeHello');if(hh)hh.textContent='Salut '+nm;var pn=document.getElementById('profName');if(pn)pn.textContent=nm;var rt=document.getElementById('readyTitle');if(rt)rt.textContent='C’est parti, '+nm+' !';}
 const COORDS=Object.fromEntries(SPOTS.map(spot=>[spot.id,spot.coords]));
 /* ---- persistance (localStorage) ---- */
 const STORE_KEY='oceanbuddy_v1';
@@ -1382,11 +1386,11 @@ function renderSessionStats(){
   el.innerHTML='<div class="ss-item"><b>'+total+'</b><span>sessions</span></div><div class="ss-item"><b>'+nspots+'</b><span>spots</span></div><div class="ss-item"><b class="ss-act">'+favLab+'</b><span>activité préférée</span></div>';
 }
 /* ===== Réglages / personnalisation ===== */
-function openSettings(section){renderMyChoice(true);var i=document.getElementById('setName');if(i)i.value=userName;var r=document.getElementById('setReduce');if(r)r.checked=document.body.classList.contains('reduce-motion');document.getElementById('settingsModal').classList.add('open');
+function openSettings(section){renderMyChoice(true);var i=document.getElementById('setName');if(i)i.value=shownName();var r=document.getElementById('setReduce');if(r)r.checked=document.body.classList.contains('reduce-motion');document.getElementById('settingsModal').classList.add('open');
   /* Depuis le profil : la section « Mon sport et mon niveau » s’affiche d’emblée. */
   if(section==='sport')requestAnimationFrame(()=>{const m=document.getElementById('setMine');if(m)m.scrollIntoView({block:'start'});});}
 function closeSettings(){document.getElementById('settingsModal').classList.remove('open');}
-function saveName(){var v=(document.getElementById('setName').value||'').trim();if(!v){toast('Entre un prénom 🐙');return;}userName=v.slice(0,18);applyName();saveState();toast('Prénom enregistré ✅');closeSettings();}
+function saveName(){var v=(document.getElementById('setName').value||'').trim();if(!v){toast('Entre un prénom 🐙');return;}/* Défaut enregistré sans changement : il reste le défaut (et suit la langue). */if(userName==='Explorateur'&&v===shownName())v='Explorateur';userName=v.slice(0,18);applyName();saveState();toast('Prénom enregistré ✅');closeSettings();}
 function toggleReduceMotion(on){document.body.classList.toggle('reduce-motion',!!on);try{localStorage.setItem('oceanbuddy_reduce',on?'1':'0');}catch(e){}try{window.OceanTheme?.refresh?.();}catch(e){}}
 async function resetProgress(){const q='Réinitialiser toute ta progression (XP, favoris, sessions, quiz) ?';if(!(await (window.OceanConfirm?OceanConfirm(q,{ok:'Réinitialiser',danger:true}):Promise.resolve(window.confirm(q)))))return;try{localStorage.removeItem(STORE_KEY);localStorage.removeItem('oceanbuddy_quiz_v1');localStorage.removeItem('oceanbuddy_progress_v1');localStorage.removeItem('oceanbuddy_badge_dates');localStorage.removeItem('oceanbuddy_daily');}catch(e){}await window.OceanMobile?.persist();location.reload();}
 
@@ -2944,7 +2948,7 @@ if(returning&&onbDone){
   const overlayOpen=()=>{try{if(sessionStorage.getItem('ob_account_after'))return true;}catch(_){}return !!document.querySelector('.oba,.as-confirm,.quiz-modal.open,.aqi.open,.app-update,.tb-cele,dialog[open]');};
   let helloWait=0;
   const hello=()=>{if(overlayOpen()){if(helloWait++<240)setTimeout(hello,500);return;}
-    toast('Bon retour, '+userName+' ! L’océan t’attendait.',2500);
+    toast('Bon retour, '+shownName()+' ! L’océan t’attendait.',2500);
     /* Texte comparé sans les espaces insécables que le français pose à l’affichage (i18n.js, passage français). */
     const plain=s=>String(s).replace(/\u00a0/g,' '),t=document.getElementById('toast'),said=plain(t.textContent);let n=0;
     const watch=()=>{if(!t.classList.contains('show')||plain(t.textContent)!==said||n++>15)return;if(overlayOpen()){t.classList.remove('show');return;}setTimeout(watch,200);};
