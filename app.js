@@ -1568,7 +1568,7 @@ function showConditions(s,w,mar){
   const o={
     wind:ws!=null?(`${Math.round(ws)} km/h ${cardinal(wd)}`).trim():'—',
     swell:wv!=null?`${num1(+wv)} m`:'—',
-    temp:sst!=null?`${Math.round(sst)}°C`:'—',
+    temp:sst!=null?`${Math.round(sst)} °C`:'—',
     current:mc.ocean_current_velocity!=null?`${num1(+mc.ocean_current_velocity)} km/h ${cardinal(mc.ocean_current_direction)}`:'—',
     currentK:mc.ocean_current_velocity!=null?+mc.ocean_current_velocity:null,
     /* Période et direction de la houle du jour (modèle Open-Meteo, au large) : lues par « Lire les conditions ». */
@@ -1653,7 +1653,7 @@ async function fetchPreviewConditions(spots){
     const wc=(wa[index]||{}).current||{},mc=(ma[marineIndex.get(s.id)]||{}).current||{},data={};
     if(wc.wind_speed_10m!=null){data.wind=(`${Math.round(wc.wind_speed_10m)} km/h ${cardinal(wc.wind_direction_10m)}`).trim();data.windK=Math.round(wc.wind_speed_10m);}
     if(mc.wave_height!=null){data.swell=`${typeof obNum==='function'?obNum(+mc.wave_height,1):(+mc.wave_height).toFixed(1)} m`;data.waveM=+mc.wave_height;}
-    if(mc.sea_surface_temperature!=null)data.temp=`${Math.round(mc.sea_surface_temperature)}°C`;
+    if(mc.sea_surface_temperature!=null)data.temp=`${Math.round(mc.sea_surface_temperature)} °C`;
     if(!Object.keys(data).length)return;
     LIVE[s.id]=Object.assign(LIVE[s.id]||{},data,{live:true,fetchedAt});
     (cards.get(s.id)||[]).forEach(card=>{const meta=card.querySelector('.spot-meta');if(meta)meta.innerHTML=spotCardMeta(s);});
