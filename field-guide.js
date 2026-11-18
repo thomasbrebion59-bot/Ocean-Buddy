@@ -70,7 +70,10 @@
       }else if(row&&typeof row==='object'){
         /* Forme étendue : le texte et ses propres sources (https, ou les normales NOAA du catalogue), chacune datée. */
         const text=typeof row.t==='string'?row.t.trim():'';
-        const cited=(Array.isArray(row.src)?row.src:[]).filter(x=>x&&(/^https:\/\//i.test(x.u||'')||x.u==='internal:climate')&&x.l&&/^\d{4}-\d{2}-\d{2}$/.test(x.d||''));
+        /* Une source citée deux fois (même lien, même date : Hossegor et Capbreton, « Règles locales ») ne s’affiche qu’une fois. */
+        const seen=new Set();
+        const cited=(Array.isArray(row.src)?row.src:[]).filter(x=>x&&(/^https:\/\//i.test(x.u||'')||x.u==='internal:climate')&&x.l&&/^\d{4}-\d{2}-\d{2}$/.test(x.d||''))
+          .filter(x=>{const k=x.u+'|'+x.d;if(seen.has(k))return false;seen.add(k);return true;});
         if(text&&cited.length){value=text;src=cited;}
       }
       return {label,key,value:value||'À vérifier localement',verified:!!value,src};
