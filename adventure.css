@@ -4,8 +4,8 @@
  --foam:var(--t-deep);--ink:var(--t-tint);--card:var(--t-deep);--line:var(--t-deep);
  --ocean-deep:var(--t-deep);--ocean:var(--t-line);--aqua:var(--t-line);
  --coral:var(--t-cta);--coral-dark:var(--t-cta);--muted:var(--t-line);
- --display:'Manrope',sans-serif;--impact:'Barlow Condensed',Impact,sans-serif;
- --body:'DM Sans',sans-serif;--radius:22px;
+ --display:'Figtree',sans-serif;--impact:'Barlow Condensed',Impact,sans-serif;
+ --body:'Figtree',sans-serif;--radius:22px;
 }
 html,body.ocean-v2,.ocean-v2 .phone{background:var(--t-deep);color:color-mix(in srgb,var(--t-on-main) 86%,transparent)}
 .ocean-v2 .screen-wrap{background:radial-gradient(ellipse at 100% 0,color-mix(in srgb,var(--t-deep) 53%,transparent),transparent 50%),var(--t-deep);scrollbar-color:var(--t-main) transparent}

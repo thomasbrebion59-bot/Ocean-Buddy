@@ -223,7 +223,7 @@ span.field-visit-source{color:var(--t-ink2);text-decoration:none}
 .field-check .field-visit-cites{margin-top:8px}
 .field-check-go{display:inline-flex;align-items:center;min-height:44px;margin-top:4px;padding:0;border:0;background:none;color:var(--t-main);font:700 12px var(--body);text-decoration:underline;text-underline-offset:3px;cursor:pointer}
 /* Planificateur : avertissement « Grosse houle ». Sa hauteur est toujours réservée (visibility, jamais display). */
-.sd-plan-warn{margin:12px 0 0;padding:10px 12px;border:1px solid var(--t-line);border-left:3px solid var(--t-danger);border-radius:8px;background:var(--t-tint);color:var(--t-ink);font:600 13px/1.45 'DM Sans',sans-serif}
+.sd-plan-warn{margin:12px 0 0;padding:10px 12px;border:1px solid var(--t-line);border-left:3px solid var(--t-danger);border-radius:8px;background:var(--t-tint);color:var(--t-ink);font:600 13px/1.45 var(--body)}
 .sd-plan-warn[aria-hidden="true"]{visibility:hidden}
 
 /* Onglet « Le spot » : colonne et ordre par CSS (aucun nœud déplacé). Quand partir, conseil, essentiel, danger principal, description, reste. */

@@ -1,7 +1,7 @@
 /* @creme-tokens */
 /* Voyage dans le spot : plein écran, scènes animées, carte guide. */
 .voyage-open,.voyage-open body{overflow:hidden}
-.voyage{position:fixed;inset:0;z-index:4000;background:var(--g-night);color:var(--t-on-main);opacity:0;transform:scale(1.02);transition:opacity .28s ease,transform .38s cubic-bezier(.22,1,.36,1);font-family:"DM Sans",Manrope,sans-serif;overflow:hidden;touch-action:manipulation}
+.voyage{position:fixed;inset:0;z-index:4000;background:var(--g-night);color:var(--t-on-main);opacity:0;transform:scale(1.02);transition:opacity .28s ease,transform .38s cubic-bezier(.22,1,.36,1);font-family:var(--body);overflow:hidden;touch-action:manipulation}
 .voyage.is-open{opacity:1;transform:none}
 .voyage[hidden]{display:none}
 .voyage button{font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
@@ -158,5 +158,5 @@ button.experience-explore-360{width:100%;font:inherit;text-align:start;cursor:po
 .vx-dot{fill:var(--t-deep);stroke:#fff;stroke-width:1.6}
 .vx-dot.is-water{fill:var(--g-soft,#2f9bff)}
 .vx-dot.is-on{fill:#e0ff91;stroke:var(--t-deep);stroke-width:2}
-.vx-n{font:800 11px "DM Sans",sans-serif;fill:var(--t-deep);text-anchor:middle}
+.vx-n{font:800 11px var(--body);fill:var(--t-deep);text-anchor:middle}
 /* @creme-exception-end */

@@ -4,7 +4,7 @@
 :root{
   --tb-navy:var(--t-deep);--tb-abyss:var(--t-deep);--tb-cobalt:var(--t-main2);--tb-lime:var(--t-acc);--tb-coral:var(--t-cta);--tb-mist:var(--t-tint);
   --tb-title:'Barlow Condensed',Impact,'Arial Narrow',sans-serif;
-  --tb-ui:'DM Sans','Manrope',system-ui,-apple-system,sans-serif;
+  --tb-ui:'Figtree',system-ui,-apple-system,sans-serif;
   --tb-spring:cubic-bezier(.2,1.25,.32,1);
 }
 /* Couleurs de rareté */

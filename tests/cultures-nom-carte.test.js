@@ -3,7 +3,7 @@ const vm = require('node:vm');
 const { read } = require('./src-extract.cjs');
 /* Contrôle sur simulateur (18 nov.) : sous le mot de la carte, le nom du pays était coupé par « … » (« MOZAMBIQ… »).
    Un nom de pays n’est jamais coupé : corps et interlettrage réduits, ou plusieurs lignes pour les noms très longs, coupées
-   aux espaces et après les traits d’union. Choisi selon la longueur (avances réelles de DM Sans 750 en capitales). */
+   aux espaces et après les traits d’union. Choisi selon la longueur (avances réelles de Figtree 700 en capitales). */
 function boot(lang) {
   const ctx = { console, setTimeout, clearTimeout, Promise, Map, Set, Date, Math, JSON, Array, Object, String, Error,
     document: { documentElement: { lang }, addEventListener() {}, readyState: 'complete', body: { append() {} } },

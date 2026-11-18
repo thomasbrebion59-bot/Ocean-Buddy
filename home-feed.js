@@ -721,7 +721,7 @@
   /* Accueil prêt : la photo d’ouverture est décodée et les polices des titres chargées (avec un plafond). */
   function settle(){
     const img=home.querySelector('.hf-slide img'),jobs=[img?.decode?img.decode().catch(()=>{}):null];
-    if(document.fonts?.load){for(const f of ['900 48px "Barlow Condensed"','800 24px "Barlow Condensed"','700 16px "DM Sans"'])jobs.push(document.fonts.load(f).catch(()=>{}));
+    if(document.fonts?.load){for(const f of ['900 48px "Barlow Condensed"','800 24px "Barlow Condensed"','700 16px "Figtree"'])jobs.push(document.fonts.load(f).catch(()=>{}));
       jobs.push(Promise.all(jobs).then(()=>document.fonts.ready));}
     return Promise.race([Promise.all(jobs),wait(1500)]);
   }

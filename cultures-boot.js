@@ -60,11 +60,12 @@
     return 5;
   }
 
-  /* Nom du pays sous le mot (capitales, DM Sans 750) : entier lui aussi, jamais « … ». Une ligne si elle tient en réduisant
+  /* Nom du pays sous le mot (capitales, Figtree 700 ; table DMC/DMW : avances mesurées dans Chrome le 18 nov. 2026, pour
+     mille unités de corps) : entier lui aussi, jamais « … ». Une ligne si elle tient en réduisant
      un peu le corps et l’interlettrage (data-fit 0 à 2), sinon deux lignes ou plus, coupées aux espaces et après les traits
      d’union (« SAINT-VINCENT-ET-LES-GRENADINES »), au plus grand corps qui tient. Même place de 73 px que le mot. */
   const DMC=[32,45,46,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,193,199,200,201,203,205,206,207,209,211,218];
-  const DMW=[236,576,252,709,638,738,707,583,556,777,714,273,541,653,559,886,730,783,614,783,630,604,597,684,707,1018,670,635,578,709,738,583,583,583,273,273,273,730,783,684];
+  const DMW=[238,408,248,714,612,725,700,589,554,743,750,289,552,666,537,857,773,787,603,789,645,607,584,704,722,985,679,647,632,714,725,589,589,589,289,289,304,773,787,704];
   const DM=new Map(DMC.map((c,i)=>[String.fromCodePoint(c),DMW[i]/1000]));
   const NAME_F=[[11.5,.9],[11,.4],[10.5,.2],[10,0]];
   function nameLines(n,[size,ls]){

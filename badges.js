@@ -377,7 +377,7 @@
     var b=find(id);if(!b)return Promise.reject(new Error('trophée inconnu'));
     var W=1080,H=1920;
     var fonts=document.fonts&&document.fonts.load?Promise.all([
-      document.fonts.load('800 150px "Barlow Condensed"'),document.fonts.load('700 36px "DM Sans"'),document.fonts.load('500 36px "DM Sans"')
+      document.fonts.load('800 150px "Barlow Condensed"'),document.fonts.load('700 36px "Figtree"'),document.fonts.load('500 36px "Figtree"')
     ]).catch(function(){}):Promise.resolve();
     return Promise.all([loadImg(b.hd).catch(function(){return loadImg(b.img);}),fonts]).then(function(r){
       var img=r[0],cv=document.createElement('canvas');cv.width=W;cv.height=H;
@@ -409,7 +409,7 @@
       var w1=c.measureText('OCEAN ').width,w2=c.measureText('BUDDY').width,x0=(W-w1-w2)/2;
       c.fillStyle='#ffffff';c.fillText('OCEAN ',x0,170);c.fillStyle='#e0ff91';c.fillText('BUDDY',x0+w1,170);
       c.textAlign='center';
-      c.font='700 32px "DM Sans", system-ui, sans-serif';spaced(c,9);c.fillStyle='#e0ff91';
+      c.font='700 32px "Figtree", system-ui, sans-serif';spaced(c,9);c.fillStyle='#e0ff91';
       c.fillText(T('TROPHÉE DÉBLOQUÉ'),W/2,262);
       /* Médaille */
       c.save();c.shadowColor='rgba(0,6,30,.55)';c.shadowBlur=70;c.shadowOffsetY=34;
@@ -420,7 +420,7 @@
       do{c.font='800 '+fs+'px "Barlow Condensed", Impact, sans-serif';fs-=6;}while(c.measureText(name).width>960&&fs>70);
       c.fillText(name,W/2,1300);
       /* Rareté */
-      c.font='800 34px "DM Sans", system-ui, sans-serif';spaced(c,8);
+      c.font='800 34px "Figtree", system-ui, sans-serif';spaced(c,8);
       var lab=T(b.tierLabel).toUpperCase(),lw=c.measureText(lab).width+84,lx=(W-lw)/2,ly=1352;
       var pg=c.createLinearGradient(lx,0,lx+lw,0);
       if(b.tier==='legendary'){pg.addColorStop(0,'#ffb2e0');pg.addColorStop(.35,'#9eeaff');pg.addColorStop(.65,'#d2b2ff');pg.addColorStop(1,'#ffe39a');}
@@ -429,11 +429,11 @@
       c.fillStyle=tp[2];c.fillText(lab,W/2+4,ly+49);
       /* Date et exploit */
       spaced(c,0);
-      c.font='600 38px "DM Sans", system-ui, sans-serif';c.fillStyle='rgba(255,255,255,.92)';
+      c.font='600 38px "Figtree", system-ui, sans-serif';c.fillStyle='rgba(255,255,255,.92)';
       c.fillText(b.date?T('Obtenu le')+' '+fmtDate(b.date):T('Trophée obtenu'),W/2,1510);
-      c.font='500 34px "DM Sans", system-ui, sans-serif';c.fillStyle='rgba(225,236,255,.78)';
+      c.font='500 34px "Figtree", system-ui, sans-serif';c.fillStyle='rgba(225,236,255,.78)';
       wrapLines(c,T(b.done||b.how),860).slice(0,2).forEach(function(l,j){c.fillText(l,W/2,1572+j*46);});
-      c.font='700 28px "DM Sans", system-ui, sans-serif';spaced(c,6);c.fillStyle='rgba(255,255,255,.75)';
+      c.font='700 28px "Figtree", system-ui, sans-serif';spaced(c,6);c.fillStyle='rgba(255,255,255,.75)';
       c.fillText(T('EXPLORE. PROGRESSE. PROTÈGE.'),W/2,1850);
       spaced(c,0);
       return cv;

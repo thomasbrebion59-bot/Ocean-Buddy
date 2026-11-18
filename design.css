@@ -7,7 +7,7 @@
   --sun:var(--t-sun);--purple:var(--t-ink2);--ink:var(--t-deep);--card:var(--t-card);
   --green:var(--t-bright);--muted:var(--t-ink2);--line:var(--t-tint);
   --shadow:0 12px 36px color-mix(in srgb,var(--t-deep) 4%,transparent);--shadow-sm:0 4px 18px color-mix(in srgb,var(--t-deep) 2%,transparent);
-  --glass:color-mix(in srgb,var(--t-card) 93%,transparent);--display:'Manrope',sans-serif;--body:'DM Sans',sans-serif;
+  --glass:color-mix(in srgb,var(--t-card) 93%,transparent);--display:'Figtree',sans-serif;--body:'Figtree',sans-serif;
   --sidebar:228px;--gutter:32px;--radius:22px;
 }
 html,body{height:100%;background:var(--foam);color:var(--ink)}

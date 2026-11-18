@@ -20,7 +20,7 @@ async function main(){
   fs.mkdirSync(path.join(dest,'vendor'),{recursive:true});
   fs.cpSync(path.join(root,'vendor/maplibre'),path.join(dest,'vendor/maplibre'),{recursive:true});
   fs.cpSync(path.join(root,'vendor/three'),path.join(dest,'vendor/three'),{recursive:true});
-  const fonts=[['barlow-condensed','Barlow Condensed',[600,700,800,900]],['manrope','Manrope',[400,500,600,700,800]],['dm-sans','DM Sans',[400,500,600,700]]];
+  const fonts=[['barlow-condensed','Barlow Condensed',[600,700,800,900]],['figtree','Figtree',[400,500,600,700,800]]];
   let css='';
   fs.mkdirSync(path.join(dest,'vendor/fonts'),{recursive:true});
   for(const [pkg,family,weights] of fonts){
@@ -55,8 +55,8 @@ async function main(){
   html=html.replace(/<link[^>]+https:\/\/fonts\.(?:googleapis|gstatic)\.com[^>]*>\n?/g,'');
   /* Manifeste d’application web : inutile dans l’app (et absent du paquet). */
   html=html.replace(/<link rel="manifest"[^>]*>\n?/,'');
-  /* Polices des titres préchargées (Barlow Condensed des grands titres, DM Sans du grand titre d’accueil) : pas de changement de police visible après le rideau. */
-  const preload=['barlow-condensed-latin-900-normal','barlow-condensed-latin-800-normal','dm-sans-latin-700-normal'].map(f=>`<link rel="preload" href="vendor/fonts/${f}.woff2" as="font" type="font/woff2" crossorigin>`).join('');
+  /* Polices des titres préchargées (Barlow Condensed des grands titres, Figtree du grand titre d’accueil) : pas de changement de police visible après le rideau. */
+  const preload=['barlow-condensed-latin-900-normal','barlow-condensed-latin-800-normal','figtree-latin-700-normal'].map(f=>`<link rel="preload" href="vendor/fonts/${f}.woff2" as="font" type="font/woff2" crossorigin>`).join('');
   html=html.replace('</head>',preload+'<link rel="stylesheet" href="vendor/fonts/fonts.css"><link rel="stylesheet" href="native.css"></head>');
   const scripts=[];html=html.replace(/<script src="([^\"]+)"[^>]*><\/script>/g,(tag,src)=>{if(src.split('?')[0]==='i18n.js')return tag;scripts.push(src);return '';});
   /* Scripts insérés d’un coup avec async=false : téléchargés en parallèle, exécutés dans l’ordre du HTML.

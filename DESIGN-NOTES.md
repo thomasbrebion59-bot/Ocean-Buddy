@@ -29,7 +29,7 @@ Conventions iOS 26 : barre d’onglets flottante en verre (Accueil, Explorer, Vo
 
 ## Identité
 
-Cobalt `#2154dc`, bleu de navigation `#174bd3`, sable `#f5f5f0`, corail `#fc7955` et citron vert `#e0ff91`. Grands titres Barlow Condensed, interface DM Sans et Manrope. Les fonds de lecture sont clairs ; le cobalt structure la navigation, les boutons et les profils. Les masques sur les photos de destinations ont été allégés.
+Cobalt `#2154dc`, bleu de navigation `#174bd3`, sable `#f5f5f0`, corail `#fc7955` et citron vert `#e0ff91`. Grands titres Barlow Condensed, interface Figtree (depuis le 18 novembre 2026 ; avant : DM Sans et Manrope). Les fonds de lecture sont clairs ; le cobalt structure la navigation, les boutons et les profils. Les masques sur les photos de destinations ont été allégés.
 
 L’aquarium, ses modales et ses récompenses de créatures sont retirés du parcours. Les défis, XP, badges et gestes pour l’océan restent accessibles. L’espace Surf trips est relié à l’accueil et à chaque fiche de spot.
 
