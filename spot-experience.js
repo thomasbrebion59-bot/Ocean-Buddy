@@ -198,6 +198,9 @@
     wave: 'Le vent vient de la terre (offshore) : il lisse les vagues, mais il te pousse vers le large. Reste près du bord et ne lâche pas ta planche.',
     other: 'Le vent vient de la terre : il te pousse vers le large et la mer paraît calme près du bord. Reste près du bord et préviens quelqu’un.'
   };
+  /* Avertissement de vent de terre d’un créneau (texte entier), ou '' : repris par la carte du créneau (onglet Prévisions)
+     et par la ligne « Ton créneau » de l’onglet Conditions (spot-before.js). */
+  const cautionOf = r => (r && r.status === 'ok' && r.offshore && (r.kind !== 'wave' || r.level === 'debutant') ? (r.kind === 'wave' ? OFFSHORE_TXT.wave : OFFSHORE_TXT.other) : '');
   function slotCard(label, r, inland) {
     if (r.status === 'ok') {
       const range = r.count > 1 ? `${hourFmt(+r.start.slice(11, 13))} – ${hourFmt(+r.end.slice(11, 13))}` : hourFmt(+r.start.slice(11, 13));
@@ -205,7 +208,7 @@
       if (r.wind) bits.push(Math.round(r.wind[0]) === Math.round(r.wind[1]) ? `Vent ${Math.round(r.wind[0])} km/h` : `Vent ${Math.round(r.wind[0])} à ${Math.round(r.wind[1])} km/h`);
       if (r.gust != null) bits.push(`rafales jusqu’à ${Math.round(r.gust)} km/h`);
       if (r.wave && !inland) bits.push(fmt1(r.wave[0]) === fmt1(r.wave[1]) ? `houle ${fmt1(r.wave[0])} m` : `houle ${fmt1(r.wave[0])} à ${fmt1(r.wave[1])} m`);
-      const caution = r.offshore && (r.kind !== 'wave' || r.level === 'debutant') ? `<p class="wx-slot-caution">${esc(r.kind === 'wave' ? OFFSHORE_TXT.wave : OFFSHORE_TXT.other)}</p>` : '';
+      const warn = cautionOf(r), caution = warn ? `<p class="wx-slot-caution">${esc(warn)}</p>` : '';
       return `<article class="wx-slot is-${r.quality}"><small>${esc(label)}</small><b>${esc(range)}</b><span class="wx-slot-q">${r.quality === 'good' ? 'Dans tes repères' : 'Possible, sans plus'}</span><p>${bits.map(b => `<span class="wx-bit">${esc(b)}</span>`).join(' · ')}</p>${caution}</article>`;
     }
     const why = r.status === 'night' ? 'Plus d’heure de jour aujourd’hui.' : r.status === 'nodata' ? 'Prévision incomplète pour ce jour.' : 'Aucun créneau dans tes repères ce jour-là.';
@@ -259,6 +262,19 @@
       + `<div><dt>Lever</dt><dd>${esc(clock(d.sunrise))}</dd></div><div><dt>Coucher</dt><dd>${esc(clock(d.sunset))}</dd></div></dl></article>`).join('')}</div>`;
   }
 
+  /* Une carte légère par jour (onglet Conditions) : la houle et le vent, ou l’air et le vent sur un plan d’eau. */
+  const DAY_IC = {
+    wave: '<path d="M2 17c2 0 3-1.6 5-1.6S10 17 12 17s3-1.6 5-1.6S20 17 22 17"/><path d="M3 12.4c2.2-4.4 6.6-6.2 10.8-4.8-2 .6-3.1 2.4-2.6 4.8"/>',
+    wind: '<path d="M3 9h11a3 3 0 1 0-3-3M3 13.5h15.5a3 3 0 1 1-3 3M3 18h6"/>',
+    air: '<path d="M10 13.6V5a2 2 0 1 1 4 0v8.6a4 4 0 1 1-4 0z"/><path d="M12 9.5v6"/>'
+  };
+  const dayIc = k => `<svg class="fx-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${DAY_IC[k]}</svg>`;
+  function nextDay(d, i, inland) {
+    const first = inland ? `<span class="fx-day-row">${dayIc('air')}<span>${d.tmax != null ? Math.round(d.tmax) + '°' : '—'}</span></span>`
+      : `<span class="fx-day-row">${dayIc('wave')}<span>${d.wave != null ? fmt1(d.wave) + ' m' : '—'}</span></span>`;
+    return `<article class="fx-day${i === 0 ? ' is-today' : ''}"><b>${esc(dayName(d.date, i))}</b>${first}<span class="fx-day-row">${dayIc('wind')}<span>${d.wind != null ? Math.round(d.wind) + ' km/h' : '—'}</span></span></article>`;
+  }
+
   let shown = null;
   function renderWeek(s, weather, marine, fetchedAt) {
     const host = $('#spotWeek'); if (!host) return;
@@ -266,21 +282,24 @@
     shown = {s, weather, marine, fetchedAt};
     const inland = isInland(s);
     const daily = W ? W.days(weather, marine, {inland}) : [];
-    const toBefore = (rule, today) => { try { window.OceanBefore?.slot(s, rule, today, hourFmt); } catch (e) {} };
+    const toBefore = (rule, today) => { try { window.OceanBefore?.slot(s, rule, today, hourFmt, cautionOf(today)); } catch (e) {} };
     if (!W || !daily.length) { host.innerHTML = '<p class="spot-week-empty">Les prévisions détaillées se chargeront dès que le modèle répondra.</p>'; toBefore(null); return; }
     const off = weather && weather.utc_offset_seconds, nowIso = W.localHourIso(off);
     const all = W.hours(weather, marine, {inland}), next = inland ? W.upcoming(all, nowIso, 48) : W.trimMarine(W.upcoming(all, nowIso, 48));
     const today = nowIso.slice(0, 10), tomorrow = (daily.find(d => d.date > today) || {}).date;
     const slots = slotsBlock(s, activeAct, all, nowIso, [today, tomorrow].filter(Boolean), inland);
-    /* Bandeau « Avant d’y aller » : le créneau d’aujourd’hui déjà calculé ici, sans nouvel appel. */
+    /* Ligne « Ton créneau » de l’onglet Conditions : le créneau d’aujourd’hui déjà calculé ici, sans nouvel appel. */
     toBefore(slots.rule, slots.today);
     const updated = fetchedAt ? new Intl.DateTimeFormat('fr-FR', {dateStyle: 'short', timeStyle: 'short'}).format(new Date(fetchedAt)) : 'heure non disponible';
     const gap = W.tzGap(off);
     const utc = (() => { const a = Math.abs(+off || 0), h = Math.floor(a / 3600), m = Math.round(a % 3600 / 60); return `UTC${off < 0 ? '−' : '+'}${h}${m ? ':' + String(m).padStart(2, '0') : ''}`; })();
-    host.innerHTML = `<div class="spot-week-head"><div><small>MÉTÉO DU SPOT</small><b>Cette semaine</b></div><span><span class="wx-stamp">Relevé ${esc(updated)}</span>${gap ? `<span class="wx-stamp">Heures locales du spot (${esc(utc)})</span>` : ''}</span></div>`
-      + `<div class="wx-block">${slots.html}</div>`
-      + `<div class="wx-block wx-hours"><div class="wx-sub"><h4>Heure par heure</h4><span>48 h</span></div>${hoursTable(next, daily, inland, slots.hours)}</div>`
-      + `<div class="wx-block wx-week"><div class="wx-sub"><h4>Les 7 jours</h4><span>Max du jour</span></div>${weekCards(daily, inland)}</div>`
+    /* Fiche v2 : le même bloc sert deux onglets (data-fx-view, lu par fiche.css). « Conditions » montre les trois
+       prochains jours et un lien ; « Prévisions » montre le créneau détaillé, les 7 jours et l’heure par heure. */
+    host.innerHTML = `<div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours</h3><div class="fx-days">${daily.slice(0, 3).map((d, i) => nextDay(d, i, inland)).join('')}</div><button type="button" class="fx-more" data-fx-tab="previsions">Toutes les prévisions</button></div>`
+      + `<div class="spot-week-head" data-fx-view="forecast"><h3 class="fx-title">Cette semaine</h3><span><span class="wx-stamp">Relevé ${esc(updated)}</span>${gap ? `<span class="wx-stamp">Heures locales du spot (${esc(utc)})</span>` : ''}</span></div>`
+      + `<div class="wx-block wx-best" data-fx-view="forecast">${slots.html}</div>`
+      + `<div class="wx-block wx-week" data-fx-view="forecast"><div class="wx-sub"><h4>Les 7 jours</h4><span>Max du jour</span></div>${weekCards(daily, inland)}</div>`
+      + `<div class="wx-block wx-hours" data-fx-view="forecast"><div class="wx-sub"><h4>Heure par heure</h4><span>48 h</span></div>${hoursTable(next, daily, inland, slots.hours)}</div>`
       + `<p class="spot-week-note"><span class="wx-stamp-note">Valeurs de modèle, indicatives, gardées une heure.</span>${inland ? '' : ' <span class="wx-stamp-note">Près des côtes, la précision des vagues est limitée. Pour la marée, consulte l’annuaire local.</span>'}</p>`
       + '<p class="wx-source"><a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Prévisions Open-Meteo (CC BY 4.0)</a></p>';
   }

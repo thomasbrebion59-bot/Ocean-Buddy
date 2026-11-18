@@ -200,7 +200,7 @@
     if(action?.dataset.fieldAction==='new'){setSport(null);openWorld('all');filterSpots(newFilter,'new',true);}
     if(action?.dataset.fieldAction==='trip')OceanTrips.fromSpot(currentSpot);
     if(action?.dataset.fieldAction==='conditions')showDetailCat('meteo');
-    if(action?.dataset.fieldAction==='emergency'){showDetailCat('meteo',false);requestAnimationFrame(()=>$('#dEmerg')?.scrollIntoView({block:'center',behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'}));}
+    if(action?.dataset.fieldAction==='emergency'){showDetailCat('securite',false);requestAnimationFrame(()=>$('#dEmerg')?.scrollIntoView({block:'center',behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'}));}
     const spot=e.target.closest('[data-field-spot]');if(spot)openSpot(spot.dataset.fieldSpot);
   });
   document.addEventListener('change',e=>{

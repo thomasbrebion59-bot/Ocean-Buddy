@@ -1,0 +1,245 @@
+/* @creme-tokens */
+/* Fiche de spot v2 (18 novembre 2026). Demande du fondateur : plus de bloc « Avant d’y aller », les conditions et les
+   prévisions tout de suite, un onglet Sécurité à part, moins de texte, une police et une mise en forme plus soignées.
+   Chargée après toutes les autres feuilles : elle pose l’en-tête compact, la rangée des sept onglets, les jetons et les
+   composants de la fiche, puis une section par onglet. Couleurs du thème actif seulement (--t-*).
+
+   CORPS DE TEXTE : tous les rôles lisent les variables posées sur #detail ci-dessous. Aucun corps en dur pour ces rôles :
+   changer une variable change toute la fiche (comparaison de tailles sans toucher au reste).
+     --fiche-num    grand chiffre d’un relevé (et numéro d’urgence)
+     --fiche-unit   unité à côté d’un grand chiffre
+     --fiche-title  titre de section
+     --fiche-label  libellé d’un relevé, d’une ligne, d’un bouton secondaire
+     --fiche-text   texte courant
+     --fiche-note   note, source, heure du relevé
+   À BANNIR dans la fiche : sur-titres en capitales espacées, numéros de section, chaînes reliées par des points médians,
+   cartes dans des cartes, bordures partout. Casse de phrase. Deux graisses au plus par bloc. */
+
+/* ================= Jetons ================= */
+.ocean-v2 #detail{
+  --fiche-num:42px;--fiche-unit:15px;--fiche-title:23px;--fiche-label:14.5px;--fiche-text:15.5px;--fiche-note:13px;
+  --fiche-gap:26px;        /* entre deux sections d’un onglet */
+  --fiche-radius:18px;     /* cartes ; 999px pour les pastilles et les boutons */
+  --fiche-soft:var(--t-ink2);
+  --fiche-wash:color-mix(in srgb,var(--t-main) 7%,var(--t-card));   /* fond d’une carte légère */
+  --fiche-hair:color-mix(in srgb,var(--t-ink) 12%,transparent);     /* filet discret */
+}
+
+/* ================= Composants (à réutiliser dans tous les onglets) ================= */
+/* Titre de section, texte, note. */
+#detail .fx-title{margin:0;font:800 var(--fiche-title)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
+#detail .fx-title-s{font-size:calc(var(--fiche-title) * .8)}
+#detail .fx-text{margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+#detail .fx-label{font:600 var(--fiche-label)/1.25 var(--body);color:var(--fiche-soft);letter-spacing:0;text-transform:none}
+#detail .fx-note,#detail .fx-stamp{font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft);letter-spacing:0;text-transform:none}
+/* Grand chiffre, unité, mot à la place d’un chiffre (« Descendante »). */
+#detail .fx-num{font:800 var(--fiche-num)/.95 var(--display);letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--t-ink)}
+#detail .fx-num.is-none{color:color-mix(in srgb,var(--t-ink) 35%,transparent)}
+#detail .fx-unit{font:500 var(--fiche-unit)/1.2 var(--body);color:var(--fiche-soft)}
+#detail .fx-word{font:700 calc(var(--fiche-num) * .52)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);overflow-wrap:anywhere}
+/* Pictogramme en trait. */
+#detail .fx-ic{flex:none;width:26px;height:26px;color:var(--t-ink)}
+/* Points de danger (quatre points, rouges jusqu’au niveau). */
+#detail .fx-dots{display:inline-flex;gap:4px;flex:none}
+#detail .fx-dots i,#detail .dtab-dots i{display:block;width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,var(--t-ink) 20%,transparent)}
+#detail .fx-dots i.on,#detail .dtab-dots i.on{background:var(--t-danger)}
+/* Relevé : pictogramme, libellé, grand chiffre et unité, sous-ligne facultative. Posé sur le fond, sans cadre. */
+#detail .fx-readings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}
+#detail .fx-reading{display:grid;grid-template-columns:26px minmax(0,1fr);column-gap:11px;row-gap:2px;align-items:start;min-width:0}
+#detail .fx-reading>.fx-ic{grid-row:1 / span 2;margin-top:1px}
+#detail .fx-reading>.fx-label{grid-column:2}
+#detail .fx-reading>.fx-value{grid-column:2;display:flex;align-items:baseline;flex-wrap:wrap;column-gap:7px;min-height:calc(var(--fiche-num) * .95)}
+#detail .fx-reading>.fx-sub{grid-column:2;font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft);min-height:calc(var(--fiche-note) * 1.3)}
+#detail .fx-reading-note{grid-column:1 / -1;margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--fiche-soft)}
+/* Ligne : pictogramme et phrase (« Ton créneau »). */
+#detail .fx-line,#detail .fx-slot{display:grid;grid-template-columns:26px minmax(0,1fr);column-gap:11px;row-gap:3px;align-items:center}
+/* Carte légère (jour de prévision, urgences) : pour ce qui se touche ou se compare. */
+#detail .fx-card{border-radius:var(--fiche-radius);background:var(--fiche-wash);padding:14px 14px 13px;border:0;box-shadow:none}
+/* Pastille. */
+#detail .fx-pill{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 12px;border-radius:999px;background:var(--fiche-wash);font:600 var(--fiche-note)/1 var(--body);color:var(--t-ink)}
+/* Lien d’action discret (« Toutes les prévisions »). */
+#detail .fx-more{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:0;padding:0 2px;border:0;background:none;font:700 var(--fiche-label)/1 var(--body);color:var(--t-main);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#detail .fx-more::after{content:"";width:7px;height:7px;border-top:2px solid currentColor;border-right:2px solid currentColor;transform:rotate(45deg)}
+[dir=rtl] #detail .fx-more::after{transform:rotate(-135deg)}
+#detail .fx-more:focus-visible,#detail .fx-alert:focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
+/* Alerte : danger élevé, phrase entière, jamais coupée. Première ligne : les points, le niveau, le lien. */
+#detail .fx-alert{display:grid;gap:5px;width:100%;box-sizing:border-box;margin:0 0 20px;padding:11px 14px 12px;border:0;border-radius:var(--fiche-radius);
+  background:color-mix(in srgb,var(--t-danger) 9%,var(--t-card));color:var(--t-ink);font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#detail .fx-alert-top{display:flex;flex-wrap:wrap;align-items:center;gap:4px 9px}
+#detail .fx-alert-top b{font:700 var(--fiche-text)/1.3 var(--body);color:var(--t-danger)}
+#detail .fx-alert-go{margin-inline-start:auto;font:700 var(--fiche-note)/1.3 var(--body);color:var(--t-ink);text-decoration:underline;text-underline-offset:3px}
+#detail .fx-alert-tx{font:400 var(--fiche-text)/1.4 var(--body);color:var(--t-ink)}
+
+/* ================= En-tête compact ================= */
+/* Environ un tiers de l’écran : la rangée d’onglets et les relevés se lisent sans défiler. Le nom, le lieu, les pastilles
+   niveau et sport, le crédit de la photo (obligatoire, petit). La température de l’eau du mois se lit dans Saisons. */
+@media(max-width:700px){
+  html .ocean-v2 #detail #detailHero{min-height:clamp(260px,33dvh,320px);height:auto}
+  html .ocean-v2 #detail #detailHero .htxt{padding:16px 20px 6px}
+  html .ocean-v2 #detail #detailHero h2{font-size:clamp(34px,10vw,46px);line-height:1}
+  html .ocean-v2 #detail #detailHero .eyebrow{display:none}
+  html .ocean-v2 #detail #detailHero .dfacts{padding-bottom:16px}
+}
+@media(min-width:701px){html .ocean-v2 #detail #detailHero{min-height:clamp(300px,40vh,420px)}}
+#detail .detail-hero .dfact-sea{display:none}
+/* « Voir la photo » : une pastille discrète en bas à droite de la photo (une ligne). */
+html body[data-screen=detail] #detail #detailHero .hero-more{top:auto!important;bottom:16px!important;right:14px!important;min-height:36px;padding:0 13px;border-radius:999px;
+  background:color-mix(in srgb,var(--t-scrim) 55%,transparent);color:var(--t-on-main);font:600 var(--fiche-note)/1 var(--body)}
+html #detail #detailHero .hero-more>b{display:none}
+
+/* ================= Rangée d’onglets ================= */
+/* Texte seul, collée en haut au défilement ; l’onglet Sécurité porte les points de danger du spot. */
+.ocean-v2 #detail .dtabs{gap:22px;min-height:50px;margin-bottom:18px;align-items:stretch;justify-content:flex-start;overflow-x:auto;scrollbar-width:none}
+.ocean-v2 #detail .dtabs::-webkit-scrollbar{display:none}
+.ocean-v2 #detail .dtab{flex:0 0 auto;display:inline-flex;flex-direction:row;align-items:center;gap:7px;min-height:50px;padding:0 1px;font:500 16px/1 var(--body);letter-spacing:0;color:var(--fiche-soft)!important;white-space:nowrap}
+.ocean-v2 #detail .dtab.active{font-weight:700;color:var(--t-main)!important}
+.ocean-v2 #detail .dtab.active::after{height:3px;border-radius:3px 3px 0 0}
+#detail .dtab-dots{display:inline-flex;gap:3px}
+#detail .dtab-dots[hidden]{display:none}
+#detail .dtab-dots i{width:7px;height:7px}
+@media(max-width:430px){.ocean-v2 #detail .dtabs{gap:20px}}
+
+/* Panneaux : fondu court à l’affichage (motion.css), colonnes souples, rien ne déborde. */
+.ocean-v2 #detail .dcat{min-width:0}
+
+/* =====================================================================================================
+   ONGLET CONDITIONS (data-cat="meteo", data-view="now")
+   ===================================================================================================== */
+/* Deux vues du même panneau : « now » (Conditions) et « forecast » (Prévisions). */
+#detail .dcat[data-cat="meteo"][data-view="now"] [data-fx-view="forecast"],
+#detail .dcat[data-cat="meteo"][data-view="forecast"] [data-fx-view="now"],
+#detail .dcat[data-cat="meteo"][data-view="forecast"]>:is(#dNow,.obf-head[data-obf-group="lire"],#sdCoach,#imWeatherHelp){display:none!important}
+/* Repris par les relevés : l’ancienne grille, son sur-titre et le bloc « comparé à la normale » ne sont plus affichés. */
+#detail .dcat[data-cat="meteo"]>:is(#dCondHead,#dWeather,#sdVsNormal){display:none!important}
+/* Ordre : activité, maintenant, prochains jours, puis l’aide. */
+#detail .dcat[data-cat="meteo"]>#immersionContext{order:0}
+#detail .dcat[data-cat="meteo"]>#dNow{order:1}
+#detail .dcat[data-cat="meteo"]>#spotWeek{order:2;margin:0}
+#detail .dcat[data-cat="meteo"]>:is(.obf-head[data-obf-group="lire"],#sdCoach,#imWeatherHelp){order:3}
+
+/* Sélecteur d’activité (spots à plusieurs activités) : pastilles, sans titre. */
+#detail .dcat[data-cat="meteo"]>#immersionContext{display:block;margin:0 0 18px;padding:0;border:0;background:none;box-shadow:none}
+#detail .dcat[data-cat="meteo"]>#immersionContext[hidden]{display:none}
+#detail #immersionContext .im-context-title{display:none}
+#detail #immersionContext .im-activity-choices{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0}
+#detail #immersionContext .im-activity-choices button{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 14px 0 8px;border:0;border-radius:999px;background:var(--fiche-wash);color:var(--t-ink);font:600 var(--fiche-label)/1 var(--body);box-shadow:none}
+#detail #immersionContext .im-activity-choices button[aria-pressed="true"]{background:var(--t-main);color:var(--t-on-main)}
+#detail #immersionContext .im-activity-choices button img,#detail #immersionContext .im-activity-choices button svg{width:26px;height:26px;border-radius:50%}
+
+/* Maintenant. */
+#detail .fx-now{margin:0 0 var(--fiche-gap)}
+#detail .fx-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 14px}
+#detail .fx-now .fx-row{margin:0}
+/* Chargement : mêmes cases et même hauteur que les relevés ; une barre claire à la place du chiffre. */
+#detail .fx-readings.db-wait{color:inherit;-webkit-user-select:auto;user-select:auto;min-height:0}
+#detail .fx-readings.db-wait::before{content:none}
+#detail .fx-wait{display:block;width:64px;height:calc(var(--fiche-num) * .62);margin:calc(var(--fiche-num) * .16) 0;border-radius:8px;background:var(--fiche-wash);animation:ob-wait 1.3s ease-in-out infinite}
+#detail .fx-readings{min-height:calc(2 * (var(--fiche-label) * 1.25 + var(--fiche-num) * .95 + var(--fiche-note) * 1.3 + 4px) + 20px)}
+#detail .fx-readings:has(>.fx-reading-note:only-child){align-content:center}
+#detail .fx-readings>.db-muted{grid-column:1 / -1;font:600 var(--fiche-text)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .fx-readings>.ob-retry{grid-column:1 / -1;justify-self:start}
+/* Ton créneau : une ligne. */
+#detail .fx-slot{margin:22px 0 0;padding:14px 0 0;border-top:1px solid var(--fiche-hair);align-items:start}
+#detail .fx-slot>.fx-ic{color:var(--t-sun);margin-top:-1px}
+#detail .fx-slot-k{grid-column:2;font:600 var(--fiche-label)/1.25 var(--body);color:var(--fiche-soft)}
+#detail .fx-slot>.db-v{grid-column:2;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;min-height:calc(var(--fiche-text) * 1.4);font:400 var(--fiche-text)/1.4 var(--body);color:var(--t-ink)}
+#detail .fx-slot>.db-v b{font-weight:700}
+#detail .fx-slot .db-q{font:600 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail .fx-slot .db-muted{color:var(--fiche-soft)}
+#detail .fx-slot .fx-caution{flex-basis:100%;margin:6px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--t-ink)}
+#detail .fx-slot .db-level{margin:4px 0 0}
+/* Les prochains jours : trois cartes légères et un lien. */
+#detail .fx-next{margin:0 0 var(--fiche-gap)}
+#detail .fx-next>.fx-title{margin:0 0 12px}
+#detail .fx-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#detail .fx-day{display:grid;gap:7px;min-width:0;padding:13px 11px 12px;border-radius:var(--fiche-radius);background:var(--fiche-wash)}
+#detail .fx-day.is-today{background:color-mix(in srgb,var(--t-sun) 22%,var(--t-card))}
+#detail .fx-day>b{font:700 var(--fiche-label)/1.2 var(--body);color:var(--t-ink);overflow-wrap:anywhere}
+#detail .fx-day-row{display:flex;align-items:center;gap:6px;min-width:0;font:500 var(--fiche-note)/1.2 var(--body);font-variant-numeric:tabular-nums;color:var(--t-ink);white-space:nowrap}
+#detail .fx-day-row .fx-ic{width:18px;height:18px;color:var(--fiche-soft)}
+#detail .fx-next>.fx-more{margin-top:6px}
+/* Pied : source du modèle et aide. */
+#detail .dcat[data-cat="meteo"] .spot-week-note,#detail .dcat[data-cat="meteo"] .wx-source{margin:0 0 6px;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="meteo"] .wx-source a{color:inherit}
+#detail .dcat[data-cat="meteo"]>.obf-head[data-obf-group="lire"]{margin-top:14px}
+
+/* fin de la section Conditions (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET PRÉVISIONS (data-cat="meteo", data-view="forecast")
+   ===================================================================================================== */
+#detail .dcat[data-cat="meteo"] .spot-week-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;margin:0 0 16px}
+#detail .dcat[data-cat="meteo"] .spot-week-head .wx-stamp{font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="meteo"] .wx-block{margin:0 0 var(--fiche-gap)}
+
+/* fin de la section Prévisions (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET SÉCURITÉ (data-cat="securite") : rien de replié, rien de tronqué
+   ===================================================================================================== */
+/* L’intertitre « Sécurité » de l’ancien onglet Conditions n’a plus lieu d’être : l’onglet porte ce nom. */
+.ocean-v2 #detail .dcat[data-cat="securite"]{margin-top:0}
+.ocean-v2 #detail .dcat[data-cat="securite"]::before{content:none!important;display:none!important}
+.ocean-v2 #detail .dcat[data-cat="securite"]:not([style*="none"]){display:flex;flex-direction:column}
+/* Ordre : danger et danger principal, urgences, dangers à surveiller, courants du moment. */
+#detail .dcat[data-cat="securite"]>*{order:5;min-width:0}
+#detail .dcat[data-cat="securite"]>#dDanger{order:1}
+#detail .dcat[data-cat="securite"]>.safety-block{order:2}
+#detail .dcat[data-cat="securite"]>#spotSafetyLive{order:6}
+#detail .fx-danger{margin:0 0 var(--fiche-gap)}
+#detail .fx-danger-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 8px}
+#detail .fx-danger-head .fx-dots i{width:12px;height:12px}
+#detail .fx-danger-text{margin:0 0 8px;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+#detail .fx-fit{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0 0 8px}
+#detail .fx-danger .fx-note{display:block}
+/* Numéro d’urgence : en grand, comme un relevé. */
+.ocean-v2 #detail .dcat[data-cat="securite"] .sc-num{font:800 var(--fiche-num)/.95 var(--display);letter-spacing:-.035em;font-variant-numeric:tabular-nums}
+
+/* fin de la section Sécurité (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET LE SPOT (data-cat="infos")
+   ===================================================================================================== */
+/* Déjà dans l’en-tête de la fiche : les tuiles « Ton activité / Le cadre / Repère de niveau ». */
+#detail .dcat[data-cat="infos"] #fieldAtAGlance{display:none!important}
+/* Numéros de chapitre des sections du guide. */
+#detail .guide-chapter-number{display:none!important}
+
+/* fin de la section Le spot (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET SAISONS (data-cat="saisons")
+   ===================================================================================================== */
+
+/* fin de la section Saisons (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET PRÉPARER (data-cat="activites")
+   ===================================================================================================== */
+
+/* fin de la section Préparer (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET NATURE (data-cat="faune", puis data-cat="preserver")
+   ===================================================================================================== */
+#detail .dcat[data-cat="preserver"]{margin-top:var(--fiche-gap)}
+
+/* fin de la section Nature (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* ================= Mouvement réduit ================= */
+@media (prefers-reduced-motion:reduce){#detail .fx-wait{animation:none}}
+body.reduce-motion #detail .fx-wait{animation:none}

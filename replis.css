@@ -2,52 +2,38 @@
 /* Moins d’informations d’un coup (replis.js) : sommaire et sections repliables de la fiche spot, replis simples du
    profil, du jeu et des défis. Jetons de thème uniquement (--t-*), courbes et durées de motion.css. */
 
-/* ---------- Fiche spot, onglet « Le spot » : sommaire puis sections ----------
-   Ordre par CSS (aucun nœud déplacé) : tête de section, puis ses membres ; un membre n’apparaît que si sa section est
-   ouverte (data-open de l’onglet). « Quand partir ? » double la ligne Saison d’« Avant d’y aller » et l’onglet Saisons :
-   il reste dans l’onglet Saisons. Tout élément inconnu passe après le sommaire, visible. */
+/* ---------- Fiche spot, onglet « Le spot » (fiche v2) ----------
+   Ordre par CSS (aucun nœud déplacé dans cet onglet) : la description, l’anecdote, les repères pratiques et le conseil
+   se lisent directement ; « Photos et carte » puis « Comprendre le spot » sont repliés (data-open de l’onglet) ; le bouton
+   « J’ai surfé ici » ferme l’onglet. Le danger principal se lit dans l’onglet Sécurité : son doublon n’est plus affiché
+   ici. « Quand partir ? » reste dans l’onglet Saisons. Tout élément inconnu passe à la fin, visible. */
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>*{order:90}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#dSeasonTeaser{display:none}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-label{order:1}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-head[data-obf-group="lieu"]{order:10}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#dSeasonTeaser,
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#fieldMainDanger{display:none!important}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-story{order:11;align-self:stretch;min-width:0}
 /* (align-self : la description prenait la largeur de sa rangée de repères, 710 px sur un écran de 430 px, et sortait
    de l’écran. Étirée à la largeur de la colonne, elle revient à la ligne ; la rangée de pastilles défile.) */
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#guideSpirit{order:12}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.anec-block{order:13}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-reference{order:14}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-head[data-obf-group="pratique"]{order:20}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-tip{order:21}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-visit{order:22}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-main-danger{order:23}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#spotImmersion{order:24}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-head[data-obf-group="autour"]{order:30}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#fieldOverview{order:31}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#guideAround{order:32}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#guideSleep{order:33}
-.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#fieldNearbyBlock{order:34}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.anec-block{order:12}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-visit{order:13}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-tip{order:14}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#guideSpirit{order:15}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-reference{order:16}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-head[data-obf-group="images"]{order:40}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#spotPhotoStrip{order:40;align-self:stretch;min-width:0}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#obVoyageBanner{order:41}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#spotVideoPanel{order:42}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#spotAreaMap{order:43}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-head[data-obf-group="reperes"]{order:50}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#spotImmersion{order:51}
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#dLogBtn{order:95}
 
 /* Sections fermées : leurs membres ne sont pas rendus (display, jamais retirés du DOM). */
-#detail .dcat[data-cat="infos"]:not([data-open~="lieu"])>:is(.field-story,#guideSpirit,.anec-block,.field-reference),
-#detail .dcat[data-cat="infos"]:not([data-open~="pratique"])>:is(.field-tip,#fieldVisit,#fieldMainDanger,#spotImmersion),
-#detail .dcat[data-cat="infos"]:not([data-open~="autour"])>:is(#fieldOverview,#guideAround,#guideSleep,#fieldNearbyBlock),
+#detail .dcat[data-cat="infos"]:not([data-open~="reperes"])>:is(#spotImmersion),
 #detail .dcat[data-cat="infos"]:not([data-open~="images"])>:is(#spotPhotoStrip,#obVoyageBanner,#spotVideoPanel,#spotAreaMap){display:none!important}
 /* Section ouverte : fondu montant (opacité et transform), une fois à l’ouverture. */
-#detail .dcat[data-cat="infos"][data-open~="lieu"]>:is(.field-story,#guideSpirit,.anec-block,.field-reference),
-#detail .dcat[data-cat="infos"][data-open~="pratique"]>:is(.field-tip,#fieldVisit,#fieldMainDanger,#spotImmersion),
-#detail .dcat[data-cat="infos"][data-open~="autour"]>:is(#fieldOverview,#guideAround,#guideSleep,#fieldNearbyBlock),
+#detail .dcat[data-cat="infos"][data-open~="reperes"]>:is(#spotImmersion),
 #detail .dcat[data-cat="infos"][data-open~="images"]>:is(#spotPhotoStrip,#obVoyageBanner,#spotVideoPanel,#spotAreaMap){animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-snap,ease) backwards}
 
-/* Le danger principal se lit en entier dans « Avant d’y aller » (son bloc détaillé est replié dans « Infos pratiques ») :
-   jusqu’à trois lignes au lieu d’une ligne coupée. Posé dès le rendu de la fiche, sans attente réseau. */
-#detail .d-before .db-danger-text{-webkit-line-clamp:3}
-
-.obf-label{margin:6px 2px 10px;font:800 12px/1.3 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--t-ink2)}
 .obf-head{display:flex;align-items:center;gap:12px;width:100%;min-height:64px;box-sizing:border-box;margin:0 0 10px;padding:10px 12px 10px 16px;
   border:1px solid var(--t-line);border-radius:16px;background:var(--t-card);color:var(--t-ink);font:inherit;text-align:left;cursor:pointer;
   -webkit-tap-highlight-color:transparent;transition:transform var(--ob-t-release,.34s) var(--ob-snap,ease),border-color .2s ease}
@@ -119,14 +105,9 @@ details.chal-why[open]>span{animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-s
    Le danger principal d’« Avant d’y aller » se lit en entier (la limite de trois lignes plus haut est levée). */
 #detail .d-before .db-danger-text{display:block;-webkit-line-clamp:none;line-clamp:none;overflow:visible;max-height:none;text-overflow:clip;white-space:normal}
 
-/* ---------- fiche-apercu ----------
-   « Le lieu » fermé : le sous-titre montre le début réel de la description (texte entier recopié par replis.js, déjà
-   traduit), coupé ici à deux lignes. Le libellé générique n’est masqué que visuellement : le nom du bouton reste « Le lieu »
-   et son libellé court (l’aperçu est aria-hidden). Repli ouvert ou spot sans description : le libellé générique revient.
-   Repli ouvert : le lieu et le nom, déjà dans l’en-tête de la fiche, ne sont pas répétés (affichage seulement, les
-   données restent dans le DOM) ; les coordonnées passent après la description et sa provenance (field-guide.js). */
-.obf-peek{display:none}
-#detail .obf-head[data-peek][aria-expanded="false"] .obf-peek{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;font:600 13px/1.35 var(--body);color:var(--t-ink2);overflow-wrap:break-word}
-#detail .obf-head[data-peek][aria-expanded="false"] .obf-tx>small{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+/* ---------- Description du lieu ----------
+   Le lieu et le nom, déjà dans l’en-tête de la fiche, ne sont pas répétés au-dessus de la description (affichage
+   seulement, les données restent dans le DOM) ; les coordonnées passent après la description et sa provenance
+   (field-guide.js). */
 #detail .dcat[data-cat="infos"]>.field-story>h4{display:none}
 #detail .dcat[data-cat="infos"]>.field-story>.field-coordinates{margin:14px 0 0}

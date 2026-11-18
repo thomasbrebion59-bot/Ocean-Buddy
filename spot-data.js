@@ -430,14 +430,19 @@
     const c = C && C.spots[s.id], m = new Date().getMonth();
     const parse = v => { const x = parseFloat(String(v || '').replace(',', '.')); return Number.isFinite(x) ? x : null; };
     const t = parse(l && l.temp), h = parse(l && l.swell), rows = [];
+    /* Fiche v2 : le même écart, en sous-ligne courte des relevés « Eau » et « Houle » de l’onglet Conditions (spot-before.js). */
+    const short = { sea: '', swell: '' };
     if (c && c.sea && t != null) {
       const d = Math.round((t - c.sea[m]) * 10) / 10;
+      short.sea = Math.abs(d) < 1 ? 'Proche de la normale du mois' : d > 0 ? `${num(Math.abs(d), 0)} °C au-dessus de la normale` : `${num(Math.abs(d), 0)} °C sous la normale`;
       rows.push([I.temp, `Eau ${num(t, 0)} °C`, Math.abs(d) < 1 ? `proche de la normale de ${monthName(m)} (${num(c.sea[m])} °C)` : `${d > 0 ? '+' : '−'}${num(Math.abs(d), 0)} °C par rapport à la normale de ${monthName(m)} (${num(c.sea[m])} °C)`, d >= 1 ? 'up' : d <= -1 ? 'down' : '']);
     }
     if (c && c.wave && h != null) {
       const n = c.wave.hs[m], r = n ? h / n : 1;
+      short.swell = r > 1.35 ? 'Plus forte que d’habitude' : r < 0.65 ? 'Plus calme que d’habitude' : 'Dans la moyenne du mois';
       rows.push([I.wave, `Houle ${num(h, 1)} m`, r > 1.35 ? `plus forte que d’habitude en ${monthName(m)} (moyenne ${num(n, 1)} m)` : r < 0.65 ? `plus calme que d’habitude en ${monthName(m)} (moyenne ${num(n, 1)} m)` : `dans la moyenne de ${monthName(m)} (${num(n, 1)} m)`, r > 1.35 ? 'up' : r < 0.65 ? 'down' : '']);
     }
+    try { window.OceanBefore?.normal(s, short); } catch (e) {}
     host.hidden = !rows.length;
     host.innerHTML = rows.length ? `<p class="sd-vs-title">Aujourd’hui, comparé à la normale</p>${rows.map(r => `<div class="sd-vs-row ${r[3]}">${icon(r[0])}<span><b>${esc(r[1])}</b><small>${esc(r[2])}</small></span></div>`).join('')}` : '';
   }

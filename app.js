@@ -1011,13 +1011,10 @@ function renderPreserve(s){
    + '</div></div>';
   return h;
 }
-/* Onglet « Préserver » : affiché seulement quand la zone du spot a ses gestes (PRESERVE). Masqué alors qu'il
-   était ouvert, on retombe sur « Le spot » sans faire défiler la page. */
 function preserveTab(on){
-  var tab=document.querySelector('#dTabs .dtab[data-cat="preserver"]');
-  if(!tab)return;
-  tab.style.display=on?'':'none';
-  if(!on&&tab.classList.contains('active'))showDetailCat('infos',false);
+  /* Fiche v2 : « Préserver » n'est plus un onglet, ses gestes suivent la faune dans « Nature ». Sans gestes pour la zone
+     du spot, son panneau reste vide (renderPreserve), rien d'autre à masquer. */
+  var host=document.getElementById('dPreserve');if(host)host.hidden=!on;
 }
 function renderFaune(s){
   var host=document.getElementById('dFaune'); if(!host) return;
@@ -1099,28 +1096,38 @@ function showHomeCat(cat){
   /* On reste à la hauteur des onglets (ils sont bas dans l’accueil) au lieu de remonter tout en haut. Jamais pendant le démarrage. */
   var tabs=document.getElementById('homeTabs'); if(tabs&&!document.documentElement.classList.contains('ob-booting')&&tabs.getBoundingClientRect().top<0) tabs.scrollIntoView({block:'start'});
 }
+/* Fiche v2 : sept onglets (index.html, #dTabs). « Prévisions » est une seconde vue du panneau des conditions
+   (attribut data-view lu par fiche.css) ; « Nature » montre la faune puis les gestes pour préserver ; la sécurité a
+   son propre onglet. Un ancien nom (« preserver ») mène à l'onglet qui porte ce contenu aujourd'hui. */
+const DETAIL_TABS=['meteo','previsions','securite','infos','saisons','activites','faune'];
+function detailTabOf(cat){return cat==='preserver'?'faune':DETAIL_TABS.indexOf(cat)>=0?cat:'meteo';}
 function showDetailCat(cat,shouldScroll=true){
-  /* « Conditions » porte deux panneaux : la météo et la sécurité. Les deux
-     répondent à la même question avant d'entrer dans l'eau. */
+  var tab=detailTabOf(cat),panel=tab==='previsions'?'meteo':tab;
   document.querySelectorAll('#detail .dcat').forEach(function(d){
-    var on=(d.dataset.cat===cat)||(cat==='meteo'&&d.dataset.cat==='securite');
+    var c=d.dataset.cat,on=c===panel||(tab==='faune'&&c==='preserver');
     d.style.display=on?'':'none';
+    if(c==='meteo')d.dataset.view=tab==='previsions'?'forecast':'now';
   });
-  /* cinq onglets ne tiennent pas dans 390 px : on amène l'onglet actif
+  var detail=document.getElementById('detail');if(detail)detail.dataset.tab=tab;
+  /* sept onglets ne tiennent pas dans 390 px : on amène l'onglet actif
      dans le champ de vision au lieu de le laisser hors écran. */
   setTimeout(function(){
     var bar=document.getElementById('dTabs');
     var act=bar&&bar.querySelector('.dtab.active');
     if(bar&&act) bar.scrollTo({left:Math.max(0,act.offsetLeft-14),behavior:'smooth'});
   },0);
-  document.querySelectorAll('#dTabs .dtab').forEach(function(b){b.classList.toggle('active',b.dataset.cat===cat);});
+  document.querySelectorAll('#dTabs .dtab').forEach(function(b){var on=b.dataset.cat===tab;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'true':'false');});
   var tabs=document.getElementById('dTabs');
   if(tabs&&shouldScroll){
     var anchor=document.getElementById('detailTabsAnchor');
     if(!anchor){anchor=document.createElement('div');anchor.id='detailTabsAnchor';tabs.before(anchor);}
     var wrap=document.getElementById('screenWrap');
-    wrap.scrollTo({top:wrap.scrollTop+anchor.getBoundingClientRect().top-wrap.getBoundingClientRect().top,behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'});
+    /* Un onglet touché en haut de fiche ne fait pas défiler la page (la photo reste en vue). La page ne remonte que si la
+       rangée était déjà collée en haut, donc si on lisait plus bas : le nouvel onglet se lit depuis son début. */
+    if(anchor.getBoundingClientRect().top<tabs.getBoundingClientRect().top-1)wrap.scrollTo({top:wrap.scrollTop+anchor.getBoundingClientRect().top-wrap.getBoundingClientRect().top,behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'});
   }
+  /* Ancien raccourci « Préserver » : jusqu'aux gestes, sous la faune. */
+  if(cat==='preserver'){var pres=document.getElementById('dPreserve');if(pres)requestAnimationFrame(function(){try{pres.scrollIntoView({block:'start',behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'});}catch(e){}});}
 }
 function worldLab(sid){
   if(typeof SPOT_WORLD==='undefined'||typeof WORLDS==='undefined')return '';
@@ -1291,7 +1298,8 @@ function openSpot(id){
   const ownDangers=(Array.isArray(s.dangers)?s.dangers:[]).filter(d=>Array.isArray(d)&&d[1]);
   const carnetDangers=!ownDangers.length&&s.carnet&&Array.isArray(s.carnet.dangers)?s.carnet.dangers.filter(d=>Array.isArray(d)&&d[1]):[];
   document.getElementById('dDangers').innerHTML=ownDangers.map(dangerRow).join('')||(carnetDangers.length?carnetTag()+carnetDangers.map(dangerRow).join(''):'')||'<p><b>Danger non évalué</b></p><p>Vérifie les consignes locales avant ta sortie.</p>';
-  showDetailCat('infos',false);
+  /* Fiche v2 : elle s'ouvre sur les conditions. */
+  showDetailCat('meteo',false);
   /* Les modules annexes (communauté, guide, carte) ne doivent jamais bloquer l’ouverture de la fiche. */
   try{window.OceanCommunity?.mountSpot(id);}catch(e){console.warn('community',e);}
   try{window.OceanSpotGuide?.update(s);}catch(e){console.warn('guide',e);}

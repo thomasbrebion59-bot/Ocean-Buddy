@@ -19,12 +19,13 @@ test('immersion : une seule entrée (la bannière), photos dans la galerie de l�
   assert.ok(!/google\.com\/search\?tbm=isch/.test(read('app.js')));
 });
 
-test('bandeau « Avant d’y aller » : aucun appel réseau, branché sur la météo déjà chargée', () => {
+test('panneau « Maintenant » (ancien bandeau « Avant d’y aller ») : aucun appel réseau, branché sur la météo déjà chargée', () => {
   const src = read('spot-before.js');
   assert.ok(!/fetch\(|open-meteo|XMLHttpRequest/.test(src));
   assert.match(read('app.js'), /OceanBefore\?\.live\(s,o\)/);
   assert.match(read('spot-experience.js'), /OceanBefore\?\.slot\(/);
   assert.match(read('spot-data.js'), /OceanBefore\?\.season\(/);
+  assert.match(read('spot-data.js'), /OceanBefore\?\.normal\(s, short\)/, 'écart à la normale du mois, en sous-ligne des relevés');
   const html = read('index.html');
   assert.ok(html.indexOf('spot-fit-model.js') > html.indexOf('src="app.js') && html.indexOf('spot-before.js') > html.indexOf('spot-fit-model.js'));
 });

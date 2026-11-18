@@ -18,7 +18,7 @@
       else if(focus.matches('#worldGrid button'))focusSelector='#worldGrid .'+[...focus.classList].find(c=>c.startsWith('world-'));
       else if(focus.id)focusSelector='#'+CSS.escape(focus.id);
     }
-    return {screen:document.body.dataset.screen||'home',world:spotWorld,country:spotCountry,sport:activeSport,filter:currentFilter,search:currentSearch,favorites:favOnly,near:nearMode,shown:spotShown,view:$('#mapView').style.display==='none'?'list':'map',mapFull,spot:currentSpot,detailSport,detailTab:$('#dTabs .dtab.active')?.dataset.cat||'infos',homeTab:$('#homeTabs .htab.active')?.dataset.hcat||'jour',trip:window.OceanTrips.route(),scroll:wrap.scrollTop,focusSelector};
+    return {screen:document.body.dataset.screen||'home',world:spotWorld,country:spotCountry,sport:activeSport,filter:currentFilter,search:currentSearch,favorites:favOnly,near:nearMode,shown:spotShown,view:$('#mapView').style.display==='none'?'list':'map',mapFull,spot:currentSpot,detailSport,detailTab:$('#dTabs .dtab.active')?.dataset.cat||'meteo',homeTab:$('#homeTabs .htab.active')?.dataset.hcat||'jour',trip:window.OceanTrips.route(),scroll:wrap.scrollTop,focusSelector};
   }
   function routeKey(r){return JSON.stringify([r.screen,!!r.mapFull,r.screen==='spots'?[r.world,r.country,r.sport]:r.screen==='detail'?r.spot:r.screen==='trips'?r.trip?.selected:null]);}
   function label(r){
@@ -116,8 +116,9 @@
     if(route.screen==='detail'&&SPOTS.some(s=>s.id===route.spot)){
       openSpot(route.spot);
       if(route.detailSport)setDetailSport(route.detailSport);
-      document.querySelectorAll('#detail .dcat').forEach(el=>{el.style.display=el.dataset.cat===route.detailTab||(route.detailTab==='meteo'&&el.dataset.cat==='securite')?'':'none';});
-      document.querySelectorAll('#dTabs .dtab').forEach(el=>el.classList.toggle('active',el.dataset.cat===route.detailTab));
+      /* Onglet retrouvé au Retour (fiche v2 : showDetailCat connaît les sept onglets et les anciens noms ; sans défilement,
+         la position de la page est rendue plus bas). */
+      showDetailCat(route.detailTab||'meteo',false);
     }else { if(route.screen==='community')window.OceanCommunity?.render(); go(route.screen==='detail'?'home':route.screen); }
     applying=false;update();
   }

@@ -75,11 +75,7 @@
     context.innerHTML=`<div class="im-context-title">${icon(a)}<span><small>${options.length>1?'ICI, TU AS ENVIE DE…':'L’ACTIVITÉ DU SPOT'}</small><b>${esc(SPORTMAP[a].label)}</b></span></div>${options.length>1?`<div class="im-activity-choices" role="group" aria-label="Activité sur ce spot">${options.map(id=>`<button type="button" data-im-activity="${id}" aria-pressed="${id===a}">${sportIcon(id)}<span>${esc(SPORTMAP[id].label.replace(/\s*\(.*\)/,''))}</span></button>`).join('')}</div>`:''}`;
     draw();
     const weatherHelp=$('#imWeatherHelp');weatherHelp.innerHTML=`${icon(a)}<span><b>Ces chiffres, ça veut dire quoi ?</b><small>Poulpy t’explique le vent${isInland(s)?' et l’eau.':', les vagues et la marée.'}</small></span>`;
-    document.querySelectorAll('#dTabs .dtab').forEach(b=>{
-      /* Un picto propre à chaque onglet de la fiche (assets/pictos/onglets-fiche). */
-      const f=PoulpyIcons.file('ft-'+b.dataset.cat)||PoulpyIcons.src(a);
-      let image=b.querySelector('.poulpy-mini');if(image){if(!image.src.endsWith(f))image.src=f;}else{b.querySelector('svg')?.remove();b.insertAdjacentHTML('afterbegin',`<img class="poulpy-mini ob-ico ft-ico" src="${f}" alt="" width="48" height="48" decoding="async">`);}
-    });
+    /* Fiche v2 : les onglets sont en texte seul (plus de pictogramme posé ici). */
   }
   function refreshConditions(s,data){
     if(spot?.id!==s.id)return;live=data;

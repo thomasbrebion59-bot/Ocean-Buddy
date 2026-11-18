@@ -13,8 +13,8 @@ const groupsSrc = js.slice(js.indexOf('const GROUPS = ['), js.indexOf('const inf
 const groups = [...groupsSrc.matchAll(/\{ id: '(\w+)', title: '([^']+)', sub: '([^']+)', members: \[([^\]]+)\] \}/g)]
   .map(m => ({ id: m[1], title: m[2], sub: m[3], members: m[4].split(',').map(s => s.trim().replace(/^'|'$/g, '')) }));
 
-test('fiche : quatre sections, chaque membre replié par CSS quand sa section est fermée', () => {
-  assert.deepEqual(groups.map(g => g.id), ['lieu', 'pratique', 'autour', 'images']);
+test('fiche v2, onglet « Le spot » : deux sections repliées, chaque membre replié par CSS quand sa section est fermée', () => {
+  assert.deepEqual(groups.map(g => g.id), ['reperes', 'images']);
   for (const g of groups) {
     const rule = css.match(new RegExp(`:not\\(\\[data-open~="${g.id}"\\]\\)>:is\\(([^)]+)\\)`));
     assert.ok(rule, 'règle de repli : ' + g.id);
@@ -24,16 +24,15 @@ test('fiche : quatre sections, chaque membre replié par CSS quand sa section es
   assert.match(css, /\{display:none!important\}/);
 });
 
-test('fiche : la sécurité reste visible ou à un toucher, les sources restent dans leur section', () => {
+test('fiche v2 : la description, l’anecdote, le conseil et les repères pratiques se lisent sans repli ; la sécurité a son onglet', () => {
   const folded = groups.flatMap(g => g.members).join(' ');
-  for (const s of ['#dBefore', '.d-before', '#dDangers', '#dEmerg', '#dCall', 'securite', '#spotSafetyLive', '#dLogBtn']) assert.ok(!folded.includes(s), 'jamais replié : ' + s);
-  /* Le danger principal se lit en entier dans « Avant d’y aller » (voir « sécurité jamais repliée » plus bas) ; son bloc
-     détaillé, qui ne dit rien de plus, reste dans « Infos pratiques ». */
-  assert.ok(groups.find(g => g.id === 'pratique').members.includes('#fieldMainDanger'), 'bloc détaillé du danger : replié, pas retiré');
-  assert.ok(groups.find(g => g.id === 'pratique').members.includes('#fieldVisit'), 'règles locales et leurs sources : dans « Infos pratiques »');
-  /* « Quand partir ? » n’est masqué que dans l’onglet « Le spot » (il double la ligne Saison et l’onglet Saisons). */
-  assert.match(css, /dcat\[data-cat="infos"\]\.field-overview>#dSeasonTeaser\{display:none\}/);
+  for (const s of ['#dBefore', '#dNow', '#dDanger', '#dDangers', '#dEmerg', '#dCall', 'securite', '#spotSafetyLive', '#dLogBtn', '.field-story', '.anec-block', '.field-tip', '#fieldVisit', '.field-reference']) assert.ok(!folded.includes(s), 'jamais replié : ' + s);
+  /* Le danger principal se lit dans l’onglet Sécurité : son doublon de l’onglet « Le spot » n’est plus affiché. */
+  assert.match(css, /dcat\[data-cat="infos"\]\.field-overview>#dSeasonTeaser,\n[^{]*dcat\[data-cat="infos"\]\.field-overview>#fieldMainDanger\{display:none!important\}/);
   assert.match(html, /<div class="dcat" data-cat="saisons"[^>]*><div id="dSeasons"/, 'l’onglet Saisons garde le détail');
+  /* « Dormir et alentours » : rangé une fois dans « Préparer », retrouvé par ses id. */
+  assert.match(js, /const MOVED = \{ activites: \['#fieldOverview', '#guideAround', '#guideSleep', '#fieldNearbyBlock'\] \};/);
+  assert.match(js, /if \(el && el\.parentNode !== to\) to\.append\(el\);/, 'rangement idempotent');
 });
 
 test('fiche : têtes accessibles (bouton, aria-expanded, aria-controls), raccourcis qui ouvrent la bonne section', () => {
@@ -43,7 +42,7 @@ test('fiche : têtes accessibles (bouton, aria-expanded, aria-controls), raccour
   /* Phase de capture : la section s’ouvre avant le défilement du module (« Dès … la nuit », aide du vent). */
   assert.match(js, /\[data-guide-jump\][\s\S]*reveal\(document\.getElementById\(jump\.dataset\.guideJump\)\)[\s\S]*\}, true\);/);
   assert.match(js, /\[data-im-open\],#imWeatherHelp/);
-  /* Nouveau spot : tout replié ; état jamais enregistré. */
+  /* Nouveau spot : tout replié ; état jamais enregistré sur l’appareil. */
   assert.match(js, /lastSpot = cur; closeAll\(\);/);
   assert.doesNotMatch(js, /localStorage|sessionStorage/);
 });
@@ -78,7 +77,7 @@ test('profil, jeu, défis : replis à un toucher, rien de retiré', () => {
 
 test('traductions : nouveaux textes en anglais et en espagnol', () => {
   const en = JSON.parse(read('locales/translations/en.json')), es = JSON.parse(read('locales/translations/es.json')), src = JSON.parse(read('locales/source/fr.json'));
-  const keys = ['Dans cette fiche', 'Pourquoi ça compte', 'Tous les trophées', 'Toutes les figures', 'La planète, l’immersion, les envies du moment, le mini-jeu et Poulpy', ...groups.flatMap(g => [g.title, g.sub])];
+  const keys = ['Pourquoi ça compte', 'Tous les trophées', 'Toutes les figures', 'La planète, l’immersion, les envies du moment, le mini-jeu et Poulpy', ...groups.flatMap(g => [g.title, g.sub])];
   for (const k of keys) {
     assert.ok(src.includes(k), 'source FR : ' + k);
     assert.ok(typeof en[k] === 'string' && en[k].trim() && en[k] !== k, 'EN : ' + k);
@@ -94,11 +93,12 @@ for (const m of tabSrc.matchAll(/(\w+): \[([\s\S]*?)\n    \]/g)) {
     .map(x => ({ id: x[1], title: x[2], sub: x[3], members: x[4].split(',').map(v => v.trim().replace(/^'|'$/g, '')) }));
 }
 
-test('onglets : Saisons, Conditions, Préparer et Faune ont leurs sections repliables', () => {
+test('onglets : Saisons, Conditions, Préparer et Nature ont leurs sections repliables ; Sécurité n’en a aucune', () => {
   assert.deepEqual(Object.keys(tabGroups), ['saisons', 'meteo', 'activites', 'faune']);
+  assert.ok(!('securite' in tabGroups), 'aucun repli dans l’onglet Sécurité');
   assert.deepEqual(tabGroups.saisons.map(g => g.id), ['courbes']);
-  assert.deepEqual(tabGroups.meteo.map(g => g.id), ['heures', 'lire']);
-  assert.deepEqual(tabGroups.activites.map(g => g.id), ['depart', 'surplace', 'adresses']);
+  assert.deepEqual(tabGroups.meteo.map(g => g.id), ['lire'], 'l’heure par heure est ouverte dans Prévisions');
+  assert.deepEqual(tabGroups.activites.map(g => g.id), ['autour', 'depart', 'surplace', 'adresses']);
   assert.deepEqual(tabGroups.faune.map(g => g.id), ['photos', 'typiques']);
   /* Un seul système : mêmes têtes (.obf-head, aria-expanded, aria-controls), repli par attribut, jamais retiré du DOM. */
   assert.match(js, /head\.className = 'obf-head'/);
@@ -211,7 +211,7 @@ test('sécurité jamais repliée : « Si tu es emporté » et « Repérer une ba
     const r = M.coach({ act, level, spot: { dangers: [['🌀', 'Courants de baïne très forts.']] }, live: null, clim: null, m: 0, monthName: 'janvier' });
     for (const l of r.levels) for (const b of l.blocks) assert.ok(!titles.includes(b.h), `${act} / ${level} / ${l.id} : « ${b.h} » est revenu dans le repli`);
   }
-  /* spot-data.js les pose juste après le bloc « Dangers & vigilance » (panneau Sécurité, affiché avec Conditions). */
+  /* spot-data.js les pose juste après le bloc « Dangers & vigilance » (onglet Sécurité). */
   const sd = read('spot-data.js');
   assert.match(sd, /const box = \$\('#dDangers'\)\?\.closest\('\.block'\);/);
   assert.match(sd, /box\.after\(host\);/);
@@ -219,26 +219,30 @@ test('sécurité jamais repliée : « Si tu es emporté » et « Repérer une ba
   assert.match(sd, /try \{ renderRip\(s\); \} catch \(e\) \{\}/);
   assert.doesNotMatch(sd.slice(sd.indexOf('function renderRip'), sd.indexOf('function renderRip') + 1500), /<details|data-obf/, 'pas de repli dans la carte');
   assert.match(html, /<div class="dcat" data-cat="securite"[^>]*>\s*<div class="block band"[^>]*><h4>[\s\S]*?Dangers & vigilance<\/h4><div id="dDangers"><\/div><\/div>/);
-  assert.match(read('app.js'), /\(cat==='meteo'&&d\.dataset\.cat==='securite'\)/);
+  /* Fiche v2 : la sécurité a son onglet, dont le panneau s’affiche en entier (aucune vue, aucun repli). */
+  assert.match(html, /<button type="button" class="dtab" data-cat="securite" onclick="showDetailCat\('securite'\)">/);
+  assert.match(read('app.js'), /const DETAIL_TABS=\['meteo','previsions','securite','infos','saisons','activites','faune'\];/);
   /* Aucune règle ne masque ni ne coupe la carte (hors [hidden], posé seulement quand le spot n’a ni surf ni bodyboard). */
   for (const cls of ['sd-rip', 'sd-rip-part']) assertNotCut(cls);
 });
 
-test('sécurité jamais repliée : le danger principal d’« Avant d’y aller » se lit en entier, sans toucher', () => {
-  for (const s of ['#dBefore', '.d-before', 'db-danger', 'db-rows']) assert.ok(!allFolded().includes(s), 'jamais replié : ' + s);
+test('sécurité jamais repliée : le danger principal se lit en entier en tête de l’onglet Sécurité et dans l’alerte de Conditions', () => {
+  for (const s of ['#dDanger', 'fx-danger', '#dNow', 'fx-alert']) assert.ok(!allFolded().includes(s), 'jamais replié : ' + s);
   const before = read('spot-before.js');
-  assert.match(before, /body\.prepend\(host\)/, 'au-dessus des onglets, hors de tout repli');
-  assert.match(before, /<span class="db-danger-text">\$\{esc\(d\.text\)\}<\/span>/, 'texte entier, aucune découpe en JS');
-  /* Le bloc détaillé replié (#fieldMainDanger) ne dit rien de plus : le même premier danger et la mention « non vérifié »,
-     déjà repris dans le bandeau (pas de doublon visible). */
-  assert.match(before, /d\.basis === 'carnet' \? '<small class="db-carnet">Carnet Ocean Buddy · non vérifié<\/small>'/);
+  assert.match(before, /headHost\.id = 'dDanger';[^\n]*\n\s*panel\.prepend\(headHost\);/, 'premier bloc de l’onglet Sécurité');
+  assert.match(before, /<p class="fx-danger-text">\$\{esc\(d\.text\)\}<\/p>/, 'texte entier, aucune découpe en JS');
+  assert.match(before, /<span class="fx-alert-tx">\$\{esc\(d\.text\)\}<\/span>/, 'alerte : phrase entière');
+  assert.match(before, /if \(g\.n == null \|\| g\.n < 3\) return '';/, 'alerte seulement à partir de 3 sur 4');
+  assert.match(before, /d\.basis === 'carnet' \? '<small class="fx-note">Carnet Ocean Buddy, non vérifié<\/small>'/);
+  /* Points de danger sur l’onglet lui-même, lus aussi par les lecteurs d’écran. */
+  assert.match(before, /tab\.setAttribute\('aria-label', `Sécurité, danger \$\{g\.n\} sur 4`\)/);
+  assert.match(html, /<span>Sécurité<\/span><span class="dtab-dots" id="dTabDanger" aria-hidden="true"><\/span>/);
   const fg = read('field-guide.js'), fd = fg.slice(fg.indexOf('function mainDanger(s){'), fg.indexOf('function mapURL'));
   assert.match(fd, /const d=own\[0\]\|\|carnet\[0\];/);
-  assert.match(fd, /<span>\$\{esc\(d\[1\]\)\}<\/span><\/div>\$\{!own\.length&&typeof carnetTag==='function'\?carnetTag\(\):''\}/);
   assert.match(read('spot-fit-model.js'), /const d = own\[0\] \|\| carnet\[0\];/);
   /* CSS : aucune règle gagnante ne limite le texte (line-clamp, max-height, overflow caché, nowrap, hauteur fixe). */
-  assertNotCut('db-danger-text');
-  for (const cls of ['db-danger', 'db-rows', 'd-before']) {
+  for (const cls of ['fx-danger-text', 'fx-alert-tx', 'fx-caution']) assertNotCut(cls);
+  for (const cls of ['fx-danger', 'fx-alert', 'fx-now']) {
     const w = cascade(cls);
     assert.ok(!w['max-height'] || w['max-height'].val === 'none', `.${cls} max-height (${w['max-height']?.where})`);
     assert.ok(!['hidden', 'clip'].includes(w.overflow?.val), `.${cls} overflow (${w.overflow?.where})`);
@@ -283,7 +287,7 @@ test('photos du lieu : rangées dans « Photos et carte » (la photo du haut ouv
 
 test('traductions : sections des autres onglets et nouveaux libellés en anglais et en espagnol', () => {
   const en = JSON.parse(read('locales/translations/en.json')), es = JSON.parse(read('locales/translations/es.json')), src = JSON.parse(read('locales/source/fr.json'));
-  const keys = [...Object.values(tabGroups).flat().flatMap(g => [g.title, g.sub]), 'Choisis ton niveau pour savoir si ce spot te correspond', 'Dépend de ton niveau', 'Cette semaine'];
+  const keys = [...Object.values(tabGroups).flat().flatMap(g => [g.title, g.sub]), 'Choisis ton niveau pour savoir si ce spot te correspond', 'Cette semaine', 'Les prochains jours', 'Toutes les prévisions', 'Voir la sécurité', 'Prévisions'];
   for (const k of keys) {
     assert.ok(src.includes(k), 'source FR : ' + k);
     assert.ok(typeof en[k] === 'string' && en[k].trim() && en[k] !== k, 'EN : ' + k);
@@ -291,131 +295,9 @@ test('traductions : sections des autres onglets et nouveaux libellés en anglais
   }
 });
 
-/* ---------- fiche-apercu : « Le lieu » fermé montre le début réel de la description ----------
-   Le sous-titre du repli fermé recopie le texte ENTIER de #dDesc tel qu’affiché (déjà traduit par i18n.js, dont les clés
-   sont des phrases françaises entières) ; la coupe à deux lignes est faite par CSS. Sans description ou repli ouvert :
-   libellé générique. Le nom du bouton reste court. */
 const vm = require('node:vm');
-const catalog = (() => { const ctx = { window: {} }; vm.runInNewContext(read('catalog-runtime.js'), ctx); return ctx.window.OCEAN_CATALOG; })();
-const descOf = id => catalog.find(s => s.id === id).desc;
-const en = JSON.parse(read('locales/translations/en.json')), es = JSON.parse(read('locales/translations/es.json'));
 
-/* Le bloc de replis.js (syncPeek, syncPeeks, observateur de #dDesc) exécuté avec de faux nœuds. */
-function peekWorld() {
-  const node = (attrs = {}) => ({ attrs: { ...attrs }, textContent: '', setAttribute(k, v) { this.attrs[k] = String(v); }, removeAttribute(k) { delete this.attrs[k]; }, hasAttribute(k) { return k in this.attrs; } });
-  const peekHtml = js.match(/const PEEK_HTML = '([^']+)';/)[1];
-  const peek = node(Object.fromEntries([...peekHtml.matchAll(/ ([\w-]+)(?:="([^"]*)")?/g)].map(m => [m[1], m[2] ?? ''])));
-  const head = node({ 'aria-expanded': 'false' }); head.querySelector = s => (s === '.obf-peek' ? peek : null);
-  const desc = node(), tab = {}, observers = [];
-  const ctx = {
-    window: { MutationObserver: true }, observers,
-    MutationObserver: class { constructor(cb) { this.cb = cb; } observe(target, opts) { observers.push({ target, opts, cb: this.cb }); } },
-    $: (s, r) => (s === '#dDesc' ? desc : r === tab && s === '.obf-head[data-obf-group="lieu"]' ? head : null),
-    infos: () => tab
-  };
-  vm.createContext(ctx);
-  vm.runInContext(js.match(/const PEEK = \{[^}]*\};/)[0].replace('const ', 'var ') + '\n' + js.slice(js.indexOf('function syncPeek('), js.indexOf('function openSet(')), ctx);
-  /* Ce que font openSpot (textContent) puis i18n.js (nodeValue en place) : une mutation observée sur #dDesc. */
-  const setDesc = t => { desc.textContent = t; observers.filter(o => o.target === desc).forEach(o => o.cb([])); };
-  return { head, peek, desc, setDesc, observers, ctx };
-}
-
-test('fiche-apercu : avec description, « Le lieu » fermé montre le texte réel en entier (coupé par CSS seulement)', () => {
-  const w = peekWorld(), full = descOf('hossegor');
-  w.setDesc(full);
-  assert.equal(w.peek.textContent, full, 'texte entier, mot pour mot, aucune coupe en JS');
-  assert.ok(w.head.hasAttribute('data-peek'));
-  /* Espaces multiples du DOM ramenés à un seul, rien d’autre. */
-  w.setDesc('  ' + descOf('tulamben').replace(/ /, '\n   ') + ' ');
-  assert.equal(w.peek.textContent, descOf('tulamben'));
-  assert.doesNotMatch(js.slice(js.indexOf('function syncPeek('), js.indexOf('function openSet(')), /slice\(|substring\(|substr\(|…|\.\.\./, 'aucun résumé ni découpe');
-  /* L’aperçu n’est ni traduit une seconde fois (texte déjà traduit) ni lu par les lecteurs d’écran. */
-  assert.equal(w.peek.attrs['aria-hidden'], 'true');
-  assert.ok('data-no-i18n' in w.peek.attrs);
-});
-
-test('fiche-apercu : sans description, le libellé générique reste', () => {
-  const w = peekWorld();
-  w.setDesc(descOf('hossegor'));
-  for (const empty of ['', '   \n ']) {
-    w.setDesc(empty);
-    assert.equal(w.peek.textContent, '');
-    assert.ok(!w.head.hasAttribute('data-peek'), 'pas d’aperçu : le sous-titre générique est affiché');
-  }
-  /* Aucun spot du catalogue n’est sans description : le cas réel est un spot privé enregistré sans texte. */
-  assert.match(read('private-spots.js'), /desc:typeof raw\.desc==='string'\?raw\.desc\.slice\(0,400\)/);
-});
-
-test('fiche-apercu : changement de langue, l’aperçu suit le texte affiché (traduction entière, jamais un morceau)', () => {
-  const w = peekWorld();
-  /* Observé : remplacement du texte (nouveau spot) ET modification en place (traduction par i18n.js). */
-  const o = w.observers.find(x => x.target === w.desc);
-  assert.ok(o, 'observateur sur #dDesc');
-  assert.deepEqual({ ...o.opts }, { childList: true, characterData: true, subtree: true });
-  for (const id of ['hossegor', 'tulamben']) {
-    const fr = descOf(id);
-    assert.ok(en[fr] && es[fr], 'la description entière est une clé traduite : ' + id);
-    w.setDesc(fr); assert.equal(w.peek.textContent, fr);
-    w.setDesc(en[fr]); assert.equal(w.peek.textContent, en[fr], 'EN : ' + id);
-    w.setDesc(es[fr]); assert.equal(w.peek.textContent, es[fr], 'ES : ' + id);
-  }
-  /* Le dictionnaire couvre toutes les descriptions du catalogue, en entier. */
-  assert.equal(catalog.filter(s => !en[s.desc] || !es[s.desc]).length, 0);
-  /* Changer de langue recharge la page et navigation.js rouvre la fiche avant que replis.js n’écoute « ocean:navigate » :
-     le sommaire est posé dès le chargement du script si la fiche est déjà ouverte. */
-  assert.match(js, /if \(document\.body\?\.dataset\.screen === 'detail'\) \{[\s\S]*?closeAll\(\); closeTabs\(\);\s*\}/);
-  assert.match(read('i18n.js'), /setLanguage: function \(code\) \{[\s\S]*?location\.replace/);
-  assert.ok(html.indexOf('src="navigation.js') < html.indexOf('src="replis.js'));
-});
-
-/* Cascade réduite aux règles de replis.css qui visent `target`, selon l’état de la tête (aperçu, ouverte). */
-function headRules(target) {
-  return styleRules(css).flatMap(r => splitTop(r.sel, ',').filter(s => s.includes(target)).map(sel => ({ sel, body: r.body })));
-}
-function appliesTo(sel, st) {
-  const m = sel.match(/\.obf-head((?:\[[^\]]+\])*)/); if (!m) return true;
-  return [...m[1].matchAll(/\[([\w-]+)(?:="([^"]*)")?\]/g)].every(([, k, v]) => (k === 'data-peek' ? st.peek : k === 'aria-expanded' ? String(st.open) === v : true));
-}
-function decl(target, st, prop) {
-  let val = null;
-  for (const r of headRules(target)) if (appliesTo(r.sel, st)) for (const d of splitTop(r.body, ';')) { const k = d.indexOf(':'); if (d.slice(0, k).trim() === prop) val = d.slice(k + 1).trim(); }
-  return val;
-}
-
-test('fiche-apercu : ouverture et fermeture du repli, le sous-titre redevient générique une fois ouvert', () => {
-  const shut = { peek: true, open: false }, open = { peek: true, open: true }, none = { peek: false, open: false };
-  /* Fermé avec description : aperçu sur deux lignes, libellé générique masqué visuellement seulement. */
-  assert.equal(decl('.obf-peek', shut, 'display'), '-webkit-box');
-  assert.equal(decl('.obf-peek', shut, '-webkit-line-clamp'), '2');
-  assert.equal(decl('.obf-peek', shut, 'overflow'), 'hidden');
-  assert.equal(decl('.obf-tx>small', shut, 'clip-path'), 'inset(50%)');
-  /* Ouvert : la phrase ne se lit pas deux fois. Sans description : rien ne change. */
-  for (const st of [open, none]) {
-    assert.equal(decl('.obf-peek', st, 'display'), 'none', JSON.stringify(st));
-    assert.equal(decl('.obf-tx>small', st, 'clip-path'), null, JSON.stringify(st));
-  }
-  /* Le libellé générique n’est jamais retiré de l’arbre d’accessibilité : le nom du bouton ne change pas. */
-  for (const st of [shut, open, none]) assert.notEqual(decl('.obf-tx>small', st, 'display'), 'none');
-  /* Le basculement passe par aria-expanded, posé par setGroup (clic sur la tête) ; un nouveau spot repart fermé. */
-  assert.match(js, /setGroup\(head\.dataset\.obfGroup, head\.getAttribute\('aria-expanded'\) !== 'true'\)/);
-  assert.match(js, /head\.innerHTML = `<span class="obf-tx"><b>\$\{g\.title\}<\/b><small>\$\{g\.sub\}<\/small>\$\{PEEK\[g\.id\] \? PEEK_HTML : ''\}<\/span>/);
-  assert.match(js, /\n    syncPeeks\(\);\n    return tab;/, 'aperçu recopié à chaque pose du sommaire');
-});
-
-test('fiche-apercu : seuls « Le lieu » et son aperçu changent ; les trois autres replis gardent leur libellé', () => {
-  assert.deepEqual(Object.keys(vm.runInNewContext('(' + js.match(/const PEEK = (\{[^}]*\});/)[1] + ')')), ['lieu']);
-  assert.deepEqual(groups.map(g => [g.id, g.title, g.sub]), [
-    ['lieu', 'Le lieu', 'Description, esprit du lieu et anecdotes'],
-    ['pratique', 'Infos pratiques', 'Marée, règles locales, danger et conseils'],
-    ['autour', 'Dormir et alentours', 'Nuits pas chères, lieux et spots voisins'],
-    ['images', 'Photos et carte', 'Photos, vidéos et carte du secteur']
-  ]);
-  /* Règles ajoutées groupées en fin de fichier, après « finitions-securite ». */
-  assert.ok(css.indexOf('---------- fiche-apercu ----------') > css.indexOf('---------- finitions-securite ----------'));
-  assert.ok(css.indexOf('.obf-peek') > css.indexOf('---------- fiche-apercu ----------'));
-});
-
-test('fiche-apercu : repli « Le lieu » ouvert, ni lieu ni nom répétés ; coordonnées après la description', () => {
+test('description du lieu : ni lieu ni nom répétés au-dessus ; coordonnées après la description', () => {
   /* Affichage seulement, et seulement dans l’onglet « Le spot » : les données restent posées. */
   assert.match(css, /#detail \.dcat\[data-cat="infos"\]>\.field-story>h4\{display:none\}/);
   const fg = read('field-guide.js');

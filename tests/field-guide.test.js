@@ -259,13 +259,13 @@ test('checklist kayak, paddle et rivière : gilet cité par sourceRef vers data/
   }
 });
 
-test('checklist : la case « numéro d’urgence » mène à #dEmerg (onglet Conditions)',()=>{
+test('checklist : la case « numéro d’urgence » mène à #dEmerg (onglet Sécurité)',()=>{
   const html=G.render(spot('hossegor'),'surf');
   assert.match(html,/<button type="button" class="field-check-go" data-field-action="emergency">Voir le numéro d’urgence<\/button>/);
   assert.equal((html.match(/data-field-action="emergency"/g)||[]).length,1);
   const scrolls=[],view=loadGuide({},{'#dEmerg':{scrollIntoView:opts=>scrolls.push(opts)}});
   view.handlers.click({target:{closest:selector=>selector==='[data-field-action]'?{dataset:{fieldAction:'emergency'}}:null}});
-  assert.deepEqual(plain(view.calls),[['showDetailCat','meteo',false]]);
+  assert.deepEqual(plain(view.calls),[['showDetailCat','securite',false]]);
   assert.deepEqual(plain(scrolls),[{block:'center',behavior:'smooth'}]);
 });
 

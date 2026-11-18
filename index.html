@@ -41,7 +41,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
   mo.observe(d,{childList:true,subtree:true});addEventListener('DOMContentLoaded',function(){mo.disconnect();});})(A[new Date().getDate()%A.length][1]);}
 })();</script>
 <noscript><style>#obBoot{display:none}</style></noscript>
-<script src="i18n.js?v=86be46a04966"></script>
+<script src="i18n.js?v=3366f6ed39e2"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
 <meta name="theme-color" content="#fef9eb">
@@ -89,8 +89,9 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <link rel="stylesheet" href="spot-before.css?v=8fc1f1d69b56">
 <link rel="stylesheet" href="organisation.css?v=d0f1deca3c06">
 <link rel="stylesheet" href="cultures.css?v=70bea98e563c">
-<link rel="stylesheet" href="replis.css?v=3be08ea5d8cb">
+<link rel="stylesheet" href="replis.css?v=7414566ecf27">
 <link rel="stylesheet" href="fiches-organisation.css?v=859175e358c2">
+<link rel="stylesheet" href="fiche.css?v=9501a16c075d">
 <link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ocean Buddy">
@@ -312,24 +313,29 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
         <button class="hero-immersion" id="dImmersionBtn" type="button" aria-label="Ouvrir le mode immersion">Mode immersion</button>
       </div>
       <div class="detail-body">
+        <!-- Fiche v2 (18 nov. 2026) : sept onglets en texte seul, juste sous la photo. « Conditions » est l’onglet d’ouverture ;
+             « Prévisions » est une seconde vue du même panneau (data-view) ; « Nature » réunit la faune et les gestes pour préserver.
+             Les points de danger du spot sont posés dans l’onglet Sécurité par le module du panneau « Maintenant ». -->
         <div class="dtabs" id="dTabs">
-          <button class="dtab active" data-cat="infos" onclick="showDetailCat('infos')"><img class="poulpy-mini ob-ico ft-ico" src="assets/pictos/onglets-fiche/ft-infos.webp" alt="" width="48" height="48" loading="lazy" decoding="async"> Le spot</button>
-          <button class="dtab" data-cat="saisons" onclick="showDetailCat('saisons')"><img class="poulpy-mini ob-ico ft-ico" src="assets/pictos/onglets-fiche/ft-saisons.webp" alt="" width="48" height="48" loading="lazy" decoding="async"> Saisons</button>
-          <button class="dtab" data-cat="meteo" onclick="showDetailCat('meteo')"><img class="poulpy-mini ob-ico ft-ico" src="assets/pictos/onglets-fiche/ft-meteo.webp" alt="" width="48" height="48" loading="lazy" decoding="async"> Conditions</button>
-          <button class="dtab" data-cat="activites" onclick="showDetailCat('activites')"><img class="poulpy-mini ob-ico ft-ico" src="assets/pictos/onglets-fiche/ft-activites.webp" alt="" width="48" height="48" loading="lazy" decoding="async"> Préparer</button>
-          <button class="dtab" data-cat="faune" onclick="showDetailCat('faune')"><img class="poulpy-mini ob-ico ft-ico" src="assets/pictos/onglets-fiche/ft-faune.webp" alt="" width="48" height="48" loading="lazy" decoding="async"> Faune</button>
-          <button class="dtab" data-cat="preserver" onclick="showDetailCat('preserver')"><img class="poulpy-mini ob-ico ft-ico" src="assets/pictos/onglets-fiche/ft-preserver.webp" alt="" width="48" height="48" loading="lazy" decoding="async"> Préserver</button>
+          <button type="button" class="dtab active" data-cat="meteo" onclick="showDetailCat('meteo')">Conditions</button>
+          <button type="button" class="dtab" data-cat="previsions" onclick="showDetailCat('previsions')">Prévisions</button>
+          <button type="button" class="dtab" data-cat="securite" onclick="showDetailCat('securite')"><span>Sécurité</span><span class="dtab-dots" id="dTabDanger" aria-hidden="true"></span></button>
+          <button type="button" class="dtab" data-cat="infos" onclick="showDetailCat('infos')">Le spot</button>
+          <button type="button" class="dtab" data-cat="saisons" onclick="showDetailCat('saisons')">Saisons</button>
+          <button type="button" class="dtab" data-cat="activites" onclick="showDetailCat('activites')">Préparer</button>
+          <button type="button" class="dtab" data-cat="faune" onclick="showDetailCat('faune')">Nature</button>
         </div>
-        <div class="dcat" data-cat="infos">
+        <div class="dcat" data-cat="infos" style="display:none">
                     <div class="block"><h4><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/guide/g-check.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> À propos du spot</h4><p id="dDesc"></p><p class="spot-provenance" id="dSource"></p></div>
           <div class="block anec-block acc-sand"><h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M9.5 18h5M10.5 21h3M12 3a6 6 0 0 0-3.6 10.8c.4.3.6.8.6 1.2h6c0-.4.2-.9.6-1.2A6 6 0 0 0 12 3z"/></svg> Le savais-tu ?</h4><p id="dAnec"></p>
           <div class="anec-more" id="dFunBlock"><b>La vraie histoire</b><p id="dFun"></p></div></div>
           <div class="block" style="background:linear-gradient(135deg,var(--t-tint),var(--t-card));"><div class="tip-head"><span class="tip-octo" id="dTipOcto"></span><h4>Le conseil de Poulpy</h4></div><p id="dTip"></p></div>
+          <button class="cta" id="dLogBtn" onclick="logSession()">J'ai surfé ici<span class="cta-xp">+40 XP</span></button>
         </div>
 
         <div class="dcat" data-cat="saisons" style="display:none"><div id="dSeasons" class="sd-seasons"></div></div>
 
-        <div class="dcat" data-cat="meteo" style="display:none">
+        <div class="dcat" data-cat="meteo" data-view="now">
           <div class="cond-head" id="dCondHead">Conditions du moment</div>
         <div class="wcond" id="dWeather"></div>
           <section class="spot-week" id="spotWeek" aria-live="polite"></section>
@@ -370,7 +376,6 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
         </div>
         </div>
 
-        <button class="cta" id="dLogBtn" onclick="logSession()">J'ai surfé ici<span class="cta-xp">+40 XP</span></button>
       </div>
     </section>
 
@@ -612,9 +617,9 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="spot-photos.js?v=ece4f2871d12"></script>
 <script src="progression.js?v=573fcb54b5ba"></script>
 <script src="spot-rank-model.js?v=475e2af88a53"></script>
-<script src="app.js?v=63b61394c5fc"></script>
+<script src="app.js?v=3eefae7f70bc"></script>
 <script src="spot-fit-model.js?v=23cae691490e"></script>
-<script src="spot-before.js?v=0b54a96c2851"></script>
+<script src="spot-before.js?v=b4a981d830eb"></script>
 <script src="private-spots.js?v=683221818ade"></script>
 <script src="poulpy-knowledge.js?v=00c4ab3bd0f8"></script>
 <script src="design.js?v=850a0d1c082e"></script>
@@ -627,22 +632,22 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="spot-notebook-model.js?v=8982c4683ab8"></script>
 <script src="spot-notebook.js?v=907f72c991ec"></script>
 <script src="spot-gallery.js?v=1ddf3441baff"></script>
-<script src="field-guide.js?v=61bf1d318b56"></script>
+<script src="field-guide.js?v=d1d2053b0d4f"></script>
 <script src="spot-immersion-model.js?v=8c6489617564"></script>
-<script src="spot-immersion.js?v=65a3f8707d0f"></script>
+<script src="spot-immersion.js?v=43370efce8a4"></script>
 <script src="spot-guide-model.js?v=c3f7a4f0dd2b"></script>
 <script src="spot-guide.js?v=e549d390ac30"></script>
 <script src="spot-data-model.js?v=4fe8c13f0248"></script>
 <script src="spot-weather-model.js?v=96ad189a5406"></script>
-<script src="spot-data.js?v=61d535a71815"></script>
+<script src="spot-data.js?v=f500091670cf"></script>
 <script src="spot-plan.js?v=8ff389198595"></script>
 <script src="ocean-sst.js?v=d283a91350a2"></script>
 <script src="deep-link.js?v=7f961879456a"></script>
-<script src="spot-experience.js?v=3cd3582d3ddc"></script>
+<script src="spot-experience.js?v=a91aee8fb278"></script>
 <script src="community-config.js?v=991b61c2fed6"></script>
 <script src="trip-sharing.js?v=e29f4931ffd4"></script>
 <script src="community.js?v=43352388a466"></script>
-<script src="navigation.js?v=b883b750548e"></script>
+<script src="navigation.js?v=cbf8e59f9dfc"></script>
 <script src="ocean-sound.js?v=7e7f5190346a"></script>
 <script src="polish.js?v=7b989c7f5998"></script>
 <script src="spot-scenes.js?v=82700c22eafe"></script>
@@ -666,6 +671,6 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="native-glass.js?v=1e031ad3005b"></script>
 <script src="motion.js?v=ec4d7c893550"></script>
 <script src="motion-media.js?v=21145e2c7af3"></script>
-<script src="replis.js?v=b3f6526b113d"></script>
+<script src="replis.js?v=6ef1c407b796"></script>
 </body>
 </html>

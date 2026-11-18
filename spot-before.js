@@ -1,12 +1,15 @@
-/* Fiche spot : bandeau « Avant d’y aller » (juste sous le titre) et pastille « adapté à ton niveau » des cartes.
-   Le bandeau ne fait AUCUN appel réseau et n’invente aucune donnée : il relit ce que la fiche a déjà chargé ou calculé.
-     - niveau et jauge de danger : catalogue + dangerGauge (app.js), comparés au niveau des Réglages (SpotFitModel.fit) ;
-     - saison du mois : spot-data.js, quand les normales sont chargées (OceanBefore.season) ;
+/* Fiche spot v2 (18 nov. 2026) : panneau « Maintenant » en tête de l’onglet Conditions, points de danger de l’onglet
+   Sécurité, tête de cet onglet (niveau de danger et danger principal) et pastille « adapté à ton niveau » des cartes.
+   L’ancien bandeau « Avant d’y aller », posé entre la photo et les onglets, n’est plus affiché (demande du fondateur) :
+   ce qu’il disait vit dans les onglets. Le module garde son nom d’interface (OceanBefore) : les autres modules lui
+   passent déjà leurs données.
+   Il ne fait AUCUN appel réseau et n’invente aucune donnée : il relit ce que la fiche a déjà chargé ou calculé.
      - conditions du moment : LIVE[id] rempli par fetchConditions (app.js, OceanBefore.live) ;
-     - meilleur créneau : calculé par spot-experience.js pour la météo de la fiche (OceanBefore.slot) ;
-     - numéro d’urgence : countryEmergency (app.js), même source que l’onglet Conditions.
-   Chaque ligne garde sa place pendant le chargement (pas de saut dans la fiche). La fiche s’ouvre après la levée du rideau :
-   ce module ne touche ni à l’accueil ni à la barre d’onglets. */
+     - écart à la normale du mois : spot-data.js, quand les normales sont chargées (OceanBefore.normal) ;
+     - créneau du jour : calculé par spot-experience.js pour la météo de la fiche (OceanBefore.slot) ;
+     - niveau et jauge de danger : catalogue + dangerGauge (app.js), comparés au niveau des Réglages (SpotFitModel.fit).
+   Chaque relevé garde sa place pendant le chargement (pas de saut dans la fiche). La fiche s’ouvre après la levée du
+   rideau : ce module ne touche ni à l’accueil ni à la barre d’onglets de l’app. */
 (() => {
   'use strict';
   const F = window.SpotFitModel;
@@ -14,7 +17,7 @@
   const esc = v => String(v ?? '').replace(/[&<>"']/g, c => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[c]));
   const LABEL = {fit: 'Adapté à ton niveau', stretch: 'Exigeant pour ton niveau', above: 'Au-dessus de ton niveau'};
   const LEVEL = {debutant: 'Débutant', intermediaire: 'Intermédiaire', expert: 'Expert'};
-  let spot = null, host = null;
+  let spot = null, host = null, headHost = null, normals = null;
 
   const userLevel = () => { try { if (typeof chosenLevel !== 'undefined' && chosenLevel) return chosenLevel; } catch (e) {} return null; };
   const gaugeOf = s => { try { return typeof dangerGauge === 'function' ? dangerGauge(s) : {n: null}; } catch (e) { return {n: null}; } };
@@ -29,73 +32,106 @@
     return `<span class="fit-pill fit-${r.kind} is-card" title="Repère d’après ton niveau et la jauge de danger">${esc(LABEL[r.kind])}</span>`;
   }
 
+  /* Le panneau « Maintenant » est le premier bloc de l’onglet Conditions ; le sélecteur d’activité (spot-immersion.js,
+     affiché seulement quand le spot en a plusieurs) est rangé juste au-dessus, dans le même onglet. */
   function ensure() {
     if (host && host.isConnected) return host;
-    const body = $('#detail .detail-body'); if (!body) return null;
+    const panel = $('#detail .dcat[data-cat="meteo"]'); if (!panel) return null;
     host = document.createElement('section');
-    host.id = 'dBefore'; host.className = 'd-before'; host.setAttribute('aria-labelledby', 'dBeforeTitle');
-    body.prepend(host);
-    host.addEventListener('click', e => { if (e.target.closest('[data-before-safety]')) openSafety(); });
+    host.id = 'dNow'; host.className = 'fx-now'; host.setAttribute('aria-labelledby', 'dNowTitle');
+    panel.prepend(host);
     return host;
   }
-
-  /* « Sécurité & secours » : onglet Conditions, puis directement le bloc des dangers et du numéro d’urgence. */
-  function openSafety() {
-    if (typeof showDetailCat !== 'function') return;
-    showDetailCat('meteo', false);
-    const target = $('#detail .dcat[data-cat="securite"]'), wrap = $('#screenWrap'), tabs = $('#dTabs');
-    if (!target || !wrap) return;
-    requestAnimationFrame(() => {
-      const chrome = $('.app-chrome'), top = (chrome ? chrome.getBoundingClientRect().height : 0) + (tabs ? tabs.getBoundingClientRect().height : 0) + 8;
-      const y = wrap.scrollTop + target.getBoundingClientRect().top - wrap.getBoundingClientRect().top - top;
-      const calm = document.body.classList.contains('reduce-motion') || (window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches);
-      wrap.scrollTo({top: Math.max(0, y), behavior: calm ? 'auto' : 'smooth'});
-      const h = target.querySelector('h4'); if (h) { h.setAttribute('tabindex', '-1'); h.focus({preventScroll: true}); }
-    });
+  function arrange() {
+    const panel = $('#detail .dcat[data-cat="meteo"]'), context = $('#immersionContext');
+    if (panel && context && context.parentNode !== panel) panel.prepend(context);
+  }
+  /* Tête de l’onglet Sécurité : le niveau de danger et le danger principal, en entier, avant tout le reste. */
+  function ensureHead() {
+    if (headHost && headHost.isConnected) return headHost;
+    const panel = $('#detail .dcat[data-cat="securite"]'); if (!panel) return null;
+    headHost = document.createElement('section');
+    headHost.id = 'dDanger'; headHost.className = 'fx-danger'; headHost.setAttribute('aria-labelledby', 'dDangerTitle');
+    panel.prepend(headHost);
+    return headHost;
   }
 
-  function dots(n) { let h = ''; for (let i = 0; i < 4; i++) h += `<i class="${n != null && i < n ? 'on' : ''}"></i>`; return `<span class="db-dots" aria-hidden="true">${h}</span>`; }
+  /* Onglet Sécurité, d’un toucher (alerte de l’onglet Conditions, liste « Avant de partir »). */
+  function openSafety() { if (typeof showDetailCat === 'function') showDetailCat('securite'); }
+
+  const dotsInner = n => { let h = ''; for (let i = 0; i < 4; i++) h += `<i class="${n != null && i < n ? 'on' : ''}"></i>`; return h; };
+  const dots = n => `<span class="fx-dots" aria-hidden="true">${dotsInner(n)}</span>`;
 
   /* L’invitation au niveau, d’un toucher : elle ouvre « Mon sport et mon niveau ». Un seul composant et un seul libellé,
-     repris tels quels par « Ton meilleur créneau » (onglet Conditions, spot-experience.js). */
+     repris tels quels par « Ton meilleur créneau » (onglet Prévisions, spot-experience.js). */
   const levelButton = () => '<button type="button" class="db-level" data-open-level>Choisis ton niveau pour savoir si ce spot te correspond</button>';
 
-  function fitBlock(s) {
-    const r = fitOf(s), lv = userLevel();
-    /* La case « Ton créneau » ne la répète pas. */
-    if (!r || r.kind === 'nolevel') return levelButton();
-    if (r.kind === 'unrated') return '<p class="db-note">Danger non évalué ici : renseigne-toi sur place avant d’entrer.</p>';
-    if (r.kind === 'zones') return '<p class="db-note">Le niveau change selon la zone : demande sur place laquelle te correspond.</p>';
-    return `<p class="db-note">D’après ton niveau (${esc(LEVEL[lv] || '')}) : un repère, pas une garantie.</p>`;
-  }
+  const ICON = {
+    wind: '<path d="M3 9h11a3 3 0 1 0-3-3M3 13.5h15.5a3 3 0 1 1-3 3M3 18h6"/>',
+    wave: '<path d="M2 17c2 0 3-1.6 5-1.6S10 17 12 17s3-1.6 5-1.6S20 17 22 17"/><path d="M3 12.4c2.2-4.4 6.6-6.2 10.8-4.8-2 .6-3.1 2.4-2.6 4.8"/>',
+    temp: '<path d="M10 13.6V5a2 2 0 1 1 4 0v8.6a4 4 0 1 1-4 0z"/><path d="M12 9.5v6"/>',
+    tide: '<path d="M2 8c2 0 3-1.5 5-1.5S10 8 12 8s3-1.5 5-1.5S20 8 22 8M2 13c2 0 3-1.5 5-1.5s3 1.5 5 1.5 3-1.5 5-1.5 3 1.5 5 1.5M2 18c2 0 3-1.5 5-1.5s3 1.5 5 1.5 3-1.5 5-1.5 3 1.5 5 1.5"/>',
+    sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3 7 7M17 17l1.7 1.7M5.3 18.7 7 17M17 7l1.7-1.7"/>'
+  };
+  const icon = k => `<svg class="fx-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
 
-  function dangerLine(s) {
+  /* Un relevé : pictogramme, libellé, grand chiffre et unité, puis une sous-ligne facultative (écart à la normale). */
+  function reading(key, label, num, unit, sub) {
+    return `<div class="fx-reading" data-reading="${key}">${icon(key)}<span class="fx-label">${label}</span>`
+      + `<span class="fx-value">${num}${unit ? `<span class="fx-unit">${unit}</span>` : ''}</span>`
+      + `<small class="fx-sub" data-reading-sub="${key}">${sub ? esc(sub) : ''}</small></div>`;
+  }
+  /* Place réservée pendant le chargement : mêmes cases, même hauteur que les relevés. */
+  function waiting(s) {
+    const bar = '<span class="fx-num fx-wait" aria-hidden="true"></span>';
+    if (inland(s)) return reading('wind', 'Vent', bar, '') + inlandNote();
+    return reading('wind', 'Vent', bar, '') + reading('wave', 'Houle', bar, '') + reading('temp', 'Eau', bar, '') + reading('tide', 'Marée', bar, '');
+  }
+  const inlandNote = () => '<p class="fx-reading-note">Plan d’eau intérieur : ni houle marine, ni marée océanique.</p>';
+
+  function alertLine(s) {
     const g = gaugeOf(s), d = F ? F.mainDanger(s) : null;
-    const gauge = g.n == null ? '<b>Danger non évalué</b>' : `${dots(g.n)}<b>${g.n} sur 4</b>`;
-    const text = d ? `<span class="db-danger-text">${esc(d.text)}</span>${d.basis === 'carnet' ? '<small class="db-carnet">Carnet Ocean Buddy · non vérifié</small>' : ''}` : '';
-    return `<div class="db-row db-danger" data-before="danger"><span class="db-k">Danger</span><span class="db-v"><span class="db-gauge" role="img" aria-label="${g.n == null ? 'Danger non évalué' : `Danger estimé : ${g.n} sur 4 · estimation Ocean Buddy`}">${gauge}</span>${text}</span></div>`;
-  }
-
-  function emergency(s) {
-    let em = null; try { em = typeof countryEmergency === 'function' ? countryEmergency(s) : null; } catch (e) {}
-    const call = em && em.call;
-    const callBtn = call ? `<a class="db-btn db-call" href="tel:${esc(call)}">Appeler le ${esc(call)}</a>` : '<span class="db-nocall">Numéro d’urgence à confirmer sur place</span>';
-    return `<div class="db-actions">${callBtn}<button type="button" class="db-btn db-safety" data-before-safety>Sécurité & secours</button></div>`;
+    if (g.n == null || g.n < 3) return '';
+    /* Phrase entière, jamais coupée ; elle mène à l’onglet Sécurité. */
+    return `<button type="button" class="fx-alert" data-fx-tab="securite"><span class="fx-alert-top">${dots(g.n)}<b>Danger ${g.n} sur 4</b><span class="fx-alert-go">Voir la sécurité</span></span>${d ? `<span class="fx-alert-tx">${esc(d.text)}</span>` : ''}</button>`;
   }
 
   function render(s) {
+    arrange();
     const el = ensure(); if (!el) return;
-    spot = s;
-    const r = fitOf(s), pill = F && F.shown(r) ? `<span class="fit-pill fit-${r.kind}">${esc(LABEL[r.kind])}</span>` : '';
-    el.innerHTML = `<div class="db-head"><h3 id="dBeforeTitle">Avant d’y aller</h3>${pill}</div>${fitBlock(s)}`
-      + `<div class="db-rows">${dangerLine(s)}`
-      + '<div class="db-row db-half" data-before="season"><span class="db-k">Saison</span><span class="db-v db-wait">Chargement…</span></div>'
-      + '<div class="db-row db-half" data-before="slot"><span class="db-k">Ton créneau</span><span class="db-v db-wait">Chargement…</span></div>'
-      + '<div class="db-row" data-before="live"><span class="db-k">Maintenant<small class="db-stamp" data-before-stamp></small></span><span class="db-v db-wait">Chargement…</span></div></div>'
-      + emergency(s);
+    spot = s; normals = null;
+    el.innerHTML = alertLine(s)
+      + '<div class="fx-head"><h3 class="fx-title" id="dNowTitle">Maintenant</h3><small class="fx-stamp" data-before-stamp></small></div>'
+      + `<div class="fx-row" data-before="live"><div class="db-v fx-readings db-wait">${waiting(s)}</div></div>`
+      + `<div class="fx-slot" data-before="slot">${icon('sun')}<span class="fx-slot-k">Ton créneau</span><span class="db-v db-wait">Chargement…</span></div>`;
     const L = typeof LIVE !== 'undefined' ? LIVE[s.id] : null;
     if (L && L.live) live(s, L);
-    if (typeof COORDS !== 'undefined' && !COORDS[s.id]) { setRow('live', '<span class="db-muted">Position non vérifiée : pas de prévision</span>'); setRow('slot', '<span class="db-muted">Indisponible</span>'); }
+    if (typeof COORDS !== 'undefined' && !COORDS[s.id]) { setRow('live', '<p class="fx-reading-note">Position non vérifiée : pas de prévision pour ce spot.</p>'); setRow('slot', '<span class="db-muted">Indisponible</span>'); }
+    renderHead(s);
+    tabDots(s);
+  }
+
+  /* Onglet Sécurité : points de danger posés sur l’onglet lui-même, lus aussi par les lecteurs d’écran. */
+  function tabDots(s) {
+    const tab = $('#dTabs .dtab[data-cat="securite"]'), slot = $('#dTabDanger'); if (!tab || !slot) return;
+    const g = gaugeOf(s);
+    slot.innerHTML = g.n == null ? '' : dotsInner(g.n);
+    slot.hidden = g.n == null;
+    if (g.n == null) tab.removeAttribute('aria-label'); else tab.setAttribute('aria-label', `Sécurité, danger ${g.n} sur 4`);
+  }
+
+  function renderHead(s) {
+    const el = ensureHead(); if (!el) return;
+    const g = gaugeOf(s), d = F ? F.mainDanger(s) : null, r = fitOf(s), lv = userLevel();
+    const title = g.n == null ? 'Danger non évalué' : `Danger ${g.n} sur 4`;
+    const text = d ? `<p class="fx-danger-text">${esc(d.text)}</p>${d.basis === 'carnet' ? '<small class="fx-note">Carnet Ocean Buddy, non vérifié</small>' : ''}`
+      : g.n == null ? '<p class="fx-danger-text">Renseigne-toi sur place avant d’entrer dans l’eau.</p>' : '';
+    let fit = '';
+    if (r && F && F.shown(r)) fit = `<p class="fx-fit"><span class="fit-pill fit-${r.kind}">${esc(LABEL[r.kind])}</span><small class="fx-note">D’après ton niveau (${esc(LEVEL[lv] || '')}) : un repère, pas une garantie.</small></p>`;
+    else if (r && r.kind === 'zones') fit = '<p class="fx-note">Le niveau change selon la zone : demande sur place laquelle te correspond.</p>';
+    else if (!r || r.kind === 'nolevel') fit = levelButton();
+    el.innerHTML = `<div class="fx-danger-head"><h3 class="fx-title" id="dDangerTitle">${title}</h3>${g.n == null ? '' : dots(g.n)}</div>${text}${fit}`
+      + (g.n == null ? '' : '<small class="fx-note">Points de danger : estimation Ocean Buddy d’après les dangers listés.</small>');
   }
 
   function setRow(key, html) {
@@ -112,43 +148,61 @@
     const d = new Date(t);
     if (d.toDateString() !== new Date(now).toDateString()) return `Relevé le ${d.toLocaleDateString('fr-FR', {day: 'numeric', month: 'short'})}`;
     const fr = !window.OB_I18N || /^fr/.test(window.OB_I18N.lang || 'fr');
-    return `Relevé à ${fr ? `${d.getHours()}\u00a0h\u00a0${String(d.getMinutes()).padStart(2, '0')}` : d.toLocaleTimeString('fr-FR', {hour: 'numeric', minute: '2-digit'})}`;
+    return `Relevé à ${fr ? `${d.getHours()} h ${String(d.getMinutes()).padStart(2, '0')}` : d.toLocaleTimeString('fr-FR', {hour: 'numeric', minute: '2-digit'})}`;
   }
 
-  /* Conditions du moment : les valeurs de LIVE (modèle Open-Meteo), sans nouvel appel, avec l’heure de leur relevé à côté
-     de « Maintenant » (même ligne que le libellé : la hauteur réservée ne change pas). */
+  /* Conditions du moment : les valeurs de LIVE (modèle Open-Meteo), sans nouvel appel, en quatre relevés à grands
+     chiffres, avec l’heure de leur relevé à côté de « Maintenant ». La hauteur réservée ne change pas. */
+  const has = v => v && v !== '—';
+  const none = '<span class="fx-num is-none">—</span>';
+  const big = v => `<span class="fx-num">${esc(v)}</span>`;
   function live(s, l) {
     if (!same(s)) return;
     const st = host && host.querySelector('[data-before-stamp]');
     if (st) st.textContent = l && l.live ? stamp(l.fetchedAt) : '';
-    if (!l || !l.live) { setRow('live', '<span class="db-muted">Prévision indisponible pour le moment</span>'); return; }
-    const has = v => v && v !== '—';
-    const bits = [];
-    if (has(l.wind)) bits.push(`<span>Vent <b>${esc(l.wind)}</b></span>`);
-    if (!inland(s) && has(l.swell)) bits.push(`<span>Houle <b>${esc(l.swell)}</b></span>`);
-    if (!inland(s) && has(l.temp)) bits.push(`<span>Eau <b>${esc(l.temp)}</b></span>`);
-    setRow('live', bits.length ? bits.join('<span class="db-sep" aria-hidden="true"> · </span>') : '<span class="db-muted">Prévision indisponible pour le moment</span>');
+    if (!l || !l.live) { setRow('live', '<p class="fx-reading-note">Prévision indisponible pour le moment</p>'); return; }
+    /* « 20 km/h SO » : le chiffre en grand, l’unité et la direction en petit. */
+    const w = has(l.wind) ? /^\s*(\d+(?:[.,]\d+)?)\s*(km\/h)\s*(.*)$/.exec(String(l.wind)) : null;
+    /* « 3,9 m », « 17 °C » : le nombre (signe et décimale compris), puis l’unité. */
+    const split = v => { const m = has(v) ? /^\s*([-−]?\d+(?:[.,]\d+)?)\s*(.*)$/.exec(String(v)) : null; return m ? [m[1], m[2]] : null; };
+    const wind = w ? reading('wind', 'Vent', big(w[1]), esc(`${w[2]}${w[3] ? ' ' + w[3] : ''}`)) : reading('wind', 'Vent', has(l.wind) ? big(l.wind) : none, '');
+    if (inland(s)) { setRow('live', wind + inlandNote()); return; }
+    const sw = split(l.swell), period = Number.isFinite(l.periodS) ? ` (${Math.round(l.periodS)} s)` : '';
+    const te = split(l.temp);
+    const n = normals && normals.id === s.id ? normals : {};
+    setRow('live', wind
+      + (sw ? reading('wave', 'Houle', big(sw[0]), esc(sw[1] + period), n.swell) : reading('wave', 'Houle', none, '', ''))
+      + (te ? reading('temp', 'Eau', big(te[0]), esc(te[1]), n.sea) : reading('temp', 'Eau', none, '', ''))
+      + reading('tide', 'Marée', has(l.tide) ? `<span class="fx-word">${esc(l.tide)}</span>` : none, '', ''));
   }
 
-  /* Saison du mois : la phrase de l’aperçu « Quand partir ? » (spot-data.js), level de 0 (peu favorable) à 3 (top). */
-  function season(s, text, level) {
+  /* Écart à la normale du mois (spot-data.js, normales chargées) : une sous-ligne courte sous l’eau et la houle. */
+  function normal(s, o) {
     if (!same(s)) return;
-    setRow('season', text ? `<span class="db-season l${level == null ? 'x' : level}">${esc(text)}</span>` : '<span class="db-muted">Normales indisponibles</span>');
+    normals = {id: s.id, sea: (o && o.sea) || '', swell: (o && o.swell) || ''};
+    if (!host) return;
+    const put = (k, t) => { const el = host.querySelector(`[data-reading-sub="${k}"]`); if (el && !el.closest('.db-wait')) el.textContent = t; };
+    put('temp', normals.sea); put('wave', normals.swell);
   }
 
-  /* Meilleur créneau d’aujourd’hui, calculé par spot-experience.js (rule = SpotWeatherModel.rule, today = bestSlot du jour). */
-  function slot(s, rule, today, hourFmt) {
+  /* Saison du mois : elle se lit dans l’onglet Saisons (spot-data.js). Gardé pour les appelants, sans affichage ici. */
+  function season() {}
+
+  /* Créneau d’aujourd’hui, calculé par spot-experience.js (rule = SpotWeatherModel.rule, today = bestSlot du jour).
+     caution : l’avertissement de vent de terre du créneau, repris en entier quand il s’applique (jamais coupé). */
+  function slot(s, rule, today, hourFmt, caution) {
     if (!same(s)) return;
     if (rule === null) { setRow('slot', '<span class="db-muted">Indisponible pour le moment</span>'); return; }
     const x = F ? F.slotSummary(rule, today) : {status: 'nodata'};
     const fmt = h => (typeof hourFmt === 'function' ? hourFmt(h) : h + ' h');
     if (x.status === 'ok') {
       const range = x.start === x.end ? fmt(x.start) : `${fmt(x.start)} – ${fmt(x.end)}`;
-      setRow('slot', `<span>Aujourd’hui <b>${esc(range)}</b></span><span class="db-q is-${x.quality}">${x.quality === 'good' ? 'Dans tes repères' : 'Possible, sans plus'}</span>`);
+      setRow('slot', `<span>Aujourd’hui <b>${esc(range)}</b></span><span class="db-q is-${x.quality}">${x.quality === 'good' ? 'Dans tes repères' : 'Possible, sans plus'}</span>${caution ? `<p class="fx-caution">${esc(caution)}</p>` : ''}`);
       return;
     }
+    if (x.status === 'norule' && x.reason === 'level') { setRow('slot', levelButton()); return; }
     const why = x.status === 'norule'
-      ? (x.reason === 'level' ? 'Dépend de ton niveau' : x.reason === 'expert' ? 'À juger toi-même heure par heure' : 'Pas de repère chiffré pour ce sport')
+      ? (x.reason === 'expert' ? 'À juger toi-même heure par heure' : 'Pas de repère chiffré pour ce sport')
       : x.status === 'night' ? 'Plus d’heure de jour aujourd’hui'
       : x.status === 'none' ? 'Aucun aujourd’hui dans tes repères'
       : 'Prévision incomplète';
@@ -157,28 +211,34 @@
 
   /* Météo refusée même après la reprise automatique (le service météo répond parfois 503) : la case le dit en un mot, avec
      « Réessayer » (family : 'now' = conditions du moment, app.js ; 'week' = prévision de la semaine, spot-experience.js).
-     Le bouton tient dans la ligne de « Chargement… » (sa zone de toucher déborde sans rien pousser) : aucune hauteur ne change. */
+     Les relevés gardent leur hauteur (fiche.css) : aucune hauteur ne change. */
   function retry(s, key, family) {
     if (!same(s)) return;
     setRow(key, `<span class="db-muted">Indisponible</span><button type="button" class="ob-retry" data-weather-retry="${family === 'week' ? 'week' : 'now'}">Réessayer</button>`);
   }
-  /* Toucher « Réessayer » : la case repasse à « Chargement… » (seulement si elle montrait l’échec, jamais sur des données). */
+  /* Toucher « Réessayer » : la case repasse à l’attente (seulement si elle montrait l’échec, jamais sur des données). */
   function wait(s, key) {
     if (!same(s) || !host) return;
     const v = host.querySelector(`[data-before="${key}"] .db-v`);
     if (!v || !v.querySelector('[data-weather-retry]')) return;
-    v.classList.add('db-wait'); v.textContent = 'Chargement…';
+    v.classList.add('db-wait');
+    if (key === 'live') v.innerHTML = waiting(s); else v.textContent = 'Chargement…';
   }
 
-  function update(s) { try { render(s); } catch (e) { console.warn('avant d’y aller', e); } }
-  /* Niveau changé dans Réglages : la pastille et l’explication suivent (le créneau est recalculé par spot-experience.js). */
-  document.addEventListener('ocean:level', () => { try { if (spot && document.body.dataset.screen === 'detail') { const keep = host && host.querySelectorAll('[data-before] .db-v'); const saved = keep ? [...keep].map(v => [v.parentNode.dataset.before, v.innerHTML, v.classList.contains('db-wait')]) : []; render(spot); saved.forEach(([k, h, wait]) => { if (!wait) setRow(k, h); }); } } catch (e) {} });
+  function update(s) { try { render(s); } catch (e) { console.warn('maintenant', e); } }
+  /* Niveau changé dans Réglages : la tête de Sécurité suit (le créneau est recalculé par spot-experience.js). */
+  document.addEventListener('ocean:level', () => { try { if (spot && document.body.dataset.screen === 'detail') renderHead(spot); } catch (e) {} });
 
-  /* Invitation au niveau (bandeau, créneau de l’onglet Conditions) : Réglages ouverts sur « Mon sport et mon niveau ». */
+  /* Invitation au niveau (onglets Conditions, Prévisions et Sécurité) : Réglages ouverts sur « Mon sport et mon niveau ». */
   document.addEventListener('click', e => {
     if (!e.target.closest('[data-open-level]')) return;
     try { if (typeof openSettings === 'function') openSettings('sport'); } catch (err) {}
   });
+  /* Liens entre onglets de la fiche (alerte, « Toutes les prévisions ») : data-fx-tab porte le nom de l’onglet. */
+  document.addEventListener('click', e => {
+    const go = e.target.closest('#detail [data-fx-tab]'); if (!go) return;
+    try { if (typeof showDetailCat === 'function') showDetailCat(go.dataset.fxTab); } catch (err) {}
+  });
 
-  window.OceanBefore = {update, live, stamp, season, slot, cardPill, openSafety, levelButton, retry, wait};
+  window.OceanBefore = {update, live, normal, stamp, season, slot, cardPill, openSafety, levelButton, retry, wait};
 })();

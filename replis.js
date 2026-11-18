@@ -1,10 +1,10 @@
-/* Moins d’informations d’un coup (demande du 16 novembre) : sections repliables, ouvertes d’un toucher.
-   - Fiche spot, onglet « Le spot » : après la photo, le nom, le niveau et « Avant d’y aller », un sommaire court de
-     quatre sections repliées (Le lieu, Infos pratiques, Dormir et alentours, Photos et carte). Aucun nœud des autres
-     modules n’est déplacé ni retiré : l’ordre et le repli passent par CSS (replis.css, attribut data-open de l’onglet).
-     Les autres onglets (Saisons, Conditions, Préparer, Faune) suivent le même principe : voir TAB_GROUPS plus bas.
-     Les avertissements de sécurité et les sources restent dans leur section, à un toucher ; le danger, le numéro
-     d’urgence et « Sécurité & secours » restent visibles dans « Avant d’y aller ».
+/* Rangement de la fiche spot (fiche v2, 18 novembre 2026) et replis simples du profil, du jeu et des défis.
+   - Fiche spot : sept onglets (index.html). Chaque onglet montre d’abord sa réponse ; seul le détail long et secondaire
+     reste dans des sections repliées, ouvertes d’un toucher. « Le spot » montre la description, l’anecdote, le conseil et
+     les repères pratiques directement ; « Comprendre le spot » et « Photos et carte » y sont repliés. Les blocs « dormir »
+     et « autour », créés par leurs modules dans « Le spot », sont rangés une fois dans « Préparer » (arrange) : les
+     modules les retrouvent par leur id ou leur référence. Le repli lui-même passe par CSS (replis.css, attribut data-open).
+     La sécurité n’est JAMAIS repliée : elle a son onglet, sans aucune section fermée.
    - Ailleurs (profil, jeu, défis) : boutons [data-obf] avec aria-controls, la zone liée porte l’attribut hidden.
    Chaque nouveau spot s’ouvre replié ; seul un Retour vers une fiche déjà vue lui rend ses sections ouvertes (mémoire
    de la session, voir « ocean:navigate » plus bas). La fiche s’ouvre après la levée du rideau :
@@ -14,16 +14,13 @@
   const $ = (s, r = document) => r.querySelector(s);
   const chevron = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg>';
 
-  /* ---------- Fiche spot : sommaire et quatre sections ---------- */
+  /* ---------- Fiche spot, onglet « Le spot » : deux sections repliées ---------- */
   const GROUPS = [
-    { id: 'lieu', title: 'Le lieu', sub: 'Description, esprit du lieu et anecdotes', members: ['.field-story', '#guideSpirit', '.anec-block', '.field-reference'] },
-    { id: 'pratique', title: 'Infos pratiques', sub: 'Marée, règles locales, danger et conseils', members: ['.field-tip', '#fieldVisit', '#fieldMainDanger', '#spotImmersion'] },
-    { id: 'autour', title: 'Dormir et alentours', sub: 'Nuits pas chères, lieux et spots voisins', members: ['#fieldOverview', '#guideAround', '#guideSleep', '#fieldNearbyBlock'] },
+    { id: 'reperes', title: 'Comprendre le spot', sub: 'Vent, houle, marée et niveau expliqués', members: ['#spotImmersion'] },
     { id: 'images', title: 'Photos et carte', sub: 'Photos, vidéos et carte du secteur', members: ['#spotPhotoStrip', '#obVoyageBanner', '#spotVideoPanel', '#spotAreaMap'] }
   ];
-  /* Groupe dont le sous-titre fermé montre le début d’un texte de la fiche (voir syncPeek plus bas). */
-  const PEEK = { lieu: '#dDesc' };
-  const PEEK_HTML = '<span class="obf-peek" aria-hidden="true" data-no-i18n></span>';
+  /* Blocs créés dans « Le spot » par field-guide.js et spot-guide.js, rangés dans « Préparer » (une seule fois). */
+  const MOVED = { activites: ['#fieldOverview', '#guideAround', '#guideSleep', '#fieldNearbyBlock'] };
   const infos = () => $('#detail .dcat[data-cat="infos"]');
   const ids = { '.field-story': 'fieldStory', '.anec-block': 'dAnecBlock', '.field-reference': 'fieldReference', '.field-tip': 'fieldTip' };
 
@@ -31,16 +28,13 @@
      sinon à la fin de l’onglet ; l’ordre affiché vient de replis.css. */
   function mount() {
     const tab = infos(); if (!tab) return null;
-    if (!$('.obf-label', tab)) {
-      const label = document.createElement('h3'); label.className = 'obf-label'; label.textContent = 'Dans cette fiche';
-      tab.prepend(label);
-    }
+    arrange();
     for (const g of GROUPS) {
       let head = $(`.obf-head[data-obf-group="${g.id}"]`, tab);
       if (!head) {
         head = document.createElement('button'); head.type = 'button'; head.className = 'obf-head';
         head.dataset.obfGroup = g.id; head.setAttribute('aria-expanded', 'false');
-        head.innerHTML = `<span class="obf-tx"><b>${g.title}</b><small>${g.sub}</small>${PEEK[g.id] ? PEEK_HTML : ''}</span><span class="obf-chev">${chevron}</span>`;
+        head.innerHTML = `<span class="obf-tx"><b>${g.title}</b><small>${g.sub}</small></span><span class="obf-chev">${chevron}</span>`;
         const first = g.members.map(s => tab.querySelector(':scope>' + s)).find(Boolean);
         if (first) first.before(head); else tab.append(head);
       }
@@ -49,32 +43,16 @@
       for (const s of g.members) { const el = tab.querySelector(':scope>' + s); if (!el) continue; if (!el.id && ids[s]) el.id = ids[s]; if (el.id) list.push(el.id); }
       if (list.length) head.setAttribute('aria-controls', list.join(' ')); else head.removeAttribute('aria-controls');
     }
-    syncPeeks();
     return tab;
   }
+  /* Rangement des blocs déménagés : idempotent, et sans effet tant que leur module ne les a pas créés. */
+  function arrange() {
+    for (const cat in MOVED) {
+      const to = tabOf(cat); if (!to) continue;
+      for (const sel of MOVED[cat]) { const el = $('#detail ' + sel); if (el && el.parentNode !== to) to.append(el); }
+    }
+  }
 
-  /* ---------- « Le lieu » fermé : le début réel de la description (fiche-apercu) ----------
-     Le sous-titre du repli fermé reprend le texte ENTIER de #dDesc tel qu’il est affiché, donc déjà traduit par i18n.js
-     (ses clés sont des phrases françaises entières : un morceau de phrase resterait en français en anglais et en espagnol).
-     La coupe à deux lignes est faite par replis.css, jamais ici. L’aperçu porte data-no-i18n (texte déjà traduit) et
-     aria-hidden : le nom du bouton reste « Le lieu » suivi du libellé court. Sans description, ou repli ouvert, le libellé
-     générique est affiché (replis.css, attributs data-peek et aria-expanded). Recopié à chaque nouveau spot et à chaque
-     traduction de la description (observateur ci-dessous). */
-  function syncPeek(head, src) {
-    const peek = head && head.querySelector('.obf-peek'); if (!peek) return;
-    const text = src ? String(src.textContent || '').replace(/\s+/g, ' ').trim() : '';
-    if (peek.textContent !== text) peek.textContent = text;
-    if (text) head.setAttribute('data-peek', ''); else head.removeAttribute('data-peek');
-  }
-  function syncPeeks() {
-    const tab = infos(); if (!tab) return;
-    for (const id in PEEK) syncPeek($(`.obf-head[data-obf-group="${id}"]`, tab), $(PEEK[id]));
-  }
-  /* Nouveau spot (textContent remplacé) puis traduction en place par i18n.js (nodeValue) : les deux sont suivis. */
-  for (const id in PEEK) {
-    const src = $(PEEK[id]);
-    if (src && 'MutationObserver' in window) new MutationObserver(syncPeeks).observe(src, { childList: true, characterData: true, subtree: true });
-  }
   function openSet(tab) { return new Set((tab.dataset.open || '').split(/\s+/).filter(Boolean)); }
   function setGroup(id, open) {
     const tab = mount(); if (!tab) return;
@@ -87,11 +65,15 @@
     tab.dataset.open = '';
     tab.querySelectorAll('.obf-head').forEach(h => h.setAttribute('aria-expanded', 'false'));
   }
-  /* Ouvre la section qui contient un élément (raccourcis « Le mot du coin », « Dès 14 € la nuit », aide du vent…). */
+  /* Montre un élément de la fiche où qu’il soit rangé (raccourcis « Le mot du coin », « Dès 14 € la nuit », aide du
+     vent…) : son onglet s’affiche s’il n’est pas déjà là, et sa section s’ouvre si elle est repliée. */
   function reveal(el) {
-    const tab = infos(); if (!tab || !el) return;
-    const top = el.closest('#detail .dcat[data-cat="infos"] > *'); if (!top) return;
-    const g = GROUPS.find(x => x.members.some(s => top.matches(s))); if (g) setGroup(g.id, true);
+    const panel = el && el.closest('#detail .dcat'); if (!panel) return;
+    const cat = panel.dataset.cat, top = el.closest('#detail .dcat > *');
+    try { if (panel.style.display === 'none' && typeof showDetailCat === 'function') showDetailCat(cat, false); } catch (_) {}
+    if (!top) return;
+    if (cat === 'infos') { const g = GROUPS.find(x => x.members.some(s => top.matches(s))); if (g) setGroup(g.id, true); return; }
+    const g = (TAB_GROUPS[cat] || []).find(x => x.members.some(s => top.matches(s) || el.closest(s))); if (g) setTabGroup(cat, g.id, true);
   }
   document.addEventListener('click', e => {
     const head = e.target.closest('.obf-head[data-obf-group]');
@@ -115,10 +97,10 @@
       { id: 'courbes', title: 'L’année en courbes', sub: 'Températures, soleil, pluie, houle, vent et sources', members: ['#dSeasons>.sd-charts', '#dSeasons>.sd-rose', '#dSeasons>.sd-table', '#dSeasons>.sd-src'] }
     ],
     meteo: [
-      { id: 'heures', title: 'Heure par heure', sub: 'Le détail des prochaines 48 heures', members: ['#spotWeek>.wx-hours'] },
-      { id: 'lire', title: 'Lire les conditions', sub: 'Comprendre le vent, la houle et la marée', members: ['#sdCoach', '#imWeatherHelp'] }
+      { id: 'lire', title: 'Comprendre ces chiffres', sub: 'Le vent, la houle et la marée, expliqués', members: ['#sdCoach', '#imWeatherHelp'] }
     ],
     activites: [
+      { id: 'autour', title: 'Dormir et alentours', sub: 'Nuits pas chères, lieux et spots voisins', members: ['#fieldOverview', '#guideAround', '#guideSleep', '#fieldNearbyBlock'] },
       { id: 'depart', title: 'Ton point de départ et tes notes', sub: 'Situer le lieu, ton carnet', members: ['#dGuide>.field-address', '#dGuide>.field-notebook'] },
       { id: 'surplace', title: 'Heure, soleil, monnaie et langue', sub: 'Ce qui change sur place', members: ['#dGo>.sd-facts'] },
       { id: 'adresses', title: 'Écoles, location et zones', sub: 'Trouver un encadrant ou du matériel', members: ['#dZonesBlock', '.field-local'] }

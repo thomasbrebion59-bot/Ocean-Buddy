@@ -24,15 +24,14 @@ test('maintenant : l’heure du relevé traduite en anglais et en espagnol', () 
   assert.match(stampIn('es', at, nextDay).shown, /^Medido el 18 nov\.?$/);
 });
 
-test('maintenant : posée sur la ligne du libellé (aucune hauteur en plus) et mise à jour à chaque relevé', () => {
-  const js = read('spot-before.js'), css = read('spot-before.css'), app = read('app.js');
-  assert.match(js, /<span class="db-k">Maintenant<small class="db-stamp" data-before-stamp><\/small><\/span>/);
+test('maintenant : posée sur la ligne du titre (aucune hauteur en plus) et mise à jour à chaque relevé', () => {
+  const js = read('spot-before.js'), css = read('fiche.css'), app = read('app.js');
+  assert.match(js, /<h3 class="fx-title" id="dNowTitle">Maintenant<\/h3><small class="fx-stamp" data-before-stamp><\/small>/);
   assert.match(js, /if \(st\) st\.textContent = l && l\.live \? stamp\(l\.fetchedAt\) : '';/);
-  assert.match(js, /window\.OceanBefore = \{update, live, stamp,/);
-  assert.match(css, /#detail \.db-row\[data-before="live"\] \.db-k\{display:flex;align-items:baseline;/);
-  assert.match(css, /#detail \.db-stamp\{font:600 12px\/1\.3 var\(--body\);[^}]*white-space:nowrap\}/, 'même corps et même interligne que le libellé, sur une ligne');
-  /* Onglet Conditions : même texte ; les données reprises du cache de session gardent leur heure réelle. */
-  assert.match(app, /const stamp=live\?\.fetchedAt\?\(window\.OceanBefore\?\.stamp\?\.\(live\.fetchedAt\)\|\|''\):'';/);
+  assert.match(js, /window\.OceanBefore = \{update, live, normal, stamp,/);
+  assert.match(css, /#detail \.fx-head\{display:flex;align-items:baseline;justify-content:space-between;/);
+  assert.match(css, /#detail \.fx-note,#detail \.fx-stamp\{font:400 var\(--fiche-note\)/, 'corps de la note, piloté par la variable');
+  /* Les données reprises du cache de session gardent leur heure réelle. */
   assert.match(app, /meteoTimes\.set\(hit\.d,hit\.t\)/);
   assert.match(app, /LIVE\[s\.id\]=Object\.assign\(LIVE\[s\.id\]\|\|\{\},data,\{live:true,fetchedAt\}\);/);
 });
