@@ -80,7 +80,20 @@
   }
   function syncStamps(){
     document.querySelectorAll('.cult-card[data-cult-open]').forEach(card=>card.classList.toggle('is-stamped',stamped(card.dataset.cultOpen)));
-    syncMeta();renderPassport();syncBanner();
+    syncQuizStamp();syncMeta();renderPassport();syncBanner();
+  }
+  /* Mauvaise réponse au mot du jour, puis tampon gagné en ouvrant la page du pays : le résultat montrait encore le rond « ? »
+     et « Ouvre sa page pour gagner son tampon. ». Seul le bloc du tampon est remplacé, sur place (même hauteur ; le bouton
+     « Découvrir… » et son focus restent). */
+  function syncQuizStamp(){
+    try{
+      const done=$('[data-cult-quiz-body].is-done'),res=done&&done.querySelector('.cult-quiz-res');
+      if(!res||!res.querySelector('.cult-stamp.is-empty'))return;
+      const q=today(),ans=q&&M.answered(read(),new Date());
+      if(!q||!ans||ans.c!==q.country||!stamped(q.country))return;
+      const t=document.createElement('div');t.innerHTML=doneHTML(q,ans);
+      const next=t.querySelector('.cult-quiz-res');if(next){res.replaceWith(next);fitDone();}
+    }catch(e){}
   }
   function syncMeta(){
     const meta=$('[data-cult-quiz-meta]');if(!meta)return;
