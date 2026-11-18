@@ -8174,7 +8174,7 @@
  "houle de 1 à 2,5 m au large": "1 to 2.5 m offshore swell",
  "houle de fond": "groundswell",
  "houle faible 6 jours sur 10": "Light swell 6 days out of 10",
- "houle moyenne de {0} m au large": "Average offshore swell of {0} m",
+ "houle moyenne de {0} m au large": "average offshore swell of {0} m",
  "hôtels pas chers": "cheap hotels",
  "iSimangaliso, Afrique du Sud": "iSimangaliso, South Africa",
  "iguanes des Petites Antilles, tortues marines, raies et jeunes requins citrons dans le lagon.": "Lesser Antilles iguanas, sea turtles, rays and young lemon sharks in the lagoon.",
@@ -11013,5 +11013,8 @@
  "Le savais-tu ?": "Did you know?",
  "{0} · {1} XP, plus que {2} XP avant le niveau {3}": "{0} · {1} XP, only {2} XP to go before level {3}",
  "Relevé à {0}": "Measured at {0}",
- "Relevé le {0}": "Measured on {0}"
+ "Relevé le {0}": "Measured on {0}",
+ "{0} s · venue {1}": "{0} s · coming {1}",
+ "<b>{0} : {1}</b> en {2}": "<b>{0}: {1}</b> in {2}",
+ "en {2}": "in {2}"
 }

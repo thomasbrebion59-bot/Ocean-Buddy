@@ -8174,7 +8174,7 @@
  "houle de 1 à 2,5 m au large": "oleaje de 1 a 2,5 m mar adentro",
  "houle de fond": "mar de fondo",
  "houle faible 6 jours sur 10": "oleaje débil 6 días de cada 10",
- "houle moyenne de {0} m au large": "oleaje moderado de {0} m mar adentro",
+ "houle moyenne de {0} m au large": "oleaje medio de {0} m mar adentro",
  "hôtels pas chers": "hoteles baratos",
  "iSimangaliso, Afrique du Sud": "iSimangaliso, Sudáfrica",
  "iguanes des Petites Antilles, tortues marines, raies et jeunes requins citrons dans le lagon.": "iguanas de las Antillas Menores, tortugas marinas, rayas y crías de tiburón limón en la laguna.",
@@ -11013,5 +11013,8 @@
  "Le savais-tu ?": "¿Sabías que…?",
  "{0} · {1} XP, plus que {2} XP avant le niveau {3}": "{0} · {1} XP, solo faltan {2} XP para el nivel {3}",
  "Relevé à {0}": "Medido a las {0}",
- "Relevé le {0}": "Medido el {0}"
+ "Relevé le {0}": "Medido el {0}",
+ "{0} s · venue {1}": "{0} s · procedente {1}",
+ "<b>{0} : {1}</b> en {2}": "<b>{0}: {1}</b> en {2}",
+ "en {2}": "en {2}"
 }

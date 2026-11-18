@@ -23,6 +23,8 @@
   const num = (v, d = 0) => v == null ? '–' : new Intl.NumberFormat(lang(), { maximumFractionDigits: d, minimumFractionDigits: d }).format(v);
   const monthName = (m, style = 'long') => new Intl.DateTimeFormat(lang(), { month: style }).format(new Date(2026, m, 15));
   const monthLetter = m => monthName(m, 'narrow');
+  /* Jours de pluie dans la langue de l’interface (« 21 j », « 21 days », « 21 d ») : Intl, sans phrase à traduire. */
+  const days = v => v == null ? '–' : new Intl.NumberFormat(lang(), { style: 'unit', unit: 'day', unitDisplay: 'short', maximumFractionDigits: 0 }).format(v);
   const sportLabel = id => (typeof SPORTMAP !== 'undefined' && SPORTMAP[id] ? SPORTMAP[id].label.replace(/\s*\(.*\)/, '') : id);
   const icon = (d, cls = '') => `<svg class="sd-ic ${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
   const I = {
@@ -131,10 +133,14 @@
     if (d.sea != null) tiles.push(['temp', 'Eau', `${num(d.sea)} °C`, 'moyenne de surface', 'sea']);
     if (d.tx != null) tiles.push(['sun', 'Air', `${num(d.tx)}° / ${num(d.tn)}°`, 'max / min du jour', 'air']);
     if (d.sun != null) tiles.push(['sun', 'Soleil', `≈ ${num(d.sun)} h`, 'par jour, estimé', 'sunh']);
-    if (d.wet != null) tiles.push(['rain', 'Pluie', `${num(d.wet)} j`, `${num(d.rain)} mm dans le mois`, 'rain']);
-    if (d.waves) tiles.push(['wave', 'Houle au large', `${num(d.hs, 1)} m`, `${num(d.tp)} s · ${M.DIR_FROM[d.dir] ? 'venue ' + M.DIR_FROM[d.dir] : ''}`, 'wave']);
+    if (d.wet != null) tiles.push(['rain', 'Pluie', days(d.wet), `${num(d.rain)} mm dans le mois`, 'rain']);
+    /* Gabarit traduisible « {0} s · venue {1} » (i18n.js traduit aussi la direction, « du sud-est ») ; sans direction, la période seule. */
+    if (d.waves) tiles.push(['wave', 'Houle au large', `${num(d.hs, 1)} m`, M.DIR_FROM[d.dir] ? `${num(d.tp)} s · venue ${M.DIR_FROM[d.dir]}` : `${num(d.tp)} s`, 'wave']);
     if (d.wind != null) tiles.push(['wind', 'Vent', `${num(d.wind)} km/h`, d.kite != null ? `${num(d.kite)} % de jours ≥ 25 km/h` : '', 'wind']);
-    const verdict = L == null ? '' : `<p class="sd-verdict l${L}"><b>${esc(sportLabel(act))} : ${esc(LEVEL_TXT[L].toLowerCase())}</b> en ${esc(monthName(selMonth))}${verdictWhy(act, d)}</p>`;
+    /* Verdict : un gabarit à lui seul (« <b>{0} : {1}</b> en {2} », traduit d’un bloc par i18n.js, ponctuation de la langue),
+       puis les raisons, chacune dans son élément pour être traduite seule (verdictWhy). */
+    const head = L == null ? '' : `<b>${esc(sportLabel(act))} : ${esc(LEVEL_TXT[L].toLowerCase())}</b> en ${esc(monthName(selMonth))}`;
+    const verdict = L == null ? '' : `<p class="sd-verdict l${L}"><span class="sd-vmain">${head}</span>${verdictWhy(act, d)}</p>`;
     return `<div class="sd-month" aria-live="polite">
       <div class="sd-month-head"><h4>En ${esc(monthName(selMonth))}</h4>${monthPicker()}</div>
       ${verdict}${suitLine(act, d)}
@@ -149,7 +155,8 @@
     if (['paddle', 'kayak'].includes(act) && d.wind != null) bits.push(`vent moyen de ${num(d.wind)} km/h`);
     if (d.sun != null && d.sun >= 8) bits.push('beaucoup de soleil');
     if (d.wet != null && d.wet >= 15) bits.push('mois pluvieux');
-    return bits.length ? ' · ' + esc(bits.join(', ')) : '';
+    /* Chaque raison dans son propre élément : i18n.js les traduit une à une (« eau à {0} °C », « mois pluvieux »…). */
+    return bits.length ? ' · ' + bits.map(b => `<span>${esc(b)}</span>`).join(', ') : '';
   }
   function monthPicker() {
     return `<div class="sd-mpick" role="group" aria-label="Choisir le mois"><button type="button" data-sd-step="-1" aria-label="Mois précédent">‹</button><button type="button" data-sd-step="1" aria-label="Mois suivant">›</button></div>`;
@@ -195,11 +202,11 @@
         g += `<path class="sd-bar ${cls}${m === selMonth ? ' on' : ''}" d="M${x(m) - bw / 2},${bot}V${yy + r}q0,-${r} ${r},-${r}h${bw - 2 * r}q${r},0 ${r},${r}V${bot}z"/>`;
       });
       const v = arr[selMonth];
-      if (v != null) g += `<text class="sd-val" x="${x(selMonth)}" y="${y(v) - 5}" text-anchor="middle">${esc(num(v, d) + unit)}</text>`;
+      if (v != null) g += `<text class="sd-val" x="${x(selMonth)}" y="${y(v) - 5}" text-anchor="middle">${esc(typeof unit === 'function' ? unit(v) : num(v, d) + unit)}</text>`;
       panels.push({ title, H, g: g + extra + hits(H) });
     };
     bars('sun', a.sun, 'Soleil · heures par jour (estimation)', ' h', 0, 'b-sun');
-    bars('wet', a.wet, 'Pluie · jours de pluie dans le mois', ' j', 0, 'b-rain');
+    bars('wet', a.wet, 'Pluie · jours de pluie dans le mois', days, 0, 'b-rain');
     if (c.wave) bars('hs', c.wave.hs, 'Houle au large · hauteur moyenne', ' m', 1, 'b-wave');
     bars('wind', a.wind, 'Vent · vitesse moyenne', ' km/h', 0, 'b-wind');
     const axis = `<svg class="sd-axis" viewBox="0 0 ${W} 18" width="100%" aria-hidden="true">${Array.from({ length: 12 }, (_, m) => `<text x="${x(m)}" y="13" text-anchor="middle" class="${m === selMonth ? 'on' : ''}">${esc(monthLetter(m))}</text>`).join('')}</svg>`;
