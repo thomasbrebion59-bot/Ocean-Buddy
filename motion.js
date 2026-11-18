@@ -113,9 +113,38 @@
     }
     document.body.append(g);
     const opt={duration:ZOOM_MS,easing:'linear',fill:'both'};
-    const anims=[g.animate(outer,opt),im.animate(inner,opt),g.animate(round,opt),
-      sc.animate(open?[{opacity:0},{opacity:1}]:[{opacity:1},{opacity:0}],{duration:ZOOM_MS,easing:'ease-out',fill:'both'})];
+    /* Si le moteur refuse une de ces animations, la photo empruntée retourne tout de suite à sa carte : elle ne reste
+       jamais dans un calque que personne ne suit. */
+    let anims;
+    try{
+      anims=[g.animate(outer,opt),im.animate(inner,opt),g.animate(round,opt),
+        sc.animate(open?[{opacity:0},{opacity:1}]:[{opacity:1},{opacity:0}],{duration:ZOOM_MS,easing:'ease-out',fill:'both'})];
+    }catch(err){giveBack({home});g.remove();throw err;}
     return {el:g,img:im,scrim:sc,anims,main:anims[0],home};
+  }
+
+  /* Horloge du vol. Le vol n’avance pas à l’heure réelle mais d’image en image, de STEP_MAX ms au plus à chaque image.
+     Sur iPhone (essai dans WKWebView, 18 nov. 2026), ouvrir une fiche occupe le fil principal 250 à 300 ms, en deux
+     images lentes : à l’heure réelle, le vol (dont le ressort fait l’essentiel du trajet dans sa première moitié)
+     se jouait pendant ces images et ne se voyait qu’à sa toute fin. Ici le calque attend à sa place de départ les
+     `skip` premières images, le temps que l’écran d’arrivée se peigne, puis chaque image affichée montre l’étape
+     suivante : rien n’est sauté. À 60 images par seconde, la durée est exactement celle prévue.
+     Filet : si aucune image ne vient (page cachée), l’atterrissage a lieu quand même. */
+  const STEP_MAX=34;
+  function drive(f,land,skip){
+    f.anims.forEach(a=>{try{a.pause();}catch(_){}});
+    f.timer=setTimeout(land,ZOOM_MS+1200);
+    let t=0,last=0,n=0;
+    const step=now=>{
+      if(flight!==f||!f.anims.length)return;
+      if(++n>skip){
+        t=Math.min(ZOOM_MS,t+(last?Math.min(Math.max(now-last,0),STEP_MAX):16));
+        f.anims.forEach(a=>{try{a.currentTime=t;}catch(_){}});
+        if(t>=ZOOM_MS){land();return;}
+      }
+      last=now;requestAnimationFrame(step);
+    };
+    requestAnimationFrame(step);
   }
 
   function heroInfo(){
@@ -163,8 +192,8 @@
             if(ready||++n>60){if(flight===f)endFlight();else{clearInterval(f.poll);giveBack(f);f.el.remove();}}
           },80);
         };
-        f.main.finished.then(land,()=>{});
-        f.timer=setTimeout(land,ZOOM_MS+160);
+        /* Deux images laissées à la fiche pour se peindre, puis le vol avance d’image en image (voir drive). */
+        drive(f,land,2);
       }catch(_){endFlight();}
       return res;
     };
@@ -248,7 +277,7 @@
             flight=f;
             /* À l’arrivée, l’image retrouve sa carte ; le nom et le cœur de la carte se reposent en fondu. */
             const land=()=>{if(flight!==f)return;endFlight();if(holder&&holder.isConnected){holder.classList.add('ob-zoom-landed');setTimeout(()=>holder.classList.remove('ob-zoom-landed'),320);}};
-            f.main.finished.then(land,()=>{});f.timer=setTimeout(land,ZOOM_MS+160);
+            drive(f,land,1);
           }
         }
       }catch(_){endFlight();}
