@@ -20,6 +20,9 @@
     { id: 'autour', title: 'Dormir et alentours', sub: 'Nuits pas chères, lieux et spots voisins', members: ['#fieldOverview', '#guideAround', '#guideSleep', '#fieldNearbyBlock'] },
     { id: 'images', title: 'Photos et carte', sub: 'Photos, vidéos et carte du secteur', members: ['#spotPhotoStrip', '#obVoyageBanner', '#spotVideoPanel', '#spotAreaMap'] }
   ];
+  /* Groupe dont le sous-titre fermé montre le début d’un texte de la fiche (voir syncPeek plus bas). */
+  const PEEK = { lieu: '#dDesc' };
+  const PEEK_HTML = '<span class="obf-peek" aria-hidden="true" data-no-i18n></span>';
   const infos = () => $('#detail .dcat[data-cat="infos"]');
   const ids = { '.field-story': 'fieldStory', '.anec-block': 'dAnecBlock', '.field-reference': 'fieldReference', '.field-tip': 'fieldTip' };
 
@@ -36,7 +39,7 @@
       if (!head) {
         head = document.createElement('button'); head.type = 'button'; head.className = 'obf-head';
         head.dataset.obfGroup = g.id; head.setAttribute('aria-expanded', 'false');
-        head.innerHTML = `<span class="obf-tx"><b>${g.title}</b><small>${g.sub}</small></span><span class="obf-chev">${chevron}</span>`;
+        head.innerHTML = `<span class="obf-tx"><b>${g.title}</b><small>${g.sub}</small>${PEEK[g.id] ? PEEK_HTML : ''}</span><span class="obf-chev">${chevron}</span>`;
         const first = g.members.map(s => tab.querySelector(':scope>' + s)).find(Boolean);
         if (first) first.before(head); else tab.append(head);
       }
@@ -45,7 +48,31 @@
       for (const s of g.members) { const el = tab.querySelector(':scope>' + s); if (!el) continue; if (!el.id && ids[s]) el.id = ids[s]; if (el.id) list.push(el.id); }
       if (list.length) head.setAttribute('aria-controls', list.join(' ')); else head.removeAttribute('aria-controls');
     }
+    syncPeeks();
     return tab;
+  }
+
+  /* ---------- « Le lieu » fermé : le début réel de la description (fiche-apercu) ----------
+     Le sous-titre du repli fermé reprend le texte ENTIER de #dDesc tel qu’il est affiché, donc déjà traduit par i18n.js
+     (ses clés sont des phrases françaises entières : un morceau de phrase resterait en français en anglais et en espagnol).
+     La coupe à deux lignes est faite par replis.css, jamais ici. L’aperçu porte data-no-i18n (texte déjà traduit) et
+     aria-hidden : le nom du bouton reste « Le lieu » suivi du libellé court. Sans description, ou repli ouvert, le libellé
+     générique est affiché (replis.css, attributs data-peek et aria-expanded). Recopié à chaque nouveau spot et à chaque
+     traduction de la description (observateur ci-dessous). */
+  function syncPeek(head, src) {
+    const peek = head && head.querySelector('.obf-peek'); if (!peek) return;
+    const text = src ? String(src.textContent || '').replace(/\s+/g, ' ').trim() : '';
+    if (peek.textContent !== text) peek.textContent = text;
+    if (text) head.setAttribute('data-peek', ''); else head.removeAttribute('data-peek');
+  }
+  function syncPeeks() {
+    const tab = infos(); if (!tab) return;
+    for (const id in PEEK) syncPeek($(`.obf-head[data-obf-group="${id}"]`, tab), $(PEEK[id]));
+  }
+  /* Nouveau spot (textContent remplacé) puis traduction en place par i18n.js (nodeValue) : les deux sont suivis. */
+  for (const id in PEEK) {
+    const src = $(PEEK[id]);
+    if (src && 'MutationObserver' in window) new MutationObserver(syncPeeks).observe(src, { childList: true, characterData: true, subtree: true });
   }
   function openSet(tab) { return new Set((tab.dataset.open || '').split(/\s+/).filter(Boolean)); }
   function setGroup(id, open) {
@@ -159,6 +186,13 @@
     if (cur === lastSpot && infos()?.querySelector('.obf-head')) { mount(); for (const cat in TAB_GROUPS) mountTab(cat); return; }
     lastSpot = cur; closeAll(); closeTabs();
   });
+  /* Fiche déjà ouverte au chargement de ce script : relance du WebView (mise à jour, changement de langue) où
+     navigation.js, chargé avant, rouvre la fiche avant que l’écouteur ci-dessus n’existe. Sans cela, l’onglet « Le spot »
+     restait sans sommaire, toutes ses sections masquées. Même état qu’une ouverture : tout replié. */
+  if (document.body?.dataset.screen === 'detail') {
+    try { lastSpot = typeof currentSpot !== 'undefined' ? currentSpot : null; } catch (_) {}
+    closeAll(); closeTabs();
+  }
 
   /* ---------- Replis simples : bouton [data-obf] + aria-controls, zone [hidden] ---------- */
   function toggle(btn, force) {

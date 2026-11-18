@@ -290,3 +290,141 @@ test('traductions : sections des autres onglets et nouveaux libellés en anglais
     assert.ok(typeof es[k] === 'string' && es[k].trim() && es[k] !== k, 'ES : ' + k);
   }
 });
+
+/* ---------- fiche-apercu : « Le lieu » fermé montre le début réel de la description ----------
+   Le sous-titre du repli fermé recopie le texte ENTIER de #dDesc tel qu’affiché (déjà traduit par i18n.js, dont les clés
+   sont des phrases françaises entières) ; la coupe à deux lignes est faite par CSS. Sans description ou repli ouvert :
+   libellé générique. Le nom du bouton reste court. */
+const vm = require('node:vm');
+const catalog = (() => { const ctx = { window: {} }; vm.runInNewContext(read('catalog-runtime.js'), ctx); return ctx.window.OCEAN_CATALOG; })();
+const descOf = id => catalog.find(s => s.id === id).desc;
+const en = JSON.parse(read('locales/translations/en.json')), es = JSON.parse(read('locales/translations/es.json'));
+
+/* Le bloc de replis.js (syncPeek, syncPeeks, observateur de #dDesc) exécuté avec de faux nœuds. */
+function peekWorld() {
+  const node = (attrs = {}) => ({ attrs: { ...attrs }, textContent: '', setAttribute(k, v) { this.attrs[k] = String(v); }, removeAttribute(k) { delete this.attrs[k]; }, hasAttribute(k) { return k in this.attrs; } });
+  const peekHtml = js.match(/const PEEK_HTML = '([^']+)';/)[1];
+  const peek = node(Object.fromEntries([...peekHtml.matchAll(/ ([\w-]+)(?:="([^"]*)")?/g)].map(m => [m[1], m[2] ?? ''])));
+  const head = node({ 'aria-expanded': 'false' }); head.querySelector = s => (s === '.obf-peek' ? peek : null);
+  const desc = node(), tab = {}, observers = [];
+  const ctx = {
+    window: { MutationObserver: true }, observers,
+    MutationObserver: class { constructor(cb) { this.cb = cb; } observe(target, opts) { observers.push({ target, opts, cb: this.cb }); } },
+    $: (s, r) => (s === '#dDesc' ? desc : r === tab && s === '.obf-head[data-obf-group="lieu"]' ? head : null),
+    infos: () => tab
+  };
+  vm.createContext(ctx);
+  vm.runInContext(js.match(/const PEEK = \{[^}]*\};/)[0].replace('const ', 'var ') + '\n' + js.slice(js.indexOf('function syncPeek('), js.indexOf('function openSet(')), ctx);
+  /* Ce que font openSpot (textContent) puis i18n.js (nodeValue en place) : une mutation observée sur #dDesc. */
+  const setDesc = t => { desc.textContent = t; observers.filter(o => o.target === desc).forEach(o => o.cb([])); };
+  return { head, peek, desc, setDesc, observers, ctx };
+}
+
+test('fiche-apercu : avec description, « Le lieu » fermé montre le texte réel en entier (coupé par CSS seulement)', () => {
+  const w = peekWorld(), full = descOf('hossegor');
+  w.setDesc(full);
+  assert.equal(w.peek.textContent, full, 'texte entier, mot pour mot, aucune coupe en JS');
+  assert.ok(w.head.hasAttribute('data-peek'));
+  /* Espaces multiples du DOM ramenés à un seul, rien d’autre. */
+  w.setDesc('  ' + descOf('tulamben').replace(/ /, '\n   ') + ' ');
+  assert.equal(w.peek.textContent, descOf('tulamben'));
+  assert.doesNotMatch(js.slice(js.indexOf('function syncPeek('), js.indexOf('function openSet(')), /slice\(|substring\(|substr\(|…|\.\.\./, 'aucun résumé ni découpe');
+  /* L’aperçu n’est ni traduit une seconde fois (texte déjà traduit) ni lu par les lecteurs d’écran. */
+  assert.equal(w.peek.attrs['aria-hidden'], 'true');
+  assert.ok('data-no-i18n' in w.peek.attrs);
+});
+
+test('fiche-apercu : sans description, le libellé générique reste', () => {
+  const w = peekWorld();
+  w.setDesc(descOf('hossegor'));
+  for (const empty of ['', '   \n ']) {
+    w.setDesc(empty);
+    assert.equal(w.peek.textContent, '');
+    assert.ok(!w.head.hasAttribute('data-peek'), 'pas d’aperçu : le sous-titre générique est affiché');
+  }
+  /* Aucun spot du catalogue n’est sans description : le cas réel est un spot privé enregistré sans texte. */
+  assert.match(read('private-spots.js'), /desc:typeof raw\.desc==='string'\?raw\.desc\.slice\(0,400\)/);
+});
+
+test('fiche-apercu : changement de langue, l’aperçu suit le texte affiché (traduction entière, jamais un morceau)', () => {
+  const w = peekWorld();
+  /* Observé : remplacement du texte (nouveau spot) ET modification en place (traduction par i18n.js). */
+  const o = w.observers.find(x => x.target === w.desc);
+  assert.ok(o, 'observateur sur #dDesc');
+  assert.deepEqual({ ...o.opts }, { childList: true, characterData: true, subtree: true });
+  for (const id of ['hossegor', 'tulamben']) {
+    const fr = descOf(id);
+    assert.ok(en[fr] && es[fr], 'la description entière est une clé traduite : ' + id);
+    w.setDesc(fr); assert.equal(w.peek.textContent, fr);
+    w.setDesc(en[fr]); assert.equal(w.peek.textContent, en[fr], 'EN : ' + id);
+    w.setDesc(es[fr]); assert.equal(w.peek.textContent, es[fr], 'ES : ' + id);
+  }
+  /* Le dictionnaire couvre toutes les descriptions du catalogue, en entier. */
+  assert.equal(catalog.filter(s => !en[s.desc] || !es[s.desc]).length, 0);
+  /* Changer de langue recharge la page et navigation.js rouvre la fiche avant que replis.js n’écoute « ocean:navigate » :
+     le sommaire est posé dès le chargement du script si la fiche est déjà ouverte. */
+  assert.match(js, /if \(document\.body\?\.dataset\.screen === 'detail'\) \{[\s\S]*?closeAll\(\); closeTabs\(\);\s*\}/);
+  assert.match(read('i18n.js'), /setLanguage: function \(code\) \{[\s\S]*?location\.replace/);
+  assert.ok(html.indexOf('src="navigation.js') < html.indexOf('src="replis.js'));
+});
+
+/* Cascade réduite aux règles de replis.css qui visent `target`, selon l’état de la tête (aperçu, ouverte). */
+function headRules(target) {
+  return styleRules(css).flatMap(r => splitTop(r.sel, ',').filter(s => s.includes(target)).map(sel => ({ sel, body: r.body })));
+}
+function appliesTo(sel, st) {
+  const m = sel.match(/\.obf-head((?:\[[^\]]+\])*)/); if (!m) return true;
+  return [...m[1].matchAll(/\[([\w-]+)(?:="([^"]*)")?\]/g)].every(([, k, v]) => (k === 'data-peek' ? st.peek : k === 'aria-expanded' ? String(st.open) === v : true));
+}
+function decl(target, st, prop) {
+  let val = null;
+  for (const r of headRules(target)) if (appliesTo(r.sel, st)) for (const d of splitTop(r.body, ';')) { const k = d.indexOf(':'); if (d.slice(0, k).trim() === prop) val = d.slice(k + 1).trim(); }
+  return val;
+}
+
+test('fiche-apercu : ouverture et fermeture du repli, le sous-titre redevient générique une fois ouvert', () => {
+  const shut = { peek: true, open: false }, open = { peek: true, open: true }, none = { peek: false, open: false };
+  /* Fermé avec description : aperçu sur deux lignes, libellé générique masqué visuellement seulement. */
+  assert.equal(decl('.obf-peek', shut, 'display'), '-webkit-box');
+  assert.equal(decl('.obf-peek', shut, '-webkit-line-clamp'), '2');
+  assert.equal(decl('.obf-peek', shut, 'overflow'), 'hidden');
+  assert.equal(decl('.obf-tx>small', shut, 'clip-path'), 'inset(50%)');
+  /* Ouvert : la phrase ne se lit pas deux fois. Sans description : rien ne change. */
+  for (const st of [open, none]) {
+    assert.equal(decl('.obf-peek', st, 'display'), 'none', JSON.stringify(st));
+    assert.equal(decl('.obf-tx>small', st, 'clip-path'), null, JSON.stringify(st));
+  }
+  /* Le libellé générique n’est jamais retiré de l’arbre d’accessibilité : le nom du bouton ne change pas. */
+  for (const st of [shut, open, none]) assert.notEqual(decl('.obf-tx>small', st, 'display'), 'none');
+  /* Le basculement passe par aria-expanded, posé par setGroup (clic sur la tête) ; un nouveau spot repart fermé. */
+  assert.match(js, /setGroup\(head\.dataset\.obfGroup, head\.getAttribute\('aria-expanded'\) !== 'true'\)/);
+  assert.match(js, /head\.innerHTML = `<span class="obf-tx"><b>\$\{g\.title\}<\/b><small>\$\{g\.sub\}<\/small>\$\{PEEK\[g\.id\] \? PEEK_HTML : ''\}<\/span>/);
+  assert.match(js, /\n    syncPeeks\(\);\n    return tab;/, 'aperçu recopié à chaque pose du sommaire');
+});
+
+test('fiche-apercu : seuls « Le lieu » et son aperçu changent ; les trois autres replis gardent leur libellé', () => {
+  assert.deepEqual(Object.keys(vm.runInNewContext('(' + js.match(/const PEEK = (\{[^}]*\});/)[1] + ')')), ['lieu']);
+  assert.deepEqual(groups.map(g => [g.id, g.title, g.sub]), [
+    ['lieu', 'Le lieu', 'Description, esprit du lieu et anecdotes'],
+    ['pratique', 'Infos pratiques', 'Marée, règles locales, danger et conseils'],
+    ['autour', 'Dormir et alentours', 'Nuits pas chères, lieux et spots voisins'],
+    ['images', 'Photos et carte', 'Photos, vidéos et carte du secteur']
+  ]);
+  /* Règles ajoutées groupées en fin de fichier, après « finitions-securite ». */
+  assert.ok(css.indexOf('---------- fiche-apercu ----------') > css.indexOf('---------- finitions-securite ----------'));
+  assert.ok(css.indexOf('.obf-peek') > css.indexOf('---------- fiche-apercu ----------'));
+});
+
+test('fiche-apercu : repli « Le lieu » ouvert, ni lieu ni nom répétés ; coordonnées après la description', () => {
+  /* Affichage seulement, et seulement dans l’onglet « Le spot » : les données restent posées. */
+  assert.match(css, /#detail \.dcat\[data-cat="infos"\]>\.field-story>h4\{display:none\}/);
+  const fg = read('field-guide.js');
+  assert.match(fg, /\$\('#fieldLocation'\)\.textContent=s\.loc;/);
+  assert.match(fg, /\$\('#fieldIntroTitle'\)\.textContent=s\.name\.split\(' — '\)\[0\];/);
+  assert.match(fg, /<span class="field-eyebrow" id="fieldLocation"><\/span><span id="fieldIntroTitle"><\/span>/);
+  /* Coordonnées posées après la description et sa provenance (ordre du DOM, donc aussi pour les lecteurs d’écran). */
+  assert.match(fg, /\$\('#dSource'\)\.insertAdjacentHTML\('afterend','<div class="field-coordinates" id="fieldCoordinates"><\/div>'\);/);
+  assert.doesNotMatch(fg, /insertAdjacentHTML\('afterbegin','<div class="field-coordinates"/);
+  assert.match(html, /<p id="dDesc"><\/p><p class="spot-provenance" id="dSource"><\/p>/);
+  assert.match(css, /\.field-story>\.field-coordinates\{margin:14px 0 0\}/);
+});

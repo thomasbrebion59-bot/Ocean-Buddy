@@ -118,3 +118,15 @@ details.chal-why[open]>span{animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-s
    Règle du fondateur : dangers, numéros d’urgence et avertissements de sécurité ne sont jamais repliés ni coupés.
    Le danger principal d’« Avant d’y aller » se lit en entier (la limite de trois lignes plus haut est levée). */
 #detail .d-before .db-danger-text{display:block;-webkit-line-clamp:none;line-clamp:none;overflow:visible;max-height:none;text-overflow:clip;white-space:normal}
+
+/* ---------- fiche-apercu ----------
+   « Le lieu » fermé : le sous-titre montre le début réel de la description (texte entier recopié par replis.js, déjà
+   traduit), coupé ici à deux lignes. Le libellé générique n’est masqué que visuellement : le nom du bouton reste « Le lieu »
+   et son libellé court (l’aperçu est aria-hidden). Repli ouvert ou spot sans description : le libellé générique revient.
+   Repli ouvert : le lieu et le nom, déjà dans l’en-tête de la fiche, ne sont pas répétés (affichage seulement, les
+   données restent dans le DOM) ; les coordonnées passent après la description et sa provenance (field-guide.js). */
+.obf-peek{display:none}
+#detail .obf-head[data-peek][aria-expanded="false"] .obf-peek{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden;font:600 13px/1.35 var(--body);color:var(--t-ink2);overflow-wrap:break-word}
+#detail .obf-head[data-peek][aria-expanded="false"] .obf-tx>small{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+#detail .dcat[data-cat="infos"]>.field-story>h4{display:none}
+#detail .dcat[data-cat="infos"]>.field-story>.field-coordinates{margin:14px 0 0}
