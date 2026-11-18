@@ -56,10 +56,14 @@
 
   function dots(n) { let h = ''; for (let i = 0; i < 4; i++) h += `<i class="${n != null && i < n ? 'on' : ''}"></i>`; return `<span class="db-dots" aria-hidden="true">${h}</span>`; }
 
+  /* L’invitation au niveau, d’un toucher : elle ouvre « Mon sport et mon niveau ». Un seul composant et un seul libellé,
+     repris tels quels par « Ton meilleur créneau » (onglet Conditions, spot-experience.js). */
+  const levelButton = () => '<button type="button" class="db-level" data-open-level>Choisis ton niveau pour savoir si ce spot te correspond</button>';
+
   function fitBlock(s) {
     const r = fitOf(s), lv = userLevel();
-    /* Une seule invitation, d’un toucher : elle ouvre « Mon sport et mon niveau » (la case « Ton créneau » ne la répète pas). */
-    if (!r || r.kind === 'nolevel') return '<button type="button" class="db-level" data-open-level>Choisis ton niveau pour savoir si ce spot te correspond</button>';
+    /* La case « Ton créneau » ne la répète pas. */
+    if (!r || r.kind === 'nolevel') return levelButton();
     if (r.kind === 'unrated') return '<p class="db-note">Danger non évalué ici : renseigne-toi sur place avant d’entrer.</p>';
     if (r.kind === 'zones') return '<p class="db-note">Le niveau change selon la zone : demande sur place laquelle te correspond.</p>';
     return `<p class="db-note">D’après ton niveau (${esc(LEVEL[lv] || '')}) : un repère, pas une garantie.</p>`;
@@ -138,6 +142,21 @@
     setRow('slot', `<span class="db-muted">${esc(why)}</span>`);
   }
 
+  /* Météo refusée même après la reprise automatique (le service météo répond parfois 503) : la case le dit en un mot, avec
+     « Réessayer » (family : 'now' = conditions du moment, app.js ; 'week' = prévision de la semaine, spot-experience.js).
+     Le bouton tient dans la ligne de « Chargement… » (sa zone de toucher déborde sans rien pousser) : aucune hauteur ne change. */
+  function retry(s, key, family) {
+    if (!same(s)) return;
+    setRow(key, `<span class="db-muted">Indisponible</span><button type="button" class="ob-retry" data-weather-retry="${family === 'week' ? 'week' : 'now'}">Réessayer</button>`);
+  }
+  /* Toucher « Réessayer » : la case repasse à « Chargement… » (seulement si elle montrait l’échec, jamais sur des données). */
+  function wait(s, key) {
+    if (!same(s) || !host) return;
+    const v = host.querySelector(`[data-before="${key}"] .db-v`);
+    if (!v || !v.querySelector('[data-weather-retry]')) return;
+    v.classList.add('db-wait'); v.textContent = 'Chargement…';
+  }
+
   function update(s) { try { render(s); } catch (e) { console.warn('avant d’y aller', e); } }
   /* Niveau changé dans Réglages : la pastille et l’explication suivent (le créneau est recalculé par spot-experience.js). */
   document.addEventListener('ocean:level', () => { try { if (spot && document.body.dataset.screen === 'detail') { const keep = host && host.querySelectorAll('[data-before] .db-v'); const saved = keep ? [...keep].map(v => [v.parentNode.dataset.before, v.innerHTML, v.classList.contains('db-wait')]) : []; render(spot); saved.forEach(([k, h, wait]) => { if (!wait) setRow(k, h); }); } } catch (e) {} });
@@ -148,5 +167,5 @@
     try { if (typeof openSettings === 'function') openSettings('sport'); } catch (err) {}
   });
 
-  window.OceanBefore = {update, live, season, slot, cardPill, openSafety};
+  window.OceanBefore = {update, live, season, slot, cardPill, openSafety, levelButton, retry, wait};
 })();

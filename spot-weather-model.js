@@ -209,7 +209,41 @@
     return +offsetSec + d.getTimezoneOffset() * 60;
   }
 
-  const api = { toward, cardinal, sky, STORM, localHourIso, dateOf, hourOf, minutesOf, instant, hours, upcoming, trimMarine, days, verdict, rule, bestSlot, tzGap, GOOD, OK, NO };
+  /* Reprise des demandes météo de la fiche (open-meteo répond parfois 503). Un essai, puis UN seul nouvel essai
+     automatique RETRY_MS plus tard ; ensuite plus rien tant qu’on ne touche pas « Réessayer » (again : un toucher = un essai).
+     Jamais deux essais à la fois : start et again ne font rien pendant un essai en cours ou programmé (ils renvoient false).
+     task() renvoie une promesse : tenue = réussite, rompue = échec. on(état, valeur) reçoit 'busy' (un essai part),
+     'ok' (réussite), 'wait' (échec, nouvel essai programmé : l’écran garde « Chargement… ») ou 'failed' (échec après la
+     reprise : « Réessayer »). stop() : la fiche a changé de spot, plus rien n’est demandé ni signalé. Sans DOM ; minuteries
+     injectables pour les tests (opts.setTimeout, opts.clearTimeout, opts.delay). */
+  const RETRY_MS = 4000;
+  function retrier(task, on, opts) {
+    const o = opts || {}, delay = o.delay != null ? o.delay : RETRY_MS;
+    const later = o.setTimeout || ((f, ms) => setTimeout(f, ms)), cancel = o.clearTimeout || (t => clearTimeout(t));
+    let busy = false, timer = null, autoLeft = 1, dead = false;
+    const tell = (state, value) => { try { if (on) on(state, value); } catch (e) {} };
+    function run() {
+      if (dead || busy || timer != null) return false;
+      busy = true;
+      tell('busy');
+      let p;
+      try { p = Promise.resolve(task()); } catch (e) { p = Promise.reject(e); }
+      p.then(v => { busy = false; if (!dead) tell('ok', v); }, e => {
+        busy = false;
+        if (dead) return;
+        if (autoLeft > 0) { autoLeft--; tell('wait', e); timer = later(() => { timer = null; run(); }, delay); }
+        else tell('failed', e);
+      });
+      return true;
+    }
+    return {
+      start: run, again: run,
+      stop() { dead = true; if (timer != null) cancel(timer); timer = null; },
+      get busy() { return busy || timer != null; }
+    };
+  }
+
+  const api = { toward, cardinal, sky, STORM, localHourIso, dateOf, hourOf, minutesOf, instant, hours, upcoming, trimMarine, days, verdict, rule, bestSlot, tzGap, GOOD, OK, NO, RETRY_MS, retrier };
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.SpotWeatherModel = api;
 })(typeof window !== 'undefined' ? window : globalThis);

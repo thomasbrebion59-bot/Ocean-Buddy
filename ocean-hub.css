@@ -166,6 +166,10 @@ body.reduce-motion .ocean-hub,body.reduce-motion .hub-flame.on svg{animation:non
 body.reduce-motion .spot-bar{transition:none}
 body:has(.spot-bar.show) #toast{margin-bottom:68px}
 @media (min-width:960px){body:has(.spot-bar.show) #toast{margin-bottom:0}}
+/* Explorer, aperçu du spot ouvert : le message se pose juste au-dessus de l’aperçu (app.js toast, --toast-lift), jamais
+   sur « Voir le spot » ni « Ajouter à un voyage », sur téléphone comme sur ordinateur. Sans glissement : seules l’opacité
+   et la translation s’animent. */
+#toast.is-lifted{bottom:var(--toast-lift,98px)!important;margin-bottom:0!important;transition-property:opacity,transform}
 /* Sens de lecture de droite à gauche */
 .ocean-hub button{text-align:start}
 [dir=rtl] .ocean-hub .hub-cta svg,[dir=rtl] .ocean-hub .hub-link svg,[dir=rtl] .hub-trip-empty>svg{transform:scaleX(-1)}

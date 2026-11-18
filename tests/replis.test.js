@@ -27,9 +27,9 @@ test('fiche : quatre sections, chaque membre replié par CSS quand sa section es
 test('fiche : la sécurité reste visible ou à un toucher, les sources restent dans leur section', () => {
   const folded = groups.flatMap(g => g.members).join(' ');
   for (const s of ['#dBefore', '.d-before', '#dDangers', '#dEmerg', '#dCall', 'securite', '#spotSafetyLive', '#dLogBtn']) assert.ok(!folded.includes(s), 'jamais replié : ' + s);
-  /* Le danger principal reste lisible en entier dans « Avant d’y aller » (son bloc détaillé est dans « Infos pratiques »). */
-  assert.match(css, /#detail \.d-before \.db-danger-text\{-webkit-line-clamp:3\}/);
-  assert.ok(groups.find(g => g.id === 'pratique').members.includes('#fieldMainDanger'), 'danger principal replié, pas retiré');
+  /* Le danger principal se lit en entier dans « Avant d’y aller » (voir « sécurité jamais repliée » plus bas) ; son bloc
+     détaillé, qui ne dit rien de plus, reste dans « Infos pratiques ». */
+  assert.ok(groups.find(g => g.id === 'pratique').members.includes('#fieldMainDanger'), 'bloc détaillé du danger : replié, pas retiré');
   assert.ok(groups.find(g => g.id === 'pratique').members.includes('#fieldVisit'), 'règles locales et leurs sources : dans « Infos pratiques »');
   /* « Quand partir ? » n’est masqué que dans l’onglet « Le spot » (il double la ligne Saison et l’onglet Saisons). */
   assert.match(css, /dcat\[data-cat="infos"\]\.field-overview>#dSeasonTeaser\{display:none\}/);
@@ -130,6 +130,128 @@ test('onglets : dangers, secours, urgence et avertissements ne sont jamais repli
   const exp = read('spot-experience.js');
   assert.match(exp, /class="wx-block wx-hours"/);
   assert.match(exp, /class="wx-block wx-week"/);
+});
+
+/* ---------- Sécurité jamais repliée (règle du fondateur, finitions-securite) ----------
+   Dangers, numéros d’urgence et avertissements de sécurité ne sont jamais repliés ni coupés. Ces tests échouent si
+   « Si tu es emporté », la reconnaissance d’un courant ou le danger principal repassent dans un repli, ou si le texte du
+   danger d’« Avant d’y aller » est de nouveau tronqué par une règle CSS. */
+const M = require('../spot-data-model.js');
+const allFolded = () => [...groups, ...Object.values(tabGroups).flat()].flatMap(g => g.members).join(' ');
+
+/* Feuilles de style dans l’ordre de index.html, puis cascade simplifiée (toutes les media queries comptent, au pire). */
+const cssFiles = () => [...html.matchAll(/<link[^>]+href="([^"?]+\.css)/g)].map(m => m[1]).filter(f => fs.existsSync(path.join(root, f)));
+function splitTop(s, sep) {
+  const out = []; let depth = 0, cur = '';
+  for (const c of s) { if (c === '(') depth++; if (c === ')') depth--; if (c === sep && depth === 0) { out.push(cur); cur = ''; } else cur += c; }
+  out.push(cur); return out.map(x => x.trim()).filter(Boolean);
+}
+function specificity(sel) {
+  let a = 0, b = 0, c = 0, rest = sel;
+  rest = rest.replace(/:(is|not|has)\(((?:[^()]|\([^()]*\))*)\)/g, (_, k, arg) => { const best = splitTop(arg, ',').map(specificity).sort((x, y) => (y[0] - x[0]) || (y[1] - x[1]) || (y[2] - x[2]))[0] || [0, 0, 0]; a += best[0]; b += best[1]; c += best[2]; return ' '; });
+  rest = rest.replace(/:where\((?:[^()]|\([^()]*\))*\)/g, ' ');
+  a += (rest.match(/#[\w-]+/g) || []).length;
+  b += (rest.match(/\.[\w-]+|\[[^\]]*\]|(?<!:):[\w-]+/g) || []).length;
+  c += (rest.match(/::[\w-]+/g) || []).length + (rest.replace(/\[[^\]]*\]/g, ' ').match(/(?:^|[\s>+~(])([a-z][\w-]*)/gi) || []).length;
+  return [a, b, c];
+}
+function styleRules(css) {
+  const out = []; css = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  let i = 0;
+  const walk = (end) => {
+    while (i < end) {
+      const open = css.indexOf('{', i); if (open < 0 || open >= end) return;
+      const head = css.slice(i, open).trim();
+      let depth = 1, j = open + 1; while (j < css.length && depth) { if (css[j] === '{') depth++; else if (css[j] === '}') depth--; j++; }
+      if (/^@(media|supports|layer|container)/.test(head)) { const save = i; i = open + 1; walk(j - 1); i = j; void save; continue; }
+      if (!head.startsWith('@')) out.push({ sel: head, body: css.slice(open + 1, j - 1) });
+      i = j;
+    }
+  };
+  walk(css.length);
+  return out;
+}
+/* Déclarations qui s’appliquent à un élément dont le dernier composé du sélecteur contient la classe `cls`. */
+function cascade(cls) {
+  const win = {}; let order = 0;
+  for (const f of cssFiles()) for (const r of styleRules(read(f))) for (const sel of splitTop(r.sel, ',')) {
+    const parts = splitTop(sel.replace(/\s*([>+~])\s*/g, ' $1 '), ' ').filter(p => !/^[>+~]$/.test(p));
+    const last = parts[parts.length - 1] || '';
+    /* Une règle réservée à l’état [hidden] (élément volontairement retiré, ex. spot sans surf) ne compte pas. */
+    if (!new RegExp(`\\.${cls}(?![\\w-])`).test(last) || /\[hidden\]/.test(last)) continue;
+    const spec = specificity(sel); order++;
+    for (const d of splitTop(r.body, ';')) {
+      const k = d.indexOf(':'); if (k < 0) continue;
+      const prop = d.slice(0, k).trim().toLowerCase(), raw = d.slice(k + 1).trim(), imp = /!important$/.test(raw), val = raw.replace(/\s*!important$/, '').trim();
+      const cur = win[prop], key = [imp ? 1 : 0, ...spec, order];
+      const beats = !cur || key.some((v, n) => v !== cur.key[n]) && (() => { for (let n = 0; n < key.length; n++) if (key[n] !== cur.key[n]) return key[n] > cur.key[n]; return false; })();
+      if (beats) win[prop] = { val, key, where: `${f} : ${sel}` };
+    }
+  }
+  return win;
+}
+function assertNotCut(cls) {
+  const w = cascade(cls), v = p => (w[p] ? w[p].val.toLowerCase() : null), at = p => (w[p] ? ` (${w[p].where})` : '');
+  assert.ok([null, 'none', 'unset', 'initial'].includes(v('-webkit-line-clamp')), `.${cls} limité en lignes : ${v('-webkit-line-clamp')}${at('-webkit-line-clamp')}`);
+  assert.ok([null, 'none', 'unset', 'initial'].includes(v('line-clamp')), `.${cls} line-clamp : ${v('line-clamp')}${at('line-clamp')}`);
+  for (const p of ['overflow', 'overflow-y', 'overflow-x']) assert.ok(!['hidden', 'clip'].includes(v(p)), `.${cls} ${p}:${v(p)}${at(p)}`);
+  assert.ok([null, 'none'].includes(v('max-height')), `.${cls} max-height:${v('max-height')}${at('max-height')}`);
+  assert.ok([null, 'auto'].includes(v('height')), `.${cls} height:${v('height')}${at('height')}`);
+  assert.ok(!['nowrap', 'pre'].includes(v('white-space')), `.${cls} white-space:${v('white-space')}${at('white-space')}`);
+  assert.ok(v('display') !== 'none', `.${cls} display:none${at('display')}`);
+}
+
+test('sécurité jamais repliée : « Si tu es emporté » et « Repérer une baïne ou un courant » visibles sans toucher, à côté de « Dangers & vigilance »', () => {
+  const titles = ['Repérer une baïne ou un courant', 'Si tu es emporté'];
+  for (const s of ['#sdRip', 'sd-rip', 'securite', '#dDangers']) assert.ok(!allFolded().includes(s), 'jamais replié : ' + s);
+  /* Le coach (rendu dans « Lire les conditions », replié) ne les contient plus, quel que soit le niveau ou le sport. */
+  assert.deepEqual(M.ripSafety(['surf'], false).map(b => b.h), titles);
+  assert.ok(M.ripSafety(['surf'], false).every(b => b.lines.length >= 3 && b.src.length), 'texte complet et sources');
+  for (const act of ['surf', 'bodyboard']) for (const level of [null, 'debutant', 'intermediaire', 'expert']) {
+    const r = M.coach({ act, level, spot: { dangers: [['🌀', 'Courants de baïne très forts.']] }, live: null, clim: null, m: 0, monthName: 'janvier' });
+    for (const l of r.levels) for (const b of l.blocks) assert.ok(!titles.includes(b.h), `${act} / ${level} / ${l.id} : « ${b.h} » est revenu dans le repli`);
+  }
+  /* spot-data.js les pose juste après le bloc « Dangers & vigilance » (panneau Sécurité, affiché avec Conditions). */
+  const sd = read('spot-data.js');
+  assert.match(sd, /const box = \$\('#dDangers'\)\?\.closest\('\.block'\);/);
+  assert.match(sd, /box\.after\(host\);/);
+  assert.match(sd, /const blocks = M\.ripSafety\(sports, inland\);/);
+  assert.match(sd, /try \{ renderRip\(s\); \} catch \(e\) \{\}/);
+  assert.doesNotMatch(sd.slice(sd.indexOf('function renderRip'), sd.indexOf('function renderRip') + 1500), /<details|data-obf/, 'pas de repli dans la carte');
+  assert.match(html, /<div class="dcat" data-cat="securite"[^>]*>\s*<div class="block band"[^>]*><h4>[\s\S]*?Dangers & vigilance<\/h4><div id="dDangers"><\/div><\/div>/);
+  assert.match(read('app.js'), /\(cat==='meteo'&&d\.dataset\.cat==='securite'\)/);
+  /* Aucune règle ne masque ni ne coupe la carte (hors [hidden], posé seulement quand le spot n’a ni surf ni bodyboard). */
+  for (const cls of ['sd-rip', 'sd-rip-part']) assertNotCut(cls);
+});
+
+test('sécurité jamais repliée : le danger principal d’« Avant d’y aller » se lit en entier, sans toucher', () => {
+  for (const s of ['#dBefore', '.d-before', 'db-danger', 'db-rows']) assert.ok(!allFolded().includes(s), 'jamais replié : ' + s);
+  const before = read('spot-before.js');
+  assert.match(before, /body\.prepend\(host\)/, 'au-dessus des onglets, hors de tout repli');
+  assert.match(before, /<span class="db-danger-text">\$\{esc\(d\.text\)\}<\/span>/, 'texte entier, aucune découpe en JS');
+  /* Le bloc détaillé replié (#fieldMainDanger) ne dit rien de plus : le même premier danger et la mention « non vérifié »,
+     déjà repris dans le bandeau (pas de doublon visible). */
+  assert.match(before, /d\.basis === 'carnet' \? '<small class="db-carnet">Carnet Ocean Buddy · non vérifié<\/small>'/);
+  const fg = read('field-guide.js'), fd = fg.slice(fg.indexOf('function mainDanger(s){'), fg.indexOf('function mapURL'));
+  assert.match(fd, /const d=own\[0\]\|\|carnet\[0\];/);
+  assert.match(fd, /<span>\$\{esc\(d\[1\]\)\}<\/span><\/div>\$\{!own\.length&&typeof carnetTag==='function'\?carnetTag\(\):''\}/);
+  assert.match(read('spot-fit-model.js'), /const d = own\[0\] \|\| carnet\[0\];/);
+  /* CSS : aucune règle gagnante ne limite le texte (line-clamp, max-height, overflow caché, nowrap, hauteur fixe). */
+  assertNotCut('db-danger-text');
+  for (const cls of ['db-danger', 'db-rows', 'd-before']) {
+    const w = cascade(cls);
+    assert.ok(!w['max-height'] || w['max-height'].val === 'none', `.${cls} max-height (${w['max-height']?.where})`);
+    assert.ok(!['hidden', 'clip'].includes(w.overflow?.val), `.${cls} overflow (${w.overflow?.where})`);
+  }
+});
+
+test('sécurité : « Ton meilleur créneau » sans niveau reprend le bouton court d’« Avant d’y aller » (même composant, même libellé)', () => {
+  const exp = read('spot-experience.js'), before = read('spot-before.js');
+  assert.match(before, /const levelButton = \(\) => '<button type="button" class="db-level" data-open-level>Choisis ton niveau pour savoir si ce spot te correspond<\/button>';/);
+  assert.match(before, /window\.OceanBefore = \{[^}]*\blevelButton\b/);
+  assert.match(exp, /if \(rule\.reason === 'level'\) return \{html: `\$\{head\}\$\{window\.OceanBefore\?\.levelButton\?\.\(\) \|\| ''\}`/);
+  assert.doesNotMatch(exp, /Choisis ton niveau/, 'plus de troisième consigne');
+  assert.doesNotMatch(read('fiches-organisation.css'), /\.wx-level/);
 });
 
 test('« Avant d’y aller » : une seule invitation au niveau, d’un toucher, cases de hauteur fixe', () => {

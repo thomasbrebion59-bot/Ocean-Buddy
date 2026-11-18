@@ -526,7 +526,10 @@
         if(selected&&!flying){pinU.uT.value=(now%60000)/1000;ambient=true;}
         if(ambient)dirty=true;
       }
-      if(dirty){dirty=false;draw();if(firstFrame){const f=firstFrame;firstFrame=null;requestAnimationFrame(()=>f());}}
+      /* Signal « première image » (onFirstFrame) seulement sur une image où la Terre est dessinée : les images demandées avant
+         ses textures (étoiles, frontières, premier redimensionnement) sont vides, et create() n’a pas encore rendu la main
+         (l’accueil ne reconnaissait pas son globe et gardait la sphère CSS). Globe créé en pause : le signal part à la reprise. */
+      if(dirty){dirty=false;draw();if(firstFrame&&earth.visible){const f=firstFrame;firstFrame=null;requestAnimationFrame(()=>f());}}
       prevAgain=again||emblemAnim||ovBusy||splitBusy;
       if(!prevAgain&&!gesture&&dprNow<dprFull)sharpen();
       if(emblemAnim||ovBusy||splitBusy){dirty=true;again=true;}

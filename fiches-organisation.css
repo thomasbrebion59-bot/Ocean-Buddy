@@ -15,10 +15,8 @@
 #detail .db-row[data-before="live"]>.db-v{min-height:1.4em}
 @media(max-width:399px){#detail .db-row[data-before="live"]>.db-v{min-height:calc(2 * 1.4em);align-content:flex-start}}
 
-/* Onglet Conditions : « Choisis ton niveau… » du meilleur créneau ouvre aussi le réglage. */
-#detail .wx-level{display:block;width:100%;margin:6px 0 0;padding:10px 12px;border:1px solid var(--t-line);border-radius:12px;background:var(--t-tint);
-  color:var(--t-deep);font:700 13px/1.4 var(--body);text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent}
-#detail .wx-level:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+/* Onglet Conditions, « Ton meilleur créneau » sans niveau : le même bouton .db-level, posé sous le titre (sans marge haute). */
+#detail .wx-sub+.db-level{margin-top:0}
 
 /* ---------- Onglet Conditions : la réponse, puis la sécurité ----------
    Ordre affiché : conditions du moment, comparaison à la normale, cette semaine (heure par heure replié) ; puis la tête
@@ -90,9 +88,14 @@
   .cult-quiz{height:160px;margin:8px 0 4px;padding:8px 12px 10px}
   .cult-quiz-head{height:22px}
   .cult-quiz-kicker img{width:22px;height:22px}
-  .cult-quiz-word{height:38px;margin:0;font-size:30px}
+  /* Corps de hauteur fixe (160 − 18 − 22 px) : la question, le message hors ligne ou le texte d’attente passe sur deux
+     lignes quand il le faut (anglais, espagnol, téléphones de 390 px et moins) en prenant la place sur le mot, jamais sur
+     la carte ; les choix restent en bas. Rien n’est coupé, la section suivante ne bouge pas. */
+  .cult-quiz-body{height:120px}
+  .cult-quiz-word{flex:0 1 38px;height:auto;min-height:30px;margin:0;font-size:30px}
   .cult-quiz-word.is-long{font-size:25px}
-  .cult-quiz-q{height:20px;margin:0 0 6px;font-size:13.5px;line-height:1.45;-webkit-line-clamp:1}
+  .cult-quiz-q{flex:none;height:auto;max-height:calc(2 * 1.25em);margin:0 0 4px;font-size:13.5px;line-height:1.25;-webkit-line-clamp:2}
+  .cult-quiz-choices,.cult-quiz-done{flex:none;margin-top:auto}
   .cult-quiz-choices{grid-template-columns:repeat(3,minmax(0,1fr));height:52px;gap:6px}
   .cult-choice{justify-content:center;height:52px;padding:0 6px;border-radius:14px;font-size:12.5px;line-height:1.15;text-align:center}
   .cult-choice img,.cult-choice i{display:none}
@@ -103,9 +106,9 @@
   .cult-quiz-done{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;height:52px}
   .cult-quiz-res{height:52px;gap:10px}
   .cult-quiz-res .cult-stamp{width:48px;height:48px}
-  .cult-quiz-res .cult-stamp b{font-size:9px}
-  .cult-quiz-res b{font-size:20px}
-  .cult-quiz-res small{font-size:12px}
+  .cult-quiz-res .cult-stamp{--sf:7.6px}
+  .cult-quiz-res>div>b{font-size:20px}
+  .cult-quiz-res>div>small{font-size:12px}
   .cult-quiz-go{height:42px;max-width:46vw;padding:0 14px;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .cult-quiz-next{display:none}
 }

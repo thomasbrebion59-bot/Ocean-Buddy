@@ -28,7 +28,8 @@
 #detail .db-dots{display:inline-flex;gap:3px}
 #detail .db-dots i{width:8px;height:8px;border-radius:50%;background:var(--t-line)}
 #detail .db-dots i.on{background:var(--t-danger)}
-#detail .db-danger-text{flex-basis:100%;display:-webkit-box;-webkit-line-clamp:1;-webkit-box-orient:vertical;overflow:hidden}
+/* Danger principal : toujours lu en entier, quelle que soit sa longueur (jamais de coupe ni de « … » : règle du fondateur). */
+#detail .db-danger-text{flex-basis:100%;display:block;min-width:0;overflow-wrap:anywhere}
 #detail .db-carnet{flex-basis:100%;font-size:11px;font-weight:600;color:var(--t-ink2)}
 #detail .db-season{font-weight:700}
 #detail .db-q{font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--t-tint);color:var(--t-deep)}
@@ -90,3 +91,17 @@
 }
 /* Onglet cliqué : l’ancre remonte de la hauteur de l’en-tête collant, le titre de la section reste visible sous les onglets. */
 @media(max-width:959px){#detailTabsAnchor{position:relative;top:calc(-1 * (52px + var(--as-top,0px)))}}
+
+/* ---------- Météo refusée : « Réessayer » (spot-before.js retry, app.js, spot-experience.js) ----------
+   Petit bouton tenu dans la ligne du texte (hauteur ≤ celle de « Chargement… ») : la case ne grandit pas. Sa zone de
+   toucher fait 44 px de haut grâce à un pseudo-élément qui déborde sans rien pousser. */
+.ob-retry{position:relative;display:inline-flex;align-items:center;flex:none;height:18px;margin:0;padding:0 10px;border:1px solid var(--t-line);border-radius:999px;
+  background:var(--t-tint);color:var(--t-deep);font:800 12px/16px var(--body);letter-spacing:0;text-transform:none;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ob-retry::before{content:"";position:absolute;left:-4px;right:-4px;top:-13px;bottom:-13px}
+.ob-retry:active{transform:scale(.97)}
+.ob-retry:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+/* En tête de l’onglet Conditions (ligne de 16,5 px) : le bouton tient dans la ligne, la tête ne grandit pas. */
+.cond-head .ob-retry{height:16px;padding:0 9px;font-size:11px;line-height:14px}
+/* Case étroite (« Ton créneau », ou espagnol) : le bouton passe sous « Indisponible » sans espace entre les deux lignes,
+   pour rester dans les deux lignes déjà réservées (2 × 1,4em). */
+#detail .db-v:has(>.ob-retry){row-gap:0}

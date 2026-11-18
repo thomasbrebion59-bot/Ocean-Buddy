@@ -218,12 +218,12 @@
     const head = `<div class="wx-sub"><h4>Ton meilleur créneau</h4><span>${esc(sport)}${lv ? ` · ${esc(lv)}` : ''}</span></div>`;
     const note = '<p class="wx-note">Repère calculé sur une prévision de modèle, avec les seuils de « Lire les conditions » et en heures de jour seulement. Ce n’est pas une consigne : le poste de secours, le balisage et les drapeaux priment.</p>';
     if (!rule.ok) {
-      const why = rule.reason === 'level' ? 'Choisis ton niveau dans Réglages, « Mon sport et mon niveau », pour voir ton meilleur créneau.'
-        : rule.reason === 'expert' ? 'Niveau expert : « Lire les conditions » ne fixe pas de seuil. Compare toi-même vent, houle et période heure par heure.'
+      /* Sans niveau : le même bouton court que dans « Avant d’y aller » (spot-before.js, OceanBefore.levelButton), qui
+         ouvre « Mon sport et mon niveau » d’un toucher ; pas une troisième phrase d’invitation sur la fiche. */
+      if (rule.reason === 'level') return {html: `${head}${window.OceanBefore?.levelButton?.() || ''}`, hours: new Set(), rule, today: null};
+      const why = rule.reason === 'expert' ? 'Niveau expert : « Lire les conditions » ne fixe pas de seuil. Compare toi-même vent, houle et période heure par heure.'
         : 'Pas de créneau calculé pour ce sport ici : « Lire les conditions » ne donne pas de repère chiffré. Renseigne-toi sur place.';
-      /* Sans niveau : la phrase ouvre directement « Mon sport et mon niveau » (spot-before.js, data-open-level). */
-      const whyHtml = rule.reason === 'level' ? `<button type="button" class="wx-slot-why wx-level" data-open-level>${esc(why)}</button>` : `<p class="wx-slot-why">${esc(why)}</p>`;
-      return {html: `${head}${whyHtml}`, hours: new Set(), rule, today: null};
+      return {html: `${head}<p class="wx-slot-why">${esc(why)}</p>`, hours: new Set(), rule, today: null};
     }
     const res = dates.map((date, i) => W.bestSlot(list, {act, inland, level, date, nowIso: i === 0 ? nowIso : null, catalogWind: s.wind}));
     const hours = new Set();
@@ -287,30 +287,53 @@
 
   function isInland(s) { return typeof window.isInland === 'function' ? window.isInland(s) : ['lake', 'inland'].includes(s?.waterType); }
   /* Un appel prévision + un appel marine (heure par heure sur 48 h et 7 jours), gardés une heure et partagés entre ouvertures simultanées.
-     Hors connexion ou modèle muet : message simple, la fiche reste utilisable. */
+     Open-meteo répond parfois 503 : la prévision refusée (statut d’erreur, réseau coupé) est redemandée UNE fois, quelques
+     secondes plus tard (SpotWeatherModel.retrier), et « Chargement… » reste affiché entre-temps ; ce qui est déjà reçu est gardé.
+     Si rien n’arrive : « Prévision indisponible pour le moment » et « Réessayer » dans le même cadre que le chargement (même
+     hauteur), « Indisponible » et « Réessayer » dans la case « Ton créneau ». Un toucher = un essai, jamais deux à la fois.
+     La houle reste facultative (sans elle, la semaine s’affiche sans vagues, comme avant). La fiche reste utilisable. */
+  const WEEK_LOADING = '<div class="spot-week-loading"><i></i><span>Chargement de la météo du spot…</span></div>';
+  const WEEK_FAILED = '<div class="spot-week-loading is-failed"><span>Prévision indisponible pour le moment</span><button type="button" class="ob-retry" data-weather-retry="week">Réessayer</button></div>';
+  let weekTry = null;
   const HOURLY = 'temperature_2m,wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,precipitation,precipitation_probability,is_day';
   const DAILY = 'temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,weather_code,sunrise,sunset';
   function loadWeek(s, act) {
     const host = $('#spotWeek');
     const c = typeof COORDS !== 'undefined' ? COORDS[s.id] : null;
+    if (weekTry) weekTry.stop();
+    weekTry = null;
     if (!c) { if (host) host.innerHTML = '<p class="spot-week-empty">Position non vérifiée : aucune prévision affichée pour ce spot.</p>'; return; }
     const key = `${s.id}:${new Date().toISOString().slice(0,10)}`;
     const n = ++request;
     const stored = cache.get(key);
     if (stored && Date.now() - stored.fetchedAt < 60*60*1000) { later(() => { if (n === request && activeSpot?.id === s.id) renderWeek(s, stored.weather, stored.marine, stored.fetchedAt); }); return; }
-    if (host) host.innerHTML = '<div class="spot-week-loading"><i></i><span>Chargement de la météo du spot…</span></div>';
+    if (host) host.innerHTML = WEEK_LOADING;
     const inland = isInland(s);
     const weatherUrl = `${api}?latitude=${c.lat}&longitude=${c.lon}&hourly=${HOURLY}&forecast_hours=48&daily=${DAILY}&wind_speed_unit=kmh&cell_selection=${inland ? 'land' : 'sea'}&forecast_days=7&timezone=auto`;
     const marineUrl = `${marineApi}?latitude=${c.lat}&longitude=${c.lon}&hourly=wave_height,wave_period,wave_direction&past_hours=1&forecast_hours=49&daily=wave_height_max,wave_period_max&forecast_days=7&timezone=auto&cell_selection=sea`;
     const getJson = async url => { const response = await fetch(url); if (!response.ok) throw Error(`Prévision HTTP ${response.status}`); return response.json(); };
-    if (!pending.has(key)) pending.set(key, Promise.all([getJson(weatherUrl), inland ? Promise.resolve({}) : getJson(marineUrl).catch(() => ({}))])
-      .then(([weather, marine]) => { const result = {weather, marine, fetchedAt: Date.now()}; cache.set(key, result); return result; })
-      .finally(() => pending.delete(key)));
-    pending.get(key).then(({weather, marine, fetchedAt}) => {
-      if (n !== request || activeSpot?.id !== s.id) return;
-      later(() => { if (n === request && activeSpot?.id === s.id) renderWeek(s, weather, marine, fetchedAt); });
-    }).catch(() => { if (n === request && activeSpot?.id === s.id) { try { window.OceanBefore?.slot(s, null); } catch (e) {} } if (n === request && $('#spotWeek')) $('#spotWeek').innerHTML = '<p class="spot-week-empty">Prévisions détaillées indisponibles pour le moment. Réessaie avec une connexion.</p>'; });
+    const got = {};
+    const part = (k, url) => got[k] ? Promise.resolve(got[k]) : getJson(url).then(d => (got[k] = d));
+    const attempt = () => {
+      if (!pending.has(key)) pending.set(key, Promise.all([part('w', weatherUrl), inland ? Promise.resolve({}) : part('m', marineUrl).catch(() => ({}))])
+        .then(([weather, marine]) => { const result = {weather, marine, fetchedAt: Date.now()}; cache.set(key, result); return result; })
+        .finally(() => pending.delete(key)));
+      return pending.get(key);
+    };
+    const mine = () => n === request && activeSpot?.id === s.id;
+    const failed = () => { try { window.OceanBefore?.slot(s, null); } catch (e) {} const h = $('#spotWeek'); if (h) h.innerHTML = '<p class="spot-week-empty">Prévision indisponible pour le moment</p>'; };
+    const W = window.SpotWeatherModel;
+    if (!W || !W.retrier) { attempt().then(r => { if (mine()) later(() => { if (mine()) renderWeek(s, r.weather, r.marine, r.fetchedAt); }); }, () => { if (mine()) failed(); }); return; }
+    const tryer = weekTry = W.retrier(attempt, (state, r) => {
+      if (weekTry !== tryer || !mine()) return;
+      const h = $('#spotWeek');
+      if (state === 'ok') later(() => { if (mine()) renderWeek(s, r.weather, r.marine, r.fetchedAt); });
+      else if (state === 'busy') { if (h && h.querySelector('[data-weather-retry]')) h.innerHTML = WEEK_LOADING; try { window.OceanBefore?.wait(s, 'slot'); } catch (e) {} }
+      else if (state === 'failed') { if (h) h.innerHTML = WEEK_FAILED; try { window.OceanBefore?.retry(s, 'slot', 'week'); } catch (e) {} }
+    });
+    tryer.start();
   }
+  document.addEventListener('click', e => { if (e.target.closest?.('[data-weather-retry="week"]') && weekTry) weekTry.again(); });
   /* Niveau changé dans Réglages : le créneau suit, sans nouvel appel. */
   document.addEventListener('ocean:level', () => { try { if (shown && activeSpot?.id === shown.s.id) renderWeek(shown.s, shown.weather, shown.marine, shown.fetchedAt); } catch (e) {} });
 

@@ -113,3 +113,8 @@ details.chal-why[open]>span{animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-s
 #detail .dcat [data-obf-shut]{display:none!important}
 #detail .dcat:not([data-cat="infos"]) .obf-head{margin:12px 0}
 #detail .dcat:not([data-cat="infos"]) .obf-head[hidden]{display:none}
+
+/* ---------- finitions-securite ----------
+   Règle du fondateur : dangers, numéros d’urgence et avertissements de sécurité ne sont jamais repliés ni coupés.
+   Le danger principal d’« Avant d’y aller » se lit en entier (la limite de trois lignes plus haut est levée). */
+#detail .d-before .db-danger-text{display:block;-webkit-line-clamp:none;line-clamp:none;overflow:visible;max-height:none;text-overflow:clip;white-space:normal}
