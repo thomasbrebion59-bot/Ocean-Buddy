@@ -47,7 +47,7 @@
     const hazards=(s.dangers||[]).length?s.dangers:(note?.dangers||[]);
     const kicker=(s.dangers||[]).length?'À surveiller':'Carnet Ocean Buddy · non vérifié';
     hazards.slice(0,2).forEach(d=>out.push({kicker,title:d[0]+' '+(d[1].split(/[.:]/)[0]||'Sécurité'),text:d[1]}));
-    if(s.anecdote)out.push({kicker:'Le saviez-vous ?',title:'Une histoire du spot',text:s.anecdote});
+    if(s.anecdote)out.push({kicker:'Le savais-tu ?',title:'Une histoire du spot',text:s.anecdote});
     return out;
   }
   function build(s){
