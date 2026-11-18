@@ -141,6 +141,8 @@ test('bon retour : attend la fenêtre « C’est sauvegardé » annoncée puis o
   const toastEl = { textContent: '', classList: { s: new Set(), contains(c) { return this.s.has(c); }, remove(c) { this.s.delete(c); } } };
   const ctx = vm.createContext({
     userName: 'Explorateur',
+    /* Prénom montré (app.js, shownName) : en français, le prénom tel quel. */
+    shownName: () => 'Explorateur',
     sessionStorage: { getItem: k => (k === 'ob_account_after' ? after : null) },
     document: { querySelector: s => (sheet && s.includes('.oba') ? {} : null), getElementById: () => toastEl },
     setTimeout: (f, ms) => timers.push({ at: now + ms, f }),
