@@ -6,7 +6,8 @@
      Les avertissements de sécurité et les sources restent dans leur section, à un toucher ; le danger, le numéro
      d’urgence et « Sécurité & secours » restent visibles dans « Avant d’y aller ».
    - Ailleurs (profil, jeu, défis) : boutons [data-obf] avec aria-controls, la zone liée porte l’attribut hidden.
-   L’état replié n’est pas mémorisé : chaque nouveau spot s’ouvre replié. La fiche s’ouvre après la levée du rideau :
+   Chaque nouveau spot s’ouvre replié ; seul un Retour vers une fiche déjà vue lui rend ses sections ouvertes (mémoire
+   de la session, voir « ocean:navigate » plus bas). La fiche s’ouvre après la levée du rideau :
    ce module ne touche ni à l’accueil ni à la barre d’onglets. */
 (() => {
   'use strict';
@@ -178,13 +179,29 @@
     queueMicrotask(() => { queued = false; for (const cat in TAB_GROUPS) mountTab(cat); });
   }).observe(body, { childList: true, subtree: true });
 
-  /* Nouveau spot : tout replié, sommaire en place. Même spot (retour) : l’état reste celui laissé. */
+  /* Nouveau spot : tout replié, sommaire en place. Même spot (retour) : l’état reste celui laissé.
+     Retour ou Avancer vers une fiche quittée pour une autre (un voisin de « Dans les environs », puis Retour) : ses
+     sections se rouvrent comme on les avait laissées, sinon la page revenait repliée, plus courte, et le défilement
+     ne retrouvait pas sa place. Cet écouteur passe avant que go() ne rende le défilement (même tâche). Mémoire de la
+     session seulement, pour les dernières fiches. */
   let lastSpot = null;
+  const left = new Map(), LEFT_MAX = 12;
+  function snapshot() {
+    const tabs = {}; for (const cat in TAB_GROUPS) { const o = tabOf(cat)?.dataset.open; if (o) tabs[cat] = o; }
+    return { infos: infos()?.dataset.open || '', tabs };
+  }
+  function reopen(state) {
+    for (const id of state.infos.split(/\s+/).filter(Boolean)) if (GROUPS.some(g => g.id === id)) setGroup(id, true);
+    for (const cat in state.tabs) { const t = tabOf(cat); if (t && TAB_GROUPS[cat]) { t.dataset.open = state.tabs[cat]; mountTab(cat); } }
+  }
   window.addEventListener('ocean:navigate', e => {
     if (e.detail !== 'detail') return;
     let cur = null; try { cur = typeof currentSpot !== 'undefined' ? currentSpot : null; } catch (_) {}
     if (cur === lastSpot && infos()?.querySelector('.obf-head')) { mount(); for (const cat in TAB_GROUPS) mountTab(cat); return; }
+    if (lastSpot != null) { left.delete(lastSpot); left.set(lastSpot, snapshot()); if (left.size > LEFT_MAX) left.delete(left.keys().next().value); }
+    let back = null; try { back = window.OceanNavigation?.restoreScroll?.() != null ? left.get(cur) : null; } catch (_) {}
     lastSpot = cur; closeAll(); closeTabs();
+    if (back) reopen(back);
   });
   /* Fiche déjà ouverte au chargement de ce script : relance du WebView (mise à jour, changement de langue) où
      navigation.js, chargé avant, rouvre la fiche avant que l’écouteur ci-dessus n’existe. Sans cela, l’onglet « Le spot »

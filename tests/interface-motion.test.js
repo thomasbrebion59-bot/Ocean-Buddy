@@ -257,7 +257,7 @@ function flightEnv({ failAt = 0 } = {}) {
   };
   const prelude = consts + 'const root={classList:{add(){},remove(){}}},M={},canAnimate=true,reduced=()=>false,blocked=()=>false,inView=()=>true,' +
     'objPos=()=>[.5,.5],radii=()=>[0,0,0,0],box=r=>({l:r.left,t:r.top,w:r.width,h:r.height}),lerp=(a,b,t)=>a+(b-a)*t;var tap=null;';
-  vm.runInNewContext(prelude + src + ';this.arm=()=>{tap={img:IMG,id:"x",rect:IMG.getBoundingClientRect(),at:1000};};this.wrap=wrapOpenSpot;this.end=endFlight;', Object.assign(context, { IMG: img }));
+  vm.runInNewContext(prelude + src + ';this.arm=()=>{tap={img:IMG,id:"x",rect:IMG.getBoundingClientRect(),at:1000};};this.wrap=wrapOpenSpot;this.end=endFlight;this.resumeAt=resumeAt;this.snapAt=snapAt;this.backTime=backTime;this.drive=drive;this.setFlight=f=>{flight=f;};', Object.assign(context, { IMG: img }));
   context.wrap();
   return { context, anims, frames, timers, card, img, body };
 }
@@ -311,4 +311,42 @@ test('vol de la photo : si le moteur refuse une animation, la photo retourne à 
     assert.equal(env.img.style.objectPosition, '40% 60%');
     assert.ok(env.body.children.every(c => c.removed), 'aucun calque orphelin dans la page');
   }
+});
+
+test('retour pendant le vol d’ouverture : le vol de retour repart de la taille que la photo a déjà', () => {
+  const env = flightEnv(), c = env.context;
+  assert.equal(c.resumeAt(), 0, 'aucun vol en cours : le retour part du héros');
+  c.arm(); c.window.openSpot('x');
+  const frame = now => env.frames.shift()(now);
+  /* Avant le départ (photo encore sur la carte) : le vol de retour n’a rien à montrer, il commence à sa fin. */
+  assert.equal(c.resumeAt(), 380);
+  frame(1000); frame(1016); frame(1032); frame(1048); frame(1064); frame(1080);
+  const t = env.anims[0].currentTime;
+  assert.equal(t, 16 + 16 * 3, 'vol d’ouverture à 64 ms');
+  const at = c.resumeAt(), p = c.snapAt(t);
+  assert.ok(p > .3 && p < .6, 'photo à mi-chemin : ' + p);
+  assert.ok(at > 0 && at < 380);
+  assert.ok(Math.abs((1 - c.snapAt(at)) - p) < .002, 'même taille au départ du retour : ' + (1 - c.snapAt(at)) + ' contre ' + p);
+  /* Aller et retour : la correspondance tient sur toute la courbe, sans jamais dépasser la durée du vol. */
+  for (let ms = 0; ms <= 380; ms += 5) {
+    const b = c.backTime(c.snapAt(ms));
+    assert.ok(b >= 0 && b <= 380);
+    assert.ok(Math.abs((1 - c.snapAt(b)) - c.snapAt(ms)) < .002, 'à ' + ms + ' ms');
+  }
+  /* Le pilote démarre à cet instant, dès la pose du calque (aucune image au héros plein cadre). */
+  const anims = [0, 1].map(() => ({ pause() { this.paused = true; }, cancel() {} }));
+  const f = { anims, open: false, t: 0 }; let landed = 0;
+  c.setFlight(f); env.frames.length = 0;
+  c.drive(f, () => { landed++; }, 1, at);
+  assert.ok(anims.every(a => a.paused && a.currentTime === at), 'calque posé à l’instant repris');
+  frame(2000); assert.ok(anims.every(a => a.currentTime === at), 'une image d’attente, sans bouger');
+  frame(2016); assert.ok(anims.every(a => a.currentTime === at + 16), 'puis il avance d’image en image');
+  assert.equal(landed, 0);
+  /* Fiche posée (le calque sert de doublure, plus d’animation) : un retour repart du héros, comme avant. */
+  c.setFlight({ anims: [], open: true, t: 380 });
+  assert.equal(c.resumeAt(), 0);
+  /* motion.js : l’instant est lu avant que le vol en cours soit arrêté, et passé au pilote du retour. */
+  const go = motionJs.slice(motionJs.indexOf('  function wrapGo(){'), motionJs.indexOf('  /* ================= Onglets de la fiche'));
+  assert.ok(go.indexOf('resumeAt()') > 0 && go.indexOf('resumeAt()') < go.indexOf('if(!nested)endFlight();'), 'lu avant endFlight');
+  assert.match(go, /drive\(f,land,1,at\);/);
 });
