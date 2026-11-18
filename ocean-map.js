@@ -65,10 +65,18 @@
   const globe=()=>matchMedia('(max-aspect-ratio:1/1)').matches;
 
   /* ---------- Chargement paresseux des moteurs ---------- */
+  /* Dans l’app iOS (page en capacitor://), MapLibre ne déduit l’adresse de son worker que d’une page http(s) : sans
+     adresse explicite, il lance new Worker(""), qui échoue, et aucune carte n’atteint « load » (abandon au bout de 20 s :
+     ni plongée vers la carte détaillée, ni petite carte de la fiche, ni relief). Ses workers sont gardés pour toute la vie
+     de la page : l’adresse est posée dès le chargement du moteur, avant la première carte. Site (http/https) : inchangé. */
+  function workerUrl(ml){
+    try{if(!/^https?:$/.test(location.protocol)&&typeof ml?.setWorkerUrl==='function'&&!ml.getWorkerUrl?.())ml.setWorkerUrl(new URL('vendor/maplibre/maplibre-gl-worker.mjs',document.baseURI).href);}catch(_){}
+    return ml;
+  }
   function loadEngine(){
     if(!engine){
       if(!document.querySelector('link[data-terrain-style]')){const sheet=document.createElement('link');sheet.rel='stylesheet';sheet.href='vendor/maplibre/maplibre-gl.css';sheet.dataset.terrainStyle='';document.head.append(sheet);}
-      engine=import(new URL('vendor/maplibre/maplibre-gl.mjs',document.baseURI).href).catch(error=>{engine=null;throw error;});
+      engine=import(new URL('vendor/maplibre/maplibre-gl.mjs',document.baseURI).href).then(workerUrl).catch(error=>{engine=null;throw error;});
     }
     return engine;
   }
