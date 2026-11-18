@@ -46,7 +46,7 @@ test('mot du jour : la mesure est faite à chaque pose du résultat (réponse, a
   assert.match(src, /if\(t\.firstElementChild\)\{body\.replaceWith\(t\.firstElementChild\);fitDone\(\);\}/, 'accueil (fillHome)');
   assert.match(src, /if\(r\.already\)\{[^\n]*fitDone\(\);return;\}/, 'réponse déjà donnée');
   assert.match(src, /body\.replaceWith\(t\.firstElementChild\);fitDone\(\);syncMeta\(/, 'nouveau jour');
-  assert.match(src, /addEventListener\('resize',\(\)=>\{if\(document\.querySelector\('\.cult-quiz-go'\)\)fitDone\(\);\}\)/, 'rotation');
+  assert.match(src, /addEventListener\('resize',\(\)=>\{if\(document\.querySelector\('\.cult-quiz-go,\.cult-choice'\)\)fitDone\(\);\}\)/, 'rotation (résultat ou réponses à choisir)');
 });
 
 test('mot du jour : .is-long, deux lignes centrées sans « … », tampon seul à gauche, hauteurs inchangées', () => {

@@ -97,10 +97,18 @@
   .cult-quiz-q{flex:none;height:auto;max-height:calc(2 * 1.25em);margin:0 0 4px;font-size:13.5px;line-height:1.25;-webkit-line-clamp:2}
   .cult-quiz-choices,.cult-quiz-done{flex:none;margin-top:auto}
   .cult-quiz-choices{grid-template-columns:repeat(3,minmax(0,1fr));height:52px;gap:6px}
-  .cult-choice{justify-content:center;height:52px;padding:0 6px;border-radius:14px;font-size:12.5px;line-height:1.15;text-align:center}
+  .cult-choice{position:relative;justify-content:center;height:52px;padding:0 6px;border-radius:14px;font-size:12.5px;line-height:1.15;text-align:center}
   .cult-choice img,.cult-choice i{display:none}
-  .cult-choice span{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:anywhere}
-  .cult-choice.is-right::after,.cult-choice.is-wrong::after{width:14px;height:14px;margin-left:4px}
+  /* Nom du pays entier, jamais coupé au milieu d’un mot ni « … » : coupures aux espaces et après les traits d’union. Nom long
+     (mesuré par cultures.js, fitDone) : trois lignes, puis un corps plus petit. Même hauteur pour les trois boutons. */
+  .cult-choice span{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow-wrap:normal;word-break:normal;hyphens:none}
+  .cult-choice[data-fit="1"] span{-webkit-line-clamp:3}
+  .cult-choice[data-fit="2"] span{-webkit-line-clamp:3;font-size:11.5px}
+  .cult-choice[data-fit="3"] span{-webkit-line-clamp:4;font-size:10.5px}
+  /* Réponse donnée : la coche ou la croix devient une pastille posée sur le coin du bouton, hors du texte ; le nom garde
+     toute la largeur (« Saint-Vincent-et-les-Grenadines » se lit en entier avant et après la réponse). */
+  .cult-choice.is-right::before,.cult-choice.is-wrong::before{content:"";position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:inherit;box-shadow:0 0 0 1.5px var(--t-card)}
+  .cult-choice.is-right::after,.cult-choice.is-wrong::after{position:absolute;top:-3px;right:-3px;width:10px;height:10px;margin:0}
   .cult-skel{height:28px}
   .cult-skel-btn{height:52px;border-radius:14px}
   .cult-quiz-done{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;height:52px}

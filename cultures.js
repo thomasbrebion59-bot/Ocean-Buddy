@@ -74,6 +74,8 @@
     });
     const body=$('[data-cult-quiz-body]');
     if(body&&body.classList.contains('is-wait')){const t=document.createElement('div');t.innerHTML=quizHTML();if(t.firstElementChild){body.replaceWith(t.firstElementChild);fitDone();}}
+    /* Jeu posé directement par homeHTML (fil remonté, vue déjà chargée) : mesuré aussi. */
+    else if(body)fitDone();
     syncMeta();
   }
   function syncStamps(){
@@ -119,7 +121,12 @@
      sur deux lignes centrées en corps plus petit ; hauteurs inchangées. */
   function fitDone(){
     const over=el=>!!el&&el.scrollWidth>el.clientWidth+1;
-    const run=()=>{try{document.querySelectorAll('.cult-quiz-done').forEach(d=>{d.classList.remove('is-long');if(over(d.querySelector('.cult-quiz-go'))||over(d.querySelector('.cult-quiz-res>div>b')))d.classList.add('is-long');});}catch(e){}};
+    /* Réponses du jeu (téléphone : trois boutons côte à côte) : le nom du pays se lit en entier, jamais « … » ni coupé au
+       milieu d’un mot. Deux lignes ; sinon trois lignes, puis un corps plus petit (data-fit 1 à 3, fiches-organisation.css).
+       Les boutons gardent leur hauteur commune. */
+    const cut=el=>!!el&&(el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1);
+    const fitChoices=()=>document.querySelectorAll('.cult-choice').forEach(b=>{const sp=b.querySelector('span');if(!sp)return;b.removeAttribute('data-fit');for(let i=1;i<=3&&cut(sp);i++)b.dataset.fit=String(i);});
+    const run=()=>{try{document.querySelectorAll('.cult-quiz-done').forEach(d=>{d.classList.remove('is-long');if(over(d.querySelector('.cult-quiz-go'))||over(d.querySelector('.cult-quiz-res>div>b')))d.classList.add('is-long');});fitChoices();}catch(e){}};
     /* Jamais d’erreur vers l’appelant (remplissage de l’accueil, retour du réseau) : mesure à l’image suivante quand elle existe. */
     const next=f=>typeof requestAnimationFrame==='function'?requestAnimationFrame(f):setTimeout(f,0);
     next(run);
@@ -359,7 +366,7 @@
   /* Changement de jour pendant que l’app reste ouverte : le jeu de la veille laisse place au nouveau mot. */
   document.addEventListener('visibilitychange',()=>{if(document.hidden||!data)return;const d=M.dayKey(new Date());if(quizCache&&quizCache.d!==d){const body=$('[data-cult-quiz-body]');if(body){const t=document.createElement('div');t.innerHTML=quizHTML();body.replaceWith(t.firstElementChild);fitDone();syncMeta();}}});
 
-  window.addEventListener('resize',()=>{if(document.querySelector('.cult-quiz-go'))fitDone();});
+  window.addEventListener('resize',()=>{if(document.querySelector('.cult-quiz-go,.cult-choice'))fitDone();});
   api._view={word,stamped,fillHome,quizHTML,choose,open,openIndex,start,load,renderPassport,fitDone};
   start();
 })();
