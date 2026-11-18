@@ -240,7 +240,7 @@ test('Sécurité : son onglet, rien de replié ; en-tête compact et rangée d�
   assert.match(css, /#detail \.dcat\[data-cat="securite"\]>#dDanger\{order:1\}\n#detail \.dcat\[data-cat="securite"\]>\.safety-block\{order:2\}/, 'danger, puis urgences');
   assert.doesNotMatch(read('replis.js'), /securite: \[/, 'aucune section repliable dans Sécurité');
   assert.match(read('field-guide.js'), /fieldAction==='emergency'\)\{showDetailCat\('securite',false\);/);
-  assert.match(css, /html \.ocean-v2 #detail #detailHero\{min-height:clamp\(260px,33dvh,320px\);height:auto\}/, 'photo : environ un tiers de l’écran');
+  assert.match(css, /html \.ocean-v2 #detail #detailHero\{min-height:clamp\(230px,33dvh,320px\);height:auto\}/, 'photo : environ un tiers de l’écran');
   assert.match(css, /#detail \.detail-hero \.dfact-sea\{display:none\}/);
   assert.match(read('base.css'), /\.dtabs\{[^}]*position:sticky;top:0/);
 });

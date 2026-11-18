@@ -1124,7 +1124,8 @@ function showDetailCat(cat,shouldScroll=true){
     var wrap=document.getElementById('screenWrap');
     /* Un onglet touché en haut de fiche ne fait pas défiler la page (la photo reste en vue). La page ne remonte que si la
        rangée était déjà collée en haut, donc si on lisait plus bas : le nouvel onglet se lit depuis son début. */
-    if(anchor.getBoundingClientRect().top<tabs.getBoundingClientRect().top-1)wrap.scrollTo({top:wrap.scrollTop+anchor.getBoundingClientRect().top-wrap.getBoundingClientRect().top,behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'});
+    var target=wrap.scrollTop+anchor.getBoundingClientRect().top-wrap.getBoundingClientRect().top;
+    if(target<wrap.scrollTop-1)wrap.scrollTo({top:target,behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'});
   }
   /* Ancien raccourci « Préserver » : jusqu'aux gestes, sous la faune. */
   if(cat==='preserver'){var pres=document.getElementById('dPreserve');if(pres)requestAnimationFrame(function(){try{pres.scrollIntoView({block:'start',behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'});}catch(e){}});}
