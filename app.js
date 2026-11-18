@@ -2941,8 +2941,9 @@ if(returning&&onbDone){
   let helloWait=0;
   const hello=()=>{if(overlayOpen()){if(helloWait++<240)setTimeout(hello,500);return;}
     toast('Bon retour, '+userName+' ! L’océan t’attendait.',2500);
-    const t=document.getElementById('toast'),said=t.textContent;let n=0;
-    const watch=()=>{if(!t.classList.contains('show')||t.textContent!==said||n++>15)return;if(overlayOpen()){t.classList.remove('show');return;}setTimeout(watch,200);};
+    /* Texte comparé sans les espaces insécables que le français pose à l’affichage (i18n.js, passage français). */
+    const plain=s=>String(s).replace(/\u00a0/g,' '),t=document.getElementById('toast'),said=plain(t.textContent);let n=0;
+    const watch=()=>{if(!t.classList.contains('show')||plain(t.textContent)!==said||n++>15)return;if(overlayOpen()){t.classList.remove('show');return;}setTimeout(watch,200);};
     setTimeout(watch,200);};
   const welcome=()=>setTimeout(hello,700);
   if(window.OceanBoot)OceanBoot.after(welcome);else welcome();
