@@ -105,3 +105,8 @@ button.trip-delete-action{display:inline-flex;align-items:center;justify-content
 /* Lisibilité : ocean-blue.css (chargé après) et app-shell.css (!important) réimposent 10,5 à 11 px sur téléphone ; ces règles les battent par spécificité */
 @media(max-width:479px){.ocean-v2 .trip-step-info small{font-size:12px}.ocean-v2 .trip-step-photo button{font-size:12px}}
 @media(max-width:639px){.ocean-v2 .trip-heading .page-eyebrow,.ocean-v2 .trip-section-title .page-eyebrow,.ocean-v2 .trip-dialog .page-eyebrow{font-size:12px!important;letter-spacing:.8px!important}}
+
+/* Voyage ouvert : ce n'est plus un écran racine (navigation.js, isRoot vaut faux quand OceanTrips.route().selected), donc le
+   bouton Retour rond s'affiche en haut à gauche (12 à 52 px). Le grand titre « Voyages » et son sur-titre se décalent pour
+   lui laisser la place au lieu de passer dessous (contrôle final 3, captures 2-93 et 2-99). */
+body.has-app-back #trips>.as-large{padding-left:48px}
