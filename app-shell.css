@@ -115,6 +115,9 @@
 
 /* ================= Grands titres et sections ================= */
 .as-large{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin:2px 96px 14px 2px;min-height:52px}
+/* La marge droite ci-dessus est annulée par design.css (.ocean-v2 .screen>*… {margin-right:0}) : le sur-titre passait sous le
+   bouton de recherche (Défis en anglais et en espagnol). Retrait intérieur à la place (bouton de 40 px + air) ; l’accueil n’est pas touché. */
+.ocean-v2 .screen:not(#home)>.as-large{padding-right:48px}
 .as-large h1{margin:0;font:800 34px/1.05 var(--body);letter-spacing:-.8px;color:var(--as-ink)}
 .as-large p{margin:4px 0 0;font:650 13px/1.3 var(--body);color:var(--as-ink2);text-transform:uppercase;letter-spacing:.6px}
 .as-large .as-large-act{flex:none;display:inline-flex;align-items:center;gap:6px;height:36px;padding:0 14px;border:0;border-radius:999px;background:color-mix(in srgb,var(--as-accent) 12%,var(--t-card));color:var(--as-accent);font:700 13px var(--body);cursor:pointer}
