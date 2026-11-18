@@ -15,3 +15,13 @@ test('voyage : l’icône de niveau de l’étape garde 30 px et une marge en px
   assert.match(trips, /<span class="trip-level">\$\{levelIcon\(p\.level\)\}/, 'l’étape utilise la vraie icône de niveau');
   assert.match(read('poulpy-icons.js'), /class="poulpy-mini ob-ico \$\{kind\}"/);
 });
+
+/* Même cause dans la liste d’Explorer : les trois filtres de niveau montraient un rond beige vide (icône de 37 px, marge de
+   18,7 px de chaque côté, calculée sur la largeur du bouton). */
+test('Explorer, filtres de niveau : l’icône a une marge en px et se voit', () => {
+  const css = read('spot-immersion.css'), html = read('index.html');
+  const m = css.match(/\.ocean-v2 #filters \.chip img\.ob-ico:not\(\.spico\)\{padding:(\d+)px\}/);
+  assert.ok(m, 'marge en px pour les icônes des filtres');
+  assert.ok(+m[1] > 0 && 2 * +m[1] < 37 * .5, 'le dessin garde plus de la moitié de l’icône');
+  for (const lv of ['debutant', 'intermediaire', 'expert']) assert.match(html, new RegExp('data-f="' + lv + '"[^>]*><img class="poulpy-mini ob-ico level-poulpy"'), 'filtre ' + lv);
+});

@@ -16,6 +16,9 @@
 /* Étape d’un voyage : la marge en % (img.ob-ico, plus bas) se calculait sur la largeur de .trip-level (~350 px), soit 63 px de chaque côté :
    un rond vide de 126 px. Marge en px, comme dans la fiche ; l’icône garde ses 30 px, alignée sur « Expert · Surf ». */
 .ocean-v2 .trip-level img.ob-ico:not(.spico){padding:5px;vertical-align:middle}
+/* Filtres de niveau de la liste d’Explorer (Débutant, Intermédiaire, Expert) : même cause, la marge de 18 % se calculait sur la
+   largeur du bouton et ne laissait rien au dessin (rond beige vide de 37 px). Marge en px : l’icône se voit. */
+.ocean-v2 #filters .chip img.ob-ico:not(.spico){padding:6px}
 .ocean-v2 .lpin .poulpy-mini{width:24px;height:24px;display:block}
 .ocean-v2 .lpop-sp{display:flex;flex-wrap:wrap;gap:5px}.ocean-v2 .lpop-sp .poulpy-mini{width:34px;height:34px}
 .ocean-v2 .lpop em .poulpy-mini{width:28px;height:28px;margin-right:5px}
