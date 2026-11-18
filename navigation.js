@@ -138,7 +138,9 @@
   wrap.addEventListener('click',remember);
   wrap.addEventListener('input',remember);wrap.addEventListener('change',remember);
   window.addEventListener('pagehide',()=>{if(!restoring){entry={...entry,route:capture()};write();}});
-  window.OceanNavigation={begin,settled,back,index:()=>entry.index};
+  /* restoreScroll : pendant un Retour ou un Avancer, la position de défilement de l’écran retrouvé (sinon null).
+     go() la pose dès le début de la transition : l’écran revient déjà à sa place, sans saut à la fin. */
+  window.OceanNavigation={begin,settled,back,index:()=>entry.index,restoreScroll:()=>restoring&&restoreTarget?Math.max(0,Number(restoreTarget.scroll)||0):null};
   history.scrollRestoration='manual';
   /* Relance du WebView (mise à jour appliquée, sauvegarde restaurée) : l’écran revient, mais l’accueil repart en haut,
      sans défilement pendant le démarrage. */

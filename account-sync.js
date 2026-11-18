@@ -62,19 +62,21 @@
   function sync(opts={}){syncing??=run(opts).finally(()=>{syncing=null;});return syncing;}
   async function run({first=false,apply='auto'}={}){
     const now=Date.now();let st=load();
-    const local=M.collect(localStorage);
+    /* Lecture d'abord : la réponse dit quels ids de progression ce serveur accepte (un serveur ancien refuserait tout
+       l'envoi pour un seul id inconnu, comme les tampons des cultures) ; seuls ceux-là sont lus, comparés et envoyés. */
+    let since=first?0:(st.lastRev||0),accept=[];const remote=[];
+    for(let i=0;i<40;i++){const r=await api('/sync/pull',{method:'POST',body:{since}});remote.push(...r.items);accept=M.serverAccepts(r);
+      if(r.items.length)since=Math.max(since,...r.items.map(x=>x.rev));if(!r.more)break;}
+    const local=M.forServer(M.collect(localStorage),accept);
     const base=first?{...M.freshState()}:{v:1,lastRev:st.lastRev,shadow:st.shadow,pend:st.pend};
     const scanned=M.scan(local,base,now);
-    if(!first)patch({pend:scanned.pend});
-    let since=first?0:(scanned.lastRev||0);const remote=[];
-    for(let i=0;i<40;i++){const r=await api('/sync/pull',{method:'POST',body:{since}});remote.push(...r.items);
-      if(r.items.length)since=Math.max(since,...r.items.map(x=>x.rev));if(!r.more)break;}
+    if(!first)patch({pend:scanned.pend,accept});
     const m=M.merge(local,remote,scanned,{now,first});
     const changes=M.apply(memory(),m.local);
     if(changes.length&&!safeNow(apply)){patch({waiting:true});return {waiting:true,summary:m.summary};}
     let ns=m.state;
     for(let i=0;i<m.push.length;i+=M.LIMITS.itemsPerPush){const r=await api('/sync/push',{method:'POST',body:{items:m.push.slice(i,i+M.LIMITS.itemsPerPush)}});ns=M.acknowledge(ns,r.results);}
-    st=patch({lastRev:ns.lastRev,shadow:ns.shadow,pend:ns.pend,lastSync:Date.now(),waiting:false});
+    st=patch({lastRev:ns.lastRev,shadow:ns.shadow,pend:ns.pend,accept,lastSync:Date.now(),waiting:false});
     if(changes.length){
       M.apply(localStorage,m.local);
       try{sessionStorage.setItem(AFTER_KEY,JSON.stringify({first,summary:m.summary}));}catch(_){}
@@ -315,7 +317,7 @@
     if(scheduled)return;scheduled=true;let debounce=0;
     const quiet=()=>sync({apply:'auto'}).catch(e=>{if(e.code==='consent_required')renderSettings();});
     setTimeout(quiet,3000);
-    setInterval(()=>{if(!load().linked)return;const local=M.collect(localStorage),st=load(),s=M.scan(local,{v:1,lastRev:st.lastRev,shadow:st.shadow,pend:st.pend},Date.now());
+    setInterval(()=>{if(!load().linked)return;const st=load(),local=M.forServer(M.collect(localStorage),st.accept),s=M.scan(local,{v:1,lastRev:st.lastRev,shadow:st.shadow,pend:st.pend},Date.now());
       if(Object.keys(s.pend).length){patch({pend:s.pend});clearTimeout(debounce);debounce=setTimeout(quiet,20000);}},30000);
     document.addEventListener('visibilitychange',()=>{if(!load().linked)return;
       if(document.hidden||Date.now()-(load().lastSync||0)>5*60000||load().waiting)quiet();});

@@ -351,6 +351,9 @@ body.explore-immersive .ex-regions{display:flex}
 /* Plein écran (galerie, choix d’activité) : les boutons ne passent plus sous la barre d’état. */
 .spot-gallery header{padding-top:calc(22px + env(safe-area-inset-top,0px))!important}
 .activity-gate-close{top:calc(12px + env(safe-area-inset-top,0px))!important;border-radius:999px!important;font-size:13px!important}
+/* Héros de la fiche : le thermomètre de « Eau ≈ 16 °C » gardait la couleur du thème (pétrole sur pastille sombre,
+   presque invisible). Il prend la couleur du texte de la pastille. */
+.ocean-v2 #detail .detail-hero .dfact .sd-ic{color:inherit}
 /* Faune : le sous-titre restait gris sur le bandeau bleu. */
 .ocean-v2 #detail .bio-head p{color:var(--t-on-main)}
 /* Appui long : pas de sélection de texte sur les cartes (comme dans une app). */

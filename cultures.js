@@ -3,7 +3,8 @@
      goûter, bon geste, tradition de la mer, fête, spots du pays, prochaine escale. Chaque fait des fiches culturelles
      affiche sa source (lien discret). Ouvrir la page donne le tampon du pays.
    - Accueil : remplit sur place, sans changer leur hauteur, les mots des cartes et le jeu « Le mot du jour ».
-   - Profil : bloc « Cultures découvertes X / N » (tampons, localStorage oceanbuddy_cultures_v1, appareil seulement).
+   - Profil : bloc « Cultures découvertes X / N » (tampons, localStorage oceanbuddy_cultures_v1 ; copiés sur le compte
+     si la sauvegarde est activée, voir account-sync-model.js).
    - Explorer : un bandeau « Découvrir <pays> » quand la recherche ou la destination nomme un pays.
    Données : assets/data/cultures.<langue>.json (scripts/build-cultures.cjs), demandées une seule fois. */
 (() => {
@@ -201,7 +202,7 @@
   }
   function spotCard(x){
     const s=x.s,sports=(s.sports||[]).slice(0,2).map(id=>(typeof SPORTMAP!=='undefined'&&SPORTMAP[id]?.label)||'').filter(Boolean).join(' · ');
-    return `<button type="button" class="cult-spot" data-cult-spot="${esc(s.id)}">${x.p?`<img src="${esc(x.p.thumb)}" alt="" loading="lazy" decoding="async">`:''}<span><b${NT}>${esc(shortName(s))}</b>${sports?`<small>${esc(sports)}</small>`:''}</span></button>`;
+    return `<button type="button" class="cult-spot" data-cult-spot="${esc(s.id)}">${x.p?`<img src="${esc(x.p.thumb)}"${window.OceanPhotos?.sharp?.(x.p,'344px')||''} alt="" loading="lazy" decoding="async">`:''}<span><b${NT}>${esc(shortName(s))}</b>${sports?`<small>${esc(sports)}</small>`:''}</span></button>`;
   }
   function pageHTML(c,{fresh=false}={}){
     const e=data?.[c]||{},cv=cover(c),s=read(),list=spotsOf(c),name=local(c);

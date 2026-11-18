@@ -124,3 +124,139 @@ test('copie de sécurité et restauration de toutes les clés synchronisées',()
   assert.equal(JSON.parse(s.getItem('oceanbuddy_trips_v1')).trips[0].id,'t1');
   assert.equal(s.getItem('oceanbuddy_lang'),'en');
 });
+
+/* ---------- tampons du « Tour du monde des cultures » (oceanbuddy_cultures_v1) ---------- */
+const CM=require('../cultures-model.js');
+const cult=(stamps,extra={})=>({v:1,stamps,quiz:null,run:0,best:0,last:null,...extra});
+const day=s=>new Date(s+'T12:00:00');
+
+test('tampons : collectés sous la forme de cultures-model, aller-retour sans changement, recréés sur un appareil neuf',()=>{
+  let st=CM.stamp(CM.emptyState(),'Portugal',day('2026-11-10')).state;st=CM.stamp(st,'Japon',day('2026-11-12')).state;
+  const s=sample();s.setItem(M.KEYS.cultures,CM.writeState(st));
+  const items=M.collect(s);
+  assert.deepEqual(items['progress:cultures'],cult({Portugal:'2026-11-10',Japon:'2026-11-12'}));
+  assert.ok(M.validItem('progress','cultures',items['progress:cultures']));
+  assert.deepEqual(M.apply(s,items),[],'aucune réécriture, donc aucun rechargement inutile');
+  const fresh=store();M.apply(fresh,items);
+  assert.deepEqual(CM.readState(fresh.getItem(M.KEYS.cultures)).stamps,{Portugal:'2026-11-10',Japon:'2026-11-12'});
+  /* Un appareil sans tampon ni mot du jour n'envoie rien. */
+  const none=store({oceanbuddy_cultures_v1:CM.writeState(CM.emptyState())});assert.equal(M.collect(none)['progress:cultures'],undefined);
+});
+
+test('tampons : union des pays, date la plus ancienne gardée, jamais effacés par un appareil en retard',()=>{
+  const local={'progress:cultures':cult({Portugal:'2026-11-10',Japon:'2026-11-12'})};
+  const st=synced(local);
+  /* L'autre appareil n'a que le Portugal (plus tôt) et le Maroc : rien n'est perdu, la date la plus ancienne reste. */
+  const remote=[{kind:'progress',id:'cultures',data:cult({Portugal:'2026-11-08',Maroc:'2026-11-11'}),u:900,deleted:false,rev:4}];
+  const r=M.merge(local,remote,st,{now:1000});
+  assert.deepEqual(r.local['progress:cultures'].stamps,{Portugal:'2026-11-08',Maroc:'2026-11-11',Japon:'2026-11-12'});
+  assert.ok(r.push.some(p=>p.id==='cultures'&&p.data.stamps.Japon==='2026-11-12'),'le Japon repart vers le compte');
+  /* Un appareil en retard (compte vide de tampons) ne retire rien. */
+  const late=M.merge(local,[{kind:'progress',id:'cultures',data:cult({}),u:950,deleted:false,rev:5}],st,{now:1000});
+  assert.deepEqual(late.local['progress:cultures'].stamps,local['progress:cultures'].stamps);
+  /* Ordre indifférent, fusion idempotente. */
+  const a=cult({A:'2026-11-03',B:'2026-11-05'},{run:2,best:4,last:'2026-11-05',quiz:{d:'2026-11-05',c:'B',a:'B',w:'x',k:'hello',ok:true}});
+  const b=cult({B:'2026-11-01',C:'2026-11-06'},{run:0,best:1,last:'2026-11-01',quiz:{d:'2026-11-06',c:'C',a:'A',w:'y',k:'thanks',ok:false}});
+  assert.equal(M.hash(M.mergeCultures(a,b)),M.hash(M.mergeCultures(b,a)));
+  const ab=M.mergeCultures(a,b);assert.equal(M.hash(M.mergeCultures(ab,ab)),M.hash(ab));
+  assert.deepEqual(ab.stamps,{A:'2026-11-03',B:'2026-11-01',C:'2026-11-06'});
+  assert.equal(ab.quiz.d,'2026-11-06','le mot du jour le plus récent');
+  assert.equal(ab.run,0,'raté après la dernière bonne réponse : la série retombe à zéro');assert.equal(ab.best,4);assert.equal(ab.last,'2026-11-05');
+});
+
+test('mot du jour : un résultat du jour ne se rejoue pas sur un autre appareil, sans bloquer personne',()=>{
+  const countries={Portugal:{hello:['Olá'],langs:'portugais'},Japon:{hello:['Konnichiwa'],langs:'japonais'},Maroc:{hello:['Salam'],langs:'arabe'},
+    Kenya:{hello:['Jambo'],langs:'swahili'}};
+  const today=day('2026-11-17'),q=CM.quiz(countries,today);assert.ok(q);
+  /* Appareil A : répond juste aujourd'hui. */
+  const a=CM.answer(CM.emptyState(),q,q.country,today).state;
+  const A=store({oceanbuddy_cultures_v1:CM.writeState(a)});
+  /* Appareil B (à jour d'hier) reçoit le compte : la question du jour est déjà jouée. */
+  const B=store();M.apply(B,{'progress:cultures':M.collect(A)['progress:cultures']});
+  const onB=CM.readState(B.getItem(M.KEYS.cultures));
+  assert.ok(CM.answered(onB,today),'résultat du jour présent sur B');
+  const again=CM.answer(onB,q,q.choices.find(c=>c!==q.country),today);
+  assert.equal(again.already,true);assert.equal(again.ok,true,'le mauvais choix sur B ne remplace pas la bonne réponse de A');
+  assert.equal(onB.stamps[q.country],'2026-11-17');
+  /* Les deux appareils ont joué le même jour avant de se voir : la bonne réponse est gardée ; demain, on rejoue partout. */
+  const wrong=CM.answer(CM.emptyState(),q,q.choices.find(c=>c!==q.country),today).state;
+  const m=M.mergeCultures(wrong,a);assert.equal(m.quiz.ok,true);assert.equal(m.run,1);
+  assert.equal(CM.answered(m,day('2026-11-18')),null,'jour suivant : rien ne bloque');
+  /* Un vieux résultat ne remplace jamais celui d'aujourd'hui. */
+  const old=cult({},{quiz:{d:'2026-11-01',c:'Japon',a:'Japon',w:'Konnichiwa',k:'hello',ok:true}});
+  assert.equal(M.mergeCultures(old,m).quiz.d,'2026-11-17');
+});
+
+test('tampons : bornes (nombre de pays, noms, dates) ; l’anormal est refusé à la réception, retiré à la lecture locale',()=>{
+  const ok=cult({Portugal:'2026-11-10'});
+  assert.ok(M.validItem('progress','cultures',ok));
+  const many={};for(let i=0;i<301;i++)many['Pays '+i]='2026-11-10';
+  for(const bad of [cult(many),cult({['x'.repeat(61)]:'2026-11-10'}),cult({Portugal:'2026-02-30'}),cult({Portugal:'2019-12-31'}),cult({Portugal:'10/11/2026'}),
+    cult({Portugal:20261110}),{stamps:[]},cult({},{quiz:{d:'2026-11-10',c:'Portugal',a:'Japon',w:'Olá',k:'evil',ok:true}}),cult({},{run:-1}),cult({},{best:1.5}),
+    cult({},{last:'demain'}),cult({'a\u0000b':'2026-11-10'}),null])
+    assert.equal(M.validItem('progress','cultures',bad),false,JSON.stringify(bad).slice(0,80));
+  assert.equal(M.checkPushItem({kind:'progress',id:'cultures',data:cult(many),u:1,deleted:false}),'data');
+  /* Lecture locale : on garde ce qui est propre (les 300 plus anciens), on ne casse jamais l'envoi. */
+  const raw={...many,Portugal:'2026-02-30',['y'.repeat(80)]:'2026-11-01',Zanzibar:'2026-11-01',__proto__x:'nope'};
+  const s=store({oceanbuddy_cultures_v1:{v:1,stamps:raw,quiz:{d:'2026-11-10',c:'Portugal',a:'',w:'Olá',k:'hello',ok:false},run:'3',best:2,last:null,extra:'ignoré'}});
+  const c=M.collect(s)['progress:cultures'];
+  assert.equal(Object.keys(c.stamps).length,300);assert.equal(c.stamps.Zanzibar,'2026-11-01');assert.equal(c.stamps.Portugal,undefined);
+  assert.equal(c.run,0);assert.equal(c.best,2);assert.equal(c.extra,undefined);assert.equal(c.quiz.a,'');
+  assert.ok(M.validItem('progress','cultures',c));
+  assert.equal(M.checkPushItem({kind:'progress',id:'cultures',data:c,u:1,deleted:false}),null,'toujours sous 32 Ko');
+  /* Noms très longs en écriture non latine : la forme nettoyée reste sous la limite d'un élément. */
+  const wide={};for(let i=0;i<300;i++)wide['日本'.repeat(29)+i]='2026-11-10';
+  const w=M.cleanCultures({stamps:wide});assert.ok(Object.keys(w.stamps).length<300);
+  assert.equal(M.checkPushItem({kind:'progress',id:'cultures',data:w,u:1,deleted:false}),null);
+});
+
+test('tampons : écrire le compte fusionne avec l’appareil, sans retirer un tampon local même hors bornes',()=>{
+  const s=store({oceanbuddy_cultures_v1:cult({Japon:'2026-11-12',Atlantide:'2019-01-01'})});
+  const changed=M.apply(s,{'progress:cultures':cult({Portugal:'2026-11-10'})});
+  assert.deepEqual(changed,['oceanbuddy_cultures_v1']);
+  assert.deepEqual(CM.readState(s.getItem(M.KEYS.cultures)).stamps,{Japon:'2026-11-12',Portugal:'2026-11-10',Atlantide:'2019-01-01'});
+  assert.deepEqual(M.apply(s,{'progress:cultures':cult({Portugal:'2026-11-10'})}),[],'rien de neuf : rien n’est écrit');
+});
+
+test('compatibilité : un serveur ancien (sans « accept ») ne reçoit jamais les tampons, ni comme envoi ni comme suppression',()=>{
+  const s=sample();s.setItem(M.KEYS.cultures,JSON.stringify(cult({Portugal:'2026-11-10'})));
+  const all=M.collect(s);
+  assert.deepEqual(M.serverAccepts({items:[],more:false,rev:3}),[]);
+  assert.equal(M.forServer(all,M.serverAccepts({items:[]}))['progress:cultures'],undefined);
+  assert.ok(M.forServer(all,[])['progress:main'],'les ids d’origine partent toujours');
+  assert.ok(M.forServer(all,M.serverAccepts({accept:{progress:M.PROGRESS_IDS}}))['progress:cultures']);
+  assert.deepEqual(M.serverAccepts({accept:{progress:['cultures','inconnu',3]}}),['cultures']);
+  /* Le serveur ne l'annonce plus (retour arrière) : le tampon déjà envoyé n'est pas compté comme supprimé. */
+  let st=synced(all);
+  st=M.scan(M.forServer(all,[]),st,500);
+  assert.deepEqual(st.pend,{});
+  assert.ok(!M.merge(M.forServer(all,[]),[],st,{now:600}).push.length);
+  /* Même règle pour toute progression absente de l'appareil (le serveur refuse de supprimer une progression). */
+  const noQuiz={...all};delete noQuiz['progress:main'];
+  assert.deepEqual(M.scan(noQuiz,synced(all),700).pend['progress:main'],undefined);
+});
+
+test('privacy.html énumère chaque clé copiée sur le compte (tampons des cultures compris)',()=>{
+  const html=require('fs').readFileSync(require('path').join(__dirname,'..','privacy.html'),'utf8');
+  const at=html.indexOf('<section id="compte">'),sec=html.slice(at,html.indexOf('</section>',at));
+  for(const key of Object.values(M.KEYS))assert.ok(sec.includes('<li>'+key+' : '),key);
+});
+
+test('progression en attente sans base commune, puis absente (retour arrière du Worker, données locales effacées) : jamais envoyée comme supprimée',()=>{
+  /* Tampon gagné hors ligne pendant que le Worker annonçait « cultures » : l'attente est notée, rien n'est encore envoyé.
+     Au retour, le Worker n'annonce plus « cultures » : sans garde, l'envoi contenait une progression « supprimée »,
+     que tout Worker refuse (400 invalid_item_kind) ; tout l'envoi (favoris, voyages) était alors bloqué pour toujours. */
+  const ls=store({oceanbuddy_v1:{favs:['a','b']},oceanbuddy_cultures_v1:{v:1,stamps:{Japon:'2026-11-17'},quiz:null,run:0,best:0,last:null}});
+  let st={...M.freshState(),lastRev:5};
+  st=M.scan(M.forServer(M.collect(ls),M.PROGRESS_IDS),st,1000);
+  assert.ok(st.pend['progress:cultures']);
+  const local=M.forServer(M.collect(ls),[]);
+  const sc=M.scan(local,st,2000);
+  assert.equal(sc.pend['progress:cultures'],undefined);
+  const mg=M.merge(local,[],sc,{now:2000});
+  assert.deepEqual(mg.push.map(p=>p.kind+':'+p.id).sort(),['fav:a','fav:b']);
+  for(const p of mg.push)assert.equal(M.checkPushItem(p),null);
+  /* Même garde dans merge seul (attente déjà présente, appareil sans la progression). */
+  const mg2=M.merge(local,[],{...sc,pend:{...sc.pend,'progress:checklist':{h:'x',u:1}}},{now:2100});
+  assert.ok(!mg2.push.some(p=>p.kind==='progress'&&p.deleted));
+});

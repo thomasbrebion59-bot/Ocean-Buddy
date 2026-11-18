@@ -2147,6 +2147,9 @@ function updateNavPill(s){
   pill.style.opacity='1';
 }
 let goTimer=null,goSeq=0;
+/* Position de défilement tenue à jour par l’événement scroll : go() la connaît sans forcer de mise en page. */
+let wrapScrollY=0;
+document.getElementById('screenWrap')?.addEventListener?.('scroll',function(){wrapScrollY=this.scrollTop;},{passive:true});
 let liveScreenId=(document.querySelector('.screen.active')||{id:'home'}).id;
 function go(s){
   window.OceanNavigation?.begin();
@@ -2172,14 +2175,17 @@ function go(s){
   if(HEADBUB[s])bubbles(HEADBUB[s]);
   const reduce=document.body.classList.contains('reduce-motion')||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
   /* motion.js: OceanMotion.instant = bascule immédiate pendant une View Transition (zoom carte -> fiche). */
-  if(!cur||reduce||covered||window.OceanMotion?.instant){
+  /* Mouvement réduit : plus de bascule sèche, mais le même passage que les autres, sans aucun glissement : un
+     fondu enchaîné court (160 ms), l’ancien écran restant dessous (jamais d’écran vide entre les deux). */
+  if(!cur||covered||window.OceanMotion?.instant){
     wrap.querySelectorAll('.screen.active').forEach(el=>{if(el!==target){el.classList.remove('active');resetScreenLive(el);}});
     resetScreenLive(target);
     /* Garde les entrées CSS désactivées après le retrait de la photo, même sur l’écran déjà actif. */
     if(covered){target.classList.add('sw-done','sw-covered');target.style.visibility='';}
     wrap.style.minHeight='';wrap.classList.remove('transitioning');
     target.classList.add('active');
-    wrap.scrollTop=0;
+    /* Retour ou Avancer : l’écran retrouvé s’affiche déjà à sa position de défilement (sinon en haut). */
+    wrap.scrollTop=window.OceanNavigation?.restoreScroll?.()||0;
     wrap.focus({preventScroll:true});
     if(s==='home')animateCounts();
     if(s==='profile')renderProfile();
@@ -2199,10 +2205,17 @@ function go(s){
   const maxC=getComputedStyle(cur).maxWidth;
   wrap.classList.add('transitioning');
   target.classList.add('active','sw-done');cur.classList.add('sw-live','sw-done');
-  cur.style.top=padT;cur.style.left=padL;cur.style.right=padR;cur.style.maxWidth=maxC;
-  wrap.scrollTop=0;
-  /* Fiche : poussée plus franche (comme une pile iOS) ; onglets : glissement court. */
-  const far=s==='detail'||cur.id==='detail',inX=dir*(far?44:22),outX=-dir*(far?26:14);
+  /* L’écran qui part reste là où on le regardait ; celui qui arrive s’affiche déjà à sa position de défilement
+     (Retour ou Avancer : celle qu’on avait laissée, sinon le haut). Avant : les deux repartaient du haut, puis l’écran
+     retrouvé sautait à sa place une fois la transition finie. fromY vient de l’événement scroll (aucune lecture de
+     mise en page ici, comme le reste de cette fonction). */
+  const fromY=wrapScrollY,toY=window.OceanNavigation?.restoreScroll?.()||0;
+  cur.style.top=toY===fromY?padT:'calc('+padT+' + '+(toY-fromY)+'px)';cur.style.left=padL;cur.style.right=padR;cur.style.maxWidth=maxC;
+  wrap.scrollTop=toY;
+  /* Fiche : poussée plus franche (comme une pile iOS) ; onglets : glissement court. motion.js (OceanMotion.zoom) :
+     la photo de la carte fait le trajet, les écrans se fondent sans glisser. */
+  const far=s==='detail'||cur.id==='detail',still=reduce||!!window.OceanMotion?.zoom,inX=still?0:dir*(far?44:22),outX=still?0:-dir*(far?26:14);
+  const goMs=reduce?160:GO_MS;
   const OM=window.OceanMotion||{},spring=OM.snap||'cubic-bezier(.2,.9,.25,1)',easeOut=OM.easeOut||'cubic-bezier(.22,.8,.3,1)';
   let waapi=false;
   if(typeof target.animate==='function'){
@@ -2212,11 +2225,11 @@ function go(s){
       const run=(el,frames,duration,easing,fill)=>{let a;try{a=el.animate(frames,{duration,easing,fill});}catch(_){a=el.animate(frames,{duration,easing:'cubic-bezier(.22,.9,.3,1)',fill});}goAnims.push(a);};
       /* Explorer : ses calques sont en position fixe (planète plein écran). Une animation de transform en ferait leur
          bloc conteneur et les rognerait pendant le glissement : fondu seul pour cet écran. */
-      if(s!=='spots')run(target,[{transform:'translate3d('+inX+'px,0,0)'},{transform:'translate3d(0,0,0)'}],GO_MS,spring,'backwards');
+      if(s!=='spots'&&inX)run(target,[{transform:'translate3d('+inX+'px,0,0)'},{transform:'translate3d(0,0,0)'}],goMs,spring,'backwards');
       /* En quittant Explorer, la planète disparaît d’un coup (app-shell) : fondu d’arrivée plus court, pas de vide. */
-      run(target,[{opacity:0},{opacity:1}],Math.round(GO_MS*(cur.id==='spots'?.35:.6)),easeOut,'backwards');
-      if(cur.id!=='spots')run(cur,[{transform:'translate3d(0,0,0)'},{transform:'translate3d('+outX+'px,0,0)'}],Math.round(GO_MS*.7),easeOut,'forwards');
-      run(cur,[{opacity:1},{opacity:0}],Math.round(GO_MS*.5),easeOut,'forwards');
+      run(target,[{opacity:0},{opacity:1}],Math.round(goMs*(cur.id==='spots'?.35:reduce?1:.6)),easeOut,'backwards');
+      if(cur.id!=='spots'&&outX)run(cur,[{transform:'translate3d(0,0,0)'},{transform:'translate3d('+outX+'px,0,0)'}],Math.round(goMs*.7),easeOut,'forwards');
+      run(cur,[{opacity:1},{opacity:0}],Math.round(goMs*(reduce?1:.5)),easeOut,'forwards');
       waapi=true;
     }catch(_){stopGoAnims();}
   }
@@ -2225,8 +2238,8 @@ function go(s){
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
       /* Une navigation plus récente peut avoir remplacé ce fondu sous la scène d’activité. */
       if(request!==goSeq)return;
-      target.style.transition='transform '+GO_MS+'ms var(--ob-snap,cubic-bezier(.2,.9,.25,1)), opacity '+Math.round(GO_MS*.6)+'ms var(--ob-ease-out,ease)';
-      cur.style.transition='transform '+Math.round(GO_MS*.7)+'ms var(--ob-ease-out,cubic-bezier(.4,0,.2,1)), opacity '+Math.round(GO_MS*.5)+'ms var(--ob-ease-out,ease)';
+      target.style.transition='transform '+goMs+'ms var(--ob-snap,cubic-bezier(.2,.9,.25,1)), opacity '+Math.round(goMs*.6)+'ms var(--ob-ease-out,ease)';
+      cur.style.transition='transform '+Math.round(goMs*.7)+'ms var(--ob-ease-out,cubic-bezier(.4,0,.2,1)), opacity '+Math.round(goMs*.5)+'ms var(--ob-ease-out,ease)';
       target.style.transform='translateX(0)';target.style.opacity='1';
       cur.style.transform='translateX('+outX+'px)';cur.style.opacity='0';
     }));
@@ -2237,13 +2250,13 @@ function go(s){
     cur.classList.remove('active');stopGoAnims();
     resetScreenLive(cur);resetScreenLive(target);
     wrap.classList.remove('transitioning');
-    if(wrap.scrollTop)wrap.scrollTop=0;
+    if(wrap.scrollTop!==toY)wrap.scrollTop=toY;
     /* Ne reprend pas le focus à un champ déjà activé (ex. recherche ouverte depuis la loupe). */
     if(!target.contains(document.activeElement))wrap.focus({preventScroll:true});
     if(s==='home')animateCounts();
     if(s==='profile')renderProfile();
     window.OceanNavigation?.settled();
-  },GO_MS+20);
+  },goMs+20);
 }
 function countUp(el){const t=+el.dataset.count;let c=0;const step=Math.max(1,Math.ceil(t/22));
   const id=setInterval(()=>{c+=step;if(c>=t){c=t;clearInterval(id);}el.textContent=c;},30);}

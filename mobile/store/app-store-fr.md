@@ -31,7 +31,7 @@ PRENDS LE TEMPS DE DÉCOUVRIR
 Fais tourner la planète d’Explorer et plonge vers le spot qui t’attire. Ouvre les galeries immersives et retrouve les caractéristiques du lieu : type de pratique, repères de niveau, accès et points d’attention. Active, si tu le souhaites, une ambiance sonore et un relief terrestre léger. Les conditions météo datées complètent ta préparation lorsque tu es connecté.
 
 VOYAGE À TRAVERS LES CULTURES
-Chacun des 118 pays a sa page : on y trouve des mots de la langue locale, un plat à goûter, un bon geste à adopter, des traditions de la mer et des fêtes, avec la source de chaque fait. Chaque jour, un mot du jour à deviner : trouve dans quel pays on le dit et gagne son tampon. Ouvrir la page d’un pays te donne aussi son tampon.
+Chacun des 118 pays a sa page. Selon le pays, on y trouve des mots de la langue locale, un plat à goûter, un bon geste à adopter, une tradition de la mer ou une fête, avec la source de chaque fait. Chaque jour, un mot du jour à deviner : trouve dans quel pays on le dit et gagne son tampon. Ouvrir la page d’un pays te donne aussi son tampon.
 
 UN COMPTE, SI TU VEUX
 Le compte est gratuit et facultatif : l’app reste entièrement utilisable sans. Avec ton adresse e-mail (un code t’est envoyé, sans mot de passe), retrouve tes favoris, tes voyages, tes notes et ta progression sur un autre appareil. Tu peux tout exporter ou supprimer ton compte depuis les Réglages. Réservé aux personnes de 15 ans et plus.

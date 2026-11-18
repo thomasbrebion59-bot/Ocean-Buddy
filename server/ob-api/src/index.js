@@ -373,7 +373,9 @@ async function pull(ctx) {
     const kept = rows.slice(0, PULL_PAGE).filter((r) => r.rev !== lastRev);
     rows = kept.length ? kept : rows.slice(0, PULL_PAGE);
   }
-  return json(200, { items: rows.map(rowToItem), more, rev: a.rev });
+  // « accept » : ids de progression que ce Worker sait recevoir. Un client à jour n'envoie un id ajouté après le 5 nov.
+  // (ex. « cultures ») que s'il est annoncé ici : l'ancien Worker refusait tout l'envoi pour un seul id inconnu.
+  return json(200, { items: rows.map(rowToItem), more, rev: a.rev, accept: { progress: M.PROGRESS_IDS } });
 }
 
 async function push(ctx) {

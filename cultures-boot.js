@@ -11,7 +11,7 @@
 (() => {
   'use strict';
   /* Empreinte des fichiers chargés à la demande : écrite par scripts/build-cultures.cjs. */
-  const V='aa4a6984b64a';
+  const V='20290a1ad62f';
   const api=window.OceanCultures={};
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||document.documentElement.lang||'fr';
@@ -62,7 +62,7 @@
   function cardHTML(c,view){
     const w=view?.word?.(c.country)||'',stamped=!!view?.stamped?.(c.country);
     return `<button type="button" class="cult-card${stamped?' is-stamped':''}" data-cult-open="${esc(c.country)}" data-cult-from="home" aria-label="${esc(c.country)}">
-      <img src="${esc(c.p.thumb||c.p.src)}" alt="" loading="lazy" decoding="async">
+      <img src="${esc(c.p.thumb||c.p.src)}"${window.OceanPhotos?.sharp?.(c.p,'335px')||''} alt="" loading="lazy" decoding="async">
       <span class="cult-card-stamp" aria-hidden="true">${STAMP_SVG}</span>
       <span class="cult-card-tx"><span class="cult-card-word${w?'':' is-wait'}" data-cult-word="${esc(c.country)}" translate="no" data-no-i18n>${esc(w)}</span><span class="cult-card-name">${esc(c.country)}</span></span>
     </button>`;

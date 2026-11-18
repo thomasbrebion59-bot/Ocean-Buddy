@@ -15,6 +15,8 @@
   const monthName=(m,style='long')=>fmt('m'+style,()=>new Intl.DateTimeFormat(lang(),{month:style})).format(new Date(2026,m,15));
 
   /* Photo réelle de couverture (les illustrations restent sur la fiche, où elles sont signalées). */
+  /* Netteté : vignette par défaut, photo entière si l’écran la demande (OceanPhotos.sharp, spot-photos.js). */
+  const sharp=(p,sizes)=>window.OceanPhotos&&OceanPhotos.sharp?OceanPhotos.sharp(p,sizes):'';
   function photo(s){
     const p=window.OceanPhotos?.lead?.(s.id,null)||window.SPOT_PHOTOS?.[s.id]||s.photo;
     if(!p||p.ai||!p.src)return null;
@@ -99,7 +101,7 @@
     const p=photo(s);if(!p)return '';
     const fav=typeof favs!=='undefined'&&favs.has(s.id);
     return `<article class="hf-card${big?' big':''}" data-spot="${esc(s.id)}"${data?` data-hf-data="${data}"`:''}${month!=null?` data-hf-m="${month}"`:''}${wantSeason?' data-hf-season':''} role="listitem" tabindex="0" aria-label="${esc(s.name)}, ${esc(s.country||'')}">
-      <img src="${esc(big?p.src:p.thumb)}" alt="" loading="lazy" decoding="async">
+      <img src="${esc(big?p.src:p.thumb)}"${big?'':sharp(p,'432px')} alt="" loading="lazy" decoding="async">
       <button type="button" class="hf-fav${fav?' on':''}" data-fav="${esc(s.id)}" aria-label="${fav?'Retirer des favoris':'Ajouter aux favoris'} : ${esc(s.name)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4S3.8 14.9 3.8 9.4A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.2 2.8c0 5.5-8.2 11-8.2 11z"/></svg></button>
       <div class="hf-card-tx">
         <small>${esc(s.country||s.loc||'')}</small>
@@ -248,8 +250,10 @@
       const sec=feed.querySelector(`[data-hf="${id}"]`);if(!sec)continue;
       const first=sec.querySelector('.hf-card img'),title=sec.querySelector('.as-sec h2')?.firstChild?.textContent||'',n=sec.querySelectorAll('.hf-card').length;
       /* Couverture choisie à la main (la plus belle photo de l’ambiance), sinon la première carte. */
-      const pick=MOOD_COVER[id]&&SPOTS.find(x=>x.id===MOOD_COVER[id]),cover=(pick&&photo(pick)?.thumb)||first?.getAttribute('src');
-      if(cover)tiles.push(`<button type="button" class="hf-mood" data-hf-jump="${id}"><img src="${esc(cover)}" alt="" loading="lazy" decoding="async"><b>${esc(title)}</b><small>${n} spots</small></button>`);
+      const pick=MOOD_COVER[id]&&SPOTS.find(x=>x.id===MOOD_COVER[id]),pp=pick&&photo(pick),cover=(pp&&pp.thumb)||first?.getAttribute('src');
+      /* (l’image est préparée à part : le gabarit de la tuile garde ses quatre expressions, donc « {3} spots » sa clé de traduction) */
+      const pic=cover?`<img src="${esc(cover)}"${pp?sharp(pp,'300px'):''} alt="" loading="lazy" decoding="async">`:'';
+      if(cover)tiles.push(`<button type="button" class="hf-mood" data-hf-jump="${id}">${pic}<b>${esc(title)}</b><small>${n} spots</small></button>`);
       if(tiles.length===4)break;
     }
     if(tiles.length<4)return '';
@@ -267,7 +271,7 @@
   }
   /* Globe de l’accueil : une seule instance, créée à l’approche de la carte (jamais avant la levée du rideau),
      mise en veille hors écran. La sphère CSS reste affichée jusqu’à la première image éclairée du globe. */
-  let planet=null,planetIO=null,planetBusy=false,planetOn=false,planetLosses=[],planetTimer=0;
+  let planet=null,planetIO=null,planetBusy=false,planetOn=false,planetLosses=[],planetTimer=0,planetFrozen=false;
   const homeShown=()=>body().dataset.screen==='home';
   const planetLive=()=>planetOn&&!document.hidden&&homeShown();
   /* Libère le globe (mémoire GPU, textures 4K) ; la sphère CSS reprend la place tant qu'il n'est pas recréé. */
@@ -291,7 +295,7 @@
       planetBusy=false;made=api;
       /* Le rendu a été refait entre-temps (langue) ou l'accueil n'est plus affiché : on libère ce globe. */
       if(!host.isConnected||!planetIO||!planetLive()){api.destroy();return;}
-      planet=api;api.setActive(true);
+      planet=api;api.setActive(!planetFrozen);
     }).catch(()=>{planetBusy=false;});
   }
   /* Contexte WebGL retiré par le système : le globe est libéré (la sphère CSS reste visible, pas de cadre vide),
@@ -307,8 +311,8 @@
     if(!planetIO)return;
     const host=home.querySelector('[data-hf-globe]');if(!host)return;
     if(!homeShown()||document.hidden){if(planet&&!homeShown())dropPlanet();else planet?.setActive(false);return;}
-    if(planet)planet.setActive(planetOn);
-    else if(planetOn)loadPlanet(host);
+    if(planet)planet.setActive(planetOn&&!planetFrozen);
+    else if(planetOn&&!planetFrozen)loadPlanet(host);
   }
   function watchPlanet(){
     if(Boot&&!Boot.lifted)return;
@@ -322,6 +326,10 @@
   }
   document.addEventListener('visibilitychange',syncPlanet);
   window.addEventListener('ocean:navigate',()=>setTimeout(syncPlanet,0));
+  /* Page d’un pays ou scène d’activité par-dessus (ocean:transition) : le globe se fige dessous, comme celui d’Explorer,
+     puis reprend ; « transition-ready » le rend avant le fondu de sortie de la scène. */
+  document.addEventListener('ocean:transition',e=>{planetFrozen=!!e.detail;syncPlanet();});
+  document.addEventListener('ocean:transition-ready',()=>{if(planetFrozen){planetFrozen=false;syncPlanet();}});
 
   /* Carrousel : glisser, ou défilement automatique toutes les 6 s (sauf mouvement réduit ou après un geste). */
   let heroTimer=0,lastTouch=0;
