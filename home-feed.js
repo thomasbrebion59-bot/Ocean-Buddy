@@ -536,7 +536,8 @@
   /* Repères d’une ligne : niveau du spot, saison du mois, eau du mois, distance (si connue). Une seule ligne, sans retour. */
   function fyChips(s,why){
     const m=new Date().getMonth(),lv=LEVEL_TX[s.level]||LEVEL_TX.variable,out=[`<span class="hf-fy-lv">${esc(lv)}</span>`];
-    if(why.inSeason)out.push(`<span class="hf-season">En saison en ${esc(monthName(m))}</span>`);
+    /* « En saison » (le mois est celui du jour, comme dans l’Explorer) : « En saison en novembre » était coupé en « En saison en novem… ». */
+    if(why.inSeason)out.push('<span class="hf-season">En saison</span>');
     else if(why.seasonKnown){const t=seasonLabel(seasons?.[s.id]);if(t)out.push(`<span>${esc(t)}</span>`);}
     const sea=dataChip(s,'sea',m);if(sea)out.push(sea);
     if(why.dist!=null)out.push(`<span>${esc(why.dist<20?num(why.dist,1):num(Math.round(why.dist)))} km</span>`);
