@@ -113,8 +113,13 @@
     }
     document.body.append(g);
     const opt={duration:ZOOM_MS,easing:'linear',fill:'both'};
-    const anims=[g.animate(outer,opt),im.animate(inner,opt),g.animate(round,opt),
-      sc.animate(open?[{opacity:0},{opacity:1}]:[{opacity:1},{opacity:0}],{duration:ZOOM_MS,easing:'ease-out',fill:'both'})];
+    /* Si le moteur refuse une de ces animations, la photo empruntée retourne tout de suite à sa carte : elle ne reste
+       jamais dans un calque que personne ne suit. */
+    let anims;
+    try{
+      anims=[g.animate(outer,opt),im.animate(inner,opt),g.animate(round,opt),
+        sc.animate(open?[{opacity:0},{opacity:1}]:[{opacity:1},{opacity:0}],{duration:ZOOM_MS,easing:'ease-out',fill:'both'})];
+    }catch(err){giveBack({home});g.remove();throw err;}
     return {el:g,img:im,scrim:sc,anims,main:anims[0],home};
   }
 
@@ -163,8 +168,20 @@
             if(ready||++n>60){if(flight===f)endFlight();else{clearInterval(f.poll);giveBack(f);f.el.remove();}}
           },80);
         };
+        /* Départ après la première image de la fiche. Sur iPhone (essai dans WKWebView, 18 nov. 2026), l’ouverture de la
+           fiche puis sa première mise en page occupent le fil principal 250 à 300 ms : parti dès sa création, le vol
+           (dont le ressort fait l’essentiel du trajet dans sa première moitié) se jouait pendant ces images bloquées
+           et ne se voyait qu’à sa toute fin. Le calque attend donc sur la carte, à sa place exacte, puis part quand
+           la fiche est affichée : tout le trajet se voit. Filet : si aucune image ne vient (page cachée),
+           l’atterrissage a lieu quand même. */
+        f.anims.forEach(a=>{try{a.pause();}catch(_){}});
         f.main.finished.then(land,()=>{});
-        f.timer=setTimeout(land,ZOOM_MS+160);
+        f.timer=setTimeout(land,ZOOM_MS+1200);
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          if(flight!==f||!f.anims.length)return;
+          f.anims.forEach(a=>{try{a.play();}catch(_){}});
+          clearTimeout(f.timer);f.timer=setTimeout(land,ZOOM_MS+160);
+        }));
       }catch(_){endFlight();}
       return res;
     };

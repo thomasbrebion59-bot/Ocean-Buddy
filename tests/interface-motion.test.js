@@ -227,3 +227,75 @@ test('Noël : pas de flocons sur la planète d’Explorer, pas de guirlande dans
   assert.match(noel, /html\.ob-noel:has\(body\[data-screen="spots"\]\)::after\{display:none\}/);
   assert.match(noel, /html\.ob-noel body:not\(\.is-scrolled\) \.app-chrome::after\{display:none\}/);
 });
+
+/* ---------- Vol de la photo (carte vers fiche) : départ différé et robustesse ---------- */
+function flightEnv({ failAt = 0 } = {}) {
+  const src = motionJs.slice(motionJs.indexOf('  let flight=null;'), motionJs.indexOf('  /* Carte du spot dans l’écran retrouvé'));
+  const consts = motionJs.match(/const SNAP=\[[^\]]+\];/)[0] + motionJs.match(/const ZOOM_MS=\d+,TAB_MS=\d+,FOLD_MS=\d+,SP=String\.fromCharCode\(32\);/)[0];
+  let created = 0; const anims = [], frames = [], timers = [];
+  const el = tag => ({
+    tag, style: {}, children: [], parentNode: null, nextSibling: null, isConnected: true, removed: false, className: '',
+    classList: { add() {}, remove() {}, contains: () => false }, setAttribute() {},
+    append(...kids) { for (const k of kids) { if (k.parentNode) k.parentNode.children = k.parentNode.children.filter(c => c !== k); k.parentNode = this; this.children.push(k); } },
+    insertBefore(k) { this.append(k); }, after() {}, remove() { this.removed = true; },
+    getBoundingClientRect: () => ({ left: 0, top: 0, right: 420, bottom: 450, width: 420, height: 450 }),
+    animate() {
+      if (++created === failAt) throw new Error('animation refusée');
+      const a = { paused: 0, played: 0, cancelled: 0, pause() { this.paused++; }, play() { this.played++; }, cancel() { this.cancelled++; }, finished: new Promise(() => {}) };
+      anims.push(a); return a;
+    }
+  });
+  const card = el('div'), img = el('img'); img.naturalWidth = 1200; img.naturalHeight = 800; img.style.objectPosition = '40% 60%'; card.append(img);
+  img.getBoundingClientRect = () => ({ left: 25, top: 472, right: 93, bottom: 540, width: 68, height: 68 });
+  const hero = el('div'), photo = el('img'), body = el('body'); body.dataset = { screen: 'detail' };
+  const context = {
+    window: { openSpot: () => 'ouvert' }, performance: { now: () => 1000 },
+    document: { createElement: el, body, getElementById: id => (id === 'detailHero' ? hero : id === 'dHeroPhoto' ? photo : null) },
+    getComputedStyle: () => ({ backgroundImage: 'none' }),
+    requestAnimationFrame: fn => frames.push(fn),
+    setTimeout: (fn, ms) => { timers.push(ms); return timers.length; }, clearTimeout() {}, setInterval: () => 1, clearInterval() {}
+  };
+  const prelude = consts + 'const root={classList:{add(){},remove(){}}},M={},canAnimate=true,reduced=()=>false,blocked=()=>false,inView=()=>true,' +
+    'objPos=()=>[.5,.5],radii=()=>[0,0,0,0],box=r=>({l:r.left,t:r.top,w:r.width,h:r.height}),lerp=(a,b,t)=>a+(b-a)*t;var tap=null;';
+  vm.runInNewContext(prelude + src + ';this.arm=()=>{tap={img:IMG,id:"x",rect:IMG.getBoundingClientRect(),at:1000};};this.wrap=wrapOpenSpot;this.end=endFlight;', Object.assign(context, { IMG: img }));
+  context.wrap();
+  return { context, anims, frames, timers, card, img, body };
+}
+
+test('vol de la photo : il attend la première image de la fiche avant de partir, avec un filet si aucune image ne vient', () => {
+  const env = flightEnv();
+  env.context.arm();
+  assert.equal(env.context.window.openSpot('x'), 'ouvert');
+  assert.equal(env.anims.length, 4, 'les quatre animations du vol sont créées');
+  assert.ok(env.anims.every(a => a.paused === 1 && a.played === 0), 'créées en pause : le calque reste sur la carte');
+  assert.equal(env.timers.at(-1), 380 + 1200, 'filet long tant que la fiche n’est pas affichée');
+  assert.equal(env.frames.length, 1);
+  env.frames.shift()();
+  assert.ok(env.anims.every(a => a.played === 0), 'une image ne suffit pas : la fiche n’est pas encore peinte');
+  env.frames.shift()();
+  assert.ok(env.anims.every(a => a.played === 1), 'départ à la deuxième image');
+  assert.equal(env.timers.at(-1), 380 + 160, 'filet court une fois le vol parti');
+});
+
+test('vol de la photo : interrompu avant son départ, il ne repart pas et la photo est rendue à sa carte', () => {
+  const env = flightEnv();
+  env.context.arm();
+  env.context.window.openSpot('x');
+  assert.notEqual(env.img.parentNode, env.card, 'la photo est empruntée par le calque');
+  env.context.end();
+  assert.equal(env.img.parentNode, env.card, 'photo rendue');
+  assert.equal(env.img.style.objectPosition, '40% 60%', 'cadrage d’origine rendu');
+  while (env.frames.length) env.frames.shift()();
+  assert.ok(env.anims.every(a => a.played === 0), 'aucun départ après l’interruption');
+});
+
+test('vol de la photo : si le moteur refuse une animation, la photo retourne à sa carte et la fiche s’ouvre quand même', () => {
+  for (const failAt of [1, 2, 3, 4]) {
+    const env = flightEnv({ failAt });
+    env.context.arm();
+    assert.equal(env.context.window.openSpot('x'), 'ouvert', 'la fiche s’ouvre (échec à l’animation ' + failAt + ')');
+    assert.equal(env.img.parentNode, env.card, 'photo rendue à sa carte (échec à l’animation ' + failAt + ')');
+    assert.equal(env.img.style.objectPosition, '40% 60%');
+    assert.ok(env.body.children.every(c => c.removed), 'aucun calque orphelin dans la page');
+  }
+});
