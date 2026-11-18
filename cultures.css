@@ -18,14 +18,22 @@
 .cult-card:active{transform:scale(.97)}
 .cult-card:focus-visible{outline:3px solid var(--t-main);outline-offset:3px}
 .cult-card-tx{position:absolute;left:12px;right:12px;bottom:12px;display:flex;flex-direction:column;gap:6px}
-.cult-card-word{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font:800 27px/.98 var(--as-condensed);letter-spacing:-.2px;color:var(--t-on-main);
-  text-shadow:0 2px 14px color-mix(in srgb,var(--t-shadow) 55%,transparent);overflow-wrap:anywhere}
+/* Mot entier, jamais coupé au milieu ni par « … » : pas de coupe forcée ni de limite de lignes ; le corps suit la longueur
+   du mot (data-fit, posé par cultures-boot.js et cultures.js, wordFit) pour qu’il tienne sur deux lignes au plus. */
+.cult-card-word{display:block;font:800 calc(27px * var(--wfit,1))/.98 var(--as-condensed);letter-spacing:-.2px;color:var(--t-on-main);
+  text-shadow:0 2px 14px color-mix(in srgb,var(--t-shadow) 55%,transparent);overflow-wrap:normal;word-break:normal;hyphens:none}
 .cult-card-word:not(:empty)::before{content:"«\00a0";color:var(--t-sun)}
 .cult-card-word:not(:empty)::after{content:"\00a0»";color:var(--t-sun)}
 html[lang="es"] .cult-card-word:not(:empty)::before{content:"«"}
 html[lang="es"] .cult-card-word:not(:empty)::after{content:"»"}
 html[lang="en"] .cult-card-word:not(:empty)::before{content:"“"}
 html[lang="en"] .cult-card-word:not(:empty)::after{content:"”"}
+.cult-card-word[data-fit="1"]{--wfit:.9}
+.cult-card-word[data-fit="2"]{--wfit:.8}
+.cult-card-word[data-fit="3"]{--wfit:.72}
+.cult-card-word[data-fit="4"]{--wfit:.64}
+.cult-card-word[data-fit="5"]{--wfit:.6}
+html .cult-card-word[data-fit="5"]:not(:empty)::before,html .cult-card-word[data-fit="5"]:not(:empty)::after{content:none}
 .cult-card-word.is-wait,.cult-card-word:empty{width:72%;height:24px;border-radius:8px;background:color-mix(in srgb,var(--t-card) 24%,transparent)}
 .cult-card.no-word .cult-card-word{display:none}
 .cult-card.no-word .cult-card-name{font:800 22px/1 var(--as-condensed);letter-spacing:0}

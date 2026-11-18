@@ -11,7 +11,7 @@
 (() => {
   'use strict';
   /* Empreinte des fichiers chargés à la demande : écrite par scripts/build-cultures.cjs. */
-  const V='a9bd01b8d224';
+  const V='ff688a953d47';
   const api=window.OceanCultures={};
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||document.documentElement.lang||'fr';
@@ -33,6 +33,30 @@
     if(lg==='en')return 'Discover '+(EN_THE.has(name)?'the ':'')+nm;
     if(lg==='es')return 'Descubre '+(ES_ART[name]||'')+nm;
     return 'Découvrir '+(ART.get(name)||'')+nm;
+  }
+
+  /* ---------- Rangée de l’accueil : le mot de chaque carte entier, jamais coupé au milieu ni par « … » ----------
+     Corps choisi selon la longueur du mot (data-fit, comme les tampons) : sa largeur est estimée avec les avances réelles
+     des lettres de Barlow Condensed 800 (police du mot, en millièmes de corps). La ligne la plus large, guillemets de la
+     langue collés au mot, deux lignes au plus, doit tenir dans 73 px : la place du texte sur la carte la plus étroite
+     (téléphone de 375 px). Mot très long (« Annyeonghaseyo ») : sans guillemets. Rien n’est mesuré dans la page :
+     la carte garde sa hauteur et l’accueil ne bouge pas. */
+  const BCC=' !-?ABCDEGHIJKMNOPQSTWXYZabcdefghijklmnopqrstuvwyz\u00a0¡«»¿àáèéðóüāćġōśŽǎǐʻ’“”';
+  const BCW=[200,289,337,462,508,477,470,480,441,473,483,235,462,505,558,522,479,474,467,454,485,707,490,492,419,457,453,445,453,446,305,451,455,223,223,465,219,685,455,452,456,456,336,426,299,455,456,635,442,377,200,289,454,454,462,457,457,446,446,456,452,455,500,444,500,500,389,667,500,278,211,211,389,389];
+  const BC=new Map([...BCC].map((c,i)=>[c,BCW[i]/1000]));
+  const FIT_W=73,WORD_K=[1,.9,.8,.72,.64,.6];
+  const QUOTE={fr:['«\u00a0','\u00a0»'],en:['“','”'],es:['«','»']};
+  function wordFit(w,lg=lang()){
+    const t=String(w||'').trim().split(/\s+/).filter(Boolean);if(!t.length)return 0;
+    const [o,c]=QUOTE[lg]||QUOTE.en;
+    const widest=k=>{
+      const px=x=>{let n=0,m=0;for(const ch of x){n+=BC.get(ch)??.46;m++;}return 19*k*n-.2*m;};
+      let best=px(o+t.join(' ')+c);
+      for(let i=1;i<t.length;i++)best=Math.min(best,Math.max(px(o+t.slice(0,i).join(' ')),px(t.slice(i).join(' ')+c)));
+      return Math.max(best,...t.map((x,i)=>px((i?'':o)+x+(i<t.length-1?'':c))));
+    };
+    for(let i=0;i<5;i++)if(widest(WORD_K[i])<=FIT_W)return i;
+    return 5;
   }
 
   /* ---------- Accueil : rangée des pays et mot du jour (hauteurs fixes) ---------- */
@@ -64,7 +88,7 @@
     return `<button type="button" class="cult-card${stamped?' is-stamped':''}" data-cult-open="${esc(c.country)}" data-cult-from="home" aria-label="${esc(c.country)}">
       <img src="${esc(c.p.thumb||c.p.src)}"${window.OceanPhotos?.sharp?.(c.p,'335px')||''} alt="" loading="lazy" decoding="async">
       <span class="cult-card-stamp" aria-hidden="true">${STAMP_SVG}</span>
-      <span class="cult-card-tx"><span class="cult-card-word${w?'':' is-wait'}" data-cult-word="${esc(c.country)}" translate="no" data-no-i18n>${esc(w)}</span><span class="cult-card-name">${esc(c.country)}</span></span>
+      <span class="cult-card-tx"><span class="cult-card-word${w?'':' is-wait'}" data-cult-word="${esc(c.country)}"${w?` data-fit="${wordFit(w)}"`:''} translate="no" data-no-i18n>${esc(w)}</span><span class="cult-card-name">${esc(c.country)}</span></span>
     </button>`;
   }
   function quizShell(){
@@ -160,7 +184,7 @@
   };
   if(window.OceanBoot&&OceanBoot.after)OceanBoot.after(later);else if(document.readyState==='complete')setTimeout(later,0);else addEventListener('load',later,{once:true});
 
-  Object.assign(api,{V,discover,homeHTML,homePicks,ensure,offline,whenOnline,
+  Object.assign(api,{V,discover,wordFit,homeHTML,homePicks,ensure,offline,whenOnline,
     open:(name,o)=>ensure().then(v=>v.open(name,o||{})),
     openIndex:()=>ensure().then(v=>v.openIndex())});
 })();

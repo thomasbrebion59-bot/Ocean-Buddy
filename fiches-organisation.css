@@ -83,7 +83,7 @@
 @media(max-width:959px){
   .cult-home>.as-sec{margin-top:24px}
   .cult-card{flex-basis:27%;max-width:116px}
-  .cult-card-word{font-size:19px}
+  .cult-card-word{font-size:calc(19px * var(--wfit,1))}
   .cult-card-tx{left:9px;right:9px;bottom:9px;gap:4px}
   .cult-quiz{height:160px;margin:8px 0 4px;padding:8px 12px 10px}
   .cult-quiz-head{height:22px}

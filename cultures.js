@@ -62,6 +62,8 @@
     document.querySelectorAll('[data-cult-word]').forEach(el=>{
       const c=el.dataset.cultWord,w=word(c),card=el.closest('.cult-card');
       if(el.textContent!==w)el.textContent=w;el.classList.remove('is-wait');
+      /* Corps selon la longueur du mot (cultures-boot.js, wordFit) : entier, jamais coupé ni « … ». */
+      const fit=String(api.wordFit?api.wordFit(w,LG()):0);if(el.dataset.fit!==fit)el.dataset.fit=fit;
       if(card){
         card.classList.toggle('no-word',!w);card.classList.toggle('is-stamped',stamped(c));
         const nm=card.querySelector('.cult-card-name');if(nm&&!nm.hasAttribute('translate')){nm.textContent=local(c);nm.setAttribute('translate','no');nm.setAttribute('data-no-i18n','');}
