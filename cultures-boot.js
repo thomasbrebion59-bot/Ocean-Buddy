@@ -37,13 +37,14 @@
 
   /* ---------- Rangée de l’accueil : le mot de chaque carte entier, jamais coupé au milieu ni par « … » ----------
      Corps choisi selon la longueur du mot (data-fit, comme les tampons) : sa largeur est estimée avec les avances réelles
-     des lettres de Barlow Condensed 800 (police du mot, en millièmes de corps). La ligne la plus large, guillemets de la
+     des lettres de Barlow Condensed 800 (police du mot, en millièmes de corps ; lettres en points de code, pour que
+     l’extraction des textes à traduire ne les prenne pas pour une phrase). La ligne la plus large, guillemets de la
      langue collés au mot, deux lignes au plus, doit tenir dans 73 px : la place du texte sur la carte la plus étroite
      (téléphone de 375 px). Mot très long (« Annyeonghaseyo ») : sans guillemets. Rien n’est mesuré dans la page :
      la carte garde sa hauteur et l’accueil ne bouge pas. */
-  const BCC=' !-?ABCDEGHIJKMNOPQSTWXYZabcdefghijklmnopqrstuvwyz\u00a0¡«»¿àáèéðóüāćġōśŽǎǐʻ’“”';
+  const BCC=[32,33,45,63,65,66,67,68,69,71,72,73,74,75,77,78,79,80,81,83,84,87,88,89,90,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118,119,121,122,160,161,171,187,191,224,225,232,233,240,243,252,257,263,289,333,347,381,462,464,699,8217,8220,8221];
   const BCW=[200,289,337,462,508,477,470,480,441,473,483,235,462,505,558,522,479,474,467,454,485,707,490,492,419,457,453,445,453,446,305,451,455,223,223,465,219,685,455,452,456,456,336,426,299,455,456,635,442,377,200,289,454,454,462,457,457,446,446,456,452,455,500,444,500,500,389,667,500,278,211,211,389,389];
-  const BC=new Map([...BCC].map((c,i)=>[c,BCW[i]/1000]));
+  const BC=new Map(BCC.map((c,i)=>[String.fromCodePoint(c),BCW[i]/1000]));
   const FIT_W=73,WORD_K=[1,.9,.8,.72,.64,.6];
   const QUOTE={fr:['«\u00a0','\u00a0»'],en:['“','”'],es:['«','»']};
   function wordFit(w,lg=lang()){
@@ -62,9 +63,9 @@
   /* Nom du pays sous le mot (capitales, DM Sans 750) : entier lui aussi, jamais « … ». Une ligne si elle tient en réduisant
      un peu le corps et l’interlettrage (data-fit 0 à 2), sinon deux lignes ou plus, coupées aux espaces et après les traits
      d’union (« SAINT-VINCENT-ET-LES-GRENADINES »), au plus grand corps qui tient. Même place de 73 px que le mot. */
-  const DMC=' -.ABCDEFGHIJKLMNOPQRSTUVWXYZÁÇÈÉËÍÎÏÑÓÚ';
+  const DMC=[32,45,46,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,193,199,200,201,203,205,206,207,209,211,218];
   const DMW=[236,576,252,709,638,738,707,583,556,777,714,273,541,653,559,886,730,783,614,783,630,604,597,684,707,1018,670,635,578,709,738,583,583,583,273,273,273,730,783,684];
-  const DM=new Map([...DMC].map((c,i)=>[c,DMW[i]/1000]));
+  const DM=new Map(DMC.map((c,i)=>[String.fromCodePoint(c),DMW[i]/1000]));
   const NAME_F=[[11.5,.9],[11,.4],[10.5,.2],[10,0]];
   function nameLines(n,[size,ls]){
     const s=String(n||'').toUpperCase().trim(),px=x=>{let e=0,m=0;for(const ch of x){e+=DM.get(ch)??.62;m++;}return size*e+ls*m;};

@@ -44,3 +44,10 @@ test('mot des cartes : jamais de coupe au milieu, jamais de « … », hauteur d
   assert.match(read('cultures-boot.js'), /data-cult-word="\$\{esc\(c\.country\)\}"\$\{w\?` data-fit="\$\{wordFit\(w\)\}"`:''\}/);
   assert.match(read('cultures.js'), /const fit=String\(api\.wordFit\?api\.wordFit\(w,LG\(\)\):0\);if\(el\.dataset\.fit!==fit\)el\.dataset\.fit=fit;/);
 });
+
+test('tables d’avances des lettres : en points de code, jamais prises pour un texte à traduire', () => {
+  const boot = read('cultures-boot.js'), src = JSON.parse(read('locales/source/fr.json'));
+  assert.match(boot, /const BCC=\[32,33,45,/);
+  assert.match(boot, /const DMC=\[32,45,46,65,/);
+  assert.ok(!src.some(k => /ABCDEFGHIJ|ABCDEGHIJK/.test(k)), 'aucune clé « alphabet » dans locales/source/fr.json');
+});
