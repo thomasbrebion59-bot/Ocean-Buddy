@@ -130,3 +130,32 @@ test('paquet mobile : API du compte en https sur oceanbuddy.app ; l’essai loca
   assert.match(b,/accountApi:'essai-local'/);
   assert.equal(require('../scripts/site-base.cjs').OB_SITE_BASE,'https://oceanbuddy.app/');
 });
+
+/* « Bon retour, … » ne recouvre jamais le texte d’une fenêtre ouverte : après la connexion au compte, la synchronisation
+   recharge l’app et account-sync.js (chargé après la levée du rideau) rouvre « C’est sauvegardé » ; le message attend. */
+test('bon retour : attend la fenêtre « C’est sauvegardé » annoncée puis ouverte, et s’affiche à sa fermeture', () => {
+  const app = read('app.js'), a = app.indexOf('const overlayOpen=()=>'), b = app.indexOf('const welcome=()=>setTimeout(hello,700);');
+  assert.ok(a > 0 && b > a, 'bloc du message de retour');
+  let now = 0, sheet = false, after = '{"first":true}';
+  const timers = [], shown = [];
+  const toastEl = { textContent: '', classList: { s: new Set(), contains(c) { return this.s.has(c); }, remove(c) { this.s.delete(c); } } };
+  const ctx = vm.createContext({
+    userName: 'Explorateur',
+    sessionStorage: { getItem: k => (k === 'ob_account_after' ? after : null) },
+    document: { querySelector: s => (sheet && s.includes('.oba') ? {} : null), getElementById: () => toastEl },
+    setTimeout: (f, ms) => timers.push({ at: now + ms, f }),
+    toast: m => { shown.push([now, m, sheet]); toastEl.textContent = '🐙 ' + m; toastEl.classList.s.add('show'); }
+  });
+  vm.runInContext(app.slice(a, b) + 'this.hello=hello;', ctx);
+  const run = ms => { const end = now + ms; for (;;) { const t = timers.filter(x => x.at <= end).sort((x, y) => x.at - y.at)[0]; if (!t) break; timers.splice(timers.indexOf(t), 1); now = t.at; t.f(); } now = end; };
+  ctx.hello();
+  run(1500); assert.equal(shown.length, 0, 'rechargement après synchronisation : la fenêtre va s’ouvrir, le message attend');
+  after = null; sheet = true;
+  run(5000); assert.equal(shown.length, 0, '« C’est sauvegardé » ouvert : rien par-dessus');
+  sheet = false;
+  run(600); assert.equal(shown.length, 1, 'fenêtre fermée : le message arrive');
+  assert.deepEqual(shown[0].slice(1), ['Bon retour, Explorateur ! L’océan t’attendait.', false]);
+  /* Une fenêtre qui s’ouvre pendant le message (invitation au compte…) le fait disparaître. */
+  sheet = true; run(400);
+  assert.equal(toastEl.classList.contains('show'), false);
+});

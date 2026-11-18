@@ -297,12 +297,32 @@
     met: { u: 'https://weather.metoffice.gov.uk/warnings-and-advice/seasonal-advice/travel/out-and-about/understanding-rip-currents', l: 'Met Office (courants de retour)', d: '2026-10-29' }
   };
 
+  /* Courants : les reconnaître et en sortir. Règle du fondateur : la sécurité n’est jamais repliée. Ces deux blocs ne sont
+     donc plus dans « Lire les conditions » (replié) : la fiche les montre toujours, à côté de « Dangers & vigilance »
+     (spot-data.js, #sdRip), pour tout spot de mer où l’on surfe ou fait du bodyboard, quel que soit le niveau.
+     Les dangers propres au spot sont listés juste au-dessus, dans « Dangers & vigilance » : ils ne sont pas répétés ici. */
+  function ripSafety(sports, inland) {
+    if (inland || !(Array.isArray(sports) ? sports : []).some(a => WAVE_SPORTS.includes(a))) return null;
+    return [
+      { id: 'rip-spot', h: 'Repérer une baïne ou un courant', lines: [
+        'Cherche une bande où les vagues ne cassent pas, entre deux zones où ça déferle. C’est souvent un chenal où l’eau repart vers le large.',
+        'Autres signes : une eau plus sombre ou trouble, de la mousse ou des débris qui s’éloignent du bord, des rides différentes autour.',
+        'Sur la côte atlantique française, une baïne est une cuvette entre deux bancs de sable. Elle se remplit à marée montante et se vide vers le large par un chenal.'
+      ], src: [SRC.sports, SRC.ffs] },
+      { id: 'rip-out', h: 'Si tu es emporté', lines: [
+        'Reste calme et ne lutte pas contre le courant : nager contre lui t’épuiserait.',
+        'Garde ta planche ou ton bodyboard, ça flotte. Ne tente pas de rejoindre la plage à la nage sans elle.',
+        'Lève un bras et appelle pour être vu.',
+        'Si tu as pied, marche plutôt que de nager. Sinon, nage en parallèle de la plage jusqu’à être sorti du courant, puis rejoins le bord.'
+      ], src: [SRC.met, SRC.ffs] }
+    ];
+  }
+
   function wavesStatic(level, s, c) {
     const blocks = [], zones = Array.isArray(s && s.zones) ? s.zones : [];
     const danger = cleanDanger(s || {});
     const tag = unverified(s) ? ' (texte du carnet Ocean Buddy, non vérifié)' : '';
     if (level === 'debutant') {
-      const hit = danger.filter(d => /ba[ïi]ne|courant|rip|arrachement/i.test(d));
       const calm = zones.filter(z => z && z.l === 'debutant' && z.n);
       blocks.push({ h: 'Lire la mer avant d’entrer', lines: [
         'La hauteur dit la taille des vagues. La période, en secondes entre deux vagues, dit leur force : plus elle est longue, plus la vague pousse, même à hauteur égale.',
@@ -310,22 +330,12 @@
         'Offshore : le vent souffle de la terre vers la mer. Onshore : de la mer vers la terre. Regarde un drapeau, une fumée ou les rides sur l’eau.',
         'Le plus simple pour débuter : peu de vent, une houle de moins d’un mètre, une période courte ou moyenne. Ce sont des repères indicatifs, pas des seuils officiels.'
       ] });
-      blocks.push({ h: 'Repérer une baïne ou un courant', lines: [
-        'Cherche une bande où les vagues ne cassent pas, entre deux zones où ça déferle. C’est souvent un chenal où l’eau repart vers le large.',
-        'Autres signes : une eau plus sombre ou trouble, de la mousse ou des débris qui s’éloignent du bord, des rides différentes autour.',
-        'Sur la côte atlantique française, une baïne est une cuvette entre deux bancs de sable. Elle se remplit à marée montante et se vide vers le large par un chenal.'
-      ].concat(hit.slice(0, 2).map(d => `Pour ce spot, le carnet signale : ${d}${tag}`)), src: [SRC.sports, SRC.ffs] });
+      /* « Repérer une baïne ou un courant » et « Si tu es emporté » : toujours visibles hors du repli (ripSafety). */
       blocks.push({ h: 'Où te mettre à l’eau', lines: [
         'Entre dans une zone surveillée, près du poste de secours, et demande au sauveteur où l’eau est la plus sûre aujourd’hui.',
         'Choisis un endroit où les vagues cassent de la même façon sur toute la ligne, pas dans le chenal calme.',
         'Tant que tu apprends, reste là où tu as pied. Ne va jamais seul à l’eau.'
       ].concat(calm.slice(0, 2).map(z => `Zone indiquée pour débuter dans le catalogue : ${z.n}${z.d ? ` (${z.d})` : ''}.`)), src: [SRC.sports] });
-      blocks.push({ h: 'Si tu es emporté', lines: [
-        'Reste calme et ne lutte pas contre le courant : nager contre lui t’épuiserait.',
-        'Garde ta planche ou ton bodyboard, ça flotte. Ne tente pas de rejoindre la plage à la nage sans elle.',
-        'Lève un bras et appelle pour être vu.',
-        'Si tu as pied, marche plutôt que de nager. Sinon, nage en parallèle de la plage jusqu’à être sorti du courant, puis rejoins le bord.'
-      ], src: [SRC.met, SRC.ffs] });
       blocks.push({ h: 'Zones surveillées et drapeaux', lines: [
         'Le surf et le bodyboard sont souvent cantonnés à une zone séparée des baigneurs, marquée par des drapeaux. Lis le panneau au poste.',
         'Le surf se pratique dans une zone repérée par un drapeau à damier noir et blanc ; la zone de baignade surveillée est marquée par des drapeaux rayés jaune et rouge. Reste hors de la zone de baignade.',
@@ -437,7 +447,7 @@
     return { kind, selected: sel, warn, levels };
   }
 
-  const coachApi = { coach, coachKind, parseLive, windSide, windBand, swellBand, periodBand, COACH_LEVELS };
+  const coachApi = { coach, coachKind, ripSafety, parseLive, windSide, windBand, swellBand, periodBand, COACH_LEVELS };
 
   const api = Object.assign({},coachApi,{ clamp, ramp, blend, month, score, level, year, best, ranges, LEVELS, CRITERIA, lite, matches, sunTimes, SECTOR_DEG, DIR_FROM, WATER_ACTS, SUIT_ACTS, wetsuit, FEW_OBS, fewObs, decodeEntities, marineSpot, seasonsDisagree });
   if (typeof module !== 'undefined' && module.exports) module.exports = api;

@@ -1486,7 +1486,7 @@ function renderConditions(s,live){
   const head=document.getElementById('dCondHead');
   if(head){
     const stamp=live?.fetchedAt?new Date(live.fetchedAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):null;
-    head.textContent=live?(isInland(s)?'Plan d’eau intérieur · vent Open-Meteo':'Prévisions du modèle · Open-Meteo')+(stamp?' · '+`consultées à ${stamp}`:''):'Prévisions du modèle indisponibles pour le moment';
+    head.textContent=live?(isInland(s)?'Plan d’eau intérieur · vent Open-Meteo':'Prévisions du modèle · Open-Meteo')+(stamp?' · '+`consultées à ${stamp}`:''):'Chargement…';
   }
 }
 function tideFromMarine(mar){
@@ -1503,34 +1503,77 @@ function tideFromMarine(mar){
   const rising=nx!=null?nx>cur:(pv!=null?cur>pv:true);
   return rising?'Montante':'Descendante';
 }
-async function fetchConditions(s){
-  const c=COORDS[s.id];if(!c)return;
-  try{
-    const [w,mar]=await Promise.all([
-      fetch(`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto&cell_selection=${meteoCell(s)}`).then(r=>r.json()).catch(()=>({})),
-      isInland(s)?Promise.resolve({}):fetch(`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&current=wave_height,wave_period,wave_direction,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&hourly=sea_level_height_msl&forecast_days=2&timezone=auto`).then(r=>r.json()).catch(()=>({}))
-    ]);
+/* Conditions du moment de la fiche (vent, houle, eau, marée). Open-meteo répond parfois 503 : une partie refusée (statut
+   d’erreur, réseau coupé, réponse illisible) est redemandée UNE fois, quelques secondes plus tard, et seule
+   (SpotWeatherModel.retrier) ; l’écran garde « Chargement… » entre-temps et les parties reçues restent affichées. Si rien
+   n’arrive : « Indisponible » et « Réessayer » dans « Maintenant » (Avant d’y aller) et en tête de l’onglet Conditions.
+   Un toucher = un essai, jamais deux à la fois ; aucune autre reprise automatique. */
+let nowTry=null;
+function fetchConditions(s){
+  if(nowTry)nowTry.stop();nowTry=null;
+  const c=COORDS[s.id];if(!c){conditionsNone();return;}
+  const inland=isInland(s),got={};
+  const part=(k,url)=>got[k]?Promise.resolve(got[k]):fetch(url).then(r=>{if(!r.ok)throw Error('meteo-http-'+r.status);return r.json();}).then(d=>(got[k]=d||{}));
+  const attempt=()=>Promise.all([
+    part('w',`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto&cell_selection=${meteoCell(s)}`).catch(()=>null),
+    inland?Promise.resolve({}):part('m',`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&current=wave_height,wave_period,wave_direction,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&hourly=sea_level_height_msl&forecast_days=2&timezone=auto`).catch(()=>null)
+  ]).then(([w,mar])=>{
     if(currentSpot!==s.id)return;
-    const wc=w.current||{},mc=mar.current||{};
-    const ws=wc.wind_speed_10m,wd=wc.wind_direction_10m,wv=mc.wave_height,sst=mc.sea_surface_temperature;
-    const tide=tideFromMarine(mar);
-    if(ws==null&&wv==null&&sst==null&&!tide){if(!LIVE[s.id]?.live)window.OceanBefore?.live(s,null);return;}
-    const o={
-      wind:ws!=null?(`${Math.round(ws)} km/h ${cardinal(wd)}`).trim():'—',
-      swell:wv!=null?`${num1(+wv)} m`:'—',
-      temp:sst!=null?`${Math.round(sst)}°C`:'—',
-      current:mc.ocean_current_velocity!=null?`${num1(+mc.ocean_current_velocity)} km/h ${cardinal(mc.ocean_current_direction)}`:'—',
-      currentK:mc.ocean_current_velocity!=null?+mc.ocean_current_velocity:null,
-      /* Période et direction de la houle du jour (modèle Open-Meteo, au large) : lues par « Lire les conditions ». */
-      period:mc.wave_period!=null?`${num1(+mc.wave_period)} s`:'—',periodS:mc.wave_period!=null?+mc.wave_period:null,
-      swellDir:mc.wave_direction!=null?cardinal(mc.wave_direction):'—',swellDirDeg:mc.wave_direction!=null?+mc.wave_direction:null,
-      tide:tide||'—',live:true,fetchedAt:Date.now()
-    };
-    LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);
-    renderConditions(s,o);
-    window.OceanExperience?.refreshConditions(s,o,mar);
-    window.OceanBefore?.live(s,o);
-  }catch(e){try{if(currentSpot===s.id&&!LIVE[s.id]?.live)window.OceanBefore?.live(s,null);}catch(_){}}
+    const shown=showConditions(s,w||{},mar||{});
+    if(!w||!mar)throw Error('meteo-partielle');
+    /* Réponses reçues mais vides : comme avant, « Prévision indisponible pour le moment ». */
+    if(!shown&&!LIVE[s.id]?.live){window.OceanBefore?.live(s,null);conditionsNone();}
+  });
+  const W=window.SpotWeatherModel;
+  if(!W||!W.retrier){attempt().catch(()=>{if(currentSpot===s.id&&!LIVE[s.id]?.live)window.OceanBefore?.live(s,null);});return;}
+  const tryer=nowTry=W.retrier(attempt,state=>{
+    if(nowTry!==tryer||currentSpot!==s.id)return;
+    if(state==='busy')conditionsWait(s);
+    else if(state==='failed'&&!LIVE[s.id]?.live)conditionsFailed(s);
+  });
+  tryer.start();
+}
+/* Tête de l’onglet Conditions : « Chargement… » à l’ouverture (une ligne, comme l’échec), puis l’heure du relevé ; sans
+   position vérifiée ou sans donnée dans la réponse, le message d’avant. */
+function conditionsNone(){
+  const head=document.getElementById('dCondHead');
+  if(head)head.textContent='Prévisions du modèle indisponibles pour le moment';
+}
+/* Échec après la reprise : « Indisponible » et « Réessayer », sur une ligne, dans les cases des conditions du moment. */
+function conditionsFailed(s){
+  try{window.OceanBefore?.retry(s,'live','now');}catch(e){}
+  const head=document.getElementById('dCondHead');
+  if(head)head.innerHTML='<span>Indisponible</span><button type="button" class="ob-retry" data-weather-retry="now">Réessayer</button>';
+}
+/* Toucher « Réessayer » : les cases qui montraient l’échec repassent à « Chargement… » (jamais celles qui ont des données). */
+function conditionsWait(s){
+  try{window.OceanBefore?.wait(s,'live');}catch(e){}
+  const head=document.getElementById('dCondHead');
+  if(head&&head.querySelector('[data-weather-retry]'))head.textContent='Chargement…';
+}
+document.addEventListener('click',e=>{if(e.target.closest?.('[data-weather-retry="now"]')&&nowTry)nowTry.again();});
+/* Affiche ce que les réponses contiennent ; renvoie false quand il n’y a aucune donnée (rien n’est alors touché). */
+function showConditions(s,w,mar){
+  const wc=w.current||{},mc=mar.current||{};
+  const ws=wc.wind_speed_10m,wd=wc.wind_direction_10m,wv=mc.wave_height,sst=mc.sea_surface_temperature;
+  const tide=tideFromMarine(mar);
+  if(ws==null&&wv==null&&sst==null&&!tide)return false;
+  const o={
+    wind:ws!=null?(`${Math.round(ws)} km/h ${cardinal(wd)}`).trim():'—',
+    swell:wv!=null?`${num1(+wv)} m`:'—',
+    temp:sst!=null?`${Math.round(sst)}°C`:'—',
+    current:mc.ocean_current_velocity!=null?`${num1(+mc.ocean_current_velocity)} km/h ${cardinal(mc.ocean_current_direction)}`:'—',
+    currentK:mc.ocean_current_velocity!=null?+mc.ocean_current_velocity:null,
+    /* Période et direction de la houle du jour (modèle Open-Meteo, au large) : lues par « Lire les conditions ». */
+    period:mc.wave_period!=null?`${num1(+mc.wave_period)} s`:'—',periodS:mc.wave_period!=null?+mc.wave_period:null,
+    swellDir:mc.wave_direction!=null?cardinal(mc.wave_direction):'—',swellDirDeg:mc.wave_direction!=null?+mc.wave_direction:null,
+    tide:tide||'—',live:true,fetchedAt:Date.now()
+  };
+  LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);
+  renderConditions(s,o);
+  window.OceanExperience?.refreshConditions(s,o,mar);
+  window.OceanBefore?.live(s,o);
+  return true;
 }
 function num1(v){ return typeof obNum==='function'?obNum(v,1):v.toFixed(1); }
 /* SITUER un instant : l'heure murale du spot (timezone=auto) convertie en instant reel grace a
@@ -2081,7 +2124,7 @@ function logSession(){
 
 /* ================= UI ================= */
 let tt;
-function toast(msg,ms){const t=document.getElementById('toast');const m=String(window.obT?obT(String(msg)):msg);/* Traduit avant le préfixe : le 🐙 empêcherait les gabarits « {0} XP » de s’appliquer. Pas de double pieuvre ni d’emoji en double en tête. */t.textContent=/^\p{Extended_Pictographic}/u.test(m)||m.includes('🐙')?m:'🐙 '+m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),ms||2600);}
+function toast(msg,ms){const t=document.getElementById('toast');const m=String(window.obT?obT(String(msg)):msg);/* Traduit avant le préfixe : le 🐙 empêcherait les gabarits « {0} XP » de s’appliquer. Pas de double pieuvre ni d’emoji en double en tête. */t.textContent=/^\p{Extended_Pictographic}/u.test(m)||m.includes('🐙')?m:'🐙 '+m;/* Explorer : l’aperçu du spot occupe le bas de l’écran ; le message se pose juste au-dessus, jamais sur ses boutons (ocean-hub.css, .toast.is-lifted). Position de mise en page (offsetTop), sans la translation de l’arrivée de l’aperçu. */try{const c=document.body.dataset.screen==='spots'&&document.querySelector('#spotMapWrap .omap-card:not([hidden])'),p=c&&c.offsetParent;t.classList.toggle('is-lifted',!!p);if(p)t.style.setProperty('--toast-lift',Math.round(Math.min(innerHeight-90,Math.max(0,innerHeight-(p.getBoundingClientRect().top+c.offsetTop)+12)))+'px');}catch(e){}t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),ms||2600);}
 const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',community:'cb',trips:'tb'};
 function vibrate(pattern){try{if(navigator.userActivation&&!navigator.userActivation.hasBeenActive)return;if(navigator.vibrate)navigator.vibrate(pattern);}catch(e){}}
 const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,community:3,profile:4,trips:2,surf:1.5};
@@ -2877,8 +2920,18 @@ window.addEventListener('resize',()=>{navPillHidden=null;const ab=document.query
 if(returning&&onbDone){
   const o=document.getElementById('onb');o.classList.add('hide');o.style.display='none';
   realHomeForecast();
-  /* Bon retour : discret, après la levée du rideau de démarrage (jamais par-dessus l’écran qui se construit). */
-  const welcome=()=>setTimeout(()=>toast('Bon retour, '+userName+' ! L’océan t’attendait.',2500),700);
+  /* Bon retour : discret, après la levée du rideau de démarrage (jamais par-dessus l’écran qui se construit), et jamais sur
+     le texte d’une fenêtre ouverte. Il attend qu’elle se ferme (au plus deux minutes, sinon il ne s’affiche pas), y compris
+     « C’est sauvegardé », rouvert par account-sync.js (chargé plus tard) après la synchronisation et le rechargement qui
+     suivent la connexion au compte (ob_account_after) ; une fenêtre qui s’ouvre pendant le message le fait disparaître. */
+  const overlayOpen=()=>{try{if(sessionStorage.getItem('ob_account_after'))return true;}catch(_){}return !!document.querySelector('.oba,.as-confirm,.quiz-modal.open,.aqi.open,.app-update,.tb-cele,dialog[open]');};
+  let helloWait=0;
+  const hello=()=>{if(overlayOpen()){if(helloWait++<240)setTimeout(hello,500);return;}
+    toast('Bon retour, '+userName+' ! L’océan t’attendait.',2500);
+    const t=document.getElementById('toast'),said=t.textContent;let n=0;
+    const watch=()=>{if(!t.classList.contains('show')||t.textContent!==said||n++>15)return;if(overlayOpen()){t.classList.remove('show');return;}setTimeout(watch,200);};
+    setTimeout(watch,200);};
+  const welcome=()=>setTimeout(hello,700);
   if(window.OceanBoot)OceanBoot.after(welcome);else welcome();
 }
 /* Le rideau masquait #onb d’après le stockage (html.ob-onboarded) : app.js en reprend la main. */

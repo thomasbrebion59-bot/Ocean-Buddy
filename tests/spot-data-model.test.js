@@ -227,12 +227,15 @@ test('offshore et onshore ne se déduisent que du sens offshore donné par le ca
 test('le débutant reçoit houle, période, vent, marée, baïne, mise à l’eau, courant et drapeaux', () => {
   const r = coach(), text = flat({ levels: [r.levels[0]] });
   assert.equal(r.selected, 'debutant');
-  for (const w of ['période', 'offshore', 'marée descendante', 'baïne', 'zone surveillée', 'Ne lutte pas', 'parallèle', 'Lève un bras', 'drapeau']) assert.ok(new RegExp(w, 'i').test(text), w);
+  for (const w of ['période', 'offshore', 'marée descendante', 'baïne', 'zone surveillée', 'drapeau']) assert.ok(new RegExp(w, 'i').test(text), w);
   assert.match(text, /Eau à 17 °C : prévois une combinaison 3\/2\./);
   assert.match(text, /Zone indiquée pour débuter dans le catalogue : La Sud/);
-  assert.match(text, /le carnet signale : Courants de baïne/);
-  assert.match(text, /non vérifié/);
   assert.match(r.warn, /classé expert/);
+  /* Courants (les repérer, en sortir) : sortis du coach replié, toujours visibles à côté de « Dangers & vigilance »
+     (M.ripSafety) ; les dangers du spot restent listés dans « Dangers & vigilance », sans répétition ici. */
+  const rip = flat({ levels: [{ blocks: M.ripSafety(['surf'], false) }] });
+  for (const w of ['baïne', 'chenal', 'Ne lutte pas', 'parallèle', 'Lève un bras']) assert.ok(new RegExp(w, 'i').test(rip), w);
+  assert.doesNotMatch(text, /Si tu es emporté|Repérer une baïne ou un courant|le carnet signale/);
 });
 
 test('l’intermédiaire a la fenêtre de session, l’orientation de la houle, la période, le pic et la planche', () => {
@@ -267,7 +270,7 @@ test('sans conditions du moment, seules les leçons générales et les normales 
   assert.ok(!/Vent de /.test(text) && !/Houle de /.test(text) && !/Eau à/.test(text));
   assert.match(text, /En octobre, la période habituelle ici est d’environ 13 s/);
   assert.match(text, /Ce mois-ci ici/);
-  assert.match(text, /Repérer une baïne ou un courant/);
+  assert.match(text, /Lire la mer avant d’entrer/);
   const sans = coach({ live: null, clim: null, suit: null });
   assert.ok(!/période habituelle/.test(flat({ levels: [sans.levels[0]] })));
 });
@@ -343,7 +346,7 @@ test('coach expert : la direction du jour passe avant la direction moyenne', () 
 });
 
 test('coach débutant : les blocs de sécurité citent leurs sources (https, datées) et les seuils maison sont annoncés indicatifs', () => {
-  const blocks = coach().levels[0].blocks, by = h => blocks.find(b => b.h === h);
+  const blocks = coach().levels[0].blocks.concat(M.ripSafety(['surf'], false)), by = h => blocks.find(b => b.h === h);
   for (const h of ['Si tu es emporté', 'Zones surveillées et drapeaux', 'Repérer une baïne ou un courant']) {
     const b = by(h); assert.ok(b && b.src && b.src.length, h);
     for (const s of b.src) { assert.match(s.u, /^https:\/\//); assert.match(s.d, /^\d{4}-\d{2}-\d{2}$/); assert.ok(s.l, h); }

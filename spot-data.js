@@ -398,6 +398,7 @@
   function update(s) {
     cur = s; selMonth = new Date().getMonth(); selAct = null;
     const go = $('#dGo'); if (go) go.hidden = true;
+    try { renderRip(s); } catch (e) {}
     try { renderCoach(); } catch (e) {}
     // « Quand partir ? » et « Observé ici » gardent leur place le temps du chargement, puis se replient s’il n’y a rien à montrer.
     const marine = M.marineSpot(s);
@@ -479,6 +480,36 @@
     host.innerHTML = `<p class="sd-vs-title">Lire les conditions · ${esc(sport)}</p>${body}<p class="sd-coach-note">Repères pour apprendre à lire la mer, pas des consignes du lieu. Sur place, suis le poste de secours, le balisage et les drapeaux.</p>`;
   }
   document.addEventListener('ocean:level', () => { try { renderCoach(); } catch (e) {} });
+
+  /* ---------------- Courants : les repérer, en sortir (onglet Conditions, JAMAIS replié) ----------------
+     Règle du fondateur : la sécurité n’est jamais repliée. Les deux blocs du modèle (M.ripSafety) sont posés juste après
+     « Dangers & vigilance » (bloc de #dDangers, panneau data-cat="securite" affiché avec Conditions), hors de
+     « Lire les conditions ». Spot de mer avec surf ou bodyboard, quel que soit le niveau ou le sport choisi. Texte fixe :
+     posé une fois (puis traduit sur place), seulement montré ou caché d’un spot à l’autre. */
+  const RIP_PICTO = { 'rip-spot': 'spirale', 'rip-out': 'surveillance' };
+  function ripHost() {
+    let host = $('#sdRip');
+    if (host) return host;
+    const box = $('#dDangers')?.closest('.block');
+    if (!box) return null;
+    host = document.createElement('section'); host.id = 'sdRip'; host.classList.add('block', 'sd-rip'); host.hidden = true;
+    box.after(host);
+    return host;
+  }
+  function renderRip(s) {
+    const host = ripHost(); if (!host) return;
+    const sports = typeof spotSports === 'function' ? spotSports(s) : (s.sports || []);
+    const inland = typeof isInland === 'function' ? isInland(s) : ['lake', 'inland'].includes(s.waterType);
+    const blocks = M.ripSafety(sports, inland);
+    if (!blocks) { host.hidden = true; return; }
+    const key = blocks.map(b => b.id).join(' ');
+    if (host.dataset.rip !== key) {
+      host.innerHTML = blocks.map(b => `<div class="sd-rip-part"><h4 id="sdRip-${b.id}"><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/${RIP_PICTO[b.id] || 'vigilance'}.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> ${esc(b.h)}</h4><ul>${b.lines.map(coachLine).join('')}</ul>${coachSources(b.src)}</div>`).join('');
+      host.dataset.rip = key;
+      host.setAttribute('aria-labelledby', blocks.map(b => 'sdRip-' + b.id).join(' '));
+    }
+    host.hidden = false;
+  }
 
   /* Changement d’activité sur la fiche : le calendrier suit. */
   function sport() { try { renderCoach(); } catch (e) {} if (!cur || !window.OCEAN_CLIMATE) return; selAct = null; const c = OCEAN_CLIMATE.spots[cur.id]; renderSeasons(cur, c); renderTeaser(cur, c); }

@@ -224,6 +224,8 @@ function render(spot, act, level) {
   sb.window = sb; sb.SpotDataModel = D;
   vm.createContext(sb);
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'spot-weather-model.js'), 'utf8'), sb);
+  /* « Avant d’y aller » fournit le bouton d’invitation au niveau repris par « Ton meilleur créneau ». */
+  vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'spot-before.js'), 'utf8'), sb);
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'spot-experience.js'), 'utf8'), sb);
   sb.OceanExperience.update(spot, act);
   const html = () => els['#spotWeek'].innerHTML;
@@ -252,18 +254,79 @@ test('fiche : lac sans houle ; plongée sans créneau ; niveau changé = nouveau
   const dive = await render({id: 'medes', name: 'Medes', waterType: 'sea', sports: ['plongee']}, 'plongee', 'debutant');
   assert.ok(dive.html.includes('Pas de créneau calculé pour ce sport ici'));
   const surf = await render({id: 'hossegor', name: 'Hossegor', waterType: 'sea', sports: ['surf']}, 'surf', null);
-  assert.ok(surf.html.includes('Choisis ton niveau'));
+  /* Sans niveau : le même bouton court qu’« Avant d’y aller » (même composant, même libellé), plus la longue consigne. */
+  assert.ok(surf.html.includes('<button type="button" class="db-level" data-open-level>Choisis ton niveau pour savoir si ce spot te correspond</button>'));
+  assert.ok(!surf.html.includes('Choisis ton niveau dans Réglages'));
   surf.sb.chosenLevel = 'expert';
   surf.listeners['ocean:level']();
   assert.ok(surf.els['#spotWeek'].innerHTML.includes('Niveau expert'));
   assert.equal(surf.calls.length, 2);
 });
 
-test('fiche : hors connexion, message simple et fiche intacte', async () => {
-  const els = {};
+/* Horloge factice : minuteries rangées par échéance, tâches de fond vidées entre deux échéances. */
+function clock() {
+  let now = 0;
+  const timers = [];
+  const flush = async () => { for (let i = 0; i < 30; i++) await Promise.resolve(); };
+  return {
+    setTimeout: (fn, ms) => { const t = {at: now + (+ms || 0), fn}; timers.push(t); return t; },
+    clearTimeout: t => { const i = timers.indexOf(t); if (i >= 0) timers.splice(i, 1); },
+    async advance(ms) {
+      const end = now + ms;
+      for (;;) {
+        await flush();
+        const due = timers.filter(t => t.at <= end).sort((a, b) => a.at - b.at)[0];
+        if (!due) break;
+        timers.splice(timers.indexOf(due), 1); now = due.at; due.fn();
+      }
+      now = end; await flush();
+    }
+  };
+}
+
+test('fiche : open-meteo en 503, exactement deux demandes automatiques, puis aucune jusqu’au toucher de « Réessayer »', async () => {
+  const els = {}, calls = [], listeners = {}, ck = clock();
+  const sb = {
+    document: {readyState: 'complete', querySelector: s => els[s] || (els[s] = el()), querySelectorAll: () => [], createElement: () => el(), addEventListener(t, f) { (listeners[t] = listeners[t] || []).push(f); }},
+    OB_I18N: {locale: 'fr-FR', lang: 'fr'}, spotSports: s => s.sports, COORDS: {x: {lat: 1, lon: 2}}, Intl, Date, Promise, console,
+    setTimeout: ck.setTimeout, clearTimeout: ck.clearTimeout,
+    fetch: url => { calls.push(url); return Promise.resolve({ok: false, status: 503, json: () => Promise.resolve({error: true, reason: 'busy'})}); }
+  };
+  sb.window = sb; sb.SpotDataModel = D;
+  vm.createContext(sb);
+  for (const f of ['spot-weather-model.js', 'spot-experience.js']) vm.runInContext(fs.readFileSync(path.join(__dirname, '..', f), 'utf8'), sb);
+  const week = () => els['#spotWeek'].innerHTML;
+  const count = () => ({forecast: calls.filter(u => /api\.open-meteo\.com\/v1\/forecast/.test(u)).length, marine: calls.filter(u => /marine-api/.test(u)).length});
+  sb.OceanExperience.update({id: 'x', name: 'X', waterType: 'sea', sports: ['surf']}, 'surf');
+  await ck.advance(0);
+  assert.deepEqual(count(), {forecast: 1, marine: 1}, 'premier essai');
+  assert.ok(week().includes('Chargement'), 'premier refus : l’écran garde « Chargement… » (nouvel essai programmé)');
+  assert.ok(!week().includes('data-weather-retry'));
+  await ck.advance(sb.SpotWeatherModel.RETRY_MS - 1);
+  assert.deepEqual(count(), {forecast: 1, marine: 1}, 'rien avant le délai');
+  await ck.advance(1);
+  assert.deepEqual(count(), {forecast: 2, marine: 2}, 'un seul nouvel essai automatique, quelques secondes plus tard');
+  assert.ok(week().includes('data-weather-retry="week"') && week().includes('Réessayer'), 'échec persistant : « Réessayer »');
+  assert.ok(week().includes('spot-week-loading is-failed'), 'même cadre que le chargement (même hauteur)');
+  await ck.advance(10 * 60 * 1000);
+  assert.deepEqual(count(), {forecast: 2, marine: 2}, 'aucune autre demande automatique, même dix minutes après');
+  /* Toucher « Réessayer » : un essai ; un second toucher pendant cet essai ne relance rien. */
+  const tap = () => (listeners.click || []).forEach(f => f({target: {closest: s => (s === '[data-weather-retry="week"]' ? {} : null)}}));
+  tap(); tap();
+  assert.ok(week().includes('Chargement'), 'le toucher remet « Chargement… » à la place du bouton');
+  await ck.advance(0);
+  assert.deepEqual(count(), {forecast: 3, marine: 3}, 'un toucher = un essai, jamais deux à la fois');
+  assert.ok(week().includes('data-weather-retry="week"'), 'nouvel échec : de nouveau « Réessayer », sans reprise automatique');
+  await ck.advance(10 * 60 * 1000);
+  assert.deepEqual(count(), {forecast: 3, marine: 3});
+});
+
+test('fiche : hors connexion, un seul nouvel essai puis un message simple, fiche intacte', async () => {
+  const els = {}, ck = clock();
   const sb = {
     document: {readyState: 'complete', querySelector: s => els[s] || (els[s] = el()), querySelectorAll: () => [], createElement: () => el(), addEventListener() {}},
-    OB_I18N: {locale: 'fr-FR', lang: 'fr'}, spotSports: s => s.sports, COORDS: {x: {lat: 1, lon: 2}}, Intl, Date, Promise, console, setTimeout, clearTimeout,
+    OB_I18N: {locale: 'fr-FR', lang: 'fr'}, spotSports: s => s.sports, COORDS: {x: {lat: 1, lon: 2}}, Intl, Date, Promise, console,
+    setTimeout: ck.setTimeout, clearTimeout: ck.clearTimeout,
     fetch: () => Promise.reject(new TypeError('offline'))
   };
   sb.window = sb; sb.SpotDataModel = D;
@@ -272,8 +335,9 @@ test('fiche : hors connexion, message simple et fiche intacte', async () => {
   vm.runInContext(fs.readFileSync(path.join(__dirname, '..', 'spot-experience.js'), 'utf8'), sb);
   sb.OceanExperience.update({id: 'x', name: 'X', waterType: 'sea', sports: ['surf']}, 'surf');
   assert.ok(els['#spotWeek'].innerHTML.includes('Chargement'), 'chargement affiché tout de suite, rendu après');
-  for (let i = 0; i < 200 && !els['#spotWeek'].innerHTML.includes('indisponibles'); i++) await new Promise(r => setTimeout(r, 10));
-  assert.ok(els['#spotWeek'].innerHTML.includes('indisponibles pour le moment'));
+  await ck.advance(sb.SpotWeatherModel.RETRY_MS + 100);
+  assert.ok(els['#spotWeek'].innerHTML.includes('Prévision indisponible pour le moment'));
+  assert.ok(!/serveur|HTTP|503|Open-Meteo/i.test(els['#spotWeek'].innerHTML.replace(/<[^>]+>/g, '')), 'aucune mention technique');
 });
 
 test('aucun horaire de pleine ou basse mer tiré du niveau modélisé ; plus de doublon « 5 jours » dans la fiche', () => {

@@ -300,3 +300,10 @@
 .sd-coach-pick,.sd-coach-warn{margin:0 0 8px;font:600 13px/1.5 'DM Sans',sans-serif;color:var(--sd-ink2)}
 .sd-coach-warn{padding:9px 11px;border-radius:10px;background:var(--sd-wash);color:var(--sd-ink)}
 .sd-coach-note{margin:10px 0 0;font:500 12px/1.5 'DM Sans',sans-serif;color:var(--sd-mute)}
+
+/* Courants : les repérer, en sortir (spot-data.js, #sdRip). Onglet Conditions, juste après « Dangers & vigilance » :
+   jamais replié, jamais coupé (règle du fondateur). Même carte que les autres blocs de sécurité. */
+.sd-rip[hidden]{display:none}
+.sd-rip-part+.sd-rip-part{margin-top:16px;padding-top:16px;border-top:1px solid var(--sd-rule)}
+.sd-rip ul{margin:0;padding:0 0 0 18px}
+.sd-rip li{margin:0 0 6px;font:500 14px/1.5 'DM Sans',sans-serif;color:var(--sd-ink2)}

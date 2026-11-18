@@ -89,9 +89,12 @@
     const cv=cover(c);
     return `<button type="button" class="cult-choice" data-cult-choice="${esc(c)}"${NT}>${cv?`<img src="${esc(cv.p.thumb)}" alt="" loading="lazy" decoding="async">`:'<i></i>'}<span>${esc(local(c))}</span></button>`;
   }
+  /* Taille du nom dans le tampon selon sa longueur (longueur totale, mot le plus long) : il tient en entier dans le cercle,
+     jamais de « … » (cultures.css, data-fit). */
+  const stampFit=n=>{const t=n.length,w=Math.max(0,...n.split(/[\s-]+/).map(x=>x.length));return t>24||w>11?3:t>15||w>9?2:t>9||w>7?1:0;};
   function stampHTML(c,date,{big=false,fresh=false}={}){
     const d=date?new Date(date+'T12:00:00').toLocaleDateString(LG(),{day:'numeric',month:'short'}):'';
-    return `<span class="cult-stamp${big?' is-big':''}${fresh?' is-fresh':''}" aria-hidden="true"${NT}><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="38" class="in"/></svg><b>${esc(local(c))}</b>${d?`<small>${esc(d)}</small>`:''}</span>`;
+    return `<span class="cult-stamp${big?' is-big':''}${fresh?' is-fresh':''}" data-fit="${stampFit(String(local(c)))}" aria-hidden="true"${NT}><svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="46"/><circle cx="50" cy="50" r="38" class="in"/></svg><b>${esc(local(c))}</b>${d?`<small>${esc(d)}</small>`:''}</span>`;
   }
   function doneHTML(q,ans,{fresh=false}={}){
     const s=read(),ok=ans.ok,c=q.country,n=M.count(s,names());

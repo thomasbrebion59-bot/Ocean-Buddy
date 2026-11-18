@@ -175,3 +175,17 @@ test('mot du jour : scripts injoignables au démarrage, nouvel essai au retour d
   assert.equal(w.count('online'), 0);
   assert.equal(w.log.fetches, 1);
 });
+
+test('mot du jour compact (téléphone) : question, message hors ligne ou attente sur deux lignes au plus, sans agrandir la carte', () => {
+  const css = read('fiches-organisation.css'), m = css.slice(css.indexOf('.cult-quiz{height:160px'), css.indexOf('.cult-quiz-next{display:none}'));
+  assert.match(m, /\.cult-quiz\{height:160px;margin:8px 0 4px;padding:8px 12px 10px\}/, 'hauteur réservée de l’accueil inchangée');
+  assert.match(m, /\.cult-quiz-head\{height:22px\}/);
+  assert.match(m, /\.cult-quiz-body\{height:120px\}/, 'corps = 160 − 8 − 10 − 22 px');
+  assert.match(m, /\.cult-quiz-q\{flex:none;height:auto;max-height:calc\(2 \* 1\.25em\);margin:0 0 4px;font-size:13\.5px;line-height:1\.25;-webkit-line-clamp:2\}/);
+  assert.match(m, /\.cult-quiz-word\{flex:0 1 38px;height:auto;min-height:30px;margin:0;font-size:30px\}/, 'le mot cède la place, jamais sous la taille de sa police');
+  assert.match(m, /\.cult-quiz-choices,\.cult-quiz-done\{flex:none;margin-top:auto\}/, 'les choix restent en bas');
+  /* Deux lignes de question + mot au minimum + marge + choix (52 px) tiennent dans le corps. */
+  assert.ok(2 * 13.5 * 1.25 + 30 + 4 + 52 <= 120);
+  /* Les messages posés sur place (hors ligne) utilisent cette même case. */
+  assert.match(read('cultures-boot.js'), /querySelector\('\.cult-quiz-q'\);if\(q\)q\.textContent='Le mot du jour arrive dès que tu es en ligne\.'/);
+});

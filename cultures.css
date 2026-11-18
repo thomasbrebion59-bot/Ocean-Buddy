@@ -75,8 +75,8 @@ html[lang="en"] .cult-card-word:not(:empty)::after{content:"”"}
 .cult-quiz-done{display:flex;flex-direction:column;gap:10px;height:160px}
 .cult-quiz-res{display:flex;align-items:center;gap:14px;height:66px}
 .cult-quiz-res>div{display:grid;gap:4px;min-width:0}
-.cult-quiz-res b{font:800 26px/1 var(--as-condensed);text-transform:uppercase;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cult-quiz-res small{font:600 13px/1.3 var(--body);color:color-mix(in srgb,var(--t-on-main) 86%,transparent)}
+.cult-quiz-res>div>b{font:800 26px/1 var(--as-condensed);text-transform:uppercase;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cult-quiz-res>div>small{font:600 13px/1.3 var(--body);color:color-mix(in srgb,var(--t-on-main) 86%,transparent)}
 .cult-quiz-go{display:flex;align-items:center;justify-content:center;height:48px;margin:0;padding:0 18px;border:0;border-radius:999px;background:var(--t-sun);color:var(--t-deep);font:800 15.5px var(--body);cursor:pointer;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 10px 22px -12px color-mix(in srgb,var(--t-shadow) 70%,transparent)}
 .cult-quiz-go:active{transform:scale(.97)}
@@ -84,15 +84,21 @@ html[lang="en"] .cult-card-word:not(:empty)::after{content:"”"}
 .cult-quiz-next{margin:0;font:600 12.5px/1.2 var(--body);text-align:center;color:color-mix(in srgb,var(--t-on-main) 78%,transparent)}
 .cult-quiz .cult-stamp{color:var(--t-sun)}
 
-/* ---------- Tampon (encre ronde) ---------- */
-.cult-stamp{position:relative;flex:none;display:grid;place-items:center;width:66px;height:66px;color:var(--t-main);transform:rotate(-10deg);text-align:center}
+/* ---------- Tampon (encre ronde) ----------
+   Le nom du pays tient toujours en entier dans le cercle, sans « … » : retour à la ligne entre les mots, et taille selon
+   la longueur du nom (data-fit, posé par cultures.js) ; --sf = taille de base selon l’endroit (carnet, profil, mot du jour,
+   page du pays). Les textes de la carte qui contient le tampon (.cult-ix, .cult-quiz-res) ne le touchent pas. */
+.cult-stamp{--sf:11px;position:relative;flex:none;display:grid;place-items:center;width:66px;height:66px;color:var(--t-main);transform:rotate(-10deg);text-align:center}
 .cult-stamp svg{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:4}
 .cult-stamp svg .in{stroke-width:1.6;stroke-dasharray:3 4}
-.cult-stamp b{position:relative;max-width:74%;margin-top:-10%;font:900 11px/1 var(--as-condensed);letter-spacing:.4px;text-transform:uppercase;color:currentColor;overflow-wrap:anywhere;
-  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cult-stamp b{position:relative;display:block;max-width:76%;margin-top:-10%;font:900 calc(var(--sf) * var(--fit,1))/1 var(--as-condensed);letter-spacing:.2px;text-transform:uppercase;color:currentColor;
+  white-space:normal;overflow-wrap:normal;word-break:normal;text-wrap:balance}
+.cult-stamp[data-fit="1"]{--fit:.86}
+.cult-stamp[data-fit="2"]{--fit:.72}
+.cult-stamp[data-fit="3"]{--fit:.6}
+.cult-stamp[data-fit="2"] b,.cult-stamp[data-fit="3"] b{letter-spacing:0}
 .cult-stamp small{position:absolute;bottom:23%;left:18%;right:18%;overflow:hidden;text-overflow:clip;font:700 7.5px/1 var(--body);letter-spacing:.2px;color:currentColor;opacity:.85;white-space:nowrap}
-.cult-stamp.is-big{width:104px;height:104px}
-.cult-stamp.is-big b{font-size:15px}
+.cult-stamp.is-big{--sf:15px;width:104px;height:104px}
 .cult-stamp.is-big small{font-size:9.5px}
 .cult-stamp.is-empty svg{stroke-dasharray:6 7;stroke-width:3;opacity:.7}
 .cult-stamp.is-fresh{animation:cult-thump .5s cubic-bezier(.3,1.4,.5,1) both}
@@ -194,10 +200,10 @@ html.cult-open{overflow:hidden}
   background:var(--t-card);color:var(--t-ink);text-align:left;cursor:pointer;font:inherit}
 .cult-ix img,.cult-ix>i{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--t-tint)}
 .cult-ix>i{background:url(assets/pictos/pictos/carte.webp) center/52px no-repeat var(--t-tint)}
-.cult-ix>span{display:grid;gap:3px;padding:8px 10px 0;min-width:0}
-.cult-ix b{font:800 17px/1.05 var(--as-condensed);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cult-ix>span:not(.cult-stamp){display:grid;gap:3px;padding:8px 10px 0;min-width:0}
+.cult-ix>span:not(.cult-stamp)>b{font:800 17px/1.05 var(--as-condensed);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cult-ix em{font:600 13px/1.2 var(--body);font-style:normal;color:var(--t-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.cult-ix .cult-stamp{position:absolute;top:8px;right:8px;width:58px;height:58px;color:var(--t-sun);border-radius:50%;background:color-mix(in srgb,var(--t-scrim) 45%,transparent)}
+.cult-ix .cult-stamp{--sf:9px;position:absolute;top:8px;right:8px;width:58px;height:58px;color:var(--t-sun);border-radius:50%;background:color-mix(in srgb,var(--t-scrim) 45%,transparent)}
 .cult-ix.is-on{border-color:color-mix(in srgb,var(--t-sun) 80%,transparent);box-shadow:0 0 0 2px color-mix(in srgb,var(--t-sun) 55%,transparent)}
 
 /* ---------- Profil : « Cultures découvertes » ---------- */
@@ -244,5 +250,3 @@ html.cult-open{overflow:hidden}
   .cult-card,.cult-choice,.cult-sheet.is-in,.cult-stamp.is-fresh,.cult-choice.is-wrong,.cult-icon{animation:none;transition:none}
 }
 .reduce-motion .cult-card,.reduce-motion .cult-choice,.reduce-motion .cult-sheet.is-in,.reduce-motion .cult-stamp.is-fresh,.reduce-motion .cult-choice.is-wrong,.reduce-motion .cult-icon{animation:none;transition:none}
-/* Carnet de tampons : le nom du pays doit tenir en entier dans le petit tampon (plus de « E… »). */
-.cult-ix .cult-stamp b{max-width:88%;font-size:9px;letter-spacing:.1px;overflow-wrap:normal;word-break:normal;-webkit-line-clamp:3}
