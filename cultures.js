@@ -67,6 +67,8 @@
       if(card){
         card.classList.toggle('no-word',!w);card.classList.toggle('is-stamped',stamped(c));
         const nm=card.querySelector('.cult-card-name');if(nm&&!nm.hasAttribute('translate')){nm.textContent=local(c);nm.setAttribute('translate','no');nm.setAttribute('data-no-i18n','');}
+        /* Nom entier lui aussi : corps, interlettrage ou lignes selon sa longueur (cultures-boot.js, nameFit). */
+        if(nm){const nf=String(api.nameFit?api.nameFit(nm.textContent):0);if(nm.dataset.fit!==nf)nm.dataset.fit=nf;}
         card.setAttribute('translate','no');card.setAttribute('aria-label',w?`${local(c)} : ${w}`:local(c));
       }
     });

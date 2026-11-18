@@ -11,7 +11,7 @@
 (() => {
   'use strict';
   /* Empreinte des fichiers chargés à la demande : écrite par scripts/build-cultures.cjs. */
-  const V='ff688a953d47';
+  const V='4f1f7dc411c2';
   const api=window.OceanCultures={};
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||document.documentElement.lang||'fr';
@@ -59,6 +59,25 @@
     return 5;
   }
 
+  /* Nom du pays sous le mot (capitales, DM Sans 750) : entier lui aussi, jamais « … ». Une ligne si elle tient en réduisant
+     un peu le corps et l’interlettrage (data-fit 0 à 2), sinon deux lignes ou plus, coupées aux espaces et après les traits
+     d’union (« SAINT-VINCENT-ET-LES-GRENADINES »), au plus grand corps qui tient. Même place de 73 px que le mot. */
+  const DMC=' -.ABCDEFGHIJKLMNOPQRSTUVWXYZÁÇÈÉËÍÎÏÑÓÚ';
+  const DMW=[236,576,252,709,638,738,707,583,556,777,714,273,541,653,559,886,730,783,614,783,630,604,597,684,707,1018,670,635,578,709,738,583,583,583,273,273,273,730,783,684];
+  const DM=new Map([...DMC].map((c,i)=>[c,DMW[i]/1000]));
+  const NAME_F=[[11.5,.9],[11,.4],[10.5,.2],[10,0]];
+  function nameLines(n,[size,ls]){
+    const s=String(n||'').toUpperCase().trim(),px=x=>{let e=0,m=0;for(const ch of x){e+=DM.get(ch)??.62;m++;}return size*e+ls*m;};
+    const units=s.split(/(?<=-)|\s+/).filter(Boolean);let lines=1,cur='',widest=0;
+    for(const u of units){widest=Math.max(widest,px(u));const cand=cur?cur+(cur.endsWith('-')?'':' ')+u:u;if(!cur||px(cand)<=FIT_W)cur=cand;else{lines++;cur=u;}}
+    return {lines,fits:widest<=FIT_W};
+  }
+  function nameFit(n){
+    for(let i=0;i<3;i++){const r=nameLines(n,NAME_F[i]);if(r.fits&&r.lines===1)return i;}
+    for(let max=2;max<=5;max++)for(let i=0;i<4;i++){const r=nameLines(n,NAME_F[i]);if(r.fits&&r.lines<=max)return i;}
+    return 3;
+  }
+
   /* ---------- Accueil : rangée des pays et mot du jour (hauteurs fixes) ---------- */
   /* Tirage du jour (Park-Miller) : stable dans la journée, différent le lendemain. */
   function dayShuffle(list,day,salt){
@@ -88,7 +107,7 @@
     return `<button type="button" class="cult-card${stamped?' is-stamped':''}" data-cult-open="${esc(c.country)}" data-cult-from="home" aria-label="${esc(c.country)}">
       <img src="${esc(c.p.thumb||c.p.src)}"${window.OceanPhotos?.sharp?.(c.p,'335px')||''} alt="" loading="lazy" decoding="async">
       <span class="cult-card-stamp" aria-hidden="true">${STAMP_SVG}</span>
-      <span class="cult-card-tx"><span class="cult-card-word${w?'':' is-wait'}" data-cult-word="${esc(c.country)}"${w?` data-fit="${wordFit(w)}"`:''} translate="no" data-no-i18n>${esc(w)}</span><span class="cult-card-name">${esc(c.country)}</span></span>
+      <span class="cult-card-tx"><span class="cult-card-word${w?'':' is-wait'}" data-cult-word="${esc(c.country)}"${w?` data-fit="${wordFit(w)}"`:''} translate="no" data-no-i18n>${esc(w)}</span><span class="cult-card-name" data-fit="${nameFit(c.country)}">${esc(c.country)}</span></span>
     </button>`;
   }
   function quizShell(){
@@ -184,7 +203,7 @@
   };
   if(window.OceanBoot&&OceanBoot.after)OceanBoot.after(later);else if(document.readyState==='complete')setTimeout(later,0);else addEventListener('load',later,{once:true});
 
-  Object.assign(api,{V,discover,wordFit,homeHTML,homePicks,ensure,offline,whenOnline,
+  Object.assign(api,{V,discover,wordFit,nameFit,homeHTML,homePicks,ensure,offline,whenOnline,
     open:(name,o)=>ensure().then(v=>v.open(name,o||{})),
     openIndex:()=>ensure().then(v=>v.openIndex())});
 })();
