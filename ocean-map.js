@@ -73,6 +73,18 @@
     try{if(!/^https?:$/.test(location.protocol)&&typeof ml?.setWorkerUrl==='function'&&!ml.getWorkerUrl?.())ml.setWorkerUrl(new URL('vendor/maplibre/maplibre-gl-worker.mjs',document.baseURI).href);}catch(_){}
     return ml;
   }
+  /* Sources de la carte : repliées derrière le bouton « i » à l’ouverture, jamais retirées (un toucher les déplie).
+     MapLibre ne rend la version compacte qu’à l’arrivée des sources, après le style, et la déplie à ce moment-là (il ne la
+     replie qu’au premier glissé) : la replier juste après addControl ne servait à rien. On la replie une fois, dès qu’elle
+     devient compacte. */
+  function foldAttribution(m){
+    const fold=()=>{
+      const a=m.getContainer().querySelector('.maplibregl-ctrl-attrib.maplibregl-compact');if(!a)return;
+      a.classList.remove('maplibregl-compact-show');a.removeAttribute('open');
+      m.off('styledata',fold);m.off('sourcedata',fold);m.off('idle',fold);
+    };
+    m.on('styledata',fold);m.on('sourcedata',fold);m.on('idle',fold);fold();
+  }
   function loadEngine(){
     if(!engine){
       if(!document.querySelector('link[data-terrain-style]')){const sheet=document.createElement('link');sheet.rel='stylesheet';sheet.href='vendor/maplibre/maplibre-gl.css';sheet.dataset.terrainStyle='';document.head.append(sheet);}
@@ -281,9 +293,7 @@
       const dive=useGlobe(),at=restoreAt,v=warmAt||(dive&&planet?planet.view():null);warmAt=null;restoreAt=null;
       m=new ml.Map({container:$('#spotMap'),style:dive?diveStyle(style('mercator'),M.mapZoom(DIVE_KM/side(),40)):style(globe()?'globe':'mercator'),center:at?at.center:v?[v.lon,v.lat]:[10,22],zoom:at?at.zoom:v?M.mapZoom(v.kmPerPx,v.lat):1.2,pixelRatio:DPR(),minZoom:0,maxZoom:17,renderWorldCopies:true,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,fadeDuration:180,maxTileCacheSize:M.tileCache(coarse),locale:{'Map.Title':'Carte des spots','NavigationControl.ZoomIn':'Zoom avant','NavigationControl.ZoomOut':'Zoom arrière','AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
       m.touchZoomRotate.disableRotation();m.keyboard.disableRotation?.();
-      m.addControl(new ml.AttributionControl({compact:true}),'bottom-right');
-      /* Sources repliées derrière le bouton « i » dès l’ouverture (elles restent à un toucher). */
-      {const a=m.getContainer().querySelector('.maplibregl-ctrl-attrib');a?.classList.remove('maplibregl-compact-show');a?.removeAttribute('open');}
+      m.addControl(new ml.AttributionControl({compact:true}),'bottom-right');foldAttribution(m);
       m.getCanvas().setAttribute('aria-label','Carte interactive des spots. Utilise les flèches pour te déplacer, plus et moins pour zoomer.');
       const made=m;made.on('webglcontextlost',()=>onMapLost(made));
       /* Contexte perdu avant même le premier rendu : échec immédiat plutôt que 20 s d’attente. */
@@ -1168,7 +1178,7 @@
         ml=await loadEngine();if(dead)return;
         m=new ml.Map({container:canvas,style:style('mercator'),center:[0,20],zoom:2,maxZoom:17,attributionControl:false,dragRotate:false,pitchWithRotate:false,touchPitch:false,cooperativeGestures:cfg.cooperative!==false,fadeDuration:150,maxTileCacheSize:M.tileCache(coarse,true),pixelRatio:DPR(),locale:{...GESTURES,'AttributionControl.ToggleAttribution':'Afficher les sources de la carte'}});
         m.touchZoomRotate.disableRotation();m.keyboard.disableRotation?.();
-        m.addControl(new ml.AttributionControl({compact:true}),'bottom-right');
+        m.addControl(new ml.AttributionControl({compact:true}),'bottom-right');foldAttribution(m);
         m.getCanvas().setAttribute('aria-label',cfg.label||'Carte du secteur');
         /* Contexte perdu : la petite carte est reconstruite (même config) au lieu de rester vide. */
         const made=m;made.on('webglcontextlost',()=>{if(made!==m||dead)return;clearTimeout(lostTimer);ready=false;status.hidden=false;status.classList.remove('is-error');status.textContent='Reprise de la carte…';lostTimer=setTimeout(()=>{if(made!==m||dead)return;markers=[];pop=null;try{made.remove();}catch(_){}m=null;creating=null;start();},LOSS_GRACE);});
