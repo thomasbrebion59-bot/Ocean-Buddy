@@ -8261,7 +8261,7 @@
  "location matériel": "equipment rental",
  "longue période": "long period",
  "loutres de mer, phoques communs, otaries de Steller, macareux, parfois orques et baleines à bosse.": "sea otters, harbour seals, Steller sea lions, puffins, sometimes orcas and humpback whales.",
- "l’accueil": "the welcome",
+ "l’accueil": "home",
  "l’algue": "the seaweed",
  "l’anémone": "the anemone",
  "l’assistance": "the assistance",
@@ -11029,5 +11029,6 @@
  "Nourrir les poissons déséquilibre les populations et les rend dépendants, même avec du pain.": "Feeding fish disrupts their populations and makes them dependent, even if you only give them bread.",
  "Un phoque à terre n'est pas en détresse, il se repose. S'en approcher le fait fuir à l'eau et l'épuise : reste loin et observe.": "A seal on land isn't in distress; it's resting. Getting close makes it flee into the water and exhausts it: keep your distance and watch.",
  "Un récif corallien parmi les plus résistants au réchauffement, mais pas au contact physique ni aux eaux usées.": "One of the coral reefs most resilient to warming, but not to physical contact or wastewater.",
- "Appeler": "Call"
+ "Appeler": "Call",
+ "Retour vers {0}": "Back to {0}"
 }
