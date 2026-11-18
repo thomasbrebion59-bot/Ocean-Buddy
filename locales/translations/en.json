@@ -11016,5 +11016,17 @@
  "Relevé le {0}": "Measured on {0}",
  "{0} s · venue {1}": "{0} s · coming {1}",
  "<b>{0} : {1}</b> en {2}": "<b>{0}: {1}</b> in {2}",
- "en {2}": "in {2}"
+ "en {2}": "in {2}",
+ ": le calendrier officiel du circuit mondial (World Surf League). Douze des treize étapes se courent sur des spots de l'appli. Ocean Buddy n'organise pas ces épreuves : les dates et les noms de sponsors changent à chaque saison, le site officiel fait foi.": ": the official World Surf League tour calendar. Twelve of the thirteen events take place at spots in the app. Ocean Buddy does not organise these events: dates and sponsor names change each season, so check the official website.",
+ "<b>Championship Tour 2026</b> : le calendrier officiel du circuit mondial (World Surf League). Douze des treize étapes se courent sur des spots de l'appli. Ocean Buddy n'organise pas ces épreuves : les dates et les noms de sponsors changent à chaque saison, le site officiel fait foi.": "<b>Championship Tour 2026</b>: the official World Surf League tour schedule. Twelve of the thirteen stops take place at spots in the app. Ocean Buddy doesn’t organise these events: dates and sponsor names change each season; the official site is the source of truth.",
+ "Choisis ton sport nautique. Tu pourras changer quand tu veux.": "Choose your water sport. You can change it whenever you like.",
+ "Dauphins et tortues s'échouent régulièrement sur cette côte. Préviens le réseau d'échouage local (en France, le Réseau national échouages). Ne le remets pas à l'eau toi-même.": "Dolphins and turtles regularly wash up on this coast. Notify the local stranding network (in France, the Réseau national échouages). Don't put it back in the water yourself.",
+ "Des eaux froides très productives, où se concentrent oiseaux marins et grands poissons, et où le plastique dérive depuis très loin.": "Cold, highly productive waters where seabirds and large fish gather, and where plastic drifts in from far away.",
+ "Explore la carte, découvre les spots, la faune, la météo et les marées, et gagne de l'XP en protégeant l'océan avec Poulpy.": "Explore the map, discover spots, wildlife, weather and tides, and earn XP by protecting the ocean with Poulpy.",
+ "Je ne sais pas, montre-moi les activités près de moi": "I’m not sure, show me activities near me",
+ "Les plages de ponte des tortues sont balisées en saison : on n'y circule pas la nuit avec une lampe.": "Turtle nesting beaches are marked during nesting season: don't walk through them at night with a torch.",
+ "Ne nage pas devant eux et ne les touche pas : c'est interdit dans plusieurs pays de la zone.": "Don't swim in front of them or touch them: it's prohibited in several countries in the region.",
+ "Nourrir les poissons déséquilibre les populations et les rend dépendants, même avec du pain.": "Feeding fish disrupts their populations and makes them dependent, even if you only give them bread.",
+ "Un phoque à terre n'est pas en détresse, il se repose. S'en approcher le fait fuir à l'eau et l'épuise : reste loin et observe.": "A seal on land isn't in distress; it's resting. Getting close makes it flee into the water and exhausts it: keep your distance and watch.",
+ "Un récif corallien parmi les plus résistants au réchauffement, mais pas au contact physique ni aux eaux usées.": "One of the coral reefs most resilient to warming, but not to physical contact or wastewater."
 }
