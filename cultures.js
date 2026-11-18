@@ -115,9 +115,11 @@
      sur deux lignes centrées en corps plus petit ; hauteurs inchangées. */
   function fitDone(){
     const over=el=>!!el&&el.scrollWidth>el.clientWidth+1;
-    const run=()=>document.querySelectorAll('.cult-quiz-done').forEach(d=>{d.classList.remove('is-long');if(over(d.querySelector('.cult-quiz-go'))||over(d.querySelector('.cult-quiz-res>div>b')))d.classList.add('is-long');});
-    requestAnimationFrame(run);
-    try{document.fonts&&document.fonts.ready.then(()=>requestAnimationFrame(run));}catch(e){}
+    const run=()=>{try{document.querySelectorAll('.cult-quiz-done').forEach(d=>{d.classList.remove('is-long');if(over(d.querySelector('.cult-quiz-go'))||over(d.querySelector('.cult-quiz-res>div>b')))d.classList.add('is-long');});}catch(e){}};
+    /* Jamais d’erreur vers l’appelant (remplissage de l’accueil, retour du réseau) : mesure à l’image suivante quand elle existe. */
+    const next=f=>typeof requestAnimationFrame==='function'?requestAnimationFrame(f):setTimeout(f,0);
+    next(run);
+    try{document.fonts&&document.fonts.ready.then(()=>next(run));}catch(e){}
   }
   function quizHTML(){
     if(!data)return '';

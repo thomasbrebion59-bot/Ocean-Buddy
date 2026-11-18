@@ -30,6 +30,16 @@ test('mot du jour : bouton ou nom qui déborde, bloc en .is-long ; tout tient, r
   assert.ok(!short.cls.has('is-long'));
 });
 
+test('mot du jour : sans requestAnimationFrame ni document.fonts (page de test, vue réduite), aucune erreur vers l’appelant', async () => {
+  const b = block(260, 90), timers = [];
+  const ctx = load('cultures.js', ['fitDone'], { document: { querySelectorAll: () => [b] }, setTimeout: f => timers.push(f) });
+  assert.doesNotThrow(() => ctx.fitDone());
+  timers.forEach(f => f());
+  assert.ok(b.cls.has('is-long'));
+  const broken = load('cultures.js', ['fitDone'], { document: { querySelectorAll: () => { throw Error('dom'); } }, requestAnimationFrame: f => f() });
+  assert.doesNotThrow(() => broken.fitDone());
+});
+
 test('mot du jour : la mesure est faite à chaque pose du résultat (réponse, accueil, nouveau jour, rotation)', () => {
   const src = read('cultures.js');
   assert.match(src, /box\?\.replaceWith\(t\.children\[0\]\);choices\.replaceWith\(t\.children\[0\]\);[^\n]*\n\s*fitDone\(\);/, 'après la réponse');
