@@ -428,3 +428,61 @@ test('fiche-apercu : repli « Le lieu » ouvert, ni lieu ni nom répétés ; coo
   assert.match(html, /<p id="dDesc"><\/p><p class="spot-provenance" id="dSource"><\/p>/);
   assert.match(css, /\.field-story>\.field-coordinates\{margin:14px 0 0\}/);
 });
+
+/* Retour vers une fiche quittée pour une autre : ses sections se rouvrent comme on les avait laissées. */
+function leaveEnv() {
+  const src = js.slice(js.indexOf('  let lastSpot = null;'), js.indexOf('  /* Fiche déjà ouverte au chargement de ce script'));
+  const infosTab = { dataset: { open: '' }, querySelector: () => ({}) };
+  const tabs = { saisons: { dataset: { open: '' } }, meteo: { dataset: { open: '' } } };
+  const calls = [];
+  const ctx = {
+    currentSpot: null, restoring: false, handler: null, infosTab, tabs,
+    window: { addEventListener: (n, fn) => { if (n === 'ocean:navigate') ctx.handler = fn; }, OceanNavigation: { restoreScroll: () => (ctx.restoring ? 0 : null) } },
+    GROUPS: [{ id: 'lieu' }, { id: 'pratique' }, { id: 'autour' }, { id: 'images' }], TAB_GROUPS: { saisons: [], meteo: [] },
+    infos: () => infosTab, tabOf: cat => tabs[cat], mount: () => infosTab, mountTab: cat => calls.push('mountTab:' + cat),
+    setGroup: (id, open) => { const set = new Set(infosTab.dataset.open.split(/\s+/).filter(Boolean)); if (open) set.add(id); else set.delete(id); infosTab.dataset.open = [...set].join(' '); },
+    closeAll: () => { infosTab.dataset.open = ''; }, closeTabs: () => { for (const c in tabs) tabs[c].dataset.open = ''; }
+  };
+  vm.runInNewContext(src, ctx);
+  const open = (spot, restoring = false) => { ctx.currentSpot = spot; ctx.restoring = restoring; ctx.handler({ detail: 'detail' }); ctx.restoring = false; };
+  return { ctx, open, infosTab, tabs };
+}
+
+test('retour vers une fiche déjà vue : ses sections se rouvrent comme on les avait laissées ; un nouveau spot s’ouvre replié', () => {
+  const { open, infosTab, tabs, ctx } = leaveEnv();
+  open('hossegor');
+  assert.equal(infosTab.dataset.open, '', 'première ouverture : tout replié');
+  infosTab.dataset.open = 'lieu autour'; tabs.saisons.dataset.open = 'mois';
+  /* Un voisin touché dans « Dans les environs » : nouvelle fiche, repliée. */
+  open('estagnots');
+  assert.equal(infosTab.dataset.open, ''); assert.equal(tabs.saisons.dataset.open, '');
+  infosTab.dataset.open = 'images';
+  /* Retour : la fiche d’origine retrouve ses sections (donc sa hauteur, donc sa place dans la page). */
+  open('hossegor', true);
+  assert.deepEqual(infosTab.dataset.open.split(' ').sort(), ['autour', 'lieu']);
+  assert.equal(tabs.saisons.dataset.open, 'mois'); assert.equal(tabs.meteo.dataset.open, '');
+  /* Avancer : le voisin retrouve les siennes. */
+  open('estagnots', true);
+  assert.equal(infosTab.dataset.open, 'images'); assert.equal(tabs.saisons.dataset.open, '');
+  /* Ouverture ordinaire d’une fiche déjà vue (pas un Retour) : repliée, comme toute nouvelle fiche. */
+  open('hossegor');
+  assert.equal(infosTab.dataset.open, ''); assert.equal(tabs.saisons.dataset.open, '');
+  /* Passage par un autre écran : rien ne change pour la fiche qu’on retrouve. */
+  infosTab.dataset.open = 'pratique';
+  ctx.handler({ detail: 'home' }); open('hossegor');
+  assert.equal(infosTab.dataset.open, 'pratique', 'même spot : état laissé tel quel');
+});
+
+test('retour vers une fiche déjà vue : mémoire bornée, jamais enregistrée sur l’appareil, section inconnue ignorée', () => {
+  const { open, infosTab } = leaveEnv();
+  open('a'); infosTab.dataset.open = 'lieu inconnue';
+  for (let i = 0; i < 12; i++) open('s' + i);
+  open('a', true);
+  assert.equal(infosTab.dataset.open, '', 'au-delà des douze dernières fiches : repliée');
+  open('s11'); infosTab.dataset.open = 'lieu inconnue'; open('b'); open('s11', true);
+  assert.equal(infosTab.dataset.open, 'lieu', 'une section qui n’existe pas n’est pas rouverte');
+  assert.doesNotMatch(js, /localStorage|sessionStorage/);
+  /* L’écouteur agit pendant « ocean:navigate », que go() envoie avant de rendre le défilement. */
+  const app = read('app.js'), sent = app.indexOf('new CustomEvent("ocean:navigate"');
+  assert.ok(sent > 0 && sent < app.indexOf('wrap.scrollTop=window.OceanNavigation?.restoreScroll?.()||0;'), 'replis rouverts avant le défilement');
+});

@@ -105,6 +105,12 @@ body .oba.open .oba-card{transform:none;opacity:1;transition:transform var(--ob-
 /* ---------- Images : fond de couleur réservé pendant le chargement ---------- */
 .guide-spirit-cover{background-color:var(--t-tint)}
 
+/* ---------- Anneau de focus : au clavier seulement ----------
+   Après un toucher (classe ob-touch, motion.js), un focus déplacé par l’app ne dessine plus d’anneau autour d’un
+   bouton que personne n’a visé. Au clavier (Tab, flèches) la classe est retirée et tous les anneaux reviennent.
+   Les champs de saisie gardent leur repère dans les deux cas. */
+html.ob-touch :focus-visible:not(input):not(textarea):not(select):not([contenteditable]){outline-color:transparent!important}
+
 /* ---------- Mouvement réduit ----------
    La règle générale (design.css) retire les déplacements et garde des fondus courts. Ici : les feuilles de ce
    fichier ne partent plus d’une position décalée (seule leur opacité change). */

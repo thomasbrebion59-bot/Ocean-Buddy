@@ -120,7 +120,7 @@
       anims=[g.animate(outer,opt),im.animate(inner,opt),g.animate(round,opt),
         sc.animate(open?[{opacity:0},{opacity:1}]:[{opacity:1},{opacity:0}],{duration:ZOOM_MS,easing:'ease-out',fill:'both'})];
     }catch(err){giveBack({home});g.remove();throw err;}
-    return {el:g,img:im,scrim:sc,anims,main:anims[0],home};
+    return {el:g,img:im,scrim:sc,anims,main:anims[0],home,open,t:0};
   }
 
   /* Horloge du vol. Le vol n’avance pas à l’heure réelle mais d’image en image, de STEP_MAX ms au plus à chaque image.
@@ -129,22 +129,40 @@
      se jouait pendant ces images et ne se voyait qu’à sa toute fin. Ici le calque attend à sa place de départ les
      `skip` premières images, le temps que l’écran d’arrivée se peigne, puis chaque image affichée montre l’étape
      suivante : rien n’est sauté. À 60 images par seconde, la durée est exactement celle prévue.
-     Filet : si aucune image ne vient (page cachée), l’atterrissage a lieu quand même. */
+     Filet : si aucune image ne vient (page cachée), l’atterrissage a lieu quand même.
+     `from` : instant de départ (un vol de retour lancé pendant le vol d’ouverture repart d’où la photo se trouve). */
   const STEP_MAX=34;
-  function drive(f,land,skip){
-    f.anims.forEach(a=>{try{a.pause();}catch(_){}});
+  function drive(f,land,skip,from){
+    let t=f.t=Math.min(ZOOM_MS,Math.max(0,from||0)),last=0,n=0;
+    f.anims.forEach(a=>{try{a.pause();if(t)a.currentTime=t;}catch(_){}});
     f.timer=setTimeout(land,ZOOM_MS+1200);
-    let t=0,last=0,n=0;
     const step=now=>{
       if(flight!==f||!f.anims.length)return;
       if(++n>skip){
-        t=Math.min(ZOOM_MS,t+(last?Math.min(Math.max(now-last,0),STEP_MAX):16));
+        t=f.t=Math.min(ZOOM_MS,t+(last?Math.min(Math.max(now-last,0),STEP_MAX):16));
         f.anims.forEach(a=>{try{a.currentTime=t;}catch(_){}});
         if(t>=ZOOM_MS){land();return;}
       }
       last=now;requestAnimationFrame(step);
     };
     requestAnimationFrame(step);
+  }
+  /* Avancement du ressort à l’instant t d’un vol (0 : carte, 1 : héros), lu entre les points de la courbe. */
+  function snapAt(t){
+    const x=Math.min(1,Math.max(0,t/ZOOM_MS))*(SNAP.length-1),i=Math.floor(x),j=Math.min(SNAP.length-1,i+1);
+    return lerp(SNAP[i],SNAP[j],x-i);
+  }
+  /* Instant d’un vol de retour où la photo a la taille p (1 : héros, au départ ; 0 : carte, à l’arrivée). */
+  function backTime(p){
+    const want=1-Math.min(1,Math.max(0,p));
+    for(let i=1;i<SNAP.length;i++)if(SNAP[i]>=want){const a=SNAP[i-1],b=SNAP[i];return (i-1+(b>a?(want-a)/(b-a):0))/(SNAP.length-1)*ZOOM_MS;}
+    return ZOOM_MS;
+  }
+  /* Retour demandé pendant le vol d’ouverture : l’instant où le vol de retour doit commencer pour repartir de la
+     taille que la photo a déjà (sinon elle sautait au héros plein cadre avant de redescendre). 0 : pas de vol en cours. */
+  function resumeAt(){
+    const f=flight;
+    return f&&f.open&&f.anims.length?backTime(snapAt(f.t||0)):0;
   }
 
   function heroInfo(){
@@ -263,6 +281,7 @@
       }
       /* Appel venu de l’ouverture d’une fiche en cours de vol (openSpot) : on ne touche à rien. */
       const nested=M.zoom;
+      const at=back&&!nested?resumeAt():0;
       if(!nested)endFlight();
       let res;
       if(back)M.zoom=true;
@@ -277,7 +296,7 @@
             flight=f;
             /* À l’arrivée, l’image retrouve sa carte ; le nom et le cœur de la carte se reposent en fondu. */
             const land=()=>{if(flight!==f)return;endFlight();if(holder&&holder.isConnected){holder.classList.add('ob-zoom-landed');setTimeout(()=>holder.classList.remove('ob-zoom-landed'),320);}};
-            drive(f,land,1);
+            drive(f,land,1,at);
           }
         }
       }catch(_){endFlight();}
@@ -398,6 +417,18 @@
       setTimeout(()=>b.classList.remove('ob-heart'),460);
     });
   },true); /* phase de capture : certains cœurs arrêtent la propagation de leur clic */
+
+  /* ================= Anneau de focus : au clavier seulement ================= */
+  /* Après un toucher, l’app déplace parfois le focus elle-même, pour le clavier et les lecteurs d’écran (bouton de
+     fermeture d’une feuille, « Découvrir » du mot du jour). Le moteur de l’iPhone dessine alors l’anneau de focus
+     comme au clavier (essai dans WKWebView, 18 nov. 2026) : un cercle coloré apparaissait autour d’un bouton que
+     personne n’avait visé. La classe ob-touch est posée au premier toucher ou clic et retirée dès qu’une touche de
+     déplacement sert (Tab, flèches) : l’anneau reste entier au clavier (motion.css). */
+  const FOCUS_KEYS=/^(Tab|Arrow(Up|Down|Left|Right))$/;
+  function pointerMode(e){if(e&&e.isPrimary===false)return;root.classList.add('ob-touch');}
+  function keyMode(e){if(e&&FOCUS_KEYS.test(e.key||''))root.classList.remove('ob-touch');}
+  window.addEventListener('pointerdown',pointerMode,{capture:true,passive:true});
+  window.addEventListener('keydown',keyMode,{capture:true,passive:true});
 
   function wrapAll(){wrapOpenSpot();wrapGo();wrapDetailTabs();softClose('closeSettings','settingsModal');softClose('closeQuiz','quizModal');softClose('closeEcoLog','ecoInfo');}
   wrapAll();
