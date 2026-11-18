@@ -91,7 +91,7 @@
       + `<div class="db-rows">${dangerLine(s)}`
       + '<div class="db-row db-half" data-before="season"><span class="db-k">Saison</span><span class="db-v db-wait">Chargement…</span></div>'
       + '<div class="db-row db-half" data-before="slot"><span class="db-k">Ton créneau</span><span class="db-v db-wait">Chargement…</span></div>'
-      + '<div class="db-row" data-before="live"><span class="db-k">Maintenant</span><span class="db-v db-wait">Chargement…</span></div></div>'
+      + '<div class="db-row" data-before="live"><span class="db-k">Maintenant<small class="db-stamp" data-before-stamp></small></span><span class="db-v db-wait">Chargement…</span></div></div>'
       + emergency(s);
     const L = typeof LIVE !== 'undefined' ? LIVE[s.id] : null;
     if (L && L.live) live(s, L);
@@ -105,9 +105,22 @@
   }
   const same = s => spot && s && spot.id === s.id;
 
-  /* Conditions du moment : les valeurs de LIVE (modèle Open-Meteo), sans nouvel appel. */
+  /* Heure du relevé (LIVE[id].fetchedAt) : « Relevé à 14 h 05 », ou la date si ce n’est pas aujourd’hui (« Relevé le 17 nov. »).
+     Une fiche déjà vue garde ses dernières valeurs, hors ligne compris : elles ne passent jamais pour celles du moment. */
+  function stamp(t, now = Date.now()) {
+    if (!Number.isFinite(t)) return '';
+    const d = new Date(t);
+    if (d.toDateString() !== new Date(now).toDateString()) return `Relevé le ${d.toLocaleDateString('fr-FR', {day: 'numeric', month: 'short'})}`;
+    const fr = !window.OB_I18N || /^fr/.test(window.OB_I18N.lang || 'fr');
+    return `Relevé à ${fr ? `${d.getHours()}\u00a0h\u00a0${String(d.getMinutes()).padStart(2, '0')}` : d.toLocaleTimeString('fr-FR', {hour: 'numeric', minute: '2-digit'})}`;
+  }
+
+  /* Conditions du moment : les valeurs de LIVE (modèle Open-Meteo), sans nouvel appel, avec l’heure de leur relevé à côté
+     de « Maintenant » (même ligne que le libellé : la hauteur réservée ne change pas). */
   function live(s, l) {
     if (!same(s)) return;
+    const st = host && host.querySelector('[data-before-stamp]');
+    if (st) st.textContent = l && l.live ? stamp(l.fetchedAt) : '';
     if (!l || !l.live) { setRow('live', '<span class="db-muted">Prévision indisponible pour le moment</span>'); return; }
     const has = v => v && v !== '—';
     const bits = [];
@@ -167,5 +180,5 @@
     try { if (typeof openSettings === 'function') openSettings('sport'); } catch (err) {}
   });
 
-  window.OceanBefore = {update, live, season, slot, cardPill, openSafety, levelButton, retry, wait};
+  window.OceanBefore = {update, live, stamp, season, slot, cardPill, openSafety, levelButton, retry, wait};
 })();

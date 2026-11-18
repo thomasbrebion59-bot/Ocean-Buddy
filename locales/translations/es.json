@@ -11011,5 +11011,7 @@
  "pays": "países",
  "continents": "continentes",
  "Le savais-tu ?": "¿Sabías que…?",
- "{0} · {1} XP, plus que {2} XP avant le niveau {3}": "{0} · {1} XP, solo faltan {2} XP para el nivel {3}"
+ "{0} · {1} XP, plus que {2} XP avant le niveau {3}": "{0} · {1} XP, solo faltan {2} XP para el nivel {3}",
+ "Relevé à {0}": "Medido a las {0}",
+ "Relevé le {0}": "Medido el {0}"
 }

@@ -21,6 +21,11 @@
 #detail .db-row{grid-column:1/-1;display:flex;flex-direction:column;gap:2px;padding:7px 0;border-bottom:1px solid var(--t-line);min-height:40px;min-width:0}
 #detail .db-row.db-half{grid-column:auto}
 #detail .db-k{font:700 12px/1.3 var(--body);color:var(--t-ink2)}
+/* « Maintenant · Relevé à 14 h 05 » : l’heure du relevé sur la ligne du libellé, même corps, aucune hauteur en plus. */
+#detail .db-row[data-before="live"] .db-k{display:flex;align-items:baseline;gap:6px;min-width:0}
+#detail .db-stamp{font:600 12px/1.3 var(--body);color:var(--t-ink2);white-space:nowrap}
+#detail .db-stamp:not(:empty)::before{content:"·";margin-right:6px}
+#detail .db-stamp:empty{display:none}
 #detail .db-v{font-size:13px;line-height:1.4;color:var(--t-ink);display:flex;flex-wrap:wrap;align-items:center;gap:4px 6px;min-width:0}
 #detail .db-v b{font-weight:800}
 #detail .db-wait,#detail .db-muted{color:var(--t-ink2)}

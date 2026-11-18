@@ -1467,9 +1467,11 @@ function meteoCell(s){return isInland(s)?'land':'sea';}
 var meteoPauseUntil=0;
 /* Travail non urgent (cache, accueil caché) : au repos du fil principal, pas pendant un défilement. */
 function whenIdle(fn){try{if(window.requestIdleCallback)requestIdleCallback(()=>fn(),{timeout:1500});else setTimeout(fn,200);}catch(e){fn();}}
+/* Réponse reprise du cache de session : son heure de relevé réelle (et non celle de la lecture) suit les données. */
+const meteoTimes=new WeakMap();
 function meteoCached(url){
   const key='oceanbuddy_meteo:'+url;
-  try{const hit=JSON.parse(sessionStorage.getItem(key)||'null');if(hit&&Date.now()-hit.t<18e5)return Promise.resolve(hit.d);}catch(e){}
+  try{const hit=JSON.parse(sessionStorage.getItem(key)||'null');if(hit&&Date.now()-hit.t<18e5){if(hit.d&&typeof hit.d==='object')meteoTimes.set(hit.d,hit.t);return Promise.resolve(hit.d);}}catch(e){}
   if(Date.now()<meteoPauseUntil)return Promise.resolve(null);
   return fetch(url).then(r=>{if(r.status===429||r.status===503){meteoPauseUntil=Date.now()+12e4;throw Error('busy');}if(!r.ok)throw Error('Conditions indisponibles');return r.json();})
     .then(d=>{const t=Date.now();whenIdle(()=>{try{sessionStorage.setItem(key,JSON.stringify({t,d}));}catch(e){}});return d;}).catch(()=>null);
@@ -1485,8 +1487,9 @@ function renderConditions(s,live){
   try{window.OceanSpotData?.live(s,live);}catch(e){}
   const head=document.getElementById('dCondHead');
   if(head){
-    const stamp=live?.fetchedAt?new Date(live.fetchedAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):null;
-    head.textContent=live?(isInland(s)?'Plan d’eau intérieur · vent Open-Meteo':'Prévisions du modèle · Open-Meteo')+(stamp?' · '+`consultées à ${stamp}`:''):'Chargement…';
+    /* Heure du relevé, ou sa date si ce n’est pas aujourd’hui (même texte que « Maintenant », spot-before.js). */
+    const stamp=live?.fetchedAt?(window.OceanBefore?.stamp?.(live.fetchedAt)||''):'';
+    head.textContent=live?(isInland(s)?'Plan d’eau intérieur · vent Open-Meteo':'Prévisions du modèle · Open-Meteo')+(stamp?' · '+stamp:''):'Chargement…';
   }
 }
 function tideFromMarine(mar){
@@ -1639,6 +1642,7 @@ async function fetchPreviewConditions(spots){
     marine.length?load(`https://marine-api.open-meteo.com/v1/marine?latitude=${mlats}&longitude=${mlons}&current=wave_height,sea_surface_temperature&timezone=auto`):Promise.resolve([])
   ]);
   const wa=weather?(Array.isArray(weather)?weather:[weather]):[],ma=sea?(Array.isArray(sea)?sea:[sea]):[];
+  const fetchedAt=Math.min(...[weather,sea].map(d=>(d&&typeof d==='object'&&meteoTimes.get(d))||Date.now()));
   let updated=false;
   const cards=new Map();document.querySelectorAll('.spot[data-spot-id]').forEach(card=>{const l=cards.get(card.dataset.spotId);if(l)l.push(card);else cards.set(card.dataset.spotId,[card]);});
   spots.forEach((s,index)=>{
@@ -1647,7 +1651,7 @@ async function fetchPreviewConditions(spots){
     if(mc.wave_height!=null){data.swell=`${typeof obNum==='function'?obNum(+mc.wave_height,1):(+mc.wave_height).toFixed(1)} m`;data.waveM=+mc.wave_height;}
     if(mc.sea_surface_temperature!=null)data.temp=`${Math.round(mc.sea_surface_temperature)}°C`;
     if(!Object.keys(data).length)return;
-    LIVE[s.id]=Object.assign(LIVE[s.id]||{},data,{live:true,fetchedAt:Date.now()});
+    LIVE[s.id]=Object.assign(LIVE[s.id]||{},data,{live:true,fetchedAt});
     (cards.get(s.id)||[]).forEach(card=>{const meta=card.querySelector('.spot-meta');if(meta)meta.innerHTML=spotCardMeta(s);});
     updated=true;
   });
