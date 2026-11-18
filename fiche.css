@@ -44,8 +44,8 @@
 #detail .fx-dots i,#detail .dtab-dots i{display:block;width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,var(--t-ink) 20%,transparent)}
 #detail .fx-dots i.on,#detail .dtab-dots i.on{background:var(--t-danger)}
 /* Relevé : pictogramme, libellé, grand chiffre et unité, sous-ligne facultative. Posé sur le fond, sans cadre. */
-#detail .fx-readings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px}
-#detail .fx-reading{display:grid;grid-template-columns:26px minmax(0,1fr);column-gap:11px;row-gap:2px;align-items:start;min-width:0}
+#detail .fx-readings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px;align-items:start}
+#detail .fx-reading{display:grid;grid-template-columns:26px minmax(0,1fr);column-gap:11px;row-gap:2px;align-items:start;align-content:start;min-width:0}
 #detail .fx-reading>.fx-ic{grid-row:1 / span 2;margin-top:1px}
 #detail .fx-reading>.fx-label{grid-column:2}
 #detail .fx-reading>.fx-value{grid-column:2;display:flex;align-items:baseline;flex-wrap:wrap;column-gap:7px;min-height:calc(var(--fiche-num) * .95)}
