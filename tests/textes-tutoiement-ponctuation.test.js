@@ -9,3 +9,13 @@ test('tutoiement : « Le savais-tu ? » (repli « Le lieu » et récit du spot),
   assert.equal(JSON.parse(read('locales/translations/en.json'))['Le savais-tu ?'], 'Did you know?');
   assert.equal(JSON.parse(read('locales/translations/es.json'))['Le savais-tu ?'], '¿Sabías que…?');
 });
+
+test('ponctuation : la ligne d’XP du profil n’a plus de tiret long, traduite en anglais et en espagnol', () => {
+  const app = read('app.js');
+  assert.match(app, /`\$\{L\.title\} · \$\{xp\} XP, plus que \$\{L\.remain\} XP avant le niveau \$\{L\.next\.n\}`/);
+  assert.doesNotMatch(app, /XP — plus que/);
+  const k = '{0} · {1} XP, plus que {2} XP avant le niveau {3}';
+  assert.ok(JSON.parse(read('locales/source/fr.json')).includes(k), 'clé extraite');
+  assert.equal(JSON.parse(read('locales/translations/en.json'))[k], '{0} · {1} XP, only {2} XP to go before level {3}');
+  assert.equal(JSON.parse(read('locales/translations/es.json'))[k], '{0} · {1} XP, solo faltan {2} XP para el nivel {3}');
+});

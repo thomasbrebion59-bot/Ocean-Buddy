@@ -1344,7 +1344,7 @@ function pstatTile(svg,bg,color,v,l,on){return '<div class="pstat"'+(on?' onclic
 function renderProfile(){
   var L=levelInfo();
   var fill=document.getElementById('profXpFill');if(fill)fill.style.width=L.pct+'%';
-  var xt=document.getElementById('profXpText');if(xt)xt.textContent=L.max?`${L.title} · ${xp} XP · niveau maximum atteint`:`${L.title} · ${xp} XP — plus que ${L.remain} XP avant le niveau ${L.next.n}`;
+  var xt=document.getElementById('profXpText');if(xt)xt.textContent=L.max?`${L.title} · ${xp} XP · niveau maximum atteint`:`${L.title} · ${xp} XP, plus que ${L.remain} XP avant le niveau ${L.next.n}`;
   var pl=document.getElementById('profLevel');if(pl)pl.textContent=`Niv. ${L.n}`;
   var sk=window.OceanProgress?OceanProgress.streak():0;var ps=document.getElementById('profStreak');if(ps)ps.textContent=sk;var psl=document.getElementById('profStreakLab');if(psl)psl.textContent=sk>1?'jours d’affilée':(window.obT?obT('jour'):'jour');
   var rt=document.getElementById('profTrips');if(rt)rt.textContent=window.OceanTrips?OceanTrips.count():0;

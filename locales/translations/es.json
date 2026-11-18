@@ -11010,5 +11010,6 @@
  "Trouver un encadrant ou du matériel": "Encontrar un monitor o material",
  "pays": "países",
  "continents": "continentes",
- "Le savais-tu ?": "¿Sabías que…?"
+ "Le savais-tu ?": "¿Sabías que…?",
+ "{0} · {1} XP, plus que {2} XP avant le niveau {3}": "{0} · {1} XP, solo faltan {2} XP para el nivel {3}"
 }

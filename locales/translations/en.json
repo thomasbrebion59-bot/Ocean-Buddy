@@ -11010,5 +11010,6 @@
  "Trouver un encadrant ou du matériel": "Find an instructor or gear",
  "pays": "countries",
  "continents": "continents",
- "Le savais-tu ?": "Did you know?"
+ "Le savais-tu ?": "Did you know?",
+ "{0} · {1} XP, plus que {2} XP avant le niveau {3}": "{0} · {1} XP, only {2} XP to go before level {3}"
 }
