@@ -262,19 +262,31 @@ function flightEnv({ failAt = 0 } = {}) {
   return { context, anims, frames, timers, card, img, body };
 }
 
-test('vol de la photo : il attend la première image de la fiche avant de partir, avec un filet si aucune image ne vient', () => {
+test('vol de la photo : il attend que la fiche soit peinte, puis avance d’image en image sans jamais sauter', () => {
   const env = flightEnv();
   env.context.arm();
   assert.equal(env.context.window.openSpot('x'), 'ouvert');
   assert.equal(env.anims.length, 4, 'les quatre animations du vol sont créées');
-  assert.ok(env.anims.every(a => a.paused === 1 && a.played === 0), 'créées en pause : le calque reste sur la carte');
-  assert.equal(env.timers.at(-1), 380 + 1200, 'filet long tant que la fiche n’est pas affichée');
-  assert.equal(env.frames.length, 1);
-  env.frames.shift()();
-  assert.ok(env.anims.every(a => a.played === 0), 'une image ne suffit pas : la fiche n’est pas encore peinte');
-  env.frames.shift()();
-  assert.ok(env.anims.every(a => a.played === 1), 'départ à la deuxième image');
-  assert.equal(env.timers.at(-1), 380 + 160, 'filet court une fois le vol parti');
+  assert.ok(env.anims.every(a => a.paused === 1 && a.played === 0), 'en pause : c’est le pilote qui les fait avancer');
+  assert.equal(env.timers.at(-1), 380 + 1200, 'filet si aucune image ne vient');
+  const frame = now => { assert.equal(env.frames.length, 1, 'une seule boucle d’images'); env.frames.shift()(now); };
+  frame(1000); frame(1250);
+  assert.ok(env.anims.every(a => a.currentTime === undefined), 'deux images laissées à la fiche : le calque attend sur la carte');
+  frame(1400);
+  assert.ok(env.anims.every(a => a.currentTime === 34), 'une image lente de 150 ms ne fait avancer le vol que de 34 ms');
+  frame(1416);
+  assert.ok(env.anims.every(a => a.currentTime === 50), 'à 60 images par seconde, le vol avance à l’heure réelle');
+  let now = 1416, steps = 0, before = 50;
+  while (env.frames.length && steps < 200) {
+    now += 16; steps++; frame(now);
+    const t = env.anims[0].currentTime;
+    assert.ok(t - before <= 34 && t >= before, 'aucun saut de plus de 34 ms');
+    before = t;
+    if (env.anims[0].cancelled) break;
+  }
+  assert.equal(before, 380, 'le vol va jusqu’au bout');
+  assert.ok(env.anims.every(a => a.cancelled === 1), 'atterrissage : les animations sont libérées');
+  assert.equal(env.frames.length, 0, 'la boucle d’images s’arrête');
 });
 
 test('vol de la photo : interrompu avant son départ, il ne repart pas et la photo est rendue à sa carte', () => {
@@ -285,8 +297,9 @@ test('vol de la photo : interrompu avant son départ, il ne repart pas et la pho
   env.context.end();
   assert.equal(env.img.parentNode, env.card, 'photo rendue');
   assert.equal(env.img.style.objectPosition, '40% 60%', 'cadrage d’origine rendu');
-  while (env.frames.length) env.frames.shift()();
-  assert.ok(env.anims.every(a => a.played === 0), 'aucun départ après l’interruption');
+  let now = 1000;
+  while (env.frames.length) env.frames.shift()(now += 16);
+  assert.ok(env.anims.every(a => a.currentTime === undefined), 'aucune avancée après l’interruption');
 });
 
 test('vol de la photo : si le moteur refuse une animation, la photo retourne à sa carte et la fiche s’ouvre quand même', () => {
