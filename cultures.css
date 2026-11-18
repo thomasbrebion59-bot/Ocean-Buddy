@@ -79,6 +79,10 @@ html[lang="en"] .cult-card-word:not(:empty)::after{content:"”"}
 .cult-quiz-res>div>small{font:600 13px/1.3 var(--body);color:color-mix(in srgb,var(--t-on-main) 86%,transparent)}
 .cult-quiz-go{display:flex;align-items:center;justify-content:center;height:48px;margin:0;padding:0 18px;border:0;border-radius:999px;background:var(--t-sun);color:var(--t-deep);font:800 15.5px var(--body);cursor:pointer;
   white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 10px 22px -12px color-mix(in srgb,var(--t-shadow) 70%,transparent)}
+/* Nom long (cultures.js, fitDone) : « Découvrir <pays> » sur deux lignes centrées, jamais de « … » ; le tampon reste
+   seul à gauche (il porte le nom en entier), le nom et la ligne qui suit s’effacent au lieu d’être coupés. */
+.cult-quiz-done.is-long .cult-quiz-go{white-space:normal;text-overflow:clip;text-align:center;overflow-wrap:normal;font-size:13.5px;line-height:1.15}
+.cult-quiz-done.is-long .cult-quiz-res>div{display:none}
 .cult-quiz-go:active{transform:scale(.97)}
 .cult-quiz-go:focus-visible{outline:2px solid var(--t-on-main);outline-offset:3px}
 .cult-quiz-next{margin:0;font:600 12.5px/1.2 var(--body);text-align:center;color:color-mix(in srgb,var(--t-on-main) 78%,transparent)}

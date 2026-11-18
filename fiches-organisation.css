@@ -110,6 +110,9 @@
   .cult-quiz-res>div>b{font-size:20px}
   .cult-quiz-res>div>small{font-size:12px}
   .cult-quiz-go{height:42px;max-width:46vw;padding:0 14px;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* Nom long (mesuré par cultures.js, fitDone) : le tampon à gauche, le bouton sur toute la place restante ; hauteur inchangée. */
+  .cult-quiz-done.is-long{grid-template-columns:auto minmax(0,1fr)}
+  .cult-quiz-done.is-long .cult-quiz-go{max-width:none;padding:0 14px}
   .cult-quiz-next{display:none}
 }
 

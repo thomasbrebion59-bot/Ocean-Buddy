@@ -69,7 +69,7 @@
       }
     });
     const body=$('[data-cult-quiz-body]');
-    if(body&&body.classList.contains('is-wait')){const t=document.createElement('div');t.innerHTML=quizHTML();if(t.firstElementChild)body.replaceWith(t.firstElementChild);}
+    if(body&&body.classList.contains('is-wait')){const t=document.createElement('div');t.innerHTML=quizHTML();if(t.firstElementChild){body.replaceWith(t.firstElementChild);fitDone();}}
     syncMeta();
   }
   function syncStamps(){
@@ -109,6 +109,16 @@
         <p class="cult-quiz-next">Un nouveau mot demain.</p>
       </div>`;
   }
+  /* Résultat du mot du jour : le nom du pays n’est jamais coupé par « … ». Mesuré une fois posé (texte déjà dans la langue
+     affichée, polices chargées) : si « Découvrir <pays> » ou le nom déborde, le bloc passe en .is-long (cultures.css,
+     fiches-organisation.css) : le tampon reste seul à gauche (il porte le nom en entier) et le bouton prend la place,
+     sur deux lignes centrées en corps plus petit ; hauteurs inchangées. */
+  function fitDone(){
+    const over=el=>!!el&&el.scrollWidth>el.clientWidth+1;
+    const run=()=>document.querySelectorAll('.cult-quiz-done').forEach(d=>{d.classList.remove('is-long');if(over(d.querySelector('.cult-quiz-go'))||over(d.querySelector('.cult-quiz-res>div>b')))d.classList.add('is-long');});
+    requestAnimationFrame(run);
+    try{document.fonts&&document.fonts.ready.then(()=>requestAnimationFrame(run));}catch(e){}
+  }
   function quizHTML(){
     if(!data)return '';
     const q=today();
@@ -124,7 +134,7 @@
     if(!data)return;
     const q=today(),body=btn.closest('[data-cult-quiz-body]');if(!q||!body||body.classList.contains('is-busy'))return;
     const r=M.answer(read(),q,btn.dataset.cultChoice,new Date());
-    if(r.already){const t=document.createElement('div');t.innerHTML=quizHTML();body.replaceWith(t.firstElementChild);return;}
+    if(r.already){const t=document.createElement('div');t.innerHTML=quizHTML();body.replaceWith(t.firstElementChild);fitDone();return;}
     save(r.state);body.classList.add('is-busy');
     body.querySelectorAll('[data-cult-choice]').forEach(b=>{b.setAttribute('aria-disabled','true');if(b.dataset.cultChoice===q.country)b.classList.add('is-right');else if(b===btn)b.classList.add('is-wrong');});
     buzz(r.ok?[10,40,18]:14);
@@ -132,7 +142,7 @@
       const box=body.querySelector('.cult-quiz-q'),choices=body.querySelector('.cult-quiz-choices');if(!choices)return;
       const t=document.createElement('div');t.innerHTML=doneHTML(q,{ok:r.ok,isNew:r.isNew},{fresh:true});
       box?.replaceWith(t.children[0]);choices.replaceWith(t.children[0]);body.classList.remove('is-busy');body.classList.add('is-done');
-      body.querySelector('.cult-quiz-go')?.focus({preventScroll:true});
+      fitDone();body.querySelector('.cult-quiz-go')?.focus({preventScroll:true});
       syncStamps();
     },reduced()?120:r.ok?520:900);
   }
@@ -341,8 +351,9 @@
     });
   }
   /* Changement de jour pendant que l’app reste ouverte : le jeu de la veille laisse place au nouveau mot. */
-  document.addEventListener('visibilitychange',()=>{if(document.hidden||!data)return;const d=M.dayKey(new Date());if(quizCache&&quizCache.d!==d){const body=$('[data-cult-quiz-body]');if(body){const t=document.createElement('div');t.innerHTML=quizHTML();body.replaceWith(t.firstElementChild);syncMeta();}}});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden||!data)return;const d=M.dayKey(new Date());if(quizCache&&quizCache.d!==d){const body=$('[data-cult-quiz-body]');if(body){const t=document.createElement('div');t.innerHTML=quizHTML();body.replaceWith(t.firstElementChild);fitDone();syncMeta();}}});
 
-  api._view={word,stamped,fillHome,quizHTML,choose,open,openIndex,start,load,renderPassport};
+  window.addEventListener('resize',()=>{if(document.querySelector('.cult-quiz-go'))fitDone();});
+  api._view={word,stamped,fillHome,quizHTML,choose,open,openIndex,start,load,renderPassport,fitDone};
   start();
 })();
