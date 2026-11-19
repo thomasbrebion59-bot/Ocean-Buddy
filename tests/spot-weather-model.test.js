@@ -211,15 +211,15 @@ function el() {
   };
 }
 const today = () => { const d = new Date(Date.now() + 7200e3); return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); };
-function render(spot, act, level) {
+function render(spot, act, level, fx = {}) {
   BASE = today();
   const els = {}, calls = [], listeners = {};
   const sb = {
-    document: {readyState: 'complete', querySelector: s => els[s] || (els[s] = el()), querySelectorAll: () => [], createElement: () => el(), addEventListener(t, f) { listeners[t] = f; }},
+    document: {readyState: 'complete', querySelector: s => els[s] || (els[s] = el()), querySelectorAll: () => [], createElement: () => el(), getElementById: id => els['#' + id] || (els['#' + id] = el()), addEventListener(t, f) { listeners[t] = f; (listeners['all:' + t] = listeners['all:' + t] || []).push(f); }},
     OB_I18N: {locale: 'fr-FR', lang: 'fr'}, isInland: s => ['lake', 'inland'].includes(s?.waterType), spotSports: s => s.sports,
     COORDS: {[spot.id]: {lat: 43.6, lon: -1.4}}, SPORTMAP: {surf: {label: 'Surf'}, kitesurf: {label: 'Kitesurf'}, paddle: {label: 'Paddle (SUP)'}},
     chosenLevel: level, localStorage: {getItem: () => null}, Intl, Date, Promise, console, setTimeout, clearTimeout,
-    fetch: url => { calls.push(url); return Promise.resolve({ok: true, json: () => Promise.resolve(/marine-api/.test(url) ? marine() : forecast())}); }
+    fetch: url => { calls.push(url); return Promise.resolve({ok: true, json: () => Promise.resolve(/marine-api/.test(url) ? marine(fx.m) : forecast(fx.f))}); }
   };
   sb.window = sb; sb.SpotDataModel = D;
   vm.createContext(sb);
@@ -261,6 +261,59 @@ test('fiche : lac sans houle ; plongée sans créneau ; niveau changé = nouveau
   surf.listeners['ocean:level']();
   assert.ok(surf.els['#spotWeek'].innerHTML.includes('Niveau expert'));
   assert.equal(surf.calls.length, 2);
+});
+
+/* ---------- Fiche v2, onglet Prévisions (18 nov. 2026) ----------
+   « Les 7 jours » en lignes compactes à colonnes alignées ; le meilleur créneau met son jour en avant (jaune soleil) avec
+   l’avertissement de vent de terre en entier ; le détail secondaire d’un jour s’ouvre au toucher ; « Heure par heure »
+   ouvert ; l’heure du relevé et la source en pied. Plus de « Cette semaine », de « Max du jour » ni de point médian. */
+const plain = h => h.replace(/<svg[\s\S]*?<\/svg>/g, '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+const forecastPart = h => h.slice(h.indexOf('<div class="wx-block wx-week"'));
+test('Prévisions : une ligne par jour, colonnes alignées, meilleur jour en jaune avec son avertissement entier', async () => {
+  /* Vent de terre de 15 km/h (le spot est « Offshore E », le vent vient de l’est) : le créneau porte l’avertissement. */
+  const {html} = await render({id: 'hossegor', name: 'Hossegor', waterType: 'sea', sports: ['surf'], wind: 'Offshore E'}, 'surf', 'debutant', {f: {wind: () => 15}});
+  const f = forecastPart(html);
+  assert.match(f, /^<div class="wx-block wx-week" data-fx-view="forecast"><h3 class="fx-title">Les 7 jours<\/h3>/);
+  assert.equal((f.match(/<li class="fx7-row/g) || []).length, 3, 'une ligne par jour reçu (trois dans le jeu de données)');
+  assert.match(f, /<div class="fx7-head" aria-hidden="true"><span><\/span><span><\/span><span>Air<\/span><span>Houle<\/span><span>Période<\/span><span>Vent<\/span><\/div>/);
+  assert.match(f, /<span class="fx7-day">Aujourd’hui<\/span>[\s\S]*?<span class="fx7-c">26°<\/span><span class="fx7-c fx7-wave">\d,\d m<\/span><span class="fx7-c">\d+ s<\/span><span class="fx7-c fx7-wind">14 km\/h<small>E<\/small><\/span>/);
+  /* Un seul jour en avant, avec ses heures, sa qualité et la phrase de vent de terre (jamais repliée ni coupée). */
+  assert.equal((f.match(/fx7-row is-best/g) || []).length, 1);
+  const best = f.slice(f.indexOf('fx7-row is-best'), f.indexOf('</li>', f.indexOf('fx7-row is-best')));
+  assert.match(best, /<span>Ton meilleur jour<\/span> <b>\d+ h( – \d+ h)?<\/b><\/span><span class="fx7-q">(Dans tes repères|Possible, sans plus)<\/span>/);
+  assert.ok(best.includes('<p class="fx7-caution">Le vent vient de la terre (offshore) : il lisse les vagues, mais il te pousse vers le large. Reste près du bord et ne lâche pas ta planche.</p>'));
+  assert.ok(best.indexOf('fx7-caution') < best.indexOf('<dl class="fx7-more"'), 'l’avertissement est hors du détail replié');
+  /* Détail secondaire : fermé au départ, ouvert au toucher. */
+  assert.equal((f.match(/<button type="button" class="fx7-btn" aria-expanded="false" aria-controls="fx7Day\d">/g) || []).length, 3);
+  assert.match(f, /<dl class="fx7-more" id="fx7Day0" hidden><div><dt>Rafales<\/dt><dd>24 km\/h<\/dd><\/div><div><dt>Pluie<\/dt><dd>10 %<\/dd><\/div><div><dt>UV<\/dt><dd>8<\/dd><\/div><div><dt>Lever<\/dt><dd>06:30<\/dd><\/div><div><dt>Coucher<\/dt><dd>21:30<\/dd><\/div><\/dl>/);
+  /* Heure par heure ouvert, puis l’heure du relevé, le rappel du calcul et la source. */
+  assert.match(f, /<div class="wx-block wx-hours" data-fx-view="forecast"><h3 class="fx-title">Heure par heure<\/h3><div class="wx-scroll"/);
+  assert.match(f, /<p class="fx-note fx7-stamp" data-fx-view="forecast">Relevé(\sà\s\d+\sh\s\d\d|\sle\s.+)<\/p>/, 'la même phrase que « Maintenant »');
+  assert.match(f, /le poste de secours, le balisage et les drapeaux priment/);
+  assert.match(f, /Prévisions Open-Meteo \(CC BY 4\.0\)/);
+  assert.doesNotMatch(plain(f), / · |Cette semaine|Max du jour|MÉTÉO/);
+  assert.doesNotMatch(f, /wx-slot|wx-best|Lever \d/, 'plus de cartes de créneau ni de lever dans la tête de l’heure par heure');
+});
+
+test('Prévisions : plan d’eau sans houle ni période, sans niveau le bouton court, toucher un jour ouvre son détail', async () => {
+  const lake = await render({id: 'annecy', name: 'Lac', waterType: 'lake', sports: ['paddle']}, 'paddle', 'debutant');
+  const f = forecastPart(lake.html);
+  assert.match(f, /<div class="fx7 is-inland"><div class="fx7-head" aria-hidden="true"><span><\/span><span><\/span><span>Air<\/span><span>Vent<\/span><\/div>/);
+  assert.doesNotMatch(f, /fx7-wave|<span>Houle<\/span>|<span>Période<\/span>/);
+  const surf = await render({id: 'hossegor', name: 'Hossegor', waterType: 'sea', sports: ['surf']}, 'surf', null);
+  const g = forecastPart(surf.html);
+  assert.ok(g.indexOf('data-open-level>Choisis ton niveau') < g.indexOf('<div class="fx7"'), 'le bouton court, sous le titre');
+  assert.doesNotMatch(g, /is-best/, 'sans niveau, aucun jour mis en avant');
+  /* Toucher la deuxième ligne : son détail s’ouvre ; la première, ouverte avant, se referme. */
+  const els = lake.els, attrs = id => ({v: {'aria-expanded': 'false', 'aria-controls': id}, getAttribute(k) { return this.v[k]; }, setAttribute(k, x) { this.v[k] = x; }});
+  const b0 = attrs('fx7Day0'), b1 = attrs('fx7Day1');
+  els['#fx7Day0'] = {hidden: true}; els['#fx7Day1'] = {hidden: true};
+  const list = {querySelectorAll: () => [b0, b1].filter(b => b.v['aria-expanded'] === 'true')};
+  b0.closest = b1.closest = s => (s === '.fx7-list' ? list : null);
+  const tap = b => lake.listeners['all:click'].forEach(fn => fn({target: {closest: s => (s === '#spotWeek .fx7-btn' ? b : null)}}));
+  tap(b0); assert.equal(els['#fx7Day0'].hidden, false); assert.equal(b0.v['aria-expanded'], 'true');
+  tap(b1); assert.equal(els['#fx7Day1'].hidden, false); assert.equal(els['#fx7Day0'].hidden, true, 'un seul détail ouvert');
+  tap(b1); assert.equal(els['#fx7Day1'].hidden, true, 'second toucher : refermé');
 });
 
 /* Horloge factice : minuteries rangées par échéance, tâches de fond vidées entre deux échéances. */

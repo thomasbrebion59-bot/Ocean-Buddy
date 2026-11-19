@@ -173,9 +173,63 @@ html #detail #detailHero .hero-more>b{display:none}
 /* =====================================================================================================
    ONGLET PRÉVISIONS (data-cat="meteo", data-view="forecast")
    ===================================================================================================== */
-#detail .dcat[data-cat="meteo"] .spot-week-head{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:6px 12px;margin:0 0 16px}
-#detail .dcat[data-cat="meteo"] .spot-week-head .wx-stamp{font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+/* Deux titres (« Les 7 jours », « Heure par heure »), posés sur le fond ; l’heure du relevé et les sources en pied.
+   Plus de sur-titre, plus de « Max du jour » isolé, plus de cartes dans des cartes. */
 #detail .dcat[data-cat="meteo"] .wx-block{margin:0 0 var(--fiche-gap)}
+#detail .dcat[data-cat="meteo"] .wx-block>.fx-title{margin:0 0 10px}
+#detail .fx7-why{margin:0 0 10px}
+#detail .wx-week>.db-level{margin:0 0 12px}
+/* Les 7 jours : une ligne par jour, colonnes alignées (jour, ciel, air, houle, période, vent), chiffres tabulaires. */
+/* Une seule grille pour l’en-tête et les sept lignes (sous-grilles) : chaque colonne prend la largeur de son contenu le
+   plus long, le jour prend le reste ; les colonnes restent alignées d’une ligne à l’autre, sans largeur fixée à la main. */
+#detail .fx7{display:grid;grid-template-columns:minmax(max-content,1fr) repeat(5,auto);column-gap:9px;min-width:0}
+#detail .fx7.is-inland{grid-template-columns:minmax(max-content,1fr) repeat(3,auto)}
+#detail .fx7-head,#detail .fx7-list,#detail .fx7-row,#detail .fx7-btn{display:grid;grid-column:1 / -1;grid-template-columns:subgrid;align-items:center}
+#detail .fx7-head{padding:0 8px 4px;font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail .fx7-head>span{text-align:end;white-space:nowrap}
+#detail .fx7-list{margin:0;padding:0;list-style:none}
+#detail .fx7-row>:not(.fx7-btn){grid-column:1 / -1;min-width:0;contain:inline-size}
+#detail .fx7-row{border-bottom:1px solid var(--fiche-hair)}
+#detail .fx7-btn{width:100%;min-height:46px;margin:0;padding:0 8px;border:0;background:none;color:var(--t-ink);text-align:start;cursor:pointer;
+  font:500 var(--fiche-label)/1.2 var(--body);font-variant-numeric:tabular-nums;-webkit-tap-highlight-color:transparent}
+#detail .fx7-btn:focus-visible{outline:2px solid var(--t-main);outline-offset:-2px;border-radius:12px}
+#detail .fx7-day{font-weight:700;white-space:nowrap}
+#detail .fx7-btn .wx-sky{justify-self:center;color:var(--t-main)}
+#detail .fx7-btn .wx-sky svg{width:22px;height:22px}
+#detail .fx7-c{text-align:end;white-space:nowrap}
+#detail .fx7-wave{font-weight:700}
+#detail .fx7-wind small{margin-inline-start:4px;font:inherit;color:var(--fiche-soft)}
+/* Le meilleur jour (créneau calculé par le code du modèle) : une touche de jaune soleil, ses heures et sa qualité. */
+#detail .fx7-row.is-best{border-bottom-color:transparent;border-radius:var(--fiche-radius);background:color-mix(in srgb,var(--t-sun) 20%,var(--t-card))}
+#detail .fx7-row:has(+ .fx7-row.is-best){border-bottom-color:transparent}
+#detail .fx7-best{display:grid;grid-template-columns:22px minmax(0,1fr) auto;column-gap:8px;row-gap:4px;align-items:center;padding:0 8px 11px}
+#detail .fx7-best>.fx-ic{width:22px;height:22px;color:var(--t-sun)}
+#detail .fx7-best-tx{min-width:0;font:400 var(--fiche-label)/1.3 var(--body);color:var(--t-ink)}
+#detail .fx7-best-tx b{font-weight:700;white-space:nowrap}
+#detail .fx7-q{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft);white-space:nowrap}
+#detail .fx7-caution{grid-column:2 / -1;margin:2px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--t-ink)}
+/* Détail d’un jour, au toucher : rafales, pluie, UV, lever, coucher. */
+#detail .fx7-more{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;padding:0 8px 12px}
+#detail .fx7-more[hidden]{display:none}
+#detail .fx7-more>div{display:flex;align-items:baseline;gap:6px;margin:0}
+#detail .fx7-more dt{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail .fx7-more dd{margin:0;font:600 var(--fiche-note)/1.3 var(--body);font-variant-numeric:tabular-nums;color:var(--t-ink)}
+#detail .fx7-hint{margin:8px 0 0}
+/* Heure par heure : 48 colonnes ouvertes qui défilent à l’horizontale, première colonne fixe, posé sur le fond. */
+#detail .wx-hours .wx-scroll{border:0;border-radius:0;background:none;margin:0 -2px}
+#detail .wx-hours .wx-table{font:500 var(--fiche-note)/1.2 var(--body);font-variant-numeric:tabular-nums;color:var(--t-ink)}
+#detail .wx-hours .wx-table th,#detail .wx-hours .wx-table td{padding:4px 3px;min-width:42px}
+#detail .wx-hours .wx-table th[scope=row],#detail .wx-hours .wx-table .wx-corner{min-width:62px;padding-inline-start:2px;background:var(--t-page);box-shadow:1px 0 var(--fiche-hair);font:600 var(--fiche-note)/1.2 var(--body);color:var(--fiche-soft)}
+#detail .wx-hours .wx-table th[scope=row] small,#detail .wx-hours .wx-table td small{font:400 calc(var(--fiche-note) * .85)/1.2 var(--body);color:var(--fiche-soft)}
+#detail .wx-hours .wx-days th{padding:2px 0 4px;border-left:1px solid var(--fiche-hair)}
+#detail .wx-hours .wx-days b{font:700 var(--fiche-note)/1.2 var(--body);color:var(--t-ink)}
+#detail .wx-hours .wx-hrow th{font:700 var(--fiche-note)/1.2 var(--body);color:var(--t-ink)}
+#detail .wx-hours .wx-table .is-day0{border-left:1px solid var(--fiche-hair)}
+#detail .wx-hours .wx-table .is-night{background:color-mix(in srgb,var(--t-main) 7%,var(--t-page))}
+#detail .wx-hours .wx-table .is-slot{background:color-mix(in srgb,var(--t-sun) 26%,var(--t-page))}
+#detail .wx-hours .wx-legend{margin:8px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+/* Pied : l’heure du relevé, le rappel du calcul du créneau, puis les notes et la source communes aux deux vues. */
+#detail .fx7-stamp,#detail .fx7-calc{margin:0 0 6px}
 
 /* fin de la section Prévisions (ne rien écrire entre ces deux lignes de séparation)
    ----------------------------------------------------------------------------------------------------- */
