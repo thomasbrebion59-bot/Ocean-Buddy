@@ -224,7 +224,10 @@ test('netteté : le thermomètre du héros prend la couleur du texte de sa pasti
 
 /* ---------- Noël ---------- */
 test('Noël : pas de flocons sur la planète d’Explorer, pas de guirlande dans le grand titre', () => {
-  assert.match(noel, /html\.ob-noel:has\(body\[data-screen="spots"\]\)::after\{display:none\}/);
+  /* Plus de calque de neige sur la page : flocons et houx posés seulement au-dessus des titres de l’accueil (#home). */
+  const css = noel.replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.doesNotMatch(css, /html\.ob-noel(?::has\([^)]*\))?::after/);
+  for (const m of css.matchAll(/([^{}]+)\{[^{}]*var\(--noel-(?:snow|holly)\)/g)) for (const sel of m[1].split(',')) assert.match(sel.trim(), /^html\.ob-noel #home /);
   assert.match(noel, /html\.ob-noel body:not\(\.is-scrolled\) \.app-chrome::after\{display:none\}/);
 });
 
