@@ -43,3 +43,14 @@ test('carnet : mesuré à l’ouverture et au changement de taille ; CSS sans «
   assert.ok(two, 'règle des deux lignes');
   assert.match(two[0], /white-space:normal;text-overflow:clip;overflow-wrap:normal;word-break:normal;hyphens:none/);
 });
+
+test('carnet : un dépassement d’une fraction de pixel compte aussi (« UNITED ARAB EMIRAT… » à 375 px)', () => {
+  /* scrollWidth arrondi égal à clientWidth, mais le texte mesure 145,6 px dans une boîte de 145 px : « … » à l'écran. */
+  const el = { dataset: {}, clientWidth: 145, removeAttribute(k) { if (k === 'data-fit') delete this.dataset.fit; },
+    get scrollWidth() { return 145; }, getBoundingClientRect: () => ({ width: 145 }) };
+  const textW = () => (el.dataset.fit ? 145.6 * 15 / 17 : 145.6);
+  const ctx = load('cultures.js', ['fitIndex'], { document: { querySelectorAll: () => [el], fonts: null,
+    createRange: () => ({ selectNodeContents() {}, getBoundingClientRect: () => ({ width: textW() }) }) }, requestAnimationFrame: f => f(), setTimeout });
+  ctx.fitIndex();
+  assert.equal(el.dataset.fit, '1');
+});

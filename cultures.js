@@ -309,7 +309,9 @@
      ESTADOS UNIDOS »). Mesuré une fois posé (texte dans la langue affichée, polices chargées) : corps réduit sur une ligne
      (data-fit 1, 2 : la carte garde sa hauteur), sinon deux lignes (3, 4). cultures.css, .cult-ix b[data-fit]. */
   function fitIndex(){
-    const over=el=>el.scrollWidth>el.clientWidth+1;
+    /* Dépassement d’une fraction de pixel compris (« UNITED ARAB EMIRAT… » : scrollWidth arrondi égal à clientWidth) : largeur
+       réelle du texte comparée à celle de la boîte. */
+    const over=el=>{if(el.scrollWidth>el.clientWidth)return true;try{const r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect().width>el.getBoundingClientRect().width+.05;}catch(e){return false;}};
     const run=()=>{try{document.querySelectorAll('.cult-ix>span:not(.cult-stamp)>b').forEach(b=>{b.removeAttribute('data-fit');for(let i=1;i<=4&&over(b);i++)b.dataset.fit=String(i);});}catch(e){}};
     const next=f=>typeof requestAnimationFrame==='function'?requestAnimationFrame(f):setTimeout(f,0);
     next(run);
