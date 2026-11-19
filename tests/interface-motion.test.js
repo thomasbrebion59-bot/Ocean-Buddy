@@ -229,6 +229,8 @@ test('Noël : pas de flocons sur la planète d’Explorer, pas de guirlande dans
   assert.doesNotMatch(css, /html\.ob-noel(?::has\([^)]*\))?::after/);
   for (const m of css.matchAll(/([^{}]+)\{[^{}]*var\(--noel-(?:snow|holly)\)/g)) for (const sel of m[1].split(',')) assert.match(sel.trim(), /^html\.ob-noel #home /);
   assert.match(noel, /html\.ob-noel body:not\(\.is-scrolled\) \.app-chrome::after\{display:none\}/);
+  /* Le décor de Noël est fixe : rien ne tombe, rien ne clignote, rien ne bouge (le fondateur : il ne doit pas gêner l’usage). */
+  assert.doesNotMatch(css, /@keyframes|animation|transition|will-change/);
 });
 
 /* ---------- Vol de la photo (carte vers fiche) : départ différé et robustesse ---------- */

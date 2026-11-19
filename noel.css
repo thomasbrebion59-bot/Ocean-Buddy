@@ -41,12 +41,14 @@ html.ob-noel #setNoelRow span::after{content:"";display:inline-block;width:9px;h
    faits pour l’iPhone ×3 ; sources PNG hors de l’app). Bonnet de Poulpy et des avatars, guirlande d’ampoules blanc chaud le
    long de la barre d’onglets (verticale le long du menu sur ordinateur), houx et flocons au-dessus des titres de section de
    l’accueil, guirlande du bandeau de saison.
-   Règle du fondateur : aucune décoration ne passe au-dessus d’un bouton, d’un texte, d’un chiffre ou d’un numéro d’urgence.
-   Plus de calque de neige au-dessus de la page : les flocons sont posés seulement dans la marge vide au-dessus des titres
+   Règle du fondateur : le décor ne doit jamais gêner l’utilisation de l’app. Il est FIXE : aucune animation, aucun
+   clignotement, rien qui tombe, aucun will-change ; et aucune décoration ne passe au-dessus d’un bouton, d’un texte, d’un chiffre
+   ou d’un numéro d’urgence.
+   Plus de calque de neige au-dessus de la page : les flocons sont des images FIXES posées seulement dans la marge vide au-dessus des titres
    de section de l’accueil (zone décorative mesurée, tests/noel-deco.test.js et noel-v2/scripts), jamais sur Explorer.
    Images chargées seulement en mode Noël : elles ne sont nommées que dans les variables ci-dessous, utilisées uniquement
    sous html.ob-noel. Pseudo-éléments en position absolue, pointer-events:none, sans dimension ajoutée (rien ne décale le
-   démarrage). Animations en opacité et transform seulement, coupées en mouvement réduit (réglage de l’app et système). */
+   démarrage). Aucune animation : le décor est le même à Noël, que le mouvement soit réduit ou non. */
 :root{
   --noel-hat:url("assets/noel/bonnet.webp");
   --noel-holly:url("assets/noel/houx.webp");
@@ -81,13 +83,12 @@ html.ob-noel .ph-avatar::before{width:65px;height:44px;top:-27px;left:-8px}
    icônes et SOUS les boutons (z-index -1 dans la pilule) : jamais sur un onglet, ni sur le contenu de la page qui défile
    derrière la barre. Sur ordinateur, verticale, à l’extérieur du menu latéral, dans la marge vide du contenu. */
 html.ob-noel .ocean-v2 .nav::after{display:block!important;content:"";position:absolute;pointer-events:none;z-index:-1;
-  background:var(--noel-bulbs-h) 50% 0/auto 13px repeat-x;-webkit-mask-image:var(--noel-ends-h);mask-image:var(--noel-ends-h);
-  animation:noel-glow 4.4s ease-in-out infinite;will-change:opacity}
+  background:var(--noel-bulbs-h) 50% 0/auto 13px repeat-x;-webkit-mask-image:var(--noel-ends-h);mask-image:var(--noel-ends-h)}
 html.ob-noel .app-chrome{--noel-bulbs-h:var(--noel-bulbs-svg)}
 @media(max-width:959px){
   html.ob-noel .ocean-v2 .nav::after{left:30px;right:30px;top:1px;bottom:auto;height:13px}
   html.ob-noel .ocean-v2 .app-chrome::after{content:"";position:absolute;left:0;right:0;bottom:-16px;height:18px;pointer-events:none;z-index:2;
-    background:var(--noel-bulbs-h) 0 0/64px 18px repeat-x;animation:noel-twinkle 4.2s ease-in-out infinite -1.4s}
+    background:var(--noel-bulbs-h) 0 0/64px 18px repeat-x}
   html.ob-noel body[data-screen=home] .ocean-v2 .app-chrome::after,html.ob-noel body[data-screen=home] .app-chrome::after{display:none}
   /* En haut de page, la guirlande de l’en-tête passait dans le grand titre (« Profil », « Défis », « Voyages ») :
      elle n’apparaît qu’une fois la page défilée, quand l’en-tête est une barre et le grand titre parti. */
@@ -97,15 +98,11 @@ html.ob-noel .app-chrome{--noel-bulbs-h:var(--noel-bulbs-svg)}
   html.ob-noel .ocean-v2 .nav::after{top:104px;bottom:70px;left:100%;right:auto;width:16px;z-index:3;background:var(--noel-bulbs-v) 0 50%/16px auto repeat-y;
     -webkit-mask-image:var(--noel-ends-v);mask-image:var(--noel-ends-v)}
   html.ob-noel .ocean-v2 .app-chrome::after{content:"";position:absolute;left:0;right:0;bottom:-17px;height:18px;pointer-events:none;z-index:2;
-    background:var(--noel-bulbs-h) 0 0/64px 18px repeat-x;animation:noel-twinkle 4.2s ease-in-out infinite -1.4s}
+    background:var(--noel-bulbs-h) 0 0/64px 18px repeat-x}
 }
-@keyframes noel-twinkle{0%,100%{opacity:1}50%{opacity:.55}}
-/* Guirlandes claires : respiration douce (sur le crème, une ampoule à moitié éteinte ne se voit plus). */
-@keyframes noel-glow{0%,100%{opacity:1}50%{opacity:.8}}
 
-/* Bandeau de saison de l’accueil (home-feed.js) : la même guirlande remplace le fil et les points dessinés. */
-html.ob-noel .hf-noel-garland{background:var(--noel-bulbs-h) 0 0/auto 20px repeat-x;filter:none;animation:noel-glow 4.4s ease-in-out infinite -2.2s}
-html.ob-noel .hf-noel-garland>i{display:none}
+/* Bandeau de saison de l’accueil (home-feed.js) : la guirlande (image fixe) est posée sur la bande vide du bandeau. */
+html.ob-noel .hf-noel-garland{background:var(--noel-bulbs-h) 0 0/auto 20px repeat-x}
 
 /* Titres de section de l’accueil : quelques flocons dans la marge vide au-dessus du titre (24 à 30 px selon la section,
    déjà réservés : aucune hauteur ajoutée) ; un brin de houx sur deux titres seulement, sobre : la première section de
@@ -120,15 +117,9 @@ html.ob-noel #home .hf-avent .as-sec h2::after,html.ob-noel #home .hf-noel .as-s
   background:var(--noel-holly) center/contain no-repeat}
 html.ob-noel #home .hf-avent~.hf-noel .as-sec h2::after{display:none}
 html.ob-noel #home .as-sec::before{content:"";position:absolute;left:0;right:120px;bottom:calc(100% + 3px);height:20px;pointer-events:none;
-  background:var(--noel-snow) right 0 top 0/auto 22px repeat-x;animation:noel-flake 7s ease-in-out infinite;will-change:transform,opacity}
+  background:var(--noel-snow) right 0 top 0/auto 22px repeat-x}
 html.ob-noel #home .hf-avent .as-sec::before,html.ob-noel #home .hf-noel .as-sec::before,html.ob-noel #home .cult-home>.as-sec::before{left:58px}
 html.ob-noel #home .hf-avent~.hf-noel .as-sec::before{left:0}
 html.ob-noel #home .hf-foryou .as-sec::before,html.ob-noel #home .hf-avent~.hf-noel .as-sec::before,html.ob-noel #home .hub-title::before,html.ob-noel #home .hf-moods .as-sec::before{scale:-1 1}
 /* Première section du contenu replié « Plus d’idées » : 18 px seulement sous le bouton qui l’ouvre ; ni houx ni flocons. */
 html.ob-noel #home .hf-plus-body>.hf-sec:first-child .as-sec::before,html.ob-noel #home .hf-plus-body>.hf-sec:first-child .as-sec h2::after{display:none}
-@keyframes noel-flake{0%,100%{opacity:.7;transform:translateY(-1px)}50%{opacity:1;transform:translateY(1px)}}
-
-@media(prefers-reduced-motion:reduce){
-  html.ob-noel .ocean-v2 .nav::after,html.ob-noel .ocean-v2 .app-chrome::after,html.ob-noel .hf-noel-garland,html.ob-noel #home .as-sec::before{animation:none}
-}
-html.ob-noel body.reduce-motion .nav::after,html.ob-noel body.reduce-motion .app-chrome::after,html.ob-noel body.reduce-motion .hf-noel-garland,html.ob-noel body.reduce-motion #home .as-sec::before{animation:none}

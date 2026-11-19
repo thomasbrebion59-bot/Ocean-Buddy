@@ -1,7 +1,8 @@
 /* Décor de Noël (noel.css, section noel-deco) : illustrations de la direction A « lumières douces » (assets/noel/).
    Garde-fous : fichiers présents, légers et nets à ×3 ; images chargées seulement sous html.ob-noel ; aucune décoration
    au-dessus du contenu (pas de calque de neige sur la page, flocons et houx dans la marge vide des titres de l’accueil,
-   guirlande hors des boutons de la barre d’onglets, paillettes sous le contenu) ; mouvement réduit respecté.
+   guirlande hors des boutons de la barre d’onglets, paillettes sous le contenu) ; décor FIXE : aucune animation (décision
+   du fondateur : le décor ne doit jamais gêner l’utilisation).
    Les mesures à l’écran (captures, aucun flocon sur un texte ni un bouton) sont dans noel-v2/scripts (hors du dépôt). */
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
@@ -11,6 +12,7 @@ const path=require('node:path');
 const root=path.join(__dirname,'..');
 const read=f=>fs.readFileSync(path.join(root,f),'utf8');
 const noel=read('noel.css'),noCom=noel.replace(/\/\*[\s\S]*?\*\//g,'');
+const feedJs=read('home-feed.js'),feedCssNoCom=read('home-feed.css').replace(/\/\*[\s\S]*?\*\//g,'');
 const DIR=path.join(root,'assets/noel');
 const FILES={'guirlande-h-clair.webp':'--noel-bulbs-h','guirlande-v-clair.webp':'--noel-bulbs-v','guirlande-h.webp':'--noel-bulbs-nuit','flocons.webp':'--noel-snow','houx.webp':'--noel-holly','bonnet.webp':'--noel-hat'};
 
@@ -131,18 +133,30 @@ test('aucune décoration au-dessus du contenu : plus de calque de neige, flocons
   assert.doesNotMatch(noCom,/\.nav>button[^{]*::after/);
 });
 
-test('mouvement réduit : toutes les animations du décor coupées (réglage de l’app et système)',()=>{
-  const animated=[...noCom.matchAll(/([^{}]+)\{[^{}]*animation:noel-[\w-]+/g)].flatMap(m=>m[1].split(',').map(s=>s.trim().replace(/^@media\([^)]*\)\s*/,'')));
-  assert.ok(animated.length>=4);
-  const media=noCom.match(/@media\(prefers-reduced-motion:reduce\)\{([^{}]*)\{animation:none\}\s*\}/);
-  assert.ok(media,'bloc prefers-reduced-motion');
-  const sys=media[1].split(',').map(s=>s.trim());
-  const app=(noCom.match(/(html\.ob-noel body\.reduce-motion [^{]+)\{animation:none\}/)||[])[1]?.split(',').map(s=>s.trim().replace('body.reduce-motion ',''))||[];
-  const norm=s=>s.replace('html.ob-noel ','').replace('.ocean-v2 ','');
-  for(const sel of new Set(animated.map(norm))){
-    assert.ok(sys.map(norm).includes(sel),'prefers-reduced-motion : '+sel);
-    assert.ok(app.map(norm).includes(sel),'réglage de l’app : '+sel);
+test('décor fixe : aucune animation, aucune transition, aucun will-change, aucun canevas animé, rien qui tombe ni qui clignote',()=>{
+  /* Décision du fondateur : le décor de Noël ne doit jamais gêner l’utilisation. Fixe, que le mouvement soit réduit ou non. */
+  assert.doesNotMatch(noCom,/@keyframes|animation|transition|will-change/,'noel.css : aucune animation, aucune transition, aucun will-change');
+  /* Aucune feuille de style du dépôt ne déclare d’animation de Noël (neige, scintillement, respiration des guirlandes). */
+  const sheets=fs.readdirSync(root).filter(n=>n.endsWith('.css'));
+  assert.ok(sheets.length>20);
+  for(const f of sheets){
+    const c=read(f).replace(/\/\*[\s\S]*?\*\//g,'');
+    assert.doesNotMatch(c,/@keyframes\s+[\w-]*(?:noel|flake|twinkle|snow|garland|sparkle|glitter)/i,f+' : animation de Noël');
+    if(f!=='noel.css')assert.doesNotMatch(c,/ob-noel/,f+' : aucun style de Noël hors noel.css');
   }
+  /* Bandeau, paillettes et Avent (home-feed.css) : aucune animation ni filtre sur le décor. */
+  const feedBlock=feedCssNoCom.slice(feedCssNoCom.indexOf('.hf-noel-top{'),feedCssNoCom.indexOf('.hf-avent{'));
+  assert.ok(feedBlock.includes('.hf-noel-sky{')&&feedBlock.includes('.hf-noel-garland{'));
+  assert.doesNotMatch(feedBlock,/animation|@keyframes|will-change|filter:/,'bandeau et paillettes de home-feed.css fixes, sans filtre');
+  assert.doesNotMatch(feedCssNoCom,/hf-noel-(?:bulbs|wire|twinkle)/,'plus de scintillement des ampoules du bandeau');
+  /* Paillettes (canevas du haut de l’accueil) : un dessin posé une fois, aucune boucle d’animation. */
+  const part=feedJs.slice(feedJs.indexOf('/* ---------- Mode Noël'),feedJs.indexOf('/* ---------- Fin du mode Noël')).replace(/\/\*[\s\S]*?\*\//g,'');
+  assert.ok(part.includes('function skyDraw')&&part.includes('hf-noel-sky'),'canevas des paillettes présent (dessin fixe)');
+  assert.doesNotMatch(part,/requestAnimationFrame|cancelAnimationFrame|setInterval|\.animate\(|IntersectionObserver|performance\.now|Math\.random/,'paillettes : aucune boucle, aucun hasard, aucun mouvement');
+  assert.doesNotMatch(feedJs.replace(/\/\*[\s\S]*?\*\//g,''),/syncSky|skyFrame|skyLive|flakes\b|skyRun/,'plus de boucle des paillettes dans home-feed.js');
+  assert.match(part,/new ResizeObserver\(skyDraw\)/,'redessiné seulement quand la taille change');
+  /* Le bandeau de saison n’a plus d’ampoules animées : une bande vide, l’image est posée par noel.css. */
+  assert.match(feedJs,/<span class="hf-noel-garland" aria-hidden="true"><\/span>/);
 });
 
 test('guirlandes sur fond crème : variante claire, bouts fondus ; variante nuit réservée aux fonds sombres',()=>{
