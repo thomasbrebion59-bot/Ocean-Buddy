@@ -289,6 +289,7 @@ test('Saisons : un titre sans sur-titre, relevés du mois en composant de la fic
      « pas une prévision » n’est plus répété en pied (il est en tête de l’onglet). */
   const src = js.slice(js.indexOf('function sources(c)'), js.indexOf('function renderSeasons'));
   assert.match(src, /\$\{w \? ' <span>La houle est celle du large : la plage peut être plus abritée ou plus exposée\.<\/span>' : ''\}/);
-  assert.match(src, /<span>Normales calculées sur plusieurs années pour le secteur du spot : \$\{esc\(parts\.join\(' ; '\)\)\}\.<\/span>/);
+  /* Chaque source dans son élément (traduite seule) ; séparateur « ; » à la française, « ; » collé ailleurs. */
+  assert.match(src, /<span>Normales calculées sur plusieurs années pour le secteur du spot :<\/span> \$\{parts\.map\(x => `<span>\$\{esc\(x\)\}<\/span>`\)\.join\(sep\)\}\./);
   assert.doesNotMatch(src, /Ce sont des tendances/);
 });

@@ -30,7 +30,9 @@ test('saisons : verdict, raisons et houle traduits en anglais et en espagnol', (
   /* Sources des normales : une phrase par élément, chacune traduite. */
   assert.equal(T('en', 'La houle est celle du large : la plage peut être plus abritée ou plus exposée.'), 'Swell is offshore: the beach may be more sheltered or more exposed.');
   assert.equal(T('es', 'Le soleil est estimé à partir du rayonnement mesuré par satellite.'), 'La luz solar se estima a partir de la radiación medida por satélite.');
-  assert.match(T('en', 'Normales calculées sur plusieurs années pour le secteur du spot : température de l’eau : NOAA OISST, moyennes 1991-2020.'), /^Averages calculated over several years for the spot area: /);
+  assert.equal(T('en', 'Normales calculées sur plusieurs années pour le secteur du spot :'), 'Averages calculated over several years for the spot area:');
+  assert.equal(T('en', 'air, pluie, vent et soleil : NASA POWER, 2010-2024'), 'air, rain, wind and sunshine: NASA POWER, 2010-2024');
+  assert.equal(T('es', 'houle : modèle WaveWatch III (NOAA, PacIOOS), 2017-2025'), 'oleaje: modelo WaveWatch III (NOAA, PacIOOS), 2017-2025');
 });
 
 test('saisons : chaque raison dans son élément, jours de pluie par Intl, houle sans direction sans séparateur orphelin', () => {

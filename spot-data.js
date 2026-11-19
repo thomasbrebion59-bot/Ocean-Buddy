@@ -259,7 +259,9 @@
     if (w) parts.push(w.src === 'era5' ? `houle : ERA5 (Copernicus) via Open-Meteo, ${w.yrs[0]}-${w.yrs[1]}` : `houle : modèle WaveWatch III (NOAA, PacIOOS), ${w.yrs[0]}-${w.yrs[1]}`);
     /* Fiche v2 : une phrase par élément (traduites une à une). Le rappel « pas une prévision » est déjà en tête de l’onglet,
        il n’est plus répété ici ; la phrase sur la houle du large n’apparaît que si le spot a des normales de houle. */
-    return `<p class="sd-src"><span>Normales calculées sur plusieurs années pour le secteur du spot : ${esc(parts.join(' ; '))}.</span>${a ? ' <span>Le soleil est estimé à partir du rayonnement mesuré par satellite.</span>' : ''}${w ? ' <span>La houle est celle du large : la plage peut être plus abritée ou plus exposée.</span>' : ''}</p>`;
+    /* Chaque source dans son élément, pour être traduite seule (le séparateur suit la typographie de la langue). */
+    const sep = /^fr/i.test(lang()) ? ' ; ' : '; ';
+    return `<p class="sd-src"><span>Normales calculées sur plusieurs années pour le secteur du spot :</span> ${parts.map(x => `<span>${esc(x)}</span>`).join(sep)}.${a ? ' <span>Le soleil est estimé à partir du rayonnement mesuré par satellite.</span>' : ''}${w ? ' <span>La houle est celle du large : la plage peut être plus abritée ou plus exposée.</span>' : ''}</p>`;
   }
 
   function renderSeasons(s, c) {
