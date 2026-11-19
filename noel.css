@@ -2,19 +2,18 @@
 /* Mode Noël : touches dorées sur le reste de l’interface (du 15 novembre au 6 janvier, réglage « Ambiance de Noël »).
    Tout passe par html.ob-noel, posée par home-feed.js sous le rideau et retirée quand le mode est coupé : sans la classe,
    ce fichier n’a aucun effet. Discret et chic : liserés et petites étoiles à quatre branches couleur soleil, jamais de
-   texte doré sur fond clair (contrastes AA inchangés), aucune image, aucune dimension modifiée (bordures déjà présentes,
-   ombres et pseudo-éléments en position absolue : rien ne décale la page). */
+   texte doré sur fond clair (contrastes AA inchangés), aucune dimension modifiée (bordures déjà présentes, ombres et
+   pseudo-éléments en position absolue : rien ne décale la page). Les illustrations du décor sont plus bas (noel-deco). */
 :root{
   --noel-star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M5 0L6.2 3.8L10 5L6.2 6.2L5 10L3.8 6.2L0 5L3.8 3.8Z'/%3E%3C/svg%3E");
   --noel-seam:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='10'%3E%3Crect y='4.4' width='36' height='1.2'/%3E%3Cpath d='M18 1L19 4L22 5L19 6L18 9L17 6L14 5L17 4Z'/%3E%3C/svg%3E");
 }
 
-/* Barre d’onglets : un fil doré en haut de la pilule, une petite étoile sur l’onglet actif. */
+/* Barre d’onglets : un fil doré en haut de la pilule (l’étoile posée sur l’onglet actif est retirée : aucune décoration
+   sur un bouton). */
 html.ob-noel .ocean-v2 .nav{border-color:color-mix(in srgb,var(--t-sun) 55%,var(--t-line))}
 html.ob-noel .ocean-v2 .nav::before{display:block!important;content:"";position:absolute;inset:auto;top:-1px;left:28px;right:28px;height:1.5px;margin:0;border-radius:2px;opacity:1;transform:none;pointer-events:none;
   background:linear-gradient(90deg,transparent,var(--t-sun) 22%,var(--t-sun) 78%,transparent);box-shadow:none;filter:none}
-html.ob-noel .ocean-v2 .nav>button[data-s].active::after,html.ob-noel .ocean-v2 .nav>button[aria-current=page]::after{content:"";position:absolute;top:5px;right:7px;width:7px;height:7px;pointer-events:none;
-  background:color-mix(in srgb,var(--t-sun) 70%,var(--t-deep));-webkit-mask:var(--noel-star) center/contain no-repeat;mask:var(--noel-star) center/contain no-repeat}
 
 /* Grands titres des onglets : une étoile après la ligne de date (même hauteur de ligne). */
 html.ob-noel .as-large p::after{content:"";display:inline-block;width:9px;height:9px;margin-left:7px;vertical-align:1px;
@@ -38,32 +37,48 @@ html.ob-noel #setNoelRow span::after{content:"";display:inline-block;width:9px;h
   background:color-mix(in srgb,var(--t-sun) 75%,var(--t-deep));-webkit-mask:var(--noel-star) center/contain no-repeat;mask:var(--noel-star) center/contain no-repeat}
 
 /* ---------- Décor de Noël (noel-deco) ----------
-   Bonnets, guirlandes colorées, houx et flocons légers : tout en pseudo-éléments en position absolue ou fixe,
-   pointer-events:none, sans aucune dimension ajoutée à la mise en page (rien ne décale le démarrage). Animations
-   limitées à transform/opacity, coupées en mouvement réduit. Sans html.ob-noel, aucun effet. */
+   Direction A « lumières douces », validée par le fondateur : illustrations ChatGPT détourées (assets/noel/, WebP transparents
+   faits pour l’iPhone ×3 ; sources PNG hors de l’app). Bonnet de Poulpy et des avatars, guirlande d’ampoules blanc chaud le
+   long de la barre d’onglets (verticale le long du menu sur ordinateur), houx et flocons au-dessus des titres de section de
+   l’accueil, guirlande du bandeau de saison.
+   Règle du fondateur : aucune décoration ne passe au-dessus d’un bouton, d’un texte, d’un chiffre ou d’un numéro d’urgence.
+   Plus de calque de neige au-dessus de la page : les flocons sont posés seulement dans la marge vide au-dessus des titres
+   de section de l’accueil (zone décorative mesurée, tests/noel-deco.test.js et noel-v2/scripts), jamais sur Explorer.
+   Images chargées seulement en mode Noël : elles ne sont nommées que dans les variables ci-dessous, utilisées uniquement
+   sous html.ob-noel. Pseudo-éléments en position absolue, pointer-events:none, sans dimension ajoutée (rien ne décale le
+   démarrage). Animations en opacité et transform seulement, coupées en mouvement réduit (réglage de l’app et système). */
 :root{
-  --noel-hat:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 56%22%3E%3Cpath d=%22M8 40C10 22 24 6 46 4c6-1 10 3 8 9-2 7-4 14-5 27z%22 fill=%22%23d23a33%22/%3E%3Cpath d=%22M8 40C10 22 24 6 46 4c-12 8-20 20-22 36z%22 fill=%22%23b02a26%22 opacity=%22.55%22/%3E%3Cpath d=%22M4 40c0-5 5-7 12-7l36 1c6 0 9 3 8 7-1 5-6 7-12 7H14C8 48 4 45 4 40z%22 fill=%22%23fdfbf4%22/%3E%3Cpath d=%22M6 43c4 2 9 2 14 2h30%22 fill=%22none%22 stroke=%22%23dcd6c4%22 stroke-width=%222%22 stroke-linecap=%22round%22/%3E%3Ccircle cx=%2252%22 cy=%229%22 r=%227.5%22 fill=%22%23fdfbf4%22/%3E%3Ccircle cx=%2250%22 cy=%227%22 r=%222.6%22 fill=%22%23fff%22/%3E%3C/svg%3E");
-  --noel-holly:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 20%22%3E%3Cpath d=%22M12 12C9 7 4 6 1 8c1 4 5 7 11 4zM12 12c3-5 8-6 11-4-1 4-5 7-11 4z%22 fill=%22%232f7d52%22/%3E%3Cpath d=%22M12 12C9 7 4 6 1 8%22 fill=%22none%22 stroke=%22%231f5e3b%22 stroke-width=%22.8%22/%3E%3Cpath d=%22M12 12c3-5 8-6 11-4%22 fill=%22none%22 stroke=%22%231f5e3b%22 stroke-width=%22.8%22/%3E%3Ccircle cx=%2210.2%22 cy=%2213.5%22 r=%222.6%22 fill=%22%23d23a33%22/%3E%3Ccircle cx=%2214%22 cy=%2213.2%22 r=%222.6%22 fill=%22%23d23a33%22/%3E%3Ccircle cx=%2212.1%22 cy=%2216.4%22 r=%222.6%22 fill=%22%23c02f2a%22/%3E%3Ccircle cx=%229.6%22 cy=%2212.7%22 r=%22.7%22 fill=%22%23fff%22 opacity=%22.7%22/%3E%3C/svg%3E");
-  --noel-bulbs-h:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2218%22%3E%3Cpath d=%22M0 2Q32 12 64 2%22 fill=%22none%22 stroke=%22%233d5560%22 stroke-width=%221.1%22 opacity=%22.75%22/%3E%3Crect x=%226.6%22 y=%223.7%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%228%22 cy=%229.2%22 rx=%222.5%22 ry=%223.3%22 fill=%22%23d23a33%22/%3E%3Cellipse cx=%227.2%22 cy=%228.1%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%2222.6%22 y=%226.2%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%2224%22 cy=%2211.7%22 rx=%222.5%22 ry=%223.3%22 fill=%22%23f2b33d%22/%3E%3Cellipse cx=%2223.2%22 cy=%2210.6%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%2238.6%22 y=%226.2%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%2240%22 cy=%2211.7%22 rx=%222.5%22 ry=%223.3%22 fill=%22%232f6fe0%22/%3E%3Cellipse cx=%2239.2%22 cy=%2210.6%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%2254.6%22 y=%223.7%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%2256%22 cy=%229.2%22 rx=%222.5%22 ry=%223.3%22 fill=%22%231f8f8a%22/%3E%3Cellipse cx=%2255.2%22 cy=%228.1%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3C/svg%3E");
-  --noel-bulbs-v:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2218%22 height=%2264%22%3E%3Cpath d=%22M2 0Q12 32 2 64%22 fill=%22none%22 stroke=%22%233d5560%22 stroke-width=%221.1%22 opacity=%22.75%22/%3E%3Crect x=%223.7%22 y=%226.6%22 width=%222.6%22 height=%222.8%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%229.2%22 cy=%228%22 rx=%223.3%22 ry=%222.5%22 fill=%22%23d23a33%22/%3E%3Cellipse cx=%228.1%22 cy=%227.2%22 rx=%221%22 ry=%22.7%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%226.2%22 y=%2222.6%22 width=%222.6%22 height=%222.8%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%2211.7%22 cy=%2224%22 rx=%223.3%22 ry=%222.5%22 fill=%22%23f2b33d%22/%3E%3Cellipse cx=%2210.6%22 cy=%2223.2%22 rx=%221%22 ry=%22.7%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%226.2%22 y=%2238.6%22 width=%222.6%22 height=%222.8%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%2211.7%22 cy=%2240%22 rx=%223.3%22 ry=%222.5%22 fill=%22%232f6fe0%22/%3E%3Cellipse cx=%2210.6%22 cy=%2239.2%22 rx=%221%22 ry=%22.7%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%223.7%22 y=%2254.6%22 width=%222.6%22 height=%222.8%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%229.2%22 cy=%2256%22 rx=%223.3%22 ry=%222.5%22 fill=%22%231f8f8a%22/%3E%3Cellipse cx=%228.1%22 cy=%2255.2%22 rx=%221%22 ry=%22.7%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3C/svg%3E");
-  --noel-snow:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22260%22 height=%22260%22%3E%3Cg transform=%22translate(24 30)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%221.7600000000000002%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -4.800000000000001V4.800000000000001M-4.16 -2.4000000000000004L4.16 2.4000000000000004M-4.16 2.4000000000000004L4.16 -2.4000000000000004%22 opacity=%22.8%22/%3E%3C/g%3E%3Cg transform=%22translate(98 12)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%221.2100000000000002%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -3.3000000000000003V3.3000000000000003M-2.8600000000000003 -1.6500000000000001L2.8600000000000003 1.6500000000000001M-2.8600000000000003 1.6500000000000001L2.8600000000000003 -1.6500000000000001%22 opacity=%22.8%22/%3E%3C/g%3E%3Cg transform=%22translate(170 58)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%221.9800000000000002%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -5.4V5.4M-4.680000000000001 -2.7L4.680000000000001 2.7M-4.680000000000001 2.7L4.680000000000001 -2.7%22 opacity=%22.8%22/%3E%3C/g%3E%3Cg transform=%22translate(228 20)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%221.32%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -3.5999999999999996V3.5999999999999996M-3.12 -1.7999999999999998L3.12 1.7999999999999998M-3.12 1.7999999999999998L3.12 -1.7999999999999998%22 opacity=%22.8%22/%3E%3C/g%3E%3Cg transform=%22translate(60 110)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%221.32%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -3.5999999999999996V3.5999999999999996M-3.12 -1.7999999999999998L3.12 1.7999999999999998M-3.12 1.7999999999999998L3.12 -1.7999999999999998%22 opacity=%22.8%22/%3E%3C/g%3E%3Cg transform=%22translate(140 126)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%221.6500000000000001%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -4.5V4.5M-3.9000000000000004 -2.25L3.9000000000000004 2.25M-3.9000000000000004 2.25L3.9000000000000004 -2.25%22 opacity=%22.8%22/%3E%3C/g%3E%3Cg transform=%22translate(214 150)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%221.4300000000000002%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -3.9000000000000004V3.9000000000000004M-3.3800000000000003 -1.9500000000000002L3.3800000000000003 1.9500000000000002M-3.3800000000000003 1.9500000000000002L3.3800000000000003 -1.9500000000000002%22 opacity=%22.8%22/%3E%3C/g%3E%3Cg transform=%22translate(18 188)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%221.87%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -5.1V5.1M-4.42 -2.55L4.42 2.55M-4.42 2.55L4.42 -2.55%22 opacity=%22.8%22/%3E%3C/g%3E%3Cg transform=%22translate(96 214)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%221.32%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -3.5999999999999996V3.5999999999999996M-3.12 -1.7999999999999998L3.12 1.7999999999999998M-3.12 1.7999999999999998L3.12 -1.7999999999999998%22 opacity=%22.8%22/%3E%3C/g%3E%3Cg transform=%22translate(182 230)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%221.7600000000000002%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -4.800000000000001V4.800000000000001M-4.16 -2.4000000000000004L4.16 2.4000000000000004M-4.16 2.4000000000000004L4.16 -2.4000000000000004%22 opacity=%22.8%22/%3E%3C/g%3E%3Cg transform=%22translate(120 70)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%220.9900000000000001%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -2.7V2.7M-2.3400000000000003 -1.35L2.3400000000000003 1.35M-2.3400000000000003 1.35L2.3400000000000003 -1.35%22 opacity=%22.8%22/%3E%3C/g%3E%3Cg transform=%22translate(246 96)%22 stroke=%22%23ffffff%22 stroke-width=%221.1%22 stroke-linecap=%22round%22 opacity=%22.9%22%3E%3Ccircle r=%220.9900000000000001%22 fill=%22%23ffffff%22 stroke=%22none%22/%3E%3Cpath d=%22M0 -2.7V2.7M-2.3400000000000003 -1.35L2.3400000000000003 1.35M-2.3400000000000003 1.35L2.3400000000000003 -1.35%22 opacity=%22.8%22/%3E%3C/g%3E%3C/svg%3E");
+  --noel-hat:url("assets/noel/bonnet.webp");
+  --noel-holly:url("assets/noel/houx.webp");
+  --noel-bulbs-h:url("assets/noel/guirlande-h.webp");
+  --noel-bulbs-v:url("assets/noel/guirlande-v.webp");
+  --noel-snow:url("assets/noel/flocons.webp");
+  /* Ancienne guirlande dessinée : gardée pour la seule barre du haut tant que sa règle (.app-chrome::after, plus bas) n’est
+     pas reprise par la session qui dirige (noel-v2/POUR-B7.md). */
+  --noel-bulbs-svg:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2218%22%3E%3Cpath d=%22M0 2Q32 12 64 2%22 fill=%22none%22 stroke=%22%233d5560%22 stroke-width=%221.1%22 opacity=%22.75%22/%3E%3Crect x=%226.6%22 y=%223.7%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%228%22 cy=%229.2%22 rx=%222.5%22 ry=%223.3%22 fill=%22%23d23a33%22/%3E%3Cellipse cx=%227.2%22 cy=%228.1%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%2222.6%22 y=%226.2%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%2224%22 cy=%2211.7%22 rx=%222.5%22 ry=%223.3%22 fill=%22%23f2b33d%22/%3E%3Cellipse cx=%2223.2%22 cy=%2210.6%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%2238.6%22 y=%226.2%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%2240%22 cy=%2211.7%22 rx=%222.5%22 ry=%223.3%22 fill=%22%232f6fe0%22/%3E%3Cellipse cx=%2239.2%22 cy=%2210.6%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%2254.6%22 y=%223.7%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%2256%22 cy=%229.2%22 rx=%222.5%22 ry=%223.3%22 fill=%22%231f8f8a%22/%3E%3Cellipse cx=%2255.2%22 cy=%228.1%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3C/svg%3E");
 }
-/* Bonnets de Noël : bouton rond de Poulpy (mobile), carte « Une question ? » (ordinateur), avatars. */
+/* Bonnets de Noël : bouton rond de Poulpy (mobile), carte « Une question ? » (ordinateur), avatars. Proportions de la
+   maquette validée : largeur 0,86 du rond, bord de fourrure sur le haut gauche, incliné de 14°. Carte « Une question ? » :
+   bonnet un peu plus petit (0,69 du rond), il ne déborde pas sur le bouton « Communauté » juste au-dessus. */
 html.ob-noel .tab-poulpy::before,html.ob-noel .sidebar-poulpy::before,html.ob-noel .chrome-user::before,
 html.ob-noel .sidebar-user::before,html.ob-noel .ph-avatar::before{content:"";position:absolute;pointer-events:none;z-index:4;
-  background:var(--noel-hat) center/contain no-repeat;filter:drop-shadow(0 1.5px 1.5px color-mix(in srgb,var(--t-shadow) 35%,transparent))}
-html.ob-noel .tab-poulpy::before{width:34px;height:30px;top:-12px;left:-2px;transform:rotate(-14deg)}
-html.ob-noel .sidebar-poulpy::before{width:46px;height:40px;top:-42px;right:9px;transform:rotate(12deg)}
+  background:var(--noel-hat) center/contain no-repeat;transform:rotate(-14deg);filter:drop-shadow(0 1.5px 1.5px color-mix(in srgb,var(--t-shadow) 30%,transparent))}
+html.ob-noel .tab-poulpy::before{width:43px;height:29px;top:-12px;left:1px}
+html.ob-noel .sidebar-poulpy::before{width:44px;height:30px;top:-41px;right:29px}
 html.ob-noel .chrome-user,html.ob-noel .sidebar-user{position:relative}
-html.ob-noel .chrome-user::before{width:30px;height:26px;top:-11px;left:11px;transform:rotate(14deg)}
-html.ob-noel .sidebar-user::before{width:30px;height:26px;top:6px;left:13px;transform:rotate(14deg)}
-html.ob-noel .ph-avatar::before{width:44px;height:39px;top:-14px;right:2px;transform:rotate(14deg)}
+html.ob-noel .chrome-user::before{width:34px;height:23px;top:-14px;left:-4px}
+html.ob-noel .sidebar-user::before{width:34px;height:23px;top:1px;left:-1px}
+html.ob-noel .ph-avatar::before{width:65px;height:44px;top:-27px;left:-8px}
+@media(min-width:960px){html.ob-noel .ph-avatar::before{width:84px;height:57px;top:-35px;left:-10px}}
 
-/* Guirlandes lumineuses : le long de la barre d’onglets (mobile), du menu latéral et de la barre du haut (ordinateur). */
-html.ob-noel .ocean-v2 .nav::after{display:block!important;content:"";position:absolute;pointer-events:none;z-index:3;
-  background:var(--noel-bulbs-h) 0 0/64px 18px repeat-x;animation:noel-twinkle 3.6s ease-in-out infinite;will-change:opacity}
+/* Guirlande d’ampoules de la barre d’onglets (mobile) : tendue DANS la pilule, le long de son bord haut, au-dessus des
+   icônes et SOUS les boutons (z-index -1 dans la pilule) : jamais sur un onglet, ni sur le contenu de la page qui défile
+   derrière la barre. Sur ordinateur, verticale, à l’extérieur du menu latéral, dans la marge vide du contenu. */
+html.ob-noel .ocean-v2 .nav::after{display:block!important;content:"";position:absolute;pointer-events:none;z-index:-1;
+  background:var(--noel-bulbs-h) 0 0/auto 13px repeat-x;animation:noel-twinkle 4.4s ease-in-out infinite;will-change:opacity}
+html.ob-noel .app-chrome{--noel-bulbs-h:var(--noel-bulbs-svg)}
 @media(max-width:959px){
-  html.ob-noel .ocean-v2 .nav::after{left:26px;right:26px;top:0;height:18px}
+  html.ob-noel .ocean-v2 .nav::after{left:30px;right:30px;top:1px;bottom:auto;height:13px}
   html.ob-noel .ocean-v2 .app-chrome::after{content:"";position:absolute;left:0;right:0;bottom:-16px;height:18px;pointer-events:none;z-index:2;
     background:var(--noel-bulbs-h) 0 0/64px 18px repeat-x;animation:noel-twinkle 4.2s ease-in-out infinite -1.4s}
   html.ob-noel body[data-screen=home] .ocean-v2 .app-chrome::after,html.ob-noel body[data-screen=home] .app-chrome::after{display:none}
@@ -72,26 +87,38 @@ html.ob-noel .ocean-v2 .nav::after{display:block!important;content:"";position:a
   html.ob-noel body:not(.is-scrolled) .app-chrome::after{display:none}
 }
 @media(min-width:960px){
-  html.ob-noel .ocean-v2 .nav::after{top:70px;bottom:70px;right:-1px;left:auto;width:18px;background:var(--noel-bulbs-v) 0 0/18px 64px repeat-y}
+  html.ob-noel .ocean-v2 .nav::after{top:104px;bottom:70px;left:100%;right:auto;width:16px;z-index:3;background:var(--noel-bulbs-v) 0 0/16px auto repeat-y}
   html.ob-noel .ocean-v2 .app-chrome::after{content:"";position:absolute;left:0;right:0;bottom:-17px;height:18px;pointer-events:none;z-index:2;
     background:var(--noel-bulbs-h) 0 0/64px 18px repeat-x;animation:noel-twinkle 4.2s ease-in-out infinite -1.4s}
 }
 @keyframes noel-twinkle{0%,100%{opacity:1}50%{opacity:.55}}
 
-/* Houx sur les titres de section (petit brin au-dessus du titre, dans l’espace déjà réservé : aucune hauteur ajoutée). */
-html.ob-noel .as-sec h2{position:relative}
-html.ob-noel .as-sec h2::after{content:"";position:absolute;left:0;top:-23px;width:26px;height:21px;pointer-events:none;transform:rotate(-5deg);background:var(--noel-holly) center/contain no-repeat}
+/* Bandeau de saison de l’accueil (home-feed.js) : la même guirlande remplace le fil et les points dessinés. */
+html.ob-noel .hf-noel-garland{background:var(--noel-bulbs-h) 0 0/auto 20px repeat-x;filter:none;animation:noel-twinkle 4.4s ease-in-out infinite -2.2s}
+html.ob-noel .hf-noel-garland>i{display:none}
 
-/* Flocons légers en arrière-plan : un seul calque fixe, qui glisse en transform seulement. */
-html.ob-noel::after{content:"";position:fixed;left:0;top:-260px;width:100%;height:calc(100% + 260px);z-index:4;pointer-events:none;
-  background:var(--noel-snow) 0 0/260px 260px repeat;opacity:.42;animation:noel-snow 26s linear infinite;will-change:transform}
-@keyframes noel-snow{to{transform:translate3d(-30px,260px,0)}}
-/* Explorer : la planète occupe tout l’écran, les flocons passaient par-dessus. Calque retiré sur cet écran (il n’est
-   alors ni dessiné ni animé). :has() : Safari 15.4 et plus ; un navigateur plus ancien garde simplement les flocons. */
-html.ob-noel:has(body[data-screen="spots"])::after{display:none}
+/* Titres de section de l’accueil : quelques flocons dans la marge vide au-dessus du titre (24 à 30 px selon la section,
+   déjà réservés : aucune hauteur ajoutée) ; un brin de houx sur deux titres seulement, sobre : la première section de
+   Noël (Calendrier de l’Avent, sinon Noël au soleil) et le Tour du monde des cultures (maquette validée).
+   Houx 45 × 22 px, 3 px au-dessus du titre ; flocons dans une bande de 20 px qui finit 3 px au-dessus du titre (les
+   flocons eux-mêmes à 4 px au moins), jamais dans les 120 derniers px : le bouton de droite
+   (« Mes tampons ») dépasse de 7 px au-dessus du titre, aucun flocon ne passe au-dessus. Les flocons d’une section sur
+   deux sont retournés (même image en miroir) pour ne pas répéter le même dessin d’un titre à l’autre. */
+html.ob-noel #home .as-sec{position:relative}
+html.ob-noel #home .as-sec h2{position:relative}
+html.ob-noel #home .hf-avent .as-sec h2::after,html.ob-noel #home .hf-noel .as-sec h2::after,html.ob-noel #home .cult-home>.as-sec h2::after{content:"";position:absolute;left:-1px;top:-25px;width:45px;height:22px;pointer-events:none;
+  background:var(--noel-holly) center/contain no-repeat}
+html.ob-noel #home .hf-avent~.hf-noel .as-sec h2::after{display:none}
+html.ob-noel #home .as-sec::before{content:"";position:absolute;left:0;right:120px;bottom:calc(100% + 3px);height:20px;pointer-events:none;
+  background:var(--noel-snow) right 0 top 0/auto 22px repeat-x;animation:noel-flake 7s ease-in-out infinite;will-change:transform,opacity}
+html.ob-noel #home .hf-avent .as-sec::before,html.ob-noel #home .hf-noel .as-sec::before,html.ob-noel #home .cult-home>.as-sec::before{left:58px}
+html.ob-noel #home .hf-avent~.hf-noel .as-sec::before{left:0}
+html.ob-noel #home .hf-foryou .as-sec::before,html.ob-noel #home .hf-avent~.hf-noel .as-sec::before,html.ob-noel #home .hub-title::before,html.ob-noel #home .hf-moods .as-sec::before{scale:-1 1}
+/* Première section du contenu replié « Plus d’idées » : 18 px seulement sous le bouton qui l’ouvre ; ni houx ni flocons. */
+html.ob-noel #home .hf-plus-body>.hf-sec:first-child .as-sec::before,html.ob-noel #home .hf-plus-body>.hf-sec:first-child .as-sec h2::after{display:none}
+@keyframes noel-flake{0%,100%{opacity:.7;transform:translateY(-1px)}50%{opacity:1;transform:translateY(1px)}}
+
 @media(prefers-reduced-motion:reduce){
-  html.ob-noel .ocean-v2 .nav::after,html.ob-noel .ocean-v2 .app-chrome::after{animation:none}
-  html.ob-noel::after{animation:none;opacity:.3}
+  html.ob-noel .ocean-v2 .nav::after,html.ob-noel .ocean-v2 .app-chrome::after,html.ob-noel .hf-noel-garland,html.ob-noel #home .as-sec::before{animation:none}
 }
-html.ob-noel body.reduce-motion .nav::after,html.ob-noel body.reduce-motion .app-chrome::after{animation:none}
-html.ob-noel:has(body.reduce-motion)::after{animation:none;opacity:.3}
+html.ob-noel body.reduce-motion .nav::after,html.ob-noel body.reduce-motion .app-chrome::after,html.ob-noel body.reduce-motion .hf-noel-garland,html.ob-noel body.reduce-motion #home .as-sec::before{animation:none}
