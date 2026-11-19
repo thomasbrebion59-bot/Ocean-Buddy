@@ -175,3 +175,9 @@ test('guirlandes sur fond crème : variante claire, bouts fondus ; variante nuit
   assert.match(noCom,/@media\(min-width:960px\)\{\s*html\.ob-noel \.ocean-v2 \.nav::after\{[^}]*mask-image:var\(--noel-ends-v\)/);
   assert.match(noCom,/--noel-ends-h:linear-gradient\(90deg,transparent,black \d+px,black calc\(100% - \d+px\),transparent\)/);
 });
+
+test('Fiche : aucune décoration de Noël sur la photo du spot (ni liseré ni guirlande)', () => {
+  const css=fs.readFileSync(path.join(root,'noel.css'),'utf8').replace(/\/\*[\s\S]*?\*\//g,'');
+  assert.doesNotMatch(css,/detail-hero/);
+  assert.doesNotMatch(css,/--noel-seam/);
+});
