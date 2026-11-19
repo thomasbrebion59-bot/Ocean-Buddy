@@ -170,9 +170,12 @@ html.cult-open{overflow:hidden}
 .cult-block h2{margin:6px 0 6px;font:800 25px/1.02 var(--as-condensed);letter-spacing:-.2px;text-transform:uppercase;color:var(--t-ink);overflow-wrap:anywhere}
 .cult-block p{margin:0;font:500 15px/1.5 var(--body);color:var(--t-ink)}
 .cult-sea{background:linear-gradient(160deg,var(--t-card) 0%,color-mix(in srgb,var(--t-tint) 70%,var(--t-card)) 100%)}
-.cult-fete{grid-template-columns:78px 1fr}
+/* Date de la fête : aucun mot coupé en son milieu (« September », « généralement », « Wednesday »). La colonne garde 78 px
+   et ne s’élargit que du nécessaire pour le mot le plus long de la date (fit-content : largeur min-content de la pastille,
+   66 px de texte au moins). */
+.cult-fete{grid-template-columns:fit-content(78px) 1fr}
 .cult-when{align-self:start;display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 6px;border-radius:16px;background:var(--t-tint);text-align:center}
-.cult-when b{font:800 13px/1.15 var(--body);color:var(--t-deep);overflow-wrap:anywhere}
+.cult-when b{min-width:66px;font:800 13px/1.15 var(--body);color:var(--t-deep);overflow-wrap:normal;word-break:normal;hyphens:none}
 .cult-pair{display:grid;gap:10px}
 .cult-tile{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:16px 16px 14px}
 .cult-tile>div{min-width:0}
