@@ -12,7 +12,7 @@ const root=path.join(__dirname,'..');
 const read=f=>fs.readFileSync(path.join(root,f),'utf8');
 const noel=read('noel.css'),noCom=noel.replace(/\/\*[\s\S]*?\*\//g,'');
 const DIR=path.join(root,'assets/noel');
-const FILES={'guirlande-h.webp':'--noel-bulbs-h','guirlande-v.webp':'--noel-bulbs-v','flocons.webp':'--noel-snow','houx.webp':'--noel-holly','bonnet.webp':'--noel-hat'};
+const FILES={'guirlande-h-clair.webp':'--noel-bulbs-h','guirlande-v-clair.webp':'--noel-bulbs-v','guirlande-h.webp':'--noel-bulbs-nuit','flocons.webp':'--noel-snow','houx.webp':'--noel-holly','bonnet.webp':'--noel-hat'};
 
 /* En-tête WebP étendu (VP8X) : drapeau de transparence et dimensions du canevas. */
 function webp(file){
@@ -32,9 +32,9 @@ function decl(sel,prop='content'){
 }
 const px=(d,prop)=>{const m=new RegExp('(?:^|;)\\s*'+prop+':\\s*(-?[\\d.]+)px').exec(d);return m?+m[1]:null;};
 
-test('assets/noel : cinq WebP transparents, légers, sans les PNG sources',()=>{
+test('assets/noel : six WebP transparents, légers, sans les PNG sources',()=>{
   const list=fs.readdirSync(DIR).sort();
-  assert.deepEqual(list,Object.keys(FILES).sort(),'seulement les cinq illustrations (les PNG sources restent hors de l’app)');
+  assert.deepEqual(list,Object.keys(FILES).sort(),'seulement les six illustrations (les PNG sources restent hors de l’app)');
   let total=0;
   for(const f of list){
     const i=webp(f);total+=i.bytes;
@@ -45,8 +45,9 @@ test('assets/noel : cinq WebP transparents, légers, sans les PNG sources',()=>{
 });
 
 test('netteté ×3 : aucune illustration affichée plus grande que le tiers de sa définition',()=>{
-  const g=webp('guirlande-h.webp'),v=webp('guirlande-v.webp'),h=webp('houx.webp'),b=webp('bonnet.webp'),s=webp('flocons.webp');
+  const g=webp('guirlande-h-clair.webp'),v=webp('guirlande-v-clair.webp'),n=webp('guirlande-h.webp'),h=webp('houx.webp'),b=webp('bonnet.webp'),s=webp('flocons.webp');
   assert.equal(v.w,g.h);assert.equal(v.h,g.w);
+  for(const x of [...noCom.matchAll(/var\(--noel-bulbs-nuit\)[^;]*?\/auto (\d+(?:\.\d+)?)px/g)].map(m=>+m[1]))assert.ok(x*3<=n.h,`guirlande nuit affichée à ${x} px`);
   /* Guirlande horizontale : hauteurs affichées (« auto Npx ») ; verticale : largeurs (« Npx auto »). */
   const hs=[...noCom.matchAll(/var\(--noel-bulbs-h\)[^;]*?\/auto (\d+(?:\.\d+)?)px/g)].map(m=>+m[1]);
   const vs=[...noCom.matchAll(/var\(--noel-bulbs-v\)[^;]*?\/(\d+(?:\.\d+)?)px auto/g)].map(m=>+m[1]);
@@ -74,12 +75,12 @@ test('images chargées seulement en mode Noël (html.ob-noel)',()=>{
      active ne l’emploie), et chaque emploi est dans une règle sous html.ob-noel. */
   const named=[...noCom.matchAll(/(--noel-[\w-]+):url\("assets\/noel\/([\w.-]+)"\)/g)].map(m=>[m[1],m[2]]);
   assert.deepEqual(Object.fromEntries(named.map(([v,f])=>[f,v])),FILES);
-  assert.equal((noCom.match(/assets\/noel\//g)||[]).length,5,'aucune autre mention des fichiers');
+  assert.equal((noCom.match(/assets\/noel\//g)||[]).length,6,'aucune autre mention des fichiers');
   const rootBlocks=[...noCom.matchAll(/:root\{([^}]*)\}/g)].map(m=>m[1]).join('');
   for(const [v] of named)assert.ok(rootBlocks.includes(v+':url('),v+' déclarée dans :root');
   const re=/([^{}]+)\{([^{}]*)\}/g;let m;
   while((m=re.exec(noCom))){
-    if(!/var\(--noel-(?:hat|holly|bulbs-h|bulbs-v|snow)\)/.test(m[2]))continue;
+    if(!/var\(--noel-(?:hat|holly|bulbs-h|bulbs-v|bulbs-nuit|snow)\)/.test(m[2]))continue;
     for(const part of m[1].split(','))assert.match(part.trim().replace(/^@media\([^)]*\)\s*/,''),/^html\.ob-noel[ .:]/,'emploi hors mode Noël : '+part.trim());
   }
   for(const f of ['index.html','home-feed.js','home-feed.css','app-shell.css','sw.js','design.css'])
@@ -142,4 +143,18 @@ test('mouvement réduit : toutes les animations du décor coupées (réglage de 
     assert.ok(sys.map(norm).includes(sel),'prefers-reduced-motion : '+sel);
     assert.ok(app.map(norm).includes(sel),'réglage de l’app : '+sel);
   }
+});
+
+test('guirlandes sur fond crème : variante claire, bouts fondus ; variante nuit réservée aux fonds sombres',()=>{
+  /* Barre d’onglets (mobile), menu latéral (ordinateur) et bandeau de saison sont sur fond crème : variante claire. */
+  assert.match(decl('html.ob-noel .ocean-v2 .nav::after'),/var\(--noel-bulbs-h\)/);
+  assert.match(noCom,/@media\(min-width:960px\)\{\s*html\.ob-noel \.ocean-v2 \.nav::after\{[^}]*var\(--noel-bulbs-v\)/);
+  assert.match(decl('html.ob-noel .hf-noel-garland','background'),/var\(--noel-bulbs-h\)/);
+  /* La variante nuit (halo blanc, invisible sur le crème) ne sert que sur la photo de l’en-tête de la fiche. */
+  const re=/([^{}]+)\{([^{}]*var\(--noel-bulbs-nuit\)[^{}]*)\}/g;let m;
+  while((m=re.exec(noCom)))for(const sel of m[1].split(','))assert.match(sel.trim(),/#detail \.detail-hero/,'variante nuit hors de la photo : '+sel.trim());
+  /* Bouts fondus : la guirlande d’onglets et la verticale ne s’arrêtent pas net au milieu d’un motif. */
+  assert.match(decl('html.ob-noel .ocean-v2 .nav::after'),/mask-image:var\(--noel-ends-h\)/);
+  assert.match(noCom,/@media\(min-width:960px\)\{\s*html\.ob-noel \.ocean-v2 \.nav::after\{[^}]*mask-image:var\(--noel-ends-v\)/);
+  assert.match(noCom,/--noel-ends-h:linear-gradient\(90deg,transparent,black \d+px,black calc\(100% - \d+px\),transparent\)/);
 });

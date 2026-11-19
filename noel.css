@@ -50,8 +50,14 @@ html.ob-noel #setNoelRow span::after{content:"";display:inline-block;width:9px;h
 :root{
   --noel-hat:url("assets/noel/bonnet.webp");
   --noel-holly:url("assets/noel/houx.webp");
-  --noel-bulbs-h:url("assets/noel/guirlande-h.webp");
-  --noel-bulbs-v:url("assets/noel/guirlande-v.webp");
+  /* Guirlande : variante « fond clair » (ampoules ambre et doré, sans halo blanc) partout où le fond est crème ;
+     variante « nuit » (ampoules blanc chaud, halo blanc) réservée aux fonds sombres (photo de l’en-tête de la fiche). */
+  --noel-bulbs-h:url("assets/noel/guirlande-h-clair.webp");
+  --noel-bulbs-v:url("assets/noel/guirlande-v-clair.webp");
+  --noel-bulbs-nuit:url("assets/noel/guirlande-h.webp");
+  /* Bouts de guirlande fondus : le motif ne s’arrête jamais net au milieu d’un dessin. */
+  --noel-ends-h:linear-gradient(90deg,transparent,black 18px,black calc(100% - 18px),transparent);
+  --noel-ends-v:linear-gradient(180deg,transparent,black 18px,black calc(100% - 18px),transparent);
   --noel-snow:url("assets/noel/flocons.webp");
   /* Ancienne guirlande dessinée : gardée pour la seule barre du haut tant que sa règle (.app-chrome::after, plus bas) n’est
      pas reprise par la session qui dirige (noel-v2/POUR-B7.md). */
@@ -75,7 +81,8 @@ html.ob-noel .ph-avatar::before{width:65px;height:44px;top:-27px;left:-8px}
    icônes et SOUS les boutons (z-index -1 dans la pilule) : jamais sur un onglet, ni sur le contenu de la page qui défile
    derrière la barre. Sur ordinateur, verticale, à l’extérieur du menu latéral, dans la marge vide du contenu. */
 html.ob-noel .ocean-v2 .nav::after{display:block!important;content:"";position:absolute;pointer-events:none;z-index:-1;
-  background:var(--noel-bulbs-h) 0 0/auto 13px repeat-x;animation:noel-twinkle 4.4s ease-in-out infinite;will-change:opacity}
+  background:var(--noel-bulbs-h) 50% 0/auto 13px repeat-x;-webkit-mask-image:var(--noel-ends-h);mask-image:var(--noel-ends-h);
+  animation:noel-glow 4.4s ease-in-out infinite;will-change:opacity}
 html.ob-noel .app-chrome{--noel-bulbs-h:var(--noel-bulbs-svg)}
 @media(max-width:959px){
   html.ob-noel .ocean-v2 .nav::after{left:30px;right:30px;top:1px;bottom:auto;height:13px}
@@ -87,14 +94,17 @@ html.ob-noel .app-chrome{--noel-bulbs-h:var(--noel-bulbs-svg)}
   html.ob-noel body:not(.is-scrolled) .app-chrome::after{display:none}
 }
 @media(min-width:960px){
-  html.ob-noel .ocean-v2 .nav::after{top:104px;bottom:70px;left:100%;right:auto;width:16px;z-index:3;background:var(--noel-bulbs-v) 0 0/16px auto repeat-y}
+  html.ob-noel .ocean-v2 .nav::after{top:104px;bottom:70px;left:100%;right:auto;width:16px;z-index:3;background:var(--noel-bulbs-v) 0 50%/16px auto repeat-y;
+    -webkit-mask-image:var(--noel-ends-v);mask-image:var(--noel-ends-v)}
   html.ob-noel .ocean-v2 .app-chrome::after{content:"";position:absolute;left:0;right:0;bottom:-17px;height:18px;pointer-events:none;z-index:2;
     background:var(--noel-bulbs-h) 0 0/64px 18px repeat-x;animation:noel-twinkle 4.2s ease-in-out infinite -1.4s}
 }
 @keyframes noel-twinkle{0%,100%{opacity:1}50%{opacity:.55}}
+/* Guirlandes claires : respiration douce (sur le crème, une ampoule à moitié éteinte ne se voit plus). */
+@keyframes noel-glow{0%,100%{opacity:1}50%{opacity:.8}}
 
 /* Bandeau de saison de l’accueil (home-feed.js) : la même guirlande remplace le fil et les points dessinés. */
-html.ob-noel .hf-noel-garland{background:var(--noel-bulbs-h) 0 0/auto 20px repeat-x;filter:none;animation:noel-twinkle 4.4s ease-in-out infinite -2.2s}
+html.ob-noel .hf-noel-garland{background:var(--noel-bulbs-h) 0 0/auto 20px repeat-x;filter:none;animation:noel-glow 4.4s ease-in-out infinite -2.2s}
 html.ob-noel .hf-noel-garland>i{display:none}
 
 /* Titres de section de l’accueil : quelques flocons dans la marge vide au-dessus du titre (24 à 30 px selon la section,
