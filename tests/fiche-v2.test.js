@@ -309,7 +309,7 @@ test('Saisons : période sous le sport = mois de la meilleure case, « Bon » d�
   assert.ok(js.includes('`${num(d.kite)} % de jours ≥ 25 km/h`'));
   for (const l of ['en', 'es']) assert.match(JSON.parse(read(`locales/translations/${l}.json`))['{0} % de jours ≥ 25 km/h'], /^\{0\} % .+ ≥ 25 km\/h$/);
   /* « L’année en courbes » : un sous-titre juste aussi sur un lac (pas de houle annoncée). */
-  assert.match(read('replis.js'), /title: 'L’année en courbes', sub: 'Températures, soleil, pluie et vent, mois par mois'/);
+  assert.match(read('replis.js'), /title: 'L’année en courbes', sub: 'Températures, soleil, pluie et vent'/);
 });
 
 test('Prévisions : lever et coucher écrits comme les autres heures (« 7 h 37 »), rappel du calcul sous le meilleur jour', () => {
