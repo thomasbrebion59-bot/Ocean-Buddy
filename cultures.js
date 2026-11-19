@@ -131,15 +131,18 @@
   /* Résultat du mot du jour : le nom du pays n’est jamais coupé par « … ». Mesuré une fois posé (texte déjà dans la langue
      affichée, polices chargées) : si « Découvrir <pays> » ou le nom déborde, le bloc passe en .is-long (cultures.css,
      fiches-organisation.css) : le tampon reste seul à gauche (il porte le nom en entier) et le bouton prend la place,
-     sur deux lignes centrées en corps plus petit ; hauteurs inchangées. */
+     sur deux lignes centrées en corps plus petit ; hauteurs inchangées. Même chose quand le nom et la phrase qui le suit
+     (« Abre su página para conseguir su sello. » sur trois lignes, espagnol à 375 px) dépassent la hauteur du bloc. */
   function fitDone(){
     const over=el=>!!el&&el.scrollWidth>el.clientWidth+1;
+    /* Seul le texte compte : le tampon, tourné de 10°, dépasse toujours un peu du bloc (scrollHeight). */
+    const tall=res=>{const t=res&&res.querySelector(':scope>div');return !!t&&t.getBoundingClientRect().height>res.clientHeight+1;};
     /* Réponses du jeu (téléphone : trois boutons côte à côte) : le nom du pays se lit en entier, jamais « … » ni coupé au
        milieu d’un mot. Deux lignes ; sinon trois lignes, puis un corps plus petit (data-fit 1 à 3, fiches-organisation.css).
        Les boutons gardent leur hauteur commune. */
     const cut=el=>!!el&&(el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1);
     const fitChoices=()=>document.querySelectorAll('.cult-choice').forEach(b=>{const sp=b.querySelector('span');if(!sp)return;b.removeAttribute('data-fit');for(let i=1;i<=3&&cut(sp);i++)b.dataset.fit=String(i);});
-    const run=()=>{try{document.querySelectorAll('.cult-quiz-done').forEach(d=>{d.classList.remove('is-long');if(over(d.querySelector('.cult-quiz-go'))||over(d.querySelector('.cult-quiz-res>div>b')))d.classList.add('is-long');});fitChoices();}catch(e){}};
+    const run=()=>{try{document.querySelectorAll('.cult-quiz-done').forEach(d=>{d.classList.remove('is-long');if(over(d.querySelector('.cult-quiz-go'))||over(d.querySelector('.cult-quiz-res>div>b'))||tall(d.querySelector('.cult-quiz-res')))d.classList.add('is-long');});fitChoices();}catch(e){}};
     /* Jamais d’erreur vers l’appelant (remplissage de l’accueil, retour du réseau) : mesure à l’image suivante quand elle existe. */
     const next=f=>typeof requestAnimationFrame==='function'?requestAnimationFrame(f):setTimeout(f,0);
     next(run);
@@ -303,7 +306,19 @@
       <div class="cult-body cult-ixbody">${WORLDS.map(([k,label])=>{const l=by.get(k);if(!l?.length)return '';const m=l.filter(c=>s.stamps[c]).length;return `<section class="cult-ixsec"><h2>${esc(label)} <small${NT}>${m}/${l.length}</small></h2><div class="cult-ixgrid">${l.map(item).join('')}</div></section>`;}).join('')}</div>`;
   }
   function openIndex(o){
-    return load().then(()=>{if(o)opener=o;current=null;show(indexHTML());});
+    return load().then(()=>{if(o)opener=o;current=null;show(indexHTML());fitIndex();});
+  }
+  /* Carnet : le nom du pays se lit en entier, jamais « … » (« SAINT VINCENT AND THE GRENADINES », « ISLAS VÍRGENES DE LOS
+     ESTADOS UNIDOS »). Mesuré une fois posé (texte dans la langue affichée, polices chargées) : corps réduit sur une ligne
+     (data-fit 1, 2 : la carte garde sa hauteur), sinon deux lignes (3, 4). cultures.css, .cult-ix b[data-fit]. */
+  function fitIndex(){
+    /* Dépassement d’une fraction de pixel compris (« UNITED ARAB EMIRAT… » : scrollWidth arrondi égal à clientWidth) : largeur
+       réelle du texte comparée à celle de la boîte. */
+    const over=el=>{if(el.scrollWidth>el.clientWidth)return true;try{const r=document.createRange();r.selectNodeContents(el);return r.getBoundingClientRect().width>el.getBoundingClientRect().width+.05;}catch(e){return false;}};
+    const run=()=>{try{document.querySelectorAll('.cult-ix>span:not(.cult-stamp)>b').forEach(b=>{b.removeAttribute('data-fit');for(let i=1;i<=4&&over(b);i++)b.dataset.fit=String(i);});}catch(e){}};
+    const next=f=>typeof requestAnimationFrame==='function'?requestAnimationFrame(f):setTimeout(f,0);
+    next(run);
+    try{document.fonts&&document.fonts.ready.then(()=>next(run));}catch(e){}
   }
   async function share(c){
     if(!c||!data?.[c])return;
@@ -380,6 +395,7 @@
   document.addEventListener('visibilitychange',()=>{if(document.hidden||!data)return;const d=M.dayKey(new Date());if(quizCache&&quizCache.d!==d){const body=$('[data-cult-quiz-body]');if(body){const t=document.createElement('div');t.innerHTML=quizHTML();body.replaceWith(t.firstElementChild);fitDone();syncMeta();}}});
 
   window.addEventListener('resize',()=>{if(document.querySelector('.cult-quiz-go,.cult-choice'))fitDone();});
+  window.addEventListener('resize',()=>{if(document.querySelector('dialog.cult-sheet[open] .cult-ix'))fitIndex();});
   api._view={word,stamped,fillHome,quizHTML,choose,open,openIndex,start,load,renderPassport,fitDone};
   start();
 })();

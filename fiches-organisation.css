@@ -116,7 +116,9 @@
   .cult-quiz-res .cult-stamp{width:48px;height:48px}
   .cult-quiz-res .cult-stamp{--sf:7.6px}
   .cult-quiz-res>div>b{font-size:20px}
-  .cult-quiz-res>div>small{font-size:12px}
+  /* Nom (20 px) et phrase sur deux lignes dans les 52 px du bloc ; trois lignes : bloc en .is-long (cultures.js, fitDone). */
+  .cult-quiz-res>div{gap:3px}
+  .cult-quiz-res>div>small{font-size:12px;line-height:1.2}
   .cult-quiz-go{height:42px;max-width:46vw;padding:0 14px;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   /* Nom long (mesuré par cultures.js, fitDone) : le tampon à gauche, le bouton sur toute la place restante ; hauteur inchangée. */
   .cult-quiz-done.is-long{grid-template-columns:auto minmax(0,1fr)}
