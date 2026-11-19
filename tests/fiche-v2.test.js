@@ -192,8 +192,12 @@ test('danger : alerte dans Conditions à partir de 3 sur 4, tête de l’onglet 
 
 test('Prévisions et Conditions : un seul bloc météo, deux vues ; trois prochains jours dans Conditions', () => {
   assert.match(exp, /<div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours<\/h3><div class="fx-days">\$\{daily\.slice\(0, 3\)\.map/);
-  for (const c of ['spot-week-head', 'wx-block wx-best', 'wx-block wx-week', 'wx-block wx-hours']) assert.match(exp, new RegExp(`<div class="${c}" data-fx-view="forecast">`), c);
+  for (const c of ['wx-block wx-week', 'wx-block wx-hours']) assert.match(exp, new RegExp(`<div class="${c}" data-fx-view="forecast">`), c);
   assert.ok(exp.indexOf('wx-block wx-week" data-fx-view') < exp.indexOf('wx-block wx-hours" data-fx-view'), 'les 7 jours avant l’heure par heure');
+  /* Fiche v2, onglet Prévisions : deux titres, plus de « Cette semaine », de « Max du jour » ni de cartes de créneau. */
+  assert.match(exp, /<h3 class="fx-title">Les 7 jours<\/h3>/);
+  assert.match(exp, /<h3 class="fx-title">Heure par heure<\/h3>/);
+  assert.doesNotMatch(exp, /Cette semaine|Max du jour|wx-best|wx-slot"|class="wx-sub"/);
   assert.doesNotMatch(exp, /MÉTÉO DU SPOT/, 'plus de sur-titre en capitales');
   /* L’ancienne grille des conditions et le bloc « comparé à la normale » ne sont plus affichés (repris par les relevés). */
   assert.match(css, /#detail \.dcat\[data-cat="meteo"\]>:is\(#dCondHead,#dWeather,#sdVsNormal\)\{display:none!important\}/);
@@ -243,4 +247,48 @@ test('Sécurité : son onglet, rien de replié ; en-tête compact et rangée d�
   assert.match(css, /html \.ocean-v2 #detail #detailHero\{min-height:clamp\(230px,33dvh,320px\);height:auto\}/, 'photo : environ un tiers de l’écran');
   assert.match(css, /#detail \.detail-hero \.dfact-sea\{display:none\}/);
   assert.match(read('base.css'), /\.dtabs\{[^}]*position:sticky;top:0/);
+});
+
+/* Lot Prévisions et Saisons (fiche v2) : leurs sections de fiche.css passent par les variables de corps, sans capitales
+   espacées ; Saisons garde son contenu au style clair, les sources visibles et le rappel « jamais une prévision ». */
+const section = name => { const a = css.indexOf('ONGLET ' + name), b = css.indexOf('fin de la section', a); return css.slice(a, b).replace(/\/\*[\s\S]*?\*\//g, ''); };
+test('fiche.css, Prévisions et Saisons : corps par les variables, ni capitales ni lettres espacées', () => {
+  for (const name of ['PRÉVISIONS', 'SAISONS']) {
+    const body = section(name);
+    assert.ok(body.length > 400, name);
+    assert.deepEqual([...body.matchAll(/font:\d+ (\d+(?:\.\d+)?px)[^;}]*/g)].map(m => m[0]), [], name + ' : corps en dur');
+    assert.doesNotMatch(body, /font-size:\d/, name);
+    assert.doesNotMatch(body, /text-transform:uppercase|letter-spacing:[1-9]/, name);
+  }
+  /* Les 7 jours : une grille pour l’en-tête et les lignes (sous-grilles), colonnes alignées, chiffres tabulaires. */
+  assert.match(section('PRÉVISIONS'), /#detail \.fx7-head,#detail \.fx7-list,#detail \.fx7-row,#detail \.fx7-btn\{display:grid;grid-column:1 \/ -1;grid-template-columns:subgrid;/);
+  assert.match(section('PRÉVISIONS'), /font-variant-numeric:tabular-nums/);
+  /* Le détail du jour ne fait pas déborder les colonnes. */
+  assert.match(section('PRÉVISIONS'), /#detail \.fx7-row>:not\(\.fx7-btn\)\{grid-column:1 \/ -1;min-width:0;contain:inline-size\}/);
+  /* L’avertissement de vent de terre n’est jamais coupé. */
+  assert.doesNotMatch(section('PRÉVISIONS').match(/#detail \.fx7-caution\{[^}]*\}/)[0], /nowrap|overflow|line-clamp|max-height/);
+  /* Saisons : le panneau du mois au style clair. */
+  assert.match(section('SAISONS'), /#detail #dSeasons \.sd-month\{[^}]*background:none;box-shadow:none;color:var\(--t-ink\)\}/);
+});
+
+test('Saisons : un titre sans sur-titre, relevés du mois en composant de la fiche, plus de point médian ni de mois répété', () => {
+  const js = read('spot-data.js'), seasons = js.slice(js.indexOf('function calendar'), js.indexOf('/* Aperçu dans « Le spot »'));
+  assert.match(seasons, /<header class="sd-head"><h3 class="fx-title">Quand partir<\/h3><p class="sd-calc">\$\{CALC_NOTE\}<\/p>/);
+  assert.match(js, /const CALC_NOTE = 'Calculé d’après les moyennes de plusieurs années\. Ce n’est jamais une prévision\.';/);
+  assert.doesNotMatch(seasons, /sd-kicker|L’année à|Mois par mois, ce que la mer/);
+  assert.match(seasons, /<div class="fx-reading sd-reading k-\$\{key\}">\$\{icon\(I\[ic\], 'fx-ic'\)\}<span class="fx-label">/);
+  assert.match(seasons, /<div class="fx-readings sd-readings">\$\{tiles\.join\(''\)\}<\/div>/);
+  assert.doesNotMatch(seasons, /sd-tiles|sd-tile /);
+  /* Aucune chaîne à point médian dans l’onglet (l’aperçu de l’onglet Le spot garde le sien). */
+  assert.doesNotMatch(seasons.replace(/\/\*[\s\S]*?\*\//g, ''), /' · '|` · `| · \$\{|\} · /);
+  assert.match(seasons, /esc\(rangeText\(b\.ranges, ', '\)\)/);
+  assert.match(js, /function rangeText\(ranges, sep = ' · '\)/, 'faune et aperçu inchangés');
+  /* Verdict : la pastille seule, le mois n’est plus répété (« En novembre » le dit) ; les raisons suivent. */
+  assert.doesNotMatch(seasons, /<\/b> ce mois-ci|<\/b> en \$\{/);
+  /* Sources visibles, une phrase par élément ; la houle du large seulement s’il y a des normales de houle ; le rappel
+     « pas une prévision » n’est plus répété en pied (il est en tête de l’onglet). */
+  const src = js.slice(js.indexOf('function sources(c)'), js.indexOf('function renderSeasons'));
+  assert.match(src, /\$\{w \? ' <span>La houle est celle du large : la plage peut être plus abritée ou plus exposée\.<\/span>' : ''\}/);
+  assert.match(src, /<span>Normales calculées sur plusieurs années pour le secteur du spot : \$\{esc\(parts\.join\(' ; '\)\)\}\.<\/span>/);
+  assert.doesNotMatch(src, /Ce sont des tendances/);
 });

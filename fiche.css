@@ -276,6 +276,56 @@ html #detail #detailHero .hero-more>b{display:none}
 /* =====================================================================================================
    ONGLET SAISONS (data-cat="saisons")
    ===================================================================================================== */
+/* Même fond, même contenu : quand partir (douze mois), le mois choisi et ses relevés, « L’année en courbes » repliée, les
+   sources visibles. Le grand panneau sombre du mois passe au style clair ; plus de sur-titre ni de cartes à bordure. */
+#detail #dSeasons .sd-head{margin:0 0 14px}
+#detail #dSeasons .sd-head .fx-title{margin:0}
+#detail #dSeasons .sd-head p.sd-calc{margin:6px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail #dSeasons .sd-head p.sd-gap{margin:10px 0 0;padding:10px 12px;border:0;border-radius:14px;background:var(--fiche-wash);font:400 var(--fiche-note)/1.45 var(--body);color:var(--t-ink)}
+/* Quand partir : la bande des douze mois, posée sur le fond. */
+#detail #dSeasons .sd-cal{margin:0 0 var(--fiche-gap);padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+#detail #dSeasons .sd-cal-row{padding:6px 0}
+#detail #dSeasons .sd-cal-row+.sd-cal-row:not(.sd-cal-head){border-top:0}
+#detail #dSeasons .sd-cal-act b{font:600 var(--fiche-label)/1.2 var(--body);color:var(--t-ink)}
+#detail #dSeasons .sd-cal-act small{margin-top:2px;font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail #dSeasons .sd-cal-m{font:500 var(--fiche-note)/1 var(--body);color:var(--fiche-soft)}
+#detail #dSeasons .sd-cal-m.now{font-weight:700;color:var(--t-ink)}
+#detail #dSeasons .sd-cell.sel{box-shadow:0 0 0 2px var(--t-page),0 0 0 4px var(--t-ink)}
+#detail #dSeasons .sd-legend{margin:2px 0 0;padding:6px 0 0;border-top:0}
+#detail #dSeasons .sd-legend span{font:400 var(--fiche-note)/1.2 var(--body);color:var(--fiche-soft)}
+/* Le mois choisi : titre, flèches de mois, verdict, repère de combinaison, relevés. */
+#detail #dSeasons .sd-month{margin:0 0 var(--fiche-gap);padding:0;border-radius:0;background:none;box-shadow:none;color:var(--t-ink)}
+#detail #dSeasons .sd-month::before,#detail #dSeasons .sd-month::after{content:none}
+#detail #dSeasons .sd-month-head .fx-title{margin:0;color:var(--t-ink)}
+#detail #dSeasons .sd-mpick button{width:44px;height:44px;border:0;border-radius:999px;background:var(--fiche-wash);color:var(--t-ink);font:600 var(--fiche-text)/1 var(--body)}
+#detail #dSeasons .sd-mpick button:active{background:color-mix(in srgb,var(--t-main) 16%,var(--t-card))}
+#detail #dSeasons .sd-verdict{margin:10px 0 12px!important;font:400 var(--fiche-text)/1.5 var(--body)!important;color:var(--t-ink)!important}
+#detail #dSeasons .sd-verdict b{display:inline-block;margin:0 6px 0 0;padding:3px 11px;border-radius:999px;background:var(--fiche-wash);color:var(--t-ink);font:700 var(--fiche-label)/1.35 var(--body)}
+#detail #dSeasons .sd-verdict.l2 b{background:color-mix(in srgb,var(--t-main) 16%,var(--t-card))}
+#detail #dSeasons .sd-verdict.l3 b{background:color-mix(in srgb,var(--t-sun) 34%,var(--t-card))}
+#detail #dSeasons .sd-suit{margin:0 0 16px;gap:2px}
+#detail #dSeasons .sd-suit b{font:600 var(--fiche-label)/1.35 var(--body);color:var(--t-ink)}
+#detail #dSeasons .sd-suit small{font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+/* Relevés du mois : le composant de relevé de la fiche, en version compacte (chiffre plus petit, sans hauteur réservée). */
+#detail #dSeasons .sd-readings{min-height:0;gap:16px 14px}
+#detail #dSeasons .sd-readings .fx-num{font-size:calc(var(--fiche-num) * .64)}
+#detail #dSeasons .sd-readings .fx-value{min-height:0}
+#detail #dSeasons .sd-readings .fx-sub{min-height:0}
+#detail #dSeasons .sd-readings .fx-ic{width:24px;height:24px;color:var(--t-ink)}
+/* L’année en courbes (repliée) : sans cadre, titre et précision séparés. */
+#detail #dSeasons .sd-charts{margin:0 0 14px;padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+#detail #dSeasons .sd-panel figcaption{padding:0 0 2px}
+#detail #dSeasons .sd-panel figcaption b{font:600 var(--fiche-label)/1.3 var(--body);color:var(--t-ink)}
+#detail #dSeasons .sd-panel figcaption .sd-sub{flex:1 1 auto;font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail #dSeasons .sd-rose{margin:0 0 14px;padding:0;border:0;border-radius:0;background:none}
+#detail #dSeasons .sd-rose small{font:600 var(--fiche-label)/1.25 var(--body);letter-spacing:0;text-transform:none;color:var(--fiche-soft)}
+#detail #dSeasons .sd-rose b{font:700 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+#detail #dSeasons .sd-rose span{font:400 var(--fiche-note)/1.45 var(--body);color:var(--fiche-soft)}
+#detail #dSeasons .sd-table{margin:0 0 6px;border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash)}
+#detail #dSeasons .sd-table summary{min-height:44px;padding:0 14px;font:700 var(--fiche-label)/1.2 var(--body);color:var(--t-main)}
+#detail #dSeasons .sd-table tbody th{background:var(--fiche-wash)}
+/* Sources des normales : visibles, en note. */
+#detail #dSeasons>.sd-src{margin:16px 0 0;font:400 var(--fiche-note)/1.5 var(--body);color:var(--fiche-soft)}
 
 /* fin de la section Saisons (ne rien écrire entre ces deux lignes de séparation)
    ----------------------------------------------------------------------------------------------------- */

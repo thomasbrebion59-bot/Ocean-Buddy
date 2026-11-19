@@ -104,10 +104,11 @@
   }
   const CALC_NOTE = 'Calculé d’après les moyennes de plusieurs années. Ce n’est jamais une prévision.';
   const GAP_NOTE = 'Nos carnets et les moyennes climatiques ne s’accordent pas ici : renseigne-toi sur place.';
-  function rangeText(ranges) {
+  /* sep : « · » pour l’aperçu de l’onglet Le spot et la faune ; l’onglet Saisons (fiche v2) les sépare d’une virgule. */
+  function rangeText(ranges, sep = ' · ') {
     if (!ranges.length) return '';
     if (ranges.length === 1 && ranges[0][0] === 0 && ranges[0][1] === 11) return 'toute l’année';
-    return ranges.map(([a, b]) => a === b ? monthName(a) : `${monthName(a)} – ${monthName(b)}`).join(' · ');
+    return ranges.map(([a, b]) => a === b ? monthName(a) : `${monthName(a)} – ${monthName(b)}`).join(sep);
   }
   function calendar(s, c) {
     const acts = (typeof spotSports === 'function' ? spotSports(s) : s.sports).filter(a => M.year(c, a, s.level).some(v => v != null));
@@ -119,7 +120,7 @@
         const L = M.level(v);
         return `<button type="button" class="sd-cell l${L ?? 'x'}${m === selMonth && a === (selAct || curAct(s)) ? ' sel' : ''}" data-sd-month="${m}" data-sd-act="${a}" aria-label="${esc(monthName(m))} : ${esc(L == null ? 'donnée indisponible' : LEVEL_TXT[L])}">${L === 3 ? '<i aria-hidden="true">✓</i>' : ''}</button>`;
       }).join('');
-      return `<div class="sd-cal-row"><div class="sd-cal-act">${typeof sportIcon === 'function' ? sportIcon(a) : ''}<span><b>${esc(sportLabel(a))}</b><small>${b.ranges.length ? esc(rangeText(b.ranges)) : 'Pas de période nette'}</small></span></div><div class="sd-cal-cells">${cells}</div></div>`;
+      return `<div class="sd-cal-row"><div class="sd-cal-act">${typeof sportIcon === 'function' ? sportIcon(a) : ''}<span><b>${esc(sportLabel(a))}</b><small>${b.ranges.length ? esc(rangeText(b.ranges, ', ')) : 'Pas de période nette'}</small></span></div><div class="sd-cal-cells">${cells}</div></div>`;
     }).join('');
     return `<div class="sd-cal" role="group" aria-label="Calendrier des activités">
       <div class="sd-cal-row sd-cal-head"><div class="sd-cal-act"></div><div class="sd-cal-cells">${head}</div></div>${rows}
@@ -127,24 +128,36 @@
     </div>`;
   }
 
+  /* Fiche v2 : le mois choisi passe au style clair de la fiche. Ses relevés reprennent le composant de relevé de la fiche
+     (pictogramme, libellé, chiffre, unité, sous-ligne) en version compacte ; le titre dit déjà le mois, le verdict ne le
+     répète plus. Chaque morceau de texte reste dans son élément pour être traduit seul. */
+  const unitParts = v => {
+    try { const p = new Intl.NumberFormat(lang(), { style: 'unit', unit: 'day', unitDisplay: 'short', maximumFractionDigits: 0 }).formatToParts(v);
+      const n = p.filter(x => /integer|group|decimal|fraction|minusSign/.test(x.type)).map(x => x.value).join(''), u = p.filter(x => x.type === 'unit').map(x => x.value).join('');
+      if (n && u) return [n, u]; } catch (e) {}
+    return [num(v), ''];
+  };
+  function reading(ic, label, n, unit, sub, key) {
+    return `<div class="fx-reading sd-reading k-${key}">${icon(I[ic], 'fx-ic')}<span class="fx-label">${esc(label)}</span><span class="fx-value"><span class="fx-num">${esc(n)}</span>${unit ? `<span class="fx-unit">${esc(unit)}</span>` : ''}</span><span class="fx-sub">${esc(sub)}</span></div>`;
+  }
   function monthCard(s, c) {
     const d = M.month(c, selMonth), act = selAct || curAct(s), sc = M.score(act, d, s.level), L = M.level(sc);
     const tiles = [];
-    if (d.sea != null) tiles.push(['temp', 'Eau', `${num(d.sea)} °C`, 'moyenne de surface', 'sea']);
-    if (d.tx != null) tiles.push(['sun', 'Air', `${num(d.tx)}° / ${num(d.tn)}°`, 'max / min du jour', 'air']);
-    if (d.sun != null) tiles.push(['sun', 'Soleil', `≈ ${num(d.sun)} h`, 'par jour, estimé', 'sunh']);
-    if (d.wet != null) tiles.push(['rain', 'Pluie', days(d.wet), `${num(d.rain)} mm dans le mois`, 'rain']);
-    /* Gabarit traduisible « {0} s · venue {1} » (i18n.js traduit aussi la direction, « du sud-est ») ; sans direction, la période seule. */
-    if (d.waves) tiles.push(['wave', 'Houle au large', `${num(d.hs, 1)} m`, M.DIR_FROM[d.dir] ? `${num(d.tp)} s · venue ${M.DIR_FROM[d.dir]}` : `${num(d.tp)} s`, 'wave']);
-    if (d.wind != null) tiles.push(['wind', 'Vent', `${num(d.wind)} km/h`, d.kite != null ? `${num(d.kite)} % de jours ≥ 25 km/h` : '', 'wind']);
-    /* Verdict : un gabarit à lui seul (« <b>{0} : {1}</b> en {2} », traduit d’un bloc par i18n.js, ponctuation de la langue),
-       puis les raisons, chacune dans son élément pour être traduite seule (verdictWhy). */
-    const head = L == null ? '' : `<b>${esc(sportLabel(act))} : ${esc(LEVEL_TXT[L].toLowerCase())}</b> en ${esc(monthName(selMonth))}`;
+    if (d.sea != null) tiles.push(reading('temp', 'Eau', num(d.sea), '°C', 'moyenne de surface', 'sea'));
+    if (d.tx != null) tiles.push(reading('sun', 'Air', `${num(d.tx)}°`, `/ ${num(d.tn)}°`, 'max / min du jour', 'air'));
+    if (d.sun != null) tiles.push(reading('sun', 'Soleil', `≈ ${num(d.sun)}`, 'h', 'par jour, estimé', 'sunh'));
+    if (d.wet != null) { const [n, u] = unitParts(d.wet); tiles.push(reading('rain', 'Pluie', n, u, `${num(d.rain)} mm dans le mois`, 'rain')); }
+    /* Houle : la période à côté de la hauteur, comme dans Conditions (« m (12 s) ») ; la direction en sous-ligne. */
+    if (d.waves) tiles.push(reading('wave', 'Houle au large', num(d.hs, 1), `m (${num(d.tp)} s)`, M.DIR_FROM[d.dir] ? `venue ${M.DIR_FROM[d.dir]}` : '', 'wave'));
+    if (d.wind != null) tiles.push(reading('wind', 'Vent', num(d.wind), 'km/h', d.kite != null ? `${num(d.kite)} % de jours ≥ 25 km/h` : '', 'wind'));
+    /* Verdict : une pastille à elle seule (gabarit « <b>{0} : {1}</b> », traduit d’un bloc par i18n.js, ponctuation de la
+       langue) ; le titre « En novembre » dit déjà le mois, le verdict ne le répète plus. Puis les raisons (verdictWhy). */
+    const head = L == null ? '' : `<b>${esc(sportLabel(act))} : ${esc(LEVEL_TXT[L].toLowerCase())}</b>`;
     const verdict = L == null ? '' : `<p class="sd-verdict l${L}"><span class="sd-vmain">${head}</span>${verdictWhy(act, d)}</p>`;
     return `<div class="sd-month" aria-live="polite">
-      <div class="sd-month-head"><h4>En ${esc(monthName(selMonth))}</h4>${monthPicker()}</div>
+      <div class="sd-month-head"><h4 class="fx-title fx-title-s">En ${esc(monthName(selMonth))}</h4>${monthPicker()}</div>
       ${verdict}${suitLine(act, d)}
-      <div class="sd-tiles">${tiles.map(t => `<div class="sd-tile k-${t[4]}">${icon(I[t[0]])}<small>${esc(t[1])}</small><b>${esc(t[2])}</b><span>${esc(t[3])}</span></div>`).join('')}</div>
+      <div class="fx-readings sd-readings">${tiles.join('')}</div>
     </div>`;
   }
   function verdictWhy(act, d) {
@@ -156,7 +169,7 @@
     if (d.sun != null && d.sun >= 8) bits.push('beaucoup de soleil');
     if (d.wet != null && d.wet >= 15) bits.push('mois pluvieux');
     /* Chaque raison dans son propre élément : i18n.js les traduit une à une (« eau à {0} °C », « mois pluvieux »…). */
-    return bits.length ? ' · ' + bits.map(b => `<span>${esc(b)}</span>`).join(', ') : '';
+    return bits.length ? `<span class="sd-why">${bits.map(b => `<span>${esc(b)}</span>`).join(', ')}</span>` : '';
   }
   function monthPicker() {
     return `<div class="sd-mpick" role="group" aria-label="Choisir le mois"><button type="button" data-sd-step="-1" aria-label="Mois précédent">‹</button><button type="button" data-sd-step="1" aria-label="Mois suivant">›</button></div>`;
@@ -203,14 +216,15 @@
       });
       const v = arr[selMonth];
       if (v != null) g += `<text class="sd-val" x="${x(selMonth)}" y="${y(v) - 5}" text-anchor="middle">${esc(typeof unit === 'function' ? unit(v) : num(v, d) + unit)}</text>`;
-      panels.push({ title, H, g: g + extra + hits(H) });
+      panels.push({ title: title[0], sub: title[1], H, g: g + extra + hits(H) });
     };
-    bars('sun', a.sun, 'Soleil · heures par jour (estimation)', ' h', 0, 'b-sun');
-    bars('wet', a.wet, 'Pluie · jours de pluie dans le mois', days, 0, 'b-rain');
-    if (c.wave) bars('hs', c.wave.hs, 'Houle au large · hauteur moyenne', ' m', 1, 'b-wave');
-    bars('wind', a.wind, 'Vent · vitesse moyenne', ' km/h', 0, 'b-wind');
+    /* Titre et précision dans deux éléments (plus de chaîne reliée par un point médian). */
+    bars('sun', a.sun, ['Soleil', 'heures par jour (estimation)'], ' h', 0, 'b-sun');
+    bars('wet', a.wet, ['Pluie', 'jours de pluie dans le mois'], days, 0, 'b-rain');
+    if (c.wave) bars('hs', c.wave.hs, ['Houle au large', 'hauteur moyenne'], ' m', 1, 'b-wave');
+    bars('wind', a.wind, ['Vent', 'vitesse moyenne'], ' km/h', 0, 'b-wind');
     const axis = `<svg class="sd-axis" viewBox="0 0 ${W} 18" width="100%" aria-hidden="true">${Array.from({ length: 12 }, (_, m) => `<text x="${x(m)}" y="13" text-anchor="middle" class="${m === selMonth ? 'on' : ''}">${esc(monthLetter(m))}</text>`).join('')}</svg>`;
-    return `<div class="sd-charts">${panels.map(p => `<figure class="sd-panel"><figcaption><b>${esc(p.title)}</b>${p.legend ? `<span class="sd-keys">${p.legend}</span>` : ''}</figcaption><svg viewBox="0 0 ${W} ${p.H}" width="100%" role="img" aria-label="${esc(p.title)}, de janvier à décembre">${p.g}</svg></figure>`).join('')}${axis}</div>`;
+    return `<div class="sd-charts">${panels.map(p => `<figure class="sd-panel"><figcaption><b>${esc(p.title)}</b>${p.sub ? `<span class="sd-sub">${esc(p.sub)}</span>` : ''}${p.legend ? `<span class="sd-keys">${p.legend}</span>` : ''}</figcaption><svg viewBox="0 0 ${W} ${p.H}" width="100%" role="img" aria-label="${esc(p.title)}, de janvier à décembre">${p.g}</svg></figure>`).join('')}${axis}</div>`;
   }
 
   function rose(c) {
@@ -243,7 +257,9 @@
     if (c.sea) parts.push('température de l’eau : NOAA OISST, moyennes 1991-2020');
     if (a) parts.push(`air, pluie, vent et soleil : NASA POWER, ${a.yrs[0]}-${a.yrs[1]}`);
     if (w) parts.push(w.src === 'era5' ? `houle : ERA5 (Copernicus) via Open-Meteo, ${w.yrs[0]}-${w.yrs[1]}` : `houle : modèle WaveWatch III (NOAA, PacIOOS), ${w.yrs[0]}-${w.yrs[1]}`);
-    return `<p class="sd-src">Normales calculées sur plusieurs années pour le secteur du spot : ${esc(parts.join(' ; '))}. Le soleil est estimé à partir du rayonnement mesuré par satellite. La houle est celle du large : la plage peut être plus abritée ou plus exposée. Ce sont des tendances, pas une prévision : regarde l’onglet Conditions avant d’y aller.</p>`;
+    /* Fiche v2 : une phrase par élément (traduites une à une). Le rappel « pas une prévision » est déjà en tête de l’onglet,
+       il n’est plus répété ici ; la phrase sur la houle du large n’apparaît que si le spot a des normales de houle. */
+    return `<p class="sd-src"><span>Normales calculées sur plusieurs années pour le secteur du spot : ${esc(parts.join(' ; '))}.</span>${a ? ' <span>Le soleil est estimé à partir du rayonnement mesuré par satellite.</span>' : ''}${w ? ' <span>La houle est celle du large : la plage peut être plus abritée ou plus exposée.</span>' : ''}</p>`;
   }
 
   function renderSeasons(s, c) {
@@ -251,7 +267,8 @@
     if (!c) { host.innerHTML = '<p class="sd-empty">Les normales climatiques de ce spot ne sont pas encore disponibles.</p>'; return; }
     const acts = typeof spotSports === 'function' ? spotSports(s) : s.sports;
     if (!selAct || !acts.includes(selAct)) selAct = curAct(s);
-    host.innerHTML = `<header class="sd-head"><p class="sd-kicker">${icon(I.cal)}Quand partir ?</p><h3>L’année à ${esc(String(s.name).split(' — ')[0])}</h3><p>Mois par mois, ce que la mer et le ciel font d’habitude ici.</p><p class="sd-calc">${CALC_NOTE}</p>${seasonsGap(s) ? `<p class="sd-gap">${GAP_NOTE}</p>` : ''}</header>
+    /* Fiche v2 : un titre, puis le rappel « moyennes de plusieurs années, jamais une prévision » (toujours visible). */
+    host.innerHTML = `<header class="sd-head"><h3 class="fx-title">Quand partir</h3><p class="sd-calc">${CALC_NOTE}</p>${seasonsGap(s) ? `<p class="sd-gap">${GAP_NOTE}</p>` : ''}</header>
       ${calendar(s, c)}${monthCard(s, c)}${charts(c)}${rose(c)}${table(c)}${sources(c)}`;
   }
 
