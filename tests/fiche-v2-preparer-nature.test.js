@@ -110,3 +110,47 @@ test('Préparer : la carte du secteur reste dans « Le spot », même après plu
   assert.match(prep, /\.field-checklist\{display:contents\}/);
   assert.match(prep, /\.field-checklist>\.field-list-head\{order:0\}[\s\S]*>#dSports\{order:1\}[\s\S]*\.field-checklist>\.field-check\{order:2\}/);
 });
+
+/* Retours de relecture du lot C (19 nov.). */
+test('Préparer et Nature : les phrases des blocs gardent la taille de note de la fiche malgré « .block p » (15 px imposés)', () => {
+  assert.match(prep, /\.block p\.field-level-note\{font-size:var\(--fiche-note\)!important;line-height:1\.4!important\}/, 'point de départ');
+  assert.match(nature, /\.block p\.bio-t\{font-size:var\(--fiche-note\)!important;line-height:1\.4!important\}/, 'phrase de l’espèce mise en avant');
+});
+
+test('Nature : l’espèce mise en avant a le dessin de la grille (rien d’écrit sur la photo), pastille et nom savant à la taille d’une note', () => {
+  const fn = fnSource(app, 'renderFaune');
+  assert.doesNotMatch(fn, /bio-cap/, 'plus de nom posé sur la photo');
+  assert.match(fn, /bioPh\(hero\)\s*\+ '<div class="bio-in"><div class="bio-n">'\+hero\[0\]\+'<\/div><div class="bio-sci">'\+hero\[1\]\+'<\/div>'/);
+  assert.match(nature, /:is\(\.bio-hero,\.bio-c\) \.bio-sci\{[^}]*var\(--fiche-note\)/);
+  assert.match(nature, /\.bio-badge\{[^}]*font:600 var\(--fiche-note\)/);
+});
+
+test('Préparer, Dormir : toutes les recherches et « Comparer » sont visibles, sans rangée à faire glisser', () => {
+  const rule = /#detail \.px-search>\.px-pills\{([^}]*)\}/.exec(prep)[1];
+  assert.match(rule, /flex-wrap:wrap/);
+  assert.doesNotMatch(rule, /nowrap|overflow-x/);
+  assert.match(fnSource(guide, 'sleepHTML'), /OceanNotebook\?\.button\(s\.id\)/, 'le bouton Comparer reste dans Dormir');
+});
+
+test('Préparer et Nature : les zones à toucher font au moins 44 px', () => {
+  assert.match(prep, /\.px-place-links a\{[^}]*min-height:44px/);
+  assert.match(prep, /\.field-check-go\{[^}]*min-height:44px/);
+  /* « Je l’ai fait » : pastille de 36 px, zone à toucher agrandie de 4 px en haut et en bas. */
+  assert.match(nature, /\.pres-do\{position:relative;[^}]*min-height:36px/);
+  assert.match(nature, /\.pres-do::after\{content:"";position:absolute;inset:-4px 0\}/);
+});
+
+test('Nature : les noms d’espèces à trait d’union sont traduits (« Poisson-lune » restait en français)', () => {
+  const src = new Set(JSON.parse(read('locales/source/fr.json')));
+  const line = app.split('\n').find(l => l.startsWith('var BIOZONE='));
+  const BZ = JSON.parse(line.slice('var BIOZONE='.length).replace(/;\s*$/, ''));
+  const names = new Set(Object.values(BZ).flatMap(z => z.sp.map(sp => sp[0])));
+  for (const l of ['en', 'es']) {
+    const tr = JSON.parse(read(`locales/translations/${l}.json`));
+    for (const n of names) {
+      assert.ok(src.has(n), 'clé extraite : ' + n);
+      assert.ok(typeof tr[n] === 'string' && tr[n].trim(), l + ' : ' + n);
+    }
+  }
+  assert.equal(JSON.parse(read('locales/translations/es.json'))['Poisson-lune'], 'Pez luna');
+});

@@ -289,10 +289,9 @@ html #detail #detailHero .hero-more>b{display:none}
 #detail .px-sleep .px-src{margin-top:4px}
 #detail .px-search{display:grid;gap:8px}
 #detail .px-search .fx-note{margin:0}
-/* Les recherches d’hébergement tiennent sur une ligne qu’on fait glisser. */
-#detail .px-search>.px-pills{flex-wrap:nowrap;margin:0 -16px;padding:0 16px 2px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:none}
-#detail .px-search>.px-pills::-webkit-scrollbar{display:none}
-#detail .px-search>.px-pills>*{flex:none;white-space:nowrap}
+/* Les recherches d’hébergement passent à la ligne : toutes visibles, « Comparer » compris, sans rien faire glisser. */
+#detail .px-search>.px-pills{flex-wrap:wrap}
+#detail .px-search>.px-pills>*{flex:none}
 #detail .px-search .spot-compare-button{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 14px;border:0;border-radius:999px;background:var(--fiche-wash);color:var(--t-ink);font:600 var(--fiche-label)/1 var(--body);box-shadow:none}
 #detail .px-search .spot-compare-button svg{width:16px;height:16px}
 #detail .px-search .spot-compare-button.selected{background:var(--t-main);color:var(--t-on-main)}
@@ -303,8 +302,8 @@ html #detail #detailHero .hero-more>b{display:none}
 #detail .px-place{display:grid;align-content:start;gap:4px;min-width:0;scroll-snap-align:start}
 #detail .px-place>b{font:700 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
 #detail .px-place>p{margin:2px 0 0;color:var(--t-ink)}
-#detail .px-place-links{display:flex;flex-wrap:wrap;gap:4px 16px;margin-top:6px}
-#detail .px-place-links a{display:inline-flex;align-items:center;min-height:32px;font:700 var(--fiche-note)/1.2 var(--body);color:var(--t-main);text-decoration:none}
+#detail .px-place-links{display:flex;flex-wrap:wrap;gap:0 16px;margin-top:0}
+#detail .px-place-links a{display:inline-flex;align-items:center;min-height:44px;font:700 var(--fiche-note)/1.2 var(--body);color:var(--t-main);text-decoration:none}
 #detail #guideAround .px-src{margin:8px 0 0}
 #detail #guideAround .guide-around-fallback{display:grid;gap:10px}
 #detail #fieldNearbyBlock .field-section-heading{display:block;margin:0 0 10px}
@@ -342,7 +341,7 @@ html #detail #detailHero .hero-more>b{display:none}
 
 /* Les paragraphes des blocs (.block p) reçoivent ailleurs un corps imposé (app-shell.css, !important) : les rôles de la
    fiche reprennent leur variable. */
-.ocean-v2 #detail .dcat[data-cat="activites"] .block p.fx-note,.ocean-v2 #detail .dcat[data-cat="activites"] .block p.g-note{font-size:var(--fiche-note)!important;line-height:1.4!important}
+.ocean-v2 #detail .dcat[data-cat="activites"] .block p.fx-note,.ocean-v2 #detail .dcat[data-cat="activites"] .block p.g-note,.ocean-v2 #detail .dcat[data-cat="activites"] .block p.field-level-note{font-size:var(--fiche-note)!important;line-height:1.4!important}
 
 /* Avant de partir : la liste à cocher, compacte ; puis Ton carnet, puis le point de départ replié. */
 .ocean-v2 #detail .dcat[data-cat="activites"]>.field-preparation{display:flex;flex-direction:column}
@@ -375,7 +374,7 @@ html #detail #detailHero .hero-more>b{display:none}
 #detail .dcat[data-cat="activites"] .field-check>span{display:grid;gap:1px;min-width:0}
 #detail .dcat[data-cat="activites"] .field-check b{font:600 var(--fiche-text)/1.35 var(--body);color:var(--t-ink)}
 .ocean-v2 #detail .dcat[data-cat="activites"] .field-check small{display:block;margin:0;max-width:none;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
-#detail .dcat[data-cat="activites"] .field-check-go{justify-self:start;min-height:32px;margin:2px 0 0;padding:0;border:0;background:none;font:700 var(--fiche-note)/1.2 var(--body);color:var(--t-main);text-decoration:underline;text-underline-offset:3px}
+#detail .dcat[data-cat="activites"] .field-check-go{justify-self:start;min-height:44px;margin:2px 0 0;padding:0;border:0;background:none;font:700 var(--fiche-note)/1.2 var(--body);color:var(--t-main);text-decoration:underline;text-underline-offset:3px}
 /* Ton carnet : la note de l’utilisateur, toujours en vue. */
 #detail .dcat[data-cat="activites"] .field-notebook{display:grid;gap:8px;margin:0 0 4px;padding:0;border:0;background:none}
 #detail .dcat[data-cat="activites"] .notebook-heading{display:block;margin:0}
@@ -409,7 +408,7 @@ html #detail #detailHero .hero-more>b{display:none}
    Plus de tuiles sombres, de bandeaux colorés, de sur-titres en capitales ni de pastilles numérotées. Préfixe : nx-. */
 .ocean-v2 #detail .dcat:is([data-cat="faune"],[data-cat="preserver"]) .fx-title{margin:0 0 10px;font:800 var(--fiche-title)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
 .ocean-v2 #detail .dcat:is([data-cat="faune"],[data-cat="preserver"]) .fx-title-s{font-size:calc(var(--fiche-title) * .8);margin-bottom:8px}
-.ocean-v2 #detail .dcat[data-cat="faune"] .block p.fx-note,.ocean-v2 #detail .dcat[data-cat="faune"] .block p.bio-note{font-size:var(--fiche-note)!important;line-height:1.4!important}
+.ocean-v2 #detail .dcat[data-cat="faune"] .block p.fx-note,.ocean-v2 #detail .dcat[data-cat="faune"] .block p.bio-note,.ocean-v2 #detail .dcat[data-cat="faune"] .block p.bio-t{font-size:var(--fiche-note)!important;line-height:1.4!important}
 .ocean-v2 #detail .dcat[data-cat="faune"] .block p.fx-text,.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head>p{font-size:var(--fiche-text)!important;line-height:1.45!important}
 #detail .dcat[data-cat="faune"] .sd-wild{margin:0 0 var(--fiche-gap)}
 #detail .dcat[data-cat="faune"] .nx-intro{margin:0 0 16px;color:var(--fiche-soft)}
@@ -468,16 +467,18 @@ html #detail #detailHero .hero-more>b{display:none}
 .ocean-v2 #detail .dcat[data-cat="faune"] .bio-note{margin:12px 0 0;padding:0;color:var(--fiche-soft)}
 .ocean-v2 #detail .dcat[data-cat="faune"] .bio-note b{font-weight:600;color:var(--t-ink)}
 .ocean-v2 #detail .dcat[data-cat="faune"] .field-empty{margin:0;padding:4px 0 0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
-/* Espèces typiques ouvertes : même dessin que les espèces photographiées (photo arrondie, nom, nom savant, une phrase),
-   sans cadre ni ombre ; « Voir plus » en lien d’action. */
+/* Espèces typiques ouvertes : même dessin que les espèces photographiées (photo arrondie, puis nom, nom savant et une
+   phrase dessous, rien d’écrit sur la photo), sans cadre ni ombre ; « Voir plus » en lien d’action. L’espèce mise en avant
+   garde seulement une photo plus large. */
 .ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c){border:0;border-radius:0;background:none;box-shadow:none;overflow:visible}
 .ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c) .bio-ph{border-radius:14px;overflow:hidden}
-.ocean-v2 #detail .dcat[data-cat="faune"] .bio-hero .bio-t{padding:8px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--t-ink)}
-.ocean-v2 #detail .dcat[data-cat="faune"] .bio-c .bio-in{padding:8px 0 0}
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c) .bio-in{padding:8px 0 0}
 .ocean-v2 #detail .dcat[data-cat="faune"] .bio-c.wide .bio-in{padding:0 0 0 12px}
-.ocean-v2 #detail .dcat[data-cat="faune"] .bio-c .bio-n{font:600 var(--fiche-label)/1.25 var(--body);color:var(--t-ink)}
-.ocean-v2 #detail .dcat[data-cat="faune"] .bio-c .bio-sci{font:400 var(--fiche-note)/1.3 var(--body);font-style:italic;color:var(--fiche-soft)}
-.ocean-v2 #detail .dcat[data-cat="faune"] .bio-c .bio-t{margin-top:3px;color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c) .bio-n{font:600 var(--fiche-label)/1.25 var(--body);color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c) .bio-sci{margin-top:1px;font:400 var(--fiche-note)/1.3 var(--body);font-style:italic;color:var(--fiche-soft)}
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c) .bio-t{margin-top:3px;padding:0;color:var(--t-ink)}
+/* La pastille « À préserver » ou « Prudence » sur la photo : à la taille d’une note, lisible. */
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-badge{padding:4px 9px;font:600 var(--fiche-note)/1.2 var(--body)}
 .ocean-v2 #detail .dcat[data-cat="faune"] .bio-grid{gap:18px 12px}
 .ocean-v2 #detail .dcat[data-cat="faune"] .bio-more{width:auto;margin:6px 0 0;padding:0 2px;min-height:44px;border:0;border-radius:0;background:none;box-shadow:none;font:700 var(--fiche-label)/1 var(--body);color:var(--t-main);text-align:start}
 /* Préserver ce spot : l’enjeu, puis les gestes en liste simple et leur bouton. */
@@ -487,7 +488,9 @@ html #detail #detailHero .hero-more>b{display:none}
 #detail .dcat[data-cat="preserver"] .pres-g{display:block;padding:0;border:0}
 #detail .dcat[data-cat="preserver"] .pres-tx b{display:block;margin:0 0 2px;font:600 var(--fiche-text)/1.35 var(--body);color:var(--t-ink)}
 #detail .dcat[data-cat="preserver"] .pres-tx p{margin:0;font:400 var(--fiche-note)/1.45 var(--body);color:var(--fiche-soft)}
-#detail .dcat[data-cat="preserver"] .pres-do{display:inline-flex;gap:8px;min-height:36px;margin:8px 0 0;padding:0 14px;border:0;background:var(--fiche-wash);color:var(--t-ink);cursor:pointer}
+#detail .dcat[data-cat="preserver"] .pres-do{position:relative;display:inline-flex;gap:8px;min-height:36px;margin:8px 0 0;padding:0 14px;border:0;background:var(--fiche-wash);color:var(--t-ink);cursor:pointer}
+/* La pastille reste à 36 px de haut ; sa zone à toucher fait 44 px. */
+#detail .dcat[data-cat="preserver"] .pres-do::after{content:"";position:absolute;inset:-4px 0}
 #detail .dcat[data-cat="preserver"] .pres-do .nx-xp{font-weight:600;color:var(--t-main)}
 #detail .dcat[data-cat="preserver"] .pres-do.done{background:color-mix(in srgb,var(--t-ok) 14%,var(--t-card));color:var(--t-ok);cursor:default}
 #detail .dcat[data-cat="preserver"] .pres-do:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}

@@ -225,11 +225,15 @@ for (const m of fs.readFileSync(path.join(ROOT, 'mobile', 'client.js'), 'utf8').
 //   - « pays » et « continents » : libellés d’un seul mot des chiffres du passeport (passport.js, stat(…, 'pays'))
 //   - « Retour vers {0} » : libellé d’accessibilité du bouton Retour, 'Retour vers '+destination dans navigation.js
 //     (« Volver hacia l’accueil » sans ce gabarit : seule la première moitié était traduite)
+//   - noms d’espèces composés d’un seul mot à trait d’union (BIOZONE dans app.js, onglet Nature) : le filtre « texte
+//     humain » les écarte (ni espace, ni accent), « Poisson-lune » restait en français en anglais et en espagnol
 const KEEP_KEYS = [
   'Défi validé ! +{0} XP',
   'pays',
   'continents',
   'Retour vers {0}',
+  'Poisson-clown', 'Poisson-cocher', 'Poisson-lion', 'Poisson-lune', 'Poisson-papillon', 'Poisson-perroquet',
+  'Poisson-pierre', 'Requin-baleine',
 ];
 for (const k of KEEP_KEYS) add(k, 'app.js (conservé)', true);
 

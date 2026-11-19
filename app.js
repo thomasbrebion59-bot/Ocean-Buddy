@@ -1050,9 +1050,11 @@ function renderFaune(s){
   if(faune.length){
     var hero=faune.shift();
     h+='<div id="bioObserve" class="bio-part">'+bioSec('À observer')
+     /* Fiche v2 : l'espèce mise en avant a le même dessin que la grille (nom et nom savant sous la photo, pas dessus). */
      + '<div class="bio-hero">'
-     + bioPh(hero,'<div class="bio-cap"><h6>'+hero[0]+'</h6><div class="bio-sci">'+hero[1]+'</div></div>')
-     + '<p class="bio-t">'+hero[4]+'</p></div>';
+     + bioPh(hero)
+     + '<div class="bio-in"><div class="bio-n">'+hero[0]+'</div><div class="bio-sci">'+hero[1]+'</div>'
+     + '<p class="bio-t">'+hero[4]+'</p></div></div>';
     if(faune.length) h+=bioGridMore(faune);
     h+='</div>';
   }
