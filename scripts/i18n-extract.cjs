@@ -225,11 +225,14 @@ for (const m of fs.readFileSync(path.join(ROOT, 'mobile', 'client.js'), 'utf8').
 //   - « pays » et « continents » : libellés d’un seul mot des chiffres du passeport (passport.js, stat(…, 'pays'))
 //   - « Retour vers {0} » : libellé d’accessibilité du bouton Retour, 'Retour vers '+destination dans navigation.js
 //     (« Volver hacia l’accueil » sans ce gabarit : seule la première moitié était traduite)
+//   - « <b>{0} : {1}</b> » : pastille du verdict du mois (onglet Saisons, spot-data.js), seule dans son élément ; sans
+//     mot hors des balises, la règle des phrases mises en forme ne l’extrait pas (ponctuation de la langue : « Surf: top »)
 const KEEP_KEYS = [
   'Défi validé ! +{0} XP',
   'pays',
   'continents',
   'Retour vers {0}',
+  '<b>{0} : {1}</b>',
 ];
 for (const k of KEEP_KEYS) add(k, 'app.js (conservé)', true);
 
