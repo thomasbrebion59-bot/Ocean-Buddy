@@ -63,6 +63,14 @@ html .ocean-v2 #detail .db-level{display:inline-flex;align-items:center;gap:8px;
   border:0;border-radius:999px;background:var(--fiche-wash);color:var(--t-main);font:700 var(--fiche-label)/1.25 var(--body);text-align:start;white-space:normal}
 html .ocean-v2 #detail .db-level::after{margin-left:0;margin-inline-start:2px}
 #detail .fx-level-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:0 0 12px}
+/* Section repliable : la même tête dans tous les onglets (replis.js). Une ligne posée sur le fond, sans cadre ni bordure :
+   le titre, une précision, et un chevron dans un rond, qui se remplit quand la section est ouverte. */
+html .ocean-v2 #detail .dcat .obf-head{min-height:48px;margin:6px 0 0;padding:4px 0;border:0;border-radius:0;background:none}
+html .ocean-v2 #detail .dcat .obf-head .obf-tx b{font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat .obf-head .obf-tx small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft);white-space:normal;overflow:visible;text-overflow:clip}
+html .ocean-v2 #detail .dcat .obf-head .obf-chev{width:30px;height:30px;background:var(--fiche-wash);color:var(--t-main)}
+html .ocean-v2 #detail .dcat .obf-head[aria-expanded="true"]{margin-bottom:10px}
+html .ocean-v2 #detail .dcat .obf-head[aria-expanded="true"] .obf-chev{background:var(--t-main);color:var(--t-on-main)}
 /* Lien d’action discret (« Toutes les prévisions »). */
 #detail .fx-more{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:0;padding:0 2px;border:0;background:none;font:700 var(--fiche-label)/1 var(--body);color:var(--t-main);cursor:pointer;-webkit-tap-highlight-color:transparent}
 #detail .fx-more::after{content:"";width:7px;height:7px;border-top:2px solid currentColor;border-right:2px solid currentColor;transform:rotate(45deg)}
@@ -425,11 +433,6 @@ html .ocean-v2 #detail .dcat[data-cat="infos"] .field-reference .field-source sp
 html .ocean-v2 #detail .dcat[data-cat="infos"] .field-source-pending{margin:0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
 
 /* Replis « Photos et carte » et « Comprendre le spot » : une pastille de fond léger, sans bordure. */
-html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head{min-height:56px;margin:0 0 10px;border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash)}
-html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head .obf-tx b{font:700 var(--fiche-text)/1.25 var(--body);color:var(--t-ink)}
-html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head .obf-tx small{font:400 var(--fiche-note)/1.35 var(--body);white-space:normal;overflow:visible;text-overflow:clip}
-html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head .obf-chev{background:none}
-html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head[aria-expanded="true"]{margin-bottom:14px}
 
 /* Dans « Photos et carte » : les sur-titres en capitales ne s’affichent pas (le titre et le texte disent la même chose). */
 html .ocean-v2 #detail .dcat[data-cat="infos"] :is(#spotVideoPanel .experience-heading small,#spotAreaMap .area-map-heading small,#obVoyageBanner small,.gallery-empty>small){display:none}
@@ -545,12 +548,6 @@ html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn :is(svg,img,.spico){flex
 #detail .px-pills{display:flex;flex-wrap:wrap;gap:8px}
 #detail .px-pills .fx-pill{min-height:38px;padding:0 14px;font-size:var(--fiche-label);text-decoration:none}
 /* Replis de l’onglet (heure et pays, point de départ) : une ligne légère, sans cadre. */
-.ocean-v2 #detail .dcat[data-cat="activites"] .obf-head{min-height:48px;margin:6px 0 0;padding:4px 0;border:0;border-radius:0;background:none}
-.ocean-v2 #detail .dcat[data-cat="activites"] .obf-head .obf-tx b{font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
-.ocean-v2 #detail .dcat[data-cat="activites"] .obf-head .obf-tx small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft);white-space:normal;overflow:visible}
-.ocean-v2 #detail .dcat[data-cat="activites"] .obf-head .obf-chev{width:30px;height:30px;background:var(--fiche-wash);color:var(--t-main)}
-.ocean-v2 #detail .dcat[data-cat="activites"] .obf-head[aria-expanded="true"]{margin-bottom:10px}
-.ocean-v2 #detail .dcat[data-cat="activites"] .obf-head[aria-expanded="true"] .obf-chev{background:var(--t-main);color:var(--t-on-main)}
 
 /* Y aller : les aéroports en lignes alignées (code, nom, distance), le vol, la source ; le détail du pays replié. */
 #detail .dcat[data-cat="activites"] .sd-airports{display:grid;gap:12px;margin:0 0 4px;padding:0;list-style:none}
@@ -719,12 +716,6 @@ html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn :is(svg,img,.spico){flex
 #detail .dcat[data-cat="faune"] .nx-when .sd-spark i.pk{background:var(--t-main)}
 #detail .dcat[data-cat="faune"] .nx-when small.sd-few{grid-column:1 / -1;margin:0;font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
 /* Replis : une ligne légère, sans cadre (même dessin que dans Préparer). */
-.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head{min-height:48px;margin:6px 0 0;padding:4px 0;border:0;border-radius:0;background:none}
-.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head .obf-tx b{font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
-.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head .obf-tx small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft);white-space:normal;overflow:visible}
-.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head .obf-chev{width:30px;height:30px;background:var(--fiche-wash);color:var(--t-main)}
-.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head[aria-expanded="true"]{margin-bottom:10px}
-.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head[aria-expanded="true"] .obf-chev{background:var(--t-main);color:var(--t-on-main)}
 /* Espèces photographiées : la photo arrondie, le nom, le nombre d’observations et le crédit, sans cadre. */
 #detail .dcat[data-cat="faune"] .sd-species{gap:18px 12px;margin:4px 0 12px}
 #detail .dcat[data-cat="faune"] .sd-sp{border:0;border-radius:0;background:none;overflow:visible}
