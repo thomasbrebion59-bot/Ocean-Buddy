@@ -240,7 +240,8 @@ test('fiche : un appel prévision + un appel marine, heure par heure et 7 jours,
   assert.ok(calls.some(u => /api\.open-meteo\.com\/v1\/forecast.*hourly=.*wind_gusts_10m.*forecast_hours=48.*daily=.*sunrise,sunset/.test(u)));
   assert.ok(calls.some(u => /marine-api.*hourly=wave_height,wave_period,wave_direction.*daily=wave_height_max,wave_period_max/.test(u)));
   assert.ok(calls.every(u => !/sea_level_height_msl/.test(u)), 'aucun niveau de la mer présenté comme marée');
-  for (const s of ['Ton meilleur créneau', 'Heure par heure', 'Rafales', 'Houle', 'Période', 'Les 7 jours', 'Lever', 'Prévisions Open-Meteo (CC BY 4.0)', 'le poste de secours, le balisage et les drapeaux priment']) assert.ok(html.includes(s), s);
+  assert.ok(/Ton meilleur créneau|Tes créneaux/.test(html), 'légende des heures surlignées');
+  for (const s of ['Ton meilleur jour', 'Heure par heure', 'Rafales', 'Houle', 'Période', 'Les 7 jours', 'Lever', 'Prévisions Open-Meteo (CC BY 4.0)', 'le poste de secours, le balisage et les drapeaux priment']) assert.ok(html.includes(s), s);
   assert.ok(/href="https:\/\/open-meteo\.com\/"/.test(html));
   assert.ok(!/Pleine mer|Basse mer/.test(html));
   assert.ok(calls.some(u => /marine-api.*past_hours=1&forecast_hours=49/.test(u)), 'la marine couvre toute la fenêtre de la prévision');
@@ -250,7 +251,7 @@ test('fiche : lac sans houle ; plongée sans créneau ; niveau changé = nouveau
   const lake = await render({id: 'annecy', name: 'Lac', waterType: 'lake', sports: ['paddle']}, 'paddle', null);
   assert.equal(lake.calls.length, 1, 'pas d’appel marine pour un lac');
   assert.ok(!/<th scope="row">Houle/.test(lake.html) && !/<dt>Houle/.test(lake.html));
-  assert.ok(lake.html.includes('Ton meilleur créneau'));
+  assert.ok(/Ton meilleur créneau|Tes créneaux/.test(lake.html));
   const dive = await render({id: 'medes', name: 'Medes', waterType: 'sea', sports: ['plongee']}, 'plongee', 'debutant');
   assert.ok(dive.html.includes('Pas de créneau calculé pour ce sport ici'));
   const surf = await render({id: 'hossegor', name: 'Hossegor', waterType: 'sea', sports: ['surf']}, 'surf', null);
@@ -285,14 +286,46 @@ test('Prévisions : une ligne par jour, colonnes alignées, meilleur jour en jau
   assert.ok(best.indexOf('fx7-caution') < best.indexOf('<dl class="fx7-more"'), 'l’avertissement est hors du détail replié');
   /* Détail secondaire : fermé au départ, ouvert au toucher. */
   assert.equal((f.match(/<button type="button" class="fx7-btn" aria-expanded="false" aria-controls="fx7Day\d">/g) || []).length, 3);
-  assert.match(f, /<dl class="fx7-more" id="fx7Day0" hidden><div><dt>Rafales<\/dt><dd>24 km\/h<\/dd><\/div><div><dt>Pluie<\/dt><dd>10 %<\/dd><\/div><div><dt>UV<\/dt><dd>8<\/dd><\/div><div><dt>Lever<\/dt><dd>06:30<\/dd><\/div><div><dt>Coucher<\/dt><dd>21:30<\/dd><\/div><\/dl>/);
-  /* Heure par heure ouvert, puis l’heure du relevé, le rappel du calcul et la source. */
+  assert.match(f, /<dl class="fx7-more" id="fx7Day0" hidden><div><dt>Rafales<\/dt><dd>24 km\/h<\/dd><\/div><div><dt>Pluie<\/dt><dd>10 %<\/dd><\/div><div><dt>UV<\/dt><dd>8<\/dd><\/div><div><dt>Lever<\/dt><dd>6 h 30<\/dd><\/div><div><dt>Coucher<\/dt><dd>21 h 30<\/dd><\/div><\/dl>/);
+  /* Le rappel « le poste de secours… priment » suit la ligne du meilleur jour, plus le pied de l’onglet. */
+  assert.ok(best.includes('<p class="fx7-calc">Repère calculé sur une prévision de modèle'), 'rappel du calcul sous le meilleur jour');
+  assert.ok(best.indexOf('fx7-calc') < best.indexOf('<dl class="fx7-more"'), 'rappel hors du détail replié');
+  assert.equal((f.match(/fx7-calc/g) || []).length, 1, 'une seule fois, plus en pied');
+  /* Heure par heure ouvert, puis l’heure du relevé et la source. */
   assert.match(f, /<div class="wx-block wx-hours" data-fx-view="forecast"><h3 class="fx-title">Heure par heure<\/h3><div class="wx-scroll"/);
   assert.match(f, /<p class="fx-note fx7-stamp" data-fx-view="forecast">Relevé(\sà\s\d+\sh\s\d\d|\sle\s.+)<\/p>/, 'la même phrase que « Maintenant »');
   assert.match(f, /le poste de secours, le balisage et les drapeaux priment/);
   assert.match(f, /Prévisions Open-Meteo \(CC BY 4\.0\)/);
   assert.doesNotMatch(plain(f), / · |Cette semaine|Max du jour|MÉTÉO/);
   assert.doesNotMatch(f, /wx-slot|wx-best|Lever \d/, 'plus de cartes de créneau ni de lever dans la tête de l’heure par heure');
+});
+
+/* Relecture du 19 nov. : le créneau est calculé pour aujourd’hui ET demain, et les heures des deux sont surlignées.
+   L’avertissement de vent de terre du jour qui n’est pas « le meilleur » ne doit jamais disparaître. */
+test('Prévisions : meilleur jour aujourd’hui, vent de terre demain, l’avertissement de demain reste affiché sur sa ligne', async () => {
+  /* Aujourd’hui : vent de mer (270°), 8 km/h ; demain : vent de terre (90°, spot « Offshore E »), 15 km/h. */
+  const {html} = await render({id: 'hossegor', name: 'Hossegor', waterType: 'sea', sports: ['surf'], wind: 'Offshore E'}, 'surf', 'debutant',
+    {f: {dir: i => (i < 24 ? 270 : 90), wind: i => (i < 24 ? 8 : 15)}});
+  const f = forecastPart(html);
+  const rowOf = day => { const i = f.indexOf(`<span class="fx7-day">${day}</span>`); return f.slice(f.lastIndexOf('<li', i), f.indexOf('</li>', i)); };
+  const today = rowOf('Aujourd’hui'), tomorrow = rowOf('Demain');
+  assert.match(today, /fx7-row is-best/, 'aujourd’hui reste le meilleur jour');
+  assert.doesNotMatch(today, /fx7-caution/, 'vent de mer aujourd’hui : pas d’avertissement');
+  assert.match(tomorrow, /<div class="fx7-best fx7-alt">[\s\S]*<span>Autre créneau<\/span> <b>\d+ h – \d+ h<\/b>/, 'le créneau de demain a sa ligne');
+  assert.ok(tomorrow.includes('<p class="fx7-caution">Le vent vient de la terre (offshore) : il lisse les vagues, mais il te pousse vers le large. Reste près du bord et ne lâche pas ta planche.</p>'), 'avertissement entier');
+  assert.ok(tomorrow.indexOf('fx7-caution') < tomorrow.indexOf('<dl class="fx7-more"'), 'hors du détail replié');
+  /* Les heures de demain sont surlignées : la légende le dit (« Tes créneaux »). */
+  assert.match(f, /<i class="is-slot" aria-hidden="true"><\/i>Tes créneaux<\/span>/);
+});
+
+test('Prévisions : un seul jour calculé avec créneau, la légende dit « Ton meilleur créneau » et aucune ligne « Autre créneau »', async () => {
+  /* Demain : vent de 45 km/h, hors des repères débutant ; aujourd’hui : 8 km/h de mer. */
+  const {html} = await render({id: 'hossegor', name: 'Hossegor', waterType: 'sea', sports: ['surf'], wind: 'Offshore E'}, 'surf', 'debutant',
+    {f: {dir: () => 270, wind: i => (i < 24 ? 8 : 45), gust: i => (i < 24 ? 15 : 60)}});
+  const f = forecastPart(html);
+  assert.equal((f.match(/fx7-row is-best/g) || []).length, 1);
+  assert.doesNotMatch(f, /fx7-alt/);
+  assert.match(f, /<i class="is-slot" aria-hidden="true"><\/i>Ton meilleur créneau<\/span>/);
 });
 
 test('Prévisions : plan d’eau sans houle ni période, sans niveau le bouton court, toucher un jour ouvre son détail', async () => {

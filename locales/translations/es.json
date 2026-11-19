@@ -8632,7 +8632,7 @@
  "zone d'observation, accès bateau": "zona de observación, acceso en barco",
  "zones surveillées": "zonas vigiladas",
  "zoomend moveend": "zoomend moveend",
- "{0} % de jours ≥ 25 km/h": "{0} % de días ≥ 25 km/h",
+ "{0} % de jours ≥ 25 km/h": "{0} % de días ≥ 25 km/h",
  "{0} / {1} trophées": "{0} / {1} trofeos",
  "{0} : choisis ton continent, puis ton spot.": "{0} : elige tu continente y luego tu spot.",
  "{0} : {1} spots": "{0} : {1} spots",
@@ -11072,5 +11072,8 @@
  "<b>{0} : {1}</b>": "<b>{0}: {1}</b>",
  "Le soleil est estimé à partir du rayonnement mesuré par satellite.": "La luz solar se estima a partir de la radiación medida por satélite.",
  "La houle est celle du large : la plage peut être plus abritée ou plus exposée.": "El oleaje es el de mar abierto: la playa puede estar más resguardada o más expuesta.",
- "Normales calculées sur plusieurs années pour le secteur du spot :": "Valores normales calculados a lo largo de varios años para la zona del spot:"
+ "Normales calculées sur plusieurs années pour le secteur du spot :": "Valores normales calculados a lo largo de varios años para la zona del spot:",
+ "Autre créneau": "Otra franja",
+ "Tes créneaux": "Tus franjas",
+ "Températures, soleil, pluie et vent, mois par mois": "Temperaturas, sol, lluvia y viento, mes a mes"
 }

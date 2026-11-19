@@ -95,7 +95,7 @@
   const TAB_GROUPS = {
     saisons: [
       /* Fiche v2 : les sources des normales restent visibles sous la section repliée. */
-      { id: 'courbes', title: 'L’année en courbes', sub: 'Températures, soleil, pluie, houle et vent', members: ['#dSeasons>.sd-charts', '#dSeasons>.sd-rose', '#dSeasons>.sd-table'] }
+      { id: 'courbes', title: 'L’année en courbes', sub: 'Températures, soleil, pluie et vent, mois par mois', members: ['#dSeasons>.sd-charts', '#dSeasons>.sd-rose', '#dSeasons>.sd-table'] }
     ],
     meteo: [
       { id: 'lire', title: 'Comprendre ces chiffres', sub: 'Le vent, la houle et la marée, expliqués', members: ['#sdCoach', '#imWeatherHelp'] }

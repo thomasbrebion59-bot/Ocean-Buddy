@@ -115,7 +115,10 @@
     if (!acts.length) return '';
     const head = Array.from({ length: 12 }, (_, m) => `<span class="sd-cal-m${m === new Date().getMonth() ? ' now' : ''}" aria-hidden="true">${esc(monthLetter(m))}</span>`).join('');
     const rows = acts.map(a => {
-      const y = M.year(c, a, s.level), b = M.best(y);
+      /* La période affichée sous le sport = les mois de la meilleure case de la bande (même couleur, même coche), pour que
+         le libellé et les cases disent la même chose (douze mois « Top » : « toute l’année »). */
+      const y = M.year(c, a, s.level), lv = y.map(M.level), topL = Math.max(-1, ...lv.filter(v => v != null));
+      const b = {ranges: topL >= 1 ? M.ranges(lv.map((L, m) => (L === topL ? m : -1)).filter(m => m >= 0)) : []};
       const cells = y.map((v, m) => {
         const L = M.level(v);
         return `<button type="button" class="sd-cell l${L ?? 'x'}${m === selMonth && a === (selAct || curAct(s)) ? ' sel' : ''}" data-sd-month="${m}" data-sd-act="${a}" aria-label="${esc(monthName(m))} : ${esc(L == null ? 'donnée indisponible' : LEVEL_TXT[L])}">${L === 3 ? '<i aria-hidden="true">✓</i>' : ''}</button>`;
@@ -149,11 +152,12 @@
     if (d.wet != null) { const [n, u] = unitParts(d.wet); tiles.push(reading('rain', 'Pluie', n, u, `${num(d.rain)} mm dans le mois`, 'rain')); }
     /* Houle : la période à côté de la hauteur, comme dans Conditions (« m (12 s) ») ; la direction en sous-ligne. */
     if (d.waves) tiles.push(reading('wave', 'Houle au large', num(d.hs, 1), `m (${num(d.tp)} s)`, M.DIR_FROM[d.dir] ? `venue ${M.DIR_FROM[d.dir]}` : '', 'wave'));
-    if (d.wind != null) tiles.push(reading('wind', 'Vent', num(d.wind), 'km/h', d.kite != null ? `${num(d.kite)} % de jours ≥ 25 km/h` : '', 'wind'));
+    if (d.wind != null) tiles.push(reading('wind', 'Vent', num(d.wind), 'km/h', d.kite != null ? `${num(d.kite)} % de jours ≥ 25 km/h` : '', 'wind'));
     /* Verdict : une pastille à elle seule (gabarit « <b>{0} : {1}</b> », traduit d’un bloc par i18n.js, ponctuation de la
        langue) ; le titre « En novembre » dit déjà le mois, le verdict ne le répète plus. Puis les raisons (verdictWhy). */
     const head = L == null ? '' : `<b>${esc(sportLabel(act))} : ${esc(LEVEL_TXT[L].toLowerCase())}</b>`;
-    const verdict = L == null ? '' : `<p class="sd-verdict l${L}"><span class="sd-vmain">${head}</span>${verdictWhy(act, d)}</p>`;
+    const why = verdictWhy(act, d);
+    const verdict = L == null ? '' : `<p class="sd-verdict l${L}"><span class="sd-vmain">${head}</span>${why ? ' ' + why : ''}</p>`;
     return `<div class="sd-month" aria-live="polite">
       <div class="sd-month-head"><h4 class="fx-title fx-title-s">En ${esc(monthName(selMonth))}</h4>${monthPicker()}</div>
       ${verdict}${suitLine(act, d)}

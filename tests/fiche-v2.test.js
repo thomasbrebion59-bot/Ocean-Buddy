@@ -293,3 +293,27 @@ test('Saisons : un titre sans sur-titre, relevés du mois en composant de la fic
   assert.match(src, /<span>Normales calculées sur plusieurs années pour le secteur du spot :<\/span> \$\{parts\.map\(x => `<span>\$\{esc\(x\)\}<\/span>`\)\.join\(sep\)\}\./);
   assert.doesNotMatch(src, /Ce sont des tendances/);
 });
+
+/* Relecture du 19 nov. : petits défauts de l’onglet Saisons et de l’onglet Prévisions. */
+test('Saisons : période sous le sport = mois de la meilleure case, « Bon » d’une teinte à lui, insécables, sous-titre sans houle', () => {
+  const js = read('spot-data.js'), cal = js.slice(js.indexOf('function calendar'), js.indexOf('function calendar') + 2000);
+  /* Libellé et cases disent la même chose : les mois au meilleur niveau atteint (douze « Top » : « toute l’année »). */
+  assert.match(cal, /lv = y\.map\(M\.level\), topL = Math\.max\(-1, \.\.\.lv\.filter\(v => v != null\)\)/);
+  assert.match(cal, /const b = \{ranges: topL >= 1 \? M\.ranges\(lv\.map\(\(L, m\) => \(L === topL \? m : -1\)\)\.filter\(m => m >= 0\)\) : \[\]\};/);
+  const M = require('../spot-data-model.js');
+  assert.deepEqual(M.ranges([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]), [[0, 11]], 'douze mois → une seule plage, « toute l’année »');
+  /* « Bon » (l2) entre « Possible » (l1) et « Top » (l3), dans la section Saisons. */
+  const sec = css.slice(css.indexOf('ONGLET SAISONS'), css.indexOf('fin de la section Saisons'));
+  assert.match(sec, /#detail #dSeasons \.sd-cell\.l2,#detail #dSeasons \.sd-legend i\.l2\{background:color-mix\(in srgb,var\(--g-soft\) 50%,var\(--g-main\)\)\}/);
+  /* « 8 % de jours ≥ 25 km/h » ne se coupe plus entre le chiffre et son unité (espaces insécables, aussi en traduction). */
+  assert.ok(js.includes('`${num(d.kite)} % de jours ≥ 25 km/h`'));
+  for (const l of ['en', 'es']) assert.match(JSON.parse(read(`locales/translations/${l}.json`))['{0} % de jours ≥ 25 km/h'], /^\{0\} % .+ ≥ 25 km\/h$/);
+  /* « L’année en courbes » : un sous-titre juste aussi sur un lac (pas de houle annoncée). */
+  assert.match(read('replis.js'), /title: 'L’année en courbes', sub: 'Températures, soleil, pluie et vent, mois par mois'/);
+});
+
+test('Prévisions : lever et coucher écrits comme les autres heures (« 7 h 37 »), rappel du calcul sous le meilleur jour', () => {
+  assert.match(exp, /const clock = iso => \{[^\n]*if \(!window\.OB_I18N \|\| \/\^\(fr\|es\)\/\.test\(OB_I18N\.lang \|\| 'fr'\)\) return `\$\{\+m\[1\]\} h \$\{m\[2\]\}`;/);
+  assert.match(exp, /\$\{note \? `<p class="fx7-calc">\$\{esc\(note\)\}<\/p>` : ''\}<\/div>`;/);
+  assert.doesNotMatch(exp, /fx-note fx7-calc" data-fx-view="forecast"/, 'plus en pied d’onglet');
+});

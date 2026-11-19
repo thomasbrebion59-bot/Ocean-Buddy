@@ -208,6 +208,9 @@ html #detail #detailHero .hero-more>b{display:none}
 #detail .fx7-best-tx b{font-weight:700;white-space:nowrap}
 #detail .fx7-q{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft);white-space:nowrap}
 #detail .fx7-caution{grid-column:2 / -1;margin:2px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--t-ink)}
+#detail .fx7-calc{grid-column:2 / -1;margin:2px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+/* L’autre jour calculé : sa ligne de créneau sous son jour, sans fond jaune (le jaune reste au meilleur jour). */
+#detail .fx7-alt{padding-top:0}
 /* Détail d’un jour, au toucher : rafales, pluie, UV, lever, coucher. */
 #detail .fx7-more{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;padding:0 8px 12px}
 #detail .fx7-more[hidden]{display:none}
@@ -228,8 +231,8 @@ html #detail #detailHero .hero-more>b{display:none}
 #detail .wx-hours .wx-table .is-night{background:color-mix(in srgb,var(--t-main) 7%,var(--t-page))}
 #detail .wx-hours .wx-table .is-slot{background:color-mix(in srgb,var(--t-sun) 26%,var(--t-page))}
 #detail .wx-hours .wx-legend{margin:8px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
-/* Pied : l’heure du relevé, le rappel du calcul du créneau, puis les notes et la source communes aux deux vues. */
-#detail .fx7-stamp,#detail .fx7-calc{margin:0 0 6px}
+/* Pied : l’heure du relevé, puis les notes et la source communes aux deux vues. */
+#detail .fx7-stamp{margin:0 0 6px}
 
 /* fin de la section Prévisions (ne rien écrire entre ces deux lignes de séparation)
    ----------------------------------------------------------------------------------------------------- */
@@ -293,6 +296,8 @@ html #detail #detailHero .hero-more>b{display:none}
 #detail #dSeasons .sd-cell.sel{box-shadow:0 0 0 2px var(--t-page),0 0 0 4px var(--t-ink)}
 #detail #dSeasons .sd-legend{margin:2px 0 0;padding:6px 0 0;border-top:0}
 #detail #dSeasons .sd-legend span{font:400 var(--fiche-note)/1.2 var(--body);color:var(--fiche-soft)}
+/* « Bon » entre « Possible » et « Top » : une teinte à mi-chemin, distincte des deux (cases et légende). */
+#detail #dSeasons .sd-cell.l2,#detail #dSeasons .sd-legend i.l2{background:color-mix(in srgb,var(--g-soft) 50%,var(--g-main))}
 /* Le mois choisi : titre, flèches de mois, verdict, repère de combinaison, relevés. */
 #detail #dSeasons .sd-month{margin:0 0 var(--fiche-gap);padding:0;border-radius:0;background:none;box-shadow:none;color:var(--t-ink)}
 #detail #dSeasons .sd-month::before,#detail #dSeasons .sd-month::after{content:none}

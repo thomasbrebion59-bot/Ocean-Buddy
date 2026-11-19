@@ -39,7 +39,9 @@ test('saisons : chaque raison dans son élément, jours de pluie par Intl, houle
   const js = read('spot-data.js');
   assert.match(js, /return bits\.length \? `<span class="sd-why">\$\{bits\.map\(b => `<span>\$\{esc\(b\)\}<\/span>`\)\.join\(', '\)\}<\/span>` : '';/);
   assert.match(js, /const head = L == null \? '' : `<b>\$\{esc\(sportLabel\(act\)\)\} : \$\{esc\(LEVEL_TXT\[L\]\.toLowerCase\(\)\)\}<\/b>`;/);
-  assert.match(js, /<span class="sd-vmain">\$\{head\}<\/span>\$\{verdictWhy\(act, d\)\}/);
+  /* Une espace entre la pastille et les raisons : lecture vocale et copier-coller ne les collent plus (« Surf : top houle… »). */
+  assert.match(js, /const why = verdictWhy\(act, d\);/);
+  assert.match(js, /<span class="sd-vmain">\$\{head\}<\/span>\$\{why \? ' ' \+ why : ''\}<\/p>/);
   assert.match(js, /`m \(\$\{num\(d\.tp\)\} s\)`, M\.DIR_FROM\[d\.dir\] \? `venue \$\{M\.DIR_FROM\[d\.dir\]\}` : ''/);
   assert.match(js, /bars\('wet', a\.wet, \['Pluie', 'jours de pluie dans le mois'\], days, 0, 'b-rain'\);/);
   /* Jours de pluie : nombre et unité d’Intl séparés pour le relevé (« 16 » et « j », « days », « d »). */

@@ -8632,7 +8632,7 @@
  "zone d'observation, accès bateau": "observation area, boat access",
  "zones surveillées": "lifeguarded areas",
  "zoomend moveend": "zoomend moveend",
- "{0} % de jours ≥ 25 km/h": "{0} % of days ≥ 25 km/h",
+ "{0} % de jours ≥ 25 km/h": "{0} % of days ≥ 25 km/h",
  "{0} / {1} trophées": "{0} / {1} trophies",
  "{0} : choisis ton continent, puis ton spot.": "{0}: choose your continent, then your spot.",
  "{0} : {1} spots": "{0}: {1} spots",
@@ -11072,5 +11072,8 @@
  "<b>{0} : {1}</b>": "<b>{0}: {1}</b>",
  "Le soleil est estimé à partir du rayonnement mesuré par satellite.": "Sunshine is estimated from satellite-measured radiation.",
  "La houle est celle du large : la plage peut être plus abritée ou plus exposée.": "Swell is offshore: the beach may be more sheltered or more exposed.",
- "Normales calculées sur plusieurs années pour le secteur du spot :": "Averages calculated over several years for the spot area:"
+ "Normales calculées sur plusieurs années pour le secteur du spot :": "Averages calculated over several years for the spot area:",
+ "Autre créneau": "Other window",
+ "Tes créneaux": "Your windows",
+ "Températures, soleil, pluie et vent, mois par mois": "Temperatures, sun, rain and wind, month by month"
 }
