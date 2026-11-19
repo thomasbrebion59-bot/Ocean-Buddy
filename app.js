@@ -985,12 +985,13 @@ function presGeste(g,i,z){
   /* le geste n'est plus seulement lu : on peut le cocher, il part dans le
      carnet écolo avec le nom du spot, et il rapporte 15 XP. */
   var k='z:'+z+':'+i, fait=(typeof ecoHas==='function')&&ecoHas(k);
-  return '<div class="pres-g"><span class="pres-n">'+(i+1)+'</span>'
-       + '<div class="pres-tx"><b>'+g[0]+'</b><p>'+g[1]+'</p>'
-       + '<button class="pres-do'+(fait?' done':'')+'" data-k="'+k+'" '
+  /* Fiche v2 : une liste simple, sans numéro (ce n'est pas une séquence) ; le bouton dit le geste, l'XP à côté. */
+  return '<li class="pres-g">'
+       + '<div class="pres-tx"><b>'+g[0]+'</b><p class="fx-note">'+g[1]+'</p>'
+       + '<button class="pres-do fx-pill'+(fait?' done':'')+'" data-k="'+k+'" '
        + 'onclick="presDone(this,\''+k+'\','+i+',\''+z+'\')"'+(fait?' disabled':'')+'>'
-       + (fait?'✓ Fait ici':'Je l\'ai fait  ·  +15 XP')+'</button>'
-       + '</div></div>';
+       + (fait?'✓ Fait ici':'Je l\'ai fait<span class="nx-xp">+15 XP</span>')+'</button>'
+       + '</div></li>';
 }
 function presDone(btn,k,i,z){
   if(btn.classList.contains('done'))return;
@@ -1003,12 +1004,12 @@ function presDone(btn,k,i,z){
 function renderPreserve(s){
   var p=PRESERVE[SPOT_ZONE[s.id]]; if(!p) return '';
   var z=SPOT_ZONE[s.id];
-  var h='<div class="pres" id="presBlock">'
-   + '<div class="pres-hd">'+uic('feuille')
-   + '<div><h6>Préserver ce spot</h6><p>'+p.e+'</p></div></div>'
-   + '<div class="pres-l"><div class="pres-lab">Ce que tu peux faire ici, aujourd\'hui</div>'
+  /* Fiche v2 (onglet Nature) : l'enjeu en une phrase, puis les gestes en liste simple. */
+  var h='<div class="pres nx-pres" id="presBlock">'
+   + '<h3 class="fx-title">Préserver ce spot</h3><p class="fx-text nx-pres-e">'+p.e+'</p>'
+   + '<ul class="pres-l">'
    + p.g.map(function(g,i){ return presGeste(g,i,z); }).join('')
-   + '</div></div>';
+   + '</ul></div>';
   return h;
 }
 function preserveTab(on){

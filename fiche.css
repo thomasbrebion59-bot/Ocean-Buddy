@@ -404,6 +404,81 @@ html #detail #detailHero .hero-more>b{display:none}
    ONGLET NATURE (data-cat="faune", puis data-cat="preserver")
    ===================================================================================================== */
 #detail .dcat[data-cat="preserver"]{margin-top:var(--fiche-gap)}
+/* Faune : titre simple, les deux chiffres en relevés sur le fond, « Quand les voir », les espèces photographiées (repli,
+   crédits visibles), puis les espèces typiques de la zone. Préserver : l’enjeu en une phrase, les gestes en liste simple.
+   Plus de tuiles sombres, de bandeaux colorés, de sur-titres en capitales ni de pastilles numérotées. Préfixe : nx-. */
+.ocean-v2 #detail .dcat:is([data-cat="faune"],[data-cat="preserver"]) .fx-title{margin:0 0 10px;font:800 var(--fiche-title)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
+.ocean-v2 #detail .dcat:is([data-cat="faune"],[data-cat="preserver"]) .fx-title-s{font-size:calc(var(--fiche-title) * .8);margin-bottom:8px}
+.ocean-v2 #detail .dcat[data-cat="faune"] .block p.fx-note,.ocean-v2 #detail .dcat[data-cat="faune"] .block p.bio-note{font-size:var(--fiche-note)!important;line-height:1.4!important}
+.ocean-v2 #detail .dcat[data-cat="faune"] .block p.fx-text,.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head>p{font-size:var(--fiche-text)!important;line-height:1.45!important}
+#detail .dcat[data-cat="faune"] .sd-wild{margin:0 0 var(--fiche-gap)}
+#detail .dcat[data-cat="faune"] .nx-intro{margin:0 0 16px;color:var(--fiche-soft)}
+/* Les deux chiffres : grand chiffre, phrase dessous, posés sur le fond. */
+#detail .dcat[data-cat="faune"] .nx-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0 0 22px}
+#detail .dcat[data-cat="faune"] .nx-stats>.nx-stat{display:grid;align-content:start;gap:6px;padding:0;border-radius:0;background:none;color:var(--t-ink)}
+#detail .dcat[data-cat="faune"] .nx-stats .fx-num{display:block;margin:0}
+#detail .dcat[data-cat="faune"] .nx-stats .fx-note{display:block;margin:0;color:var(--fiche-soft)}
+/* Quand les voir. */
+#detail .dcat[data-cat="faune"] .nx-when{margin:0 0 14px;padding:0;border:0;border-radius:0;background:none}
+#detail .dcat[data-cat="faune"] .nx-when ul{display:grid;gap:12px}
+#detail .dcat[data-cat="faune"] .nx-when .sd-flag{display:grid;grid-template-columns:minmax(0,1fr) 108px;column-gap:14px;row-gap:2px;align-items:center;padding:0;border:0}
+#detail .dcat[data-cat="faune"] .nx-when .sd-flag-name b{font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="faune"] .nx-when .sd-flag-name small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="faune"] .nx-when .sd-spark{width:108px;height:28px}
+#detail .dcat[data-cat="faune"] .nx-when .sd-spark i.pk{background:var(--t-main)}
+#detail .dcat[data-cat="faune"] .nx-when small.sd-few{grid-column:1 / -1;margin:0;font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+/* Replis : une ligne légère, sans cadre (même dessin que dans Préparer). */
+.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head{min-height:48px;margin:6px 0 0;padding:4px 0;border:0;border-radius:0;background:none}
+.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head .obf-tx b{font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head .obf-tx small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft);white-space:normal;overflow:visible}
+.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head .obf-chev{width:30px;height:30px;background:var(--fiche-wash);color:var(--t-main)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head[aria-expanded="true"]{margin-bottom:10px}
+.ocean-v2 #detail .dcat[data-cat="faune"] .obf-head[aria-expanded="true"] .obf-chev{background:var(--t-main);color:var(--t-on-main)}
+/* Espèces photographiées : la photo arrondie, le nom, le nombre d’observations et le crédit, sans cadre. */
+#detail .dcat[data-cat="faune"] .sd-species{gap:18px 12px;margin:4px 0 12px}
+#detail .dcat[data-cat="faune"] .sd-sp{border:0;border-radius:0;background:none;overflow:visible}
+#detail .dcat[data-cat="faune"] .sd-sp figure{border-radius:14px;overflow:hidden}
+#detail .dcat[data-cat="faune"] .sd-sp>div{padding:8px 0 0;gap:1px}
+#detail .dcat[data-cat="faune"] .sd-sp b{font:600 var(--fiche-label)/1.25 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="faune"] .sd-sp i{font:400 var(--fiche-note)/1.3 var(--body);font-style:italic;color:var(--fiche-soft)}
+#detail .dcat[data-cat="faune"] .sd-sp small{margin:2px 0 0;font:600 var(--fiche-note)/1.3 var(--body);color:var(--t-main)}
+#detail .dcat[data-cat="faune"] .sd-credit{padding:2px 0 0;font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="faune"] .sd-iucn{font:600 var(--fiche-note)/1.1 var(--body)}
+#detail .dcat[data-cat="faune"] #dWild>.sd-link{margin:0;padding:0 2px;background:none;border-radius:0;font:700 var(--fiche-label)/1 var(--body);color:var(--t-main)}
+#detail .dcat[data-cat="faune"] #dWild>.sd-src{margin:4px 0 0}
+/* Espèces typiques de la zone : le bloc se pose sur le fond ; la zone en intertitre, sans bandeau ni pastilles. */
+.ocean-v2 #detail .dcat[data-cat="faune"]>.block{margin:0;padding:0;border:0;border-radius:0;background:none!important;box-shadow:none}
+.ocean-v2 #detail .dcat[data-cat="faune"]>.block::before,.ocean-v2 #detail .dcat[data-cat="faune"]>.block::after{content:none;display:none}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head{margin:0 0 4px;padding:0;border:0;border-radius:0;background:none;box-shadow:none!important;color:var(--t-ink);overflow:visible}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head::before,.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head::after{content:none;display:none}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head h5{display:block;margin:0 0 6px;font:800 calc(var(--fiche-title) * .8)/1.15 var(--display);letter-spacing:-.02em;color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head h5 svg{display:none}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head>p{margin:0;opacity:1;color:var(--fiche-soft);font-weight:400}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-chip{display:none}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-sec{display:block;margin:18px 0 8px}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-sec b{font:700 var(--fiche-text)/1.3 var(--body);letter-spacing:0;text-transform:none;color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-sec i{display:none}
+/* À connaître avant de te mettre à l’eau : jamais replié, une carte d’avertissement légère. */
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-warn{display:grid;gap:12px;padding:14px;border:0;border-radius:var(--fiche-radius);background:color-mix(in srgb,var(--t-sun) 16%,var(--t-card));box-shadow:none}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-w .bio-n{font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-w .bio-sci{font:400 var(--fiche-note)/1.3 var(--body);font-style:italic;color:var(--fiche-soft)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-w .bio-t{margin-top:3px;font:400 var(--fiche-note)/1.4 var(--body);color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-n,.ocean-v2 #detail .dcat[data-cat="faune"] .bio-cap h6{font-family:var(--body);letter-spacing:0}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-t{font:400 var(--fiche-note)/1.4 var(--body)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-note{margin:12px 0 0;padding:0;color:var(--fiche-soft)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-note b{font-weight:600;color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .field-empty{margin:0;padding:4px 0 0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+/* Préserver ce spot : l’enjeu, puis les gestes en liste simple et leur bouton. */
+.ocean-v2 #detail .dcat[data-cat="preserver"] .nx-pres{margin:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible}
+#detail .dcat[data-cat="preserver"] .nx-pres-e{margin:0 0 16px}
+#detail .dcat[data-cat="preserver"] .pres-l{display:grid;gap:18px;margin:0;padding:0;list-style:none}
+#detail .dcat[data-cat="preserver"] .pres-g{display:block;padding:0;border:0}
+#detail .dcat[data-cat="preserver"] .pres-tx b{display:block;margin:0 0 2px;font:600 var(--fiche-text)/1.35 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="preserver"] .pres-tx p{margin:0;font:400 var(--fiche-note)/1.45 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="preserver"] .pres-do{display:inline-flex;gap:8px;min-height:36px;margin:8px 0 0;padding:0 14px;border:0;background:var(--fiche-wash);color:var(--t-ink);cursor:pointer}
+#detail .dcat[data-cat="preserver"] .pres-do .nx-xp{font-weight:600;color:var(--t-main)}
+#detail .dcat[data-cat="preserver"] .pres-do.done{background:color-mix(in srgb,var(--t-ok) 14%,var(--t-card));color:var(--t-ok);cursor:default}
+#detail .dcat[data-cat="preserver"] .pres-do:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
 
 /* fin de la section Nature (ne rien écrire entre ces deux lignes de séparation)
    ----------------------------------------------------------------------------------------------------- */

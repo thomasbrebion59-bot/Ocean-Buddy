@@ -105,9 +105,11 @@
       { id: 'depart', title: 'Ton point de départ', sub: 'Situer le lieu sur la carte', members: ['#dGuide>.field-address'] },
       { id: 'surplace', title: 'Heure, soleil, monnaie et langue', sub: 'Ce qui change sur place', members: ['#dGo>.sd-facts'] }
     ],
+    /* Nature (fiche v2) : les photos et les listes d’espèces se replient ; leurs sources restent visibles sous chaque repli
+       (iNaturalist et OBIS soutiennent les deux chiffres, Wikimedia Commons crédite les photos des espèces à connaître). */
     faune: [
-      { id: 'photos', title: 'Les espèces photographiées ici', sub: 'Photos, observations et sources', members: ['#dWild>.sd-species', '#dWild>.sd-link', '#dWild>.sd-src'] },
-      { id: 'typiques', title: 'Les espèces typiques de la zone', sub: 'À observer, flore et fonds', members: ['#bioObserve', '#bioFlore', '#dFaune>.bio-note'] }
+      { id: 'photos', title: 'Les espèces photographiées ici', sub: 'Photos et observations', members: ['#dWild>.sd-species', '#dWild>.sd-link'] },
+      { id: 'typiques', title: 'Les espèces typiques de la zone', sub: 'À observer, flore et fonds', members: ['#bioObserve', '#bioFlore'] }
     ]
   };
   const tabOf = cat => $(`#detail .dcat[data-cat="${cat}"]`);

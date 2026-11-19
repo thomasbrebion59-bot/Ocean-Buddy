@@ -126,7 +126,10 @@ test('onglets : dangers, secours, urgence et avertissements ne sont jamais repli
   assert.ok(fauneFn.indexOf('id="bioObserve"') < fauneFn.indexOf('id="bioFlore"'));
   /* Sources : chacune reste dans sa section (normales, observations, aéroports visibles). */
   assert.ok(tabGroups.saisons[0].members.includes('#dSeasons>.sd-src'));
-  assert.ok(tabGroups.faune[0].members.includes('#dWild>.sd-src'));
+  /* Fiche v2 : les sources de Nature restent visibles sous leur repli (elles soutiennent les chiffres et créditent les
+     photos des espèces à connaître, toujours affichées). */
+  assert.ok(!folded.includes('#dWild>.sd-src'), 'source des observations visible');
+  assert.ok(!folded.includes('bio-note'), 'note et crédit des espèces typiques visibles');
   assert.ok(!folded.includes('#dGo>.sd-src'), 'source des aéroports à côté des aéroports');
   /* Heure par heure : bloc identifié dans spot-experience.js. */
   const exp = read('spot-experience.js');
