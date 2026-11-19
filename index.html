@@ -359,21 +359,22 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
         </div>
 
         <div class="dcat" data-cat="securite" style="display:none">
-          <div class="block band" style="--b1:var(--t-danger);--b2:var(--t-cta)"><h4><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/vigilance.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> Dangers & vigilance</h4><div id="dDangers"></div></div>
+          <div class="block sx-watch"><h3 class="fx-title fx-title-s" id="dDangersTitle">À surveiller</h3><div id="dDangers"></div></div>
           <section class="spot-safety-live" id="spotSafetyLive" aria-live="polite"></section>
-          <div class="block safety-block band" style="--b1:var(--t-deep);--b2:var(--t-main2)">
-          <h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3.5v5M12 15.5v5M3.5 12h5M15.5 12h5"/></svg> Sécurité & secours</h4>
+          <section class="block safety-block sx-urg" aria-labelledby="dUrgTitle">
           <div class="safety-call">
-            <div class="sc-info"><div class="sc-lab">Numéro d'urgence ici</div><div class="sc-num" id="dEmerg">112</div><div class="sc-sea" id="dSea"></div></div>
+            <div class="sc-info"><div class="sc-lab" id="dUrgTitle"><svg class="fx-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 18v-5a5.5 5.5 0 0 1 11 0v5"/><path d="M4.5 18h15v3h-15z"/><path d="M12 2.5v2.2M4.6 5.6l1.5 1.5M19.4 5.6l-1.5 1.5M2.5 12.5h2M19.5 12.5h2"/></svg><span>Numéro d'urgence ici</span></div><div class="sc-num" id="dEmerg">112</div><div class="sc-sea" id="dSea"></div></div>
             <a class="sc-btn" id="dCall" href="tel:112"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>Appeler</a>
           </div>
-          <button class="svc" id="dRescue" style="width:100%;margin-top:11px"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3.5v5M12 15.5v5M3.5 12h5M15.5 12h5"/></svg> Poste de secours le plus proche</button>
+          <button type="button" class="svc" id="dRescue"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3.5v5M12 15.5v5M3.5 12h5M15.5 12h5"/></svg><span>Poste de secours le plus proche</span></button>
+          </section>
+          <section class="sx-foot" aria-labelledby="dFlagsTitle">
           <div class="flags">
-            <div class="fl-title"><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/surveillance.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> Drapeaux de baignade</div>
+            <h3 class="fx-title fx-title-s fl-title" id="dFlagsTitle">Drapeaux de baignade</h3>
             <p class="field-flags-note">Repère le balisage, les panneaux et les consignes du poste de secours. Les couleurs et les zones autorisées dépendent du lieu et de l’activité.</p>
           </div>
           <div class="safety-note" id="dSafeNote">Vérifie le numéro local et les horaires de surveillance avant ta sortie. Le <a href="https://europa.eu/youreurope/citizens/travel/security-and-emergencies/emergency/index_en.htm" target="_blank" rel="noopener">112 est le numéro commun de l’Union européenne</a> ; à l’étranger, consulte les consignes locales.</div>
-        </div>
+          </section>
         </div>
 
       </div>

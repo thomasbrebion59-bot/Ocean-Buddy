@@ -218,7 +218,7 @@ test('sécurité jamais repliée : « Si tu es emporté » et « Repérer une ba
   assert.match(sd, /const blocks = M\.ripSafety\(sports, inland\);/);
   assert.match(sd, /try \{ renderRip\(s\); \} catch \(e\) \{\}/);
   assert.doesNotMatch(sd.slice(sd.indexOf('function renderRip'), sd.indexOf('function renderRip') + 1500), /<details|data-obf/, 'pas de repli dans la carte');
-  assert.match(html, /<div class="dcat" data-cat="securite"[^>]*>\s*<div class="block band"[^>]*><h4>[\s\S]*?Dangers & vigilance<\/h4><div id="dDangers"><\/div><\/div>/);
+  assert.match(html, /<div class="dcat" data-cat="securite"[^>]*>\s*<div class="block sx-watch"><h3 class="fx-title fx-title-s" id="dDangersTitle">À surveiller<\/h3><div id="dDangers"><\/div><\/div>/);
   /* Fiche v2 : la sécurité a son onglet, dont le panneau s’affiche en entier (aucune vue, aucun repli). */
   assert.match(html, /<button type="button" class="dtab" data-cat="securite" onclick="showDetailCat\('securite'\)">/);
   assert.match(read('app.js'), /const DETAIL_TABS=\['meteo','previsions','securite','infos','saisons','activites','faune'\];/);

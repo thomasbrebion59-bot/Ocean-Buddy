@@ -86,9 +86,9 @@ test('carte de spot : role="img", aria-label et title disent qu’il s’agit d�
  assert.doesNotMatch(code(card),/sans danger/i);
 });
 
-test('carnet : étiquette « Carnet Ocean Buddy · non vérifié » sur le conseil et les dangers repris',()=>{
+test('carnet : étiquette « Carnet Ocean Buddy, non vérifié » (fiche v2 : sans point médian) sur le conseil et les dangers repris',()=>{
  const ctx={};vm.runInNewContext(functionSource('function carnetTag','function openSpot')+';this.tag=carnetTag;',ctx);
- assert.match(ctx.tag('dTipCarnet'),/^<small class="carnet-unverified" id="dTipCarnet"[^>]*>Carnet Ocean Buddy · non vérifié<\/small>$/);
+ assert.match(ctx.tag('dTipCarnet'),/^<small class="carnet-unverified" id="dTipCarnet"[^>]*>Carnet Ocean Buddy, non vérifié<\/small>$/);
  assert.doesNotMatch(ctx.tag(),/ id=/);
  assert.doesNotMatch(ctx.tag(),/#[0-9a-f]{3,6}\b|rgb\(/i,'couleur codée en dur');
  const open=functionSource('function openSpot','function renderSpotSource');

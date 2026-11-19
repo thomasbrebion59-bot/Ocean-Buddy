@@ -188,20 +188,94 @@ html #detail #detailHero .hero-more>b{display:none}
 .ocean-v2 #detail .dcat[data-cat="securite"]{margin-top:0}
 .ocean-v2 #detail .dcat[data-cat="securite"]::before{content:none!important;display:none!important}
 .ocean-v2 #detail .dcat[data-cat="securite"]:not([style*="none"]){display:flex;flex-direction:column}
-/* Ordre : danger et danger principal, urgences, dangers à surveiller, courants du moment. */
+/* Ordre : danger et danger principal, urgences, dangers à surveiller, baïnes et courants, courants du moment, drapeaux
+   et notes. RIEN n’est replié ni coupé dans cet onglet, à aucune largeur et dans aucune langue. */
 #detail .dcat[data-cat="securite"]>*{order:5;min-width:0}
 #detail .dcat[data-cat="securite"]>#dDanger{order:1}
 #detail .dcat[data-cat="securite"]>.safety-block{order:2}
+#detail .dcat[data-cat="securite"]>.sx-watch{order:3}
+#detail .dcat[data-cat="securite"]>#sdRip{order:4}
 #detail .dcat[data-cat="securite"]>#spotSafetyLive{order:6}
+#detail .dcat[data-cat="securite"]>.sx-foot{order:7}
+/* Les blocs de l’onglet sont posés sur le fond (pas de carte, pas de bordure), sauf les urgences : une carte, parce
+   qu’elle se touche. */
+html .ocean-v2 #detail .dcat[data-cat="securite"]>:is(.block,.spot-safety-live,.sx-foot){margin:0 0 var(--fiche-gap);padding:0;border:0;border-radius:0;background:none!important;box-shadow:none;color:var(--t-ink)}
+#detail .dcat[data-cat="securite"] .fx-title{margin:0 0 12px}
+
 #detail .fx-danger{margin:0 0 var(--fiche-gap)}
 #detail .fx-danger-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 8px}
 #detail .fx-danger-head .fx-dots i{width:12px;height:12px}
 #detail .fx-danger-text{margin:0 0 8px;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
 #detail .fx-fit{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0 0 8px}
 #detail .fx-danger .fx-note{display:block}
-/* Numéro d’urgence : en grand, comme un relevé. */
-.ocean-v2 #detail .dcat[data-cat="securite"] .sc-num{font:800 var(--fiche-num)/.95 var(--display);letter-spacing:-.035em;font-variant-numeric:tabular-nums}
-.ocean-v2 #detail .dcat[data-cat="securite"] .sc-lab{font:600 var(--fiche-label)/1.25 var(--body);letter-spacing:0;text-transform:none;color:var(--fiche-soft)}
+
+/* Urgences : une carte. Le libellé, le numéro en grand et le bouton rouge « Appeler le {numéro} » sur une rangée, puis
+   les secours en mer, les autres numéros, le poste de secours et la date de vérification. Les nœuds de app.js gardent
+   leurs id ; .safety-call et .sc-info s’effacent (display:contents) pour que la carte les range sur une seule grille. */
+html .ocean-v2 #detail .dcat[data-cat="securite"]>.safety-block{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:16px;align-items:center;
+  padding:16px 16px 12px;border:0!important;border-radius:var(--fiche-radius);background:var(--fiche-wash)!important}
+html .ocean-v2 #detail .sx-urg :is(.safety-call,.sc-info){display:contents}
+html .ocean-v2 #detail .sx-urg .sc-lab{grid-column:1 / -1;grid-row:1;display:flex;align-items:center;gap:10px;margin:0 0 6px;font:600 var(--fiche-label)/1.25 var(--body);letter-spacing:0;text-transform:none;color:var(--t-ink)}
+html .ocean-v2 #detail .sx-urg .sc-lab .fx-ic{width:24px;height:24px}
+html .ocean-v2 #detail .dcat[data-cat="securite"] .sx-urg .sc-num{grid-column:1;grid-row:2;font:800 var(--fiche-num)/.95 var(--display);letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--t-ink);overflow-wrap:anywhere}
+html .ocean-v2 #detail .sx-urg #dCall{grid-column:2;grid-row:2;justify-self:stretch;display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;min-height:52px;margin:0;padding:8px 16px;box-sizing:border-box;
+  border:0;border-radius:999px;background:var(--t-danger);color:var(--t-on-alert);font:700 var(--fiche-text)/1.2 var(--body);text-align:center;white-space:normal;box-shadow:none;text-decoration:none}
+html .ocean-v2 #detail .sx-urg #dCall .uic{width:18px;height:18px;flex:none;color:currentColor}
+html .ocean-v2 #detail .sx-urg #dCall:focus-visible{outline:2px solid var(--t-danger);outline-offset:3px}
+/* Pas de numéro composable (« À confirmer ») : le texte prend toute la largeur. */
+html .ocean-v2 #detail .sx-urg:has(#dCall[hidden]) .sc-num{grid-column:1 / -1;font-size:calc(var(--fiche-num) * .62);line-height:1.1}
+html .ocean-v2 #detail .sx-urg :is(#dSea,#dEmergMore){grid-column:1 / -1;margin:10px 0 0;font:400 var(--fiche-text)/1.4 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .sx-urg #dEmergMore{grid-row:4;margin-top:4px}
+html .ocean-v2 #detail .sx-urg #dEmergMore .sc-sea{margin:2px 0 0;font:inherit;color:inherit}
+html .ocean-v2 #detail .sx-urg #dSea{grid-row:3}
+html .ocean-v2 #detail .sx-urg #dEmergMore[hidden],html .ocean-v2 #detail .sx-urg #dEmergChecked[hidden]{display:none}
+html .ocean-v2 #detail .sx-urg #dRescue{grid-column:1 / -1;grid-row:5;justify-self:start;display:inline-flex;align-items:center;gap:9px;width:auto;min-width:0;min-height:44px;margin:6px 0 0;padding:0 2px;
+  border:0;border-radius:0;background:none;box-shadow:none;font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-main);text-align:start;cursor:pointer}
+html .ocean-v2 #detail .sx-urg #dRescue .uic{width:20px;height:20px;flex:none;padding:0;background:none;color:currentColor}
+html .ocean-v2 #detail .sx-urg #dEmergChecked{grid-column:1 / -1;grid-row:6;margin:0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+
+/* À surveiller : une ligne par danger, pictogramme et phrase entière. Le danger principal (première ligne, data-main)
+   est déjà écrit en tête de l’onglet : il n’est pas répété. Sans autre danger, le bloc ne s’affiche pas. */
+#detail .sx-watch #dDangers>.danger-item[data-main]{display:none}
+html .ocean-v2 #detail .dcat[data-cat="securite"]>.sx-watch:has(#dDangers>.danger-item[data-main]):not(:has(#dDangers>.danger-item:not([data-main]))){display:none}
+html .ocean-v2 #detail .sx-watch .danger-item{display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:14px;align-items:start;margin:0;padding:9px 0;border:0;background:none;
+  font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+/* Pictogramme en trait (dangerTrait, app.js), couleur du texte, aligné sur la première ligne de la phrase. */
+html .ocean-v2 #detail .sx-watch .danger-item .di{display:block;width:28px;height:28px;padding:0;border-radius:0;background:none!important;box-shadow:none;margin-top:-2px;color:var(--t-ink)!important}
+html .ocean-v2 #detail .sx-watch .danger-item .di .fx-ic{display:block;width:28px;height:28px;color:inherit}
+html .ocean-v2 #detail .sx-watch #dDangers>p{margin:0 0 4px;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+/* Sans danger listé : « Danger non évalué » est déjà le titre de l’onglet, seule la consigne reste ici. */
+#detail .sx-watch #dDangers>p[data-unrated]{display:none}
+html .ocean-v2 #detail .sx-watch .carnet-unverified{font:400 var(--fiche-note)/1.4 var(--body)!important;color:var(--fiche-soft)!important}
+
+/* Repérer une baïne ou un courant, Si tu es emporté : listes courtes, texte entier, sources dessous. */
+html .ocean-v2 #detail .dcat[data-cat="securite"]>#sdRip h4{display:block;margin:0 0 10px;font:800 calc(var(--fiche-title) * .8)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
+html .ocean-v2 #detail #sdRip h4 svg{display:none}
+html .ocean-v2 #detail #sdRip .sd-rip-part+.sd-rip-part{margin-top:var(--fiche-gap);padding-top:0;border-top:0}
+html .ocean-v2 #detail #sdRip ul{margin:0;padding:0 0 0 20px}
+html .ocean-v2 #detail #sdRip li{margin:0 0 8px;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="securite"] :is(.sd-coach-src,.sd-src,.sd-rip-part>p,.sd-rip-part a){font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+
+/* Courants et dangers à vérifier (données du moment) : titre, heure du modèle en note, schéma, deux relevés sans carte. */
+html .ocean-v2 #detail #spotSafetyLive .safety-live-head{display:block;margin:0 0 12px}
+html .ocean-v2 #detail #spotSafetyLive .safety-live-head .fx-title{margin:0 0 4px}
+html .ocean-v2 #detail #spotSafetyLive .safety-live-pill{display:block;padding:0;border:0;border-radius:0;background:none;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft);white-space:normal}
+html .ocean-v2 #detail #spotSafetyLive .safety-diagram{margin:0 0 12px;border-radius:var(--fiche-radius);overflow:hidden}
+/* Légendes du schéma en casse de phrase (spot-experience.js), sans approche élargie : un peu plus grandes qu’avant. */
+html .ocean-v2 #detail #spotSafetyLive .safety-diagram text{font-weight:700;font-size:var(--fiche-note);font-family:var(--body);letter-spacing:0}
+html .ocean-v2 #detail #spotSafetyLive .safety-readings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:4px 0 10px}
+html .ocean-v2 #detail #spotSafetyLive .safety-readings>span{display:grid;gap:3px;align-content:start;min-width:0;padding:0;border:0;background:none;box-shadow:none}
+html .ocean-v2 #detail #spotSafetyLive .safety-readings b{font:800 calc(var(--fiche-num) * .62)/1.05 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--t-ink);overflow-wrap:anywhere}
+html .ocean-v2 #detail #spotSafetyLive .safety-readings small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+html .ocean-v2 #detail #spotSafetyLive :is(.safety-disclaimer,.safety-tip-source){font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+html .ocean-v2 #detail #spotSafetyLive .safety-tips{gap:10px;margin:0 0 12px}
+html .ocean-v2 #detail #spotSafetyLive .safety-tips li{padding:0;border:0;border-radius:0;background:none;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+
+/* Drapeaux de baignade et avertissements : texte entier, en pied d’onglet. */
+html .ocean-v2 #detail .sx-foot .flags{margin:0 0 14px}
+html .ocean-v2 #detail .sx-foot .fl-title{display:block;margin:0 0 8px}
+html .ocean-v2 #detail .sx-foot .field-flags-note{margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .sx-foot .safety-note{margin:0;padding:0;border:0;border-radius:0;background:none;font:400 var(--fiche-note)/1.45 var(--body);color:var(--fiche-soft)}
 
 /* fin de la section Sécurité (ne rien écrire entre ces deux lignes de séparation)
    ----------------------------------------------------------------------------------------------------- */
@@ -214,6 +288,103 @@ html #detail #detailHero .hero-more>b{display:none}
 #detail .dcat[data-cat="infos"] #fieldAtAGlance{display:none!important}
 /* Numéros de chapitre des sections du guide. */
 #detail .guide-chapter-number{display:none!important}
+/* Les pastilles « Le mot du coin », « À goûter », « Dès … la nuit » : le mot et le plat sont sur la ligne vers la page
+   culture du pays (spot-guide.js), la nuit se lit dans Préparer. */
+#detail .dcat[data-cat="infos"] #guideGlance{display:none!important}
+
+/* Ordre : description, Le savais-tu ?, repères pratiques, conseil de Poulpy, le bon geste et la culture du pays,
+   sources et crédits, puis les replis « Photos et carte » et « Comprendre le spot », et « J’ai surfé ici » en bas.
+   Tout est posé sur le fond : ni carte, ni bordure (les replis se touchent : pastille de fond léger). */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>:is(.block,.field-visit,#guideSpirit,.field-reference){margin:0 0 var(--fiche-gap);padding:0;border:0;border-radius:0;background:none!important;box-shadow:none;color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .fx-title{margin:0 0 10px}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.block>h4{display:flex;align-items:center;gap:10px;margin:0 0 10px;font:800 calc(var(--fiche-title) * .8)/1.1 var(--display);letter-spacing:-.02em;text-transform:none;color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.block>h4>svg{display:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-story>h4{display:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.block p{margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+
+/* La description entière, en texte courant, puis sa provenance et les coordonnées en note. */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-story{padding:0}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #dDesc{margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-story .spot-provenance{display:block;margin:10px 0 0!important;padding:0;border:0;border-radius:0;background:none;font:400 var(--fiche-note)/1.4 var(--body)!important;color:var(--fiche-soft)!important}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .spot-provenance a{color:inherit}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-story>.field-coordinates{margin:4px 0 0;font:400 var(--fiche-note)/1.4 var(--body);letter-spacing:0;color:var(--fiche-soft)}
+
+/* Le savais-tu ? et « La vraie histoire ». */
+html .ocean-v2 #detail .dcat[data-cat="infos"] .anec-more{margin:12px 0 0;padding:0;border:0}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .anec-more b{display:block;margin:0 0 4px;font:600 var(--fiche-label)/1.25 var(--body);letter-spacing:0;text-transform:none;color:var(--fiche-soft)}
+
+/* Repères pratiques : libellé, texte, sources de chaque ligne. */
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-visit dl{margin:0}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-visit-row{display:block;padding:0;margin:0 0 14px;border:0}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-visit-row dt{margin:0 0 2px;font:600 var(--fiche-label)/1.25 var(--body);letter-spacing:0;color:var(--fiche-soft)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-visit-row dd{margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-visit-cites .field-visit-source{display:block;margin:4px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft);text-decoration:underline;text-underline-offset:3px}
+html .ocean-v2 #detail .dcat[data-cat="infos"] span.field-visit-source{text-decoration:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"] :is(.field-visit-caution,.field-visit-pending){margin:0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+
+/* Le conseil de Poulpy : son visage à côté du titre, le texte dessous. */
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-tip .tip-head{display:flex;align-items:center;gap:10px;margin:0 0 8px}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-tip .tip-head h4{margin:0;font:800 calc(var(--fiche-title) * .8)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-tip .tip-octo,html .ocean-v2 #detail .dcat[data-cat="infos"] .field-tip .tip-octo svg{width:34px;height:34px}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-tip .carnet-unverified{font:400 var(--fiche-note)/1.4 var(--body)!important;color:var(--fiche-soft)!important}
+
+/* Le bon geste, puis une ligne vers la page culture du pays (le mot du coin et le plat à goûter dessous). */
+#detail .sg-geste{margin:0 0 18px}
+/* Bon geste qui reprend le conseil de Poulpy et le prolonge : le conseil n’est pas répété au-dessus (spot-guide.js). */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-tip[data-in-geste]{display:none!important}
+#detail .sg-cult{display:grid;grid-template-columns:26px minmax(0,1fr) auto;column-gap:12px;align-items:center;width:100%;min-height:56px;margin:0;padding:12px 16px 12px 14px;box-sizing:border-box;
+  border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash);color:var(--t-ink);font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#detail .sg-cult::after{content:"";width:8px;height:8px;margin-inline-end:4px;border-top:2px solid var(--t-main);border-right:2px solid var(--t-main);transform:rotate(45deg)}
+[dir=rtl] #detail .sg-cult::after{transform:rotate(-135deg)}
+#detail .sg-cult-static{cursor:default}
+#detail .sg-cult-static::after{content:none}
+#detail .sg-cult:focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
+#detail .sg-cult .fx-ic{color:var(--t-main)}
+#detail .sg-cult-tx{display:grid;gap:3px;min-width:0}
+#detail .sg-cult-tx>b{font:700 var(--fiche-text)/1.25 var(--body);color:var(--t-ink);overflow-wrap:anywhere}
+#detail .sg-cult-bits{display:flex;flex-wrap:wrap;gap:2px 12px;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .sg-cult-bit{min-width:0;overflow-wrap:anywhere}
+#detail #guideSpirit>.fx-note{margin:8px 0 0}
+
+/* Sources du catalogue et crédit de la photo : des notes. */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-reference{display:grid;gap:4px;padding:0}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-reference>a,html .ocean-v2 #detail .dcat[data-cat="infos"] .field-reference .field-source{display:block;max-width:none;min-height:0;margin:0;text-align:start;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-reference .field-source small{display:inline;margin:0;font:inherit;letter-spacing:0;text-transform:none;color:inherit}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-reference .field-source b{font:inherit;color:inherit;text-decoration:underline;text-underline-offset:3px}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-reference .field-source small::after{content:" : "}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-reference .field-source span{display:block}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-source-pending{margin:0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+
+/* Replis « Photos et carte » et « Comprendre le spot » : une pastille de fond léger, sans bordure. */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head{min-height:56px;margin:0 0 10px;border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash)}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head .obf-tx b{font:700 var(--fiche-text)/1.25 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head .obf-tx small{font:400 var(--fiche-note)/1.35 var(--body);white-space:normal;overflow:visible;text-overflow:clip}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head .obf-chev{background:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head[aria-expanded="true"]{margin-bottom:14px}
+
+/* Dans « Photos et carte » : les sur-titres en capitales ne s’affichent pas (le titre et le texte disent la même chose). */
+html .ocean-v2 #detail .dcat[data-cat="infos"] :is(#spotVideoPanel .experience-heading small,#spotAreaMap .area-map-heading small,#obVoyageBanner small,.gallery-empty>small){display:none}
+/* Les photos et la carte du secteur sont posées sur le fond (ni filet, ni carte autour de la carte), avec les titres et
+   les notes de la fiche. Le lien des vidéos est une carte légère, parce qu’il se touche. */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>:is(#spotVideoPanel,#spotAreaMap){margin:0 0 var(--fiche-gap);padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"] :is(#spotVideoPanel .experience-heading b,#spotAreaMap .area-map-heading h3){margin:0 0 4px;font:800 calc(var(--fiche-title) * .8)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotVideoPanel .experience-heading i{margin:0;font:400 var(--fiche-note)/1.4 var(--body);font-style:normal;color:var(--fiche-soft)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotVideoPanel .experience-video-search{min-height:56px;border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotVideoPanel .experience-video-search>span:first-child{background:var(--t-card);color:var(--t-main)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotVideoPanel .experience-video-search b{font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotVideoPanel .experience-video-search small{font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotAreaMap .area-map-heading p{max-width:none;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotAreaMap .area-map-canvas{margin-top:12px;border:0;border-radius:var(--fiche-radius)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotAreaMap .area-map-legend{font:600 var(--fiche-note)/1.3 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotAreaMap .area-map-footer{display:grid;gap:4px;justify-content:start;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotAreaMap .area-map-footer a{display:inline-flex;align-items:center;min-height:44px;font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-main)}
+
+/* « J’ai surfé ici » (ou son équivalent), en bas de l’onglet : un bouton large, texte entier. */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 10px;width:100%;min-height:52px;margin:16px 0 8px;padding:10px 18px;box-sizing:border-box;
+  border:0;border-radius:999px;background:var(--t-main)!important;color:var(--t-on-main);box-shadow:none!important;font:700 var(--fiche-text)/1.2 var(--body);letter-spacing:0;text-transform:none;white-space:normal;overflow:visible;text-align:center}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn::before,html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn::after{content:none!important;display:none!important}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn .cta-xp{flex:none;padding:4px 9px;border:0;border-radius:999px;background:color-mix(in srgb,var(--t-on-main) 18%,transparent);color:inherit;font:600 var(--fiche-note)/1 var(--body)}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn :is(svg,img,.spico){flex:none}
 
 /* fin de la section Le spot (ne rien écrire entre ces deux lignes de séparation)
    ----------------------------------------------------------------------------------------------------- */
