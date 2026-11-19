@@ -131,15 +131,17 @@
   /* Résultat du mot du jour : le nom du pays n’est jamais coupé par « … ». Mesuré une fois posé (texte déjà dans la langue
      affichée, polices chargées) : si « Découvrir <pays> » ou le nom déborde, le bloc passe en .is-long (cultures.css,
      fiches-organisation.css) : le tampon reste seul à gauche (il porte le nom en entier) et le bouton prend la place,
-     sur deux lignes centrées en corps plus petit ; hauteurs inchangées. */
+     sur deux lignes centrées en corps plus petit ; hauteurs inchangées. Même chose quand le nom et la phrase qui le suit
+     (« Abre su página para conseguir su sello. » sur trois lignes, espagnol à 375 px) dépassent la hauteur du bloc. */
   function fitDone(){
     const over=el=>!!el&&el.scrollWidth>el.clientWidth+1;
+    const tall=el=>!!el&&el.scrollHeight>el.clientHeight+1;
     /* Réponses du jeu (téléphone : trois boutons côte à côte) : le nom du pays se lit en entier, jamais « … » ni coupé au
        milieu d’un mot. Deux lignes ; sinon trois lignes, puis un corps plus petit (data-fit 1 à 3, fiches-organisation.css).
        Les boutons gardent leur hauteur commune. */
     const cut=el=>!!el&&(el.scrollWidth>el.clientWidth+1||el.scrollHeight>el.clientHeight+1);
     const fitChoices=()=>document.querySelectorAll('.cult-choice').forEach(b=>{const sp=b.querySelector('span');if(!sp)return;b.removeAttribute('data-fit');for(let i=1;i<=3&&cut(sp);i++)b.dataset.fit=String(i);});
-    const run=()=>{try{document.querySelectorAll('.cult-quiz-done').forEach(d=>{d.classList.remove('is-long');if(over(d.querySelector('.cult-quiz-go'))||over(d.querySelector('.cult-quiz-res>div>b')))d.classList.add('is-long');});fitChoices();}catch(e){}};
+    const run=()=>{try{document.querySelectorAll('.cult-quiz-done').forEach(d=>{d.classList.remove('is-long');if(over(d.querySelector('.cult-quiz-go'))||over(d.querySelector('.cult-quiz-res>div>b'))||tall(d.querySelector('.cult-quiz-res')))d.classList.add('is-long');});fitChoices();}catch(e){}};
     /* Jamais d’erreur vers l’appelant (remplissage de l’accueil, retour du réseau) : mesure à l’image suivante quand elle existe. */
     const next=f=>typeof requestAnimationFrame==='function'?requestAnimationFrame(f):setTimeout(f,0);
     next(run);
