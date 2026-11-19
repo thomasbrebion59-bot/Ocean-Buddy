@@ -136,6 +136,7 @@ function segments(text) {
 }
 
 const LETTERS = /[A-Za-zÀ-ÖØ-öø-ÿŒœ]/g;
+const SELECTOR_TOKEN = /^(?:[>+~]|(?:[a-z*][\w-]*)?(?:[.#][\w-]+|\[[\w-]+(?:[~|^$*]?=[^\]]*)?\]|::?[\w-]+(?:\([^)]*\))?)*,?)$/;
 function isHumanText(s) {
   if (s.length < 2) return false;
   if ((s.match(LETTERS) || []).length < 2) return false;
@@ -143,6 +144,8 @@ function isHumanText(s) {
   if (/[{};]\s*$/.test(s) && /:/.test(s) && !/\{\d+\}/.test(s)) return false;          // CSS
   if (/^[\w-]+\s*:\s*[^ ]+;/.test(s)) return false;                                      // style inline
   if (/^[.#\[][\w-]/.test(s)) return false;                                               // sélecteurs
+  // sélecteurs composés qui commencent par une balise (« dialog.cult-sheet[open] .cult-ix ») : que des jetons de sélecteur
+  if (/[.#\[][a-z]/.test(s) && !/[A-ZÀ-ÖØ-öø-ÿŒœ’]/.test(s) && s.split(/\s+/).every(t => SELECTOR_TOKEN.test(t))) return false;
   if (/\.(jpe?g|png|webp|tiff?|svg|gif)\b/i.test(s)) return false;                         // noms de fichiers
   if (/^(CC[ -]|Public domain|GFDL|Copyrighted free use)/i.test(s)) return false;            // licences
   if (/^(var|rgba?|hsla?|calc|url|translate|scale|rotate|cubic-bezier)\(/i.test(s)) return false;
@@ -225,11 +228,14 @@ for (const m of fs.readFileSync(path.join(ROOT, 'mobile', 'client.js'), 'utf8').
 //   - « pays » et « continents » : libellés d’un seul mot des chiffres du passeport (passport.js, stat(…, 'pays'))
 //   - « Retour vers {0} » : libellé d’accessibilité du bouton Retour, 'Retour vers '+destination dans navigation.js
 //     (« Volver hacia l’accueil » sans ce gabarit : seule la première moitié était traduite)
+//   - « <b>{0} : {1}</b> » : pastille du verdict du mois (onglet Saisons, spot-data.js), seule dans son élément ; sans
+//     mot hors des balises, la règle des phrases mises en forme ne l’extrait pas (ponctuation de la langue : « Surf: top »)
 const KEEP_KEYS = [
   'Défi validé ! +{0} XP',
   'pays',
   'continents',
   'Retour vers {0}',
+  '<b>{0} : {1}</b>',
 ];
 for (const k of KEEP_KEYS) add(k, 'app.js (conservé)', true);
 

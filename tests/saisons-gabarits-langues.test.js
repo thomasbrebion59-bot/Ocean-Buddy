@@ -14,21 +14,37 @@ test('saisons : jours de pluie par Intl, « 21 j » en français, « 21 days » 
 });
 
 test('saisons : verdict, raisons et houle traduits en anglais et en espagnol', () => {
-  assert.equal(T('en', '<b>Plongée : top</b> en novembre'), '<b>Diving: top</b> in novembre', 'gabarit du verdict (le mois vient déjà d’Intl)');
-  assert.equal(T('es', '<b>Plongée : top</b> en noviembre'), '<b>Buceo: lo mejor</b> en noviembre', 'ponctuation espagnole, sans espace avant les deux-points');
+  /* Fiche v2 : le titre « En novembre » dit le mois, le verdict ne le répète plus : la pastille seule, traduite d’un bloc. */
+  assert.equal(T('en', '<b>Plongée : top</b>'), '<b>Diving: top</b>', 'gabarit du verdict');
+  assert.equal(T('es', '<b>Plongée : top</b>'), '<b>Buceo: lo mejor</b>', 'ponctuation espagnole, sans espace avant les deux-points');
+  assert.ok(JSON.parse(read('locales/source/fr.json')).includes('<b>{0} : {1}</b>'), 'gabarit gardé par l’extraction (KEEP_KEYS)');
   assert.equal(T('en', 'eau à 29 °C'), 'water at 29 °C');
   assert.equal(T('es', 'mois pluvieux'), 'mes lluvioso');
-  assert.equal(T('en', '4 s · venue du sud-est'), '4 s · coming from the southeast');
-  assert.equal(T('es', '4 s · venue du sud-est'), '4 s · procedente del sureste');
-  assert.equal(T('en', '9 s · venue d’ouest'), '9 s · coming from the west');
+  /* Houle du mois : la période à côté de la hauteur (« m (4 s) »), la direction seule en sous-ligne. */
+  assert.equal(T('en', 'venue du sud-est'), 'coming from the southeast');
+  assert.equal(T('es', 'venue du sud-est'), 'procedente del sureste');
+  assert.equal(T('en', 'venue d’ouest'), 'coming from the west');
+  /* Courbes : titre et précision séparés (plus de point médian). */
+  assert.equal(T('en', 'heures par jour (estimation)'), 'hours per day (estimate)');
+  assert.equal(T('es', 'jours de pluie dans le mois'), 'días de lluvia en el mes');
+  /* Sources des normales : une phrase par élément, chacune traduite. */
+  assert.equal(T('en', 'La houle est celle du large : la plage peut être plus abritée ou plus exposée.'), 'Swell is offshore: the beach may be more sheltered or more exposed.');
+  assert.equal(T('es', 'Le soleil est estimé à partir du rayonnement mesuré par satellite.'), 'La luz solar se estima a partir de la radiación medida por satélite.');
+  assert.equal(T('en', 'Normales calculées sur plusieurs années pour le secteur du spot :'), 'Averages calculated over several years for the spot area:');
+  assert.equal(T('en', 'air, pluie, vent et soleil : NASA POWER, 2010-2024'), 'air, rain, wind and sunshine: NASA POWER, 2010-2024');
+  assert.equal(T('es', 'houle : modèle WaveWatch III (NOAA, PacIOOS), 2017-2025'), 'oleaje: modelo WaveWatch III (NOAA, PacIOOS), 2017-2025');
 });
 
 test('saisons : chaque raison dans son élément, jours de pluie par Intl, houle sans direction sans séparateur orphelin', () => {
   const js = read('spot-data.js');
-  assert.match(js, /return bits\.length \? ' · ' \+ bits\.map\(b => `<span>\$\{esc\(b\)\}<\/span>`\)\.join\(', '\) : '';/);
-  assert.match(js, /const head = L == null \? '' : `<b>\$\{esc\(sportLabel\(act\)\)\} : \$\{esc\(LEVEL_TXT\[L\]\.toLowerCase\(\)\)\}<\/b> en \$\{esc\(monthName\(selMonth\)\)\}`;/);
-  assert.match(js, /<span class="sd-vmain">\$\{head\}<\/span>\$\{verdictWhy\(act, d\)\}/);
-  assert.match(js, /M\.DIR_FROM\[d\.dir\] \? `\$\{num\(d\.tp\)\} s · venue \$\{M\.DIR_FROM\[d\.dir\]\}` : `\$\{num\(d\.tp\)\} s`/);
-  assert.match(js, /bars\('wet', a\.wet, 'Pluie · jours de pluie dans le mois', days, 0, 'b-rain'\);/);
+  assert.match(js, /return bits\.length \? `<span class="sd-why">\$\{bits\.map\(b => `<span>\$\{esc\(b\)\}<\/span>`\)\.join\(', '\)\}<\/span>` : '';/);
+  assert.match(js, /const head = L == null \? '' : `<b>\$\{esc\(sportLabel\(act\)\)\} : \$\{esc\(LEVEL_TXT\[L\]\.toLowerCase\(\)\)\}<\/b>`;/);
+  /* Une espace entre la pastille et les raisons : lecture vocale et copier-coller ne les collent plus (« Surf : top houle… »). */
+  assert.match(js, /const why = verdictWhy\(act, d\);/);
+  assert.match(js, /<span class="sd-vmain">\$\{head\}<\/span>\$\{why \? ' ' \+ why : ''\}<\/p>/);
+  assert.match(js, /`m \(\$\{num\(d\.tp\)\} s\)`, M\.DIR_FROM\[d\.dir\] \? `venue \$\{M\.DIR_FROM\[d\.dir\]\}` : ''/);
+  assert.match(js, /bars\('wet', a\.wet, \['Pluie', 'jours de pluie dans le mois'\], days, 0, 'b-rain'\);/);
+  /* Jours de pluie : nombre et unité d’Intl séparés pour le relevé (« 16 » et « j », « days », « d »). */
+  assert.match(js, /formatToParts\(v\)/);
   assert.doesNotMatch(js, /\$\{num\(d\.wet\)\} j`|' j', 0/, 'plus de « j » français en dur');
 });

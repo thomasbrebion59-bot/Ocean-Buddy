@@ -94,7 +94,8 @@
      espèces « À connaître avant de te mettre à l’eau », avertissements de créneau. */
   const TAB_GROUPS = {
     saisons: [
-      { id: 'courbes', title: 'L’année en courbes', sub: 'Températures, soleil, pluie, houle, vent et sources', members: ['#dSeasons>.sd-charts', '#dSeasons>.sd-rose', '#dSeasons>.sd-table', '#dSeasons>.sd-src'] }
+      /* Fiche v2 : les sources des normales restent visibles sous la section repliée. */
+      { id: 'courbes', title: 'L’année en courbes', sub: 'Températures, soleil, pluie et vent', members: ['#dSeasons>.sd-charts', '#dSeasons>.sd-rose', '#dSeasons>.sd-table'] }
     ],
     meteo: [
       { id: 'lire', title: 'Comprendre ces chiffres', sub: 'Le vent, la houle et la marée, expliqués', members: ['#sdCoach', '#imWeatherHelp'] }

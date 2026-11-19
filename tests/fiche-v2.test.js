@@ -192,8 +192,12 @@ test('danger : alerte dans Conditions à partir de 3 sur 4, tête de l’onglet 
 
 test('Prévisions et Conditions : un seul bloc météo, deux vues ; trois prochains jours dans Conditions', () => {
   assert.match(exp, /<div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours<\/h3><div class="fx-days">\$\{daily\.slice\(0, 3\)\.map/);
-  for (const c of ['spot-week-head', 'wx-block wx-best', 'wx-block wx-week', 'wx-block wx-hours']) assert.match(exp, new RegExp(`<div class="${c}" data-fx-view="forecast">`), c);
+  for (const c of ['wx-block wx-week', 'wx-block wx-hours']) assert.match(exp, new RegExp(`<div class="${c}" data-fx-view="forecast">`), c);
   assert.ok(exp.indexOf('wx-block wx-week" data-fx-view') < exp.indexOf('wx-block wx-hours" data-fx-view'), 'les 7 jours avant l’heure par heure');
+  /* Fiche v2, onglet Prévisions : deux titres, plus de « Cette semaine », de « Max du jour » ni de cartes de créneau. */
+  assert.match(exp, /<h3 class="fx-title">Les 7 jours<\/h3>/);
+  assert.match(exp, /<h3 class="fx-title">Heure par heure<\/h3>/);
+  assert.doesNotMatch(exp, /Cette semaine|Max du jour|wx-best|wx-slot"|class="wx-sub"/);
   assert.doesNotMatch(exp, /MÉTÉO DU SPOT/, 'plus de sur-titre en capitales');
   /* L’ancienne grille des conditions et le bloc « comparé à la normale » ne sont plus affichés (repris par les relevés). */
   assert.match(css, /#detail \.dcat\[data-cat="meteo"\]>:is\(#dCondHead,#dWeather,#sdVsNormal\)\{display:none!important\}/);
@@ -256,4 +260,74 @@ test('onglets collés : juste sous l’en-tête, la zone sûre n’est comptée 
   assert.equal(m[1], '44px');
   assert.doesNotMatch(read('fiche.css') + before, /#detail \.dtabs\{[^}]*top:calc\([^)]*--as-top/, 'jamais la zone sûre dans le décalage collé');
   assert.match(before, /@media\(min-width:960px\)\{\.ocean-v2 #detail \.dtabs\{top:0;z-index:6\}\}/, 'ordinateur : collé en haut de sa colonne');
+});
+
+/* Lot Prévisions et Saisons (fiche v2) : leurs sections de fiche.css passent par les variables de corps, sans capitales
+   espacées ; Saisons garde son contenu au style clair, les sources visibles et le rappel « jamais une prévision ». */
+const section = name => { const a = css.indexOf('ONGLET ' + name), b = css.indexOf('fin de la section', a); return css.slice(a, b).replace(/\/\*[\s\S]*?\*\//g, ''); };
+test('fiche.css, Prévisions et Saisons : corps par les variables, ni capitales ni lettres espacées', () => {
+  for (const name of ['PRÉVISIONS', 'SAISONS']) {
+    const body = section(name);
+    assert.ok(body.length > 400, name);
+    assert.deepEqual([...body.matchAll(/font:\d+ (\d+(?:\.\d+)?px)[^;}]*/g)].map(m => m[0]), [], name + ' : corps en dur');
+    assert.doesNotMatch(body, /font-size:\d/, name);
+    assert.doesNotMatch(body, /text-transform:uppercase|letter-spacing:[1-9]/, name);
+  }
+  /* Les 7 jours : une grille pour l’en-tête et les lignes (sous-grilles), colonnes alignées, chiffres tabulaires. */
+  assert.match(section('PRÉVISIONS'), /#detail \.fx7-head,#detail \.fx7-list,#detail \.fx7-row,#detail \.fx7-btn\{display:grid;grid-column:1 \/ -1;grid-template-columns:subgrid;/);
+  assert.match(section('PRÉVISIONS'), /font-variant-numeric:tabular-nums/);
+  /* Le détail du jour ne fait pas déborder les colonnes. */
+  assert.match(section('PRÉVISIONS'), /#detail \.fx7-row>:not\(\.fx7-btn\)\{grid-column:1 \/ -1;min-width:0;contain:inline-size\}/);
+  /* L’avertissement de vent de terre n’est jamais coupé. */
+  assert.doesNotMatch(section('PRÉVISIONS').match(/#detail \.fx7-caution\{[^}]*\}/)[0], /nowrap|overflow|line-clamp|max-height/);
+  /* Saisons : le panneau du mois au style clair. */
+  assert.match(section('SAISONS'), /#detail #dSeasons \.sd-month\{[^}]*background:none;box-shadow:none;color:var\(--t-ink\)\}/);
+});
+
+test('Saisons : un titre sans sur-titre, relevés du mois en composant de la fiche, plus de point médian ni de mois répété', () => {
+  const js = read('spot-data.js'), seasons = js.slice(js.indexOf('function calendar'), js.indexOf('/* Aperçu dans « Le spot »'));
+  assert.match(seasons, /<header class="sd-head"><h3 class="fx-title">Quand partir<\/h3><p class="sd-calc">\$\{CALC_NOTE\}<\/p>/);
+  assert.match(js, /const CALC_NOTE = 'Calculé d’après les moyennes de plusieurs années\. Ce n’est jamais une prévision\.';/);
+  assert.doesNotMatch(seasons, /sd-kicker|L’année à|Mois par mois, ce que la mer/);
+  assert.match(seasons, /<div class="fx-reading sd-reading k-\$\{key\}">\$\{icon\(I\[ic\], 'fx-ic'\)\}<span class="fx-label">/);
+  assert.match(seasons, /<div class="fx-readings sd-readings">\$\{tiles\.join\(''\)\}<\/div>/);
+  assert.doesNotMatch(seasons, /sd-tiles|sd-tile /);
+  /* Aucune chaîne à point médian dans l’onglet (l’aperçu de l’onglet Le spot garde le sien). */
+  assert.doesNotMatch(seasons.replace(/\/\*[\s\S]*?\*\//g, ''), /' · '|` · `| · \$\{|\} · /);
+  assert.match(seasons, /esc\(rangeText\(b\.ranges, ', '\)\)/);
+  assert.match(js, /function rangeText\(ranges, sep = ' · '\)/, 'faune et aperçu inchangés');
+  /* Verdict : la pastille seule, le mois n’est plus répété (« En novembre » le dit) ; les raisons suivent. */
+  assert.doesNotMatch(seasons, /<\/b> ce mois-ci|<\/b> en \$\{/);
+  /* Sources visibles, une phrase par élément ; la houle du large seulement s’il y a des normales de houle ; le rappel
+     « pas une prévision » n’est plus répété en pied (il est en tête de l’onglet). */
+  const src = js.slice(js.indexOf('function sources(c)'), js.indexOf('function renderSeasons'));
+  assert.match(src, /\$\{w \? ' <span>La houle est celle du large : la plage peut être plus abritée ou plus exposée\.<\/span>' : ''\}/);
+  /* Chaque source dans son élément (traduite seule) ; séparateur « ; » à la française, « ; » collé ailleurs. */
+  assert.match(src, /<span>Normales calculées sur plusieurs années pour le secteur du spot :<\/span> \$\{parts\.map\(x => `<span>\$\{esc\(x\)\}<\/span>`\)\.join\(sep\)\}\./);
+  assert.doesNotMatch(src, /Ce sont des tendances/);
+});
+
+/* Relecture du 19 nov. : petits défauts de l’onglet Saisons et de l’onglet Prévisions. */
+test('Saisons : période sous le sport = mois de la meilleure case, « Bon » d’une teinte à lui, insécables, sous-titre sans houle', () => {
+  const js = read('spot-data.js'), cal = js.slice(js.indexOf('function calendar'), js.indexOf('function calendar') + 2000);
+  /* Libellé et cases disent la même chose : les mois au meilleur niveau atteint (douze « Top » : « toute l’année »). */
+  assert.match(cal, /lv = y\.map\(M\.level\), topL = Math\.max\(-1, \.\.\.lv\.filter\(v => v != null\)\)/);
+  assert.match(cal, /const b = \{ranges: topL >= 1 \? M\.ranges\(lv\.map\(\(L, m\) => \(L === topL \? m : -1\)\)\.filter\(m => m >= 0\)\) : \[\]\};/);
+  const M = require('../spot-data-model.js');
+  assert.deepEqual(M.ranges([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]), [[0, 11]], 'douze mois → une seule plage, « toute l’année »');
+  /* « Bon » (l2) entre « Possible » (l1) et « Top » (l3), dans la section Saisons. */
+  const sec = css.slice(css.indexOf('ONGLET SAISONS'), css.indexOf('fin de la section Saisons'));
+  assert.match(sec, /#detail #dSeasons \.sd-cell\.l2,#detail #dSeasons \.sd-legend i\.l2\{background:color-mix\(in srgb,var\(--g-soft\) 50%,var\(--g-main\)\)\}/);
+  /* « 8 % de jours ≥ 25 km/h » ne se coupe plus entre le chiffre et son unité (espaces insécables, aussi en traduction). */
+  assert.ok(js.includes('`${num(d.kite)} % de jours ≥ 25 km/h`'));
+  for (const l of ['en', 'es']) assert.match(JSON.parse(read(`locales/translations/${l}.json`))['{0} % de jours ≥ 25 km/h'], /^\{0\} % .+ ≥ 25 km\/h$/);
+  /* « L’année en courbes » : un sous-titre juste aussi sur un lac (pas de houle annoncée). */
+  assert.match(read('replis.js'), /title: 'L’année en courbes', sub: 'Températures, soleil, pluie et vent'/);
+});
+
+test('Prévisions : lever et coucher écrits comme les autres heures (« 7 h 37 »), rappel du calcul sous le meilleur jour', () => {
+  assert.match(exp, /const clock = iso => \{[^\n]*if \(!window\.OB_I18N \|\| \/\^\(fr\|es\)\/\.test\(OB_I18N\.lang \|\| 'fr'\)\) return `\$\{\+m\[1\]\} h \$\{m\[2\]\}`;/);
+  assert.match(exp, /\$\{note \? `<p class="fx7-calc">\$\{esc\(note\)\}<\/p>` : ''\}<\/div>`;/);
+  assert.doesNotMatch(exp, /fx-note fx7-calc" data-fx-view="forecast"/, 'plus en pied d’onglet quand un jour est mis en avant');
+  assert.match(exp, /foot: best \? '' : note\}/, 'sans meilleur jour, le rappel reste en pied, sous l’heure du relevé');
 });
