@@ -303,7 +303,17 @@
       <div class="cult-body cult-ixbody">${WORLDS.map(([k,label])=>{const l=by.get(k);if(!l?.length)return '';const m=l.filter(c=>s.stamps[c]).length;return `<section class="cult-ixsec"><h2>${esc(label)} <small${NT}>${m}/${l.length}</small></h2><div class="cult-ixgrid">${l.map(item).join('')}</div></section>`;}).join('')}</div>`;
   }
   function openIndex(o){
-    return load().then(()=>{if(o)opener=o;current=null;show(indexHTML());});
+    return load().then(()=>{if(o)opener=o;current=null;show(indexHTML());fitIndex();});
+  }
+  /* Carnet : le nom du pays se lit en entier, jamais « … » (« SAINT VINCENT AND THE GRENADINES », « ISLAS VÍRGENES DE LOS
+     ESTADOS UNIDOS »). Mesuré une fois posé (texte dans la langue affichée, polices chargées) : corps réduit sur une ligne
+     (data-fit 1, 2 : la carte garde sa hauteur), sinon deux lignes (3, 4). cultures.css, .cult-ix b[data-fit]. */
+  function fitIndex(){
+    const over=el=>el.scrollWidth>el.clientWidth+1;
+    const run=()=>{try{document.querySelectorAll('.cult-ix>span:not(.cult-stamp)>b').forEach(b=>{b.removeAttribute('data-fit');for(let i=1;i<=4&&over(b);i++)b.dataset.fit=String(i);});}catch(e){}};
+    const next=f=>typeof requestAnimationFrame==='function'?requestAnimationFrame(f):setTimeout(f,0);
+    next(run);
+    try{document.fonts&&document.fonts.ready.then(()=>next(run));}catch(e){}
   }
   async function share(c){
     if(!c||!data?.[c])return;
@@ -380,6 +390,7 @@
   document.addEventListener('visibilitychange',()=>{if(document.hidden||!data)return;const d=M.dayKey(new Date());if(quizCache&&quizCache.d!==d){const body=$('[data-cult-quiz-body]');if(body){const t=document.createElement('div');t.innerHTML=quizHTML();body.replaceWith(t.firstElementChild);fitDone();syncMeta();}}});
 
   window.addEventListener('resize',()=>{if(document.querySelector('.cult-quiz-go,.cult-choice'))fitDone();});
+  window.addEventListener('resize',()=>{if(document.querySelector('dialog.cult-sheet[open] .cult-ix'))fitIndex();});
   api._view={word,stamped,fillHome,quizHTML,choose,open,openIndex,start,load,renderPassport,fitDone};
   start();
 })();

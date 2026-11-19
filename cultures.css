@@ -219,6 +219,12 @@ html.cult-open{overflow:hidden}
 .cult-ix>i{background:url(assets/pictos/pictos/carte.webp) center/52px no-repeat var(--t-tint)}
 .cult-ix>span:not(.cult-stamp){display:grid;gap:3px;padding:8px 10px 0;min-width:0}
 .cult-ix>span:not(.cult-stamp)>b{font:800 17px/1.05 var(--as-condensed);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Nom du pays entier, jamais « … » (cultures.js, fitIndex, mesuré une fois le carnet posé) : corps réduit sur une ligne
+   (data-fit 1 et 2 : la carte garde sa hauteur), sinon deux lignes coupées aux espaces et après les traits d’union (3 et 4). */
+.cult-ix>span:not(.cult-stamp)>b[data-fit="1"]{font-size:15px}
+.cult-ix>span:not(.cult-stamp)>b[data-fit="2"]{font-size:13.5px}
+.cult-ix>span:not(.cult-stamp)>b:is([data-fit="3"],[data-fit="4"]){font-size:15px;white-space:normal;text-overflow:clip;overflow-wrap:normal;word-break:normal;hyphens:none;text-wrap:balance}
+.cult-ix>span:not(.cult-stamp)>b[data-fit="4"]{font-size:13.5px}
 .cult-ix em{font:600 13px/1.2 var(--body);font-style:normal;color:var(--t-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .cult-ix .cult-stamp{--sf:9px;position:absolute;top:8px;right:8px;width:58px;height:58px;color:var(--t-sun);border-radius:50%;background:color-mix(in srgb,var(--t-scrim) 45%,transparent)}
 .cult-ix.is-on{border-color:color-mix(in srgb,var(--t-sun) 80%,transparent);box-shadow:0 0 0 2px color-mix(in srgb,var(--t-sun) 55%,transparent)}
