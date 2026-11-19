@@ -101,8 +101,6 @@
     const ctry=country(s);
     return town&&ctry&&!town.includes(ctry)?town+', '+ctry:(town||s.name);
   }
-  let allLows=null;
-  function lows(){if(!allLows&&data)allLows=allSpots().filter(s=>!s.custom).map(s=>({id:s.id,lo:estimate(s).lo,country:country(s)}));return allLows||[];}
 
   /* ---------- Outils ---------- */
   function distance(a,b){const r=Math.PI/180,dLat=(b.lat-a.lat)*r,dLon=(b.lon-a.lon)*r,x=Math.sin(dLat/2)**2+Math.cos(a.lat*r)*Math.cos(b.lat*r)*Math.sin(dLon/2)**2;return 6371*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));}
@@ -112,7 +110,6 @@
   /* Distance et mois : fragments calculés depuis les données, en anglais hors français et marqués non traduisibles. */
   const LG=()=>lang()==='es'&&window.OCEAN_SPOT_GUIDES_ES?'es':english()?'en':'fr';
   const months=m=>`<span${NT}>${esc(M.monthsLabel(m,LG()))}</span>`;
-  const monthNow2=()=>`<span${NT}>${esc(M.monthName(monthNow(),LG()))}</span>`;
   function whereText(km,deg){
     if(LG()==='es')return km<1?'A menos de 1 km del spot':`A ${Math.round(km)} km al ${DIRS_ES[Math.round(deg/45)%8]}`;
     if(english())return km<1?'Less than 1 km from the spot':`${Math.round(km)} km ${DIRS_EN[Math.round(deg/45)%8]}`;
@@ -157,34 +154,6 @@
     if(!c||!g?.a)return [];
     return g.a.map(([n,d,k,lat,lon,wiki],i)=>{const title=wiki===1?n.replace(/’/g,"'"):wiki;const km=distance(c,{lat,lon}),deg=bearing(c,{lat,lon});return {i:i+1,n,d,k,lat,lon,title,km,deg};});
   }
-  function radar(items){
-    const far=Math.max(...items.map(x=>x.km)),nice=[2,5,10,15,20,30,40];
-    const max=nice.find(v=>v>=far)||Math.ceil(far/10)*10,R=118,C=150;
-    // Échelle en racine carrée : les lieux proches ne se chevauchent pas au centre.
-    const radius=km=>Math.max(32,Math.sqrt(km/max)*R);
-    const rings=[max/4,max/2,max].map(v=>({r:radius(v),label:Number.isInteger(v)?v:v.toFixed(1).replace('.',',')}));
-    // Les lieux très proches l’un de l’autre s’écartent un peu (rotation puis éloignement) pour rester lisibles.
-    const pos=[];
-    items.forEach(x=>{
-      let r=radius(x.km),deg=x.deg,p;
-      for(let t=0;t<14;t++){
-        const a=(deg-90)*Math.PI/180;p={...x,x:C+r*Math.cos(a),y:C+r*Math.sin(a)};
-        if(pos.every(q=>Math.hypot(q.x-p.x,q.y-p.y)>=26))break;
-        deg=x.deg+(t%2?-1:1)*Math.ceil((t+1)/2)*22;if(t===7)r=Math.min(R,r+18);
-      }
-      pos.push(p);
-    });
-    return `<svg class="guide-radar" viewBox="0 0 300 300" role="img" aria-label="Schéma des lieux à découvrir autour du spot, distances à vol d’oiseau">
-      <defs><radialGradient id="guideRadarBg" cx="50%" cy="50%" r="50%"><stop offset="0" stop-color="#ffffff"/><stop offset="1" stop-color="#dbe6ff"/></radialGradient></defs>
-      <circle cx="${C}" cy="${C}" r="${R+14}" fill="url(#guideRadarBg)"/>
-      ${rings.map(g=>`<circle cx="${C}" cy="${C}" r="${g.r}" fill="none" stroke="#9fb7f0" stroke-width="1" stroke-dasharray="3 5"/><text x="${C+4}" y="${C-g.r+12}" class="guide-radar-ring">${g.label} km</text>`).join('')}
-      <path d="M${C} ${C-R-14}V${C+R+14}M${C-R-14} ${C}H${C+R+14}" stroke="#c4d4f7" stroke-width="1"/>
-      <path d="M${C} 8l6 14h-12z" fill="#1f55e0"/><text x="${C}" y="36" text-anchor="middle" class="guide-radar-n">N</text>
-      ${pos.map(p=>`<line x1="${C}" y1="${C}" x2="${p.x.toFixed(1)}" y2="${p.y.toFixed(1)}" stroke="#ff7a55" stroke-width="1.2" stroke-dasharray="2 4" opacity=".7"/>`).join('')}
-      <circle cx="${C}" cy="${C}" r="17" fill="#1f55e0"/><clipPath id="guideRadarClip"><circle cx="${C}" cy="${C}" r="15"/></clipPath><circle cx="${C}" cy="${C}" r="15" fill="#fff"/><image href="assets/poulpy/scenes/travel-v2.webp" x="${C-15}" y="${C-15}" width="30" height="30" clip-path="url(#guideRadarClip)" preserveAspectRatio="xMidYMid slice"/>
-      ${pos.map(p=>`<g class="guide-radar-point" data-around-point="${p.i}"><circle cx="${p.x.toFixed(1)}" cy="${p.y.toFixed(1)}" r="12" fill="#ff7a55" stroke="#fff" stroke-width="3"/><text x="${p.x.toFixed(1)}" y="${(p.y+4).toFixed(1)}" text-anchor="middle">${p.i}</text></g>`).join('')}
-    </svg>`;
-  }
   function aroundTitle(s){
     const sports=typeof spotSports==='function'?spotSports(s):(s.sports||[]);
     if(typeof isInland==='function'?isInland(s):s.waterType!=='sea')return 'Au-delà du rivage.';
@@ -192,16 +161,17 @@
     if(['kitesurf','windsurf'].includes(sports[0]))return 'Quand le vent tombe.';
     return 'Au-delà de la vague.';
   }
+  /* Fiche v2 (onglet Préparer, « Autour ») : un titre simple et les lieux en cartes compactes qu’on fait glisser,
+     sans schéma ni numéros. Chaque lieu garde son lien vers la carte et vers sa page Wikipédia ; la source reste dessous. */
   function aroundHTML(s){
     const items=aroundItems(s),lang=entry(s.id)?.w||'en',c=coordsOf(s.id);
-    const head=`<div class="guide-chapter"><span class="guide-chapter-number">02</span><span class="guide-chapter-label">À découvrir autour</span></div><div class="guide-heading"><div><h3>${esc(aroundTitle(s))}</h3><p>Des lieux réels, à moins de 30 km, pour une demi-journée hors de l’eau.</p></div></div><button type="button" class="guide-around-toggle" data-around-toggle aria-expanded="false" aria-controls="guideAroundBody">Voir les lieux</button>`;
+    const head=`<h3 class="fx-title">Autour</h3><p class="fx-note px-lead">Des lieux réels, à moins de 30 km, pour une demi-journée hors de l’eau.</p>`;
     if(!items.length){
       const q=k=>'https://www.google.com/maps/search/'+encodeURIComponent(k)+(c?`/@${c.lat},${c.lon},12z`:encodeURIComponent(' '+s.loc));
-      return head+`<div class="guide-around-body" id="guideAroundBody" hidden><div class="guide-around-fallback"><p>Poulpy n’a pas encore sélectionné les incontournables de ce secteur. Explore les environs sur la carte :</p><div class="guide-chips">${[['panorama','Points de vue','point de vue'],['marche','Marchés','marché'],['rando','Randonnées','randonnée'],['musee','Musées','musée']].map(([k,label,query])=>`<a href="${esc(q(query))}" target="_blank" rel="noopener">${icon(k)}<span>${label}</span></a>`).join('')}</div></div></div>`;
+      return head+`<div class="guide-around-fallback"><p class="fx-text">Poulpy n’a pas encore sélectionné les incontournables de ce secteur. Explore les environs sur la carte :</p><div class="px-pills">${[['panorama','Points de vue','point de vue'],['marche','Marchés','marché'],['rando','Randonnées','randonnée'],['musee','Musées','musée']].map(([k,label,query])=>`<a class="fx-pill" href="${esc(q(query))}" target="_blank" rel="noopener"><span>${label}</span></a>`).join('')}</div></div>`;
     }
-    return head+`<div class="guide-around-body" id="guideAroundBody" hidden><div class="guide-around-layout"><figure class="guide-radar-wrap">${radar(items)}<figcaption>Distances à vol d’oiseau depuis le secteur du spot. Le trajet réel peut être plus long.</figcaption></figure>
-      <ol class="guide-around-list">${items.map(x=>`<li class="guide-place" data-around-item="${x.i}"><span class="guide-place-number">${x.i}</span><div class="guide-place-body"><span class="guide-place-kind">${icon(x.k)}${esc(KIND_LABEL[x.k]||'À voir')}</span><b${NT}>${esc(x.n)}</b><p${NT}>${esc(x.d)}</p><span class="guide-place-where"${english()?NT:''}>${esc(whereText(x.km,x.deg))}</span><span class="guide-place-links"><a href="${esc(mapsUrl(x.n,s))}" target="_blank" rel="noopener">${icon('map')}<span>Voir sur la carte</span></a>${x.title?`<a href="${esc(wikiUrl(lang,x.title))}" target="_blank" rel="noopener">${icon('book')}<span>En savoir plus</span></a>`:''}</span></div></li>`).join('')}</ol></div>
-      <p class="guide-source">Lieux sélectionnés par Ocean Buddy et situés grâce aux coordonnées de Wikipédia. Vérifie horaires et accès avant de partir.</p></div>`;
+    return head+`<ol class="px-rail px-places" aria-label="${esc(aroundTitle(s))}">${items.map(x=>`<li class="px-place fx-card" data-around-item="${x.i}"><span class="fx-label">${esc(KIND_LABEL[x.k]||'À voir')}</span><b${NT}>${esc(x.n)}</b><span class="fx-note"${english()?NT:''}>${esc(whereText(x.km,x.deg))}</span><p class="fx-note"${NT}>${esc(x.d)}</p><span class="px-place-links"><a href="${esc(mapsUrl(x.n,s))}" target="_blank" rel="noopener">Voir sur la carte</a>${x.title?`<a href="${esc(wikiUrl(lang,x.title))}" target="_blank" rel="noopener">En savoir plus</a>`:''}</span></li>`).join('')}</ol>
+      <p class="fx-note px-src">Lieux sélectionnés par Ocean Buddy et situés grâce aux coordonnées de Wikipédia. Vérifie horaires et accès avant de partir.</p>`;
   }
 
   /* ---------- Dormir pas cher ---------- */
@@ -216,42 +186,33 @@
     return null;
   }
   const fmtDate=d=>new Date(d+'T12:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'short'});
-  function gauge(s,e){
-    const list=lows();if(list.length<10)return '';
-    const values=list.map(x=>x.lo),min=Math.min(...values),max=Math.max(...values);
-    const scale=v=>Math.log(v/min)/Math.log(max/min)*100;
-    const more=values.filter(v=>v>e.lo).length,less=values.filter(v=>v<e.lo).length;
-    const rank=more>=less?`Moins cher que ${Math.round(more/values.length*100)} % des spots Ocean Buddy`:`Plus cher que ${Math.round(less/values.length*100)} % des spots Ocean Buddy`;
-    const same=list.filter(x=>x.country===country(s)&&x.id!==s.id);
-    const cheapest=same.length?same.reduce((a,b)=>b.lo<a.lo?b:a):null;
-    const cheapSpot=cheapest&&cheapest.lo<e.lo?spotById(cheapest.id):null;
-    return `<div class="guide-gauge"><div class="guide-gauge-head"><b>${rank}</b><span>Nuit la moins chère, basse saison</span></div>
-      <div class="guide-gauge-track" aria-hidden="true">${values.map(v=>`<i style="left:${scale(v).toFixed(1)}%"></i>`).join('')}<em style="left:${scale(e.lo).toFixed(1)}%"><span>${e.lo} €</span></em></div>
-      <div class="guide-gauge-scale" aria-hidden="true"><span>${min} €</span><span>${max} €</span></div>
-      ${cheapSpot?`<button type="button" class="guide-cheaper" data-guide-spot="${esc(cheapSpot.id)}">Plus doux dans le même pays : ${esc(cheapSpot.name.split(' — ')[0])}, dès ${cheapest.lo} € la nuit</button>`:''}</div>`;
-  }
+  /* Fiche v2 (onglet Préparer, « Dormir ») : la nuit la moins chère en grand chiffre, sa saison haute en une ligne, sa
+     source juste dessous, puis les recherches publiques en pastilles. Retirés de l’affichage : le classement parmi tous les
+     spots (jauge) et la répétition du lieu de recherche. */
   function sleepHTML(s){
     const e=estimate(s),now=monthNow(),dates=tripDates(s),pl=place(s,e);
     const links=M.searchLinks(pl,{checkin:dates?.checkin,checkout:dates?.checkout,coords:coordsOf(s.id)});
     const inPeak=e.peak.includes(now),hasPeak=e.peak.length>0;
-    const seasons=`<div class="guide-seasons"><div class="guide-season${!inPeak?' is-now':''}"><small>Hors haute saison</small><b>${M.euros({lo:e.lo,hi:e.hi})}</b>${!inPeak?`<span>En ce moment · ${monthNow2()}</span>`:''}</div>${hasPeak?`<div class="guide-season peak${inPeak?' is-now':''}"><small>Haute saison · ${months(e.peak)}</small><b>${M.euros({lo:e.peakLo,hi:e.peakHi})}</b>${inPeak?`<span>En ce moment · ${monthNow2()}</span>`:''}</div>`:''}</div>`;
+    /* Les mois s’écrivent ici en texte simple, déjà dans la langue de l’app : un élément au milieu de la phrase la
+       couperait en deux pour i18n.js, qui ne reconnaîtrait plus « Haute saison ({0}) : {1} la nuit. ». */
+    const peakMonths=esc(M.monthsLabel(e.peak,LG()));
+    const peak=!hasPeak?'':inPeak?`<p class="fx-note px-peak">En ce moment, c’est la haute saison (${peakMonths}) : ${M.euros({lo:e.peakLo,hi:e.peakHi})} la nuit.</p>`:`<p class="fx-note px-peak">Haute saison (${peakMonths}) : ${M.euros({lo:e.peakLo,hi:e.peakHi})} la nuit.</p>`;
     const buttons=[['booking','Booking.com'],['hostelworld','Hostelworld'],['airbnb','Airbnb'],['google','Google Hôtels']];
     if(e.type==='camping')buttons.unshift(['camping','Campings sur la carte']);
-    return `<div class="guide-chapter"><span class="guide-chapter-number">03</span><span class="guide-chapter-label">Dormir pas cher</span></div>
-      <div class="guide-sleep-grid">
-        <div class="guide-ticket">
-          <div class="guide-ticket-top"><span class="guide-ticket-icon">${icon(e.type)}</span><div><small>La nuit la moins chère</small><b>${lab(e)}</b></div></div>
-          <p class="guide-price"><strong>${M.euros({lo:e.lo,hi:e.hi})}</strong><span>par nuit, pour une personne</span></p>
-          <p class="guide-ticket-detail">${esc(e.detail)}</p>
-          ${seasons}
-          ${e.alt?`<p class="guide-alt">${icon(e.alt.type)}<span>Sans tente : ${esc(e.alt.label.toLowerCase())}, ${M.euros(e.alt)} la nuit.</span></p>`:''}
-          <p class="guide-disclaimer">Estimation indicative Ocean Buddy · ${M.EDITION} · les prix varient selon la saison.</p>
-        </div>
-        <div class="guide-sleep-side">
-          ${gauge(s,e)}
-          <div class="guide-search"><small>Chercher un lit près du spot</small><b class="guide-search-place">${icon('compass')}<span>${esc(pl)}</span></b>${dates?`<p class="guide-search-dates">${icon('calendar')}<span>Dates de ton voyage « ${esc(dates.name)} » : du ${esc(fmtDate(dates.checkin))} au ${esc(fmtDate(dates.checkout))}.</span></p>`:''}<div class="guide-search-links">${buttons.map(([k,label])=>`<a href="${esc(links[k])}" target="_blank" rel="noopener"><span>${label}</span></a>`).join('')}</div><p>Recherches publiques, sans lien sponsorisé. Compare les avis et les conditions d’annulation.</p></div>
-          <div class="guide-compare-slot">${window.OceanNotebook?.button(s.id)||''}<span>Ajoute ce spot au comparateur pour mettre les budgets côte à côte.</span></div>
-        </div>
+    return `<h3 class="fx-title">Dormir</h3>
+      <div class="px-sleep">
+        <span class="fx-label">La nuit la moins chère</span>
+        <p class="px-price"><b class="fx-num">${M.euros({lo:e.lo,hi:e.hi})}</b><span class="fx-unit">par nuit, pour une personne</span></p>
+        <p class="fx-text px-type"><b>${lab(e)}</b><span>${esc(e.detail)}</span></p>
+        ${peak}
+        ${e.alt?`<p class="fx-note">Sans tente : ${esc(e.alt.label.toLowerCase())}, ${M.euros(e.alt)} la nuit.</p>`:''}
+        <p class="fx-note px-src">Estimation indicative Ocean Buddy (${M.EDITION}), les prix varient selon la saison.</p>
+      </div>
+      <div class="px-search">
+        <span class="fx-label">Chercher un lit près du spot</span>
+        ${dates?`<p class="fx-note">Dates de ton voyage « ${esc(dates.name)} » : du ${esc(fmtDate(dates.checkin))} au ${esc(fmtDate(dates.checkout))}.</p>`:''}
+        <div class="px-pills">${buttons.map(([k,label])=>`<a class="fx-pill" href="${esc(links[k])}" target="_blank" rel="noopener"><span>${label}</span></a>`).join('')}${window.OceanNotebook?.button(s.id)||''}</div>
+        <p class="fx-note">Recherches publiques, sans lien sponsorisé. Compare les avis et les conditions d’annulation.</p>
       </div>`;
   }
 
@@ -328,11 +289,7 @@
   document.addEventListener('click',e=>{
     const jump=e.target.closest('[data-guide-jump]');
     if(jump){const target=document.getElementById(jump.dataset.guideJump);if(target){target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}return;}
-    const tog=e.target.closest('[data-around-toggle]');
-    if(tog){const body=document.getElementById('guideAroundBody');if(body){const open=body.hidden;body.hidden=!open;tog.setAttribute('aria-expanded',String(open));tog.textContent=open?'Masquer les lieux':'Voir les lieux';}return;}
     const go=e.target.closest('[data-guide-spot]');if(go){openSpot(go.dataset.guideSpot);return;}
-    const point=e.target.closest('[data-around-point]');
-    if(point){const item=document.querySelector(`[data-around-item="${point.dataset.aroundPoint}"]`);if(item){item.classList.remove('is-flash');void item.offsetWidth;item.classList.add('is-flash');item.scrollIntoView({behavior:'smooth',block:'nearest'});}}
   });
 
   /* ---------- Comparateur ---------- */

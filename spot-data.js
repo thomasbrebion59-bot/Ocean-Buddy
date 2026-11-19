@@ -338,16 +338,18 @@
     try { cur = (ci.cur || []).map(k => `${new Intl.DisplayNames([lang()], { type: 'currency' }).of(k)} (${k})`).join(' · '); } catch (e) { cur = (ci.cur || []).join(' · '); }
     try { lng = (ci.lang || []).map(k => new Intl.DisplayNames([lang()], { type: 'language' }).of(k)).join(' · '); } catch (e) { lng = ''; }
     const ap = (a.ap || []).slice(0, 3).map((p, i) => `<li class="${i === 0 ? 'first' : ''}"><span class="sd-iata"${NT}>${esc(p[0])}</span><span class="sd-ap"><b${NT}>${esc(p[1])}</b><small${NT}>${esc(p[2] || '')}</small></span><span class="sd-km">${num(p[3])} km${p[4] ? '<em>international</em>' : ''}</span></li>`).join('');
-    const flights = a.ap && a.ap[0] ? `<a class="sd-link" href="https://www.google.com/travel/flights?q=${encodeURIComponent('Flights to ' + a.ap[0][0])}" target="_blank" rel="noopener noreferrer">${icon(I.plane)}Chercher un vol vers ${esc(a.ap[0][0])}</a>` : '';
-    host.innerHTML = `<header class="sd-head small"><p class="sd-kicker">${icon(I.plane)}Y aller</p><h3>Le voyage jusqu’au spot</h3></header>
+    const flights = a.ap && a.ap[0] ? `<a class="sd-link fx-more" href="https://www.google.com/travel/flights?q=${encodeURIComponent('Flights to ' + a.ap[0][0])}" target="_blank" rel="noopener noreferrer">Chercher un vol vers ${esc(a.ap[0][0])}</a>` : '';
+    /* Fiche v2 (onglet Préparer) : un titre simple, les aéroports en lignes alignées (code, nom, distance), leur source
+       juste dessous ; le détail du pays (heure, soleil, monnaie, langue) vient après, replié par replis.js. */
+    host.innerHTML = `<h3 class="fx-title">Y aller</h3>
       ${ap ? `<ul class="sd-airports" aria-label="Aéroports les plus proches">${ap}</ul>${flights}` : ''}
+      <p class="sd-src fx-note">Distances à vol d’oiseau depuis le secteur du spot. Aéroports avec vols réguliers : OurAirports (domaine public). Vérifie les liaisons et les formalités d’entrée avant de réserver.</p>
       <div class="sd-facts">
         ${local ? `<div>${icon(I.clock)}<small>Heure locale</small><b>${esc(local)}</b><span>${esc(diffTxt)}</span></div>` : ''}
         ${st ? `<div>${icon(I.sun)}<small>Soleil aujourd’hui</small><b>${esc(hm(st.rise, off))} – ${esc(hm(st.set, off))}</b><span>${num((st.set - st.rise), 1)} h de jour</span></div>` : ''}
         ${cur ? `<div>${icon(I.coin)}<small>Monnaie</small><b>${esc(cur)}</b></div>` : ''}
         ${lng ? `<div>${icon(I.talk)}<small>Langue</small><b>${esc(lng)}</b>${ci.tel ? `<span${NT}>${esc(ci.tel)}</span>` : ''}</div>` : ''}
-      </div>
-      <p class="sd-src">Distances à vol d’oiseau depuis le secteur du spot. Aéroports avec vols réguliers : OurAirports (domaine public). Vérifie les liaisons et les formalités d’entrée avant de réserver.</p>`;
+      </div>`;
   }
 
   /* ---------------- Observé ici (faune) ---------------- */
@@ -388,12 +390,13 @@
       return `<li class="sd-flag"><span class="sd-flag-name"><b${isFr() ? '' : NT}>${txt(spName(o.t))}</b><small>surtout ${esc(rangeText(rng) || monthName(peak))}</small></span>
         <span class="sd-spark" role="img" aria-label="Observations par mois, pic en ${esc(monthName(peak))}">${o.h.map((v, m) => `<i style="height:${Math.max(6, Math.round(100 * v / max))}%" class="${m === peak ? 'pk' : ''}"></i>`).join('')}</span>${few}</li>`;
     };
-    host.innerHTML = `<header class="sd-head small"><p class="sd-kicker">${icon(I.eye)}Observé ici</p><h3>La vraie faune du coin</h3><p>Des espèces photographiées et identifiées par des plongeurs, nageurs et naturalistes autour du spot.</p></header>
-      <div class="sd-stats"><div><b>${num(w.n)}</b><small>espèces aquatiques observées à moins de ${num(w.r)} km</small></div>${w.o ? `<div><b>${num(w.o)}</b><small>espèces marines recensées par les scientifiques (OBIS)</small></div>` : ''}</div>
-      ${flags.length ? `<div class="sd-flags"><h5>Quand les voir ?</h5><ul>${flags.map(flagRow).join('')}</ul></div>` : ''}
+    /* Fiche v2 (onglet Nature) : titre simple, les deux chiffres en relevés posés sur le fond (grand chiffre, phrase dessous). */
+    host.innerHTML = `<h3 class="fx-title">La vraie faune du coin</h3><p class="fx-text nx-intro">Des espèces photographiées et identifiées par des plongeurs, nageurs et naturalistes autour du spot.</p>
+      <div class="sd-stats nx-stats"><div class="nx-stat"><b class="fx-num">${num(w.n)}</b><small class="fx-note">espèces aquatiques observées à moins de ${num(w.r)} km</small></div>${w.o ? `<div class="nx-stat"><b class="fx-num">${num(w.o)}</b><small class="fx-note">espèces marines recensées par les scientifiques (OBIS)</small></div>` : ''}</div>
+      ${flags.length ? `<div class="sd-flags nx-when"><h4 class="fx-title fx-title-s">Quand les voir ?</h4><ul>${flags.map(flagRow).join('')}</ul></div>` : ''}
       <ul class="sd-species">${shown.map(card).join('')}</ul>
-      <a class="sd-link" href="${esc(more)}" target="_blank" rel="noopener noreferrer">${icon(I.fish)}Toutes les observations sur iNaturalist</a>
-      <p class="sd-src">Observations « niveau recherche » d’iNaturalist (identifications confirmées par la communauté) et Ocean Biodiversity Information System. Ce qu’on y a vu, pas une promesse de rencontre : la faune bouge avec la saison et la météo. Photos sous licence libre, crédits sur chaque image.</p>`;
+      <a class="sd-link fx-more" href="${esc(more)}" target="_blank" rel="noopener noreferrer">Toutes les observations sur iNaturalist</a>
+      <p class="sd-src fx-note">Observations « niveau recherche » d’iNaturalist (identifications confirmées par la communauté) et Ocean Biodiversity Information System. Ce qu’on y a vu, pas une promesse de rencontre : la faune bouge avec la saison et la météo. Photos sous licence libre, crédits sur chaque image.</p>`;
   }
 
   /* ---------------- Interactions ---------------- */

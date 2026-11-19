@@ -230,12 +230,16 @@ for (const m of fs.readFileSync(path.join(ROOT, 'mobile', 'client.js'), 'utf8').
 //     (« Volver hacia l’accueil » sans ce gabarit : seule la première moitié était traduite)
 //   - « <b>{0} : {1}</b> » : pastille du verdict du mois (onglet Saisons, spot-data.js), seule dans son élément ; sans
 //     mot hors des balises, la règle des phrases mises en forme ne l’extrait pas (ponctuation de la langue : « Surf: top »)
+//   - noms d’espèces composés d’un seul mot à trait d’union (BIOZONE dans app.js, onglet Nature) : le filtre « texte
+//     humain » les écarte (ni espace, ni accent), « Poisson-lune » restait en français en anglais et en espagnol
 const KEEP_KEYS = [
   'Défi validé ! +{0} XP',
   'pays',
   'continents',
   'Retour vers {0}',
   '<b>{0} : {1}</b>',
+  'Poisson-clown', 'Poisson-cocher', 'Poisson-lion', 'Poisson-lune', 'Poisson-papillon', 'Poisson-perroquet',
+  'Poisson-pierre', 'Requin-baleine',
 ];
 for (const k of KEEP_KEYS) add(k, 'app.js (conservé)', true);
 

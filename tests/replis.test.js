@@ -98,7 +98,9 @@ test('onglets : Saisons, Conditions, Préparer et Nature ont leurs sections repl
   assert.ok(!('securite' in tabGroups), 'aucun repli dans l’onglet Sécurité');
   assert.deepEqual(tabGroups.saisons.map(g => g.id), ['courbes']);
   assert.deepEqual(tabGroups.meteo.map(g => g.id), ['lire'], 'l’heure par heure est ouverte dans Prévisions');
-  assert.deepEqual(tabGroups.activites.map(g => g.id), ['autour', 'depart', 'surplace', 'adresses']);
+  /* Fiche v2 : Préparer ne replie plus que le détail du pays et le point de départ (Dormir, Autour, Matériel et cours et
+     le carnet se lisent directement). */
+  assert.deepEqual(tabGroups.activites.map(g => g.id), ['depart', 'surplace']);
   assert.deepEqual(tabGroups.faune.map(g => g.id), ['photos', 'typiques']);
   /* Un seul système : mêmes têtes (.obf-head, aria-expanded, aria-controls), repli par attribut, jamais retiré du DOM. */
   assert.match(js, /head\.className = 'obf-head'/);
@@ -126,7 +128,10 @@ test('onglets : dangers, secours, urgence et avertissements ne sont jamais repli
   /* Fiche v2 : les sources des normales sont visibles sous « L’année en courbes » (repliée). */
   assert.ok(!folded.includes('#dSeasons>.sd-src'), 'sources des normales visibles');
   assert.deepEqual(tabGroups.saisons[0].members, ['#dSeasons>.sd-charts', '#dSeasons>.sd-rose', '#dSeasons>.sd-table']);
-  assert.ok(tabGroups.faune[0].members.includes('#dWild>.sd-src'));
+  /* Fiche v2 : les sources de Nature restent visibles sous leur repli (elles soutiennent les chiffres et créditent les
+     photos des espèces à connaître, toujours affichées). */
+  assert.ok(!folded.includes('#dWild>.sd-src'), 'source des observations visible');
+  assert.ok(!folded.includes('bio-note'), 'note et crédit des espèces typiques visibles');
   assert.ok(!folded.includes('#dGo>.sd-src'), 'source des aéroports à côté des aéroports');
   /* Heure par heure : bloc identifié dans spot-experience.js. */
   const exp = read('spot-experience.js');
