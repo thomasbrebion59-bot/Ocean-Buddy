@@ -43,8 +43,10 @@
   function updateAreaMap(s){
     const panel=$('#spotAreaMap');if(!panel)return;
     const copy=panel.querySelector('.area-map-copy'),link=panel.querySelector('[data-area-map-link]'),host=panel.querySelector('[data-area-map]');
-    /* La carte suit les incontournables « À découvrir autour » quand le carnet est affiché. */
-    const around=$('#guideAround');if(around&&around.nextElementSibling!==panel&&around.parentNode)around.after(panel);
+    /* Fiche v2 : la carte du secteur reste dans « Le spot » (repli « Photos et carte », ordre posé par replis.css). Elle
+       suivait « À découvrir autour », que replis.js range dans Préparer : dès la deuxième fiche ouverte, elle s’y
+       retrouvait en grand sous le carnet. */
+    const infos=$('#detail .dcat[data-cat="infos"]');if(infos&&panel.parentNode!==infos)infos.append(panel);
     const point=typeof COORDS!=='undefined'?COORDS[s.id]:null,lat=Number(point?.lat),lon=Number(point?.lon);
     if(!point||!Number.isFinite(lat)||!Number.isFinite(lon)){panel.hidden=true;return;}
     panel.hidden=false;

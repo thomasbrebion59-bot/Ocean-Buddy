@@ -98,7 +98,9 @@ test('onglets : Saisons, Conditions, Préparer et Nature ont leurs sections repl
   assert.ok(!('securite' in tabGroups), 'aucun repli dans l’onglet Sécurité');
   assert.deepEqual(tabGroups.saisons.map(g => g.id), ['courbes']);
   assert.deepEqual(tabGroups.meteo.map(g => g.id), ['lire'], 'l’heure par heure est ouverte dans Prévisions');
-  assert.deepEqual(tabGroups.activites.map(g => g.id), ['autour', 'depart', 'surplace', 'adresses']);
+  /* Fiche v2 : Préparer ne replie plus que le détail du pays et le point de départ (Dormir, Autour, Matériel et cours et
+     le carnet se lisent directement). */
+  assert.deepEqual(tabGroups.activites.map(g => g.id), ['depart', 'surplace']);
   assert.deepEqual(tabGroups.faune.map(g => g.id), ['photos', 'typiques']);
   /* Un seul système : mêmes têtes (.obf-head, aria-expanded, aria-controls), repli par attribut, jamais retiré du DOM. */
   assert.match(js, /head\.className = 'obf-head'/);

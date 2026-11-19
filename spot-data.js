@@ -315,16 +315,18 @@
     try { cur = (ci.cur || []).map(k => `${new Intl.DisplayNames([lang()], { type: 'currency' }).of(k)} (${k})`).join(' · '); } catch (e) { cur = (ci.cur || []).join(' · '); }
     try { lng = (ci.lang || []).map(k => new Intl.DisplayNames([lang()], { type: 'language' }).of(k)).join(' · '); } catch (e) { lng = ''; }
     const ap = (a.ap || []).slice(0, 3).map((p, i) => `<li class="${i === 0 ? 'first' : ''}"><span class="sd-iata"${NT}>${esc(p[0])}</span><span class="sd-ap"><b${NT}>${esc(p[1])}</b><small${NT}>${esc(p[2] || '')}</small></span><span class="sd-km">${num(p[3])} km${p[4] ? '<em>international</em>' : ''}</span></li>`).join('');
-    const flights = a.ap && a.ap[0] ? `<a class="sd-link" href="https://www.google.com/travel/flights?q=${encodeURIComponent('Flights to ' + a.ap[0][0])}" target="_blank" rel="noopener noreferrer">${icon(I.plane)}Chercher un vol vers ${esc(a.ap[0][0])}</a>` : '';
-    host.innerHTML = `<header class="sd-head small"><p class="sd-kicker">${icon(I.plane)}Y aller</p><h3>Le voyage jusqu’au spot</h3></header>
+    const flights = a.ap && a.ap[0] ? `<a class="sd-link fx-more" href="https://www.google.com/travel/flights?q=${encodeURIComponent('Flights to ' + a.ap[0][0])}" target="_blank" rel="noopener noreferrer">Chercher un vol vers ${esc(a.ap[0][0])}</a>` : '';
+    /* Fiche v2 (onglet Préparer) : un titre simple, les aéroports en lignes alignées (code, nom, distance), leur source
+       juste dessous ; le détail du pays (heure, soleil, monnaie, langue) vient après, replié par replis.js. */
+    host.innerHTML = `<h3 class="fx-title">Y aller</h3>
       ${ap ? `<ul class="sd-airports" aria-label="Aéroports les plus proches">${ap}</ul>${flights}` : ''}
+      <p class="sd-src fx-note">Distances à vol d’oiseau depuis le secteur du spot. Aéroports avec vols réguliers : OurAirports (domaine public). Vérifie les liaisons et les formalités d’entrée avant de réserver.</p>
       <div class="sd-facts">
         ${local ? `<div>${icon(I.clock)}<small>Heure locale</small><b>${esc(local)}</b><span>${esc(diffTxt)}</span></div>` : ''}
         ${st ? `<div>${icon(I.sun)}<small>Soleil aujourd’hui</small><b>${esc(hm(st.rise, off))} – ${esc(hm(st.set, off))}</b><span>${num((st.set - st.rise), 1)} h de jour</span></div>` : ''}
         ${cur ? `<div>${icon(I.coin)}<small>Monnaie</small><b>${esc(cur)}</b></div>` : ''}
         ${lng ? `<div>${icon(I.talk)}<small>Langue</small><b>${esc(lng)}</b>${ci.tel ? `<span${NT}>${esc(ci.tel)}</span>` : ''}</div>` : ''}
-      </div>
-      <p class="sd-src">Distances à vol d’oiseau depuis le secteur du spot. Aéroports avec vols réguliers : OurAirports (domaine public). Vérifie les liaisons et les formalités d’entrée avant de réserver.</p>`;
+      </div>`;
   }
 
   /* ---------------- Observé ici (faune) ---------------- */

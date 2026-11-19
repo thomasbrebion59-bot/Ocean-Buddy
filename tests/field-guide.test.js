@@ -181,14 +181,14 @@ test('checklist : les trois premières cases gardent leur rang, les nouvelles vo
   /* Rendu : la case n° 3 garde la clé id:act:2, les nouvelles ont les rangs 3 et 4. */
   const html=G.render(sea,'surf');
   assert.deepEqual([...html.matchAll(/data-visit-check="([^"]+)"/g)].map(m=>m[1]),['hossegor:surf:0','hossegor:surf:1','hossegor:surf:2','hossegor:surf:3','hossegor:surf:4']);
-  assert.match(html,/<span id="fieldProgress">0 \/ 5<\/span>/);
+  assert.match(html,/<span id="fieldProgress" class="fx-pill">0 \/ 5<\/span>/);
 });
 
 test('checklist : une case cochée avant la mise à jour reste cochée sur le même sens',()=>{
   const old=loadGuide({localStorage:{getItem:()=>JSON.stringify({'hossegor:surf:2':true}),setItem(){}}});
   const html=old.guide.render(spot('hossegor'),'surf');
   assert.match(html,/data-visit-check="hossegor:surf:2" checked/);
-  assert.match(html,/<span id="fieldProgress">1 \/ 5<\/span>/);
+  assert.match(html,/<span id="fieldProgress" class="fx-pill">1 \/ 5<\/span>/);
   assert.doesNotMatch(html,/data-visit-check="hossegor:surf:[013-9]" checked/);
 });
 

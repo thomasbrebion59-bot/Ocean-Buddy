@@ -3,7 +3,7 @@
      reste dans des sections repliées, ouvertes d’un toucher. « Le spot » montre la description, l’anecdote, le conseil et
      les repères pratiques directement ; « Comprendre le spot » et « Photos et carte » y sont repliés. Les blocs « dormir »
      et « autour », créés par leurs modules dans « Le spot », sont rangés une fois dans « Préparer » (arrange) : les
-     modules les retrouvent par leur id ou leur référence. Le repli lui-même passe par CSS (replis.css, attribut data-open).
+     modules les retrouvent par leur id ou leur référence ; ils s’y lisent sans repli (« Dormir » et « Autour »). Le repli lui-même passe par CSS (replis.css, attribut data-open).
      La sécurité n’est JAMAIS repliée : elle a son onglet, sans aucune section fermée.
    - Ailleurs (profil, jeu, défis) : boutons [data-obf] avec aria-controls, la zone liée porte l’attribut hidden.
    Chaque nouveau spot s’ouvre replié ; seul un Retour vers une fiche déjà vue lui rend ses sections ouvertes (mémoire
@@ -99,11 +99,11 @@
     meteo: [
       { id: 'lire', title: 'Comprendre ces chiffres', sub: 'Le vent, la houle et la marée, expliqués', members: ['#sdCoach', '#imWeatherHelp'] }
     ],
+    /* Préparer (fiche v2) : « Y aller », « Dormir », « Autour », « Matériel et cours », « Avant de partir » et « Ton carnet »
+       se lisent sans repli ; seuls le détail du pays (heure, soleil, monnaie, langue) et le point de départ restent repliés. */
     activites: [
-      { id: 'autour', title: 'Dormir et alentours', sub: 'Nuits pas chères, lieux et spots voisins', members: ['#fieldOverview', '#guideAround', '#guideSleep', '#fieldNearbyBlock'] },
-      { id: 'depart', title: 'Ton point de départ et tes notes', sub: 'Situer le lieu, ton carnet', members: ['#dGuide>.field-address', '#dGuide>.field-notebook'] },
-      { id: 'surplace', title: 'Heure, soleil, monnaie et langue', sub: 'Ce qui change sur place', members: ['#dGo>.sd-facts'] },
-      { id: 'adresses', title: 'Écoles, location et zones', sub: 'Trouver un encadrant ou du matériel', members: ['#dZonesBlock', '.field-local'] }
+      { id: 'depart', title: 'Ton point de départ', sub: 'Situer le lieu sur la carte', members: ['#dGuide>.field-address'] },
+      { id: 'surplace', title: 'Heure, soleil, monnaie et langue', sub: 'Ce qui change sur place', members: ['#dGo>.sd-facts'] }
     ],
     faune: [
       { id: 'photos', title: 'Les espèces photographiées ici', sub: 'Photos, observations et sources', members: ['#dWild>.sd-species', '#dWild>.sd-link', '#dWild>.sd-src'] },
