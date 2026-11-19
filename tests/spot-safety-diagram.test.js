@@ -136,7 +136,7 @@ test('spot de mer sans schéma : la carte garde ses lectures et sa mention compl
   assert.equal(hidden, false);
   assert.equal(diagram(html), null);
   assert.doesNotMatch(html, /safety-diagram|safety-tips/);
-  assert.match(html, /Courant marin, modèle Open-Meteo/);
+  assert.match(html, /Courant marin, modèle Open-\u2060Meteo/);
   assert.match(html, /Variation sur les 24 premières heures du modèle/);
   assert.match(html, /Vérifie la marée du jour/);
   assert.match(html, /Modèle reçu le /);
@@ -144,7 +144,7 @@ test('spot de mer sans schéma : la carte garde ses lectures et sa mention compl
 
 test('spot de mer : rendu des lectures et mention inchangés', () => {
   const {html} = load().draw(spot('hossegor', ['Baïnes.']), LIVE, MARINE);
-  assert.match(html, /<b>1\.2 km\/h N<\/b><small>Courant marin, modèle Open-Meteo<\/small>/);
+  assert.match(html, /<b>1\.2 km\/h N<\/b><small>Courant marin, modèle Open-\u2060Meteo<\/small>/);
   assert.match(html, /Variation sur les 24 premières heures du modèle/);
   assert.match(html, /Les courants Open-Meteo sont une aide de repérage à résolution limitée près des côtes : ils ne remplacent ni le balisage, ni le poste de secours, ni les consignes du spot\. Vérifie la marée du jour auprès d’une source locale\./);
   assert.match(html, /Modèle reçu le /);
@@ -271,7 +271,7 @@ test('passe et rivière : le catalogue donne les 61 + 1 (Rocher du Diamant, déc
   assert.deepEqual(riviere.sort(), ['futaleufu', 'gorgestarn', 'pontdarc', 'rishikesh', 'roquegageac', 'soca']);
   for (const id of ['sipadan', 'saltstraumen', 'tikehau', 'rangiroa']) assert.ok(passe.includes(id), id);
   /* Un spot de passe garde ses lectures marines ; une rivière n'en a aucune. */
-  assert.match(L.draw(byId('sipadan'), LIVE, MARINE).html, /Courant marin, modèle Open-Meteo/);
+  assert.match(L.draw(byId('sipadan'), LIVE, MARINE).html, /Courant marin, modèle Open-\u2060Meteo/);
   assert.doesNotMatch(L.draw(byId('pontdarc'), LIVE, MARINE).html, /Courant marin|Open-Meteo|Modèle (reçu|indisponible)/);
 });
 

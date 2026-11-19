@@ -296,6 +296,9 @@
   function update(s){
     if(!s||!mount())return;
     current=s.id;
+    /* Le conseil de Poulpy redevient visible à chaque fiche : seul spiritHTML (spot du catalogue) peut le masquer à
+       nouveau. Sans cela, un spot personnel ouvert après un spot où le bon geste l’a remplacé n’aurait ni l’un ni l’autre. */
+    document.getElementById('dTip')?.closest('.block')?.removeAttribute('data-in-geste');
     if(data){paint(s);return;}
     section.spirit.innerHTML='<div class="guide-loading"><i></i><span>Poulpy ouvre son carnet de voyage…</span></div>';
     section.around.innerHTML='';section.sleep.innerHTML='';section.glance.innerHTML='';

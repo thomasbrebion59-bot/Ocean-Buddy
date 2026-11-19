@@ -19,7 +19,13 @@ test('Sécurité : toutes les informations d’avant restent dans l’onglet (nu
   assert.match(panel, /Poste de secours le plus proche/);
   assert.match(panel, /Drapeaux de baignade<\/h3>\s*<p class="field-flags-note">Repère le balisage, les panneaux et les consignes du poste de secours\./);
   assert.match(panel, /Vérifie le numéro local et les horaires de surveillance avant ta sortie\./);
-  assert.match(panel, /112 est le numéro commun de l’Union européenne<\/a> ; à l’étranger, consulte les consignes locales\./);
+  assert.match(panel, /avant ta sortie\. <a [^>]+>Le 112 est le numéro commun de l’Union européenne<\/a>\. À l’étranger, consulte les consignes locales\./);
+  /* Chaque nœud de texte de l’avertissement est une phrase entière : la traduction ne garde ni « The 112 » ni l’espace
+     française avant un point-virgule. */
+  const en = JSON.parse(read('locales/translations/en.json')), es = JSON.parse(read('locales/translations/es.json'));
+  assert.equal(en['Le 112 est le numéro commun de l’Union européenne'], '112 is the common emergency number in the European Union');
+  assert.equal(en['. À l’étranger, consulte les consignes locales.'], '. Abroad, check local guidance.');
+  assert.equal(es['. À l’étranger, consulte les consignes locales.'], '. En el extranjero, consulta las indicaciones locales.');
   /* Secours en mer, autres numéros, date de vérification : toujours posés par openSpot. */
   assert.match(app, /document\.getElementById\('dSea'\)\.textContent=/);
   assert.match(app, /_ck\.textContent=_shown\?`Numéro vérifié le /);
@@ -140,6 +146,18 @@ test('Sécurité sans danger listé : « Danger non évalué » n’est pas rép
   assert.match(read('spot-before.js'), /g\.n == null \? 'Danger non évalué'/);
 });
 
+test('Sécurité : sans niveau choisi, un bouton court en pastille (sans bordure ni grand cadre)', () => {
+  const rule = noComments(secu).match(/#dDanger \.sx-level\{([^}]*)\}/);
+  assert.ok(rule, 'règle de la pastille');
+  assert.match(rule[1], /width:auto/);
+  assert.match(rule[1], /border:0/);
+  assert.match(rule[1], /border-radius:999px/);
+  assert.match(rule[1], /min-height:44px/);
+  assert.match(rule[1], /white-space:normal/, 'texte entier, jamais coupé');
+  const en = JSON.parse(read('locales/translations/en.json')), es = JSON.parse(read('locales/translations/es.json'));
+  assert.ok(en['Choisis ton niveau'] && es['Choisis ton niveau']);
+});
+
 test('Schémas des courants : légendes en casse de phrase, sans point médian, traduites', () => {
   const exp = read('spot-experience.js');
   const labels = [...exp.matchAll(/<text x="\d+" y="\d+">([^<]+)<\/text>/g)].map(m => m[1]);
@@ -194,6 +212,26 @@ test('Le spot : « Le bon geste » ne répète pas le conseil de Poulpy', () => 
   assert.match(spot, /\.field-tip\[data-in-geste\]\{display:none!important\}/);
 });
 
+test('Le spot : le conseil de Poulpy revient sur un spot personnel ouvert après un spot où le bon geste l’a remplacé', () => {
+  const vm = require('node:vm');
+  const src = read('spot-guide.js');
+  const i = src.indexOf('function spiritHTML('), j = src.indexOf('/* ---------- À découvrir autour');
+  const k = src.indexOf('  function paint(s){'), l = src.indexOf('  /* Prix « dès »');
+  const block = { attrs: {}, toggleAttribute(n, v) { if (v) this.attrs[n] = true; else delete this.attrs[n]; }, removeAttribute(n) { delete this.attrs[n]; } };
+  const part = () => ({ hidden: false, innerHTML: '' });
+  const ctx = vm.createContext({
+    culture: () => ({ respect: 'Entre avec des chaussons, ne te tiens jamais à l’épave.', grounded: true }), country: () => 'Indonésie',
+    esc: v => String(v ?? ''), NT: '', svg: () => '', P: {}, document: { getElementById: () => ({ closest: () => block }) },
+    window: {}, data: {}, current: null, mount: () => true, section: { spirit: part(), around: part(), sleep: part(), glance: part() },
+    aroundHTML: () => '', sleepHTML: () => '', glanceHTML: () => '', badgeNearby: () => {}, spotById: () => null, load: () => Promise.resolve()
+  });
+  vm.runInContext(src.slice(i, j) + src.slice(k, l) + ';this.update=update;', ctx);
+  ctx.update({ id: 'tulamben', tip: 'Entre avec des chaussons.' });
+  assert.equal(block.attrs['data-in-geste'], true, 'le bon geste remplace le conseil');
+  ctx.update({ id: 'perso-1', custom: true, tip: 'Vérifie les règles locales et les conditions avant toute sortie.' });
+  assert.equal(block.attrs['data-in-geste'], undefined, 'spot personnel : le conseil se voit');
+});
+
 test('Le spot : la carte du secteur reste dans l’onglet (repli « Photos et carte »), crédits et provenance sans point médian', () => {
   const exp = read('spot-experience.js');
   assert.match(exp, /const infos=\$\('#detail \.dcat\[data-cat="infos"\]'\);if\(infos&&panel\.parentNode!==infos\)infos\.append\(panel\);/);
@@ -203,11 +241,18 @@ test('Le spot : la carte du secteur reste dans l’onglet (repli « Photos et ca
   const fg = read('field-guide.js');
   assert.doesNotMatch(fg, /\+' · ':s\.photoContext/);
   const vm = require('node:vm');
-  const credit = (caption, ctxt) => { const m = fg.match(/textContent=photo\?(\(\(photo\.caption\|\|s\.photoContext\)[^;]*?)\+'Photographie : '/); return vm.runInNewContext(m[1], { photo: { caption }, s: { photoContext: ctxt } }); };
+  const credit = (caption, ctxt) => { const m = fg.match(/cap\.textContent=(photoCap\?[^;]*?);/); return vm.runInNewContext(m[1], { photoCap: caption || ctxt }); };
   assert.equal(credit('Vue de la plage, à Bali.'), 'Vue de la plage, à Bali. ');
   assert.equal(credit('Vue de la plage'), 'Vue de la plage. ');
   assert.equal(credit('', 'Le port'), 'Le port. ');
   assert.equal(credit(''), '');
+  /* La légende (en français seulement, photo-catalog.js) est un nœud à part, masqué hors français ; le crédit
+     « Photographie : auteur » reste et se traduit. */
+  assert.match(fg, /cap\.className='fg-photo-cap';cap\.lang='fr';/);
+  assert.match(fg, /document\.createTextNode\('Photographie : '\+photo\.author\)/);
+  assert.match(spot, /html:not\(\[lang="fr"\]\) #detail #fieldPhotoLink \.fg-photo-cap\{display:none\}/);
+  /* « Source du catalogue » sur sa ligne : aucun « : » écrit par le CSS, qui échapperait à la traduction. */
+  assert.doesNotMatch(noComments(css), /\.field-source small::after\{content:/);
 });
 
 test('Le spot en anglais ou en espagnol : le doublon se repère sur le texte français du carnet', () => {

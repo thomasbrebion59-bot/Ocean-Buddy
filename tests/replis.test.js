@@ -260,7 +260,10 @@ test('sécurité : « Ton meilleur créneau » sans niveau reprend le bouton cou
 
 test('« Avant d’y aller » : une seule invitation au niveau, d’un toucher, cases de hauteur fixe', () => {
   const before = read('spot-before.js');
-  assert.equal((before.match(/Choisis ton niveau/g) || []).length, 1, 'une seule invitation');
+  /* Une invitation par onglet : le bouton des Conditions (levelButton) et, depuis la fiche v2 (19 nov.), la pastille
+     courte en tête de l’onglet Sécurité. Même action (data-open-level). */
+  assert.equal((before.match(/Choisis ton niveau/g) || []).length, 2, 'une invitation par onglet');
+  assert.match(before, /fit = '<p class="fx-fit"><button type="button" class="db-level sx-level" data-open-level>Choisis ton niveau<\/button><\/p>'/);
   assert.match(before, /<button type="button" class="db-level" data-open-level>/);
   assert.match(before, /\[data-open-level\][\s\S]*openSettings\('sport'\)/);
   const page = read('fiches-organisation.css');

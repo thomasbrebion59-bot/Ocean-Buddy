@@ -155,7 +155,13 @@
     window.OceanNotebook?.sync();
     $('#fieldLocalSource').innerHTML=sourceLink(s);
     const photo=OceanPhotos.lead(s.id,act);
-    $('#fieldPhotoLink').href=photo?.source||'photos.html';$('#fieldPhotoLink').textContent=photo?((photo.caption||s.photoContext)?(photo.caption||s.photoContext).replace(/[.!?…]?\s*$/,m=>(m.trim()||'.')+' '):'')+'Photographie : '+photo.author:'Crédits photographiques';
+    /* La légende de la photo (photo-catalog.js, en français, hors dictionnaires) est dans son propre nœud lang="fr" :
+       fiche.css la masque dans les autres langues, où seul « Photographie : auteur » (traduit) reste. */
+    const photoLink=$('#fieldPhotoLink'),photoCap=photo&&(photo.caption||s.photoContext);
+    photoLink.href=photo?.source||'photos.html';
+    if(photo){const cap=document.createElement('span');cap.className='fg-photo-cap';cap.lang='fr';cap.textContent=photoCap?photoCap.replace(/[.!?…]?\s*$/,m=>(m.trim()||'.')+' '):'';
+      photoLink.replaceChildren(...(photoCap?[cap]:[]),document.createTextNode('Photographie : '+photo.author));}
+    else photoLink.textContent='Crédits photographiques';
     $('#fieldSchoolLink').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('école '+activity+' '+name);
     $('#fieldShopLink').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('location matériel '+activity+' '+name);
     const near=SPOTS.filter(x=>x.id!==s.id&&SPOT_WORLD[x.id]===SPOT_WORLD[s.id]&&spotSports(x).includes(act)&&c&&COORDS[x.id]&&distKm(c.lat,c.lon,COORDS[x.id].lat,COORDS[x.id].lon)<=200).sort((a,b)=>{

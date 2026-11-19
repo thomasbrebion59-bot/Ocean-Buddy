@@ -129,7 +129,8 @@
     let fit = '';
     if (r && F && F.shown(r)) fit = `<p class="fx-fit"><span class="fit-pill fit-${r.kind}">${esc(LABEL[r.kind])}</span><small class="fx-note">D’après ton niveau (${esc(LEVEL[lv] || '')}) : un repère, pas une garantie.</small></p>`;
     else if (r && r.kind === 'zones') fit = '<p class="fx-note">Le niveau change selon la zone : demande sur place laquelle te correspond.</p>';
-    else if (!r || r.kind === 'nolevel') fit = levelButton();
+    /* Onglet Sécurité : un bouton court (pastille), pas le grand cadre des Conditions. Même action (data-open-level). */
+    else if (!r || r.kind === 'nolevel') fit = '<p class="fx-fit"><button type="button" class="db-level sx-level" data-open-level>Choisis ton niveau</button></p>';
     el.innerHTML = `<div class="fx-danger-head"><h3 class="fx-title" id="dDangerTitle">${title}</h3>${g.n == null ? '' : dots(g.n)}</div>${text}${fit}`
       + (g.n == null ? '' : '<small class="fx-note">Points de danger : estimation Ocean Buddy d’après les dangers listés.</small>');
   }
