@@ -41,7 +41,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
   mo.observe(d,{childList:true,subtree:true});addEventListener('DOMContentLoaded',function(){mo.disconnect();});})(A[new Date().getDate()%A.length][1]);}
 })();</script>
 <noscript><style>#obBoot{display:none}</style></noscript>
-<script src="i18n.js?v=caf57b927b8c"></script>
+<script src="i18n.js?v=3bdcceca5aa0"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
 <meta name="theme-color" content="#fef9eb">
@@ -91,7 +91,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <link rel="stylesheet" href="cultures.css?v=fabacb2adac7">
 <link rel="stylesheet" href="replis.css?v=7414566ecf27">
 <link rel="stylesheet" href="fiches-organisation.css?v=e977add6e883">
-<link rel="stylesheet" href="fiche.css?v=ba219728806c">
+<link rel="stylesheet" href="fiche.css?v=a7b54d7e707c">
 <link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ocean Buddy">
@@ -359,21 +359,22 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
         </div>
 
         <div class="dcat" data-cat="securite" style="display:none">
-          <div class="block band" style="--b1:var(--t-danger);--b2:var(--t-cta)"><h4><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/vigilance.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> Dangers & vigilance</h4><div id="dDangers"></div></div>
+          <div class="block sx-watch"><h3 class="fx-title fx-title-s" id="dDangersTitle">À surveiller</h3><div id="dDangers"></div></div>
           <section class="spot-safety-live" id="spotSafetyLive" aria-live="polite"></section>
-          <div class="block safety-block band" style="--b1:var(--t-deep);--b2:var(--t-main2)">
-          <h4><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3.5v5M12 15.5v5M3.5 12h5M15.5 12h5"/></svg> Sécurité & secours</h4>
+          <section class="block safety-block sx-urg" aria-labelledby="dUrgTitle">
           <div class="safety-call">
-            <div class="sc-info"><div class="sc-lab">Numéro d'urgence ici</div><div class="sc-num" id="dEmerg">112</div><div class="sc-sea" id="dSea"></div></div>
+            <div class="sc-info"><div class="sc-lab" id="dUrgTitle"><svg class="fx-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 18v-5a5.5 5.5 0 0 1 11 0v5"/><path d="M4.5 18h15v3h-15z"/><path d="M12 2.5v2.2M4.6 5.6l1.5 1.5M19.4 5.6l-1.5 1.5M2.5 12.5h2M19.5 12.5h2"/></svg><span>Numéro d'urgence ici</span></div><div class="sc-num" id="dEmerg">112</div><div class="sc-sea" id="dSea"></div></div>
             <a class="sc-btn" id="dCall" href="tel:112"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.8.7a2 2 0 0 1 1.7 2z"/></svg>Appeler</a>
           </div>
-          <button class="svc" id="dRescue" style="width:100%;margin-top:11px"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3.5v5M12 15.5v5M3.5 12h5M15.5 12h5"/></svg> Poste de secours le plus proche</button>
+          <button type="button" class="svc" id="dRescue"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.4"/><path d="M12 3.5v5M12 15.5v5M3.5 12h5M15.5 12h5"/></svg><span>Poste de secours le plus proche</span></button>
+          </section>
+          <section class="sx-foot" aria-labelledby="dFlagsTitle">
           <div class="flags">
-            <div class="fl-title"><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/surveillance.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> Drapeaux de baignade</div>
+            <h3 class="fx-title fx-title-s fl-title" id="dFlagsTitle">Drapeaux de baignade</h3>
             <p class="field-flags-note">Repère le balisage, les panneaux et les consignes du poste de secours. Les couleurs et les zones autorisées dépendent du lieu et de l’activité.</p>
           </div>
-          <div class="safety-note" id="dSafeNote">Vérifie le numéro local et les horaires de surveillance avant ta sortie. Le <a href="https://europa.eu/youreurope/citizens/travel/security-and-emergencies/emergency/index_en.htm" target="_blank" rel="noopener">112 est le numéro commun de l’Union européenne</a> ; à l’étranger, consulte les consignes locales.</div>
-        </div>
+          <div class="safety-note" id="dSafeNote">Vérifie le numéro local et les horaires de surveillance avant ta sortie. <a href="https://europa.eu/youreurope/citizens/travel/security-and-emergencies/emergency/index_en.htm" target="_blank" rel="noopener">Le 112 est le numéro commun de l’Union européenne</a>. À l’étranger, consulte les consignes locales.</div>
+          </section>
         </div>
 
       </div>
@@ -617,9 +618,9 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="spot-photos.js?v=ece4f2871d12"></script>
 <script src="progression.js?v=573fcb54b5ba"></script>
 <script src="spot-rank-model.js?v=475e2af88a53"></script>
-<script src="app.js?v=55e83e824368"></script>
+<script src="app.js?v=92d129cf412c"></script>
 <script src="spot-fit-model.js?v=23cae691490e"></script>
-<script src="spot-before.js?v=b4a981d830eb"></script>
+<script src="spot-before.js?v=e744a725b5d1"></script>
 <script src="private-spots.js?v=683221818ade"></script>
 <script src="poulpy-knowledge.js?v=00c4ab3bd0f8"></script>
 <script src="design.js?v=850a0d1c082e"></script>
@@ -632,18 +633,18 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="spot-notebook-model.js?v=8982c4683ab8"></script>
 <script src="spot-notebook.js?v=907f72c991ec"></script>
 <script src="spot-gallery.js?v=1ddf3441baff"></script>
-<script src="field-guide.js?v=d1d2053b0d4f"></script>
+<script src="field-guide.js?v=6dd73a46964e"></script>
 <script src="spot-immersion-model.js?v=8c6489617564"></script>
 <script src="spot-immersion.js?v=43370efce8a4"></script>
 <script src="spot-guide-model.js?v=c3f7a4f0dd2b"></script>
-<script src="spot-guide.js?v=e549d390ac30"></script>
+<script src="spot-guide.js?v=300b0d072b26"></script>
 <script src="spot-data-model.js?v=4fe8c13f0248"></script>
 <script src="spot-weather-model.js?v=96ad189a5406"></script>
-<script src="spot-data.js?v=9f6ded7e26b1"></script>
+<script src="spot-data.js?v=1171faa49079"></script>
 <script src="spot-plan.js?v=8ff389198595"></script>
 <script src="ocean-sst.js?v=d283a91350a2"></script>
 <script src="deep-link.js?v=7f961879456a"></script>
-<script src="spot-experience.js?v=e04e210e321f"></script>
+<script src="spot-experience.js?v=0d2047059bf4"></script>
 <script src="community-config.js?v=991b61c2fed6"></script>
 <script src="trip-sharing.js?v=e29f4931ffd4"></script>
 <script src="community.js?v=43352388a466"></script>

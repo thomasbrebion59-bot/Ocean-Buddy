@@ -90,8 +90,8 @@
   const country=s=>data?.spots?.[s?.id]?.c||s?.country||(typeof countryOf==='function'?countryOf(s):'');
   const world=s=>s?.world||(typeof SPOT_WORLD!=="undefined"?SPOT_WORLD:{})[s?.id]||'eu';
   const entry=id=>data?.spots?.[id]||null;
-  function culture(s){
-    const c=data?.countries?.[country(s)]||null,g=entry(s.id)||{};
+  function culture(s,d=data){
+    const c=d?.countries?.[country(s)]||null,g=d?.spots?.[s.id]||{};
     return {lang:g.l||c?.lang||'',hello:g.h||c?.hello||null,food:g.f||c?.food||null,respect:g.r||c?.respect||'',vibe:g.v||'',season:g.s||(s.editorialStatus==='reviewed'?s.visit?.bestPeriod:'')||'',grounded:!!g.v};
   }
   function estimate(s){if(!s)return null;return M.estimate({country:country(s),loc:s.loc,world:world(s)},entry(s.id)?.z);}
@@ -124,27 +124,31 @@
   const monthNow=()=>new Date().getMonth()+1;
   const MONTHS=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
 
-  /* ---------- L’esprit du lieu ---------- */
+  /* ---------- L’esprit du lieu (fiche v2 : onglet « Le spot ») ----------
+     Demande du fondateur (18 nov.) : moins d’informations, rien en double. Restent « Le bon geste » (texte entier) et une
+     seule ligne vers la page culture du pays, qui porte le mot du coin et le plat à goûter (les anciennes pastilles).
+     Ne sont plus affichés ici : la photo du spot répétée (déjà en tête de fiche), la phrase d’ambiance, la tuile
+     « La bonne saison » (onglet Saisons) et le numéro de chapitre. Les données restent dans le carnet (culture()).
+     Pas de doublon avec « Le conseil de Poulpy » (dTip, app.js) : un bon geste identique au conseil n’est pas affiché ; un
+     bon geste qui reprend le conseil du catalogue et le prolonge le remplace (data-in-geste masque le bloc du conseil,
+     fiche.css). Un conseil du carnet, marqué « non vérifié », reste toujours affiché avec sa mention. */
   function spiritHTML(s){
-    const c=culture(s),photo=typeof spotPhotoUrl==='function'?spotPhotoUrl(s.id,1280):'';
-    const hello=c.hello?.[0]||'',gloss=c.hello?.[1]||'';
-    const tiles=[
-      c.food&&['food','À goûter sur place',c.food[0],c.food[1]],
-      c.respect&&['respect','Le bon geste',null,c.respect],
-      /* Texte de saison = repère indicatif : la mention est hors du bloc translate="no", elle se traduit. */
-      c.season&&['season','La bonne saison',null,c.season,'Repère indicatif, à confirmer localement.']
-    ].filter(Boolean);
-    return `<div class="guide-chapter"><span class="guide-chapter-number">01</span><span class="guide-chapter-label">L’esprit du lieu</span></div>
-      <div class="guide-spirit-cover${photo?'':' no-photo'}">${photo?`<img src="${esc(photo)}" alt="" loading="lazy" decoding="async">`:''}
-        <div class="guide-spirit-words">
-          <span class="guide-eyebrow">${esc(country(s)||'Carnet de voyage')}${c.lang?` · <span${NT}>${esc(c.lang)}</span>`:''}</span>
-          ${hello?`<p class="guide-hello" lang="und"${NT}><span aria-hidden="true">«&nbsp;</span>${esc(hello)}<span aria-hidden="true">&nbsp;»</span></p><p class="guide-gloss"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" width="40" height="40" loading="lazy" decoding="async"><span><span>Poulpy te souffle le mot du coin :</span> <span${NT}>${esc(gloss)}.</span></span></p>`:`<h3 class="guide-hello">Le temps d’une escale</h3>`}
-        </div>
-      </div>
-      ${c.vibe?`<blockquote class="guide-vibe"${NT}><svg class="guide-quote" viewBox="0 0 48 40" aria-hidden="true"><path d="M0 40V24C0 10 7 2 20 0l2 6c-7 2-11 7-11 14h9v20H0Zm26 0V24C26 10 33 2 46 0l2 6c-7 2-11 7-11 14h9v20H26Z" fill="currentColor"/></svg><p>${esc(c.vibe)}</p></blockquote>`:''}
-      ${tiles.length?`<div class="guide-tiles">${tiles.map(([k,label,title,text,note])=>`<article class="guide-tile tile-${k}"><span class="guide-tile-icon">${icon(k)}</span><small>${label}</small>${title?`<b${NT}>${esc(title)}</b>`:''}<p${NT}>${esc(text)}</p>${note?`<span class="guide-note">${note}</span>`:''}</article>`).join('')}</div>`:''}
-      ${c.grounded?'':'<p class="guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>'}
-      ${typeof OceanCultures!=='undefined'&&country(s)?`<button type="button" class="guide-cult" data-cult-open="${esc(country(s))}" data-cult-from="spot"><img src="assets/pictos/guide/g-speech.webp" alt="" width="44" height="44" loading="lazy" decoding="async"><span><small>Tour du monde des cultures</small><b${NT}>${esc(OceanCultures.discover(country(s)))}</b></span></button>`:''}`;
+    const same=v=>String(v||'').toLowerCase().replace(/[\s.,;:!?’'«»]+/g,' ').trim();
+    const c=culture(s),hello=c.hello?.[0]||'',food=c.food?.[0]||'',ctry=country(s);
+    const open=typeof OceanCultures!=='undefined'&&ctry;
+    const bits=[hello&&`<span class="sg-cult-bit"><span>Le mot du coin :</span> <span${NT}>«&nbsp;${esc(hello)}&nbsp;»</span></span>`,food&&`<span class="sg-cult-bit"><span>À goûter :</span> <span${NT}>${esc(food)}</span></span>`].filter(Boolean).join('');
+    const ownTip=typeof s.tip==='string'&&s.tip.trim()?s.tip:'',tip=ownTip||(typeof s.carnet?.tip==='string'?s.carnet.tip:'');
+    /* Comparaison sur le texte français (le conseil du catalogue est en français ; en anglais ou en espagnol, le bon
+       geste vient de la traduction du carnet, posée par-dessus window.OCEAN_SPOT_GUIDES). */
+    const base=typeof window!=='undefined'?window.OCEAN_SPOT_GUIDES:null;
+    const fr=base&&typeof data!=='undefined'&&data!==base?culture(s,base):c;
+    const r=same(fr.respect),t=same(tip);
+    const dup=!!(r&&t&&r===t),wider=!!(r&&ownTip&&!dup&&r.startsWith(t));
+    if(typeof document!=='undefined'){const tb=document.getElementById('dTip')?.closest('.block');if(tb)tb.toggleAttribute('data-in-geste',wider);}
+    const geste=c.respect&&!dup?`<div class="sg-geste"><h3 class="fx-title fx-title-s">Le bon geste</h3><p class="fx-text"${NT}>${esc(c.respect)}</p></div>`:'';
+    const line=open?`<button type="button" class="sg-cult" data-cult-open="${esc(country(s))}" data-cult-from="spot">${svg(P.speech,'fx-ic')}<span class="sg-cult-tx"><b${NT}>${esc(OceanCultures.discover(ctry))}</b>${bits?`<small class="sg-cult-bits">${bits}</small>`:''}</span></button>`
+      :bits?`<p class="sg-cult sg-cult-static">${svg(P.speech,'fx-ic')}<span class="sg-cult-tx"><small class="sg-cult-bits">${bits}</small></span></p>`:'';
+    return geste+line+(c.grounded?'':'<p class="fx-note guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>');
   }
 
   /* ---------- À découvrir autour ---------- */
@@ -292,6 +296,9 @@
   function update(s){
     if(!s||!mount())return;
     current=s.id;
+    /* Le conseil de Poulpy redevient visible à chaque fiche : seul spiritHTML (spot du catalogue) peut le masquer à
+       nouveau. Sans cela, un spot personnel ouvert après un spot où le bon geste l’a remplacé n’aurait ni l’un ni l’autre. */
+    document.getElementById('dTip')?.closest('.block')?.removeAttribute('data-in-geste');
     if(data){paint(s);return;}
     section.spirit.innerHTML='<div class="guide-loading"><i></i><span>Poulpy ouvre son carnet de voyage…</span></div>';
     section.around.innerHTML='';section.sleep.innerHTML='';section.glance.innerHTML='';

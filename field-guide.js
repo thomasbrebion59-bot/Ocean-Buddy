@@ -51,7 +51,7 @@
   const preparationKey=(s,act,i)=>s.id+':'+act+':'+i;
   function source(s){
     const record=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
-    return record?.url&&/^https:\/\//i.test(record.url)?`<a class="field-source" href="${esc(record.url)}" target="_blank" rel="noopener noreferrer"><span><small>SOURCE DU CATALOGUE</small><b>${esc(record.label)}</b></span></a>`:'<p class="field-source-pending">Informations éditoriales à confirmer auprès de sources locales.</p>';
+    return record?.url&&/^https:\/\//i.test(record.url)?`<a class="field-source" href="${esc(record.url)}" target="_blank" rel="noopener noreferrer"><span><small>Source du catalogue</small><b>${esc(record.label)}</b></span></a>`:'<p class="field-source-pending">Informations éditoriales à confirmer auprès de sources locales.</p>';
   }
   function sourceLink(s){const html=source(s);return html.includes('field-source-pending')?'':html;}
   const frNum=(n,d)=>window.obNum?obNum(n,d):n.toFixed(d).replace('.',',');
@@ -79,18 +79,19 @@
       return {label,key,value:value||'À vérifier localement',verified:!!value,src};
     });
   }
-  /* « Source : {libellé} · consultée le {date} » : un lien, ou le simple libellé pour les normales NOAA de climate.json. */
+  /* « Source : {libellé}, consultée le {date} » (fiche v2 : plus de point médian) : un lien, ou le simple libellé pour les normales NOAA de climate.json. */
   function visitCite(x){
     const date=x.d.split('-').reverse().join('/');
-    return x.u==='internal:climate'?`<span class="field-visit-source" data-src="${esc(x.u)}">Source : ${esc(x.l)} · consultée le ${esc(date)}</span>`:`<a class="field-visit-source" href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">Source : ${esc(x.l)} · consultée le ${esc(date)}</a>`;
+    return x.u==='internal:climate'?`<span class="field-visit-source" data-src="${esc(x.u)}">Source : ${esc(x.l)}, consultée le ${esc(date)}</span>`:`<a class="field-visit-source" href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">Source : ${esc(x.l)}, consultée le ${esc(date)}</a>`;
   }
   function visitGuide(s){
     const rows=visitRows(s).filter(row=>row.verified);
     const key=row=>row.src.map(x=>x.u+'|'+x.d).join(',');
     /* Mêmes sources sur toutes les lignes (anciennes fiches) : une seule mention en bas ; sinon chaque ligne cite les siennes. */
     const shared=rows.length>0&&rows.every(row=>key(row)===key(rows[0]));
-    const head='<span class="field-eyebrow">REPÈRES PRATIQUES</span><h3 id="fieldVisitTitle">L’essentiel avant d’y aller</h3>';
-    const caution='<p class="field-visit-caution">Les accès, conditions et règles peuvent changer. Vérifie les consignes en vigueur sur place.</p>';
+    /* Fiche v2 : un titre en casse de phrase, sans sur-titre en capitales (onglet « Le spot »). */
+    const head='<h3 class="fx-title fx-title-s" id="fieldVisitTitle">Repères pratiques</h3>';
+    const caution='<p class="field-visit-caution fx-note">Les accès, conditions et règles peuvent changer. Vérifie les consignes en vigueur sur place.</p>';
     if(!rows.length)return head+'<p class="field-visit-pending">À vérifier localement</p>'+caution;
     return head+`<dl>${rows.map(row=>`<div class="field-visit-row"><dt>${esc(row.label)}</dt><dd>${esc(row.value)}${shared?'':`<span class="field-visit-cites">${row.src.map(visitCite).join('')}</span>`}</dd></div>`).join('')}</dl>${shared?`<span class="field-visit-cites">${rows[0].src.map(visitCite).join('')}</span>`:''}${caution}`;
   }
@@ -154,7 +155,13 @@
     window.OceanNotebook?.sync();
     $('#fieldLocalSource').innerHTML=sourceLink(s);
     const photo=OceanPhotos.lead(s.id,act);
-    $('#fieldPhotoLink').href=photo?.source||'photos.html';$('#fieldPhotoLink').textContent=photo?(photo.caption?photo.caption+' · ':s.photoContext?s.photoContext+' · ':'')+'Photographie : '+photo.author:'Crédits photographiques';
+    /* La légende de la photo (photo-catalog.js, en français, hors dictionnaires) est dans son propre nœud lang="fr" :
+       fiche.css la masque dans les autres langues, où seul « Photographie : auteur » (traduit) reste. */
+    const photoLink=$('#fieldPhotoLink'),photoCap=photo&&(photo.caption||s.photoContext);
+    photoLink.href=photo?.source||'photos.html';
+    if(photo){const cap=document.createElement('span');cap.className='fg-photo-cap';cap.lang='fr';cap.textContent=photoCap?photoCap.replace(/[.!?…]?\s*$/,m=>(m.trim()||'.')+' '):'';
+      photoLink.replaceChildren(...(photoCap?[cap]:[]),document.createTextNode('Photographie : '+photo.author));}
+    else photoLink.textContent='Crédits photographiques';
     $('#fieldSchoolLink').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('école '+activity+' '+name);
     $('#fieldShopLink').href='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent('location matériel '+activity+' '+name);
     const near=SPOTS.filter(x=>x.id!==s.id&&SPOT_WORLD[x.id]===SPOT_WORLD[s.id]&&spotSports(x).includes(act)&&c&&COORDS[x.id]&&distKm(c.lat,c.lon,COORDS[x.id].lat,COORDS[x.id].lon)<=200).sort((a,b)=>{

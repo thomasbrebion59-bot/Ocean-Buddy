@@ -479,7 +479,7 @@
     try { const d = JSON.parse(localStorage.getItem('oceanbuddy_v1') || 'null'); return (d && d.level) || null; } catch (e) { return null; }
   };
   const coachLine = ln => Array.isArray(ln) ? `<li><b>${esc(ln[0])}</b> ${ln.slice(1).map(esc).join(' ')}</li>` : `<li>${esc(ln)}</li>`;
-  const coachSources = src => Array.isArray(src) ? src.filter(x => x && /^https:\/\//.test(x.u)).map(x => `<a class="sd-coach-note sd-coach-src" style="display:block;margin-top:3px;text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere" href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">Source : ${esc(x.l)} · consultée le ${esc(String(x.d || '').split('-').reverse().join('/'))}</a>`).join('') : '';
+  const coachSources = src => Array.isArray(src) ? src.filter(x => x && /^https:\/\//.test(x.u)).map(x => `<a class="sd-coach-note sd-coach-src" style="display:block;margin-top:3px;text-decoration:underline;text-underline-offset:2px;overflow-wrap:anywhere" href="${esc(x.u)}" target="_blank" rel="noopener noreferrer">Source : ${esc(x.l)}, consultée le ${esc(String(x.d || '').split('-').reverse().join('/'))}</a>`).join('') : '';
   const coachBlocks = blocks => blocks.map(b => `<div class="sd-coach-block"><h5>${esc(b.h)}</h5><ul>${b.lines.map(coachLine).join('')}</ul>${coachSources(b.src)}</div>`).join('');
   function coachHost() {
     let host = $('#sdCoach');

@@ -138,14 +138,16 @@ test('carte : chaque ligne vérifiée cite ses sources, une ligne absente n’es
     access:{t:'Tu arrives par <b>l’aéroport</b>.',src:[src()]},
     gear:{t:'Eau autour de 28 °C : lycra ou shorty.',src:[src({u:'internal:climate',l:'Normales NOAA OISST 1991-2020'})]}}};
   const html=G.visitGuide(s);
-  assert.match(html,/L’essentiel avant d’y aller/);
+  /* Fiche v2 : « Repères pratiques » en casse de phrase, plus de sur-titre en capitales ni de « avant d’y aller ». */
+  assert.match(html,/^<h3 class="fx-title fx-title-s" id="fieldVisitTitle">Repères pratiques<\/h3>/);
+  assert.doesNotMatch(html,/REPÈRES PRATIQUES|field-eyebrow|avant d’y aller/);
   assert.equal((html.match(/<div class="field-visit-row">/g)||[]).length,2);
   assert.match(html,/<dt>Accès<\/dt>/);assert.match(html,/<dt>Matériel<\/dt>/);
   assert.doesNotMatch(html,/<dt>Stationnement<\/dt>|<dt>Marée<\/dt>|<dt>À éviter<\/dt>|<dt>Règles locales<\/dt>/);
   assert.doesNotMatch(html,/À vérifier localement/);
   assert.match(html,/&lt;b&gt;l’aéroport&lt;\/b&gt;/,'le texte est échappé');
-  assert.match(html,/<a class="field-visit-source" href="https:\/\/example\.org\/page" target="_blank" rel="noopener noreferrer">Source : Office du tourisme · consultée le 20\/10\/2026<\/a>/);
-  assert.match(html,/<span class="field-visit-source" data-src="internal:climate">Source : Normales NOAA OISST 1991-2020 · consultée le 20\/10\/2026<\/span>/);
+  assert.match(html,/<a class="field-visit-source" href="https:\/\/example\.org\/page" target="_blank" rel="noopener noreferrer">Source : Office du tourisme, consultée le 20\/10\/2026<\/a>/);
+  assert.match(html,/<span class="field-visit-source" data-src="internal:climate">Source : Normales NOAA OISST 1991-2020, consultée le 20\/10\/2026<\/span>/);
   assert.equal((html.match(/field-visit-source/g)||[]).length,2,'chaque ligne a sa source');
 });
 

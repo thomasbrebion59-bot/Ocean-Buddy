@@ -220,7 +220,7 @@ test('sécurité jamais repliée : « Si tu es emporté » et « Repérer une ba
   assert.match(sd, /const blocks = M\.ripSafety\(sports, inland\);/);
   assert.match(sd, /try \{ renderRip\(s\); \} catch \(e\) \{\}/);
   assert.doesNotMatch(sd.slice(sd.indexOf('function renderRip'), sd.indexOf('function renderRip') + 1500), /<details|data-obf/, 'pas de repli dans la carte');
-  assert.match(html, /<div class="dcat" data-cat="securite"[^>]*>\s*<div class="block band"[^>]*><h4>[\s\S]*?Dangers & vigilance<\/h4><div id="dDangers"><\/div><\/div>/);
+  assert.match(html, /<div class="dcat" data-cat="securite"[^>]*>\s*<div class="block sx-watch"><h3 class="fx-title fx-title-s" id="dDangersTitle">À surveiller<\/h3><div id="dDangers"><\/div><\/div>/);
   /* Fiche v2 : la sécurité a son onglet, dont le panneau s’affiche en entier (aucune vue, aucun repli). */
   assert.match(html, /<button type="button" class="dtab" data-cat="securite" onclick="showDetailCat\('securite'\)">/);
   assert.match(read('app.js'), /const DETAIL_TABS=\['meteo','previsions','securite','infos','saisons','activites','faune'\];/);
@@ -262,7 +262,10 @@ test('sécurité : « Ton meilleur créneau » sans niveau reprend le bouton cou
 
 test('« Avant d’y aller » : une seule invitation au niveau, d’un toucher, cases de hauteur fixe', () => {
   const before = read('spot-before.js');
-  assert.equal((before.match(/Choisis ton niveau/g) || []).length, 1, 'une seule invitation');
+  /* Une invitation par onglet : le bouton des Conditions (levelButton) et, depuis la fiche v2 (19 nov.), la pastille
+     courte en tête de l’onglet Sécurité. Même action (data-open-level). */
+  assert.equal((before.match(/Choisis ton niveau/g) || []).length, 2, 'une invitation par onglet');
+  assert.match(before, /fit = '<p class="fx-fit"><button type="button" class="db-level sx-level" data-open-level>Choisis ton niveau<\/button><\/p>'/);
   assert.match(before, /<button type="button" class="db-level" data-open-level>/);
   assert.match(before, /\[data-open-level\][\s\S]*openSettings\('sport'\)/);
   const page = read('fiches-organisation.css');

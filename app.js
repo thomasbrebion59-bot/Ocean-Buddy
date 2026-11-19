@@ -1222,7 +1222,7 @@ function renderDetailFacts(s,act){
 }
 /* Étiquette des phrases reprises du carnet (champ « carnet » du catalogue) : elles ne sont jamais présentées comme vérifiées. */
 function carnetTag(id){
-  return `<small class="carnet-unverified"${id?` id="${id}"`:''} style="display:block;margin:6px 0;font-size:12px;font-weight:600;color:var(--t-ink2)">Carnet Ocean Buddy · non vérifié</small>`;
+  return `<small class="carnet-unverified"${id?` id="${id}"`:''} style="display:block;margin:6px 0;font-size:12px;font-weight:600;color:var(--t-ink2)">Carnet Ocean Buddy, non vérifié</small>`;
 }
 function openSpot(id){
   const s=SPOTS.find(x=>x.id===id);if(!s)return;
@@ -1262,6 +1262,8 @@ function openSpot(id){
   if(_ck){_ck.textContent=_shown?`Numéro vérifié le ${em.checked.split('-').reverse().join('/')}`:'';_ck.hidden=!_shown;}
   const callButton=document.getElementById('dCall');callButton.hidden=!em.call;
   if(em.call)callButton.href='tel:'+em.call;else callButton.removeAttribute('href');
+  /* Fiche v2 : « Appeler le {numéro} », avec le numéro local réel de ce spot (jamais un numéro en dur). */
+  if(em.call){var _ci=callButton.querySelector('svg');callButton.replaceChildren(...(_ci?[_ci]:[]),document.createTextNode(`Appeler le ${em.call}`));}
   document.getElementById('dRescue').onclick=function(){mapsSearch('poste de secours plage sauveteurs '+near,cc);};
   document.getElementById('dGuide').innerHTML=renderGuide(s,act);
   renderGuideSub(s,act);
@@ -1295,10 +1297,13 @@ function openSpot(id){
   renderConditions(s,LIVE[s.id]?.live?LIVE[s.id]:null);fetchConditions(s);
   try{renderFaune(s);}catch(e){}
   /* Lignes du catalogue ; à défaut, celles du carnet, précédées une seule fois de l'étiquette « non vérifié ». */
-  const dangerRow=d=>{var m=dangerStyle(d[0],d[1]);return `<div class="danger-item"><span class="di" style="background:${m[1]};color:${m[2]}">${uic(m[0])}</span><span>${esc(d[1])}</span></div>`;};
+  /* La première ligne est le danger principal, déjà écrit en entier en tête de l'onglet Sécurité (data-main : elle n'est
+     pas répétée dans « À surveiller », fiche.css). Sans danger listé, « Danger non évalué » est déjà le titre de l’onglet :
+     data-unrated ne le répète pas, la consigne reste. */
+  const dangerRow=(d,i)=>`<div class="danger-item"${i===0?' data-main':''}><span class="di">${dangerTrait(dangerTraitKey(d[0],d[1]))}</span><span>${esc(d[1])}</span></div>`;
   const ownDangers=(Array.isArray(s.dangers)?s.dangers:[]).filter(d=>Array.isArray(d)&&d[1]);
   const carnetDangers=!ownDangers.length&&s.carnet&&Array.isArray(s.carnet.dangers)?s.carnet.dangers.filter(d=>Array.isArray(d)&&d[1]):[];
-  document.getElementById('dDangers').innerHTML=ownDangers.map(dangerRow).join('')||(carnetDangers.length?carnetTag()+carnetDangers.map(dangerRow).join(''):'')||'<p><b>Danger non évalué</b></p><p>Vérifie les consignes locales avant ta sortie.</p>';
+  document.getElementById('dDangers').innerHTML=ownDangers.map(dangerRow).join('')||(carnetDangers.length?carnetTag()+carnetDangers.map(dangerRow).join(''):'')||'<p data-unrated><b>Danger non évalué</b></p><p>Vérifie les consignes locales avant ta sortie.</p>';
   /* Fiche v2 : elle s'ouvre sur les conditions. */
   showDetailCat('meteo',false);
   /* Les modules annexes (communauté, guide, carte) ne doivent jamais bloquer l’ouverture de la fiche. */
@@ -1319,7 +1324,7 @@ function renderSpotSource(s){
   host.append('Source : ');
   const link=document.createElement('a');link.href=source.url;link.target='_blank';link.rel='noopener noreferrer';link.textContent=source.label||'Consulter la source';
   host.append(link);
-  if(checked){const v=document.createElement('span');v.textContent=`Vérifié le ${new Date(checked+'T12:00:00Z').toLocaleDateString('fr-FR')}`;host.append(' · ',v);}
+  if(checked){const v=document.createElement('span');v.textContent=`Vérifié le ${new Date(checked+'T12:00:00Z').toLocaleDateString('fr-FR')}`;host.append('. ',v);}
 }
 function chalButton(ch,kind,i){
   var P=window.OceanProgress,done=P&&P.chalDone(ch.id),g=P&&P.goal(ch.id,{sessions:sessions});
@@ -2562,6 +2567,63 @@ function dangerStyle(emoji,text){
   var w=dangerWords(text);
   if(w)return w;
   return hit?[hit[0],hit[1],hit[2]]:DANGER_FALLBACK.slice();
+}
+/* Fiche v2, onglet Sécurité, « À surveiller » : un pictogramme en trait par ligne de danger (maquette validée), dessiné
+   comme ceux des relevés (24 × 24, trait 1,6, couleur du texte). Même clé que dangerStyle ; une clé sans dessin propre
+   prend le plus proche (DANGER_TRAIT_ALIAS), sinon le triangle d'attention. Le texte du danger reste entier à côté. */
+var DANGER_TRAIT={
+  spirale:'<path d="M12 12c-3 0-3-4 0-4s4 3 4 6-3 6-7 6-7-4-7-8 3-9 9-9"/>',
+  wave:'<path d="M2.5 8c2.2 0 2.2-2.2 4.4-2.2S9.1 8 11.3 8s2.2-2.2 4.4-2.2S17.9 8 20.1 8M2.5 13c2.2 0 2.2-2.2 4.4-2.2S9.1 13 11.3 13s2.2-2.2 4.4-2.2 2.2 2.2 4.4 2.2M2.5 18c2.2 0 2.2-2.2 4.4-2.2s2.2 2.2 4.4 2.2 2.2-2.2 4.4-2.2 2.2 2.2 4.4 2.2"/>',
+  rocher:'<path d="M2.5 19.5h19"/><path d="M4 19.5l3.2-6.5 2.8 2.4L13.5 8.5l6 11"/>',
+  bateau:'<path d="M4 14h16l-2 5.5a2 2 0 0 1-1.9 1.5H7.9A2 2 0 0 1 6 19.5z"/><path d="M12 14V3.5l6 7.5h-6"/>',
+  vent:'<path d="M3 8h9a2.5 2.5 0 1 0-2.3-3.4M3 13h13a2.7 2.7 0 1 1-2.5 3.7M3 18h7"/>',
+  corail:'<path d="M12 21v-8.5M12 12.5c-2.6 0-4-1.8-4-4.5V5M12 15.5c2.6 0 4-1.8 4-4.5V7M8 8.5 5.5 6.5M16 11l2.4-2M7 21h10"/>',
+  neige:'<path d="M12 3v18M4.2 7.5l15.6 9M19.8 7.5l-15.6 9M10 4.5 12 6.5l2-2M10 19.5l2-2 2 2"/>',
+  affluence:'<circle cx="9" cy="8" r="3"/><path d="M3.5 19.5c0-3.6 2.3-5.8 5.5-5.8s5.5 2.2 5.5 5.8"/><circle cx="17" cy="9.5" r="2.3"/><path d="M15.3 14.2c.6-.2 1.2-.3 1.7-.3 2.5 0 4 1.9 4 5"/>',
+  interdit:'<circle cx="12" cy="12" r="8.5"/><path d="M6 6l12 12"/>',
+  soleil:'<circle cx="12" cy="12" r="4.2"/><path d="M12 2.8V5M12 19v2.2M2.8 12H5M19 12h2.2M5.5 5.5l1.6 1.6M16.9 16.9l1.6 1.6M18.5 5.5l-1.6 1.6M7.1 16.9l-1.6 1.6"/>',
+  eclair:'<path d="M13.5 2.5 4.5 14h6.5l-1.5 7.5 9-11.5H12z"/>',
+  vigilance:'<path d="M12 3.5 2.5 20h19z"/><path d="M12 9.5v5M12 17.3h.01"/>',
+  requin:'<path d="M2.5 18.5c2 0 3-1.3 5-1.3s3 1.3 5 1.3 3-1.3 5-1.3 3 1.3 4 1.3"/><path d="M6 15C8 9.8 12 6 17.5 5c-1.5 2.8-1.9 6-1 10"/>',
+  secours:'<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><path d="M12 8v8M8 12h8"/>',
+  sante:'<circle cx="12" cy="12" r="8.5"/><path d="M12 8.2v7.6M8.2 12h7.6"/>',
+  fond:'<path d="M2.5 20h19M5 20c1-3.2 3.6-5 7-5s6 1.8 7 5"/><path d="M12 15V4.5M5.5 8.5C6.5 6 9 4.5 12 4.5s5.5 1.5 6.5 4z"/>',
+  cyclone:'<circle cx="12" cy="12" r="3"/><path d="M15 12c0-4.6-2.6-8-7.5-9.5M9 12c0 4.6 2.6 8 7.5 9.5"/>',
+  meduse:'<path d="M5 12a7 7 0 0 1 14 0z"/><path d="M8.2 12v3c0 1.6-1 2.6-1 4.5M12 12v8.5M15.8 12v3c0 1.6 1 2.6 1 4.5"/>',
+  surveillance:'<path d="M7.5 21l2-10M16.5 21l-2-10M8.6 16h6.8M6.5 11h11M9 11V7.5h6V11M12 7.5V3l3.5 1.3L12 5.6"/>',
+  drapeau:'<path d="M6 21V3.5"/><path d="M6 4.5h11l-2.5 3.5 2.5 3.5H6"/>',
+  feuille:'<path d="M5 19C5 10.5 10 5.5 19 5c0 9-5 14-14 14z"/><path d="M5 19l8-8"/>',
+  tortue:'<ellipse cx="10.5" cy="12" rx="7" ry="5.2"/><path d="M17.4 10.8c.9-1.5 3.8-1.4 4 .7.2 1.7-1.8 2.4-3.6 1.4M6.4 7.7 5 5.3M6.4 16.3 5 18.7M14.6 16.4l1.3 2.3M14.6 7.6l1.3-2.3"/><ellipse cx="10.5" cy="12" rx="3.6" ry="2.5"/>',
+  marche:'<circle cx="13" cy="4.3" r="1.8"/><path d="M9 21l2-6-2.3-2 .8-4.4L12 7l2 2.3 3 1M9.5 15l-3 2.5"/>',
+  poisson:'<path d="M3.5 7.5 7 12l-3.5 4.5"/><path d="M7 12c2.5-3.6 5.5-5.5 8.5-5.5S20.5 9 21 12c-.5 3-2.5 5.5-5.5 5.5S9.5 15.6 7 12z"/><path d="M16.5 10.7h.01"/>',
+  orage:'<path d="M7 16.5a4 4 0 0 1-.6-8 5.5 5.5 0 0 1 10.7 1.3A3.4 3.4 0 0 1 17 16.5"/><path d="M12.6 12.5l-2.2 4h3.2l-2.2 4"/>',
+  pluie:'<path d="M7 14.5a4 4 0 0 1-.6-8 5.5 5.5 0 0 1 10.7 1.3A3.4 3.4 0 0 1 17 14.5"/><path d="M8.5 17.5l-1 2.5M12.5 17.5l-1 2.5M16.5 17.5l-1 2.5"/>',
+  grotte:'<path d="M3 20c0-6 4-11 9-11s9 5 9 11M3 20h18"/><path d="M9.5 20c0-2.5 1.1-4.5 2.5-4.5s2.5 2 2.5 4.5"/>',
+  profondeur:'<path d="M12 3v13M7.5 11.5 12 16l4.5-4.5M5 20h14"/>',
+  mammifere:'<path d="M10.9 19.3c.5-2 .9-4 1.1-6.3M13.1 19.3c-.5-2-.9-4-1.1-6.3M12 13c-1-3.6-4.4-5.6-8.5-5.2 1 3.6 4.3 5.6 8.5 5.2zM12 13c1-3.6 4.4-5.6 8.5-5.2-1 3.6-4.3 5.6-8.5 5.2z"/><path d="M3 20.5c3-1.3 6-1.3 9 0s6 1.3 9 0"/>',
+  flamme:'<path d="M12 3.2c1 3-1 4-2.1 5.8-.9 1.5-.8 3.6.6 4.6.5-1 1-1.9 1.9-2.4.4 2 1.9 2.6 1.9 4.6a4.3 4.3 0 0 1-8.6 0c0-2.1 1.6-3.7 3.2-5.3C8 9.4 11 7.2 12 3.2z"/>',
+  oiseau:'<path d="M3 10.5c2.6-2.6 5.8-2.6 9 .8 3.2-3.4 6.4-3.4 9-.8M8 16.5c1.3-1.2 2.7-1.2 4 .4 1.3-1.6 2.7-1.6 4-.4"/>',
+  oursin:'<circle cx="12" cy="12" r="3.6"/><path d="M12 3.5v3.4M12 17.1v3.4M3.5 12h3.4M17.1 12h3.4M6 6l2.4 2.4M15.6 15.6 18 18M18 6l-2.4 2.4M8.4 15.6 6 18"/>',
+  visibilite:'<path d="M2.5 12s3.5-6.5 9.5-6.5S21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="2.8"/>',
+  algue:'<path d="M8 21c0-4 2.2-5.2 2.2-8.5S8 8 8 4M14.5 21c0-3 2.5-4.5 2.5-7.5S14.5 9 14.5 6"/>',
+  temperature:'<path d="M12 3.5a2.3 2.3 0 0 0-2.3 2.3v8.4a4 4 0 1 0 4.6 0V5.8A2.3 2.3 0 0 0 12 3.5z"/><path d="M12 9v5"/>'
+};
+var DANGER_TRAIT_ALIAS={secours_eloignes:'secours',sante_maladie:'sante',cyclone_typhon:'cyclone',orage_pluie:'orage',drapeau_attention:'drapeau',
+  dauphin:'mammifere',invertebre:'poisson',epave_penetration:'bateau',animal_a_risque:'vigilance',reptile:'vigilance',moustique:'vigilance',repli_attention:'vigilance'};
+/* Clé du pictogramme en trait : celle de dangerStyle, sauf quand l'emoji désigne un animal et que la phrase parle d'autre
+   chose de précis : la foule, les bateaux, une règle, la surveillance ou les secours (« 🐠 Forte affluence. »). Un mot
+   de nature ne remplace jamais l'animal (« poissons-pierres » ne devient pas un rocher). */
+var DANGER_FAUNA={poisson:1,dauphin:1,tortue:1,mammifere:1,oiseau:1,invertebre:1,reptile:1};
+var DANGER_HUMAN={affluence:1,bateau:1,interdit:1,surveillance:1,drapeau_attention:1,secours_eloignes:1};
+function dangerTraitKey(emoji,text){
+  var k=dangerStyle(emoji,text)[0];
+  if(!DANGER_FAUNA[k])return k;
+  var w=dangerWords(text);
+  return w&&DANGER_HUMAN[w[0]]?w[0]:k;
+}
+function dangerTrait(key){
+  var k=Object.prototype.hasOwnProperty.call(DANGER_TRAIT,key)?key:DANGER_TRAIT_ALIAS[key];
+  return '<svg class="fx-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">'+(DANGER_TRAIT[k]||DANGER_TRAIT.vigilance)+'</svg>';
 }
 function spotTokens(s){const t=[s.id];s.name.split('—')[0].toLowerCase().split(/[^a-zà-ÿ0-9]+/).forEach(function(w){if(w.length>=5)t.push(w);});(ALIAS[s.id]||[]).forEach(function(a){t.push(a);});return t;}
 function findSpotInQuery(q){for(const s of SPOTS){const tk=spotTokens(s);for(const k of tk){if(k.length>=4&&q.indexOf(k)>=0)return s;}}return null;}

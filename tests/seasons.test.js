@@ -137,20 +137,31 @@ test('accueil : le rail du mois et le toast parlent d’un repère indicatif, pa
   assert.deepEqual([...new Set(feed.match(/data\/[\w-]+\.json/g).filter(f=>/season/.test(f)))],['data/seasons.json']);
 });
 
-/* ---------- Tuile « La bonne saison » ---------- */
-function spirit(culture){
+/* ---------- « Le spot » (fiche v2) : plus de tuile « La bonne saison » ---------- */
+function spirit(culture,cultures){
   const src=text('spot-guide.js'),i=src.indexOf('function spiritHTML('),j=src.indexOf('/* ---------- À découvrir autour');
   assert.ok(i>0&&j>i,'spiritHTML introuvable');
-  const ctx=vm.createContext({culture:()=>culture,spotPhotoUrl:()=>'',country:()=>'France',esc:v=>String(v??''),NT:' translate="no" data-no-i18n',icon:()=>''});
+  const ctx=vm.createContext({culture:()=>culture,spotPhotoUrl:()=>'photo.jpg',country:()=>'France',esc:v=>String(v??''),NT:' translate="no" data-no-i18n',icon:()=>'',svg:(b,c)=>`<svg class="${c}"></svg>`,P:{speech:''},OceanCultures:cultures});
   vm.runInContext(src.slice(i,j)+';this.spiritHTML=spiritHTML;',ctx);
   return ctx.spiritHTML({id:'x'});
 }
-test('« La bonne saison » : la mention indicative est sous le texte, hors du bloc translate="no"',()=>{
-  const html=spirit({season:'De mai à octobre : test',respect:'Sois discret.',food:['Plat','Description'],grounded:true});
-  const note='<span class="guide-note">Repère indicatif, à confirmer localement.</span>';
-  assert.equal(html.split(note).length-1,1,'une seule mention');
-  assert.match(html,/La bonne saison<\/small><p translate="no" data-no-i18n>De mai à octobre : test<\/p><span class="guide-note">Repère indicatif, à confirmer localement\.<\/span><\/article>/);
-  /* pas de saison, pas de mention ; les autres tuiles n’en ont pas */
-  const sans=spirit({respect:'Sois discret.',food:['Plat','Description'],grounded:true});
-  assert.ok(!sans.includes('Repère indicatif'));
+test('« Le spot » : la saison se lit dans l’onglet Saisons, le mot du coin et le plat à goûter sur une seule ligne vers la culture du pays',()=>{
+  const full={season:'De mai à octobre : test',respect:'Sois discret.',food:['Plat','Description'],hello:['Bonjour','pour saluer'],vibe:'Ambiance.',grounded:true};
+  const html=spirit(full,{discover:c=>'Découvrir la '+c});
+  /* Retirés de l’affichage : la saison (onglet Saisons), la photo répétée, la phrase d’ambiance, le numéro de chapitre. */
+  assert.doesNotMatch(html,/La bonne saison|De mai à octobre|Repère indicatif|<img|Ambiance|guide-chapter|01/);
+  /* Le bon geste : texte entier, non retraduit par morceaux. */
+  assert.match(html,/<h3 class="fx-title fx-title-s">Le bon geste<\/h3><p class="fx-text" translate="no" data-no-i18n>Sois discret\.<\/p>/);
+  /* Une seule ligne, un seul bouton vers la page culture du pays. */
+  assert.equal((html.match(/<button /g)||[]).length,1);
+  assert.match(html,/<button type="button" class="sg-cult" data-cult-open="France" data-cult-from="spot">/);
+  assert.match(html,/<b translate="no" data-no-i18n>Découvrir la France<\/b>/);
+  assert.match(html,/<span>Le mot du coin :<\/span> <span translate="no" data-no-i18n>«&nbsp;Bonjour&nbsp;»<\/span>/);
+  assert.match(html,/<span>À goûter :<\/span> <span translate="no" data-no-i18n>Plat<\/span>/);
+  assert.doesNotMatch(html.replace(/<[^>]+>/g,' '),/·/,'aucune chaîne reliée par des points médians');
+  /* Sans module culture : la même ligne, sans lien ; repères généraux du pays : la note le dit. */
+  const plain=spirit({...full,grounded:false},undefined);
+  assert.doesNotMatch(plain,/<button /);
+  assert.match(plain,/<p class="sg-cult sg-cult-static">/);
+  assert.match(plain,/Repères culturels généraux du pays\. La fiche détaillée de ce spot arrive bientôt\./);
 });

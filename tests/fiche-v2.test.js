@@ -223,7 +223,7 @@ test('fiche.css : échelle typographique pilotée par six variables posées sur 
   const role = { 'fx-num': '--fiche-num', 'fx-unit': '--fiche-unit', 'fx-title': '--fiche-title', 'fx-label': '--fiche-label', 'fx-text': '--fiche-text', 'fx-note': '--fiche-note' };
   for (const [cls, v] of Object.entries(role)) assert.match(css, new RegExp(`#detail \\.${cls}[,{][^}]*font:\\d+ var\\(${v}\\)`), cls);
   /* Le numéro d’urgence suit le grand chiffre. */
-  assert.match(css, /\.dcat\[data-cat="securite"\] \.sc-num\{font:800 var\(--fiche-num\)/);
+  assert.match(css, /\.dcat\[data-cat="securite"\] \.sx-urg \.sc-num\{[^}]*font:800 var\(--fiche-num\)/);
   /* Dans les composants et l’onglet Conditions, les corps passent par les variables (seuls les onglets ont leur 16 px). */
   const body = css.slice(css.indexOf('/* ================= Composants'), css.indexOf('fin de la section Conditions')).replace(/\/\*[\s\S]*?\*\//g, '');
   const hard = [...body.matchAll(/font:\d+ (\d+(?:\.\d+)?px)[^;}]*/g)].map(m => m[0]).filter(f => !/^font:\d+ 16px\/1 var\(--body\)/.test(f));
