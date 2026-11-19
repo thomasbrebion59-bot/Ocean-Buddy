@@ -245,7 +245,7 @@ test('Sécurité : son onglet, rien de replié ; en-tête compact et rangée d�
   /* 19 nov. (« trop de texte ») : dans Sécurité, seule la valeur de modèle des courants s’ouvre d’un toucher. */
   assert.match(read('replis.js'), /securite: \[\n\s+\{ id: 'courants', title: 'Courants & dangers à vérifier', sub: 'Valeurs de modèle, à vérifier sur place', members: \['#spotSafetyLive'\] \}\n\s+\]/, 'un seul repli dans Sécurité : la valeur de modèle des courants');
   assert.match(read('field-guide.js'), /fieldAction==='emergency'\)\{showDetailCat\('securite',false\);/);
-  assert.match(css, /html \.ocean-v2 #detail #detailHero\{min-height:clamp\(230px,33dvh,320px\);height:auto\}/, 'photo : environ un tiers de l’écran');
+  assert.match(css, /html \.ocean-v2 #detail #detailHero\{min-height:clamp\(280px,42dvh,410px\);height:auto\}/, 'photo (19 nov., « un peu trop petite ») : 42 % de l’écran, les quatre relevés restent visibles sur un grand iPhone ; avant : un tiers de l’écran');
   assert.match(css, /#detail \.detail-hero \.dfact-sea\{display:none\}/);
   assert.match(read('base.css'), /\.dtabs\{[^}]*position:sticky;top:0/);
 });
