@@ -4,9 +4,11 @@ const { read, load } = require('./src-extract.cjs');
    passait sur trois lignes, 71 px de contenu dans le bloc de 52 px du résultat (la dernière ligne touchait le bas de la
    carte du mot du jour). Le nom et la phrase tiennent sur deux lignes dans les 52 px ; au-delà, le bloc passe en .is-long
    (tampon seul à gauche, bouton « Descubre… » sur toute la place), comme pour un nom trop long. */
-function block({ resH = 52, resBox = 52 } = {}) {
+/* Bloc du résultat : texte (nom + phrase) de hauteur textH ; le tampon tourné fait toujours dépasser scrollHeight (56 px). */
+function block({ textH = 52, resBox = 52 } = {}) {
   const cls = new Set(), el = w => ({ scrollWidth: w, clientWidth: 150 });
-  const res = { scrollHeight: resH, clientHeight: resBox };
+  const text = { getBoundingClientRect: () => ({ height: textH }) };
+  const res = { scrollHeight: 56, clientHeight: resBox, querySelector: s => (s === ':scope>div' ? text : null) };
   const go = el(120), name = el(80);
   return { cls, classList: { add: c => cls.add(c), remove: c => cls.delete(c) },
     querySelector: s => (s === '.cult-quiz-go' ? go : s === '.cult-quiz-res>div>b' ? name : s === '.cult-quiz-res' ? res : null) };
@@ -16,8 +18,8 @@ function fit(blocks) {
   ctx.fitDone();
 }
 
-test('mot du jour, résultat : contenu plus haut que le bloc, bloc en .is-long ; contenu qui tient, rien ne change', () => {
-  const tall = block({ resH: 71 }), fits = block({ resH: 52 });
+test('mot du jour, résultat : texte plus haut que le bloc, bloc en .is-long ; texte qui tient (tampon tourné compris), rien ne change', () => {
+  const tall = block({ textH: 66.2 }), fits = block({ textH: 51.8 });
   fit([tall, fits]);
   assert.ok(tall.cls.has('is-long'), 'trois lignes : .is-long');
   assert.ok(!fits.cls.has('is-long'), 'deux lignes : mise en page habituelle');

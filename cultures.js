@@ -135,7 +135,8 @@
      (« Abre su página para conseguir su sello. » sur trois lignes, espagnol à 375 px) dépassent la hauteur du bloc. */
   function fitDone(){
     const over=el=>!!el&&el.scrollWidth>el.clientWidth+1;
-    const tall=el=>!!el&&el.scrollHeight>el.clientHeight+1;
+    /* Seul le texte compte : le tampon, tourné de 10°, dépasse toujours un peu du bloc (scrollHeight). */
+    const tall=res=>{const t=res&&res.querySelector(':scope>div');return !!t&&t.getBoundingClientRect().height>res.clientHeight+1;};
     /* Réponses du jeu (téléphone : trois boutons côte à côte) : le nom du pays se lit en entier, jamais « … » ni coupé au
        milieu d’un mot. Deux lignes ; sinon trois lignes, puis un corps plus petit (data-fit 1 à 3, fiches-organisation.css).
        Les boutons gardent leur hauteur commune. */
