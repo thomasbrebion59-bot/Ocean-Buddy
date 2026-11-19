@@ -209,3 +209,17 @@ test('Le spot : la carte du secteur reste dans l’onglet (repli « Photos et ca
   assert.equal(credit('', 'Le port'), 'Le port. ');
   assert.equal(credit(''), '');
 });
+
+test('Le spot en anglais ou en espagnol : le doublon se repère sur le texte français du carnet', () => {
+  const vm = require('node:vm');
+  const src = read('spot-guide.js'), i = src.indexOf('function culture('), j = src.indexOf('/* ---------- À découvrir autour');
+  const block = { attrs: {}, toggleAttribute(k, v) { this.attrs[k] = v; } };
+  const fr = { spots: { x: { r: 'Entre avec des chaussons.' } }, countries: {} };
+  const es = { spots: { x: { r: 'Entra con escarpines.' } }, countries: {} };
+  const ctx = vm.createContext({ data: es, window: { OCEAN_SPOT_GUIDES: fr }, country: () => 'France', esc: v => String(v ?? ''), NT: '', svg: () => '', P: {},
+    document: { getElementById: () => ({ closest: () => block }) } });
+  vm.runInContext(src.slice(i, j) + ';this.spiritHTML=spiritHTML;', ctx);
+  /* Bon geste espagnol identique (en français) au conseil : pas de bon geste. */
+  assert.doesNotMatch(ctx.spiritHTML({ id: 'x', tip: 'Entre avec des chaussons.' }), /Le bon geste/);
+  assert.match(ctx.spiritHTML({ id: 'x', tip: 'Rame au large.' }), /Le bon geste[\s\S]*Entra con escarpines\./);
+});

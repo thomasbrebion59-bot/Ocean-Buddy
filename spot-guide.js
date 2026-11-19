@@ -90,8 +90,8 @@
   const country=s=>data?.spots?.[s?.id]?.c||s?.country||(typeof countryOf==='function'?countryOf(s):'');
   const world=s=>s?.world||(typeof SPOT_WORLD!=="undefined"?SPOT_WORLD:{})[s?.id]||'eu';
   const entry=id=>data?.spots?.[id]||null;
-  function culture(s){
-    const c=data?.countries?.[country(s)]||null,g=entry(s.id)||{};
+  function culture(s,d=data){
+    const c=d?.countries?.[country(s)]||null,g=d?.spots?.[s.id]||{};
     return {lang:g.l||c?.lang||'',hello:g.h||c?.hello||null,food:g.f||c?.food||null,respect:g.r||c?.respect||'',vibe:g.v||'',season:g.s||(s.editorialStatus==='reviewed'?s.visit?.bestPeriod:'')||'',grounded:!!g.v};
   }
   function estimate(s){if(!s)return null;return M.estimate({country:country(s),loc:s.loc,world:world(s)},entry(s.id)?.z);}
@@ -138,7 +138,11 @@
     const open=typeof OceanCultures!=='undefined'&&ctry;
     const bits=[hello&&`<span class="sg-cult-bit"><span>Le mot du coin :</span> <span${NT}>«&nbsp;${esc(hello)}&nbsp;»</span></span>`,food&&`<span class="sg-cult-bit"><span>À goûter :</span> <span${NT}>${esc(food)}</span></span>`].filter(Boolean).join('');
     const ownTip=typeof s.tip==='string'&&s.tip.trim()?s.tip:'',tip=ownTip||(typeof s.carnet?.tip==='string'?s.carnet.tip:'');
-    const r=same(c.respect),t=same(tip);
+    /* Comparaison sur le texte français (le conseil du catalogue est en français ; en anglais ou en espagnol, le bon
+       geste vient de la traduction du carnet, posée par-dessus window.OCEAN_SPOT_GUIDES). */
+    const base=typeof window!=='undefined'?window.OCEAN_SPOT_GUIDES:null;
+    const fr=base&&typeof data!=='undefined'&&data!==base?culture(s,base):c;
+    const r=same(fr.respect),t=same(tip);
     const dup=!!(r&&t&&r===t),wider=!!(r&&ownTip&&!dup&&r.startsWith(t));
     if(typeof document!=='undefined'){const tb=document.getElementById('dTip')?.closest('.block');if(tb)tb.toggleAttribute('data-in-geste',wider);}
     const geste=c.respect&&!dup?`<div class="sg-geste"><h3 class="fx-title fx-title-s">Le bon geste</h3><p class="fx-text"${NT}>${esc(c.respect)}</p></div>`:'';
