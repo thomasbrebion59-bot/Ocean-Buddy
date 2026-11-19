@@ -331,3 +331,16 @@ test('Prévisions : lever et coucher écrits comme les autres heures (« 7 h 37 
   assert.doesNotMatch(exp, /fx-note fx7-calc" data-fx-view="forecast"/, 'plus en pied d’onglet quand un jour est mis en avant');
   assert.match(exp, /foot: best \? '' : note\}/, 'sans meilleur jour, le rappel reste en pied, sous l’heure du relevé');
 });
+
+test('barre du haut de la fiche : le nom du spot, pas « Le spot » (qui est aussi un onglet)', () => {
+  const nav = read('navigation.js');
+  assert.match(nav, /const spotTitle=scr==='detail'&&window\.SpotName\?SpotName\.parts\(SPOTS\.find\(s=>s\.id===currentSpot\)\?\.name\)\.main:'';/);
+  assert.match(nav, /mobileTitle\.textContent=spotTitle\|\|\{home:'Accueil',spots:'Explorer',detail:'Le spot',/, 'sans spot connu, l’ancien titre reste');
+  /* Nom déjà traduit par spot-name.js : le traducteur de page ne le reprend pas, et le marquage part avec la fiche. */
+  assert.match(nav, /if\(spotTitle\)\{mobileTitle\.setAttribute\('data-no-i18n',''\);mobileTitle\.setAttribute\('translate','no'\);\}/);
+  assert.match(nav, /else \{mobileTitle\.removeAttribute\('data-no-i18n'\);mobileTitle\.removeAttribute\('translate'\);\}/);
+  const SpotName = (() => { const w = {}; new Function('window', read('spot-name.js'))(w); return w.SpotName; })();
+  assert.equal(SpotName.parts('Hossegor — La Gravière').main, 'Hossegor');
+  assert.equal(SpotName.parts('Tulamben').main, 'Tulamben');
+  assert.equal(SpotName.parts(undefined).main, '');
+});

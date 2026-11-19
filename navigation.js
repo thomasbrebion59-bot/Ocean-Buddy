@@ -38,7 +38,12 @@
     backButton.hidden=!hasBack;document.body.classList.toggle('has-app-back',hasBack);
     const backLabel='Retour vers '+(entry.from||'l’accueil');backButton.setAttribute('aria-label',backLabel);backButton.title=backLabel;
     $('#detail .back-btn').setAttribute('aria-label',backLabel);
-    mobileTitle.textContent={home:'Accueil',spots:'Explorer',detail:'Le spot',trips:'Voyages',surf:'Jeu',challenges:'Défis',community:'Communauté',profile:'Profil'}[document.body.dataset.screen];
+    /* Fiche : la barre porte le nom du spot (« Hossegor »), pas « Le spot », qui est aussi le nom d’un onglet. Le nom est
+       déjà dans la langue choisie (spot-name.js) : le traducteur de page n’y touche pas. */
+    const spotTitle=scr==='detail'&&window.SpotName?SpotName.parts(SPOTS.find(s=>s.id===currentSpot)?.name).main:'';
+    if(spotTitle){mobileTitle.setAttribute('data-no-i18n','');mobileTitle.setAttribute('translate','no');}
+    else {mobileTitle.removeAttribute('data-no-i18n');mobileTitle.removeAttribute('translate');}
+    mobileTitle.textContent=spotTitle||{home:'Accueil',spots:'Explorer',detail:'Le spot',trips:'Voyages',surf:'Jeu',challenges:'Défis',community:'Communauté',profile:'Profil'}[scr];
     const world=worldOf(spotWorld),sportName=activeSport?SPORTMAP[activeSport].label:'Toutes les activités';
     $('#exploreSportLabel').textContent=sportName;
     $('#exploreActivity').setAttribute('aria-label','Changer d’activité : '+sportName);
