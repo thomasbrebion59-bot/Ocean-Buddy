@@ -1009,7 +1009,7 @@ function renderPreserve(s){
    + '<h3 class="fx-title">Préserver ce spot</h3><p class="fx-text nx-pres-e">'+p.e+'</p>'
    + '<ul class="pres-l">'
    + p.g.map(function(g,i){ return presGeste(g,i,z); }).join('')
-   + '</ul></div>';
+   + '</ul><button type="button" class="fx-more pres-more" data-fx-reveal="#presBlock">Pourquoi ces gestes ?</button></div>';
   return h;
 }
 function preserveTab(on){

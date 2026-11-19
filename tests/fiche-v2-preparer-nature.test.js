@@ -71,7 +71,8 @@ test('Nature : les deux chiffres en relevés de la fiche, « Quand les voir », 
   assert.match(nature, /\.nx-stats>\.nx-stat\{[^}]*background:none/, 'plus de tuiles sombres');
   /* Les sources restent visibles sous leur repli. */
   const g = tabGroups('faune');
-  assert.deepEqual(g.map(x => x.id), ['photos', 'typiques']);
+  /* 19 nov. : les photos des espèces observées se voient d’emblée. */
+  assert.deepEqual(g.map(x => x.id), ['typiques']);
   const folded = g.map(x => x.members).join(' ');
   assert.ok(!folded.includes('sd-src') && !folded.includes('bio-note') && !folded.includes('bio-warn'));
   assert.match(data, /Photos sous licence libre, crédits sur chaque image\./);
@@ -92,7 +93,7 @@ test('Nature, Préserver : l’enjeu en une phrase, puis les gestes en liste sim
 test('Préparer et Nature : les nouveaux textes sont traduits en anglais et en espagnol', () => {
   const src = new Set(JSON.parse(read('locales/source/fr.json')));
   const keys = ['Y aller', 'Dormir', 'Autour', 'Matériel et cours', 'Ton carnet', 'Ton point de départ', 'Même activité, dans un rayon de 200 km',
-    'Chercher un vol vers {1}', 'Haute saison ({0}) : {1} la nuit.', 'Je l\'ai fait', 'Préserver ce spot', 'Photos et observations', 'Quand les voir ?'];
+    'Chercher un vol vers {1}', 'Haute saison ({0}) : {1} la nuit.', 'Je l\'ai fait', 'Préserver ce spot', 'Quand les voir ?', 'Voir le détail des étapes', 'Pourquoi ces gestes ?', 'Sources et précisions'];
   for (const l of ['en', 'es']) {
     const tr = JSON.parse(read(`locales/translations/${l}.json`));
     for (const k of keys) {

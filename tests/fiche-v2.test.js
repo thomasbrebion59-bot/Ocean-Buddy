@@ -242,7 +242,8 @@ test('fiche.css : échelle typographique pilotée par six variables posées sur 
 test('Sécurité : son onglet, rien de replié ; en-tête compact et rangée d’onglets collée', () => {
   assert.match(css, /\.dcat\[data-cat="securite"\]::before\{content:none!important;display:none!important\}/, 'l’ancien intertitre n’a plus lieu d’être');
   assert.match(css, /#detail \.dcat\[data-cat="securite"\]>#dDanger\{order:1\}\n#detail \.dcat\[data-cat="securite"\]>\.safety-block\{order:2\}/, 'danger, puis urgences');
-  assert.doesNotMatch(read('replis.js'), /securite: \[/, 'aucune section repliable dans Sécurité');
+  /* 19 nov. (« trop de texte ») : dans Sécurité, seule la valeur de modèle des courants s’ouvre d’un toucher. */
+  assert.match(read('replis.js'), /securite: \[\n\s+\{ id: 'courants', title: 'Courants & dangers à vérifier', sub: 'Valeurs de modèle, à vérifier sur place', members: \['#spotSafetyLive'\] \}\n\s+\]/, 'un seul repli dans Sécurité : la valeur de modèle des courants');
   assert.match(read('field-guide.js'), /fieldAction==='emergency'\)\{showDetailCat\('securite',false\);/);
   assert.match(css, /html \.ocean-v2 #detail #detailHero\{min-height:clamp\(230px,33dvh,320px\);height:auto\}/, 'photo : environ un tiers de l’écran');
   assert.match(css, /#detail \.detail-hero \.dfact-sea\{display:none\}/);

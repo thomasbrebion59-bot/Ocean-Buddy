@@ -16,12 +16,14 @@
 
   /* ---------- Fiche spot, onglet « Le spot » : deux sections repliées ---------- */
   const GROUPS = [
+    { id: 'anecdote', title: 'Le savais-tu ?', sub: 'Une anecdote sur ce spot', members: ['.anec-block'] },
     { id: 'reperes', title: 'Comprendre le spot', sub: 'Vent, houle, marée et niveau expliqués', members: ['#spotImmersion'] },
     { id: 'images', title: 'Photos et carte', sub: 'Photos, vidéos et carte du secteur', members: ['#spotPhotoStrip', '#obVoyageBanner', '#spotVideoPanel', '#spotAreaMap'] }
   ];
   /* Blocs créés dans « Le spot » par field-guide.js et spot-guide.js, rangés dans « Préparer » (une seule fois). */
   const MOVED = { activites: ['#fieldOverview', '#guideAround', '#guideSleep', '#fieldNearbyBlock'] };
   const infos = () => $('#detail .dcat[data-cat="infos"]');
+  const absent = el => !!el.closest('[hidden]') || el.style.display === 'none';
   const ids = { '.field-story': 'fieldStory', '.anec-block': 'dAnecBlock', '.field-reference': 'fieldReference', '.field-tip': 'fieldTip' };
 
   /* Les têtes de section sont posées une fois, devant le premier membre présent de leur groupe (ordre de lecture),
@@ -42,6 +44,9 @@
       const list = [];
       for (const s of g.members) { const el = tab.querySelector(':scope>' + s); if (!el) continue; if (!el.id && ids[s]) el.id = ids[s]; if (el.id) list.push(el.id); }
       if (list.length) head.setAttribute('aria-controls', list.join(' ')); else head.removeAttribute('aria-controls');
+      /* Section sans contenu pour ce spot (pas d’anecdote : son bloc est masqué par app.js) : sa ligne s’efface. */
+      const els = g.members.map(s => tab.querySelector(':scope>' + s)).filter(Boolean);
+      head.hidden = els.length > 0 && els.every(absent);
     }
     return tab;
   }
@@ -106,15 +111,31 @@
       { id: 'depart', title: 'Ton point de départ', sub: 'Situer le lieu sur la carte', members: ['#dGuide>.field-address'] },
       { id: 'surplace', title: 'Heure, soleil, monnaie et langue', sub: 'Ce qui change sur place', members: ['#dGo>.sd-facts'] }
     ],
-    /* Nature (fiche v2) : les photos et les listes d’espèces se replient ; leurs sources restent visibles sous chaque repli
-       (iNaturalist et OBIS soutiennent les deux chiffres, Wikimedia Commons crédite les photos des espèces à connaître). */
+    /* Nature (19 nov., « trop de texte ») : les photos des espèces observées se voient d’emblée, en bande à faire glisser
+       (fiche.css) ; seules les espèces typiques de la zone restent repliées. Sources et crédits de méthode : NOTES. */
     faune: [
-      { id: 'photos', title: 'Les espèces photographiées ici', sub: 'Photos et observations', members: ['#dWild>.sd-species', '#dWild>.sd-link'] },
       { id: 'typiques', title: 'Les espèces typiques de la zone', sub: 'À observer, flore et fonds', members: ['#bioObserve', '#bioFlore'] }
+    ],
+    /* Sécurité : le niveau de danger, les numéros d’urgence, les dangers du spot et les consignes en étapes restent
+       toujours visibles. Seule la valeur de modèle des courants (avec son avertissement) s’ouvre d’un toucher. */
+    securite: [
+      { id: 'courants', title: 'Courants & dangers à vérifier', sub: 'Valeurs de modèle, à vérifier sur place', members: ['#spotSafetyLive'] }
     ]
   };
+  /* « Sources et précisions » (19 nov. : « il y a trop de texte ») : les sources, dates de consultation et précisions de
+     méthode ne s’étalent plus sous chaque bloc. Elles restent dans la page, marquées data-fx-note (masquées par
+     fiche.css), et une seule ligne en pied de fiche (#dNotes, index.html) les montre toutes, pour l’onglet affiché,
+     d’un toucher. Jamais ici : un danger, un numéro d’urgence, un avertissement de sécurité. */
+  const NOTES = {
+    meteo: ['#spotWeek>.spot-week-note', '#spotWeek>.wx-source', '#spotWeek>.fx7-stamp'],
+    securite: ['#dDanger>small.fx-note', '#sdRip .sd-coach-src'],
+    infos: ['#dSource', '.field-visit-cites', '.field-visit-caution', '.field-reference'],
+    saisons: ['#dSeasons .sd-suit>small', '#dSeasons>.sd-src'],
+    activites: ['#dGo>.sd-src', '.field-preparation>.g-note', '.field-local>.fx-note', '#guideAround>.px-lead', '#guideAround>.px-src',
+      '#guideSleep .px-type>span', '#guideSleep .px-src', '#guideSleep .px-search>.fx-note'],
+    faune: ['#dWild>.nx-intro', '#dWild>.sd-src', '#dFaune>.bio-note']
+  };
   const tabOf = cat => $(`#detail .dcat[data-cat="${cat}"]`);
-  const absent = el => !!el.closest('[hidden]') || el.style.display === 'none';
   function makeHead(g) {
     const head = document.createElement('button'); head.type = 'button'; head.className = 'obf-head';
     head.dataset.obfGroup = g.id; head.setAttribute('aria-expanded', 'false');
@@ -150,6 +171,51 @@
     mountTab(cat);
   }
   function closeTabs() { for (const cat in TAB_GROUPS) { const t = tabOf(cat); if (t) t.dataset.open = ''; mountTab(cat); } }
+  function markNotes() {
+    for (const cat in NOTES) { const tab = tabOf(cat); if (!tab) continue;
+      for (const sel of NOTES[cat]) tab.querySelectorAll(sel).forEach(e => { if (!e.hasAttribute('data-fx-note')) e.setAttribute('data-fx-note', ''); }); }
+  }
+  const notesBox = $('#dNotes'), notesHead = $('#dNotesHead'), notesZone = $('#dNotesZone');
+  const gone = (e, root) => { for (let n = e; n && n !== root; n = n.parentElement) if (n.hidden || n.style.display === 'none' || n.hasAttribute('data-obf-shut')) return true; return false; };
+  /* Les précisions de l’onglet affiché : « Prévisions » est une vue du panneau météo, « Nature » montre deux panneaux. */
+  function noteNodes() {
+    const tab = $('#detail')?.dataset.tab || 'meteo', view = tab === 'previsions' ? 'forecast' : 'now';
+    const cats = tab === 'previsions' ? ['meteo'] : tab === 'faune' ? ['faune', 'preserver'] : [tab];
+    const seen = new Set();
+    return cats.flatMap(c => { const p = tabOf(c); return p ? [...p.querySelectorAll('[data-fx-note]')].filter(e => !gone(e, p)) : []; })
+      .filter(e => { const v = e.closest('[data-fx-view]'); if (v && v.dataset.fxView !== view) return false;
+        const k = e.textContent.replace(/\s+/g, ' ').trim(); if (!k || seen.has(k)) return false; seen.add(k); return true; });
+  }
+  function fillNotes() {
+    if (!notesZone) return;
+    notesZone.replaceChildren(...noteNodes().map(e => {
+      const c = e.cloneNode(true); c.removeAttribute('data-fx-note'); c.removeAttribute('id'); c.removeAttribute('style');
+      c.querySelectorAll('[id]').forEach(x => x.removeAttribute('id'));
+      const item = document.createElement('div'); item.className = 'fx-notes-item'; item.append(c); return item;
+    }));
+  }
+  function setNotes(open) {
+    if (!notesBox) return;
+    notesHead.setAttribute('aria-expanded', String(!!open)); notesZone.hidden = !open;
+    if (open) fillNotes(); else notesZone.replaceChildren();
+  }
+  function syncNotes() {
+    if (!notesBox) return;
+    markNotes();
+    const any = noteNodes().length > 0;
+    if (notesBox.hidden === any) notesBox.hidden = !any;
+    if (!any) setNotes(false); else if (notesHead.getAttribute('aria-expanded') === 'true') fillNotes();
+  }
+  if (notesHead) notesHead.addEventListener('click', () => setNotes(notesHead.getAttribute('aria-expanded') !== 'true'));
+  /* Changement d’onglet (app.js, showDetailCat pose data-tab) : la ligne se referme et suit le nouvel onglet. */
+  if (notesBox && 'MutationObserver' in window) new MutationObserver(() => { setNotes(false); syncNotes(); }).observe($('#detail'), { attributes: true, attributeFilter: ['data-tab'] });
+  /* Révéler d’un toucher, une fois : [data-fx-reveal] donne le sélecteur du bloc qui reçoit .is-detail (le détail des
+     étapes d’une liste, le pourquoi d’un geste). Le bouton s’efface ensuite. */
+  document.addEventListener('click', e => {
+    const b = e.target.closest('#detail button[data-fx-reveal]'); if (!b) return;
+    const box = b.closest(b.dataset.fxReveal); if (!box) return;
+    box.classList.add('is-detail'); b.hidden = true;
+  });
   document.addEventListener('click', e => {
     const head = e.target.closest('#detail .dcat:not([data-cat="infos"]) .obf-head[data-obf-group]'); if (!head) return;
     const cat = head.closest('.dcat')?.dataset.cat;
@@ -159,9 +225,10 @@
      avant l’affichage (microtâche), donc sans saut visible. */
   let queued = false;
   const body = $('#detail .detail-body');
-  if (body && 'MutationObserver' in window) new MutationObserver(() => {
+  if (body && 'MutationObserver' in window) new MutationObserver(muts => {
+    if (notesBox && muts.every(m => notesBox.contains(m.target))) return;   /* le pied « Sources et précisions » s’écrit lui-même */
     if (queued) return; queued = true;
-    queueMicrotask(() => { queued = false; for (const cat in TAB_GROUPS) mountTab(cat); });
+    queueMicrotask(() => { queued = false; for (const cat in TAB_GROUPS) mountTab(cat); syncNotes(); });
   }).observe(body, { childList: true, subtree: true });
 
   /* Nouveau spot : tout replié, sommaire en place. Même spot (retour) : l’état reste celui laissé.
@@ -182,10 +249,10 @@
   window.addEventListener('ocean:navigate', e => {
     if (e.detail !== 'detail') return;
     let cur = null; try { cur = typeof currentSpot !== 'undefined' ? currentSpot : null; } catch (_) {}
-    if (cur === lastSpot && infos()?.querySelector('.obf-head')) { mount(); for (const cat in TAB_GROUPS) mountTab(cat); return; }
+    if (cur === lastSpot && infos()?.querySelector('.obf-head')) { mount(); for (const cat in TAB_GROUPS) mountTab(cat); syncNotes(); return; }
     if (lastSpot != null) { left.delete(lastSpot); left.set(lastSpot, snapshot()); if (left.size > LEFT_MAX) left.delete(left.keys().next().value); }
     let back = null; try { back = window.OceanNavigation?.restoreScroll?.() != null ? left.get(cur) : null; } catch (_) {}
-    lastSpot = cur; closeAll(); closeTabs();
+    lastSpot = cur; closeAll(); closeTabs(); setNotes(false); syncNotes();
     if (back) reopen(back);
   });
   /* Fiche déjà ouverte au chargement de ce script : relance du WebView (mise à jour, changement de langue) où
@@ -193,7 +260,7 @@
      restait sans sommaire, toutes ses sections masquées. Même état qu’une ouverture : tout replié. */
   if (document.body?.dataset.screen === 'detail') {
     try { lastSpot = typeof currentSpot !== 'undefined' ? currentSpot : null; } catch (_) {}
-    closeAll(); closeTabs();
+    closeAll(); closeTabs(); syncNotes();
   }
 
   /* ---------- Replis simples : bouton [data-obf] + aria-controls, zone [hidden] ---------- */
@@ -206,5 +273,5 @@
     const b = e.target.closest('button[data-obf]'); if (b) toggle(b);
   });
 
-  window.OceanReplis = { mount, setGroup, closeAll, reveal, toggle, GROUPS, TAB_GROUPS, mountTab, setTabGroup };
+  window.OceanReplis = { mount, setGroup, closeAll, reveal, toggle, GROUPS, TAB_GROUPS, mountTab, setTabGroup, NOTES, syncNotes, setNotes };
 })();

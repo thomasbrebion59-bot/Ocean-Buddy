@@ -7,7 +7,8 @@ const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { read } = require('./src-extract.cjs');
 const html = read('index.html'), app = read('app.js'), css = read('fiche.css');
-const panel = html.slice(html.indexOf('<div class="dcat" data-cat="securite"'), html.indexOf('<!-- ============ CHALLENGES'));
+/* Le panneau Sécurité s’arrête avant le pied « Sources et précisions », commun à tous les onglets (19 nov.). */
+const panel = html.slice(html.indexOf('<div class="dcat" data-cat="securite"'), html.indexOf('<!-- Sources et précisions'));
 const section = (name, next) => css.slice(css.indexOf('ONGLET ' + name), css.indexOf('fin de la section ' + next));
 const secu = section('SÉCURITÉ', 'Sécurité'), spot = section('LE SPOT', 'Le spot');
 const noComments = s => s.replace(/\/\*[\s\S]*?\*\//g, '');
@@ -32,7 +33,8 @@ test('Sécurité : toutes les informations d’avant restent dans l’onglet (nu
   assert.match(app, /_more\.id='dEmergMore'/);
   /* Aucun repli, aucune vue dans l’onglet. */
   assert.doesNotMatch(panel, /<details|data-obf|\shidden[\s>=]/);
-  assert.doesNotMatch(read('replis.js'), /securite: \[/);
+  /* 19 nov. : un seul repli dans l’onglet, la valeur de modèle des courants (ni danger, ni numéro, ni consigne). */
+  assert.match(read('replis.js'), /securite: \[\n\s+\{ id: 'courants', title: 'Courants & dangers à vérifier', sub: 'Valeurs de modèle, à vérifier sur place', members: \['#spotSafetyLive'\] \}\n\s+\]/);
 });
 
 test('Sécurité : « Appeler le {numéro} » avec le numéro local réel, jamais le 112 en dur', () => {

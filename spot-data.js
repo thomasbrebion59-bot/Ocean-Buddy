@@ -534,6 +534,14 @@
     box.after(host);
     return host;
   }
+  /* Étapes : un titre de quelques mots toujours affiché ; le détail suit d’un toucher (.is-detail, replis.js). « Si tu es
+     emporté » est une suite d’actions, donc numérotée ; les signes d’un courant ne le sont pas. */
+  function ripSteps(b) {
+    const ordered = b.id === 'rip-out', tag = ordered ? 'ol' : 'ul';
+    const step = (ln, i) => { const [lead, more] = Array.isArray(ln) ? ln : [ln, ''];
+      return `<li class="sx-step">${ordered ? `<span class="sx-step-n" aria-hidden="true">${i + 1}</span>` : '<span class="sx-step-dot" aria-hidden="true"></span>'}<span class="sx-step-tx"><b>${esc(lead)}</b>${more ? `<span class="sx-step-more">${esc(more)}</span>` : ''}</span></li>`; };
+    return `<${tag} class="sx-steps">${b.lines.map(step).join('')}</${tag}>`;
+  }
   function renderRip(s) {
     const host = ripHost(); if (!host) return;
     const sports = typeof spotSports === 'function' ? spotSports(s) : (s.sports || []);
@@ -542,7 +550,7 @@
     if (!blocks) { host.hidden = true; return; }
     const key = blocks.map(b => b.id).join(' ');
     if (host.dataset.rip !== key) {
-      host.innerHTML = blocks.map(b => `<div class="sd-rip-part"><h4 id="sdRip-${b.id}"><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/${RIP_PICTO[b.id] || 'vigilance'}.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> ${esc(b.h)}</h4><ul>${b.lines.map(coachLine).join('')}</ul>${coachSources(b.src)}</div>`).join('');
+      host.innerHTML = blocks.map(b => `<div class="sd-rip-part" data-rip="${b.id}"><h4 id="sdRip-${b.id}"><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/${RIP_PICTO[b.id] || 'vigilance'}.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> ${esc(b.h)}</h4>${ripSteps(b)}<button type="button" class="fx-more sx-steps-more" data-fx-reveal=".sd-rip-part">Lire le détail</button>${coachSources(b.src)}</div>`).join('');
       host.dataset.rip = key;
       host.setAttribute('aria-labelledby', blocks.map(b => 'sdRip-' + b.id).join(' '));
     }

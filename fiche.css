@@ -65,12 +65,12 @@ html .ocean-v2 #detail .db-level::after{margin-left:0;margin-inline-start:2px}
 #detail .fx-level-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:0 0 12px}
 /* Section repliable : la même tête dans tous les onglets (replis.js). Une ligne posée sur le fond, sans cadre ni bordure :
    le titre, une précision, et un chevron dans un rond, qui se remplit quand la section est ouverte. */
-html .ocean-v2 #detail .dcat .obf-head{min-height:48px;margin:6px 0 0;padding:4px 0;border:0;border-radius:0;background:none}
-html .ocean-v2 #detail .dcat .obf-head .obf-tx b{font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
-html .ocean-v2 #detail .dcat .obf-head .obf-tx small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft);white-space:normal;overflow:visible;text-overflow:clip}
-html .ocean-v2 #detail .dcat .obf-head .obf-chev{width:30px;height:30px;background:var(--fiche-wash);color:var(--t-main)}
-html .ocean-v2 #detail .dcat .obf-head[aria-expanded="true"]{margin-bottom:10px}
-html .ocean-v2 #detail .dcat .obf-head[aria-expanded="true"] .obf-chev{background:var(--t-main);color:var(--t-on-main)}
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head{min-height:48px;margin:6px 0 0;padding:4px 0;border:0;border-radius:0;background:none}
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head .obf-tx b{font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head .obf-tx small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft);white-space:normal;overflow:visible;text-overflow:clip}
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head .obf-chev{width:30px;height:30px;background:var(--fiche-wash);color:var(--t-main)}
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head[aria-expanded="true"]{margin-bottom:10px}
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head[aria-expanded="true"] .obf-chev{background:var(--t-main);color:var(--t-on-main)}
 /* Lien d’action discret (« Toutes les prévisions »). */
 #detail .fx-more{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:0;padding:0 2px;border:0;background:none;font:700 var(--fiche-label)/1 var(--body);color:var(--t-main);cursor:pointer;-webkit-tap-highlight-color:transparent}
 #detail .fx-more::after{content:"";width:7px;height:7px;border-top:2px solid currentColor;border-right:2px solid currentColor;transform:rotate(45deg)}
@@ -326,8 +326,22 @@ html .ocean-v2 #detail .sx-watch .carnet-unverified{font:400 var(--fiche-note)/1
 html .ocean-v2 #detail .dcat[data-cat="securite"]>#sdRip h4{display:block;margin:0 0 10px;font:800 calc(var(--fiche-title) * .8)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
 html .ocean-v2 #detail #sdRip h4 svg{display:none}
 html .ocean-v2 #detail #sdRip .sd-rip-part+.sd-rip-part{margin-top:var(--fiche-gap);padding-top:0;border-top:0}
-html .ocean-v2 #detail #sdRip ul{margin:0;padding:0 0 0 20px}
-html .ocean-v2 #detail #sdRip li{margin:0 0 8px;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+/* Consignes en étapes (19 nov.) : un titre de quelques mots toujours affiché, son détail d’un toucher (.is-detail).
+   « Si tu es emporté » est une suite d’actions, numérotée ; les signes d’un courant ont un simple point. */
+html .ocean-v2 #detail #sdRip .sx-steps{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+html .ocean-v2 #detail #sdRip .sx-step{display:grid;grid-template-columns:26px minmax(0,1fr);column-gap:11px;align-items:start;margin:0;padding:0}
+html .ocean-v2 #detail #sdRip .sx-step-n{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--t-main);color:var(--t-on-main);font:700 var(--fiche-note)/1 var(--body);font-variant-numeric:tabular-nums}
+html .ocean-v2 #detail #sdRip .sx-step-dot{width:8px;height:8px;margin:9px 9px 0;border-radius:50%;background:var(--t-main)}
+html .ocean-v2 #detail #sdRip .sx-step-tx{display:grid;gap:2px;min-width:0;padding-top:2px}
+html .ocean-v2 #detail #sdRip .sx-step-tx b{font:600 var(--fiche-text)/1.35 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail #sdRip .sx-step-more{display:none;font:400 var(--fiche-note)/1.45 var(--body);color:var(--fiche-soft)}
+html .ocean-v2 #detail #sdRip .sd-rip-part.is-detail .sx-step-more{display:block}
+html .ocean-v2 #detail #sdRip .sx-steps-more{margin:4px 0 0 35px}
+html .ocean-v2 #detail #sdRip .sx-steps-more[hidden]{display:none}
+/* Valeur de modèle des courants : repliée (replis.js, groupe « courants ») ; son titre est celui de la ligne. */
+#detail .dcat[data-cat="securite"]>.obf-head[data-obf-group="courants"]{order:6;margin:0 0 var(--fiche-gap)}
+#detail .dcat[data-cat="securite"]>.obf-head[data-obf-group="courants"][aria-expanded="true"]{margin-bottom:12px}
+html .ocean-v2 #detail #spotSafetyLive .safety-live-head .fx-title{display:none}
 html .ocean-v2 #detail .dcat[data-cat="securite"] :is(.sd-coach-src,.sd-src,.sd-rip-part>p,.sd-rip-part a){font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
 
 /* Courants et dangers à vérifier (données du moment) : titre, heure du modèle en note, schéma, deux relevés sans carte. */
@@ -781,6 +795,61 @@ html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn :is(svg,img,.spico){flex
 /* fin de la section Nature (ne rien écrire entre ces deux lignes de séparation)
    ----------------------------------------------------------------------------------------------------- */
 
+
+/* =====================================================================================================
+   MOINS DE TEXTE (19 nov. : « il y a trop de texte, tu dois trouver une alternative »)
+   Chaque onglet montre la réponse. Sources, précisions de méthode et explications restent à un toucher.
+   ===================================================================================================== */
+/* Le spot : l’anecdote est une section repliée (replis.js), son titre est celui de la ligne. Une ligne sans contenu s’efface. */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.anec-block>h4{display:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head[data-obf-group="anecdote"]{margin:0 0 var(--fiche-gap)}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head[data-obf-group="anecdote"][aria-expanded="true"]{margin-bottom:8px}
+#detail .obf-head[hidden]{display:none!important}
+/* Sources et précisions : marquées par replis.js (NOTES), masquées dans la page, montrées en pied de fiche (#dNotes). */
+#detail .dcat [data-fx-note]{display:none!important}
+html .ocean-v2 #detail .fx-notes{margin:var(--fiche-gap) 0 0;padding-top:4px;border-top:1px solid var(--fiche-hair)}
+html .ocean-v2 #detail .fx-notes[hidden],#detail .fx-notes-zone[hidden]{display:none}
+#detail .fx-notes-zone{display:grid;gap:10px;padding:4px 0 8px}
+#detail .fx-notes-item,#detail .fx-notes-item *{margin:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;min-height:0!important;max-width:none!important;
+  font:400 var(--fiche-note)/1.45 var(--body)!important;letter-spacing:0!important;text-transform:none!important;color:var(--fiche-soft)!important;overflow-wrap:anywhere}
+#detail .fx-notes-item>*{display:block!important}
+#detail .fx-notes-item a{text-decoration:underline!important;text-underline-offset:3px}
+
+/* Préparer : aéroports sur une ligne (code, nom, distance), séparés par un filet. */
+#detail .dcat[data-cat="activites"] .sd-ap small{display:none}
+#detail .dcat[data-cat="activites"] .sd-airports{gap:0}
+#detail .dcat[data-cat="activites"] .sd-airports li{align-items:center;min-height:46px;border-bottom:1px solid var(--fiche-hair)}
+#detail .dcat[data-cat="activites"] .sd-airports li:last-child{border-bottom:0}
+/* Dormir : le prix en grand, le type d’hébergement, les recherches ; plus de libellés au-dessus. */
+#detail .px-sleep>.fx-label,#detail .px-search>.fx-label{display:none}
+/* Autour : cartes courtes (type, nom, distance, liens). La description est sur la page liée. */
+#detail .px-place>p{display:none}
+#detail .px-rail.px-places{grid-auto-columns:min(64%,230px)}
+/* Matériel et cours : deux pastilles. */
+#detail .dcat[data-cat="activites"] .field-local-links{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;gap:8px;margin:0 0 18px}
+#detail .dcat[data-cat="activites"] .field-local-links a{display:inline-flex;flex:0 0 auto;width:auto;align-items:center;min-height:44px;padding:0 16px;border-radius:999px}
+#detail .dcat[data-cat="activites"] .field-local-links small{display:none}
+/* Avant de partir : les titres seuls ; le détail des étapes d’un toucher. */
+.ocean-v2 #detail .dcat[data-cat="activites"] .field-checklist:not(.is-detail) .field-check small{display:none}
+#detail .dcat[data-cat="activites"] .field-check{align-items:center;min-height:44px;padding:4px 0}
+#detail .dcat[data-cat="activites"] .field-checklist.is-detail .field-check,#detail .dcat[data-cat="activites"] .field-check:has(.field-check-go){align-items:start;padding:8px 0}
+#detail .dcat[data-cat="activites"] .field-checklist>.field-check-more{order:2;justify-self:start;margin:0 0 var(--fiche-gap) 34px}
+#detail .dcat[data-cat="activites"] .field-check-more[hidden]{display:none}
+
+/* Nature : les photos des espèces observées en bande à faire glisser, sans compte d’observations. */
+#detail .dcat[data-cat="faune"] .sd-species{display:flex;gap:12px;margin:4px -16px 16px;padding:0 16px 4px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scroll-padding-inline:16px;scrollbar-width:none;list-style:none}
+#detail .dcat[data-cat="faune"] .sd-species::-webkit-scrollbar{display:none}
+#detail .dcat[data-cat="faune"] .sd-species>.sd-sp{flex:0 0 44%;max-width:210px;min-width:0;scroll-snap-align:start}
+#detail .dcat[data-cat="faune"] .sd-sp small{display:none}
+/* Préserver : le geste et son bouton sur une ligne ; le pourquoi d’un toucher. */
+#detail .dcat[data-cat="preserver"] .pres-l{gap:10px}
+#detail .dcat[data-cat="preserver"] .pres-tx{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 12px}
+#detail .dcat[data-cat="preserver"] .pres-tx b{margin:0}
+#detail .dcat[data-cat="preserver"] .pres-tx p{grid-column:1 / -1;grid-row:2}
+#detail .dcat[data-cat="preserver"] #presBlock:not(.is-detail) .pres-tx p{display:none}
+#detail .dcat[data-cat="preserver"] .pres-do{grid-column:2;grid-row:1;margin:0}
+#detail .dcat[data-cat="preserver"] .pres-more{margin-top:8px}
+#detail .dcat[data-cat="preserver"] .pres-more[hidden]{display:none}
 
 /* ================= Mouvement réduit ================= */
 @media (prefers-reduced-motion:reduce){#detail .fx-wait{animation:none}}

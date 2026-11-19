@@ -13,8 +13,9 @@ const groupsSrc = js.slice(js.indexOf('const GROUPS = ['), js.indexOf('const inf
 const groups = [...groupsSrc.matchAll(/\{ id: '(\w+)', title: '([^']+)', sub: '([^']+)', members: \[([^\]]+)\] \}/g)]
   .map(m => ({ id: m[1], title: m[2], sub: m[3], members: m[4].split(',').map(s => s.trim().replace(/^'|'$/g, '')) }));
 
-test('fiche v2, onglet « Le spot » : deux sections repliées, chaque membre replié par CSS quand sa section est fermée', () => {
-  assert.deepEqual(groups.map(g => g.id), ['reperes', 'images']);
+test('fiche v2, onglet « Le spot » : trois sections repliées, chaque membre replié par CSS quand sa section est fermée', () => {
+  /* 19 nov. (« trop de texte ») : l’anecdote « Le savais-tu ? » s’ouvre d’un toucher. */
+  assert.deepEqual(groups.map(g => g.id), ['anecdote', 'reperes', 'images']);
   for (const g of groups) {
     const rule = css.match(new RegExp(`:not\\(\\[data-open~="${g.id}"\\]\\)>:is\\(([^)]+)\\)`));
     assert.ok(rule, 'règle de repli : ' + g.id);
@@ -24,9 +25,9 @@ test('fiche v2, onglet « Le spot » : deux sections repliées, chaque membre re
   assert.match(css, /\{display:none!important\}/);
 });
 
-test('fiche v2 : la description, l’anecdote, le conseil et les repères pratiques se lisent sans repli ; la sécurité a son onglet', () => {
+test('fiche v2 : la description, le conseil et les repères pratiques se lisent sans repli ; la sécurité a son onglet', () => {
   const folded = groups.flatMap(g => g.members).join(' ');
-  for (const s of ['#dBefore', '#dNow', '#dDanger', '#dDangers', '#dEmerg', '#dCall', 'securite', '#spotSafetyLive', '#dLogBtn', '.field-story', '.anec-block', '.field-tip', '#fieldVisit', '.field-reference']) assert.ok(!folded.includes(s), 'jamais replié : ' + s);
+  for (const s of ['#dBefore', '#dNow', '#dDanger', '#dDangers', '#dEmerg', '#dCall', 'securite', '#spotSafetyLive', '#dLogBtn', '.field-story', '.field-tip', '#fieldVisit']) assert.ok(!folded.includes(s), 'jamais replié : ' + s);
   /* Le danger principal se lit dans l’onglet Sécurité : son doublon de l’onglet « Le spot » n’est plus affiché. */
   assert.match(css, /dcat\[data-cat="infos"\]\.field-overview>#dSeasonTeaser,\n[^{]*dcat\[data-cat="infos"\]\.field-overview>#fieldMainDanger\{display:none!important\}/);
   assert.match(html, /<div class="dcat" data-cat="saisons"[^>]*><div id="dSeasons"/, 'l’onglet Saisons garde le détail');
@@ -86,6 +87,8 @@ test('traductions : nouveaux textes en anglais et en espagnol', () => {
 });
 
 /* ---------- Autres onglets (17 novembre) : réponse courte, détail replié, sécurité jamais repliée ---------- */
+const notesSrc = js.slice(js.indexOf('const NOTES = {'), js.indexOf('function markNotes'));
+const noteSelectors = [...notesSrc.matchAll(/'([^']+)'/g)].map(m => m[1]);
 const tabSrc = js.slice(js.indexOf('const TAB_GROUPS = {'), js.indexOf('const tabOf = '));
 const tabGroups = {};
 for (const m of tabSrc.matchAll(/(\w+): \[([\s\S]*?)\n    \]/g)) {
@@ -93,15 +96,16 @@ for (const m of tabSrc.matchAll(/(\w+): \[([\s\S]*?)\n    \]/g)) {
     .map(x => ({ id: x[1], title: x[2], sub: x[3], members: x[4].split(',').map(v => v.trim().replace(/^'|'$/g, '')) }));
 }
 
-test('onglets : Saisons, Conditions, Préparer et Nature ont leurs sections repliables ; Sécurité n’en a aucune', () => {
-  assert.deepEqual(Object.keys(tabGroups), ['saisons', 'meteo', 'activites', 'faune']);
-  assert.ok(!('securite' in tabGroups), 'aucun repli dans l’onglet Sécurité');
+test('onglets : Saisons, Conditions, Préparer et Nature ont leurs sections repliables ; Sécurité ne replie que la valeur de modèle des courants', () => {
+  assert.deepEqual(Object.keys(tabGroups), ['saisons', 'meteo', 'activites', 'faune', 'securite']);
+  assert.deepEqual(tabGroups.securite.map(g => [g.id, g.members]), [['courants', ['#spotSafetyLive']]], 'ni danger, ni numéro d’urgence, ni consigne dans ce repli');
   assert.deepEqual(tabGroups.saisons.map(g => g.id), ['courbes']);
   assert.deepEqual(tabGroups.meteo.map(g => g.id), ['lire'], 'l’heure par heure est ouverte dans Prévisions');
   /* Fiche v2 : Préparer ne replie plus que le détail du pays et le point de départ (Dormir, Autour, Matériel et cours et
      le carnet se lisent directement). */
   assert.deepEqual(tabGroups.activites.map(g => g.id), ['depart', 'surplace']);
-  assert.deepEqual(tabGroups.faune.map(g => g.id), ['photos', 'typiques']);
+  /* 19 nov. : les photos des espèces observées se voient d’emblée (bande à faire glisser). */
+  assert.deepEqual(tabGroups.faune.map(g => g.id), ['typiques']);
   /* Un seul système : mêmes têtes (.obf-head, aria-expanded, aria-controls), repli par attribut, jamais retiré du DOM. */
   assert.match(js, /head\.className = 'obf-head'/);
   assert.match(js, /e\.setAttribute\('data-obf-shut', ''\)/);
@@ -115,7 +119,7 @@ test('onglets : Saisons, Conditions, Préparer et Nature ont leurs sections repl
 
 test('onglets : dangers, secours, urgence et avertissements ne sont jamais repliés', () => {
   const folded = Object.values(tabGroups).flat().flatMap(g => g.members).join(' ');
-  for (const s of ['#dDangers', 'securite', '#spotSafetyLive', 'safety', '#dEmerg', '#dCall', '#dRescue', 'bio-warn', '.wx-slots', '#dWeather', '#sdVsNormal', '.wx-week', 'sd-stats', 'sd-flags', 'sd-cal', 'sd-month', 'field-checklist', 'sd-airports'])
+  for (const s of ['#dDangers', '#dDanger', '#sdRip', 'safety', '#dEmerg', '#dCall', '#dRescue', '#dSafeNote', 'flags', 'bio-warn', '.wx-slots', '#dWeather', '#sdVsNormal', '.wx-week', 'sd-stats', 'sd-flags', 'sd-cal', 'sd-month', 'field-checklist', 'sd-airports'])
     assert.ok(!folded.includes(s), 'jamais replié : ' + s);
   /* Conditions : la lecture de la mer passe sous la semaine ; le bloc Sécurité (onglet voisin) reste entier et visible. */
   const page = read('fiches-organisation.css');
@@ -125,14 +129,21 @@ test('onglets : dangers, secours, urgence et avertissements ne sont jamais repli
   assert.ok(fauneFn.indexOf("À connaître avant de te mettre à l") < fauneFn.indexOf('id="bioObserve"'), 'danger avant « À observer »');
   assert.ok(fauneFn.indexOf('id="bioObserve"') < fauneFn.indexOf('id="bioFlore"'));
   /* Sources : chacune reste dans sa section (normales, observations, aéroports visibles). */
-  /* Fiche v2 : les sources des normales sont visibles sous « L’année en courbes » (repliée). */
-  assert.ok(!folded.includes('#dSeasons>.sd-src'), 'sources des normales visibles');
   assert.deepEqual(tabGroups.saisons[0].members, ['#dSeasons>.sd-charts', '#dSeasons>.sd-rose', '#dSeasons>.sd-table']);
-  /* Fiche v2 : les sources de Nature restent visibles sous leur repli (elles soutiennent les chiffres et créditent les
-     photos des espèces à connaître, toujours affichées). */
-  assert.ok(!folded.includes('#dWild>.sd-src'), 'source des observations visible');
-  assert.ok(!folded.includes('bio-note'), 'note et crédit des espèces typiques visibles');
-  assert.ok(!folded.includes('#dGo>.sd-src'), 'source des aéroports à côté des aéroports');
+  /* 19 nov. (« il y a trop de texte ») : les sources et précisions de méthode ne sont plus sous chaque bloc ni dans un
+     repli de section. Elles sont marquées (NOTES) et se lisent toutes en pied de fiche, d’un toucher. */
+  for (const s of ['#dSeasons>.sd-src', '#dWild>.sd-src', 'bio-note', '#dGo>.sd-src']) {
+    assert.ok(!folded.includes(s), 'pas dans un repli de section : ' + s);
+    assert.ok(noteSelectors.includes(s) || noteSelectors.some(n => n.includes(s)), 'dans « Sources et précisions » : ' + s);
+  }
+  /* Jamais dans « Sources et précisions » : un danger, un numéro d’urgence, une consigne ou un avertissement de sécurité. */
+  for (const s of ['#dDangers', 'danger-item', 'fx-danger-text', 'fx-fit', '#dEmerg', '#dCall', '#dRescue', 'safety-block', 'sc-', '#dSafeNote', 'safety-note',
+    'safety-disclaimer', 'flags', 'bio-warn', 'bio-w', 'fx-caution', 'fx7-caution', 'fx7-calc', 'sx-step', 'fx-alert'])
+    assert.ok(!noteSelectors.some(n => n.includes(s)), 'toujours dans la page : ' + s);
+  assert.match(js, /if \(!e\.hasAttribute\('data-fx-note'\)\) e\.setAttribute\('data-fx-note', ''\);/);
+  assert.match(read('fiche.css'), /#detail \.dcat \[data-fx-note\]\{display:none!important\}/);
+  assert.match(html, /<div class="fx-notes" id="dNotes" hidden>\s*<button type="button" class="obf-head" id="dNotesHead" aria-expanded="false" aria-controls="dNotesZone"><span class="obf-tx"><b>Sources et précisions<\/b>/);
+  assert.doesNotMatch(js.slice(js.indexOf('function fillNotes'), js.indexOf('function setNotes')), /\.remove\(\)|innerHTML/, 'les précisions sont copiées, jamais retirées de leur bloc');
   /* Heure par heure : bloc identifié dans spot-experience.js. */
   const exp = read('spot-experience.js');
   assert.match(exp, /class="wx-block wx-hours"/);
@@ -333,7 +344,8 @@ function leaveEnv() {
     GROUPS: [{ id: 'lieu' }, { id: 'pratique' }, { id: 'autour' }, { id: 'images' }], TAB_GROUPS: { saisons: [], meteo: [] },
     infos: () => infosTab, tabOf: cat => tabs[cat], mount: () => infosTab, mountTab: cat => calls.push('mountTab:' + cat),
     setGroup: (id, open) => { const set = new Set(infosTab.dataset.open.split(/\s+/).filter(Boolean)); if (open) set.add(id); else set.delete(id); infosTab.dataset.open = [...set].join(' '); },
-    closeAll: () => { infosTab.dataset.open = ''; }, closeTabs: () => { for (const c in tabs) tabs[c].dataset.open = ''; }
+    closeAll: () => { infosTab.dataset.open = ''; }, closeTabs: () => { for (const c in tabs) tabs[c].dataset.open = ''; },
+    setNotes: open => calls.push('setNotes:' + open), syncNotes: () => calls.push('syncNotes')
   };
   vm.runInNewContext(src, ctx);
   const open = (spot, restoring = false) => { ctx.currentSpot = spot; ctx.restoring = restoring; ctx.handler({ detail: 'detail' }); ctx.restoring = false; };

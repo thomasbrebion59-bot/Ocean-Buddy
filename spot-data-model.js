@@ -304,16 +304,18 @@
   function ripSafety(sports, inland) {
     if (inland || !(Array.isArray(sports) ? sports : []).some(a => WAVE_SPORTS.includes(a))) return null;
     return [
+      /* 19 nov. (« trop de texte ») : chaque consigne a un titre de quelques mots, toujours affiché, et son détail,
+         montré d’un toucher (spot-data.js, renderRip). Le sens des phrases d’origine est gardé. */
       { id: 'rip-spot', h: 'Repérer une baïne ou un courant', lines: [
-        'Cherche une bande où les vagues ne cassent pas, entre deux zones où ça déferle. C’est souvent un chenal où l’eau repart vers le large.',
-        'Autres signes : une eau plus sombre ou trouble, de la mousse ou des débris qui s’éloignent du bord, des rides différentes autour.',
-        'Sur la côte atlantique française, une baïne est une cuvette entre deux bancs de sable. Elle se remplit à marée montante et se vide vers le large par un chenal.'
+        ['Une bande sans vagues', 'Entre deux zones où ça déferle. C’est souvent un chenal où l’eau repart vers le large.'],
+        ['Une eau plus sombre ou trouble', 'De la mousse ou des débris qui s’éloignent du bord, des rides différentes autour.'],
+        ['Une cuvette entre deux bancs de sable', 'Sur la côte atlantique française, c’est une baïne. Elle se remplit à marée montante et se vide vers le large par un chenal.']
       ], src: [SRC.sports, SRC.ffs] },
       { id: 'rip-out', h: 'Si tu es emporté', lines: [
-        'Reste calme et ne lutte pas contre le courant : nager contre lui t’épuiserait.',
-        'Garde ta planche ou ton bodyboard, ça flotte. Ne tente pas de rejoindre la plage à la nage sans elle.',
-        'Lève un bras et appelle pour être vu.',
-        'Si tu as pied, marche plutôt que de nager. Sinon, nage en parallèle de la plage jusqu’à être sorti du courant, puis rejoins le bord.'
+        ['Reste calme', 'Ne lutte pas contre le courant : nager contre lui t’épuiserait.'],
+        ['Garde ta planche', 'Elle flotte, comme ton bodyboard. Ne tente pas de rejoindre la plage à la nage sans elle.'],
+        ['Lève un bras et appelle', 'Pour être vu.'],
+        ['Sors par le côté', 'Si tu as pied, marche plutôt que de nager. Sinon, nage en parallèle de la plage jusqu’à être sorti du courant, puis rejoins le bord.']
       ], src: [SRC.met, SRC.ffs] }
     ];
   }

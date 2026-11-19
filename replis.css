@@ -13,6 +13,7 @@
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-story{order:11;align-self:stretch;min-width:0}
 /* (align-self : la description prenait la largeur de sa rangée de repères, 710 px sur un écran de 430 px, et sortait
    de l’écran. Étirée à la largeur de la colonne, elle revient à la ligne ; la rangée de pastilles défile.) */
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.obf-head[data-obf-group="anecdote"]{order:12}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.anec-block{order:12}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-visit{order:13}
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>.field-tip{order:14}
@@ -28,9 +29,11 @@
 .ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#dLogBtn{order:95}
 
 /* Sections fermées : leurs membres ne sont pas rendus (display, jamais retirés du DOM). */
+#detail .dcat[data-cat="infos"]:not([data-open~="anecdote"])>:is(.anec-block),
 #detail .dcat[data-cat="infos"]:not([data-open~="reperes"])>:is(#spotImmersion),
 #detail .dcat[data-cat="infos"]:not([data-open~="images"])>:is(#spotPhotoStrip,#obVoyageBanner,#spotVideoPanel,#spotAreaMap){display:none!important}
 /* Section ouverte : fondu montant (opacité et transform), une fois à l’ouverture. */
+#detail .dcat[data-cat="infos"][data-open~="anecdote"]>:is(.anec-block),
 #detail .dcat[data-cat="infos"][data-open~="reperes"]>:is(#spotImmersion),
 #detail .dcat[data-cat="infos"][data-open~="images"]>:is(#spotPhotoStrip,#obVoyageBanner,#spotVideoPanel,#spotAreaMap){animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-snap,ease) backwards}
 
