@@ -124,6 +124,9 @@ test('aucune décoration au-dessus du contenu : plus de calque de neige, flocons
   assert.ok(navM,'règle mobile de la guirlande d’onglets');
   assert.ok(px(navM[1],'top')>=0&&px(navM[1],'top')+px(navM[1],'height')<=16,'dans le haut de la pilule');
   assert.match(read('app-shell.css'),/\.ocean-v2 \.nav,html\[data-act\] \.ocean-v2 \.nav\{\s*position:fixed;z-index:80;/);
+  /* Barre du haut (.app-chrome) : rien ne pend sous la barre, donc rien ne passe sur le contenu qui défile. */
+  assert.doesNotMatch(noCom,/\.app-chrome::after\{[^}]*bottom:\s*-/,'aucune guirlande pendue sous la barre du haut');
+  assert.doesNotMatch(noCom,/--noel-bulbs-svg/,'plus d’ancienne guirlande dessinée');
   /* Paillettes du haut de l’accueil : sous le contenu (z-index -1 dans #home, juste après le fond d’ambiance). */
   const feedCss=read('home-feed.css');
   assert.match(feedCss,/\.hf-noel-sky\{position:absolute;z-index:-1;/);

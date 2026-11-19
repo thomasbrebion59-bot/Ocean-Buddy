@@ -61,9 +61,6 @@ html.ob-noel #setNoelRow span::after{content:"";display:inline-block;width:9px;h
   --noel-ends-h:linear-gradient(90deg,transparent,black 18px,black calc(100% - 18px),transparent);
   --noel-ends-v:linear-gradient(180deg,transparent,black 18px,black calc(100% - 18px),transparent);
   --noel-snow:url("assets/noel/flocons.webp");
-  /* Ancienne guirlande dessinée : gardée pour la seule barre du haut tant que sa règle (.app-chrome::after, plus bas) n’est
-     pas reprise par la session qui dirige (noel-v2/POUR-B7.md). */
-  --noel-bulbs-svg:url("data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%2264%22 height=%2218%22%3E%3Cpath d=%22M0 2Q32 12 64 2%22 fill=%22none%22 stroke=%22%233d5560%22 stroke-width=%221.1%22 opacity=%22.75%22/%3E%3Crect x=%226.6%22 y=%223.7%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%228%22 cy=%229.2%22 rx=%222.5%22 ry=%223.3%22 fill=%22%23d23a33%22/%3E%3Cellipse cx=%227.2%22 cy=%228.1%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%2222.6%22 y=%226.2%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%2224%22 cy=%2211.7%22 rx=%222.5%22 ry=%223.3%22 fill=%22%23f2b33d%22/%3E%3Cellipse cx=%2223.2%22 cy=%2210.6%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%2238.6%22 y=%226.2%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%2240%22 cy=%2211.7%22 rx=%222.5%22 ry=%223.3%22 fill=%22%232f6fe0%22/%3E%3Cellipse cx=%2239.2%22 cy=%2210.6%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3Crect x=%2254.6%22 y=%223.7%22 width=%222.8%22 height=%222.6%22 rx=%22.6%22 fill=%22%233d5560%22/%3E%3Cellipse cx=%2256%22 cy=%229.2%22 rx=%222.5%22 ry=%223.3%22 fill=%22%231f8f8a%22/%3E%3Cellipse cx=%2255.2%22 cy=%228.1%22 rx=%22.7%22 ry=%221%22 fill=%22%23fff%22 opacity=%22.6%22/%3E%3C/svg%3E");
 }
 /* Bonnets de Noël : bouton rond de Poulpy (mobile), carte « Une question ? » (ordinateur), avatars. Proportions de la
    maquette validée : largeur 0,86 du rond, bord de fourrure sur le haut gauche, incliné de 14°. Carte « Une question ? » :
@@ -81,24 +78,18 @@ html.ob-noel .ph-avatar::before{width:65px;height:44px;top:-27px;left:-8px}
 
 /* Guirlande d’ampoules de la barre d’onglets (mobile) : tendue DANS la pilule, le long de son bord haut, au-dessus des
    icônes et SOUS les boutons (z-index -1 dans la pilule) : jamais sur un onglet, ni sur le contenu de la page qui défile
-   derrière la barre. Sur ordinateur, verticale, à l’extérieur du menu latéral, dans la marge vide du contenu. */
+   derrière la barre. Sur ordinateur, verticale, à l’extérieur du menu latéral, dans la marge vide du contenu.
+   Barre du haut (.app-chrome) : AUCUNE guirlande pendue sous la barre : elle passait sur le contenu qui défile (retirée,
+   le décor ne doit jamais gêner l’usage). La guirlande tendue DANS la barre, sous ses boutons, est à poser par la session
+   qui dirige (noel-v2/POUR-B7.md), sans animation. */
 html.ob-noel .ocean-v2 .nav::after{display:block!important;content:"";position:absolute;pointer-events:none;z-index:-1;
   background:var(--noel-bulbs-h) 50% 0/auto 13px repeat-x;-webkit-mask-image:var(--noel-ends-h);mask-image:var(--noel-ends-h)}
-html.ob-noel .app-chrome{--noel-bulbs-h:var(--noel-bulbs-svg)}
 @media(max-width:959px){
   html.ob-noel .ocean-v2 .nav::after{left:30px;right:30px;top:1px;bottom:auto;height:13px}
-  html.ob-noel .ocean-v2 .app-chrome::after{content:"";position:absolute;left:0;right:0;bottom:-16px;height:18px;pointer-events:none;z-index:2;
-    background:var(--noel-bulbs-h) 0 0/64px 18px repeat-x}
-  html.ob-noel body[data-screen=home] .ocean-v2 .app-chrome::after,html.ob-noel body[data-screen=home] .app-chrome::after{display:none}
-  /* En haut de page, la guirlande de l’en-tête passait dans le grand titre (« Profil », « Défis », « Voyages ») :
-     elle n’apparaît qu’une fois la page défilée, quand l’en-tête est une barre et le grand titre parti. */
-  html.ob-noel body:not(.is-scrolled) .app-chrome::after{display:none}
 }
 @media(min-width:960px){
   html.ob-noel .ocean-v2 .nav::after{top:104px;bottom:70px;left:100%;right:auto;width:16px;z-index:3;background:var(--noel-bulbs-v) 0 50%/16px auto repeat-y;
     -webkit-mask-image:var(--noel-ends-v);mask-image:var(--noel-ends-v)}
-  html.ob-noel .ocean-v2 .app-chrome::after{content:"";position:absolute;left:0;right:0;bottom:-17px;height:18px;pointer-events:none;z-index:2;
-    background:var(--noel-bulbs-h) 0 0/64px 18px repeat-x}
 }
 
 /* Bandeau de saison de l’accueil (home-feed.js) : la guirlande (image fixe) est posée sur la bande vide du bandeau. */
