@@ -6,7 +6,6 @@
    pseudo-éléments en position absolue : rien ne décale la page). Les illustrations du décor sont plus bas (noel-deco). */
 :root{
   --noel-star:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 10 10'%3E%3Cpath d='M5 0L6.2 3.8L10 5L6.2 6.2L5 10L3.8 6.2L0 5L3.8 3.8Z'/%3E%3C/svg%3E");
-  --noel-seam:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='36' height='10'%3E%3Crect y='4.4' width='36' height='1.2'/%3E%3Cpath d='M18 1L19 4L22 5L19 6L18 9L17 6L14 5L17 4Z'/%3E%3C/svg%3E");
 }
 
 /* Barre d’onglets : un fil doré en haut de la pilule (l’étoile posée sur l’onglet actif est retirée : aucune décoration
@@ -28,9 +27,8 @@ html.ob-noel .hf-plan{box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--t-sun) 
 html.ob-noel .hf-card::before,html.ob-noel .hf-mood::before{content:"";position:absolute;inset:0;z-index:1;border-radius:inherit;pointer-events:none;
   box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--t-sun) 55%,transparent)}
 
-/* Fiche d’un spot : liseré étoilé au bas de la grande photo. */
-html.ob-noel #detail .detail-hero::before{content:"";position:absolute;left:0;right:0;bottom:6px;z-index:3;height:10px;pointer-events:none;
-  background:var(--t-sun);opacity:.9;-webkit-mask:var(--noel-seam) 0 0/36px 10px repeat-x;mask:var(--noel-seam) 0 0/36px 10px repeat-x}
+/* Fiche d’un spot : aucune décoration sur la photo (demande du fondateur, 19 nov. : la petite guirlande sous la photo « c’est
+   moche, faut l’enlever »). La photo du spot reste nette, sans liseré ni guirlande. */
 
 /* Réglages : la case « Ambiance de Noël » prend une étoile. */
 html.ob-noel #setNoelRow span::after{content:"";display:inline-block;width:9px;height:9px;margin-left:6px;vertical-align:0;
