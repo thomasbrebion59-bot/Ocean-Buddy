@@ -57,6 +57,12 @@
 #detail .fx-card{border-radius:var(--fiche-radius);background:var(--fiche-wash);padding:14px 14px 13px;border:0;box-shadow:none}
 /* Pastille. */
 #detail .fx-pill{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 12px;border-radius:999px;background:var(--fiche-wash);font:600 var(--fiche-note)/1 var(--body);color:var(--t-ink)}
+/* Sans niveau choisi : un bouton court en pastille, le même dans Conditions, Prévisions et Sécurité (spot-before.js,
+   levelButton) ; ni bordure ni grand cadre. Dans Prévisions, il suit le libellé « Ton meilleur jour ». */
+html .ocean-v2 #detail .db-level{display:inline-flex;align-items:center;gap:8px;width:auto;max-width:100%;min-height:44px;margin:0;padding:10px 18px;box-sizing:border-box;
+  border:0;border-radius:999px;background:var(--fiche-wash);color:var(--t-main);font:700 var(--fiche-label)/1.25 var(--body);text-align:start;white-space:normal}
+html .ocean-v2 #detail .db-level::after{margin-left:0;margin-inline-start:2px}
+#detail .fx-level-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:0 0 12px}
 /* Lien d’action discret (« Toutes les prévisions »). */
 #detail .fx-more{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:0;padding:0 2px;border:0;background:none;font:700 var(--fiche-label)/1 var(--body);color:var(--t-main);cursor:pointer;-webkit-tap-highlight-color:transparent}
 #detail .fx-more::after{content:"";width:7px;height:7px;border-top:2px solid currentColor;border-right:2px solid currentColor;transform:rotate(45deg)}
@@ -150,7 +156,7 @@ html #detail #detailHero .hero-more>b{display:none}
 #detail .fx-slot .db-q{font:600 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
 #detail .fx-slot .db-muted{color:var(--fiche-soft)}
 #detail .fx-slot .fx-caution{flex-basis:100%;margin:6px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--t-ink)}
-#detail .fx-slot .db-level{margin:4px 0 0}
+html .ocean-v2 #detail .fx-slot .db-level{margin:4px 0 0}
 /* Les prochains jours : trois cartes légères et un lien. */
 #detail .fx-next{margin:0 0 var(--fiche-gap)}
 #detail .fx-next>.fx-title{margin:0 0 12px}
@@ -178,7 +184,6 @@ html #detail #detailHero .hero-more>b{display:none}
 #detail .dcat[data-cat="meteo"] .wx-block{margin:0 0 var(--fiche-gap)}
 #detail .dcat[data-cat="meteo"] .wx-block>.fx-title{margin:0 0 10px}
 #detail .fx7-why{margin:0 0 10px}
-#detail .wx-week>.db-level{margin:0 0 12px}
 /* Les 7 jours : une ligne par jour, colonnes alignées (jour, ciel, air, houle, période, vent), chiffres tabulaires. */
 /* Une seule grille pour l’en-tête et les sept lignes (sous-grilles) : chaque colonne prend la largeur de son contenu le
    plus long, le jour prend le reste ; les colonnes restent alignées d’une ligne à l’autre, sans largeur fixée à la main. */

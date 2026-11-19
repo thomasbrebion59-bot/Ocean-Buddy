@@ -256,7 +256,7 @@ test('fiche : lac sans houle ; plongée sans créneau ; niveau changé = nouveau
   assert.ok(dive.html.includes('Pas de créneau calculé pour ce sport ici'));
   const surf = await render({id: 'hossegor', name: 'Hossegor', waterType: 'sea', sports: ['surf']}, 'surf', null);
   /* Sans niveau : le même bouton court qu’« Avant d’y aller » (même composant, même libellé), plus la longue consigne. */
-  assert.ok(surf.html.includes('<button type="button" class="db-level" data-open-level>Choisis ton niveau pour savoir si ce spot te correspond</button>'));
+  assert.ok(surf.html.includes('<p class="fx-level-line"><span class="fx-label">Ton meilleur jour</span><button type="button" class="db-level" data-open-level>Choisis ton niveau</button></p>'));
   assert.ok(!surf.html.includes('Choisis ton niveau dans Réglages'));
   surf.sb.chosenLevel = 'expert';
   surf.listeners['ocean:level']();

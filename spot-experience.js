@@ -212,9 +212,9 @@
     const rule = W.rule(act, inland, level);
     const note = 'Repère calculé sur une prévision de modèle, avec les seuils de « Lire les conditions » et en heures de jour seulement. Ce n’est pas une consigne : le poste de secours, le balisage et les drapeaux priment.';
     if (!rule.ok) {
-      /* Sans niveau : le même bouton court que dans l’onglet Conditions (spot-before.js, OceanBefore.levelButton), qui
-         ouvre « Mon sport et mon niveau » d’un toucher. */
-      if (rule.reason === 'level') return {top: window.OceanBefore?.levelButton?.() || '', best: null, hours: new Set(), rule, today: null, note: '', res: []};
+      /* Sans niveau : le même bouton court que dans les onglets Conditions et Sécurité (spot-before.js,
+         OceanBefore.levelButton), qui ouvre « Mon sport et mon niveau » d’un toucher ; « Ton meilleur jour » dit pourquoi. */
+      if (rule.reason === 'level') return {top: window.OceanBefore?.levelButton ? `<p class="fx-level-line"><span class="fx-label">Ton meilleur jour</span>${window.OceanBefore.levelButton()}</p>` : '', best: null, hours: new Set(), rule, today: null, note: '', res: []};
       const why = rule.reason === 'expert' ? 'Niveau expert : « Lire les conditions » ne fixe pas de seuil. Compare toi-même vent, houle et période heure par heure.'
         : 'Pas de créneau calculé pour ce sport ici : « Lire les conditions » ne donne pas de repère chiffré. Renseigne-toi sur place.';
       return {top: `<p class="fx-note fx7-why">${esc(why)}</p>`, best: null, hours: new Set(), rule, today: null, note: '', res: []};

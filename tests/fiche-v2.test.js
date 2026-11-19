@@ -164,7 +164,7 @@ test('Conditions : « Ton créneau » sur une ligne, avec son avertissement de v
   /* Sans niveau : le bouton court, le même que dans Prévisions et Sécurité. */
   const n = nowWorld();
   n.B.slot(n.spot, { ok: false, reason: 'level' }, null);
-  assert.match(n.row('slot').innerHTML, /<button type="button" class="db-level" data-open-level>Choisis ton niveau pour savoir si ce spot te correspond<\/button>/);
+  assert.match(n.row('slot').innerHTML, /^<button type="button" class="db-level" data-open-level>Choisis ton niveau<\/button>$/);
   /* L’avertissement vient de la même règle que la carte du créneau (spot-experience.js). */
   assert.match(exp, /const cautionOf = r => \(r && r\.status === 'ok' && r\.offshore && \(r\.kind !== 'wave' \|\| r\.level === 'debutant'\)/);
   assert.match(exp, /OceanBefore\?\.slot\(s, rule, today, hourFmt, cautionOf\(today\)\)/);

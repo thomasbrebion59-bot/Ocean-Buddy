@@ -64,7 +64,7 @@
 
   /* L’invitation au niveau, d’un toucher : elle ouvre « Mon sport et mon niveau ». Un seul composant et un seul libellé,
      repris tels quels par « Ton meilleur créneau » (onglet Prévisions, spot-experience.js). */
-  const levelButton = () => '<button type="button" class="db-level" data-open-level>Choisis ton niveau pour savoir si ce spot te correspond</button>';
+  const levelButton = () => '<button type="button" class="db-level" data-open-level>Choisis ton niveau</button>';
 
   const ICON = {
     wind: '<path d="M3 9h11a3 3 0 1 0-3-3M3 13.5h15.5a3 3 0 1 1-3 3M3 18h6"/>',

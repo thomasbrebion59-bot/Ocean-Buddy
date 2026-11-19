@@ -258,9 +258,9 @@ test('sécurité jamais repliée : le danger principal se lit en entier en tête
 
 test('sécurité : « Ton meilleur créneau » sans niveau reprend le bouton court d’« Avant d’y aller » (même composant, même libellé)', () => {
   const exp = read('spot-experience.js'), before = read('spot-before.js');
-  assert.match(before, /const levelButton = \(\) => '<button type="button" class="db-level" data-open-level>Choisis ton niveau pour savoir si ce spot te correspond<\/button>';/);
+  assert.match(before, /const levelButton = \(\) => '<button type="button" class="db-level" data-open-level>Choisis ton niveau<\/button>';/);
   assert.match(before, /window\.OceanBefore = \{[^}]*\blevelButton\b/);
-  assert.match(exp, /if \(rule\.reason === 'level'\) return \{top: window\.OceanBefore\?\.levelButton\?\.\(\) \|\| ''/);
+  assert.match(exp, /if \(rule\.reason === 'level'\) return \{top: window\.OceanBefore\?\.levelButton \? `<p class="fx-level-line"><span class="fx-label">Ton meilleur jour<\/span>\$\{window\.OceanBefore\.levelButton\(\)\}<\/p>` : ''/);
   assert.doesNotMatch(exp, /Choisis ton niveau/, 'plus de troisième consigne');
   assert.doesNotMatch(read('fiches-organisation.css'), /\.wx-level/);
 });
@@ -297,7 +297,7 @@ test('photos du lieu : rangées dans « Photos et carte » (la photo du haut ouv
 
 test('traductions : sections des autres onglets et nouveaux libellés en anglais et en espagnol', () => {
   const en = JSON.parse(read('locales/translations/en.json')), es = JSON.parse(read('locales/translations/es.json')), src = JSON.parse(read('locales/source/fr.json'));
-  const keys = [...Object.values(tabGroups).flat().flatMap(g => [g.title, g.sub]), 'Choisis ton niveau pour savoir si ce spot te correspond', 'Les 7 jours', 'Heure par heure', 'Touche un jour pour voir les rafales, la pluie, l’UV et le soleil.', 'Aucun créneau dans tes repères aujourd’hui ni demain.', 'Quand partir', 'Ton meilleur jour', 'Les prochains jours', 'Toutes les prévisions', 'Voir la sécurité', 'Prévisions'];
+  const keys = [...Object.values(tabGroups).flat().flatMap(g => [g.title, g.sub]), 'Choisis ton niveau', 'Les 7 jours', 'Heure par heure', 'Touche un jour pour voir les rafales, la pluie, l’UV et le soleil.', 'Aucun créneau dans tes repères aujourd’hui ni demain.', 'Quand partir', 'Ton meilleur jour', 'Les prochains jours', 'Toutes les prévisions', 'Voir la sécurité', 'Prévisions'];
   for (const k of keys) {
     assert.ok(src.includes(k), 'source FR : ' + k);
     assert.ok(typeof en[k] === 'string' && en[k].trim() && en[k] !== k, 'EN : ' + k);
