@@ -224,8 +224,15 @@ test('netteté : le thermomètre du héros prend la couleur du texte de sa pasti
 
 /* ---------- Noël ---------- */
 test('Noël : pas de flocons sur la planète d’Explorer, pas de guirlande dans le grand titre', () => {
-  assert.match(noel, /html\.ob-noel:has\(body\[data-screen="spots"\]\)::after\{display:none\}/);
-  assert.match(noel, /html\.ob-noel body:not\(\.is-scrolled\) \.app-chrome::after\{display:none\}/);
+  /* Plus de calque de neige sur la page : flocons et houx posés seulement au-dessus des titres de l’accueil (#home). */
+  const css = noel.replace(/\/\*[\s\S]*?\*\//g, '');
+  assert.doesNotMatch(css, /html\.ob-noel(?::has\([^)]*\))?::after/);
+  for (const m of css.matchAll(/([^{}]+)\{[^{}]*var\(--noel-(?:snow|holly)\)/g)) for (const sel of m[1].split(',')) assert.match(sel.trim(), /^html\.ob-noel #home /);
+  /* Barre du haut : aucune guirlande pendue sous la barre (elle passait sur le contenu qui défile) ni dans le grand titre ;
+     celle que la session principale posera doit rester DANS la barre (bottom >= 0), sous ses boutons (noel-v2/POUR-B7.md). */
+  for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) if (/\.app-chrome(?:\s|::|$)/.test(m[1]) && /::after|::before/.test(m[1])) assert.doesNotMatch(m[2], /bottom:\s*-/, 'guirlande pendue sous la barre du haut : ' + m[1].trim());
+  /* Le décor de Noël est fixe : rien ne tombe, rien ne clignote, rien ne bouge (le fondateur : il ne doit pas gêner l’usage). */
+  assert.doesNotMatch(css, /@keyframes|animation|transition|will-change/);
 });
 
 /* ---------- Vol de la photo (carte vers fiche) : départ différé et robustesse ---------- */

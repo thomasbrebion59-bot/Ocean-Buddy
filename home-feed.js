@@ -357,9 +357,10 @@
 
   /* ---------- Mode Noël (noel-model.js) ----------
      Du 15 novembre au 6 janvier (date de l’appareil) : un titre de saison sous une fine guirlande, des paillettes dorées
-     qui tombent lentement sur le haut de l’accueil, la rangée « Noël au soleil » et le calendrier de l’Avent (du 1er au
-     24 décembre ; avant, une carte annonce son ouverture). html.ob-noel donne au reste de l’interface ses touches
-     dorées (noel.css).
+     posées une fois sur le haut de l’accueil (dessin fixe, sous le contenu), la rangée « Noël au soleil » et le calendrier
+     de l’Avent (du 1er au 24 décembre ; avant, une carte annonce son ouverture). html.ob-noel donne au reste de
+     l’interface ses touches dorées et ses illustrations (noel.css). Le décor est FIXE : rien ne bouge, rien ne tombe,
+     rien ne clignote, aucune boucle d’animation (décision du fondateur : le décor ne doit jamais gêner l’utilisation).
      Bandeau et calque posés avec l’ouverture, rangée et Avent avec le fil : tout est en place sous le rideau, à hauteur
      fixe (home-feed.css). Hors mode, rien n’est créé ni écouté. Réglage « Ambiance de Noël » : localStorage oceanbuddy_noel. */
   const NM=window.NoelModel;
@@ -373,9 +374,9 @@
     if(g.kind==='countdown')return g.n===1?'Plus qu’un jour avant Noël':`Plus que ${g.n} jours avant Noël`;
     return g.kind==='noel'?'Joyeux Noël':g.kind==='fetes'?'Belles fêtes':'Bonne année';
   }
-  /* Guirlande : un fil et deux rangs d’ampoules dessinés par des masques CSS (couleurs de la marque, sans image). */
+  /* Guirlande : une bande vide, l’illustration est posée par noel.css (sous html.ob-noel), fixe. */
   function noelTop(){
-    return `<div class="hf-noel-top"><span class="hf-noel-garland" aria-hidden="true"><i class="hf-noel-wire"></i><i class="hf-noel-bulbs"></i><i class="hf-noel-bulbs hf-noel-bulbs-b"></i></span><p class="hf-noel-title">${esc(noelTitle())}</p></div>`;
+    return `<div class="hf-noel-top"><span class="hf-noel-garland" aria-hidden="true"></span><p class="hf-noel-title">${esc(noelTitle())}</p></div>`;
   }
   /* Bandeau et calque des paillettes : ajoutés ou retirés selon le mode (au montage, ou quand le réglage change). */
   function syncNoel(){
@@ -446,61 +447,36 @@
     if(typeof vibrate==='function')vibrate(8);
     if(typeof openSpot==='function')openSpot(id);
   }
-  /* Paillettes : un canevas léger (une trentaine de points, 30 images/s) seulement sur le haut de l’accueil.
-     Arrêté sous le rideau, onglet caché, hors accueil, hors écran ou en mouvement réduit (le canevas est alors vidé). */
-  let sky=null,skyCtx=null,skyRun=0,skyIO=null,skyOn=false,skyLast=0,skyW=0,skyH=0,skyCols=null,flakes=[],skyBound=false;
-  const reduced=()=>matchMedia('(prefers-reduced-motion: reduce)').matches||body().classList.contains('reduce-motion');
-  const skyLive=()=>!!sky&&noel.on&&skyOn&&!document.hidden&&homeShown()&&!reduced()&&!(Boot&&!Boot.lifted);
-  function skySize(){
-    const w=sky.clientWidth,h=sky.clientHeight,r=Math.min(2,window.devicePixelRatio||1);
-    if(!w||!h)return false;
-    if(w!==skyW||h!==skyH){
-      skyW=w;skyH=h;sky.width=Math.round(w*r);sky.height=Math.round(h*r);
-      skyCtx=sky.getContext('2d');skyCtx?.setTransform(r,0,0,r,0,0);
-      const n=Math.max(16,Math.min(40,Math.round(w/14)));
-      flakes=Array.from({length:n},()=>flake(true));
-    }
-    return !!skyCtx;
-  }
-  function flake(anywhere){
-    const R=Math.random;
-    return {x:R()*skyW,y:anywhere?R()*skyH:-6-R()*30,r:.8+R()*1.5,vy:9+R()*14,amp:4+R()*12,f:.4+R()*.7,ph:R()*6.3,spin:1.2+R()*2.4,tw:R()*6.3,a:.45+R()*.45,gold:R()<.72};
-  }
-  function skyClear(){if(skyCtx)skyCtx.clearRect(0,0,skyW,skyH);}
-  function skyFrame(t){
-    skyRun=0;
-    if(!skyLive()){skyClear();return;}
-    skyRun=requestAnimationFrame(skyFrame);
-    if(skyLast&&t-skyLast<32)return;
-    const dt=skyLast?Math.min(.08,(t-skyLast)/1000):.032;skyLast=t;
-    if(!skySize())return;
-    if(!skyCols){const cs=getComputedStyle(document.documentElement);skyCols=[cs.getPropertyValue('--t-sun').trim()||'gold',cs.getPropertyValue('--t-on-main').trim()||'white'];}
-    const c=skyCtx;c.clearRect(0,0,skyW,skyH);
-    for(const f of flakes){
-      f.y+=f.vy*dt;f.ph+=f.f*dt;f.tw+=f.spin*dt;
-      if(f.y>skyH+6)Object.assign(f,flake(false));
-      const w=f.r*(.3+.7*Math.abs(Math.cos(f.tw)));
-      c.globalAlpha=f.a*(.65+.35*Math.sin(f.tw*1.7));c.fillStyle=skyCols[f.gold?0:1];
-      c.beginPath();c.ellipse(f.x+Math.sin(f.ph)*f.amp,f.y,w,f.r,0,0,6.2832);c.fill();
+  /* Paillettes : un dessin FIXE (une trentaine de points posés une fois, positions tirées d’une graine : les mêmes à chaque
+     ouverture), seulement sur le haut de l’accueil, SOUS le contenu (z-index -1, home-feed.css). Aucune boucle
+     d’animation, aucun requestAnimationFrame : le calque n’est redessiné que si sa taille change (rotation, retour sur
+     l’accueil, fenêtre) ou si la couleur du sport change (après la transition du thème). */
+  let sky=null,skyCtx=null,skyW=0,skyH=0,skyRO=null,skyBound=false,skyTimers=[];
+  function skyRand(seed){let x=seed>>>0||1;return()=>{x=(Math.imul(x,1664525)+1013904223)>>>0;return x/4294967296;};}
+  function skyDraw(){
+    if(!sky)return;
+    const w=sky.clientWidth,h=sky.clientHeight;if(!w||!h)return;
+    const r=Math.min(2,window.devicePixelRatio||1);
+    if(w!==skyW||h!==skyH||!skyCtx){skyW=w;skyH=h;sky.width=Math.round(w*r);sky.height=Math.round(h*r);skyCtx=sky.getContext('2d');}
+    const c=skyCtx;if(!c)return;
+    c.setTransform(r,0,0,r,0,0);c.clearRect(0,0,w,h);
+    const cs=getComputedStyle(document.documentElement),cols=[cs.getPropertyValue('--t-sun').trim()||'gold',cs.getPropertyValue('--t-on-main').trim()||'white'];
+    const R=skyRand(2611),n=Math.max(16,Math.min(40,Math.round(w/14)));
+    for(let i=0;i<n;i++){
+      const x=R()*w,y=R()*h,rad=.8+R()*1.5,k=.4+.6*R(),a=.45+R()*.45,gold=R()<.72;
+      c.globalAlpha=a;c.fillStyle=cols[gold?0:1];
+      c.beginPath();c.ellipse(x,y,rad*k,rad,0,0,6.2832);c.fill();
     }
     c.globalAlpha=1;
   }
-  function syncSky(){
-    if(skyLive()){if(!skyRun){skyLast=0;skyRun=requestAnimationFrame(skyFrame);}}
-    else{if(skyRun){cancelAnimationFrame(skyRun);skyRun=0;}skyClear();}
-  }
-  function stopSky(){skyIO?.disconnect();skyIO=null;skyOn=false;syncSky();}
+  function stopSky(){skyRO?.disconnect();skyRO=null;skyTimers.forEach(clearTimeout);skyTimers=[];skyCtx=null;skyW=skyH=0;}
   function watchSky(){
     if(!sky)return;
-    skyIO?.disconnect();
-    if(window.IntersectionObserver){skyIO=new IntersectionObserver(([e])=>{skyOn=!!e?.isIntersecting;syncSky();});skyIO.observe(sky);}else skyOn=true;
+    skyRO?.disconnect();
+    if(window.ResizeObserver){skyRO=new ResizeObserver(skyDraw);skyRO.observe(sky);}else skyDraw();
     if(skyBound)return;skyBound=true;
-    document.addEventListener('visibilitychange',syncSky);
-    window.addEventListener('ocean:navigate',()=>setTimeout(syncSky,0));
-    matchMedia('(prefers-reduced-motion: reduce)').addEventListener?.('change',syncSky);
-    document.getElementById('setReduce')?.addEventListener('change',()=>setTimeout(syncSky,0));
-    window.addEventListener('resize',()=>{skyW=0;},{passive:true});
-    document.addEventListener('ocean:sport',()=>{skyCols=null;});
+    /* Le thème d’un sport change par transition CSS : on relit les couleurs après, une fois. */
+    document.addEventListener('ocean:sport',()=>{skyTimers.forEach(clearTimeout);skyTimers=[700,1800].map(ms=>setTimeout(skyDraw,ms));});
   }
   /* Réglage « Ambiance de Noël » : proposé seulement pendant la période (ou en essai), activé par défaut. */
   const noelRow=document.getElementById('setNoelRow'),noelBox=document.getElementById('setNoel');
@@ -508,7 +484,7 @@
     noelRow.hidden=false;noelBox.checked=noel.on;
     noelBox.addEventListener('change',()=>{
       try{localStorage.setItem(NM.STORE,noelBox.checked?'on':'off');}catch(_){}
-      noel=noelState();if(built)mount();else syncNoel();syncSky();
+      noel=noelState();if(built)mount();else syncNoel();
     });
   }
   /* ---------- Fin du mode Noël ---------- */
@@ -806,7 +782,7 @@
     return ready();
   }).catch(e=>{setTimeout(()=>{throw e;});Boot?.done('feed');});
   /* Globe et premier défilement automatique : seulement après la levée du rideau. */
-  Boot?.after(()=>{lastTouch=Date.now();watchPlanet();syncSky();});
+  Boot?.after(()=>{lastTouch=Date.now();watchPlanet();});
   /* Langue changée : on reconstruit (noms des mois). */
   window.addEventListener('ocean:lang',()=>{if(built)mount();});
   window.OceanHomeFeed={refresh:mount,seasonLabel,syncActs};

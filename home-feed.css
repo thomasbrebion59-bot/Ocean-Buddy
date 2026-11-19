@@ -144,28 +144,16 @@ html[data-act] #home .as-large p{color:var(--t-deep)}
 .hf-fav::after{content:"";position:absolute;inset:-3px}
 
 /* ---------- Mode Noël (home-feed.js, noel-model.js) ----------
-   Du 1er décembre au 6 janvier : guirlande fine et titre de saison en haut de l’ouverture, paillettes dorées (canevas)
-   sur le haut de l’accueil, rangée « Noël au soleil » et calendrier de l’Avent. Couleurs de la marque uniquement
-   (crème, pétrole, soleil) ; le soleil ne sert jamais de couleur de texte sur fond clair. Hauteurs fixes : rien ne
-   décale l’accueil. Animations coupées en mouvement réduit. */
+   Du 1er décembre au 6 janvier : guirlande fine et titre de saison en haut de l’ouverture (l’illustration de la guirlande
+   est posée par noel.css), paillettes dorées (canevas, dessin fixe) sous le haut de l’accueil, rangée « Noël au soleil » et
+   calendrier de l’Avent. Couleurs de la marque uniquement (crème, pétrole, soleil) ; le soleil ne sert jamais de
+   couleur de texte sur fond clair. Hauteurs fixes : rien ne décale l’accueil. Le décor est fixe : aucune animation. */
 .hf-noel-top{position:relative;height:50px;margin:-4px 0 10px;display:flex;align-items:flex-end}
-.hf-noel-garland{position:absolute;top:0;left:calc(-1 * var(--as-gutter,16px));right:calc(-1 * var(--as-gutter,16px));height:20px;pointer-events:none;
-  filter:drop-shadow(0 0 2.5px color-mix(in srgb,var(--t-sun) 70%,transparent))}
-.hf-noel-garland i{position:absolute;inset:0}
-.hf-noel-wire{background:color-mix(in srgb,var(--t-edge) 55%,transparent);
-  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='20'%3E%3Cpath d='M0 3Q32 19 64 3' fill='none' stroke='black' stroke-width='1.1'/%3E%3C/svg%3E") 0 0/64px 20px repeat-x;
-  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='20'%3E%3Cpath d='M0 3Q32 19 64 3' fill='none' stroke='black' stroke-width='1.1'/%3E%3C/svg%3E") 0 0/64px 20px repeat-x}
-.hf-noel-bulbs{background:var(--t-sun);
-  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='20'%3E%3Cellipse cx='16' cy='12' rx='2' ry='2.6'/%3E%3Cellipse cx='48' cy='12' rx='2' ry='2.6'/%3E%3C/svg%3E") 0 0/64px 20px repeat-x;
-  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='20'%3E%3Cellipse cx='16' cy='12' rx='2' ry='2.6'/%3E%3Cellipse cx='48' cy='12' rx='2' ry='2.6'/%3E%3C/svg%3E") 0 0/64px 20px repeat-x;
-  animation:hf-noel-twinkle 3.2s ease-in-out infinite}
-.hf-noel-bulbs-b{-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='20'%3E%3Cellipse cx='32' cy='14' rx='2' ry='2.6'/%3E%3C/svg%3E") 0 0/64px 20px repeat-x;
-  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='64' height='20'%3E%3Cellipse cx='32' cy='14' rx='2' ry='2.6'/%3E%3C/svg%3E") 0 0/64px 20px repeat-x;
-  animation-delay:-1.6s}
-@keyframes hf-noel-twinkle{0%,100%{opacity:1}50%{opacity:.42}}
+.hf-noel-garland{position:absolute;top:0;left:calc(-1 * var(--as-gutter,16px));right:calc(-1 * var(--as-gutter,16px));height:20px;pointer-events:none}
 .hf-noel-title{margin:0;font:800 21px/1.05 var(--as-condensed);letter-spacing:.3px;text-transform:uppercase;color:var(--t-deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-/* Paillettes : calque transparent au-dessus du haut de l’accueil, jamais cliquable, fondu vers le bas. */
-.hf-noel-sky{position:absolute;z-index:3;top:calc(-8px - var(--as-top,0px));left:calc(-1 * var(--as-gutter,16px));width:calc(100% + 2 * var(--as-gutter,16px));height:440px;pointer-events:none;
+/* Paillettes : calque transparent SOUS le contenu du haut de l’accueil (z-index -1 dans #home, juste après le fond
+   d’ambiance) : visibles sur le fond seulement, jamais sur un bouton ni un texte. Dessin fixe, jamais cliquable, fondu vers le bas. */
+.hf-noel-sky{position:absolute;z-index:-1;top:calc(-8px - var(--as-top,0px));left:calc(-1 * var(--as-gutter,16px));width:calc(100% + 2 * var(--as-gutter,16px));height:440px;pointer-events:none;
   -webkit-mask-image:linear-gradient(180deg,black 55%,transparent);mask-image:linear-gradient(180deg,black 55%,transparent)}
 
 /* Rangée « Noël au soleil » et calendrier de l’Avent. */
@@ -190,8 +178,8 @@ html[data-act] #home .as-large p{color:var(--t-deep)}
 .hf-avent-day:not(:disabled):active{transform:scale(.94)}
 .hf-avent-day:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
 @media(min-width:960px){.hf-noel-garland{left:0;right:0}.hf-avent-row{margin-inline:0;padding-inline:0}.hf-noel-sky{left:-24px;top:-24px;width:calc(100% + 48px)}}
-@media(prefers-reduced-motion:reduce){.hf-noel-bulbs,.hf-avent-day{animation:none;transition:none}}
-.reduce-motion .hf-noel-bulbs,.reduce-motion .hf-avent-day{animation:none;transition:none}
+@media(prefers-reduced-motion:reduce){.hf-avent-day{transition:none}}
+.reduce-motion .hf-avent-day{transition:none}
 /* Réglage « Ambiance de Noël » : visible seulement pendant la période (home-feed.js retire hidden). */
 .set-toggle[hidden]{display:none}
 /* Avant le 1er décembre : carte d’annonce à la place des cases (même hauteur que la rangée). */

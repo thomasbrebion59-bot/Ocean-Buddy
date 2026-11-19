@@ -218,10 +218,13 @@ test('Avent et « Noël au soleil » : deux blocs distincts, jamais imbriqués ;
   assert.match(read('app-shell.js'),/format\(window\.OB_NOEL_TODAY\|\|new Date\(\)\)/);
 });
 
-test('CSS de Noël : jetons uniquement, animations coupées en mouvement réduit',()=>{
+test('CSS de Noël : jetons uniquement, aucune animation (décor fixe), cases de l’Avent sans transition en mouvement réduit',()=>{
   assert.match(css,/\.hf-noel-top/);
-  assert.match(css,/@media\s*\(prefers-reduced-motion:\s*reduce\)\{[^}]*\.hf-noel/);
-  assert.match(css,/\.reduce-motion \.hf-noel/);
+  const block=css.slice(css.indexOf('/* ---------- Mode Noël'),css.indexOf('/* Rangée « Noël au soleil »'));
+  assert.ok(block.length>300);
+  assert.doesNotMatch(block.replace(/\/\*[\s\S]*?\*\//g,''),/animation|@keyframes/,'le bandeau de saison ne bouge pas');
+  assert.match(css,/@media\s*\(prefers-reduced-motion:\s*reduce\)\{\.hf-avent-day\{transition:none\}\}/);
+  assert.match(css,/\.reduce-motion \.hf-avent-day/);
 });
 
 test('traductions EN et ES présentes pour chaque texte de Noël',()=>{
