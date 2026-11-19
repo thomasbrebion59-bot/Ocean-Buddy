@@ -64,8 +64,11 @@
   body[data-screen=detail] .spot-bar-name{display:none}
   body[data-screen=detail] .spot-bar{padding-left:8px}
   body[data-screen=detail] .spot-bar-trip{flex:1}
-  /* Onglets de la fiche collés sous l’en-tête translucide. */
-  .ocean-v2 #detail .dtabs{top:calc(52px + var(--as-top,0px));z-index:6}
+  /* Onglets de la fiche collés juste sous l’en-tête translucide (52 px + zone sûre). Un élément collé se mesure depuis
+     le bord INTÉRIEUR de la zone qui défile, donc après sa marge du haut (8 px + zone sûre, app-shell.css) : il reste
+     52 − 8 = 44 px. Avec l’ancienne valeur (52 px + zone sûre), la zone sûre comptait deux fois : sur iPhone les
+     onglets se collaient 76 px trop bas et le contenu défilait à découvert au-dessus d’eux (essai WKWebView, 19 nov. 2026). */
+  .ocean-v2 #detail .dtabs{top:44px;z-index:6}
 }
 @media(min-width:960px){.ocean-v2 #detail .dtabs{top:0;z-index:6}}
 /* Ligne « Danger » : libellé et jauge sur une ligne, danger principal dessous. */

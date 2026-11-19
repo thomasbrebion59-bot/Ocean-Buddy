@@ -244,3 +244,16 @@ test('Sécurité : son onglet, rien de replié ; en-tête compact et rangée d�
   assert.match(css, /#detail \.detail-hero \.dfact-sea\{display:none\}/);
   assert.match(read('base.css'), /\.dtabs\{[^}]*position:sticky;top:0/);
 });
+
+test('onglets collés : juste sous l’en-tête, la zone sûre n’est comptée qu’une fois', () => {
+  const shell = read('app-shell.css'), before = read('spot-before.css');
+  /* En-tête : 52 px + zone sûre. Zone qui défile : marge du haut de 8 px + zone sûre. */
+  assert.match(shell, /height:calc\(52px \+ var\(--as-top\)\)!important/);
+  assert.match(shell, /padding:calc\(8px \+ var\(--as-top\)\) var\(--as-gutter\)/);
+  /* Collé = mesuré depuis le bord intérieur de la zone qui défile : 52 − 8 = 44 px, sans la zone sûre. */
+  const m = before.match(/@media\(max-width:959px\)\{[\s\S]*?\.ocean-v2 #detail \.dtabs\{top:([^;]+);z-index:6\}/);
+  assert.ok(m, 'règle des onglets collés sur téléphone');
+  assert.equal(m[1], '44px');
+  assert.doesNotMatch(read('fiche.css') + before, /#detail \.dtabs\{[^}]*top:calc\([^)]*--as-top/, 'jamais la zone sûre dans le décalage collé');
+  assert.match(before, /@media\(min-width:960px\)\{\.ocean-v2 #detail \.dtabs\{top:0;z-index:6\}\}/, 'ordinateur : collé en haut de sa colonne');
+});
