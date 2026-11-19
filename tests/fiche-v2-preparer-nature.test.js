@@ -49,6 +49,9 @@ test('Préparer : chaque fait garde sa source à côté (aéroports, lieux autou
   assert.match(fnSource(guide, 'aroundHTML'), /wikiUrl\(lang,x\.title\)/, 'chaque lieu garde son lien Wikipédia');
   assert.match(fnSource(guide, 'sleepHTML'), /Estimation indicative Ocean Buddy \(\$\{M\.EDITION\}\)/);
   assert.match(fnSource(guide, 'sleepHTML'), /Recherches publiques, sans lien sponsorisé/);
+  /* La haute saison se traduit d’un bloc : aucun élément au milieu de la phrase (i18n.js la couperait en deux). */
+  const peak = fnSource(guide, 'sleepHTML').split('\n').find(l => l.includes('const peak='));
+  assert.ok(peak && !/months\(|<span/.test(peak), 'mois en texte simple dans « Haute saison (…) : … la nuit. »');
 });
 
 test('Préparer : seuls le détail du pays et le point de départ sont repliés ; la liste et le carnet restent en vue', () => {

@@ -468,6 +468,18 @@ html #detail #detailHero .hero-more>b{display:none}
 .ocean-v2 #detail .dcat[data-cat="faune"] .bio-note{margin:12px 0 0;padding:0;color:var(--fiche-soft)}
 .ocean-v2 #detail .dcat[data-cat="faune"] .bio-note b{font-weight:600;color:var(--t-ink)}
 .ocean-v2 #detail .dcat[data-cat="faune"] .field-empty{margin:0;padding:4px 0 0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+/* Espèces typiques ouvertes : même dessin que les espèces photographiées (photo arrondie, nom, nom savant, une phrase),
+   sans cadre ni ombre ; « Voir plus » en lien d’action. */
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c){border:0;border-radius:0;background:none;box-shadow:none;overflow:visible}
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c) .bio-ph{border-radius:14px;overflow:hidden}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-hero .bio-t{padding:8px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-c .bio-in{padding:8px 0 0}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-c.wide .bio-in{padding:0 0 0 12px}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-c .bio-n{font:600 var(--fiche-label)/1.25 var(--body);color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-c .bio-sci{font:400 var(--fiche-note)/1.3 var(--body);font-style:italic;color:var(--fiche-soft)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-c .bio-t{margin-top:3px;color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-grid{gap:18px 12px}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-more{width:auto;margin:6px 0 0;padding:0 2px;min-height:44px;border:0;border-radius:0;background:none;box-shadow:none;font:700 var(--fiche-label)/1 var(--body);color:var(--t-main);text-align:start}
 /* Préserver ce spot : l’enjeu, puis les gestes en liste simple et leur bouton. */
 .ocean-v2 #detail .dcat[data-cat="preserver"] .nx-pres{margin:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible}
 #detail .dcat[data-cat="preserver"] .nx-pres-e{margin:0 0 16px}

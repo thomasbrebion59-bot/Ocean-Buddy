@@ -189,7 +189,10 @@
     const e=estimate(s),now=monthNow(),dates=tripDates(s),pl=place(s,e);
     const links=M.searchLinks(pl,{checkin:dates?.checkin,checkout:dates?.checkout,coords:coordsOf(s.id)});
     const inPeak=e.peak.includes(now),hasPeak=e.peak.length>0;
-    const peak=!hasPeak?'':inPeak?`<p class="fx-note px-peak">En ce moment, c’est la haute saison (${months(e.peak)}) : ${M.euros({lo:e.peakLo,hi:e.peakHi})} la nuit.</p>`:`<p class="fx-note px-peak">Haute saison (${months(e.peak)}) : ${M.euros({lo:e.peakLo,hi:e.peakHi})} la nuit.</p>`;
+    /* Les mois s’écrivent ici en texte simple, déjà dans la langue de l’app : un élément au milieu de la phrase la
+       couperait en deux pour i18n.js, qui ne reconnaîtrait plus « Haute saison ({0}) : {1} la nuit. ». */
+    const peakMonths=esc(M.monthsLabel(e.peak,LG()));
+    const peak=!hasPeak?'':inPeak?`<p class="fx-note px-peak">En ce moment, c’est la haute saison (${peakMonths}) : ${M.euros({lo:e.peakLo,hi:e.peakHi})} la nuit.</p>`:`<p class="fx-note px-peak">Haute saison (${peakMonths}) : ${M.euros({lo:e.peakLo,hi:e.peakHi})} la nuit.</p>`;
     const buttons=[['booking','Booking.com'],['hostelworld','Hostelworld'],['airbnb','Airbnb'],['google','Google Hôtels']];
     if(e.type==='camping')buttons.unshift(['camping','Campings sur la carte']);
     return `<h3 class="fx-title">Dormir</h3>
