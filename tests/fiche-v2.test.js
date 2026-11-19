@@ -315,5 +315,6 @@ test('Saisons : période sous le sport = mois de la meilleure case, « Bon » d�
 test('Prévisions : lever et coucher écrits comme les autres heures (« 7 h 37 »), rappel du calcul sous le meilleur jour', () => {
   assert.match(exp, /const clock = iso => \{[^\n]*if \(!window\.OB_I18N \|\| \/\^\(fr\|es\)\/\.test\(OB_I18N\.lang \|\| 'fr'\)\) return `\$\{\+m\[1\]\} h \$\{m\[2\]\}`;/);
   assert.match(exp, /\$\{note \? `<p class="fx7-calc">\$\{esc\(note\)\}<\/p>` : ''\}<\/div>`;/);
-  assert.doesNotMatch(exp, /fx-note fx7-calc" data-fx-view="forecast"/, 'plus en pied d’onglet');
+  assert.doesNotMatch(exp, /fx-note fx7-calc" data-fx-view="forecast"/, 'plus en pied d’onglet quand un jour est mis en avant');
+  assert.match(exp, /foot: best \? '' : note\}/, 'sans meilleur jour, le rappel reste en pied, sous l’heure du relevé');
 });

@@ -434,3 +434,12 @@ test('aucun horaire de pleine ou basse mer tiré du niveau modélisé ; plus de 
   assert.ok(!/courbe de marée/.test(fs.readFileSync(path.join(root, 'spot-data-model.js'), 'utf8')), '« Lire les conditions » ne renvoie plus vers une courbe retirée');
   assert.ok(/id="fcBars"/.test(html), 'les prévisions de l’accueil restent');
 });
+
+test('Prévisions : aucun créneau ni aujourd’hui ni demain, le rappel du calcul reste visible en pied, sous l’heure du relevé', async () => {
+  const {html} = await render({id: 'hossegor', name: 'Hossegor', waterType: 'sea', sports: ['surf'], wind: 'Offshore E'}, 'surf', 'debutant',
+    {f: {dir: () => 270, wind: () => 45, gust: () => 60}});
+  const f = forecastPart(html);
+  assert.match(f, /Aucun créneau dans tes repères aujourd’hui ni demain\./);
+  assert.doesNotMatch(f, /is-best|fx7-alt|fx7-calc/);
+  assert.match(f, /<p class="fx-note fx7-stamp" data-fx-view="forecast">Relevé[^<]*<\/p><p class="fx-note fx7-stamp" data-fx-view="forecast">Repère calculé sur une prévision de modèle[^<]*le poste de secours, le balisage et les drapeaux priment\.<\/p>/);
+});

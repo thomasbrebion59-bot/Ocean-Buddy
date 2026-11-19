@@ -224,8 +224,9 @@
     const best = ok.find(x => x.r.quality === 'good') || ok[0] || null;
     const why = best ? '' : res.some(x => x.r.status === 'nodata') ? 'Prévision incomplète : pas de créneau calculé pour le moment.' : 'Aucun créneau dans tes repères aujourd’hui ni demain.';
     const noLevel = !rule.level ? '<p class="fx-note fx7-why">Sans niveau choisi dans Réglages, le calcul reste prudent.</p>' : '';
-    /* Sans meilleur jour, le rappel du calcul suit la phrase qui le dit ; sinon il suit la ligne « Ton meilleur jour ». */
-    return {top: (why ? `<p class="fx-note fx7-why">${esc(why)}</p><p class="fx-note fx7-why">${esc(note)}</p>` : '') + noLevel, best, hours, rule, today: res[0] ? res[0].r : null, note, res};
+    /* Le rappel du calcul suit la ligne « Ton meilleur jour » ; sans meilleur jour, il reste en pied (foot), sous l’heure
+       du relevé, pour garder le haut de l’onglet léger. */
+    return {top: (why ? `<p class="fx-note fx7-why">${esc(why)}</p>` : '') + noLevel, best, hours, rule, today: res[0] ? res[0].r : null, note, res, foot: best ? '' : note};
   }
   /* Ligne du meilleur jour : le créneau, sa qualité, l’avertissement entier (jamais replié, jamais coupé), puis le rappel
      que le poste de secours, le balisage et les drapeaux priment, juste dessous. L’autre jour calculé (aujourd’hui ou
@@ -330,6 +331,7 @@
       + `<div class="wx-block wx-week" data-fx-view="forecast"><h3 class="fx-title">Les 7 jours</h3>${slots.top}${weekRows(daily, inland, slots)}<p class="fx-note fx7-hint">Touche un jour pour voir les rafales, la pluie, l’UV et le soleil.</p></div>`
       + `<div class="wx-block wx-hours" data-fx-view="forecast"><h3 class="fx-title">Heure par heure</h3>${hoursTable(next, daily, inland, slots.hours, gap ? utc : '')}</div>`
       + `<p class="fx-note fx7-stamp" data-fx-view="forecast">${esc(updated)}</p>`
+      + (slots.foot ? `<p class="fx-note fx7-stamp" data-fx-view="forecast">${esc(slots.foot)}</p>` : '')
       + `<p class="spot-week-note"><span class="wx-stamp-note">Valeurs de modèle, indicatives, gardées une heure.</span>${inland ? '' : ' <span class="wx-stamp-note">Près des côtes, la précision des vagues est limitée. Pour la marée, consulte l’annuaire local.</span>'}</p>`
       + '<p class="wx-source"><a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Prévisions Open-Meteo (CC BY 4.0)</a></p>';
   }
