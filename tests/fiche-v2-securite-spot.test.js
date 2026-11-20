@@ -224,7 +224,7 @@ test('Le spot : le conseil de Poulpy revient sur un spot personnel ouvert après
   const ctx = vm.createContext({
     culture: () => ({ respect: 'Entre avec des chaussons, ne te tiens jamais à l’épave.', grounded: true }), country: () => 'Indonésie',
     esc: v => String(v ?? ''), NT: '', svg: () => '', P: {}, document: { getElementById: () => ({ closest: () => block }) },
-    window: { OCEAN_CLIMATE_LITE: {}, OCEAN_CULTURE_ZONES: { zones: {}, spots: {} } }, data: {}, current: null, mount: () => true, section: { spirit: part(), around: part(), sleep: part(), glance: part(), live: part() }, lastLive: null, paintLive: () => {},
+    window: { OCEAN_CLIMATE_LITE: {}, OCEAN_CULTURE_ZONES: { zones: {}, spots: {} }, OCEAN_SPOT_EXTRAS: { places: {}, prix: { c: {} } } }, data: {}, current: null, mount: () => true, section: { spirit: part(), around: part(), sleep: part(), glance: part(), live: part() }, lastLive: null, paintLive: () => {},
     aroundHTML: () => '', sleepHTML: () => '', glanceHTML: () => '', badgeNearby: () => {}, spotById: () => null, load: () => Promise.resolve()
   });
   vm.runInContext(src.slice(i, j) + src.slice(k, l) + ';this.update=update;', ctx);

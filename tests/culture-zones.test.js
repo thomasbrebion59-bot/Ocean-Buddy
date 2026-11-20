@@ -83,7 +83,7 @@ test('fiche : un fait par carte, sa source d’un toucher et dans « Sources et 
   assert.match(g, /food=has\('gout'\)\?'':c\.food\?\.\[0\]\|\|''/);
   /* Toutes les sources de la zone, avec leur date, dans « Sources et précisions ». */
   assert.match(g, /<ul class="fx-note gl-zone-src">/);
-  assert.match(read('replis.js'), /'#guideLive \.gl-zone-src'\]/);
+  assert.match(read('replis.js'), /'#guideLive \.gl-zone-src'[,\]]/);
   assert.doesNotMatch(css, /\.gl-fact-src\{[^}]*display:none/);
   assert.match(css, /#detail \.gl-fact-src\{[^}]*min-height:44px/);
   for (const k of ['table', 'fete', 'coutume', 'marche', 'cabane', 'panneau', 'soleil']) assert.ok(fs.existsSync(path.join(__dirname, '..', 'assets/fiche', k + '.webp')), k);

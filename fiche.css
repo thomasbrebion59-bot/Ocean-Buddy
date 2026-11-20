@@ -941,6 +941,38 @@ body.reduce-motion #detail :is(.gl-tile,.gl-link-ic,.gl-card-go button){transiti
   #detail .gl-budget{max-width:560px}
   #detail .gl-links{grid-template-columns:repeat(auto-fit,minmax(64px,96px));justify-content:start}
 }
+/* Niveau des prix du pays (Banque mondiale) : un grand pourcentage, puis l’échelle parmi les pays du guide. */
+#detail .gl-pli{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 8px}
+#detail .gl-pli .fx-num{white-space:nowrap}
+#detail .gl-pli-tx{display:grid;gap:2px;min-width:0;font:600 var(--fiche-label)/1.3 var(--body);color:var(--t-ink)}
+#detail .gl-pli-tx small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+#detail .gl-pli+.gl-scale{margin-top:4px}
+#detail .gl-pli~.gl-rank{margin-bottom:16px}
+/* Autour du spot (OpenStreetMap) : par catégorie, une rangée de lieux à faire glisser ; chaque lieu s’ouvre sur la carte. */
+#detail .gl-around{margin-top:var(--fiche-gap)}
+#detail .gl-around-sub{margin:-4px 0 12px}
+#detail .gl-around-h{display:block;margin:14px 0 8px}
+#detail .gl-places{display:flex;gap:10px;margin:0 -16px;padding:0 16px 4px;list-style:none;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scroll-padding-inline:16px;scrollbar-width:none}
+#detail .gl-places::-webkit-scrollbar{display:none}
+#detail .gl-places>li{flex:0 0 min(62%,220px);min-width:0;scroll-snap-align:start}
+#detail .gl-place{display:grid;grid-template-columns:36px minmax(0,1fr);align-items:start;column-gap:10px;height:100%;box-sizing:border-box;min-height:74px;padding:12px;border-radius:var(--fiche-radius);
+  background:var(--fiche-wash);color:var(--t-ink);text-decoration:none;-webkit-tap-highlight-color:transparent;transition:transform .18s ease}
+#detail .gl-place:active{transform:scale(.97)}
+#detail .gl-place:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+#detail .gl-place-ic{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--t-card);color:var(--t-main)}
+#detail .gl-place-ic svg{width:20px;height:20px}
+#detail .gl-place-tx{display:grid;gap:2px;min-width:0}
+#detail .gl-place-tx b{font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-ink);overflow-wrap:anywhere}
+#detail .gl-place-tx small{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail .gl-place-tx .gl-place-d{color:var(--t-main);font-weight:600}
+#detail .gl-osm{margin:8px 0 0}
+#detail .gl-osm a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+@media (prefers-reduced-motion:reduce){#detail .gl-place{transition:none}}
+body.reduce-motion #detail .gl-place{transition:none}
+@media(min-width:960px){
+  #detail .gl-places{margin:0;padding:0 0 4px}
+  #detail .gl-places>li{flex:0 0 220px}
+}
 
 
 /* =====================================================================================================

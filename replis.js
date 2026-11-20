@@ -130,7 +130,7 @@
     meteo: ['#spotWeek>.spot-week-note', '#spotWeek>.wx-source', '#spotWeek>.fx7-stamp'],
     securite: ['#dDanger>small.fx-note', '#sdRip .sd-coach-src'],
     /* L’estimation des prix (#guideLive .gl-src) reste à côté des prix : ce sont des barèmes par pays, à dire sur place. */
-    infos: ['#dSource', '.field-visit-cites', '.field-visit-caution', '.field-reference', '#guideLive .gl-links-src', '#guideLive .guide-note', '#guideLive .gl-zone-src'],
+    infos: ['#dSource', '.field-visit-cites', '.field-visit-caution', '.field-reference', '#guideLive .gl-links-src', '#guideLive .guide-note', '#guideLive .gl-zone-src', '#guideLive .gl-pli-src', '#guideLive .gl-osm-src'],
     saisons: ['#dSeasons .sd-suit>small', '#dSeasons>.sd-src'],
     activites: ['#dGo>.sd-src', '.field-preparation>.g-note', '.field-local>.fx-note', '#guideAround>.px-lead', '#guideAround>.px-src',
       '#guideSleep .px-type>span', '#guideSleep .px-src', '#guideSleep .px-search>.fx-note'],

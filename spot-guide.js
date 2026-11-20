@@ -9,6 +9,9 @@
   const DATA_URL_ES='assets/data/spot-guides.es.js?v=1738a29c9a1b';
   /* Culture locale sourcée, par zone (scripts/build-culture-zones.cjs) : chargée à l’ouverture d’une fiche, jamais au démarrage. */
   const ZONES_URL='assets/data/culture-zones.js?v=8a299adc2301';
+  /* Lieux autour du spot (OpenStreetMap) et niveau des prix par pays (Banque mondiale) : scripts/build-spot-extras.cjs,
+     chargés à l’ouverture d’une fiche, jamais au démarrage. */
+  const EXTRAS_URL='assets/data/spot-extras.js?v=938e24ce7c9f';
   /* Hors français, le contenu éditorial (esprit du lieu, lieux, libellés d’hébergement) s’affiche en anglais.
      Il est marqué translate="no" pour que i18n.js ne le retraduise pas par morceaux ; les libellés d’interface restent traduisibles. */
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||'fr';
@@ -229,10 +232,31 @@
      une ligne sans valeur n’apparaît pas. Pas de prix d’hôtel ni de restaurant : nous n’en avons pas de sourcé. */
   const ILLU=k=>`<img class="gl-illu" src="assets/fiche/${k}.webp" alt="" width="210" height="210" loading="lazy" decoding="async" draggable="false">`;
   const nf=(v,d=0)=>{try{return Number(v).toLocaleString(window.OB_LOCALE||'fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});}catch(_){return String(v);}};
-  let nightPrices=null;
-  function allNightPrices(){
-    if(!nightPrices)nightPrices=allSpots().filter(x=>x&&!x.custom).map(x=>{try{return estimate(x)?.lo;}catch(_){return null;}}).filter(Number.isFinite);
-    return nightPrices;
+  /* Niveau des prix du pays (Banque mondiale, WDI PA.NUS.PRVT.PLI, États-Unis = 100) et sa place parmi les pays du guide.
+     Un pays sans valeur n’a ni échelle ni chiffre : jamais de valeur de remplacement. */
+  function priceLevel(name){
+    const d=window.OCEAN_SPOT_EXTRAS?.prix,v=d?.c?.[name];if(!Array.isArray(v)||!Number.isFinite(v[0]))return null;
+    const all=Object.values(d.c).map(x=>x[0]).filter(Number.isFinite);
+    const cheaper=Math.round(all.filter(x=>x<v[0]).length/all.length*100),pricier=Math.round(all.filter(x=>x>v[0]).length/all.length*100);
+    return {index:v[0],year:v[1],cheaper,pricier,meta:d.meta};
+  }
+  /* Lieux OpenStreetMap autour du spot : [nom, distance en m, étiquette brute, référence OSM] par catégorie (R, E, L). */
+  const CUISINE={regional:'Cuisine du coin',local:'Cuisine du coin',pizza:'Pizzas',burger:'Burgers',coffee_shop:'Café',sandwich:'Sandwichs',french:'Cuisine française',italian:'Cuisine italienne',seafood:'Poisson et fruits de mer',fish:'Poisson',fish_and_chips:'Fish and chips',international:'Cuisine du monde',asian:'Cuisine asiatique',ice_cream:'Glaces',chinese:'Cuisine chinoise',crepe:'Crêpes',greek:'Cuisine grecque',indonesian:'Cuisine indonésienne',caribbean:'Cuisine des Caraïbes',tapas:'Tapas',mediterranean:'Cuisine méditerranéenne',breakfast:'Petit-déjeuner',brazilian:'Cuisine brésilienne',sushi:'Sushis',kebab:'Kebab',thai:'Cuisine thaïe',portuguese:'Cuisine portugaise',mexican:'Cuisine mexicaine',hawaiian:'Cuisine hawaïenne',american:'Cuisine américaine',barbecue:'Grillades',meat:'Viandes',pasta:'Pâtes',noodles:'Nouilles',chicken:'Poulet',cake:'Gâteaux',donut:'Beignets'};
+  const SPORT_TAG={surfing:'Surf',windsurfing:'Planche à voile',planche_a_voile:'Planche à voile',kitesurfing:'Kitesurf',scuba_diving:'Plongée','plongée':'Plongée','apnée':'Apnée',swimming:'Natation'};
+  const KIND_TAG={location:'Location',boutique:'Boutique'};
+  const tagOf=(cat,raw)=>{const map=cat==='R'?CUISINE:cat==='E'?SPORT_TAG:KIND_TAG;for(const t of String(raw||'').split(';')){const k=t.trim();if(map[k])return map[k];}return '';};
+  /* Les coordonnées du catalogue sont au centième de degré : une distance « à environ », arrondie. */
+  const around=m=>m<950?`à environ ${Math.max(100,Math.round(m/100)*100)} m`:`à environ ${nf(Math.round(m/500)/2,Math.round(m/500)%2?1:0)} km`;
+  function placesHTML(s){
+    const d=window.OCEAN_SPOT_EXTRAS,p=s&&!s.custom&&d?.places?.[s.id];if(!p)return '';
+    const CATS=[['R','Pour manger',P.food],['E','Écoles et clubs',P.school],['L','Location et boutiques',P.board]];
+    const rows=CATS.filter(([k])=>Array.isArray(p[k])&&p[k].length).map(([k,title,ic])=>`<h4 class="fx-label gl-around-h">${title}</h4><ul class="gl-places">${p[k].map((x,i)=>{
+      const tag=tagOf(k,x[2]);
+      return `<li style="--i:${i}"><a class="gl-place" href="https://www.openstreetmap.org/${esc(x[3])}" target="_blank" rel="noopener noreferrer"><span class="gl-place-ic">${svg(ic)}</span><span class="gl-place-tx"><b${NT}>${esc(x[0])}</b>${tag?`<small>${tag}</small>`:''}<small class="gl-place-d">${around(x[1])}</small></span></a></li>`;}).join('')}</ul>`);
+    if(!rows.length)return '';
+    const km=nf(Math.round((p.r||3000)/1000));
+    const date=frDate(d.osm?.extracted);
+    return `<div class="gl-block gl-around"><h3 class="fx-title">Autour du spot</h3><p class="fx-note gl-around-sub">Dans un rayon de ${km} km</p>${rows.join('')}<p class="fx-note gl-osm"><a href="${esc(d.osm?.source||'https://www.openstreetmap.org/copyright')}" target="_blank" rel="noopener noreferrer">Données OpenStreetMap</a></p><p class="fx-note gl-osm-src"><span>Lieux : © les contributeurs d’OpenStreetMap, sous licence ODbL, extraction du</span> <span${NT}>${esc(date)}</span>. <span>Les distances sont approximatives.</span></p></div>`;
   }
   /* Normales du mois en cours : fichier léger déjà utilisé par l’accueil ([eau, …, houle ×10, …], spot-data.js). */
   function monthNormals(s){
@@ -258,6 +282,11 @@
   function loadZones(){
     if(window.OCEAN_CULTURE_ZONES)return Promise.resolve();
     return zonesLoading||(zonesLoading=inject(ZONES_URL).catch(()=>{zonesLoading=null;}));
+  }
+  let extrasLoading=null;
+  function loadExtras(){
+    if(window.OCEAN_SPOT_EXTRAS)return Promise.resolve();
+    return extrasLoading||(extrasLoading=inject(EXTRAS_URL).catch(()=>{extrasLoading=null;}));
   }
   function liveHTML(s){
     const e=estimate(s),c=culture(s),n=monthNormals(s),ctry=country(s),month=esc(M.monthName(new Date().getMonth()+1,LG()));
@@ -290,21 +319,30 @@
     const zoneName=zone?`<p class="fx-label gl-zone"${NT}>${esc(zone.n)}</p>`:'';
     const zoneSrc=zone?`<ul class="fx-note gl-zone-src">${zone.f.map(f=>`<li><span${NT}>${esc(f[1])}</span> : <a href="${esc(f[4])}" target="_blank" rel="noopener noreferrer"${NT}>${esc(f[5])}</a>, <span>consultée le</span> <span${NT}>${esc(frDate(f[6]))}</span></li>`).join('')}</ul>`:'';
     const life=cards.length||vibe?`<div class="gl-block gl-life"><h3 class="fx-title">Ici, on vit comme ça</h3>${zoneName}${vibe}${cards.length?`<ul class="gl-rail">${cards.join('')}</ul>`:''}${zoneSrc}${c.grounded||zone?'':'<p class="fx-note guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>'}</div>`:'';
-    /* 3. Budget sur place : le prix de la nuit parmi tous les spots du guide, puis nos estimations. */
+    /* 3. Budget sur place : le niveau des prix du pays (Banque mondiale, sourcé) et sa place parmi les pays du guide,
+       puis nos estimations de la nuit, avec leur mention d’estimation visible. */
     let budget='';
     const srcNote=`Estimation indicative Ocean Buddy (${M.EDITION}), les prix varient selon la saison.`;
-    if(e){
-      const all=allNightPrices(),cheaper=all.length?Math.round(all.filter(v=>v<e.lo).length/all.length*100):null,pricier=M.cheaperThan(e.lo,all);
-      const pos=cheaper==null?50:Math.max(3,Math.min(97,cheaper));
-      const rank=cheaper==null?'':pricier>=50?`<p class="gl-rank"><span>Moins cher que</span> <b${NT}>${pricier}&nbsp;%</b> <span>des spots du guide</span></p>`:`<p class="gl-rank"><span>Plus cher que</span> <b${NT}>${cheaper}&nbsp;%</b> <span>des spots du guide</span></p>`;
-      const hasPeak=e.peak.length>0,rows=[`<li><span class="gl-ic">${svg(e.type==='camping'?P.tent:P.bed)}</span><span class="gl-row-tx">${lab(e)}</span><b${NT}>${M.euros({lo:e.lo,hi:e.hi})}</b></li>`];
-      if(hasPeak)rows.push(`<li><span class="gl-ic">${svg(P.sun)}</span><span class="gl-row-tx"><span>En haute saison</span> <small${NT}>${esc(M.monthsLabel(e.peak,LG()))}</small></span><b${NT}>${M.euros({lo:e.peakLo,hi:e.peakHi})}</b></li>`);
-      if(e.alt)rows.push(`<li><span class="gl-ic">${svg(P.bed)}</span><span class="gl-row-tx">${esc(e.alt.label)}</span><b${NT}>${M.euros(e.alt)}</b></li>`);
-      budget=`<div class="gl-block gl-budget"><h3 class="fx-title">Budget sur place</h3>
+    const pl0=priceLevel(ctry);
+    if(e||pl0){
+      let level='';
+      if(pl0){
+        const pos=Math.max(3,Math.min(97,pl0.cheaper));
+        const rank=pl0.pricier>=50?`<p class="gl-rank"><span>Moins cher que</span> <b${NT}>${pl0.pricier}&nbsp;%</b> <span>des pays du guide</span></p>`:`<p class="gl-rank"><span>Plus cher que</span> <b${NT}>${pl0.cheaper}&nbsp;%</b> <span>des pays du guide</span></p>`;
+        level=`<div class="gl-pli"><b class="fx-num"${NT}>${nf(Math.round(pl0.index))}&nbsp;%</b><span class="gl-pli-tx"><span>du coût de la vie aux États-Unis</span><small><span>${esc(ctry)}</span>, <span>Banque mondiale</span> <span${NT}>${pl0.year}</span></small></span></div>
         <div class="gl-scale" aria-hidden="true"><span>moins cher</span><i class="gl-track"><i class="gl-pin" style="--p:${pos}%"></i></i><span>plus cher</span></div>${rank}
-        <ul class="gl-prices">${rows.join('')}</ul>
+        <p class="fx-note gl-pli-src"><span>Niveau des prix de la consommation des ménages, États-Unis = 100 :</span> <a href="${esc(pl0.meta.url)}" target="_blank" rel="noopener noreferrer"${NT}>${esc(pl0.meta.name)}</a>, <span>licence CC BY 4.0, consultée le</span> <span${NT}>${esc(frDate(pl0.meta.consulted))}</span>.</p>`;
+      }
+      let nights='';
+      if(e){
+        const hasPeak=e.peak.length>0,rows=[`<li><span class="gl-ic">${svg(e.type==='camping'?P.tent:P.bed)}</span><span class="gl-row-tx">${lab(e)}</span><b${NT}>${M.euros({lo:e.lo,hi:e.hi})}</b></li>`];
+        if(hasPeak)rows.push(`<li><span class="gl-ic">${svg(P.sun)}</span><span class="gl-row-tx"><span>En haute saison</span> <small${NT}>${esc(M.monthsLabel(e.peak,LG()))}</small></span><b${NT}>${M.euros({lo:e.peakLo,hi:e.peakHi})}</b></li>`);
+        if(e.alt)rows.push(`<li><span class="gl-ic">${svg(P.bed)}</span><span class="gl-row-tx">${esc(e.alt.label)}</span><b${NT}>${M.euros(e.alt)}</b></li>`);
+        nights=`<ul class="gl-prices">${rows.join('')}</ul>
         <p class="fx-note gl-unit">par nuit, pour une personne</p>
-        <p class="fx-note gl-src">${srcNote}</p></div>`;
+        <p class="fx-note gl-src">${srcNote}</p>`;
+      }
+      budget=`<div class="gl-block gl-budget"><h3 class="fx-title">Budget sur place</h3>${level}${nights}</div>`;
     }
     /* 4. Raccourcis : de vrais liens (recherches publiques, sans lien sponsorisé). */
     const pl=place(s,e),dates=tripDates(s),links=M.searchLinks(pl,{checkin:dates?.checkin,checkout:dates?.checkout,coords:coordsOf(s.id)});
@@ -313,7 +351,7 @@
     const shortcuts=[link(links.booking,P.bed,'Booking.com',1)];
     if(e&&e.type==='camping')shortcuts.push(link(links.camping,P.tent,'Campings'));
     shortcuts.push(link(mapsNear(s,('école '+sportName).trim()),P.school,'École'),link(mapsNear(s,('location matériel '+sportName).trim()),P.board,'Location'),link(mapsNear(s,'restaurants'),P.food,'Restaurants'));
-    return `${tiles.length?`<div class="gl-tiles gl-n${tiles.length}">${tiles.join('')}</div>`:''}${life}${budget}<nav class="gl-links" aria-label="Raccourcis pratiques">${shortcuts.join('')}</nav><p class="fx-note gl-links-src">Recherches publiques, sans lien sponsorisé.</p>`;
+    return `${tiles.length?`<div class="gl-tiles gl-n${tiles.length}">${tiles.join('')}</div>`:''}${life}${budget}<nav class="gl-links" aria-label="Raccourcis pratiques">${shortcuts.join('')}</nav><p class="fx-note gl-links-src">Recherches publiques, sans lien sponsorisé.</p>${placesHTML(s)}`;
   }
   /* Les chiffres comptent jusqu’à leur valeur, une fois, à l’ouverture ; jamais en mouvement réduit. */
   function countUp(root){
@@ -375,6 +413,8 @@
     if(!window.OCEAN_CLIMATE_LITE)window.OceanSpotData?.load?.('lite').then(()=>{if(current===s.id)paintLive(s,false);}).catch(()=>{});
     /* La culture locale de la zone arrive à son tour, sans rejouer l’entrée en scène. */
     if(!window.OCEAN_CULTURE_ZONES)loadZones().then(()=>{if(current===s.id&&zoneOf(s))paintLive(s,false);});
+    /* Lieux et niveau des prix : chargés à la première fiche ouverte, repeints sans rejouer l’entrée en scène. */
+    if(!window.OCEAN_SPOT_EXTRAS)loadExtras().then(()=>{if(current===s.id)paintLive(s,false);});
     badgeNearby();
     window.OceanNotebook?.sync();
   }

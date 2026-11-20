@@ -154,10 +154,10 @@ function liveBlock(culture,cultures,over={}){
     estimate:()=>('est' in over?over.est:est),allSpots:()=>[{id:'a'},{id:'b'},{id:'c'},{id:'d',custom:true}],coordsOf:()=>({lat:43.66,lon:-1.44}),place:()=>'Hossegor, France',tripDates:()=>null,
     M:{monthName:()=>'novembre',monthsLabel:()=>'juillet et août',euros:r=>r.lo===r.hi?`${r.lo} €`:`${r.lo}–${r.hi} €`,cheaperThan:(v,all)=>Math.round(all.filter(x=>x>v).length/all.length*100),EDITION:'septembre 2026',
       searchLinks:()=>({booking:'https://www.booking.com/searchresults.html?ss=Hossegor',camping:'https://www.google.com/maps/search/camping'})},
-    window:{OCEAN_CLIMATE_LITE:'lite' in over?over.lite:{x:[[13,12,12,14,16,19,21,22,21,18,16,14],[],[],[],[],[23,26,23,17,14,12,13,13,15,18,24,25],[]]},OB_LOCALE:'fr-FR'},
+    window:{OCEAN_CLIMATE_LITE:'lite' in over?over.lite:{x:[[13,12,12,14,16,19,21,22,21,18,16,14],[],[],[],[],[23,26,23,17,14,12,13,13,15,18,24,25],[]]},OB_LOCALE:'fr-FR',OCEAN_SPOT_EXTRAS:over.extras},
     OceanCultures:cultures,Date,Number,Math,encodeURIComponent,SPORTMAP:{surf:{label:'Surf'}},spotSports:()=>['surf']});
   vm.runInContext(src.slice(i,j)+';this.liveHTML=liveHTML;',ctx);
-  return ctx.liveHTML({id:'x',waterType:over.water||'sea',sports:['surf']});
+  return ctx.liveHTML({id:over.id||'x',waterType:over.water||'sea',sports:['surf']});
 }
 test('« Le spot » : la saison se lit dans l’onglet Saisons ; le mot du coin, le plat et la page du pays sont dans « Ici, on vit comme ça »',()=>{
   const full={season:'De mai à octobre : test',respect:'Sois discret.',food:['Plat','Description'],hello:['Bonjour','pour saluer'],vibe:'Ambiance.',grounded:true};
@@ -193,10 +193,10 @@ test('« Le spot, en vie » : grands chiffres seulement s’il y a une donnée, 
   assert.doesNotMatch(liveBlock(c,undefined,{water:'lake'}),/Houle en/);
   const bare=liveBlock(c,undefined,{lite:{}});
   assert.doesNotMatch(bare,/Eau en|Houle en/); assert.match(bare,/class="gl-tiles gl-n1"/);
-  /* Budget : trois spots au même prix dans le catalogue factice, aucun n’est moins cher. */
+  /* Budget : sans indice de prix du pays (données pas encore chargées, ou pays sans valeur), ni échelle ni pourcentage ;
+     les estimations de la nuit restent, avec leur mention. L’échelle ne compare plus les barèmes Ocean Buddy entre spots. */
   assert.match(html,/<h3 class="fx-title">Budget sur place<\/h3>/);
-  assert.match(html,/<i class="gl-pin" style="--p:3%"><\/i>/);
-  assert.match(html,/<span>Plus cher que<\/span> <b translate="no" data-no-i18n>0&nbsp;%<\/b> <span>des spots du guide<\/span>/);
+  assert.doesNotMatch(html,/gl-scale|gl-pin|gl-pli|des spots du guide/);
   assert.match(html,/Camping<\/span><b translate="no" data-no-i18n>12–25 €<\/b>/);
   assert.match(html,/<span>En haute saison<\/span> <small translate="no" data-no-i18n>juillet et août<\/small><\/span><b translate="no" data-no-i18n>16–30 €<\/b>/);
   assert.match(html,/Auberge de jeunesse<\/span><b translate="no" data-no-i18n>25–40 €<\/b>/);
@@ -227,4 +227,66 @@ test('« Le spot, en vie » : grands chiffres seulement s’il y a une donnée, 
   /* La houle du mois : seulement pour les sports de vague ou de vent (pas sur un spot de plongée ou un lac). */
   assert.match(text('spot-guide.js'),/swellSport=sportsOf\.some\(a=>\['surf','bodyboard','kitesurf','windsurf','wingfoil','foil'\]\.includes\(a\)\);\n\s+if\(n&&n\.hs!=null&&swellSport\)tiles\.push/);
   for(const f of ['eau','houle','cabane','table','panneau','accueil','fete','coutume','marche'])assert.ok(fs.existsSync(path.join(__dirname,'..','assets/fiche',f+'.webp')),f);
+});
+
+/* 21 nov. : niveau des prix du pays (Banque mondiale, sourcé) et lieux autour du spot (OpenStreetMap). */
+const EXTRAS={osm:{extracted:'2026-11-20',license:"Données © les contributeurs d'OpenStreetMap, sous licence ODbL",source:'https://www.openstreetmap.org/copyright'},
+  places:{hossegor:{R:[['Makai',270,'','node/1'],['Le Napoli',276,'pizza;regional','node/2']],E:[['Prévent Surf Cool',1145,'surfing','node/3']],r:3000},teahupoo:{R:[['Snack',5400,'','way/4']],r:8000}},
+  prix:{meta:{name:'Banque mondiale, WDI',url:'https://data.worldbank.org/indicator/PA.NUS.PRVT.PLI',license:'CC BY 4.0',consulted:'2026-11-20'},c:{France:[82.8,2025,'FR'],Suisse:[128.2,2025,'CH'],Indonésie:[30.7,2025,'ID'],Portugal:[64.9,2025,'PT']}}};
+test('« Sur place » : niveau des prix du pays sourcé, échelle parmi les pays du guide, lieux OpenStreetMap sans note ni prix',()=>{
+  const c={hello:['Bonjour'],food:['Plat'],grounded:true};
+  const html=liveBlock(c,undefined,{extras:EXTRAS,id:'hossegor'});
+  /* France 82,8 : deux pays moins chers sur quatre (50 %), un plus cher (25 %). */
+  assert.match(html,/<div class="gl-pli"><b class="fx-num" translate="no" data-no-i18n>83&nbsp;%<\/b><span class="gl-pli-tx"><span>du coût de la vie aux États-Unis<\/span><small><span>France<\/span>, <span>Banque mondiale<\/span> <span translate="no" data-no-i18n>2025<\/span><\/small><\/span><\/div>/);
+  assert.match(html,/<i class="gl-pin" style="--p:50%"><\/i>/);
+  assert.match(html,/<span>Plus cher que<\/span> <b translate="no" data-no-i18n>50&nbsp;%<\/b> <span>des pays du guide<\/span>/);
+  assert.match(html,/<p class="fx-note gl-pli-src">.*href="https:\/\/data\.worldbank\.org\/indicator\/PA\.NUS\.PRVT\.PLI".*licence CC BY 4\.0, consultée le<\/span> <span translate="no" data-no-i18n>20\/11\/2026<\/span>/);
+  /* Les estimations de la nuit restent, mention d’estimation visible. */
+  assert.match(html,/<p class="fx-note gl-src">Estimation indicative Ocean Buddy/);
+  /* Lieux : par catégorie présente, nom hors traduction, étiquette connue, distance « à environ », lien OSM. */
+  assert.match(html,/<h3 class="fx-title">Autour du spot<\/h3><p class="fx-note gl-around-sub">Dans un rayon de 3 km<\/p>/);
+  assert.match(html,/<h4 class="fx-label gl-around-h">Pour manger<\/h4>/);
+  assert.match(html,/<h4 class="fx-label gl-around-h">Écoles et clubs<\/h4>/);
+  assert.doesNotMatch(html,/Location et boutiques/,'catégorie vide : rien');
+  assert.match(html,/<a class="gl-place" href="https:\/\/www\.openstreetmap\.org\/node\/2" target="_blank" rel="noopener noreferrer">.*?<b translate="no" data-no-i18n>Le Napoli<\/b><small>Pizzas<\/small><small class="gl-place-d">à environ 300 m<\/small>/);
+  assert.match(html,/<b translate="no" data-no-i18n>Prévent Surf Cool<\/b><small>Surf<\/small><small class="gl-place-d">à environ 1 km<\/small>/);
+  assert.match(html,/Lieux : © les contributeurs d’OpenStreetMap, sous licence ODbL, extraction du<\/span> <span translate="no" data-no-i18n>20\/11\/2026<\/span>/);
+  assert.doesNotMatch(html.replace(/<[^>]+>/g,' '),/\b(note|étoiles?|avis|horaires?)\b|\d\s?€.*Makai/i);
+  /* Rayon élargi : dit tel quel ; distance en kilomètres avec une décimale. */
+  const far=liveBlock(c,undefined,{extras:EXTRAS,id:'teahupoo'});
+  assert.match(far,/Dans un rayon de 8 km/); assert.match(far,/à environ 5,5 km/);
+  /* Spot sans lieux : pas de bloc ; pays sans indice : ni chiffre ni échelle, et aucune valeur de remplacement. */
+  const none=liveBlock(c,undefined,{extras:{...EXTRAS,prix:{...EXTRAS.prix,c:{Suisse:[128.2,2025,'CH']}}},id:'tikehau'});
+  assert.doesNotMatch(none,/Autour du spot|gl-pli|gl-scale|des pays du guide/);
+  assert.match(none,/Budget sur place/);
+  /* Chargement à l’ouverture d’une fiche, jamais au démarrage ; sources rangées dans « Sources et précisions ». */
+  const g=text('spot-guide.js');
+  assert.match(g,/if\(!window\.OCEAN_SPOT_EXTRAS\)loadExtras\(\)\.then\(\(\)=>\{if\(current===s\.id\)paintLive\(s,false\);\}\);/);
+  assert.match(g,/const EXTRAS_URL='assets\/data\/spot-extras\.js\?v=[0-9a-f]{12}';/);
+  assert.doesNotMatch(text('index.html'),/spot-extras\.js/,'jamais chargé au démarrage');
+  assert.match(text('replis.js'),/'#guideLive \.gl-pli-src', '#guideLive \.gl-osm-src'/);
+});
+
+test('build-spot-extras : lieux valides seulement (lien OSM, distance, aucun champ de note ou de prix), pays sans valeur absents',()=>{
+  const B=require('../scripts/build-spot-extras.cjs');
+  const base={extracted:'2026-11-20',license:"Données © les contributeurs d'OpenStreetMap, sous licence ODbL",source:'https://www.openstreetmap.org/copyright',radiusM:3000};
+  const out=B.buildPlaces({...base,spots:{a:{restaurants:[{name:'Ok',lat:1,lon:1,distM:500,osm:'node/9'},{name:'Noté',lat:1,lon:1,distM:200,osm:'node/8',rating:4.5},{name:'Cher',lat:1,lon:1,distM:200,osm:'node/7',price:'€€'},{name:'Sans lien',lat:1,lon:1,distM:100,osm:'http://x'},{name:'Loin',lat:1,lon:1,distM:'3 km',osm:'node/6'}],ecoles:[],locations:[]},vide:{restaurants:[],ecoles:[],locations:[]}}});
+  assert.deepEqual(out.spots.a.R,[['Ok',500,'','node/9']]);
+  assert.equal(out.spots.a.r,3000);
+  assert.ok(!('vide' in out.spots),'spot sans lieu : absent');
+  assert.deepEqual(out.dropped.map(x=>x.why),['champ interdit : rating','champ interdit : price','référence OpenStreetMap invalide','distance invalide']);
+  assert.throws(()=>B.buildPlaces({...base,license:'',spots:{}}),/ODbL/);
+  const pr=B.buildPrices({source:{name:'WDI',url:'https://data.worldbank.org/x',license:'CC BY 4.0',consulted:'2026-11-20'},countries:{FR:{index:82.8,year:2025},XX:{index:'?',year:2025}}},{France:'FR','La Réunion':'RE',Bidon:'XX'});
+  assert.deepEqual(pr.countries,{France:[82.8,2025,'FR']});
+  assert.deepEqual(pr.dropped.map(x=>x.country),['Bidon']);
+  assert.throws(()=>B.buildPrices({source:{url:'http://x',license:'a',consulted:'2026-11-20'},countries:{}},{}),/https/);
+  /* Donnée du dépôt : 5 lieux au plus par catégorie, aucun champ interdit, liens OSM valides, indices numériques datés. */
+  const d=JSON.parse(text('data/spot-extras.json'));
+  for(const [id,p] of Object.entries(d.places))for(const k of ['R','E','L'])if(p[k]){
+    assert.ok(p[k].length<=5,id+k);
+    for(const x of p[k]){assert.equal(x.length,4);assert.match(x[3],/^(node|way|relation)\/\d+$/);assert.ok(Number.isFinite(x[1]));}
+  }
+  for(const [n,v] of Object.entries(d.prix.c)){assert.ok(Number.isFinite(v[0])&&v[0]>0,n);assert.ok(Number.isInteger(v[1]),n);}
+  for(const n of ['La Réunion','Guadeloupe','Martinique']) assert.ok(!(n in d.prix.c),'pays sans valeur absent : '+n);
+  assert.match(d.osm.license,/ODbL/);
 });
