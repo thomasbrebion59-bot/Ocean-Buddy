@@ -123,7 +123,9 @@ test('rubriques : Mes spots, Bon aujourd’hui, En <mois>, Cultures ; trois lign
 test('lignes de spot : photo, nom, points de danger, conditions, verdict ; toucher ouvre la fiche avec le vol de la photo', () => {
   const row = fn('spotRow');
   assert.match(row, /class="ui-spot \$\{cls\}"\$\{rise\(i\)\} data-spot="\$\{esc\(s\.id\)\}" role="button" tabindex="0"/);
-  assert.match(row, /<span class="ui-ph">\$\{p\?`<img src="\$\{esc\(p\.thumb\)\}"\$\{sharp\(p,'114px'\)\} alt="" decoding="async"/, 'vraie photo du spot, vignette et srcset de l’app');
+  assert.match(row, /\$\{p\?`<span class="ui-ph"><img src="\$\{esc\(p\.thumb\)\}"\$\{sharp\(p,'114px'\)\} alt="" decoding="async"/, 'vraie photo du spot, vignette et srcset de l’app');
+  assert.match(row, /:noPhoto\(s\)\}/, 'sans vraie photo : le pictogramme de l’activité, jamais une illustration');
+  assert.match(v2, /const noPhoto=s=>`<span class="ui-ph is-none" style="--ic:url\('assets\/pictos\/sports\/\$\{esc\(\(s\.sports\|\|\[\]\)\.find\(a=>sportLabel\(a\)\)\|\|'all'\)\}-mono\.webp'\)"><\/span>`;/);
   assert.match(row, /\$\{rowName\(s\)\}\$\{dotsHTML\(g\)\}/);
   assert.match(row, /window\.dangerGauge\?\.\(s\)\?\.n\?\?null/, 'danger : la jauge de la fiche');
   assert.match(row, /\$\{liveHTML\(s\.id\)\}/);
@@ -317,6 +319,12 @@ test('ordinateur (960 px et plus) : deux colonnes', () => {
   const desk = /@media\(min-width:960px\)\{((?:[^{}]*\{[^{}]*\})*)\s*\}/.exec(noComments(css.slice(css.indexOf('Ordinateur (960'))))[1];
   assert.match(desk, /\.ocean-v2 #home \.hf-feed\{display:grid;grid-template-columns:repeat\(2,minmax\(0,560px\)\)/);
   assert.match(fn('renderV2'), /cols\.map\(c=>`<div class="ac-col">\$\{c\.map\(k=>B\[k\]\|\|''\)\.join\(''\)\}<\/div>`\)/);
+});
+
+test('tablette (700 à 959 px) : une colonne de 640 px au centre', () => {
+  const tab = /@media\(min-width:700px\) and \(max-width:959px\)\{([^{}]*\{[^{}]*\})\s*\}/.exec(noComments(css));
+  assert.ok(tab, 'règle tablette présente');
+  assert.match(tab[1], /\.ocean-v2 #home \.ac-top,\.ocean-v2 #home \.hf-feed\{max-width:640px!important;margin-left:auto!important;margin-right:auto!important\}/);
 });
 
 /* ---------- Textes ---------- */

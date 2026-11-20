@@ -668,10 +668,12 @@
     const p=window.SpotName?.parts?window.SpotName.parts(s.name):{main:shortName(s),sub:''};
     return `<span translate="no" data-no-i18n>${esc(p.main)}${p.sub?` <small>${esc(p.sub)}</small>`:''}</span>`;
   }
+  /* Spot sans vraie photo (une illustration ne sert jamais de couverture ici) : le pictogramme de son activité, au même format. */
+  const noPhoto=s=>`<span class="ui-ph is-none" style="--ic:url('assets/pictos/sports/${esc((s.sports||[]).find(a=>sportLabel(a))||'all')}-mono.webp')"></span>`;
   function spotRow(s,i,{eager=false,cls='ac-in'}={}){
     const p=photo(s),g=window.dangerGauge?.(s)?.n??null;
     return `<div class="ui-spot ${cls}"${rise(i)} data-spot="${esc(s.id)}" role="button" tabindex="0">
-      <span class="ui-ph">${p?`<img src="${esc(p.thumb)}"${sharp(p,'114px')} alt="" decoding="async"${eager?'':' loading="lazy"'}>`:''}</span>
+      ${p?`<span class="ui-ph"><img src="${esc(p.thumb)}"${sharp(p,'114px')} alt="" decoding="async"${eager?'':' loading="lazy"'}></span>`:noPhoto(s)}
       <div><p class="ui-spot-name">${rowName(s)}${dotsHTML(g)}</p>${liveHTML(s.id)}</div>
     </div>`;
   }

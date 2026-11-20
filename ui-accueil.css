@@ -48,6 +48,8 @@
 /* Lignes de spot de l'accueil : photo et chiffres plus grands quand l'écran le permet (maquette : 430 px). */
 .ocean-v2 #home .ui-spot:focus-visible{outline:2px solid var(--t-main);outline-offset:-2px;border-radius:14px}
 .ocean-v2 #home .ui-ph{color:var(--ui-soft)}
+/* Spot sans vraie photo : le pictogramme de son activité dans le cadre de la photo. */
+.ocean-v2 #home .ui-ph.is-none::before{content:"";position:absolute;inset:27%;background:currentColor;opacity:.6;-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
 .ocean-v2 #home .ui-spot-name small{font:500 1em/1.2 var(--body);color:var(--ui-soft)}
 @media(min-width:390px){
   .ocean-v2 #home .ui-spot{grid-template-columns:86px minmax(0,1fr);min-height:106px}
@@ -179,6 +181,10 @@
 
 /* ---------- Ordinateur (960 px et plus) : deux colonnes ----------
    À gauche tes spots et « Bon aujourd'hui », à droite le mois et les cultures ; le haut garde la largeur d'une colonne. */
+/* Tablette et petite fenêtre d'ordinateur : une colonne de 640 px au centre, plutôt que des lignes étirées. */
+@media(min-width:700px) and (max-width:959px){
+  .ocean-v2 #home .ac-top,.ocean-v2 #home .hf-feed{max-width:640px!important;margin-left:auto!important;margin-right:auto!important}
+}
 @media(min-width:960px){
   /* !important : design.css remet max-width:none sur chaque bloc direct d'un écran (sélecteur à identifiant). */
   .ocean-v2 #home .ac-top{max-width:560px!important;margin-top:8px}
