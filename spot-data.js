@@ -359,12 +359,15 @@
     const l = window.OB_I18N && OB_I18N.lang;
     return (t.n && t.n[l]) || t.en || t.sci;
   }
+  /* Nature, mois choisi dans la frise « Mois par mois » (renderWild) : par défaut le mois en cours. */
+  let wildMonth = new Date().getMonth(), wildLast = null, wildSpot = null;
   function renderWild(s, W) {
     const host = wildSlot(false);
+    if (s && s.id !== wildSpot) { wildSpot = s.id; wildMonth = new Date().getMonth(); }
     if (!host) return;
     const w = W && W.spots[s.id];
     // Les relevés sont côtiers : ni lac, ni rivière, ni cénote. Sans bloc, le repli « Pour identifier… » de l’onglet reste visible.
-    if (!M.marineSpot(s) || !w || !w.sp || w.sp.length < 3) { host.hidden = true; wildOn(false); return; }
+    if (!M.marineSpot(s) || !w || !w.sp || w.sp.length < 3) { host.hidden = true; wildOn(false); wildLast = null; return; }
     host.hidden = false; wildOn(true);
     const T = W.taxa;
     const list = w.sp.map(r => ({ t: T[r[0]], id: r[0], c: r[1], h: r[2] })).filter(o => o.t);
@@ -376,7 +379,8 @@
     const txt = v => esc(M.decodeEntities(v));
     const card = o => {
       const st = IUCN[o.t.i];
-      return `<li class="sd-sp"><figure><img src="${esc(o.t.p[0])}" alt="${txt(spName(o.t))}" loading="lazy" decoding="async" referrerpolicy="no-referrer">${st ? `<span class="sd-iucn i-${o.t.i}">${esc(st)}</span>` : ''}</figure>
+      const seen = Array.isArray(o.h) && o.h.some(v => v > 0) ? o.h.map(v => (v > 0 ? 1 : 0)).join('') : '';
+      return `<li class="sd-sp"${seen ? ` data-wild-seen="${seen}"` : ''}><figure><img src="${esc(o.t.p[0])}" alt="${txt(spName(o.t))}" loading="lazy" decoding="async" referrerpolicy="no-referrer">${st ? `<span class="sd-iucn i-${o.t.i}">${esc(st)}</span>` : ''}</figure>
         <div><b${isFr() ? '' : NT}>${txt(spName(o.t))}</b><i${NT}>${txt(o.t.s)}</i><small>${num(o.c)} observation${o.c > 1 ? 's' : ''}</small></div>
         <span class="sd-credit"${NT}>${txt(o.t.p[1] || '')}</span></li>`;
     };
@@ -394,13 +398,43 @@
     host.innerHTML = `<h3 class="fx-title">La vraie faune du coin</h3><p class="fx-text nx-intro">Des espèces photographiées et identifiées par des plongeurs, nageurs et naturalistes autour du spot.</p>
       <div class="sd-stats nx-stats"><div class="nx-stat"><b class="fx-num">${num(w.n)}</b><small class="fx-note">espèces aquatiques observées à moins de ${num(w.r)} km</small></div>${w.o ? `<div class="nx-stat"><b class="fx-num">${num(w.o)}</b><small class="fx-note">espèces marines recensées par les scientifiques (OBIS)</small></div>` : ''}</div>
       ${flags.length ? `<div class="sd-flags nx-when"><h4 class="fx-title fx-title-s">Quand les voir ?</h4><ul>${flags.map(flagRow).join('')}</ul></div>` : ''}
+      ${wildMonths(list)}
       <ul class="sd-species">${shown.map(card).join('')}</ul>
       <a class="sd-link fx-more" href="${esc(more)}" target="_blank" rel="noopener noreferrer">Toutes les observations sur iNaturalist</a>
       <p class="sd-src fx-note">Observations « niveau recherche » d’iNaturalist (identifications confirmées par la communauté) et Ocean Biodiversity Information System. Ce qu’on y a vu, pas une promesse de rencontre : la faune bouge avec la saison et la météo. Photos sous licence libre, crédits sur chaque image.</p>`;
+    paintWildMonth();
+  }
+
+  /* Frise des douze mois (20 nov.) : toucher un mois met en avant, dans la bande de photos, les espèces photographiées
+     ce mois-là autour du spot (relevés iNaturalist par mois, o.h). Seules les espèces qui ont des relevés mensuels sont
+     comptées ; les autres restent telles quelles. Rien d’inventé : un mois sans relevé le dit. */
+  function wildMonths(list) {
+    const withH = list.filter(o => Array.isArray(o.h) && o.h.length === 12 && o.h.some(v => v > 0));
+    wildLast = withH;
+    if (withH.length < 2) return '';
+    /* Hauteur d’une barre : la part des relevés de chaque espèce tombée ce mois-là, additionnée (une espèce très photographiée
+       ne cache pas les autres) ; le texte, lui, compte les espèces. */
+    const score = m => withH.reduce((t, o) => t + o.h[m] / Math.max(1, ...o.h), 0), max = Math.max(0.01, ...Array.from({ length: 12 }, (_, m) => score(m)));
+    const now = new Date().getMonth();
+    const cells = Array.from({ length: 12 }, (_, m) => `<button type="button" class="nx-m${m === now ? ' now' : ''}" data-wild-month="${m}" aria-pressed="${m === wildMonth}" aria-label="${esc(monthName(m))}"><i style="height:${Math.round(12 + 88 * score(m) / max)}%"></i><span aria-hidden="true">${esc(monthLetter(m))}</span></button>`).join('');
+    return `<div class="nx-months"><h4 class="fx-title fx-title-s">Mois par mois</h4><div class="nx-mrow" role="group" aria-label="Choisis un mois">${cells}</div><p class="nx-mtx" aria-live="polite"></p></div>`;
+  }
+  function paintWildMonth() {
+    const host = $('#dWild'); if (!host || !wildLast) return;
+    const m = wildMonth, n = wildLast.filter(o => o.h[m] > 0).length;
+    host.querySelectorAll('[data-wild-month]').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.wildMonth === m)));
+    const tx = host.querySelector('.nx-mtx');
+    if (tx) tx.textContent = n ? (n > 1 ? `En ${monthName(m)}, ${num(n)} de ces espèces ont été photographiées autour du spot.` : `En ${monthName(m)}, une de ces espèces a été photographiée autour du spot.`)
+      : `En ${monthName(m)}, aucune de ces espèces n’a été photographiée autour du spot.`;
+    host.querySelectorAll('.sd-species>.sd-sp').forEach(li => {
+      const seen = li.dataset.wildSeen; li.classList.toggle('is-seen', !!seen && seen[m] === '1'); li.classList.toggle('is-off', !!seen && seen[m] !== '1');
+    });
   }
 
   /* ---------------- Interactions ---------------- */
   document.addEventListener('click', e => {
+    const wm = e.target.closest('#dWild [data-wild-month]');
+    if (wm) { wildMonth = +wm.dataset.wildMonth; paintWildMonth(); return; }
     const m = e.target.closest('[data-sd-month]');
     if (m && $('#dSeasons')?.contains(m)) { selMonth = +m.dataset.sdMonth; if (m.dataset.sdAct) selAct = m.dataset.sdAct; refresh(); return; }
     const st = e.target.closest('[data-sd-step]');

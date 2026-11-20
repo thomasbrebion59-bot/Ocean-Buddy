@@ -11184,5 +11184,11 @@
  "Vent de côté": "Viento lateral",
  "Vent de mer": "Viento de mar",
  "Vent de terre": "Viento de tierra",
- "Vent, au plus fort": "Viento, en su máximo"
+ "Vent, au plus fort": "Viento, en su máximo",
+ "{8} observation{9}": "{8} observaci{9}",
+ "Choisis un mois": "Elige un mes",
+ "Mois par mois": "Mes a mes",
+ "En {0}, {1} de ces espèces ont été photographiées autour du spot.": "En {0}, se fotografiaron {1} de estas especies cerca del spot.",
+ "En {0}, aucune de ces espèces n’a été photographiée autour du spot.": "En {0}, no se fotografió ninguna de estas especies cerca del spot.",
+ "En {0}, une de ces espèces a été photographiée autour du spot.": "En {0}, se fotografió una de estas especies cerca del spot."
 }

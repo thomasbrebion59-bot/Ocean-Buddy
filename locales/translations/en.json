@@ -11184,5 +11184,11 @@
  "Vent de côté": "Cross-shore wind",
  "Vent de mer": "Onshore wind",
  "Vent de terre": "Offshore wind",
- "Vent, au plus fort": "Wind, at its strongest"
+ "Vent, au plus fort": "Wind, at its strongest",
+ "{8} observation{9}": "{8} observation{9}",
+ "Choisis un mois": "Pick a month",
+ "Mois par mois": "Month by month",
+ "En {0}, {1} de ces espèces ont été photographiées autour du spot.": "In {0}, {1} of these species were photographed around the spot.",
+ "En {0}, aucune de ces espèces n’a été photographiée autour du spot.": "In {0}, none of these species was photographed around the spot.",
+ "En {0}, une de ces espèces a été photographiée autour du spot.": "In {0}, one of these species was photographed around the spot."
 }

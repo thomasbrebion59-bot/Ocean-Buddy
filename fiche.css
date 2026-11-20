@@ -1035,6 +1035,24 @@ body.reduce-motion #detail.px-in .hero-photo,body.reduce-motion #detail.px-in .h
 body.reduce-motion #detail .hero-photo{transform:none!important}
 
 
+/* Nature, frise des douze mois (spot-data.js, wildMonths) : une barre par mois, haute du nombre d’espèces photographiées
+   ce mois-là ; toucher un mois met en avant, dans la bande de photos, les espèces vues ce mois-là. */
+#detail .nx-months{margin:0 0 14px}
+#detail .nx-months>.fx-title{margin:0 0 10px}
+#detail .nx-mrow{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;align-items:end;height:74px}
+#detail .nx-m{position:relative;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%;min-width:0;min-height:44px;padding:0;border:0;background:none;color:var(--fiche-soft);font:600 var(--fiche-note)/1 var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#detail .nx-m i{display:block;width:100%;max-width:22px;border-radius:6px 6px 3px 3px;background:color-mix(in srgb,var(--t-main) 28%,var(--t-card));transition:background-color .2s ease}
+#detail .nx-m.now span{color:var(--t-ink);text-decoration:underline;text-underline-offset:3px}
+#detail .nx-m[aria-pressed="true"] i{background:var(--t-main)}
+#detail .nx-m[aria-pressed="true"] span{color:var(--t-main);font-weight:800}
+#detail .nx-m:focus-visible{outline:2px solid var(--t-main);outline-offset:2px;border-radius:6px}
+#detail .nx-mtx{margin:8px 0 0;font:500 var(--fiche-text)/1.4 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="faune"] .sd-species>.sd-sp{transition:opacity .25s ease,transform .25s ease}
+#detail .dcat[data-cat="faune"] .sd-species>.sd-sp.is-seen{order:-1}
+#detail .dcat[data-cat="faune"] .sd-species>.sd-sp.is-off{opacity:.38}
+@media (prefers-reduced-motion:reduce){#detail .dcat[data-cat="faune"] .sd-species>.sd-sp,#detail .nx-m i{transition:none}}
+body.reduce-motion #detail .dcat[data-cat="faune"] .sd-species>.sd-sp,body.reduce-motion #detail .nx-m i{transition:none}
+
 /* =====================================================================================================
    SCÈNE ILLUSTRÉE DE CONDITIONS (spot-experience.js, sceneHTML et paintScene)
    Le jour choisi parmi « Les prochains jours » : vague à sa taille, va-et-vient au rythme de la période, vent dans son
