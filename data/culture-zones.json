@@ -1,0 +1,2818 @@
+{
+ "version": 1,
+ "updated": "2026-11-20",
+ "zones": {
+  "fr-landes-hossegor": {
+   "name": "Hossegor, Seignosse et Capbreton",
+   "region": "Landes",
+   "country": "FR",
+   "spots": [
+    "hossegor",
+    "seignosse",
+    "capbreton"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le pastis landais",
+     "text": "Brioche à la fleur d’oranger, au rhum ou à la vanille, longtemps réservée aux mariages et aux fêtes du village.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Pastis_landais",
+      "publisher": "Wikipédia, article « Pastis landais »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La course landaise",
+     "text": "Les écarteurs esquivent la vache au dernier moment, sans mise à mort. Elle anime les fêtes locales de mars à octobre.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Course_landaise",
+      "publisher": "Wikipédia, article « Course landaise »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Baïne",
+     "text": "Mot gascon pour la cuvette d’eau parallèle à la plage, où le courant peut devenir dangereux selon la marée.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Ba%C3%AFne",
+      "publisher": "Wikipédia, article « Baïne »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "fr-paysbasque-guethary": {
+   "name": "Guéthary",
+   "region": "Pays basque",
+   "country": "FR",
+   "spots": [
+    "guethary"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "L’axoa",
+     "text": "Veau coupé en dés, mijoté avec poivron, oignon et piment d’Espelette : un plat de foire et de fête au Pays basque.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Axoa",
+      "publisher": "Wikipédia, article « Axoa »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Kaixo",
+     "text": "« Bonjour » ou « salut » en basque, à lancer avec le sourire.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wiktionary.org/wiki/kaixo",
+      "publisher": "Wiktionnaire, entrée « kaixo »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Les fêtes de la Saint-Nicolas",
+     "text": "Les fêtes patronales de Guéthary ont lieu chaque année en décembre, autour de saint Nicolas.",
+     "months": [
+      12
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Gu%C3%A9thary",
+      "publisher": "Wikipédia, article « Guéthary »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La pelote au grand chistera",
+     "text": "Le club L’Olharroa, né en 1922, est surnommé la Mecque du grand chistera : on joue sur le fronton du village.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Gu%C3%A9thary",
+      "publisher": "Wikipédia, article « Guéthary »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "fr-finistere-penhors": {
+   "name": "Penhors et le pays bigouden",
+   "region": "Finistère",
+   "country": "FR",
+   "spots": [
+    "penhors"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "Le pardon de Penhors",
+     "text": "Le pardon de Penhors, à Pouldreuzic, a lieu le premier dimanche de septembre : procession, messe et bénédiction, comme tout pardon breton.",
+     "months": [
+      9
+     ],
+     "source": {
+      "url": "https://www.destination-paysbigouden.com/en/discover/tradition/fest-noz-and-traditional-festivals/",
+      "publisher": "Office de tourisme Destination Pays Bigouden",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le fest-noz",
+     "text": "Soirée dansante bretonne, ouverte à tous : on s’y met à la gavotte ou à l’an dro après avoir regardé les pas.",
+     "months": [],
+     "source": {
+      "url": "https://www.destination-paysbigouden.com/en/discover/tradition/fest-noz-and-traditional-festivals/",
+      "publisher": "Office de tourisme Destination Pays Bigouden",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le far breton",
+     "text": "Gâteau d’œufs, de lait et de beurre demi-sel, souvent aux pruneaux que les marins bretons rapportaient de Bordeaux.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Far_breton",
+      "publisher": "Wikipédia, article « Far breton »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Demat",
+     "text": "« Bonjour » en breton.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wiktionary.org/wiki/demat",
+      "publisher": "Wiktionnaire, entrée « demat »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La coiffe bigoudène",
+     "text": "Haute d’une trentaine de centimètres, elle ne se porte plus que lors des pardons, fêtes et festivals.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Coiffe_bigoud%C3%A8ne",
+      "publisher": "Wikipédia, article « Coiffe bigoudène »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "fr-var-portcros": {
+   "name": "Port-Cros",
+   "region": "Var",
+   "country": "FR",
+   "spots": [
+    "portcros"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "L’aïoli",
+     "text": "Morue et légumes servis avec une sauce d’ail pilé et d’huile d’olive : un plat emblématique de la Provence.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/A%C3%AFoli",
+      "publisher": "Wikipédia, article « Aïoli »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Une pêche encadrée",
+     "text": "Sur l’île, la pêche reste traditionnelle mais encadrée : charte depuis 1999 pour 24 pros, autorisation annuelle pour les amateurs.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Port-Cros",
+      "publisher": "Wikipédia, article « Port-Cros »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La Vigie",
+     "text": "Ancien sémaphore qu’on rejoint par l’ancienne route stratégique, avec un panorama sur l’archipel et le massif des Maures.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Port-Cros",
+      "publisher": "Wikipédia, article « Port-Cros »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "fr-corse-rondinara": {
+   "name": "Rondinara et Bonifacio",
+   "region": "Corse-du-Sud",
+   "country": "FR",
+   "spots": [
+    "rondinara"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le fiadone",
+     "text": "Gâteau frais au brocciu, au sucre, aux œufs et au citron, un dessert emblématique de la Corse.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Fiadone",
+      "publisher": "Wikipédia, article « Fiadone »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Les polyphonies corses",
+     "text": "Chant à trois voix a cappella, né de la vie des villages et des bergers : veillées, pèlerinages et fêtes le font vivre.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Polyphonie_corse",
+      "publisher": "Wikipédia, article « Polyphonie corse »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La Semaine sainte à Bonifacio",
+     "text": "Les confréries organisent des processions très suivies pendant la Semaine sainte, et les offices des Ténèbres.",
+     "months": [
+      3,
+      4
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Bonifacio",
+      "publisher": "Wikipédia, article « Bonifacio »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "pt-ericeira": {
+   "name": "Ericeira",
+   "region": "Lisbonne",
+   "country": "PT",
+   "spots": [
+    "ericeira"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "L’oursin d’Ericeira",
+     "text": "Spécialité de la ville : les restaurants du village cuisinent l’oursin de plusieurs façons pendant le festival qui lui est dédié.",
+     "months": [],
+     "source": {
+      "url": "https://www.visitlisboa.com/pt-pt/eventos/festival-internacional-do-ourico-do-mar",
+      "publisher": "Turismo de Lisboa (Visit Lisboa)",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le festival international de l’oursin",
+     "text": "Dégustations, showcooking et ateliers au marché municipal d’Ericeira : l’édition 2026 allait du 24 avril au 3 mai.",
+     "months": [
+      4,
+      5
+     ],
+     "source": {
+      "url": "https://www.visitlisboa.com/pt-pt/eventos/festival-internacional-do-ourico-do-mar",
+      "publisher": "Turismo de Lisboa (Visit Lisboa)",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Réserve mondiale de surf",
+     "text": "Depuis octobre 2011, la côte d’Ericeira porte le titre de réserve mondiale de surf, décerné par Save the Waves.",
+     "months": [
+      10
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Ericeira",
+      "publisher": "Wikipédia, article « Ericeira »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "es-minorque-macarella": {
+   "name": "Sud-ouest de Minorque, Cala Macarella",
+   "region": "Minorque, Baléares",
+   "country": "ES",
+   "spots": [
+    "macarella"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "Sant Joan à Ciutadella",
+     "text": "Les 23 et 24 juin, cavaliers et chevaux minorquins défilent à Ciutadella, avec des « bots » où le cheval se cabre.",
+     "months": [
+      6
+     ],
+     "source": {
+      "url": "https://visitmenorca.com/?p=1128",
+      "publisher": "Visit Menorca",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le fromage de Maó",
+     "text": "Fromage de vache à la croûte orangée frottée d’huile d’olive et de paprika, protégé par une AOP depuis 1985.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Ma%C3%B3_(fromage)",
+      "publisher": "Wikipédia, article « Maó (fromage) »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "La caldereta de langosta",
+     "text": "Soupe de langouste mijotée, un plat typique de Minorque.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Minorque",
+      "publisher": "Wikipédia, article « Minorque »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Pomada",
+     "text": "Gin de Minorque mélangé à de la limonade, qu’on boit pendant les fêtes patronales.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Minorque",
+      "publisher": "Wikipédia, article « Minorque »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le Camí de Cavalls",
+     "text": "Sentier qui fait le tour de l’île à pied (GR 223), ancien chemin qui reliait les tours de défense.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Minorque",
+      "publisher": "Wikipédia, article « Minorque »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "gr-zakynthos-navagio": {
+   "name": "Zakynthos (Zante), côte nord-ouest",
+   "region": "Îles Ioniennes",
+   "country": "GR",
+   "spots": [
+    "navagio"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "La fête de saint Denys",
+     "text": "Le 24 août, les reliques de saint Denys, patron de l’île, défilent en procession le soir dans la ville de Zante.",
+     "months": [
+      8
+     ],
+     "source": {
+      "url": "https://orthodoxtimes.com/festive-events-in-honour-of-saint-dionysios-in-zakynthos/",
+      "publisher": "Orthodox Times",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le raisin de Corinthe de Zante",
+     "text": "Petit raisin doux et sans pépin, né sur l’île : avec l’huile d’olive, c’est l’un de ses grands produits.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Zakynthos",
+      "publisher": "Wikipédia (en), article « Zakynthos »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Les produits du terroir",
+     "text": "Huile d’olive, miel de thym, raisins de Corinthe et vin se vendent sur des étals au bord des routes et dans les villages.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Zakynthos",
+      "publisher": "Wikivoyage (en), article « Zakynthos »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le poète Solomos",
+     "text": "Une statue du poète Dionýsios Solomós orne la place principale de Zante, et un musée porte son nom place Saint-Marc.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Zakynthos",
+      "publisher": "Wikipédia (en), article « Zakynthos »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "gb-gower-rhossili": {
+   "name": "Péninsule de Gower, Rhossili",
+   "region": "Pays de Galles",
+   "country": "GB",
+   "spots": [
+    "rhossili"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le laverbread",
+     "text": "Purée épaisse d’algue porphyra bouillie des heures, appelée « bara lawr » en gallois.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Cuisine_of_Gower",
+      "publisher": "Wikipédia (en), article « Cuisine of Gower »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Les coques de Penclawdd",
+     "text": "Des familles de Penclawdd ramassent les coques du Burry Inlet depuis des générations ; on les vend au marché de Swansea.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Cuisine_of_Gower",
+      "publisher": "Wikipédia (en), article « Cuisine of Gower »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "L’agneau de pré salé de Gower",
+     "text": "Il broute samphire et lavande de mer ; AOP au Royaume-Uni en 2021, puis dans l’Union européenne en 2023.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Cuisine_of_Gower",
+      "publisher": "Wikipédia (en), article « Cuisine of Gower »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Worm’s Head",
+     "text": "Deux îlots, Inner Head et Outer Head, qu’on ne rejoint qu’à marée basse.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Rhossili",
+      "publisher": "Wikipédia (en), article « Rhossili »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Gallois au nord, anglais au sud",
+     "text": "Le nord de Gower compte beaucoup de galloisants, alors que le sud est traditionnellement anglophone.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Gower_Peninsula",
+      "publisher": "Wikivoyage (en), article « Gower Peninsula »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "pf-societe-tahiti": {
+   "name": "Tahiti et Bora Bora",
+   "region": "Îles de la Société",
+   "country": "PF",
+   "spots": [
+    "teahupoo",
+    "borabora"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "Le Heiva i Tahiti",
+     "text": "Chaque juillet, une quinzaine de jours de concours de chant et de danse, et de sports ancestraux comme le va’a, place To’atā.",
+     "months": [
+      7
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Heiva_i_Tahiti",
+      "publisher": "Wikipédia, article « Heiva i Tahiti »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le poisson cru",
+     "text": "Poisson mariné au citron vert et au lait de coco : le plat de l’île à goûter en premier.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Tahiti",
+      "publisher": "Wikivoyage (en), article « Tahiti »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le tamaaraa",
+     "text": "Festin de cochon, de poisson et de fruit à pain cuits à l’étouffée dans un four en terre, pour les grandes occasions de famille.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Tahiti",
+      "publisher": "Wikivoyage (en), article « Tahiti »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Mauruuru",
+     "text": "« Merci » en tahitien, à prononcer ma-rou-rou.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Tahiti",
+      "publisher": "Wikivoyage (en), article « Tahiti »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La fleur de tiaré",
+     "text": "Une fleur à l’oreille gauche dit que tu ne cherches pas de compagnie ; à droite, que tu es disponible.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Tiar%C3%A9_tahiti",
+      "publisher": "Wikipédia, article « Tiaré tahiti »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "cl-pichilemu": {
+   "name": "Pichilemu et Punta de Lobos",
+   "region": "Région de O’Higgins",
+   "country": "CL",
+   "spots": [
+    "puntadelobos"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "La fête du cochayuyo",
+     "text": "Cinq jours de plats à base de cochayuyo, une algue marine ; le dernier jour tombait le dimanche 26 juillet en 2026.",
+     "months": [
+      7
+     ],
+     "source": {
+      "url": "https://www.cnnchile.com/tendencias/pichilemu-celebra-su-fiesta-costumbrista-del-cochayuyo/",
+      "publisher": "CNN Chile",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Les Fiestas Patrias",
+     "text": "Autour du 18 septembre, Pichilemu fête la fête nationale : jeux traditionnels, cuisine, musique et danse, jour et nuit.",
+     "months": [
+      9
+     ],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Pichilemu",
+      "publisher": "Wikivoyage (en), article « Pichilemu »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Empanadas et completos",
+     "text": "Les empanadas et les « completos » sont les deux grands classiques à emporter à Pichilemu.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Pichilemu",
+      "publisher": "Wikivoyage (en), article « Pichilemu »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le parc Agustín Ross",
+     "text": "Le parc et centre culturel Agustín Ross compte parmi les cinq monuments nationaux de Pichilemu.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Pichilemu",
+      "publisher": "Wikivoyage (en), article « Pichilemu »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "br-noronha": {
+   "name": "Fernando de Noronha",
+   "region": "Pernambouc",
+   "country": "BR",
+   "spots": [
+    "noronha"
+   ],
+   "facts": [
+    {
+     "kind": "lieu",
+     "title": "Le centre historique",
+     "text": "La Vila dos Remédios et la chapelle São Pedro dos Pescadores sont patrimoine culturel du Brésil, classé par l’Iphan en 2017.",
+     "months": [],
+     "source": {
+      "url": "https://pt.wikipedia.org/wiki/Fernando_de_Noronha",
+      "publisher": "Wikipédia (pt), article « Fernando de Noronha »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "L’açaí",
+     "text": "Après la plongée, rien ne vaut un bol d’açaí servi au port, avec du granola et des bananes.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Fernando_de_Noronha",
+      "publisher": "Wikivoyage (en), article « Fernando de Noronha »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "mx-islamujeres": {
+   "name": "Isla Mujeres",
+   "region": "Quintana Roo",
+   "country": "MX",
+   "spots": [
+    "islamujeres"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le tik-n-chik",
+     "text": "Poisson entier mariné à l’achiote puis grillé : c’est le plat signature de l’île.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Isla_Mujeres",
+      "publisher": "Wikivoyage (en), article « Isla Mujeres »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Punta Sur",
+     "text": "À la pointe sud, les ruines d’un ancien phare et d’un temple d’Ixchel, déesse de la fertilité.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Isla_Mujeres",
+      "publisher": "Wikivoyage (en), article « Isla Mujeres »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Isla Mujeres",
+     "text": "Le nom de l’île veut dire « île des Femmes » en espagnol.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Isla_Mujeres",
+      "publisher": "Wikivoyage (en), article « Isla Mujeres »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "sn-dakar-ouakam": {
+   "name": "Ouakam, Dakar",
+   "region": "Dakar",
+   "country": "SN",
+   "spots": [
+    "ouakam"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le ceebu jën",
+     "text": "Riz au poisson et légumes de saison, né chez les pêcheurs de Saint-Louis, inscrit à l’UNESCO en 2021 ; on le mange souvent avec les mains.",
+     "months": [],
+     "source": {
+      "url": "https://ich.unesco.org/en/RL/ceebu-jn-a-culinary-art-of-senegal-01748",
+      "publisher": "UNESCO, patrimoine culturel immatériel",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Teranga",
+     "text": "Mot wolof souvent traduit par « hospitalité » : partager son repas et accueillir l’étranger chez soi.",
+     "months": [],
+     "source": {
+      "url": "https://lepetitjournal.com/dakar/comprendre-senegal/la-teranga-lhospitalite-senegalaise-249604",
+      "publisher": "Le Petit Journal Dakar",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Un village lébou",
+     "text": "Ouakam est l’un des quatre villages lébou d’origine de la presqu’île du Cap-Vert, avec Yoff, Ngor et Hann.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Ouakam",
+      "publisher": "Wikipédia (en), article « Ouakam »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La mosquée de la Divinité",
+     "text": "Un saint homme dit avoir reçu en songe, le 28 juin 1973, l’ordre de bâtir cette mosquée au bord de l’océan.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Ouakam",
+      "publisher": "Wikipédia (en), article « Ouakam »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "au-whitsundays-whitehaven": {
+   "name": "Whitsundays, Whitehaven Beach",
+   "region": "Queensland",
+   "country": "AU",
+   "spots": [
+    "whitehaven"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "Le Great Barrier Reef Festival",
+     "text": "Quatre jours à Airlie Beach avec feux d’artifice, régate de bateaux recyclés et défilé de rue : du 31 juillet au 2 août en 2026.",
+     "months": [
+      7,
+      8
+     ],
+     "source": {
+      "url": "https://www.tourismwhitsundays.com.au/blog/the-ultimate-2026-whitsundays-events-guide",
+      "publisher": "Tourism Whitsundays",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La Hamilton Island Race Week",
+     "text": "Grande régate au large, décrite comme la plus importante d’Australie : du 15 au 22 août en 2026, avec animations à la marina.",
+     "months": [
+      8
+     ],
+     "source": {
+      "url": "https://www.tourismwhitsundays.com.au/blog/the-ultimate-2026-whitsundays-events-guide",
+      "publisher": "Tourism Whitsundays",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le marché d’Airlie Beach",
+     "text": "Chaque samedi de 7 h à 13 h, sur le front de mer : souvenirs, café, fruits frais et art local.",
+     "months": [],
+     "source": {
+      "url": "https://www.tourismwhitsundays.com.au/blog/the-ultimate-2026-whitsundays-events-guide",
+      "publisher": "Tourism Whitsundays",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le Ngaro Track",
+     "text": "Ouvert en 2026, ce sentier de 32 km va de Whitehaven à Hill Inlet ; les propriétaires traditionnels demandent d’y marcher avec respect.",
+     "months": [],
+     "source": {
+      "url": "https://statements.qld.gov.au/statements/104951",
+      "publisher": "Gouvernement du Queensland",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Whitsunday",
+     "text": "James Cook a passé les îles le dimanche 3 juin 1770, jour de la Pentecôte (Whitsun), d’où leur nom.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Whitsunday_Islands",
+      "publisher": "Wikipédia (en), article « Whitsunday Islands »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "us-hawaii-kona": {
+   "name": "Kona et la baie de Kealakekua",
+   "region": "Hawaï (Big Island)",
+   "country": "US",
+   "spots": [
+    "kealakekua"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le café de Kona",
+     "text": "Seul le café des pentes du Hualālai et du Mauna Loa peut s’appeler Kona ; un « Kona blend » n’en exige que 10 %.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Kona_coffee",
+      "publisher": "Wikipédia (en), article « Kona coffee »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le Kona Coffee Cultural Festival",
+     "text": "Depuis 1970, une fête du café de dix jours en novembre ; la prochaine édition est annoncée du 5 au 14 novembre 2027.",
+     "months": [
+      11
+     ],
+     "source": {
+      "url": "https://konacoffeefest.com/",
+      "publisher": "Kona Coffee Cultural Festival (organisateur)",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Aloha",
+     "text": "Mot hawaïen pour l’amour, la paix et la compassion ; il sert aussi à dire bonjour et au revoir.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Aloha",
+      "publisher": "Wikipédia (en), article « Aloha »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Mahalo",
+     "text": "Mot hawaïen qui veut dire merci, gratitude et estime.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Aloha",
+      "publisher": "Wikipédia (en), article « Aloha »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Puʻuhonua o Hōnaunau",
+     "text": "Près de Kealakekua, ce lieu de refuge sauvait celui qui avait brisé un kapu : un prêtre le graciait, et il repartait libre.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Pu%CA%BBuhonua_o_H%C5%8Dnaunau_National_Historical_Park",
+      "publisher": "Wikipédia (en), article « Puʻuhonua o Hōnaunau National Historical Park »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "mu-lemorne": {
+   "name": "Le Morne",
+   "region": "Maurice",
+   "country": "MU",
+   "spots": [
+    "lemorne"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le dholl puri",
+     "text": "Galette d’origine indienne devenue le « fish and chips » des Mauriciens.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Mauritius",
+      "publisher": "Wikivoyage (en), article « Mauritius »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Les gâteaux piments",
+     "text": "Beignets salés, variante des vadai indiens : littéralement des gâteaux au piment.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Mauritius",
+      "publisher": "Wikivoyage (en), article « Mauritius »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Maha Shivaratri à Ganga Talao",
+     "text": "En février ou mars, pour Maha Shivaratri, les hindous de Maurice vont en pèlerinage au lac-cratère de Ganga Talao.",
+     "months": [
+      2,
+      3
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Maha_Shivaratri",
+      "publisher": "Wikipédia (en), article « Maha Shivaratri »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le séga",
+     "text": "Né chez les esclaves de Maurice et de La Réunion, il se joue avec ravanne, maravanne et triangle ; inscrit à l’UNESCO en 2014.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Sega_(genre)",
+      "publisher": "Wikipédia (en), article « Sega (genre) »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le Morne Brabant",
+     "text": "Inscrite à l’UNESCO en 2008, la montagne porte la légende d’esclaves en fuite qui auraient sauté du rocher en 1835 plutôt que d’être repris.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Le_Morne_Brabant",
+      "publisher": "Wikipédia (en), article « Le Morne Brabant »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "gp-desirade-petiteterre": {
+   "name": "La Désirade et Petite-Terre",
+   "region": "Guadeloupe",
+   "country": "GP",
+   "spots": [
+    "petiteterre"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "La Fèt a kabrit",
+     "text": "Au week-end de Pâques, La Désirade fait la fête au cabri : c’est le grand rendez-vous de l’île, avec le Gwadarun.",
+     "months": [
+      3,
+      4
+     ],
+     "source": {
+      "url": "https://www.mairie-ladesirade.fr/tourisme-tourism/les-renseignements-utiles/article/les-evenements-a-la-desirade",
+      "publisher": "Collectivité de La Désirade",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Les fêtes d’août",
+     "text": "Du 13 au 17 août : fête patronale le 15, fête traditionnelle des marins le 16, puis fête des marins défunts le 17.",
+     "months": [
+      8
+     ],
+     "source": {
+      "url": "https://www.mairie-ladesirade.fr/tourisme-tourism/les-renseignements-utiles/article/les-evenements-a-la-desirade",
+      "publisher": "Collectivité de La Désirade",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Les Chantés Noël",
+     "text": "Chaque décembre, on chante Noël dans toute l’île, parfois chez des particuliers.",
+     "months": [
+      12
+     ],
+     "source": {
+      "url": "https://www.mairie-ladesirade.fr/tourisme-tourism/les-renseignements-utiles/article/les-evenements-a-la-desirade",
+      "publisher": "Collectivité de La Désirade",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le colombo",
+     "text": "Curry antillais d’origine indienne, cuisiné avec du cabri, du porc, du poulet ou du poisson.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Cuisine_antillaise_fran%C3%A7aise",
+      "publisher": "Wikipédia, article « Cuisine antillaise française »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "re-ermitage": {
+   "name": "L’Ermitage et Saint-Paul",
+   "region": "La Réunion",
+   "country": "RE",
+   "spots": [
+    "ermitage"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "Le 20 décembre, fèt kaf",
+     "text": "Jour férié qui rappelle l’abolition de l’esclavage proclamée en 1848 ; en créole, on dit « fèt kaf » ou « 20 désamb ».",
+     "months": [
+      12
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/F%C3%AAte_r%C3%A9unionnaise_de_la_libert%C3%A9",
+      "publisher": "Wikipédia, article « Fête réunionnaise de la liberté »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le rougail saucisse",
+     "text": "Saucisses cuisinées à la créole avec tomates, oignons et piment, servies avec du riz et des grains.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Rougail_saucisse",
+      "publisher": "Wikipédia, article « Rougail saucisse »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le maloya",
+     "text": "Né au temps de l’esclavage et porté par les percussions (roulèr, kayamb), il est inscrit à l’UNESCO depuis 2009.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Maloya",
+      "publisher": "Wikipédia, article « Maloya »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "tz-zanzibar-mnemba": {
+   "name": "Zanzibar, nord-est (Mnemba)",
+   "region": "Zanzibar",
+   "country": "TZ",
+   "spots": [
+    "mnemba"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "Mwaka Kogwa",
+     "text": "Nouvel an shirazi à Makunduchi, en juillet ou août : combat rituel, puis case brûlée dont la fumée sert à prédire l’année.",
+     "months": [
+      7,
+      8
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Makunduchi",
+      "publisher": "Wikipédia (en), article « Makunduchi »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "La pizza de Zanzibar",
+     "text": "Sorte de crêpe salée garnie de bœuf, d’œufs et de salade, qu’on mange au marché de nuit de Forodhani, à Stone Town.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Zanzibar",
+      "publisher": "Wikivoyage (en), article « Zanzibar »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Jus de canne et lait de coco",
+     "text": "Le jus de canne à sucre et le lait de coco frais de Stone Town sont à ne pas manquer.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Zanzibar",
+      "publisher": "Wikivoyage (en), article « Zanzibar »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Une tenue pudique",
+     "text": "Couvre jambes et bras en ville, et évite les gestes d’affection en public ; le bikini passe sur la plage des hôtels.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Zanzibar",
+      "publisher": "Wikivoyage (en), article « Zanzibar »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "it-sardaigne-stintino": {
+   "name": "Stintino, La Pelosa",
+   "region": "Sardaigne",
+   "country": "IT",
+   "spots": [
+    "pelosa"
+   ],
+   "facts": [
+    {
+     "kind": "lieu",
+     "title": "Le musée de la tonnara",
+     "text": "L’ancienne tonnara Saline a pêché le thon jusqu’aux années 1970 ; le musée des thonaires en raconte l’histoire depuis 2016.",
+     "months": [],
+     "source": {
+      "url": "https://sardegnaturismo.it/it/luoghi/nord-ovest/stintino?language=en-gb",
+      "publisher": "Sardegna Turismo (Région autonome de Sardaigne)",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "La bottarga de thon",
+     "text": "Les œufs de thon séchés (bottarga) figurent parmi les plats de la tradition de pêche, avec le poulpe à l’ail et la soupe de langouste.",
+     "months": [],
+     "source": {
+      "url": "https://sardegnaturismo.it/it/luoghi/nord-ovest/stintino?language=en-gb",
+      "publisher": "Sardegna Turismo (Région autonome de Sardaigne)",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La régate des gozzi",
+     "text": "Depuis 1983, Stintino organise une régate pour ses gozzi, les voiliers de bois traditionnels des pêcheurs.",
+     "months": [],
+     "source": {
+      "url": "https://sardegnaturismo.it/it/luoghi/nord-ovest/stintino?language=en-gb",
+      "publisher": "Sardegna Turismo (Région autonome de Sardaigne)",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La fête de la Madone",
+     "text": "Le 8 septembre est le jour de la sainte patronne de Stintino, la Beata Vergine della Difesa.",
+     "months": [
+      9
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Stintino",
+      "publisher": "Wikipédia (en), article « Stintino »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "gr-cephalonie-myrtos": {
+   "name": "Céphalonie, Myrtos",
+   "region": "Îles Ioniennes",
+   "country": "GR",
+   "spots": [
+    "myrtos"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "Les serpents de la Vierge",
+     "text": "Avant le 15 août, de petits serpents inoffensifs, une croix sur la tête, entrent dans l’église de Markopoulo : un bon présage.",
+     "months": [
+      8
+     ],
+     "source": {
+      "url": "https://greekcitytimes.com/2025/08/16/snakes-of-panagia-in-kefalonia-videos/",
+      "publisher": "Greek City Times",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "La kreatopita",
+     "text": "Tourte à la viande, plat de ferme qui est la spécialité de Céphalonie.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Cephalonia",
+      "publisher": "Wikivoyage (en), article « Cephalonia »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le miel de thym",
+     "text": "Le miel de thym sauvage de Céphalonie est à rapporter : son goût est vraiment particulier.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Cephalonia",
+      "publisher": "Wikivoyage (en), article « Cephalonia »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le robola",
+     "text": "Raisin blanc cultivé surtout à Céphalonie, souvent non greffé sur les sols calcaires de l’île.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Robola",
+      "publisher": "Wikipédia (en), article « Robola »",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le frappé en terrasse",
+     "text": "Un frappé sert de « ticket » pour rester des heures en terrasse, comme les Grecs ; lance aussi un bonjour en grec.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikivoyage.org/wiki/Cephalonia",
+      "publisher": "Wikivoyage (en), article « Cephalonia »",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "fr-normandie-dieppe": {
+   "name": "Dieppe",
+   "region": "Normandie",
+   "country": "FR",
+   "spots": [
+    "dieppe"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "La marmite dieppoise",
+     "text": "Spécialité de Dieppe : un ragoût de poissons et de crustacés au vin blanc, avec des légumes et des aromates.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Marmite_dieppoise",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La foire aux harengs et à la coquille Saint-Jacques",
+     "text": "Chaque troisième week-end de novembre, on mange le hareng grillé avec une pomme de terre braisée et du beurre salé fondu.",
+     "months": [
+      11
+     ],
+     "source": {
+      "url": "https://uk.dieppetourisme.com/agenda/herring-and-scallop-festival/",
+      "publisher": "Office de tourisme Dieppe Maritime",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le marché du samedi",
+     "text": "Le samedi, de 8 h 30 à 13 h, le marché alimentaire occupe la Grande Rue, la place Nationale et la rue Saint-Jacques.",
+     "months": [],
+     "source": {
+      "url": "https://uk.dieppetourisme.com/stay/markets-local-flavours/local-markets/",
+      "publisher": "Office de tourisme Dieppe Maritime",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le festival de cerfs-volants",
+     "text": "Le festival international de cerfs-volants revient en septembre : l’édition 2025 a eu lieu du 13 au 21, après trois ans d’absence.",
+     "months": [
+      9
+     ],
+     "source": {
+      "url": "https://www.tourmag.com/Dieppe-capitale-mondiale-du-cerf-volant-en-septembre_a128134.html",
+      "publisher": "TourMaG",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "fr-verdon-saintecroix": {
+   "name": "Lac de Sainte-Croix et pays de Moustiers",
+   "region": "Verdon",
+   "country": "FR",
+   "spots": [
+    "saintecroix"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "La truffe noire d’Aups",
+     "text": "Aups tient le troisième marché aux truffes noires de France, le matin, de fin novembre à fin février.",
+     "months": [
+      11,
+      12,
+      1,
+      2
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Aups",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "L’huile d’olive et la lavande",
+     "text": "Autour de Moustiers, on produit l’huile d’olive de Haute-Provence AOP, ainsi que du miel et des essences de lavande.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Moustiers-Sainte-Marie",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La Diane de Moustiers",
+     "text": "Du 31 août au 8 septembre, les Dianaïres réveillent le village en musique à 5 h ; le 8, procession à l’aube jusqu’à la chapelle.",
+     "months": [
+      8,
+      9
+     ],
+     "source": {
+      "url": "https://www.moustiers.fr/en/the-feast-of-the-diane/",
+      "publisher": "Commune de Moustiers-Sainte-Marie",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "L’étoile de Moustiers",
+     "text": "Une étoile pend à une chaîne tendue entre deux falaises au-dessus du village, selon la légende du chevalier de Blacas.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Moustiers-Sainte-Marie",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La faïence de Moustiers",
+     "text": "Le village fut réputé pour sa faïence aux XVIIe et XVIIIe siècles ; l’art est reparti en 1925 avec Marcel Provence.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Moustiers-Sainte-Marie",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "bz-belize-blue-hole": {
+   "name": "Belize et Great Blue Hole",
+   "region": "Belize",
+   "country": "BZ",
+   "spots": [
+    "bluehole_belize"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le riz aux haricots",
+     "text": "Plat de base des Kriols : du riz mijoté avec des haricots et du lait de coco, servi avec de la viande et une salade.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Belizean_cuisine",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le hudut garifuna",
+     "text": "Le hudut est une soupe de poisson garifuna, préparée avec ou sans lait de coco.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Belizean_cuisine",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le Garifuna Settlement Day",
+     "text": "Le 19 novembre, jour férié : défilés, musique de rue et danses traditionnelles, surtout à Dangriga.",
+     "months": [
+      11
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Garifuna_Settlement_Day",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le St George’s Caye Day",
+     "text": "Le 10 septembre, on marque la bataille de St George’s Caye, livrée en 1798.",
+     "months": [
+      9
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Belize",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "id-papua-rajaampat": {
+   "name": "Raja Ampat",
+   "region": "Papouasie du Sud-Ouest",
+   "country": "ID",
+   "spots": [
+    "rajaampat"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le papeda",
+     "text": "Bouillie de sagou des Moluques et de la côte ouest de Papouasie, servie avec du poisson au bouillon jaune.",
+     "months": [],
+     "source": {
+      "url": "https://id.wikipedia.org/wiki/Papeda",
+      "publisher": "Wikipédia en indonésien",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le Festival Pesona Raja Ampat",
+     "text": "En octobre (du 15 au 18 en 2026), arts, cuisine locale et actions pour la mer, à Raja Ampat. L’entrée est gratuite.",
+     "months": [
+      10
+     ],
+     "source": {
+      "url": "https://www.indonesia.travel/id/en/events/event-detail/festival-pesona-raja-ampat-2026",
+      "publisher": "Indonesia.travel, site officiel du tourisme indonésien",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le sasi",
+     "text": "Les habitants interdisent la récolte de certaines ressources : de la cérémonie de fermeture à celle de réouverture.",
+     "months": [],
+     "source": {
+      "url": "https://regional.kompas.com/read/2023/01/09/203228778/tradisi-sasi-konservasi-alam-berbasis-kearifan-lokal-di-raja-ampat",
+      "publisher": "Kompas.com",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Raja Ampat, les quatre rois",
+     "text": "Raja Ampat veut dire « quatre rois » : le nom vient d’un mythe de sept œufs d’où naquirent des rois.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Raja_Ampat_Islands",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "id-bali-nusapenida": {
+   "name": "Nusa Penida",
+   "region": "Bali",
+   "country": "ID",
+   "spots": [
+    "nusapenida"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le babi guling",
+     "text": "Porcelet farci d’épices et rôti à la broche, souvent servi avec du riz lawar ; une spécialité de Bali.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Babi_guling",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Les canang sari",
+     "text": "Chaque jour, les Balinais déposent ces petits paniers de feuilles de palmier en offrande, dans les temples et les maisons.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Canang_sari",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Galungan",
+     "text": "Tous les 210 jours, des mâts de bambou ornés (penjor) bordent les routes. Prochaines dates : 13 janvier et 11 août 2027.",
+     "months": [
+      1,
+      8
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Galungan",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Le basa Nosa",
+     "text": "Sur l’île, on parle un balinais propre à Nusa Penida, que les habitants du reste de Bali ne comprennent pas.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Nusa_Penida",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "id-lombok-gili": {
+   "name": "Gili Trawangan",
+   "region": "Lombok",
+   "country": "ID",
+   "spots": [
+    "gilit"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "L’ayam Taliwang",
+     "text": "Poulet grillé épicé et sucré, à la pâte de crevette, né à Taliwang, près de Mataram, la capitale de Lombok.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Ayam_Taliwang",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le plecing kangkung",
+     "text": "Liseron d’eau blanchi, servi froid avec une sambal pimentée, souvent à côté de l’ayam Taliwang.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Plecing_kangkung",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le Bau Nyale",
+     "text": "En février ou mars, on ramasse à la main des vers de mer, après minuit, sur la plage de Seger, en souvenir d’une princesse.",
+     "months": [
+      2,
+      3
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Bau_Nyale",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Une île sans moteur",
+     "text": "Les véhicules à moteur sont interdits par arrêté local : on circule à vélo ou en cidomo, une petite calèche.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Gili_Trawangan",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "pf-tuamotu-tikehau": {
+   "name": "Tikehau",
+   "region": "Tuamotu",
+   "country": "PF",
+   "spots": [
+    "tikehau"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le poisson cru au lait de coco",
+     "text": "Le plat le plus connu de Polynésie : du poisson cru mariné au jus de citron vert et au lait de coco.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Cuisine_polyn%C3%A9sienne",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le four tahitien",
+     "text": "Pour les repas de fête, on cuit les aliments à l’étouffée dans un trou garni de pierres chauffées, couvert de feuilles de bananier.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Cuisine_polyn%C3%A9sienne",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le Heiva i Tahiti",
+     "text": "Chaque juillet, à Papeete, des groupes en compétition présentent chants et danses traditionnels, avec des sports polynésiens.",
+     "months": [
+      7
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Heiva_i_Tahiti",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Les parcs à poissons",
+     "text": "L’atoll pratique la pêche traditionnelle avec des parcs à poissons, près de la passe de Tuheiava.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Tikehau",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "th-surat-thani-kohtao": {
+   "name": "Ko Tao et Surat Thani",
+   "region": "Surat Thani",
+   "country": "TH",
+   "spots": [
+    "kohtao"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Les huîtres de Surat Thani",
+     "text": "La province est la première zone d’élevage d’huîtres de Thaïlande ; on les mange crues, avec du citron vert et du piment.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Surat_Thani_province",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Les œufs rouges",
+     "text": "Œufs de cane salés, conservés dans un mélange de terre et de sel : une spécialité de la province de Surat Thani.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Surat_Thani_province",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le Chak Phra",
+     "text": "Vers octobre, neuf jours de processions de statues de Bouddha sur terre et sur l’eau, avec des courses de pirogues.",
+     "months": [
+      10
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Chak_Phra",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Ko Tao, l’île aux tortues",
+     "text": "Ko Tao veut dire « île aux tortues » en thaï.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Koh_Tao",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le monogramme du roi",
+     "text": "Près de la plage de Sairee, un rocher porte le monogramme laissé par le roi Chulalongkorn en 1899 ; on le vénère encore.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Koh_Tao",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "us-floride-keylargo": {
+   "name": "Key Largo",
+   "region": "Floride, Keys",
+   "country": "US",
+   "spots": [
+    "keylargo"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "La Key lime pie",
+     "text": "Tarte au citron vert des Keys, au lait concentré sucré ; c’est la tarte officielle de la Floride depuis 2006.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Key_lime_pie",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La mini-saison de la langouste",
+     "text": "En juillet, la mini-saison de la langouste ouvre deux jours dans les Keys (les 29 et 30 en 2026).",
+     "months": [
+      7
+     ],
+     "source": {
+      "url": "https://www.wlrn.org/environment/2026-07-28/mini-lobster-season-opens-in-the-florida-keys-with-a-safety-first-message",
+      "publisher": "WLRN, radio publique de Miami",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le parc Pennekamp",
+     "text": "Ouvert en 1963, c’est le premier parc sous-marin des États-Unis ; la statue Christ of the Abyss y repose par près de 8 m de fond.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/John_Pennekamp_Coral_Reef_State_Park",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Les Conchs",
+     "text": "Les habitants des Keys se sont longtemps appelés « Conchs » ; Key West a même proclamé sa « République » le 23 avril 1982.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Conch_Republic",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "es-galice-razo": {
+   "name": "Razo et Carballo",
+   "region": "Galice",
+   "country": "ES",
+   "spots": [
+    "razo"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le polbo á feira",
+     "text": "Poulpe bouilli dans un chaudron de cuivre, puis saupoudré de gros sel et de paprika, et arrosé d’huile d’olive.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Pulpo_a_la_gallega",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La queimada",
+     "text": "Punch d’eau-de-vie de marc, de sucre et d’écorces, flambé en récitant une formule pour chasser les mauvais esprits.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Queimada_(drink)",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La nuit de la Saint-Jean",
+     "text": "Le 23 juin, nuit des sorcières en Galice : c’est le moment où l’on prépare surtout la queimada.",
+     "months": [
+      6
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Queimada_(drink)",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "La morriña",
+     "text": "Mot galicien pour la mélancolie qu’on ressent loin de la terre où l’on est né.",
+     "months": [],
+     "source": {
+      "url": "https://gl.wikipedia.org/wiki/Morri%C3%B1a",
+      "publisher": "Wikipedia en galicien",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La feira de Carballo",
+     "text": "À Carballo, le marché de produits agricoles se tient le jeudi, ainsi que les 2e, 4e et 5e dimanches du mois.",
+     "months": [],
+     "source": {
+      "url": "https://gl.wikipedia.org/wiki/Carballo",
+      "publisher": "Wikipedia en galicien",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "co-sanandres": {
+   "name": "San Andrés",
+   "region": "Archipel de San Andrés",
+   "country": "CO",
+   "spots": [
+    "sanandres"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le rondón",
+     "text": "Ragoût de poisson ou d’escargots de mer, de manioc, de plantain et de fruit à pain, cuit dans du lait de coco.",
+     "months": [],
+     "source": {
+      "url": "https://es.wikipedia.org/wiki/Rond%C3%B3n_(plato)",
+      "publisher": "Wikipedia en espagnol",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La veda du crabe noir",
+     "text": "Chaque année, du 1er avril au 31 juillet, la chasse au crabe noir est interdite, car l’espèce est menacée.",
+     "months": [
+      4,
+      5,
+      6,
+      7
+     ],
+     "source": {
+      "url": "https://www.elespectador.com/ambiente/inicia-veda-de-cangrejo-negro-en-san-andres-providencia-y-santa-catalina-article/",
+      "publisher": "El Espectador",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Le créole raizal",
+     "text": "Les Raizals, communauté afro-caribéenne des îles, parlent le créole de San Andrés et Providencia, plus l’espagnol et l’anglais.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/San_Andr%C3%A9s_and_Providencia_Department",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "nz-coromandel-cathedralcove": {
+   "name": "Cathedral Cove et Mercury Bay",
+   "region": "Coromandel",
+   "country": "NZ",
+   "spots": [
+    "cathedralcove"
+   ],
+   "facts": [
+    {
+     "kind": "mot",
+     "title": "Te Whanganui-A-Hei",
+     "text": "Le nom maori du lieu veut dire « la grande baie de Hei », du nom d’un tohunga de la pirogue Te Arawa.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Cathedral_Cove",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le hāngī",
+     "text": "Cuisine maorie au four de terre : de la viande, des légumes et des fruits de mer cuisent sur des pierres brûlantes enterrées.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/H%C4%81ngi",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le Whitianga Oceans Festival",
+     "text": "Chaque septembre, Whitianga célèbre les fruits de mer de Coromandel (le 14 septembre en 2024).",
+     "months": [
+      9
+     ],
+     "source": {
+      "url": "https://www.nzherald.co.nz/waikato-news/news/whitianga-to-celebrate-a-symphony-of-flavours-and-melodies/G2ZQ453Y4VBSJCG6276B2LHPSM/",
+      "publisher": "New Zealand Herald",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Matariki",
+     "text": "Nouvel An maori, au lever des Pléiades, férié depuis 2022 : le 10 juillet 2026, puis le 25 juin 2027.",
+     "months": [
+      6,
+      7
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Matariki",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Hot Water Beach",
+     "text": "Deux heures autour de la marée basse, on creuse le sable pour faire sourdre une eau chaude, jusqu’à 64 °C.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Hot_Water_Beach",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "nl-la-haye-scheveningen": {
+   "name": "Scheveningen",
+   "region": "La Haye",
+   "country": "NL",
+   "spots": [
+    "scheveningen"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le hareng nouveau",
+     "text": "Hollandse Nieuwe : hareng cru légèrement salé, qu’on mange en le tenant par la queue, souvent avec des oignons crus.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Hollandse_Nieuwe",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Vlaggetjesdag",
+     "text": "Le troisième samedi de juin, le port se pavoise pour la saison du hareng, avec la vente aux enchères du premier petit tonneau.",
+     "months": [
+      6
+     ],
+     "source": {
+      "url": "https://nl.wikipedia.org/wiki/Vlaggetjesdag",
+      "publisher": "Wikipedia en néerlandais",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le plongeon du Nouvel An",
+     "text": "Le 1er janvier, bain polaire dans la mer : 50 000 personnes y ont participé en 2016.",
+     "months": [
+      1
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Scheveningen",
+      "publisher": "Wikipédia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le Kurhaus",
+     "text": "Le Kurhaus, hôtel de Scheveningen, a ouvert ses portes en 1886.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Scheveningen",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "eg-mer-rouge-elgouna": {
+   "name": "El Gouna",
+   "region": "Mer Rouge",
+   "country": "EG",
+   "spots": [
+    "elgouna"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le koshari",
+     "text": "Mélange de riz, de lentilles et de macaronis, vendu dans la rue ; certains y voient le plat national égyptien.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Egyptian_cuisine",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le thé",
+     "text": "Le thé est la boisson nationale de l’Égypte, souvent servi avec de la menthe.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Egyptian_cuisine",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le festival du film d’El Gouna",
+     "text": "Chaque octobre, la station accueille un festival de cinéma créé en 2017.",
+     "months": [
+      10
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/El_Gouna_Film_Festival",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Al-Gouna, la lagune",
+     "text": "Le nom arabe d’El Gouna veut dire « la lagune » : la ville s’étend sur 20 îles entourées de lagons.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/El_Gouna",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "ky-grandcayman-stingray": {
+   "name": "Stingray City et Grand Caïman",
+   "region": "Grand Caïman",
+   "country": "KY",
+   "spots": [
+    "stingraycity"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le lambi",
+     "text": "Le lambi se prépare mariné, en salade, en chaudrée ou en ragoût ; c’est un plat de base des Caïmans depuis longtemps.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Cuisine_of_the_Cayman_Islands",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La Pirates Week",
+     "text": "En novembre, reconstitutions d’invasions de pirates, grande parade culturelle et course de bateaux en carton (8 au 22 nov. en 2025).",
+     "months": [
+      11
+     ],
+     "source": {
+      "url": "https://piratesweek.cigarchives.gov.ky/",
+      "publisher": "Gouvernement des îles Caïmans",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Les raies de Stingray City",
+     "text": "Les raies se seraient rassemblées quand des pêcheurs nettoyaient leur prise dans les hauts-fonds, puis ont associé le moteur au repas.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Stingray_City,_Grand_Cayman",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "ve-losroques": {
+   "name": "Los Roques",
+   "region": "Archipel de Los Roques",
+   "country": "VE",
+   "spots": [
+    "losroques"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "L’arepa",
+     "text": "L’arepa, galette de maïs, se mange à toute heure au Venezuela ; la « reina pepiada » est garnie de poulet, d’avocat et de mayonnaise.",
+     "months": [],
+     "source": {
+      "url": "https://es.wikipedia.org/wiki/Arepa",
+      "publisher": "Wikipedia en espagnol",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le Festival de la Langosta",
+     "text": "En novembre, à l’ouverture de la saison de pêche, l’archipel fête la langouste épineuse, l’un de ses animaux emblématiques.",
+     "months": [
+      11
+     ],
+     "source": {
+      "url": "https://es.wikipedia.org/wiki/Archipi%C3%A9lago_Los_Roques",
+      "publisher": "Wikipedia en espagnol",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La Virgen del Valle",
+     "text": "La deuxième semaine de septembre, une procession de bateaux part de Crasquí pour Gran Roque : la Vierge protège les pêcheurs.",
+     "months": [
+      9
+     ],
+     "source": {
+      "url": "https://es.wikipedia.org/wiki/Archipi%C3%A9lago_Los_Roques",
+      "publisher": "Wikipedia en espagnol",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Gran Roque",
+     "text": "Presque tous les habitants vivent à Gran Roque, un petit village de sept rues de sable.",
+     "months": [],
+     "source": {
+      "url": "https://es.wikipedia.org/wiki/Archipi%C3%A9lago_Los_Roques",
+      "publisher": "Wikipedia en espagnol",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "fj-vitilevu-beqa": {
+   "name": "Lagon de Beqa",
+   "region": "Viti Levu",
+   "country": "FJ",
+   "spots": [
+    "beqa"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le kokoda",
+     "text": "Poisson cru mariné au citron et au lait de coco, avec des légumes en dés (concombre, tomate, oignon).",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Kokoda_(food)",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le lovo",
+     "text": "Le lovo est le four en terre fidjien : pierres chauffées dans une fosse, nourriture couverte de terre, pour les grandes occasions.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Lovo",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La marche sur le feu",
+     "text": "Cinq villages de Beqa sont réputés pour la marche sur le feu (vilavilairevo), déjà une attraction touristique en 1902.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Beqa_Island",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le Hibiscus Festival",
+     "text": "Fin août et début septembre, Suva élit des reines et propose des programmes culturels (31 août au 7 sept. en 2024).",
+     "months": [
+      8,
+      9
+     ],
+     "source": {
+      "url": "https://www.fbcnews.com.fj/news/hibiscus-festival-to-return-in-august",
+      "publisher": "FBC News, Fiji",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "to-vavau": {
+   "name": "Vavaʻu",
+   "region": "Vavaʻu",
+   "country": "TO",
+   "spots": [
+    "vavau"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "La cuisine traditionnelle",
+     "text": "Le régime traditionnel repose sur le taro, l’igname, la banane, la noix de coco et le poisson cuit dans des feuilles.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Tongan_cuisine",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le dimanche tongien",
+     "text": "Le sabbat est inscrit dans la constitution : le dimanche, commerces et divertissements s’arrêtent.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Tonga",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le four en terre umu",
+     "text": "Autrefois, le grand repas de midi cuisait dans un four en terre ; on y préparait aussi le porc des mariages et des deuils.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Tongan_cuisine",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le port de Neiafu",
+     "text": "Neiafu, capitale de Vavaʻu, est un port abrité ; de mai à octobre, il accueille des voiliers venus du monde entier.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Vava%CA%BBu",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "yt-mayotte-ngouja": {
+   "name": "N’Gouja et Kani-Kéli",
+   "region": "Mayotte",
+   "country": "YT",
+   "spots": [
+    "ngouja"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le mataba",
+     "text": "Feuilles de manioc mijotées dans du lait de coco, un plat long à préparer qu’on sert surtout lors des cérémonies.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Culture_of_Mayotte",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "La chahoula ya nadzi",
+     "text": "Riz cuit à l’eau ou au lait de coco, plat obligé des cérémonies (circoncision, debbah, maoulida) et des grands repas de famille.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Culture_of_Mayotte",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le maoulida shengué",
+     "text": "Chant traditionnel mêlant chant, danse et chorégraphie, inscrit au patrimoine culturel immatériel national depuis juin 2022.",
+     "months": [],
+     "source": {
+      "url": "https://www.mayottehebdo.com/actualite/culture/le-maoulida-shengue-celebre-en-grand-a-chiconi",
+      "publisher": "Mayotte Hebdo",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La salouva",
+     "text": "Les femmes portent souvent la salouva, un vêtement coloré ; les hommes, des tenues de coton blanc.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Culture_of_Mayotte",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Le kibushi",
+     "text": "Langue d’origine malgache, le kibushi est la langue maternelle d’environ 30 % des habitants de Mayotte.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Culture_of_Mayotte",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "no-jaeren-borestranda": {
+   "name": "Jæren et Borestranda",
+   "region": "Jæren",
+   "country": "NO",
+   "spots": [
+    "borestranda"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le Jædersylte",
+     "text": "Produit local du Jæren : viande et lard hachés, puis mis en conserve.",
+     "months": [],
+     "source": {
+      "url": "https://no.wikipedia.org/wiki/J%C3%A6ren",
+      "publisher": "Wikipedia en norvégien",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Gladmat",
+     "text": "Fin juin, à Stavanger, le plus grand festival culinaire de Norvège : producteurs locaux sur le port (23 au 26 juin 2027).",
+     "months": [
+      6
+     ],
+     "source": {
+      "url": "https://www.fjordnorway.com/en/events/gladmatfestivalen-food-festival-in-stavanger-yfpms6sik18067rqyqw",
+      "publisher": "Fjord Norway, tourisme régional",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La Jærdagen",
+     "text": "Le dernier week-end de mai, Bryne fête la Jærdagen, sa fête de ville.",
+     "months": [
+      5
+     ],
+     "source": {
+      "url": "https://no.wikipedia.org/wiki/Bryne",
+      "publisher": "Wikipedia en norvégien",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le droit d’accès à la nature",
+     "text": "Chacun peut parcourir les terres non cultivées, camper à 150 m au moins d’une maison et cueillir des baies.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Right_to_roam",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Le jærsk",
+     "text": "On y parle le jærsk, un dialecte du sud-ouest de la Norvège, surtout à Hå, Time et Klepp.",
+     "months": [],
+     "source": {
+      "url": "https://no.wikipedia.org/wiki/J%C3%A6ren",
+      "publisher": "Wikipedia en norvégien",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "se-bohuslan-kosterhavet": {
+   "name": "Kosterhavet et Strömstad",
+   "region": "Bohuslän",
+   "country": "SE",
+   "spots": [
+    "kosterhavet"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Plateaux de fruits de mer et fêtes de crevettes",
+     "text": "À Strömstad, les restaurants servent plateaux de fruits de mer et fêtes de crevettes pendant Smaka på Bohuslän.",
+     "months": [],
+     "source": {
+      "url": "https://www.vastsverige.com/stromstad/smaka-pa-bohuslan/",
+      "publisher": "Västsverige, tourisme régional",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "L’ouverture de la pêche au homard",
+     "text": "Le premier lundi après le 20 septembre, à 7 h pile, la chasse au homard s’ouvre ; elle dure jusqu’au 30 novembre.",
+     "months": [
+      9
+     ],
+     "source": {
+      "url": "https://www.vastsverige.com/kosterhavets-nationalpark/artiklar/fiske/",
+      "publisher": "Västsverige, tourisme régional",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Smaka på Bohuslän",
+     "text": "Début octobre, Strömstad célèbre les saveurs du Bohuslän : fruits de mer, pêche au homard, visites de fermes (2 au 11 oct.).",
+     "months": [
+      10
+     ],
+     "source": {
+      "url": "https://www.vastsverige.com/stromstad/smaka-pa-bohuslan/",
+      "publisher": "Västsverige, tourisme régional",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "L’allemansrätten",
+     "text": "Le droit d’accès public permet de marcher, de camper une nuit ou deux et de cueillir baies et champignons hors des cultures.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Right_to_roam",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Les huîtres du propriétaire",
+     "text": "Les huîtres appartiennent au propriétaire du terrain : on ne les ramasse pas où l’on veut.",
+     "months": [],
+     "source": {
+      "url": "https://www.vastsverige.com/kosterhavets-nationalpark/artiklar/fiske/",
+      "publisher": "Västsverige, tourisme régional",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "dk-jutland-hvidesande": {
+   "name": "Hvide Sande",
+   "region": "Jutland de l’Ouest",
+   "country": "DK",
+   "spots": [
+    "hvidesande"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Les limandes séchées",
+     "text": "Les limandes séchées (dabs) sont la friandise locale de Hvide Sande, qu’on goûte gratuitement lors de la fête des Æ Dabs.",
+     "months": [],
+     "source": {
+      "url": "https://www.visitvesterhavet.com/northsea/our-cities/activities-and-around-hvide-sande",
+      "publisher": "Visit Vesterhavet, office de tourisme",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Æ Dabs Day",
+     "text": "À l’Ascension, la rue Metheasvej est fermée pour goûter des limandes séchées, en musique, boutiques ouvertes.",
+     "months": [
+      5
+     ],
+     "source": {
+      "url": "https://www.visitvesterhavet.com/northsea/our-cities/activities-and-around-hvide-sande",
+      "publisher": "Visit Vesterhavet, office de tourisme",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le festival du hareng",
+     "text": "Fin avril : hareng fumé sous la tente, concours de pêche et musique (23 au 25 avril 2027).",
+     "months": [
+      4
+     ],
+     "source": {
+      "url": "https://www.visitdenmark.com/denmark/plan-your-trip/herring-festival-gdk1108693",
+      "publisher": "VisitDenmark",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Waterz",
+     "text": "Début septembre, le plus grand festival nautique de Scandinavie : planche à voile, kitesurf, surf, SUP (3 et 4 sept. 2027).",
+     "months": [
+      9
+     ],
+     "source": {
+      "url": "https://www.visitdenmark.com/denmark/plan-your-trip/waterz-water-sports-festival-gdk1141774",
+      "publisher": "VisitDenmark",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La criée du dimanche",
+     "text": "Tous les dimanches de juillet et d’août, et un dimanche d’octobre, on enchérit sur la pêche du jour à la criée.",
+     "months": [
+      7,
+      8,
+      10
+     ],
+     "source": {
+      "url": "https://www.visitvesterhavet.com/northsea/our-cities/activities-and-around-hvide-sande",
+      "publisher": "Visit Vesterhavet, office de tourisme",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "ie-sligo-easkey": {
+   "name": "Easkey",
+   "region": "Comté de Sligo",
+   "country": "IE",
+   "spots": [
+    "easkey"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Les produits de Sligo",
+     "text": "Le comté de Sligo met en avant les huîtres de Lissadell, le homard sauvage de Mullaghmore et le miel de Knocknarea.",
+     "months": [],
+     "source": {
+      "url": "https://www.discoverireland.ie/sligo/sligo-food-trail",
+      "publisher": "Discover Ireland, tourisme irlandais",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Les bains d’algues",
+     "text": "Les bains d’algues, apparus à l’ère victorienne, survivent à Enniscrone : la maison Kilcullen date de 1912.",
+     "months": [],
+     "source": {
+      "url": "https://www.ireland.com/en/magazine/long-reads/seaweed-baths-wild-atlantic-way/",
+      "publisher": "Ireland.com, tourisme irlandais",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le Poll Gorm",
+     "text": "Bassin d’eau salée naturel dont le mur a été bâti en 1966 par quatre habitants ; les enfants du coin y apprennent à nager.",
+     "months": [],
+     "source": {
+      "url": "https://discoverireland.ie/sligo/car-free-enniscrone-easkey",
+      "publisher": "Discover Ireland, tourisme irlandais",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Iascaigh",
+     "text": "Iascaigh, le nom irlandais d’Easkey, veut dire « riche en poissons ».",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Easkey",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "ec-galapagos-puntacarola": {
+   "name": "San Cristóbal",
+   "region": "Galápagos",
+   "country": "EC",
+   "spots": [
+    "puntacarola"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le ceviche de canchalagua",
+     "text": "Le ceviche de canchalagua est surtout typique de San Cristóbal, l’île la plus orientale de l’archipel.",
+     "months": [],
+     "source": {
+      "url": "https://www.eluniverso.com/tendencias/2017/06/14/nota/6230149/mar-tierra-galapagos-deliciosa/",
+      "publisher": "El Universo, Équateur",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La cantonisation",
+     "text": "Le 18 février, Puerto Baquerizo Moreno célèbre la cantonisation, sa fête majeure.",
+     "months": [
+      2
+     ],
+     "source": {
+      "url": "https://es.wikipedia.org/wiki/Puerto_Baquerizo_Moreno",
+      "publisher": "Wikipedia en espagnol",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La distance avec les animaux",
+     "text": "Dans le parc national, on reste à 2 m au moins des animaux, même s’ils approchent, sans les nourrir ni quitter les sentiers.",
+     "months": [],
+     "source": {
+      "url": "https://galapagos.org/travel/park-rules/",
+      "publisher": "Galápagos Conservancy, règles de la Direction du parc national",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La Lobería",
+     "text": "Cette colonie d’otaries est à dix minutes en bus de Puerto Baquerizo Moreno.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/San_Crist%C3%B3bal_Island",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La statue de Darwin",
+     "text": "Une statue marque l’endroit où Darwin a débarqué pour la première fois aux Galápagos, le 16 septembre 1835.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/San_Crist%C3%B3bal_Island",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  },
+  "vi-saintjohn-trunkbay": {
+   "name": "Trunk Bay et Saint John",
+   "region": "Saint John",
+   "country": "VI",
+   "spots": [
+    "trunkbay"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le fungi",
+     "text": "Polenta de maïs à l’okra, servie avec du poisson bouilli ou de la morue salée.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Cuisine_of_the_United_States_Virgin_Islands",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le kallaloo",
+     "text": "Soupe de feuilles de callaloo, parfois remplacées par des épinards.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Cuisine_of_the_United_States_Virgin_Islands",
+      "publisher": "Wikipedia",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La St. John Celebration",
+     "text": "Du 14 juin au 4 juillet 2026 : parade du 4 Juillet, steel bands, concours de cuisine et feux d’artifice sur Cruz Bay.",
+     "months": [
+      6,
+      7
+     ],
+     "source": {
+      "url": "https://www.visitusvi.com/experience/experience-st-john-celebration",
+      "publisher": "Visit USVI, tourisme officiel",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le J’ouvert",
+     "text": "Le J’ouvert (« point du jour ») : à l’aube, on danse sur du soca et du calypso, couvert de boue, de poudre et de peinture.",
+     "months": [
+      6,
+      7
+     ],
+     "source": {
+      "url": "https://www.visitusvi.com/experience/experience-st-john-celebration",
+      "publisher": "Visit USVI, tourisme officiel",
+      "consulted": "2026-11-20"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le sentier sous-marin",
+     "text": "Le sentier longe Trunk Bay Cay sur environ 90 m (300 pieds) et ses plaques aident les débutants à reconnaître la vie marine.",
+     "months": [],
+     "source": {
+      "url": "https://www.nps.gov/viis/planyourvisit/snorkeling.htm",
+      "publisher": "National Park Service",
+      "consulted": "2026-11-20"
+     }
+    }
+   ]
+  }
+ },
+ "spots": {
+  "hossegor": "fr-landes-hossegor",
+  "seignosse": "fr-landes-hossegor",
+  "capbreton": "fr-landes-hossegor",
+  "guethary": "fr-paysbasque-guethary",
+  "penhors": "fr-finistere-penhors",
+  "portcros": "fr-var-portcros",
+  "rondinara": "fr-corse-rondinara",
+  "ericeira": "pt-ericeira",
+  "macarella": "es-minorque-macarella",
+  "navagio": "gr-zakynthos-navagio",
+  "rhossili": "gb-gower-rhossili",
+  "teahupoo": "pf-societe-tahiti",
+  "borabora": "pf-societe-tahiti",
+  "puntadelobos": "cl-pichilemu",
+  "noronha": "br-noronha",
+  "islamujeres": "mx-islamujeres",
+  "ouakam": "sn-dakar-ouakam",
+  "whitehaven": "au-whitsundays-whitehaven",
+  "kealakekua": "us-hawaii-kona",
+  "lemorne": "mu-lemorne",
+  "petiteterre": "gp-desirade-petiteterre",
+  "ermitage": "re-ermitage",
+  "mnemba": "tz-zanzibar-mnemba",
+  "pelosa": "it-sardaigne-stintino",
+  "myrtos": "gr-cephalonie-myrtos",
+  "dieppe": "fr-normandie-dieppe",
+  "saintecroix": "fr-verdon-saintecroix",
+  "bluehole_belize": "bz-belize-blue-hole",
+  "rajaampat": "id-papua-rajaampat",
+  "nusapenida": "id-bali-nusapenida",
+  "gilit": "id-lombok-gili",
+  "tikehau": "pf-tuamotu-tikehau",
+  "kohtao": "th-surat-thani-kohtao",
+  "keylargo": "us-floride-keylargo",
+  "razo": "es-galice-razo",
+  "sanandres": "co-sanandres",
+  "cathedralcove": "nz-coromandel-cathedralcove",
+  "scheveningen": "nl-la-haye-scheveningen",
+  "elgouna": "eg-mer-rouge-elgouna",
+  "stingraycity": "ky-grandcayman-stingray",
+  "losroques": "ve-losroques",
+  "beqa": "fj-vitilevu-beqa",
+  "vavau": "to-vavau",
+  "ngouja": "yt-mayotte-ngouja",
+  "borestranda": "no-jaeren-borestranda",
+  "kosterhavet": "se-bohuslan-kosterhavet",
+  "hvidesande": "dk-jutland-hvidesande",
+  "easkey": "ie-sligo-easkey",
+  "puntacarola": "ec-galapagos-puntacarola",
+  "trunkbay": "vi-saintjohn-trunkbay"
+ }
+}

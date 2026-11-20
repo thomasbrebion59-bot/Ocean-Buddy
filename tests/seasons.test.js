@@ -225,5 +225,5 @@ test('« Le spot, en vie » : grands chiffres seulement s’il y a une donnée, 
   assert.doesNotMatch(text('replis.js'),/'#guideLive \.gl-src'/,'l’estimation des prix n’est jamais rangée dans « Sources et précisions »');
   /* La houle du mois : seulement pour les sports de vague ou de vent (pas sur un spot de plongée ou un lac). */
   assert.match(text('spot-guide.js'),/swellSport=sportsOf\.some\(a=>\['surf','bodyboard','kitesurf','windsurf','wingfoil','foil'\]\.includes\(a\)\);\n\s+if\(n&&n\.hs!=null&&swellSport\)tiles\.push/);
-  for(const f of ['eau','houle','toit','plat','panneau','accueil'])assert.ok(fs.existsSync(path.join(__dirname,'..','assets/fiche',f+'.webp')),f);
+  for(const f of ['eau','houle','cabane','table','panneau','accueil','fete','coutume','marche'])assert.ok(fs.existsSync(path.join(__dirname,'..','assets/fiche',f+'.webp')),f);
 });

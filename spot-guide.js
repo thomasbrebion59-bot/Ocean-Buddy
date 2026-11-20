@@ -7,6 +7,8 @@
   const DATA_URL='assets/data/spot-guides.js?v=ad3a1ef5330b';
   const DATA_URL_EN='assets/data/spot-guides.en.js?v=09dc78f14a87';
   const DATA_URL_ES='assets/data/spot-guides.es.js?v=1738a29c9a1b';
+  /* Culture locale sourcée, par zone (scripts/build-culture-zones.cjs) : chargée à l’ouverture d’une fiche, jamais au démarrage. */
+  const ZONES_URL='assets/data/culture-zones.js?v=0d006ab9da6f';
   /* Hors français, le contenu éditorial (esprit du lieu, lieux, libellés d’hébergement) s’affiche en anglais.
      Il est marqué translate="no" pour que i18n.js ne le retraduise pas par morceaux ; les libellés d’interface restent traduisibles. */
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||'fr';
@@ -242,6 +244,21 @@
     const c=coordsOf(s.id)||s.coords,ok=c&&Number.isFinite(+c.lat)&&Number.isFinite(+c.lon);
     return `https://www.google.com/maps/search/${encodeURIComponent(what)}${ok?`/@${(+c.lat).toFixed(4)},${(+c.lon).toFixed(4)},13z`:encodeURIComponent(' '+place(s,estimate(s)))}`;
   }
+  /* Zone de culture locale du spot (window.OCEAN_CULTURE_ZONES : {zones:{id:{n,r,c,f}}, spots:{spot:id}}), ou null. */
+  const ZONE_LABEL={gout:'À goûter',fete:'La fête',mot:'Le mot du coin',coutume:'La coutume',lieu:'À voir'};
+  const ZONE_ILLU={gout:'table',fete:'fete',mot:'panneau',coutume:'coutume',lieu:'soleil'};
+  /* Un « lieu » est souvent un marché ; sinon, un paysage de mer sans bâtiment (aucun dessin ne prétend montrer le vrai lieu). */
+  const zoneIllu=(kind,title)=>kind==='lieu'&&/march|market|mercad/i.test(title||'')?'marche':ZONE_ILLU[kind]||'accueil';
+  const frDate=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d||''));return m?`${m[3]}/${m[2]}/${m[1]}`:String(d||'');};
+  function zoneOf(s){
+    const d=window.OCEAN_CULTURE_ZONES,id=s&&!s.custom&&d?.spots?.[s.id],z=id&&d.zones?.[id];
+    return z&&Array.isArray(z.f)&&z.f.length?z:null;
+  }
+  let zonesLoading=null;
+  function loadZones(){
+    if(window.OCEAN_CULTURE_ZONES)return Promise.resolve();
+    return zonesLoading||(zonesLoading=inject(ZONES_URL).catch(()=>{zonesLoading=null;}));
+  }
   function liveHTML(s){
     const e=estimate(s),c=culture(s),n=monthNormals(s),ctry=country(s),month=esc(M.monthName(new Date().getMonth()+1,LG()));
     /* 1. Grands chiffres. Le mois s’écrit déjà dans la langue de l’app, hors traduction. */
@@ -251,15 +268,26 @@
     /* La houle du mois ne parle qu’à ceux qui cherchent la vague ou le vent : pas de tuile sur un spot de plongée ou un lac. */
     const sportsOf=typeof spotSports==='function'?spotSports(s):(s.sports||[]),swellSport=sportsOf.some(a=>['surf','bodyboard','kitesurf','windsurf','wingfoil','foil'].includes(a));
     if(n&&n.hs!=null&&swellSport)tiles.push(tile('saisons','Houle en',n.hs,1,'m','houle',tiles.length));
-    if(e)tiles.push(`<button type="button" class="gl-tile" data-gl-go="dormir" style="--i:${tiles.length}"><span class="gl-tile-tx"><span class="fx-label">La nuit, dès</span><span class="gl-big"><b class="fx-num" data-gl-count="${e.lo}" data-gl-dec="0"${NT}>${nf(e.lo)}</b><span class="fx-unit"${NT}>€</span></span></span>${ILLU('toit')}</button>`);
+    if(e)tiles.push(`<button type="button" class="gl-tile" data-gl-go="dormir" style="--i:${tiles.length}"><span class="gl-tile-tx"><span class="fx-label">La nuit, dès</span><span class="gl-big"><b class="fx-num" data-gl-count="${e.lo}" data-gl-dec="0"${NT}>${nf(e.lo)}</b><span class="fx-unit"${NT}>€</span></span></span>${ILLU('cabane')}</button>`);
     /* 2. Ici, on vit comme ça : seulement ce que le carnet contient (mot du coin, à goûter), puis la page du pays. */
     const cards=[];
-    const hello=c.hello?.[0]||'',helloMore=typeof c.hello?.[1]==='string'?c.hello[1]:'',food=c.food?.[0]||'',foodMore=typeof c.food?.[1]==='string'?c.food[1]:'';
+    /* Les mois d’une fête sont ceux d’une édition constatée, pas une date garantie : « Souvent en mai », jamais de jour.
+       Culture locale de la zone : des faits sourcés, un par carte, chacun avec sa source d’un toucher. Les repères du
+       carnet (mot du coin, à goûter), sans source par fait, ne s’affichent plus quand la zone donne le même genre. */
+    const zone=zoneOf(s),has=k=>!!zone&&zone.f.some(f=>f[0]===k);
+    if(zone)for(const f of zone.f){
+      const [kind,title,text,months,url,publisher]=f,when=Array.isArray(months)&&months.length?M.monthsLabel(months,LG()):'';
+      cards.push(`<li class="gl-card gl-fact" data-kind="${esc(kind)}" style="--i:${cards.length}">${ILLU(zoneIllu(kind,title))}<span class="fx-label">${ZONE_LABEL[kind]||''}</span><b${NT}>${esc(title)}</b><small${NT}>${esc(text)}</small>${when?`<small class="gl-when"><span>Souvent en</span> <span${NT}>${esc(when)}</span></small>`:''}<a class="gl-fact-src" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>Source :</span> <span${NT}>${esc(publisher)}</span></a></li>`);
+    }
+    const hello=has('mot')?'':c.hello?.[0]||'',helloMore=typeof c.hello?.[1]==='string'?c.hello[1]:'',food=has('gout')?'':c.food?.[0]||'',foodMore=typeof c.food?.[1]==='string'?c.food[1]:'';
     if(hello)cards.push(`<li class="gl-card" style="--i:${cards.length}">${ILLU('panneau')}<span class="fx-label">Le mot du coin</span><b${NT}>«&nbsp;${esc(hello)}&nbsp;»</b>${helloMore?`<small${NT}>${esc(helloMore)}</small>`:''}</li>`);
-    if(food)cards.push(`<li class="gl-card" style="--i:${cards.length}">${ILLU('plat')}<span class="fx-label">À goûter</span><b${NT}>${esc(food)}</b>${foodMore?`<small${NT}>${esc(foodMore)}</small>`:''}</li>`);
+    if(food)cards.push(`<li class="gl-card" style="--i:${cards.length}">${ILLU('table')}<span class="fx-label">À goûter</span><b${NT}>${esc(food)}</b>${foodMore?`<small${NT}>${esc(foodMore)}</small>`:''}</li>`);
     if(typeof OceanCultures!=='undefined'&&ctry)cards.push(`<li class="gl-card gl-card-go" style="--i:${cards.length}"><button type="button" data-cult-open="${esc(ctry)}" data-cult-from="spot">${ILLU('accueil')}<span class="fx-label">Culture du pays</span><b${NT}>${esc(OceanCultures.discover(ctry))}</b><small>Mots, fêtes et usages</small></button></li>`);
     const vibe=c.vibe?`<p class="fx-text gl-vibe"${NT}>${esc(c.vibe)}</p>`:'';
-    const life=cards.length||vibe?`<div class="gl-block gl-life"><h3 class="fx-title">Ici, on vit comme ça</h3>${vibe}${cards.length?`<ul class="gl-rail">${cards.join('')}</ul>`:''}${c.grounded?'':'<p class="fx-note guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>'}</div>`:'';
+    /* Le nom de la zone dit d’où viennent ces faits ; la liste des sources (adresse et date) part dans « Sources et précisions ». */
+    const zoneName=zone?`<p class="fx-label gl-zone"${NT}>${esc(zone.n)}</p>`:'';
+    const zoneSrc=zone?`<ul class="fx-note gl-zone-src">${zone.f.map(f=>`<li><span${NT}>${esc(f[1])}</span> : <a href="${esc(f[4])}" target="_blank" rel="noopener noreferrer"${NT}>${esc(f[5])}</a>, <span>consultée le</span> <span${NT}>${esc(frDate(f[6]))}</span></li>`).join('')}</ul>`:'';
+    const life=cards.length||vibe?`<div class="gl-block gl-life"><h3 class="fx-title">Ici, on vit comme ça</h3>${zoneName}${vibe}${cards.length?`<ul class="gl-rail">${cards.join('')}</ul>`:''}${zoneSrc}${c.grounded||zone?'':'<p class="fx-note guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>'}</div>`:'';
     /* 3. Budget sur place : le prix de la nuit parmi tous les spots du guide, puis nos estimations. */
     let budget='';
     const srcNote=`Estimation indicative Ocean Buddy (${M.EDITION}), les prix varient selon la saison.`;
@@ -343,6 +371,8 @@
     /* L’entrée en scène ne joue qu’à l’ouverture d’un autre spot ; les normales arrivent sans rejouer l’animation. */
     paintLive(s,lastLive!==s.id);lastLive=s.id;
     if(!window.OCEAN_CLIMATE_LITE)window.OceanSpotData?.load?.('lite').then(()=>{if(current===s.id)paintLive(s,false);}).catch(()=>{});
+    /* La culture locale de la zone arrive à son tour, sans rejouer l’entrée en scène. */
+    if(!window.OCEAN_CULTURE_ZONES)loadZones().then(()=>{if(current===s.id&&zoneOf(s))paintLive(s,false);});
     badgeNearby();
     window.OceanNotebook?.sync();
   }
