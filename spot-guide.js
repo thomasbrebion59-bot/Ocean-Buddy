@@ -8,7 +8,7 @@
   const DATA_URL_EN='assets/data/spot-guides.en.js?v=09dc78f14a87';
   const DATA_URL_ES='assets/data/spot-guides.es.js?v=1738a29c9a1b';
   /* Culture locale sourcée, par zone (scripts/build-culture-zones.cjs) : chargée à l’ouverture d’une fiche, jamais au démarrage. */
-  const ZONES_URL='assets/data/culture-zones.js?v=0d006ab9da6f';
+  const ZONES_URL='assets/data/culture-zones.js?v=3aed88738c2e';
   /* Hors français, le contenu éditorial (esprit du lieu, lieux, libellés d’hébergement) s’affiche en anglais.
      Il est marqué translate="no" pour que i18n.js ne le retraduise pas par morceaux ; les libellés d’interface restent traduisibles. */
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||'fr';

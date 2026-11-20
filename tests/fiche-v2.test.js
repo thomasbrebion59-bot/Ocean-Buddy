@@ -112,7 +112,8 @@ test('ouverture : trois chiffres du moment sur la photo, la motion d’arrivée 
   /* Photo : environ 62 % de l’écran sur téléphone (proposition approuvée ; 42 % au temps des onglets). */
   assert.match(css, /html \.ocean-v2 #detail #detailHero\{min-height:clamp\(400px,62dvh,600px\);height:auto\}/);
   /* Motion : une fois par ouverture, rien en boucle, rien en mouvement réduit ; parallaxe en transform, une écriture par image. */
-  const px = css.slice(css.indexOf('PARCOURS EN CHAPITRES'));
+  /* (La scène de Conditions, plus bas dans fiche.css, a sa propre règle : boucle douce seulement à l’écran.) */
+  const px = css.slice(css.indexOf('PARCOURS EN CHAPITRES'), css.indexOf('SCÈNE ILLUSTRÉE DE CONDITIONS'));
   assert.doesNotMatch(px, /infinite/);
   assert.match(px, /@media \(prefers-reduced-motion:reduce\)\{#detail\.px-in \.hero-photo,[^}]*\{animation:none!important\}#detail \.hero-photo\{transform:none!important\}\}/);
   assert.match(px, /body\.reduce-motion #detail \.hero-photo\{transform:none!important\}/);
@@ -250,7 +251,7 @@ test('danger : alerte dans Conditions à partir de 3 sur 4, tête de l’onglet 
 });
 
 test('Prévisions et Conditions : un seul bloc météo, deux vues ; trois prochains jours dans Conditions', () => {
-  assert.match(exp, /<div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours<\/h3><div class="fx-days">\$\{daily\.slice\(0, 3\)\.map/);
+  assert.match(exp, /<div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours<\/h3>\$\{sceneHTML\(daily, inland\)\}<div class="fx-days">\$\{daily\.slice\(0, 3\)\.map/);
   for (const c of ['wx-block wx-week', 'wx-block wx-hours']) assert.match(exp, new RegExp(`<div class="${c}" data-fx-view="forecast">`), c);
   assert.ok(exp.indexOf('wx-block wx-week" data-fx-view') < exp.indexOf('wx-block wx-hours" data-fx-view'), 'les 7 jours avant l’heure par heure');
   /* Fiche v2, onglet Prévisions : deux titres, plus de « Cette semaine », de « Max du jour » ni de cartes de créneau. */

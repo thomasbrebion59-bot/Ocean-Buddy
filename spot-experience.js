@@ -302,11 +302,68 @@
     air: '<path d="M10 13.6V5a2 2 0 1 1 4 0v8.6a4 4 0 1 1-4 0z"/><path d="M12 9.5v6"/>'
   };
   const dayIc = k => `<svg class="fx-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${DAY_IC[k]}</svg>`;
+  /* Les trois prochains jours : chacun bascule la scène illustrée au-dessus (sceneHTML, paintScene). */
   function nextDay(d, i, inland) {
     const first = inland ? `<span class="fx-day-row">${dayIc('air')}<span>${d.tmax != null ? Math.round(d.tmax) + '°' : '—'}</span></span>`
       : `<span class="fx-day-row">${dayIc('wave')}<span>${d.wave != null ? fmt1(d.wave) + ' m' : '—'}</span></span>`;
-    return `<article class="fx-day${i === 0 ? ' is-today' : ''}"><b>${esc(dayName(d.date, i))}</b>${first}<span class="fx-day-row">${dayIc('wind')}<span>${d.wind != null ? Math.round(d.wind) + ' km/h' : '—'}</span></span></article>`;
+    return `<button type="button" class="fx-day${i === 0 ? ' is-today' : ''}" data-scene-day="${i}" aria-pressed="${i === 0}"><b>${esc(dayName(d.date, i))}</b>${first}<span class="fx-day-row">${dayIc('wind')}<span>${d.wind != null ? Math.round(d.wind) + ' km/h' : '—'}</span></span></button>`;
   }
+
+  /* ---------- Scène illustrée de Conditions (20 nov.) ----------
+     Une vague vue de côté, le sable à gauche, la mer à droite, et les chiffres du jour choisi posés dessus. Données :
+     uniquement les prévisions du jour déjà affichées (W.days : houle et période maximales, vent maximal, direction
+     dominante). La vague, tournée vers la plage, a trois tailles (petite, moyenne, grosse) ; son va-et-vient dure la période réelle. Les traits
+     de vent vont de la terre vers la mer (vent de terre) ou l’inverse (vent de mer) seulement quand le catalogue donne
+     le sens offshore du spot (SpotDataModel.windSide) ; sinon ils ne vont dans aucun sens. Rien ne bouge hors écran
+     (IntersectionObserver) ni en mouvement réduit (fiche.css). */
+  const waveSize = h => (h == null ? 's' : h < 0.8 ? 's' : h < 2 ? 'm' : 'l');
+  const windSideOf = (deg, s) => { try { return window.SpotDataModel?.windSide?.(deg, s && s.wind) || null; } catch (e) { return null; } };
+  const SIDE_LABEL = { offshore: 'Vent de terre', onshore: 'Vent de mer', cross: 'Vent de côté' };
+  function sceneArt() {
+    return `<svg class="sc-art" viewBox="0 0 400 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
+      <rect class="sc-sky" width="400" height="220"/><circle class="sc-sun" cx="232" cy="134" r="20"/>
+      <path class="sc-far" d="M120 132 C190 124 280 128 400 122 V220 H120Z"/>
+      <g class="sc-wave"><g class="sc-wave-move"><g transform="matrix(-1 0 0 1 560 0)"><path class="sc-swell" d="M140 220 C150 170 190 128 252 112 C300 100 340 112 360 138 C330 128 304 136 296 160 C290 182 310 200 340 210 L400 214 V220Z"/>
+        <path class="sc-curl" d="M252 112 C300 100 340 112 360 138 C342 130 318 132 306 146 C298 132 280 116 252 112Z"/>
+        <g class="sc-foam"><circle cx="356" cy="136" r="7"/><circle cx="344" cy="128" r="5"/><circle cx="364" cy="146" r="4"/><circle cx="330" cy="122" r="4"/></g></g></g></g>
+      <path class="sc-sand" d="M0 160 C60 150 110 168 160 186 C200 200 230 212 260 220 H0Z"/>
+      <path class="sc-wash" d="M120 182 C160 190 196 204 230 216" fill="none"/>
+      <g class="sc-wind"><path d="M30 150 H100"/><path d="M90 168 H180"/><path d="M10 186 H80"/><path d="M150 140 H220"/></g>
+    </svg>`;
+  }
+  function sceneHTML(daily, inland) {
+    if (!daily.length) return '';
+    return `<div class="fx-scene" data-scene data-inland="${inland ? 1 : 0}">${sceneArt()}<div class="sc-now" aria-live="polite"></div></div>`;
+  }
+  function paintScene(host, d, i, s, inland) {
+    const sc = host && host.querySelector('[data-scene]'); if (!sc || !d) return;
+    const h = inland ? null : d.wave, per = Number.isFinite(+d.period) && +d.period > 0 ? +d.period : null;
+    sc.dataset.size = inland ? 'flat' : waveSize(h);
+    sc.style.setProperty('--sc-period', (per ? Math.min(18, Math.max(5, per)) : 10) + 's');
+    const w = d.wind != null ? Math.round(d.wind) : null;
+    sc.style.setProperty('--sc-wind', (w == null ? 4 : Math.max(1.4, 5.5 - w / 9)).toFixed(2) + 's');
+    const side = windSideOf(d.windDir, s);
+    sc.dataset.side = side === 'offshore' ? 'land' : side === 'onshore' ? 'sea' : 'none';
+    const arrow = d.windDir == null ? '' : `<svg class="sc-arrow" viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(${(Math.round(+d.windDir) + 180) % 360}deg)"><path d="M12 3v15M6 12l6 7 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" transform="rotate(180 12 12)"/></svg>`;
+    const first = inland
+      ? `<div class="sc-read"><span class="sc-lab">Air, au plus chaud</span><span class="sc-val"><b class="fx-num">${d.tmax != null ? Math.round(d.tmax) : '—'}</b><span class="fx-unit">°C</span></span></div>`
+      : `<div class="sc-read"><span class="sc-lab">Houle, au plus haut</span><span class="sc-val"><b class="fx-num">${h != null ? fmt1(h) : '—'}</b><span class="fx-unit">m</span></span>${per ? `<span class="sc-sub">${esc(`une vague toutes les ${Math.round(per)} s`)}</span>` : ''}</div>`;
+    const wind = `<div class="sc-read sc-read-wind"><span class="sc-lab">Vent, au plus fort</span><span class="sc-val"><b class="fx-num">${w != null ? w : '—'}</b><span class="fx-unit">km/h</span>${arrow}<span class="fx-unit">${esc(direction(d.windDir))}</span></span>${side ? `<span class="sc-sub">${esc(SIDE_LABEL[side])}</span>` : ''}</div>`;
+    sc.querySelector('.sc-now').innerHTML = `<span class="sc-day">${esc(dayName(d.date, i))}</span>${first}${wind}`;
+    host.querySelectorAll('[data-scene-day]').forEach(b => { const on = +b.dataset.sceneDay === i; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('is-on', on); });
+    watchScene(sc);
+  }
+  let sceneIO = null;
+  function watchScene(sc) {
+    if (!('IntersectionObserver' in window)) { sc.classList.add('is-live'); return; }
+    if (!sceneIO) sceneIO = new IntersectionObserver(es => es.forEach(e => e.target.classList.toggle('is-live', e.isIntersecting)), { threshold: 0.05 });
+    if (sc.dataset.watched) return; sc.dataset.watched = '1'; sceneIO.observe(sc);
+  }
+  document.addEventListener('click', e => {
+    const b = e.target.closest?.('#spotWeek [data-scene-day]'); if (!b || !shown) return;
+    const inland = isInland(shown.s), W = window.SpotWeatherModel, daily = W ? W.days(shown.weather, shown.marine, {inland}) : [];
+    const i = +b.dataset.sceneDay; if (daily[i]) paintScene($('#spotWeek'), daily[i], i, shown.s, inland);
+  });
 
   let shown = null;
   function renderWeek(s, weather, marine, fetchedAt) {
@@ -330,13 +387,14 @@
     /* Fiche v2 : le même bloc sert deux onglets (data-fx-view, lu par fiche.css). « Conditions » montre les trois
        prochains jours et un lien ; « Prévisions » montre les 7 jours (meilleur créneau mis en avant) et l’heure par heure,
        puis l’heure du relevé et les sources en note. */
-    host.innerHTML = `<div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours</h3><div class="fx-days">${daily.slice(0, 3).map((d, i) => nextDay(d, i, inland)).join('')}</div><button type="button" class="fx-more" data-fx-tab="previsions">Toutes les prévisions</button></div>`
+    host.innerHTML = `<div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours</h3>${sceneHTML(daily, inland)}<div class="fx-days">${daily.slice(0, 3).map((d, i) => nextDay(d, i, inland)).join('')}</div><button type="button" class="fx-more" data-fx-tab="previsions">Toutes les prévisions</button></div>`
       + `<div class="wx-block wx-week" data-fx-view="forecast"><h3 class="fx-title">Les 7 jours</h3>${slots.top}${weekRows(daily, inland, slots)}<p class="fx-note fx7-hint">Touche un jour pour voir les rafales, la pluie, l’UV et le soleil.</p></div>`
       + `<div class="wx-block wx-hours" data-fx-view="forecast"><h3 class="fx-title">Heure par heure</h3>${hoursTable(next, daily, inland, slots.hours, gap ? utc : '')}</div>`
       + `<p class="fx-note fx7-stamp" data-fx-view="forecast">${esc(updated)}</p>`
       + (slots.foot ? `<p class="fx-note fx7-stamp" data-fx-view="forecast">${esc(slots.foot)}</p>` : '')
       + `<p class="spot-week-note"><span class="wx-stamp-note">Valeurs de modèle, indicatives, gardées une heure.</span>${inland ? '' : ' <span class="wx-stamp-note">Près des côtes, la précision des vagues est limitée. Pour la marée, consulte l’annuaire local.</span>'}</p>`
       + '<p class="wx-source"><a href="https://open-meteo.com/" target="_blank" rel="noopener noreferrer">Prévisions Open-Meteo (CC BY 4.0)</a></p>';
+    try { paintScene(host, daily[0], 0, s, inland); } catch (e) {}
   }
 
   function isInland(s) { return typeof window.isInland === 'function' ? window.isInland(s) : ['lake', 'inland'].includes(s?.waterType); }

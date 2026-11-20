@@ -296,9 +296,7 @@
      "kind": "lieu",
      "title": "Réserve mondiale de surf",
      "text": "Depuis octobre 2011, la côte d’Ericeira porte le titre de réserve mondiale de surf, décerné par Save the Waves.",
-     "months": [
-      10
-     ],
+     "months": [],
      "source": {
       "url": "https://fr.wikipedia.org/wiki/Ericeira",
       "publisher": "Wikipédia, article « Ericeira »",
@@ -994,9 +992,7 @@
      "kind": "coutume",
      "title": "Les Chantés Noël",
      "text": "Chaque décembre, on chante Noël dans toute l’île, parfois chez des particuliers.",
-     "months": [
-      12
-     ],
+     "months": [],
      "source": {
       "url": "https://www.mairie-ladesirade.fr/tourisme-tourism/les-renseignements-utiles/article/les-evenements-a-la-desirade",
       "publisher": "Collectivité de La Désirade",
@@ -1311,12 +1307,7 @@
      "kind": "gout",
      "title": "La truffe noire d’Aups",
      "text": "Aups tient le troisième marché aux truffes noires de France, le matin, de fin novembre à fin février.",
-     "months": [
-      11,
-      12,
-      1,
-      2
-     ],
+     "months": [],
      "source": {
       "url": "https://fr.wikipedia.org/wiki/Aups",
       "publisher": "Wikipédia",
@@ -1869,12 +1860,7 @@
      "kind": "coutume",
      "title": "La veda du crabe noir",
      "text": "Chaque année, du 1er avril au 31 juillet, la chasse au crabe noir est interdite, car l’espèce est menacée.",
-     "months": [
-      4,
-      5,
-      6,
-      7
-     ],
+     "months": [],
      "source": {
       "url": "https://www.elespectador.com/ambiente/inicia-veda-de-cangrejo-negro-en-san-andres-providencia-y-santa-catalina-article/",
       "publisher": "El Espectador",
@@ -2557,11 +2543,7 @@
      "kind": "lieu",
      "title": "La criée du dimanche",
      "text": "Tous les dimanches de juillet et d’août, et un dimanche d’octobre, on enchérit sur la pêche du jour à la criée.",
-     "months": [
-      7,
-      8,
-      10
-     ],
+     "months": [],
      "source": {
       "url": "https://www.visitvesterhavet.com/northsea/our-cities/activities-and-around-hvide-sande",
       "publisher": "Visit Vesterhavet, office de tourisme",
@@ -2739,10 +2721,7 @@
      "kind": "coutume",
      "title": "Le J’ouvert",
      "text": "Le J’ouvert (« point du jour ») : à l’aube, on danse sur du soca et du calypso, couvert de boue, de poudre et de peinture.",
-     "months": [
-      6,
-      7
-     ],
+     "months": [],
      "source": {
       "url": "https://www.visitusvi.com/experience/experience-st-john-celebration",
       "publisher": "Visit USVI, tourisme officiel",

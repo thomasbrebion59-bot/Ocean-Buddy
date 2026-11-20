@@ -219,7 +219,8 @@ test('« Le spot, en vie » : grands chiffres seulement s’il y a une donnée, 
   assert.match(src,/const still=document\.body\.classList\.contains\('reduce-motion'\)\|\|\(window\.matchMedia&&matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches\)/);
   assert.match(css,/@media \(prefers-reduced-motion:reduce\)\{#detail #guideLive :is\(\.gl-tile,\.gl-card,\.gl-pin\)\{animation:none!important\}/);
   assert.match(css,/body\.reduce-motion #detail #guideLive :is\(\.gl-tile,\.gl-card,\.gl-pin\)\{animation:none!important\}/);
-  assert.doesNotMatch(css.slice(css.indexOf('LE SPOT, EN VIE')),/animation:[^;}]*infinite/);
+  /* Section « Le spot, en vie » seulement (la scène de Conditions, plus bas, a sa propre règle : boucle douce à l’écran). */
+  assert.doesNotMatch(css.slice(css.indexOf('LE SPOT, EN VIE'), css.indexOf('SCÈNE ILLUSTRÉE DE CONDITIONS')), /animation:[^;}]*infinite/);
   /* 20 nov. : les prix sont des barèmes par pays sans source ; leur mention d’estimation reste à côté des prix. */
   assert.match(text('replis.js'),/'#guideLive \.gl-links-src', '#guideLive \.guide-note'/);
   assert.doesNotMatch(text('replis.js'),/'#guideLive \.gl-src'/,'l’estimation des prix n’est jamais rangée dans « Sources et précisions »');
