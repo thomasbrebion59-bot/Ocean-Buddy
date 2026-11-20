@@ -43,8 +43,12 @@ test('items associe les symboles SF, actif et repos',()=>{
   const [home,spots]=M.items(tabs);
   assert.equal(home.symbol,'house');
   assert.equal(home.symbolOn,'house.fill');
-  assert.equal(spots.symbol,'globe.europe.africa');
-  assert.equal(spots.symbolOn,'globe.europe.africa.fill');
+  /* Interface v2 : Explorer = la loupe (sans version pleine), Profil = la silhouette. */
+  assert.equal(spots.symbol,'magnifyingglass');
+  assert.equal(spots.symbolOn,'magnifyingglass');
+  const profile=M.items([{id:'profile',label:'Profil'}])[0];
+  assert.equal(profile.symbol,'person');
+  assert.equal(profile.symbolOn,'person.fill');
   assert.equal(M.items([{id:'surf'}])[0].symbolOn,'figure.surfing');
 });
 

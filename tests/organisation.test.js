@@ -93,12 +93,16 @@ test('Réglages : quatre rubriques dans l’ordre, chaque réglage à sa place',
   assert.match(read('ocean-sound.js'), /document\.querySelector\('#settingsModal \.set-toggle'\)/);
 });
 
-test('Profil : ton sport, ton passeport et tes chiffres avant la vitrine des trophées ; Réglages en bas', () => {
+/* Interface v2 (maquette du 19 nov.) : le Profil court vient d’abord (ton sport et ton niveau, tes spots, jouer, le
+   passeport en résumé, les Réglages) ; le passeport complet, derrière « Voir tout », garde l’ordre d’avant : tes chiffres,
+   ton carnet, puis la vitrine des trophées (longue) et le style de Poulpy. Détail : tests/interface-v2-nav-profil.test.js. */
+test('Profil : ton sport et tes Réglages dans le Profil court ; tes chiffres avant la vitrine des trophées dans le passeport complet', () => {
   const prof = html.slice(html.indexOf('<section class="screen" id="profile">'), html.indexOf('<!-- ============ JEU'));
   const at = s => prof.indexOf(s);
-  assert.ok(at('id="profMine"') < at('Mes statistiques') && at('Mes statistiques') < at('Mon carnet de sessions') && at('Mon carnet de sessions') < at('Mes trophées'));
-  assert.ok(at('id="profSettings"') > at('id="quizBadgesProfile"'), 'entrée Réglages après la vitrine');
-  assert.match(read('poulpy.js'), /getElementById\('profSettings'\);if\(profSet\)profSet\.before\(profileCard\)/);
+  assert.ok(at('id="profMine"') > 0 && at('id="profMine"') < at('id="pvSettings"') && at('id="pvSettings"') < at('id="pvFullHead"'), 'sport puis Réglages, dans le Profil court');
+  assert.ok(at('id="pvFullHead"') < at('Mes statistiques') && at('Mes statistiques') < at('Mon carnet de sessions') && at('Mon carnet de sessions') < at('Mes trophées'));
+  assert.ok(at('id="pvFullEnd"') > at('id="quizBadgesProfile"'), 'fin du passeport complet après la vitrine');
+  assert.match(read('poulpy.js'), /getElementById\('pvFullEnd'\);if\(profEnd\)profEnd\.before\(profileCard\)/);
   assert.match(read('app.js'), /favs\.size,'Favoris','openFavorites\(\)'\)/, 'la tuile Favoris ouvre tes favoris');
 });
 
@@ -109,7 +113,7 @@ test('Défis : le Quiz juste sous l’en-tête, le bandeau écolo avant les déf
 test('états vides : favoris vides avec une action ; textes nouveaux traduits en anglais et en espagnol', () => {
   assert.match(read('app.js'), /favOnly&&!favs\.size&&!q\?'<button onclick="toggleFavFilter\(\)">Voir tous les spots<\/button>'/);
   const en = JSON.parse(read('locales/translations/en.json')), es = JSON.parse(read('locales/translations/es.json')), src = JSON.parse(read('locales/source/fr.json'));
-  for (const k of ['Mes favoris', 'Reprendre', 'Mon voyage', 'Aucun pour l’instant', 'Accès rapide', 'En voyage', 'Plus d’idées de départ', 'Ton espace', 'Ta semaine, ton prochain départ et tes spots', 'Mon profil', 'Affichage et son', 'Mes données', 'À propos', 'Réglages', 'Prénom, langue, animations, mes données', 'Ouvrir', 'Voir tous les spots', 'Reprendre : {1}']) {
+  for (const k of ['Mes favoris', 'Reprendre', 'Mon voyage', 'Aucun pour l’instant', 'Accès rapide', 'En voyage', 'Plus d’idées de départ', 'Ton espace', 'Ta semaine, ton prochain départ et tes spots', 'Mon profil', 'Affichage et son', 'Mes données', 'À propos', 'Réglages', 'Voir tous les spots', 'Reprendre : {1}']) {
     assert.ok(src.includes(k), 'source FR : ' + k);
     assert.ok(typeof en[k] === 'string' && en[k].trim(), 'EN : ' + k);
     assert.ok(typeof es[k] === 'string' && es[k].trim(), 'ES : ' + k);

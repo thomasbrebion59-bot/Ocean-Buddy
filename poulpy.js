@@ -85,8 +85,8 @@
   });
   const profileCard=document.createElement('button');profileCard.type='button';profileCard.className='poulpy-profile-card';profileCard.onclick=openWardrobe;
   profileCard.innerHTML=`<span class="profile-poulpy-art">${image('travel','personal-poulpy',false)}</span><span><span class="section-kicker">TON COMPAGNON D’AVENTURE</span><strong>Ton Poulpy, ton style.</strong><span id="poulpyPreference"></span></span><span class="profile-customize">Choisir</span>`;
-  /* Profil : le style de Poulpy se range avec les réglages, en bas (ton sport et ton passeport d’abord). */
-  const profSet=document.getElementById('profSettings');if(profSet)profSet.before(profileCard);else $('#profTop').after(profileCard);
+  /* Profil : le style de Poulpy se range à la fin du passeport complet (interface v2) ; l’avatar du Profil l’ouvre aussi. */
+  const profEnd=document.getElementById('pvFullEnd');if(profEnd)profEnd.before(profileCard);else $('#profile')?.append(profileCard);
   document.querySelectorAll('.chrome-user,.sidebar-user').forEach(button=>button.insertAdjacentHTML('afterbegin',image('travel','personal-poulpy',false)));
 
   // Illustrate the existing onboarding controls without changing their behaviour.
@@ -116,6 +116,6 @@
   new MutationObserver(syncOnboarding).observe($('#onb'),{attributes:true,attributeFilter:['style','class']});
   document.addEventListener('keydown',e=>{if(e.key==='Escape'&&quickGate){e.preventDefault();cancelGate();}});
   window.addEventListener('ocean:navigate',refresh);
-  window.OceanPoulpy={refresh,src,sportVariant,context,openWorlds,decorateOnboarding,focusOnboarding};
+  window.OceanPoulpy={refresh,src,sportVariant,context,openWorlds,openWardrobe,decorateOnboarding,focusOnboarding};
   refresh();syncOnboarding();
 })();

@@ -2,14 +2,16 @@
    Swift OceanGlass. Testée dans tests/native-glass-model.test.js. */
 (function(root,factory){const api=factory();if(typeof module==='object'&&module.exports)module.exports=api;else root.NativeGlassModel=api;})(typeof window!=='undefined'?window:globalThis,()=>{
   'use strict';
-  /* SF Symbols : contour au repos, plein quand l’onglet est actif (comme les icônes web). */
+  /* SF Symbols : contour au repos, plein quand l’onglet est actif (comme les icônes web).
+     Interface v2 : quatre onglets, maison, loupe, valise, silhouette (la loupe n’a pas de version pleine). Jeu et Défis
+     ne sont plus dans la barre web, donc plus envoyés au natif ; leurs symboles restent pour une ancienne page en cache. */
   const SYMBOLS={
     home:['house','house.fill'],
-    spots:['globe.europe.africa','globe.europe.africa.fill'],
+    spots:['magnifyingglass','magnifyingglass'],
     surf:['figure.surfing','figure.surfing'],
     trips:['suitcase','suitcase.fill'],
     challenges:['trophy','trophy.fill'],
-    profile:['person.crop.circle','person.crop.circle.fill']
+    profile:['person','person.fill']
   };
   const round=v=>Math.round((Number(v)||0)*2)/2;
   function rect(r){return r?{x:round(r.left??r.x),y:round(r.top??r.y),w:round(r.width??r.w),h:round(r.height??r.h)}:null;}

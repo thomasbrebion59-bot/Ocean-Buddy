@@ -1,5 +1,5 @@
 /* Ocean Buddy 1.3 — coque d’application.
-   Barre d’onglets flottante (Accueil, Explorer, Voyages, Défis, Profil) et bouton Poulpy,
+   Barre d’onglets flottante (interface v2 : Accueil, Explorer, Voyages, Profil) et bouton Poulpy,
    grands titres, barre qui se fait discrète au défilement, Explorer en plein écran sur la vraie
    Terre (recherche flottante, continents en photos, soleil réel, nuages) et fenêtre « Nouveautés ».
    Chargé en dernier : il s’appuie sur les fonctions globales de app.js sans les réécrire. */
@@ -12,28 +12,25 @@
   const store={get(k,d){try{const v=localStorage.getItem(k);return v==null?d:JSON.parse(v);}catch(_){return d;}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v));}catch(_){}}};
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 
-  /* ---------- Onglets : icônes au trait, pleines quand l’onglet est actif ---------- */
+  /* ---------- Onglets : pictogrammes au trait, pleins quand l’onglet est actif ---------- */
+  /* Interface v2 (maquette du 19 nov.) : quatre onglets, maison, loupe, valise, silhouette. Jeu et Défis n’ont plus
+     d’onglet : ils s’ouvrent depuis Profil > Jouer, et le Profil reste l’onglet actif (tabOf dans app.js). */
   const svg=(d,fill)=>`<svg class="${fill?'on':'off'}" viewBox="0 0 24 24" fill="${fill?'currentColor':'none'}" stroke="currentColor" stroke-width="${fill?0:1.8}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
   const TABS={
     home:{label:'Accueil',off:'<path d="M3.5 10.6 12 3.6l8.5 7v9.1a1.3 1.3 0 0 1-1.3 1.3h-4.4v-6.2H9.2V21H4.8a1.3 1.3 0 0 1-1.3-1.3z"/>',on:'<path d="M11.2 2.9a1.3 1.3 0 0 1 1.6 0l8.3 6.8c.3.3.5.7.5 1.1v8.9a2.3 2.3 0 0 1-2.3 2.3h-4.1v-6.6a.8.8 0 0 0-.8-.8H9.6a.8.8 0 0 0-.8.8V22H4.7a2.3 2.3 0 0 1-2.3-2.3v-8.9c0-.4.2-.8.5-1.1z"/>'},
-    spots:{label:'Explorer',off:'<circle cx="12" cy="12" r="9"/><path d="M3.3 9.5h17.4M3.3 14.5h17.4"/><path d="M12 3c2.5 2.6 3.8 5.6 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z"/>',on:'<path fill-rule="evenodd" d="M12 2a10 10 0 1 1 0 20 10 10 0 0 1 0-20zm3.4 13.2H8.6c.5 2 1.6 3.9 3.4 5.4 1.8-1.5 2.9-3.4 3.4-5.4zm-8.7 0H3.8a8.5 8.5 0 0 0 5.4 5.5 12.2 12.2 0 0 1-2.5-5.5zm13.5 0h-2.9a12.2 12.2 0 0 1-2.5 5.5 8.5 8.5 0 0 0 5.4-5.5zM8.4 10.3a14 14 0 0 0 0 3.4h7.2a14 14 0 0 0 0-3.4zm-1.5 0H3.4a8.6 8.6 0 0 0 0 3.4h3.5a16 16 0 0 1 0-3.4zm13.7 0h-3.5a16 16 0 0 1 0 3.4h3.5a8.6 8.6 0 0 0 0-3.4zM9.2 3.3a8.5 8.5 0 0 0-5.4 5.5h2.9c.4-2 1.3-3.9 2.5-5.5zm2.8.1c-1.8 1.5-2.9 3.4-3.4 5.4h6.8c-.5-2-1.6-3.9-3.4-5.4zm2.8-.1c1.2 1.6 2.1 3.5 2.5 5.5h2.9a8.5 8.5 0 0 0-5.4-5.5z"/>'},
-    surf:{label:'Jeu',off:'<path d="M3 19c2.5 0 2.5-1.6 4.5-1.6S10 19 12 19s2.5-1.6 4.5-1.6S19 19 21 19"/><path d="M4 14.5C5 8.5 9.5 5 14.5 5.5c-1.8 1.3-2.200 3.1-1.200 4.6 1.200 1.700 3.8 1.700 6 .6-1.400 3.400-4.8 5-8.3 4.700-2.700-.2-5.200-.4-7-1.400z"/>',on:'<path d="M2.5 17.200c1.5 0 1.900-.9 3-.9 1.3 0 1.700.9 3 .9s1.700-.9 3-.9 1.700.9 3 .9 1.700-.9 3-.9c1.1 0 1.5.9 3 .9v2.6a.8.8 0 0 1-.8.8H3.3a.8.8 0 0 1-.8-.8z"/><path d="M3.5 13.8C3.900 8 8.8 4 14.900 4.6a.8.8 0 0 1 .4 1.5c-1.5 1-1.8 2.3-1 3.400.9 1.3 3 1.3 5.1.3a.8.8 0 0 1 1.1 1c-1.5 3.8-5.200 5.6-9.200 5.3-3.200-.2-5.700-.5-7.700-1.700a.8.8 0 0 1-.4-.6z"/>'},
+    spots:{label:'Explorer',off:'<circle cx="11" cy="11" r="6.6"/><path d="m20.2 20.2-4.5-4.5"/>',on:'<path fill-rule="evenodd" d="M11 3.1a7.9 7.9 0 1 0 4.7 14.25l3.8 3.8a1.25 1.25 0 0 0 1.75-1.75l-3.8-3.8A7.9 7.9 0 0 0 11 3.1zm0 2.6a5.3 5.3 0 1 1 0 10.6 5.3 5.3 0 0 1 0-10.6z"/>'},
     trips:{label:'Voyages',off:'<path d="M9 6V4.8A1.8 1.8 0 0 1 10.8 3h2.4A1.8 1.8 0 0 1 15 4.8V6"/><rect x="3" y="6" width="18" height="14" rx="3"/><path d="M8 6v14M16 6v14"/>',on:'<path d="M10.8 2.2h2.4a2.6 2.6 0 0 1 2.6 2.6v.4H18a3.8 3.8 0 0 1 3.8 3.8v8.2A3.8 3.8 0 0 1 18 21h-.6V5.2H16v15.8H8V5.2H6.6V21H6a3.8 3.8 0 0 1-3.8-3.8V9A3.8 3.8 0 0 1 6 5.2h2.2v-.4a2.6 2.6 0 0 1 2.6-2.6zm0 1.6a1 1 0 0 0-1 1v.4h4.4v-.4a1 1 0 0 0-1-1z"/>'},
-    challenges:{label:'Défis',off:'<path d="M8 4h8v5.5a4 4 0 0 1-8 0z"/><path d="M8 5.5H4.6c0 3 1.4 4.6 3.6 5M16 5.5h3.4c0 3-1.4 4.6-3.6 5"/><path d="M12 13.5V17M8.5 20.5h7M10 17h4l.6 3.5H9.4z"/>',on:'<path d="M7.2 3.2h9.6c.4 0 .8.4.8.8v.7h2a.8.8 0 0 1 .8.8c0 3.3-1.7 5.3-4.3 5.8a5 5 0 0 1-3.3 2.9v2.6h1.9l.6 3.5h1a.8.8 0 0 1 0 1.6H7.7a.8.8 0 0 1 0-1.6h1l.6-3.5h1.9v-2.6A5 5 0 0 1 7.9 11C5.3 10.4 3.6 8.5 3.6 5.5a.8.8 0 0 1 .8-.8h2V4c0-.4.4-.8.8-.8zM5.3 6.3c.3 1.7 1.2 2.7 2.4 3.2a5 5 0 0 1-.1-1.1V6.3zm13.4 0h-2.3v2.1c0 .4 0 .8-.1 1.1 1.2-.5 2.1-1.5 2.4-3.2z"/>'},
     profile:{label:'Profil',off:'<circle cx="12" cy="8" r="4"/><path d="M4.5 20.5c.8-3.8 3.8-6 7.5-6s6.7 2.2 7.5 6"/>',on:'<circle cx="12" cy="7.8" r="4.6"/><path d="M12 13.6c4.3 0 7.6 2.6 8.4 6.6a1.3 1.3 0 0 1-1.3 1.6H4.9a1.3 1.3 0 0 1-1.3-1.6c.8-4 4.1-6.6 8.4-6.6z"/>'}
   };
-  const TAB_PIC={home:'tab-accueil',spots:'tab-explorer',surf:'tab-jeu',trips:'tab-voyages',challenges:'tab-defis',profile:'tab-profil'};
   for(const b of $$('button[data-s]',nav)){
     const t=TABS[b.dataset.s];if(!t)continue;
     const desk=b.querySelector('.desktop-label')?.outerHTML||'';
     const deskIcon=b.querySelector(':scope>svg')?.outerHTML||'';
-    /* Picto dessiné (silhouette mono en masque, teinte = couleur du bouton) ; tracé de secours sinon. */
-    const pic=TAB_PIC[b.dataset.s],ic=pic?`<i class="off" style="--m:url('assets/pictos/onglets-app/${pic}-mono.webp')" aria-hidden="true"></i><i class="on" style="--m:url('assets/pictos/onglets-app/${pic}-mono.webp')" aria-hidden="true"></i>`:`${svg(t.off,false)}${svg(t.on,true)}`;
-    b.innerHTML=`${deskIcon}<span class="tab-ic${pic?' tab-pic':''}">${ic}</span>${desk}<span class="tab-label">${t.label}</span>`;
-    b.setAttribute('aria-label',t.label==='Explorer'?'Explorer la planète':t.label);
+    b.innerHTML=`${deskIcon}<span class="tab-ic">${svg(t.off,false)}${svg(t.on,true)}</span>${desk}<span class="tab-label">${t.label}</span>`;
+    b.setAttribute('aria-label',t.label);
   }
-  /* Ordre des onglets : Accueil, Explorer, Voyages, Défis, Profil (Communauté est dans le profil). */
-  ['home','spots','surf','trips','challenges','profile','community'].forEach(id=>{const b=$(`button[data-s="${id}"]`,nav);if(b)nav.append(b);});
+  /* Ordre des onglets : Accueil, Explorer, Voyages, Profil. Sur ordinateur, Communauté est rangée en bas du menu (design.js). */
+  ['home','spots','trips','profile'].forEach(id=>{const b=$(`:scope>button[data-s="${id}"]`,nav);if(b)nav.append(b);});
   nav.querySelector('.sidebar-bottom')&&nav.append(nav.querySelector('.sidebar-bottom'));
   const poulpy=document.createElement('button');
   poulpy.type='button';poulpy.className='tab-poulpy';poulpy.setAttribute('aria-label','Discuter avec Poulpy, ton guide océan');
@@ -50,10 +47,8 @@
   }
   const LARGE={
     home:()=>({title:greet(),sub:today()}),
-    surf:()=>({title:'Jeu',sub:'Mini-jeu de surf hors connexion'}),
     trips:()=>({title:'Voyages',sub:'Tes envies, tes itinéraires'}),
-    challenges:()=>({title:'Défis',sub:'Quiz, défis et gestes pour l’océan'}),
-    profile:()=>({title:'Profil',sub:'Ton passeport et tes trophées'}),
+    /* Interface v2 : Profil, Jeu et Défis ont leur propre en-tête, sans sur-titre (index.html, ui-nav.css). */
     community:()=>({title:'Communauté',sub:'Les explorateurs racontent'})
   };
   function largeTitles(){
@@ -257,6 +252,8 @@
     if(typeof mapFull!=='undefined'&&mapFull&&typeof setMapFull==='function'){setMapFull(false,true);return true;}
     const card=$('#spotMapWrap .omap-card');if(body.dataset.screen==='spots'&&visible(card)&&!card.hidden){card.querySelector('.omap-card-close')?.click();return true;}
     const mw=$('#spotMapWrap.sheet-open');if(body.dataset.screen==='spots'&&mw){mw.querySelector('.omap-sheet-head')?.click();return true;}
+    /* Profil : le passeport complet (« Voir tout ») se referme, on reste sur le Profil (ui-nav.js). */
+    if(body.dataset.screen==='profile'&&window.OceanProfile?.isFullOpen?.()){window.OceanProfile.closeFull();return true;}
     return false;
   }
   /* Le retour du navigateur a déjà reculé dans l’historique : on referme la fenêtre puis on revient en avant,

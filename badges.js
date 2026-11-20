@@ -545,6 +545,8 @@
     queue.length=0;endCele(false);
     try{var qm=document.getElementById('quizModal');if(qm&&qm.classList.contains('open')&&typeof closeQuiz==='function')closeQuiz();}catch(e){}
     try{if(typeof go==='function'&&document.body.dataset.screen!=='profile')go('profile');}catch(e){}
+    /* Interface v2 : la vitrine est dans le passeport complet (ui-nav.js). */
+    try{if(window.OceanProfile)OceanProfile.openFull({quiet:true});}catch(e){}
     setTimeout(function(){
       var host=document.getElementById('badges');if(!host)return;
       var tiles=all.map(function(id){return host.querySelector('[data-tb="'+id+'"]');}).filter(Boolean);
