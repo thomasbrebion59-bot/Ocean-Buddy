@@ -22,6 +22,9 @@ const MAX_TEXT = 140;
 const EXCLUDED_PUBLISHERS = ['Guide des Landes', 'Portal de Prefeitura', 'Riviera Maya News'];
 const excluded = p => EXCLUDED_PUBLISHERS.some(x => String(p || '').toLowerCase().includes(x.toLowerCase()));
 
+/* Identifiant stable d’un fait : zone, puis titre sans accents (« fr-landes-hossegor--le-pastis-landais »). Sert à
+   associer une illustration propre au fait (data/culture-zones-illus.json : identifiant → fichier de assets/fiche/faits/). */
+const factId = (zone, title) => zone + '--' + String(title || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 48);
 /* Un fait : pourquoi il est refusé, ou null s’il est valable. */
 function factError(f) {
   if (!f || typeof f !== 'object') return 'fait illisible';
@@ -53,7 +56,8 @@ function merge(files) {
       for (const f of z.facts) {
         const err = factError(f);
         if (err) { dropped.push({ zone: id, title: f && f.title || '', why: err }); continue; }
-        facts.push({ kind: f.kind, title: f.title.trim(), text: f.text.trim(), months: Array.isArray(f.months) ? f.months : [],
+        /* Seule une fête a des mois (le mois d’une édition constatée) ; ailleurs ils ne sont pas affichés, donc pas gardés. */
+        facts.push({ kind: f.kind, title: f.title.trim(), text: f.text.trim(), months: f.kind === 'fete' && Array.isArray(f.months) ? f.months : [],
           source: { url: f.source.url, publisher: f.source.publisher.trim(), consulted: f.source.consulted } });
       }
       if (!facts.length) { notes.push(`${name} : zone ${id} sans fait valable, ignorée`); continue; }
@@ -67,10 +71,11 @@ function merge(files) {
   return { version: 1, updated, zones, spots, dropped, notes };
 }
 
-/* Forme compacte chargée par la fiche : faits en tableaux [genre, titre, texte, mois, adresse, éditeur, date]. */
-function compact(d) {
+/* Forme compacte chargée par la fiche : faits en tableaux [genre, titre, texte, mois, adresse, éditeur, date, illustration].
+   L’illustration est le nom d’un fichier de assets/fiche/faits/ (sans extension), ou '' : la fiche prend alors celle du genre. */
+function compact(d, illus = {}) {
   const zones = {};
-  for (const [id, z] of Object.entries(d.zones)) zones[id] = { n: z.name, r: z.region, c: z.country, f: z.facts.map(f => [f.kind, f.title, f.text, f.months, f.source.url, f.source.publisher, f.source.consulted]) };
+  for (const [id, z] of Object.entries(d.zones)) zones[id] = { n: z.name, r: z.region, c: z.country, f: z.facts.map(f => [f.kind, f.title, f.text, f.months, f.source.url, f.source.publisher, f.source.consulted, illus[factId(id, f.title)] || '']) };
   return { v: d.version, updated: d.updated, zones, spots: d.spots };
 }
 
@@ -98,7 +103,11 @@ function run() {
     data = JSON.parse(fs.readFileSync(kept, 'utf8'));
     console.log('Pas de dossier de collecte : data/culture-zones.json repris tel quel.');
   }
-  const body = '/* Généré par scripts/build-culture-zones.cjs depuis data/culture-zones.json. Ne pas modifier à la main. */\nwindow.OCEAN_CULTURE_ZONES=' + JSON.stringify(compact(data)) + ';\n';
+  /* Illustrations propres aux faits : seulement celles dont le fichier existe (une image refusée n’est pas listée). */
+  const illusFile = path.join(root, 'data/culture-zones-illus.json'), illus = {};
+  if (fs.existsSync(illusFile)) for (const [k, v] of Object.entries(JSON.parse(fs.readFileSync(illusFile, 'utf8'))))
+    if (/^[a-z0-9-]+$/.test(v) && fs.existsSync(path.join(root, 'assets/fiche/faits', v + '.webp'))) illus[k] = v; else console.log(`illustration absente ou invalide, ignorée : ${k} → ${v}`);
+  const body = '/* Généré par scripts/build-culture-zones.cjs depuis data/culture-zones.json. Ne pas modifier à la main. */\nwindow.OCEAN_CULTURE_ZONES=' + JSON.stringify(compact(data, illus)) + ';\n';
   const out = path.join(root, 'assets/data/culture-zones.js');
   fs.writeFileSync(out, body);
   const hash = crypto.createHash('sha256').update(body).digest('hex').slice(0, 12);
@@ -106,8 +115,9 @@ function run() {
   const next = code.replace(/assets\/data\/culture-zones\.js\?v=[0-9a-f]+/, 'assets/data/culture-zones.js?v=' + hash);
   if (next !== code) fs.writeFileSync(guide, next);
   const facts = Object.values(data.zones).reduce((a, z) => a + z.facts.length, 0);
+  console.log(`${Object.keys(illus).length} illustrations propres à un fait.`);
   console.log(`${Object.keys(data.zones).length} zones, ${Object.keys(data.spots).length} spots, ${facts} faits sourcés → data/culture-zones.json, assets/data/culture-zones.js (${(body.length / 1024).toFixed(1)} Ko)` + (data.dropped ? `, ${data.dropped.length} faits écartés` : ''));
 }
 
-module.exports = { KINDS, MAX_TEXT, EXCLUDED_PUBLISHERS, factError, merge, compact };
+module.exports = { KINDS, MAX_TEXT, EXCLUDED_PUBLISHERS, factError, factId, merge, compact };
 if (require.main === module) run();

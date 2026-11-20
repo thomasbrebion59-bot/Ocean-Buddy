@@ -8,7 +8,7 @@
   const DATA_URL_EN='assets/data/spot-guides.en.js?v=09dc78f14a87';
   const DATA_URL_ES='assets/data/spot-guides.es.js?v=1738a29c9a1b';
   /* Culture locale sourcée, par zone (scripts/build-culture-zones.cjs) : chargée à l’ouverture d’une fiche, jamais au démarrage. */
-  const ZONES_URL='assets/data/culture-zones.js?v=3aed88738c2e';
+  const ZONES_URL='assets/data/culture-zones.js?v=8a299adc2301';
   /* Hors français, le contenu éditorial (esprit du lieu, lieux, libellés d’hébergement) s’affiche en anglais.
      Il est marqué translate="no" pour que i18n.js ne le retraduise pas par morceaux ; les libellés d’interface restent traduisibles. */
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||'fr';
@@ -276,8 +276,10 @@
        carnet (mot du coin, à goûter), sans source par fait, ne s’affichent plus quand la zone donne le même genre. */
     const zone=zoneOf(s),has=k=>!!zone&&zone.f.some(f=>f[0]===k);
     if(zone)for(const f of zone.f){
-      const [kind,title,text,months,url,publisher]=f,when=Array.isArray(months)&&months.length?M.monthsLabel(months,LG()):'';
-      cards.push(`<li class="gl-card gl-fact" data-kind="${esc(kind)}" style="--i:${cards.length}">${ILLU(zoneIllu(kind,title))}<span class="fx-label">${ZONE_LABEL[kind]||''}</span><b${NT}>${esc(title)}</b><small${NT}>${esc(text)}</small>${when?`<small class="gl-when"><span>Souvent en</span> <span${NT}>${esc(when)}</span></small>`:''}<a class="gl-fact-src" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>Source :</span> <span${NT}>${esc(publisher)}</span></a></li>`);
+      /* Mois : seulement pour une fête (le mois d’une édition constatée, jamais une date). Illustration propre au fait
+         (assets/fiche/faits/) quand elle existe, sinon celle du genre. */
+      const [kind,title,text,months,url,publisher,,own]=f,when=kind==='fete'&&Array.isArray(months)&&months.length?M.monthsLabel(months,LG()):'';
+      cards.push(`<li class="gl-card gl-fact" data-kind="${esc(kind)}" style="--i:${cards.length}">${ILLU(own&&/^[a-z0-9-]+$/.test(own)?'faits/'+own:zoneIllu(kind,title))}<span class="fx-label">${ZONE_LABEL[kind]||''}</span><b${NT}>${esc(title)}</b><small${NT}>${esc(text)}</small>${when?`<small class="gl-when"><span>Souvent en</span> <span${NT}>${esc(when)}</span></small>`:''}<a class="gl-fact-src" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>Source :</span> <span${NT}>${esc(publisher)}</span></a></li>`);
     }
     const hello=has('mot')?'':c.hello?.[0]||'',helloMore=typeof c.hello?.[1]==='string'?c.hello[1]:'',food=has('gout')?'':c.food?.[0]||'',foodMore=typeof c.food?.[1]==='string'?c.food[1]:'';
     if(hello)cards.push(`<li class="gl-card" style="--i:${cards.length}">${ILLU('panneau')}<span class="fx-label">Le mot du coin</span><b${NT}>«&nbsp;${esc(hello)}&nbsp;»</b>${helloMore?`<small${NT}>${esc(helloMore)}</small>`:''}</li>`);

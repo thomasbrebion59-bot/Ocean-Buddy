@@ -37,7 +37,7 @@ test('fusion : faits invalides écartés et listés, « manques » retiré, zone
   assert.deepEqual(d.dropped.map(x => x.title), ['Sans source', 'Le pastis landais']);
   assert.deepEqual(d.spots, { s1: 'z1', s2: 'z1' }, 'un spot reste dans sa première zone');
   const c = B.compact(d);
-  assert.deepEqual(c.zones.z1.f[0], ['gout', 'Le pastis landais', 'Brioche à la fleur d’oranger.', [], 'https://fr.wikipedia.org/wiki/Pastis_landais', 'Wikipédia', '2026-11-20']);
+  assert.deepEqual(c.zones.z1.f[0], ['gout', 'Le pastis landais', 'Brioche à la fleur d’oranger.', [], 'https://fr.wikipedia.org/wiki/Pastis_landais', 'Wikipédia', '2026-11-20', '']);
   assert.deepEqual(c.spots, d.spots);
 });
 
@@ -59,7 +59,9 @@ test('donnée du dépôt : chaque fait a sa source, chaque spot de l’index exi
   /* Le fichier chargé par la fiche est la même donnée, compacte, et son empreinte est celle de l’URL de spot-guide.js. */
   const js = read('assets/data/culture-zones.js');
   const loaded = JSON.parse(js.slice(js.indexOf('window.OCEAN_CULTURE_ZONES=') + 27, js.lastIndexOf(';')));
-  assert.deepEqual(loaded, B.compact(d));
+  const illusMap = JSON.parse(read('data/culture-zones-illus.json')), illus = {};
+  for (const [k, v] of Object.entries(illusMap)) if (fs.existsSync(path.join(__dirname, '..', 'assets/fiche/faits', v + '.webp'))) illus[k] = v;
+  assert.deepEqual(loaded, B.compact(d, illus));
   const hash = require('crypto').createHash('sha256').update(js).digest('hex').slice(0, 12);
   assert.ok(read('spot-guide.js').includes(`const ZONES_URL='assets/data/culture-zones.js?v=${hash}';`), 'empreinte à jour : relancer scripts/build-culture-zones.cjs');
 });
@@ -87,4 +89,28 @@ test('fiche : un fait par carte, sa source d’un toucher et dans « Sources et 
   for (const k of ['table', 'fete', 'coutume', 'marche', 'cabane', 'panneau', 'soleil']) assert.ok(fs.existsSync(path.join(__dirname, '..', 'assets/fiche', k + '.webp')), k);
   for (const k of ['La fête', 'La coutume', 'Souvent en', 'consultée le', 'À voir'])
     for (const l of ['en', 'es']) { const d = JSON.parse(read(`locales/translations/${l}.json`)); assert.ok(d[k] && d[k] !== k, `${l} : ${k}`); }
+});
+
+test('mois : seulement sur une fête (le mois d’une édition constatée), jamais affichés pour un autre genre', () => {
+  const d = JSON.parse(read('data/culture-zones.json'));
+  for (const [id, z] of Object.entries(d.zones)) for (const f of z.facts)
+    if (f.kind !== 'fete') assert.deepEqual(f.months, [], `${id} « ${f.title} » (${f.kind}) : pas de mois`);
+  const merged = B.merge([{ name: 't', json: { zones: { z: { name: 'Z', spots: ['s'], facts: [
+    { kind: 'lieu', title: 'Un lieu', text: 'Texte.', months: [10], source: { url: 'https://a.b/c', publisher: 'P', consulted: '2026-11-20' } },
+    { kind: 'fete', title: 'Une fête', text: 'Texte.', months: [7], source: { url: 'https://a.b/c', publisher: 'P', consulted: '2026-11-20' } }] } } } }]);
+  assert.deepEqual(merged.zones.z.facts.map(f => f.months), [[], [7]]);
+  assert.match(read('spot-guide.js'), /when=kind==='fete'&&Array\.isArray\(months\)&&months\.length\?M\.monthsLabel\(months,LG\(\)\):'';/);
+});
+
+test('illustrations propres aux faits : identifiant stable, fichier présent, sinon l’illustration du genre', () => {
+  assert.equal(B.factId('fr-landes-hossegor', 'Le pastis landais'), 'fr-landes-hossegor--le-pastis-landais');
+  assert.equal(B.factId('gr-zakynthos-navagio', 'La fête de saint Denys'), 'gr-zakynthos-navagio--la-fete-de-saint-denys');
+  const d = JSON.parse(read('data/culture-zones.json')), ids = new Set();
+  for (const [id, z] of Object.entries(d.zones)) for (const f of z.facts) ids.add(B.factId(id, f.title));
+  for (const [k, v] of Object.entries(JSON.parse(read('data/culture-zones-illus.json')))) {
+    assert.ok(ids.has(k), 'fait connu : ' + k);
+    assert.match(v, /^[a-z0-9-]+$/);
+    assert.ok(fs.existsSync(path.join(__dirname, '..', 'assets/fiche/faits', v + '.webp')), 'fichier : ' + v);
+  }
+  assert.match(read('spot-guide.js'), /ILLU\(own&&\/\^\[a-z0-9-\]\+\$\/\.test\(own\)\?'faits\/'\+own:zoneIllu\(kind,title\)\)/);
 });
