@@ -107,7 +107,10 @@ test('Défis : le Quiz juste sous l’en-tête, le bandeau écolo avant les déf
 });
 
 test('états vides : favoris vides avec une action ; textes nouveaux traduits en anglais et en espagnol', () => {
-  assert.match(read('app.js'), /favOnly&&!favs\.size&&!q\?'<button onclick="toggleFavFilter\(\)">Voir tous les spots<\/button>'/);
+  /* Interface v2 : la liste d’Explorer et son état vide sont dans explore-list.js (bouton relié à toggleFavFilter). */
+  const list = read('explore-list.js');
+  assert.match(list, /: none \? '<button type="button" class="ui-btn is-soft" data-exl="favs-off">Voir tous les spots<\/button>'/);
+  assert.match(list, /if \(t\.closest\('\[data-exl=favs-off\]'\)\) \{ if \(typeof toggleFavFilter === 'function'\) toggleFavFilter\(\); \}/);
   const en = JSON.parse(read('locales/translations/en.json')), es = JSON.parse(read('locales/translations/es.json')), src = JSON.parse(read('locales/source/fr.json'));
   for (const k of ['Mes favoris', 'Reprendre', 'Mon voyage', 'Aucun pour l’instant', 'Accès rapide', 'En voyage', 'Plus d’idées de départ', 'Ton espace', 'Ta semaine, ton prochain départ et tes spots', 'Mon profil', 'Affichage et son', 'Mes données', 'À propos', 'Réglages', 'Prénom, langue, animations, mes données', 'Ouvrir', 'Voir tous les spots', 'Reprendre : {1}']) {
     assert.ok(src.includes(k), 'source FR : ' + k);

@@ -1,2 +1,209 @@
 /* @creme-tokens */
-/* Interface v2, écran « listes » (voir ~/Projects/Ocean-Buddy-orga-docs/interface-v2/BRIEF.md). Composants communs : ui-v2.css. */
+/* Interface v2, écrans « listes » : Explorer (la liste d'abord) et Voyages. Maquettes validées le 19 novembre 2026 :
+   ~/Projects/Ocean-Buddy-orga-docs/interface-v2/maquette-3-explorer.png et maquette-4-voyages.png. Composants communs : ui-v2.css.
+   Explorer : explore-list.js (classes exl-*) ; Voyages : trips.js (classes tv-*). Couleurs du thème actif seulement. */
+
+/* ================= Explorer : la liste d'abord ================= */
+/* Les anciens blocs de l'écran (fil d'étapes, affiche, grille des continents, barre de recherche, puces, légende) restent dans
+   la page : navigation.js et les filtres les lisent encore. Ils ne s'affichent plus : l'en-tête v2 les remplace. */
+.ocean-v2 #spots>:is(.explore-path,#spotsTop,#worldPick,#wBack,#spotTools,#sportFilters),
+.ocean-v2 #listView>:is(#filters,#sdPlanChip,#spotResultCount,#spotDangerLegend){display:none!important}
+/* La recherche est dans l'écran : le bouton rond de la barre du haut ferait doublon sous le sélecteur Liste / Carte. */
+/* La barre du haut (transparente sur téléphone) passe au-dessus du titre : elle laisse passer les touchers vers le sélecteur. */
+@media(max-width:959px){
+  body[data-screen=spots] .app-chrome .mobile-search{display:none!important}
+  body[data-screen=spots] .app-chrome{pointer-events:none}
+  body[data-screen=spots] .app-chrome>*{pointer-events:auto}
+  body[data-screen=spots] .app-chrome .chrome-title{pointer-events:none}
+}
+
+.ocean-v2 .exl-head{display:grid;gap:12px;margin:0 0 2px}
+.ocean-v2 .exl-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:52px;margin:0 2px}
+.ocean-v2 .exl-title{margin:0;font:800 34px/1.05 var(--body);letter-spacing:-.8px;color:var(--t-ink);text-transform:none}
+@media(max-width:959px){body.has-app-back .exl-bar{padding-left:46px}}
+.exl-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+
+/* Sélecteur Liste / Carte : deux segments, le mode actif en plein. */
+.ocean-v2 .exl-seg{display:inline-grid;grid-auto-flow:column;grid-auto-columns:1fr;flex:none;padding:3px;border-radius:999px;background:var(--t-card);box-shadow:inset 0 0 0 1px var(--ui-hair)}
+.ocean-v2 .exl-seg button{min-width:70px;height:38px;padding:0 16px;border:0;border-radius:999px;background:none;color:var(--t-ink);font:600 15px/1 var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .18s ease,color .18s ease}
+.ocean-v2 .exl-seg button[aria-pressed=true]{background:var(--t-main);color:var(--t-on-main);font-weight:700}
+
+/* Recherche : « Spot, pays, île ». 16 px dans le champ : iOS ne zoome pas. */
+.ocean-v2 .exl-search{display:flex;align-items:center;gap:10px;height:48px;margin:0;padding:0 6px 0 16px;border-radius:999px;background:var(--t-card);box-shadow:inset 0 0 0 1px var(--ui-hair);color:var(--t-ink);cursor:text}
+.ocean-v2 .exl-search:focus-within{box-shadow:inset 0 0 0 2px var(--t-main)}
+.ocean-v2 .exl-search>svg{flex:none;width:20px;height:20px}
+.ocean-v2 .exl-search input{flex:1;min-width:0;width:auto;height:46px;margin:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;color:var(--t-ink);font:500 16px/1.2 var(--body);outline:none;-webkit-appearance:none;appearance:none}
+.ocean-v2 .exl-search input::placeholder{color:var(--ui-soft);opacity:1}
+.ocean-v2 .exl-search input::-webkit-search-cancel-button{display:none}
+.ocean-v2 .exl-search button{display:grid;place-items:center;flex:none;width:36px;height:36px;padding:0;border:0;border-radius:50%;background:var(--ui-wash);color:var(--t-ink);cursor:pointer}
+.ocean-v2 .exl-search button[hidden]{display:none}
+.ocean-v2 .exl-search button svg{width:16px;height:16px}
+
+/* Filtres en pastilles : sport, niveau, mois ; le bouton rond des autres filtres reste au bord. */
+.ocean-v2 .exl-pills{display:flex;align-items:center;gap:6px;min-width:0}
+.ocean-v2 .exl-scroll{display:flex;flex:1;gap:6px;min-width:0;margin:-4px 0 -4px -16px;padding:4px 12px 4px 16px;overflow-x:auto;scrollbar-width:none;-webkit-mask-image:linear-gradient(90deg,#000 calc(100% - 12px),transparent);mask-image:linear-gradient(90deg,#000 calc(100% - 12px),transparent)}
+.ocean-v2 .exl-scroll::-webkit-scrollbar{display:none}
+.ocean-v2 .exl-pill{display:inline-flex;align-items:center;gap:6px;flex:none;height:40px;padding:0 13px 0 11px;border:0;border-radius:999px;background:var(--ui-wash);color:var(--t-ink);font:700 14px/1 var(--body);white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1),background-color .18s ease,color .18s ease}
+.ocean-v2 .exl-pill.is-on{background:var(--t-main);color:var(--t-on-main)}
+.ocean-v2 .exl-pill b{font-weight:inherit}
+.ocean-v2 .exl-pill .ui-ic{width:18px;height:18px;color:inherit}
+.ocean-v2 .exl-pill .exl-mark{width:19px;height:19px}
+.ocean-v2 .exl-pill .exl-x{width:14px;height:14px;margin-left:1px;opacity:.85}
+.ocean-v2 .ui-ic.exl-bars{stroke-width:3}
+.exl-mark{display:block;flex:none;width:20px;height:20px;background:currentColor;-webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat}
+.ocean-v2 .exl-more{position:relative;display:grid;place-items:center;flex:none;width:40px;height:40px;padding:0;border:0;border-radius:50%;background:none;box-shadow:inset 0 0 0 1.5px var(--t-ink);color:var(--t-ink);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1)}
+.ocean-v2 .exl-more .ui-ic{width:20px;height:20px;color:inherit}
+.ocean-v2 .exl-more.is-on{background:var(--t-main);box-shadow:none;color:var(--t-on-main)}
+.ocean-v2 .exl-more>i{position:absolute;top:-4px;right:-4px;min-width:19px;height:19px;padding:0 5px;box-sizing:border-box;border-radius:999px;background:var(--t-sun);color:var(--t-ink);font:800 12px/19px var(--body);font-style:normal;text-align:center}
+.ocean-v2 :is(.exl-pill,.exl-more):active{transform:scale(.97)}
+.ocean-v2 :is(.exl-pill,.exl-more,.exl-seg button,.exl-search button):focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
+
+/* Nombre de résultats, en petit ; à droite, le sens des points de danger (une estimation, jamais cachée). */
+.ocean-v2 .exl-meta{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:20px;margin:2px 2px 10px}
+.ocean-v2 .exl-count{margin:0;font:500 14.5px/1.2 var(--body);color:var(--ui-soft);font-variant-numeric:tabular-nums}
+.ocean-v2 .exl-legend{display:inline-flex;align-items:center;gap:6px;font:500 13px/1 var(--body);color:var(--ui-soft)}
+
+/* La liste : chaque ligne est une carte légère de hauteur fixe, posée par transform (rendu virtualisé : la liste a tout de
+   suite sa hauteur finale, seules les lignes proches de l'écran existent). --exl-row, --exl-gap et --exl-min sont lus par
+   explore-list.js ; --exl-cols est écrit par lui (une colonne tant qu'une ligne n'a pas --exl-min de large). */
+.ocean-v2 #spotList.exl-host{display:block;max-width:none;margin:0 -8px;padding:0;gap:0}
+.ocean-v2 .exl-list{position:relative;--exl-row:132px;--exl-gap:10px;--exl-min:400px;--exl-cols:1;--exl-photo:108px;contain:layout style}
+@media(min-width:400px){.ocean-v2 .exl-list{--exl-row:140px;--exl-photo:138px}}
+@media(min-width:960px){.ocean-v2 #spotList.exl-host{margin:0}.ocean-v2 .exl-list{--exl-row:132px;--exl-gap:14px;--exl-photo:132px}.ocean-v2 .exl-head{margin-top:14px}.ocean-v2 .exl-search{max-width:560px}}
+.ocean-v2 .exl-item{position:absolute;top:0;left:0;width:calc((100% - (var(--exl-cols) - 1) * var(--exl-gap)) / var(--exl-cols));height:var(--exl-row);contain:layout style}
+.ocean-v2 .exl-row{grid-template-columns:var(--exl-photo) minmax(0,1fr);column-gap:14px;width:100%;height:100%;min-height:0;box-sizing:border-box;padding:8px 12px 8px 8px;border-radius:var(--ui-radius);background:var(--t-card);box-shadow:0 10px 22px -20px color-mix(in srgb,var(--t-shadow) 60%,transparent);overflow:hidden}
+.ocean-v2 .exl-row>img,.ocean-v2 .exl-row>.ui-ph{display:block;width:100%;height:100%;border-radius:14px}
+.ocean-v2 .exl-row>.exl-ph{display:grid;place-items:center;color:color-mix(in srgb,var(--t-ink) 38%,transparent)}
+.ocean-v2 .exl-row>.exl-ph .exl-mark{width:38px;height:38px}
+.ocean-v2 .exl-row>div{gap:0;align-content:center}
+.ocean-v2 .exl-row .ui-spot-name{font:800 18px/1.2 var(--body);letter-spacing:-.01em}
+.ocean-v2 .exl-row .ui-spot-sub{display:block;margin:2px 0 0;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ocean-v2 .exl-part::after{content:", "}
+.ocean-v2 .exl-dist{margin-inline-start:8px;font-weight:700;color:var(--t-ink);font-variant-numeric:tabular-nums}
+.ocean-v2 .exl-warn{margin-inline-start:8px;padding:2px 8px;border-radius:999px;background:color-mix(in srgb,var(--t-danger) 13%,var(--t-card));color:var(--t-ink);font-weight:700;font-size:12.5px}
+/* Conditions et verdict : la place est réservée (deux lignes), le contenu arrive en fondu. En attente, deux traits clairs
+   immobiles ; sans donnée, la place reste et la ligne ne change pas de hauteur. */
+.ocean-v2 .exl-live{display:grid;align-content:start;gap:8px;height:56px;margin-top:9px;overflow:hidden}
+.ocean-v2 .exl-live[data-state=wait]::before,.ocean-v2 .exl-live[data-state=wait]::after{content:"";display:block;border-radius:999px;background:color-mix(in srgb,var(--t-ink) 8%,transparent)}
+.ocean-v2 .exl-live[data-state=wait]::before{width:min(100%,210px);height:14px;margin:3px 0}
+.ocean-v2 .exl-live[data-state=wait]::after{width:104px;height:26px}
+.ocean-v2 .exl-row .ui-cond{flex-wrap:nowrap;gap:0 12px;min-height:20px;overflow:hidden}
+.ocean-v2 .exl-row .ui-verdict{flex-wrap:nowrap;min-height:26px;overflow:hidden;white-space:nowrap}
+.ocean-v2 .exl-row:focus-visible{outline-offset:-2px}
+@media(max-width:399px){
+  .ocean-v2 .exl-row{column-gap:12px;padding-right:10px}
+  .ocean-v2 .exl-row .ui-spot-name{font-size:17px}
+  .ocean-v2 .exl-row .ui-cond{gap:0 9px;font-size:14px}
+  .ocean-v2 .exl-live{margin-top:7px}
+}
+/* Liste vide : une carte courte avec Poulpy et un seul bouton. */
+.ocean-v2 .exl-empty{display:grid;justify-items:center;gap:12px;margin:4px 8px 0;padding:26px 18px;border-radius:var(--ui-radius);background:var(--t-card);text-align:center}
+.ocean-v2 .exl-empty[hidden]{display:none}
+.ocean-v2 .exl-empty img{width:96px;height:96px;border-radius:50%;object-fit:cover}
+.ocean-v2 .exl-empty .ui-link{margin:0}
+
+/* Feuilles des filtres (même gabarit que « Quand ? » : spot-data.css, .sd-sheet). */
+.exl-sheet .exl-opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:14px 0 0}
+.exl-sheet .exl-opt{display:flex;align-items:center;gap:10px;min-height:52px;min-width:0;padding:0 14px;border:0;border-radius:16px;background:var(--ui-wash,var(--t-tint));color:var(--t-ink);font:700 15px/1.15 var(--body);text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.exl-sheet .exl-opt b{flex:1;min-width:0;font-weight:inherit;overflow:hidden;text-overflow:ellipsis}
+.exl-sheet .exl-opt small{flex:none;font:600 13px/1 var(--body);opacity:.7;font-variant-numeric:tabular-nums}
+.exl-sheet .exl-opt .ui-ic{flex:none;width:20px;height:20px;color:inherit}
+.exl-sheet .exl-opt[aria-pressed=true]{background:var(--t-main);color:var(--t-on-main)}
+.exl-sheet .exl-opt[disabled]{opacity:.4;cursor:default}
+.exl-sheet .ui-ic.exl-bars{stroke-width:3}
+.exl-sheet h4.exl-sub{margin:20px 0 10px;font:700 15px/1.2 var(--body);letter-spacing:0;text-transform:none;color:var(--t-ink)}
+.exl-sheet .exl-chips{display:flex;flex-wrap:wrap;gap:8px}
+.exl-sheet .exl-chips button{min-height:40px;padding:0 14px;border:0;border-radius:999px;background:var(--ui-wash,var(--t-tint));color:var(--t-ink);font:700 14px/1 var(--body);cursor:pointer}
+.exl-sheet .exl-chips button[aria-pressed=true]{background:var(--t-main);color:var(--t-on-main)}
+.exl-sheet :is(.exl-opt,.exl-chips button):focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+.exl-sheet .exl-foot .sd-count b{display:inline;margin-inline-end:6px}
+
+/* Mode Carte (planète en plein écran, inchangée) : le retour à la liste est écrit en clair dans la recherche flottante. */
+.ocean-v2 .ex-search [data-ex=list]{display:inline-flex;align-items:center;gap:6px;width:auto;padding:0 12px 0 10px;border-radius:999px;font:700 13px/1 var(--body)}
+
+@media (prefers-reduced-motion:reduce){.ocean-v2 :is(.exl-pill,.exl-more,.exl-seg button){transition:none}.ocean-v2 :is(.exl-pill,.exl-more):active{transform:none}}
+.ocean-v2.reduce-motion :is(.exl-pill,.exl-more,.exl-seg button){transition:none}
+
+/* ================= Voyages ================= */
+/* Plus de sur-titre en capitales au-dessus du grand titre. */
+.ocean-v2 #trips>.as-large p{display:none}
+.ocean-v2 .tv-h1{display:none}
+@media(min-width:960px){.ocean-v2 .tv-h1{display:block;margin:22px 0 20px;font:800 34px/1.05 var(--body);letter-spacing:-.8px;color:var(--t-ink);text-transform:none}}
+.ocean-v2 .tv{display:block}
+.ocean-v2 .tv .ui-head{margin:6px 2px 12px}
+.ocean-v2 .tv .tv-ideas-head{margin-top:var(--ui-gap)}
+.ocean-v2 .tv .tv-ideas-head .ui-title{font-size:20px}
+
+/* Une carte légère par voyage : photo de la première étape, nom, dates, étapes, liste « Avant de partir », et à droite les
+   jours avant le départ en grand chiffre. Toute la carte ouvre le voyage. */
+.ocean-v2 .tv-list{display:grid;gap:12px;margin:0 -8px}
+.ocean-v2 .tv-card{min-width:0;border-radius:var(--ui-radius);background:var(--t-card);box-shadow:0 10px 22px -20px color-mix(in srgb,var(--t-shadow) 60%,transparent);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1)}
+.ocean-v2 .tv-card:active{transform:scale(.985)}
+.ocean-v2 .tv-open{display:grid;grid-template-columns:clamp(92px,27vw,124px) minmax(0,1fr) auto;column-gap:14px;align-items:center;width:100%;margin:0;padding:10px 14px 10px 10px;border:0;border-radius:var(--ui-radius);background:none;color:var(--t-ink);font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ocean-v2 .tv-open:focus-visible{outline:2px solid var(--t-main);outline-offset:-2px}
+.ocean-v2 .tv-photo{display:block;width:100%;aspect-ratio:1/1;border-radius:14px;object-fit:cover;background:var(--ui-hair)}
+.ocean-v2 .tv-body{display:grid;gap:6px;min-width:0}
+.ocean-v2 .tv-name{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;font:800 18px/1.2 var(--body);letter-spacing:-.01em;color:var(--t-ink);overflow:hidden;overflow-wrap:anywhere}
+.ocean-v2 .tv-dates{margin-top:-3px;font:400 14px/1.2 var(--body);color:var(--ui-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ocean-v2 .tv-line{display:flex;align-items:center;gap:9px;min-width:0;font:600 14.5px/1.2 var(--body);color:var(--t-ink)}
+.ocean-v2 .tv-line svg{flex:none;width:19px;height:19px}
+.ocean-v2 .tv-bar{position:relative;display:block;flex:1;max-width:124px;height:8px;border-radius:999px;background:color-mix(in srgb,var(--t-ink) 12%,transparent);overflow:hidden;-webkit-mask-image:repeating-linear-gradient(90deg,#000 0 calc(100% / var(--n) - 2px),transparent calc(100% / var(--n) - 2px) calc(100% / var(--n)));mask-image:repeating-linear-gradient(90deg,#000 0 calc(100% / var(--n) - 2px),transparent calc(100% / var(--n) - 2px) calc(100% / var(--n)))}
+.ocean-v2 .tv-bar>i{position:absolute;inset:0;background:var(--t-main);transform:scaleX(var(--p));transform-origin:0 50%}
+[dir=rtl] .ocean-v2 .tv-bar>i{transform-origin:100% 50%}
+.ocean-v2 .tv-frac{flex:none;font:600 14px/1 var(--body);color:var(--ui-soft);font-variant-numeric:tabular-nums}
+.ocean-v2 .tv-count{display:grid;justify-items:center;align-content:center;gap:2px;min-width:54px;text-align:center}
+.ocean-v2 .tv-count .ui-num{font-size:40px;min-width:1.2ch}
+.ocean-v2 .tv-count.is-open{color:color-mix(in srgb,var(--t-ink) 30%,transparent)}
+.ocean-v2 .tv-count.is-open svg{width:30px;height:30px}
+@media(max-width:399px){.ocean-v2 .tv-open{column-gap:12px;padding-right:12px}.ocean-v2 .tv-name{font-size:17px}.ocean-v2 .tv-count{min-width:48px}.ocean-v2 .tv-count .ui-num{font-size:36px}}
+
+/* Étapes du prochain voyage : ronds photo reliés par des points. */
+.ocean-v2 .tv-steps{display:flex;align-items:flex-start;justify-content:center;margin:0;padding:6px 12px 16px;list-style:none;--tv-round:clamp(56px,17vw,76px)}
+.ocean-v2 .tv-step{display:grid;justify-items:center;gap:7px;flex:none;width:calc(var(--tv-round) + 14px);min-width:0}
+.ocean-v2 .tv-step img,.ocean-v2 .tv-step .tv-ph{display:grid;place-items:center;width:var(--tv-round);height:var(--tv-round);border-radius:50%;object-fit:cover;background:var(--ui-hair)}
+.ocean-v2 .tv-step .tv-ph{box-sizing:border-box;background:none;border:2px dashed color-mix(in srgb,var(--t-ink) 28%,transparent);color:color-mix(in srgb,var(--t-ink) 45%,transparent);font:800 17px/1 var(--body)}
+.ocean-v2 .tv-step .tv-ph svg{width:24px;height:24px}
+.ocean-v2 .tv-step b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;max-width:100%;font:700 13px/1.2 var(--body);color:var(--t-ink);text-align:center;overflow:hidden;overflow-wrap:anywhere}
+.ocean-v2 .tv-link{flex:1;min-width:10px;max-width:60px;height:0;margin-top:calc(var(--tv-round) / 2 - 2px);border-top:3px dotted color-mix(in srgb,var(--t-ink) 32%,transparent)}
+
+/* « Nouveau voyage » : pleine largeur, juste sous les voyages. */
+.ocean-v2 .tv-new{width:100%;min-height:52px;margin-top:14px;border-radius:var(--ui-radius);font-size:17px}
+.ocean-v2 .tv-new svg{width:22px;height:22px}
+
+/* Idées, en petit : trois vignettes sur une rangée, plus petites que les cartes de voyage. */
+.ocean-v2 .tv-ideas{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.ocean-v2 .tv-idea{display:grid;gap:8px;min-width:0;margin:0;padding:0;border:0;background:none;color:var(--t-ink);font:inherit;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1)}
+.ocean-v2 .tv-idea:active{transform:scale(.97)}
+.ocean-v2 .tv-idea img{display:block;width:100%;aspect-ratio:6/5;border-radius:16px;object-fit:cover;background:var(--ui-hair)}
+.ocean-v2 .tv-idea b{font:700 14px/1.2 var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ocean-v2 .tv-idea:focus-visible{outline:2px solid var(--t-main);outline-offset:3px;border-radius:16px}
+
+/* Sans voyage : une carte qui invite, « Nouveau voyage » en premier. */
+.ocean-v2 .tv-empty{display:grid;justify-items:center;gap:14px;margin:0 -8px;padding:10px 10px 16px;border-radius:var(--ui-radius);background:var(--t-card);box-shadow:0 10px 22px -20px color-mix(in srgb,var(--t-shadow) 60%,transparent);text-align:center}
+.ocean-v2 .tv-empty-art{display:block;width:100%;height:auto;aspect-ratio:16/9;border-radius:14px;object-fit:cover;object-position:50% 38%;background:var(--ui-hair)}
+.ocean-v2 .tv-empty .tv-steps{padding:2px 0 0;--tv-round:48px}
+.ocean-v2 .tv-empty .tv-step{width:var(--tv-round)}
+.ocean-v2 .tv-empty .tv-step .tv-ph svg{width:20px;height:20px}
+.ocean-v2 .tv-empty .tv-link{flex:none;width:34px}
+.ocean-v2 .tv-empty .tv-new{width:calc(100% - 12px)}
+.ocean-v2 .tv-empty .ui-title{font-size:20px}
+.ocean-v2 .tv-empty .tv-new{margin-top:2px}
+.ocean-v2 .tv .trip-archives{margin-top:var(--ui-gap)}
+
+@media(min-width:960px){
+  .ocean-v2 .tv{max-width:920px}
+  .ocean-v2 .tv-list{grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;margin:0}
+  .ocean-v2 .tv-open{grid-template-columns:124px minmax(0,1fr) auto}
+  .ocean-v2 .tv-steps{--tv-round:72px}
+  .ocean-v2 .tv-new{width:auto;min-width:320px}
+  .ocean-v2 .tv-ideas{max-width:480px;gap:14px}
+  .ocean-v2 .tv-empty{max-width:520px;margin:0}
+}
+@media (prefers-reduced-motion:reduce){.ocean-v2 :is(.tv-card,.tv-idea){transition:none}.ocean-v2 :is(.tv-card,.tv-idea):active{transform:none}}
+.ocean-v2.reduce-motion :is(.tv-card,.tv-idea){transition:none}
+
+/* Voyage ouvert : plus de sur-titre en capitales (la destination garde sa pastille, en casse normale). */
+.ocean-v2 #trips .trip-banner .trip-pill{text-transform:none;letter-spacing:0}
+.ocean-v2 #trips .trip-switch .trip-switch-new{display:inline-flex;align-items:center;gap:6px}
+.ocean-v2 #trips .trip-switch .trip-switch-new svg{width:16px;height:16px}
+@media(min-width:960px){.ocean-v2 #trips.has-trip .trip-switch{margin-top:18px}}
