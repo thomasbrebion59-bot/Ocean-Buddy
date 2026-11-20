@@ -1104,35 +1104,142 @@ function showHomeCat(cat){
    son propre onglet. Un ancien nom (« preserver ») mène à l'onglet qui porte ce contenu aujourd'hui. */
 const DETAIL_TABS=['meteo','previsions','securite','infos','saisons','activites','faune'];
 function detailTabOf(cat){return cat==='preserver'?'faune':DETAIL_TABS.indexOf(cat)>=0?cat:'meteo';}
-function showDetailCat(cat,shouldScroll=true){
-  var tab=detailTabOf(cat),panel=tab==='previsions'?'meteo':tab;
+/* Parcours en chapitres (20 nov. 2026, proposition approuvée par le fondateur) : la fiche n'a plus sept onglets, elle se
+   lit d'un seul défilement. Les panneaux .dcat gardent leurs nœuds et leurs id (les modules y écrivent toujours) ; ils
+   sont tous affichés, dans l'ordre posé par fiche.css. La rangée #dTabs devient la barre de progression collée en haut.
+   showDetailCat(cat) reste le point d'entrée de tous les appelants : il mène au chapitre. « previsions » ouvre les 7 jours
+   et l'heure par heure dans le chapitre Conditions ; « preserver » mène aux gestes, sous la faune. */
+const DETAIL_CHAPTERS=['meteo','infos','faune','securite','saisons','activites'];
+const DETAIL_CHAPTER_TITLES={meteo:'Conditions',infos:'Le coin',faune:'Nature',securite:'Sécurité',saisons:'Saisons',activites:'Préparer'};
+var detailSpyLock=0;
+function detailChapterOf(cat){var t=detailTabOf(cat);return t==='previsions'?'meteo':t;}
+function detailReduced(){return document.body.classList.contains('reduce-motion')||!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);}
+/* Tous les panneaux affichés, chacun avec son titre de chapitre (posé une fois, traduit par i18n.js comme tout texte). */
+function detailChaptersMount(){
   document.querySelectorAll('#detail .dcat').forEach(function(d){
-    var c=d.dataset.cat,on=c===panel||(tab==='faune'&&c==='preserver');
-    d.style.display=on?'':'none';
-    if(c==='meteo')d.dataset.view=tab==='previsions'?'forecast':'now';
+    var c=d.dataset.cat;
+    if(d.style.display==='none')d.style.display='';
+    if(c==='meteo'&&d.dataset.view!=='now')d.dataset.view='now';
+    /* Le titre est posé devant son panneau (même rang d'ordre, fiche.css), pas dedans : les modules réécrivent ou
+       réordonnent le contenu des panneaux, jamais ce qui les entoure. */
+    if(DETAIL_CHAPTER_TITLES[c]&&!document.getElementById('dChapter-'+c)){
+      var h=document.createElement('h2');h.className='fx-chapter';h.id='dChapter-'+c;h.dataset.chapter=c;h.textContent=DETAIL_CHAPTER_TITLES[c];d.before(h);
+    }
   });
-  var detail=document.getElementById('detail');if(detail)detail.dataset.tab=tab;
-  /* sept onglets ne tiennent pas dans 390 px : on amène l'onglet actif
-     dans le champ de vision au lieu de le laisser hors écran. */
-  setTimeout(function(){
-    var bar=document.getElementById('dTabs');
-    var act=bar&&bar.querySelector('.dtab.active');
-    if(bar&&act) bar.scrollTo({left:Math.max(0,act.offsetLeft-14),behavior:'smooth'});
-  },0);
-  document.querySelectorAll('#dTabs .dtab').forEach(function(b){var on=b.dataset.cat===tab;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'true':'false');});
-  var tabs=document.getElementById('dTabs');
-  if(tabs&&shouldScroll){
-    var anchor=document.getElementById('detailTabsAnchor');
-    if(!anchor){anchor=document.createElement('div');anchor.id='detailTabsAnchor';tabs.before(anchor);}
-    var wrap=document.getElementById('screenWrap');
-    /* Un onglet touché en haut de fiche ne fait pas défiler la page (la photo reste en vue). La page ne remonte que si la
-       rangée était déjà collée en haut, donc si on lisait plus bas : le nouvel onglet se lit depuis son début. */
-    var target=wrap.scrollTop+anchor.getBoundingClientRect().top-wrap.getBoundingClientRect().top;
-    if(target<wrap.scrollTop-1)wrap.scrollTo({top:target,behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'});
-  }
-  /* Ancien raccourci « Préserver » : jusqu'aux gestes, sous la faune. */
-  if(cat==='preserver'){var pres=document.getElementById('dPreserve');if(pres)requestAnimationFrame(function(){try{pres.scrollIntoView({block:'start',behavior:document.body.classList.contains('reduce-motion')?'auto':'smooth'});}catch(e){}});}
 }
+function detailMarkChapter(chap){
+  var detail=document.getElementById('detail');if(!detail)return;
+  if(detail.dataset.tab===chap&&document.querySelector('#dTabs .dtab.active')?.dataset.cat===chap)return;
+  detail.dataset.tab=chap;
+  var bar=document.getElementById('dTabs');
+  document.querySelectorAll('#dTabs .dtab').forEach(function(b){var on=b.dataset.cat===chap;b.classList.toggle('active',on);b.setAttribute('aria-current',on?'true':'false');});
+  /* six étiquettes ne tiennent pas toujours dans 375 px : l'étiquette du chapitre lu reste dans le champ. */
+  var act=bar&&bar.querySelector('.dtab.active');
+  if(bar&&act&&bar.scrollTo)bar.scrollTo({left:Math.max(0,act.offsetLeft-14),behavior:detailReduced()?'auto':'smooth'});
+}
+/* Hauteur prise en haut de la zone qui défile par la barre collée (elle se mesure depuis le bord intérieur de la zone). */
+function detailBarOffset(){
+  var wrap=document.getElementById('screenWrap'),bar=document.getElementById('dTabs');if(!wrap||!bar)return 0;
+  return (parseFloat(getComputedStyle(wrap).paddingTop)||0)+(parseFloat(getComputedStyle(bar).top)||0)+bar.offsetHeight;
+}
+function detailScrollTo(el){
+  var wrap=document.getElementById('screenWrap');if(!wrap||!el)return;
+  var top=wrap.scrollTop+el.getBoundingClientRect().top-wrap.getBoundingClientRect().top-detailBarOffset()-10;
+  detailSpyLock=Date.now()+900;
+  wrap.scrollTo({top:Math.max(0,top),behavior:detailReduced()?'auto':'smooth'});
+  /* Des images arrivées pendant le défilement peuvent déplacer le chapitre : un seul recalage, à l'arrivée. */
+  setTimeout(function(){
+    if(!el.isConnected||document.body.dataset.screen!=='detail')return;
+    var off=el.getBoundingClientRect().top-wrap.getBoundingClientRect().top-detailBarOffset()-10;
+    if(Math.abs(off)>8)wrap.scrollTo({top:Math.max(0,wrap.scrollTop+off),behavior:'auto'});
+  },700);
+}
+function showDetailCat(cat,shouldScroll=true){
+  var tab=detailTabOf(cat),chap=detailChapterOf(cat);
+  detailChaptersMount();
+  var meteo=document.querySelector('#detail .dcat[data-cat="meteo"]');
+  /* « Toutes les prévisions » : les 7 jours et l'heure par heure s'ouvrent dans le chapitre Conditions, et y restent. */
+  if(tab==='previsions'&&meteo)meteo.dataset.forecast='open';
+  detailMarkChapter(chap);
+  if(!shouldScroll)return;
+  var target=tab==='previsions'?document.querySelector('#spotWeek .wx-week'):cat==='preserver'?document.getElementById('dPreserve'):null;
+  target=target||document.getElementById('dChapter-'+chap)||document.querySelector('#detail .dcat[data-cat="'+chap+'"]');
+  /* Après la mise en page (les blocs de prévision viennent d'apparaître). */
+  requestAnimationFrame(function(){try{detailScrollTo(target);}catch(e){}});
+}
+/* Chapitre lu : calculé au défilement, écoute passive, au plus une mesure tous les 120 ms et une dernière à l'arrêt.
+   La barre n'apparaît qu'une fois le sommaire d'ouverture passé (#detail.is-past). */
+(function(){
+  var wrap=document.getElementById('screenWrap');if(!wrap)return;
+  var last=0,timer=0;
+  function measure(){
+    timer=0;last=Date.now();
+    if(document.body.dataset.screen!=='detail')return;
+    var detail=document.getElementById('detail'),start=document.getElementById('dStart'),bar=document.getElementById('dTabs');if(!detail||!bar)return;
+    var wtop=wrap.getBoundingClientRect().top,line=wtop+detailBarOffset()+Math.min(160,wrap.clientHeight*.22);
+    var past=start?start.getBoundingClientRect().bottom<=wtop+detailBarOffset()-bar.offsetHeight+4:wrap.scrollTop>240;
+    if(detail.classList.contains('is-past')!==past)detail.classList.toggle('is-past',past);
+    if(Date.now()<detailSpyLock)return;
+    var cur=DETAIL_CHAPTERS[0];
+    for(var i=0;i<DETAIL_CHAPTERS.length;i++){
+      var d=document.getElementById('dChapter-'+DETAIL_CHAPTERS[i]);
+      if(!d||!d.getClientRects().length)continue;
+      if(d.getBoundingClientRect().top<=line)cur=DETAIL_CHAPTERS[i];
+    }
+    detailMarkChapter(cur);
+  }
+  function onScroll(){
+    if(timer)return;
+    var wait=Math.max(0,120-(Date.now()-last));
+    timer=setTimeout(measure,wait);
+  }
+  wrap.addEventListener('scroll',onScroll,{passive:true});
+  window.addEventListener('ocean:navigate',function(e){if(e.detail==='detail')setTimeout(measure,60);});
+  window.detailSpyMeasure=measure;
+  /* Parallaxe légère de la photo : transform seulement, une écriture par image au plus, tant que la photo est à l'écran.
+     Aucune en mouvement réduit. */
+  var raf=0,photo=null;
+  function parallax(){
+    raf=0;
+    if(document.body.dataset.screen!=='detail')return;
+    photo=photo||document.getElementById('dHeroPhoto');if(!photo)return;
+    var y=wrap.scrollTop,hero=photo.parentElement,h=hero?hero.offsetHeight:0;
+    if(detailReduced()||y<=0){if(photo.style.transform)photo.style.transform='';return;}
+    if(y>h+40)return;
+    photo.style.transform='translate3d(0,'+Math.round(y*.28)+'px,0)';
+  }
+  wrap.addEventListener('scroll',function(){if(!raf)raf=requestAnimationFrame(parallax);},{passive:true});
+  /* Arrivée sur une fiche (une fois par ouverture, environ une seconde) : zoom arrière de la photo, chiffres qui comptent,
+     points de danger qui s'allument, sommaire en cascade (fiche.css, #detail.px-in). Mouvement réduit : rien ne bouge. */
+  var arrived=null,counted=null;
+  function count(el){
+    var txt=el.textContent,m=/^([-−]?)(\d+)([.,](\d+))?$/.exec(txt.trim());if(!m)return;
+    var end=parseFloat((m[1]?'-':'')+m[2]+(m[4]?'.'+m[4]:'')),dec=m[4]?m[4].length:0,sep=m[3]?m[3][0]:',',t0=performance.now(),dur=650;
+    function fmt(v){var a=Math.abs(v).toFixed(dec);return (v<0?m[1]:'')+(dec?a.replace('.',sep):a);}
+    function step(now){
+      var k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3);
+      if(!el.isConnected)return;
+      el.textContent=k>=1?txt:fmt(end*e);
+      if(k<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+  window.addEventListener('ocean:navigate',function(e){
+    if(e.detail!=='detail'){arrived=null;return;}
+    var detail=document.getElementById('detail'),id=typeof currentSpot!=='undefined'?currentSpot:null;if(!detail)return;
+    if(photo&&photo.style.transform)photo.style.transform='';
+    if(arrived===id||detailReduced()){arrived=id;return;}
+    arrived=id;counted=null;
+    detail.classList.remove('px-in');void detail.offsetWidth;detail.classList.add('px-in');
+    setTimeout(function(){detail.classList.remove('px-in');},1600);
+  });
+  document.addEventListener('ocean:hero-now',function(e){
+    var d=e.detail||{};if(!d.ready||counted===d.id||detailReduced())return;
+    if(document.body.dataset.screen!=='detail'||wrap.scrollTop>40)return;
+    counted=d.id;
+    document.querySelectorAll('#dHeroNow [data-hx-count]').forEach(count);
+  });
+})();
 function worldLab(sid){
   if(typeof SPOT_WORLD==='undefined'||typeof WORLDS==='undefined')return '';
   var w=SPOT_WORLD[sid];
@@ -1307,7 +1414,8 @@ function openSpot(id){
   const ownDangers=(Array.isArray(s.dangers)?s.dangers:[]).filter(d=>Array.isArray(d)&&d[1]);
   const carnetDangers=!ownDangers.length&&s.carnet&&Array.isArray(s.carnet.dangers)?s.carnet.dangers.filter(d=>Array.isArray(d)&&d[1]):[];
   document.getElementById('dDangers').innerHTML=ownDangers.map(dangerRow).join('')||(carnetDangers.length?carnetTag()+carnetDangers.map(dangerRow).join(''):'')||'<p data-unrated><b>Danger non évalué</b></p><p>Vérifie les consignes locales avant ta sortie.</p>';
-  /* Fiche v2 : elle s'ouvre sur les conditions. */
+  /* Parcours : la fiche s'ouvre en haut, sur son premier chapitre ; les prévisions détaillées repartent fermées. */
+  document.querySelector('#detail .dcat[data-cat="meteo"]')?.removeAttribute('data-forecast');
   showDetailCat('meteo',false);
   /* Les modules annexes (communauté, guide, carte) ne doivent jamais bloquer l’ouverture de la fiche. */
   try{window.OceanCommunity?.mountSpot(id);}catch(e){console.warn('community',e);}

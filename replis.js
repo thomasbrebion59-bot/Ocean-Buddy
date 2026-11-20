@@ -129,7 +129,8 @@
   const NOTES = {
     meteo: ['#spotWeek>.spot-week-note', '#spotWeek>.wx-source', '#spotWeek>.fx7-stamp'],
     securite: ['#dDanger>small.fx-note', '#sdRip .sd-coach-src'],
-    infos: ['#dSource', '.field-visit-cites', '.field-visit-caution', '.field-reference', '#guideLive .gl-src', '#guideLive .gl-links-src', '#guideLive .guide-note'],
+    /* L’estimation des prix (#guideLive .gl-src) reste à côté des prix : ce sont des barèmes par pays, à dire sur place. */
+    infos: ['#dSource', '.field-visit-cites', '.field-visit-caution', '.field-reference', '#guideLive .gl-links-src', '#guideLive .guide-note'],
     saisons: ['#dSeasons .sd-suit>small', '#dSeasons>.sd-src'],
     activites: ['#dGo>.sd-src', '.field-preparation>.g-note', '.field-local>.fx-note', '#guideAround>.px-lead', '#guideAround>.px-src',
       '#guideSleep .px-type>span', '#guideSleep .px-src', '#guideSleep .px-search>.fx-note'],
@@ -177,13 +178,14 @@
   }
   const notesBox = $('#dNotes'), notesHead = $('#dNotesHead'), notesZone = $('#dNotesZone');
   const gone = (e, root) => { for (let n = e; n && n !== root; n = n.parentElement) if (n.hidden || n.style.display === 'none' || n.hasAttribute('data-obf-shut')) return true; return false; };
-  /* Les précisions de l’onglet affiché : « Prévisions » est une vue du panneau météo, « Nature » montre deux panneaux. */
+  /* Les précisions de tout le parcours (20 nov. : la fiche se lit d’un seul défilement, tous les chapitres sont affichés).
+     Celles des prévisions détaillées ne comptent que si « Toutes les prévisions » est ouvert. */
+  const NOTE_CATS = ['meteo', 'infos', 'faune', 'preserver', 'securite', 'saisons', 'activites'];
   function noteNodes() {
-    const tab = $('#detail')?.dataset.tab || 'meteo', view = tab === 'previsions' ? 'forecast' : 'now';
-    const cats = tab === 'previsions' ? ['meteo'] : tab === 'faune' ? ['faune', 'preserver'] : [tab];
+    const forecast = tabOf('meteo')?.dataset.forecast === 'open';
     const seen = new Set();
-    return cats.flatMap(c => { const p = tabOf(c); return p ? [...p.querySelectorAll('[data-fx-note]')].filter(e => !gone(e, p)) : []; })
-      .filter(e => { const v = e.closest('[data-fx-view]'); if (v && v.dataset.fxView !== view) return false;
+    return NOTE_CATS.flatMap(c => { const p = tabOf(c); return p ? [...p.querySelectorAll('[data-fx-note]')].filter(e => !gone(e, p)) : []; })
+      .filter(e => { const v = e.closest('[data-fx-view]'); if (v && v.dataset.fxView === 'forecast' && !forecast) return false;
         const k = e.textContent.replace(/\s+/g, ' ').trim(); if (!k || seen.has(k)) return false; seen.add(k); return true; });
   }
   function fillNotes() {
@@ -207,8 +209,8 @@
     if (!any) setNotes(false); else if (notesHead.getAttribute('aria-expanded') === 'true') fillNotes();
   }
   if (notesHead) notesHead.addEventListener('click', () => setNotes(notesHead.getAttribute('aria-expanded') !== 'true'));
-  /* Changement d’onglet (app.js, showDetailCat pose data-tab) : la ligne se referme et suit le nouvel onglet. */
-  if (notesBox && 'MutationObserver' in window) new MutationObserver(() => { setNotes(false); syncNotes(); }).observe($('#detail'), { attributes: true, attributeFilter: ['data-tab'] });
+  /* Prévisions détaillées ouvertes ou refermées (app.js pose data-forecast) : la liste des précisions suit. */
+  if (notesBox && 'MutationObserver' in window && tabOf('meteo')) new MutationObserver(() => syncNotes()).observe(tabOf('meteo'), { attributes: true, attributeFilter: ['data-forecast'] });
   /* Révéler d’un toucher, une fois : [data-fx-reveal] donne le sélecteur du bloc qui reçoit .is-detail (le détail des
      étapes d’une liste, le pourquoi d’un geste). Le bouton s’efface ensuite. */
   document.addEventListener('click', e => {

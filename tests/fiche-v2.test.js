@@ -1,5 +1,5 @@
-/* Fiche de spot v2 (18 nov. 2026, demande du fondateur) : plus de bloc « Avant d’y aller », sept onglets en texte seul
-   juste sous une photo compacte, la fiche s’ouvre sur les conditions, la sécurité a son onglet (jamais repliée), une seule
+/* Fiche de spot v2 (18 nov. 2026, demande du fondateur) : plus de bloc « Avant d’y aller », la fiche s’ouvre sur les
+   conditions (parcours en chapitres depuis le 20 nov.), la sécurité a son onglet (jamais repliée), une seule
    police (Figtree) et une échelle typographique pilotée par des variables. */
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
@@ -7,62 +7,121 @@ const vm = require('node:vm');
 const { read, fnSource } = require('./src-extract.cjs');
 const html = read('index.html'), app = read('app.js'), before = read('spot-before.js'), css = read('fiche.css'), exp = read('spot-experience.js');
 
+/* 20 nov. 2026 : la fiche est un parcours en chapitres (proposition approuvée par le fondateur). La rangée #dTabs est la
+   barre de progression ; un sommaire en médaillons ouvre le parcours. */
 const tabsHtml = html.slice(html.indexOf('<div class="dtabs" id="dTabs">'), html.indexOf('<div class="dcat" data-cat="infos"'));
 const tabs = [...tabsHtml.matchAll(/<button type="button" class="dtab( active)?" data-cat="(\w+)" onclick="showDetailCat\('(\w+)'\)">([\s\S]*?)<\/button>/g)];
+const CHAPTERS = ['meteo', 'infos', 'faune', 'securite', 'saisons', 'activites'];
 
-test('sept onglets en texte seul, « Conditions » en premier et actif à l’ouverture', () => {
-  assert.deepEqual(tabs.map(t => t[2]), ['meteo', 'previsions', 'securite', 'infos', 'saisons', 'activites', 'faune']);
-  assert.deepEqual(tabs.map(t => t[4].replace(/<span class="dtab-dots"[^>]*><\/span>/, '').replace(/<[^>]+>/g, '').trim()), ['Conditions', 'Prévisions', 'Sécurité', 'Le spot', 'Saisons', 'Préparer', 'Nature']);
-  assert.deepEqual(tabs.map(t => !!t[1]), [true, false, false, false, false, false, false]);
-  for (const t of tabs) assert.equal(t[2], t[3], 'data-cat et showDetailCat disent le même onglet');
-  assert.doesNotMatch(tabsHtml, /<img|<svg/, 'aucun pictogramme dans les onglets');
-  assert.doesNotMatch(read('spot-immersion.js'), /#dTabs \.dtab[\s\S]{0,200}insertAdjacentHTML/, 'plus de pictogramme posé par le module d’immersion');
-  /* Le panneau des conditions est affiché d’emblée ; « Le spot » attend son onglet. */
+test('parcours : six chapitres dans la barre, « Conditions » en premier ; un sommaire en médaillons ouvre la fiche', () => {
+  assert.deepEqual(tabs.map(t => t[2]), CHAPTERS);
+  assert.deepEqual(tabs.map(t => t[4].replace(/<span class="dtab-dots"[^>]*><\/span>/, '').replace(/<[^>]+>/g, '').trim()), ['Conditions', 'Le coin', 'Nature', 'Sécurité', 'Saisons', 'Préparer']);
+  assert.deepEqual(tabs.map(t => !!t[1]), [true, false, false, false, false, false]);
+  for (const t of tabs) assert.equal(t[2], t[3], 'data-cat et showDetailCat disent le même chapitre');
+  assert.doesNotMatch(tabsHtml, /<img|<svg/, 'aucun pictogramme dans la barre');
+  assert.match(app, /const DETAIL_CHAPTERS=\['meteo','infos','faune','securite','saisons','activites'\];/);
+  /* Sommaire : mêmes chapitres, même ordre, chacun avec son illustration (fichier présent) et son nom. */
+  const start = html.slice(html.indexOf('<nav class="px-start" id="dStart"'), html.indexOf('<div class="dtabs" id="dTabs">'));
+  const meds = [...start.matchAll(/<button type="button" class="px-med" data-fx-tab="(\w+)"><img src="(assets\/fiche\/[\w-]+\.webp)" alt="" width="210" height="210" loading="lazy" decoding="async" draggable="false"><span>([^<]+)<\/span><\/button>/g)];
+  assert.deepEqual(meds.map(m => m[1]), CHAPTERS);
+  assert.deepEqual(meds.map(m => m[3]), ['Conditions', 'Le coin', 'Nature', 'Sécurité', 'Saisons', 'Préparer']);
+  for (const m of meds) assert.ok(require('node:fs').existsSync(require('node:path').join(__dirname, '..', m[2])), m[2]);
+  assert.match(start, /<h3 class="fx-title">Ton voyage commence ici<\/h3>/);
+  assert.ok(html.indexOf('id="dStart"') < html.indexOf('id="dTabs"'), 'le sommaire précède la barre');
+  /* Le panneau des conditions est le premier chapitre ; la fiche s’ouvre dessus, prévisions détaillées refermées. */
   assert.match(html, /<div class="dcat" data-cat="meteo" data-view="now">/);
-  assert.match(html, /<div class="dcat" data-cat="infos" style="display:none">/);
-  assert.match(app, /showDetailCat\('meteo',false\);\n  \/\* Les modules annexes/, 'openSpot ouvre la fiche sur les conditions');
+  assert.match(app, /removeAttribute\('data-forecast'\);\n  showDetailCat\('meteo',false\);\n  \/\* Les modules annexes/, 'openSpot ouvre la fiche en haut du parcours');
   assert.match(read('navigation.js'), /detailTab:\$\('#dTabs \.dtab\.active'\)\?\.dataset\.cat\|\|'meteo'/);
-  assert.match(read('navigation.js'), /showDetailCat\(route\.detailTab\|\|'meteo',false\);/, 'onglet rendu au Retour par la même fonction');
+  assert.match(read('navigation.js'), /showDetailCat\(route\.detailTab\|\|'meteo',false\);/, 'chapitre rendu au Retour par la même fonction');
+  /* Ordre des chapitres posé par la feuille, les panneaux gardent leur place dans la page. */
+  CHAPTERS.forEach((c, i) => assert.match(css, new RegExp(`#detail \\.detail-body>:is\\(\\.dcat\\[data-cat="${c}"\\],\\[data-chapter="${c}"\\]\\)\\{order:${[1, 2, 3, 5, 6, 7][i]}\\}`), c));
+  assert.match(css, /#detail \.detail-body>\.dcat\[data-cat="preserver"\]\{order:4\}/, 'les gestes suivent la faune');
+  assert.match(css, /#detail \.detail-body>\.fx-notes\{order:9\}/, '« Sources et précisions » ferme le parcours');
 });
 
 /* showDetailCat exécuté avec de faux panneaux. */
 function tabWorld() {
   const cats = ['infos', 'saisons', 'meteo', 'activites', 'faune', 'preserver', 'securite'];
-  const panels = cats.map(c => ({ dataset: { cat: c }, style: { display: 'none' } }));
-  const btns = ['meteo', 'previsions', 'securite', 'infos', 'saisons', 'activites', 'faune'].map(c => ({ dataset: { cat: c }, cls: new Set(), attrs: {}, classList: { toggle(n, on) { on ? this.o.cls.add(n) : this.o.cls.delete(n); } }, setAttribute(k, v) { this.attrs[k] = v; } }));
+  const made = {};
+  const panels = cats.map(c => ({ dataset: { cat: c }, style: { display: 'none' }, removed: [], before(h) { made[h.id] = h; } }));
+  if (panels[2]) panels[2].dataset.view = 'forecast';
+  const btns = CHAPTERS.map(c => ({ dataset: { cat: c }, cls: new Set(), attrs: {}, classList: { toggle(n, on) { on ? this.o.cls.add(n) : this.o.cls.delete(n); } }, setAttribute(k, v) { this.attrs[k] = v; } }));
   btns.forEach(b => { b.classList.o = b; });
   const detail = { dataset: {} }, scrolled = [];
+  const meteo = panels.find(p => p.dataset.cat === 'meteo');
+  const el = id => ({ id, getBoundingClientRect: () => ({ top: 500 }), isConnected: true });
   const ctx = {
+    window: {}, Date,
     document: {
       querySelectorAll: s => (s === '#detail .dcat' ? panels : s === '#dTabs .dtab' ? btns : []),
-      getElementById: id => (id === 'detail' ? detail : id === 'dPreserve' ? { scrollIntoView: o => scrolled.push(o) } : null),
-      body: { classList: { contains: () => false } }
+      querySelector: s => (s === '#detail .dcat[data-cat="meteo"]' ? meteo : s === '#dTabs .dtab.active' ? (btns.find(b => b.cls.has('active')) || null) : s === '#spotWeek .wx-week' ? el('week') : /^#detail \.dcat\[data-cat="(\w+)"\]$/.test(s) ? panels.find(p => p.dataset.cat === RegExp.$1) : null),
+      getElementById: id => (id === 'detail' ? detail : id === 'dPreserve' ? el('dPreserve') : id === 'screenWrap' ? { scrollTop: 0, getBoundingClientRect: () => ({ top: 0 }), scrollTo: o => scrolled.push(o) } : made[id] || null),
+      createElement: () => ({ dataset: {}, isConnected: true, getBoundingClientRect: () => ({ top: 500 }) }),
+      body: { classList: { contains: () => false }, dataset: { screen: 'detail' } }
     },
+    getComputedStyle: () => ({ paddingTop: '8px', top: '44px' }),
     setTimeout: () => 0, requestAnimationFrame: f => f()
   };
   vm.createContext(ctx);
-  vm.runInContext(app.match(/const DETAIL_TABS=\[[^\]]+\];/)[0].replace('const ', 'var ') + fnSource(app, 'detailTabOf') + fnSource(app, 'showDetailCat'), ctx);
+  const src = ['DETAIL_TABS', 'DETAIL_CHAPTERS'].map(n => app.match(new RegExp(`const ${n}=\\[[^\\]]+\\];`))[0].replace('const ', 'var ')).join('')
+    + app.match(/const DETAIL_CHAPTER_TITLES=\{[^}]+\};/)[0].replace('const ', 'var ') + 'var detailSpyLock=0;'
+    + ['detailTabOf', 'detailChapterOf', 'detailReduced', 'detailChaptersMount', 'detailMarkChapter', 'detailBarOffset', 'detailScrollTo', 'showDetailCat'].map(n => fnSource(app, n)).join('');
+  vm.runInContext(src, ctx);
   const shown = () => panels.filter(p => p.style.display === '').map(p => p.dataset.cat);
   const active = () => btns.filter(b => b.cls.has('active')).map(b => b.dataset.cat);
-  return { ctx, panels, shown, active, detail, scrolled, view: () => panels.find(p => p.dataset.cat === 'meteo').dataset.view };
+  return { ctx, panels, shown, active, detail, scrolled, made, meteo };
 }
 
-test('changement d’onglet : un panneau par onglet, « Prévisions » est la seconde vue des conditions, « Nature » réunit faune et gestes', () => {
-  const w = tabWorld(), go = c => w.ctx.showDetailCat(c, false);
-  go('meteo'); assert.deepEqual(w.shown(), ['meteo']); assert.equal(w.view(), 'now'); assert.deepEqual(w.active(), ['meteo']);
-  go('previsions'); assert.deepEqual(w.shown(), ['meteo']); assert.equal(w.view(), 'forecast'); assert.deepEqual(w.active(), ['previsions']);
-  go('securite'); assert.deepEqual(w.shown(), ['securite'], 'la sécurité seule, en entier'); assert.equal(w.view(), 'now');
-  go('infos'); assert.deepEqual(w.shown(), ['infos']);
-  go('saisons'); assert.deepEqual(w.shown(), ['saisons']);
-  go('activites'); assert.deepEqual(w.shown(), ['activites']);
-  go('faune'); assert.deepEqual(w.shown(), ['faune', 'preserver']); assert.deepEqual(w.active(), ['faune']);
-  assert.equal(w.detail.dataset.tab, 'faune');
-  /* Anciens noms : « preserver » mène à Nature et jusqu’aux gestes ; un nom inconnu retombe sur les conditions. */
-  go('preserver'); assert.deepEqual(w.shown(), ['faune', 'preserver']); assert.deepEqual(w.active(), ['faune']); assert.equal(w.scrolled.length, 1);
-  go('nimportequoi'); assert.deepEqual(w.shown(), ['meteo']); assert.deepEqual(w.active(), ['meteo']);
-  /* Plus de panneau de sécurité collé sous les conditions. */
-  assert.doesNotMatch(app, /cat==='meteo'&&d\.dataset\.cat==='securite'/);
-  assert.match(css, /\[data-view="now"\] \[data-fx-view="forecast"\],\n[^\n]*\[data-view="forecast"\] \[data-fx-view="now"\],/);
+test('aller à un chapitre : tous les panneaux restent affichés, la barre marque le chapitre, les anciens noms d’onglets marchent toujours', () => {
+  const w = tabWorld(), go = (c, scroll = false) => w.ctx.showDetailCat(c, scroll);
+  go('meteo');
+  assert.deepEqual(w.shown().sort(), ['activites', 'faune', 'infos', 'meteo', 'preserver', 'saisons', 'securite'], 'aucun panneau masqué');
+  assert.equal(w.meteo.dataset.view, 'now', 'le chapitre Conditions montre le moment présent');
+  assert.deepEqual(w.active(), ['meteo']);
+  /* Un titre par chapitre, posé devant son panneau (jamais dedans : les modules réécrivent le contenu des panneaux). */
+  assert.deepEqual(Object.keys(w.made).sort(), CHAPTERS.map(c => 'dChapter-' + c).sort());
+  assert.deepEqual(CHAPTERS.map(c => w.made['dChapter-' + c].textContent), ['Conditions', 'Le coin', 'Nature', 'Sécurité', 'Saisons', 'Préparer']);
+  for (const c of ['securite', 'infos', 'saisons', 'activites', 'faune']) { go(c); assert.deepEqual(w.active(), [c]); assert.equal(w.detail.dataset.tab, c); assert.equal(w.shown().length, 7); }
+  /* « previsions » : les 7 jours et l’heure par heure s’ouvrent dans Conditions. « preserver » : les gestes, chapitre Nature. */
+  assert.equal(w.meteo.dataset.forecast, undefined);
+  go('previsions'); assert.equal(w.meteo.dataset.forecast, 'open'); assert.deepEqual(w.active(), ['meteo']); assert.equal(w.meteo.dataset.view, 'now');
+  go('preserver'); assert.deepEqual(w.active(), ['faune']);
+  go('nimportequoi'); assert.deepEqual(w.active(), ['meteo']);
+  /* Sans défilement demandé (ouverture, Retour), la page ne bouge pas ; avec, elle va au chapitre, sous la barre. */
+  assert.equal(w.scrolled.length, 0);
+  go('securite', true); assert.equal(w.scrolled.length, 1); assert.equal(w.scrolled[0].behavior, 'smooth');
+  assert.equal(w.scrolled[0].top, 500 - 0 - 10, 'au titre du chapitre, moins la hauteur de la barre collée (absente de ce faux monde)');
+  assert.match(fnSource(app, 'detailBarOffset'), /return \(parseFloat\(getComputedStyle\(wrap\)\.paddingTop\)\|\|0\)\+\(parseFloat\(getComputedStyle\(bar\)\.top\)\|\|0\)\+bar\.offsetHeight;/);
+  /* Les prévisions détaillées ne sont masquées que tant qu’on ne les a pas demandées. */
+  assert.match(css, /\[data-view="now"\]:not\(\[data-forecast="open"\]\) \[data-fx-view="forecast"\],/);
+  /* Chapitre lu : écoute passive, au plus une mesure tous les 120 ms. */
+  assert.match(app, /wrap\.addEventListener\('scroll',onScroll,\{passive:true\}\);/);
+  assert.match(app, /var wait=Math\.max\(0,120-\(Date\.now\(\)-last\)\);/);
+  assert.doesNotMatch(app.slice(app.indexOf('const DETAIL_CHAPTERS'), app.indexOf('function worldLab')), /scroll-snap|setInterval/);
+});
+
+test('ouverture : trois chiffres du moment sur la photo, la motion d’arrivée et la parallaxe s’effacent en mouvement réduit', () => {
+  assert.match(html, /<div class="dfacts" id="dFacts"><\/div>\n\s*<!--[^>]*-->\n\s*<div class="hx-now" id="dHeroNow"><\/div>/);
+  const hero = fnSource(before, 'hero');
+  assert.match(hero, /if \(!s \|\| s\.custom\) \{ el\.innerHTML = ''; el\.hidden = true; return; \}/, 'rien sur un spot personnel');
+  assert.match(hero, /chips\.push\(hxChip\('wave', 'Houle'/); assert.match(hero, /chips\.push\(hxChip\('temp', 'Eau'/);
+  assert.match(hero, /if \(inland\(s\)\) \{[\s\S]*hxChip\('wind', 'Vent'/, 'plan d’eau intérieur : le vent, pas la houle');
+  assert.match(hero, /class="hx-chip hx-danger" data-hx="danger" data-fx-tab="securite"/, 'le danger mène à la sécurité');
+  assert.match(hero, /ready \? \(sw \? num\(sw\) : '—'\) : hxWait/, 'la case garde sa place pendant le chargement');
+  assert.match(before, /hero\(s, L && L\.live \? L : null\);/); assert.match(fnSource(before, 'live'), /hero\(s, l\);/);
+  /* Photo : environ 62 % de l’écran sur téléphone (proposition approuvée ; 42 % au temps des onglets). */
+  assert.match(css, /html \.ocean-v2 #detail #detailHero\{min-height:clamp\(400px,62dvh,600px\);height:auto\}/);
+  /* Motion : une fois par ouverture, rien en boucle, rien en mouvement réduit ; parallaxe en transform, une écriture par image. */
+  const px = css.slice(css.indexOf('PARCOURS EN CHAPITRES'));
+  assert.doesNotMatch(px, /infinite/);
+  assert.match(px, /@media \(prefers-reduced-motion:reduce\)\{#detail\.px-in \.hero-photo,[^}]*\{animation:none!important\}#detail \.hero-photo\{transform:none!important\}\}/);
+  assert.match(px, /body\.reduce-motion #detail \.hero-photo\{transform:none!important\}/);
+  assert.match(px, /html:not\(\.ob-zoom-open\):not\(\.ob-zoom-land\) #detail\.px-in \.hero-photo\{animation:pxZoom/, 'jamais pendant le vol de la photo');
+  assert.match(app, /if\(detailReduced\(\)\|\|y<=0\)\{if\(photo\.style\.transform\)photo\.style\.transform='';return;\}/);
+  assert.match(app, /wrap\.addEventListener\('scroll',function\(\)\{if\(!raf\)raf=requestAnimationFrame\(parallax\);\},\{passive:true\}\);/);
+  assert.match(app, /if\(arrived===id\|\|detailReduced\(\)\)\{arrived=id;return;\}/);
+  /* Jetons crème : ni couleur en dur, ni flou de verre, ni capitales dans la section. */
+  assert.doesNotMatch(px.replace(/\/\*[\s\S]*?\*\//g, ''), /#[0-9a-fA-F]{3,8}\b|backdrop-filter|text-transform:uppercase/);
 });
 
 test('« Avant d’y aller » n’est plus affiché : rien entre la photo et les onglets', () => {
@@ -70,7 +129,7 @@ test('« Avant d’y aller » n’est plus affiché : rien entre la photo et les
   assert.doesNotMatch(before, /body\.prepend\(host\)/);
   assert.match(before, /const panel = \$\('#detail \.dcat\[data-cat="meteo"\]'\); if \(!panel\) return null;[\s\S]{0,260}panel\.prepend\(host\);/, 'le panneau « Maintenant » est dans l’onglet Conditions');
   assert.match(before, /context\.parentNode !== panel\) panel\.prepend\(context\)/, 'le choix d’activité aussi');
-  assert.match(html, /<div class="detail-body">\s*<!--[\s\S]*?-->\s*<div class="dtabs" id="dTabs">/, 'la rangée d’onglets ouvre le corps de la fiche');
+  assert.match(html, /<div class="detail-body">\s*<!--[\s\S]*?-->\s*<nav class="px-start" id="dStart"/, 'le sommaire du parcours ouvre le corps de la fiche');
   /* « J’ai surfé ici » : une seule fois, en bas de l’onglet « Le spot ». */
   assert.equal((html.match(/id="dLogBtn"/g) || []).length, 1);
   const infos = html.slice(html.indexOf('<div class="dcat" data-cat="infos"'), html.indexOf('<div class="dcat" data-cat="saisons"'));
@@ -245,7 +304,7 @@ test('Sécurité : son onglet, rien de replié ; en-tête compact et rangée d�
   /* 19 nov. (« trop de texte ») : dans Sécurité, seule la valeur de modèle des courants s’ouvre d’un toucher. */
   assert.match(read('replis.js'), /securite: \[\n\s+\{ id: 'courants', title: 'Courants & dangers à vérifier', sub: 'Valeurs de modèle, à vérifier sur place', members: \['#spotSafetyLive'\] \}\n\s+\]/, 'un seul repli dans Sécurité : la valeur de modèle des courants');
   assert.match(read('field-guide.js'), /fieldAction==='emergency'\)\{showDetailCat\('securite',false\);/);
-  assert.match(css, /html \.ocean-v2 #detail #detailHero\{min-height:clamp\(280px,42dvh,410px\);height:auto\}/, 'photo (19 nov., « un peu trop petite ») : 42 % de l’écran, les quatre relevés restent visibles sur un grand iPhone ; avant : un tiers de l’écran');
+  assert.match(css, /html \.ocean-v2 #detail #detailHero\{min-height:clamp\(400px,62dvh,600px\);height:auto\}/, 'photo : environ 62 % de l’écran à l’ouverture du parcours');
   assert.match(css, /#detail \.detail-hero \.dfact-sea\{display:none\}/);
   assert.match(read('base.css'), /\.dtabs\{[^}]*position:sticky;top:0/);
 });

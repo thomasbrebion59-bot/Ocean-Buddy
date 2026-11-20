@@ -248,7 +248,9 @@
     const tile=(go,label,value,dec,unit,illu,i)=>`<button type="button" class="gl-tile" data-gl-go="${go}" style="--i:${i}"><span class="gl-tile-tx"><span class="fx-label"><span>${label}</span> <span${NT}>${month}</span></span><span class="gl-big"><b class="fx-num" data-gl-count="${value}" data-gl-dec="${dec}"${NT}>${nf(value,dec)}</b><span class="fx-unit"${NT}>${unit}</span></span></span>${ILLU(illu)}</button>`;
     const tiles=[];
     if(n&&n.sea!=null)tiles.push(tile('saisons','Eau en',n.sea,0,'°C','eau',tiles.length));
-    if(n&&n.hs!=null)tiles.push(tile('saisons','Houle en',n.hs,1,'m','houle',tiles.length));
+    /* La houle du mois ne parle qu’à ceux qui cherchent la vague ou le vent : pas de tuile sur un spot de plongée ou un lac. */
+    const sportsOf=typeof spotSports==='function'?spotSports(s):(s.sports||[]),swellSport=sportsOf.some(a=>['surf','bodyboard','kitesurf','windsurf','wingfoil','foil'].includes(a));
+    if(n&&n.hs!=null&&swellSport)tiles.push(tile('saisons','Houle en',n.hs,1,'m','houle',tiles.length));
     if(e)tiles.push(`<button type="button" class="gl-tile" data-gl-go="dormir" style="--i:${tiles.length}"><span class="gl-tile-tx"><span class="fx-label">La nuit, dès</span><span class="gl-big"><b class="fx-num" data-gl-count="${e.lo}" data-gl-dec="0"${NT}>${nf(e.lo)}</b><span class="fx-unit"${NT}>€</span></span></span>${ILLU('toit')}</button>`);
     /* 2. Ici, on vit comme ça : seulement ce que le carnet contient (mot du coin, à goûter), puis la page du pays. */
     const cards=[];

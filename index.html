@@ -41,7 +41,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
   mo.observe(d,{childList:true,subtree:true});addEventListener('DOMContentLoaded',function(){mo.disconnect();});})(A[new Date().getDate()%A.length][1]);}
 })();</script>
 <noscript><style>#obBoot{display:none}</style></noscript>
-<script src="i18n.js?v=74e23fdcd2d5"></script>
+<script src="i18n.js?v=4a047f58c214"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Ocean Buddy — Explore. Progresse. Protège.</title>
 <meta name="theme-color" content="#fef9eb">
@@ -91,7 +91,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <link rel="stylesheet" href="cultures.css?v=fabacb2adac7">
 <link rel="stylesheet" href="replis.css?v=15d2762b11d2">
 <link rel="stylesheet" href="fiches-organisation.css?v=e977add6e883">
-<link rel="stylesheet" href="fiche.css?v=829dc2e82642">
+<link rel="stylesheet" href="fiche.css?v=38d61c29b42a">
 <link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ocean Buddy">
@@ -309,21 +309,26 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
         <img class="hero-photo" id="dHeroPhoto" alt="" decoding="async">
         <div class="htxt"><div class="eyebrow" id="dEyebrow"></div><h2 id="dName"></h2><div class="loc" id="dLoc"></div><div class="hero-credit" id="dHeroCred"></div></div>
         <div class="dfacts" id="dFacts"></div>
+        <!-- Ouverture : trois chiffres du moment sur la photo (module du panneau « Maintenant ») : houle, eau et danger. -->
+        <div class="hx-now" id="dHeroNow"></div>
         <button class="hero-more" id="dHeroMore" type="button" aria-label="Voir plus de photos du spot" title="Voir plus de photos du spot"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="3.2"/><circle cx="12" cy="13.5" r="3.4"/><path d="M8 7l1.4-2.4h5L16 7"/></svg></button>
         <button class="hero-immersion" id="dImmersionBtn" type="button" aria-label="Ouvrir le mode immersion">Mode immersion</button>
       </div>
       <div class="detail-body">
-        <!-- Fiche v2 (18 nov. 2026) : sept onglets en texte seul, juste sous la photo. « Conditions » est l’onglet d’ouverture ;
-             « Prévisions » est une seconde vue du même panneau (data-view) ; « Nature » réunit la faune et les gestes pour préserver.
-             Les points de danger du spot sont posés dans l’onglet Sécurité par le module du panneau « Maintenant ». -->
+        <!-- Parcours en chapitres (20 nov. 2026) : la fiche se lit d'un seul défilement. À l'ouverture, un sommaire en médaillons ;
+             une fois le sommaire passé, #dTabs devient la barre de progression collée en haut (app.js, showDetailCat et suivi du
+             chapitre lu). Les points de danger du spot sont posés sur l'étiquette Sécurité par le module du panneau « Maintenant ». -->
+        <nav class="px-start" id="dStart" aria-label="Les chapitres de la fiche">
+          <h3 class="fx-title">Ton voyage commence ici</h3>
+          <div class="px-meds"><button type="button" class="px-med" data-fx-tab="meteo"><img src="assets/fiche/houle.webp" alt="" width="210" height="210" loading="lazy" decoding="async" draggable="false"><span>Conditions</span></button><button type="button" class="px-med" data-fx-tab="infos"><img src="assets/fiche/panneau.webp" alt="" width="210" height="210" loading="lazy" decoding="async" draggable="false"><span>Le coin</span></button><button type="button" class="px-med" data-fx-tab="faune"><img src="assets/fiche/dauphin.webp" alt="" width="210" height="210" loading="lazy" decoding="async" draggable="false"><span>Nature</span></button><button type="button" class="px-med" data-fx-tab="securite"><img src="assets/fiche/bouee.webp" alt="" width="210" height="210" loading="lazy" decoding="async" draggable="false"><span>Sécurité</span></button><button type="button" class="px-med" data-fx-tab="saisons"><img src="assets/fiche/soleil.webp" alt="" width="210" height="210" loading="lazy" decoding="async" draggable="false"><span>Saisons</span></button><button type="button" class="px-med" data-fx-tab="activites"><img src="assets/fiche/sac.webp" alt="" width="210" height="210" loading="lazy" decoding="async" draggable="false"><span>Préparer</span></button></div>
+        </nav>
         <div class="dtabs" id="dTabs">
           <button type="button" class="dtab active" data-cat="meteo" onclick="showDetailCat('meteo')">Conditions</button>
-          <button type="button" class="dtab" data-cat="previsions" onclick="showDetailCat('previsions')">Prévisions</button>
+          <button type="button" class="dtab" data-cat="infos" onclick="showDetailCat('infos')">Le coin</button>
+          <button type="button" class="dtab" data-cat="faune" onclick="showDetailCat('faune')">Nature</button>
           <button type="button" class="dtab" data-cat="securite" onclick="showDetailCat('securite')"><span>Sécurité</span><span class="dtab-dots" id="dTabDanger" aria-hidden="true"></span></button>
-          <button type="button" class="dtab" data-cat="infos" onclick="showDetailCat('infos')">Le spot</button>
           <button type="button" class="dtab" data-cat="saisons" onclick="showDetailCat('saisons')">Saisons</button>
           <button type="button" class="dtab" data-cat="activites" onclick="showDetailCat('activites')">Préparer</button>
-          <button type="button" class="dtab" data-cat="faune" onclick="showDetailCat('faune')">Nature</button>
         </div>
         <div class="dcat" data-cat="infos" style="display:none">
                     <div class="block"><h4><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/guide/g-check.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> À propos du spot</h4><p id="dDesc"></p><p class="spot-provenance" id="dSource"></p></div>
@@ -623,9 +628,9 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="spot-photos.js?v=ece4f2871d12"></script>
 <script src="progression.js?v=573fcb54b5ba"></script>
 <script src="spot-rank-model.js?v=475e2af88a53"></script>
-<script src="app.js?v=29a142e41341"></script>
+<script src="app.js?v=bfe5f0f2420e"></script>
 <script src="spot-fit-model.js?v=23cae691490e"></script>
-<script src="spot-before.js?v=0fe77750bc98"></script>
+<script src="spot-before.js?v=dea5ed43eef5"></script>
 <script src="private-spots.js?v=683221818ade"></script>
 <script src="poulpy-knowledge.js?v=00c4ab3bd0f8"></script>
 <script src="design.js?v=850a0d1c082e"></script>
@@ -642,7 +647,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="spot-immersion-model.js?v=8c6489617564"></script>
 <script src="spot-immersion.js?v=43370efce8a4"></script>
 <script src="spot-guide-model.js?v=c3f7a4f0dd2b"></script>
-<script src="spot-guide.js?v=e1afd05ea5c1"></script>
+<script src="spot-guide.js?v=7effc87115cf"></script>
 <script src="spot-data-model.js?v=bbcff84ee8ac"></script>
 <script src="spot-weather-model.js?v=96ad189a5406"></script>
 <script src="spot-data.js?v=c6a6dd38eff5"></script>
@@ -677,6 +682,6 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="native-glass.js?v=1e031ad3005b"></script>
 <script src="motion.js?v=ec4d7c893550"></script>
 <script src="motion-media.js?v=21145e2c7af3"></script>
-<script src="replis.js?v=38170ab9dbff"></script>
+<script src="replis.js?v=b517fa32a315"></script>
 </body>
 </html>

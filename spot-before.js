@@ -89,6 +89,33 @@
   }
   const inlandNote = () => '<p class="fx-reading-note">Plan d’eau intérieur : ni houle marine, ni marée océanique.</p>';
 
+  /* Ouverture du parcours (20 nov.) : trois chiffres du moment posés sur la photo, sur verre dépoli. Mer : houle, eau,
+     danger. Plan d’eau intérieur : vent et danger (ni houle marine, ni température d’eau en direct). Les cases gardent
+     leur place pendant le chargement ; les valeurs viennent de LIVE, les mêmes que « Maintenant ». Le danger n’attend pas
+     le relevé. data-hx-count : le chiffre compte jusqu’à sa valeur à l’arrivée (app.js). */
+  const hxChip = (key, label, value, unit, extra) => `<span class="hx-chip" data-hx="${key}">${key === 'danger' ? '' : icon(key)}<span class="hx-tx"><b class="hx-val">${value}${unit ? `<small>${unit}</small>` : ''}</b><span class="hx-lab">${label}</span></span>${extra || ''}</span>`;
+  const hxWait = '<span class="hx-wait" aria-hidden="true"></span>';
+  function hero(s, l) {
+    const el = $('#dHeroNow'); if (!el) return;
+    if (!s || s.custom) { el.innerHTML = ''; el.hidden = true; return; }
+    el.hidden = false;
+    const split = v => { const m = has(v) ? /^\s*([-−]?\d+(?:[.,]\d+)?)\s*(.*)$/.exec(String(v)) : null; return m ? [m[1], m[2]] : null; };
+    const num = p => `<span data-hx-count>${esc(p[0])}</span>`;
+    const ready = !!(l && l.live), g = gaugeOf(s), chips = [];
+    if (inland(s)) {
+      const w = ready ? split(l.wind) : null;
+      chips.push(hxChip('wind', 'Vent', ready ? (w ? num(w) : '—') : hxWait, w ? esc(w[1]) : ''));
+    } else {
+      const sw = ready ? split(l.swell) : null, te = ready ? split(l.temp) : null;
+      chips.push(hxChip('wave', 'Houle', ready ? (sw ? num(sw) : '—') : hxWait, sw ? esc(sw[1]) : ''));
+      chips.push(hxChip('temp', 'Eau', ready ? (te ? num(te) : '—') : hxWait, te ? esc(te[1]) : ''));
+    }
+    if (g.n != null) chips.push(`<button type="button" class="hx-chip hx-danger" data-hx="danger" data-fx-tab="securite" aria-label="Danger ${g.n} sur 4, voir la sécurité"><span class="hx-tx"><b class="hx-val"><span data-hx-count>${g.n}</span><small>/4</small></b><span class="hx-lab">Danger</span></span>${dots(g.n)}</button>`);
+    el.className = 'hx-now'; el.classList.add('hx-n' + chips.length);
+    el.innerHTML = chips.join('');
+    try { document.dispatchEvent(new CustomEvent('ocean:hero-now', {detail: {id: s.id, ready}})); } catch (e) {}
+  }
+
   function alertLine(s) {
     const g = gaugeOf(s), d = F ? F.mainDanger(s) : null;
     if (g.n == null || g.n < 3) return '';
@@ -105,6 +132,7 @@
       + `<div class="fx-row" data-before="live"><div class="db-v fx-readings db-wait">${waiting(s)}</div></div>`
       + `<div class="fx-slot" data-before="slot">${icon('sun')}<span class="fx-slot-k">Ton créneau</span><span class="db-v db-wait">Chargement…</span></div>`;
     const L = typeof LIVE !== 'undefined' ? LIVE[s.id] : null;
+    hero(s, L && L.live ? L : null);
     if (L && L.live) live(s, L);
     if (typeof COORDS !== 'undefined' && !COORDS[s.id]) { setRow('live', '<p class="fx-reading-note">Position non vérifiée : pas de prévision pour ce spot.</p>'); setRow('slot', '<span class="db-muted">Indisponible</span>'); }
     renderHead(s);
@@ -159,6 +187,7 @@
   const big = v => `<span class="fx-num">${esc(v)}</span>`;
   function live(s, l) {
     if (!same(s)) return;
+    hero(s, l);
     const st = host && host.querySelector('[data-before-stamp]');
     if (st) st.textContent = l && l.live ? stamp(l.fetchedAt) : '';
     if (!l || !l.live) { setRow('live', '<p class="fx-reading-note">Prévision indisponible pour le moment</p>'); return; }

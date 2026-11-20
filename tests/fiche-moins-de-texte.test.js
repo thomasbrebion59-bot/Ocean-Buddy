@@ -53,16 +53,21 @@ test('révéler d’un toucher : le bouton pose .is-detail sur son bloc et s’e
   assert.doesNotMatch(css, /\.field-check-go\{[^}]*display:none/);
 });
 
-test('« Sources et précisions » : un seul pied de fiche, pour l’onglet affiché ; les précisions sont copiées, jamais déplacées', () => {
+test('« Sources et précisions » : un seul pied de fiche, pour tout le parcours ; les précisions sont copiées, jamais déplacées', () => {
   assert.equal((html.match(/id="dNotes"/g) || []).length, 1);
   assert.ok(html.indexOf('id="dNotes"') > html.indexOf('data-cat="securite" style'), 'après le dernier panneau');
-  assert.match(replis, /const cats = tab === 'previsions' \? \['meteo'\] : tab === 'faune' \? \['faune', 'preserver'\] : \[tab\];/);
+  /* 20 nov. : tous les chapitres sont affichés, leurs précisions sont rassemblées ; celles des prévisions détaillées
+     seulement quand elles sont ouvertes. */
+  assert.match(replis, /const NOTE_CATS = \['meteo', 'infos', 'faune', 'preserver', 'securite', 'saisons', 'activites'\];/);
+  assert.match(replis, /if \(v && v\.dataset\.fxView === 'forecast' && !forecast\) return false;/);
   /* Une précision masquée par son bloc (section fermée, bloc absent pour ce spot) n’est pas listée ; pas de doublon. */
   assert.match(replis, /if \(n\.hidden \|\| n\.style\.display === 'none' \|\| n\.hasAttribute\('data-obf-shut'\)\) return true;/);
   assert.match(replis, /if \(!k \|\| seen\.has\(k\)\) return false; seen\.add\(k\); return true;/);
   assert.match(replis, /const c = e\.cloneNode\(true\); c\.removeAttribute\('data-fx-note'\); c\.removeAttribute\('id'\);/);
-  /* Changement d’onglet ou de fiche : la ligne se referme. Ses propres écritures ne relancent pas le rangement. */
-  assert.match(replis, /new MutationObserver\(\(\) => \{ setNotes\(false\); syncNotes\(\); \}\)\.observe\(\$\('#detail'\), \{ attributes: true, attributeFilter: \['data-tab'\] \}\);/);
+  /* Changement de fiche : la ligne se referme. Ses propres écritures ne relancent pas le rangement. */
+  /* La ligne ne se referme plus au changement de chapitre (on lit en défilant) ; elle suit l’ouverture des prévisions. */
+  assert.match(replis, /new MutationObserver\(\(\) => syncNotes\(\)\)\.observe\(tabOf\('meteo'\), \{ attributes: true, attributeFilter: \['data-forecast'\] \}\);/);
+  assert.doesNotMatch(replis, /attributeFilter: \['data-tab'\]/);
   assert.match(replis, /if \(notesBox && muts\.every\(m => notesBox\.contains\(m\.target\)\)\) return;/);
   assert.match(replis, /lastSpot = cur; closeAll\(\); closeTabs\(\); setNotes\(false\); syncNotes\(\);/);
   /* Même dessin que les autres sections repliables. */
