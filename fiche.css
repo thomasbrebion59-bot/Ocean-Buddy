@@ -851,6 +851,15 @@ html .ocean-v2 #detail .fx-notes[hidden],#detail .fx-notes-zone[hidden]{display:
 #detail .dcat[data-cat="preserver"] .pres-more{margin-top:8px}
 #detail .dcat[data-cat="preserver"] .pres-more[hidden]{display:none}
 
+/* Ordinateur (20 nov., « un gros trou au milieu ») : les quatre relevés tiennent sur une rangée au lieu de deux colonnes
+   étirées sur toute la largeur, et le texte courant garde une largeur de lecture. */
+@media(min-width:960px){
+  #detail .fx-readings{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px;min-height:calc(var(--fiche-label) * 1.25 + var(--fiche-num) * .95 + var(--fiche-note) * 1.3 + 4px)}
+  #detail .dcat[data-cat="faune"] .nx-stats{grid-template-columns:repeat(2,minmax(0,280px))}
+  #detail .dcat :is(p,li,.fx-text,.fx-note,.danger-item),#detail .fx-notes-item{max-width:76ch}
+}
+
+
 /* ================= Mouvement réduit ================= */
 @media (prefers-reduced-motion:reduce){#detail .fx-wait{animation:none}}
 body.reduce-motion #detail .fx-wait{animation:none}
