@@ -129,7 +129,7 @@
   const NOTES = {
     meteo: ['#spotWeek>.spot-week-note', '#spotWeek>.wx-source', '#spotWeek>.fx7-stamp'],
     securite: ['#dDanger>small.fx-note', '#sdRip .sd-coach-src'],
-    infos: ['#dSource', '.field-visit-cites', '.field-visit-caution', '.field-reference'],
+    infos: ['#dSource', '.field-visit-cites', '.field-visit-caution', '.field-reference', '#guideLive .gl-src', '#guideLive .gl-links-src', '#guideLive .guide-note'],
     saisons: ['#dSeasons .sd-suit>small', '#dSeasons>.sd-src'],
     activites: ['#dGo>.sd-src', '.field-preparation>.g-note', '.field-local>.fx-note', '#guideAround>.px-lead', '#guideAround>.px-src',
       '#guideSleep .px-type>span', '#guideSleep .px-src', '#guideSleep .px-search>.fx-note'],

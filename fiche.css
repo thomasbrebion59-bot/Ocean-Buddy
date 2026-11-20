@@ -860,6 +860,82 @@ html .ocean-v2 #detail .fx-notes[hidden],#detail .fx-notes-zone[hidden]{display:
 }
 
 
+/* =====================================================================================================
+   LE SPOT, EN VIE (20 nov. : « trop vide… chiffres importants grands… illustrations… il faut que les spots vivent »)
+   En tête de l’onglet « Le spot » (spot-guide.js, liveHTML) : grands chiffres illustrés, « Ici, on vit comme ça »,
+   « Budget sur place » avec l’échelle de prix, raccourcis. Illustrations : assets/fiche/*.webp, sans texte.
+   ===================================================================================================== */
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#guideLive{order:10;align-self:stretch;min-width:0;margin:0 0 var(--fiche-gap);padding:0;border:0;background:none;box-shadow:none}
+#detail #guideLive[hidden]{display:none}
+#detail #guideLive .gl-illu{display:block;pointer-events:none;-webkit-user-select:none;user-select:none;mix-blend-mode:multiply}
+/* Grands chiffres : une tuile par valeur, l’illustration posée en bas. */
+#detail .gl-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 var(--fiche-gap)}
+#detail .gl-tiles.gl-n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+#detail .gl-tiles.gl-n1{grid-template-columns:minmax(0,1fr)}
+#detail .gl-tile{position:relative;display:grid;align-content:start;min-width:0;min-height:156px;margin:0;padding:12px 12px 0;border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash);color:var(--t-ink);font:inherit;text-align:start;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .18s ease}
+#detail .gl-tile:active{transform:scale(.97)}
+#detail .gl-tile:focus-visible,#detail .gl-link:focus-visible,#detail .gl-card-go button:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+#detail .gl-tile-tx{position:relative;z-index:1;display:grid;gap:2px;min-width:0}
+#detail .gl-tile .fx-label{font-size:var(--fiche-note);line-height:1.25}
+#detail .gl-big{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:5px}
+#detail .gl-big .fx-num{font-size:calc(var(--fiche-num) * .86)}
+#detail .gl-tile .gl-illu{position:absolute;inset:auto 0 -6px 0;width:100%;height:auto;aspect-ratio:1;max-height:50%;object-fit:cover;object-position:50% 80%}
+/* Ici, on vit comme ça : cartes illustrées à faire glisser. */
+#detail .gl-block{margin:0 0 var(--fiche-gap)}
+#detail .gl-block>.fx-title{margin:0 0 10px}
+#detail .gl-vibe{margin:0 0 14px}
+#detail .gl-rail{display:flex;gap:10px;margin:0 -16px;padding:0 16px 4px;list-style:none;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scroll-padding-inline:16px;scrollbar-width:none}
+#detail .gl-rail::-webkit-scrollbar{display:none}
+#detail .gl-card{flex:0 0 58%;max-width:250px;min-width:0;display:grid;align-content:start;gap:3px;padding:0 0 12px;border-radius:var(--fiche-radius);background:var(--fiche-wash);overflow:hidden;scroll-snap-align:start}
+#detail .gl-card>.gl-illu,#detail .gl-card-go .gl-illu{width:100%;height:auto;aspect-ratio:16 / 11;object-fit:cover;margin:0 0 8px}
+#detail .gl-card>:not(.gl-illu):not(button),#detail .gl-card-go button>:not(.gl-illu){margin-inline:14px}
+#detail .gl-card b{font:700 var(--fiche-text)/1.3 var(--body);color:var(--t-ink);overflow-wrap:anywhere}
+#detail .gl-card small{font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .gl-card-go{padding:0}
+#detail .gl-card-go button{display:grid;align-content:start;gap:3px;width:100%;height:100%;margin:0;padding:0 0 12px;border:0;background:none;color:inherit;font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .18s ease}
+#detail .gl-card-go button:active{transform:scale(.97)}
+#detail .gl-card-go b{color:var(--t-main)}
+/* Budget sur place : l’échelle situe le prix de la nuit parmi tous les spots du guide. */
+#detail .gl-scale{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;margin:0 0 6px;font:400 var(--fiche-note)/1.2 var(--body);color:var(--fiche-soft)}
+#detail .gl-track{position:relative;display:block;height:10px;border-radius:999px;background:linear-gradient(90deg,color-mix(in srgb,var(--t-main) 16%,var(--t-card)),var(--t-main))}
+#detail .gl-pin{position:absolute;left:var(--p,50%);top:50%;width:20px;height:20px;border-radius:50%;border:3px solid var(--t-card);background:var(--t-sun,var(--t-main));box-shadow:0 1px 4px color-mix(in srgb,var(--t-ink) 30%,transparent);transform:translate(-50%,-50%)}
+#detail .gl-rank{margin:0 0 12px;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .gl-rank b{font-weight:700;color:var(--t-ink)}
+#detail .gl-prices{display:grid;gap:0;margin:0;padding:0;list-style:none}
+#detail .gl-prices li{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;column-gap:10px;min-height:48px;border-bottom:1px solid var(--fiche-hair)}
+#detail .gl-prices li:last-child{border-bottom:0}
+#detail .gl-ic{display:grid;place-items:center;width:30px;height:30px;color:var(--t-main)}
+#detail .gl-ic svg{width:24px;height:24px}
+#detail .gl-row-tx{min-width:0;font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+#detail .gl-row-tx small{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail .gl-prices b{font:800 calc(var(--fiche-num) * .5)/1.1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--t-ink);white-space:nowrap}
+#detail .gl-unit{margin:6px 0 0}
+/* Raccourcis : de vrais liens, pictogramme dans un rond. */
+#detail .gl-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(62px,1fr));gap:10px 2px;margin:0 -6px}
+#detail .gl-link{display:grid;justify-items:center;align-content:start;gap:7px;min-width:0;min-height:44px;color:var(--t-main);text-decoration:none;font:700 var(--fiche-note)/1.2 var(--body);text-align:center;overflow-wrap:normal;-webkit-tap-highlight-color:transparent}
+#detail .gl-link>span:last-child{font-size:12.5px;letter-spacing:-.01em;white-space:nowrap}
+#detail .gl-link-ic{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:var(--fiche-wash);transition:transform .18s ease}
+#detail .gl-link:active .gl-link-ic{transform:scale(.92)}
+#detail .gl-link-ic svg{width:26px;height:26px}
+/* Entrée en scène, une fois par spot : les tuiles puis les cartes montent légèrement, l’une après l’autre. */
+@keyframes glRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes glPin{from{left:3%}to{left:var(--p,50%)}}
+#detail #guideLive.gl-in :is(.gl-tile,.gl-card){animation:glRise .46s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0) * 70ms)}
+#detail #guideLive.gl-in .gl-card{animation-delay:calc(180ms + var(--i,0) * 70ms)}
+#detail #guideLive.gl-in .gl-pin{animation:glPin .8s cubic-bezier(.2,.8,.2,1) .25s backwards}
+@media (prefers-reduced-motion:reduce){#detail #guideLive :is(.gl-tile,.gl-card,.gl-pin){animation:none!important}#detail :is(.gl-tile,.gl-link-ic,.gl-card-go button){transition:none}}
+body.reduce-motion #detail #guideLive :is(.gl-tile,.gl-card,.gl-pin){animation:none!important}
+body.reduce-motion #detail :is(.gl-tile,.gl-link-ic,.gl-card-go button){transition:none}
+@media(max-width:389px){#detail .gl-big .fx-num{font-size:calc(var(--fiche-num) * .74)}#detail .gl-tile{padding:10px 10px 0;min-height:158px}#detail .gl-tile .gl-illu{max-height:42%}}
+@media(min-width:960px){
+  #detail .gl-tiles{grid-template-columns:repeat(3,minmax(0,220px))}
+  #detail .gl-rail{margin:0;padding:0 0 4px}
+  #detail .gl-card{flex:0 0 250px}
+  #detail .gl-budget{max-width:560px}
+  #detail .gl-links{grid-template-columns:repeat(auto-fit,minmax(64px,96px));justify-content:start}
+}
+
+
 /* ================= Mouvement réduit ================= */
 @media (prefers-reduced-motion:reduce){#detail .fx-wait{animation:none}}
 body.reduce-motion #detail .fx-wait{animation:none}

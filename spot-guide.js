@@ -16,6 +16,10 @@
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const svg=(body,cls='')=>`<svg class="${cls}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${body}</svg>`;
   const P={
+    tent:'<path d="M3 20h18M12 5 4 20M12 5l8 15M12 12l-3 8M12 12l3 8"/>',
+    sun:'<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.5M12 19v2.5M2.5 12H5M19 12h2.5M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M18.7 5.3l-1.8 1.8M7.1 16.9l-1.8 1.8"/>',
+    school:'<path d="M3 9l9-4 9 4-9 4-9-4ZM7 11v4c1.5 1.5 3 2 5 2s3.5-.5 5-2v-4M21 9v5"/>',
+    board:'<path d="M12 2.5c3 3 4.5 6.5 4.5 10S15 19 12 21.5C9 19 7.5 16 7.5 12.5S9 5.5 12 2.5ZM12 6v12"/>',
     nature:'<path d="M3 20h18M6 20l5-9 3 5 2-3 4 7"/><circle cx="17" cy="6" r="2"/>',
     plage:'<path d="M4 20c2.5-1.5 5.5-1.5 8 0s5.5 1.5 8 0M12 4c-4 0-7 3-7 6h14c0-3-3-6-7-6ZM12 10l3 8"/>',
     village:'<path d="M3 20V11l5-4 5 4v9M13 20v-6l4-3 4 3v6M3 20h18M7 20v-4h2v4"/>',
@@ -131,9 +135,7 @@
      fiche.css). Un conseil du carnet, marqué « non vérifié », reste toujours affiché avec sa mention. */
   function spiritHTML(s){
     const same=v=>String(v||'').toLowerCase().replace(/[\s.,;:!?’'«»]+/g,' ').trim();
-    const c=culture(s),hello=c.hello?.[0]||'',food=c.food?.[0]||'',ctry=country(s);
-    const open=typeof OceanCultures!=='undefined'&&ctry;
-    const bits=[hello&&`<span class="sg-cult-bit"><span>Le mot du coin :</span> <span${NT}>«&nbsp;${esc(hello)}&nbsp;»</span></span>`,food&&`<span class="sg-cult-bit"><span>À goûter :</span> <span${NT}>${esc(food)}</span></span>`].filter(Boolean).join('');
+    const c=culture(s);
     const ownTip=typeof s.tip==='string'&&s.tip.trim()?s.tip:'',tip=ownTip||(typeof s.carnet?.tip==='string'?s.carnet.tip:'');
     /* Comparaison sur le texte français (le conseil du catalogue est en français ; en anglais ou en espagnol, le bon
        geste vient de la traduction du carnet, posée par-dessus window.OCEAN_SPOT_GUIDES). */
@@ -143,9 +145,8 @@
     const dup=!!(r&&t&&r===t),wider=!!(r&&ownTip&&!dup&&r.startsWith(t));
     if(typeof document!=='undefined'){const tb=document.getElementById('dTip')?.closest('.block');if(tb)tb.toggleAttribute('data-in-geste',wider);}
     const geste=c.respect&&!dup?`<div class="sg-geste"><h3 class="fx-title fx-title-s">Le bon geste</h3><p class="fx-text"${NT}>${esc(c.respect)}</p></div>`:'';
-    const line=open?`<button type="button" class="sg-cult" data-cult-open="${esc(country(s))}" data-cult-from="spot">${svg(P.speech,'fx-ic')}<span class="sg-cult-tx"><b${NT}>${esc(OceanCultures.discover(ctry))}</b>${bits?`<small class="sg-cult-bits">${bits}</small>`:''}</span></button>`
-      :bits?`<p class="sg-cult sg-cult-static">${svg(P.speech,'fx-ic')}<span class="sg-cult-tx"><small class="sg-cult-bits">${bits}</small></span></p>`:'';
-    return geste+line+(c.grounded?'':'<p class="fx-note guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>');
+    /* 20 nov. : le mot du coin, le plat et la page du pays sont dans « Ici, on vit comme ça » (liveHTML), sans doublon ici. */
+    return geste;
   }
 
   /* ---------- À découvrir autour ---------- */
@@ -216,6 +217,89 @@
       </div>`;
   }
 
+
+  /* ---------- Le spot, en vie (20 nov. 2026) ----------
+     Le fondateur, devant la fiche allégée : « un peu trop vide… chiffres importants grands… belles illustrations… il faut
+     que les spots vivent… même la culture… échelle de prix par rapport aux autres spots… raccourcis Booking, école, matériel,
+     restaurants ». En tête de l’onglet « Le spot » : trois grands chiffres illustrés (normales du mois, prix de la nuit),
+     « Ici, on vit comme ça » (ce que le carnet sait du lieu), « Budget sur place » (le prix de la nuit situé parmi tous
+     les spots, puis nos estimations) et des raccourcis qui sont de vrais liens. Aucun chiffre sans donnée : une tuile ou
+     une ligne sans valeur n’apparaît pas. Pas de prix d’hôtel ni de restaurant : nous n’en avons pas de sourcé. */
+  const ILLU=k=>`<img class="gl-illu" src="assets/fiche/${k}.webp" alt="" width="210" height="210" loading="lazy" decoding="async" draggable="false">`;
+  const nf=(v,d=0)=>{try{return Number(v).toLocaleString(window.OB_LOCALE||'fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});}catch(_){return String(v);}};
+  let nightPrices=null;
+  function allNightPrices(){
+    if(!nightPrices)nightPrices=allSpots().filter(x=>x&&!x.custom).map(x=>{try{return estimate(x)?.lo;}catch(_){return null;}}).filter(Number.isFinite);
+    return nightPrices;
+  }
+  /* Normales du mois en cours : fichier léger déjà utilisé par l’accueil ([eau, …, houle ×10, …], spot-data.js). */
+  function monthNormals(s){
+    const row=window.OCEAN_CLIMATE_LITE?.[s.id],m=new Date().getMonth();if(!Array.isArray(row))return null;
+    const sea=Number(row[0]?.[m]),hs=Number(row[5]?.[m])/10,inland=typeof isInland==='function'?isInland(s):['lake','inland'].includes(s.waterType);
+    return {sea:Number.isFinite(sea)&&row[0]?.[m]!=null?sea:null,hs:!inland&&Number.isFinite(hs)&&row[5]?.[m]!=null&&hs>0?hs:null};
+  }
+  function mapsNear(s,what){
+    const c=coordsOf(s.id)||s.coords,ok=c&&Number.isFinite(+c.lat)&&Number.isFinite(+c.lon);
+    return `https://www.google.com/maps/search/${encodeURIComponent(what)}${ok?`/@${(+c.lat).toFixed(4)},${(+c.lon).toFixed(4)},13z`:encodeURIComponent(' '+place(s,estimate(s)))}`;
+  }
+  function liveHTML(s){
+    const e=estimate(s),c=culture(s),n=monthNormals(s),ctry=country(s),month=esc(M.monthName(new Date().getMonth()+1,LG()));
+    /* 1. Grands chiffres. Le mois s’écrit déjà dans la langue de l’app, hors traduction. */
+    const tile=(go,label,value,dec,unit,illu,i)=>`<button type="button" class="gl-tile" data-gl-go="${go}" style="--i:${i}"><span class="gl-tile-tx"><span class="fx-label"><span>${label}</span> <span${NT}>${month}</span></span><span class="gl-big"><b class="fx-num" data-gl-count="${value}" data-gl-dec="${dec}"${NT}>${nf(value,dec)}</b><span class="fx-unit"${NT}>${unit}</span></span></span>${ILLU(illu)}</button>`;
+    const tiles=[];
+    if(n&&n.sea!=null)tiles.push(tile('saisons','Eau en',n.sea,0,'°C','eau',tiles.length));
+    if(n&&n.hs!=null)tiles.push(tile('saisons','Houle en',n.hs,1,'m','houle',tiles.length));
+    if(e)tiles.push(`<button type="button" class="gl-tile" data-gl-go="dormir" style="--i:${tiles.length}"><span class="gl-tile-tx"><span class="fx-label">La nuit, dès</span><span class="gl-big"><b class="fx-num" data-gl-count="${e.lo}" data-gl-dec="0"${NT}>${nf(e.lo)}</b><span class="fx-unit"${NT}>€</span></span></span>${ILLU('toit')}</button>`);
+    /* 2. Ici, on vit comme ça : seulement ce que le carnet contient (mot du coin, à goûter), puis la page du pays. */
+    const cards=[];
+    const hello=c.hello?.[0]||'',helloMore=typeof c.hello?.[1]==='string'?c.hello[1]:'',food=c.food?.[0]||'',foodMore=typeof c.food?.[1]==='string'?c.food[1]:'';
+    if(hello)cards.push(`<li class="gl-card" style="--i:${cards.length}">${ILLU('panneau')}<span class="fx-label">Le mot du coin</span><b${NT}>«&nbsp;${esc(hello)}&nbsp;»</b>${helloMore?`<small${NT}>${esc(helloMore)}</small>`:''}</li>`);
+    if(food)cards.push(`<li class="gl-card" style="--i:${cards.length}">${ILLU('plat')}<span class="fx-label">À goûter</span><b${NT}>${esc(food)}</b>${foodMore?`<small${NT}>${esc(foodMore)}</small>`:''}</li>`);
+    if(typeof OceanCultures!=='undefined'&&ctry)cards.push(`<li class="gl-card gl-card-go" style="--i:${cards.length}"><button type="button" data-cult-open="${esc(ctry)}" data-cult-from="spot">${ILLU('accueil')}<span class="fx-label">Culture du pays</span><b${NT}>${esc(OceanCultures.discover(ctry))}</b><small>Mots, fêtes et usages</small></button></li>`);
+    const vibe=c.vibe?`<p class="fx-text gl-vibe"${NT}>${esc(c.vibe)}</p>`:'';
+    const life=cards.length||vibe?`<div class="gl-block gl-life"><h3 class="fx-title">Ici, on vit comme ça</h3>${vibe}${cards.length?`<ul class="gl-rail">${cards.join('')}</ul>`:''}${c.grounded?'':'<p class="fx-note guide-note">Repères culturels généraux du pays. La fiche détaillée de ce spot arrive bientôt.</p>'}</div>`:'';
+    /* 3. Budget sur place : le prix de la nuit parmi tous les spots du guide, puis nos estimations. */
+    let budget='';
+    const srcNote=`Estimation indicative Ocean Buddy (${M.EDITION}), les prix varient selon la saison.`;
+    if(e){
+      const all=allNightPrices(),cheaper=all.length?Math.round(all.filter(v=>v<e.lo).length/all.length*100):null,pricier=M.cheaperThan(e.lo,all);
+      const pos=cheaper==null?50:Math.max(3,Math.min(97,cheaper));
+      const rank=cheaper==null?'':pricier>=50?`<p class="gl-rank"><span>Moins cher que</span> <b${NT}>${pricier}&nbsp;%</b> <span>des spots du guide</span></p>`:`<p class="gl-rank"><span>Plus cher que</span> <b${NT}>${cheaper}&nbsp;%</b> <span>des spots du guide</span></p>`;
+      const hasPeak=e.peak.length>0,rows=[`<li><span class="gl-ic">${svg(e.type==='camping'?P.tent:P.bed)}</span><span class="gl-row-tx">${lab(e)}</span><b${NT}>${M.euros({lo:e.lo,hi:e.hi})}</b></li>`];
+      if(hasPeak)rows.push(`<li><span class="gl-ic">${svg(P.sun)}</span><span class="gl-row-tx"><span>En haute saison</span> <small${NT}>${esc(M.monthsLabel(e.peak,LG()))}</small></span><b${NT}>${M.euros({lo:e.peakLo,hi:e.peakHi})}</b></li>`);
+      if(e.alt)rows.push(`<li><span class="gl-ic">${svg(P.bed)}</span><span class="gl-row-tx">${esc(e.alt.label)}</span><b${NT}>${M.euros(e.alt)}</b></li>`);
+      budget=`<div class="gl-block gl-budget"><h3 class="fx-title">Budget sur place</h3>
+        <div class="gl-scale" aria-hidden="true"><span>moins cher</span><i class="gl-track"><i class="gl-pin" style="--p:${pos}%"></i></i><span>plus cher</span></div>${rank}
+        <ul class="gl-prices">${rows.join('')}</ul>
+        <p class="fx-note gl-unit">par nuit, pour une personne</p>
+        <p class="fx-note gl-src">${srcNote}</p></div>`;
+    }
+    /* 4. Raccourcis : de vrais liens (recherches publiques, sans lien sponsorisé). */
+    const pl=place(s,e),dates=tripDates(s),links=M.searchLinks(pl,{checkin:dates?.checkin,checkout:dates?.checkout,coords:coordsOf(s.id)});
+    const act=(typeof detailAct==='function'?detailAct(s):null)||(typeof spotSports==='function'?spotSports(s)[0]:(s.sports||[])[0])||'',sportName=(typeof SPORTMAP!=='undefined'&&SPORTMAP[act]?.label)||'';
+    const link=(href,ic,label,nt)=>`<a class="gl-link" href="${esc(href)}" target="_blank" rel="noopener"><span class="gl-link-ic">${svg(ic)}</span><span${nt?NT:''}>${label}</span></a>`;
+    const shortcuts=[link(links.booking,P.bed,'Booking.com',1)];
+    if(e&&e.type==='camping')shortcuts.push(link(links.camping,P.tent,'Campings'));
+    shortcuts.push(link(mapsNear(s,('école '+sportName).trim()),P.school,'École'),link(mapsNear(s,('location matériel '+sportName).trim()),P.board,'Location'),link(mapsNear(s,'restaurants'),P.food,'Restaurants'));
+    return `${tiles.length?`<div class="gl-tiles gl-n${tiles.length}">${tiles.join('')}</div>`:''}${life}${budget}<nav class="gl-links" aria-label="Raccourcis pratiques">${shortcuts.join('')}</nav><p class="fx-note gl-links-src">Recherches publiques, sans lien sponsorisé.</p>`;
+  }
+  /* Les chiffres comptent jusqu’à leur valeur, une fois, à l’ouverture ; jamais en mouvement réduit. */
+  function countUp(root){
+    const still=document.body.classList.contains('reduce-motion')||(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)||typeof requestAnimationFrame!=='function';
+    if(still)return;
+    root.querySelectorAll('[data-gl-count]').forEach(b=>{
+      const to=Number(b.dataset.glCount),dec=Number(b.dataset.glDec)||0;if(!Number.isFinite(to))return;
+      const t0=performance.now(),dur=700;
+      const step=t=>{const k=Math.min(1,(t-t0)/dur),v=to*(1-Math.pow(1-k,3));b.textContent=nf(k<1?v:to,dec);if(k<1&&b.isConnected)requestAnimationFrame(step);};
+      b.textContent=nf(0,dec);requestAnimationFrame(step);
+    });
+  }
+  function paintLive(s,animate){
+    if(!section?.live)return;
+    section.live.innerHTML=liveHTML(s);
+    if(animate){section.live.classList.remove('gl-in');void section.live.offsetWidth;section.live.classList.add('gl-in');countUp(section.live);}
+  }
+
   /* ---------- Aperçu en tête de fiche ---------- */
   function glanceHTML(s){
     const c=culture(s),e=estimate(s);
@@ -239,18 +323,24 @@
     infos.insertBefore(around,anchor);infos.insertBefore(sleep,anchor);
     const glance=document.createElement('div');glance.id='guideGlance';glance.className='guide-glance';glance.setAttribute('aria-label','L’essentiel du voyage');
     ($('#fieldAtAGlance')||story.lastElementChild)?.after(glance);
-    section={spirit,around,sleep,glance};
+    const live=document.createElement('section');live.id='guideLive';live.className='guide-section';live.classList.add('guide-live');live.setAttribute('aria-label','Le spot en un coup d’œil');
+    story.before(live);
+    section={spirit,around,sleep,glance,live};
     return true;
   }
+  let lastLive=null;
   function paint(s){
     if(!section||!s||current!==s.id)return;
     const custom=!!s.custom;
-    section.spirit.hidden=custom;section.around.hidden=custom;section.sleep.hidden=custom;section.glance.hidden=custom;
+    section.spirit.hidden=custom;section.around.hidden=custom;section.sleep.hidden=custom;section.glance.hidden=custom;section.live.hidden=custom;
     if(custom)return;
     section.spirit.innerHTML=spiritHTML(s);
     section.around.innerHTML=aroundHTML(s);
     section.sleep.innerHTML=sleepHTML(s);
     section.glance.innerHTML=glanceHTML(s);
+    /* L’entrée en scène ne joue qu’à l’ouverture d’un autre spot ; les normales arrivent sans rejouer l’animation. */
+    paintLive(s,lastLive!==s.id);lastLive=s.id;
+    if(!window.OCEAN_CLIMATE_LITE)window.OceanSpotData?.load?.('lite').then(()=>{if(current===s.id)paintLive(s,false);}).catch(()=>{});
     badgeNearby();
     window.OceanNotebook?.sync();
   }
@@ -287,6 +377,12 @@
   }
   const tripDialog=$('#tripDialog');if(tripDialog)new MutationObserver(badgePicker).observe(tripDialog,{childList:true,subtree:true});
   document.addEventListener('click',e=>{
+    const tile=e.target.closest('#guideLive [data-gl-go]');
+    if(tile&&typeof showDetailCat==='function'){
+      const go=tile.dataset.glGo;showDetailCat(go==='dormir'?'activites':go);
+      if(go==='dormir')setTimeout(()=>document.getElementById('guideSleep')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}),60);
+      return;
+    }
     const jump=e.target.closest('[data-guide-jump]');
     if(jump){const target=document.getElementById(jump.dataset.guideJump);if(target){target.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});}return;}
     const go=e.target.closest('[data-guide-spot]');if(go){openSpot(go.dataset.guideSpot);return;}

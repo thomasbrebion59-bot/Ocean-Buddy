@@ -145,23 +145,81 @@ function spirit(culture,cultures){
   vm.runInContext(src.slice(i,j)+';this.spiritHTML=spiritHTML;',ctx);
   return ctx.spiritHTML({id:'x'});
 }
-test('« Le spot » : la saison se lit dans l’onglet Saisons, le mot du coin et le plat à goûter sur une seule ligne vers la culture du pays',()=>{
+/* « Le spot, en vie » (20 nov.) : le bloc de tête de l’onglet, rendu par liveHTML avec des données factices. */
+function liveBlock(culture,cultures,over={}){
+  const src=text('spot-guide.js'),i=src.indexOf('  const ILLU=k=>'),j=src.indexOf('  /* Les chiffres comptent jusqu’à leur valeur');
+  assert.ok(i>0&&j>i,'liveHTML introuvable');
+  const est={type:'camping',label:'Camping',lo:12,hi:25,peakLo:16,peakHi:30,peak:[7,8],alt:{label:'Auberge de jeunesse',lo:25,hi:40},town:''};
+  const ctx=vm.createContext({culture:()=>culture,country:()=>'France',esc:v=>String(v??''),NT:' translate="no" data-no-i18n',svg:()=>'<svg></svg>',P:{},lab:e=>e.label,LG:()=>'fr',
+    estimate:()=>('est' in over?over.est:est),allSpots:()=>[{id:'a'},{id:'b'},{id:'c'},{id:'d',custom:true}],coordsOf:()=>({lat:43.66,lon:-1.44}),place:()=>'Hossegor, France',tripDates:()=>null,
+    M:{monthName:()=>'novembre',monthsLabel:()=>'juillet et août',euros:r=>r.lo===r.hi?`${r.lo} €`:`${r.lo}–${r.hi} €`,cheaperThan:(v,all)=>Math.round(all.filter(x=>x>v).length/all.length*100),EDITION:'septembre 2026',
+      searchLinks:()=>({booking:'https://www.booking.com/searchresults.html?ss=Hossegor',camping:'https://www.google.com/maps/search/camping'})},
+    window:{OCEAN_CLIMATE_LITE:'lite' in over?over.lite:{x:[[13,12,12,14,16,19,21,22,21,18,16,14],[],[],[],[],[23,26,23,17,14,12,13,13,15,18,24,25],[]]},OB_LOCALE:'fr-FR'},
+    OceanCultures:cultures,Date,Number,Math,encodeURIComponent,SPORTMAP:{surf:{label:'Surf'}},spotSports:()=>['surf']});
+  vm.runInContext(src.slice(i,j)+';this.liveHTML=liveHTML;',ctx);
+  return ctx.liveHTML({id:'x',waterType:over.water||'sea',sports:['surf']});
+}
+test('« Le spot » : la saison se lit dans l’onglet Saisons ; le mot du coin, le plat et la page du pays sont dans « Ici, on vit comme ça »',()=>{
   const full={season:'De mai à octobre : test',respect:'Sois discret.',food:['Plat','Description'],hello:['Bonjour','pour saluer'],vibe:'Ambiance.',grounded:true};
   const html=spirit(full,{discover:c=>'Découvrir la '+c});
-  /* Retirés de l’affichage : la saison (onglet Saisons), la photo répétée, la phrase d’ambiance, le numéro de chapitre. */
-  assert.doesNotMatch(html,/La bonne saison|De mai à octobre|Repère indicatif|<img|Ambiance|guide-chapter|01/);
-  /* Le bon geste : texte entier, non retraduit par morceaux. */
+  /* L’esprit du lieu ne garde que le bon geste : ni saison, ni photo, ni ligne de culture en double. */
+  assert.doesNotMatch(html,/La bonne saison|De mai à octobre|Repère indicatif|<img|Ambiance|guide-chapter|01|sg-cult|<button /);
   assert.match(html,/<h3 class="fx-title fx-title-s">Le bon geste<\/h3><p class="fx-text" translate="no" data-no-i18n>Sois discret\.<\/p>/);
-  /* Une seule ligne, un seul bouton vers la page culture du pays. */
-  assert.equal((html.match(/<button /g)||[]).length,1);
-  assert.match(html,/<button type="button" class="sg-cult" data-cult-open="France" data-cult-from="spot">/);
-  assert.match(html,/<b translate="no" data-no-i18n>Découvrir la France<\/b>/);
-  assert.match(html,/<span>Le mot du coin :<\/span> <span translate="no" data-no-i18n>«&nbsp;Bonjour&nbsp;»<\/span>/);
-  assert.match(html,/<span>À goûter :<\/span> <span translate="no" data-no-i18n>Plat<\/span>/);
-  assert.doesNotMatch(html.replace(/<[^>]+>/g,' '),/·/,'aucune chaîne reliée par des points médians');
-  /* Sans module culture : la même ligne, sans lien ; repères généraux du pays : la note le dit. */
-  const plain=spirit({...full,grounded:false},undefined);
-  assert.doesNotMatch(plain,/<button /);
-  assert.match(plain,/<p class="sg-cult sg-cult-static">/);
+  /* Ici, on vit comme ça : seulement ce que le carnet contient, et un seul bouton vers la page culture du pays. */
+  const live=liveBlock(full,{discover:c=>'Découvrir la '+c});
+  assert.match(live,/<h3 class="fx-title">Ici, on vit comme ça<\/h3><p class="fx-text gl-vibe" translate="no" data-no-i18n>Ambiance\.<\/p>/);
+  assert.match(live,/<span class="fx-label">Le mot du coin<\/span><b translate="no" data-no-i18n>«&nbsp;Bonjour&nbsp;»<\/b><small translate="no" data-no-i18n>pour saluer<\/small>/);
+  assert.match(live,/<span class="fx-label">À goûter<\/span><b translate="no" data-no-i18n>Plat<\/b><small translate="no" data-no-i18n>Description<\/small>/);
+  assert.equal((live.match(/data-cult-open=/g)||[]).length,1);
+  assert.match(live,/<button type="button" data-cult-open="France" data-cult-from="spot">/);
+  assert.match(live,/<b translate="no" data-no-i18n>Découvrir la France<\/b>/);
+  assert.doesNotMatch(live.replace(/<[^>]+>/g,' '),/·/,'aucune chaîne reliée par des points médians');
+  assert.doesNotMatch(live,/La fête|Festival/i,'aucune fête inventée : le carnet n’en contient pas');
+  /* Sans module culture : pas de bouton ; repères généraux du pays : la note le dit. */
+  const plain=liveBlock({...full,grounded:false},undefined);
+  assert.doesNotMatch(plain,/data-cult-open/);
   assert.match(plain,/Repères culturels généraux du pays\. La fiche détaillée de ce spot arrive bientôt\./);
+});
+test('« Le spot, en vie » : grands chiffres seulement s’il y a une donnée, échelle de prix calculée, raccourcis qui sont de vrais liens',()=>{
+  const c={hello:['Bonjour'],food:['Plat'],grounded:true};
+  const html=liveBlock(c,undefined);
+  /* Normales du mois en cours (fichier léger) : eau, houle ; prix de la nuit la moins chère. */
+  const m=new Date().getMonth(),sea=[13,12,12,14,16,19,21,22,21,18,16,14][m],hs=[23,26,23,17,14,12,13,13,15,18,24,25][m]/10;
+  assert.match(html,new RegExp(`data-gl-go="saisons"[^>]*>.*?<span>Eau en</span> <span translate="no" data-no-i18n>novembre</span>.*?data-gl-count="${sea}" data-gl-dec="0"`));
+  assert.match(html,new RegExp(`<span>Houle en</span>.*?data-gl-count="${hs}" data-gl-dec="1"`));
+  assert.match(html,/data-gl-go="dormir".*?<span class="fx-label">La nuit, dès<\/span>.*?data-gl-count="12"/);
+  assert.match(html,/class="gl-tiles gl-n3"/);
+  /* Plan d’eau intérieur : pas de houle. Sans normales : seule la tuile du prix. */
+  assert.doesNotMatch(liveBlock(c,undefined,{water:'lake'}),/Houle en/);
+  const bare=liveBlock(c,undefined,{lite:{}});
+  assert.doesNotMatch(bare,/Eau en|Houle en/); assert.match(bare,/class="gl-tiles gl-n1"/);
+  /* Budget : trois spots au même prix dans le catalogue factice, aucun n’est moins cher. */
+  assert.match(html,/<h3 class="fx-title">Budget sur place<\/h3>/);
+  assert.match(html,/<i class="gl-pin" style="--p:3%"><\/i>/);
+  assert.match(html,/<span>Plus cher que<\/span> <b translate="no" data-no-i18n>0&nbsp;%<\/b> <span>des spots du guide<\/span>/);
+  assert.match(html,/Camping<\/span><b translate="no" data-no-i18n>12–25 €<\/b>/);
+  assert.match(html,/<span>En haute saison<\/span> <small translate="no" data-no-i18n>juillet et août<\/small><\/span><b translate="no" data-no-i18n>16–30 €<\/b>/);
+  assert.match(html,/Auberge de jeunesse<\/span><b translate="no" data-no-i18n>25–40 €<\/b>/);
+  assert.match(html,/<p class="fx-note gl-src">Estimation indicative Ocean Buddy \(septembre 2026\), les prix varient selon la saison\.<\/p>/);
+  /* Aucun prix d’hôtel ni de restaurant : nous n’en avons pas de sourcé. */
+  assert.doesNotMatch(html,/Hôtel|H[oô]tel<\/span><b/);
+  assert.doesNotMatch(html,/Restaurants?<\/span><b/);
+  /* Raccourcis : Booking.com mène à booking.com ; école, location et restaurants cherchent autour du spot. */
+  assert.match(html,/<a class="gl-link" href="https:\/\/www\.booking\.com\/searchresults\.html\?ss=Hossegor" target="_blank" rel="noopener">.*?<span translate="no" data-no-i18n>Booking\.com<\/span><\/a>/);
+  assert.match(html,/href="https:\/\/www\.google\.com\/maps\/search\/restaurants\/@43\.6600,-1\.4400,13z"[^>]*>.*?<span>Restaurants<\/span>/);
+  assert.match(html,/maps\/search\/%C3%A9cole%20Surf\/@43\.6600,-1\.4400,13z/);
+  assert.match(html,/maps\/search\/location%20mat%C3%A9riel%20Surf\/@/);
+  assert.match(html,/<span>Campings<\/span>/);
+  /* Sans estimation : ni tuile de prix ni budget, les raccourcis restent. */
+  const none=liveBlock(c,undefined,{est:null});
+  assert.doesNotMatch(none,/Budget sur place|La nuit, dès/); assert.match(none,/Booking\.com/);
+  /* Motion : une fois par spot, jamais en mouvement réduit ; précisions rangées en pied de fiche. */
+  const src=text('spot-guide.js'),css=text('fiche.css');
+  assert.match(src,/paintLive\(s,lastLive!==s\.id\);lastLive=s\.id;/);
+  assert.match(src,/const still=document\.body\.classList\.contains\('reduce-motion'\)\|\|\(window\.matchMedia&&matchMedia\('\(prefers-reduced-motion: reduce\)'\)\.matches\)/);
+  assert.match(css,/@media \(prefers-reduced-motion:reduce\)\{#detail #guideLive :is\(\.gl-tile,\.gl-card,\.gl-pin\)\{animation:none!important\}/);
+  assert.match(css,/body\.reduce-motion #detail #guideLive :is\(\.gl-tile,\.gl-card,\.gl-pin\)\{animation:none!important\}/);
+  assert.doesNotMatch(css.slice(css.indexOf('LE SPOT, EN VIE')),/animation:[^;}]*infinite/);
+  assert.match(text('replis.js'),/'#guideLive \.gl-src', '#guideLive \.gl-links-src', '#guideLive \.guide-note'/);
+  for(const f of ['eau','houle','toit','plat','panneau','accueil'])assert.ok(fs.existsSync(path.join(__dirname,'..','assets/fiche',f+'.webp')),f);
 });

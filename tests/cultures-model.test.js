@@ -223,7 +223,7 @@ test('intégration : un seul point d’accroche dans home-feed.js, chargement à
   assert.match(bootSrc, /OceanBoot\.after/);
   assert.match(bootSrc, /const V='[0-9a-f]{12}';/);
   for (const f of ['scripts/build-static.cjs', 'scripts/build-mobile.cjs']) assert.match(read(f), /'cultures-model\.js','cultures\.js'/, f);
-  assert.match(read('spot-guide.js'), /data-cult-open="\$\{esc\(country\(s\)\)\}"/);
+  assert.match(read('spot-guide.js'), /data-cult-open="\$\{esc\(ctry\)\}" data-cult-from="spot"/);
   for (const l of ['fr', 'en', 'es']) assert.ok(fs.existsSync(path.join(root, `assets/data/cultures.${l}.json`)), l);
 });
 test('traductions : textes de la découverte des cultures en anglais et en espagnol', () => {
