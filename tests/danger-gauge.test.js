@@ -107,3 +107,19 @@ test('rail « Pour débuter en douceur » : aucun spot débutant à 3 points ou 
  assert.deepEqual(picked.filter(s=>gauge(s).n>=3).map(s=>s.id),[]);
  for(const id of ['tayrona','havelock','jervisbay'])assert.equal(picked.some(s=>s.id===id),false,id);
 });
+
+/* 21 nov. 2026 : plusieurs des vagues les plus dangereuses du monde étaient à 1 ou 2 sur 4, leurs phrases de danger
+   (« Récif affleurant », « Vague extrêmement lourde », « Vagues XXL réservées au tow-in ») ne contenant aucun mot de la
+   liste. La jauge reste calculée sur les lignes de danger (décision du 20 oct.), avec les mots qui manquaient. */
+test('vagues de gros et récifs peu profonds : jamais sous 3 sur 4',()=>{
+ for(const id of ['teahupoo','pipeline','supertubos','padang','cloud9','hookipa','keramas'])assert.ok(gauge(byId[id]).n>=3,id+' : '+gauge(byId[id]).n);
+ for(const id of ['nazare','jaws'])assert.equal(gauge(byId[id]).n,4,id);
+ assert.equal(n('Vague extrêmement lourde.'),3);
+ assert.equal(n('Récif affleurant.'),3);
+ assert.equal(n('Vagues XXL réservées au tow-in.'),4);
+ assert.equal(n('Courants très forts près des passes.'),3);
+ assert.equal(n('Aucun secours sur place.'),4);
+ /* ce qui n'est pas un danger sérieux ne monte pas */
+ assert.equal(n('Soleil intense, hydrate-toi.'),1);
+ assert.equal(n('Foule.'),1);
+});

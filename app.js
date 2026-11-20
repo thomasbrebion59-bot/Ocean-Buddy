@@ -243,8 +243,8 @@ function spotCardMeta(s){
    n'est pas « roche »). Le champ s.danger du catalogue n'est plus lu. Lignes du catalogue, sinon celles du
    carnet (basis « carnet », non vérifiées) ; aucune ligne : n vaut null (« non évalué », jamais « sans danger »). */
 var DANGER_GAUGE=[
-  [4,/\b(?:mortel|mortels|mortelle|mortelles|meurtriers?|meurtrieres?|victimes?|noyades?|tres dangereu(?:x|se|ses)|requins?|crocodiles?|alligators?|cubomeduses?|meduses?[- ]boites?|irukandji|baignade interdite)\b/],
-  [3,/\b(?:baines?|arrachement|courants? (?:forts?|violents?|puissants?|de passe)|shore[- ]?break|recifs? (?:tranchants?|a fleur d'eau)|hypothermie|isole|isolee|isoles|isolees|secours eloignes?|cyclones?|typhons?|ouragans?|grottes?|cavites?|epaves?|pieges? de marees?)\b/],
+  [4,/\b(?:mortel|mortels|mortelle|mortelles|meurtriers?|meurtrieres?|victimes?|noyades?|tres dangereu(?:x|se|ses)|requins?|crocodiles?|alligators?|cubomeduses?|meduses?[- ]boites?|irukandji|baignade interdite|vagues? (?:geantes?|enormes?|xxl)|tow-?in|vagues? de (?:plus de )?\d+ (?:m|metres|pieds)|\d+ pieds|aucun secours|secours specialises?)\b/],
+  [3,/\b(?:baines?|arrachement|courants? (?:forts?|violents?|puissants?|de passe)|shore[- ]?break|recifs? (?:tranchants?|coupants?|volcaniques?|a fleur d'eau|affleurants?|(?:tres )?peu profonds?)|recifs? (?:peu profond )?et coupants?|fonds? (?:de recif|de lave|rocheux|(?:tres )?peu profonds?)|fond rocheux peu profond|(?:vagues?|houles?|tubes?) (?:(?:extremement|tres) )?(?:lourdes?|puissantes?|creux|creuses?)|vagues? de gros|puissance elevee|tubes? (?:rapides?|puissants?)|courants? (?:tres |extremement )?(?:forts?|violents?|puissants?|extremes?)|tourbillons?|eau (?:glaciale|a [0-4]\b[^ ]*)|conditions arctiques|ferme brutalement|chute risquee|sauvetages? frequents?|grosse houle|forte houle|hypothermie|isole|isolee|isoles|isolees|secours eloignes?|cyclones?|typhons?|ouragans?|grottes?|cavites?|epaves?|pieges? de marees?)\b/],
   [2,/\b(?:courants?|houles?|vents? (?:forts?|offshore)|rochers?|roches?|falaises?|chutes? de pierres|oursins?|meduses?|bateaux?|trafic|jet-?skis?|profondeurs?)\b/]
 ];
 function dangerGauge(s){
