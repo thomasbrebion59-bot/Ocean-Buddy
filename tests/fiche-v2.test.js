@@ -405,3 +405,23 @@ test('barre du haut de la fiche : le nom du spot, pas « Le spot » (qui est aus
   assert.equal(SpotName.parts('Tulamben').main, 'Tulamben');
   assert.equal(SpotName.parts(undefined).main, '');
 });
+
+test('barre de progression collée : fond opaque du thème, pleine largeur, sans fondu de bord ni coins arrondis', () => {
+  const css = read('fiche.css');
+  const rule = 'html .ocean-v2 #detail .dtabs{background:var(--t-page);border-radius:0;-webkit-mask-image:none;mask-image:none;box-shadow:none}';
+  assert.ok(css.includes(rule));
+  /* Elle vient après les règles anciennes (field-guide.css, design.css) : fiche.css est chargée en dernier. */
+  const html = read('index.html');
+  assert.ok(html.indexOf('fiche.css?v=') > html.indexOf('field-guide.css?v='));
+  assert.ok(html.indexOf('fiche.css?v=') > html.indexOf('design.css?v='));
+});
+
+test('photo d’ouverture : les points de danger, allumés jusqu’au niveau seulement, le point éteint est un anneau', () => {
+  const css = read('fiche.css'), before = read('spot-before.js');
+  assert.match(css, /#detail \.hx-danger \.fx-dots i:not\(\.on\)\{background:transparent;box-shadow:inset 0 0 0 1\.5px /);
+  assert.match(css, /#detail \.hx-danger \.fx-dots i\.on\{background:color-mix\(in srgb,var\(--t-danger\) 72%,var\(--t-on-main\)\)\}/);
+  /* La tuile de la photo utilise le même dessin des points que l’alerte (dots(g.n) : .on sur les n premiers). */
+  const hero = before.slice(before.indexOf('function hero('), before.indexOf('function alertLine('));
+  assert.match(hero, /hx-danger/);
+  assert.match(hero, /dots\(g\.n\)/);
+});

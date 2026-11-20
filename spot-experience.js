@@ -319,15 +319,32 @@
   const waveSize = h => (h == null ? 's' : h < 0.8 ? 's' : h < 2 ? 'm' : 'l');
   const windSideOf = (deg, s) => { try { return window.SpotDataModel?.windSide?.(deg, s && s.wind) || null; } catch (e) { return null; } };
   const SIDE_LABEL = { offshore: 'Vent de terre', onshore: 'Vent de mer', cross: 'Vent de côté' };
+  /* La vague (20 nov., reprise) : une vraie vague qui déferle vers la plage, avec sa lèvre, son tube et son écume ; l’eau
+     et le sable ont leurs couleurs d’illustration (la même mer quel que soit le sport choisi), le ciel suit le thème pour
+     que les chiffres posés dessus restent lisibles. */
   function sceneArt() {
     return `<svg class="sc-art" viewBox="0 0 400 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-      <rect class="sc-sky" width="400" height="220"/><circle class="sc-sun" cx="232" cy="134" r="20"/>
-      <path class="sc-far" d="M120 132 C190 124 280 128 400 122 V220 H120Z"/>
-      <g class="sc-wave"><g class="sc-wave-move"><g transform="matrix(-1 0 0 1 560 0)"><path class="sc-swell" d="M140 220 C150 170 190 128 252 112 C300 100 340 112 360 138 C330 128 304 136 296 160 C290 182 310 200 340 210 L400 214 V220Z"/>
-        <path class="sc-curl" d="M252 112 C300 100 340 112 360 138 C342 130 318 132 306 146 C298 132 280 116 252 112Z"/>
-        <g class="sc-foam"><circle cx="356" cy="136" r="7"/><circle cx="344" cy="128" r="5"/><circle cx="364" cy="146" r="4"/><circle cx="330" cy="122" r="4"/></g></g></g></g>
-      <path class="sc-sand" d="M0 160 C60 150 110 168 160 186 C200 200 230 212 260 220 H0Z"/>
-      <path class="sc-wash" d="M120 182 C160 190 196 204 230 216" fill="none"/>
+      <defs>
+        <linearGradient id="scSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fb7c4"/><stop offset=".55" stop-color="#2f8ba0"/><stop offset="1" stop-color="#17627a"/></linearGradient>
+        <linearGradient id="scFace" x1=".2" y1="0" x2=".6" y2="1"><stop offset="0" stop-color="#9fdcd6"/><stop offset=".35" stop-color="#3ea5a9"/><stop offset=".75" stop-color="#1c7488"/><stop offset="1" stop-color="#0f4f66"/></linearGradient>
+        <linearGradient id="scTube" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0d4259"/><stop offset="1" stop-color="#1a6c80"/></linearGradient>
+        <linearGradient id="scSand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6dca6"/><stop offset="1" stop-color="#e8bf7a"/></linearGradient>
+      </defs>
+      <rect class="sc-sky" width="400" height="220"/>
+      <circle class="sc-sun" cx="356" cy="104" r="15"/>
+      <path class="sc-far" d="M0 122 C90 118 210 121 400 116 V220 H0Z" fill="url(#scSea)"/>
+      <g class="sc-lines" fill="none" stroke="#bfe6e6" stroke-width="2" stroke-linecap="round" opacity=".55"><path d="M40 132 H110"/><path d="M160 128 H230"/><path d="M60 146 H150"/><path d="M300 126 H350"/></g>
+      <g class="sc-wave"><g class="sc-wave-move">
+        <path class="sc-face" d="M400 220 V156 C372 136 338 114 298 106 C258 99 222 108 202 128 C190 140 186 154 193 166 C201 152 217 146 233 151 C253 158 260 180 254 200 C250 210 244 216 238 220 Z" fill="url(#scFace)"/>
+        <path class="sc-tube" d="M197 163 C205 152 221 148 235 154 C249 162 253 183 247 201 C244 210 240 216 236 220 H216 C224 204 226 187 220 175 C216 167 204 163 197 163 Z" fill="url(#scTube)"/>
+        <path class="sc-lip" d="M398 154 C370 134 338 115 298 108 C260 102 226 110 205 128" fill="none" stroke="#f3fbf9" stroke-width="3.2" stroke-linecap="round"/>
+        <path class="sc-curtain" d="M205 128 C192 140 188 153 194 165" fill="none" stroke="#e6f6f4" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+        <g class="sc-foam" fill="#fbfefd"><circle cx="195" cy="168" r="7"/><circle cx="185" cy="177" r="6"/><circle cx="203" cy="181" r="5"/><circle cx="178" cy="190" r="8"/><circle cx="194" cy="196" r="6"/><circle cx="210" cy="124" r="3"/><circle cx="200" cy="118" r="2.4"/><circle cx="218" cy="116" r="2"/></g>
+        <path class="sc-white" d="M132 220 C144 204 162 194 180 192 C196 191 210 198 220 210 C224 214 226 218 228 220 Z" fill="#f4fbfa" opacity=".92"/>
+      </g></g>
+      <path class="sc-sand" d="M0 176 C46 170 96 180 136 196 C160 206 182 214 198 220 H0Z" fill="url(#scSand)"/>
+      <path class="sc-wet" d="M70 182 C100 186 128 196 152 208 C164 214 174 218 182 220 H150 C136 212 116 202 92 194 C80 190 72 186 70 182Z" fill="#d9ae6a" opacity=".55"/>
+      <path class="sc-wash" d="M96 184 C124 190 150 202 176 216" fill="none" stroke="#fbfefd" stroke-width="3.5" stroke-linecap="round" opacity=".85"/>
       <g class="sc-wind"><path d="M30 150 H100"/><path d="M90 168 H180"/><path d="M10 186 H80"/><path d="M150 140 H220"/></g>
     </svg>`;
   }
@@ -335,8 +352,18 @@
     if (!daily.length) return '';
     return `<div class="fx-scene" data-scene data-inland="${inland ? 1 : 0}">${sceneArt()}<div class="sc-now" aria-live="polite"></div></div>`;
   }
+  /* Aujourd’hui : le relevé du moment (le même que « Maintenant », LIVE d’app.js) quand il est là, pour ne pas montrer
+     deux chiffres différents pour la même chose ; les autres jours, le maximum du jour. */
+  function nowOf(s, inland) {
+    let l = null; try { l = typeof LIVE !== 'undefined' && s ? LIVE[s.id] : null; } catch (e) {}
+    if (!l || !l.live || l.windK == null) return null;
+    if (inland ? l.airC == null : l.waveM == null) return null;
+    return {wave: l.waveM, period: l.periodS, wind: l.windK, windDir: l.windDeg, tmax: l.airC};
+  }
   function paintScene(host, d, i, s, inland) {
     const sc = host && host.querySelector('[data-scene]'); if (!sc || !d) return;
+    const now = i === 0 ? nowOf(s, inland) : null;
+    if (now) d = Object.assign({}, d, now);
     const h = inland ? null : d.wave, per = Number.isFinite(+d.period) && +d.period > 0 ? +d.period : null;
     sc.dataset.size = inland ? 'flat' : waveSize(h);
     sc.style.setProperty('--sc-period', (per ? Math.min(18, Math.max(5, per)) : 10) + 's');
@@ -344,12 +371,15 @@
     sc.style.setProperty('--sc-wind', (w == null ? 4 : Math.max(1.4, 5.5 - w / 9)).toFixed(2) + 's');
     const side = windSideOf(d.windDir, s);
     sc.dataset.side = side === 'offshore' ? 'land' : side === 'onshore' ? 'sea' : 'none';
-    const arrow = d.windDir == null ? '' : `<svg class="sc-arrow" viewBox="0 0 24 24" aria-hidden="true" style="transform:rotate(${(Math.round(+d.windDir) + 180) % 360}deg)"><path d="M12 3v15M6 12l6 7 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" transform="rotate(180 12 12)"/></svg>`;
+    /* Pas de flèche de boussole dans la scène : elle n’est pas une carte (la plage est à gauche quel que soit le spot),
+       une flèche « vers l’est » y contredisait les traits de vent. La direction reste écrite (« O »), le sens terre ou mer
+       est dit en toutes lettres et montré par les traits. */
+    const arrow = '';
     const first = inland
-      ? `<div class="sc-read"><span class="sc-lab">Air, au plus chaud</span><span class="sc-val"><b class="fx-num">${d.tmax != null ? Math.round(d.tmax) : '—'}</b><span class="fx-unit">°C</span></span></div>`
-      : `<div class="sc-read"><span class="sc-lab">Houle, au plus haut</span><span class="sc-val"><b class="fx-num">${h != null ? fmt1(h) : '—'}</b><span class="fx-unit">m</span></span>${per ? `<span class="sc-sub">${esc(`une vague toutes les ${Math.round(per)} s`)}</span>` : ''}</div>`;
-    const wind = `<div class="sc-read sc-read-wind"><span class="sc-lab">Vent, au plus fort</span><span class="sc-val"><b class="fx-num">${w != null ? w : '—'}</b><span class="fx-unit">km/h</span>${arrow}<span class="fx-unit">${esc(direction(d.windDir))}</span></span>${side ? `<span class="sc-sub">${esc(SIDE_LABEL[side])}</span>` : ''}</div>`;
-    sc.querySelector('.sc-now').innerHTML = `<span class="sc-day">${esc(dayName(d.date, i))}</span>${first}${wind}`;
+      ? `<div class="sc-read"><span class="sc-lab">${now ? 'Air' : 'Air, au plus chaud'}</span><span class="sc-val"><b class="fx-num">${d.tmax != null ? Math.round(d.tmax) : '—'}</b><span class="fx-unit">°C</span></span></div>`
+      : `<div class="sc-read"><span class="sc-lab">${now ? 'Houle' : 'Houle, au plus haut'}</span><span class="sc-val"><b class="fx-num">${h != null ? fmt1(h) : '—'}</b><span class="fx-unit">m</span></span>${per ? `<span class="sc-sub">${esc(`une vague toutes les ${Math.round(per)} s`)}</span>` : ''}</div>`;
+    const wind = `<div class="sc-read sc-read-wind"><span class="sc-lab">${now ? 'Vent' : 'Vent, au plus fort'}</span><span class="sc-val"><b class="fx-num">${w != null ? w : '—'}</b><span class="fx-unit">km/h</span>${arrow}<span class="fx-unit">${esc(direction(d.windDir))}</span></span>${side ? `<span class="sc-sub">${esc(SIDE_LABEL[side])}</span>` : ''}</div>`;
+    sc.querySelector('.sc-now').innerHTML = `<span class="sc-day">${esc(now ? 'Maintenant' : dayName(d.date, i))}</span>${first}${wind}`;
     host.querySelectorAll('[data-scene-day]').forEach(b => { const on = +b.dataset.sceneDay === i; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('is-on', on); });
     watchScene(sc);
   }
@@ -461,7 +491,17 @@
     updateAreaMap(s);
     drawSafety(s,window.LIVE?.[s.id]);loadWeek(s,act);
   }
-  function refreshConditions(s, live, marine) { if (activeSpot?.id !== s.id) return; drawSafety(s, live, marine); }
+  function refreshConditions(s, live, marine) {
+    if (activeSpot?.id !== s.id) return; drawSafety(s, live, marine);
+    /* Le relevé du moment arrive : la scène d’aujourd’hui passe sur « Maintenant » (sauf si un autre jour est choisi). */
+    try {
+      const host = $('#spotWeek'), on = host && host.querySelector('[data-scene-day][aria-pressed="true"]');
+      if (shown && shown.s.id === s.id && (!on || on.dataset.sceneDay === '0')) {
+        const inland = isInland(s), W = window.SpotWeatherModel, daily = W ? W.days(shown.weather, shown.marine, {inland}) : [];
+        if (daily[0]) paintScene(host, daily[0], 0, s, inland);
+      }
+    } catch (e) {}
+  }
   window.OceanExperience = {init, update, refreshConditions};
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();

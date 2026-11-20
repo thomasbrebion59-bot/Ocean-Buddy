@@ -1699,7 +1699,9 @@ function showConditions(s,w,mar){
     /* Période et direction de la houle du jour (modèle Open-Meteo, au large) : lues par « Lire les conditions ». */
     period:mc.wave_period!=null?`${num1(+mc.wave_period)} s`:'—',periodS:mc.wave_period!=null?+mc.wave_period:null,
     swellDir:mc.wave_direction!=null?cardinal(mc.wave_direction):'—',swellDirDeg:mc.wave_direction!=null?+mc.wave_direction:null,
-    tide:tide||'—',live:true,fetchedAt:Date.now()
+    tide:tide||'—',live:true,fetchedAt:Date.now(),
+    /* Valeurs brutes du moment, pour la scène de Conditions (« Maintenant » plutôt que le maximum du jour). */
+    waveM:wv!=null?+wv:null,windK:ws!=null?+ws:null,windDeg:wd!=null?+wd:null,airC:wc.temperature_2m!=null?+wc.temperature_2m:null
   };
   LIVE[s.id]=Object.assign(LIVE[s.id]||{},o);
   renderConditions(s,o);

@@ -211,14 +211,24 @@ function el() {
   };
 }
 const today = () => { const d = new Date(Date.now() + 7200e3); return Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()); };
+/* Horloge figée à 9 h, heure du spot (UTC+2 dans ces prévisions) : sans cela, les tests de créneau échouaient le soir,
+   quand il ne reste plus d’heure de jour aujourd’hui (constaté le 20 nov. à 21 h 56). fx.hour change l’heure. */
+const fixedClock = (base, hour) => {
+  const at = base + hour * 3600e3 - 7200e3;
+  return class extends Date {
+    constructor(...a) { if (a.length) super(...a); else super(at); }
+    static now() { return at; }
+  };
+};
 function render(spot, act, level, fx = {}) {
   BASE = today();
+  const FixedDate = fixedClock(BASE, fx.hour == null ? 9 : fx.hour);
   const els = {}, calls = [], listeners = {};
   const sb = {
     document: {readyState: 'complete', querySelector: s => els[s] || (els[s] = el()), querySelectorAll: () => [], createElement: () => el(), getElementById: id => els['#' + id] || (els['#' + id] = el()), addEventListener(t, f) { listeners[t] = f; (listeners['all:' + t] = listeners['all:' + t] || []).push(f); }},
     OB_I18N: {locale: 'fr-FR', lang: 'fr'}, isInland: s => ['lake', 'inland'].includes(s?.waterType), spotSports: s => s.sports,
     COORDS: {[spot.id]: {lat: 43.6, lon: -1.4}}, SPORTMAP: {surf: {label: 'Surf'}, kitesurf: {label: 'Kitesurf'}, paddle: {label: 'Paddle (SUP)'}},
-    chosenLevel: level, localStorage: {getItem: () => null}, Intl, Date, Promise, console, setTimeout, clearTimeout,
+    chosenLevel: level, localStorage: {getItem: () => null}, Intl, Date: FixedDate, Promise, console, setTimeout, clearTimeout,
     fetch: url => { calls.push(url); return Promise.resolve({ok: true, json: () => Promise.resolve(/marine-api/.test(url) ? marine(fx.m) : forecast(fx.f))}); }
   };
   sb.window = sb; sb.SpotDataModel = D;
@@ -442,4 +452,11 @@ test('Prévisions : aucun créneau ni aujourd’hui ni demain, le rappel du calc
   assert.match(f, /Aucun créneau dans tes repères aujourd’hui ni demain\./);
   assert.doesNotMatch(f, /is-best|fx7-alt|fx7-calc/);
   assert.match(f, /<p class="fx-note fx7-stamp" data-fx-view="forecast">Relevé[^<]*<\/p><p class="fx-note fx7-stamp" data-fx-view="forecast">Repère calculé sur une prévision de modèle[^<]*le poste de secours, le balisage et les drapeaux priment\.<\/p>/);
+});
+
+test('tests de créneau : l’horloge du rendu est figée, ils ne dépendent plus de l’heure à laquelle on les lance', async () => {
+  const late = await render({id: 'hossegor', name: 'Hossegor', waterType: 'sea', sports: ['surf'], wind: 'Offshore E'}, 'surf', 'debutant', {hour: 23});
+  const early = await render({id: 'hossegor', name: 'Hossegor', waterType: 'sea', sports: ['surf'], wind: 'Offshore E'}, 'surf', 'debutant', {hour: 9});
+  assert.equal(late.sb.Date.now(), early.sb.Date.now() + 14 * 3600e3);
+  assert.equal(new early.sb.Date().getTime(), early.sb.Date.now());
 });
