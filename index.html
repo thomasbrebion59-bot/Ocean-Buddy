@@ -34,6 +34,9 @@ B.cap=setTimeout(function(){B.ready('timeout');},4000);
    demandée tout de suite (preload) puis posée sur l’image statique de #home dès que l’analyseur l’atteint, sans attendre les scripts ;
    home-feed.js reprend ce fond et la première photo du carrousel est la même URL. Liste générée par scripts/build-home-ambient.py. */
 var A=/*ambient*/[['rajaampat','assets/spots/rajaampat.jpg'],['borabora','assets/spots/borabora.jpg'],['noronha','assets/spots/noronha.jpg'],['navagio','assets/spots/navagio.jpg'],['whitehaven','assets/spots/whitehaven.jpg'],['macarella','assets/spots/macarella.webp'],['tikehau','assets/spots/tikehau.webp'],['myrtos','assets/spots/myrtos.webp'],['nusapenida','assets/spots/nusapenida.webp'],['trunkbay','assets/spots/trunkbay.webp'],['pelosa','assets/spots/pelosa.webp'],['losroques','assets/spots/losroques.webp']]/*/ambient*/,mo;
+/* Interface v2 (20 novembre 2026) : l’accueil s’ouvre sur le salut, la recherche et « Mes spots », sans grande photo d’ambiance.
+   Rien n’est préchargé ni posé ; la liste ci-dessus reste pour le carrousel « Spot de rêve », gardé dans home-feed.js. */
+A=[];
 try{var sv=JSON.parse(localStorage.getItem('oceanbuddy_v1')||'null');if(sv&&sv.sport&&sv.sport!=='all')A=[];}catch(e){}
 /* Sport enregistré : le carrousel suit ce sport (home-feed.js), la photo générale du jour n’est ni demandée ni posée. */
 if(A.length&&window.MutationObserver){(function(u){var l=document.createElement('link');l.rel='preload';l.as='image';l.href=u;l.setAttribute('fetchpriority','high');document.head.appendChild(l);
@@ -92,7 +95,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <link rel="stylesheet" href="replis.css?v=15d2762b11d2">
 <link rel="stylesheet" href="fiches-organisation.css?v=e977add6e883">
 <link rel="stylesheet" href="ui-v2.css?v=c3069318015a">
-<link rel="stylesheet" href="ui-accueil.css?v=54c2ded9cc7f">
+<link rel="stylesheet" href="ui-accueil.css?v=449c1ff3dd1a">
 <link rel="stylesheet" href="ui-nav.css?v=87fe917aaa76">
 <link rel="stylesheet" href="ui-listes.css?v=642f6e31d568">
 <link rel="stylesheet" href="fiche.css?v=b943abaa4b25">
@@ -164,8 +167,6 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 
     <!-- ============ HOME ============ -->
     <section class="screen active hf-on" id="home">
-      <!-- Fond d’ambiance (home-feed.js) : présent dès le HTML, la première image est posée par le script de démarrage. -->
-      <div class="hf-ambient" aria-hidden="true"><img alt="" class="on" fetchpriority="high"><img alt=""></div>
       <!-- Grand titre de l’accueil : place réservée dès le HTML, texte posé par app-shell.js (largeTitles). -->
       <header class="as-large"><div><p>&nbsp;</p><h1>&nbsp;</h1></div></header>
       <div class="home-intro">
@@ -670,7 +671,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="noel-model.js?v=e20ee64f411f"></script>
 <script src="cultures-boot.js?v=90cc45a27762"></script>
 <script src="home-layout-model.js?v=8d77c0b3c9d2"></script>
-<script src="home-feed.js?v=de4dddf9196e"></script>
+<script src="home-feed.js?v=10c50d457efb"></script>
 <script src="passport.js?v=055be0942070"></script>
 <script src="surf-model.js?v=db29a0e31c9a"></script>
 <script src="surf-render.js?v=f094a635d338"></script>

@@ -1,2 +1,189 @@
 /* @creme-tokens */
-/* Interface v2, écran « accueil » (voir ~/Projects/Ocean-Buddy-orga-docs/interface-v2/BRIEF.md). Composants communs : ui-v2.css. */
+/* Interface v2, écran « accueil » (voir ~/Projects/Ocean-Buddy-orga-docs/interface-v2/BRIEF.md). Composants communs : ui-v2.css.
+   Maquettes validées le 19 novembre 2026 : maquette-1-accueil-haut.png et maquette-2-accueil-suite.png.
+   Rendu par home-feed.js (bloc « Accueil v2 ») : le haut (date, salut, pastille sport et niveau, recherche), puis
+   « Mes spots », « Bon aujourd'hui », « En <mois> » et « Cultures ». Couleurs du thème actif seulement (--t-*).
+   Hauteurs fixes partout où un contenu arrive après le montage (conditions, verdicts, mot du jour, photo) : aucun saut.
+   Motion : transform et opacity seulement, une seule fois, rien en mouvement réduit ; aucune boucle. */
+
+/* ---------- Ce qui n'est plus affiché sur l'accueil (le code reste) ---------- */
+/* Grand titre de la coque (app-shell.js) : le salut de l'accueil est écrit par home-feed.js, avec la pastille à côté. */
+.ocean-v2 #home.hf-on>.as-large{display:none}
+/* Bande vidéo d'ambiance du haut (motion-media.js) : cachée, donc ni son affiche ni sa vidéo ne sont chargées. */
+.ocean-v2 #home.hf-on>.mm-band{display:none}
+/* Blocs des autres scripts (Ton espace, immersion, nouveautés, Poulpy) : rangés à des places cachées par home-feed.js. */
+.ocean-v2 #home .ac-off{display:none!important}
+.ocean-v2 #home .ac-sec[hidden],.ocean-v2 #home .ac-sec [hidden]{display:none!important}
+/* En haut de l'accueil, la recherche est juste sous le salut : le bouton rond de la barre du haut ne revient qu'au
+   défilement (il passerait sur la pastille). Il reste dans la page : la recherche de l'accueil le déclenche. */
+@media(max-width:959px){
+  body.ocean-v2[data-screen=home]:not(.is-scrolled) .app-chrome .mobile-search{opacity:0;pointer-events:none}
+  .ocean-v2 .app-chrome .mobile-search{transition:opacity .2s}
+}
+
+/* ---------- Haut : date, salut, pastille, compte à rebours de Noël, recherche ---------- */
+.ocean-v2 .ac-top{margin:0}
+.ocean-v2 .ac-head{margin:6px 0 14px}
+.ocean-v2 .ac-date{margin:0 0 2px;font:500 var(--ui-label)/18px var(--body);color:var(--ui-soft)}
+/* Le salut et la pastille sur une ligne ; si la place manque (prénom, langue, téléphone étroit), la pastille passe dessous. */
+.ocean-v2 .ac-hello{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;min-height:44px}
+.ocean-v2 .ac-hi{flex:0 1 auto;min-width:0;margin:0;font:800 34px/40px var(--display);letter-spacing:-.03em;color:var(--t-ink);overflow-wrap:anywhere;text-transform:none}
+.ocean-v2 .ac-me{flex:none;max-width:100%;min-height:44px;gap:8px;padding:0 15px 0 11px;font:600 var(--ui-label)/1 var(--body);color:var(--t-ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ocean-v2 .ac-me>span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ocean-v2 .ac-me-ic{flex:none;width:24px;height:24px;background:var(--t-ink);-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
+/* Noël : le compte à rebours tient en une ligne discrète sous le salut ; la guirlande (image posée par noel.css sur
+   .hf-noel-garland) prend le reste de la ligne. Hauteur fixe : 20 px. */
+.ocean-v2 .ac-top .hf-noel-top{display:flex;align-items:center;gap:12px;height:20px;margin:-4px 0 14px}
+.ocean-v2 .ac-top .hf-noel-title{order:-1;flex:none;max-width:72%;font:600 var(--ui-note)/20px var(--body);letter-spacing:0;text-transform:none;color:var(--ui-soft)}
+.ocean-v2 .ac-top .hf-noel-garland{position:static;flex:1;min-width:0;height:20px;-webkit-mask-image:linear-gradient(90deg,transparent,black 18px,black calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,transparent,black 18px,black calc(100% - 18px),transparent)}
+/* Recherche : une seule ligne, comme un champ. */
+.ocean-v2 .ac-search{min-height:54px;margin:0;padding:6px 18px;gap:12px;border-color:var(--ui-hair);box-shadow:none}
+.ocean-v2 .ac-search svg{width:22px;height:22px;color:var(--t-ink)}
+.ocean-v2 .ac-search b{font:500 16.5px/1.2 var(--body);color:var(--ui-soft)}
+
+/* ---------- Rubriques ---------- */
+.ocean-v2 .ac-sec{margin:calc(var(--ui-gap) + 4px) 0 0}
+.ocean-v2 .ac-sec>.as-sec{margin:0 0 12px;min-height:26px}
+.ocean-v2 .ac-sec .ui-link{font-size:15.5px}
+/* Lignes de spot de l'accueil : photo et chiffres plus grands quand l'écran le permet (maquette : 430 px). */
+.ocean-v2 #home .ui-spot:focus-visible{outline:2px solid var(--t-main);outline-offset:-2px;border-radius:14px}
+.ocean-v2 #home .ui-ph{color:var(--ui-soft)}
+.ocean-v2 #home .ui-spot-name small{font:500 1em/1.2 var(--body);color:var(--ui-soft)}
+@media(min-width:390px){
+  .ocean-v2 #home .ui-spot{grid-template-columns:86px minmax(0,1fr);min-height:106px}
+  .ocean-v2 #home .ui-spot>.ui-ph{width:86px;height:86px}
+}
+@media(min-width:428px){
+  .ocean-v2 #home .ui-spot{grid-template-columns:96px minmax(0,1fr);column-gap:16px;min-height:116px}
+  .ocean-v2 #home .ui-spot>.ui-ph{width:96px;height:96px;border-radius:16px}
+  .ocean-v2 #home .ui-spot-name{font-size:17px}
+  .ocean-v2 #home .ui-cond{font-size:15.5px;gap:4px 15px}
+  .ocean-v2 #home .ui-cond small{font-size:14px}
+  .ocean-v2 #home .ui-ic{width:20px;height:20px}
+  .ocean-v2 #home .ui-live{min-height:52px}
+  .ocean-v2 #home .ui-live.is-solo{min-height:20px}
+  .ocean-v2 #home .ui-live .ui-cond{min-height:20px}
+}
+@media(max-width:389px){
+  .ocean-v2 #home .ui-cond{gap:4px 10px}
+  .ocean-v2 #home .ui-cond>span{gap:4px}
+}
+
+/* « Mes spots » sans favori ni spot vu : une carte courte, l'illustration de Poulpy, le nombre de spots en grand. */
+.ocean-v2 .ac-empty{display:grid;grid-template-columns:118px minmax(0,1fr);gap:16px;align-items:center;min-height:142px;padding:12px 16px 12px 12px}
+.ocean-v2 .ac-empty>img{display:block;width:118px;height:118px;border-radius:16px;object-fit:cover;object-position:46% 50%}
+.ocean-v2 .ac-empty-tx{display:grid;gap:12px;justify-items:start;min-width:0}
+.ocean-v2 .ac-empty-n{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin:0}
+.ocean-v2 .ac-empty .ui-btn{min-height:44px}
+
+/* ---------- « En <mois> » : cartes photo ---------- */
+.ocean-v2 .ac-row{grid-auto-columns:minmax(138px,37.5%);gap:9px}
+.ocean-v2 .ac-card{position:relative;display:block;overflow:hidden;isolation:isolate;aspect-ratio:3/4;margin:0;padding:0;border:0;border-radius:16px;background:var(--t-deep);color:var(--t-on-main);text-align:start;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ocean-v2 .ac-card>img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+.ocean-v2 .ac-card::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:linear-gradient(180deg,transparent 46%,color-mix(in srgb,var(--t-scrim) 80%,transparent) 100%)}
+.ocean-v2 .ac-card-tx{position:absolute;left:11px;right:11px;bottom:11px;display:grid;gap:7px}
+.ocean-v2 .ac-card-tx>b{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font:800 21px/1 var(--as-condensed);letter-spacing:.01em;text-transform:uppercase;color:var(--t-on-main)}
+/* Pastilles : hauteur réservée même quand l'eau du mois arrive après (normales chargées plus tard). */
+.ocean-v2 .ac-card-chips{display:flex;gap:5px;height:23px;overflow:hidden}
+.ocean-v2 .ac-card-chips>span{flex:0 1 auto;display:inline-flex;align-items:center;gap:4px;min-width:0;height:23px;padding:0 9px;border-radius:999px;background:color-mix(in srgb,var(--t-scrim) 46%,transparent);font:600 12px/1 var(--body);color:var(--t-on-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ocean-v2 .ac-card-chips>.hf-data{flex:none}
+.ocean-v2 .ac-card-chips svg{flex:none;width:12px;height:12px}
+.ocean-v2 .ac-card:focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
+
+/* ---------- « Cultures » : le mot du jour et le tour du monde, une seule carte ----------
+   Le jeu vient de cultures.js (mêmes éléments .cult-quiz-*). Ici : fond clair et hauteur fixe de 128 px pour les quatre
+   états de la carte (data-ac-quiz) : attente, fermé (photo, mot, « Deviner le pays »), ouvert (trois réponses), résultat.
+   Trois rangées fixes dans la colonne du jeu : le libellé (18 px), le mot (28 px), puis une zone de 62 px où se succèdent
+   le bouton, les réponses et le résultat. Le libellé et le mot ne bougent donc jamais d'un état à l'autre. */
+.ocean-v2 .ac-cult{padding:14px}
+.ocean-v2 .ac-cult .ac-quiz{position:relative;display:grid;grid-template-columns:104px minmax(0,1fr);column-gap:14px;align-items:center;box-sizing:border-box;height:128px;margin:0;padding:0;overflow:visible;border-radius:0;background:none;box-shadow:none;color:var(--t-ink)}
+.ocean-v2 .ac-cult .ac-quiz::before{content:none}
+.ocean-v2 .ac-quiz-pic{position:relative;display:grid;place-items:center;width:104px;height:104px;overflow:hidden;border-radius:14px;background:var(--ui-hair);color:var(--ui-soft)}
+.ocean-v2 .ac-quiz-pic>svg{width:34px;height:34px}
+.ocean-v2 .ac-quiz-pic>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease-out}
+.ocean-v2 .ac-quiz-pic>img.is-on{opacity:1}
+.ocean-v2 .ac-quiz-main{position:relative;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:18px 28px 62px;row-gap:6px;align-content:center;min-width:0;height:128px}
+.ocean-v2 .ac-cult .cult-quiz-body{display:contents}
+.ocean-v2 .ac-cult .cult-quiz-head{grid-row:1;display:flex;align-items:baseline;justify-content:space-between;gap:10px;height:18px}
+.ocean-v2 .ac-cult .cult-quiz-meta{font:500 var(--ui-note)/18px var(--body);color:var(--ui-soft)}
+.ocean-v2 .ac-cult .cult-quiz-word{grid-row:2;display:block;height:28px;min-height:0;margin:0;font:800 24px/28px var(--display);letter-spacing:-.02em;color:var(--t-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ocean-v2 .ac-cult .cult-quiz-word.is-long{font-size:19px}
+.ocean-v2 .ac-cult .cult-quiz-word span{color:var(--t-main)}
+.ocean-v2 .ac-cult .cult-skel{width:68%;height:20px;margin-top:4px;border-radius:8px;background:var(--ui-hair)}
+/* La question se lit dans le bouton (« Deviner le pays ») : elle reste pour les lecteurs d'écran. Le message du résultat
+   (« Bonne réponse ! ») et celui de l'attente (hors ligne) s'affichent, sur une ligne, en haut de la zone. */
+.ocean-v2 .ac-cult .cult-quiz-q{position:absolute;width:1px;height:1px;margin:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.ocean-v2 .ac-cult .cult-quiz-body:is(.is-done,.is-wait) .cult-quiz-q{position:static;grid-row:3;align-self:start;display:block;width:auto;height:16px;max-height:none;clip-path:none;font:500 var(--ui-note)/16px var(--body);color:var(--ui-soft);overflow:hidden;text-overflow:ellipsis;-webkit-line-clamp:unset}
+.ocean-v2 .ac-guess{position:relative;grid-row:3;align-self:center;justify-self:start;min-height:40px;padding:0 18px;font-size:14.5px}
+.ocean-v2 .ac-guess::after{content:"";position:absolute;inset:-4px 0}
+/* États : les trois réponses ou le résultat prennent toute la largeur (la photo cède la place), « Deviner » s'efface. */
+.ocean-v2 .ac-cult .cult-quiz-choices,.ocean-v2 .ac-cult .cult-quiz-done{display:none}
+.ocean-v2 .ac-quiz:is([data-ac-quiz=open],[data-ac-quiz=done]){grid-template-columns:minmax(0,1fr)}
+.ocean-v2 .ac-quiz:is([data-ac-quiz=open],[data-ac-quiz=done]) .ac-quiz-pic,.ocean-v2 .ac-quiz:is([data-ac-quiz=open],[data-ac-quiz=done],[data-ac-quiz=wait]) .ac-guess{display:none}
+.ocean-v2 .ac-quiz[data-ac-quiz=open] .cult-quiz-choices{grid-row:3;align-self:center;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;height:54px;margin:0}
+.ocean-v2 .ac-quiz[data-ac-quiz=done] .cult-quiz-done{grid-row:3;align-self:end;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;height:44px;margin:0}
+.ocean-v2 .ac-quiz[data-ac-quiz=done] .cult-quiz-done.is-long{grid-template-columns:auto minmax(0,1fr)}
+.ocean-v2 .ac-quiz[data-ac-quiz=open] .cult-quiz-choices,.ocean-v2 .ac-quiz[data-ac-quiz=done] .cult-quiz-done{animation:ac-fade .24s ease-out backwards}
+/* Réponses : trois boutons côte à côte, le nom du pays entier (data-fit posé par cultures.js, fitDone). */
+.ocean-v2 .ac-cult .cult-choice{position:relative;justify-content:center;height:54px;padding:0 6px;border:1.5px solid var(--ui-hair);border-radius:14px;background:var(--t-card);color:var(--t-ink);font:600 13px/1.15 var(--body);text-align:center}
+.ocean-v2 .ac-cult .cult-choice img,.ocean-v2 .ac-cult .cult-choice i{display:none}
+.ocean-v2 .ac-cult .cult-choice span{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none}
+.ocean-v2 .ac-cult .cult-choice[data-fit="1"] span{-webkit-line-clamp:3}
+.ocean-v2 .ac-cult .cult-choice[data-fit="2"] span{-webkit-line-clamp:3;font-size:12px}
+.ocean-v2 .ac-cult .cult-choice[data-fit="3"] span{-webkit-line-clamp:4;font-size:12px;line-height:1.05}
+.ocean-v2 .ac-cult .cult-choice.is-right{background:var(--t-ok);border-color:var(--t-ok);color:var(--t-on-alert)}
+.ocean-v2 .ac-cult .cult-choice.is-wrong{background:var(--t-danger);border-color:var(--t-danger);color:var(--t-on-alert)}
+.ocean-v2 .ac-cult .cult-choice:is(.is-right,.is-wrong)::before{content:"";position:absolute;top:-6px;right:-6px;width:16px;height:16px;border-radius:50%;background:inherit;box-shadow:0 0 0 1.5px var(--t-card)}
+.ocean-v2 .ac-cult .cult-choice:is(.is-right,.is-wrong)::after{position:absolute;top:-3px;right:-3px;width:10px;height:10px;margin:0}
+.ocean-v2 .ac-cult .cult-choice:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+/* Résultat : le tampon, le pays, puis « Découvrir <pays> ». */
+.ocean-v2 .ac-cult .cult-quiz-res{height:44px;gap:10px}
+.ocean-v2 .ac-cult .cult-quiz-res .cult-stamp{--sf:7.2px;width:44px;height:44px;color:var(--t-main)}
+.ocean-v2 .ac-cult .cult-quiz-res>div{gap:2px}
+.ocean-v2 .ac-cult .cult-quiz-res>div>b{font-size:19px;color:var(--t-ink)}
+.ocean-v2 .ac-cult .cult-quiz-res>div>small{font:500 12px/1.15 var(--body);color:var(--ui-soft)}
+.ocean-v2 .ac-cult .cult-quiz-done.is-long .cult-quiz-res>div{display:none}
+.ocean-v2 .ac-cult .cult-quiz-go{height:40px;max-width:46vw;padding:0 16px;background:var(--t-main);color:var(--t-on-main);font:700 14px/1.15 var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ocean-v2 .ac-cult .cult-quiz-done.is-long .cult-quiz-go{max-width:none;white-space:normal;text-overflow:clip;text-align:center;font-size:13px}
+.ocean-v2 .ac-cult .cult-quiz-go:focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
+.ocean-v2 .ac-cult .cult-quiz-next{display:none}
+/* « Tour du monde » : une ligne qui se touche, sous un filet. */
+.ocean-v2 .ac-tour{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;margin:12px 0 -6px;padding:6px 0 0;border:0;border-top:1px solid var(--ui-hair);background:none;color:var(--t-main);font:700 16px/1.2 var(--body);text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ocean-v2 .ac-tour>svg{flex:none;width:26px;height:26px}
+.ocean-v2 .ac-tour:focus-visible{outline:2px solid var(--t-main);outline-offset:2px;border-radius:10px}
+@media(max-width:389px){
+  .ocean-v2 .ac-cult .ac-quiz{grid-template-columns:92px minmax(0,1fr);column-gap:12px}
+  .ocean-v2 .ac-quiz-pic{width:92px;height:92px}
+  .ocean-v2 .ac-cult .cult-quiz-word{font-size:22px}
+}
+
+/* ---------- Calendrier de l'Avent : carte compacte (du 1er au 24 décembre) ---------- */
+.ocean-v2 .ac-avent{padding:10px 0}
+.ocean-v2 .ac-avent .hf-avent-row{margin:0;padding:4px 12px;scroll-padding-inline:12px}
+
+/* ---------- Vie : entrée des blocs, une seule fois ----------
+   Classe ac-go posée sur #home à la levée du rideau (home-feed.js), retirée après l'entrée : fondu et glissé de 12 px,
+   décalés de 35 ms par rang (--i) et de 70 ms par rubrique (--s). Lignes arrivées après coup (« Bon aujourd'hui ») :
+   ac-row-in, même geste. Hors de ces classes, rien n'est animé : aucun calque transformé au repos. */
+@keyframes ac-in{from{opacity:0;transform:translate3d(0,12px,0)}}
+@keyframes ac-fade{from{opacity:0}}
+.ocean-v2 .ac-top{--s:0}.ocean-v2 .ac-mine{--s:1}.ocean-v2 .ac-good{--s:2}.ocean-v2 .ac-col+.ac-col .ac-sec{--s:3}.ocean-v2 .ac-col+.ac-col .cult-home{--s:4}
+.ocean-v2 #home.ac-go .ac-in{animation:ac-in .44s var(--ob-ease-out,cubic-bezier(.22,.8,.3,1)) backwards;animation-delay:calc(var(--s,0) * 70ms + var(--i,0) * 35ms)}
+.ocean-v2 #home .ac-row-in{animation:ac-in .4s var(--ob-ease-out,cubic-bezier(.22,.8,.3,1)) backwards;animation-delay:calc(var(--i,0) * 40ms)}
+@media (prefers-reduced-motion:reduce){
+  .ocean-v2 #home.ac-go .ac-in,.ocean-v2 #home .ac-row-in,.ocean-v2 .ac-quiz .cult-quiz-choices,.ocean-v2 .ac-quiz .cult-quiz-done{animation:none}
+  .ocean-v2 .ac-quiz-pic>img,.ocean-v2 .app-chrome .mobile-search{transition:none}
+}
+.ocean-v2.reduce-motion #home.ac-go .ac-in,.ocean-v2.reduce-motion #home .ac-row-in,.ocean-v2.reduce-motion .ac-quiz .cult-quiz-choices,.ocean-v2.reduce-motion .ac-quiz .cult-quiz-done{animation:none}
+.ocean-v2.reduce-motion .ac-quiz-pic>img,.ocean-v2.reduce-motion .app-chrome .mobile-search{transition:none}
+
+/* ---------- Ordinateur (960 px et plus) : deux colonnes ----------
+   À gauche tes spots et « Bon aujourd'hui », à droite le mois et les cultures ; le haut garde la largeur d'une colonne. */
+@media(min-width:960px){
+  /* !important : design.css remet max-width:none sur chaque bloc direct d'un écran (sélecteur à identifiant). */
+  .ocean-v2 #home .ac-top{max-width:560px!important;margin-top:8px}
+  .ocean-v2 #home .ac-search{max-width:none}
+  .ocean-v2 #home .hf-feed{display:grid;grid-template-columns:repeat(2,minmax(0,560px));gap:0 48px;align-items:start}
+  .ocean-v2 #home .ac-row{margin:0;padding:0;grid-auto-columns:minmax(150px,31%)}
+  .ocean-v2 #home .ac-cult .cult-quiz-go{max-width:260px}
+}

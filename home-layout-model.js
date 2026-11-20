@@ -62,5 +62,54 @@
     }
     return items;
   }
-  return { ORDER, FOLDED, DATA_RAILS, railShown, quick };
+  /* ---------- Accueil v2 (interface v2, 20 novembre 2026) ----------
+     Quatre rubriques utiles au lieu de vingt : « Mes spots » et « Bon aujourd’hui » (conditions et verdict, spot-verdict.js),
+     puis « En <mois> » et « Cultures » ; le calendrier de l’Avent s’y glisse du 1er au 24 décembre. Deux colonnes sur
+     ordinateur, lues l’une après l’autre sur téléphone. ORDER et FOLDED ci-dessus décrivent l’ancien fil, gardé dans le code. */
+  const V2 = [['mesSpots', 'bon'], ['avent', 'mois', 'cultures']];
+  /* Salut du haut : « Bonjour » le jour, « Bonsoir » le soir. Hors du français, l’après-midi a son propre salut
+     (« Good afternoon », « Buenas tardes ») : « Good morning » à 15 h serait faux. */
+  function hello(hour, lang) {
+    if (hour >= 18 || hour < 5) return 'Bonsoir';
+    return hour >= 12 && lang && lang !== 'fr' ? 'Bon après-midi' : 'Bonjour';
+  }
+  /* « Mes spots » : les favoris, sinon les derniers spots vus ; n lignes au plus. Plus de n favoris : ceux que tu as
+     regardés le plus récemment, montrés dans l’ordre où tu les as ajoutés (la liste ne se réordonne pas à chaque visite). */
+  function mine({ favs = [], recent = [], known = () => true, n = 3 } = {}) {
+    const seen = [...new Set((recent || []).map(x => (x && typeof x === 'object' ? x.id : x)).filter(id => typeof id === 'string' && known(id)))];
+    const fav = [...new Set([...(favs || [])].filter(id => typeof id === 'string' && known(id)))];
+    if (fav.length) {
+      const at = new Map(seen.map((id, i) => [id, i]));
+      const keep = new Set(fav.map((id, i) => ({ id, k: at.has(id) ? at.get(id) : 1e6 + i })).sort((a, b) => a.k - b.k).slice(0, n).map(o => o.id));
+      return { kind: 'favs', ids: fav.filter(id => keep.has(id)), total: fav.length };
+    }
+    const ids = seen.slice(0, n);
+    return { kind: ids.length ? 'recent' : 'none', ids, total: ids.length };
+  }
+  /* « Bon aujourd’hui » : parmi les candidats (déjà triés : sport, niveau, saison), n spots, les « bon » d’abord, puis les
+     « possible », puis ceux dont on ne sait rien dire (pas de seuil, pas de donnée), et « pas aujourd’hui » en dernier ;
+     aujourd’hui avant demain ; un spot par pays tant qu’il y a le choix dans la même classe. cands : [{id, country, e: entrée OceanVerdict}]. */
+  const VERDICT_RANK = { bon: 0, possible: 1, non: 3 };
+  function good(cands, { n = 3, perCountry = 1 } = {}) {
+    const rows = (cands || []).map((c, i) => {
+      const e = c && c.e;
+      return { c, i, v: e && e.now && Object.prototype.hasOwnProperty.call(VERDICT_RANK, e.verdict) ? VERDICT_RANK[e.verdict] : 2, d: e && e.day === 'tomorrow' ? 1 : 0 };
+    }).filter(r => r.c && r.c.id).sort((a, b) => a.v - b.v || a.d - b.d || a.i - b.i);
+    /* Un créneau dans le même pays passe avant un spot dont on ne sait rien dire dans un autre. */
+    const out = [], per = new Map();
+    for (const [max, limit] of [[1, perCountry], [1, Infinity], [3, perCountry], [3, Infinity]]) {
+      for (const r of rows) {
+        if (out.length >= n) break;
+        if (r.v > max || out.includes(r)) continue;
+        const k = r.c.country || '';
+        if ((per.get(k) || 0) >= limit) continue;
+        per.set(k, (per.get(k) || 0) + 1);
+        out.push(r);
+      }
+    }
+    return out.sort((a, b) => rows.indexOf(a) - rows.indexOf(b)).map(r => r.c.id);
+  }
+  /* Le titre « Bon aujourd’hui » ne se dit que si un spot montré a un créneau (bon ou possible). */
+  const goodProven = entries => (entries || []).some(e => !!e && !!e.now && (e.verdict === 'bon' || e.verdict === 'possible'));
+  return { ORDER, FOLDED, DATA_RAILS, railShown, quick, V2, hello, mine, good, goodProven };
 });
