@@ -233,6 +233,9 @@
      les spots, puis nos estimations) et des raccourcis qui sont de vrais liens. Aucun chiffre sans donnée : une tuile ou
      une ligne sans valeur n’apparaît pas. Pas de prix d’hôtel ni de restaurant : nous n’en avons pas de sourcé. */
   const ILLU=k=>`<img class="gl-illu" src="assets/fiche/${k}.webp" alt="" width="210" height="210" loading="lazy" decoding="async" draggable="false">`;
+  /* Grande image en tête d’une carte de culture (23 nov.) : l’illustration propre au fait, 1080 × 810 (4:3), assez nette
+     pour la largeur de la carte sur un écran ×3. Les illustrations de genre (420 px) restent en vignette. */
+  const HERO=k=>`<img class="gl-hero" src="assets/fiche/${k}.webp" alt="" width="1080" height="810" loading="lazy" decoding="async" draggable="false">`;
   const nf=(v,d=0)=>{try{return Number(v).toLocaleString(window.OB_LOCALE||'fr-FR',{minimumFractionDigits:d,maximumFractionDigits:d});}catch(_){return String(v);}};
   /* Niveau des prix du pays (Banque mondiale, WDI PA.NUS.PRVT.PLI, États-Unis = 100) et sa place parmi les pays du guide.
      Un pays sans valeur n’a ni échelle ni chiffre : jamais de valeur de remplacement. */
@@ -321,7 +324,8 @@
       /* Mois : seulement pour une fête (le mois d’une édition constatée, jamais une date). Illustration propre au fait
          (assets/fiche/faits/) quand elle existe, sinon celle du genre. */
       const [kind,title,text,months,url,publisher,,own]=f,when=kind==='fete'&&Array.isArray(months)&&months.length?M.monthsLabel(months,LG()):'';
-      cards.push(`<li class="gl-card gl-fact" data-kind="${esc(kind)}" style="--i:${cards.length}">${ILLU(own&&/^[a-z0-9-]+$/.test(own)?'faits/'+own:zoneIllu(kind,title))}<span class="fx-label">${ZONE_LABEL[kind]||''}</span><b${NT}>${esc(title)}</b><small${NT}>${esc(text)}</small>${when?`<small class="gl-when"><span>Souvent en</span> <span${NT}>${esc(when)}</span></small>`:''}<a class="gl-fact-src" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>Source :</span> <span${NT}>${esc(publisher)}</span></a></li>`);
+      const big=!!own&&/^[a-z0-9-]+$/.test(own);
+      cards.push(`<li class="gl-card gl-fact${big?' gl-big-card':''}" data-kind="${esc(kind)}" style="--i:${cards.length}">${big?HERO('faits/'+own):ILLU(zoneIllu(kind,title))}<span class="fx-label">${ZONE_LABEL[kind]||''}</span><b${NT}>${esc(title)}</b><small${NT}>${esc(text)}</small>${when?`<small class="gl-when"><span>Souvent en</span> <span${NT}>${esc(when)}</span></small>`:''}<a class="gl-fact-src" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>Source :</span> <span${NT}>${esc(publisher)}</span></a></li>`);
     }
     const hello=has('mot')?'':c.hello?.[0]||'',helloMore=typeof c.hello?.[1]==='string'?c.hello[1]:'',food=has('gout')?'':c.food?.[0]||'',foodMore=typeof c.food?.[1]==='string'?c.food[1]:'';
     if(hello)cards.push(`<li class="gl-card" style="--i:${cards.length}">${ILLU('panneau')}<span class="fx-label">Le mot du coin</span><b${NT}>«&nbsp;${esc(hello)}&nbsp;»</b>${helloMore?`<small${NT}>${esc(helloMore)}</small>`:''}</li>`);
