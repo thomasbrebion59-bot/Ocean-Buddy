@@ -53,9 +53,10 @@ function tabWorld() {
   const ctx = {
     window: {}, Date,
     document: {
+      addEventListener() {}, removeEventListener() {},
       querySelectorAll: s => (s === '#detail .dcat' ? panels : s === '#dTabs .dtab' ? btns : []),
       querySelector: s => (s === '#detail .dcat[data-cat="meteo"]' ? meteo : s === '#dTabs .dtab.active' ? (btns.find(b => b.cls.has('active')) || null) : s === '#spotWeek .wx-week' ? el('week') : /^#detail \.dcat\[data-cat="(\w+)"\]$/.test(s) ? panels.find(p => p.dataset.cat === RegExp.$1) : null),
-      getElementById: id => (id === 'detail' ? detail : id === 'dPreserve' ? el('dPreserve') : id === 'screenWrap' ? { scrollTop: 0, getBoundingClientRect: () => ({ top: 0 }), scrollTo: o => scrolled.push(o) } : made[id] || null),
+      getElementById: id => (id === 'detail' ? detail : id === 'dPreserve' ? el('dPreserve') : id === 'screenWrap' ? { scrollTop: 0, getBoundingClientRect: () => ({ top: 0 }), scrollTo: o => scrolled.push(o), addEventListener() {}, removeEventListener() {} } : made[id] || null),
       createElement: () => ({ dataset: {}, isConnected: true, getBoundingClientRect: () => ({ top: 500 }) }),
       body: { classList: { contains: () => false }, dataset: { screen: 'detail' } }
     },
@@ -64,7 +65,7 @@ function tabWorld() {
   };
   vm.createContext(ctx);
   const src = ['DETAIL_TABS', 'DETAIL_CHAPTERS'].map(n => app.match(new RegExp(`const ${n}=\\[[^\\]]+\\];`))[0].replace('const ', 'var ')).join('')
-    + app.match(/const DETAIL_CHAPTER_TITLES=\{[^}]+\};/)[0].replace('const ', 'var ') + 'var detailSpyLock=0;'
+    + app.match(/const DETAIL_CHAPTER_TITLES=\{[^}]+\};/)[0].replace('const ', 'var ') + 'var detailSpyLock=0,detailJump=0;'
     + ['detailTabOf', 'detailChapterOf', 'detailReduced', 'detailChaptersMount', 'detailMarkChapter', 'detailBarOffset', 'detailScrollTo', 'showDetailCat'].map(n => fnSource(app, n)).join('');
   vm.runInContext(src, ctx);
   const shown = () => panels.filter(p => p.style.display === '').map(p => p.dataset.cat);
@@ -424,4 +425,60 @@ test('photo d’ouverture : les points de danger, allumés jusqu’au niveau seu
   const hero = before.slice(before.indexOf('function hero('), before.indexOf('function alertLine('));
   assert.match(hero, /hx-danger/);
   assert.match(hero, /dots\(g\.n\)/);
+});
+
+test('saut vers un chapitre : le titre est recalé sous la barre tant que la page bouge, et s’arrête au premier geste', () => {
+  /* Faux monde avec une horloge à la main : le chapitre descend de 30 px après le départ (des images arrivent). */
+  const timers = []; let now = 1000;
+  const listeners = {}, scrolled = [];
+  const wrap = { scrollTop: 0, scrollHeight: 9000, clientHeight: 800, getBoundingClientRect: () => ({ top: 0 }),
+    scrollTo(o) { scrolled.push(o); this.scrollTop = o.top; },
+    addEventListener(n, f) { listeners[n] = f; }, removeEventListener(n) { delete listeners[n]; } };
+  let docTop = 2000;
+  const el = { isConnected: true, getBoundingClientRect: () => ({ top: docTop - wrap.scrollTop }) };
+  let measured = 0;
+  const ctx = { window: { detailSpyMeasure: () => { measured++; } }, Date: { now: () => now },
+    document: { getElementById: id => (id === 'screenWrap' ? wrap : null), body: { classList: { contains: () => false }, dataset: { screen: 'detail' } }, addEventListener(n, f) { listeners['doc-' + n] = f; }, removeEventListener(n) { delete listeners['doc-' + n]; } },
+    getComputedStyle: () => ({ paddingTop: '0', top: '0' }), setTimeout: (f, ms) => { timers.push({ f, at: now + ms }); return timers.length; } };
+  ctx.window.matchMedia = () => ({ matches: false });
+  vm.createContext(ctx);
+  vm.runInContext('var detailSpyLock=0,detailJump=0;' + ['detailReduced', 'detailBarOffset', 'detailScrollTo'].map(n => fnSource(app, n)).join(''), ctx);
+  const tick = ms => { now += ms; for (const t of timers.splice(0).sort((a, b) => a.at - b.at)) { if (t.at <= now) t.f(); else timers.push(t); } };
+  ctx.detailScrollTo(el);
+  assert.equal(scrolled[0].top, 1990); assert.equal(scrolled[0].behavior, 'smooth');
+  assert.ok(vm.runInContext('detailSpyLock', ctx) > now, 'le chapitre lu ne change pas pendant le saut');
+  tick(120); assert.equal(scrolled.length, 1, 'première mesure : on attend que la page soit immobile');
+  docTop = 2030; tick(120);
+  assert.equal(scrolled.length, 2); assert.deepEqual({ ...scrolled[1] }, { top: 2020, behavior: 'auto' }, 'recalé sans animation, à 10 px sous la barre');
+  tick(120); assert.equal(scrolled.length, 2, 'en place : plus rien');
+  docTop = 2055; tick(120); assert.equal(scrolled[2].top, 2045, 'une image arrivée plus tard est rattrapée aussi');
+  /* Premier geste : tout s’arrête, le suivi du chapitre lu reprend. */
+  listeners.touchstart(); assert.equal(vm.runInContext('detailSpyLock', ctx), 0); assert.equal(measured, 1);
+  docTop = 2100; tick(120); tick(120); assert.equal(scrolled.length, 3, 'plus aucun recalage après un geste');
+  assert.equal(Object.keys(listeners).length, 0, 'écoutes retirées');
+  /* Sans geste : fin au bout de 2,4 s. En bas de page, on ne force rien. */
+  const src = fnSource(app, 'detailScrollTo');
+  assert.match(src, /Date\.now\(\)-t0>2400/); assert.match(src, /setTimeout\(check,120\)/); assert.doesNotMatch(src, /requestAnimationFrame|setInterval/);
+  assert.match(src, /var room=off>0\?wrap\.scrollHeight-wrap\.clientHeight-y:y;/);
+  /* « Conditions » garde la place de la barre au-dessus de son titre : elle ne le recouvre pas après un saut. */
+  assert.match(css, /\.fx-chapter\[data-chapter="meteo"\]\{border-top:0;padding-top:0;margin-top:60px\}/);
+  assert.match(css, /#detail \.px-start\{margin:0;padding:22px 0 0\}/);
+});
+
+test('arrivée : moins d’une seconde, une seule courbe, transform et opacity seulement', () => {
+  const px = css.slice(css.indexOf('Arrivée (une fois, moins d’une seconde)'), css.indexOf('Nature, frise des douze mois'));
+  const sec = v => (v ? parseFloat(v) : 0);
+  let last = 0, n = 0;
+  /* Durée + retard de chaque règle (les retards posés à part par :nth-child s’ajoutent à la durée de la règle mère). */
+  const dur = {};
+  for (const m of px.matchAll(/#detail\.px-in ([^{]+)\{animation:px\w+ ([\d.]+)s [^;}]*?(?:\) ([\d.]+)s)? both(?:;animation-delay:calc\(([\d.]+)s \+ var\(--i,0\) \* ([\d.]+)s\))?\}/g)) {
+    dur[m[1].trim()] = sec(m[2]); n++;
+    last = Math.max(last, sec(m[2]) + sec(m[3]) + (m[4] ? sec(m[4]) + 5 * sec(m[5]) : 0));
+  }
+  assert.ok(n >= 5, 'règles lues : ' + n);
+  for (const m of px.matchAll(/#detail\.px-in ([^{]+?)(?::nth-child\(\d\))\{animation-delay:([\d.]+)s\}/g)) last = Math.max(last, sec(m[2]) + (dur[m[1].trim()] || 0));
+  assert.ok(last > 0.6 && last <= 1.0, 'dernier mouvement fini à ' + last.toFixed(2) + ' s');
+  for (const m of px.matchAll(/@keyframes px\w+\{((?:[^{}]*\{[^}]*\})+)\}/g))
+    for (const d of m[1].matchAll(/\{([^}]*)\}/g)) for (const prop of d[1].split(';').filter(Boolean)) assert.match(prop, /^(transform|opacity):/);
+  assert.match(app, /setTimeout\(function\(\)\{detail\.classList\.remove\('px-in'\);\},1100\);/);
 });

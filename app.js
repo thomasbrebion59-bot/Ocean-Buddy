@@ -1111,7 +1111,7 @@ function detailTabOf(cat){return cat==='preserver'?'faune':DETAIL_TABS.indexOf(c
    et l'heure par heure dans le chapitre Conditions ; « preserver » mène aux gestes, sous la faune. */
 const DETAIL_CHAPTERS=['meteo','infos','faune','securite','saisons','activites'];
 const DETAIL_CHAPTER_TITLES={meteo:'Conditions',infos:'Le coin',faune:'Nature',securite:'Sécurité',saisons:'Saisons',activites:'Préparer'};
-var detailSpyLock=0;
+var detailSpyLock=0,detailJump=0;
 function detailChapterOf(cat){var t=detailTabOf(cat);return t==='previsions'?'meteo':t;}
 function detailReduced(){return document.body.classList.contains('reduce-motion')||!!(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);}
 /* Tous les panneaux affichés, chacun avec son titre de chapitre (posé une fois, traduit par i18n.js comme tout texte). */
@@ -1145,14 +1145,34 @@ function detailBarOffset(){
 function detailScrollTo(el){
   var wrap=document.getElementById('screenWrap');if(!wrap||!el)return;
   var top=wrap.scrollTop+el.getBoundingClientRect().top-wrap.getBoundingClientRect().top-detailBarOffset()-10;
-  detailSpyLock=Date.now()+900;
+  var jump=++detailJump,t0=Date.now(),lastY=null;
+  detailSpyLock=t0+2500;
   wrap.scrollTo({top:Math.max(0,top),behavior:detailReduced()?'auto':'smooth'});
-  /* Des images arrivées pendant le défilement peuvent déplacer le chapitre : un seul recalage, à l'arrivée. */
-  setTimeout(function(){
-    if(!el.isConnected||document.body.dataset.screen!=='detail')return;
-    var off=el.getBoundingClientRect().top-wrap.getBoundingClientRect().top-detailBarOffset()-10;
-    if(Math.abs(off)>8)wrap.scrollTo({top:Math.max(0,wrap.scrollTop+off),behavior:'auto'});
-  },700);
+  /* Des images et des blocs arrivent pendant et après le défilement et déplacent le chapitre (mesuré : 20 à 60 px, parfois
+     bien plus juste après l'ouverture). Pendant 2,4 s, dès que la page est immobile, le titre est recalé sous la barre,
+     sans animation. Tout s'arrête au premier geste (toucher, molette, clavier) ou au saut suivant. Pas de boucle par
+     image : une vérification toutes les 120 ms, vingt au plus. */
+  function done(){
+    if(jump!==detailJump)return;
+    detailJump++;detailSpyLock=0;
+    wrap.removeEventListener('touchstart',done);wrap.removeEventListener('wheel',done);document.removeEventListener('keydown',done);
+    if(typeof window.detailSpyMeasure==='function')try{window.detailSpyMeasure();}catch(e){}
+  }
+  function check(){
+    if(jump!==detailJump)return;
+    if(!el.isConnected||document.body.dataset.screen!=='detail'||Date.now()-t0>2400){done();return;}
+    var y=wrap.scrollTop;
+    if(lastY!==null&&Math.abs(y-lastY)<.5){
+      var off=el.getBoundingClientRect().top-wrap.getBoundingClientRect().top-detailBarOffset()-10;
+      /* En bas de page, le titre ne peut pas toujours monter jusqu'à la barre : on ne force rien. */
+      var room=off>0?wrap.scrollHeight-wrap.clientHeight-y:y;
+      if(Math.abs(off)>1.5&&room>1){wrap.scrollTo({top:Math.max(0,y+off),behavior:'auto'});y=wrap.scrollTop;}
+    }
+    lastY=y;
+    setTimeout(check,120);
+  }
+  wrap.addEventListener('touchstart',done,{passive:true});wrap.addEventListener('wheel',done,{passive:true});document.addEventListener('keydown',done);
+  setTimeout(check,120);
 }
 function showDetailCat(cat,shouldScroll=true){
   var tab=detailTabOf(cat),chap=detailChapterOf(cat);
@@ -1214,7 +1234,7 @@ function showDetailCat(cat,shouldScroll=true){
   var arrived=null,counted=null;
   function count(el){
     var txt=el.textContent,m=/^([-−]?)(\d+)([.,](\d+))?$/.exec(txt.trim());if(!m)return;
-    var end=parseFloat((m[1]?'-':'')+m[2]+(m[4]?'.'+m[4]:'')),dec=m[4]?m[4].length:0,sep=m[3]?m[3][0]:',',t0=performance.now(),dur=650;
+    var end=parseFloat((m[1]?'-':'')+m[2]+(m[4]?'.'+m[4]:'')),dec=m[4]?m[4].length:0,sep=m[3]?m[3][0]:',',t0=performance.now(),dur=600;
     function fmt(v){var a=Math.abs(v).toFixed(dec);return (v<0?m[1]:'')+(dec?a.replace('.',sep):a);}
     function step(now){
       var k=Math.min(1,(now-t0)/dur),e=1-Math.pow(1-k,3);
@@ -1231,7 +1251,7 @@ function showDetailCat(cat,shouldScroll=true){
     if(arrived===id||detailReduced()){arrived=id;return;}
     arrived=id;counted=null;
     detail.classList.remove('px-in');void detail.offsetWidth;detail.classList.add('px-in');
-    setTimeout(function(){detail.classList.remove('px-in');},1600);
+    setTimeout(function(){detail.classList.remove('px-in');},1100);
   });
   document.addEventListener('ocean:hero-now',function(e){
     var d=e.detail||{};if(!d.ready||counted===d.id||detailReduced())return;
