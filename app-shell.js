@@ -1,7 +1,8 @@
 /* Ocean Buddy 1.3 — coque d’application.
    Barre d’onglets flottante (interface v2 : Accueil, Explorer, Voyages, Profil) et bouton Poulpy,
-   grands titres, barre qui se fait discrète au défilement, Explorer en plein écran sur la vraie
+   grands titres, barre qui se fait discrète au défilement, mode Carte d’Explorer en plein écran sur la vraie
    Terre (recherche flottante, continents en photos, soleil réel, nuages) et fenêtre « Nouveautés ».
+   Interface v2 : Explorer s’ouvre sur la liste (explore-list.js) ; la planète est son mode Carte, inchangée.
    Chargé en dernier : il s’appuie sur les fonctions globales de app.js sans les réécrire. */
 (() => {
   'use strict';
@@ -89,18 +90,18 @@
     }
     syncSearch();
   }
-  /* Entrer dans Explorer sur téléphone ouvre directement la Terre (au lieu de la liste des continents). */
-  function toGlobe(){
+  /* Interface v2 : entrer dans Explorer ouvre la liste de tous les spots (avant : la Terre). La planète est le mode
+     Carte, à un toucher (sélecteur Liste / Carte) ; la vue choisie reste tant qu’on ne change pas de région. */
+  function toList(){
     if(typeof openWorld!=='function')return;
     if(spotWorld!=='all'||spotCountry)openWorld('all');
-    setView('map');
   }
   const wrapFn=(name,after,before)=>{const f=window[name];if(typeof f!=='function')return;window[name]=function(...a){if(before&&before(...a)===false)return;const r=f.apply(this,a);try{after?.(...a);}catch(e){console.warn(e);}return r;};};
-  wrapFn('go',s=>{if(s==='spots'&&!spotWorld)toGlobe();immersive();largeTitles();});
+  wrapFn('go',s=>{if(s==='spots'&&!spotWorld)toList();immersive();largeTitles();});
   wrapFn('setView',()=>immersive());
   wrapFn('syncWorldUI',()=>immersive());
-  /* « Tous les continents » ramène à la planète entière. */
-  wrapFn('backToWorlds',()=>{if(body.dataset.screen==='spots'){toGlobe();setTimeout(()=>window.OceanMap?.overview?.(),60);}});
+  /* « Tous les continents » ramène à la liste de tous les spots. */
+  wrapFn('backToWorlds',()=>{if(body.dataset.screen==='spots')toList();});
   window.addEventListener('ocean:navigate',()=>requestAnimationFrame(immersive));
   matchMedia('(max-width:959px)').addEventListener?.('change',immersive);
 
@@ -109,7 +110,7 @@
   function buildTop(){
     const stage=$('#spotMapWrap .omap-stage');if(!stage||exTop)return;
     exTop=document.createElement('div');exTop.className='ex-top';
-    exTop.innerHTML=`<label class="ex-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="omap-sr">Rechercher un spot, un pays</span><input type="search" enterkeyhint="search" autocomplete="off" placeholder="Spot, pays, île…"><button type="button" data-ex="clear" aria-label="Effacer la recherche" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button><button type="button" data-ex="list" aria-label="Voir les spots en liste"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg></button></label>`;
+    exTop.innerHTML=`<label class="ex-search"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span class="omap-sr">Rechercher un spot, un pays</span><input type="search" enterkeyhint="search" autocomplete="off" placeholder="Spot, pays, île…"><button type="button" data-ex="clear" aria-label="Effacer la recherche" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button><button type="button" data-ex="list" aria-label="Voir les spots en liste"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6h11M9 12h11M9 18h11"/><path d="M4.5 6h.01M4.5 12h.01M4.5 18h.01"/></svg><span>Liste</span></button></label>`;
     stage.append(exTop);
     const input=$('input',exTop),clear=$('[data-ex=clear]',exTop);
     let t=0;
@@ -237,6 +238,7 @@
     const conf=[...document.querySelectorAll('.as-confirm.open')].pop();if(conf){conf.querySelector('[data-v="0"]')?.click();return true;}
     const upd=$('.app-update.show');if(upd){upd.querySelector('.app-update-later')?.click();return true;}
     if(window.OceanPlan?.isOpen?.()){window.OceanPlan.close();return true;}
+    if(window.OceanExploreList?.sheetOpen?.()){window.OceanExploreList.closeSheet();return true;}
     if(window.OceanSurf?.isOpen?.()){window.OceanSurf.close();return true;}
     const newsEl=$('.as-news');if(newsEl){newsEl.querySelector('.as-news-later')?.click();return true;}
     const cele=$('.tb-cele');if(visible(cele)){(cele.querySelector('[data-tb-c=next]')||cele.querySelector('button:last-of-type'))?.click();return true;}
@@ -295,7 +297,8 @@
     if(from===to){wrap.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});return;}
     if(from&&from!=='detail')tabScroll[from]=wrap.scrollTop;
     const y=tabScroll[to];
-    pendingScroll=y>0&&to!=='spots'?{to,y}:null;
+    /* Explorer retrouve aussi sa place dans la liste ; en mode Carte (planète en plein écran), il n’y a rien à rétablir. */
+    pendingScroll=y>0&&!(to==='spots'&&mapShown())?{to,y}:null;
     if(pendingScroll)setTimeout(applyScroll,0);
   },true);
   /* La transition d’écran remet le défilement à zéro à la fin : on rétablit la position juste après. */
@@ -312,7 +315,7 @@
 
   /* Démarrage. */
   immersive();
-  if(body.dataset.screen==='spots'&&!spotWorld)toGlobe();
+  if(body.dataset.screen==='spots'&&!spotWorld)toList();
   /* Les nouveautés attendent la levée du rideau de démarrage. */
   if(window.OceanBoot)OceanBoot.after(()=>setTimeout(()=>news(false),1200));else setTimeout(()=>news(false),1600);
   document.addEventListener('visibilitychange',()=>{if(!document.hidden)largeTitles();});

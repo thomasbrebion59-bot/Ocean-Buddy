@@ -1,14 +1,30 @@
-/* Surf trips — a locally saved travel notebook connected to the spot catalogue. */
+/* Surf trips — a locally saved travel notebook connected to the spot catalogue.
+   Interface v2 (20 novembre 2026, maquette orga-docs/interface-v2/maquette-4-voyages.png) : l’écran s’ouvre sur « Mes voyages »,
+   une carte légère par voyage (photo de la première étape, nom, dates, étapes, liste « Avant de partir », jours avant le
+   départ en grand chiffre), puis « Nouveau voyage » et trois idées en petit. Plus de grande affiche ni de sur-titres en
+   capitales. Vie : la barre se remplit à l’arrivée, le nombre de jours monte une fois, les ronds des étapes arrivent l’un
+   après l’autre (transform et opacity, rien en mouvement réduit).
+   Passe du 23 novembre 2026 : six idées parlantes (trois thèmes appuyés sur les données de l’app, trois destinations) en
+   affiches à faire défiler, illustration dédiée sans voyage, cartes et idées qui entrent l’une après l’autre, itinéraire
+   des ronds qui se trace, voyage ouvert qui arrive en douceur. */
 (() => {
   'use strict';
   const M=TripModel, $=s=>document.querySelector(s), knownIds=()=>SPOTS.map(s=>s.id);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const icon=(path)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg>`;
-  const I={trash:icon('M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7'),plus:icon('M12 5v14M5 12h14'),route:icon('M5 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4m14 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4M5 9v4a4 4 0 0 0 4 4h4m-2-10h4a4 4 0 0 1 4 4v4'),calendar:icon('M5 5h14v16H5zM8 3v4m8-4v4M5 10h14'),bag:icon('M4 8h16v13H4zM8 8V3h8v5'),check:icon('m5 12 4 4 10-10'),close:icon('m6 6 12 12M6 18 18 6'),map:icon('m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zm6-2v16m6-14v16')};
+  const I={trash:icon('M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7'),plus:icon('M12 5v14M5 12h14'),route:icon('M5 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4m14 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4M5 9v4a4 4 0 0 0 4 4h4m-2-10h4a4 4 0 0 1 4 4v4'),calendar:icon('M5 5h14v16H5zM8 3v4m8-4v4M5 10h14'),bag:icon('M4 8h16v13H4zM8 8V3h8v5'),check:icon('m5 12 4 4 10-10'),close:icon('m6 6 12 12M6 18 18 6'),map:icon('m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zm6-2v16m6-14v16'),pin:icon('M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11zm0-13.300a2.300 2.300 0 1 0 0 4.600 2.300 2.300 0 0 0 0-4.600'),clock:icon('M12 3.500a8.500 8.500 0 1 0 0 17 8.500 8.500 0 0 0 0-17M12 7.500V12l3 2'),list:icon('M9 4h6v3H9zM9 5.500H6.500A1.500 1.500 0 0 0 5 7v12.500A1.500 1.500 0 0 0 6.500 21h11a1.500 1.500 0 0 0 1.500-1.500V7a1.500 1.500 0 0 0-1.500-1.500H15M9 14l2 2 4-4.500')};
+  /* Idées : trois thèmes (ceux de la maquette), puis trois destinations. Rien d’inventé : chaque thème s’appuie sur les
+     données de l’app, et tests/voyages-v2.test.js le vérifie. « Surf d’hiver » : trois spots de surf, tous en saison de
+     novembre à mars (data/seasons.json). « Plongée » et « Eau chaude » : la plus basse et la plus haute des températures de
+     mer mensuelles des trois étapes, telles que la fiche les affiche (normales NOAA, assets/data/spot-climate-lite.js).
+     months : premier et dernier mois (0 = janvier) ; sea : minimum et maximum, en °C ; sport : la pastille de l’affiche. */
   const ideas=[
-    {name:'La côte basque, au rythme des vagues',short:'Côte basque',destination:'France',tag:'UN ROAD TRIP À DEUX PAS',photo:'biarritz',spots:['biarritz','anglet','hossegor']},
-    {name:'Du soleil et des vagues au Portugal',short:'Portugal',destination:'Portugal',tag:'L’ATLANTIQUE EN GRAND',photo:'praia_marinha',spots:['ericeira','supertubos','praia_marinha']},
-    {name:'Bali, d’une côte à l’autre',short:'Bali',destination:'Indonésie',tag:'UNE ÎLE, MILLE HORIZONS',photo:'uluwatu',spots:['uluwatu','padang','keramas']}
+    {name:'Surf d’hiver au Maroc',short:'Surf d’hiver',place:'Maroc',destination:'Maroc',sport:'surf',months:[10,2],photo:'mirleft',spots:['anchorpoint','tamraght','mirleft']},
+    {name:'Plongée en mer Rouge',short:'Plongée',place:'Mer Rouge',destination:'Égypte',sport:'plongee',sea:[22,29],photo:'dahab',spots:['rasmohammed','dahab','abudabbab']},
+    {name:'Eau chaude en Polynésie',short:'Eau chaude',place:'Polynésie',destination:'Polynésie française',sport:'baignade',sea:[26,29],photo:'moorea',spots:['moorea','borabora','maupiti']},
+    {name:'La côte basque, au rythme des vagues',short:'Côte basque',place:'France',destination:'France',sport:'surf',photo:'biarritz',spots:['biarritz','anglet','hossegor']},
+    {name:'Du soleil et des vagues au Portugal',short:'Côte portugaise',place:'Portugal',destination:'Portugal',sport:'surf',photo:'praia_marinha',spots:['ericeira','supertubos','praia_marinha']},
+    {name:'Bali, d’une côte à l’autre',short:'Bali',place:'Indonésie',destination:'Indonésie',sport:'surf',photo:'uluwatu',spots:['uluwatu','padang','keramas']}
   ];
   let trips=[],selected=null,view='itinerary',loadError='',tripMap=null,lastFocus=null,pendingSpot=null;
   try{trips=M.load(localStorage,knownIds())}catch(e){loadError='Ton carnet ne peut pas être chargé. Les données existantes sont conservées. Réessaie après avoir rechargé la page.';}
@@ -20,6 +36,9 @@
   const distanceKm=(a,b)=>{if(!a||!b)return null;const rad=Math.PI/180,dLat=(b.lat-a.lat)*rad,dLon=(b.lon-a.lon)*rad,x=Math.sin(dLat/2)**2+Math.cos(a.lat*rad)*Math.cos(b.lat*rad)*Math.sin(dLon/2)**2;return 6371*2*Math.atan2(Math.sqrt(x),Math.sqrt(1-x));};
   const routeDistance=t=>{let total=0,legs=0,prev=null;t.steps.forEach(s=>{const c=COORDS[s.spotId];if(c&&prev){total+=distanceKm(prev,c);legs++;}prev=c||null;});return legs?total:null;};
   const prettyDistance=n=>n<1?Math.round(n*1000)+' m':n<100?Math.round(n)+' km':Math.round(n/10)*10+' km';
+  /* Distances affichées : chaque phrase est un gabarit entier dans son propre élément, avec une classe (.trip-dist).
+     Sans classe, le traducteur de page (i18n.js) lit la ligne entière comme une phrase à balises et un gabarit plus court
+     s’applique : « 23 km from stop précédente » en anglais. */
   const region=t=>t.steps.length?(SPOT_WORLD[t.steps[0].spotId]||t.steps[0].legacy?.world||'as'):'as';
   /* Sans étape, pas de paysage d'un autre continent : une vue d'océan neutre. */
   const cover=t=>t.steps.length&&spot(t.steps[0].spotId)?photo(t.steps[0].spotId):t.steps.length?WORLD_PHOTOS[region(t)]?.src||'assets/photos/hero.jpg':'assets/photos/hero.jpg';
@@ -31,7 +50,66 @@
   const badge=t=>{const n=t.steps.length,d=M.duration(t),spots=n>1?`${n} spots`:`${n} spot`;return d?spots+' · '+(d>1?`${d} jours`:`${d} jour`):spots;};
   const todayKey=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
   const when=t=>{const c=M.countdown(t,todayKey());return c.state==='upcoming'?(c.days===1?'Départ demain':`J-${c.days}`):c.state==='ongoing'?`Jour ${c.days} · en route`:c.state==='past'?'Voyage terminé':'';};
-  const prep=t=>{const p=M.progress(t);return p.total?`<span class="trip-prep" style="--p:${p.pct}%"><i></i><small>Préparation ${p.done}/${p.total}</small></span>`:'';};
+  /* ---------- Interface v2 : carte d’un voyage ---------- */
+  const D=v=>new Date(v+'T12:00:00');
+  const dayMonth=(v,month='long')=>D(v).toLocaleDateString('fr-FR',{day:'numeric',month});
+  /* Dates courtes : « 5 au 7 décembre », « 28 nov. au 3 déc. ». L’année n’apparaît que si le départ n’est pas dans les
+     onze mois qui viennent. Hors du français, c’est le format d’intervalle de la langue (Intl) : la chaîne est déjà dans
+     la bonne langue, le traducteur de page n’y touche pas (data-no-i18n posé par la carte). */
+  function shortRange(t){
+    if(!t.start&&!t.end)return '';
+    const today=D(todayKey()),ref=D(t.start||t.end),gap=(ref-today)/86400000;
+    const year=gap<-1&&ref.getFullYear()!==today.getFullYear()||gap>335?' '+ref.getFullYear():'';
+    const one=!t.start||!t.end||t.end===t.start;
+    const a=D(t.start||t.end),b=D(t.end||t.start),same=a.getMonth()===b.getMonth()&&a.getFullYear()===b.getFullYear();
+    /* Hors du français : la langue choisie (OB_LOCALE) écrit elle-même la date ou l’intervalle (« Dec 5 – 7 », « 5–7 dic »). */
+    if((window.OB_I18N?.lang||'fr')!=='fr'){
+      try{const f=new Intl.DateTimeFormat(window.OB_LOCALE||'en',{day:'numeric',month:one||same?'long':'short',...(year?{year:'numeric'}:{})});return one?f.format(a):f.formatRange(a,b);}catch(_){}
+    }
+    if(one)return dayMonth(t.start||t.end)+year;
+    const link=' au ';
+    return (same?String(a.getDate()):dayMonth(t.start,'short'))+link+dayMonth(t.end,same?'long':'short')+year;
+  }
+  /* Le voyage dont les étapes sont dessinées en ronds reliés : le prochain départ s’il a plusieurs étapes, sinon le
+     premier voyage qui en a plusieurs (une seule rangée de ronds par écran). */
+  function featured(saved){
+    const next=M.nextTrip(saved,todayKey())?.trip;
+    if(next&&next.steps.length>1)return next.id;
+    return saved.find(t=>t.steps.length>1)?.id||null;
+  }
+  const stepName=s=>{const p=spot(s.spotId);return p?(window.SpotName?SpotName.parts(p.name).main:p.name.split(' — ')[0]):(s.legacy?.name||'Spot indisponible');};
+  const round=(s,sizes)=>spot(s.spotId)&&spotPhotoUrl(s.spotId,480)?`<img src="${esc(spotPhotoUrl(s.spotId,480))}"${spotPhotoSrcset(s.spotId)} sizes="${sizes}" alt="" loading="lazy" decoding="async">`:`<span class="tv-ph" aria-hidden="true">${I.pin}</span>`;
+  function stepsRow(t){
+    const max=4,shown=t.steps.length>max?t.steps.slice(0,max-1):t.steps,more=t.steps.length-shown.length;
+    const items=shown.map(s=>`<li class="tv-step">${round(s,'76px')}<b translate="no" data-no-i18n>${esc(stepName(s))}</b></li>`);
+    if(more>0)items.push(`<li class="tv-step"><span class="tv-ph tv-more" translate="no">+${more}</span><b>${more>1?`${more} étapes`:`${more} étape`}</b></li>`);
+    return `<ol class="tv-steps" aria-label="Étapes">${items.join('<li class="tv-link" aria-hidden="true"></li>')}</ol>`;
+  }
+  /* Repère d’une idée (« Nov. à mars », « 26 à 29 °C »), écrit ici dans la langue choisie et jamais passé au traducteur de
+     page (data-no-i18n) : un gabarit « {0} à {1} » attraperait d’autres phrases. Hors du français, l’intervalle de la langue. */
+  function ideaFact(x){
+    const fr=(window.OB_I18N?.lang||'fr')==='fr',link=' à ';
+    if(x.sea)return fr?x.sea[0]+link+x.sea[1]+' °C':x.sea[0]+'–'+x.sea[1]+' °C';
+    if(!x.months)return '';
+    const a=new Date(2026,x.months[0],15),b=new Date(x.months[1]<x.months[0]?2027:2026,x.months[1],15);
+    let text='';
+    try{const f=new Intl.DateTimeFormat(fr?'fr-FR':window.OB_LOCALE||'en',{month:'short'});text=fr?f.format(a)+link+f.format(b):f.formatRange(a,b);}catch(_){return '';}
+    return text.charAt(0).toUpperCase()+text.slice(1);
+  }
+  const sportMark=id=>window.PoulpyIcons?.mono?`<i class="exl-mark" style="--m:url('${esc(PoulpyIcons.mono(id))}')"></i>`:'';
+  /* Affiche d’une idée : vraie photo d’une étape, sport en pastille, repère chiffré s’il existe, thème et lieu. */
+  function ideaCard(x,i){
+    const fact=ideaFact(x);
+    return `<button type="button" class="tv-idea" data-action="idea" data-index="${i}"><img src="${esc(spotPhotoUrl(x.photo,480)||photo(x.photo))}"${spotPhotoSrcset(x.photo)} sizes="(max-width:959px) 42vw, 200px" alt="" loading="lazy" decoding="async"><span class="tv-idea-sport" aria-hidden="true">${sportMark(x.sport)}</span>${fact?`<span class="tv-idea-fact" translate="no" data-no-i18n>${esc(fact)}</span>`:''}<span class="tv-idea-tx"><b>${x.short}</b><small>${x.place}</small></span></button>`;
+  }
+  function tripCard(t,withSteps){
+    const c=M.countdown(t,todayKey()),p=M.progress(t),n=t.steps.length,first=t.steps[0],dates=shortRange(t);
+    const photoTag=`<img class="tv-photo" src="${esc(cover(t))}"${first&&spot(first.spotId)?spotPhotoSrcset(first.spotId):''} sizes="(max-width:959px) 30vw, 132px" alt="" loading="lazy" decoding="async">`;
+    const count=c.state==='upcoming'?`<span class="tv-count"><b class="ui-num" data-tv-num="${c.days}" translate="no">${c.days}</b><span class="ui-unit">${c.days>1?obT('jours'):obT('jour')}</span></span>`
+      :c.state==='ongoing'?`<span class="tv-count is-live"><span class="ui-unit">Jour</span><b class="ui-num" data-tv-num="${c.days}" translate="no">${c.days}</b></span>`
+      :c.state==='past'?`<span class="tv-count is-done"><span class="ui-unit">Terminé</span></span>`:`<span class="tv-count is-open" aria-hidden="true">${I.calendar}</span>`;
+    return `<article class="tv-card" data-action="select" data-id="${esc(t.id)}" data-tv="${esc(t.id)}"><button type="button" class="tv-open">${photoTag}<span class="tv-body"><b class="tv-name">${esc(t.name)}</b>${dates?`<span class="tv-dates" translate="no" data-no-i18n>${esc(dates)}</span>`:'<span class="tv-dates">Dates à définir</span>'}<span class="tv-line">${I.pin}<span>${n>1?`${n} étapes`:n===1?`${n} étape`:'Aucune étape'}</span></span>${p.total?`<span class="tv-line tv-prep" role="img" aria-label="Avant de partir : ${p.done} sur ${p.total}">${I.list}<span class="tv-bar" style="--p:${(p.done/p.total).toFixed(3)};--n:${p.total}"><i></i></span><span class="tv-frac" translate="no" aria-hidden="true">${p.done}/${p.total}</span></span>`:''}</span>${count}</button>${withSteps?stepsRow(t):''}</article>`;
+  }
   function render(){
     /* Écran Voyages caché : on ne lit ni n’écrit la position de défilement de #screenWrap (cette lecture juste
        après innerHTML forçait une mise en page complète, 70 à 160 ms au démarrage sous x4-x6). */
@@ -39,33 +117,81 @@
     if(tripMap){tripMap.destroy();tripMap=null;}
     const t=current(),saved=active();
     $('#trips').classList.toggle('has-trip',!!t);$('#trips').classList.toggle('has-saved',saved.length>0);
-    $('#tripContent').innerHTML=`<div class="trip-heading"><div><div class="page-eyebrow">LE VOYAGE COMMENCE AVANT LE DÉPART</div><h1>Les bons spots.<br><span>Dans le bon ordre.</span></h1><p>Rassemble tes envies. Dessine ton itinéraire. Prépare le grand départ.</p></div>${saved.length?`<button class="trip-primary" data-action="new">${I.plus} Nouveau voyage</button>`:''}</div>${loadError?`<p class="trip-error" role="alert">${loadError}</p>`:''}
-      ${saved.length?`<div class="trip-switch"><button class="${t?'':'active'}" data-action="overview">Mes voyages <b>${saved.length}</b></button>${saved.map(x=>`<button class="${x.id===selected?'active':''}" data-action="select" data-id="${esc(x.id)}">${esc(x.name)}</button>`).join('')}</div>`:''}
+    /* Voyage ouvert : la rangée des voyages (pour passer de l’un à l’autre) et « Nouveau voyage ». Liste : les cartes suffisent. */
+    $('#tripContent').innerHTML=`${t?'':'<h1 class="tv-h1">Voyages</h1>'}${loadError?`<p class="trip-error" role="alert">${loadError}</p>`:''}
+      ${t&&saved.length?`<div class="trip-switch"><button data-action="overview">Mes voyages <b>${saved.length}</b></button>${saved.map(x=>`<button class="${x.id===selected?'active':''}" data-action="select" data-id="${esc(x.id)}">${esc(x.name)}</button>`).join('')}<button class="trip-switch-new" data-action="new">${I.plus}<span>Nouveau voyage</span></button></div>`:''}
       ${t?tripDetail(t):overview(saved)}
       <p class="trip-storage">${loadError?'':I.check+' Ton carnet est enregistré sur cet appareil.'} <a href="photos.html" target="_blank" rel="noopener">Crédits photos</a></p>`;
     if(live)wrap.scrollTop=scroll;
     if(focus)document.querySelector(`[data-focus="${CSS.escape(focus)}"]`)?.focus({preventScroll:true});
     if(t&&view==='map')requestAnimationFrame(()=>drawMap(t));
     if(t)window.OceanSpotGuide?.fillTrip(t);
+    if(t)arriveTrip();else enliven();
+  }
+  /* Vie de « Mes voyages », à l’arrivée sur l’écran seulement (pas à chaque nouveau rendu) : les cartes puis les idées
+     entrent l’une après l’autre, la barre « Avant de partir » se remplit, l’itinéraire des ronds se trace d’étape en
+     étape ; le nombre de jours ne monte qu’une fois par voyage. transform et opacity seulement, aucune boucle. */
+  let arriving=true;const counted=new Set();
+  const still=()=>document.body.classList.contains('reduce-motion')||!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)||typeof Element.prototype.animate!=='function';
+  const rise=(el,delay,dy=14,duration=420)=>el.animate([{opacity:0,transform:`translate3d(0,${dy}px,0)`},{opacity:1,transform:'translate3d(0,0,0)'}],{duration,delay,easing:window.OceanMotion?.easeOut||'cubic-bezier(.22,.8,.3,1)',fill:'backwards'});
+  function enliven(){
+    const fresh=arriving;arriving=false;
+    const cards=[...document.querySelectorAll('#tripContent [data-tv],#tripContent .tv-empty')];
+    if(!fresh||still()||document.body.dataset.screen!=='trips')return;
+    const ease=window.OceanMotion?.easeOut||'cubic-bezier(.22,.8,.3,1)';
+    cards.forEach((card,k)=>{
+      rise(card,40+k*60);
+      const art=card.querySelector('.tv-empty-art>img');
+      if(art)art.animate([{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:900,delay:40,easing:ease,fill:'backwards'});
+      const fill=card.querySelector('.tv-bar>i'),p=parseFloat(card.querySelector('.tv-bar')?.style.getPropertyValue('--p'))||0;
+      if(fill&&p>0)fill.animate([{transform:'scaleX(0)'},{transform:`scaleX(${p})`}],{duration:700,delay:220+k*90,easing:ease,fill:'backwards'});
+      card.querySelectorAll('.tv-steps>li').forEach((li,i)=>li.animate(li.classList.contains('tv-link')?[{opacity:0,transform:'scaleX(0)'},{opacity:1,transform:'scaleX(1)'}]:[{opacity:0,transform:'scale(.82)'},{opacity:1,transform:'scale(1)'}],{duration:340,delay:320+i*70,easing:ease,fill:'backwards'}));
+      const num=card.querySelector('[data-tv-num]'),to=num?+num.dataset.tvNum:0;
+      if(num&&to>1&&!counted.has(card.dataset.tv)){
+        const t0=performance.now()+180+k*90,span=Math.min(900,420+to*6);
+        num.textContent='0';
+        const step=now=>{if(!num.isConnected)return;const x=Math.min(1,Math.max(0,(now-t0)/span)),e=1-Math.pow(1-x,3);num.textContent=String(Math.round(to*e));if(x<1)requestAnimationFrame(step);};
+        requestAnimationFrame(step);
+      }
+      counted.add(card.dataset.tv);
+    });
+    const after=40+cards.length*60;
+    document.querySelectorAll('#tripContent .tv>.tv-new,#tripContent .tv-ideas-head').forEach((el,i)=>rise(el,after+i*50,10,360));
+    document.querySelectorAll('#tripContent .tv-idea').forEach((el,i)=>rise(el,after+90+i*45,12,400));
+  }
+  /* Voyage ouvert : à l’ouverture seulement (pas à chaque case cochée ou étape déplacée), la bannière puis les premières
+     étapes arrivent en douceur. */
+  let opening=false; /* posé juste avant le rendu qui reste à l’écran (go('trips') rend déjà une fois l’écran) */
+  function arriveTrip(){
+    const fresh=opening;opening=false;
+    if(!fresh||still()||document.body.dataset.screen!=='trips')return;
+    document.querySelectorAll('#tripContent .trip-banner>div>*,#tripContent .trip-banner>.trip-glass').forEach((el,i)=>rise(el,60+i*55,10,380));
+    [...document.querySelectorAll('#tripContent .trip-step')].slice(0,4).forEach((el,i)=>rise(el,220+i*70,16,440));
   }
   function storedTrips(title,list,trash=false){
     if(!list.length)return '';
     return `<details class="trip-archives ${trash?'trip-trash':''}"><summary>${title} (${list.length})</summary>${trash?'<p class="trip-trash-note">Les voyages supprimés restent récupérables sur cet appareil.</p>':''}${list.map(t=>`<div class="trip-stored-row"><span class="trip-stored-info"><b>${esc(t.name)}</b><small>${esc(range(t))} · ${badge(t)}${trash&&t.archived?' · Archivé':''}</small></span><span class="trip-stored-actions"><button data-action="${trash?'recover':'restore'}" data-id="${esc(t.id)}" aria-label="Restaurer ${esc(t.name)}">Restaurer</button>${trash?'':`<button class="trip-delete-action" data-action="delete" data-id="${esc(t.id)}" aria-label="Supprimer ${esc(t.name)}">${I.trash}<span>Supprimer</span></button>`}</span></div>`).join('')}</details>`;
   }
   function overview(saved){
-    const archived=trips.filter(t=>t.archived&&!t.deleted),deleted=trips.filter(t=>t.deleted);
-    return `${saved.length?`<div class="trip-saved-grid">${saved.map(t=>`<article class="trip-saved-card"><button class="trip-saved" data-action="select" data-id="${esc(t.id)}"><img src="${esc(cover(t))}"${t.steps[0]&&spot(t.steps[0].spotId)?spotPhotoSrcset(t.steps[0].spotId):''} sizes="(max-width:700px) 92vw, 420px" alt="" loading="lazy" decoding="async">${when(t)?`<span class="trip-when">${when(t)}</span>`:''}<span class="trip-saved-body"><small>${esc(t.destination||'Ton prochain horizon')}</small><b>${esc(t.name)}</b><span>${esc(range(t))}</span>${prep(t)}<em>${badge(t)}</em></span></button><div class="trip-card-actions"><button class="trip-delete-action" data-action="delete" data-id="${esc(t.id)}" aria-label="Supprimer ${esc(t.name)}">${I.trash} Supprimer</button></div></article>`).join('')}</div>`:`<div class="trip-welcome"><img src="${esc(WORLD_PHOTOS.as.src)}" alt="Paysage des îles Raja Ampat" loading="lazy" decoding="async"><div><span class="trip-pill">LE CARNET DE TES ENVIES</span><h2>Ton prochain<br>grand départ.</h2><p>Repère tes spots, choisis tes étapes <br>et prépare ton sac.</p><button class="trip-primary" data-action="new">${trips.length?'Créer un nouveau voyage':'Créer mon premier voyage'}</button></div><figure class="trip-poulpy-postcard"><img src="assets/poulpy/scenes/travel-v2.webp" alt="Poulpy l’explorateur avec sa carte et sa boussole" width="960" height="640" loading="lazy" decoding="async"><figcaption>Prochaine escale : tes envies.</figcaption></figure><span class="trip-stamp">LE LARGE<br>NOUS ATTEND.</span></div>`}
-      ${storedTrips('Voyages archivés',archived)}${storedTrips('Corbeille',deleted,true)}
-      <div class="trip-section-title"><div><span class="page-eyebrow">UNE ÉTINCELLE POUR COMMENCER</span><h2>Trois idées. Ton aventure.</h2></div><span>Des itinéraires à personnaliser</span></div>
-      <div class="trip-ideas">${ideas.map((x,i)=>`<article class="trip-idea"><img src="${esc(photo(x.photo))}"${spotPhotoSrcset(x.photo)} sizes="(max-width:700px) 92vw, 420px" alt="${esc(x.short)}" loading="lazy" decoding="async"><div><small>${x.tag}</small><h3>${x.short}</h3><p>${x.spots.map(id=>esc(spot(id).name.split(' — ')[0])).join(' · ')}</p><button data-action="idea" data-index="${i}">Personnaliser ces 3 étapes</button></div></article>`).join('')}</div>
-      `;
+    const archived=trips.filter(t=>t.archived&&!t.deleted),deleted=trips.filter(t=>t.deleted),star=featured(saved);
+    /* Sans voyage : une carte qui invite, « Nouveau voyage » en premier. Illustration dédiée (Poulpy devant sa carte
+       d’étapes, au style des illustrations de la fiche) ; dessous, des étapes à remplir, dessinées comme celles d’un vrai voyage. */
+    const empty=`<div class="tv-empty"><span class="tv-empty-art"><img src="assets/ui/voyage-vide.webp" srcset="assets/ui/voyage-vide-960.webp 960w, assets/ui/voyage-vide.webp 1536w" sizes="(max-width:959px) 92vw, 640px" alt="" width="1536" height="864" decoding="async"></span><ol class="tv-steps" aria-hidden="true"><li class="tv-step"><span class="tv-ph">${I.pin}</span></li><li class="tv-link"></li><li class="tv-step"><span class="tv-ph">${I.pin}</span></li><li class="tv-link"></li><li class="tv-step"><span class="tv-ph">${I.pin}</span></li></ol><p class="ui-title">Pas encore de voyage</p><button type="button" class="ui-btn tv-new" data-action="new">${I.plus}<span>Nouveau voyage</span></button></div>`;
+    return `<section class="tv"><div class="ui-head"><h2 class="ui-title">Mes voyages</h2></div>
+      ${saved.length?`<div class="tv-list">${saved.map(t=>tripCard(t,t.id===star)).join('')}</div><button type="button" class="ui-btn tv-new" data-action="new">${I.plus}<span>Nouveau voyage</span></button>`:empty}
+      <div class="ui-head tv-ideas-head"><h2 class="ui-title">Idées</h2></div>
+      <div class="tv-ideas">${ideas.map(ideaCard).join('')}</div>
+      ${storedTrips('Voyages archivés',archived)}${storedTrips('Corbeille',deleted,true)}</section>`;
   }
   function tripDetail(t){
     const done=t.checklist.filter(c=>c.done).length;
+    /* Bannière : dates courtes (comme sur la carte du voyage), étapes et durée, chacune avec son pictogramme. */
+    const n=t.steps.length,days=M.duration(t),dates=shortRange(t);
+    const meta=`<p class="tv-meta"><span>${I.calendar}${dates?`<span translate="no" data-no-i18n>${esc(dates)}</span>`:'<span>Dates à définir</span>'}</span><span>${I.pin}<span>${n>1?`${n} étapes`:n===1?`${n} étape`:'Aucune étape'}</span></span>${days?`<span>${I.clock}<span>${days>1?`${days} jours`:`${days} jour`}</span></span>`:''}</p>`;
     const distance=routeDistance(t),hasArchived=t.steps.some(s=>!spot(s.spotId));
-    return `<div class="trip-banner" style="--trip-cover:url('${esc(cover(t))}')"><div><span class="trip-pill">${esc(t.destination||'MON PROCHAIN VOYAGE')}</span>${when(t)?`<span class="trip-when">${when(t)}</span>`:''}<h2>${esc(t.name)}</h2><p>${I.calendar} ${esc(range(t))} <span>·</span> ${badge(t)}</p></div><button class="trip-glass" data-action="edit">Modifier le voyage</button></div>
-      <div class="trip-layout"><div class="trip-main"><div class="trip-toolbar"><div class="trip-view"><button data-action="view" data-view="itinerary" class="${view==='itinerary'?'active':''}">${I.route} Itinéraire</button><button data-action="view" data-view="map" class="${view==='map'?'active':''}">${I.map} Carte</button></div><span class="trip-route-distance">${distance!==null?I.route+' '+prettyDistance(distance)+(hasArchived?' entre les étapes connues':' entre les spots'):'Ajoute 2 spots consécutifs pour mesurer le trajet'}</span><button class="trip-primary" data-action="add">${I.plus} Ajouter un spot</button></div>
-      ${view==='map'?`<div id="tripMap" class="trip-map" aria-label="Carte des étapes"></div><p class="trip-map-note">La ligne relie les étapes consécutives dans l’ordre prévu. Elle ne représente pas un trajet routier.${hasArchived?' Les étapes archivées ne figurent pas sur la carte.':''}</p>`:`<div class="trip-steps">${t.steps.length?t.steps.map((s,i)=>stepCard(t,s,i)).join(''):`<div class="trip-no-steps">${I.route}<h3>Le premier spot donne le ton.</h3><p>Pioche dans les ${SPOTS.length} spots du catalogue pour commencer ton itinéraire.</p><button class="trip-primary" data-action="add">Choisir mon premier spot</button></div>`}</div>`}
+    return `<div class="trip-banner" style="--trip-cover:url('${esc(cover(t))}')"><div>${t.destination?`<span class="trip-pill">${esc(t.destination)}</span>`:''}${when(t)?`<span class="trip-when">${when(t)}</span>`:''}<h2>${esc(t.name)}</h2>${meta}</div><button class="trip-glass" data-action="edit">Modifier le voyage</button></div>
+      <div class="trip-layout"><div class="trip-main"><div class="trip-toolbar"><div class="trip-view"><button data-action="view" data-view="itinerary" class="${view==='itinerary'?'active':''}">${I.route} Itinéraire</button><button data-action="view" data-view="map" class="${view==='map'?'active':''}">${I.map} Carte</button></div><span class="trip-route-distance">${distance!==null?I.route+(hasArchived?`<span class="trip-dist">${prettyDistance(distance)} entre les étapes connues</span>`:`<span class="trip-dist">${prettyDistance(distance)} entre les spots</span>`):'Ajoute 2 spots consécutifs pour mesurer le trajet'}</span><button class="trip-primary" data-action="add">${I.plus} Ajouter un spot</button></div>
+      ${view==='map'?`<div id="tripMap" class="trip-map" aria-label="Carte des étapes"></div><p class="trip-map-note">La ligne relie les étapes consécutives dans l’ordre prévu. Elle ne représente pas un trajet routier.${hasArchived?' Les étapes archivées ne figurent pas sur la carte.':''}</p>`:`<div class="trip-steps">${t.steps.length?t.steps.map((s,i)=>stepCard(t,s,i)).join(''):`<div class="trip-no-steps">${I.route}<button class="trip-primary" data-action="add">Choisir mon premier spot</button></div>`}</div>`}
       <div class="trip-notes-panel"><h3>Le carnet de bord</h3><label for="tripNotes">Idées, bonnes adresses, envies à garder…</label><textarea id="tripNotes" data-field="notes" data-focus="notes" rows="3" maxlength="2000" placeholder="Un coucher de soleil à ne pas manquer, une adresse conseillée…">${esc(t.notes)}</textarea><div class="trip-footer-actions"><button data-action="export">Exporter mon carnet (.json)</button><button data-action="archive" class="trip-muted-button">Archiver ce voyage</button><button data-action="delete" data-id="${esc(t.id)}" class="trip-delete-action">${I.trash} Supprimer ce voyage</button></div></div></div>
       <aside class="trip-preparation"><div class="trip-check-panel"><div class="trip-panel-title">${I.bag}<h3>Prêt à partir ?</h3><span>${done}/${t.checklist.length}</span></div><div class="trip-progress"><i style="width:${t.checklist.length?done/t.checklist.length*100:0}%"></i></div><div class="trip-checklist">${t.checklist.map(c=>`<label class="${c.done?'done':''}"><input type="checkbox" data-check="${esc(c.id)}" data-focus="check-${esc(c.id)}" ${c.done?'checked':''}><span>${esc(c.label)}</span></label>`).join('')}</div><form id="tripCheckForm"><label class="sr-only" for="newCheck">Ajouter une tâche</label><input id="newCheck" maxlength="160" placeholder="Ajouter une tâche…" required><button aria-label="Ajouter la tâche">${I.plus}</button></form></div>
       <div class="trip-lodging-panel" id="tripLodging" hidden></div>
@@ -82,7 +208,7 @@
       return `<article class="trip-step trip-step-archived"><div class="trip-step-number">${String(i+1).padStart(2,'0')}</div><div class="trip-step-photo" aria-hidden="true">${I.map}</div><div class="trip-step-info"><small>${esc(loc)} · Hors du catalogue actuel</small><h3>${esc(name)}</h3><span class="trip-level">Cette étape et tes notes sont conservées.</span><div class="trip-step-fields"><label>Date de l’étape<input type="date" aria-label="Date : ${esc(name)}" data-step-date="${esc(s.id)}" data-focus="date-${esc(s.id)}" value="${esc(s.date)}" ${t.start?`min="${t.start}"`:''} ${t.end?`max="${t.end}"`:''}></label><label>À prévoir<input type="text" aria-label="Notes : ${esc(name)}" maxlength="1000" data-step-notes="${esc(s.id)}" data-focus="step-${esc(s.id)}" value="${esc(s.notes)}"></label></div>${stepLogistics(s)}<button class="trip-primary" data-action="replace" data-id="${esc(s.id)}">Choisir un spot du catalogue pour cette étape</button></div><div class="trip-step-controls"><button data-action="up" data-id="${esc(s.id)}" ${i===0?'disabled':''} aria-label="Monter ${esc(name)}">↑</button><button data-action="down" data-id="${esc(s.id)}" ${i===t.steps.length-1?'disabled':''} aria-label="Descendre ${esc(name)}">↓</button><button data-action="remove" data-id="${esc(s.id)}" aria-label="Retirer ${esc(name)}">${I.close}</button></div></article>`;
     }
     const prev=i>0?spot(t.steps[i-1].spotId):null,leg=prev?distanceKm(COORDS[prev.id],COORDS[p.id]):null;
-    return `<article class="trip-step"><div class="trip-step-number">${String(i+1).padStart(2,'0')}</div><div class="trip-step-photo"><img src="${esc(photo(p.id))}" alt="" loading="lazy"><button data-action="spot" data-spot="${p.id}">Voir le spot</button></div><div class="trip-step-info"><small>${esc(p.loc)}${leg!==null?` · ${prettyDistance(leg)} depuis l’étape précédente`:''}</small><h3>${esc(p.name.split(' — ')[0])}</h3><span class="trip-level">${levelIcon(p.level)}${esc(lvlLabel[p.level])} · ${spotSports(p).slice(0,3).map(id=>esc(SPORTMAP[id].label)).join(' · ')}</span><div class="trip-step-lodging" data-lodging-step="${esc(s.id)}"></div><div class="trip-step-fields"><label>Date de l’étape<input type="date" aria-label="Date : ${esc(p.name)}" data-step-date="${esc(s.id)}" data-focus="date-${esc(s.id)}" value="${esc(s.date)}" ${t.start?`min="${t.start}"`:''} ${t.end?`max="${t.end}"`:''}></label><label>À prévoir<input type="text" aria-label="Notes : ${esc(p.name)}" maxlength="1000" data-step-notes="${esc(s.id)}" data-focus="step-${esc(s.id)}" value="${esc(s.notes)}" placeholder="Session, accès, matériel…"></label></div>${stepLogistics(s)}</div><div class="trip-step-controls"><button data-action="up" data-id="${esc(s.id)}" ${i===0?'disabled':''} aria-label="Monter ${esc(p.name)}">↑</button><button data-action="down" data-id="${esc(s.id)}" ${i===t.steps.length-1?'disabled':''} aria-label="Descendre ${esc(p.name)}">↓</button><button data-action="remove" data-id="${esc(s.id)}" aria-label="Retirer ${esc(p.name)}">${I.close}</button></div></article>`;
+    return `<article class="trip-step"><div class="trip-step-number">${String(i+1).padStart(2,'0')}</div><div class="trip-step-photo"><img src="${esc(photo(p.id))}" alt="" loading="lazy"><button data-action="spot" data-spot="${p.id}">Voir le spot</button></div><div class="trip-step-info"><small>${esc(p.loc)}${leg!==null?' · '+`<span class="trip-dist">${prettyDistance(leg)} depuis l’étape précédente</span>`:''}</small><h3>${esc(p.name.split(' — ')[0])}</h3><span class="trip-level">${levelIcon(p.level)}${esc(lvlLabel[p.level])} · ${spotSports(p).slice(0,3).map(id=>esc(SPORTMAP[id].label)).join(' · ')}</span><div class="trip-step-lodging" data-lodging-step="${esc(s.id)}"></div><div class="trip-step-fields"><label>Date de l’étape<input type="date" aria-label="Date : ${esc(p.name)}" data-step-date="${esc(s.id)}" data-focus="date-${esc(s.id)}" value="${esc(s.date)}" ${t.start?`min="${t.start}"`:''} ${t.end?`max="${t.end}"`:''}></label><label>À prévoir<input type="text" aria-label="Notes : ${esc(p.name)}" maxlength="1000" data-step-notes="${esc(s.id)}" data-focus="step-${esc(s.id)}" value="${esc(s.notes)}" placeholder="Session, accès, matériel…"></label></div>${stepLogistics(s)}</div><div class="trip-step-controls"><button data-action="up" data-id="${esc(s.id)}" ${i===0?'disabled':''} aria-label="Monter ${esc(p.name)}">↑</button><button data-action="down" data-id="${esc(s.id)}" ${i===t.steps.length-1?'disabled':''} aria-label="Descendre ${esc(p.name)}">↓</button><button data-action="remove" data-id="${esc(s.id)}" aria-label="Retirer ${esc(p.name)}">${I.close}</button></div></article>`;
   }
   const modal=document.createElement('dialog');modal.id='tripDialog';modal.className='trip-dialog';document.body.append(modal);
   function openDialog(html,initialFocus=null){lastFocus=document.activeElement;modal.innerHTML=`<img class="trip-dialog-poulpy" src="assets/poulpy/scenes/travel-v2.webp" alt="" width="640" height="640" loading="lazy" decoding="async"><button class="trip-dialog-close" data-close aria-label="Fermer">${I.close}</button>${html}`;const heading=modal.querySelector('h2');if(heading){heading.id='tripDialogTitle';modal.setAttribute('aria-labelledby',heading.id);}modal.showModal();modal.querySelector(initialFocus||'input,select,button:not([data-close])')?.focus();}
@@ -92,7 +218,7 @@
   modal.addEventListener('cancel',()=>{lastFocus?.isConnected&&lastFocus.focus()});
   function confirmDelete(id){
     const t=trips.find(t=>t.id===id&&!t.deleted);if(!t)return;
-    openDialog(`<span class="page-eyebrow">TON CARNET DE VOYAGES</span><h2>Supprimer ce voyage ?</h2><div class="trip-delete-summary"><b>${esc(t.name)}</b><span>${esc(range(t))} · ${badge(t)}</span></div><p>Ce voyage sera retiré de ta liste. Ses étapes, notes et préparatifs resteront récupérables dans la <b>corbeille</b> sur cet appareil.</p><p class="trip-form-error" role="alert"></p><div class="trip-confirm-actions"><button id="tripDeleteCancel" data-close>Annuler</button><button id="tripDeleteConfirm" class="trip-delete-confirm">${I.trash} Supprimer le voyage</button></div>`,'#tripDeleteCancel');
+    openDialog(`<h2>Supprimer ce voyage ?</h2><div class="trip-delete-summary"><b>${esc(t.name)}</b><span>${esc(range(t))} · ${badge(t)}</span></div><p>Ce voyage sera retiré de ta liste. Ses étapes, notes et préparatifs resteront récupérables dans la <b>corbeille</b> sur cet appareil.</p><p class="trip-form-error" role="alert"></p><div class="trip-confirm-actions"><button id="tripDeleteCancel" data-close>Annuler</button><button id="tripDeleteConfirm" class="trip-delete-confirm">${I.trash} Supprimer le voyage</button></div>`,'#tripDeleteCancel');
     $('#tripDeleteConfirm').onclick=()=>{
       try{
         const next=M.removeTrip(trips,id);
@@ -104,16 +230,18 @@
     };
   }
   function editor(existing=null,idea=null,spotId=null){
-    const fields=existing||{name:idea?.name||'',destination:idea?.destination||(spotId?spot(spotId)?.loc:'')||'',start:'',end:''};
-    openDialog(`<span class="page-eyebrow">${existing?'TON PROJET PREND FORME':'ON PART OÙ ?'}</span><h2>${existing?'Les détails du voyage':'Un nouveau départ.'}</h2><p>Les dates peuvent attendre. Commence par une envie.</p><form id="tripEditForm"><label for="tripNameInput">Nom du voyage</label><input id="tripNameInput" name="name" value="${esc(fields.name)}" maxlength="70" placeholder="Mon été sur la côte basque" required><label for="tripDestinationInput">Destination</label><input id="tripDestinationInput" name="destination" value="${esc(fields.destination)}" maxlength="100" placeholder="Une région, un pays, un horizon…"><div class="trip-date-fields"><label>Départ<input name="start" type="date" value="${esc(fields.start)}"></label><label>Retour<input name="end" type="date" value="${esc(fields.end)}"></label></div><p class="trip-form-error" role="alert"></p><button class="trip-primary" type="submit">${existing?'Enregistrer les modifications':'Créer mon voyage'}</button></form>`);
+    /* Une idée propose son nom et sa destination dans la langue de l’app (la valeur d’un champ n’est pas traduite par la page). */
+    const said=v=>(v&&typeof obT==='function'?obT(v):v)||'';
+    const fields=existing||{name:said(idea?.name),destination:said(idea?.destination)||(spotId?spot(spotId)?.loc:'')||'',start:'',end:''};
+    openDialog(`<h2>${existing?'Les détails du voyage':'Nouveau voyage'}</h2><form id="tripEditForm"><label for="tripNameInput">Nom du voyage</label><input id="tripNameInput" name="name" value="${esc(fields.name)}" maxlength="70" placeholder="Mon été sur la côte basque" required><label for="tripDestinationInput">Destination</label><input id="tripDestinationInput" name="destination" value="${esc(fields.destination)}" maxlength="100" placeholder="Une région, un pays, un horizon…"><div class="trip-date-fields"><label>Départ<input name="start" type="date" value="${esc(fields.start)}"></label><label>Retour<input name="end" type="date" value="${esc(fields.end)}"></label></div><p class="trip-form-error" role="alert"></p><button class="trip-primary" type="submit">${existing?'Enregistrer les modifications':'Créer mon voyage'}</button></form>`);
     $('#tripEditForm').onsubmit=e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target));try{
       let next=existing?M.edit(existing,f):M.create(f,spotId?[spotId]:(idea?.spots||[]));
       window.OceanNavigation?.begin();
-      if(persist(existing?trips.map(t=>t.id===existing.id?next:t):[...trips,next])){selected=next.id;view='itinerary';closeDialog();go('trips');render();$('#screenWrap').scrollTop=0;toast(existing?'Voyage mis à jour':'Ton voyage est créé. À toi de choisir la suite !');}
+      if(persist(existing?trips.map(t=>t.id===existing.id?next:t):[...trips,next])){selected=next.id;view='itinerary';closeDialog();go('trips');opening=!existing;render();$('#screenWrap').scrollTop=0;toast(existing?'Voyage mis à jour':'Ton voyage est créé. À toi de choisir la suite !');}
     }catch(err){modal.querySelector('.trip-form-error').textContent=err.message}};
   }
   function picker(replacingStepId=null){
-    openDialog(`<span class="page-eyebrow">${replacingStepId?'REMPLACER UNE ANCIENNE ÉTAPE':'UNE NOUVELLE ÉTAPE'}</span><h2>${replacingStepId?'Quel spot du catalogue choisir ?':'Le prochain spot ?'}</h2>${replacingStepId?'<p>La date et les notes de cette étape seront conservées.</p>':''}<label class="sr-only" for="tripSpotSearch">Rechercher dans les spots</label><input id="tripSpotSearch" type="search" placeholder="Nom du spot, pays, région…" autocomplete="off"><div class="trip-picker-filters"><label for="tripRegion">Continent</label><select id="tripRegion"><option value="all">Tous les continents</option>${WORLDS.map(w=>`<option value="${w.id}">${w.lab}</option>`).join('')}</select><label for="tripCountry">Pays</label><select id="tripCountry" disabled><option value="all">Tous les pays</option></select><label class="trip-only-favs"><input id="tripOnlyFavs" type="checkbox"> Mes favoris</label></div><div id="tripSpotResults" class="trip-spot-results"></div>`);
+    openDialog(`<h2>${replacingStepId?'Quel spot du catalogue choisir ?':'Le prochain spot ?'}</h2>${replacingStepId?'<p>La date et les notes de cette étape seront conservées.</p>':''}<label class="sr-only" for="tripSpotSearch">Rechercher dans les spots</label><input id="tripSpotSearch" type="search" placeholder="Nom du spot, pays, région…" autocomplete="off"><div class="trip-picker-filters"><label for="tripRegion">Continent</label><select id="tripRegion"><option value="all">Tous les continents</option>${WORLDS.map(w=>`<option value="${w.id}">${w.lab}</option>`).join('')}</select><label for="tripCountry">Pays</label><select id="tripCountry" disabled><option value="all">Tous les pays</option></select><label class="trip-only-favs"><input id="tripOnlyFavs" type="checkbox"> Mes favoris</label></div><div id="tripSpotResults" class="trip-spot-results"></div>`);
     const normal=s=>s.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
     function refreshCountries(){const r=$('#tripRegion').value,c=$('#tripCountry');if(!c)return;const names=[...new Set(SPOTS.filter(s=>r==='all'||SPOT_WORLD[s.id]===r).map(countryOf))].sort((a,b)=>a.localeCompare(b,'fr'));c.innerHTML='<option value="all">Tous les pays</option>'+names.map(n=>'<option value="'+esc(n)+'">'+esc(n)+'</option>').join('');c.disabled=r==='all';}
     function results(){const q=normal($('#tripSpotSearch').value),r=$('#tripRegion').value,c=$('#tripCountry').value,list=SPOTS.filter(s=>normal(s.name+' '+s.loc+' '+countryOf(s)).includes(q)&&(r==='all'||SPOT_WORLD[s.id]===r)&&(c==='all'||countryOf(s)===c)&&(!$('#tripOnlyFavs').checked||favs.has(s.id)));
@@ -127,7 +255,7 @@
     pendingSpot=spotId;
     const saved=active();
     if(!saved.length){editor(null,null,spotId);return;}
-    openDialog(`<span class="page-eyebrow">GARDE CE SPOT POUR PLUS TARD</span><h2>Dans quel voyage ?</h2><p>${esc(spot(spotId).name)}</p><div class="trip-select-list">${saved.map(t=>`<button data-add-to="${esc(t.id)}"><span><b>${esc(t.name)}</b><small>${esc(range(t))}</small></span>${I.plus}</button>`).join('')}</div><button class="trip-primary" id="tripNewFromSpot">Créer un nouveau voyage ${I.plus}</button>`);
+    openDialog(`<h2>Dans quel voyage ?</h2><p>${esc(spot(spotId).name)}</p><div class="trip-select-list">${saved.map(t=>`<button data-add-to="${esc(t.id)}"><span><b>${esc(t.name)}</b><small>${esc(range(t))}</small></span>${I.plus}</button>`).join('')}</div><button class="trip-primary" id="tripNewFromSpot">Créer un nouveau voyage ${I.plus}</button>`);
     modal.querySelectorAll('[data-add-to]').forEach(b=>b.onclick=()=>{const t=trips.find(t=>t.id===b.dataset.addTo);if(persist(trips.map(x=>x.id===t.id?M.addStep(t,spotId,knownIds()):x))){selected=t.id;closeDialog();toast('Ajouté à « '+t.name+' »');}});
     $('#tripNewFromSpot').onclick=()=>{closeDialog();editor(null,null,spotId)};
   }
@@ -146,7 +274,7 @@
     if(a==='edit')editor(current());
     if(a==='idea')editor(null,ideas[+b.dataset.index]);
     if(a==='overview'){window.OceanNavigation?.begin();selected=null;render();$('#screenWrap').scrollTop=0;}
-    if(a==='select'){window.OceanNavigation?.begin();selected=id;view='itinerary';render();$('#screenWrap').scrollTop=0;}
+    if(a==='select'){window.OceanNavigation?.begin();selected=id;view='itinerary';opening=true;render();$('#screenWrap').scrollTop=0;}
     if(a==='add')picker();
     if(a==='replace')picker(id);
     if(a==='view'){view=b.dataset.view;render()}
@@ -188,10 +316,11 @@
     if(el.dataset.stepField){const s=t.steps.find(s=>s.id===el.dataset.stepId),key=el.dataset.stepField;if(!s||!update(t=>M.editStep(t,s.id,{[key]:el.value}),{draw:false}))el.value=s?.[key]||'';}
   });
   $('#tripContent').addEventListener('submit',e=>{if(e.target.id==='tripCheckForm'){e.preventDefault();const label=$('#newCheck').value.trim();if(label)update(t=>({...t,checklist:[...t.checklist,{id:M.uid(),label,done:false}]}));}});
-  window.addEventListener('ocean:navigate',e=>{if(e.detail==='trips')render()});
+  let lastScreen=document.body.dataset.screen||'home';
+  window.addEventListener('ocean:navigate',e=>{const from=lastScreen;lastScreen=e.detail;if(e.detail==='trips'){if(from!=='trips')arriving=true;render();}});
   /* Fiche spot : « Ajouter à un voyage » n’existe plus qu’une fois, dans la barre d’actions du bas (ocean-hub.js). */
   const homeCTA=document.createElement('button');homeCTA.className='home-trip-link';homeCTA.innerHTML=I.route+' Préparer mon voyage';homeCTA.onclick=()=>go('trips');$('.hero-cta').after(homeCTA);
-  window.OceanTrips={count:()=>active().length,list:()=>active(),openTrip:id=>{if(!active().some(t=>t.id===id))return;selected=id;view='itinerary';go('trips');render();$('#screenWrap').scrollTop=0;},fromSpot,open:()=>go('trips'),route:()=>({selected:current()?.id||null,view}),restoreRoute:r=>{selected=trips.some(t=>t.id===r?.selected&&!t.archived&&!t.deleted)?r.selected:null;view=r?.view==='map'?'map':'itinerary';}};
+  window.OceanTrips={count:()=>active().length,list:()=>active(),openTrip:id=>{if(!active().some(t=>t.id===id))return;selected=id;view='itinerary';go('trips');opening=true;render();$('#screenWrap').scrollTop=0;},fromSpot,open:()=>go('trips'),route:()=>({selected:current()?.id||null,view}),restoreRoute:r=>{selected=trips.some(t=>t.id===r?.selected&&!t.archived&&!t.deleted)?r.selected:null;view=r?.view==='map'?'map':'itinerary';}};
   /* Démarrage : l’écran Voyages n’est construit qu’à sa première ouverture (ocean:navigate « trips » ci-dessus),
      sauf s’il est déjà l’écran affiché. */
   if($('#trips').classList.contains('active'))render();

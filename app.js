@@ -394,13 +394,9 @@ function toggleNear(){
   requestGeo(()=>{nearMode=true;if(b)b.classList.add('on');renderSpots();if(document.getElementById('mapView').style.display!=='none')centerOnUser();toast('Spots triés par distance 📍');},
     ()=>toast('📍 Localisation refusée ou indisponible'));
 }
-/* La liste rendait les 118 spots d'un coup : 30 000 px de défilement et
-   118 images chargées pour en voir trois. On en montre 12, le reste à la
-   demande — et tout changement de filtre repart de 12. */
-/* Lignes compactes (vignette + repères) : 30 par page, et la page suivante se charge seule à l’approche du bas
-   (le bouton reste pour le clavier et les lecteurs d’écran). */
+/* Interface v2 : la liste d’Explorer est virtualisée (explore-list.js), elle n’est plus chargée par pages de 30.
+   SPOT_PAGE et spotShown restent : l’historique (navigation.js) les enregistre encore dans ses routes. */
 var SPOT_PAGE=30, spotShown=SPOT_PAGE;
-function moreSpots(){ spotShown+=SPOT_PAGE; renderSpots(currentFilter,true); }
 /* ====== SEPT MONDES ======
    L'écran ouvrait sur 118 fiches à faire défiler : un inventaire, pas un choix.
    On entre par une page de sélection, chaque monde avec sa lumière et sa
@@ -490,19 +486,11 @@ function renderCountries(){
   const total=document.getElementById('worldTotal');if(total){const nb=names.reduce((n,x)=>n+countryCount(x),0),nd=names.length;total.innerHTML='<b>'+`${nb} spots`+'</b> <span>'+(nd===1?`répartis dans ${nd} destination.`:`répartis dans ${nd} destinations.`)+'</span> <span>Choisis un pays.</span>';}
 }
 
+/* Interface v2 : choisir une région ouvre tout de suite sa liste de spots (la grille des pays n’est plus une étape). */
 function openWorld(id){
   window.OceanNavigation?.begin();
   spotWorld=id;
-  spotCountry=null;
-  if(id==='fr'){
-    spotCountry='France';
-    syncWorldUI();
-    renderSpots();
-    try{renderMap(true)}catch(e){}
-    const wrap=document.getElementById('screenWrap');if(wrap)wrap.scrollTop=0;
-    return;
-  }
-  if(id!=='all'){renderCountries(); syncWorldUI(); const sw=document.getElementById('screenWrap');if(sw)sw.scrollTop=0; return;}
+  spotCountry=id==='fr'?'France':null;
   syncWorldUI();
   renderSpots();
   try{ renderMap(true); }catch(e){}
@@ -524,11 +512,11 @@ function backToWorlds(){
 }
 function backToDestination(){
   if(spotWorld==='fr'){backToWorlds();return;}
-  if(spotCountry){window.OceanNavigation?.begin();spotCountry=null;renderCountries();syncWorldUI();var w=document.getElementById('screenWrap');if(w)w.scrollTop=0;return;}
+  if(spotCountry){window.OceanNavigation?.begin();spotCountry=null;renderCountries();syncWorldUI();renderSpots();var w=document.getElementById('screenWrap');if(w)w.scrollTop=0;return;}
   backToWorlds();
 }
 function syncWorldUI(){
-  var on=!!spotWorld&&(!spotWorld||spotWorld==='all'||!!spotCountry);
+  var on=!!spotWorld;
   ['spotTools','sportFilters','wBack'].forEach(function(id){
     var e=document.getElementById(id); if(e) e.style.display=on?'':'none';
   });
@@ -554,42 +542,15 @@ function syncWorldUI(){
     : 'Choisis un horizon. Prépare ta session. Vis ton aventure.';
 }
 function renderSpots(filter=currentFilter,keep){
-  currentFilter=filter;const q=currentSearch;
-  if(!keep) spotShown=SPOT_PAGE;
+  currentFilter=filter;
   let list=exploreSpots(filter);
   /* « Près de moi » : distance seule. Sinon, pertinence (spot-rank-model.js) : ton niveau, la saison du mois, la
      proximité si ta position est déjà connue, puis la photo. Aucun appel réseau, aucune demande de position. */
   if(nearMode&&userPos)list=list.slice().sort((a,b)=>(spotDist(a)??9e9)-(spotDist(b)??9e9));
   else if(typeof SpotRank!=='undefined')list=SpotRank.rank(list,spotRankCtx());
-  const resultCount=document.getElementById('spotResultCount');
-  if(resultCount){const n=list.length,one=n===1;resultCount.textContent=filter==='new'
-    ?(q?(one?`${n} nouveau spot trouvé`:`${n} nouveaux spots trouvés`):(one?`${n} nouveau spot à explorer`:`${n} nouveaux spots à explorer`))
-    :(q?(one?`${n} spot trouvé`:`${n} spots trouvés`):(one?`${n} spot à explorer`:`${n} spots à explorer`));
-    /* Sport actif : puce effaçable (la liste n’a plus de sélecteur de sport ; la recherche garde ton sport). */
-    if(activeSport&&typeof SPORTMAP!=='undefined'&&SPORTMAP[activeSport]){const c=document.createElement('button');c.type='button';c.className='sr-sport-chip';c.setAttribute('aria-label','Retirer le filtre '+SPORTMAP[activeSport].label);c.textContent=SPORTMAP[activeSport].label+' \u00d7';c.onclick=exploreAllActivities;resultCount.append(' ',c);}}
-  var _h;
-  if(!list.length){
-    const oldFavorites=favOnly&&[...favs].some(id=>window.OceanLegacySpots?.archive(id)&&!window.OceanLegacySpots?.canonicalId(id));
-    const title=q?`Aucun spot ne correspond à « ${esc(q)} ».`:favOnly?(favs.size?'Aucun de tes favoris ici.':'Pas encore de favori.'):'Aucun spot ici.';
-    const hint=q?'Essaie un pays, une région ou un autre nom.':favOnly&&!favs.size?'Touche le cœur d’un spot pour le retrouver ici.':'';
-    _h='<div class="nospot"><b>'+title+'</b>'+(hint?'<span>'+hint+'</span>':'')
-      +(q?'<button onclick="clearSpotSearch()">Effacer la recherche</button>':'')
-      +(favOnly&&!favs.size&&!q?'<button onclick="toggleFavFilter()">Voir tous les spots</button>':'')
-      +(activeSport&&(q||(favOnly&&favs.size))?'<button onclick="exploreAllActivities()">Chercher dans toutes les activités</button>':'')
-      +(oldFavorites?'<button onclick="go(\'profile\')">Voir mes favoris archivés</button>':'')+((spotWorld&&spotWorld!=='all'&&currentSearch)?'<button onclick="openWorld(\'all\')">Chercher dans tous les spots</button>':'')+'</div>';
-  }else{
-    var _v=list.slice(0,spotShown),_ctx=spotRankCtx();
-    _h=_v.map(s=>spotRow(s,_ctx)).join('');
-    if(list.length>spotShown){
-      _h+='<button class="more-spots" data-more-spots onclick="moreSpots()">'
-        + `Voir ${Math.min(SPOT_PAGE,list.length-spotShown)} spots de plus`
-        + '<span>'+spotShown+' / '+list.length+'</span></button>';
-    }else if(list.length>SPOT_PAGE){
-      _h+='<div class="more-end">'+`Les ${list.length} spots sont affichés.`+'</div>';
-    }
-  }
-  document.getElementById('spotList').innerHTML=_h;
-  watchMoreSpots();
+  /* Interface v2 : en-tête, filtres, nombre de résultats et lignes de la liste d’Explorer (explore-list.js).
+     keep : rien ne bouge sous le doigt (cœur touché depuis une fiche, retour de l’historique). */
+  window.OceanExploreList?.render(list,{keep:!!keep});
   const home=(nearMode&&userPos)?SPOTS.slice().sort((a,b)=>(spotDist(a)??9e9)-(spotDist(b)??9e9)).slice(0,3):SPOTS.slice(0,3);
   document.getElementById('homeSpots').innerHTML=home.map(spotCard).join('');
   watchConditionCards();
@@ -615,43 +576,6 @@ function spotRankCtx(){
   return {sport:activeSport||'all',strict:false,level:(typeof chosenLevel!=='undefined'&&chosenLevel)||null,month:new Date().getMonth(),
     seasons:window.OCEAN_SEASONS||null,photo:window.OCEAN_PHOTO_SCORES||null,pos,coords:s=>COORDS[s.id]||s.coords,
     gauge:s=>{if(!RANK_GAUGE.has(s.id))RANK_GAUGE.set(s.id,dangerGauge(s).n);return RANK_GAUGE.get(s.id);}};
-}
-/* Ligne compacte de la liste d’Explorer : vignette, nom, lieu, repères (niveau, saison, distance), jauge de danger, favori.
-   Environ quatre spots par écran de téléphone (la grande carte spotCard reste pour l’accueil et le comparateur).
-   « Comparer » reste sur la fiche du spot. */
-function spotRow(s,ctx){
-  const gauge=dangerGauge(s),unrated=gauge.n===null;
-  const dangerLabel=unrated?'Danger non évalué':gauge.basis==='carnet'?`Danger estimé : ${gauge.n} sur 4 · estimation Ocean Buddy · carnet non vérifié`:`Danger estimé : ${gauge.n} sur 4 · estimation Ocean Buddy`;
-  let dots='';for(let i=0;i<4;i++)dots+=`<span class="dot ${!unrated&&i<gauge.n?'on':''}"></span>`;
-  const why=typeof SpotRank!=='undefined'?SpotRank.explain(s,ctx||spotRankCtx()):{};
-  const sports=spotSports(s),photo=spotPhotoUrl(s.id,240),fav=favs.has(s.id);
-  const idArg=esc(JSON.stringify(String(s.id))),level=['debutant','intermediaire','expert','variable'].includes(s.level)?s.level:'variable';
-  const dist=(nearMode&&userPos)?spotDist(s):why.dist;
-  const tags=[`<span class="sr-lvl" data-lvl="${level}">${esc(lvlLabel[level])}</span>`];
-  if(why.tier===0&&ctx&&ctx.level)tags.push('<span class="sr-warn">Au-dessus de ton niveau</span>');
-  if(why.inSeason)tags.push('<span class="sr-season">En saison</span>');
-  if(dist!=null)tags.push(`<span>${fmtDist(dist)}</span>`);
-  if(s.catalogNew)tags.push('<span class="sr-new">Nouveau</span>');
-  if(s.custom)tags.push('<span>Spot privé</span>');
-  const acts=sports.slice(0,3).map(id=>SPORTMAP[id].label).join(' · ');
-  return `<article class="spot-row" data-spot-id="${esc(s.id)}" tabindex="0" role="button" aria-label="Découvrir ${esc(s.name)}" onclick="openSpot(${idArg})" onkeydown="if(event.target===this&&(event.key==='Enter'||event.key===' ')){event.preventDefault();openSpot(${idArg})}">
-    <span class="sr-img">${photo?`<img src="${esc(photo)}" alt="" loading="lazy" decoding="async" onerror="this.remove()">`:''}</span>
-    <span class="sr-tx"><b>${esc(s.name)}</b><small>${esc(s.loc||countryOf(s))}${acts?` · ${esc(acts)}`:''}</small>
-      <span class="sr-tags">${tags.join('')}</span></span>
-    <span class="sr-side"><button class="sr-fav${fav?' on':''}" aria-label="${fav?'Retirer des favoris':'Ajouter aux favoris'}" aria-pressed="${fav}" onclick="toggleFav(${idArg},event)">${fav?FAV_ON:FAV_OFF}</button>
-      <span class="danger-dots" role="img" aria-label="${dangerLabel}" title="${unrated?'Danger non évalué':'Danger : estimation Ocean Buddy'}">${dots}</span></span>
-  </article>`;
-}
-/* Chargement continu : le bouton « Voir N spots de plus » se déclenche seul quand il approche de l’écran
-   (il reste utilisable au clavier et avec un lecteur d’écran). */
-let moreObserver=null;
-function watchMoreSpots(){
-  if(!('IntersectionObserver' in window))return;
-  if(!moreObserver)moreObserver=new IntersectionObserver(entries=>{
-    entries.forEach(e=>{if(e.isIntersecting&&e.target.isConnected&&document.body.dataset.screen==='spots'){moreObserver.unobserve(e.target);moreSpots();}});
-  },{rootMargin:'0px 0px 600px 0px'});
-  moreObserver.disconnect();
-  const b=document.querySelector('#spotList [data-more-spots]');if(b)moreObserver.observe(b);
 }
 /* Traits d'union, tirets et apostrophes comptent comme des espaces, des deux côtés : « saint gilles » trouve « Saint-Gilles-Croix-de-Vie ». */
 function searchable(value){return String(value||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase().replace(/[-\u2010-\u2015\x27\u2019\u2018\x60\u00b4]+/g,' ').replace(/\s+/g,' ').trim();}
@@ -689,6 +613,7 @@ function setView(v){
        sinon on retombe sur la vue calculee quand le conteneur n'avait
        pas encore sa taille. centerOnUser(), appele apres, reste prioritaire. */
     setTimeout(fitMapToSpots,60);}
+  window.OceanExploreList?.view(v);
 }
 /* ---- zoom / pan controller ---- */
 let mScale=1,mX=0,mY=0,mDragged=false,mPrevDist=0;const mPtrs=new Map();
