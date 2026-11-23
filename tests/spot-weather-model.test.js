@@ -291,7 +291,7 @@ test('Prévisions : une ligne par jour, colonnes alignées, meilleur jour en jau
   /* Un seul jour en avant, avec ses heures, sa qualité et la phrase de vent de terre (jamais repliée ni coupée). */
   assert.equal((f.match(/fx7-row is-best/g) || []).length, 1);
   const best = f.slice(f.indexOf('fx7-row is-best'), f.indexOf('</li>', f.indexOf('fx7-row is-best')));
-  assert.match(best, /<span>Ton meilleur jour<\/span> <b>\d+ h( – \d+ h)?<\/b><\/span><span class="fx7-q">(Dans tes repères|Possible, sans plus)<\/span>/);
+  assert.match(best, /<span>Ton meilleur jour<\/span> <b>(de )?\d+ h( à \d+ h)?<\/b><\/span><span class="fx7-q">(Dans tes repères|Possible, sans plus)<\/span>/);
   assert.ok(best.includes('<p class="fx7-caution">Le vent vient de la terre (offshore) : il lisse les vagues, mais il te pousse vers le large. Reste près du bord et ne lâche pas ta planche.</p>'));
   assert.ok(best.indexOf('fx7-caution') < best.indexOf('<dl class="fx7-more"'), 'l’avertissement est hors du détail replié');
   /* Détail secondaire : fermé au départ, ouvert au toucher. */
@@ -321,7 +321,7 @@ test('Prévisions : meilleur jour aujourd’hui, vent de terre demain, l’avert
   const today = rowOf('Aujourd’hui'), tomorrow = rowOf('Demain');
   assert.match(today, /fx7-row is-best/, 'aujourd’hui reste le meilleur jour');
   assert.doesNotMatch(today, /fx7-caution/, 'vent de mer aujourd’hui : pas d’avertissement');
-  assert.match(tomorrow, /<div class="fx7-best fx7-alt">[\s\S]*<span>Autre créneau<\/span> <b>\d+ h – \d+ h<\/b>/, 'le créneau de demain a sa ligne');
+  assert.match(tomorrow, /<div class="fx7-best fx7-alt">[\s\S]*<span>Autre créneau<\/span> <b>de \d+ h à \d+ h<\/b>/, 'le créneau de demain a sa ligne');
   assert.ok(tomorrow.includes('<p class="fx7-caution">Le vent vient de la terre (offshore) : il lisse les vagues, mais il te pousse vers le large. Reste près du bord et ne lâche pas ta planche.</p>'), 'avertissement entier');
   assert.ok(tomorrow.indexOf('fx7-caution') < tomorrow.indexOf('<dl class="fx7-more"'), 'hors du détail replié');
   /* Les heures de demain sont surlignées : la légende le dit (« Tes créneaux »). */

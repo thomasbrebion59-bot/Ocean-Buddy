@@ -105,7 +105,8 @@
     const split = v => { const m = has(v) ? /^\s*([-−]?\d+(?:[.,]\d+)?)\s*(.*)$/.exec(String(v)) : null; return m ? [m[1], m[2]] : null; };
     const num = p => `<span data-hx-count>${esc(p[0])}</span>`;
     const ready = !!(l && l.live), g = gaugeOf(s), chips = [];
-    const wind = () => { const w = ready ? split(l.wind) : null; chips.push(hxChip('wind', 'Vent', ready ? (w ? num(w) : '—') : hxWait, w ? esc(w[1]) : '')); };
+    /* « 15 km/h S » : le chiffre et son unité ; la direction passe dans le libellé (« Vent S ») pour que la case tienne sur une ligne. */
+    const wind = () => { const w = ready ? split(l.wind) : null, m = w ? /^(km\/h)\s*(.*)$/.exec(w[1]) : null; chips.push(hxChip('wind', m && m[2] ? `<span>Vent</span> <span translate="no" data-no-i18n>${esc(m[2])}</span>` : 'Vent', ready ? (w ? num(w) : '—') : hxWait, w ? esc(m ? m[1] : w[1]) : '')); };
     if (inland(s)) {
       /* Plan d’eau : le vent, puis l’air du moment quand le relevé le donne (ni houle marine, ni eau en direct). */
       wind();
@@ -234,7 +235,7 @@
     const x = F ? F.slotSummary(rule, today) : {status: 'nodata'};
     const fmt = h => (typeof hourFmt === 'function' ? hourFmt(h) : h + ' h');
     if (x.status === 'ok') {
-      const range = x.start === x.end ? fmt(x.start) : `${fmt(x.start)} – ${fmt(x.end)}`;
+      const range = x.start === x.end ? fmt(x.start) : `de ${fmt(x.start)} à ${fmt(x.end)}`;
       setRow('slot', `<span>Aujourd’hui <b>${esc(range)}</b></span><span class="db-q is-${x.quality}">${x.quality === 'good' ? 'Dans tes repères' : 'Possible, sans plus'}</span>${caution ? `<p class="fx-caution">${esc(caution)}</p>` : ''}`);
       return;
     }

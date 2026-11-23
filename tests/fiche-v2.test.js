@@ -106,7 +106,9 @@ test('ouverture : trois chiffres du moment sur la photo, la motion d’arrivée 
   const hero = fnSource(before, 'hero');
   assert.match(hero, /if \(!s \|\| s\.custom\) \{ el\.innerHTML = ''; el\.hidden = true; return; \}/, 'rien sur un spot personnel');
   assert.match(hero, /chips\.push\(hxChip\('wave', 'Houle'/); assert.match(hero, /chips\.push\(hxChip\('temp', 'Eau'/);
-  assert.match(hero, /const wind = \(\) => \{ const w = ready \? split\(l\.wind\) : null; chips\.push\(hxChip\('wind', 'Vent'/);
+  /* Le vent : chiffre et unité dans la valeur, direction dans le libellé (« Vent S »), pour tenir sur une ligne à trois cases. */
+  assert.match(hero, /const wind = \(\) => \{ const w = ready \? split\(l\.wind\) : null, m = w \? \/\^\(km\\\/h\)\\s\*\(\.\*\)\$\/\.exec\(w\[1\]\) : null; chips\.push\(hxChip\('wind', m && m\[2\] \? `<span>Vent<\/span> <span translate="no" data-no-i18n>\$\{esc\(m\[2\]\)\}<\/span>` : 'Vent'/);
+  assert.match(read('app.js'), /&current=wind_speed_10m,wind_direction_10m,temperature_2m&wind_speed_unit=kmh&timezone=auto&cell_selection=\$\{meteoCell\(s\)\}/, 'l’air du moment est demandé avec le vent (même appel)');
   assert.match(hero, /if \(inland\(s\)\) \{[^}]*\n\s+wind\(\);\n\s+if \(ready && Number\.isFinite\(l\.airC\)\) chips\.push\(hxChip\('temp', 'Air'/, 'plan d’eau intérieur : le vent et l’air, pas la houle');
   /* Spot de mer sans sport de vague ni de vent (plongée, snorkeling) : le vent du moment remplace la houle. */
   assert.match(hero, /if \(waveSpot\(s\)\) chips\.push\(hxChip\('wave', 'Houle'[^\n]*\n\s+else wind\(\);/);
@@ -224,7 +226,7 @@ test('Conditions : « Ton créneau » sur une ligne, avec son avertissement de v
   const warn = 'Le vent vient de la terre (offshore) : il lisse les vagues, mais il te pousse vers le large. Reste près du bord et ne lâche pas ta planche.';
   w.B.slot(w.spot, rule, today, h => h + ' h', warn);
   const s = w.row('slot').innerHTML;
-  assert.match(s, /<span>Aujourd’hui <b>12 h – 14 h<\/b><\/span><span class="db-q is-good">Dans tes repères<\/span>/);
+  assert.match(s, /<span>Aujourd’hui <b>de 12 h à 14 h<\/b><\/span><span class="db-q is-good">Dans tes repères<\/span>/);
   assert.ok(s.includes(`<p class="fx-caution">${warn.replace(/’/g, '’')}</p>`), 'avertissement entier');
   w.B.slot(w.spot, null);
   assert.match(w.row('slot').innerHTML, /Indisponible pour le moment/);
@@ -363,7 +365,7 @@ test('Saisons : un titre sans sur-titre, relevés du mois en composant de la fic
   /* Aucune chaîne à point médian dans l’onglet (l’aperçu de l’onglet Le spot garde le sien). */
   assert.doesNotMatch(seasons.replace(/\/\*[\s\S]*?\*\//g, ''), /' · '|` · `| · \$\{|\} · /);
   /* Périodes en toutes lettres (« de septembre à mars »), hors traduction automatique : ni point médian ni tiret. */
-  assert.match(seasons, /<small translate="no" data-no-i18n>\$\{esc\(periodText\(b\.ranges\)\)\}<\/small>/);
+  assert.match(seasons, /<small class="sd-cal-when" translate="no" data-no-i18n>\$\{esc\(periodText\(b\.ranges\)\)\}<\/small>/);
   assert.doesNotMatch(seasons, /rangeText\(/);
   /* Verdict : la pastille seule, le mois n’est plus répété (« En novembre » le dit) ; les raisons suivent. */
   assert.doesNotMatch(seasons, /<\/b> ce mois-ci|<\/b> en \$\{/);

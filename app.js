@@ -1667,7 +1667,7 @@ function fetchConditions(s){
   const inland=isInland(s),got={};
   const part=(k,url)=>got[k]?Promise.resolve(got[k]):fetch(url).then(r=>{if(!r.ok)throw Error('meteo-http-'+r.status);return r.json();}).then(d=>(got[k]=d||{}));
   const attempt=()=>Promise.all([
-    part('w',`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current=wind_speed_10m,wind_direction_10m&wind_speed_unit=kmh&timezone=auto&cell_selection=${meteoCell(s)}`).catch(()=>null),
+    part('w',`https://api.open-meteo.com/v1/forecast?latitude=${c.lat}&longitude=${c.lon}&current=wind_speed_10m,wind_direction_10m,temperature_2m&wind_speed_unit=kmh&timezone=auto&cell_selection=${meteoCell(s)}`).catch(()=>null),
     inland?Promise.resolve({}):part('m',`https://marine-api.open-meteo.com/v1/marine?latitude=${c.lat}&longitude=${c.lon}&current=wave_height,wave_period,wave_direction,sea_surface_temperature,ocean_current_velocity,ocean_current_direction&hourly=sea_level_height_msl&forecast_days=2&timezone=auto`).catch(()=>null)
   ]).then(([w,mar])=>{
     if(currentSpot!==s.id)return;

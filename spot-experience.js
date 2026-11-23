@@ -206,7 +206,7 @@
   /* Fiche v2, onglet Prévisions : le créneau (calculé pour aujourd’hui et demain, les seules journées couvertes heure par
      heure) ne fait plus deux cartes. Le meilleur des deux met sa ligne des 7 jours en avant (jaune soleil), avec ses heures,
      sa qualité et, s’il y a lieu, l’avertissement de vent de terre en entier. Les autres cas tiennent en une note. */
-  const slotRange = r => (r.count > 1 ? `${hourFmt(+r.start.slice(11, 13))} – ${hourFmt(+r.end.slice(11, 13))}` : hourFmt(+r.start.slice(11, 13)));
+  const slotRange = r => (r.count > 1 ? `de ${hourFmt(+r.start.slice(11, 13))} à ${hourFmt(+r.end.slice(11, 13))}` : hourFmt(+r.start.slice(11, 13)));
   function slotsBlock(s, act, list, nowIso, dates, inland) {
     const W = window.SpotWeatherModel, level = myLevel();
     const rule = W.rule(act, inland, level);

@@ -126,7 +126,7 @@
         const L = M.level(v);
         return `<button type="button" class="sd-cell l${L ?? 'x'}${m === selMonth && a === (selAct || curAct(s)) ? ' sel' : ''}" data-sd-month="${m}" data-sd-act="${a}" aria-label="${esc(monthName(m))} : ${esc(L == null ? 'donnée indisponible' : LEVEL_TXT[L])}">${L === 3 ? '<i aria-hidden="true">✓</i>' : ''}</button>`;
       }).join('');
-      return `<div class="sd-cal-row"><div class="sd-cal-act">${typeof sportIcon === 'function' ? sportIcon(a) : ''}<span><b>${esc(sportLabel(a))}</b>${b.ranges.length ? `<small translate="no" data-no-i18n>${esc(periodText(b.ranges))}</small>` : '<small>Pas de période nette</small>'}</span></div><div class="sd-cal-cells">${cells}</div></div>`;
+      return `<div class="sd-cal-row"><div class="sd-cal-act">${typeof sportIcon === 'function' ? sportIcon(a) : ''}<span><b>${esc(sportLabel(a))}</b></span></div><div class="sd-cal-cells">${cells}</div>${b.ranges.length ? `<small class="sd-cal-when" translate="no" data-no-i18n>${esc(periodText(b.ranges))}</small>` : '<small class="sd-cal-when">Pas de période nette</small>'}</div>`;
     }).join('');
     return `<div class="sd-cal" role="group" aria-label="Calendrier des activités">
       <div class="sd-cal-row sd-cal-head"><div class="sd-cal-act"></div><div class="sd-cal-cells">${head}</div></div>${rows}
