@@ -1,6 +1,8 @@
 /* Ocean Buddy 1.3 — passeport océan (profil).
    Une carte du monde (NASA Blue Marble) où s’allument les spots visités (sessions du carnet)
-   et les favoris (envies), avec les pays, continents et fiches découverts. Tout reste sur l’appareil. */
+   et les favoris (envies), avec les pays, continents et fiches découverts. Tout reste sur l’appareil.
+   Interface v2 : c’est le haut du passeport complet (Profil > Passeport > « Voir tout »), sous l’en-tête « Passeport »
+   d’index.html ; plus de grande affiche ni de sur-titre. Le Profil court (ui-nav.js) lit les mêmes chiffres par data(). */
 (() => {
   'use strict';
   const $=(s,r=document)=>r.querySelector(s);
@@ -23,7 +25,7 @@
     let card=$('#oceanPassport');
     if(!card){
       card=document.createElement('section');card.id='oceanPassport';card.className='pp';card.setAttribute('aria-label','Mon passeport océan');
-      /* Juste avant « Mes statistiques » : sous « Mon sport et mon niveau », avant les chiffres et la vitrine des trophées. */
+      /* Juste avant « Mes statistiques » : en tête du passeport complet, avant les chiffres et la vitrine des trophées. */
       const stats=$('#profStats'),head=stats?.previousElementSibling?.matches('.sec')?stats.previousElementSibling:stats;
       if(head)head.before(card);else profile.append(card);
     }
@@ -31,8 +33,7 @@
     const dot=(s,cls)=>{const c=COORDS[s.id];if(!c)return '';const p=pos(c);if(p.y<0||p.y>100)return '';return `<i class="pp-dot ${cls}" style="left:${p.x.toFixed(2)}%;top:${p.y.toFixed(2)}%" title="${esc(s.name)}"></i>`;};
     const stat=(n,label)=>`<div class="pp-stat"><b>${n}</b><span>${label}</span></div>`;
     const empty=!d.visited.length&&!d.wished.length;
-    card.innerHTML=`<div class="pp-head"><div><small>Ocean Buddy · Passeport</small><h2>Mon passeport océan</h2></div><span class="pp-stamp" aria-hidden="true">${d.countries.size}</span></div>
-      <div class="pp-map"><img src="assets/globe/world-card.webp" alt="Carte du monde de tes spots" loading="lazy" decoding="async">${d.wished.map(s=>dot(s,'wish')).join('')}${d.visited.map(s=>dot(s,'been')).join('')}</div>
+    card.innerHTML=`<div class="pp-map"><img src="assets/globe/world-card.webp" alt="Carte du monde de tes spots" loading="lazy" decoding="async">${d.wished.map(s=>dot(s,'wish')).join('')}${d.visited.map(s=>dot(s,'been')).join('')}</div>
       <div class="pp-legend"><span><i class="pp-dot been"></i> Visités</span><span><i class="pp-dot wish"></i> Envies (favoris)</span></div>
       <div class="pp-stats">${stat(d.countries.size,'pays')}${stat(`${d.worlds.size}/6`,'continents')}${stat(d.visited.length,'spots visités')}${stat(d.seen,'fiches vues')}</div>
       ${empty?`<p class="pp-empty">Ajoute des favoris ❤ et note tes sessions sur les fiches : ta carte du monde s’allume au fil de tes voyages.</p>`:''}
@@ -42,5 +43,5 @@
   const original=window.renderProfile;
   if(typeof original==='function'){window.renderProfile=function(...a){const r=original.apply(this,a);try{render();}catch(e){console.warn(e);}return r;};}
   render();
-  window.OceanPassport={render};
+  window.OceanPassport={render,data};
 })();

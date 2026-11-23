@@ -2283,10 +2283,17 @@ let tt;
 function toast(msg,ms){const t=document.getElementById('toast');const m=String(window.obT?obT(String(msg)):msg);/* Traduit avant le préfixe : le 🐙 empêcherait les gabarits « {0} XP » de s’appliquer. Pas de double pieuvre ni d’emoji en double en tête. */t.textContent=/^\p{Extended_Pictographic}/u.test(m)||m.includes('🐙')?m:'🐙 '+m;/* Explorer : l’aperçu du spot occupe le bas de l’écran ; le message se pose juste au-dessus, jamais sur ses boutons (ocean-hub.css, .toast.is-lifted). Position de mise en page (offsetTop), sans la translation de l’arrivée de l’aperçu. */try{const c=document.body.dataset.screen==='spots'&&document.querySelector('#spotMapWrap .omap-card:not([hidden])'),p=c&&c.offsetParent;t.classList.toggle('is-lifted',!!p);if(p)t.style.setProperty('--toast-lift',Math.round(Math.min(innerHeight-90,Math.max(0,innerHeight-(p.getBoundingClientRect().top+c.offsetTop)+12)))+'px');}catch(e){}t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),ms||2600);}
 const HEADBUB={home:'hb',profile:'pb',spots:'sb',challenges:'cb',community:'cb',trips:'tb'};
 function vibrate(pattern){try{if(navigator.userActivation&&!navigator.userActivation.hasBeenActive)return;if(navigator.vibrate)navigator.vibrate(pattern);}catch(e){}}
-const SCREEN_ORDER={home:0,spots:1,detail:2,challenges:3,community:3,profile:4,trips:2,surf:1.5};
+/* Ordre des écrans (sens du glissement) : celui de la barre d’onglets, Accueil, Explorer, Voyages, Profil ; Jeu et Défis
+   s’ouvrent depuis le Profil (interface v2), donc après lui. */
+const SCREEN_ORDER={home:0,spots:1,detail:2,trips:2,community:3,profile:4,surf:5,challenges:5};
 function resetScreenLive(el){el.classList.remove('sw-live');el.style.top='';el.style.left='';el.style.right='';el.style.maxWidth='';el.style.transform='';el.style.opacity='';el.style.transition='';}
-/* Durée d’un changement d’écran (ms) : sous 350 ms, l’écran suivant répond tout de suite. */
-const GO_MS=340;let goAnims=[];
+/* Interface v2 : la barre a quatre onglets. Jeu et Défis s’ouvrent depuis Profil > Jouer : pendant qu’ils sont affichés,
+   l’onglet actif reste le Profil (barre d’onglets, menu latéral, barre native iOS). */
+const TAB_PARENT={surf:'profile',challenges:'profile'};
+function tabOf(s){return TAB_PARENT[s]||s;}
+/* Durée d’un changement d’écran (ms) : sous 350 ms, l’écran suivant répond tout de suite. TAB_GO_MS : d’un onglet à
+   l’autre, fondu court (de 160 à 220 ms) ; GO_MS : la fiche, poussée plus franche. */
+const GO_MS=340,TAB_GO_MS=200;let goAnims=[];
 function stopGoAnims(){const l=goAnims;goAnims=[];l.forEach(a=>{try{a.cancel();}catch(_){}});}
 let navPillHidden=null;
 function updateNavPill(s){
@@ -2325,8 +2332,9 @@ function go(s){
     wrap.querySelectorAll('.screen.active').forEach(el=>{if(el!==target&&el!==cur){el.classList.remove('active');resetScreenLive(el);}});
     if(cur)resetScreenLive(cur);
     wrap.style.minHeight='';wrap.classList.remove('transitioning');}
-  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.s===s));
-  updateNavPill(s);
+  const tab=tabOf(s);
+  document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.s===tab));
+  updateNavPill(tab);
   if(cur)vibrate(8);
   if(HEADBUB[s])bubbles(HEADBUB[s]);
   const reduce=document.body.classList.contains('reduce-motion')||(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches);
@@ -2368,10 +2376,13 @@ function go(s){
   const fromY=wrapScrollY,toY=window.OceanNavigation?.restoreScroll?.()||0;
   cur.style.top=toY===fromY?padT:'calc('+padT+' + '+(toY-fromY)+'px)';cur.style.left=padL;cur.style.right=padR;cur.style.maxWidth=maxC;
   wrap.scrollTop=toY;
-  /* Fiche : poussée plus franche (comme une pile iOS) ; onglets : glissement court. motion.js (OceanMotion.zoom) :
-     la photo de la carte fait le trajet, les écrans se fondent sans glisser. */
-  const far=s==='detail'||cur.id==='detail',still=reduce||!!window.OceanMotion?.zoom,inX=still?0:dir*(far?44:22),outX=still?0:-dir*(far?26:14);
-  const goMs=reduce?160:GO_MS;
+  /* Fiche : poussée plus franche (comme une pile iOS). D’un onglet à l’autre (interface v2) : fondu court de 160 à
+     200 ms et déplacement de 10 px seulement, en transform et opacity. motion.js (OceanMotion.zoom) : la photo de la carte
+     fait le trajet, les écrans se fondent sans glisser. */
+  const far=s==='detail'||cur.id==='detail',still=reduce||!!window.OceanMotion?.zoom,inX=still?0:dir*(far?44:10),outX=still?0:-dir*(far?26:6);
+  const goMs=reduce?160:far?GO_MS:TAB_GO_MS;
+  /* Fondus : l’écran qui arrive, puis celui qui part. Entre deux onglets, presque toute la durée (180 et 160 ms). */
+  const fadeIn=Math.round(goMs*(cur.id==='spots'?.35:reduce?1:far?.6:.9)),fadeOut=Math.round(goMs*(reduce?1:far?.5:.8));
   const OM=window.OceanMotion||{},spring=OM.snap||'cubic-bezier(.2,.9,.25,1)',easeOut=OM.easeOut||'cubic-bezier(.22,.8,.3,1)';
   let waapi=false;
   if(typeof target.animate==='function'){
@@ -2383,9 +2394,9 @@ function go(s){
          bloc conteneur et les rognerait pendant le glissement : fondu seul pour cet écran. */
       if(s!=='spots'&&inX)run(target,[{transform:'translate3d('+inX+'px,0,0)'},{transform:'translate3d(0,0,0)'}],goMs,spring,'backwards');
       /* En quittant Explorer, la planète disparaît d’un coup (app-shell) : fondu d’arrivée plus court, pas de vide. */
-      run(target,[{opacity:0},{opacity:1}],Math.round(goMs*(cur.id==='spots'?.35:reduce?1:.6)),easeOut,'backwards');
+      run(target,[{opacity:0},{opacity:1}],fadeIn,easeOut,'backwards');
       if(cur.id!=='spots'&&outX)run(cur,[{transform:'translate3d(0,0,0)'},{transform:'translate3d('+outX+'px,0,0)'}],Math.round(goMs*.7),easeOut,'forwards');
-      run(cur,[{opacity:1},{opacity:0}],Math.round(goMs*(reduce?1:.5)),easeOut,'forwards');
+      run(cur,[{opacity:1},{opacity:0}],fadeOut,easeOut,'forwards');
       waapi=true;
     }catch(_){stopGoAnims();}
   }
@@ -2394,8 +2405,8 @@ function go(s){
     requestAnimationFrame(()=>requestAnimationFrame(()=>{
       /* Une navigation plus récente peut avoir remplacé ce fondu sous la scène d’activité. */
       if(request!==goSeq)return;
-      target.style.transition='transform '+goMs+'ms var(--ob-snap,cubic-bezier(.2,.9,.25,1)), opacity '+Math.round(goMs*.6)+'ms var(--ob-ease-out,ease)';
-      cur.style.transition='transform '+Math.round(goMs*.7)+'ms var(--ob-ease-out,cubic-bezier(.4,0,.2,1)), opacity '+Math.round(goMs*.5)+'ms var(--ob-ease-out,ease)';
+      target.style.transition='transform '+goMs+'ms var(--ob-snap,cubic-bezier(.2,.9,.25,1)), opacity '+fadeIn+'ms var(--ob-ease-out,ease)';
+      cur.style.transition='transform '+Math.round(goMs*.7)+'ms var(--ob-ease-out,cubic-bezier(.4,0,.2,1)), opacity '+fadeOut+'ms var(--ob-ease-out,ease)';
       target.style.transform='translateX(0)';target.style.opacity='1';
       cur.style.transform='translateX('+outX+'px)';cur.style.opacity='0';
     }));
@@ -3121,7 +3132,8 @@ var _oi=document.getElementById('octo');if(_oi)_oi.innerHTML=poulpySVG();/* #oct
 document.getElementById('octoProfile').innerHTML=poulpySVG();
 document.getElementById('logoOcto').innerHTML=poulpySVG();
 document.getElementById('logoOcto2').innerHTML=poulpySVG();
-['homeTop','spotsTop','chalTop','profTop'].forEach(id=>{const el=document.getElementById(id);el.insertAdjacentHTML('afterbegin',headerSky(id));el.insertAdjacentHTML('beforeend','<svg class="hwave" viewBox="0 0 392 30" preserveAspectRatio="none"><path d="M0 14 Q49 2 98 14 T196 14 T294 14 T392 14 V30 H0Z" fill="#eef9f8"/></svg>');});
+/* Interface v2 : Défis et Profil n’ont plus de grande affiche (#chalTop, #profTop) ; seuls l’accueil et Explorer en gardent une. */
+['homeTop','spotsTop'].forEach(id=>{const el=document.getElementById(id);if(!el)return;el.insertAdjacentHTML('afterbegin',headerSky(id));el.insertAdjacentHTML('beforeend','<svg class="hwave" viewBox="0 0 392 30" preserveAspectRatio="none"><path d="M0 14 Q49 2 98 14 T196 14 T294 14 T392 14 V30 H0Z" fill="#eef9f8"/></svg>');});
 document.getElementById('fabOcto').innerHTML=poulpySVG();
 document.getElementById('chatOcto').innerHTML=poulpySVG();
 const returning=loadState();

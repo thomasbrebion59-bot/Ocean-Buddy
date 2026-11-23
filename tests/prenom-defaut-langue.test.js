@@ -34,6 +34,8 @@ test('prénom saisi : jamais traduit ; le défaut enregistré tel quel reste le 
 });
 
 test('profil : le titre (prénom) n’est jamais passé au dictionnaire, il reçoit le prénom déjà dans la bonne langue', () => {
-  assert.match(read('index.html'), /<h1 id="profName" translate="no" data-no-i18n>Explorateur<\/h1>/);
+  /* Interface v2 : le titre du Profil est « Profil » ; le prénom reste dans la page (masqué) pour le menu latéral et la
+     barre du haut, qui le recopient (design.js), toujours sans passer par le dictionnaire. */
+  assert.match(read('index.html'), /<span id="profName" hidden translate="no" data-no-i18n>Explorateur<\/span>/);
   assert.match(read('app.js'), /var pn=document\.getElementById\('profName'\);if\(pn\)pn\.textContent=nm;/);
 });

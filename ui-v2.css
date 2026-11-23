@@ -1,0 +1,91 @@
+/* @creme-tokens */
+/* Interface v2 (19 novembre 2026) : jetons et composants communs aux écrans hors fiche (accueil, Explorer, Voyages, Profil,
+   barre d'onglets). Maquettes validées par le fondateur : ~/Projects/Ocean-Buddy-orga-docs/interface-v2/.
+   Même vocabulaire que la fiche v2 (fiche.css, composants fx-* scopés à #detail) : mêmes corps, mêmes rayons, mêmes relevés.
+   Scopé à .ocean-v2 (classe posée sur <body>) ; classes ui-* propres, jamais utilisées dans #detail. La fusion avec fiche.css se fera avec la session
+   principale, plus tard.
+
+   Règles : peu de texte (pas de phrase sous les titres, titres de 1 à 3 mots), casse de phrase, pas de sur-titres en capitales
+   espacées, pas de chaînes à points médians, cartes seulement pour ce qui se touche ou se compare, deux graisses au plus par bloc.
+   Couleurs du thème actif seulement (--t-*). Chaque écran a sa feuille : ui-accueil.css, ui-nav.css, ui-listes.css. */
+
+/* ================= Jetons ================= */
+.ocean-v2{
+  --ui-num:42px;--ui-num-s:22px;--ui-unit:15px;--ui-title:23px;--ui-label:14.5px;--ui-text:15.5px;--ui-note:13px;
+  --ui-gap:26px;           /* entre deux sections */
+  --ui-radius:18px;        /* cartes ; 999px pour les pastilles et les boutons */
+  --ui-soft:var(--t-ink2);
+  /* Passe du 23 novembre 2026 : cartes blanches à filet, comme la maquette (avant : cartes teintées par --ui-wash, 7 % du
+     bleu du thème, grises et froides sur le crème). --ui-surface est le fond d'une carte, bordée du filet --ui-hair ;
+     --ui-wash reste le fond des pastilles et des boutons doux : la page à peine assombrie, donc chaude sur le crème. */
+  --ui-surface:var(--t-card);                                    /* fond d'une carte (blanc cassé), avec le filet --ui-hair */
+  --ui-wash:color-mix(in srgb,var(--t-ink) 6%,var(--t-page));    /* fond d'une pastille, d'un bouton doux */
+  --ui-hair:color-mix(in srgb,var(--t-ink) 12%,transparent);     /* filet discret */
+  /* Verdict « pour toi » : bon, possible, pas aujourd'hui. */
+  --ui-good:var(--t-ok);--ui-good-bg:color-mix(in srgb,var(--t-ok) 15%,var(--t-card));
+  --ui-maybe:var(--t-warn);--ui-maybe-bg:color-mix(in srgb,var(--t-sun) 30%,var(--t-card));
+  --ui-no:var(--t-ink2);--ui-no-bg:color-mix(in srgb,var(--t-ink) 8%,var(--t-card));
+}
+
+/* ================= Composants ================= */
+/* Titre de section (1 à 3 mots) et son lien à droite (« Tout voir », « Modifier »). */
+.ocean-v2 .ui-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 12px}
+.ocean-v2 .ui-title{margin:0;font:800 var(--ui-title)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
+.ocean-v2 .ui-link{display:inline-flex;align-items:center;min-height:44px;margin:-12px 0;padding:0 2px;border:0;background:none;font:700 var(--ui-label)/1 var(--body);color:var(--t-main);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ocean-v2 .ui-text{margin:0;font:400 var(--ui-text)/1.45 var(--body);color:var(--t-ink)}
+.ocean-v2 .ui-label{font:600 var(--ui-label)/1.25 var(--body);color:var(--ui-soft)}
+.ocean-v2 .ui-note{font:400 var(--ui-note)/1.4 var(--body);color:var(--ui-soft)}
+/* Grand chiffre et unité (jours avant un départ, compteurs du passeport). */
+.ocean-v2 .ui-num{font:800 var(--ui-num)/.95 var(--display);letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--t-ink)}
+.ocean-v2 .ui-unit{font:500 var(--ui-unit)/1.2 var(--body);color:var(--ui-soft)}
+/* Pictogramme au trait (mêmes dessins que la fiche). */
+.ocean-v2 .ui-ic{flex:none;width:18px;height:18px;color:var(--t-ink)}
+/* Points de danger : quatre points, rouges jusqu'au niveau. Jamais cachés quand le danger est connu. */
+.ocean-v2 .ui-dots{display:inline-flex;gap:3px;flex:none;vertical-align:middle}
+.ocean-v2 .ui-dots i{display:block;width:7px;height:7px;border-radius:50%;background:color-mix(in srgb,var(--t-ink) 20%,transparent)}
+.ocean-v2 .ui-dots i.on{background:var(--t-danger)}
+/* Carte légère : pour ce qui se touche ou se compare. Blanche, bordée d'un filet (--ui-surface, --ui-hair). */
+.ocean-v2 .ui-card{border-radius:var(--ui-radius);background:var(--ui-surface);padding:14px;border:0;box-shadow:inset 0 0 0 1px var(--ui-hair)}
+/* Pastille et bouton court en pastille. */
+.ocean-v2 .ui-pill{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 12px;border:0;border-radius:999px;background:var(--ui-wash);font:600 var(--ui-note)/1 var(--body);color:var(--t-ink)}
+.ocean-v2 .ui-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;padding:0 20px;border:0;border-radius:999px;background:var(--t-main);color:var(--t-on-main);font:700 var(--ui-label)/1 var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ocean-v2 .ui-btn.is-soft{background:var(--ui-wash);color:var(--t-main)}
+
+/* Ligne de conditions du moment : vent, houle, eau. Pictogramme puis valeur, unité atténuée. Chiffres alignés. */
+.ocean-v2 .ui-cond{display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;margin:0;font:700 var(--ui-label)/1.2 var(--body);color:var(--t-ink);font-variant-numeric:tabular-nums}
+.ocean-v2 .ui-cond>span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.ocean-v2 .ui-cond small{font:500 var(--ui-note)/1 var(--body);color:var(--ui-soft)}
+.ocean-v2 .ui-cond .is-none{color:color-mix(in srgb,var(--t-ink) 35%,transparent)}
+
+/* Verdict pour ton sport et ton niveau : pastille de couleur et heures. data-v = bon | possible | non. */
+.ocean-v2 .ui-verdict{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0}
+.ocean-v2 .ui-verdict>b{display:inline-flex;align-items:center;min-height:26px;padding:0 10px;border-radius:999px;font:700 var(--ui-note)/1 var(--body)}
+.ocean-v2 .ui-verdict[data-v=bon]>b{background:var(--ui-good-bg);color:var(--ui-good)}
+.ocean-v2 .ui-verdict[data-v=possible]>b{background:var(--ui-maybe-bg);color:var(--ui-maybe)}
+.ocean-v2 .ui-verdict[data-v=non]>b{background:var(--ui-no-bg);color:var(--ui-no)}
+.ocean-v2 .ui-verdict>span{font:500 var(--ui-note)/1.2 var(--body);color:var(--ui-soft);font-variant-numeric:tabular-nums}
+
+/* Ligne de spot (Mes spots, Bon aujourd'hui, liste d'Explorer) : photo carrée arrondie, nom, ligne de conditions, verdict.
+   Toute la ligne se touche (ouvre la fiche). Filet discret entre deux lignes d'une même carte. */
+.ocean-v2 .ui-spots{display:grid;padding:4px 14px;border-radius:var(--ui-radius);background:var(--ui-surface);box-shadow:inset 0 0 0 1px var(--ui-hair)}
+.ocean-v2 .ui-spot{display:grid;grid-template-columns:76px minmax(0,1fr);column-gap:14px;align-items:center;min-height:96px;padding:10px 0;border:0;background:none;color:inherit;text-align:start;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ocean-v2 .ui-spot+.ui-spot{border-top:1px solid var(--ui-hair)}
+.ocean-v2 .ui-spot>img,.ocean-v2 .ui-spot>.ui-ph{width:76px;height:76px;border-radius:14px;object-fit:cover;background:var(--ui-hair)}
+.ocean-v2 .ui-spot>div{display:grid;gap:6px;min-width:0}
+.ocean-v2 .ui-spot-name{display:flex;align-items:center;gap:8px;min-width:0;margin:0;font:700 var(--ui-text)/1.2 var(--body);color:var(--t-ink)}
+.ocean-v2 .ui-spot-name>span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ocean-v2 .ui-spot-sub{margin:-3px 0 0;font:400 var(--ui-note)/1.2 var(--body);color:var(--ui-soft)}
+
+/* Rangée de photos (« En novembre », idées) : défilement horizontal, cartes photo avec nom en affiche. */
+.ocean-v2 .ui-row{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(132px,38%);gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;margin:0 -16px;padding:0 16px}
+.ocean-v2 .ui-row::-webkit-scrollbar{display:none}
+.ocean-v2 .ui-row>*{scroll-snap-align:start}
+
+/* Retour au toucher : léger enfoncement, sans délai. Rien si l'utilisateur réduit les animations. */
+.ocean-v2 :is(.ui-spot,.ui-btn,.ui-pill,.ui-card[role=button],.ui-row>button,.ui-row>a){transition:transform .12s cubic-bezier(.2,.7,.3,1)}
+.ocean-v2 :is(.ui-spot,.ui-btn,.ui-pill,.ui-card[role=button],.ui-row>button,.ui-row>a):active{transform:scale(.98)}
+@media (prefers-reduced-motion:reduce){.ocean-v2 :is(.ui-spot,.ui-btn,.ui-pill,.ui-card[role=button],.ui-row>button,.ui-row>a){transition:none}.ocean-v2 :is(.ui-spot,.ui-btn,.ui-pill,.ui-card[role=button],.ui-row>button,.ui-row>a):active{transform:none}}
+.ocean-v2.reduce-motion :is(.ui-spot,.ui-btn,.ui-pill,.ui-card[role=button],.ui-row>button,.ui-row>a){transition:none}
+
+/* Focus clavier visible, masqué après un toucher (classe ob-touch, déjà posée par l'app). */
+.ocean-v2 :is(.ui-spot,.ui-btn,.ui-pill,.ui-link):focus-visible{outline:2px solid var(--t-main);outline-offset:3px}

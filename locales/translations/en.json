@@ -11250,5 +11250,17 @@
  "all year round": "all year round",
  "todo el año": "all year round",
  "sobre todo": "mostly",
- "de {0} à {1}": "from {0} to {1}"
+ "de {0} à {1}": "from {0} to {1}",
+ "Aide": "Help",
+ "Mes spots": "My spots",
+ "Mini-jeu": "Mini-game",
+ "Pas encore de favori": "No favourites yet",
+ "Pas encore de spot visité": "No spots visited yet",
+ "Passeport": "Passport",
+ "Quiz": "Quiz",
+ "spot": "spot",
+ "spots": "spots",
+ "trophée": "trophy",
+ "un seul pays": "country",
+ "Note ta première session": "Log your first session"
 }

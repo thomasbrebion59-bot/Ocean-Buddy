@@ -3,9 +3,9 @@
   const $ = (s, root = document) => root.querySelector(s);
   const paths = {
     home:'M3 10.5 12 3l9 7.5M5 9v11h5v-6h4v6h5V9',
-    spots:'M12 21s7-6.6 7-12a7 7 0 0 0-14 0c0 5.4 7 12 7 12z M15 9a3 3 0 1 1-6 0 3 3 0 0 1 6 0',
+    spots:'M17.5 11a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0m-1.8 4.7 4.3 4.3',
     challenges:'M8 4h8v4a4 4 0 0 1-8 0V4zM8 5H4v2a4 4 0 0 0 4 4m8-6h4v2a4 4 0 0 1-4 4m-4 1v5m-4 3h8m-7-3h6',
-    trips:'M3 5l6-2 6 2 6-2v16l-6 2-6-2-6 2V5zm6-2v16m6-14v16M5 11l2 1m4 1 2 1m4-1 2-2',
+    trips:'M9 6V4.8A1.8 1.8 0 0 1 10.8 3h2.4A1.8 1.8 0 0 1 15 4.8V6M6 6h12a3 3 0 0 1 3 3v8a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V9a3 3 0 0 1 3-3zM8 6v14M16 6v14',
     profile:'M16 7a4 4 0 1 1-8 0 4 4 0 0 1 8 0M4 21v-3a8 8 0 0 1 16 0v3',
     community:'M4 5h16v11H9l-5 4v-4H4zM8 9h8M8 13h5',
     search:'M17 10a7 7 0 1 1-14 0 7 7 0 0 1 14 0m-2 5 6 6',
@@ -13,7 +13,7 @@
     wave:'M2 9c3 0 3-3 6-3s3 3 6 3 3-3 6-3M2 16c3 0 3-3 6-3s3 3 6 3 3-3 6-3'
   };
   const icon = key => `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${paths[key] || paths.wave}"/></svg>`;
-  const labels = {home:'Accueil',spots:'Explorer',challenges:'Défis',community:'Communauté',profile:'Mon profil',trips:'Voyages',surf:'Jeu',detail:'Le spot'};
+  const labels = {home:'Accueil',spots:'Explorer',challenges:'Défis',community:'Communauté',profile:'Profil',trips:'Voyages',surf:'Jeu',detail:'Le spot'};
   const short = {home:'Accueil',spots:'Spots',challenges:'Défis',community:'Social',profile:'Profil',trips:'Voyages',surf:'Jeu'};
   const nav = $('.nav');
   nav.insertAdjacentHTML('afterbegin', `<a class="sidebar-brand" href="#home" aria-label="Ocean Buddy — Accueil"><img src="assets/brand/manta-petrole-256.png" alt="" width="47" height="47" loading="lazy" decoding="async"><span>OCEAN <b>BUDDY</b><small>L’OCÉAN, À TES CÔTÉS.</small></span></a><div class="sidebar-label">TON TERRAIN DE JEU</div>`);
@@ -24,10 +24,11 @@
     button.setAttribute('aria-label', labels[page]);
     if(button.classList.contains('active'))button.setAttribute('aria-current','page');
   });
-  // Planning follows exploration in the main navigation.
-  nav.insertBefore($('.n-trips',nav),$('.center',nav));
+  // Interface v2 : quatre entrées (Accueil, Explorer, Voyages, Profil), dans l’ordre d’index.html. Jeu et Défis s’ouvrent depuis Profil > Jouer.
   nav.insertAdjacentHTML('beforeend', `<div class="sidebar-bottom"><button class="sidebar-poulpy" type="button"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" loading="lazy" decoding="async"><b>Une question ?</b><span>Poulpy est là pour toi.</span><i>Discuter avec Poulpy</i></button><button class="sidebar-settings" type="button">${icon('settings')} Réglages</button><button class="sidebar-user" type="button"><span class="user-initial"></span><span><b class="user-name"></b><small id="sidebarXp"></small></span></button><span class="sidebar-motto">Moins de traces. Plus de souvenirs.</span></div>`);
   $('.sidebar-poulpy').onclick = openChat;
+  // Communauté (ordinateur seulement) : rangée en bas du menu, avec les Réglages ; le menu principal garde ses quatre entrées.
+  {const c=$('.n-community',nav),s=$('.sidebar-settings',nav);if(c&&s){c.classList.add('sidebar-community');s.before(c);}}
   $('.sidebar-settings').onclick = openSettings;
   $('.sidebar-user').onclick = () => go('profile');
   const chrome = document.createElement('header');chrome.className='app-chrome';
@@ -66,21 +67,19 @@
   window.addEventListener('ocean:navigate',event=>{
     const page=event.detail;$('#pageLabel').textContent=labels[page]||'Accueil';
     nav.querySelectorAll('[data-s]').forEach(button=>{
-      const selected=button.dataset.s===(page==='detail'?'spots':page);
+      /* Jeu et Défis : écrans rattachés au Profil, qui reste l’entrée active (tabOf, app.js). */
+      const selected=button.dataset.s===(page==='detail'?'spots':typeof tabOf==='function'?tabOf(page):page);
       if(selected)button.setAttribute('aria-current','page');else button.removeAttribute('aria-current');
     });identity();
   });
+  /* Interface v2 : Défis et Profil n’ont plus de grande affiche ni de sur-titre (en-têtes simples d’index.html). */
   const headings = {
-    spotsTop:['LE MONDE T’ATTEND','Trouve ton prochain horizon.'],
-    chalTop:['À TOI DE JOUER','Passe à l’action.<br>Protège ton terrain.'],
-    profTop:['TON AVENTURE','']
+    spotsTop:['LE MONDE T’ATTEND','Trouve ton prochain horizon.']
   };
-  for(const [id,[eyebrow,title]] of Object.entries(headings)){
+  for(const [id,[eyebrow]] of Object.entries(headings)){
     const header=document.getElementById(id);
-    header.insertAdjacentHTML('afterbegin',`<div class="page-eyebrow">${eyebrow}</div>`);
-    if(title&&id!=='spotsTop')$('h1',header).innerHTML=title;
+    if(header)header.insertAdjacentHTML('afterbegin',`<div class="page-eyebrow">${eyebrow}</div>`);
   }
-  $('#chalTop .sub').textContent='Relève des défis, gagne de l’XP et prends soin de l’océan.';
 
   const credits=document.createElement('a');credits.className='photo-credits';credits.href='photos.html';credits.target='_blank';credits.rel='noopener';credits.textContent='Photographies & crédits';$('#worldPick').append(credits);
   const photoNote=document.createElement('a');photoNote.className='hero-photo-credit';photoNote.href='photos.html';photoNote.target='_blank';photoNote.rel='noopener';photoNote.textContent='Photo · byronetmedia';$('#homeTop').append(photoNote);
