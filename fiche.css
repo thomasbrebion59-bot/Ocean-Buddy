@@ -1095,30 +1095,51 @@ body.reduce-motion #detail .dcat[data-cat="faune"] .sd-species>.sd-sp,body.reduc
    Le jour choisi parmi « Les prochains jours » : vague à sa taille, va-et-vient au rythme de la période, vent dans son
    sens quand il est connu. Rien ne bouge hors écran (.is-live posé par IntersectionObserver) ni en mouvement réduit.
    ===================================================================================================== */
-#detail .fx-scene{position:relative;overflow:hidden;height:clamp(210px,56vw,300px);margin:0 0 12px;border-radius:var(--fiche-radius);background:color-mix(in srgb,var(--t-tint) 60%,var(--t-card));isolation:isolate}
-#detail .fx-scene .sc-art{position:absolute;inset:0;width:100%;height:100%;display:block}
+/* Le cadre a le format du dessin (400 × 290) : la scène n’est jamais rognée sur téléphone, et les calques se déplacent
+   en pourcentage du cadre, donc en unités du dessin. */
+#detail .fx-scene{position:relative;overflow:hidden;aspect-ratio:400 / 290;margin:0 0 10px;border-radius:var(--fiche-radius);background:color-mix(in srgb,var(--t-tint) 70%,var(--t-card));isolation:isolate}
+#detail .fx-scene .sc-stage{position:absolute;left:0;right:0;bottom:0;aspect-ratio:400 / 290;pointer-events:none}
+#detail .fx-scene .sc-layer{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible}
 #detail .fx-scene .sc-sky{fill:color-mix(in srgb,var(--t-tint) 70%,var(--t-card))}
-#detail .fx-scene .sc-sun{fill:color-mix(in srgb,var(--t-sun) 75%,var(--t-card))}
-#detail .fx-scene .sc-wind path{stroke:color-mix(in srgb,var(--t-ink) 38%,transparent);stroke-width:3;stroke-linecap:round;fill:none;opacity:.55}
-#detail .fx-scene .sc-wave{transform-box:view-box;transform-origin:330px 220px;transition:transform .5s var(--ob-snap,ease)}
-#detail .fx-scene[data-size="s"] .sc-wave{transform:scale(.5)}
-#detail .fx-scene[data-size="m"] .sc-wave{transform:scale(.76)}
-#detail .fx-scene[data-size="l"] .sc-wave{transform:scale(1)}
-#detail .fx-scene[data-size="flat"] .sc-wave,#detail .fx-scene[data-size="flat"] .sc-wash{display:none}
-#detail .fx-scene .sc-wave-move{transform-box:view-box;transform-origin:330px 220px}
+#detail .fx-scene .sc-sun{fill:color-mix(in srgb,var(--t-sun) 82%,var(--t-card))}
+#detail .fx-scene .sc-haze-0{stop-color:var(--t-sun);stop-opacity:0}
+#detail .fx-scene .sc-haze-1{stop-color:var(--t-sun);stop-opacity:.3}
+#detail .fx-scene .sc-glow-0{stop-color:var(--t-sun);stop-opacity:.55}
+#detail .fx-scene .sc-glow-1{stop-color:var(--t-sun);stop-opacity:0}
+/* La vague : sa taille suit la houle (--sc-k, posé par paintScene), depuis le pied droit du dessin. */
+#detail .fx-scene .sc-wave{position:absolute;inset:0;transform-origin:87.5% 100%;transform:scale(var(--sc-k,.76));transition:transform .6s cubic-bezier(.3,.7,.2,1)}
+#detail .fx-scene[data-size="s"] .sc-wave{transform:scale(var(--sc-k,.5))}
+#detail .fx-scene[data-size="m"] .sc-wave{transform:scale(var(--sc-k,.76))}
+#detail .fx-scene[data-size="l"] .sc-wave{transform:scale(var(--sc-k,1))}
+/* Mer presque plate ou plan d’eau : pas de vague qui déferle ; sur un plan d’eau, ni houle ni ressac. */
+#detail .fx-scene:is([data-size="xs"],[data-size="flat"]) .sc-wave{display:none}
+#detail .fx-scene[data-size="flat"] .sc-wash{display:none}
+#detail .fx-scene[data-size="flat"] .sc-swell{opacity:.6}
+#detail .fx-scene .sc-wash{opacity:.9}
+#detail .fx-scene .sc-wind{position:absolute;inset:0}
+/* Traits de vent : clairs, visibles seulement quand le sens (terre ou mer) est connu ; sinon rien n’est dessiné. */
+#detail .fx-scene .sc-wind i{position:absolute;left:8%;top:64%;width:18%;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,var(--t-on-main) 35%,var(--t-on-main) 65%,transparent);opacity:0}
+#detail .fx-scene:is([data-side="land"],[data-side="sea"]) .sc-wind i{opacity:.6}
+#detail .fx-scene .sc-wind i:nth-child(2){left:24%;top:70%;width:22%}
+#detail .fx-scene .sc-wind i:nth-child(3){left:3%;top:77%;width:17%}
+#detail .fx-scene .sc-wind i:nth-child(4){left:38%;top:66%;width:16%}
 #detail .fx-scene .sc-now{position:absolute;inset:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto auto 1fr;align-content:start;column-gap:16px;padding:14px 16px;color:var(--t-ink);pointer-events:none}
-#detail .fx-scene .sc-day{grid-column:1 / -1;margin:0 0 6px;font:700 var(--fiche-label)/1.2 var(--body);color:var(--t-ink)}
+#detail .fx-scene .sc-day{grid-column:1 / -1;margin:0 0 5px;font:700 var(--fiche-label)/1.2 var(--body);color:var(--t-ink)}
 #detail .fx-scene .sc-read{display:grid;gap:1px;align-content:start;min-width:0}
 #detail .fx-scene .sc-lab{font:600 var(--fiche-note)/1.25 var(--body);color:var(--fiche-soft)}
 #detail .fx-scene .sc-val{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:5px}
 #detail .fx-scene .sc-val .fx-num{font-size:calc(var(--fiche-num) * .92)}
 #detail .fx-scene .sc-sub{font:500 var(--fiche-note)/1.3 var(--body);color:var(--t-ink)}
+#detail .fx-scene .sc-max{font-weight:700}
 #detail .fx-scene .sc-arrow{width:18px;height:18px;align-self:center;color:var(--t-main)}
+#detail .fx-days-note{margin:0 0 8px}
+#detail .fx-day-row:first-of-type{font-weight:700;font-size:var(--fiche-label)}
 /* Ordinateur : la scène à gauche, les trois jours empilés à droite (pas de grande bande vide ni de vague géante). */
 @media(min-width:960px){
-  #detail .fx-next{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(220px,1fr);column-gap:16px;align-items:stretch}
+  #detail .fx-next{display:grid;grid-template-columns:minmax(0,480px) minmax(220px,1fr);grid-template-rows:auto auto 1fr auto;column-gap:16px;align-items:stretch}
   #detail .fx-next>.fx-title,#detail .fx-next>.fx-more{grid-column:1 / -1}
-  #detail .fx-next>.fx-scene{grid-column:1;height:300px;margin:0}
+  #detail .fx-next>.fx-scene{grid-column:1;grid-row:2 / span 2;margin:0}
+  #detail .fx-next>.fx-days-note{grid-column:2;margin:0 0 8px}
   #detail .fx-next>.fx-days{grid-column:2;grid-template-columns:1fr;grid-auto-rows:1fr;gap:8px}
   #detail .fx-next>.fx-days>.fx-day{grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:14px}
   #detail .fx-scene .sc-now{grid-template-columns:repeat(2,minmax(0,240px))}
@@ -1127,19 +1148,24 @@ body.reduce-motion #detail .dcat[data-cat="faune"] .sd-species>.sd-sp,body.reduc
 #detail button.fx-day{width:100%;border:0;font:inherit;color:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:inset 0 0 0 0 var(--t-main);transition:box-shadow .2s ease}
 #detail button.fx-day.is-on{box-shadow:inset 0 0 0 2px var(--t-main)}
 #detail button.fx-day:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
-/* Mouvement : seulement à l’écran (.is-live). */
-@keyframes scSwell{0%,100%{transform:translateX(8px) scaleY(.97)}50%{transform:translateX(-12px) scaleY(1.04)}}
-@keyframes scFoam{0%,100%{opacity:.55}50%{opacity:1}}
-@keyframes scWindLand{0%{transform:translateX(-70px);opacity:0}25%{opacity:.6}100%{transform:translateX(150px);opacity:0}}
-@keyframes scWindSea{0%{transform:translateX(150px);opacity:0}25%{opacity:.6}100%{transform:translateX(-70px);opacity:0}}
+/* Mouvement : seulement à l’écran (.is-live), sur transform et opacity seulement (calques composés, aucun dessin par image).
+   Lignes de houle : une longueur d’onde (160 unités, 40 % du cadre) par période réelle, vers la plage. La vague avance et
+   se creuse, son écume gonfle, le ressac monte sur le sable puis se retire : le tout sur la même période. */
+@keyframes scDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-40%,0,0)}}
+@keyframes scSwell{0%,100%{transform:translate3d(1.8%,.6%,0)}45%{transform:translate3d(-2.6%,-1%,0)}}
+@keyframes scFoam{0%,100%{transform:translate3d(1.2%,.8%,0) scale(.96);opacity:.82}50%{transform:translate3d(-3.4%,0,0) scale(1.05);opacity:1}}
+@keyframes scWash{0%{transform:translate3d(4%,2%,0);opacity:0}18%{opacity:.95}46%{transform:translate3d(-2.4%,-1.2%,0);opacity:.95}62%{transform:translate3d(-2.4%,-1.2%,0);opacity:.8}100%{transform:translate3d(4%,2%,0);opacity:0}}
+@keyframes scWindLand{0%{transform:translate3d(-90%,0,0);opacity:0}25%{opacity:.6}100%{transform:translate3d(210%,0,0);opacity:0}}
+@keyframes scWindSea{0%{transform:translate3d(210%,0,0);opacity:0}25%{opacity:.6}100%{transform:translate3d(-90%,0,0);opacity:0}}
+#detail .fx-scene.is-live:not([data-size="flat"]) .sc-swell{animation:scDrift var(--sc-period,10s) linear infinite}
 #detail .fx-scene.is-live .sc-wave-move{animation:scSwell var(--sc-period,10s) ease-in-out infinite}
-#detail .fx-scene.is-live .sc-foam{animation:scFoam calc(var(--sc-period,10s) / 2) ease-in-out infinite}
-#detail .fx-scene .sc-wind path{transform-box:view-box}
-#detail .fx-scene.is-live[data-side="land"] .sc-wind path{animation:scWindLand var(--sc-wind,4s) linear infinite}
-#detail .fx-scene.is-live[data-side="sea"] .sc-wind path{animation:scWindSea var(--sc-wind,4s) linear infinite}
-#detail .fx-scene.is-live .sc-wind path:nth-child(2){animation-delay:calc(var(--sc-wind,4s) * -.35)}
-#detail .fx-scene.is-live .sc-wind path:nth-child(3){animation-delay:calc(var(--sc-wind,4s) * -.7)}
-#detail .fx-scene.is-live .sc-wind path:nth-child(4){animation-delay:calc(var(--sc-wind,4s) * -.2)}
+#detail .fx-scene.is-live .sc-foam{transform-origin:55% 100%;animation:scFoam var(--sc-period,10s) ease-in-out calc(var(--sc-period,10s) * -.12) infinite}
+#detail .fx-scene.is-live .sc-wash{animation:scWash var(--sc-period,10s) ease-in-out calc(var(--sc-period,10s) * -.3) infinite}
+#detail .fx-scene.is-live[data-side="land"] .sc-wind i{animation:scWindLand var(--sc-wind,4s) linear infinite}
+#detail .fx-scene.is-live[data-side="sea"] .sc-wind i{animation:scWindSea var(--sc-wind,4s) linear infinite}
+#detail .fx-scene.is-live .sc-wind i:nth-child(2){animation-delay:calc(var(--sc-wind,4s) * -.35)}
+#detail .fx-scene.is-live .sc-wind i:nth-child(3){animation-delay:calc(var(--sc-wind,4s) * -.7)}
+#detail .fx-scene.is-live .sc-wind i:nth-child(4){animation-delay:calc(var(--sc-wind,4s) * -.2)}
 @media (prefers-reduced-motion:reduce){#detail .fx-scene *{animation:none!important;transition:none!important}}
 body.reduce-motion #detail .fx-scene *{animation:none!important;transition:none!important}
 

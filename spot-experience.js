@@ -302,51 +302,91 @@
     air: '<path d="M10 13.6V5a2 2 0 1 1 4 0v8.6a4 4 0 1 1-4 0z"/><path d="M12 9.5v6"/>'
   };
   const dayIc = k => `<svg class="fx-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${DAY_IC[k]}</svg>`;
-  /* Les trois prochains jours : chacun bascule la scène illustrée au-dessus (sceneHTML, paintScene). */
+  /* Les trois prochains jours : chacun bascule la scène illustrée au-dessus (sceneHTML, paintScene). Chaque carte montre
+     le maximum du jour (c’est écrit juste au-dessus des cartes). Aujourd’hui, ce maximum n’est jamais plus bas que le
+     relevé du moment (todayMax) : la scène peut dire « 2,4 m maintenant, jusqu’à 3,5 m aujourd’hui » sans se contredire. */
   function nextDay(d, i, inland) {
-    const first = inland ? `<span class="fx-day-row">${dayIc('air')}<span>${d.tmax != null ? Math.round(d.tmax) + '°' : '—'}</span></span>`
-      : `<span class="fx-day-row">${dayIc('wave')}<span>${d.wave != null ? fmt1(d.wave) + ' m' : '—'}</span></span>`;
-    return `<button type="button" class="fx-day${i === 0 ? ' is-today' : ''}" data-scene-day="${i}" aria-pressed="${i === 0}"><b>${esc(dayName(d.date, i))}</b>${first}<span class="fx-day-row">${dayIc('wind')}<span>${d.wind != null ? Math.round(d.wind) + ' km/h' : '—'}</span></span></button>`;
+    const first = inland ? `<span class="fx-day-row">${dayIc('air')}<span data-day-v="air">${d.tmax != null ? Math.round(d.tmax) + '°' : '—'}</span></span>`
+      : `<span class="fx-day-row">${dayIc('wave')}<span data-day-v="wave">${d.wave != null ? fmt1(d.wave) + ' m' : '—'}</span></span>`;
+    return `<button type="button" class="fx-day${i === 0 ? ' is-today' : ''}" data-scene-day="${i}" aria-pressed="${i === 0}"><b>${esc(dayName(d.date, i))}</b>${first}<span class="fx-day-row">${dayIc('wind')}<span data-day-v="wind">${d.wind != null ? Math.round(d.wind) + ' km/h' : '—'}</span></span></button>`;
+  }
+  const hi = (a, b) => (a == null ? b : b == null ? a : Math.max(+a, +b));
+  /* Maximum d’aujourd’hui : celui de la prévision, relevé au niveau du relevé du moment s’il le dépasse. */
+  const todayMax = (d, now) => (now ? Object.assign({}, d, {wave: hi(d.wave, now.wave), wind: hi(d.wind, now.wind), tmax: hi(d.tmax, now.tmax)}) : d);
+  function paintToday(host, d, now, inland) {
+    const card = host && host.querySelector('[data-scene-day="0"]'); if (!card || !d) return;
+    const m = todayMax(d, now), put = (k, t) => { const el = card.querySelector(`[data-day-v="${k}"]`); if (el && el.textContent !== t) el.textContent = t; };
+    if (inland) put('air', m.tmax != null ? Math.round(m.tmax) + '°' : '—'); else put('wave', m.wave != null ? fmt1(m.wave) + ' m' : '—');
+    put('wind', m.wind != null ? Math.round(m.wind) + ' km/h' : '—');
   }
 
-  /* ---------- Scène illustrée de Conditions (20 nov.) ----------
-     Une vague vue de côté, le sable à gauche, la mer à droite, et les chiffres du jour choisi posés dessus. Données :
+  /* ---------- Scène illustrée de Conditions (20 nov., reprise le 23 nov.) ----------
+     Une vague vue de côté, le sable à gauche, la mer à droite, et les chiffres du jour choisi posés sur le ciel. Données :
      uniquement les prévisions du jour déjà affichées (W.days : houle et période maximales, vent maximal, direction
-     dominante). La vague, tournée vers la plage, a trois tailles (petite, moyenne, grosse) ; son va-et-vient dure la période réelle. Les traits
+     dominante) et, pour aujourd’hui, le relevé du moment. La vague, tournée vers la plage, a trois tailles (petite,
+     moyenne, grosse) et grandit avec la houle ; une mer presque plate (moins de 0,4 m) est dessinée plate. Les lignes de
+     houle avancent d’une longueur d’onde par période réelle, la vague et son écume respirent au même rythme. Les traits
      de vent vont de la terre vers la mer (vent de terre) ou l’inverse (vent de mer) seulement quand le catalogue donne
      le sens offshore du spot (SpotDataModel.windSide) ; sinon ils ne vont dans aucun sens. Rien ne bouge hors écran
      (IntersectionObserver) ni en mouvement réduit (fiche.css). */
-  const waveSize = h => (h == null ? 's' : h < 0.8 ? 's' : h < 2 ? 'm' : 'l');
+  const waveSize = h => (h == null ? 's' : h < 0.4 ? 'xs' : h < 0.8 ? 's' : h < 2 ? 'm' : 'l');
+  /* Échelle de la vague dans sa taille : 0,4 m = 0,44 ; 2 m = 0,76 ; 3,2 m et plus = 1. */
+  const waveScale = h => (h == null ? 0.5 : Math.min(1, Math.max(0.42, 0.36 + 0.2 * h)));
   const windSideOf = (deg, s) => { try { return window.SpotDataModel?.windSide?.(deg, s && s.wind) || null; } catch (e) { return null; } };
   const SIDE_LABEL = { offshore: 'Vent de terre', onshore: 'Vent de mer', cross: 'Vent de côté' };
-  /* La vague (20 nov., reprise) : une vraie vague qui déferle vers la plage, avec sa lèvre, son tube et son écume ; l’eau
-     et le sable ont leurs couleurs d’illustration (la même mer quel que soit le sport choisi), le ciel suit le thème pour
-     que les chiffres posés dessus restent lisibles. */
+  /* Le dessin : des calques empilés dans un cadre au format fixe (400 × 290), tous vectoriels (nets à toute densité
+     d’écran). Chaque calque qui bouge est un élément à part, déplacé par transform ou opacity seulement : le navigateur
+     le compose sans redessiner la scène. L’eau et le sable ont leurs couleurs d’illustration (la même mer quel que soit
+     le sport choisi), le ciel suit le thème pour que les chiffres posés dessus restent lisibles. */
   function sceneArt() {
-    return `<svg class="sc-art" viewBox="0 0 400 220" preserveAspectRatio="xMidYMax slice" aria-hidden="true" focusable="false">
-      <defs>
-        <linearGradient id="scSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#6fb7c4"/><stop offset=".55" stop-color="#2f8ba0"/><stop offset="1" stop-color="#17627a"/></linearGradient>
-        <linearGradient id="scFace" x1=".2" y1="0" x2=".6" y2="1"><stop offset="0" stop-color="#9fdcd6"/><stop offset=".35" stop-color="#3ea5a9"/><stop offset=".75" stop-color="#1c7488"/><stop offset="1" stop-color="#0f4f66"/></linearGradient>
-        <linearGradient id="scTube" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#0d4259"/><stop offset="1" stop-color="#1a6c80"/></linearGradient>
-        <linearGradient id="scSand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f6dca6"/><stop offset="1" stop-color="#e8bf7a"/></linearGradient>
-      </defs>
-      <rect class="sc-sky" width="400" height="220"/>
-      <circle class="sc-sun" cx="356" cy="104" r="15"/>
-      <path class="sc-far" d="M0 122 C90 118 210 121 400 116 V220 H0Z" fill="url(#scSea)"/>
-      <g class="sc-lines" fill="none" stroke="#bfe6e6" stroke-width="2" stroke-linecap="round" opacity=".55"><path d="M40 132 H110"/><path d="M160 128 H230"/><path d="M60 146 H150"/><path d="M300 126 H350"/></g>
-      <g class="sc-wave"><g class="sc-wave-move">
-        <path class="sc-face" d="M400 220 V156 C372 136 338 114 298 106 C258 99 222 108 202 128 C190 140 186 154 193 166 C201 152 217 146 233 151 C253 158 260 180 254 200 C250 210 244 216 238 220 Z" fill="url(#scFace)"/>
-        <path class="sc-tube" d="M197 163 C205 152 221 148 235 154 C249 162 253 183 247 201 C244 210 240 216 236 220 H216 C224 204 226 187 220 175 C216 167 204 163 197 163 Z" fill="url(#scTube)"/>
-        <path class="sc-lip" d="M398 154 C370 134 338 115 298 108 C260 102 226 110 205 128" fill="none" stroke="#f3fbf9" stroke-width="3.2" stroke-linecap="round"/>
-        <path class="sc-curtain" d="M205 128 C192 140 188 153 194 165" fill="none" stroke="#e6f6f4" stroke-width="5" stroke-linecap="round" opacity=".9"/>
-        <g class="sc-foam" fill="#fbfefd"><circle cx="195" cy="168" r="7"/><circle cx="185" cy="177" r="6"/><circle cx="203" cy="181" r="5"/><circle cx="178" cy="190" r="8"/><circle cx="194" cy="196" r="6"/><circle cx="210" cy="124" r="3"/><circle cx="200" cy="118" r="2.4"/><circle cx="218" cy="116" r="2"/></g>
-        <path class="sc-white" d="M132 220 C144 204 162 194 180 192 C196 191 210 198 220 210 C224 214 226 218 228 220 Z" fill="#f4fbfa" opacity=".92"/>
-      </g></g>
-      <path class="sc-sand" d="M0 176 C46 170 96 180 136 196 C160 206 182 214 198 220 H0Z" fill="url(#scSand)"/>
-      <path class="sc-wet" d="M70 182 C100 186 128 196 152 208 C164 214 174 218 182 220 H150 C136 212 116 202 92 194 C80 190 72 186 70 182Z" fill="#d9ae6a" opacity=".55"/>
-      <path class="sc-wash" d="M96 184 C124 190 150 202 176 216" fill="none" stroke="#fbfefd" stroke-width="3.5" stroke-linecap="round" opacity=".85"/>
-      <g class="sc-wind"><path d="M30 150 H100"/><path d="M90 168 H180"/><path d="M10 186 H80"/><path d="M150 140 H220"/></g>
-    </svg>`;
+    const tile = x => `<path d="M${x + 10} 187 q18 -3 36 0" stroke-width="1.4"/><path d="M${x + 84} 199 q28 -4 56 0" stroke-width="2"/><path d="M${x + 16} 215 q40 -5 80 0" stroke-width="2.6"/>`;
+    const tiles = [0, 160, 320, 480].map(tile).join('');
+    return `<div class="sc-stage" aria-hidden="true">
+      <svg class="sc-layer sc-back" viewBox="0 0 400 290" preserveAspectRatio="xMidYMax meet" focusable="false">
+        <defs>
+          <linearGradient id="scSea" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2c8198"/><stop offset=".45" stop-color="#3a9cab"/><stop offset="1" stop-color="#74c6bf"/></linearGradient>
+          <linearGradient id="scFace" x1=".15" y1="0" x2=".6" y2="1"><stop offset="0" stop-color="#a9e2d9"/><stop offset=".3" stop-color="#46adae"/><stop offset=".7" stop-color="#1d778b"/><stop offset="1" stop-color="#0f5068"/></linearGradient>
+          <linearGradient id="scTube" x1="0" y1="0" x2="1" y2=".4"><stop offset="0" stop-color="#0b3d54"/><stop offset="1" stop-color="#1b6f84"/></linearGradient>
+          <linearGradient id="scSand" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#f8e0ad"/><stop offset="1" stop-color="#e7bd77"/></linearGradient>
+          <linearGradient id="scHaze" x1="0" y1="0" x2="0" y2="1"><stop class="sc-haze-0" offset="0"/><stop class="sc-haze-1" offset="1"/></linearGradient>
+          <radialGradient id="scGlow"><stop class="sc-glow-0" offset="0"/><stop class="sc-glow-1" offset="1"/></radialGradient>
+          <linearGradient id="scShallow" x1="0" y1="1" x2=".7" y2="0"><stop offset="0" stop-color="#bfeadf" stop-opacity=".9"/><stop offset="1" stop-color="#8fd6cd" stop-opacity="0"/></linearGradient>
+        </defs>
+        <rect class="sc-sky" x="-40" y="-40" width="480" height="218"/>
+        <rect x="-40" y="96" width="480" height="82" fill="url(#scHaze)"/>
+        <circle cx="104" cy="170" r="46" fill="url(#scGlow)"/>
+        <circle class="sc-sun" cx="104" cy="171" r="16"/>
+        <rect class="sc-far" x="-40" y="176" width="480" height="120" fill="url(#scSea)"/>
+        <path d="M-40 176.6 H440" stroke="#d8f1ec" stroke-width="1.2" opacity=".55"/>
+        <path d="M-40 236 C40 214 150 226 230 296 H-40Z" fill="url(#scShallow)"/>
+        <g class="sc-glint" fill="none" stroke="#ffe9bd" stroke-width="2.2" stroke-linecap="round" opacity=".8"><path d="M93 183 H115"/><path d="M86 190 H108"/><path d="M100 197 H124"/><path d="M90 205 H104"/><path d="M96 213 H128"/></g>
+      </svg>
+      <svg class="sc-layer sc-swell" viewBox="0 0 400 290" preserveAspectRatio="xMidYMax meet" focusable="false"><g class="sc-lines" fill="none" stroke="#d9f2ee" stroke-linecap="round" opacity=".62">${tiles}</g></svg>
+      <svg class="sc-layer sc-front" viewBox="0 0 400 290" preserveAspectRatio="xMidYMax meet" focusable="false">
+        <path class="sc-sand" d="M-40 232 C40 224 104 236 146 254 C174 266 198 281 214 296 H-40Z" fill="url(#scSand)"/>
+        <path class="sc-wet" d="M66 234 C106 239 142 251 172 267 C190 277 204 287 212 296 H190 C176 284 152 268 124 256 C102 246 80 239 66 234Z" fill="#c9995a" opacity=".42"/>
+        <g fill="#d8a968" opacity=".7"><circle cx="34" cy="252" r="1.6"/><circle cx="62" cy="266" r="1.3"/><circle cx="22" cy="276" r="1.5"/><circle cx="92" cy="278" r="1.4"/><circle cx="118" cy="284" r="1.2"/><circle cx="48" cy="284" r="1.3"/></g>
+      </svg>
+      <div class="sc-wave">
+        <svg class="sc-layer sc-wave-move" viewBox="0 0 400 290" preserveAspectRatio="xMidYMax meet" focusable="false">
+          <path class="sc-face" d="M440 296 V206 C404 190 366 170 326 164 C290 159 256 166 236 184 C225 194 220 208 226 220 C232 206 248 198 264 202 C284 208 294 232 288 256 C284 272 276 286 268 296 Z" fill="url(#scFace)"/>
+          <g fill="none" stroke="#c6efe6" stroke-linecap="round"><path d="M306 292 C322 254 332 216 324 180" stroke-width="3" opacity=".24"/><path d="M340 292 C358 258 368 226 362 196" stroke-width="2.6" opacity=".17"/><path d="M376 292 C392 266 400 244 398 222" stroke-width="2.2" opacity=".12"/></g>
+          <path class="sc-tube" d="M229 218 C237 205 253 200 267 205 C285 212 290 236 284 256 C281 270 275 284 268 296 H244 C254 276 258 254 252 240 C247 229 238 221 229 218 Z" fill="url(#scTube)"/>
+          <path d="M322 171 C292 166 262 172 244 189" fill="none" stroke="#0e4c63" stroke-width="3" stroke-linecap="round" opacity=".32"/>
+          <path class="sc-lip" d="M440 205 C404 189 366 169 326 163 C290 158 256 165 235 184" fill="none" stroke="#f5fcfa" stroke-width="3.4" stroke-linecap="round"/>
+          <path class="sc-curtain" d="M235 184 C224 194 219 208 225 221" fill="none" stroke="#e9f7f5" stroke-width="6" stroke-linecap="round" opacity=".94"/>
+          <g class="sc-spray" fill="#fbfefd"><circle cx="241" cy="176" r="3"/><circle cx="252" cy="168" r="2.2"/><circle cx="264" cy="161" r="1.8"/><circle cx="278" cy="156" r="2.4"/><circle cx="294" cy="152" r="1.6"/><circle cx="308" cy="154" r="2"/><circle cx="286" cy="147" r="1.2"/><circle cx="270" cy="151" r="1.3"/></g>
+        </svg>
+        <svg class="sc-layer sc-foam" viewBox="0 0 400 290" preserveAspectRatio="xMidYMax meet" focusable="false">
+          <path class="sc-white" d="M150 296 C160 274 180 260 200 256 C206 241 218 233 230 237 C244 233 256 243 256 257 C266 263 271 278 268 296 Z" fill="#f6fcfb"/>
+          <path d="M172 296 C182 280 197 270 213 270 C229 268 245 277 252 296 Z" fill="#cdeae5" opacity=".85"/>
+          <g fill="#fbfefd"><circle cx="196" cy="251" r="7.5"/><circle cx="212" cy="239" r="8.5"/><circle cx="227" cy="229" r="7.5"/><circle cx="241" cy="241" r="7"/><circle cx="184" cy="263" r="6.5"/><circle cx="170" cy="276" r="5.5"/><circle cx="224" cy="217" r="4.2"/><circle cx="213" cy="224" r="3"/><circle cx="158" cy="286" r="4.2"/></g>
+          <g fill="#fbfefd" opacity=".9"><circle cx="176" cy="245" r="2"/><circle cx="188" cy="234" r="1.6"/><circle cx="164" cy="259" r="1.8"/><circle cx="200" cy="226" r="2"/><circle cx="150" cy="272" r="1.4"/></g>
+        </svg>
+      </div>
+      <svg class="sc-layer sc-wash" viewBox="0 0 400 290" preserveAspectRatio="xMidYMax meet" focusable="false"><path d="M88 235 C130 243 167 260 201 289 C170 266 132 249 88 235Z M90 236 C130 244 166 261 200 288" fill="#fbfefd" stroke="#fbfefd" stroke-width="3.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M112 247 C138 254 160 266 180 281" fill="none" stroke="#fbfefd" stroke-width="1.6" stroke-linecap="round" opacity=".55"/></svg>
+      <span class="sc-wind"><i></i><i></i><i></i><i></i></span>
+    </div>`;
   }
   function sceneHTML(daily, inland) {
     if (!daily.length) return '';
@@ -363,9 +403,13 @@
   function paintScene(host, d, i, s, inland) {
     const sc = host && host.querySelector('[data-scene]'); if (!sc || !d) return;
     const now = i === 0 ? nowOf(s, inland) : null;
+    /* Le maximum d’aujourd’hui (carte « Aujourd’hui ») : dit sous le relevé du moment quand il est plus haut. */
+    const top = i === 0 ? todayMax(d, now) : null;
+    if (i === 0) paintToday(host, d, now, inland);
     if (now) d = Object.assign({}, d, now);
     const h = inland ? null : d.wave, per = Number.isFinite(+d.period) && +d.period > 0 ? +d.period : null;
     sc.dataset.size = inland ? 'flat' : waveSize(h);
+    sc.style.setProperty('--sc-k', waveScale(h).toFixed(2));
     sc.style.setProperty('--sc-period', (per ? Math.min(18, Math.max(5, per)) : 10) + 's');
     const w = d.wind != null ? Math.round(d.wind) : null;
     sc.style.setProperty('--sc-wind', (w == null ? 4 : Math.max(1.4, 5.5 - w / 9)).toFixed(2) + 's');
@@ -375,10 +419,12 @@
        une flèche « vers l’est » y contredisait les traits de vent. La direction reste écrite (« O »), le sens terre ou mer
        est dit en toutes lettres et montré par les traits. */
     const arrow = '';
+    const upTo = (shown, max, unit) => (now && max != null && shown !== max ? `<span class="sc-sub sc-max">${esc(`jusqu’à ${max} ${unit} aujourd’hui`)}</span>` : '');
+    const airNow = d.tmax != null ? String(Math.round(d.tmax)) : '—', waveNow = h != null ? fmt1(h) : '—';
     const first = inland
-      ? `<div class="sc-read"><span class="sc-lab">${now ? 'Air' : 'Air, au plus chaud'}</span><span class="sc-val"><b class="fx-num">${d.tmax != null ? Math.round(d.tmax) : '—'}</b><span class="fx-unit">°C</span></span></div>`
-      : `<div class="sc-read"><span class="sc-lab">${now ? 'Houle' : 'Houle, au plus haut'}</span><span class="sc-val"><b class="fx-num">${h != null ? fmt1(h) : '—'}</b><span class="fx-unit">m</span></span>${per ? `<span class="sc-sub">${esc(`une vague toutes les ${Math.round(per)} s`)}</span>` : ''}</div>`;
-    const wind = `<div class="sc-read sc-read-wind"><span class="sc-lab">${now ? 'Vent' : 'Vent, au plus fort'}</span><span class="sc-val"><b class="fx-num">${w != null ? w : '—'}</b><span class="fx-unit">km/h</span>${arrow}<span class="fx-unit">${esc(direction(d.windDir))}</span></span>${side ? `<span class="sc-sub">${esc(SIDE_LABEL[side])}</span>` : ''}</div>`;
+      ? `<div class="sc-read"><span class="sc-lab">${now ? 'Air' : 'Air, au plus chaud'}</span><span class="sc-val"><b class="fx-num">${airNow}</b><span class="fx-unit">°C</span></span>${upTo(airNow, top && top.tmax != null ? String(Math.round(top.tmax)) : null, '°C')}</div>`
+      : `<div class="sc-read"><span class="sc-lab">${now ? 'Houle' : 'Houle, au plus haut'}</span><span class="sc-val"><b class="fx-num">${waveNow}</b><span class="fx-unit">m</span></span>${per ? `<span class="sc-sub">${esc(`une vague toutes les ${Math.round(per)} s`)}</span>` : ''}${upTo(waveNow, top && top.wave != null ? fmt1(top.wave) : null, 'm')}</div>`;
+    const wind = `<div class="sc-read sc-read-wind"><span class="sc-lab">${now ? 'Vent' : 'Vent, au plus fort'}</span><span class="sc-val"><b class="fx-num">${w != null ? w : '—'}</b><span class="fx-unit">km/h</span>${arrow}<span class="fx-unit">${esc(direction(d.windDir))}</span></span>${side ? `<span class="sc-sub">${esc(SIDE_LABEL[side])}</span>` : ''}${upTo(w != null ? String(w) : '—', top && top.wind != null ? String(Math.round(top.wind)) : null, 'km/h')}</div>`;
     sc.querySelector('.sc-now').innerHTML = `<span class="sc-day">${esc(now ? 'Maintenant' : dayName(d.date, i))}</span>${first}${wind}`;
     host.querySelectorAll('[data-scene-day]').forEach(b => { const on = +b.dataset.sceneDay === i; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('is-on', on); });
     watchScene(sc);
@@ -417,7 +463,7 @@
     /* Fiche v2 : le même bloc sert deux onglets (data-fx-view, lu par fiche.css). « Conditions » montre les trois
        prochains jours et un lien ; « Prévisions » montre les 7 jours (meilleur créneau mis en avant) et l’heure par heure,
        puis l’heure du relevé et les sources en note. */
-    host.innerHTML = `<div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours</h3>${sceneHTML(daily, inland)}<div class="fx-days">${daily.slice(0, 3).map((d, i) => nextDay(d, i, inland)).join('')}</div><button type="button" class="fx-more" data-fx-tab="previsions">Toutes les prévisions</button></div>`
+    host.innerHTML = `<div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours</h3>${sceneHTML(daily, inland)}<p class="fx-note fx-days-note">Le maximum de chaque jour. Touche un jour pour le voir.</p><div class="fx-days">${daily.slice(0, 3).map((d, i) => nextDay(d, i, inland)).join('')}</div><button type="button" class="fx-more" data-fx-tab="previsions">Toutes les prévisions</button></div>`
       + `<div class="wx-block wx-week" data-fx-view="forecast"><h3 class="fx-title">Les 7 jours</h3>${slots.top}${weekRows(daily, inland, slots)}<p class="fx-note fx7-hint">Touche un jour pour voir les rafales, la pluie, l’UV et le soleil.</p></div>`
       + `<div class="wx-block wx-hours" data-fx-view="forecast"><h3 class="fx-title">Heure par heure</h3>${hoursTable(next, daily, inland, slots.hours, gap ? utc : '')}</div>`
       + `<p class="fx-note fx7-stamp" data-fx-view="forecast">${esc(updated)}</p>`
@@ -496,9 +542,11 @@
     /* Le relevé du moment arrive : la scène d’aujourd’hui passe sur « Maintenant » (sauf si un autre jour est choisi). */
     try {
       const host = $('#spotWeek'), on = host && host.querySelector('[data-scene-day][aria-pressed="true"]');
-      if (shown && shown.s.id === s.id && (!on || on.dataset.sceneDay === '0')) {
+      if (shown && shown.s.id === s.id) {
         const inland = isInland(s), W = window.SpotWeatherModel, daily = W ? W.days(shown.weather, shown.marine, {inland}) : [];
-        if (daily[0]) paintScene(host, daily[0], 0, s, inland);
+        /* La carte « Aujourd’hui » suit toujours le relevé ; la scène seulement si elle montre aujourd’hui. */
+        if (daily[0] && (!on || on.dataset.sceneDay === '0')) paintScene(host, daily[0], 0, s, inland);
+        else if (daily[0]) paintToday(host, daily[0], nowOf(s, inland), inland);
       }
     } catch (e) {}
   }

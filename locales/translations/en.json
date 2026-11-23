@@ -11244,5 +11244,7 @@
  "Sandwichs": "Sandwiches",
  "Sushis": "Sushi",
  "Tapas": "Tapas",
- "Viandes": "Meat"
+ "Viandes": "Meat",
+ "jusqu’à {0} {1} aujourd’hui": "up to {0} {1} today",
+ "Le maximum de chaque jour. Touche un jour pour le voir.": "Each day’s maximum. Tap a day to see it."
 }
