@@ -491,3 +491,8 @@ test('arrivée : moins d’une seconde, une seule courbe, transform et opacity s
     for (const d of m[1].matchAll(/\{([^}]*)\}/g)) for (const prop of d[1].split(';').filter(Boolean)) assert.match(prop, /^(transform|opacity):/);
   assert.match(app, /setTimeout\(function\(\)\{detail\.classList\.remove\('px-in'\);\},1100\);/);
 });
+
+test('ouverture : le niveau de danger s’affiche d’emblée, il ne compte jamais depuis zéro', () => {
+  assert.match(app, /document\.querySelectorAll\('#dHeroNow \.hx-chip:not\(\.hx-danger\) \[data-hx-count\]'\)\.forEach\(count\);/);
+  assert.doesNotMatch(app, /querySelectorAll\('#dHeroNow \[data-hx-count\]'\)/);
+});

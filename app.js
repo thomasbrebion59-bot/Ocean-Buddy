@@ -1257,7 +1257,8 @@ function showDetailCat(cat,shouldScroll=true){
     var d=e.detail||{};if(!d.ready||counted===d.id||detailReduced())return;
     if(document.body.dataset.screen!=='detail'||wrap.scrollTop>40)return;
     counted=d.id;
-    document.querySelectorAll('#dHeroNow [data-hx-count]').forEach(count);
+    /* Le niveau de danger ne compte pas depuis zéro : il s'affiche d'emblée à sa valeur (jamais « 0 sur 4 », même un instant). */
+    document.querySelectorAll('#dHeroNow .hx-chip:not(.hx-danger) [data-hx-count]').forEach(count);
   });
 })();
 function worldLab(sid){
