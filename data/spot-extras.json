@@ -1,7 +1,7 @@
 {
  "v": 1,
  "osm": {
-  "extracted": "2026-11-20",
+  "extracted": "2026-11-23",
   "license": "Données © les contributeurs d'OpenStreetMap, sous licence ODbL",
   "source": "https://www.openstreetmap.org/copyright"
  },
@@ -426,6 +426,14 @@
      "way/685196988"
     ]
    ],
+   "E": [
+    [
+     "Blue Islands Diving",
+     2155,
+     "scuba_diving",
+     "node/12215478118"
+    ]
+   ],
    "L": [
     [
      "Artiem Sports",
@@ -601,6 +609,32 @@
      "node/4066784134"
     ]
    ],
+   "E": [
+    [
+     "Bleu Marine Réunion",
+     2733,
+     "scuba_diving",
+     "node/3034352313"
+    ],
+    [
+     "Giras Suwan Macha",
+     2938,
+     "scuba_diving",
+     "node/8347749568"
+    ],
+    [
+     "Gloria Maris",
+     2939,
+     "scuba_diving",
+     "node/6155467419"
+    ],
+    [
+     "Corail Plongée",
+     2981,
+     "scuba_diving",
+     "way/145713696"
+    ]
+   ],
    "r": 3000
   },
   "penhors": {
@@ -677,6 +711,14 @@
      394,
      "",
      "node/10687336105"
+    ]
+   ],
+   "E": [
+    [
+     "Dive ´n smile",
+     1525,
+     "scuba_diving",
+     "node/5303669123"
     ]
    ],
    "L": [
@@ -757,6 +799,14 @@
      "node/10815167829"
     ]
    ],
+   "E": [
+    [
+     "Atlantis Divers",
+     1487,
+     "scuba_diving",
+     "way/129221969"
+    ]
+   ],
    "L": [
     [
      "Emnoronha",
@@ -798,6 +848,14 @@
      381,
      "sushi",
      "node/13918173351"
+    ]
+   ],
+   "E": [
+    [
+     "Casa del Buceo",
+     1377,
+     "scuba_diving",
+     "node/4390530190"
     ]
    ],
    "r": 3000
@@ -1081,6 +1139,26 @@
      "node/5674860322"
     ]
    ],
+   "E": [
+    [
+     "Penida Dive Resort",
+     844,
+     "scuba_diving",
+     "node/2721145685"
+    ],
+    [
+     "Warnakali",
+     1540,
+     "scuba_diving",
+     "node/6224409785"
+    ],
+    [
+     "Freedive Nusa",
+     1944,
+     "scuba_diving",
+     "node/6367420588"
+    ]
+   ],
    "L": [
     [
      "Nomads Diving",
@@ -1142,13 +1220,39 @@
      "node/5304784521"
     ]
    ],
-   "L": [
+   "E": [
     [
      "Gili Sanctum",
      360,
-     "boutique",
+     "scuba_diving",
      "node/9769685074"
     ],
+    [
+     "Gili Scuba Diving",
+     362,
+     "scuba_diving",
+     "node/2380050107"
+    ],
+    [
+     "Gili Divers",
+     397,
+     "scuba_diving",
+     "node/2380050044"
+    ],
+    [
+     "Mango Dive",
+     409,
+     "scuba_diving",
+     "node/2380050388"
+    ],
+    [
+     "DSM Dive Gili Trawangan",
+     486,
+     "scuba_diving",
+     "way/327552941"
+    ]
+   ],
+   "L": [
     [
      "Big Bubble Dive",
      365,
@@ -1207,6 +1311,38 @@
      852,
      "thai",
      "node/12692258352"
+    ]
+   ],
+   "E": [
+    [
+     "Flow Divers",
+     221,
+     "scuba_diving",
+     "node/14177504579"
+    ],
+    [
+     "French Kiss Divers - Sairee",
+     972,
+     "scuba_diving",
+     "node/5436366380"
+    ],
+    [
+     "Blue Immersion",
+     1109,
+     "scuba_diving",
+     "node/2820040208"
+    ],
+    [
+     "Phoenix Diver",
+     1203,
+     "scuba_diving",
+     "node/1617098871"
+    ],
+    [
+     "Rainbow Fish Divers",
+     1252,
+     "scuba_diving",
+     "node/3956359312"
     ]
    ],
    "L": [
@@ -1372,6 +1508,14 @@
      297,
      "",
      "way/169602429"
+    ]
+   ],
+   "E": [
+    [
+     "Karibik Diving",
+     174,
+     "scuba_diving",
+     "node/1269638941"
     ]
    ],
    "L": [
@@ -2007,6 +2151,441 @@
     ]
    ],
    "r": 3000
+  },
+  "elgouna": {
+   "R": [
+    [
+     "La Rotisserie",
+     269,
+     "",
+     "way/372503634"
+    ],
+    [
+     "Mios",
+     499,
+     "seafood",
+     "node/11637890121"
+    ],
+    [
+     "Marco Polo",
+     643,
+     "international",
+     "node/4382568290"
+    ],
+    [
+     "El Sayadeen",
+     681,
+     "",
+     "node/4382572590"
+    ],
+    [
+     "The Grill (former: Oriental Grill)",
+     715,
+     "grill",
+     "node/4945644213"
+    ]
+   ],
+   "E": [
+    [
+     "Scuba World",
+     1815,
+     "scuba_diving",
+     "node/13942657217"
+    ],
+    [
+     "Orca diveclub",
+     2054,
+     "scuba_diving",
+     "node/11637790881"
+    ]
+   ],
+   "L": [
+    [
+     "The Diveconnection",
+     477,
+     "boutique",
+     "way/402804052"
+    ],
+    [
+     "Osmosis Kitebording",
+     738,
+     "boutique",
+     "node/4382568092"
+    ],
+    [
+     "Colona Divers",
+     1337,
+     "boutique",
+     "node/3907434554"
+    ]
+   ],
+   "r": 3000
+  },
+  "kosterhavet": {
+   "R": [
+    [
+     "Kosters Trädgårdar",
+     697,
+     "",
+     "way/477995504"
+    ],
+    [
+     "Sundets Skaldjurscafe",
+     1328,
+     "",
+     "node/2313471147"
+    ],
+    [
+     "Strandkanten",
+     1336,
+     "burger;fish_and_chips",
+     "way/477791559"
+    ],
+    [
+     "Galejen",
+     1369,
+     "regional",
+     "way/478008279"
+    ],
+    [
+     "Hamngrillen",
+     1443,
+     "",
+     "node/1348489972"
+    ]
+   ],
+   "r": 3000
+  },
+  "biarritz": {
+   "R": [
+    [
+     "Eden Rock café",
+     289,
+     "",
+     "node/3704992427"
+    ],
+    [
+     "Carlos",
+     322,
+     "",
+     "node/11898257169"
+    ],
+    [
+     "Le Surfing Biarritz",
+     342,
+     "",
+     "node/11898258469"
+    ],
+    [
+     "Arena Biarritz",
+     347,
+     "french",
+     "node/4330743200"
+    ],
+    [
+     "Les Baigneuses",
+     364,
+     "french",
+     "node/4877320069"
+    ]
+   ],
+   "E": [
+    [
+     "La Vague Basque",
+     384,
+     "surfing",
+     "node/10973923405"
+    ],
+    [
+     "Jo Moraiz Surf School",
+     387,
+     "surfing",
+     "node/6577392285"
+    ]
+   ],
+   "L": [
+    [
+     "Lastage surfshop",
+     503,
+     "boutique",
+     "node/13261740761"
+    ],
+    [
+     "Lastage-Concept",
+     506,
+     "boutique",
+     "node/6041948377"
+    ],
+    [
+     "Biarritz Paradise Surf Shop",
+     763,
+     "boutique",
+     "node/6274733928"
+    ],
+    [
+     "Ripcurl",
+     1232,
+     "boutique",
+     "node/6814385987"
+    ],
+    [
+     "Takamaka",
+     1236,
+     "boutique",
+     "node/2799172207"
+    ]
+   ],
+   "r": 3000
+  },
+  "anglet": {
+   "R": [
+    [
+     "L'Arrantza",
+     318,
+     "regional",
+     "way/157142491"
+    ],
+    [
+     "Club House du Golf de Chiberta",
+     500,
+     "",
+     "node/12331649229"
+    ],
+    [
+     "La Fleur de Sel",
+     589,
+     "fine_dining",
+     "node/3871575591"
+    ],
+    [
+     "Abrazo",
+     601,
+     "",
+     "node/5786488802"
+    ],
+    [
+     "Relais de Chiberta",
+     694,
+     "",
+     "node/12514979015"
+    ]
+   ],
+   "L": [
+    [
+     "Waimea Surf Shop",
+     1360,
+     "boutique",
+     "node/3246224537"
+    ],
+    [
+     "Rip Curl Anglet",
+     1514,
+     "boutique",
+     "node/9694518748"
+    ],
+    [
+     "FitnessBoutique",
+     1966,
+     "boutique",
+     "node/12038308750"
+    ],
+    [
+     "Chisteras Gonzalez",
+     2308,
+     "boutique",
+     "node/11078440458"
+    ],
+    [
+     "HEXA",
+     2541,
+     "boutique",
+     "node/9990655417"
+    ]
+   ],
+   "r": 3000
+  },
+  "lafitenia": {
+   "R": [
+    [
+     "Ilura",
+     194,
+     "fine_dining",
+     "node/3520000994"
+    ],
+    [
+     "Le Spot de Sainte-Barbe",
+     241,
+     "tapas;traditional",
+     "node/7764607343"
+    ],
+    [
+     "Parc Victoria",
+     492,
+     "",
+     "way/72483776"
+    ],
+    [
+     "L'Océan",
+     821,
+     "fine_dining",
+     "node/3520002689"
+    ],
+    [
+     "Aho Fina",
+     825,
+     "",
+     "node/7595666124"
+    ]
+   ],
+   "L": [
+    [
+     "Océan Paddling Evolution2",
+     1448,
+     "location",
+     "node/8749940307"
+    ],
+    [
+     "L'indalo Sun-shop",
+     2176,
+     "boutique",
+     "node/7698595676"
+    ],
+    [
+     "Hawaii Surf",
+     2803,
+     "boutique",
+     "node/11132751528"
+    ],
+    [
+     "Decathlon",
+     2930,
+     "boutique",
+     "node/11197847618"
+    ]
+   ],
+   "r": 3000
+  },
+  "sauveterre": {
+   "R": [
+    [
+     "Restaurant du Nid d'été",
+     623,
+     "",
+     "way/108908277"
+    ],
+    [
+     "Mireille Oasis",
+     1043,
+     "",
+     "node/12123881609"
+    ],
+    [
+     "La Fleur de sel",
+     1095,
+     "",
+     "node/2724390934"
+    ],
+    [
+     "Le Prénom",
+     1913,
+     "",
+     "node/14093904401"
+    ],
+    [
+     "Pizza West",
+     2065,
+     "pizza",
+     "node/3932195535"
+    ]
+   ],
+   "L": [
+    [
+     "La Terrasse des Salines",
+     1750,
+     "location",
+     "way/1193124878"
+    ],
+    [
+     "Base Yakanoë des Loirs",
+     1775,
+     "location",
+     "node/14085370558"
+    ],
+    [
+     "Decathlon",
+     2035,
+     "boutique",
+     "way/368095222"
+    ],
+    [
+     "Intersport",
+     2365,
+     "boutique",
+     "node/3844286685"
+    ]
+   ],
+   "r": 3000
+  },
+  "lapalue": {
+   "R": [
+    [
+     "L'Hermine",
+     4507,
+     "french",
+     "node/2133744962"
+    ],
+    [
+     "Sovaj'",
+     5970,
+     "regional;french",
+     "way/53977290"
+    ],
+    [
+     "Hôtel Restaurant Julia",
+     6363,
+     "",
+     "node/2092275270"
+    ],
+    [
+     "Bistrot Le 34",
+     6411,
+     "french",
+     "node/2092280749"
+    ],
+    [
+     "Cantine et canons",
+     6530,
+     "",
+     "node/9255787317"
+    ]
+   ],
+   "L": [
+    [
+     "K rider club",
+     5001,
+     "boutique",
+     "node/12026828243"
+    ],
+    [
+     "Absolute SURF - ESB CROZON-MORGAT",
+     6576,
+     "boutique",
+     "node/3230960894"
+    ],
+    [
+     "Catavoile",
+     6760,
+     "location",
+     "node/6738113005"
+    ],
+    [
+     "Sport & Nature",
+     6778,
+     "location",
+     "node/6738077723"
+    ]
+   ],
+   "r": 8000
   }
  },
  "prix": {

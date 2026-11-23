@@ -13,7 +13,7 @@
   const ZONES_URL_I18N={en:'assets/data/culture-zones.en.js?v=bf73a60bed15',es:'assets/data/culture-zones.es.js?v=5ecede979b85'};
   /* Lieux autour du spot (OpenStreetMap) et niveau des prix par pays (Banque mondiale) : scripts/build-spot-extras.cjs,
      chargés à l’ouverture d’une fiche, jamais au démarrage. */
-  const EXTRAS_URL='assets/data/spot-extras.js?v=938e24ce7c9f';
+  const EXTRAS_URL='assets/data/spot-extras.js?v=664f4cb4788a';
   /* Hors français, le contenu éditorial (esprit du lieu, lieux, libellés d’hébergement) s’affiche en anglais.
      Il est marqué translate="no" pour que i18n.js ne le retraduise pas par morceaux ; les libellés d’interface restent traduisibles. */
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||'fr';
