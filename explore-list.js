@@ -664,11 +664,19 @@
     };
     const restoring = () => window.OceanNavigation?.restoreScroll?.() != null;
     const toMap = () => { if (typeof setView === 'function' && typeof spotWorld !== 'undefined' && spotWorld) setView('map'); };
-    wrapAfter('go', s => ({ from: body.dataset.screen, s, restoring: restoring() }), (ctx) => {
+    /* Entrée dans Explorer : lue sur l’évènement « ocean:navigate », émis par go() lui-même, et non en enveloppant go.
+       Dans l’app iPhone, les scripts sont chargés un à un après DOMContentLoaded : ce fichier passe avant app.js, go
+       n’existait pas encore et l’enveloppe n’était jamais posée (Explorer s’ouvrait sur la liste ; simulateur, 23 nov.).
+       La vue part après la fin de go et de ses enveloppes (microtâche), comme le faisait l’enveloppe. */
+    let from = body.dataset.screen || 'home';
+    window.addEventListener('ocean:navigate', e => {
+      const ctx = { from, s: e.detail, restoring: restoring() }; from = e.detail;
       if (ctx.s !== 'spots' || ctx.restoring || ctx.from === 'spots' || ctx.from === 'detail') return;
-      toMap();
+      queueMicrotask(toMap);
     });
-    wrapAfter('backToWorlds', null, () => { if (body.dataset.screen === 'spots') { toMap(); setTimeout(() => window.OceanMap?.overview?.(), 60); } });
+    /* backToWorlds n’existe qu’une fois app.js chargé : enveloppé dès qu’il existe (au plus tard à la première navigation). */
+    const wrapBack = () => wrapAfter('backToWorlds', null, () => { if (body.dataset.screen === 'spots') { toMap(); setTimeout(() => window.OceanMap?.overview?.(), 60); } });
+    wrapBack(); window.addEventListener('load', wrapBack, { once: true }); window.addEventListener('ocean:navigate', wrapBack, { once: true });
   }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', globeFirst, { once: true }); else globeFirst();
 

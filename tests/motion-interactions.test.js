@@ -198,3 +198,10 @@ test('aucun calque animé ne retient un toucher', () => {
   for (const layer of ['.ob-zoom', '.ob-tab-ink']) assert.match(css, new RegExp(layer.replace('.', '\\.') + '\\{[^}]*pointer-events:none'), layer);
   assert.doesNotMatch(noComments(motionJs), /document\.createElement\('div'\)[^;]*;(?![^\n]*ob-zoom)/, 'un seul calque créé par le script : celui du vol, traversé par les touchers');
 });
+
+/* Simulateur, 23 nov. : le reflet en boucle des boutons .cta (ctaSweep, base.css) tournait encore sur « J'ai surfé ici »
+   dans la fiche, où ce reflet est masqué, y compris en mouvement réduit. Il est coupé. */
+test('fiche : aucun reflet en boucle sous le bouton « J’ai surfé ici »', () => {
+  const css = require('node:fs').readFileSync(require('node:path').join(__dirname, '..', 'fiche.css'), 'utf8');
+  assert.match(css, /#dLogBtn::after\{content:none!important;display:none!important;animation:none!important\}/);
+});

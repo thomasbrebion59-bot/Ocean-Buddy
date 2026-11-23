@@ -468,7 +468,7 @@ html .ocean-v2 #detail .dcat[data-cat="infos"] #spotAreaMap .area-map-footer a{d
 /* « J’ai surfé ici » (ou son équivalent), en bas de l’onglet : un bouton large, texte entier. */
 html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 10px;width:100%;min-height:52px;margin:16px 0 8px;padding:10px 18px;box-sizing:border-box;
   border:0;border-radius:999px;background:var(--t-main)!important;color:var(--t-on-main);box-shadow:none!important;font:700 var(--fiche-text)/1.2 var(--body);letter-spacing:0;text-transform:none;white-space:normal;overflow:visible;text-align:center}
-html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn::before,html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn::after{content:none!important;display:none!important}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn::before,html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn::after{content:none!important;display:none!important;animation:none!important}
 html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn .cta-xp{flex:none;padding:4px 9px;border:0;border-radius:999px;background:color-mix(in srgb,var(--t-on-main) 18%,transparent);color:inherit;font:600 var(--fiche-note)/1 var(--body)}
 html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn :is(svg,img,.spico){flex:none}
 
