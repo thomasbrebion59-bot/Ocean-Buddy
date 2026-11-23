@@ -425,6 +425,7 @@
       ? `<div class="sc-read"><span class="sc-lab">${now ? 'Air' : 'Air, au plus chaud'}</span><span class="sc-val"><b class="fx-num">${airNow}</b><span class="fx-unit">°C</span></span>${upTo(airNow, top && top.tmax != null ? String(Math.round(top.tmax)) : null, '°C')}</div>`
       : `<div class="sc-read"><span class="sc-lab">${now ? 'Houle' : 'Houle, au plus haut'}</span><span class="sc-val"><b class="fx-num">${waveNow}</b><span class="fx-unit">m</span></span>${per ? `<span class="sc-sub">${esc(`une vague toutes les ${Math.round(per)} s`)}</span>` : ''}${upTo(waveNow, top && top.wave != null ? fmt1(top.wave) : null, 'm')}</div>`;
     const wind = `<div class="sc-read sc-read-wind"><span class="sc-lab">${now ? 'Vent' : 'Vent, au plus fort'}</span><span class="sc-val"><b class="fx-num">${w != null ? w : '—'}</b><span class="fx-unit">km/h</span>${arrow}<span class="fx-unit">${esc(direction(d.windDir))}</span></span>${side ? `<span class="sc-sub">${esc(SIDE_LABEL[side])}</span>` : ''}${upTo(w != null ? String(w) : '—', top && top.wind != null ? String(Math.round(top.wind)) : null, 'km/h')}</div>`;
+    sc.dataset.now = now ? '1' : '0';
     sc.querySelector('.sc-now').innerHTML = `<span class="sc-day">${esc(now ? 'Maintenant' : dayName(d.date, i))}</span>${first}${wind}`;
     host.querySelectorAll('[data-scene-day]').forEach(b => { const on = +b.dataset.sceneDay === i; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('is-on', on); });
     watchScene(sc);
@@ -463,7 +464,7 @@
     /* Fiche v2 : le même bloc sert deux onglets (data-fx-view, lu par fiche.css). « Conditions » montre les trois
        prochains jours et un lien ; « Prévisions » montre les 7 jours (meilleur créneau mis en avant) et l’heure par heure,
        puis l’heure du relevé et les sources en note. */
-    host.innerHTML = `<div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours</h3>${sceneHTML(daily, inland)}<p class="fx-note fx-days-note">Le maximum de chaque jour. Touche un jour pour le voir.</p><div class="fx-days">${daily.slice(0, 3).map((d, i) => nextDay(d, i, inland)).join('')}</div><button type="button" class="fx-more" data-fx-tab="previsions">Toutes les prévisions</button></div>`
+    host.innerHTML = `<div class="fx-scene-wrap" data-fx-view="now">${sceneHTML(daily, inland)}</div><div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours</h3><p class="fx-note fx-days-note">Le maximum de chaque jour. Touche un jour pour le voir.</p><div class="fx-days">${daily.slice(0, 3).map((d, i) => nextDay(d, i, inland)).join('')}</div><button type="button" class="fx-more" data-fx-tab="previsions">Toutes les prévisions</button></div>`
       + `<div class="wx-block wx-week" data-fx-view="forecast"><h3 class="fx-title">Les 7 jours</h3>${slots.top}${weekRows(daily, inland, slots)}<p class="fx-note fx7-hint">Touche un jour pour voir les rafales, la pluie, l’UV et le soleil.</p></div>`
       + `<div class="wx-block wx-hours" data-fx-view="forecast"><h3 class="fx-title">Heure par heure</h3>${hoursTable(next, daily, inland, slots.hours, gap ? utc : '')}</div>`
       + `<p class="fx-note fx7-stamp" data-fx-view="forecast">${esc(updated)}</p>`

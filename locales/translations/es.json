@@ -11305,5 +11305,11 @@
  "Pas aujourd’hui": "Hoy no",
  "Pas demain": "Mañana no",
  "Tour du monde": "Vuelta al mundo",
- "Trouver un spot": "Encontrar un spot"
+ "Trouver un spot": "Encontrar un spot",
+ "Illustration": "Ilustración",
+ "Illustration, ce n’est pas une photo du lieu": "Ilustración, no es una foto del lugar",
+ "Illustration, pas une photo du lieu": "Ilustración, no es una foto del lugar",
+ "Scène illustrée": "Escena ilustrada",
+ "Scène illustrée, pas une photo du lieu": "Escena ilustrada, no es una foto del lugar",
+ "Aucune vue réelle n’existe encore dans l’eau ici. Cette illustration te donne une idée de l’ambiance, ce n’est pas une photo du lieu.": "Aún no hay vistas reales bajo el agua aquí. Esta ilustración te da una idea del ambiente; no es una foto del lugar."
 }

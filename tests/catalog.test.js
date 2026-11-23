@@ -77,7 +77,7 @@ test('every spot shows the six fixed practical rows without inventing missing fa
 test('each published photograph belongs to the destination and has usable attribution',()=>{
  assert.equal(all.length,TOTAL);
  assert.equal(Object.keys(photos).length,all.filter(s=>s.photo).length);
- for(const id of ['tamarindo','byronbay']){const p=all.find(s=>s.id===id).photo;assert.equal(p.ai,true,id);assert.equal(p.label,'Illustration IA',id);assert.match(p.caption,/pas une photo du lieu/,id);assert.ok(photos[id],id);}
+ for(const id of ['tamarindo','byronbay']){const p=all.find(s=>s.id===id).photo;assert.equal(p.ai,true,id);assert.equal(p.label,'Illustration',id);assert.match(p.caption,/pas une photo du lieu/,id);assert.ok(photos[id],id);}
  for(const s of all.filter(s=>s.photo?.ai))assert.match(s.photo.src,/-ia\.webp$/,s.id);
  /* Couvertures revues en octobre 2026 : photos du lieu même, Wikimedia Commons. */
  assert.match(photos.cumbuco.source,/Praia_do_cumbuco/);

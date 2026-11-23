@@ -43,7 +43,7 @@ for path in sorted(INBOX.glob('*')) if INBOX.is_dir() else []:
             rel = f'assets/scenes/{sid}-{n}.webp'
             save(image, ROOT / rel, (1920, 1920))
             rows = [r for r in scenes.get(sid, []) if r['src'] != rel]
-            rows.append({'src': rel, 'title': TITLES[(int(n) - 1) % len(TITLES)], 'caption': 'Scène illustrée par IA'})
+            rows.append({'src': rel, 'title': TITLES[(int(n) - 1) % len(TITLES)], 'caption': 'Scène illustrée'})
             scenes[sid] = sorted(rows, key=lambda r: r['src'])
             added += 1
         else:
@@ -57,8 +57,8 @@ for path in sorted(INBOX.glob('*')) if INBOX.is_dir() else []:
             spot['photo'] = {
                 'ai': True, 'file': path.name, 'src': src, 'thumb': thumb, 'width': w, 'height': h,
                 'source': 'https://oceanbuddy.app/photos.html',
-                'author': 'Illustration générée par IA (ChatGPT)', 'license': 'Illustration Ocean Buddy',
-                'caption': 'Illustration IA · ce n’est pas une photo du lieu', 'label': 'Illustration IA',
+                'author': 'Illustration Ocean Buddy', 'license': 'Illustration Ocean Buddy',
+                'caption': 'Illustration, ce n’est pas une photo du lieu', 'label': 'Illustration',
             }
             covers += 1
 

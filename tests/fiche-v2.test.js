@@ -260,7 +260,8 @@ test('danger : alerte dans Conditions à partir de 3 sur 4, tête de l’onglet 
 });
 
 test('Prévisions et Conditions : un seul bloc météo, deux vues ; trois prochains jours dans Conditions', () => {
-  assert.match(exp, /<div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours<\/h3>\$\{sceneHTML\(daily, inland\)\}<p class="fx-note fx-days-note">[^<]+<\/p><div class="fx-days">\$\{daily\.slice\(0, 3\)\.map/);
+  /* 23 nov. : la scène a son propre bloc, avant « Les prochains jours » (Conditions sans doublon, fiche.css). */
+  assert.match(exp, /<div class="fx-scene-wrap" data-fx-view="now">\$\{sceneHTML\(daily, inland\)\}<\/div><div class="fx-next" data-fx-view="now"><h3 class="fx-title fx-title-s">Les prochains jours<\/h3><p class="fx-note fx-days-note">[^<]+<\/p><div class="fx-days">\$\{daily\.slice\(0, 3\)\.map/);
   for (const c of ['wx-block wx-week', 'wx-block wx-hours']) assert.match(exp, new RegExp(`<div class="${c}" data-fx-view="forecast">`), c);
   assert.ok(exp.indexOf('wx-block wx-week" data-fx-view') < exp.indexOf('wx-block wx-hours" data-fx-view'), 'les 7 jours avant l’heure par heure');
   /* Fiche v2, onglet Prévisions : deux titres, plus de « Cette semaine », de « Max du jour » ni de cartes de créneau. */

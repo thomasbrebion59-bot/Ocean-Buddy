@@ -109,7 +109,7 @@
     const st=sc.step||{},credit=sc.type==='photo'&&sc.author?`<a href="${esc(sc.source||'#')}" target="_blank" rel="noopener noreferrer">Photo : ${esc(sc.author)} · ${esc(sc.license||'')}</a>`
       :sc.type==='wide'?`<a href="${esc(sc.page)}" target="_blank" rel="noopener noreferrer">Panorama : ${esc(sc.author||'Wikimedia Commons')} · ${esc(sc.license||'')}</a>`
       :sc.type==='pano'?`<a href="${esc(sc.page)}" target="_blank" rel="noopener noreferrer">360° : ${esc(sc.author||'Wikimedia Commons')} · ${esc(sc.license||'')}</a>`
-      :sc.type==='ai'?'<span class="voyage-ai">Scène illustrée par IA · pas une photo du lieu</span>':'';
+      :sc.type==='ai'?'<span class="voyage-ai">Scène illustrée, pas une photo du lieu</span>':'';
     if(sc.type==='explore')return dock(sc);
     const chips=[levelLabel(spot.level),...(spot.sports||[]).slice(0,3).map(sportLabel)].map(x=>`<span>${esc(x)}</span>`).join('');
     const live=typeof LIVE!=='undefined'?LIVE[spot.id]:null;const cond=live?.live?`<div class="voyage-live"><span><small>Vent</small><b>${esc(live.wind)}</b></span><span><small>Houle</small><b>${esc(live.swell)}</b></span><span><small>Eau</small><b>${esc(live.temp)}</b></span></div>`:'';
@@ -274,7 +274,7 @@
   }
   function credit(v){
     if(v.src==='google'||v.src==='google-ll')return streetView()?'<span>Images © Google Street View</span> <button type="button" class="vx-link" data-vx-revoke>Ne plus charger Google</button>':'<span>Vue fournie par Google Street View</span>';
-    if(v.src==='ai')return '<span class="voyage-ai">Illustration IA · pas une photo du lieu</span>';
+    if(v.src==='ai')return '<span class="voyage-ai">Illustration, pas une photo du lieu</span>';
     return `<a href="${esc(v.page)}" target="_blank" rel="noopener noreferrer">360° : ${esc(v.author||'Wikimedia Commons')} · ${esc(v.license||'')}</a>`;
   }
   function dock(sc){
@@ -290,7 +290,7 @@
     const kind=v?KIND[v.k]:null,place=v?[v.name,away(v,sc.origin)].filter(Boolean).join(' · '):'';
     const min=root.classList.contains('vx-min'),focused=c.contains(document.activeElement)?document.activeElement:null;
     c.innerHTML=`<div class="voyage-kicker"><img src="${esc(window.PoulpyIcons?.src?.(spot.sports?.[0])||'assets/design/poulpy.webp')}" alt="" width="34" height="34"><span>Explorer le spot</span><em>${views.length?`${sc.cur+1} / ${views.length}`:''}</em><button type="button" class="vx-fold" data-vx-min aria-expanded="${!min}" aria-label="${min?'Afficher les infos':'Masquer les infos'}">${icon.fold}</button></div>
-      ${kind?`<h2>${esc(kind.label)}</h2>${place?`<p class="vx-place">${icon.pin}<span>${esc(place)}</span></p>`:''}<p class="vx-text">${esc(v.src==='ai'?'Aucune vue réelle n’existe encore dans l’eau ici. Cette illustration IA te donne une idée de l’ambiance, ce n’est pas une photo du lieu.':kind.text)}</p>`:'<h2>Balade-toi sur le spot</h2>'}
+      ${kind?`<h2>${esc(kind.label)}</h2>${place?`<p class="vx-place">${icon.pin}<span>${esc(place)}</span></p>`:''}<p class="vx-text">${esc(v.src==='ai'?'Aucune vue réelle n’existe encore dans l’eau ici. Cette illustration te donne une idée de l’ambiance, ce n’est pas une photo du lieu.':kind.text)}</p>`:'<h2>Balade-toi sur le spot</h2>'}
       ${views.length>1?`<div class="vx-strip" role="group" aria-label="Points de vue">${strip}</div>`:''}${noWater}
       ${toWater||gy?`<div class="voyage-actions">${toWater}${gy}</div>`:''}<div class="voyage-credit">${v?credit(v):''}</div>`;
     const on=c.querySelector('.vx-chip.is-on'),strp=c.querySelector('.vx-strip');
