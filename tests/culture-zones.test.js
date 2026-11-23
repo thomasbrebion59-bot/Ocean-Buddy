@@ -70,7 +70,7 @@ test('fiche : un fait par carte, sa source d’un toucher et dans « Sources et 
   const g = read('spot-guide.js'), css = read('fiche.css');
   /* Chargé à l’ouverture d’une fiche, pas dans la page. */
   assert.doesNotMatch(read('index.html'), /culture-zones/);
-  assert.match(g, /if\(!window\.OCEAN_CULTURE_ZONES\)loadZones\(\)\.then\(\(\)=>\{if\(current===s\.id&&zoneOf\(s\)\)paintLive\(s,false\);\}\);/);
+  assert.match(g, /if\(!window\.OCEAN_CULTURE_ZONES\|\|\(zoneLang\(\)!=='fr'&&!window\['OCEAN_CULTURE_ZONES_'\+zoneLang\(\)\.toUpperCase\(\)\]\)\)loadZones\(\)\.then\(\(\)=>\{if\(current===s\.id&&zoneOf\(s\)\)paintLive\(s,false\);\}\);/);
   assert.match(g, /const d=window\.OCEAN_CULTURE_ZONES,id=s&&!s\.custom&&d\?\.spots\?\.\[s\.id\],z=id&&d\.zones\?\.\[id\];/, 'rattachement par l’identifiant du spot ; jamais pour un spot personnel');
   /* Carte : genre, titre, texte, source (lien externe) ; le texte du fait n’est pas envoyé au traducteur de page. */
   assert.match(g, /<a class="gl-fact-src" href="\$\{esc\(url\)\}" target="_blank" rel="noopener noreferrer"><span>Source :<\/span> <span\$\{NT\}>\$\{esc\(publisher\)\}<\/span><\/a><\/li>/);
@@ -113,4 +113,53 @@ test('illustrations propres aux faits : identifiant stable, fichier présent, si
     assert.ok(fs.existsSync(path.join(__dirname, '..', 'assets/fiche/faits', v + '.webp')), 'fichier : ' + v);
   }
   assert.match(read('spot-guide.js'), /ILLU\(own&&\/\^\[a-z0-9-\]\+\$\/\.test\(own\)\?'faits\/'\+own:zoneIllu\(kind,title\)\)/);
+});
+
+test('traductions : chaque fait a son titre et son texte en anglais et en espagnol, sans source propre ni décoration', () => {
+  const d = JSON.parse(read('data/culture-zones.json')), tr = JSON.parse(read('data/culture-zones-i18n.json'));
+  const ids = [];
+  for (const [id, z] of Object.entries(d.zones)) for (const f of z.facts) ids.push(B.factId(id, f.title));
+  assert.equal(new Set(ids).size, ids.length, 'identifiants de faits uniques');
+  assert.deepEqual(B.LANGS, ['en', 'es']);
+  for (const lang of B.LANGS) {
+    const t = tr[lang];
+    assert.deepEqual(Object.keys(t.facts).sort(), [...ids].sort(), lang + ' : un fait traduit par fait, aucun en trop');
+    assert.deepEqual(Object.keys(t.zones).sort(), Object.keys(d.zones).sort(), lang + ' : toutes les zones nommées');
+    for (const [k, x] of Object.entries(t.facts)) {
+      assert.equal(B.translationError(x), null, `${lang} ${k}`);
+      assert.deepEqual(Object.keys(x).sort(), ['text', 'title'], `${lang} ${k} : ni source ni mois dans une traduction`);
+    }
+    /* Un mot du coin garde son mot : le titre d’un fait « mot » contient le titre français sans son article. */
+    for (const [id, z] of Object.entries(d.zones)) for (const f of z.facts) if (f.kind === 'mot') {
+      const words = f.title.replace(/^(Le |La |Les |L’|Un |Une )/i, '').toLowerCase().split(/[\s,]+/).filter(w => w.length >= 2);
+      const title = t.facts[B.factId(id, f.title)].title.toLowerCase();
+      assert.ok(!words.length || words.some(w => title.includes(w)), `${lang} : le mot « ${f.title} » est gardé`);
+    }
+    /* Les années ne changent pas : chaque nombre à quatre chiffres du texte français est dans la traduction, sans autre.
+       (Les heures peuvent changer d’écriture : « 13 h » devient « 1 p.m. » en anglais.) */
+    for (const [id, z] of Object.entries(d.zones)) for (const f of z.facts) {
+      const nums = v => (String(v).match(/\d{4}/g) || []).map(Number).sort((a, b) => a - b).join(',');
+      assert.equal(nums(t.facts[B.factId(id, f.title)].text), nums(f.text), `${lang} ${id} « ${f.title} » : mêmes années`);
+    }
+    /* Le fichier chargé par la fiche suit l’ordre des faits, et son empreinte est dans spot-guide.js. */
+    const js = read(`assets/data/culture-zones.${lang}.js`);
+    const loaded = JSON.parse(js.slice(js.indexOf('=') + 1).trim().replace(/;$/, ''));
+    assert.deepEqual(loaded, { zones: B.translate(d, t).zones });
+    for (const [id, z] of Object.entries(d.zones)) assert.equal(loaded.zones[id].f.length, z.facts.length, id);
+    const hash = require('crypto').createHash('sha256').update(js).digest('hex').slice(0, 12);
+    assert.ok(read('spot-guide.js').includes(`assets/data/culture-zones.${lang}.js?v=${hash}`), lang + ' : empreinte à jour');
+  }
+  /* La donnée française et ses sources ne sont pas touchées par les traductions. */
+  assert.equal(B.translationError({ title: 'A', text: 'Un point · médian' }), 'flèche, tiret décoratif ou point médian');
+  assert.match(B.translationError({ title: 'A', text: 'x'.repeat(171) }), /170 au plus/);
+  const t = B.translate({ zones: { z: { facts: [{ title: 'Le pastis landais' }, { title: 'Baïne' }] } } }, { zones: { z: 'Zone' }, facts: { 'z--le-pastis-landais': { title: 'Pastis landais', text: 'A brioche.' }, 'z--disparu': { title: 'X', text: 'Y' } } });
+  assert.deepEqual(t.zones, { z: { n: 'Zone', f: [['Pastis landais', 'A brioche.'], 0] } });
+  assert.deepEqual(t.missing, ['z--baine']); assert.deepEqual(t.orphans, ['z--disparu']);
+});
+
+test('fiche : les faits s’affichent dans la langue de l’app, la source reste celle du fait français', () => {
+  const g = read('spot-guide.js');
+  assert.match(g, /const zoneLang=\(\)=>\(lang\(\)==='es'\?'es':english\(\)\?'en':'fr'\);/);
+  assert.match(g, /return Array\.isArray\(x\)&&x\[0\]&&x\[1\]\?\[f\[0\],x\[0\],x\[1\],\.\.\.f\.slice\(3\)\]:f;/, 'seuls le titre et le texte changent ; sans traduction, le français');
+  assert.match(g, /then\(\(\)=>need\(\)\?inject\(ZONES_URL_I18N\[lg\]\)\.catch\(\(\)=>\{\}\):null\)/, 'une traduction absente ne bloque pas la fiche');
 });

@@ -1,0 +1,1677 @@
+{
+ "note": "Traductions des faits de data/culture-zones.json (titre et texte seulement ; les sources ne changent pas). Clé : identifiant du fait (zone--titre français), voir scripts/build-culture-zones.cjs.",
+ "en": {
+  "zones": {
+   "fr-landes-hossegor": "Hossegor, Seignosse and Capbreton",
+   "fr-paysbasque-guethary": "Guéthary",
+   "fr-finistere-penhors": "Penhors and the Bigouden country",
+   "fr-var-portcros": "Port-Cros",
+   "fr-corse-rondinara": "Rondinara and Bonifacio",
+   "pt-ericeira": "Ericeira",
+   "es-minorque-macarella": "Southwest Menorca, Cala Macarella",
+   "gr-zakynthos-navagio": "Zakynthos (Zante), northwest coast",
+   "gb-gower-rhossili": "Gower Peninsula, Rhossili",
+   "pf-societe-tahiti": "Tahiti and Bora Bora",
+   "cl-pichilemu": "Pichilemu and Punta de Lobos",
+   "br-noronha": "Fernando de Noronha",
+   "mx-islamujeres": "Isla Mujeres",
+   "sn-dakar-ouakam": "Ouakam, Dakar",
+   "au-whitsundays-whitehaven": "Whitsundays, Whitehaven Beach",
+   "us-hawaii-kona": "Kona and Kealakekua Bay",
+   "mu-lemorne": "Le Morne",
+   "gp-desirade-petiteterre": "La Désirade and Petite-Terre",
+   "re-ermitage": "L’Ermitage and Saint-Paul",
+   "tz-zanzibar-mnemba": "Zanzibar, northeast (Mnemba)",
+   "it-sardaigne-stintino": "Stintino, La Pelosa",
+   "gr-cephalonie-myrtos": "Cephalonia, Myrtos",
+   "fr-normandie-dieppe": "Dieppe",
+   "fr-verdon-saintecroix": "Lake Sainte-Croix and the Moustiers country",
+   "bz-belize-blue-hole": "Belize and the Great Blue Hole",
+   "id-papua-rajaampat": "Raja Ampat",
+   "id-bali-nusapenida": "Nusa Penida",
+   "id-lombok-gili": "Gili Trawangan",
+   "pf-tuamotu-tikehau": "Tikehau",
+   "th-surat-thani-kohtao": "Ko Tao and Surat Thani",
+   "us-floride-keylargo": "Key Largo",
+   "es-galice-razo": "Razo and Carballo",
+   "co-sanandres": "San Andrés",
+   "nz-coromandel-cathedralcove": "Cathedral Cove and Mercury Bay",
+   "nl-la-haye-scheveningen": "Scheveningen",
+   "eg-mer-rouge-elgouna": "El Gouna",
+   "ky-grandcayman-stingray": "Stingray City and Grand Cayman",
+   "ve-losroques": "Los Roques",
+   "fj-vitilevu-beqa": "Beqa Lagoon",
+   "to-vavau": "Vavaʻu",
+   "yt-mayotte-ngouja": "N’Gouja and Kani-Kéli",
+   "no-jaeren-borestranda": "Jæren and Borestranda",
+   "se-bohuslan-kosterhavet": "Kosterhavet and Strömstad",
+   "dk-jutland-hvidesande": "Hvide Sande",
+   "ie-sligo-easkey": "Easkey",
+   "ec-galapagos-puntacarola": "San Cristóbal",
+   "vi-saintjohn-trunkbay": "Trunk Bay and Saint John"
+  },
+  "facts": {
+   "fr-landes-hossegor--le-pastis-landais": {
+    "title": "Pastis landais",
+    "text": "A brioche flavored with orange blossom, rum or vanilla, long reserved for weddings and village festivals."
+   },
+   "fr-landes-hossegor--la-course-landaise": {
+    "title": "Course landaise",
+    "text": "Écarteurs dodge the cow at the last moment, with no killing. It brightens local festivals from March to October."
+   },
+   "fr-landes-hossegor--baine": {
+    "title": "Baïne",
+    "text": "Gascon word for the pool of water running parallel to the beach, where the current can turn dangerous depending on the tide."
+   },
+   "fr-paysbasque-guethary--l-axoa": {
+    "title": "Axoa",
+    "text": "Diced veal simmered with pepper, onion and Espelette chili: a dish of fairs and festivals in the Basque Country."
+   },
+   "fr-paysbasque-guethary--kaixo": {
+    "title": "Kaixo",
+    "text": "“Hello” or “hi” in Basque, to be said with a smile."
+   },
+   "fr-paysbasque-guethary--les-fetes-de-la-saint-nicolas": {
+    "title": "Saint-Nicolas festivals",
+    "text": "Guéthary’s patron saint festivals take place every year in December, around Saint Nicholas."
+   },
+   "fr-paysbasque-guethary--la-pelote-au-grand-chistera": {
+    "title": "Grand chistera pelota",
+    "text": "The L’Olharroa club, founded in 1922, is nicknamed the Mecca of the grand chistera: games are played on the village wall."
+   },
+   "fr-finistere-penhors--le-pardon-de-penhors": {
+    "title": "Pardon de Penhors",
+    "text": "The Penhors pardon, in Pouldreuzic, takes place on the first Sunday of September: procession, mass and blessing, like any Breton pardon."
+   },
+   "fr-finistere-penhors--le-fest-noz": {
+    "title": "Fest-noz",
+    "text": "A Breton dance night open to all: you join the gavotte or the an dro after watching the steps."
+   },
+   "fr-finistere-penhors--le-far-breton": {
+    "title": "Far breton",
+    "text": "A cake of eggs, milk and salted butter, often with the prunes that Breton sailors brought back from Bordeaux."
+   },
+   "fr-finistere-penhors--demat": {
+    "title": "Demat",
+    "text": "“Hello” in Breton."
+   },
+   "fr-finistere-penhors--la-coiffe-bigoudene": {
+    "title": "The Bigouden headdress",
+    "text": "About thirty centimeters tall, it is now worn only at pardons, celebrations and festivals."
+   },
+   "fr-var-portcros--l-aioli": {
+    "title": "Aïoli",
+    "text": "Cod and vegetables served with a sauce of crushed garlic and olive oil: an emblematic dish of Provence."
+   },
+   "fr-var-portcros--une-peche-encadree": {
+    "title": "Regulated fishing",
+    "text": "On the island, fishing remains traditional but regulated: a charter since 1999 for 24 professionals, an annual permit for amateurs."
+   },
+   "fr-var-portcros--la-vigie": {
+    "title": "La Vigie",
+    "text": "A former semaphore station reached by the old strategic road, with a panorama of the archipelago and the Maures massif."
+   },
+   "fr-corse-rondinara--le-fiadone": {
+    "title": "Fiadone",
+    "text": "A fresh cake made with brocciu, sugar, eggs and lemon, an emblematic dessert of Corsica."
+   },
+   "fr-corse-rondinara--les-polyphonies-corses": {
+    "title": "Corsican polyphony",
+    "text": "Three-voice a cappella singing, born of village and shepherd life: vigils, pilgrimages and festivals keep it alive."
+   },
+   "fr-corse-rondinara--la-semaine-sainte-a-bonifacio": {
+    "title": "Holy Week in Bonifacio",
+    "text": "Brotherhoods hold well-attended processions during Holy Week, along with the Tenebrae services."
+   },
+   "pt-ericeira--l-oursin-d-ericeira": {
+    "title": "Ericeira sea urchin",
+    "text": "A specialty of the town: village restaurants cook sea urchin in several ways during the festival dedicated to it."
+   },
+   "pt-ericeira--le-festival-international-de-l-oursin": {
+    "title": "International Sea Urchin Festival",
+    "text": "Tastings, cooking shows and workshops at Ericeira’s municipal market: the 2026 edition ran from April 24 to May 3."
+   },
+   "pt-ericeira--reserve-mondiale-de-surf": {
+    "title": "World Surfing Reserve",
+    "text": "Since October 2011, the Ericeira coast has held the title of World Surfing Reserve, awarded by Save the Waves."
+   },
+   "es-minorque-macarella--sant-joan-a-ciutadella": {
+    "title": "Sant Joan in Ciutadella",
+    "text": "On June 23 and 24, riders and Menorcan horses parade through Ciutadella, with “bots” where the horse rears up."
+   },
+   "es-minorque-macarella--le-fromage-de-mao": {
+    "title": "Maó cheese",
+    "text": "A cow’s milk cheese with an orange rind rubbed with olive oil and paprika, protected by a PDO since 1985."
+   },
+   "es-minorque-macarella--la-caldereta-de-langosta": {
+    "title": "Caldereta de langosta",
+    "text": "A simmered spiny lobster stew, a typical dish of Menorca."
+   },
+   "es-minorque-macarella--pomada": {
+    "title": "Pomada",
+    "text": "Menorcan gin mixed with lemonade, drunk during the patron saint festivals."
+   },
+   "es-minorque-macarella--le-cami-de-cavalls": {
+    "title": "Camí de Cavalls",
+    "text": "A trail around the island on foot (GR 223), an old path that once linked the defense towers."
+   },
+   "gr-zakynthos-navagio--la-fete-de-saint-denys": {
+    "title": "Feast of Saint Dionysios",
+    "text": "On August 24, the relics of Saint Dionysios, patron of the island, are carried in procession in the evening through Zakynthos town."
+   },
+   "gr-zakynthos-navagio--le-raisin-de-corinthe-de-zante": {
+    "title": "Zante currant",
+    "text": "A small, sweet, seedless grape born on the island: along with olive oil, it is one of the island’s major products."
+   },
+   "gr-zakynthos-navagio--les-produits-du-terroir": {
+    "title": "Local products",
+    "text": "Olive oil, thyme honey, currants and wine are sold at roadside stalls and in the villages."
+   },
+   "gr-zakynthos-navagio--le-poete-solomos": {
+    "title": "The poet Solomos",
+    "text": "A statue of the poet Dionýsios Solomós adorns Zakynthos town’s main square, and a museum bears his name on Saint Mark’s Square."
+   },
+   "gb-gower-rhossili--le-laverbread": {
+    "title": "Laverbread",
+    "text": "A thick purée of porphyra seaweed boiled for hours, called “bara lawr” in Welsh."
+   },
+   "gb-gower-rhossili--les-coques-de-penclawdd": {
+    "title": "Penclawdd cockles",
+    "text": "Penclawdd families have gathered cockles from the Burry Inlet for generations; they are sold at Swansea market."
+   },
+   "gb-gower-rhossili--l-agneau-de-pre-sale-de-gower": {
+    "title": "Gower salt marsh lamb",
+    "text": "It grazes on samphire and sea lavender; PDO in the United Kingdom in 2021, then in the European Union in 2023."
+   },
+   "gb-gower-rhossili--worm-s-head": {
+    "title": "Worm’s Head",
+    "text": "Two islets, Inner Head and Outer Head, that can only be reached at low tide."
+   },
+   "gb-gower-rhossili--gallois-au-nord-anglais-au-sud": {
+    "title": "Welsh in the north, English in the south",
+    "text": "Northern Gower has many Welsh speakers, while the south is traditionally English-speaking."
+   },
+   "pf-societe-tahiti--le-heiva-i-tahiti": {
+    "title": "Heiva i Tahiti",
+    "text": "Each July, about two weeks of song and dance contests and ancestral sports like va’a, at Place To’atā."
+   },
+   "pf-societe-tahiti--le-poisson-cru": {
+    "title": "Poisson cru",
+    "text": "Fish marinated in lime juice and coconut milk: the island dish to try first."
+   },
+   "pf-societe-tahiti--le-tamaaraa": {
+    "title": "Tamaaraa",
+    "text": "A feast of pork, fish and breadfruit steamed in an earth oven, for big family occasions."
+   },
+   "pf-societe-tahiti--mauruuru": {
+    "title": "Mauruuru",
+    "text": "“Thank you” in Tahitian, pronounced ma-rou-rou."
+   },
+   "pf-societe-tahiti--la-fleur-de-tiare": {
+    "title": "The tiaré flower",
+    "text": "A flower behind the left ear says you are not looking for company; behind the right, that you are available."
+   },
+   "cl-pichilemu--la-fete-du-cochayuyo": {
+    "title": "Cochayuyo festival",
+    "text": "Five days of dishes made with cochayuyo, a sea algae; the last day fell on Sunday, July 26 in 2026."
+   },
+   "cl-pichilemu--les-fiestas-patrias": {
+    "title": "Fiestas Patrias",
+    "text": "Around September 18, Pichilemu celebrates the national holiday: traditional games, food, music and dance, day and night."
+   },
+   "cl-pichilemu--empanadas-et-completos": {
+    "title": "Empanadas and completos",
+    "text": "Empanadas and “completos” are the two great takeaway classics in Pichilemu."
+   },
+   "cl-pichilemu--le-parc-agustin-ross": {
+    "title": "Agustín Ross Park",
+    "text": "The Agustín Ross park and cultural center is one of Pichilemu’s five national monuments."
+   },
+   "br-noronha--le-centre-historique": {
+    "title": "The historic center",
+    "text": "Vila dos Remédios and the São Pedro dos Pescadores chapel are Brazilian cultural heritage, listed by Iphan in 2017."
+   },
+   "br-noronha--l-acai": {
+    "title": "Açaí",
+    "text": "After a dive, nothing beats a bowl of açaí served at the port, with granola and bananas."
+   },
+   "mx-islamujeres--le-tik-n-chik": {
+    "title": "Tik-n-chik",
+    "text": "A whole fish marinated in achiote, then grilled: the island’s signature dish."
+   },
+   "mx-islamujeres--punta-sur": {
+    "title": "Punta Sur",
+    "text": "At the southern tip, the ruins of an old lighthouse and of a temple to Ixchel, goddess of fertility."
+   },
+   "mx-islamujeres--isla-mujeres": {
+    "title": "Isla Mujeres",
+    "text": "The island’s name means “Island of Women” in Spanish."
+   },
+   "sn-dakar-ouakam--le-ceebu-jen": {
+    "title": "Ceebu jën",
+    "text": "Rice with fish and seasonal vegetables, born among Saint-Louis fishermen, UNESCO-listed in 2021; often eaten by hand."
+   },
+   "sn-dakar-ouakam--teranga": {
+    "title": "Teranga",
+    "text": "A Wolof word often translated as “hospitality”: sharing your meal and welcoming strangers into your home."
+   },
+   "sn-dakar-ouakam--un-village-lebou": {
+    "title": "A Lebou village",
+    "text": "Ouakam is one of the four original Lebou villages of the Cap-Vert peninsula, with Yoff, Ngor and Hann."
+   },
+   "sn-dakar-ouakam--la-mosquee-de-la-divinite": {
+    "title": "Mosque of the Divinity",
+    "text": "A holy man said he received an order in a dream, on June 28, 1973, to build this mosque by the ocean."
+   },
+   "au-whitsundays-whitehaven--le-great-barrier-reef-festival": {
+    "title": "Great Barrier Reef Festival",
+    "text": "Four days in Airlie Beach with fireworks, a regatta of recycled boats and a street parade: July 31 to August 2 in 2026."
+   },
+   "au-whitsundays-whitehaven--la-hamilton-island-race-week": {
+    "title": "Hamilton Island Race Week",
+    "text": "A major offshore regatta, described as Australia’s biggest: August 15 to 22 in 2026, with entertainment at the marina."
+   },
+   "au-whitsundays-whitehaven--le-marche-d-airlie-beach": {
+    "title": "Airlie Beach market",
+    "text": "Every Saturday from 7 a.m. to 1 p.m., on the waterfront: souvenirs, coffee, fresh fruit and local art."
+   },
+   "au-whitsundays-whitehaven--le-ngaro-track": {
+    "title": "Ngaro Track",
+    "text": "Opened in 2026, this 32 km trail runs from Whitehaven to Hill Inlet; the traditional owners ask you to walk it with respect."
+   },
+   "au-whitsundays-whitehaven--whitsunday": {
+    "title": "Whitsunday",
+    "text": "James Cook passed the islands on Sunday, June 3, 1770, the day of Pentecost (Whitsun), hence their name."
+   },
+   "us-hawaii-kona--le-cafe-de-kona": {
+    "title": "Kona coffee",
+    "text": "Only coffee from the slopes of Hualālai and Mauna Loa can be called Kona; a “Kona blend” requires just 10%."
+   },
+   "us-hawaii-kona--le-kona-coffee-cultural-festival": {
+    "title": "Kona Coffee Cultural Festival",
+    "text": "Since 1970, a ten-day coffee festival in November; the next edition is announced for November 5 to 14, 2027."
+   },
+   "us-hawaii-kona--aloha": {
+    "title": "Aloha",
+    "text": "A Hawaiian word for love, peace and compassion; it is also used to say hello and goodbye."
+   },
+   "us-hawaii-kona--mahalo": {
+    "title": "Mahalo",
+    "text": "A Hawaiian word meaning thanks, gratitude and esteem."
+   },
+   "us-hawaii-kona--pu-uhonua-o-honaunau": {
+    "title": "Puʻuhonua o Hōnaunau",
+    "text": "Near Kealakekua, this place of refuge saved anyone who had broken a kapu: a priest pardoned them, and they left free."
+   },
+   "mu-lemorne--le-dholl-puri": {
+    "title": "Dholl puri",
+    "text": "A flatbread of Indian origin that has become the Mauritian “fish and chips.”"
+   },
+   "mu-lemorne--les-gateaux-piments": {
+    "title": "Gâteaux piments",
+    "text": "Savory fritters, a variant of Indian vadai: literally chili cakes."
+   },
+   "mu-lemorne--maha-shivaratri-a-ganga-talao": {
+    "title": "Maha Shivaratri at Ganga Talao",
+    "text": "In February or March, for Maha Shivaratri, Mauritian Hindus make a pilgrimage to the crater lake of Ganga Talao."
+   },
+   "mu-lemorne--le-sega": {
+    "title": "Séga",
+    "text": "Born among the enslaved of Mauritius and Réunion, it is played with ravanne, maravanne and triangle; UNESCO-listed in 2014."
+   },
+   "mu-lemorne--le-morne-brabant": {
+    "title": "Le Morne Brabant",
+    "text": "UNESCO-listed in 2008, the mountain carries the legend of fleeing slaves who supposedly jumped from the rock in 1835 rather than be recaptured."
+   },
+   "gp-desirade-petiteterre--la-fet-a-kabrit": {
+    "title": "Fèt a kabrit",
+    "text": "At Easter weekend, La Désirade celebrates the goat: it is the island’s big event, along with the Gwadarun."
+   },
+   "gp-desirade-petiteterre--les-fetes-d-aout": {
+    "title": "August festivals",
+    "text": "August 13 to 17: patron saint festival on the 15th, traditional sailors’ festival on the 16th, then the festival of lost sailors on the 17th."
+   },
+   "gp-desirade-petiteterre--les-chantes-noel": {
+    "title": "Chantés Noël",
+    "text": "Every December, Christmas carols are sung all over the island, sometimes in private homes."
+   },
+   "gp-desirade-petiteterre--le-colombo": {
+    "title": "Colombo",
+    "text": "A West Indian curry of Indian origin, cooked with goat, pork, chicken or fish."
+   },
+   "re-ermitage--le-20-decembre-fet-kaf": {
+    "title": "December 20, fèt kaf",
+    "text": "A public holiday marking the abolition of slavery proclaimed in 1848; in Creole, it is called “fèt kaf” or “20 désamb.”"
+   },
+   "re-ermitage--le-rougail-saucisse": {
+    "title": "Rougail saucisse",
+    "text": "Sausages cooked Creole style with tomatoes, onions and chili, served with rice and beans."
+   },
+   "re-ermitage--le-maloya": {
+    "title": "Maloya",
+    "text": "Born in the time of slavery and carried by percussion (roulèr, kayamb), it has been UNESCO-listed since 2009."
+   },
+   "tz-zanzibar-mnemba--mwaka-kogwa": {
+    "title": "Mwaka Kogwa",
+    "text": "Shirazi New Year in Makunduchi, in July or August: a ritual fight, then a burning hut whose smoke is used to predict the year."
+   },
+   "tz-zanzibar-mnemba--la-pizza-de-zanzibar": {
+    "title": "Zanzibar pizza",
+    "text": "A kind of savory crêpe filled with beef, eggs and salad, eaten at the Forodhani night market in Stone Town."
+   },
+   "tz-zanzibar-mnemba--jus-de-canne-et-lait-de-coco": {
+    "title": "Sugarcane juice and coconut milk",
+    "text": "Stone Town’s sugarcane juice and fresh coconut milk are not to be missed."
+   },
+   "tz-zanzibar-mnemba--une-tenue-pudique": {
+    "title": "Modest dress",
+    "text": "Cover your legs and arms in town, and avoid public displays of affection; a bikini is fine on hotel beaches."
+   },
+   "it-sardaigne-stintino--le-musee-de-la-tonnara": {
+    "title": "Tonnara museum",
+    "text": "The former Saline tonnara fished tuna until the 1970s; the tuna fishermen’s museum has told its story since 2016."
+   },
+   "it-sardaigne-stintino--la-bottarga-de-thon": {
+    "title": "Tuna bottarga",
+    "text": "Dried tuna roe (bottarga) is among the dishes of the fishing tradition, along with garlic octopus and spiny lobster soup."
+   },
+   "it-sardaigne-stintino--la-regate-des-gozzi": {
+    "title": "Gozzi regatta",
+    "text": "Since 1983, Stintino has held a regatta for its gozzi, the fishermen’s traditional wooden sailboats."
+   },
+   "it-sardaigne-stintino--la-fete-de-la-madone": {
+    "title": "Feast of the Madonna",
+    "text": "September 8 is the day of Stintino’s patron saint, the Beata Vergine della Difesa."
+   },
+   "gr-cephalonie-myrtos--les-serpents-de-la-vierge": {
+    "title": "The Virgin’s snakes",
+    "text": "Before August 15, small harmless snakes, with a cross on their heads, enter the church of Markopoulo: a good omen."
+   },
+   "gr-cephalonie-myrtos--la-kreatopita": {
+    "title": "Kreatopita",
+    "text": "A meat pie, a farmhouse dish that is the specialty of Cephalonia."
+   },
+   "gr-cephalonie-myrtos--le-miel-de-thym": {
+    "title": "Thyme honey",
+    "text": "Cephalonia’s wild thyme honey is worth bringing home: its taste is truly distinctive."
+   },
+   "gr-cephalonie-myrtos--le-robola": {
+    "title": "Robola",
+    "text": "A white grape grown mostly in Cephalonia, often ungrafted on the island’s limestone soils."
+   },
+   "gr-cephalonie-myrtos--le-frappe-en-terrasse": {
+    "title": "Frappé on the terrace",
+    "text": "A frappé is a “ticket” to stay for hours on a terrace, like the Greeks do; also say hello in Greek."
+   },
+   "fr-normandie-dieppe--la-marmite-dieppoise": {
+    "title": "Marmite dieppoise",
+    "text": "A Dieppe specialty: a stew of fish and shellfish in white wine, with vegetables and herbs."
+   },
+   "fr-normandie-dieppe--la-foire-aux-harengs-et-a-la-coquille-saint-jacq": {
+    "title": "Herring and scallop fair",
+    "text": "Every third weekend of November, grilled herring is eaten with a braised potato and melted salted butter."
+   },
+   "fr-normandie-dieppe--le-marche-du-samedi": {
+    "title": "Saturday market",
+    "text": "On Saturdays, from 8:30 a.m. to 1 p.m., the food market fills Grande Rue, Place Nationale and Rue Saint-Jacques."
+   },
+   "fr-normandie-dieppe--le-festival-de-cerfs-volants": {
+    "title": "Kite festival",
+    "text": "The international kite festival returns in September: the 2025 edition took place from the 13th to the 21st, after three years away."
+   },
+   "fr-verdon-saintecroix--la-truffe-noire-d-aups": {
+    "title": "Aups black truffle",
+    "text": "Aups holds France’s third-largest black truffle market, in the morning, from late November to late February."
+   },
+   "fr-verdon-saintecroix--l-huile-d-olive-et-la-lavande": {
+    "title": "Olive oil and lavender",
+    "text": "Around Moustiers, they produce Haute-Provence PDO olive oil, as well as honey and lavender essences."
+   },
+   "fr-verdon-saintecroix--la-diane-de-moustiers": {
+    "title": "La Diane de Moustiers",
+    "text": "From August 31 to September 8, the Dianaïres wake the village with music at 5 a.m.; on the 8th, a dawn procession to the chapel."
+   },
+   "fr-verdon-saintecroix--l-etoile-de-moustiers": {
+    "title": "The Moustiers star",
+    "text": "A star hangs from a chain stretched between two cliffs above the village, according to the legend of the knight de Blacas."
+   },
+   "fr-verdon-saintecroix--la-faience-de-moustiers": {
+    "title": "Moustiers faience",
+    "text": "The village was famed for its faience in the 17th and 18th centuries; the art revived in 1925 with Marcel Provence."
+   },
+   "bz-belize-blue-hole--le-riz-aux-haricots": {
+    "title": "Rice and beans",
+    "text": "A staple dish of the Kriols: rice simmered with beans and coconut milk, served with meat and a salad."
+   },
+   "bz-belize-blue-hole--le-hudut-garifuna": {
+    "title": "Garifuna hudut",
+    "text": "Hudut is a Garifuna fish soup, prepared with or without coconut milk."
+   },
+   "bz-belize-blue-hole--le-garifuna-settlement-day": {
+    "title": "Garifuna Settlement Day",
+    "text": "On November 19, a public holiday: parades, street music and traditional dances, especially in Dangriga."
+   },
+   "bz-belize-blue-hole--le-st-george-s-caye-day": {
+    "title": "St George’s Caye Day",
+    "text": "On September 10, people mark the Battle of St George’s Caye, fought in 1798."
+   },
+   "id-papua-rajaampat--le-papeda": {
+    "title": "Papeda",
+    "text": "A sago porridge from the Moluccas and the west coast of Papua, served with fish in a yellow broth."
+   },
+   "id-papua-rajaampat--le-festival-pesona-raja-ampat": {
+    "title": "Pesona Raja Ampat Festival",
+    "text": "In October (15 to 18 in 2026), arts, local food and actions for the sea, in Raja Ampat. Admission is free."
+   },
+   "id-papua-rajaampat--le-sasi": {
+    "title": "Sasi",
+    "text": "Residents ban the harvest of certain resources: from the closing ceremony to the reopening one."
+   },
+   "id-papua-rajaampat--raja-ampat-les-quatre-rois": {
+    "title": "Raja Ampat, the four kings",
+    "text": "Raja Ampat means “four kings”: the name comes from a myth of seven eggs from which kings were born."
+   },
+   "id-bali-nusapenida--le-babi-guling": {
+    "title": "Babi guling",
+    "text": "Suckling pig stuffed with spices and spit-roasted, often served with lawar rice; a specialty of Bali."
+   },
+   "id-bali-nusapenida--les-canang-sari": {
+    "title": "Canang sari",
+    "text": "Every day, the Balinese place these small palm-leaf baskets as offerings, in temples and homes."
+   },
+   "id-bali-nusapenida--galungan": {
+    "title": "Galungan",
+    "text": "Every 210 days, decorated bamboo poles (penjor) line the roads. Next dates: January 13 and August 11, 2027."
+   },
+   "id-bali-nusapenida--le-basa-nosa": {
+    "title": "Basa Nosa",
+    "text": "On the island, people speak a Balinese specific to Nusa Penida, which people from the rest of Bali do not understand."
+   },
+   "id-lombok-gili--l-ayam-taliwang": {
+    "title": "Ayam Taliwang",
+    "text": "Spicy, sweet grilled chicken with shrimp paste, born in Taliwang, near Mataram, the capital of Lombok."
+   },
+   "id-lombok-gili--le-plecing-kangkung": {
+    "title": "Plecing kangkung",
+    "text": "Blanched water spinach, served cold with a spicy sambal, often alongside ayam Taliwang."
+   },
+   "id-lombok-gili--le-bau-nyale": {
+    "title": "Bau Nyale",
+    "text": "In February or March, sea worms are gathered by hand after midnight on Seger beach, in memory of a princess."
+   },
+   "id-lombok-gili--une-ile-sans-moteur": {
+    "title": "An island without engines",
+    "text": "Motor vehicles are banned by local decree: you get around by bicycle or cidomo, a small horse cart."
+   },
+   "pf-tuamotu-tikehau--le-poisson-cru-au-lait-de-coco": {
+    "title": "Poisson cru au lait de coco",
+    "text": "The best-known dish of Polynesia: raw fish marinated in lime juice and coconut milk."
+   },
+   "pf-tuamotu-tikehau--le-four-tahitien": {
+    "title": "Tahitian oven",
+    "text": "For festive meals, food is steamed in a pit lined with heated stones and covered with banana leaves."
+   },
+   "pf-tuamotu-tikehau--le-heiva-i-tahiti": {
+    "title": "Heiva i Tahiti",
+    "text": "Each July, in Papeete, competing groups present traditional songs and dances, along with Polynesian sports."
+   },
+   "pf-tuamotu-tikehau--les-parcs-a-poissons": {
+    "title": "Fish traps",
+    "text": "The atoll practices traditional fishing with fish traps, near the Tuheiava pass."
+   },
+   "th-surat-thani-kohtao--les-huitres-de-surat-thani": {
+    "title": "Surat Thani oysters",
+    "text": "The province is Thailand’s top oyster-farming area; they are eaten raw, with lime and chili."
+   },
+   "th-surat-thani-kohtao--les-ufs-rouges": {
+    "title": "Red eggs",
+    "text": "Salted duck eggs, preserved in a mix of earth and salt: a specialty of Surat Thani province."
+   },
+   "th-surat-thani-kohtao--le-chak-phra": {
+    "title": "Chak Phra",
+    "text": "Around October, nine days of processions of Buddha statues on land and water, with dugout canoe races."
+   },
+   "th-surat-thani-kohtao--ko-tao-l-ile-aux-tortues": {
+    "title": "Ko Tao, the turtle island",
+    "text": "Ko Tao means “turtle island” in Thai."
+   },
+   "th-surat-thani-kohtao--le-monogramme-du-roi": {
+    "title": "The king’s monogram",
+    "text": "Near Sairee beach, a rock bears the monogram left by King Chulalongkorn in 1899; it is still venerated."
+   },
+   "us-floride-keylargo--la-key-lime-pie": {
+    "title": "Key lime pie",
+    "text": "A Keys lime pie made with sweetened condensed milk; it has been Florida’s official pie since 2006."
+   },
+   "us-floride-keylargo--la-mini-saison-de-la-langouste": {
+    "title": "Lobster mini-season",
+    "text": "In July, the lobster mini-season opens for two days in the Keys (the 29th and 30th in 2026)."
+   },
+   "us-floride-keylargo--le-parc-pennekamp": {
+    "title": "Pennekamp Park",
+    "text": "Opened in 1963, it is the first underwater park in the United States; the Christ of the Abyss statue rests there in nearly 8 m of water."
+   },
+   "us-floride-keylargo--les-conchs": {
+    "title": "The Conchs",
+    "text": "Keys residents long called themselves “Conchs”; Key West even proclaimed its “Republic” on April 23, 1982."
+   },
+   "es-galice-razo--le-polbo-a-feira": {
+    "title": "Polbo á feira",
+    "text": "Octopus boiled in a copper pot, then sprinkled with coarse salt and paprika and drizzled with olive oil."
+   },
+   "es-galice-razo--la-queimada": {
+    "title": "Queimada",
+    "text": "A punch of pomace brandy, sugar and peels, set aflame while reciting a spell to drive away evil spirits."
+   },
+   "es-galice-razo--la-nuit-de-la-saint-jean": {
+    "title": "Saint John’s Eve",
+    "text": "June 23 is witches’ night in Galicia: this is when queimada is mostly prepared."
+   },
+   "es-galice-razo--la-morrina": {
+    "title": "Morriña",
+    "text": "A Galician word for the melancholy felt far from the land where you were born."
+   },
+   "es-galice-razo--la-feira-de-carballo": {
+    "title": "Carballo feira",
+    "text": "In Carballo, the farm produce market is held on Thursdays, and on the 2nd, 4th and 5th Sundays of the month."
+   },
+   "co-sanandres--le-rondon": {
+    "title": "Rondón",
+    "text": "A stew of fish or sea snails, cassava, plantain and breadfruit, cooked in coconut milk."
+   },
+   "co-sanandres--la-veda-du-crabe-noir": {
+    "title": "Black crab closed season",
+    "text": "Every year, from April 1 to July 31, hunting the black crab is banned, because the species is threatened."
+   },
+   "co-sanandres--le-creole-raizal": {
+    "title": "Raizal Creole",
+    "text": "The Raizals, the islands’ Afro-Caribbean community, speak the Creole of San Andrés and Providencia, plus Spanish and English."
+   },
+   "nz-coromandel-cathedralcove--te-whanganui-a-hei": {
+    "title": "Te Whanganui-A-Hei",
+    "text": "The Maori name of the place means “the great bay of Hei,” after a tohunga of the Te Arawa canoe."
+   },
+   "nz-coromandel-cathedralcove--le-hangi": {
+    "title": "Hāngī",
+    "text": "Maori earth-oven cooking: meat, vegetables and seafood cook on hot stones buried in the ground."
+   },
+   "nz-coromandel-cathedralcove--le-whitianga-oceans-festival": {
+    "title": "Whitianga Oceans Festival",
+    "text": "Every September, Whitianga celebrates Coromandel seafood (September 14 in 2024)."
+   },
+   "nz-coromandel-cathedralcove--matariki": {
+    "title": "Matariki",
+    "text": "Maori New Year, at the rising of the Pleiades, a public holiday since 2022: July 10, 2026, then June 25, 2027."
+   },
+   "nz-coromandel-cathedralcove--hot-water-beach": {
+    "title": "Hot Water Beach",
+    "text": "For two hours around low tide, you dig in the sand to let hot water seep up, up to 64 °C."
+   },
+   "nl-la-haye-scheveningen--le-hareng-nouveau": {
+    "title": "Hollandse Nieuwe",
+    "text": "Lightly salted raw herring, eaten holding it by the tail, often with raw onions."
+   },
+   "nl-la-haye-scheveningen--vlaggetjesdag": {
+    "title": "Vlaggetjesdag",
+    "text": "On the third Saturday of June, the harbor is decked with flags for the herring season, with the auction of the first small barrel."
+   },
+   "nl-la-haye-scheveningen--le-plongeon-du-nouvel-an": {
+    "title": "New Year’s Dive",
+    "text": "On January 1, a polar dip in the sea: 50,000 people took part in 2016."
+   },
+   "nl-la-haye-scheveningen--le-kurhaus": {
+    "title": "Kurhaus",
+    "text": "The Kurhaus, a hotel in Scheveningen, opened its doors in 1886."
+   },
+   "eg-mer-rouge-elgouna--le-koshari": {
+    "title": "Koshari",
+    "text": "A mix of rice, lentils and macaroni, sold on the street; some see it as Egypt’s national dish."
+   },
+   "eg-mer-rouge-elgouna--le-the": {
+    "title": "Tea",
+    "text": "Tea is Egypt’s national drink, often served with mint."
+   },
+   "eg-mer-rouge-elgouna--le-festival-du-film-d-el-gouna": {
+    "title": "El Gouna Film Festival",
+    "text": "Every October, the resort hosts a film festival founded in 2017."
+   },
+   "eg-mer-rouge-elgouna--al-gouna-la-lagune": {
+    "title": "Al-Gouna, the lagoon",
+    "text": "El Gouna’s Arabic name means “the lagoon”: the town spreads over 20 islands surrounded by lagoons."
+   },
+   "ky-grandcayman-stingray--le-lambi": {
+    "title": "Conch",
+    "text": "Conch is prepared marinated, in salad, in chowder or in stew; it has long been a staple dish of the Caymans."
+   },
+   "ky-grandcayman-stingray--la-pirates-week": {
+    "title": "Pirates Week",
+    "text": "In November, reenactments of pirate invasions, a big cultural parade and a cardboard boat race (November 8 to 22 in 2025)."
+   },
+   "ky-grandcayman-stingray--les-raies-de-stingray-city": {
+    "title": "The Stingray City rays",
+    "text": "The rays are said to have gathered when fishermen cleaned their catch in the shallows, then learned to associate boat engines with food."
+   },
+   "ve-losroques--l-arepa": {
+    "title": "Arepa",
+    "text": "The arepa, a corn cake, is eaten at any hour in Venezuela; the “reina pepiada” is filled with chicken, avocado and mayonnaise."
+   },
+   "ve-losroques--le-festival-de-la-langosta": {
+    "title": "Festival de la Langosta",
+    "text": "In November, when the fishing season opens, the archipelago celebrates the spiny lobster, one of its emblematic animals."
+   },
+   "ve-losroques--la-virgen-del-valle": {
+    "title": "Virgen del Valle",
+    "text": "In the second week of September, a boat procession leaves Crasquí for Gran Roque: the Virgin protects the fishermen."
+   },
+   "ve-losroques--gran-roque": {
+    "title": "Gran Roque",
+    "text": "Almost all residents live in Gran Roque, a small village of seven sand streets."
+   },
+   "fj-vitilevu-beqa--le-kokoda": {
+    "title": "Kokoda",
+    "text": "Raw fish marinated in lime and coconut milk, with diced vegetables (cucumber, tomato, onion)."
+   },
+   "fj-vitilevu-beqa--le-lovo": {
+    "title": "Lovo",
+    "text": "The lovo is the Fijian earth oven: heated stones in a pit, food covered with earth, for big occasions."
+   },
+   "fj-vitilevu-beqa--la-marche-sur-le-feu": {
+    "title": "Fire walking",
+    "text": "Five Beqa villages are renowned for fire walking (vilavilairevo), already a tourist attraction in 1902."
+   },
+   "fj-vitilevu-beqa--le-hibiscus-festival": {
+    "title": "Hibiscus Festival",
+    "text": "In late August and early September, Suva elects queens and offers cultural programs (August 31 to September 7 in 2024)."
+   },
+   "to-vavau--la-cuisine-traditionnelle": {
+    "title": "Traditional cuisine",
+    "text": "The traditional diet is based on taro, yam, banana, coconut and fish cooked in leaves."
+   },
+   "to-vavau--le-dimanche-tongien": {
+    "title": "Tongan Sunday",
+    "text": "The Sabbath is written into the constitution: on Sundays, shops and entertainment stop."
+   },
+   "to-vavau--le-four-en-terre-umu": {
+    "title": "The umu earth oven",
+    "text": "In the past, the big midday meal was cooked in an earth oven; wedding and funeral pork was also prepared there."
+   },
+   "to-vavau--le-port-de-neiafu": {
+    "title": "Neiafu harbor",
+    "text": "Neiafu, capital of Vavaʻu, is a sheltered port; from May to October, it welcomes sailboats from around the world."
+   },
+   "yt-mayotte-ngouja--le-mataba": {
+    "title": "Mataba",
+    "text": "Cassava leaves simmered in coconut milk, a dish that takes long to prepare and is served mostly at ceremonies."
+   },
+   "yt-mayotte-ngouja--la-chahoula-ya-nadzi": {
+    "title": "Chahoula ya nadzi",
+    "text": "Rice cooked in water or coconut milk, a must at ceremonies (circumcision, debbah, maoulida) and big family meals."
+   },
+   "yt-mayotte-ngouja--le-maoulida-shengue": {
+    "title": "Maoulida shengué",
+    "text": "A traditional art mixing song, dance and choreography, on the national intangible cultural heritage list since June 2022."
+   },
+   "yt-mayotte-ngouja--la-salouva": {
+    "title": "Salouva",
+    "text": "Women often wear the salouva, a colorful garment; men wear white cotton outfits."
+   },
+   "yt-mayotte-ngouja--le-kibushi": {
+    "title": "Kibushi",
+    "text": "A language of Malagasy origin, Kibushi is the mother tongue of about 30% of Mayotte’s residents."
+   },
+   "no-jaeren-borestranda--le-j-dersylte": {
+    "title": "Jædersylte",
+    "text": "A local product of Jæren: minced meat and fat, then canned."
+   },
+   "no-jaeren-borestranda--gladmat": {
+    "title": "Gladmat",
+    "text": "In late June, in Stavanger, Norway’s biggest food festival: local producers on the harbor (June 23 to 26, 2027)."
+   },
+   "no-jaeren-borestranda--la-j-rdagen": {
+    "title": "Jærdagen",
+    "text": "On the last weekend of May, Bryne celebrates Jærdagen, its town festival."
+   },
+   "no-jaeren-borestranda--le-droit-d-acces-a-la-nature": {
+    "title": "Right of access to nature",
+    "text": "Anyone may roam uncultivated land, camp at least 150 m from a house and pick berries."
+   },
+   "no-jaeren-borestranda--le-j-rsk": {
+    "title": "Jærsk",
+    "text": "People speak Jærsk there, a southwestern Norwegian dialect, mainly in Hå, Time and Klepp."
+   },
+   "se-bohuslan-kosterhavet--plateaux-de-fruits-de-mer-et-fetes-de-crevettes": {
+    "title": "Seafood platters and shrimp parties",
+    "text": "In Strömstad, restaurants serve seafood platters and shrimp parties during Smaka på Bohuslän."
+   },
+   "se-bohuslan-kosterhavet--l-ouverture-de-la-peche-au-homard": {
+    "title": "Lobster fishing opening",
+    "text": "On the first Monday after September 20, at 7 a.m. sharp, lobster fishing opens; it runs until November 30."
+   },
+   "se-bohuslan-kosterhavet--smaka-pa-bohuslan": {
+    "title": "Smaka på Bohuslän",
+    "text": "In early October, Strömstad celebrates the flavors of Bohuslän: seafood, lobster fishing, farm visits (October 2 to 11)."
+   },
+   "se-bohuslan-kosterhavet--l-allemansratten": {
+    "title": "Allemansrätten",
+    "text": "The public right of access lets you walk, camp for a night or two and pick berries and mushrooms outside cultivated land."
+   },
+   "se-bohuslan-kosterhavet--les-huitres-du-proprietaire": {
+    "title": "The landowner’s oysters",
+    "text": "Oysters belong to the landowner: you cannot gather them wherever you like."
+   },
+   "dk-jutland-hvidesande--les-limandes-sechees": {
+    "title": "Dried dabs",
+    "text": "Dried dabs are Hvide Sande’s local treat, tasted for free at the Æ Dabs festival."
+   },
+   "dk-jutland-hvidesande--dabs-day": {
+    "title": "Æ Dabs Day",
+    "text": "On Ascension Day, Metheasvej street is closed to taste dried dabs, with music and shops open."
+   },
+   "dk-jutland-hvidesande--le-festival-du-hareng": {
+    "title": "Herring festival",
+    "text": "Late April: smoked herring under a tent, fishing contests and music (April 23 to 25, 2027)."
+   },
+   "dk-jutland-hvidesande--waterz": {
+    "title": "Waterz",
+    "text": "In early September, Scandinavia’s biggest water sports festival: windsurfing, kitesurfing, surfing, SUP (September 3 and 4, 2027)."
+   },
+   "dk-jutland-hvidesande--la-criee-du-dimanche": {
+    "title": "Sunday auction",
+    "text": "Every Sunday in July and August, and one Sunday in October, you can bid on the day’s catch at the fish auction."
+   },
+   "ie-sligo-easkey--les-produits-de-sligo": {
+    "title": "Sligo produce",
+    "text": "County Sligo highlights Lissadell oysters, wild Mullaghmore lobster and Knocknarea honey."
+   },
+   "ie-sligo-easkey--les-bains-d-algues": {
+    "title": "Seaweed baths",
+    "text": "Seaweed baths, which appeared in the Victorian era, survive in Enniscrone: the Kilcullen house dates from 1912."
+   },
+   "ie-sligo-easkey--le-poll-gorm": {
+    "title": "Poll Gorm",
+    "text": "A natural saltwater pool whose wall was built in 1966 by four locals; local children learn to swim there."
+   },
+   "ie-sligo-easkey--iascaigh": {
+    "title": "Iascaigh",
+    "text": "Iascaigh, the Irish name of Easkey, means “rich in fish.”"
+   },
+   "ec-galapagos-puntacarola--le-ceviche-de-canchalagua": {
+    "title": "Canchalagua ceviche",
+    "text": "Canchalagua ceviche is especially typical of San Cristóbal, the easternmost island of the archipelago."
+   },
+   "ec-galapagos-puntacarola--la-cantonisation": {
+    "title": "Cantonization",
+    "text": "On February 18, Puerto Baquerizo Moreno celebrates cantonization, its major festival."
+   },
+   "ec-galapagos-puntacarola--la-distance-avec-les-animaux": {
+    "title": "Distance from animals",
+    "text": "In the national park, stay at least 2 m from animals, even if they approach, and don’t feed them or leave the trails."
+   },
+   "ec-galapagos-puntacarola--la-loberia": {
+    "title": "La Lobería",
+    "text": "This sea lion colony is ten minutes by bus from Puerto Baquerizo Moreno."
+   },
+   "ec-galapagos-puntacarola--la-statue-de-darwin": {
+    "title": "Darwin statue",
+    "text": "A statue marks the spot where Darwin first landed in the Galápagos, on September 16, 1835."
+   },
+   "vi-saintjohn-trunkbay--le-fungi": {
+    "title": "Fungi",
+    "text": "Cornmeal polenta with okra, served with boiled fish or salt cod."
+   },
+   "vi-saintjohn-trunkbay--le-kallaloo": {
+    "title": "Kallaloo",
+    "text": "A soup of callaloo leaves, sometimes replaced by spinach."
+   },
+   "vi-saintjohn-trunkbay--la-st-john-celebration": {
+    "title": "St. John Celebration",
+    "text": "June 14 to July 4, 2026: Fourth of July parade, steel bands, cooking contests and fireworks over Cruz Bay."
+   },
+   "vi-saintjohn-trunkbay--le-j-ouvert": {
+    "title": "J’ouvert",
+    "text": "J’ouvert (“daybreak”): at dawn, people dance to soca and calypso, covered in mud, powder and paint."
+   },
+   "vi-saintjohn-trunkbay--le-sentier-sous-marin": {
+    "title": "Underwater trail",
+    "text": "The trail runs along Trunk Bay Cay for about 90 m (300 feet), and its plaques help beginners recognize marine life."
+   }
+  }
+ },
+ "es": {
+  "zones": {
+   "fr-landes-hossegor": "Hossegor, Seignosse y Capbreton",
+   "fr-paysbasque-guethary": "Guéthary",
+   "fr-finistere-penhors": "Penhors y el país bigudén",
+   "fr-var-portcros": "Port-Cros",
+   "fr-corse-rondinara": "Rondinara y Bonifacio",
+   "pt-ericeira": "Ericeira",
+   "es-minorque-macarella": "Suroeste de Menorca, Cala Macarella",
+   "gr-zakynthos-navagio": "Zakynthos (Zante), costa noroeste",
+   "gb-gower-rhossili": "Península de Gower, Rhossili",
+   "pf-societe-tahiti": "Tahití y Bora Bora",
+   "cl-pichilemu": "Pichilemu y Punta de Lobos",
+   "br-noronha": "Fernando de Noronha",
+   "mx-islamujeres": "Isla Mujeres",
+   "sn-dakar-ouakam": "Ouakam, Dakar",
+   "au-whitsundays-whitehaven": "Whitsundays, Whitehaven Beach",
+   "us-hawaii-kona": "Kona y la bahía de Kealakekua",
+   "mu-lemorne": "Le Morne",
+   "gp-desirade-petiteterre": "La Désirade y Petite-Terre",
+   "re-ermitage": "L’Ermitage y Saint-Paul",
+   "tz-zanzibar-mnemba": "Zanzíbar, noreste (Mnemba)",
+   "it-sardaigne-stintino": "Stintino, La Pelosa",
+   "gr-cephalonie-myrtos": "Cefalonia, Myrtos",
+   "fr-normandie-dieppe": "Dieppe",
+   "fr-verdon-saintecroix": "Lago de Sainte-Croix y el país de Moustiers",
+   "bz-belize-blue-hole": "Belice y Great Blue Hole",
+   "id-papua-rajaampat": "Raja Ampat",
+   "id-bali-nusapenida": "Nusa Penida",
+   "id-lombok-gili": "Gili Trawangan",
+   "pf-tuamotu-tikehau": "Tikehau",
+   "th-surat-thani-kohtao": "Ko Tao y Surat Thani",
+   "us-floride-keylargo": "Key Largo",
+   "es-galice-razo": "Razo y Carballo",
+   "co-sanandres": "San Andrés",
+   "nz-coromandel-cathedralcove": "Cathedral Cove y Mercury Bay",
+   "nl-la-haye-scheveningen": "Scheveningen",
+   "eg-mer-rouge-elgouna": "El Gouna",
+   "ky-grandcayman-stingray": "Stingray City y Gran Caimán",
+   "ve-losroques": "Los Roques",
+   "fj-vitilevu-beqa": "Laguna de Beqa",
+   "to-vavau": "Vavaʻu",
+   "yt-mayotte-ngouja": "N’Gouja y Kani-Kéli",
+   "no-jaeren-borestranda": "Jæren y Borestranda",
+   "se-bohuslan-kosterhavet": "Kosterhavet y Strömstad",
+   "dk-jutland-hvidesande": "Hvide Sande",
+   "ie-sligo-easkey": "Easkey",
+   "ec-galapagos-puntacarola": "San Cristóbal",
+   "vi-saintjohn-trunkbay": "Trunk Bay y Saint John"
+  },
+  "facts": {
+   "fr-landes-hossegor--le-pastis-landais": {
+    "title": "El pastis landais",
+    "text": "Brioche con flor de azahar, ron o vainilla, reservada durante mucho tiempo a las bodas y a las fiestas del pueblo."
+   },
+   "fr-landes-hossegor--la-course-landaise": {
+    "title": "La course landaise",
+    "text": "Los écarteurs esquivan a la vaca en el último momento, sin darle muerte. Anima las fiestas locales de marzo a octubre."
+   },
+   "fr-landes-hossegor--baine": {
+    "title": "Baïne",
+    "text": "Palabra gascona para la cubeta de agua paralela a la playa, donde la corriente puede volverse peligrosa según la marea."
+   },
+   "fr-paysbasque-guethary--l-axoa": {
+    "title": "El axoa",
+    "text": "Ternera en dados, estofada con pimiento, cebolla y chile de Espelette: un plato de feria y de fiesta en el País Vasco."
+   },
+   "fr-paysbasque-guethary--kaixo": {
+    "title": "Kaixo",
+    "text": "«Buenos días» u «hola» en euskera, para decir con una sonrisa."
+   },
+   "fr-paysbasque-guethary--les-fetes-de-la-saint-nicolas": {
+    "title": "Las fiestas de San Nicolás",
+    "text": "Las fiestas patronales de Guéthary se celebran cada año en diciembre, en torno a san Nicolás."
+   },
+   "fr-paysbasque-guethary--la-pelote-au-grand-chistera": {
+    "title": "La pelota con gran chistera",
+    "text": "El club L’Olharroa, nacido en 1922, es apodado la Meca del gran chistera: se juega en el frontón del pueblo."
+   },
+   "fr-finistere-penhors--le-pardon-de-penhors": {
+    "title": "El pardon de Penhors",
+    "text": "El pardon de Penhors, en Pouldreuzic, se celebra el primer domingo de septiembre: procesión, misa y bendición, como todo pardon bretón."
+   },
+   "fr-finistere-penhors--le-fest-noz": {
+    "title": "El fest-noz",
+    "text": "Noche de baile bretona, abierta a todos: te unes a la gavotte o al an dro después de mirar los pasos."
+   },
+   "fr-finistere-penhors--le-far-breton": {
+    "title": "El far bretón",
+    "text": "Pastel de huevos, leche y mantequilla semisalada, a menudo con las ciruelas pasas que los marineros bretones traían de Burdeos."
+   },
+   "fr-finistere-penhors--demat": {
+    "title": "Demat",
+    "text": "«Buenos días» en bretón."
+   },
+   "fr-finistere-penhors--la-coiffe-bigoudene": {
+    "title": "La coiffe bigoudène",
+    "text": "Alta unos treinta centímetros, ya solo se lleva en los pardons, fiestas y festivales."
+   },
+   "fr-var-portcros--l-aioli": {
+    "title": "El aïoli",
+    "text": "Bacalao y verduras servidos con una salsa de ajo machacado y aceite de oliva: un plato emblemático de la Provenza."
+   },
+   "fr-var-portcros--une-peche-encadree": {
+    "title": "Una pesca regulada",
+    "text": "En la isla, la pesca sigue siendo tradicional pero regulada: carta desde 1999 para 24 profesionales, autorización anual para aficionados."
+   },
+   "fr-var-portcros--la-vigie": {
+    "title": "La Vigie",
+    "text": "Antiguo semáforo al que se llega por la antigua ruta estratégica, con vistas al archipiélago y al macizo de los Maures."
+   },
+   "fr-corse-rondinara--le-fiadone": {
+    "title": "El fiadone",
+    "text": "Pastel fresco de brocciu, azúcar, huevos y limón, un postre emblemático de Córcega."
+   },
+   "fr-corse-rondinara--les-polyphonies-corses": {
+    "title": "Las polifonías corsas",
+    "text": "Canto a tres voces a cappella, nacido de la vida de los pueblos y los pastores: veladas, peregrinaciones y fiestas lo mantienen vivo."
+   },
+   "fr-corse-rondinara--la-semaine-sainte-a-bonifacio": {
+    "title": "La Semana Santa en Bonifacio",
+    "text": "Las cofradías organizan procesiones muy concurridas durante la Semana Santa, y los oficios de Tinieblas."
+   },
+   "pt-ericeira--l-oursin-d-ericeira": {
+    "title": "El erizo de Ericeira",
+    "text": "Especialidad de la ciudad: los restaurantes del pueblo cocinan el erizo de varias maneras durante el festival que le está dedicado."
+   },
+   "pt-ericeira--le-festival-international-de-l-oursin": {
+    "title": "El festival internacional del erizo",
+    "text": "Degustaciones, showcooking y talleres en el mercado municipal de Ericeira: la edición de 2026 fue del 24 de abril al 3 de mayo."
+   },
+   "pt-ericeira--reserve-mondiale-de-surf": {
+    "title": "Reserva mundial de surf",
+    "text": "Desde octubre de 2011, la costa de Ericeira lleva el título de reserva mundial de surf, concedido por Save the Waves."
+   },
+   "es-minorque-macarella--sant-joan-a-ciutadella": {
+    "title": "Sant Joan en Ciutadella",
+    "text": "El 23 y 24 de junio, jinetes y caballos menorquines desfilan en Ciutadella, con «bots» en los que el caballo se encabrita."
+   },
+   "es-minorque-macarella--le-fromage-de-mao": {
+    "title": "El queso de Maó",
+    "text": "Queso de vaca con corteza anaranjada frotada con aceite de oliva y pimentón, protegido por una DOP desde 1985."
+   },
+   "es-minorque-macarella--la-caldereta-de-langosta": {
+    "title": "La caldereta de langosta",
+    "text": "Sopa de langosta a fuego lento, un plato típico de Menorca."
+   },
+   "es-minorque-macarella--pomada": {
+    "title": "Pomada",
+    "text": "Ginebra de Menorca mezclada con limonada, que se bebe durante las fiestas patronales."
+   },
+   "es-minorque-macarella--le-cami-de-cavalls": {
+    "title": "El Camí de Cavalls",
+    "text": "Sendero que rodea la isla a pie (GR 223), antiguo camino que unía las torres de defensa."
+   },
+   "gr-zakynthos-navagio--la-fete-de-saint-denys": {
+    "title": "La fiesta de san Dionisio",
+    "text": "El 24 de agosto, por la tarde, las reliquias de san Dionisio, patrón de la isla, recorren en procesión la ciudad de Zante."
+   },
+   "gr-zakynthos-navagio--le-raisin-de-corinthe-de-zante": {
+    "title": "La pasa de Corinto de Zante",
+    "text": "Uva pequeña, dulce y sin pepitas, nacida en la isla: con el aceite de oliva, es uno de sus grandes productos."
+   },
+   "gr-zakynthos-navagio--les-produits-du-terroir": {
+    "title": "Los productos de la tierra",
+    "text": "Aceite de oliva, miel de tomillo, pasas de Corinto y vino se venden en puestos al borde de las carreteras y en los pueblos."
+   },
+   "gr-zakynthos-navagio--le-poete-solomos": {
+    "title": "El poeta Solomos",
+    "text": "Una estatua del poeta Dionýsios Solomós adorna la plaza principal de Zante, y un museo lleva su nombre en la plaza de San Marcos."
+   },
+   "gb-gower-rhossili--le-laverbread": {
+    "title": "El laverbread",
+    "text": "Puré espeso de alga porphyra hervida durante horas, llamado «bara lawr» en galés."
+   },
+   "gb-gower-rhossili--les-coques-de-penclawdd": {
+    "title": "Los berberechos de Penclawdd",
+    "text": "Familias de Penclawdd recogen los berberechos del Burry Inlet desde hace generaciones; se venden en el mercado de Swansea."
+   },
+   "gb-gower-rhossili--l-agneau-de-pre-sale-de-gower": {
+    "title": "El cordero de pasto salado de Gower",
+    "text": "Pace samphire y lavanda de mar; DOP en el Reino Unido en 2021 y en la Unión Europea en 2023."
+   },
+   "gb-gower-rhossili--worm-s-head": {
+    "title": "Worm’s Head",
+    "text": "Dos islotes, Inner Head y Outer Head, a los que solo se llega con marea baja."
+   },
+   "gb-gower-rhossili--gallois-au-nord-anglais-au-sud": {
+    "title": "Galés al norte, inglés al sur",
+    "text": "El norte de Gower cuenta con muchos galófonos, mientras que el sur es tradicionalmente anglófono."
+   },
+   "pf-societe-tahiti--le-heiva-i-tahiti": {
+    "title": "El Heiva i Tahiti",
+    "text": "Cada julio, unos quince días de concursos de canto y danza, y de deportes ancestrales como el va’a, en la plaza To’atā."
+   },
+   "pf-societe-tahiti--le-poisson-cru": {
+    "title": "El pescado crudo",
+    "text": "Pescado marinado en lima y leche de coco: el plato de la isla que hay que probar primero."
+   },
+   "pf-societe-tahiti--le-tamaaraa": {
+    "title": "El tamaaraa",
+    "text": "Festín de cerdo, pescado y fruto del árbol del pan cocidos al vapor en un horno de tierra, para las grandes ocasiones familiares."
+   },
+   "pf-societe-tahiti--mauruuru": {
+    "title": "Mauruuru",
+    "text": "«Gracias» en tahitiano, se pronuncia ma-rou-rou."
+   },
+   "pf-societe-tahiti--la-fleur-de-tiare": {
+    "title": "La flor de tiaré",
+    "text": "Una flor en la oreja izquierda dice que no buscas compañía; en la derecha, que estás disponible."
+   },
+   "cl-pichilemu--la-fete-du-cochayuyo": {
+    "title": "La fiesta del cochayuyo",
+    "text": "Cinco días de platos a base de cochayuyo, un alga marina; el último día fue el domingo 26 de julio en 2026."
+   },
+   "cl-pichilemu--les-fiestas-patrias": {
+    "title": "Las Fiestas Patrias",
+    "text": "Hacia el 18 de septiembre, Pichilemu celebra la fiesta nacional: juegos tradicionales, cocina, música y baile, de día y de noche."
+   },
+   "cl-pichilemu--empanadas-et-completos": {
+    "title": "Empanadas y completos",
+    "text": "Las empanadas y los «completos» son los dos grandes clásicos para llevar en Pichilemu."
+   },
+   "cl-pichilemu--le-parc-agustin-ross": {
+    "title": "El parque Agustín Ross",
+    "text": "El parque y centro cultural Agustín Ross es uno de los cinco monumentos nacionales de Pichilemu."
+   },
+   "br-noronha--le-centre-historique": {
+    "title": "El centro histórico",
+    "text": "La Vila dos Remédios y la capilla São Pedro dos Pescadores son patrimonio cultural de Brasil, declarado por el Iphan en 2017."
+   },
+   "br-noronha--l-acai": {
+    "title": "El açaí",
+    "text": "Después del buceo, nada como un bol de açaí servido en el puerto, con granola y plátanos."
+   },
+   "mx-islamujeres--le-tik-n-chik": {
+    "title": "El tik-n-chik",
+    "text": "Pescado entero marinado en achiote y luego a la parrilla: es el plato estrella de la isla."
+   },
+   "mx-islamujeres--punta-sur": {
+    "title": "Punta Sur",
+    "text": "En el extremo sur, las ruinas de un antiguo faro y de un templo de Ixchel, diosa de la fertilidad."
+   },
+   "mx-islamujeres--isla-mujeres": {
+    "title": "Isla Mujeres",
+    "text": "El nombre de la isla significa «isla de las Mujeres» en español."
+   },
+   "sn-dakar-ouakam--le-ceebu-jen": {
+    "title": "El ceebu jën",
+    "text": "Arroz con pescado y verduras de temporada, nacido entre los pescadores de Saint-Louis, inscrito en la UNESCO en 2021; suele comerse con las manos."
+   },
+   "sn-dakar-ouakam--teranga": {
+    "title": "Teranga",
+    "text": "Palabra wolof a menudo traducida como «hospitalidad»: compartir la comida y acoger al extranjero en casa."
+   },
+   "sn-dakar-ouakam--un-village-lebou": {
+    "title": "Un pueblo lebou",
+    "text": "Ouakam es uno de los cuatro pueblos lebou originales de la península de Cabo Verde, junto con Yoff, Ngor y Hann."
+   },
+   "sn-dakar-ouakam--la-mosquee-de-la-divinite": {
+    "title": "La mezquita de la Divinidad",
+    "text": "Un hombre santo dice haber recibido en sueños, el 28 de junio de 1973, la orden de construir esta mezquita a orillas del océano."
+   },
+   "au-whitsundays-whitehaven--le-great-barrier-reef-festival": {
+    "title": "El Great Barrier Reef Festival",
+    "text": "Cuatro días en Airlie Beach con fuegos artificiales, regata de barcos reciclados y desfile callejero: del 31 de julio al 2 de agosto en 2026."
+   },
+   "au-whitsundays-whitehaven--la-hamilton-island-race-week": {
+    "title": "La Hamilton Island Race Week",
+    "text": "Gran regata en alta mar, descrita como la más importante de Australia: del 15 al 22 de agosto en 2026, con animación en la marina."
+   },
+   "au-whitsundays-whitehaven--le-marche-d-airlie-beach": {
+    "title": "El mercado de Airlie Beach",
+    "text": "Cada sábado de 7 h a 13 h, frente al mar: recuerdos, café, fruta fresca y arte local."
+   },
+   "au-whitsundays-whitehaven--le-ngaro-track": {
+    "title": "El Ngaro Track",
+    "text": "Abierto en 2026, este sendero de 32 km va de Whitehaven a Hill Inlet; los propietarios tradicionales piden caminar por él con respeto."
+   },
+   "au-whitsundays-whitehaven--whitsunday": {
+    "title": "Whitsunday",
+    "text": "James Cook pasó por las islas el domingo 3 de junio de 1770, día de Pentecostés (Whitsun), de ahí su nombre."
+   },
+   "us-hawaii-kona--le-cafe-de-kona": {
+    "title": "El café de Kona",
+    "text": "Solo el café de las laderas del Hualālai y del Mauna Loa puede llamarse Kona; un «Kona blend» solo exige un 10 %."
+   },
+   "us-hawaii-kona--le-kona-coffee-cultural-festival": {
+    "title": "El Kona Coffee Cultural Festival",
+    "text": "Desde 1970, una fiesta del café de diez días en noviembre; la próxima edición está anunciada del 5 al 14 de noviembre de 2027."
+   },
+   "us-hawaii-kona--aloha": {
+    "title": "Aloha",
+    "text": "Palabra hawaiana para el amor, la paz y la compasión; también sirve para saludar y despedirse."
+   },
+   "us-hawaii-kona--mahalo": {
+    "title": "Mahalo",
+    "text": "Palabra hawaiana que significa gracias, gratitud y estima."
+   },
+   "us-hawaii-kona--pu-uhonua-o-honaunau": {
+    "title": "Puʻuhonua o Hōnaunau",
+    "text": "Cerca de Kealakekua, este lugar de refugio salvaba a quien había roto un kapu: un sacerdote lo perdonaba y se marchaba libre."
+   },
+   "mu-lemorne--le-dholl-puri": {
+    "title": "El dholl puri",
+    "text": "Torta de origen indio convertida en el «fish and chips» de los mauricianos."
+   },
+   "mu-lemorne--les-gateaux-piments": {
+    "title": "Los gâteaux piments",
+    "text": "Buñuelos salados, variante de los vadai indios: literalmente pasteles de chile."
+   },
+   "mu-lemorne--maha-shivaratri-a-ganga-talao": {
+    "title": "Maha Shivaratri en Ganga Talao",
+    "text": "En febrero o marzo, por Maha Shivaratri, los hindúes de Mauricio peregrinan al lago-cráter de Ganga Talao."
+   },
+   "mu-lemorne--le-sega": {
+    "title": "El séga",
+    "text": "Nacido entre los esclavos de Mauricio y de La Reunión, se toca con ravanne, maravanne y triángulo; inscrito en la UNESCO en 2014."
+   },
+   "mu-lemorne--le-morne-brabant": {
+    "title": "Le Morne Brabant",
+    "text": "Inscrita en la UNESCO en 2008, la montaña guarda la leyenda de esclavos fugitivos que habrían saltado de la roca en 1835 antes que ser capturados."
+   },
+   "gp-desirade-petiteterre--la-fet-a-kabrit": {
+    "title": "La Fèt a kabrit",
+    "text": "El fin de semana de Pascua, La Désirade celebra el cabrito: es la gran cita de la isla, junto con el Gwadarun."
+   },
+   "gp-desirade-petiteterre--les-fetes-d-aout": {
+    "title": "Las fiestas de agosto",
+    "text": "Del 13 al 17 de agosto: fiesta patronal el 15, fiesta tradicional de los marineros el 16 y fiesta de los marineros difuntos el 17."
+   },
+   "gp-desirade-petiteterre--les-chantes-noel": {
+    "title": "Los Chantés Noël",
+    "text": "Cada diciembre se cantan villancicos por toda la isla, a veces en casas particulares."
+   },
+   "gp-desirade-petiteterre--le-colombo": {
+    "title": "El colombo",
+    "text": "Curry antillano de origen indio, cocinado con cabrito, cerdo, pollo o pescado."
+   },
+   "re-ermitage--le-20-decembre-fet-kaf": {
+    "title": "El 20 de diciembre, fèt kaf",
+    "text": "Día festivo que recuerda la abolición de la esclavitud proclamada en 1848; en criollo se dice «fèt kaf» o «20 désamb»."
+   },
+   "re-ermitage--le-rougail-saucisse": {
+    "title": "El rougail saucisse",
+    "text": "Salchichas cocinadas a la criolla con tomates, cebollas y chile, servidas con arroz y legumbres."
+   },
+   "re-ermitage--le-maloya": {
+    "title": "El maloya",
+    "text": "Nacido en tiempos de la esclavitud y llevado por las percusiones (roulèr, kayamb), está inscrito en la UNESCO desde 2009."
+   },
+   "tz-zanzibar-mnemba--mwaka-kogwa": {
+    "title": "Mwaka Kogwa",
+    "text": "Año nuevo shirazi en Makunduchi, en julio o agosto: combate ritual y luego una cabaña quemada cuyo humo sirve para predecir el año."
+   },
+   "tz-zanzibar-mnemba--la-pizza-de-zanzibar": {
+    "title": "La pizza de Zanzíbar",
+    "text": "Especie de crepe salada rellena de carne de vaca, huevos y ensalada, que se come en el mercado nocturno de Forodhani, en Stone Town."
+   },
+   "tz-zanzibar-mnemba--jus-de-canne-et-lait-de-coco": {
+    "title": "Jugo de caña y leche de coco",
+    "text": "El jugo de caña de azúcar y la leche de coco fresca de Stone Town no hay que perdérselos."
+   },
+   "tz-zanzibar-mnemba--une-tenue-pudique": {
+    "title": "Una vestimenta discreta",
+    "text": "Cúbrete piernas y brazos en la ciudad y evita las muestras de afecto en público; el bikini se tolera en la playa de los hoteles."
+   },
+   "it-sardaigne-stintino--le-musee-de-la-tonnara": {
+    "title": "El museo de la tonnara",
+    "text": "La antigua tonnara Saline pescó atún hasta los años 1970; el museo de las almadrabas cuenta su historia desde 2016."
+   },
+   "it-sardaigne-stintino--la-bottarga-de-thon": {
+    "title": "La bottarga de atún",
+    "text": "Las huevas de atún secas (bottarga) figuran entre los platos de la tradición pesquera, con el pulpo al ajo y la sopa de langosta."
+   },
+   "it-sardaigne-stintino--la-regate-des-gozzi": {
+    "title": "La regata de los gozzi",
+    "text": "Desde 1983, Stintino organiza una regata para sus gozzi, los veleros de madera tradicionales de los pescadores."
+   },
+   "it-sardaigne-stintino--la-fete-de-la-madone": {
+    "title": "La fiesta de la Virgen",
+    "text": "El 8 de septiembre es el día de la santa patrona de Stintino, la Beata Vergine della Difesa."
+   },
+   "gr-cephalonie-myrtos--les-serpents-de-la-vierge": {
+    "title": "Las serpientes de la Virgen",
+    "text": "Antes del 15 de agosto, pequeñas serpientes inofensivas, con una cruz en la cabeza, entran en la iglesia de Markopoulo: buen presagio."
+   },
+   "gr-cephalonie-myrtos--la-kreatopita": {
+    "title": "La kreatopita",
+    "text": "Empanada de carne, plato de granja que es la especialidad de Cefalonia."
+   },
+   "gr-cephalonie-myrtos--le-miel-de-thym": {
+    "title": "La miel de tomillo",
+    "text": "La miel de tomillo silvestre de Cefalonia es un buen recuerdo para llevarse: su sabor es realmente especial."
+   },
+   "gr-cephalonie-myrtos--le-robola": {
+    "title": "El robola",
+    "text": "Uva blanca cultivada sobre todo en Cefalonia, a menudo sin injertar en los suelos calcáreos de la isla."
+   },
+   "gr-cephalonie-myrtos--le-frappe-en-terrasse": {
+    "title": "El frappé en la terraza",
+    "text": "Un frappé sirve de «entrada» para quedarse horas en la terraza, como los griegos; saluda también en griego."
+   },
+   "fr-normandie-dieppe--la-marmite-dieppoise": {
+    "title": "La marmite dieppoise",
+    "text": "Especialidad de Dieppe: un guiso de pescados y crustáceos al vino blanco, con verduras y hierbas aromáticas."
+   },
+   "fr-normandie-dieppe--la-foire-aux-harengs-et-a-la-coquille-saint-jacq": {
+    "title": "La feria del arenque y de la vieira",
+    "text": "Cada tercer fin de semana de noviembre se come el arenque a la parrilla con patata braseada y mantequilla salada derretida."
+   },
+   "fr-normandie-dieppe--le-marche-du-samedi": {
+    "title": "El mercado del sábado",
+    "text": "Los sábados, de 8 h 30 a 13 h, el mercado de alimentación ocupa la Grande Rue, la plaza Nationale y la rue Saint-Jacques."
+   },
+   "fr-normandie-dieppe--le-festival-de-cerfs-volants": {
+    "title": "El festival de cometas",
+    "text": "El festival internacional de cometas vuelve en septiembre: la edición de 2025 se celebró del 13 al 21, tras tres años de ausencia."
+   },
+   "fr-verdon-saintecroix--la-truffe-noire-d-aups": {
+    "title": "La trufa negra de Aups",
+    "text": "Aups tiene el tercer mercado de trufas negras de Francia, por la mañana, de finales de noviembre a finales de febrero."
+   },
+   "fr-verdon-saintecroix--l-huile-d-olive-et-la-lavande": {
+    "title": "El aceite de oliva y la lavanda",
+    "text": "Alrededor de Moustiers se produce el aceite de oliva de Alta Provenza DOP, además de miel y esencias de lavanda."
+   },
+   "fr-verdon-saintecroix--la-diane-de-moustiers": {
+    "title": "La Diane de Moustiers",
+    "text": "Del 31 de agosto al 8 de septiembre, los Dianaïres despiertan al pueblo con música a las 5 h; el 8, procesión al alba hasta la capilla."
+   },
+   "fr-verdon-saintecroix--l-etoile-de-moustiers": {
+    "title": "La estrella de Moustiers",
+    "text": "Una estrella cuelga de una cadena tendida entre dos acantilados sobre el pueblo, según la leyenda del caballero de Blacas."
+   },
+   "fr-verdon-saintecroix--la-faience-de-moustiers": {
+    "title": "La loza de Moustiers",
+    "text": "El pueblo fue célebre por su loza en los siglos XVII y XVIII; el arte renació en 1925 con Marcel Provence."
+   },
+   "bz-belize-blue-hole--le-riz-aux-haricots": {
+    "title": "El arroz con frijoles",
+    "text": "Plato básico de los criollos: arroz cocido con frijoles y leche de coco, servido con carne y ensalada."
+   },
+   "bz-belize-blue-hole--le-hudut-garifuna": {
+    "title": "El hudut garífuna",
+    "text": "El hudut es una sopa de pescado garífuna, preparada con o sin leche de coco."
+   },
+   "bz-belize-blue-hole--le-garifuna-settlement-day": {
+    "title": "El Garifuna Settlement Day",
+    "text": "El 19 de noviembre, día festivo: desfiles, música callejera y danzas tradicionales, sobre todo en Dangriga."
+   },
+   "bz-belize-blue-hole--le-st-george-s-caye-day": {
+    "title": "El St George’s Caye Day",
+    "text": "El 10 de septiembre se conmemora la batalla de St George’s Caye, librada en 1798."
+   },
+   "id-papua-rajaampat--le-papeda": {
+    "title": "El papeda",
+    "text": "Papilla de sagú de las Molucas y de la costa occidental de Papúa, servida con pescado en caldo amarillo."
+   },
+   "id-papua-rajaampat--le-festival-pesona-raja-ampat": {
+    "title": "El Festival Pesona Raja Ampat",
+    "text": "En octubre (del 15 al 18 en 2026): artes, cocina local y acciones por el mar, en Raja Ampat. La entrada es gratuita."
+   },
+   "id-papua-rajaampat--le-sasi": {
+    "title": "El sasi",
+    "text": "Los habitantes prohíben la recolección de ciertos recursos: desde la ceremonia de cierre hasta la de reapertura."
+   },
+   "id-papua-rajaampat--raja-ampat-les-quatre-rois": {
+    "title": "Raja Ampat, los cuatro reyes",
+    "text": "Raja Ampat significa «cuatro reyes»: el nombre viene de un mito de siete huevos de los que nacieron reyes."
+   },
+   "id-bali-nusapenida--le-babi-guling": {
+    "title": "El babi guling",
+    "text": "Cochinillo relleno de especias y asado en espetón, a menudo servido con arroz lawar; una especialidad de Bali."
+   },
+   "id-bali-nusapenida--les-canang-sari": {
+    "title": "Los canang sari",
+    "text": "Cada día, los balineses dejan estas pequeñas cestas de hojas de palma como ofrenda, en los templos y en las casas."
+   },
+   "id-bali-nusapenida--galungan": {
+    "title": "Galungan",
+    "text": "Cada 210 días, mástiles de bambú adornados (penjor) bordean las carreteras. Próximas fechas: 13 de enero y 11 de agosto de 2027."
+   },
+   "id-bali-nusapenida--le-basa-nosa": {
+    "title": "El basa Nosa",
+    "text": "En la isla se habla un balinés propio de Nusa Penida, que los habitantes del resto de Bali no entienden."
+   },
+   "id-lombok-gili--l-ayam-taliwang": {
+    "title": "El ayam Taliwang",
+    "text": "Pollo a la parrilla picante y dulce, con pasta de camarón, nacido en Taliwang, cerca de Mataram, la capital de Lombok."
+   },
+   "id-lombok-gili--le-plecing-kangkung": {
+    "title": "El plecing kangkung",
+    "text": "Espinaca de agua escaldada, servida fría con sambal picante, a menudo junto al ayam Taliwang."
+   },
+   "id-lombok-gili--le-bau-nyale": {
+    "title": "El Bau Nyale",
+    "text": "En febrero o marzo se recogen a mano gusanos de mar, pasada la medianoche, en la playa de Seger, en recuerdo de una princesa."
+   },
+   "id-lombok-gili--une-ile-sans-moteur": {
+    "title": "Una isla sin motor",
+    "text": "Los vehículos de motor están prohibidos por decreto local: se circula en bicicleta o en cidomo, un pequeño carruaje."
+   },
+   "pf-tuamotu-tikehau--le-poisson-cru-au-lait-de-coco": {
+    "title": "El pescado crudo con leche de coco",
+    "text": "El plato más conocido de la Polinesia: pescado crudo marinado en jugo de lima y leche de coco."
+   },
+   "pf-tuamotu-tikehau--le-four-tahitien": {
+    "title": "El horno tahitiano",
+    "text": "En las comidas de fiesta, los alimentos se cuecen al vapor en un hoyo con piedras calientes, cubierto con hojas de bananero."
+   },
+   "pf-tuamotu-tikehau--le-heiva-i-tahiti": {
+    "title": "El Heiva i Tahiti",
+    "text": "Cada julio, en Papeete, grupos en competición presentan cantos y danzas tradicionales, con deportes polinesios."
+   },
+   "pf-tuamotu-tikehau--les-parcs-a-poissons": {
+    "title": "Los corrales de pesca",
+    "text": "El atolón practica la pesca tradicional con corrales de pesca, cerca del paso de Tuheiava."
+   },
+   "th-surat-thani-kohtao--les-huitres-de-surat-thani": {
+    "title": "Las ostras de Surat Thani",
+    "text": "La provincia es la primera zona de cría de ostras de Tailandia; se comen crudas, con lima y chile."
+   },
+   "th-surat-thani-kohtao--les-ufs-rouges": {
+    "title": "Los huevos rojos",
+    "text": "Huevos de pata salados, conservados en una mezcla de tierra y sal: una especialidad de la provincia de Surat Thani."
+   },
+   "th-surat-thani-kohtao--le-chak-phra": {
+    "title": "El Chak Phra",
+    "text": "Hacia octubre, nueve días de procesiones de estatuas de Buda por tierra y por agua, con carreras de piraguas."
+   },
+   "th-surat-thani-kohtao--ko-tao-l-ile-aux-tortues": {
+    "title": "Ko Tao, la isla de las tortugas",
+    "text": "Ko Tao significa «isla de las tortugas» en tailandés."
+   },
+   "th-surat-thani-kohtao--le-monogramme-du-roi": {
+    "title": "El monograma del rey",
+    "text": "Cerca de la playa de Sairee, una roca lleva el monograma dejado por el rey Chulalongkorn en 1899; aún se venera."
+   },
+   "us-floride-keylargo--la-key-lime-pie": {
+    "title": "La Key lime pie",
+    "text": "Tarta de lima de los Keys, con leche condensada azucarada; es la tarta oficial de Florida desde 2006."
+   },
+   "us-floride-keylargo--la-mini-saison-de-la-langouste": {
+    "title": "La minitemporada de la langosta",
+    "text": "En julio, la minitemporada de la langosta abre dos días en los Keys (el 29 y el 30 en 2026)."
+   },
+   "us-floride-keylargo--le-parc-pennekamp": {
+    "title": "El parque Pennekamp",
+    "text": "Abierto en 1963, es el primer parque submarino de Estados Unidos; la estatua Christ of the Abyss reposa allí a casi 8 m de profundidad."
+   },
+   "us-floride-keylargo--les-conchs": {
+    "title": "Los Conchs",
+    "text": "Los habitantes de los Keys se llamaron durante mucho tiempo «Conchs»; Key West incluso proclamó su «República» el 23 de abril de 1982."
+   },
+   "es-galice-razo--le-polbo-a-feira": {
+    "title": "El polbo á feira",
+    "text": "Pulpo hervido en una olla de cobre, luego espolvoreado con sal gruesa y pimentón, y regado con aceite de oliva."
+   },
+   "es-galice-razo--la-queimada": {
+    "title": "La queimada",
+    "text": "Ponche de aguardiente de orujo, azúcar y cortezas, flambeado mientras se recita un conjuro para ahuyentar a los malos espíritus."
+   },
+   "es-galice-razo--la-nuit-de-la-saint-jean": {
+    "title": "La noche de San Juan",
+    "text": "El 23 de junio, noche de las brujas en Galicia: es el momento en que se prepara sobre todo la queimada."
+   },
+   "es-galice-razo--la-morrina": {
+    "title": "La morriña",
+    "text": "Palabra gallega para la melancolía que se siente lejos de la tierra donde uno nació."
+   },
+   "es-galice-razo--la-feira-de-carballo": {
+    "title": "La feira de Carballo",
+    "text": "En Carballo, el mercado de productos agrícolas se celebra los jueves, y los domingos 2.º, 4.º y 5.º del mes."
+   },
+   "co-sanandres--le-rondon": {
+    "title": "El rondón",
+    "text": "Guiso de pescado o de caracol de mar, yuca, plátano y fruto del árbol del pan, cocido en leche de coco."
+   },
+   "co-sanandres--la-veda-du-crabe-noir": {
+    "title": "La veda del cangrejo negro",
+    "text": "Cada año, del 1 de abril al 31 de julio, está prohibida la caza del cangrejo negro, porque la especie está amenazada."
+   },
+   "co-sanandres--le-creole-raizal": {
+    "title": "El criollo raizal",
+    "text": "Los raizales, comunidad afrocaribeña de las islas, hablan el criollo de San Andrés y Providencia, además de español e inglés."
+   },
+   "nz-coromandel-cathedralcove--te-whanganui-a-hei": {
+    "title": "Te Whanganui-A-Hei",
+    "text": "El nombre maorí del lugar significa «la gran bahía de Hei», por un tohunga de la canoa Te Arawa."
+   },
+   "nz-coromandel-cathedralcove--le-hangi": {
+    "title": "El hāngī",
+    "text": "Cocina maorí en horno de tierra: carne, verduras y mariscos se cuecen sobre piedras ardientes enterradas."
+   },
+   "nz-coromandel-cathedralcove--le-whitianga-oceans-festival": {
+    "title": "El Whitianga Oceans Festival",
+    "text": "Cada septiembre, Whitianga celebra los mariscos de Coromandel (el 14 de septiembre en 2024)."
+   },
+   "nz-coromandel-cathedralcove--matariki": {
+    "title": "Matariki",
+    "text": "Año Nuevo maorí, con la salida de las Pléyades, festivo desde 2022: el 10 de julio de 2026 y luego el 25 de junio de 2027."
+   },
+   "nz-coromandel-cathedralcove--hot-water-beach": {
+    "title": "Hot Water Beach",
+    "text": "Dos horas en torno a la marea baja, se cava la arena para hacer brotar agua caliente, de hasta 64 °C."
+   },
+   "nl-la-haye-scheveningen--le-hareng-nouveau": {
+    "title": "El arenque nuevo",
+    "text": "Hollandse Nieuwe: arenque crudo ligeramente salado, que se come sujetándolo por la cola, a menudo con cebolla cruda."
+   },
+   "nl-la-haye-scheveningen--vlaggetjesdag": {
+    "title": "Vlaggetjesdag",
+    "text": "El tercer sábado de junio, el puerto se engalana para la temporada del arenque, con la subasta del primer barrilito."
+   },
+   "nl-la-haye-scheveningen--le-plongeon-du-nouvel-an": {
+    "title": "El chapuzón de Año Nuevo",
+    "text": "El 1 de enero, baño polar en el mar: 50 000 personas participaron en 2016."
+   },
+   "nl-la-haye-scheveningen--le-kurhaus": {
+    "title": "El Kurhaus",
+    "text": "El Kurhaus, hotel de Scheveningen, abrió sus puertas en 1886."
+   },
+   "eg-mer-rouge-elgouna--le-koshari": {
+    "title": "El koshari",
+    "text": "Mezcla de arroz, lentejas y macarrones, vendida en la calle; algunos lo consideran el plato nacional egipcio."
+   },
+   "eg-mer-rouge-elgouna--le-the": {
+    "title": "El té",
+    "text": "El té es la bebida nacional de Egipto, a menudo servido con menta."
+   },
+   "eg-mer-rouge-elgouna--le-festival-du-film-d-el-gouna": {
+    "title": "El festival de cine de El Gouna",
+    "text": "Cada octubre, la ciudad turística acoge un festival de cine creado en 2017."
+   },
+   "eg-mer-rouge-elgouna--al-gouna-la-lagune": {
+    "title": "Al-Gouna, la laguna",
+    "text": "El nombre árabe de El Gouna significa «la laguna»: la ciudad se extiende sobre 20 islas rodeadas de lagunas."
+   },
+   "ky-grandcayman-stingray--le-lambi": {
+    "title": "El lambi",
+    "text": "El lambi se prepara marinado, en ensalada, en sopa o en guiso; es un plato básico de las islas Caimán desde hace mucho tiempo."
+   },
+   "ky-grandcayman-stingray--la-pirates-week": {
+    "title": "La Pirates Week",
+    "text": "En noviembre, recreaciones de invasiones piratas, gran desfile cultural y carrera de barcos de cartón (del 8 al 22 de nov. en 2025)."
+   },
+   "ky-grandcayman-stingray--les-raies-de-stingray-city": {
+    "title": "Las rayas de Stingray City",
+    "text": "Las rayas se habrían reunido cuando los pescadores limpiaban sus capturas en los bajíos, y luego asociaron el motor con la comida."
+   },
+   "ve-losroques--l-arepa": {
+    "title": "La arepa",
+    "text": "La arepa, torta de maíz, se come a cualquier hora en Venezuela; la «reina pepiada» lleva pollo, aguacate y mayonesa."
+   },
+   "ve-losroques--le-festival-de-la-langosta": {
+    "title": "El Festival de la Langosta",
+    "text": "En noviembre, con la apertura de la temporada de pesca, el archipiélago celebra la langosta espinosa, uno de sus animales emblemáticos."
+   },
+   "ve-losroques--la-virgen-del-valle": {
+    "title": "La Virgen del Valle",
+    "text": "La segunda semana de septiembre, una procesión de barcos sale de Crasquí hacia Gran Roque: la Virgen protege a los pescadores."
+   },
+   "ve-losroques--gran-roque": {
+    "title": "Gran Roque",
+    "text": "Casi todos los habitantes viven en Gran Roque, un pequeño pueblo de siete calles de arena."
+   },
+   "fj-vitilevu-beqa--le-kokoda": {
+    "title": "El kokoda",
+    "text": "Pescado crudo marinado en limón y leche de coco, con verduras en dados (pepino, tomate, cebolla)."
+   },
+   "fj-vitilevu-beqa--le-lovo": {
+    "title": "El lovo",
+    "text": "El lovo es el horno de tierra fiyiano: piedras calientes en un foso, comida cubierta de tierra, para las grandes ocasiones."
+   },
+   "fj-vitilevu-beqa--la-marche-sur-le-feu": {
+    "title": "La marcha sobre el fuego",
+    "text": "Cinco pueblos de Beqa son famosos por la marcha sobre el fuego (vilavilairevo), ya una atracción turística en 1902."
+   },
+   "fj-vitilevu-beqa--le-hibiscus-festival": {
+    "title": "El Hibiscus Festival",
+    "text": "A finales de agosto y principios de septiembre, Suva elige reinas y ofrece programas culturales (del 31 de agosto al 7 de sept. en 2024)."
+   },
+   "to-vavau--la-cuisine-traditionnelle": {
+    "title": "La cocina tradicional",
+    "text": "La dieta tradicional se basa en el taro, el ñame, el plátano, el coco y el pescado cocido en hojas."
+   },
+   "to-vavau--le-dimanche-tongien": {
+    "title": "El domingo tongano",
+    "text": "El sabbat está inscrito en la constitución: el domingo, comercios y diversiones se detienen."
+   },
+   "to-vavau--le-four-en-terre-umu": {
+    "title": "El horno de tierra umu",
+    "text": "Antiguamente, la gran comida del mediodía se cocía en un horno de tierra; también se preparaba allí el cerdo de las bodas y de los duelos."
+   },
+   "to-vavau--le-port-de-neiafu": {
+    "title": "El puerto de Neiafu",
+    "text": "Neiafu, capital de Vavaʻu, es un puerto abrigado; de mayo a octubre acoge veleros llegados de todo el mundo."
+   },
+   "yt-mayotte-ngouja--le-mataba": {
+    "title": "El mataba",
+    "text": "Hojas de mandioca estofadas en leche de coco, un plato largo de preparar que se sirve sobre todo en las ceremonias."
+   },
+   "yt-mayotte-ngouja--la-chahoula-ya-nadzi": {
+    "title": "La chahoula ya nadzi",
+    "text": "Arroz cocido en agua o en leche de coco, plato obligado de las ceremonias (circuncisión, debbah, maoulida) y de las grandes comidas familiares."
+   },
+   "yt-mayotte-ngouja--le-maoulida-shengue": {
+    "title": "El maoulida shengué",
+    "text": "Canto tradicional que mezcla canto, danza y coreografía, inscrito en el patrimonio cultural inmaterial nacional desde junio de 2022."
+   },
+   "yt-mayotte-ngouja--la-salouva": {
+    "title": "La salouva",
+    "text": "Las mujeres suelen llevar la salouva, una prenda colorida; los hombres, ropa de algodón blanco."
+   },
+   "yt-mayotte-ngouja--le-kibushi": {
+    "title": "El kibushi",
+    "text": "Lengua de origen malgache, el kibushi es la lengua materna de alrededor del 30 % de los habitantes de Mayotte."
+   },
+   "no-jaeren-borestranda--le-j-dersylte": {
+    "title": "El Jædersylte",
+    "text": "Producto local del Jæren: carne y tocino picados, luego envasados en conserva."
+   },
+   "no-jaeren-borestranda--gladmat": {
+    "title": "Gladmat",
+    "text": "A finales de junio, en Stavanger, el mayor festival culinario de Noruega: productores locales en el puerto (del 23 al 26 de junio de 2027)."
+   },
+   "no-jaeren-borestranda--la-j-rdagen": {
+    "title": "La Jærdagen",
+    "text": "El último fin de semana de mayo, Bryne celebra la Jærdagen, su fiesta de la ciudad."
+   },
+   "no-jaeren-borestranda--le-droit-d-acces-a-la-nature": {
+    "title": "El derecho de acceso a la naturaleza",
+    "text": "Cualquiera puede recorrer las tierras no cultivadas, acampar a 150 m como mínimo de una casa y recoger bayas."
+   },
+   "no-jaeren-borestranda--le-j-rsk": {
+    "title": "El jærsk",
+    "text": "Allí se habla el jærsk, un dialecto del suroeste de Noruega, sobre todo en Hå, Time y Klepp."
+   },
+   "se-bohuslan-kosterhavet--plateaux-de-fruits-de-mer-et-fetes-de-crevettes": {
+    "title": "Mariscadas y fiestas de camarones",
+    "text": "En Strömstad, los restaurantes sirven mariscadas y fiestas de camarones durante Smaka på Bohuslän."
+   },
+   "se-bohuslan-kosterhavet--l-ouverture-de-la-peche-au-homard": {
+    "title": "La apertura de la pesca de la langosta",
+    "text": "El primer lunes después del 20 de septiembre, a las 7 h en punto, se abre la caza de la langosta; dura hasta el 30 de noviembre."
+   },
+   "se-bohuslan-kosterhavet--smaka-pa-bohuslan": {
+    "title": "Smaka på Bohuslän",
+    "text": "A principios de octubre, Strömstad celebra los sabores de Bohuslän: mariscos, pesca de langosta, visitas a granjas (del 2 al 11 de oct.)."
+   },
+   "se-bohuslan-kosterhavet--l-allemansratten": {
+    "title": "El allemansrätten",
+    "text": "El derecho de acceso público permite caminar, acampar una o dos noches y recoger bayas y setas fuera de los cultivos."
+   },
+   "se-bohuslan-kosterhavet--les-huitres-du-proprietaire": {
+    "title": "Las ostras del propietario",
+    "text": "Las ostras pertenecen al propietario del terreno: no se recogen donde uno quiera."
+   },
+   "dk-jutland-hvidesande--les-limandes-sechees": {
+    "title": "Las platijas secas",
+    "text": "Las platijas secas (dabs) son la golosina local de Hvide Sande, que se prueba gratis durante la fiesta de los Æ Dabs."
+   },
+   "dk-jutland-hvidesande--dabs-day": {
+    "title": "Æ Dabs Day",
+    "text": "En la Ascensión, se cierra la calle Metheasvej para probar platijas secas, con música y tiendas abiertas."
+   },
+   "dk-jutland-hvidesande--le-festival-du-hareng": {
+    "title": "El festival del arenque",
+    "text": "A finales de abril: arenque ahumado bajo la carpa, concurso de pesca y música (del 23 al 25 de abril de 2027)."
+   },
+   "dk-jutland-hvidesande--waterz": {
+    "title": "Waterz",
+    "text": "A principios de septiembre, el mayor festival náutico de Escandinavia: windsurf, kitesurf, surf, SUP (el 3 y 4 de sept. de 2027)."
+   },
+   "dk-jutland-hvidesande--la-criee-du-dimanche": {
+    "title": "La subasta del domingo",
+    "text": "Todos los domingos de julio y agosto, y un domingo de octubre, se puja por la pesca del día en la lonja."
+   },
+   "ie-sligo-easkey--les-produits-de-sligo": {
+    "title": "Los productos de Sligo",
+    "text": "El condado de Sligo destaca las ostras de Lissadell, la langosta salvaje de Mullaghmore y la miel de Knocknarea."
+   },
+   "ie-sligo-easkey--les-bains-d-algues": {
+    "title": "Los baños de algas",
+    "text": "Los baños de algas, surgidos en la era victoriana, sobreviven en Enniscrone: la casa Kilcullen data de 1912."
+   },
+   "ie-sligo-easkey--le-poll-gorm": {
+    "title": "El Poll Gorm",
+    "text": "Piscina natural de agua salada cuyo muro construyeron en 1966 cuatro vecinos; los niños del lugar aprenden allí a nadar."
+   },
+   "ie-sligo-easkey--iascaigh": {
+    "title": "Iascaigh",
+    "text": "Iascaigh, el nombre irlandés de Easkey, significa «rica en peces»."
+   },
+   "ec-galapagos-puntacarola--le-ceviche-de-canchalagua": {
+    "title": "El ceviche de canchalagua",
+    "text": "El ceviche de canchalagua es típico sobre todo de San Cristóbal, la isla más oriental del archipiélago."
+   },
+   "ec-galapagos-puntacarola--la-cantonisation": {
+    "title": "La cantonización",
+    "text": "El 18 de febrero, Puerto Baquerizo Moreno celebra la cantonización, su fiesta mayor."
+   },
+   "ec-galapagos-puntacarola--la-distance-avec-les-animaux": {
+    "title": "La distancia con los animales",
+    "text": "En el parque nacional, mantente a 2 m como mínimo de los animales, aunque se acerquen, sin alimentarlos ni salir de los senderos."
+   },
+   "ec-galapagos-puntacarola--la-loberia": {
+    "title": "La Lobería",
+    "text": "Esta colonia de lobos marinos está a diez minutos en autobús de Puerto Baquerizo Moreno."
+   },
+   "ec-galapagos-puntacarola--la-statue-de-darwin": {
+    "title": "La estatua de Darwin",
+    "text": "Una estatua marca el lugar donde Darwin desembarcó por primera vez en las Galápagos, el 16 de septiembre de 1835."
+   },
+   "vi-saintjohn-trunkbay--le-fungi": {
+    "title": "El fungi",
+    "text": "Polenta de maíz con okra, servida con pescado hervido o bacalao salado."
+   },
+   "vi-saintjohn-trunkbay--le-kallaloo": {
+    "title": "El kallaloo",
+    "text": "Sopa de hojas de callaloo, a veces sustituidas por espinacas."
+   },
+   "vi-saintjohn-trunkbay--la-st-john-celebration": {
+    "title": "La St. John Celebration",
+    "text": "Del 14 de junio al 4 de julio de 2026: desfile del 4 de Julio, steel bands, concursos de cocina y fuegos artificiales en Cruz Bay."
+   },
+   "vi-saintjohn-trunkbay--le-j-ouvert": {
+    "title": "El J’ouvert",
+    "text": "El J’ouvert («amanecer»): al alba se baila al ritmo de soca y calipso, cubierto de barro, polvo y pintura."
+   },
+   "vi-saintjohn-trunkbay--le-sentier-sous-marin": {
+    "title": "El sendero submarino",
+    "text": "El sendero bordea Trunk Bay Cay a lo largo de unos 90 m (300 pies) y sus placas ayudan a los principiantes a reconocer la vida marina."
+   }
+  }
+ }
+}

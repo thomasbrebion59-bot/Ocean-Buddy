@@ -7,7 +7,10 @@
  * format dans son FORMAT.md), valide chaque fait, et écrit dans le dépôt :
  *   - data/culture-zones.json            la donnée gardée, lisible (zones, faits, sources, index spot → zone) ;
  *   - assets/data/culture-zones.js       la même, compacte, chargée à la demande à l’ouverture d’une fiche.
- * Puis met à jour l’empreinte de l’URL dans spot-guide.js.
+ * Traductions : data/culture-zones-i18n.json (anglais et espagnol, titre et texte de chaque fait, nom de chaque zone),
+ * validées ici et écrites dans assets/data/culture-zones.en.js et culture-zones.es.js, chargées selon la langue de l’app.
+ * Une traduction ne porte jamais de source : celle du fait français reste la seule, inchangée.
+ * Puis met à jour l’empreinte des URL dans spot-guide.js.
  * Règle : aucun fait sans source. Un fait invalide est écarté et listé, jamais corrigé ici.
  * Sans dossier de collecte (autre machine, intégration continue), data/culture-zones.json est repris tel quel.
  */
@@ -79,6 +82,38 @@ function compact(d, illus = {}) {
   return { v: d.version, updated: d.updated, zones, spots: d.spots };
 }
 
+/* Traductions (anglais, espagnol) : seulement le titre et le texte d’un fait, et le nom d’une zone. La forme chargée par
+   la fiche suit l’ordre des faits français : {zones:{id:{n, f:[[titre, texte] | 0, …]}}} (0 : pas de traduction valable,
+   la fiche garde alors le français). Une traduction d’un fait qui n’existe plus, ou qui porte une flèche, un tiret
+   décoratif ou un point médian, est écartée et listée. */
+const LANGS = ['en', 'es'];
+const MAX_TEXT_I18N = 170;
+function translationError(t) {
+  if (!t || typeof t !== 'object') return 'traduction illisible';
+  if (typeof t.title !== 'string' || !t.title.trim()) return 'titre absent';
+  if (typeof t.text !== 'string' || !t.text.trim()) return 'texte absent';
+  if (t.text.length > MAX_TEXT_I18N) return `texte de ${t.text.length} caractères (${MAX_TEXT_I18N} au plus)`;
+  if (/[→←↔⇒➜➔·]|\s[—–]\s/.test(t.title + ' ' + t.text)) return 'flèche, tiret décoratif ou point médian';
+  return null;
+}
+function translate(d, tr) {
+  const zones = {}, dropped = [], missing = [], known = new Set();
+  for (const [id, z] of Object.entries(d.zones)) {
+    const f = z.facts.map(fact => {
+      const key = factId(id, fact.title), t = tr && tr.facts && tr.facts[key];
+      known.add(key);
+      if (!t) { missing.push(key); return 0; }
+      const err = translationError(t);
+      if (err) { dropped.push({ id: key, why: err }); return 0; }
+      return [t.title.trim(), t.text.trim()];
+    });
+    const n = tr && tr.zones && typeof tr.zones[id] === 'string' ? tr.zones[id].trim() : '';
+    if (n || f.some(Boolean)) zones[id] = { n, f };
+  }
+  const orphans = Object.keys((tr && tr.facts) || {}).filter(k => !known.has(k));
+  return { zones, dropped, missing, orphans };
+}
+
 function run() {
   const root = path.join(__dirname, '..');
   const dir = process.argv[2] || process.env.OB_CULTURE_ZONES_DIR || path.join(os.homedir(), 'Projects/Ocean-Buddy-orga-docs/donnees-spots');
@@ -114,10 +149,25 @@ function run() {
   const guide = path.join(root, 'spot-guide.js'), code = fs.readFileSync(guide, 'utf8');
   const next = code.replace(/assets\/data\/culture-zones\.js\?v=[0-9a-f]+/, 'assets/data/culture-zones.js?v=' + hash);
   if (next !== code) fs.writeFileSync(guide, next);
+  /* Traductions : un fichier par langue, chargé à la demande ; l’empreinte de chacun est reportée dans spot-guide.js. */
+  const i18nFile = path.join(root, 'data/culture-zones-i18n.json'), i18n = fs.existsSync(i18nFile) ? JSON.parse(fs.readFileSync(i18nFile, 'utf8')) : {};
+  let code2 = fs.readFileSync(guide, 'utf8');
+  for (const lang of LANGS) {
+    const t = translate(data, i18n[lang]);
+    for (const x of t.dropped) console.log(`traduction ${lang} écartée : ${x.id} (${x.why})`);
+    for (const k of t.orphans) console.log(`traduction ${lang} sans fait : ${k}`);
+    if (t.missing.length) console.log(`traduction ${lang} : ${t.missing.length} fait(s) sans traduction, affichés en français (${t.missing.slice(0, 5).join(', ')}${t.missing.length > 5 ? '…' : ''})`);
+    const tb = '/* Généré par scripts/build-culture-zones.cjs depuis data/culture-zones-i18n.json. Ne pas modifier à la main. */\nwindow.OCEAN_CULTURE_ZONES_' + lang.toUpperCase() + '=' + JSON.stringify({ zones: t.zones }) + ';\n';
+    fs.writeFileSync(path.join(root, `assets/data/culture-zones.${lang}.js`), tb);
+    const th = crypto.createHash('sha256').update(tb).digest('hex').slice(0, 12);
+    code2 = code2.replace(new RegExp(`assets/data/culture-zones\\.${lang}\\.js\\?v=[0-9a-f]+`), `assets/data/culture-zones.${lang}.js?v=${th}`);
+    console.log(`${lang} : ${Object.values(t.zones).reduce((a, z) => a + z.f.filter(Boolean).length, 0)} faits traduits (${(tb.length / 1024).toFixed(1)} Ko)`);
+  }
+  if (code2 !== fs.readFileSync(guide, 'utf8')) fs.writeFileSync(guide, code2);
   const facts = Object.values(data.zones).reduce((a, z) => a + z.facts.length, 0);
   console.log(`${Object.keys(illus).length} illustrations propres à un fait.`);
   console.log(`${Object.keys(data.zones).length} zones, ${Object.keys(data.spots).length} spots, ${facts} faits sourcés → data/culture-zones.json, assets/data/culture-zones.js (${(body.length / 1024).toFixed(1)} Ko)` + (data.dropped ? `, ${data.dropped.length} faits écartés` : ''));
 }
 
-module.exports = { KINDS, MAX_TEXT, EXCLUDED_PUBLISHERS, factError, factId, merge, compact };
+module.exports = { KINDS, MAX_TEXT, MAX_TEXT_I18N, LANGS, EXCLUDED_PUBLISHERS, factError, factId, merge, compact, translationError, translate };
 if (require.main === module) run();

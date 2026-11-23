@@ -9,6 +9,8 @@
   const DATA_URL_ES='assets/data/spot-guides.es.js?v=1738a29c9a1b';
   /* Culture locale sourcée, par zone (scripts/build-culture-zones.cjs) : chargée à l’ouverture d’une fiche, jamais au démarrage. */
   const ZONES_URL='assets/data/culture-zones.js?v=8a299adc2301';
+  /* Traductions des faits de culture locale (titre, texte, nom de zone) : une par langue, chargée avec la zone. */
+  const ZONES_URL_I18N={en:'assets/data/culture-zones.en.js?v=bf73a60bed15',es:'assets/data/culture-zones.es.js?v=5ecede979b85'};
   /* Lieux autour du spot (OpenStreetMap) et niveau des prix par pays (Banque mondiale) : scripts/build-spot-extras.cjs,
      chargés à l’ouverture d’une fiche, jamais au démarrage. */
   const EXTRAS_URL='assets/data/spot-extras.js?v=938e24ce7c9f';
@@ -274,14 +276,25 @@
   /* Un « lieu » est souvent un marché ; sinon, un paysage de mer sans bâtiment (aucun dessin ne prétend montrer le vrai lieu). */
   const zoneIllu=(kind,title)=>kind==='lieu'&&/march|market|mercad/i.test(title||'')?'marche':ZONE_ILLU[kind]||'accueil';
   const frDate=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d||''));return m?`${m[3]}/${m[2]}/${m[1]}`:String(d||'');};
+  /* La zone dans la langue de l’app : titre et texte traduits quand la traduction existe (sinon le français), nom de zone
+     traduit. Genre, mois, source et illustration viennent toujours de la donnée française : une source ne change jamais. */
+  const zoneLang=()=>(lang()==='es'?'es':english()?'en':'fr');
+  const zoneCache=new Map();
   function zoneOf(s){
     const d=window.OCEAN_CULTURE_ZONES,id=s&&!s.custom&&d?.spots?.[s.id],z=id&&d.zones?.[id];
-    return z&&Array.isArray(z.f)&&z.f.length?z:null;
+    if(!z||!Array.isArray(z.f)||!z.f.length)return null;
+    const lg=zoneLang(),t=lg==='fr'?null:window['OCEAN_CULTURE_ZONES_'+lg.toUpperCase()]?.zones?.[id];
+    if(!t)return z;
+    const key=lg+':'+id;
+    if(!zoneCache.has(key))zoneCache.set(key,{...z,n:t.n||z.n,f:z.f.map((f,i)=>{const x=Array.isArray(t.f)&&t.f[i];return Array.isArray(x)&&x[0]&&x[1]?[f[0],x[0],x[1],...f.slice(3)]:f;})});
+    return zoneCache.get(key);
   }
   let zonesLoading=null;
   function loadZones(){
-    if(window.OCEAN_CULTURE_ZONES)return Promise.resolve();
-    return zonesLoading||(zonesLoading=inject(ZONES_URL).catch(()=>{zonesLoading=null;}));
+    const lg=zoneLang(),need=()=>lg!=='fr'&&!window['OCEAN_CULTURE_ZONES_'+lg.toUpperCase()];
+    if(window.OCEAN_CULTURE_ZONES&&!need())return Promise.resolve();
+    /* La traduction qui n’arrive pas (réseau) ne bloque rien : les faits s’affichent alors en français. */
+    return zonesLoading||(zonesLoading=(window.OCEAN_CULTURE_ZONES?Promise.resolve():inject(ZONES_URL)).then(()=>need()?inject(ZONES_URL_I18N[lg]).catch(()=>{}):null).then(()=>{zonesLoading=null;}).catch(()=>{zonesLoading=null;}));
   }
   let extrasLoading=null;
   function loadExtras(){
@@ -412,7 +425,7 @@
     paintLive(s,lastLive!==s.id);lastLive=s.id;
     if(!window.OCEAN_CLIMATE_LITE)window.OceanSpotData?.load?.('lite').then(()=>{if(current===s.id)paintLive(s,false);}).catch(()=>{});
     /* La culture locale de la zone arrive à son tour, sans rejouer l’entrée en scène. */
-    if(!window.OCEAN_CULTURE_ZONES)loadZones().then(()=>{if(current===s.id&&zoneOf(s))paintLive(s,false);});
+    if(!window.OCEAN_CULTURE_ZONES||(zoneLang()!=='fr'&&!window['OCEAN_CULTURE_ZONES_'+zoneLang().toUpperCase()]))loadZones().then(()=>{if(current===s.id&&zoneOf(s))paintLive(s,false);});
     /* Lieux et niveau des prix : chargés à la première fiche ouverte, repeints sans rejouer l’entrée en scène. */
     if(!window.OCEAN_SPOT_EXTRAS)loadExtras().then(()=>{if(current===s.id)paintLive(s,false);});
     badgeNearby();
