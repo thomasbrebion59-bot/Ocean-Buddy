@@ -163,3 +163,16 @@ test('fiche : les faits s’affichent dans la langue de l’app, la source reste
   assert.match(g, /return Array\.isArray\(x\)&&x\[0\]&&x\[1\]\?\[f\[0\],x\[0\],x\[1\],\.\.\.f\.slice\(3\)\]:f;/, 'seuls le titre et le texte changent ; sans traduction, le français');
   assert.match(g, /then\(\(\)=>need\(\)\?inject\(ZONES_URL_I18N\[lg\]\)\.catch\(\(\)=>\{\}\):null\)/, 'une traduction absente ne bloque pas la fiche');
 });
+
+test('cartes de culture : compactes, vignette nette sur écran ×3, la carte suivante se devine', () => {
+  const css = read('fiche.css');
+  /* Vignette de 104 points : 312 px d’écran en ×3, moins que les 640 px du fichier (dessiné à environ 450 px). */
+  assert.match(css, /#detail \.gl-card>\.gl-illu,#detail \.gl-card-go \.gl-illu\{grid-column:1;grid-row:1 \/ span 2;width:104px;height:104px;/);
+  const side = 104 * 3; for (const f of fs.readdirSync(path.join(__dirname, '..', 'assets/fiche/faits')).slice(0, 3)) assert.ok(f.endsWith('.webp') && side < 450, f);
+  /* La carte ne prend jamais toute la largeur : 56 px restent pour l’écart et le bord de la suivante. */
+  assert.match(css, /#detail \.gl-card\{flex:0 0 min\(330px,calc\(100% - 56px\)\);/);
+  /* Aucun texte coupé : pas de hauteur fixe, pas de troncature dans la carte. */
+  const card = css.slice(css.indexOf('/* Carte de culture (reprise le 23 nov.)'), css.indexOf('/* Budget sur place'));
+  assert.doesNotMatch(card, /line-clamp|text-overflow|max-height|(?<!min-)height:\d+px(?!;aspect-ratio:1)/);
+  assert.match(card, /#detail \.gl-fact-src\{align-self:end;display:block;min-height:44px;/, 'la source reste une cible de 44 points');
+});
