@@ -1,0 +1,82 @@
+/* @creme-tokens */
+/* Ocean Buddy — organisation de l’app (raccourcis et repli de l’accueil, Réglages par rubriques, ordre du profil,
+   en-tête des Voyages). Jetons de thème uniquement (--t-*). Chargé en dernier. */
+
+/* ---------- Accueil : raccourcis en un geste (home-feed.js, posés avec l’ouverture sous le rideau) ----------
+   Hauteur fixe de 60 px : le contenu change sur place (favoris, dernier spot, voyage) sans rien décaler. */
+.hf-quick{display:flex;gap:8px;height:60px;box-sizing:border-box;overflow-x:auto;overflow-y:hidden;margin:0 calc(-1 * var(--as-gutter,16px)) 10px;padding:2px var(--as-gutter,16px);
+  scrollbar-width:none;scroll-snap-type:x proximity;scroll-padding-inline:var(--as-gutter,16px);overscroll-behavior-x:contain;-webkit-overflow-scrolling:touch}
+.hf-quick::-webkit-scrollbar{display:none}
+.hf-q{flex:1 0 156px;max-width:260px;display:flex;align-items:center;gap:10px;height:56px;min-width:0;box-sizing:border-box;padding:0 14px 0 8px;border:1px solid var(--t-line);border-radius:18px;
+  background:var(--t-card);color:var(--t-ink);text-align:left;cursor:pointer;scroll-snap-align:start;-webkit-tap-highlight-color:transparent;
+  box-shadow:0 4px 12px -8px color-mix(in srgb,var(--t-shadow) 40%,transparent)}
+.hf-q:active{transform:scale(.97)}
+.hf-q:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+.hf-q-ic{flex:none;display:grid;place-items:center;width:40px;height:40px;overflow:hidden;border-radius:12px;background:var(--t-tint);color:var(--t-main)}
+.hf-q-ic svg{width:20px;height:20px}
+.hf-q-ic.is-fav svg{fill:var(--t-danger);stroke:none}
+.hf-q-ic.is-photo img{width:100%;height:100%;object-fit:cover;display:block}
+.hf-q-tx{display:grid;gap:1px;min-width:0}
+.hf-q-tx b{font:800 14px/1.2 var(--body);color:var(--t-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Ligne du dessous entière (« Ninguno por ahora » : 106 px dans 101 px en espagnol à 390 px) : deux lignes au plus dans
+   la tuile de 56 px (16,8 + 1 + 2 × 15 px), sans « … » pour les textes de l’app. */
+.hf-q-tx small{font:600 12.5px/1.2 var(--body);color:var(--t-ink2);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:normal}
+@media(min-width:960px){.hf-quick{margin-inline:0;padding-inline:0;max-width:640px}}
+
+/* ---------- Accueil : « Plus d’idées de départ » (tout ce qui suit les six premières sections, replié) ---------- */
+.hf-plus{margin:30px 0 6px}
+.hf-plus-btn{display:flex;align-items:center;gap:14px;width:100%;min-height:72px;box-sizing:border-box;padding:12px 14px 12px 18px;border:1px solid var(--t-line);border-radius:var(--as-r-l,22px);
+  background:var(--t-card);color:var(--t-ink);text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:0 10px 30px -18px color-mix(in srgb,var(--t-shadow) 45%,transparent)}
+.hf-plus-btn:active{transform:scale(.985)}
+.hf-plus-btn:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+.hf-plus-btn[aria-expanded="true"]{border-color:var(--t-main)}
+.hf-plus-tx{display:grid;gap:3px;min-width:0;flex:1}
+.hf-plus-tx b{font:800 18px/1.2 var(--body);color:var(--t-ink)}
+.hf-plus-tx small{font:600 13px/1.35 var(--body);color:var(--t-ink2);display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+.hf-plus-n{flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--t-tint);color:var(--t-main);font:800 15px/1 var(--body)}
+.hf-plus-n svg{width:20px;height:20px;transition:transform var(--ob-t-release,.34s) var(--ob-snap,ease)}
+.hf-plus-btn[aria-expanded="true"] .hf-plus-n{background:var(--t-main);color:var(--t-on-main)}
+.hf-plus-btn[aria-expanded="true"] .hf-plus-n svg{transform:rotate(180deg)}
+.hf-plus-body>.hf-sec:first-child .as-sec{margin-top:18px}
+/* Dépli : simple fondu montant (opacité et transform seulement, @keyframes obFoldIn dans replis.css), rien au-dessus
+   du bouton ne bouge. */
+.hf-plus-body:not([hidden]){animation:obFoldIn var(--ob-t-sheet,.34s) var(--ob-snap,ease) backwards}
+@media (prefers-reduced-motion:reduce){.hf-plus-body:not([hidden]){animation:none}.hf-plus-n svg{transition:none}}
+.reduce-motion .hf-plus-body:not([hidden]){animation:none}
+
+/* ---------- Accueil : « Ton espace » (ocean-hub.js), titré comme les autres blocs ---------- */
+.ocean-hub .hub-title{grid-column:1/-1;margin:16px 2px 0}
+/* Même largeur que les autres blocs du fil (le cockpit gardait une marge intérieure de 16 px en plus). */
+#home.hf-on #oceanHub{padding-left:0;padding-right:0}
+#home:not(.hf-on) .ocean-hub .hub-title{display:none}
+
+/* ---------- Réglages : rubriques par thème ---------- */
+.set-grp{margin-top:20px;padding-top:16px;border-top:1px solid var(--t-line)}
+.set-title+.set-grp{margin-top:0;padding-top:0;border-top:0}
+.set-grp-t,#settingsModal #obaSetTitle{margin:0 0 6px;font:800 13px/1.25 var(--body);letter-spacing:.7px;text-transform:uppercase;color:var(--t-main)}
+.set-grp-t+.set-lab{margin-top:8px}
+.set-grp .set-toggle{margin-top:10px}
+.set-grp .set-reset{margin-top:10px}
+.set-grp-t+.set-reset{margin-top:8px}
+.set-grp-about .set-logo{display:block;margin:6px auto 0}
+.set-grp-about .set-about{margin-top:8px}
+
+/* ---------- Profil : entrée « Réglages » en bas de page (en plus de la roue dentée du haut) ---------- */
+.prof-settings{display:flex;align-items:center;gap:12px;width:100%;box-sizing:border-box;margin:22px 0 4px;padding:10px 14px;font:inherit;text-align:left;cursor:pointer;
+  background:var(--t-card);color:var(--t-ink);border:2px solid var(--t-line);border-radius:20px;-webkit-tap-highlight-color:transparent}
+.prof-settings:active{transform:scale(.98)}
+.prof-settings:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+.prof-settings-ic{flex:none;display:grid;place-items:center;width:44px;height:44px;border-radius:14px;background:var(--t-tint);color:var(--t-main)}
+.prof-settings-ic svg{width:22px;height:22px}
+.prof-settings-tx{display:flex;flex-direction:column;gap:1px;min-width:0}
+.prof-settings-tx b{font-size:15px;font-weight:800;color:var(--t-deep)}
+.prof-settings-tx small{font-size:12px;font-weight:600;color:var(--t-ink2)}
+.prof-settings-go{margin-left:auto;font-size:13px;font-weight:800;color:var(--t-main);white-space:nowrap}
+#profStats .pstat[onclick]{cursor:pointer}
+
+/* ---------- Voyages : sur téléphone, le grand titre « Voyages » suffit ; le slogan en double est retiré ---------- */
+@media(max-width:959px){
+  #trips .trip-heading>div{display:none}
+  #trips .trip-heading{margin:4px 0 16px}
+  #trips:not(.has-saved) .trip-heading{display:none}
+}

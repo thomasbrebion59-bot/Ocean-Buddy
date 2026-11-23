@@ -1,0 +1,278 @@
+/* @creme-tokens */
+/* Découverte des cultures (cultures-boot.js, cultures.js). Chargé avec l’app : la rangée et la carte du jeu sont posées
+   sur l’accueil sous le rideau, à hauteur fixe ; les mots et le jeu arrivent ensuite sur place, sans rien décaler.
+   Couleurs de la marque uniquement (jetons --t-*). Zones de toucher de 44 px au moins. Mouvement réduit respecté. */
+
+/* ---------- Accueil : « Tour du monde des cultures » ---------- */
+.cult-home{margin:0}
+.cult-home>.as-sec{margin-top:30px}
+.cult-home>.as-sec button{min-height:44px}
+.cult-rail{display:flex;gap:10px;overflow-x:auto;overflow-y:hidden;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:var(--as-gutter,16px);
+  margin:0 calc(-1 * var(--as-gutter,16px));padding:2px var(--as-gutter,16px) 10px;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.cult-rail::-webkit-scrollbar{display:none}
+.cult-card{position:relative;flex:0 0 42%;max-width:190px;aspect-ratio:3/4;scroll-snap-align:start;overflow:hidden;isolation:isolate;margin:0;padding:0;border:0;
+  border-radius:var(--as-r-l,22px);background:var(--t-deep);color:var(--t-on-main);cursor:pointer;text-align:left;font:inherit;-webkit-tap-highlight-color:transparent;
+  box-shadow:0 14px 30px -18px color-mix(in srgb,var(--t-shadow) 60%,transparent);transition:transform .25s cubic-bezier(.32,1.28,.42,1)}
+.cult-card img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+.cult-card::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,color-mix(in srgb,var(--t-scrim) 10%,transparent) 0%,transparent 34%,color-mix(in srgb,var(--t-scrim) 86%,transparent) 100%)}
+.cult-card:active{transform:scale(.97)}
+.cult-card:focus-visible{outline:3px solid var(--t-main);outline-offset:3px}
+.cult-card-tx{position:absolute;left:12px;right:12px;bottom:12px;display:flex;flex-direction:column;gap:6px}
+/* Mot entier, jamais coupé au milieu ni par « … » : pas de coupe forcée ni de limite de lignes ; le corps suit la longueur
+   du mot (data-fit, posé par cultures-boot.js et cultures.js, wordFit) pour qu’il tienne sur deux lignes au plus. */
+.cult-card-word{display:block;font:800 calc(27px * var(--wfit,1))/.98 var(--as-condensed);letter-spacing:-.2px;color:var(--t-on-main);
+  text-shadow:0 2px 14px color-mix(in srgb,var(--t-shadow) 55%,transparent);overflow-wrap:normal;word-break:normal;hyphens:none}
+.cult-card-word:not(:empty)::before{content:"«\00a0";color:var(--t-sun)}
+.cult-card-word:not(:empty)::after{content:"\00a0»";color:var(--t-sun)}
+html[lang="es"] .cult-card-word:not(:empty)::before{content:"«"}
+html[lang="es"] .cult-card-word:not(:empty)::after{content:"»"}
+html[lang="en"] .cult-card-word:not(:empty)::before{content:"“"}
+html[lang="en"] .cult-card-word:not(:empty)::after{content:"”"}
+.cult-card-word[data-fit="1"]{--wfit:.9}
+.cult-card-word[data-fit="2"]{--wfit:.8}
+.cult-card-word[data-fit="3"]{--wfit:.72}
+.cult-card-word[data-fit="4"]{--wfit:.64}
+.cult-card-word[data-fit="5"]{--wfit:.6}
+html .cult-card-word[data-fit="5"]:not(:empty)::before,html .cult-card-word[data-fit="5"]:not(:empty)::after{content:none}
+.cult-card-word.is-wait,.cult-card-word:empty{width:72%;height:24px;border-radius:8px;background:color-mix(in srgb,var(--t-card) 24%,transparent)}
+.cult-card.no-word .cult-card-word{display:none}
+.cult-card.no-word .cult-card-name{font:800 22px/1 var(--as-condensed);letter-spacing:0}
+/* Nom du pays entier, jamais « … » : corps et interlettrage réduits, ou plusieurs lignes, selon sa longueur (data-fit,
+   cultures-boot.js nameFit). Coupures aux espaces et après les traits d’union seulement ; la carte garde sa hauteur. */
+.cult-card-name{font:700 11.5px/1.2 var(--body);letter-spacing:.9px;text-transform:uppercase;color:color-mix(in srgb,var(--t-on-main) 88%,transparent);white-space:normal;overflow-wrap:normal;word-break:normal;hyphens:none}
+.cult-card-name[data-fit="1"]{font-size:11px;letter-spacing:.4px}
+.cult-card-name[data-fit="2"]{font-size:10.5px;letter-spacing:.2px}
+.cult-card-name[data-fit="3"]{font-size:10px;letter-spacing:0}
+.cult-card-stamp{position:absolute;top:10px;right:10px;display:none;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--t-sun);color:var(--t-deep);transform:rotate(-10deg);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--t-sun) 35%,transparent)}
+.cult-card-stamp svg{width:17px;height:17px}
+.cult-card.is-stamped .cult-card-stamp{display:grid}
+@media(min-width:960px){.cult-card{flex-basis:180px}.cult-rail{margin:0;padding-inline:0}}
+
+/* ---------- Accueil : « Le mot du jour » (hauteur fixe : question et résultat tiennent dans la même boîte) ---------- */
+.cult-quiz{position:relative;overflow:hidden;isolation:isolate;box-sizing:border-box;height:344px;margin:14px 0 22px;padding:14px 16px 16px;border-radius:var(--as-r-xl,28px);color:var(--t-on-main);
+  background:radial-gradient(120% 90% at 100% 0%,color-mix(in srgb,var(--t-sun) 18%,transparent) 0%,transparent 55%),linear-gradient(150deg,var(--t-deep) 0%,var(--t-main2) 100%);
+  box-shadow:0 22px 44px -28px color-mix(in srgb,var(--t-shadow) 90%,transparent)}
+.cult-quiz::before{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:repeating-linear-gradient(135deg,color-mix(in srgb,var(--t-card) 4%,transparent) 0 2px,transparent 2px 9px)}
+.cult-quiz-head{display:flex;align-items:center;justify-content:space-between;gap:10px;height:32px}
+.cult-quiz-kicker{display:inline-flex;align-items:center;gap:8px;font:800 12px/1 var(--body);letter-spacing:1.3px;text-transform:uppercase;color:var(--t-sun)}
+.cult-quiz-kicker img{width:28px;height:28px}
+.cult-quiz-meta{font:700 12.5px/1 var(--body);color:color-mix(in srgb,var(--t-on-main) 82%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cult-quiz-body{display:flex;flex-direction:column}
+.cult-quiz-word{display:flex;align-items:center;height:54px;margin:8px 0 2px;font:900 42px/1 var(--as-condensed);letter-spacing:-.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:var(--t-on-main)}
+.cult-quiz-word span{color:var(--t-sun)}
+.cult-quiz-word.is-long{font-size:32px}
+.cult-quiz-q{height:42px;margin:0 0 10px;font:600 15px/1.35 var(--body);color:color-mix(in srgb,var(--t-on-main) 90%,transparent);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cult-quiz-choices{display:grid;gap:8px;height:160px}
+.cult-choice{display:flex;align-items:center;gap:10px;height:48px;min-width:0;margin:0;padding:0 16px 0 7px;box-sizing:border-box;border:1.5px solid color-mix(in srgb,var(--t-card) 30%,transparent);border-radius:999px;
+  background:color-mix(in srgb,var(--t-card) 12%,transparent);color:var(--t-on-main);font:700 15.5px/1.1 var(--body);text-align:left;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:background-color .25s,border-color .25s,transform .2s}
+.cult-choice img,.cult-choice i{flex:none;width:34px;height:34px;border-radius:50%;object-fit:cover;background:color-mix(in srgb,var(--t-card) 20%,transparent)}
+.cult-choice span{min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cult-choice:active{transform:scale(.97)}
+.cult-choice:focus-visible{outline:2px solid var(--t-sun);outline-offset:2px}
+.cult-choice[aria-disabled="true"]{cursor:default}
+.cult-choice[aria-disabled="true"]:not(.is-right):not(.is-wrong){opacity:.55}
+.cult-choice.is-right{background:var(--t-ok);border-color:var(--t-ok);color:var(--t-on-alert)}
+.cult-choice.is-wrong{background:var(--t-danger);border-color:var(--t-danger);color:var(--t-on-alert)}
+.cult-choice.is-right::after,.cult-choice.is-wrong::after{content:"";flex:none;width:20px;height:20px;margin-left:auto;background:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m5 12.5 4.5 4.5L19 7.5'/%3E%3C/svg%3E") center/contain no-repeat}
+.cult-choice.is-wrong::after{-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M7 7l10 10M17 7 7 17'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M7 7l10 10M17 7 7 17'/%3E%3C/svg%3E") center/contain no-repeat}
+.cult-choice.is-wrong{animation:cult-shake .38s ease-in-out}
+@keyframes cult-shake{20%{transform:translateX(-6px)}45%{transform:translateX(5px)}70%{transform:translateX(-3px)}}
+/* En attente des données : formes neutres, sans clignotement. */
+.cult-skel{display:block;width:62%;height:34px;border-radius:10px;background:color-mix(in srgb,var(--t-card) 16%,transparent)}
+.cult-skel-btn{display:block;height:48px;border-radius:999px;background:color-mix(in srgb,var(--t-card) 10%,transparent)}
+/* Résultat : tampon, pays, bouton « Découvrir », rappel du lendemain. */
+.cult-quiz-done{display:flex;flex-direction:column;gap:10px;height:160px}
+.cult-quiz-res{display:flex;align-items:center;gap:14px;height:66px}
+.cult-quiz-res>div{display:grid;gap:4px;min-width:0}
+.cult-quiz-res>div>b{font:800 26px/1 var(--as-condensed);text-transform:uppercase;letter-spacing:-.2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cult-quiz-res>div>small{font:600 13px/1.3 var(--body);color:color-mix(in srgb,var(--t-on-main) 86%,transparent)}
+.cult-quiz-go{display:flex;align-items:center;justify-content:center;height:48px;margin:0;padding:0 18px;border:0;border-radius:999px;background:var(--t-sun);color:var(--t-deep);font:800 15.5px var(--body);cursor:pointer;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;box-shadow:0 10px 22px -12px color-mix(in srgb,var(--t-shadow) 70%,transparent)}
+/* Nom long (cultures.js, fitDone) : « Découvrir <pays> » sur deux lignes centrées, jamais de « … » ; le tampon reste
+   seul à gauche (il porte le nom en entier), le nom et la ligne qui suit s’effacent au lieu d’être coupés. */
+.cult-quiz-done.is-long .cult-quiz-go{white-space:normal;text-overflow:clip;text-align:center;overflow-wrap:normal;font-size:13.5px;line-height:1.15}
+.cult-quiz-done.is-long .cult-quiz-res>div{display:none}
+.cult-quiz-go:active{transform:scale(.97)}
+.cult-quiz-go:focus-visible{outline:2px solid var(--t-on-main);outline-offset:3px}
+.cult-quiz-next{margin:0;font:600 12.5px/1.2 var(--body);text-align:center;color:color-mix(in srgb,var(--t-on-main) 78%,transparent)}
+.cult-quiz .cult-stamp{color:var(--t-sun)}
+
+/* ---------- Tampon (encre ronde) ----------
+   Le nom du pays tient toujours en entier dans le cercle, sans « … » : retour à la ligne entre les mots, et taille selon
+   la longueur du nom (data-fit, posé par cultures.js) ; --sf = taille de base selon l’endroit (carnet, profil, mot du jour,
+   page du pays). Les textes de la carte qui contient le tampon (.cult-ix, .cult-quiz-res) ne le touchent pas. */
+.cult-stamp{--sf:11px;position:relative;flex:none;display:grid;place-items:center;width:66px;height:66px;color:var(--t-main);transform:rotate(-10deg);text-align:center}
+.cult-stamp svg{position:absolute;inset:0;width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:4}
+.cult-stamp svg .in{stroke-width:1.6;stroke-dasharray:3 4}
+.cult-stamp b{position:relative;display:block;max-width:76%;margin-top:-10%;font:900 calc(var(--sf) * var(--fit,1))/1 var(--as-condensed);letter-spacing:.2px;text-transform:uppercase;color:currentColor;
+  white-space:normal;overflow-wrap:normal;word-break:normal;text-wrap:balance}
+.cult-stamp[data-fit="1"]{--fit:.86}
+.cult-stamp[data-fit="2"]{--fit:.72}
+.cult-stamp[data-fit="3"]{--fit:.6}
+.cult-stamp[data-fit="2"] b,.cult-stamp[data-fit="3"] b{letter-spacing:0}
+.cult-stamp small{position:absolute;bottom:23%;left:18%;right:18%;overflow:hidden;text-overflow:clip;font:700 7.5px/1 var(--body);letter-spacing:.2px;color:currentColor;opacity:.85;white-space:nowrap}
+.cult-stamp.is-big{--sf:15px;width:104px;height:104px}
+.cult-stamp.is-big small{font-size:9.5px}
+.cult-stamp.is-empty svg{stroke-dasharray:6 7;stroke-width:3;opacity:.7}
+.cult-stamp.is-fresh{animation:cult-thump .5s cubic-bezier(.3,1.4,.5,1) both}
+@keyframes cult-thump{0%{transform:scale(1.9) rotate(-26deg);opacity:0}55%{transform:scale(.93) rotate(-8deg);opacity:1}100%{transform:scale(1) rotate(-10deg);opacity:1}}
+
+/* ---------- Feuille plein écran : page pays et carnet de tampons ---------- */
+html.cult-open{overflow:hidden}
+.cult-sheet{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;overflow:hidden;background:var(--t-page);color:var(--t-ink)}
+.cult-sheet::backdrop{background:color-mix(in srgb,var(--t-scrim) 45%,transparent)}
+.cult-sheet.is-in{animation:cult-in .34s cubic-bezier(.2,.9,.3,1)}
+@keyframes cult-in{from{transform:translateY(32px);opacity:0}to{transform:none;opacity:1}}
+.cult-scroll{height:100%;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+.cult-hero{position:relative;isolation:isolate;display:flex;flex-direction:column;justify-content:flex-end;min-height:min(64vh,560px);background:var(--t-deep);color:var(--t-on-main)}
+.cult-hero.no-photo{min-height:340px;background:linear-gradient(150deg,var(--t-deep) 0%,var(--t-main2) 100%)}
+.cult-hero-img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+.cult-hero::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,color-mix(in srgb,var(--t-scrim) 45%,transparent) 0%,transparent 26%,transparent 42%,color-mix(in srgb,var(--t-scrim) 88%,transparent) 100%)}
+/* Barre Fermer / Partager : collée en haut de la feuille pendant tout le défilement (iPhone : ni Échap ni geste retour),
+   sous la zone sûre. Hauteur nulle dans le flux, avant le héros : rien ne bouge, les boutons débordent par-dessus.
+   Sombre et translucide sur la photo ; claire et pleine (is-solid) une fois la photo passée sous la barre (cultures.js). */
+.cult-bar{position:sticky;z-index:5;top:calc(env(safe-area-inset-top,0px) + 10px);height:0;margin:0 14px;display:flex;align-items:flex-start;justify-content:space-between;pointer-events:none}
+.cult-bar.is-ix{width:min(692px,calc(100% - 28px));margin:0 auto}
+.cult-bar>*{pointer-events:auto}
+.cult-icon{flex:none;display:grid;place-items:center;width:44px;height:44px;margin:0;padding:0;border:0;border-radius:50%;cursor:pointer;color:var(--t-on-main);
+  background:color-mix(in srgb,var(--t-scrim) 52%,transparent);box-shadow:0 0 0 1px color-mix(in srgb,var(--t-card) 18%,transparent);
+  transition:background-color .2s,color .2s,box-shadow .2s}
+.cult-icon svg{width:21px;height:21px}
+.cult-icon:focus-visible{outline:2px solid var(--t-sun);outline-offset:2px}
+.cult-hero-tx{position:relative;padding:0 20px 46px;max-width:720px;width:100%;box-sizing:border-box;margin:0 auto}
+.cult-kicker{display:inline-block;padding:6px 11px;border-radius:999px;background:color-mix(in srgb,var(--t-sun) 92%,transparent);color:var(--t-deep);font:800 11px/1 var(--body);letter-spacing:1.2px;text-transform:uppercase}
+.cult-hero h1{margin:12px 0 6px;font:900 58px/.9 var(--as-condensed);letter-spacing:-.6px;text-transform:uppercase;text-wrap:balance;overflow-wrap:anywhere;color:var(--t-on-main);
+  text-shadow:0 4px 26px color-mix(in srgb,var(--t-shadow) 45%,transparent)}
+.cult-langs{margin:0;font:600 15px/1.4 var(--body);color:color-mix(in srgb,var(--t-on-main) 92%,transparent)}
+.cult-photo-of{display:inline-flex;align-items:center;gap:4px;min-height:44px;margin:0 0 -12px;padding:0;border:0;background:none;color:color-mix(in srgb,var(--t-on-main) 84%,transparent);font:600 12.5px/1.2 var(--body);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.cult-hero .cult-stamp.is-big{position:absolute;z-index:1;top:calc(env(safe-area-inset-top,0px) + 70px);right:18px;color:var(--t-sun);border-radius:50%;background:color-mix(in srgb,var(--t-scrim) 42%,transparent)}
+.cult-body{display:grid;gap:14px;box-sizing:border-box;max-width:720px;margin:0 auto;padding:0 16px calc(32px + env(safe-area-inset-bottom,0px))}
+.cult-body>:first-child{margin-top:16px}
+.cult-words:first-child{margin-top:-30px}
+.cult-words{position:relative;z-index:1;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.cult-words.is-one{grid-template-columns:1fr}
+.cult-word,.cult-block,.cult-tile{box-sizing:border-box;min-width:0;border-radius:var(--as-r-l,22px);background:var(--t-card);border:1px solid color-mix(in srgb,var(--t-line) 55%,transparent);
+  box-shadow:0 14px 30px -24px color-mix(in srgb,var(--t-shadow) 70%,transparent)}
+.cult-word{padding:14px 14px 12px}
+.cult-label,.cult-word small{display:block;font:800 11px/1.2 var(--body);letter-spacing:1.1px;text-transform:uppercase;color:var(--t-ink2)}
+.cult-word b{display:block;margin:8px 0 6px;font:800 28px/1 var(--as-condensed);letter-spacing:-.2px;color:var(--t-main);overflow-wrap:anywhere}
+.cult-word p{margin:0;font:500 13.5px/1.4 var(--body);color:var(--t-ink2)}
+.cult-word.is-thanks b{color:var(--t-deep)}
+.cult-src{display:inline-block;padding:12px 0;margin:-6px 0 -12px;font:600 12.5px/1.25 var(--body);color:var(--t-ink2);text-decoration:underline;text-underline-offset:3px;text-decoration-thickness:1px;overflow-wrap:anywhere}
+.cult-src:focus-visible{outline:2px solid var(--t-main);outline-offset:2px;border-radius:4px}
+.cult-base-src{margin:-6px 4px -4px}
+.cult-block{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:16px 16px 14px}
+.cult-pic{width:44px;height:44px;object-fit:contain}
+.cult-block h2{margin:6px 0 6px;font:800 25px/1.02 var(--as-condensed);letter-spacing:-.2px;text-transform:uppercase;color:var(--t-ink);overflow-wrap:anywhere}
+.cult-block p{margin:0;font:500 15px/1.5 var(--body);color:var(--t-ink)}
+.cult-sea{background:linear-gradient(160deg,var(--t-card) 0%,color-mix(in srgb,var(--t-tint) 70%,var(--t-card)) 100%)}
+/* Date de la fête : aucun mot coupé en son milieu (« September », « généralement », « Wednesday »). La colonne garde 78 px
+   et ne s’élargit que du nécessaire pour le mot le plus long de la date (fit-content : largeur min-content de la pastille,
+   66 px de texte au moins). */
+.cult-fete{grid-template-columns:fit-content(78px) 1fr}
+.cult-when{align-self:start;display:flex;flex-direction:column;align-items:center;gap:8px;padding:10px 6px;border-radius:16px;background:var(--t-tint);text-align:center}
+.cult-when b{min-width:66px;font:800 13px/1.15 var(--body);color:var(--t-deep);overflow-wrap:normal;word-break:normal;hyphens:none}
+.cult-pair{display:grid;gap:10px}
+.cult-tile{display:grid;grid-template-columns:44px 1fr;gap:14px;padding:16px 16px 14px}
+.cult-tile>div{min-width:0}
+.cult-tile b{display:block;margin:6px 0 4px;font:800 21px/1.05 var(--as-condensed);text-transform:uppercase;color:var(--t-ink)}
+.cult-tile p{margin:4px 0 0;font:500 14.5px/1.45 var(--body);color:var(--t-ink)}
+@media(min-width:560px){.cult-pair{grid-template-columns:1fr 1fr}}
+.cult-spots-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:12px 2px 0}
+.cult-spots-head h2{margin:0;font:800 22px/1.15 var(--body);letter-spacing:-.4px;color:var(--t-ink)}
+.cult-spots-head button{min-height:44px;padding:0;border:0;background:none;color:var(--t-main);font:750 15px var(--body);cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+.cult-spots-rail{display:flex;gap:10px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;margin:0 -16px;padding:2px 16px 8px;scroll-padding-inline:16px;scrollbar-width:none}
+.cult-spots-rail::-webkit-scrollbar{display:none}
+.cult-spot{position:relative;flex:0 0 46%;max-width:210px;aspect-ratio:4/5;scroll-snap-align:start;overflow:hidden;isolation:isolate;margin:0;padding:0;border:0;border-radius:var(--as-r-l,22px);background:var(--t-deep);color:var(--t-on-main);cursor:pointer;text-align:left}
+.cult-spot img{position:absolute;inset:0;z-index:-2;width:100%;height:100%;object-fit:cover}
+.cult-spot::after{content:"";position:absolute;inset:0;z-index:-1;background:linear-gradient(180deg,transparent 42%,color-mix(in srgb,var(--t-scrim) 84%,transparent) 100%)}
+.cult-spot>span{position:absolute;left:12px;right:12px;bottom:12px;display:grid;gap:4px}
+.cult-spot b{font:800 20px/1 var(--as-condensed);text-transform:uppercase;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+.cult-spot small{font:650 11.5px/1.2 var(--body);color:color-mix(in srgb,var(--t-on-main) 86%,transparent)}
+.cult-spot:active,.cult-next:active,.cult-ix:active,.cult-ex:active,.guide-cult:active{transform:scale(.98)}
+.cult-next{display:flex;align-items:center;gap:14px;width:100%;min-height:96px;margin:4px 0 0;padding:10px 16px 10px 10px;box-sizing:border-box;border:0;border-radius:var(--as-r-l,22px);cursor:pointer;text-align:left;
+  background:linear-gradient(150deg,var(--t-deep) 0%,var(--t-main2) 100%);color:var(--t-on-main);box-shadow:0 18px 36px -24px color-mix(in srgb,var(--t-shadow) 85%,transparent)}
+.cult-next img{flex:none;width:76px;height:76px;border-radius:16px;object-fit:cover}
+.cult-next>span{display:grid;gap:4px;min-width:0}
+.cult-next small{font:800 11px/1 var(--body);letter-spacing:1.2px;text-transform:uppercase;color:var(--t-sun)}
+.cult-next b{font:800 26px/1 var(--as-condensed);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cult-next em{font:600 14px/1.2 var(--body);font-style:normal;color:color-mix(in srgb,var(--t-on-main) 86%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cult-foot{margin:4px 4px 0;font:500 12.5px/1.45 var(--body);color:var(--t-ink2)}
+/* Carnet de tampons */
+.cult-ixhead{position:relative;padding:calc(env(safe-area-inset-top,0px) + 66px) 20px 18px;max-width:720px;margin:0 auto;box-sizing:border-box}
+.cult-bar.is-solid .cult-icon{background:var(--t-card);color:var(--t-ink);box-shadow:0 0 0 1px var(--t-line),0 8px 18px -10px color-mix(in srgb,var(--t-shadow) 55%,transparent)}
+.cult-ixhead h1{margin:12px 0 4px;font:900 46px/.92 var(--as-condensed);text-transform:uppercase;letter-spacing:-.4px;color:var(--t-ink)}
+.cult-ixcount{margin:0 0 10px;font:600 15px/1.2 var(--body);color:var(--t-ink2)}
+.cult-ixcount b{font:900 34px/1 var(--as-condensed);color:var(--t-main)}
+.cult-ixhint{margin:10px 0 0;font:500 14px/1.45 var(--body);color:var(--t-ink2)}
+.cult-bar-track{position:relative;height:10px;border-radius:999px;overflow:hidden;background:color-mix(in srgb,var(--t-main) 14%,transparent)}
+.cult-bar-track i{position:absolute;left:0;top:0;bottom:0;border-radius:999px;background:linear-gradient(90deg,var(--t-main) 0%,var(--t-sun) 100%)}
+.cult-ixbody{gap:6px}
+.cult-ixsec h2{display:flex;align-items:baseline;justify-content:space-between;margin:18px 2px 10px;font:800 21px/1.1 var(--body);letter-spacing:-.3px;color:var(--t-ink)}
+.cult-ixsec h2 small{font:700 13px var(--body);color:var(--t-ink2)}
+.cult-ixgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(min-width:560px){.cult-ixgrid{grid-template-columns:repeat(3,1fr)}}
+.cult-ix{position:relative;display:flex;flex-direction:column;min-width:0;margin:0;padding:0 0 10px;border:1px solid color-mix(in srgb,var(--t-line) 60%,transparent);border-radius:18px;overflow:hidden;
+  background:var(--t-card);color:var(--t-ink);text-align:left;cursor:pointer;font:inherit}
+.cult-ix img,.cult-ix>i{display:block;width:100%;aspect-ratio:16/10;object-fit:cover;background:var(--t-tint)}
+.cult-ix>i{background:url(assets/pictos/pictos/carte.webp) center/52px no-repeat var(--t-tint)}
+.cult-ix>span:not(.cult-stamp){display:grid;gap:3px;padding:8px 10px 0;min-width:0}
+.cult-ix>span:not(.cult-stamp)>b{font:800 17px/1.05 var(--as-condensed);text-transform:uppercase;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* Nom du pays entier, jamais « … » (cultures.js, fitIndex, mesuré une fois le carnet posé) : corps réduit sur une ligne
+   (data-fit 1 et 2 : la carte garde sa hauteur), sinon deux lignes coupées aux espaces et après les traits d’union (3 et 4). */
+.cult-ix>span:not(.cult-stamp)>b[data-fit="1"]{font-size:15px}
+.cult-ix>span:not(.cult-stamp)>b[data-fit="2"]{font-size:13.5px}
+.cult-ix>span:not(.cult-stamp)>b:is([data-fit="3"],[data-fit="4"]){font-size:15px;white-space:normal;text-overflow:clip;overflow-wrap:normal;word-break:normal;hyphens:none;text-wrap:balance}
+.cult-ix>span:not(.cult-stamp)>b[data-fit="4"]{font-size:13.5px}
+.cult-ix em{font:600 13px/1.2 var(--body);font-style:normal;color:var(--t-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cult-ix .cult-stamp{--sf:9px;position:absolute;top:8px;right:8px;width:58px;height:58px;color:var(--t-sun);border-radius:50%;background:color-mix(in srgb,var(--t-scrim) 45%,transparent)}
+.cult-ix.is-on{border-color:color-mix(in srgb,var(--t-sun) 80%,transparent);box-shadow:0 0 0 2px color-mix(in srgb,var(--t-sun) 55%,transparent)}
+
+/* ---------- Profil : « Cultures découvertes » ---------- */
+.cult-pp{position:relative;margin:14px 0 6px;padding:18px 16px 16px;border-radius:var(--as-r-xl,28px);background:var(--t-card);color:var(--t-ink);border:1px solid color-mix(in srgb,var(--t-line) 70%,transparent);
+  box-shadow:0 18px 40px -30px color-mix(in srgb,var(--t-shadow) 80%,transparent)}
+.cult-pp-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
+.cult-pp-head small{display:block;font:800 11px var(--body);letter-spacing:1.4px;text-transform:uppercase;color:var(--t-ink2)}
+.cult-pp-head h2{margin:4px 0 0;font:800 28px/1 var(--as-condensed);text-transform:uppercase;letter-spacing:-.3px;color:var(--t-main)}
+.cult-pp-count{margin:0;white-space:nowrap;font:700 15px var(--body);color:var(--t-ink2)}
+.cult-pp-count b{font:900 38px/1 var(--as-condensed);color:var(--t-main)}
+.cult-pp-stamps{display:flex;gap:4px;overflow-x:auto;margin:12px -16px 6px;padding:4px 16px;scrollbar-width:none}
+.cult-pp-stamps::-webkit-scrollbar{display:none}
+.cult-pp-stamp{flex:none;display:grid;place-items:center;width:76px;height:76px;margin:0;padding:0;border:0;background:none;cursor:pointer}
+.cult-pp-stamp:nth-child(2n) .cult-stamp{transform:rotate(7deg);color:var(--t-deep)}
+.cult-pp-stamp:nth-child(3n) .cult-stamp{transform:rotate(-4deg)}
+.cult-pp-empty{margin:12px 0;font:500 14px/1.45 var(--body);color:var(--t-ink2)}
+.cult-pp-go{width:100%;height:48px;margin-top:6px;border:0;border-radius:999px;background:var(--t-main);color:var(--t-on-main);font:800 15px var(--body);cursor:pointer}
+.cult-pp-go:active{transform:scale(.98)}
+
+/* ---------- Explorer : bandeau « Découvrir <pays> » ---------- */
+.cult-ex{display:flex;align-items:center;gap:12px;width:100%;min-height:72px;margin:0 0 12px;padding:8px 10px 8px 8px;box-sizing:border-box;border:1px solid color-mix(in srgb,var(--t-sun) 70%,transparent);border-radius:20px;
+  background:linear-gradient(120deg,color-mix(in srgb,var(--t-tint) 85%,var(--t-card)) 0%,var(--t-card) 100%);color:var(--t-ink);text-align:left;cursor:pointer;font:inherit}
+.cult-ex[hidden]{display:none}
+.cult-ex img{flex:none;width:56px;height:56px;border-radius:14px;object-fit:cover}
+.cult-ex>span{display:grid;gap:2px;flex:1;min-width:0}
+.cult-ex small{font:800 10.5px/1.1 var(--body);letter-spacing:1.1px;text-transform:uppercase;color:var(--t-ink2)}
+.cult-ex b{font:800 19px/1.05 var(--as-condensed);text-transform:uppercase;color:var(--t-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cult-ex em{font:600 13px/1.2 var(--body);font-style:normal;color:var(--t-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cult-ex-ok{flex:none;display:grid;place-items:center;width:32px;height:32px;margin-right:4px;border-radius:50%;background:var(--t-sun);color:var(--t-deep);transform:rotate(-10deg)}
+.cult-ex-ok svg{width:18px;height:18px}
+.cult-stamp.is-empty b{margin:0;font-size:26px;opacity:.8}
+
+/* ---------- Fiche spot : lien « Découvrir <pays> » dans « L’esprit du lieu » ---------- */
+.guide-cult{display:flex;align-items:center;gap:12px;width:100%;min-height:68px;margin:14px 0 0;padding:10px 16px 10px 12px;box-sizing:border-box;border:0;border-radius:18px;cursor:pointer;text-align:left;font:inherit;
+  background:linear-gradient(150deg,var(--t-deep) 0%,var(--t-main2) 100%);color:var(--t-on-main);box-shadow:0 14px 28px -20px color-mix(in srgb,var(--t-shadow) 80%,transparent)}
+.guide-cult img{flex:none;width:44px;height:44px}
+.guide-cult>span{display:grid;gap:3px;min-width:0}
+.guide-cult small{font:800 10.5px/1.1 var(--body);letter-spacing:1.1px;text-transform:uppercase;color:var(--t-sun)}
+.guide-cult b{font:800 21px/1.05 var(--as-condensed);text-transform:uppercase;overflow-wrap:anywhere}
+.guide-cult:focus-visible,.cult-ex:focus-visible,.cult-next:focus-visible,.cult-ix:focus-visible,.cult-spot:focus-visible,.cult-pp-go:focus-visible,.cult-pp-stamp:focus-visible{outline:3px solid var(--t-main);outline-offset:3px}
+
+/* ---------- Mouvement réduit ---------- */
+@media(prefers-reduced-motion:reduce){
+  .cult-card,.cult-choice,.cult-sheet.is-in,.cult-stamp.is-fresh,.cult-choice.is-wrong,.cult-icon{animation:none;transition:none}
+}
+.reduce-motion .cult-card,.reduce-motion .cult-choice,.reduce-motion .cult-sheet.is-in,.reduce-motion .cult-stamp.is-fresh,.reduce-motion .cult-choice.is-wrong,.reduce-motion .cult-icon{animation:none;transition:none}
