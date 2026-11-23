@@ -53,7 +53,23 @@
      OceanVerdict.pending(id, opts?) -> chaîne HTML       place réservée pendant l'attente : mêmes lignes, mêmes hauteurs ;
      OceanVerdict.animate(élément)                        chiffres qui montent jusqu'à leur valeur (une fois, rien en
                                                           mouvement réduit) ; à appeler juste après avoir posé html().
-     OceanVerdict.LOT                                     taille d'un lot. */
+     OceanVerdict.LOT                                     taille d'un lot.
+
+   AJOUTS DU 23 NOVEMBRE 2026 (passe d'amélioration de l'accueil ; le contrat ci-dessus n'a pas changé, rien n'est retiré) :
+     entrée.next = { verdict: 'bon' | 'possible', slot: '9 h à 12 h', day: 'tomorrow' }
+                                                          repère positif d'une journée sans créneau : le meilleur créneau
+                                                          de DEMAIN, même calcul (bestSlot puis slotSummary sur la date du
+                                                          lendemain, heures du spot). Le champ n'existe que si verdict = 'non',
+                                                          day = 'today' et qu'un créneau existe demain ; sinon il est absent
+                                                          (jamais de valeur inventée, jamais null). verdict, slot et day de
+                                                          l'entrée ne changent pas : la journée reste « non ».
+     OceanVerdict.html(entrée)                            quand entrée.next existe, la ligne .ui-verdict porte, après la
+                                                          pastille « Pas aujourd'hui », <span class="ui-next" data-v="bon |
+                                                          possible"> : un petit soleil levant et « Demain 9 h à 12 h »
+                                                          (style dans ui-v2.css). Sans next, le rendu est celui d'avant.
+     OceanVerdict.animate(élément)                        un chiffre qui porte data-ui-from="<valeur>" part de cette valeur
+                                                          au lieu de 0 (conditions rafraîchies : 20 puis 22) ; s'il n'a pas
+                                                          changé, il ne bouge pas. */
 (function (root) {
   'use strict';
   const node = typeof module !== 'undefined' && !!module.exports;
@@ -170,7 +186,15 @@
     }
     const x = F.slotSummary(rule, r);
     if (x.status === 'ok') { out.verdict = x.quality === 'good' ? 'bon' : 'possible'; out.slot = range(x.start, x.end); out.day = day; }
-    else if (x.status === 'none') { out.verdict = 'non'; out.day = day; }
+    else if (x.status === 'none') {
+      out.verdict = 'non'; out.day = day;
+      /* Rien aujourd'hui : le meilleur créneau de demain, s'il y en a un (même calcul, heures du spot). */
+      const tomorrow = day === 'today' ? (list.find(q => q.date > today) || {}).date : null;
+      if (tomorrow) {
+        const y = F.slotSummary(rule, W.bestSlot(list, Object.assign({ date: tomorrow, nowIso: null }, base)));
+        if (y.status === 'ok') out.next = { verdict: y.quality === 'good' ? 'bon' : 'possible', slot: range(y.start, y.end), day: 'tomorrow' };
+      }
+    }
     return out;
   }
 
@@ -256,6 +280,8 @@
     return `<span>${ic(k)}<span class="ui-n" data-ui-n="${n}" data-ui-d="${d}">${esc(shown(n, d))}</span><small>${UNIT[k]}</small></span>`;
   }
   const LABEL = { bon: 'Bon pour toi', possible: 'Possible', non: 'Pas aujourd’hui' };
+  /* Soleil levant (repère de demain) : même trait que les pictogrammes de la ligne, décoratif (le texte dit « Demain »). */
+  const SUNRISE = '<svg class="ui-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 6.5v3M5.3 10.8l2 2M18.7 10.8l-2 2"/></svg>';
   api.html = function (e) {
     if (!e || !e.now) return '<p class="ui-cond"><span class="is-none">Conditions indisponibles</span></p>';
     const n = e.now, sea = e.inland === false || n.swellM != null || n.swellS != null || n.waterC != null;
@@ -265,7 +291,10 @@
       const tomorrow = e.day === 'tomorrow';
       const label = e.verdict === 'non' && tomorrow ? 'Pas demain' : LABEL[e.verdict];
       const when = e.slot ? (tomorrow ? obT('Demain') + ' ' + e.slot : e.slot) : '';
-      h += `<p class="ui-verdict" data-v="${e.verdict}"><b>${label}</b>${when ? `<span>${esc(when)}</span>` : ''}</p>`;
+      /* Journée sans créneau, mais un créneau demain (entrée.next) : le repère positif, à la couleur de son verdict. */
+      const n = e.verdict === 'non' && !tomorrow && e.next && (e.next.verdict === 'bon' || e.next.verdict === 'possible') && e.next.slot ? e.next : null;
+      const next = n ? `<span class="ui-next" data-v="${n.verdict}">${SUNRISE}<span><em>${esc(obT('Demain'))}</em> ${esc(n.slot)}</span></span>` : '';
+      h += `<p class="ui-verdict" data-v="${e.verdict}"><b>${label}</b>${when ? `<span>${esc(when)}</span>` : ''}${next}</p>`;
     }
     return h;
   };
@@ -280,11 +309,13 @@
      pendant le décompte (rien ne bouge autour). Mouvement réduit : rien, les valeurs sont déjà écrites. */
   api.animate = function (el) {
     if (!el || typeof el.querySelectorAll !== 'function' || env.reduced() || typeof requestAnimationFrame !== 'function') return;
-    const items = [...el.querySelectorAll('.ui-n[data-ui-n]:not([data-ui-done])')].map(n => ({ n, to: +n.dataset.uiN, d: +n.dataset.uiD || 0, text: n.textContent }))
-      .filter(x => Number.isFinite(x.to) && x.to > 0);
+    /* Départ : 0, ou la valeur d'avant quand elle est connue (data-ui-from) ; un chiffre inchangé ne bouge pas. */
+    const start = n => { const v = n.dataset.uiFrom; return v != null && v !== '' && Number.isFinite(+v) ? +v : 0; };
+    const items = [...el.querySelectorAll('.ui-n[data-ui-n]:not([data-ui-done])')].map(n => ({ n, to: +n.dataset.uiN, from: start(n), d: +n.dataset.uiD || 0, text: n.textContent }))
+      .filter(x => Number.isFinite(x.to) && x.to > 0 && x.from !== x.to);
     if (!items.length) return;
     const widths = items.map(x => x.n.getBoundingClientRect().width);
-    items.forEach((x, i) => { x.n.dataset.uiDone = '1'; x.n.style.minWidth = widths[i].toFixed(2) + 'px'; x.n.textContent = shown(0, x.d); });
+    items.forEach((x, i) => { x.n.dataset.uiDone = '1'; x.n.style.minWidth = widths[i].toFixed(2) + 'px'; x.n.textContent = shown(x.from, x.d); });
     const DUR = 600;
     let t0 = 0;
     const step = t => {
@@ -292,7 +323,8 @@
       const p = Math.min(1, (t - t0) / DUR), k = 1 - Math.pow(1 - p, 3);
       for (const x of items) {
         if (!x.n.isConnected) continue;
-        const v = p >= 1 ? x.text : shown(x.d ? Math.round(x.to * k * 10) / 10 : Math.round(x.to * k), x.d);
+        const at = x.from + (x.to - x.from) * k;
+        const v = p >= 1 ? x.text : shown(x.d ? Math.round(at * 10) / 10 : Math.round(at), x.d);
         if (x.n.firstChild && x.n.firstChild.nodeType === 3) { if (x.n.firstChild.nodeValue !== v) x.n.firstChild.nodeValue = v; } else x.n.textContent = v;
         if (p >= 1) x.n.style.minWidth = '';
       }

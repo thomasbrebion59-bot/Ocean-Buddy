@@ -4,7 +4,9 @@
    - une demande groupée par lot (plusieurs latitudes et longitudes), mer et plans d’eau séparés, 2 jours ;
    - cache de 30 min par spot et par adresse, pause de 2 min après un refus 429 ou 503 ;
    - la ligne affichée : pictogrammes au trait de la fiche, libellés, « Conditions indisponibles » sans donnée ;
-   - aucun texte en dur hors de la chaîne de traduction. */
+   - aucun texte en dur hors de la chaîne de traduction ;
+   - ajouts du 23 novembre : entrée.next (le meilleur créneau de demain quand la journée est « non »), son rendu, et le
+     départ d’un chiffre depuis sa valeur d’avant (data-ui-from). */
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -153,9 +155,9 @@ test('le soir : plus d’heure de jour aujourd’hui, le créneau de demain avec
   /* Demain sans créneau : « non », toujours pour demain. */
   const none = V.compute(s, rec(weather(), marine({ wave: () => 3 })), o, at(22));
   assert.deepEqual([none.verdict, none.slot, none.day], ['non', null, 'tomorrow']);
-  /* Dans la journée, un jour sans créneau ne regarde pas demain. */
+  /* Dans la journée, un jour sans créneau reste « non » pour aujourd’hui (le créneau de demain va dans next, plus bas). */
   const day = V.compute(s, rec(weather(), marine({ wave: (h, i) => (i < 24 ? 3 : 1) })), o, at(10));
-  assert.deepEqual([day.verdict, day.day], ['non', 'today']);
+  assert.deepEqual([day.verdict, day.slot, day.day], ['non', null, 'today']);
   /* Le soir du deuxième jour : aucune heure de demain dans la réponse, rien à affirmer. */
   assert.equal(V.compute(s, rec(weather(), marine()), o, at(22, 1)).verdict, null);
 });
@@ -390,3 +392,112 @@ test('index.html : spot-verdict.js chargé après ses modèles et app.js, avant 
   for (const dep of ['app.js', 'spot-fit-model.js', 'spot-data-model.js', 'spot-weather-model.js']) assert.ok(at2(dep) > 0 && at2(dep) < at2('spot-verdict.js'), dep);
   assert.ok(at2('spot-verdict.js') < at2('home-feed.js'));
 });
+
+/* ================= Ajouts du 23 novembre 2026 ================= */
+test('next : journée « non », le meilleur créneau de demain, même calcul que la fiche ; absent dans tous les autres cas', () => {
+  world();
+  const s = SPOTS.surf, o = { sport: 'surf', level: 'intermediaire' };
+  /* Grosse houle aujourd’hui, houle modeste demain. */
+  const w = weather(), m = marine({ wave: (h, i) => (i < 24 ? 3 : 1) });
+  const e = V.compute(s, rec(w, m), o, at(10));
+  assert.deepEqual([e.verdict, e.slot, e.day], ['non', null, 'today'], 'verdict, slot et day ne changent pas : la journée reste « non »');
+  assert.deepEqual(e.next, { verdict: 'bon', slot: '7 h à 21 h', day: 'tomorrow' });
+  /* Même calcul, fait à la main avec les fonctions de la fiche, sur la date du lendemain. */
+  const list = W.hours(w, m, { inland: false }), rule = W.rule('surf', false, 'intermediaire');
+  const r = W.bestSlot(list, { act: 'surf', inland: false, level: 'intermediaire', date: iso(24).slice(0, 10), nowIso: null, catalogWind: s.wind });
+  const x = F.slotSummary(rule, r);
+  assert.deepEqual([x.status, x.quality], ['ok', 'good']);
+  assert.equal(e.next.slot, `${x.start} h à ${x.end} h`, 'mêmes heures que la fiche');
+  /* Demain « possible, sans plus ». */
+  const maybe = V.compute(s, rec(weather(), marine({ wave: (h, i) => (i < 24 ? 3 : 1.5) })), o, at(10));
+  assert.deepEqual([maybe.verdict, maybe.next.verdict, maybe.next.day], ['non', 'possible', 'tomorrow']);
+  /* Une seule bonne heure demain : « 12 h », sans « à ». */
+  assert.equal(V.compute(s, rec(weather(), marine({ wave: (h, i) => (i >= 24 && h === 12 ? 1 : 3) })), o, at(10)).next.slot, '12 h');
+  /* Rien demain non plus : pas de champ (jamais null, jamais une valeur inventée). */
+  const none = V.compute(s, rec(weather(), marine({ wave: () => 3 })), o, at(10));
+  assert.equal(none.verdict, 'non');
+  assert.ok(!('next' in none));
+  /* Un créneau aujourd’hui : pas de next. */
+  for (const wave of [() => 1, () => 1.5]) assert.ok(!('next' in V.compute(s, rec(weather(), marine({ wave })), o, at(10))));
+  /* Le soir, le verdict porte déjà sur demain (day = tomorrow) : pas de next. */
+  const night = V.compute(s, rec(weather(), marine({ wave: () => 3 })), o, at(22));
+  assert.deepEqual([night.verdict, night.day], ['non', 'tomorrow']);
+  assert.ok(!('next' in night));
+  /* Deuxième jour de la réponse : aucune heure du lendemain, rien à affirmer. */
+  const last = V.compute(s, rec(weather(), marine({ wave: (h, i) => (i >= 24 ? 3 : 1) })), o, at(10, 1));
+  assert.equal(last.verdict, 'non');
+  assert.ok(!('next' in last));
+  /* Sans seuil (plongée) ou sans donnée : pas de next. */
+  assert.ok(!('next' in V.compute(SPOTS.dive, rec(w, m), { sport: 'plongee', level: 'intermediaire' }, at(10))));
+  assert.ok(!('next' in V.compute(s, null, o, at(10))));
+  /* Le contrat d’origine est toujours écrit dans l’en-tête, et l’ajout y est documenté. */
+  const head = src.slice(0, src.indexOf('(function (root)'));
+  assert.match(head, /AJOUTS DU 23 NOVEMBRE 2026/);
+  assert.ok(head.includes("entrée.next = { verdict: 'bon' | 'possible', slot: '9 h à 12 h', day: 'tomorrow' }"));
+  assert.ok(head.includes('data-ui-from'));
+});
+
+test('next par forSpots et cached : la même entrée, sans nouvelle demande', async () => {
+  const w = world({ marine: { wave: (h, i) => (i < 24 ? 3 : 1) } });
+  const e = (await V.forSpots(['surf'])).get('surf');
+  assert.deepEqual(e.next, { verdict: 'bon', slot: '7 h à 21 h', day: 'tomorrow' });
+  const calls = w.calls.length;
+  assert.deepEqual(V.cached('surf').next, e.next);
+  assert.equal(w.calls.length, calls);
+});
+
+test('html : le repère de demain après la pastille « Pas aujourd’hui », à la couleur de son verdict, dans la langue', () => {
+  const o = { sport: 'surf', level: 'intermediaire' }, m = () => marine({ wave: (h, i) => (i < 24 ? 3 : 1) });
+  const w = world();
+  let e = V.compute(SPOTS.surf, rec(weather(), m()), o, at(10));
+  let h = V.html(e);
+  assert.match(h, /<p class="ui-verdict" data-v="non"><b>Pas aujourd’hui<\/b><span class="ui-next" data-v="bon"><svg class="ui-ic"[^>]*aria-hidden="true">[\s\S]*?<\/svg><span><em>Demain<\/em> 7 h à 21 h<\/span><\/span><\/p>$/);
+  assert.equal((h.match(/class="ui-ic"/g) || []).length, 4, 'vent, houle, eau, et le soleil levant');
+  /* Sans next : le rendu d’avant, à l’identique. */
+  const plain = Object.assign({}, e); delete plain.next;
+  assert.match(V.html(plain), /<p class="ui-verdict" data-v="non"><b>Pas aujourd’hui<\/b><\/p>$/);
+  /* next ne s’écrit que pour une journée « non » d’aujourd’hui, avec un verdict connu et des heures. */
+  for (const bad of [{ verdict: 'bon', slot: '10 h à 12 h' }, { verdict: 'non', day: 'tomorrow' }, { next: { verdict: 'non', slot: '9 h', day: 'tomorrow' } }, { next: { verdict: 'bon', slot: null, day: 'tomorrow' } }])
+    assert.doesNotMatch(V.html(Object.assign({}, e, bad)), /ui-next/, JSON.stringify(bad));
+  assert.match(V.html(Object.assign({}, e, { next: { verdict: 'possible', slot: '9 h à 12 h', day: 'tomorrow' } })), /<span class="ui-next" data-v="possible">/);
+  /* Langues : « Demain » par le dictionnaire, les heures de la langue. */
+  w.lang = 'en'; V.setup({});
+  e = V.compute(SPOTS.surf, rec(weather(), m()), o, at(10));
+  assert.match(V.html(e), /<em>Tomorrow<\/em> 7 AM to 9 PM<\/span>/);
+  w.lang = 'es'; V.setup({});
+  e = V.compute(SPOTS.surf, rec(weather(), m()), o, at(10));
+  assert.match(V.html(e), /<em>Mañana<\/em> 7 h a 21 h<\/span>/);
+  /* Style commun (ui-v2.css, ajout) : couleur du verdict de demain, et repli sur deux lignes quand la place manque. */
+  const ui = read('ui-v2.css'), add = ui.slice(ui.indexOf('Ajouts du 23 novembre 2026'));
+  assert.ok(ui.indexOf('Ajouts du 23 novembre 2026') > ui.indexOf('Ajouts du 20 novembre 2026'), 'ajout en fin de feuille');
+  assert.match(add, /\.ocean-v2 \.ui-verdict>\.ui-next\[data-v=bon\]\{color:var\(--ui-good\)\}/);
+  assert.match(add, /\.ocean-v2 \.ui-verdict>\.ui-next\[data-v=possible\]\{color:var\(--ui-maybe\)\}/);
+  assert.match(add, /\.ocean-v2 \.ui-live \.ui-verdict\[data-fit="2"\]>\.ui-next>span\{display:grid;/);
+  assert.doesNotMatch(add.replace(/\/\*[\s\S]*?\*\//g, ''), /#[0-9a-fA-F]{3,8}\b|rgba?\(|infinite|will-change/);
+});
+
+test('animate : un chiffre part de sa valeur d’avant (data-ui-from) ; inchangé, il ne bouge pas', () => {
+  world();
+  V.setup({ reduced: () => false });
+  const frames = [];
+  const had = global.requestAnimationFrame;
+  global.requestAnimationFrame = f => { frames.push(f); };
+  try {
+    const node = (ds, text) => { const n = { dataset: ds, style: {}, isConnected: true, getBoundingClientRect: () => ({ width: 20 }) }; let t = text; Object.defineProperty(n, 'textContent', { get: () => t, set: v => { t = v; } }); return n; };
+    const up = node({ uiN: '22', uiD: '0', uiFrom: '20' }, '22'), same = node({ uiN: '16', uiD: '0', uiFrom: '16' }, '16'), wave = node({ uiN: '1.4', uiD: '1', uiFrom: '2.4' }, '1,4'), zero = node({ uiN: '9', uiD: '0' }, '9');
+    V.animate({ querySelectorAll: () => [up, same, wave, zero] });
+    assert.equal(up.textContent, '20', 'départ : la valeur d’avant');
+    assert.equal(wave.textContent, '2,4');
+    assert.equal(zero.textContent, '0', 'sans valeur d’avant : départ à 0, comme avant');
+    assert.equal(same.textContent, '16');
+    assert.equal(same.dataset.uiDone, undefined, 'un chiffre inchangé n’est pas animé');
+    const tick = t => { const f = frames.shift(); f(t); };
+    tick(1000); tick(1300);
+    assert.ok(+up.textContent > 20 && +up.textContent <= 22, 'en chemin : ' + up.textContent);
+    assert.ok(parseFloat(wave.textContent.replace(',', '.')) < 2.4 && parseFloat(wave.textContent.replace(',', '.')) >= 1.4, 'il descend : ' + wave.textContent);
+    tick(1600);
+    assert.deepEqual([up.textContent, wave.textContent, zero.textContent], ['22', '1,4', '9'], 'arrivée : le texte exact');
+    assert.equal(frames.length, 0, 'décompte fini : plus aucune image demandée');
+  } finally { if (had) global.requestAnimationFrame = had; else delete global.requestAnimationFrame; }
+});
+

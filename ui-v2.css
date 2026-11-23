@@ -125,3 +125,17 @@
 .ocean-v2.reduce-motion .ui-arrive :is(.ui-n,small,.is-none),.ocean-v2.reduce-motion .ui-arrive .ui-verdict>span,.ocean-v2.reduce-motion .ui-arrive .ui-verdict>b{animation:none}
 /* Rangée de photos : la première carte garde sa marge de 16 px (sans cela, l'accroche du défilement la colle au bord). */
 .ocean-v2 .ui-row{scroll-padding-inline:16px}
+
+/* ================= Ajouts du 23 novembre 2026 (passe d'amélioration de l'accueil, spot-verdict.js) =================
+   Ajouts seulement : rien de ce qui précède n'est renommé ni modifié. */
+/* Repère de demain dans une ligne de verdict (entrée.next de spot-verdict.js) : après la pastille « Pas aujourd'hui »,
+   un petit soleil levant et « Demain 9 h à 12 h », à la couleur du verdict de demain (bon ou possible). */
+.ocean-v2 .ui-verdict>.ui-next{display:inline-flex;align-items:center;gap:4px;min-width:0;font:700 var(--ui-note)/1.2 var(--body);white-space:nowrap}
+.ocean-v2 .ui-verdict>.ui-next[data-v=bon]{color:var(--ui-good)}
+.ocean-v2 .ui-verdict>.ui-next[data-v=possible]{color:var(--ui-maybe)}
+.ocean-v2 .ui-next>.ui-ic{width:16px;height:16px;color:currentColor}
+.ocean-v2 .ui-next em{font-style:normal}
+/* Ligne trop courte (data-fit, posé après mesure) : corps réduit, puis « Demain » au-dessus des heures. */
+.ocean-v2 .ui-live .ui-verdict[data-fit]>.ui-next{font-size:12px}
+.ocean-v2 .ui-live .ui-verdict[data-fit="2"]>.ui-next>span{display:grid;line-height:13px;white-space:nowrap}
+
