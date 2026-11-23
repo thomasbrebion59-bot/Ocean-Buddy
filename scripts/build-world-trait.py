@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""Fabrique assets/ui/monde-trait.svg : la carte du monde du passeport, au trait.
+"""Fabrique assets/ui/monde-trait.svg (la carte du monde du passeport, au trait) et assets/ui/monde-terres.svg (les mêmes
+terres, pleines).
 
 Source : assets/globe/world-card.webp (la carte plate du passeport, scripts/build-world-card-map.py), donc la même
 projection (équirectangulaire, 84°N → 58°S) et le même repère de 2400 × 946 : les points des spots se posent avec le
@@ -76,3 +77,11 @@ out = ROOT / "assets/ui/monde-trait.svg"
 out.parent.mkdir(parents=True, exist_ok=True)
 out.write_text(svg, encoding="utf-8")
 print(out.relative_to(ROOT), f"{kept} contours, {points} points, {len(svg)} octets")
+
+# Les mêmes terres, pleines (passe du 23 novembre 2026) : un second masque, pour teinter les terres sous le trait dans le
+# résumé du passeport. Mêmes contours, donc même repère ; evenodd laisse les mers intérieures ouvertes.
+fill = (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" fill="#000" fill-rule="evenodd">'
+        f'<path d="{"".join(parts)}"/></svg>\n')
+out_fill = ROOT / "assets/ui/monde-terres.svg"
+out_fill.write_text(fill, encoding="utf-8")
+print(out_fill.relative_to(ROOT), f"{len(fill)} octets")

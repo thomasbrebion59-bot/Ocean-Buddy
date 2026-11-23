@@ -222,7 +222,7 @@ test('mouvement : transform et opacity seulement, rien en boucle, rien en mouvem
     for (const k of splitTop(frame.replace(/`[^`]*`|'[^']*'/g, 'x')).map(x => x.split(':')[0].trim())) assert.ok(k === 'opacity' || k === 'transform', 'image clé : ' + k);
   assert.ok((j.match(/\.animate\(/g) || []).length >= 4);
   /* Chaque mouvement lancé par ui-nav.js passe d’abord par calm() ou reduced(). */
-  for (const name of ['swap', 'enter', 'play']) {
+  for (const name of ['swap', 'reveal', 'enter', 'play']) {
     const a = j.indexOf('function ' + name + '('), body = j.slice(a, j.indexOf('\n  }', a));
     assert.match(body.slice(0, body.indexOf('.animate(') > 0 ? body.indexOf('.animate(') : body.indexOf('requestAnimationFrame')), /calm\(\)|reduced\(\)/, name + '() : garde de mouvement réduit');
   }
@@ -253,4 +253,123 @@ test('ui-nav.js : chargé après la coque et les modules du Profil ; ui-nav.css 
   for (const f of ['app.js', 'poulpy.js', 'passport.js', 'badges.js', 'app-shell.js']) assert.ok(at(f) < at('ui-nav.js'), f + ' avant ui-nav.js');
   assert.ok(html.indexOf('href="ui-nav.css') < html.indexOf('href="fiche.css'));
   assert.ok(fs.existsSync(path.join(__dirname, '..', 'assets/ui/monde-trait.svg')));
+});
+
+/* ================= Passe du 23 novembre 2026 : plus beau, plus vivant ================= */
+const v2 = read('ui-v2.css');
+/* Largeur et hauteur d’un fichier WebP (en-têtes VP8, VP8L et VP8X). */
+function webpSize(file) {
+  const b = fs.readFileSync(path.join(__dirname, '..', file));
+  assert.equal(b.toString('ascii', 0, 4) + b.toString('ascii', 8, 12), 'RIFFWEBP', file + ' : fichier WebP');
+  const kind = b.toString('ascii', 12, 16);
+  if (kind === 'VP8X') return [1 + b.readUIntLE(24, 3), 1 + b.readUIntLE(27, 3)];
+  if (kind === 'VP8L') { const n = b.readUInt32LE(21); return [1 + (n & 0x3fff), 1 + ((n >> 14) & 0x3fff)]; }
+  return [b.readUInt16LE(26) & 0x3fff, b.readUInt16LE(28) & 0x3fff];
+}
+
+test('cartes blanches à filet : jetons communs de ui-v2.css, repris par le Profil', () => {
+  assert.match(v2, /--ui-surface:var\(--t-card\);/, 'fond d’une carte : le blanc cassé du thème');
+  assert.match(v2, /--ui-wash:color-mix\(in srgb,var\(--t-ink\) 6%,var\(--t-page\)\);/, 'pastilles : la page à peine assombrie (chaud sur le crème)');
+  assert.doesNotMatch(noComments(v2), /--ui-wash:[^;]*--t-main/, 'plus de bleu du thème dans le fond des pastilles');
+  for (const sel of ['.ui-card', '.ui-spots'])
+    assert.match(v2, new RegExp('\\.ocean-v2 \\' + sel + '\\{[^}]*background:var\\(--ui-surface\\)[^}]*box-shadow:inset 0 0 0 1px var\\(--ui-hair\\)'), sel + ' : blanche, avec son filet');
+  /* Aucun renommage : les jetons et les classes d’avant existent toujours. */
+  for (const k of ['--ui-wash:', '--ui-hair:', '--ui-radius:', '.ui-card{', '.ui-spots{', '.ui-pill{', '.ui-btn.is-soft{']) assert.ok(v2.includes(k), 'toujours là : ' + k);
+  /* Profil : tuiles, liste et chiffres du passeport complet sur le même fond ; --ui-wash seulement pour le sélecteur. */
+  assert.match(css, /\.ocean-v2 \.pv-tile\{[^}]*background:var\(--ui-surface\)/);
+  assert.match(css, /\.ocean-v2 \.pv-tile::after\{[^}]*box-shadow:inset 0 0 0 1px var\(--ui-hair\)/, 'filet par-dessus l’illustration');
+  assert.match(css, /\.ocean-v2 \.pv-list\{[^}]*background:var\(--ui-surface\);box-shadow:inset 0 0 0 1px var\(--ui-hair\)/);
+  assert.match(css, /\.ocean-v2 #profile \.pp-stat\{background:var\(--ui-surface\);box-shadow:inset 0 0 0 1px var\(--ui-hair\)\}/);
+  assert.deepEqual([...noComments(css).matchAll(/([^{}]+)\{[^}]*background:var\(--ui-wash\)/g)].map(m => m[1].trim()), ['.ocean-v2 .pv-seg']);
+});
+
+test('tuiles Jouer : une illustration par tuile (assets/ui, WebP 4:3), le libellé gardé, plus de pictogramme', () => {
+  const play = short.slice(short.indexOf('<div class="pv-play">'), short.indexOf('</div>', short.indexOf('<div class="pv-play">')));
+  const tiles = [...play.matchAll(/<button type="button" class="pv-tile" data-pv-play="(\w+)"><span class="pv-tile-art"><img src="(assets\/ui\/[\w-]+\.webp)" alt="" width="(\d+)" height="(\d+)" loading="lazy" decoding="async"><\/span><b(?: data-i18n)?>([^<]+)<\/b><\/button>/g)];
+  assert.deepEqual(tiles.map(m => m[1] + ':' + m[2] + ':' + m[5]), ['quiz:assets/ui/jouer-quiz.webp:Quiz', 'surf:assets/ui/jouer-mini-jeu.webp:Mini-jeu', 'challenges:assets/ui/jouer-defis.webp:Défis']);
+  assert.doesNotMatch(play, /<svg/, 'plus de pictogramme dans les tuiles');
+  for (const m of tiles) {
+    const [w, h] = webpSize(m[2]);
+    assert.deepEqual([w, h], [+m[3], +m[4]], m[2] + ' : dimensions annoncées dans la page');
+    assert.equal(w * 3, h * 4, 'rapport 4:3');
+    assert.ok(w >= 900, 'assez de pixels pour une tuile de 225 px à ×3');
+  }
+  assert.match(css, /\.ocean-v2 \.pv-tile-art\{[^}]*aspect-ratio:4\/3/, 'place réservée avant l’arrivée de l’image');
+});
+
+test('« Mes spots » vide : une scène dessinée pour cet état, à la hauteur de la rangée de vignettes', () => {
+  assert.match(js, /<span class="pv-ph pv-empty-art"><img src="assets\/ui\/mes-spots-vide\.webp" alt="" width="800" height="800" loading="lazy" decoding="async"><\/span>/);
+  assert.doesNotMatch(noComments(js), /assets\/poulpy\/scenes/, 'plus d’image de Poulpy réutilisée');
+  assert.deepEqual(webpSize('assets/ui/mes-spots-vide.webp'), [800, 800]);
+  /* Même hauteur que la rangée de vignettes (photo et nom) : aucun saut en passant de Favoris à Visités. */
+  assert.match(css, /\.ocean-v2 \.pv-spots\.is-empty\{[^}]*grid-template-columns:calc\(var\(--pv-th\) \+ 41\.6px\) minmax\(0,1fr\)/);
+});
+
+test('passeport plus parlant : terres teintées, halo des spots visités, pays visités en tampons (données réelles)', () => {
+  /* Les tampons sont les pays des spots visités, ceux qui font le chiffre « pays » (passport.js). */
+  assert.match(js, /countries:d\?d\.countries\.size:0,countryNames:d\?\[\.\.\.d\.countries\]:\[\]/);
+  const fn = js.slice(js.indexOf('function renderStamps(m){'), js.indexOf('\n  }', js.indexOf('function renderStamps(m){')));
+  assert.match(fn, /const names=m\.countryNames,sig=names\.join\('\|'\);\s*if\(sig===stampsSig\)return;/, 'rien n’est réécrit si rien n’a changé');
+  assert.match(fn, /names\.slice\(0,STAMPS\)\.map\(n=>`<span class="pv-stamp">\$\{esc\(n\)\}<\/span>`\)/, 'noms échappés');
+  assert.match(fn, /<span class="pv-stamp is-more" translate="no" data-no-i18n>\+\$\{more\}<\/span>/);
+  assert.match(fn, /<span class="pv-stamp is-todo">Note ta première session<\/span>/, 'sans pays visité : comment gagner le premier');
+  assert.match(short, /<span class="pv-stamps" id="pvStamps"><\/span>/);
+  /* Hauteur réservée : une ligne de tampons, présente dès le premier rendu. */
+  assert.match(css, /\.ocean-v2 \.pv-stamps\{[^}]*min-height:46px;/);
+  assert.doesNotMatch(css.match(/\.ocean-v2 \.pv-stamps\{[^}]*\}/)[0], /overflow:hidden/, 'un tampon qui se pose n’est pas rogné');
+  /* Terres pleines : mêmes contours que la carte au trait (même script), donc même repère pour les points. */
+  const trait = read('assets/ui/monde-trait.svg'), terres = read('assets/ui/monde-terres.svg');
+  const d = s => s.match(/<path d="([^"]+)"\/>/)[1];
+  assert.equal(d(terres), d(trait)); assert.match(terres, /viewBox="0 0 2400 946" fill="#000" fill-rule="evenodd"/);
+  assert.match(read('scripts/build-world-trait.py'), /assets\/ui\/monde-terres\.svg/);
+  assert.match(css, /\.ocean-v2 \.pv-map-fill\{[^}]*background:var\(--t-tint\);[^}]*mask:url\("assets\/ui\/monde-terres\.svg"\)/);
+  assert.match(css, /\.ocean-v2 \.pv-dot\.been\{[^}]*box-shadow:0 0 0 2px var\(--ui-surface\),0 0 0 5px color-mix\(in srgb,var\(--t-main\) 20%,transparent\)/);
+  /* L’onde d’un spot visité est retirée du document à la fin : rien ne reste, rien ne tourne en boucle. */
+  assert.match(js, /wave\.onfinish=wave\.oncancel=\(\)=>ring\.remove\(\);/);
+});
+
+test('ordinateur large : deux colonnes (niveau et spots ; jouer, passeport, réglages), une seule suite sur téléphone', () => {
+  const cols = [...short.matchAll(/<div class="pv-col( pv-side)?">/g)];
+  assert.equal(cols.length, 2);
+  const [a, b] = cols.map(m => m.index), first = short.slice(a, b), second = short.slice(b);
+  for (const id of ['pvLevelT', 'pvSpotsT']) assert.ok(first.includes('id="' + id + '"'), 'colonne de gauche : ' + id);
+  for (const id of ['pvPlayT', 'pvPassT', 'pvSettings', 'pvHelp']) assert.ok(second.includes('id="' + id + '"') && !first.includes('id="' + id + '"'), 'colonne de droite : ' + id);
+  assert.match(css, /\.ocean-v2 \.pv-col\{display:contents\}/, 'téléphone : les blocs restent des éléments de la grille du Profil');
+  const wide = css.match(/@media\(min-width:1200px\)\{([\s\S]*?)\n\}/);
+  assert.ok(wide, 'règles de l’ordinateur large');
+  assert.match(wide[1], /\.ocean-v2 \.pv\{max-width:1240px!important;grid-template-columns:minmax\(0,1\.7fr\) minmax\(0,1fr\);/);
+  assert.match(wide[1], /\.ocean-v2 \.pv-top\{grid-column:1\/-1\}/);
+  assert.match(wide[1], /\.ocean-v2 \.pv-col\{display:grid;gap:var\(--ui-gap\)/);
+  /* Ordinateur : les vignettes passent à la ligne ; la carte du passeport complet n’est plus une affiche. */
+  assert.match(css, /@media\(min-width:960px\)\{\.ocean-v2 \.pv-spots:not\(\.is-empty\)\{grid-auto-flow:row;grid-template-columns:repeat\(auto-fill,minmax\(150px,1fr\)\)/);
+  assert.match(css, /\.ocean-v2 #profile \.pp\{display:grid;grid-template-columns:minmax\(0,1\.5fr\) minmax\(0,1fr\)/);
+});
+
+test('entrée des blocs : chacun entre en arrivant à l’écran, une fois ; jamais caché en mouvement réduit', () => {
+  const j = noComments(js);
+  const enter = j.slice(j.indexOf('function enter(){'), j.indexOf('\n  }', j.indexOf('function enter(){')));
+  assert.match(enter, /^function enter\(\)\{\s*if\(entered\|\|fullOpen\|\|calm\(\)\)return;entered=true;/, 'une seule fois, jamais en mouvement réduit');
+  assert.ok(enter.indexOf('calm()') < enter.indexOf("classList.add('pv-wait')"), 'un bloc n’attend caché que si le mouvement est permis');
+  assert.match(enter, /if\(!\('IntersectionObserver' in window\)\)\{blocks\.forEach\(reveal\);return;\}/, 'sans observateur : rien n’est caché');
+  assert.match(enter, /if\(e\.isIntersecting\)\{seen\.unobserve\(e\.target\);reveal\(e\.target,n\+\+\);\}/);
+  const reveal = j.slice(j.indexOf('function reveal(el,i){'), j.indexOf('\n  }', j.indexOf('function reveal(el,i){')));
+  assert.match(reveal, /^function reveal\(el,i\)\{\s*el\.classList\.remove\('pv-wait'\);\s*if\(calm\(\)\)return;/, 'le bloc redevient visible avant tout, même sans mouvement');
+  /* Filet de sécurité en CSS : avec l’un ou l’autre réglage, un bloc en attente reste visible. */
+  assert.match(css, /\.ocean-v2 \.pv-wait\{opacity:0\}/);
+  const media = css.match(/@media \(prefers-reduced-motion:reduce\)\{([\s\S]*?)\n\}/)[1];
+  assert.match(media, /\.ocean-v2 \.pv-wait\{opacity:1\}/);
+  assert.match(css, /\.ocean-v2\.reduce-motion \.pv-wait\{opacity:1\}/);
+  assert.match(css, /\.ocean-v2\.reduce-motion :is\([^)]*\.pv-tile-art>img[^)]*\)[^{]*\{transition:none\}/);
+});
+
+test('plus aucun sur-titre en capitales : menu latéral, Communauté, vitrine des trophées, dates des compétitions', () => {
+  assert.match(css, /@media\(min-width:960px\)\{[\s\S]*\.ocean-v2 \.nav \.sidebar-label\{display:none\}/);
+  assert.match(css, /\.ocean-v2 #community \.community-kicker\{display:none\}/);
+  for (const sel of ['#community \\.community-hero h1', '#community \\.community-panel :is\\(h2,h3\\)', '#profile \\.tb-title', '#profile \\.sub-lab', '#challenges \\.evt-m'])
+    assert.match(css, new RegExp('\\.ocean-v2 ' + sel + '\\{[^}]*text-transform:none'), sel.replace(/\\/g, ''));
+  assert.match(css, /\.ocean-v2 #community \.community-hero\{[^}]*background:none;box-shadow:none/, 'plus de grande affiche sombre');
+  assert.match(css, /\.ocean-v2 #community \.community-panel\{[^}]*background:var\(--ui-surface\);box-shadow:inset 0 0 0 1px var\(--ui-hair\)\}/);
+  /* Communauté garde son entrée en bas du menu (ordinateur) : l’accès n’est pas retiré. */
+  assert.match(design, /c\.classList\.add\('sidebar-community'\);s\.before\(c\);/);
+  assert.doesNotMatch(noComments(css), /text-transform:uppercase/);
 });

@@ -5,6 +5,8 @@
    - Jeu et Défis n’ont plus d’onglet : ils s’ouvrent depuis « Jouer ». Un bouton Retour, dans la barre du haut, ramène au
      Profil, qui reste l’onglet actif (go() d’app.js).
    Chargé après app.js, poulpy.js, passport.js, badges.js et app-shell.js ; n’écrit dans aucun autre écran.
+   Passe du 23 novembre 2026 : tuiles Jouer illustrées, scène dessinée pour « Mes spots » vide, passeport plus parlant
+   (terres teintées, halo et onde des spots visités, pays visités en tampons), deux colonnes sur ordinateur large.
    Mouvements : joués une fois, en transform et opacity (Web Animations), jamais en boucle ; rien ne bouge en mouvement
    réduit (réglage du système ou « Réduire les animations »). */
 (() => {
@@ -28,7 +30,8 @@
     /* Favoris : le plus récent d’abord (favs garde l’ordre d’ajout). */
     const fav=[...(typeof favs!=='undefined'?favs:[])].map(id=>byId.get(id)).filter(Boolean).reverse();
     let trophies=0;try{trophies=(window.OceanBadges?.list?.()||[]).filter(b=>b.unlocked).length;}catch(_){}
-    return {fav,been,wished:d?d.wished:[],countries:d?d.countries.size:0,trophies};
+    /* Pays visités : ceux du passeport (data().countries), dans l’ordre des sessions, la plus récente d’abord. */
+    return {fav,been,wished:d?d.wished:[],countries:d?d.countries.size:0,countryNames:d?[...d.countries]:[],trophies};
   }
 
   /* ================= Mon niveau ================= */
@@ -75,7 +78,8 @@
     spotsSig=sig;
     host.classList.toggle('is-empty',!list.length);
     if(list.length){host.innerHTML=list.map(spotCard).join('');host.scrollLeft=0;return;}
-    host.innerHTML=`<span class="pv-ph pv-empty-art"><img src="assets/poulpy/scenes/travel-v2.webp" alt="" width="960" height="640" loading="lazy" decoding="async"></span>`
+    /* Une scène dessinée pour cet état (des spots à découvrir), dans le style des illustrations de la fiche. */
+    host.innerHTML=`<span class="pv-ph pv-empty-art"><img src="assets/ui/mes-spots-vide.webp" alt="" width="800" height="800" loading="lazy" decoding="async"></span>`
       +`<div class="pv-empty"><p class="ui-text">${tab==='been'?'Pas encore de spot visité':'Pas encore de favori'}</p><button type="button" class="ui-btn" data-pv-explore>Explorer</button></div>`;
   }
   $('#pvTabs')?.addEventListener('click',e=>{
@@ -130,6 +134,21 @@
     const dot=(s,cls)=>{const c=typeof COORDS!=='undefined'&&COORDS[s.id];if(!c)return '';const p=pos(c);return p.y<0||p.y>100?'':`<i class="pv-dot ${cls}" style="left:${p.x.toFixed(2)}%;top:${p.y.toFixed(2)}%"></i>`;};
     const html=m.wished.map(s=>dot(s,'wish')).join('')+m.been.map(s=>dot(s,'been')).join('');
     const host=$('#pvDots');if(host&&html!==dotsSig){dotsSig=html;host.innerHTML=html;}
+    renderStamps(m);
+  }
+  /* Les pays visités, en tampons : trois au plus, puis le nombre de ceux qui restent. Les noms sont ceux des spots
+     visités (traduits comme partout ailleurs). Sans pays visité, une case en pointillé dit comment gagner le premier. */
+  const STAMPS=3;
+  let stampsSig=null;
+  function renderStamps(m){
+    const host=$('#pvStamps');if(!host)return;
+    const names=m.countryNames,sig=names.join('|');
+    if(sig===stampsSig)return;
+    stampsSig=sig;
+    const more=names.length-STAMPS;
+    host.innerHTML=names.length
+      ?names.slice(0,STAMPS).map(n=>`<span class="pv-stamp">${esc(n)}</span>`).join('')+(more>0?`<span class="pv-stamp is-more" translate="no" data-no-i18n>+${more}</span>`:'')
+      :`<span class="pv-stamp is-todo">Note ta première session</span>`;
   }
   /* Une fois, quand la carte du passeport entre à l’écran : les chiffres montent et les points se posent. */
   function play(){
@@ -145,6 +164,15 @@
     };
     requestAnimationFrame(tick);
     $$('#pvDots .pv-dot').forEach((d,i)=>d.animate([{opacity:0,transform:'scale(.2)'},{opacity:1,transform:'scale(1)'}],{duration:340,delay:160+Math.min(i,12)*45,easing:ease(),fill:'backwards'}));
+    /* Une onde part de chaque spot visité (six au plus), une seule fois, puis son élément est retiré. */
+    $$('#pvDots .pv-dot.been').slice(0,6).forEach((d,i)=>{
+      const ring=document.createElement('i');ring.className='pv-ring';ring.style.left=d.style.left;ring.style.top=d.style.top;
+      d.before(ring);
+      const wave=ring.animate([{opacity:.7,transform:'scale(1)'},{opacity:0,transform:'scale(4.2)'}],{duration:900,delay:420+i*90,easing:ease(),fill:'backwards'});
+      wave.onfinish=wave.oncancel=()=>ring.remove();
+    });
+    /* Les tampons se posent l’un après l’autre, comme un coup de tampon. */
+    $$('#pvStamps .pv-stamp').forEach((el,i)=>el.animate([{opacity:0,transform:'scale(1.35)'},{opacity:1,transform:'scale(1)'}],{duration:260,delay:380+i*110,easing:ease(),fill:'backwards'}));
   }
   let passSeen=false;
   function tryPlay(){
@@ -220,11 +248,28 @@
     const h=sub?(scr==='profile'?$('#pvFullHead h1'):$('#'+scr+' .pv-sub-head h1')):null,text=h?h.textContent:'';
     if(title.textContent!==text)title.textContent=text;
   }
-  /* Première arrivée sur le Profil : ses blocs entrent l’un après l’autre (35 ms d’écart), une seule fois. */
+  /* Première arrivée sur le Profil, une seule fois : les blocs déjà à l’écran entrent l’un après l’autre (40 ms
+     d’écart) ; ceux du bas attendent, invisibles (.pv-wait), d’arriver à l’écran quand on fait défiler. Les photos et
+     les illustrations d’un bloc se posent alors en douceur, dans leur cadre. */
   let entered=false;
+  function reveal(el,i){
+    el.classList.remove('pv-wait');
+    if(calm())return;
+    const delay=40+i*40;
+    el.animate([{opacity:0,transform:'translate3d(0,14px,0)'},{opacity:1,transform:'translate3d(0,0,0)'}],{duration:320,delay,easing:ease(),fill:'backwards'});
+    $$('.pv-tile-art>img,.pv-ph>img',el).forEach((img,j)=>img.animate([{transform:'scale(1.12)'},{transform:'scale(1)'}],{duration:620,delay:delay+j*70,easing:ease(),fill:'backwards'}));
+  }
   function enter(){
     if(entered||fullOpen||calm())return;entered=true;
-    $$('#pvMain>*').forEach((el,i)=>el.animate([{opacity:0,transform:'translate3d(0,12px,0)'},{opacity:1,transform:'translate3d(0,0,0)'}],{duration:300,delay:40+i*35,easing:ease(),fill:'backwards'}));
+    const blocks=$$('#pvMain>.pv-top,#pvMain>.pv-col>*');
+    if(!('IntersectionObserver' in window)){blocks.forEach(reveal);return;}
+    blocks.forEach(el=>el.classList.add('pv-wait'));
+    /* Marge basse : la bande cachée par la barre d’onglets ne compte pas. */
+    const seen=new IntersectionObserver(es=>{
+      let n=0;
+      for(const e of es)if(e.isIntersecting){seen.unobserve(e.target);reveal(e.target,n++);}
+    },{root:wrap,rootMargin:[0,0,-64,0].map(v=>v+'px').join(' '),threshold:.08});
+    blocks.forEach(el=>seen.observe(el));
   }
   window.addEventListener('ocean:navigate',e=>{
     const to=e.detail;

@@ -45,17 +45,43 @@
   .ocean-v2 .nav .sidebar-community .mobile-label{display:none}
   .ocean-v2 .nav .sidebar-community:hover{color:var(--t-main)}
   .ocean-v2 .nav .sidebar-community.active,.ocean-v2 .nav .sidebar-community[aria-current=page]{color:var(--t-main);font-weight:700}
+  /* Plus de sur-titre en capitales au-dessus des quatre entrées (« Ton terrain de jeu », posé par design.js). */
+  .ocean-v2 .nav .sidebar-label{display:none}
 }
+/* Communauté (ordinateur seulement) : elle garde son entrée en bas du menu, mais son écran prend le vocabulaire de
+   l’interface v2 : un titre simple à la place de la grande affiche sombre, plus de sur-titres en capitales, titres en
+   casse de phrase, cartes blanches à filet. Le contenu (community.js) ne change pas. */
+.ocean-v2 #community .community-kicker{display:none}
+.ocean-v2 #community .community-hero{padding:0 2px;border-radius:0;background:none;box-shadow:none;color:var(--t-ink)}
+.ocean-v2 #community .community-hero h1{margin:0 0 8px;font:800 34px/1.05 var(--body);letter-spacing:-.8px;text-transform:none;color:var(--t-ink)}
+.ocean-v2 #community .community-hero h1 br{display:none}
+.ocean-v2 #community .community-hero h1 b{margin-left:.24em;color:var(--t-main)}
+.ocean-v2 #community .community-hero p{max-width:none;font:400 var(--ui-text)/1.45 var(--body);color:var(--ui-soft)}
+.ocean-v2 #community .community-panel{border:0;border-radius:var(--ui-radius);background:var(--ui-surface);box-shadow:inset 0 0 0 1px var(--ui-hair)}
+.ocean-v2 #community .community-panel :is(h2,h3){margin:0 0 10px;font:800 var(--ui-title)/1.1 var(--display);letter-spacing:-.02em;text-transform:none;color:var(--t-ink)}
 
 /* ================= 2. Profil court ================= */
+/* Cartes blanches à filet (ui-v2.css : --ui-surface et --ui-hair), comme la maquette ; --ui-wash pour les pastilles. */
 .ocean-v2 #profile:not(.pv-full-open)>.pv-sub-head,.ocean-v2 #profile:not(.pv-full-open)>.pv-sub-head~*{display:none!important}
 .ocean-v2 #profile.pv-full-open>.pv{display:none}
 .ocean-v2 .pv{display:grid;gap:var(--ui-gap);min-width:0}
+/* Deux groupes de blocs : le niveau et les spots ; puis jouer, le passeport et les réglages. Sur téléphone, ils se
+   suivent (display:contents : chaque bloc reste un élément de la grille). Sur ordinateur large, ce sont deux colonnes. */
+.ocean-v2 .pv-col{display:contents}
 /* Ordinateur : une colonne de lecture, calée à gauche comme les titres, plutôt que des cartes étirées sur tout l’écran. */
 /* !important : design.css remet « max-width:none » sur chaque enfant direct d’un écran, avec un sélecteur plus précis. */
 @media(min-width:960px){.ocean-v2 .pv{max-width:760px!important;padding-top:14px}.ocean-v2 .pv-sub-head{padding-top:14px}}
-.ocean-v2 .pv>*{min-width:0;margin:0}
+/* Ordinateur large (1200 px et plus) : deux colonnes, plus de bande vide à droite. À gauche, le niveau et les spots ; à
+   droite, jouer, le passeport et les réglages. À 1440 × 900, tout le Profil tient à l’écran sans défiler. */
+@media(min-width:1200px){
+  .ocean-v2 .pv{max-width:1240px!important;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);column-gap:40px;align-items:start}
+  .ocean-v2 .pv-top{grid-column:1/-1}
+  .ocean-v2 .pv-col{display:grid;gap:var(--ui-gap);min-width:0;align-content:start}
+}
+.ocean-v2 .pv>*,.ocean-v2 .pv-col>*{min-width:0;margin:0}
 .ocean-v2 .pv :is(h1,h2):focus{outline:none}
+/* Première arrivée : un bloc attend, invisible, d’arriver à l’écran pour entrer (ui-nav.js). Jamais en mouvement réduit. */
+.ocean-v2 .pv-wait{opacity:0}
 
 /* Titre et avatar. L’avatar garde l’élément .ph-avatar à sa taille d’origine (76 px, 100 px sur ordinateur), réduit par
    une transformation : le bonnet de Noël de noel.css, posé sur .ph-avatar::before, reste à la bonne proportion. */
@@ -76,7 +102,7 @@
 .ocean-v2 .pv-sport-ic{flex:none;width:44px;height:44px;object-fit:contain}
 .ocean-v2 .pv-sport>b{min-width:0;font:700 20px/1.15 var(--display);letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 .ocean-v2 .pv-chev{flex:none;width:18px;height:18px;margin-left:auto;color:var(--ui-soft)}
-.ocean-v2 .pv-seg{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px;border-radius:999px;background:var(--t-card);box-shadow:inset 0 0 0 1px var(--ui-hair)}
+.ocean-v2 .pv-seg{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px;border-radius:999px;background:var(--ui-wash)}
 .ocean-v2 .pv-seg>button{position:relative;z-index:1;min-width:0;min-height:38px;margin:0;padding:0 4px;border:0;border-radius:999px;background:none;color:var(--t-ink);font:500 14.5px/1 var(--body);white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .16s}
 .ocean-v2 .pv-seg>button[aria-checked=true]{color:var(--t-on-main);font-weight:700}
 .ocean-v2 .pv-seg-ink{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);border-radius:999px;background:var(--t-main);opacity:0;pointer-events:none;transition:transform .22s var(--ob-snap,cubic-bezier(.2,.9,.25,1)),opacity .16s}
@@ -103,38 +129,60 @@
 .ocean-v2 .pv-ph>img{display:block;width:100%;height:100%;object-fit:cover}
 /* Nom sur deux lignes au plus (« Les Sables-d’Olonne »), hauteur réservée. */
 .ocean-v2 .pv-spot-n{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;min-height:33.6px;font:700 14px/1.2 var(--body);overflow:hidden;overflow-wrap:anywhere;text-wrap:balance}
-/* Aucun spot : une illustration à la place de la première vignette, une ligne et un bouton, centrés dans la même hauteur
-   que la rangée de vignettes : passer d’un onglet à l’autre ne fait pas sauter la suite. */
-.ocean-v2 .pv-spots.is-empty{grid-auto-flow:row;grid-template-columns:var(--pv-th) minmax(0,1fr);align-items:center;gap:16px;overflow:visible}
+/* Ordinateur : les vignettes passent à la ligne au lieu de défiler (une souris ne fait pas glisser une rangée). */
+@media(min-width:960px){.ocean-v2 .pv-spots:not(.is-empty){grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));row-gap:16px;margin:0;padding:0;overflow:visible}}
+/* Aucun spot : une scène dessinée pour cet état (assets/ui/mes-spots-vide.webp), une ligne et un bouton. La scène prend
+   toute la hauteur de la rangée de vignettes (photo et nom) : passer d’un onglet à l’autre ne fait pas sauter la suite. */
+.ocean-v2 .pv-spots.is-empty{grid-auto-flow:row;grid-template-columns:calc(var(--pv-th) + 41.6px) minmax(0,1fr);align-items:center;gap:16px;overflow:visible}
+.ocean-v2 .pv-empty-art{border-radius:16px;background:var(--t-tint)}
 .ocean-v2 .pv-empty{display:grid;justify-items:start;gap:12px;min-width:0}
 .ocean-v2 .pv-empty .ui-btn{min-height:44px}
 
-/* Jouer : trois tuiles. */
+/* Jouer : trois tuiles illustrées (assets/ui/jouer-*.webp, dans le style des illustrations de la fiche). */
 .ocean-v2 .pv .ui-head{margin:0 0 12px}
 .ocean-v2 .pv-xp{font-variant-numeric:tabular-nums}
 .ocean-v2 .pv-play{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
-.ocean-v2 .pv-tile{display:grid;justify-items:center;align-content:center;gap:8px;min-width:0;min-height:80px;margin:0;padding:10px 4px;border:0;border-radius:var(--ui-radius);background:var(--ui-wash);color:var(--t-ink);font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1)}
+.ocean-v2 .pv-tile{position:relative;display:block;min-width:0;margin:0;padding:0;border:0;border-radius:var(--ui-radius);overflow:hidden;background:var(--ui-surface);color:var(--t-ink);font:inherit;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1)}
 .ocean-v2 .pv-tile:active{transform:scale(.96)}
-.ocean-v2 .pv-tile>.ui-ic{width:30px;height:30px}
-.ocean-v2 .pv-tile>b{max-width:100%;font:700 16px/1.15 var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Le filet passe par-dessus l’illustration : la tuile garde son bord sur tout son tour. */
+.ocean-v2 .pv-tile::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px var(--ui-hair);pointer-events:none}
+/* Avant l’arrivée de l’image : le sable clair du thème, pas un gris. */
+.ocean-v2 .pv-tile-art{display:block;aspect-ratio:4/3;overflow:hidden;background:var(--t-tint)}
+.ocean-v2 .pv-tile-art>img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+@media(hover:hover){.ocean-v2 .pv-tile:hover .pv-tile-art>img{transform:scale(1.05)}}
+.ocean-v2 .pv-tile>b{display:block;padding:9px 4px 11px;font:700 16px/1.15 var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
 
-/* Passeport en résumé : la carte du monde au trait (celle du passeport, scripts/build-world-trait.py) et trois chiffres. */
+/* Passeport en résumé : la carte du monde (terres teintées et trait, scripts/build-world-trait.py), trois chiffres, puis
+   les pays visités en tampons. */
 .ocean-v2 .pv-pass{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);align-items:center;gap:14px;width:100%;margin:0;color:var(--t-ink);font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1)}
 .ocean-v2 .pv-pass:active{transform:scale(.985)}
 .ocean-v2 .pv-map{position:relative;display:block;aspect-ratio:2400/946}
+.ocean-v2 .pv-map-fill{position:absolute;inset:0;background:var(--t-tint);-webkit-mask:url("assets/ui/monde-terres.svg") center/100% 100% no-repeat;mask:url("assets/ui/monde-terres.svg") center/100% 100% no-repeat}
 .ocean-v2 .pv-map-land{position:absolute;inset:0;background:var(--t-ink);-webkit-mask:url("assets/ui/monde-trait.svg") center/100% 100% no-repeat;mask:url("assets/ui/monde-trait.svg") center/100% 100% no-repeat}
 .ocean-v2 .pv-dots{position:absolute;inset:0;display:block}
-.ocean-v2 .pv-dot{position:absolute;width:8px;height:8px;margin:-4px 0 0 -4px;border-radius:50%}
-.ocean-v2 .pv-dot.been{background:var(--t-main);box-shadow:0 0 0 2px var(--ui-wash)}
-.ocean-v2 .pv-dot.wish{background:var(--ui-wash);box-shadow:inset 0 0 0 1.5px var(--t-main)}
+.ocean-v2 .pv-dot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%}
+/* Spot visité : point plein et halo ; envie (favori) : point creux. */
+.ocean-v2 .pv-dot.been{background:var(--t-main);box-shadow:0 0 0 2px var(--ui-surface),0 0 0 5px color-mix(in srgb,var(--t-main) 20%,transparent)}
+.ocean-v2 .pv-dot.wish{background:var(--ui-surface);box-shadow:inset 0 0 0 1.5px var(--t-main)}
+/* Onde d’un point visité : une seule fois, posée puis retirée par ui-nav.js. */
+.ocean-v2 .pv-ring{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;box-shadow:0 0 0 1.5px var(--t-main);opacity:0;pointer-events:none}
 .ocean-v2 .pv-nums{display:grid;gap:8px;padding-left:14px;border-left:1px solid var(--ui-hair)}
 .ocean-v2 .pv-nums>span{display:flex;align-items:baseline;gap:10px;min-width:0}
 .ocean-v2 .pv-n{flex:none;min-width:1.25ch;font:800 26px/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--t-ink)}
 .ocean-v2 .pv-l{min-width:0;font:500 var(--ui-label)/1.2 var(--body);color:var(--ui-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-@media(min-width:960px){.ocean-v2 .pv-pass{grid-template-columns:minmax(0,420px) auto;justify-content:start;gap:28px}.ocean-v2 .pv-nums{padding-left:28px}}
+/* Tampons : un par pays visité (trois au plus, puis « +2 »), légèrement de travers comme dans un vrai passeport. Sans
+   pays visité, une case en pointillé dit comment gagner le premier. Hauteur réservée : une ligne. Rien n’est rogné :
+   un tampon qui se pose dépasse un instant de sa place. */
+.ocean-v2 .pv-stamps{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-height:46px;margin:-2px 0 -3px;padding:13px 2px 3px;border-top:1px solid var(--ui-hair);box-sizing:border-box}
+.ocean-v2 .pv-stamp{display:inline-flex;align-items:center;min-width:0;max-width:100%;height:30px;padding:0 11px;box-sizing:border-box;border:1.5px dashed color-mix(in srgb,var(--t-main) 60%,transparent);border-radius:9px;color:var(--t-main);font:700 13.5px/1 var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ocean-v2 .pv-stamp:nth-child(3n+1){rotate:-2.5deg}
+.ocean-v2 .pv-stamp:nth-child(3n+2){rotate:1.5deg}
+.ocean-v2 .pv-stamp:nth-child(3n){rotate:-1deg}
+.ocean-v2 .pv-stamp.is-more{border-style:solid;border-color:var(--ui-hair);color:var(--ui-soft);rotate:none}
+.ocean-v2 .pv-stamp.is-todo{border-color:color-mix(in srgb,var(--t-ink) 30%,transparent);color:var(--ui-soft);font-weight:600;rotate:none}
 
 /* Réglages et aide. */
-.ocean-v2 .pv-list{display:grid;padding:2px 16px;border-radius:var(--ui-radius);background:var(--ui-wash)}
+.ocean-v2 .pv-list{display:grid;padding:2px 16px;border-radius:var(--ui-radius);background:var(--ui-surface);box-shadow:inset 0 0 0 1px var(--ui-hair)}
 .ocean-v2 .pv-row{display:flex;align-items:center;gap:14px;min-height:54px;margin:0;padding:0;border:0;background:none;color:var(--t-ink);font:inherit;text-align:start;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ocean-v2 .pv-row+.pv-row{border-top:1px solid var(--ui-hair)}
 .ocean-v2 .pv-row>.ui-ic{width:24px;height:24px}
@@ -159,18 +207,33 @@
 .ocean-v2 #profile .pp-legend{padding-left:3px;color:var(--ui-soft)}
 .ocean-v2 #profile .pp-dot.wish{background:var(--t-card)}
 .ocean-v2 #profile .pp-stats{margin:14px 0}
-.ocean-v2 #profile .pp-stat{background:var(--ui-wash)}
+.ocean-v2 #profile .pp-stat{background:var(--ui-surface);box-shadow:inset 0 0 0 1px var(--ui-hair)}
 .ocean-v2 #profile .pp-stat b{font:800 var(--ui-num-s)/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--t-ink)}
 .ocean-v2 #profile .pp-stat span{color:var(--ui-soft)}
 .ocean-v2 #profile .pp-empty{color:var(--ui-soft)}
 .ocean-v2 #profile .pp-go{background:var(--t-main);color:var(--t-on-main);font:700 var(--ui-label)/1 var(--body)}
+/* Ordinateur : la carte ne s’étale plus sur tout l’écran (elle faisait 630 px de haut à 1440 px, une affiche). Carte à
+   gauche, légende, chiffres et bouton à droite. */
+@media(min-width:960px){
+  .ocean-v2 #profile .pp{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-rows:auto auto 1fr auto;column-gap:32px;align-items:start}
+  .ocean-v2 #profile .pp-map{grid-row:1/-1;margin:0}
+  .ocean-v2 #profile .pp>:not(.pp-map){grid-column:2}
+  .ocean-v2 #profile .pp-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+  .ocean-v2 #profile .pp-stat{padding:16px 6px}
+  .ocean-v2 #profile .pp-go{align-self:end}
+}
 /* Titres des blocs du passeport complet : casse de phrase, comme le reste de l’interface v2 ; sur-titres retirés. */
 .ocean-v2 #profile .sec h2,.ocean-v2 #profile .cult-pp-head h2{margin:0;padding:0;font:800 var(--ui-title)/1.1 var(--display);letter-spacing:-.02em;text-transform:none;color:var(--t-ink)}
 .ocean-v2 #profile :is(.cult-pp-head small,.poulpy-profile-card .section-kicker,.tb-eyebrow){display:none}
+/* Vitrine des trophées (« 0 / 13 trophées ») et sous-titre des badges du quiz : plus de capitales. */
+.ocean-v2 #profile .tb-title{font:800 26px/1.05 var(--display);letter-spacing:-.02em;text-transform:none}
+.ocean-v2 #profile .sub-lab{letter-spacing:0;text-transform:none}
 .ocean-v2 #profile .pv-full-end{height:22px}
 
 /* Défis et Jeu : pas de sur-titre en capitales, titres en casse de phrase. */
 .ocean-v2 #challenges .poulpy-eco-banner .section-kicker{display:none}
+/* Dates et lieux des compétitions (Défis surf) : casse de phrase, corps lisible. */
+.ocean-v2 #challenges .evt-m{font-size:12.5px;letter-spacing:0;text-transform:none}
 .ocean-v2 #surf .sf-body{padding-top:0}
 .ocean-v2 #surf .sf-card h3{font:800 var(--ui-title)/1.1 var(--display);letter-spacing:-.02em;text-transform:none}
 .ocean-v2 #surf .sf-play{font:700 18px/1 var(--body);letter-spacing:0;text-transform:none}
@@ -178,8 +241,10 @@
 
 /* ================= Mouvement réduit ================= */
 @media (prefers-reduced-motion:reduce){
-  .ocean-v2 :is(.pv-avatar,.pv-spot,.pv-tile,.pv-pass,.pv-seg>button,.pv-seg-ink,.pv-tabs>button,.pv-chrome-title),.ocean-v2 .pv-tabs>button::after{transition:none}
-  .ocean-v2 :is(.pv-avatar,.pv-spot,.pv-tile,.pv-pass):active{transform:none}
+  .ocean-v2 :is(.pv-avatar,.pv-spot,.pv-tile,.pv-tile-art>img,.pv-pass,.pv-seg>button,.pv-seg-ink,.pv-tabs>button,.pv-chrome-title),.ocean-v2 .pv-tabs>button::after{transition:none}
+  .ocean-v2 :is(.pv-avatar,.pv-spot,.pv-tile,.pv-pass):active,.ocean-v2 .pv-tile:hover .pv-tile-art>img{transform:none}
+  .ocean-v2 .pv-wait{opacity:1}
 }
-.ocean-v2.reduce-motion :is(.pv-avatar,.pv-spot,.pv-tile,.pv-pass,.pv-seg>button,.pv-seg-ink,.pv-tabs>button,.pv-chrome-title),.ocean-v2.reduce-motion .pv-tabs>button::after{transition:none}
-.ocean-v2.reduce-motion :is(.pv-avatar,.pv-spot,.pv-tile,.pv-pass):active{transform:none}
+.ocean-v2.reduce-motion :is(.pv-avatar,.pv-spot,.pv-tile,.pv-tile-art>img,.pv-pass,.pv-seg>button,.pv-seg-ink,.pv-tabs>button,.pv-chrome-title),.ocean-v2.reduce-motion .pv-tabs>button::after{transition:none}
+.ocean-v2.reduce-motion :is(.pv-avatar,.pv-spot,.pv-tile,.pv-pass):active,.ocean-v2.reduce-motion .pv-tile:hover .pv-tile-art>img{transform:none}
+.ocean-v2.reduce-motion .pv-wait{opacity:1}
