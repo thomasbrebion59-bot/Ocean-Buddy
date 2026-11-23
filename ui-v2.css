@@ -89,3 +89,57 @@
 
 /* Focus clavier visible, masqué après un toucher (classe ob-touch, déjà posée par l'app). */
 .ocean-v2 :is(.ui-spot,.ui-btn,.ui-pill,.ui-link):focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
+
+/* ================= Ajouts du 20 novembre 2026 (écran d'accueil, spot-verdict.js) =================
+   Ajouts seulement : rien de ce qui précède n'est renommé ni modifié. */
+/* Photo d'une ligne dans son cadre (.ui-spot > .ui-ph > img) : la photo peut s'envoler vers la fiche (motion.js l'emprunte
+   le temps du vol) sans que le texte de la ligne change de colonne. */
+.ocean-v2 .ui-spot>.ui-ph{display:block;position:relative;overflow:hidden}
+.ocean-v2 .ui-spot>.ui-ph>img{display:block;width:100%;height:100%;object-fit:cover}
+/* Conditions et verdict d'une ligne (OceanVerdict.html / .pending) : place réservée, une ligne de conditions et une ligne
+   de verdict. Le contenu est remplacé à l'arrivée des données sans rien décaler. .is-solo : pas de verdict pour ce spot
+   (plongée, surf expert, niveau non choisi), la ligne de verdict n'est pas réservée. */
+.ocean-v2 .ui-live{display:grid;gap:6px;align-content:center;min-width:0;min-height:50px}
+.ocean-v2 .ui-live.is-solo{min-height:18px}
+.ocean-v2 .ui-live .ui-cond{flex-wrap:nowrap;min-height:18px;overflow:hidden}
+.ocean-v2 .ui-live .ui-verdict{flex-wrap:nowrap;min-height:26px;overflow:hidden}
+.ocean-v2 .ui-live .ui-verdict>b{flex:none}
+.ocean-v2 .ui-live .ui-verdict>span{white-space:nowrap}
+/* Verdict trop long pour la ligne (heures en anglais, téléphone étroit) : data-fit posé après mesure. 1 : corps réduit ;
+   2 : les heures sur deux lignes à côté de la pastille. Même hauteur dans tous les cas. */
+.ocean-v2 .ui-live .ui-verdict[data-fit]{gap:6px}
+.ocean-v2 .ui-live .ui-verdict[data-fit]>b{padding:0 8px;font-size:12px}
+.ocean-v2 .ui-live .ui-verdict[data-fit]>span{font-size:12px}
+.ocean-v2 .ui-live .ui-verdict[data-fit="2"]>span{white-space:normal;line-height:13px;max-height:26px;overflow:hidden}
+/* Chiffre d'une condition : sa largeur finale est gardée pendant qu'il monte (OceanVerdict.animate), et il reste calé à
+   gauche : ni lui ni son unité ne changent de place (aucun décalage mesuré, même d'un pixel). */
+.ocean-v2 .ui-cond .ui-n{display:inline-block;text-align:start}
+/* Attente : barres discrètes à la place des chiffres, du nom et de la pastille. Aucune animation. */
+.ocean-v2 .ui-skel{display:inline-block;flex:none;width:30px;height:9px;border-radius:5px;background:var(--ui-hair)}
+.ocean-v2 .ui-verdict.is-wait>b.ui-skel{width:92px;height:26px;padding:0;background:var(--ui-no-bg)}
+.ocean-v2 .ui-spot-name>.ui-skel{width:46%;height:12px;border-radius:6px}
+.ocean-v2 .ui-spot.is-wait{cursor:default;pointer-events:none}
+/* Arrivée des conditions (classe .ui-arrive posée sur .ui-live) : les chiffres et les heures en fondu, la pastille en
+   douceur. Une seule fois, opacity et transform seulement ; rien en mouvement réduit. */
+@keyframes ui-arrive{from{opacity:0}}
+@keyframes ui-pop{from{opacity:0;transform:scale(.9)}}
+.ocean-v2 .ui-arrive :is(.ui-n,small,.is-none),.ocean-v2 .ui-arrive .ui-verdict>span{animation:ui-arrive .28s ease-out backwards}
+.ocean-v2 .ui-arrive .ui-verdict>b{animation:ui-pop .32s cubic-bezier(.2,.9,.25,1) .1s backwards}
+@media (prefers-reduced-motion:reduce){.ocean-v2 .ui-arrive :is(.ui-n,small,.is-none),.ocean-v2 .ui-arrive .ui-verdict>span,.ocean-v2 .ui-arrive .ui-verdict>b{animation:none}}
+.ocean-v2.reduce-motion .ui-arrive :is(.ui-n,small,.is-none),.ocean-v2.reduce-motion .ui-arrive .ui-verdict>span,.ocean-v2.reduce-motion .ui-arrive .ui-verdict>b{animation:none}
+/* Rangée de photos : la première carte garde sa marge de 16 px (sans cela, l'accroche du défilement la colle au bord). */
+.ocean-v2 .ui-row{scroll-padding-inline:16px}
+
+/* ================= Ajouts du 23 novembre 2026 (passe d'amélioration de l'accueil, spot-verdict.js) =================
+   Ajouts seulement : rien de ce qui précède n'est renommé ni modifié. */
+/* Repère de demain dans une ligne de verdict (entrée.next de spot-verdict.js) : après la pastille « Pas aujourd'hui »,
+   un petit soleil levant et « Demain 9 h à 12 h », à la couleur du verdict de demain (bon ou possible). */
+.ocean-v2 .ui-verdict>.ui-next{display:inline-flex;align-items:center;gap:4px;min-width:0;font:700 var(--ui-note)/1.2 var(--body);white-space:nowrap}
+.ocean-v2 .ui-verdict>.ui-next[data-v=bon]{color:var(--ui-good)}
+.ocean-v2 .ui-verdict>.ui-next[data-v=possible]{color:var(--ui-maybe)}
+.ocean-v2 .ui-next>.ui-ic{width:16px;height:16px;color:currentColor}
+.ocean-v2 .ui-next em{font-style:normal}
+/* Ligne trop courte (data-fit, posé après mesure) : corps réduit, puis « Demain » au-dessus des heures. */
+.ocean-v2 .ui-live .ui-verdict[data-fit]>.ui-next{font-size:12px}
+.ocean-v2 .ui-live .ui-verdict[data-fit="2"]>.ui-next>span{display:grid;line-height:13px;white-space:nowrap}
+

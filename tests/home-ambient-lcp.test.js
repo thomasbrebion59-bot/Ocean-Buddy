@@ -1,4 +1,6 @@
-/* Fond d’ambiance de l’accueil (élément LCP) : photo du jour posée par le script de démarrage, même rotation que home-feed.js. */
+/* Fond d’ambiance de l’accueil : l’interface v2 (20 novembre 2026) l’a retiré. L’accueil s’ouvre sur le salut, la recherche
+   et « Mes spots » ; plus aucune grande photo n’est préchargée ni posée par le script de démarrage. La liste des photos
+   (scripts/build-home-ambient.py) et le carrousel « Spot de rêve » restent dans le code, sans être affichés. */
 const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
@@ -20,14 +22,14 @@ test('the ambient list matches HERO_IDS and their real photographs (scripts/buil
   for(const [,src] of list)assert.ok(fs.existsSync(path.join(root,src)),src);
 });
 
-test('#home starts with the static ambient layer, first image shown without src',()=>{
+test('interface v2 : #home no longer starts with an ambient layer; the large title keeps its reserved place',()=>{
   const home=html.slice(html.indexOf('id="home"'));
   const first=home.slice(home.indexOf('>')+1).match(/<(?!!--)[^>]+>/)[0];
-  assert.equal(first,'<div class="hf-ambient" aria-hidden="true">');
-  assert.match(home,/^[^]*?<div class="hf-ambient" aria-hidden="true"><img alt="" class="on" fetchpriority="high"><img alt=""><\/div>/);
+  assert.equal(first,'<header class="as-large">');
+  assert.doesNotMatch(html,/class="hf-ambient"/);
 });
 
-test('the boot script preloads today’s photo and sets it on the static ambient image',()=>{
+test('interface v2 : the boot script preloads no ambient photo and still waits for the « feed » step',()=>{
   const links=[],observers=[],img={attrs:{},getAttribute(k){return this.attrs[k]??null;},set src(v){this.attrs.src=v;}};
   let found=false;
   const el=()=>({classList:{add(){},remove(){},contains(){return false;}},setAttribute(k,v){this[k]=v;}});
@@ -38,12 +40,13 @@ test('the boot script preloads today’s photo and sets it on the static ambient
     MutationObserver:class{constructor(f){this.f=f;observers.push(this);}observe(){}disconnect(){this.off=true;}}
   };
   context.window=context;vm.createContext(context);vm.runInContext(bootSource,context);
-  const url=list[new Date().getDate()%list.length][1];
-  assert.equal(links.length,1);
-  assert.deepEqual([links[0].rel,links[0].as,links[0].href,links[0].fetchpriority],['preload','image',url,'high']);
-  observers[0].f();assert.equal(img.attrs.src,undefined,'waits for the parser');
-  found=true;observers[0].f();
-  assert.equal(img.attrs.src,url);assert.ok(observers[0].off);
+  assert.equal(links.length,0,'no preload link');
+  assert.equal(observers.length,0,'nothing waits for an ambient image');
+  found=true;assert.equal(img.attrs.src,undefined);
+  /* Les deux étapes du rideau restent attendues : « shell » (app-shell.js) et « feed » (home-feed.js). */
+  assert.deepEqual({...context.OceanBoot.steps},{shell:false,feed:false});
+  assert.match(bootSource,/B\.wait\('shell'\);B\.wait\('feed'\);/);
+  assert.match(feed,/function ready\(\)\{const g=\+\+gen;Boot\?\.wait\('feed'\);return settle\(\)\.then\(\(\)=>\{if\(g===gen\)Boot\?\.done\('feed'\);\}\);\}/);
 });
 
 test('home-feed.js keeps the ambient photo already set by the boot script',()=>{
