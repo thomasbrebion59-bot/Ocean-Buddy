@@ -106,7 +106,13 @@ test('ouverture : trois chiffres du moment sur la photo, la motion d’arrivée 
   const hero = fnSource(before, 'hero');
   assert.match(hero, /if \(!s \|\| s\.custom\) \{ el\.innerHTML = ''; el\.hidden = true; return; \}/, 'rien sur un spot personnel');
   assert.match(hero, /chips\.push\(hxChip\('wave', 'Houle'/); assert.match(hero, /chips\.push\(hxChip\('temp', 'Eau'/);
-  assert.match(hero, /if \(inland\(s\)\) \{[\s\S]*hxChip\('wind', 'Vent'/, 'plan d’eau intérieur : le vent, pas la houle');
+  assert.match(hero, /const wind = \(\) => \{ const w = ready \? split\(l\.wind\) : null; chips\.push\(hxChip\('wind', 'Vent'/);
+  assert.match(hero, /if \(inland\(s\)\) \{[^}]*\n\s+wind\(\);\n\s+if \(ready && Number\.isFinite\(l\.airC\)\) chips\.push\(hxChip\('temp', 'Air'/, 'plan d’eau intérieur : le vent et l’air, pas la houle');
+  /* Spot de mer sans sport de vague ni de vent (plongée, snorkeling) : le vent du moment remplace la houle. */
+  assert.match(hero, /if \(waveSpot\(s\)\) chips\.push\(hxChip\('wave', 'Houle'[^\n]*\n\s+else wind\(\);/);
+  const waveSpot = new Function('spotSports', before.match(/const WAVE_SPORTS = [^\n]+\n\s+const waveSpot = [^\n]+/)[0] + '; return waveSpot;')(s => s.sports);
+  assert.equal(waveSpot({sports: ['plongee', 'snorkeling']}), false); assert.equal(waveSpot({sports: ['plongee', 'surf']}), true);
+  assert.equal(waveSpot({sports: ['kitesurf']}), true); assert.equal(waveSpot({sports: []}), true, 'sans sport connu : la houle reste');
   assert.match(hero, /class="hx-chip hx-danger" data-hx="danger" data-fx-tab="securite"/, 'le danger mène à la sécurité');
   assert.match(hero, /ready \? \(sw \? num\(sw\) : '—'\) : hxWait/, 'la case garde sa place pendant le chargement');
   assert.match(before, /hero\(s, L && L\.live \? L : null\);/); assert.match(fnSource(before, 'live'), /hero\(s, l\);/);

@@ -95,6 +95,9 @@
      le relevé. data-hx-count : le chiffre compte jusqu’à sa valeur à l’arrivée (app.js). */
   const hxChip = (key, label, value, unit, extra) => `<span class="hx-chip" data-hx="${key}">${key === 'danger' ? '' : icon(key)}<span class="hx-tx"><b class="hx-val">${value}${unit ? `<small>${unit}</small>` : ''}</b><span class="hx-lab">${label}</span></span>${extra || ''}</span>`;
   const hxWait = '<span class="hx-wait" aria-hidden="true"></span>';
+  /* Les sports pour lesquels la houle compte (la même liste que la tuile « Houle en novembre » du chapitre Le coin). */
+  const WAVE_SPORTS = ['surf', 'bodyboard', 'kitesurf', 'windsurf', 'wingfoil', 'foil'];
+  const waveSpot = s => { let l = []; try { l = typeof spotSports === 'function' ? spotSports(s) : (s.sports || []); } catch (e) { l = s.sports || []; } return !l.length || l.some(a => WAVE_SPORTS.includes(a)); };
   function hero(s, l) {
     const el = $('#dHeroNow'); if (!el) return;
     if (!s || s.custom) { el.innerHTML = ''; el.hidden = true; return; }
@@ -102,12 +105,17 @@
     const split = v => { const m = has(v) ? /^\s*([-−]?\d+(?:[.,]\d+)?)\s*(.*)$/.exec(String(v)) : null; return m ? [m[1], m[2]] : null; };
     const num = p => `<span data-hx-count>${esc(p[0])}</span>`;
     const ready = !!(l && l.live), g = gaugeOf(s), chips = [];
+    const wind = () => { const w = ready ? split(l.wind) : null; chips.push(hxChip('wind', 'Vent', ready ? (w ? num(w) : '—') : hxWait, w ? esc(w[1]) : '')); };
     if (inland(s)) {
-      const w = ready ? split(l.wind) : null;
-      chips.push(hxChip('wind', 'Vent', ready ? (w ? num(w) : '—') : hxWait, w ? esc(w[1]) : ''));
+      /* Plan d’eau : le vent, puis l’air du moment quand le relevé le donne (ni houle marine, ni eau en direct). */
+      wind();
+      if (ready && Number.isFinite(l.airC)) chips.push(hxChip('temp', 'Air', num([String(Math.round(l.airC))]), '°C'));
     } else {
       const sw = ready ? split(l.swell) : null, te = ready ? split(l.temp) : null;
-      chips.push(hxChip('wave', 'Houle', ready ? (sw ? num(sw) : '—') : hxWait, sw ? esc(sw[1]) : ''));
+      /* Spot sans sport de vague ni de vent (plongée, snorkeling, baignade) : la houle au large n’y dit rien d’utile
+         (Tulamben : 0,5 m). Le vent du moment la remplace ; c’est le même relevé que « Maintenant ». */
+      if (waveSpot(s)) chips.push(hxChip('wave', 'Houle', ready ? (sw ? num(sw) : '—') : hxWait, sw ? esc(sw[1]) : ''));
+      else wind();
       chips.push(hxChip('temp', 'Eau', ready ? (te ? num(te) : '—') : hxWait, te ? esc(te[1]) : ''));
     }
     if (g.n != null) chips.push(`<button type="button" class="hx-chip hx-danger" data-hx="danger" data-fx-tab="securite" aria-label="Danger ${g.n} sur 4, voir la sécurité"><span class="hx-tx"><b class="hx-val"><span data-hx-count>${g.n}</span><small>/4</small></b><span class="hx-lab">Danger</span></span>${dots(g.n)}</button>`);
