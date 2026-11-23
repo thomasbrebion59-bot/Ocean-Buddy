@@ -1,4 +1,5 @@
-/* Explorer v2 : la liste d’abord (interface v2, 20 novembre 2026). Maquette validée : orga-docs/interface-v2/maquette-3-explorer.png.
+/* Explorer v2 (interface v2, 20 novembre 2026). Maquette validée : orga-docs/interface-v2/maquette-3-explorer.png.
+   Depuis le 23 novembre 2026, Explorer s’ouvre sur la planète 3D (globeFirst, plus bas) ; la liste est à un toucher.
    En haut : « Explorer » et le sélecteur Liste / Carte, la recherche, trois filtres en pastilles (sport, niveau, mois) et un
    bouton rond pour les autres filtres, puis le nombre de résultats. Dessous : des lignes .ui-spot (ui-v2.css), avec la photo,
    le nom, le pays, les points de danger connus, les conditions et le verdict « pour toi ».
@@ -644,6 +645,32 @@
   });
   /* Filet : dès que la liste a une largeur (écran affiché après une transition, rotation, colonne latérale), elle se met à jour. */
   if ('ResizeObserver' in window) new ResizeObserver(() => { if (head && visible()) sync(); }).observe(host);
+
+  /* Explorer s’ouvre sur la planète 3D (demande du fondateur, 23 nov. 2026 : « dans explorer, il faut que on tombe
+     directement sur la planète en 3D »). La liste reste à un toucher (sélecteur Liste / Carte, bouton « Liste » de la carte).
+     - Entrer dans Explorer depuis un autre écran (onglet, lien) ouvre la planète. Un retour depuis une fiche, ou un Retour
+       ou Avancer de l’historique (navigation.js restaure alors la vue enregistrée), garde la vue où l’on était : la liste
+       ouverte avant la fiche revient à sa place.
+     - Les liens qui veulent la liste (favoris, recherche de l’accueil) appellent setView('list') juste après go('spots') :
+       ils gardent la main, puisque ce choix passe avant le leur.
+     - « Tous les continents » ramène à la planète entière.
+     app-shell.js (chargé en dernier) enveloppe déjà go et backToWorlds ; ces enveloppes-ci sont posées une fois tous les
+     scripts lus (DOMContentLoaded), donc par-dessus, sans toucher à app-shell.js. */
+  function globeFirst() {
+    const wrapAfter = (name, before, after) => {
+      const f = window[name]; if (typeof f !== 'function' || f.__exlGlobe) return;
+      const w = function (...a) { const ctx = before ? before(...a) : null; const r = f.apply(this, a); try { after(ctx, ...a); } catch (e) { console.warn(e); } return r; };
+      w.__exlGlobe = true; window[name] = w;
+    };
+    const restoring = () => window.OceanNavigation?.restoreScroll?.() != null;
+    const toMap = () => { if (typeof setView === 'function' && typeof spotWorld !== 'undefined' && spotWorld) setView('map'); };
+    wrapAfter('go', s => ({ from: body.dataset.screen, s, restoring: restoring() }), (ctx) => {
+      if (ctx.s !== 'spots' || ctx.restoring || ctx.from === 'spots' || ctx.from === 'detail') return;
+      toMap();
+    });
+    wrapAfter('backToWorlds', null, () => { if (body.dataset.screen === 'spots') { toMap(); setTimeout(() => window.OceanMap?.overview?.(), 60); } });
+  }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', globeFirst, { once: true }); else globeFirst();
 
   window.OceanExploreList = { render, sync, view: () => requestAnimationFrame(sync), sheetOpen: () => !!sheet, closeSheet: () => closeSheet(),
     get count() { return S.order.length; }, get mounted() { return S.mounted.size; } };
