@@ -4,7 +4,25 @@
    Rendu par home-feed.js (bloc « Accueil v2 ») : le haut (date, salut, pastille sport et niveau, recherche), puis
    « Mes spots », « Bon aujourd'hui », « En <mois> » et « Cultures ». Couleurs du thème actif seulement (--t-*).
    Hauteurs fixes partout où un contenu arrive après le montage (conditions, verdicts, mot du jour, photo) : aucun saut.
-   Motion : transform et opacity seulement, une seule fois, rien en mouvement réduit ; aucune boucle. */
+   Motion : transform et opacity seulement, une seule fois, rien en mouvement réduit ; aucune boucle.
+   Passe d'amélioration du 23 novembre 2026 (PASSE-FABLE-23-NOV.md) : fond crème quel que soit le sport, noms entiers sur
+   deux lignes, salut et pastille sur une ligne dans toutes les langues, repère de demain, illustrations (carte sans
+   favori, spots sans photo, tour du monde), rangée du mois tenue dans sa colonne, vie après l'entrée. */
+
+/* ---------- Fond chaud ----------
+   Avec un sport choisi, la page était voilée de sa couleur (--t-veil à 6 %) et les cartes teintées de --t-main : en surf,
+   un gris-bleu froid. L'accueil garde le crème de la maquette (--t-cream) et des cartes claires (--t-card) ; la couleur du
+   sport reste sur ce qui se touche (liens, boutons, pictogrammes). Les deux barres (titre en haut au défilement, onglets
+   en bas) suivent : --t-bar reprend, sur l'accueil, la teinte chaude de la palette sans sport, et --t-wash aussi (le
+   voile et les vagues de la couche d'ambiance, visibles sur ordinateur seulement). --t-page et --t-bar sont des jetons
+   déclarés (@property) : le passage d'un écran à l'autre se fait en douceur. La règle sur body sert là où :has() n'est
+   pas compris. */
+html[data-act]:has(body.ocean-v2[data-screen=home]){--t-page:var(--t-cream);--t-bar:color-mix(in srgb,var(--t-sun) 13%,var(--t-cream));--t-wash:color-mix(in srgb,var(--t-sun) 16%,transparent)}
+html[data-act] body.ocean-v2[data-screen=home]{--t-page:var(--t-cream);--as-page:var(--t-cream);--t-bar:color-mix(in srgb,var(--t-sun) 13%,var(--t-cream));--t-wash:color-mix(in srgb,var(--t-sun) 16%,transparent)}
+/* Cartes : blanc cassé sur le crème, bordées du filet commun, comme la maquette. Même recette que les cartes communes de
+   la passe du 23 novembre sur l'écran « nav » (ui-v2.css de iv-nav : --ui-surface et filet --ui-hair) : après la fusion,
+   cette règle dit la même chose que la feuille commune, et --ui-wash (fond des pastilles) n'est pas touché ici. */
+.ocean-v2 #home :is(.ui-spots,.ui-card){background:var(--t-card);box-shadow:inset 0 0 0 1px var(--ui-hair)}
 
 /* ---------- Ce qui n'est plus affiché sur l'accueil (le code reste) ---------- */
 /* Grand titre de la coque (app-shell.js) : le salut de l'accueil est écrit par home-feed.js, avec la pastille à côté. */
@@ -28,8 +46,22 @@
 /* Le salut et la pastille sur une ligne ; si la place manque (prénom, langue, téléphone étroit), la pastille passe dessous. */
 .ocean-v2 .ac-hello{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 12px;min-height:44px}
 .ocean-v2 .ac-hi{flex:0 1 auto;min-width:0;margin:0;font:800 34px/40px var(--display);letter-spacing:-.03em;color:var(--t-ink);overflow-wrap:anywhere;text-transform:none}
-.ocean-v2 .ac-me{flex:none;max-width:100%;min-height:44px;gap:8px;padding:0 15px 0 11px;font:600 var(--ui-label)/1 var(--body);color:var(--t-ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ocean-v2 .ac-me{flex:none;max-width:100%;min-height:44px;gap:8px;padding:0 15px 0 11px;background:color-mix(in srgb,var(--t-ink) 6%,var(--t-cream));font:600 var(--ui-label)/1 var(--body);color:var(--t-ink);cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ocean-v2 .ac-me>span:last-child{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Grand écran de téléphone : le salut de la maquette, plus grand. */
+@media(min-width:428px){.ocean-v2 .ac-hi{font-size:38px;line-height:44px}}
+/* Le salut et la pastille sur UNE ligne dans toutes les langues (data-ac-fit, posé par fitTop après mesure) :
+   1 et 2, la pastille sur deux lignes (le sport, puis le niveau) ; 3 et 4, le sport seul ; 5, le pictogramme seul ;
+   2, 4 et 5, le salut un peu plus petit. Le texte retiré de l'écran reste lu par les lecteurs d'écran. */
+.ocean-v2 .ac-hello:is([data-ac-fit="2"],[data-ac-fit="4"],[data-ac-fit="5"]) .ac-hi{font-size:29px}
+.ocean-v2 .ac-hello:is([data-ac-fit="1"],[data-ac-fit="2"]) .ac-me{padding:0 14px 0 10px}
+.ocean-v2 .ac-hello:is([data-ac-fit="1"],[data-ac-fit="2"]) .ac-me-tx{display:grid;gap:2px;overflow:visible}
+.ocean-v2 .ac-hello:is([data-ac-fit="1"],[data-ac-fit="2"]) .ac-me-a{font:700 14px/1.1 var(--body)}
+.ocean-v2 .ac-hello:is([data-ac-fit="1"],[data-ac-fit="2"]) .ac-me-b{font:500 12px/1.1 var(--body);color:var(--ui-soft)}
+.ocean-v2 .ac-hello:is([data-ac-fit="1"],[data-ac-fit="2"]) .ac-me-b::first-letter{text-transform:uppercase}
+.ocean-v2 .ac-hello:is([data-ac-fit="1"],[data-ac-fit="2"]) .ac-me-sep,.ocean-v2 .ac-hello:is([data-ac-fit="3"],[data-ac-fit="4"]) :is(.ac-me-sep,.ac-me-b),.ocean-v2 .ac-hello[data-ac-fit="5"] .ac-me-tx{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.ocean-v2 .ac-hello[data-ac-fit="5"] .ac-me{width:44px;padding:0;justify-content:center}
+@media(min-width:428px){.ocean-v2 .ac-hello:is([data-ac-fit="2"],[data-ac-fit="4"],[data-ac-fit="5"]) .ac-hi{font-size:32px}}
 .ocean-v2 .ac-me-ic{flex:none;width:24px;height:24px;background:var(--t-ink);-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
 /* Noël : le compte à rebours tient en une ligne discrète sous le salut ; la guirlande (image posée par noel.css sur
    .hf-noel-garland) prend le reste de la ligne. Hauteur fixe : 20 px. */
@@ -45,20 +77,40 @@
 .ocean-v2 .ac-sec{margin:calc(var(--ui-gap) + 4px) 0 0}
 .ocean-v2 .ac-sec>.as-sec{margin:0 0 12px;min-height:26px}
 .ocean-v2 .ac-sec .ui-link{font-size:15.5px}
+@media(min-width:428px){.ocean-v2 #home .ac-sec .ui-title{font-size:25px}}
+/* Heure du relevé des conditions, à côté de « Mes spots » : un point vert et l'heure (syncFresh). Le point bat une
+   fois quand un relevé plus récent arrive et au retour sur l'accueil (classe is-beat, posée puis retirée). */
+.ocean-v2 .ac-fresh{display:inline-flex;align-items:center;gap:6px;margin-right:auto;font:600 var(--ui-note)/1 var(--body);color:var(--ui-soft);font-variant-numeric:tabular-nums;white-space:nowrap}
+.ocean-v2 .ac-fresh>i{position:relative;flex:none;width:8px;height:8px;border-radius:50%;background:var(--t-ok)}
+.ocean-v2 .ac-fresh>i::after{content:"";position:absolute;inset:0;border-radius:50%;background:var(--t-ok);opacity:0}
+.ocean-v2 .ac-fresh.is-beat>i::after{animation:ac-beat .5s ease-out .2s 2 backwards}
 /* Lignes de spot de l'accueil : photo et chiffres plus grands quand l'écran le permet (maquette : 430 px). */
 .ocean-v2 #home .ui-spot:focus-visible{outline:2px solid var(--t-main);outline-offset:-2px;border-radius:14px}
 .ocean-v2 #home .ui-ph{color:var(--ui-soft)}
 /* Spot sans vraie photo : le pictogramme de son activité dans le cadre de la photo. */
 .ocean-v2 #home .ui-ph.is-none::before{content:"";position:absolute;inset:27%;background:currentColor;opacity:.6;-webkit-mask:var(--ic) center/contain no-repeat;mask:var(--ic) center/contain no-repeat}
-.ocean-v2 #home .ui-spot-name small{font:500 1em/1.2 var(--body);color:var(--ui-soft)}
+/* Spot sans vraie photo : l'illustration de son activité (home-feed.js, noPhoto) remplit le cadre. */
+.ocean-v2 #home .ui-ph.is-illus{background:var(--il) center/cover no-repeat}
+/* Nom entier, jamais « … » : la précision passe à la ligne quand elle ne tient pas à côté du nom (« Les Sables-d'Olonne »
+   puis « Tanchet »). Deux lignes au plus. Toutes les lignes ont la même hauteur, celle d'un nom sur deux lignes : une
+   ligne de « Bon aujourd'hui » qui arrive à la place d'une ligne en attente ne décale rien. */
+.ocean-v2 #home .ui-spot{grid-template-columns:80px minmax(0,1fr);column-gap:13px;min-height:112px}
+.ocean-v2 #home .ui-spot>.ui-ph{width:80px;height:80px}
+.ocean-v2 #home .ui-spot>div{gap:5px}
+.ocean-v2 #home .ui-spot-name{align-items:flex-start;line-height:18px}
+.ocean-v2 #home .ui-spot-name>span:not(.ui-dots){display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;white-space:normal;overflow-wrap:anywhere}
+.ocean-v2 #home .ui-spot-name small{font:500 1em/18px var(--body);color:var(--ui-soft);white-space:nowrap}
+.ocean-v2 #home .ui-spot-name>.ui-dots{margin-top:5.5px}
 @media(min-width:390px){
-  .ocean-v2 #home .ui-spot{grid-template-columns:86px minmax(0,1fr);min-height:106px}
-  .ocean-v2 #home .ui-spot>.ui-ph{width:86px;height:86px}
+  .ocean-v2 #home .ui-spot{grid-template-columns:88px minmax(0,1fr);column-gap:14px}
+  .ocean-v2 #home .ui-spot>.ui-ph{width:88px;height:88px}
 }
 @media(min-width:428px){
-  .ocean-v2 #home .ui-spot{grid-template-columns:96px minmax(0,1fr);column-gap:16px;min-height:116px}
+  .ocean-v2 #home .ui-spot{grid-template-columns:96px minmax(0,1fr);column-gap:16px;min-height:118px}
   .ocean-v2 #home .ui-spot>.ui-ph{width:96px;height:96px;border-radius:16px}
-  .ocean-v2 #home .ui-spot-name{font-size:17px}
+  .ocean-v2 #home .ui-spot-name{font-size:17px;line-height:20px}
+  .ocean-v2 #home .ui-spot-name small{line-height:20px}
+  .ocean-v2 #home .ui-spot-name>.ui-dots{margin-top:6.5px}
   .ocean-v2 #home .ui-cond{font-size:15.5px;gap:4px 15px}
   .ocean-v2 #home .ui-cond small{font-size:14px}
   .ocean-v2 #home .ui-ic{width:20px;height:20px}
@@ -71,12 +123,21 @@
   .ocean-v2 #home .ui-cond>span{gap:4px}
 }
 
-/* « Mes spots » sans favori ni spot vu : une carte courte, l'illustration de Poulpy, le nombre de spots en grand. */
+/* « Mes spots » sans favori ni spot vu : une carte courte, son illustration (une côte et ses repères de spots, faite
+   pour cette carte : assets/ui/accueil-spots.webp) et le nombre de spots en grand, qui monte jusqu'à sa valeur. */
 .ocean-v2 .ac-empty{display:grid;grid-template-columns:118px minmax(0,1fr);gap:16px;align-items:center;min-height:142px;padding:12px 16px 12px 12px}
-.ocean-v2 .ac-empty>img{display:block;width:118px;height:118px;border-radius:16px;object-fit:cover;object-position:46% 50%}
+.ocean-v2 .ac-empty>img{display:block;width:118px;height:118px;border-radius:16px;object-fit:cover}
 .ocean-v2 .ac-empty-tx{display:grid;gap:12px;justify-items:start;min-width:0}
 .ocean-v2 .ac-empty-n{display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 8px;margin:0}
+.ocean-v2 .ac-empty .ui-num{font-size:46px}
+/* Le chiffre garde sa largeur finale pendant qu'il monte (OceanVerdict.animate) : rien ne bouge autour. */
+.ocean-v2 .ac-empty .ui-n{display:inline-block;text-align:start}
 .ocean-v2 .ac-empty .ui-btn{min-height:44px}
+@media(min-width:390px){
+  .ocean-v2 .ac-empty{grid-template-columns:136px minmax(0,1fr);gap:18px;min-height:160px}
+  .ocean-v2 .ac-empty>img{width:136px;height:136px;border-radius:18px}
+  .ocean-v2 .ac-empty .ui-num{font-size:52px}
+}
 
 /* ---------- « En <mois> » : cartes photo ---------- */
 .ocean-v2 .ac-row{grid-auto-columns:minmax(138px,37.5%);gap:9px}
@@ -101,11 +162,15 @@
 .ocean-v2 .ac-cult .ac-quiz{position:relative;display:grid;grid-template-columns:104px minmax(0,1fr);column-gap:14px;align-items:center;box-sizing:border-box;height:128px;margin:0;padding:0;overflow:visible;border-radius:0;background:none;box-shadow:none;color:var(--t-ink)}
 .ocean-v2 .ac-cult .ac-quiz::before{content:none}
 .ocean-v2 .ac-quiz-pic{position:relative;display:grid;place-items:center;width:104px;height:104px;overflow:hidden;border-radius:14px;background:var(--ui-hair);color:var(--ui-soft)}
-.ocean-v2 .ac-quiz-pic>svg{width:34px;height:34px}
-.ocean-v2 .ac-quiz-pic>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .35s ease-out}
-.ocean-v2 .ac-quiz-pic>img.is-on{opacity:1}
+/* Dans le cadre : l'illustration (le globe et sa bulle), puis, avec le résultat, la photo du pays, qui arrive par-dessus
+   en fondu et se pose. */
+.ocean-v2 .ac-quiz-pic>img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transform:scale(1.08);transition:opacity .35s ease-out,transform .5s cubic-bezier(.22,.8,.3,1)}
+.ocean-v2 .ac-quiz-pic>img.is-on,.ocean-v2 .ac-quiz-pic>.ac-quiz-art{opacity:1;transform:none}
 .ocean-v2 .ac-quiz-main{position:relative;display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:18px 28px 62px;row-gap:6px;align-content:center;min-width:0;height:128px}
 .ocean-v2 .ac-cult .cult-quiz-body{display:contents}
+/* Une seule colonne, pour tous les blocs du jeu. Sans cela, le message et le résultat, tous deux en troisième rangée,
+   ouvraient une deuxième colonne : la première se réduisait à rien (« Mot / du / jour » sur trois lignes, mot coupé). */
+.ocean-v2 .ac-quiz-main>*,.ocean-v2 .ac-cult .cult-quiz-body>*{grid-column:1}
 .ocean-v2 .ac-cult .cult-quiz-head{grid-row:1;display:flex;align-items:baseline;justify-content:space-between;gap:10px;height:18px}
 .ocean-v2 .ac-cult .cult-quiz-meta{font:500 var(--ui-note)/18px var(--body);color:var(--ui-soft)}
 .ocean-v2 .ac-cult .cult-quiz-word{grid-row:2;display:block;height:28px;min-height:0;margin:0;font:800 24px/28px var(--display);letter-spacing:-.02em;color:var(--t-ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -118,10 +183,11 @@
 .ocean-v2 .ac-cult .cult-quiz-body:is(.is-done,.is-wait) .cult-quiz-q{position:static;grid-row:3;align-self:start;display:block;width:auto;height:16px;max-height:none;clip-path:none;font:500 var(--ui-note)/16px var(--body);color:var(--ui-soft);overflow:hidden;text-overflow:ellipsis;-webkit-line-clamp:unset}
 .ocean-v2 .ac-guess{position:relative;grid-row:3;align-self:center;justify-self:start;min-height:40px;padding:0 18px;font-size:14.5px}
 .ocean-v2 .ac-guess::after{content:"";position:absolute;inset:-4px 0}
-/* États : les trois réponses ou le résultat prennent toute la largeur (la photo cède la place), « Deviner » s'efface. */
+/* États : les trois réponses prennent toute la largeur (le cadre cède la place) et « Deviner » s'efface ; avec le
+   résultat, le cadre revient et la photo du pays s'y pose (passe du 23 novembre). */
 .ocean-v2 .ac-cult .cult-quiz-choices,.ocean-v2 .ac-cult .cult-quiz-done{display:none}
-.ocean-v2 .ac-quiz:is([data-ac-quiz=open],[data-ac-quiz=done]){grid-template-columns:minmax(0,1fr)}
-.ocean-v2 .ac-quiz:is([data-ac-quiz=open],[data-ac-quiz=done]) .ac-quiz-pic,.ocean-v2 .ac-quiz:is([data-ac-quiz=open],[data-ac-quiz=done],[data-ac-quiz=wait]) .ac-guess{display:none}
+.ocean-v2 .ac-quiz[data-ac-quiz=open]{grid-template-columns:minmax(0,1fr)}
+.ocean-v2 .ac-quiz[data-ac-quiz=open] .ac-quiz-pic,.ocean-v2 .ac-quiz:is([data-ac-quiz=open],[data-ac-quiz=done],[data-ac-quiz=wait]) .ac-guess{display:none}
 .ocean-v2 .ac-quiz[data-ac-quiz=open] .cult-quiz-choices{grid-row:3;align-self:center;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;height:54px;margin:0}
 .ocean-v2 .ac-quiz[data-ac-quiz=done] .cult-quiz-done{grid-row:3;align-self:end;display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:10px;height:44px;margin:0}
 .ocean-v2 .ac-quiz[data-ac-quiz=done] .cult-quiz-done.is-long{grid-template-columns:auto minmax(0,1fr)}
@@ -149,12 +215,33 @@
 .ocean-v2 .ac-cult .cult-quiz-done.is-long .cult-quiz-go{max-width:none;white-space:normal;text-overflow:clip;text-align:center;font-size:13px}
 .ocean-v2 .ac-cult .cult-quiz-go:focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
 .ocean-v2 .ac-cult .cult-quiz-next{display:none}
-/* « Tour du monde » : une ligne qui se touche, sous un filet. */
-.ocean-v2 .ac-tour{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;margin:12px 0 -6px;padding:6px 0 0;border:0;border-top:1px solid var(--ui-hair);background:none;color:var(--t-main);font:700 16px/1.2 var(--body);text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent}
-.ocean-v2 .ac-tour>svg{flex:none;width:26px;height:26px}
+/* « Tour du monde » : une ligne qui se touche, sous un filet, avec sa vignette illustrée. */
+.ocean-v2 .ac-tour{display:flex;align-items:center;gap:14px;width:100%;min-height:68px;margin:14px 0 -6px;padding:12px 0 4px;border:0;border-top:1px solid var(--ui-hair);background:none;color:var(--t-main);font:700 16.5px/1.2 var(--body);text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1)}
+.ocean-v2 .ac-tour:active{transform:scale(.985)}
+.ocean-v2 .ac-tour-pic{flex:none;width:52px;height:52px;border-radius:50%;object-fit:cover}
+.ocean-v2 .ac-tour>span{flex:1;min-width:0}
+.ocean-v2 .ac-tour>svg{flex:none;width:22px;height:22px;opacity:.6}
+/* Vie du jeu, selon l'état qui vient d'arriver (data-ac-move, posé puis retiré par syncQuiz) : le mot se pose et le
+   bouton suit ; les trois réponses arrivent l'une après l'autre ; « Découvrir <pays> » glisse en place. */
+.ocean-v2 .ac-quiz[data-ac-move=closed] .cult-quiz-word{transform-origin:0 70%;animation:ac-word .44s cubic-bezier(.2,.9,.25,1) backwards}
+.ocean-v2 .ac-quiz[data-ac-move=closed] .ac-guess{animation:ac-pop .36s cubic-bezier(.2,.9,.25,1) .14s backwards}
+.ocean-v2 .ac-quiz[data-ac-move=open] .cult-choice{animation:ac-see .36s var(--ob-ease-out,cubic-bezier(.22,.8,.3,1)) backwards}
+.ocean-v2 .ac-quiz[data-ac-move=open] .cult-choice:nth-child(2){animation-delay:.06s}
+.ocean-v2 .ac-quiz[data-ac-move=open] .cult-choice:nth-child(3){animation-delay:.12s}
+.ocean-v2 .ac-quiz[data-ac-move=done] .cult-quiz-go{animation:ac-see .4s var(--ob-ease-out,cubic-bezier(.22,.8,.3,1)) .16s backwards}
+/* Le cadre cède la place aux trois réponses, puis revient avec le résultat : le texte change de colonne. Il glisse
+   de l'une à l'autre au lieu de sauter (départ à sa place d'avant, transform seulement ; --ac-pic est la largeur du
+   cadre et de sa gouttière). À l'ouverture, le libellé et le mot glissent ; au résultat, toute la colonne glisse et le
+   compteur de tampons, calé à droite, reçoit le mouvement inverse : il ne bouge pas. */
+.ocean-v2 .ac-quiz{--ac-pic:118px}
+.ocean-v2 .ac-quiz[data-ac-move=open][data-ac-from=closed] :is(.cult-quiz-head>.ui-label,.cult-quiz-word){--ac-dx:var(--ac-pic);animation:ac-slide .34s var(--ob-ease-out,cubic-bezier(.22,.8,.3,1)) backwards}
+.ocean-v2 .ac-quiz[data-ac-move=done][data-ac-from=open] .ac-quiz-main{--ac-dx:calc(-1 * var(--ac-pic));animation:ac-slide .4s var(--ob-ease-out,cubic-bezier(.22,.8,.3,1)) backwards}
+.ocean-v2 .ac-quiz[data-ac-move=done][data-ac-from=open] .cult-quiz-meta{--ac-dx:var(--ac-pic);animation:ac-slide .4s var(--ob-ease-out,cubic-bezier(.22,.8,.3,1)) backwards}
+.ocean-v2 .ac-cult .cult-choice{transition:transform .12s cubic-bezier(.2,.7,.3,1)}
+.ocean-v2 .ac-cult .cult-choice:active{transform:scale(.96)}
 .ocean-v2 .ac-tour:focus-visible{outline:2px solid var(--t-main);outline-offset:2px;border-radius:10px}
 @media(max-width:389px){
-  .ocean-v2 .ac-cult .ac-quiz{grid-template-columns:92px minmax(0,1fr);column-gap:12px}
+  .ocean-v2 .ac-cult .ac-quiz{--ac-pic:104px;grid-template-columns:92px minmax(0,1fr);column-gap:12px}
   .ocean-v2 .ac-quiz-pic{width:92px;height:92px}
   .ocean-v2 .ac-cult .cult-quiz-word{font-size:22px}
 }
@@ -169,21 +256,58 @@
    ac-row-in, même geste. Hors de ces classes, rien n'est animé : aucun calque transformé au repos. */
 @keyframes ac-in{from{opacity:0;transform:translate3d(0,12px,0)}}
 @keyframes ac-fade{from{opacity:0}}
+@keyframes ac-see{from{opacity:0;transform:translate3d(0,14px,0)}}
+@keyframes ac-zoom{from{transform:scale(1.1)}}
+@keyframes ac-pop{from{opacity:0;transform:scale(.86)}}
+@keyframes ac-word{from{opacity:0;transform:translate3d(0,9px,0) scale(.95)}}
+@keyframes ac-slide{from{transform:translate3d(var(--ac-dx,0),0,0)}}
+@keyframes ac-beat{from{opacity:.55;transform:scale(1)}to{opacity:0;transform:scale(3.4)}}
+@keyframes ac-pulse{40%{transform:scale(1.09)}}
 .ocean-v2 .ac-top{--s:0}.ocean-v2 .ac-mine{--s:1}.ocean-v2 .ac-good{--s:2}.ocean-v2 .ac-col+.ac-col .ac-sec{--s:3}.ocean-v2 .ac-col+.ac-col .cult-home{--s:4}
 .ocean-v2 #home.ac-go .ac-in{animation:ac-in .44s var(--ob-ease-out,cubic-bezier(.22,.8,.3,1)) backwards;animation-delay:calc(var(--s,0) * 70ms + var(--i,0) * 35ms)}
 .ocean-v2 #home .ac-row-in{animation:ac-in .4s var(--ob-ease-out,cubic-bezier(.22,.8,.3,1)) backwards;animation-delay:calc(var(--i,0) * 40ms)}
+/* À l'entrée, les photos des lignes et des cartes se posent (léger recul) et l'illustration de la carte sans favori arrive. */
+.ocean-v2 #home.ac-go .ac-in :is(.ui-ph,.ac-card)>img{animation:ac-zoom .5s ease-out backwards;animation-delay:calc(var(--s,0) * 70ms + var(--i,0) * 35ms)}
+.ocean-v2 #home.ac-go .ac-empty>img{animation:ac-pop .46s cubic-bezier(.2,.9,.25,1) .16s backwards}
+
+/* ---------- Vie après l'entrée (passe du 23 novembre) ----------
+   Au défilement : les blocs sous le premier écran attendent sans opacité (ac-wait, posée par watchSee) puis glissent en
+   place quand ils arrivent à l'écran (ac-see, retirée ensuite ; --k décale ceux qui arrivent ensemble) ; les cartes du
+   mois font de même au défilement de côté.
+   Au retour sur l'accueil : les pastilles de verdict battent une fois l'une après l'autre, sans jamais disparaître
+   (ac-wake sur la ligne, --w = son rang), et le point du relevé bat. Tout est posé puis retiré par home-feed.js : aucune boucle, aucun calque au repos. */
+.ocean-v2 #home .ac-wait{opacity:0}
+.ocean-v2 #home .ac-see{animation:ac-see .46s var(--ob-ease-out,cubic-bezier(.22,.8,.3,1)) backwards;animation-delay:calc(var(--k,0) * 45ms)}
+.ocean-v2 #home .ac-see :is(.ui-ph,.ac-card)>img,.ocean-v2 #home .ac-card.ac-see>img{animation:ac-zoom .5s ease-out backwards;animation-delay:calc(var(--k,0) * 45ms)}
+.ocean-v2 #home .ac-wake .ui-verdict>b{animation:ac-pulse .44s cubic-bezier(.3,.7,.3,1);animation-delay:calc(240ms + var(--w,0) * 60ms)}
+.ocean-v2 #home .ac-wake .ui-next>.ui-ic{animation:ac-pulse .44s cubic-bezier(.3,.7,.3,1);animation-delay:calc(300ms + var(--w,0) * 60ms)}
 @media (prefers-reduced-motion:reduce){
   .ocean-v2 #home.ac-go .ac-in,.ocean-v2 #home .ac-row-in,.ocean-v2 .ac-quiz .cult-quiz-choices,.ocean-v2 .ac-quiz .cult-quiz-done{animation:none}
   .ocean-v2 .ac-quiz-pic>img,.ocean-v2 .app-chrome .mobile-search{transition:none}
+  .ocean-v2 #home.ac-go :is(.ui-ph,.ac-card,.ac-empty)>img,.ocean-v2 #home .ac-see,.ocean-v2 #home .ac-see img,.ocean-v2 #home .ac-wake .ui-verdict :is(b,.ui-ic),.ocean-v2 .ac-fresh.is-beat>i::after,.ocean-v2 .ac-quiz[data-ac-move] :is(.ac-quiz-main,.ui-label,.cult-quiz-meta,.cult-quiz-word,.ac-guess,.cult-choice,.cult-quiz-go){animation:none}
+  .ocean-v2 #home .ac-wait{opacity:1}
+  .ocean-v2 .ac-tour,.ocean-v2 .ac-cult .cult-choice{transition:none}
 }
 .ocean-v2.reduce-motion #home.ac-go .ac-in,.ocean-v2.reduce-motion #home .ac-row-in,.ocean-v2.reduce-motion .ac-quiz .cult-quiz-choices,.ocean-v2.reduce-motion .ac-quiz .cult-quiz-done{animation:none}
 .ocean-v2.reduce-motion .ac-quiz-pic>img,.ocean-v2.reduce-motion .app-chrome .mobile-search{transition:none}
+.ocean-v2.reduce-motion #home.ac-go :is(.ui-ph,.ac-card,.ac-empty)>img,.ocean-v2.reduce-motion #home .ac-see,.ocean-v2.reduce-motion #home .ac-see img,.ocean-v2.reduce-motion #home .ac-wake .ui-verdict :is(b,.ui-ic),.ocean-v2.reduce-motion .ac-fresh.is-beat>i::after,.ocean-v2.reduce-motion .ac-quiz[data-ac-move] :is(.ac-quiz-main,.ui-label,.cult-quiz-meta,.cult-quiz-word,.ac-guess,.cult-choice,.cult-quiz-go){animation:none}
+.ocean-v2.reduce-motion #home .ac-wait{opacity:1}
+.ocean-v2.reduce-motion .ac-tour,.ocean-v2.reduce-motion .ac-cult .cult-choice{transition:none}
 
 /* ---------- Ordinateur (960 px et plus) : deux colonnes ----------
    À gauche tes spots et « Bon aujourd'hui », à droite le mois et les cultures ; le haut garde la largeur d'une colonne. */
 /* Tablette et petite fenêtre d'ordinateur : une colonne de 640 px au centre, plutôt que des lignes étirées. */
 @media(min-width:700px) and (max-width:959px){
   .ocean-v2 #home .ac-top,.ocean-v2 #home .hf-feed{max-width:640px!important;margin-left:auto!important;margin-right:auto!important}
+}
+/* Tablette : la rangée du mois ne dépasse plus de la colonne (elle allait jusqu'au bord droit de l'écran). Quatre
+   cartes entières et le début de la cinquième, qui s'efface vers le bord : on voit que la rangée continue. Le fondu
+   part quand la rangée est au bout (classe is-end, home-feed.js). Même fondu à droite sur ordinateur. */
+@media(min-width:700px) and (max-width:959px){
+  .ocean-v2 #home .ac-row{margin:0;padding:0;scroll-padding-inline:0;grid-auto-columns:calc((100% - 36px) / 4.42);gap:9px}
+}
+@media(min-width:700px){
+  .ocean-v2 #home .ac-row:not(.is-end){-webkit-mask-image:linear-gradient(90deg,black calc(100% - 56px),transparent);mask-image:linear-gradient(90deg,black calc(100% - 56px),transparent)}
 }
 @media(min-width:960px){
   /* !important : design.css remet max-width:none sur chaque bloc direct d'un écran (sélecteur à identifiant). */

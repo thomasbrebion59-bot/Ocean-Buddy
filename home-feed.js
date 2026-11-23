@@ -614,6 +614,8 @@
   const spotOf=id=>SPOTS.find(s=>s.id===id);
   /* Délai d’entrée d’un bloc : rang du bloc dans sa rubrique (CSS : --i, 35 ms par rang). */
   const rise=i=>` style="--i:${i}"`;
+  /* Mouvement réduit : le réglage du téléphone ou celui de l’app. */
+  const calmV2=()=>matchMedia('(prefers-reduced-motion: reduce)').matches||body().classList.contains('reduce-motion');
 
   /* ---------- Haut : date, salut, pastille sport et niveau ---------- */
   function dateText(){
@@ -625,20 +627,22 @@
     const hello=tr(Layout?.hello?Layout.hello(new Date().getHours(),lang()):'Bonjour');
     return name?`${hello}, ${name}`:hello;
   }
-  /* « Surf, intermédiaire » : écrit dans la langue ici (un assemblage n’est pas une clé du dictionnaire). */
+  /* « Surf, intermédiaire » : écrit dans la langue ici (un assemblage n’est pas une clé du dictionnaire). Deux parties,
+     le sport puis le niveau : quand la place manque, la pastille les empile ou ne garde que le sport (fitTop). */
   function meText(){
     const sp=curSport(),lv=curLevel();
     const s=sp!=='all'?tr(String(sportLabel(sp)).replace(/\s*\(.*\)/,'')):'',l=lv&&LEVEL_TX[lv]&&lv!=='variable'?tr(LEVEL_TX[lv]):'';
-    if(s&&l)return `${s}, ${l.toLowerCase()}`;
-    return s||l||tr('Mon sport');
+    if(s&&l)return [s,l.toLowerCase()];
+    return [s||l||tr('Mon sport')];
   }
+  const meHTML=()=>{const [a,b]=meText();return `<span class="ac-me-a">${esc(a)}</span>${b?`<span class="ac-me-sep">, </span><span class="ac-me-b">${esc(b)}</span>`:''}`;};
   const meIcon=()=>`url('assets/pictos/sports/${curSport()==='all'?'all':curSport()}-mono.webp')`;
   function topV2(){
     return `<section class="hf-top ac-top" aria-label="Trouve ton spot">
       <header class="ac-head ac-in"${rise(0)}>
         <p class="ac-date" data-ac-date data-no-i18n>${esc(dateText())}</p>
-        <div class="ac-hello"><h1 class="ac-hi" data-ac-hi data-no-i18n>${esc(helloText())}</h1>
-          <button type="button" class="ui-pill ac-me" data-ac-me title="Modifier mon sport et mon niveau"><span class="ac-me-ic" data-ac-me-ic style="--ic:${esc(meIcon())}" aria-hidden="true"></span><span data-ac-me-tx data-no-i18n>${esc(meText())}</span></button></div>
+        <div class="ac-hello" data-ac-hello><h1 class="ac-hi" data-ac-hi data-no-i18n>${esc(helloText())}</h1>
+          <button type="button" class="ui-pill ac-me" data-ac-me title="Modifier mon sport et mon niveau"><span class="ac-me-ic" data-ac-me-ic style="--ic:${esc(meIcon())}" aria-hidden="true"></span><span class="ac-me-tx" data-ac-me-tx data-no-i18n>${meHTML()}</span></button></div>
       </header>
       <button type="button" class="hf-search ac-search ac-in"${rise(1)} data-hf-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span><b>Où veux-tu aller ?</b></span></button>
     </section>`;
@@ -647,8 +651,26 @@
   function syncTop(){
     const top=$('.ac-top',home);if(!top)return;
     const put=(sel,t)=>{const el=$(sel,top);if(el&&el.textContent!==t)el.textContent=t;};
-    put('[data-ac-date]',dateText());put('[data-ac-hi]',helloText());put('[data-ac-me-tx]',meText());
+    put('[data-ac-date]',dateText());put('[data-ac-hi]',helloText());
+    const me=$('[data-ac-me-tx]',top),h=meHTML();if(me&&me._acHtml!==h){me.innerHTML=h;me._acHtml=h;}
     const ic=$('[data-ac-me-ic]',top),v=meIcon();if(ic&&ic.style.getPropertyValue('--ic')!==v)ic.style.setProperty('--ic',v);
+    fitTop();
+  }
+  /* Le salut et la pastille tiennent sur UNE ligne, dans toutes les langues (« Buenas noches » à 375 px) : tant que la
+     pastille passe dessous, on essaie, dans l’ordre, la pastille sur deux lignes (sport, puis niveau), le salut un peu
+     plus petit, le sport seul, puis le pictogramme seul (data-ac-fit, 1 à 5 ; ui-accueil.css). Mesuré sous le rideau,
+     puis quand les polices sont là et quand la largeur change. Rien ne tient (long prénom) : la pastille reste dessous. */
+  const FITS=5;
+  let fitW=-1;
+  function fitTop(){
+    const row=$('[data-ac-hello]',home),hi=row&&$('[data-ac-hi]',row),me=row&&$('[data-ac-me]',row);if(!row||!hi||!me)return;
+    /* Accueil caché (autre écran) : rien à mesurer, l’ajustement en place est gardé ; il est refait au retour. */
+    if(!hi.offsetHeight)return;
+    fitW=row.clientWidth;
+    const under=()=>me.offsetTop-hi.offsetTop>20||hi.offsetHeight>60;
+    let fit=0;row.removeAttribute('data-ac-fit');
+    while(fit<FITS&&under())row.setAttribute('data-ac-fit',String(++fit));
+    if(under())row.removeAttribute('data-ac-fit');
   }
 
   /* ---------- Lignes de spot : photo, nom, points de danger, conditions, verdict ---------- */
@@ -668,8 +690,15 @@
     const p=window.SpotName?.parts?window.SpotName.parts(s.name):{main:shortName(s),sub:''};
     return `<span translate="no" data-no-i18n>${esc(p.main)}${p.sub?` <small>${esc(p.sub)}</small>`:''}</span>`;
   }
-  /* Spot sans vraie photo (une illustration ne sert jamais de couverture ici) : le pictogramme de son activité, au même format. */
-  const noPhoto=s=>`<span class="ui-ph is-none" style="--ic:url('assets/pictos/sports/${esc((s.sports||[]).find(a=>sportLabel(a))||'all')}-mono.webp')"></span>`;
+  /* Spot sans vraie photo : l’illustration de son activité (assets/ui/sports/, neuf dessins faits pour ce cadre, dans le
+     style des illustrations de la fiche). C’est un dessin de l’activité, jamais une fausse photo du spot ; il est posé en
+     fond du cadre, pas en image : le vol vers la fiche (motion.js) ne l’emprunte pas. Activité sans dessin : son pictogramme. */
+  const ILLUS=new Set(['surf','bodyboard','baignade','paddle','kayak','snorkeling','plongee','kitesurf','windsurf']);
+  function noPhoto(s){
+    const sp=curSport(),a=sp!=='all'&&has(s,sp)?sp:(s.sports||[]).find(x=>sportLabel(x))||'all';
+    if(ILLUS.has(a))return `<span class="ui-ph is-illus" style="--il:url('assets/ui/sports/${a}.webp')"></span>`;
+    return `<span class="ui-ph is-none" style="--ic:url('assets/pictos/sports/${esc(a)}-mono.webp')"></span>`;
+  }
   function spotRow(s,i,{eager=false,cls='ac-in'}={}){
     const p=photo(s),g=window.dangerGauge?.(s)?.n??null;
     return `<div class="ui-spot ${cls}"${rise(i)} data-spot="${esc(s.id)}" role="button" tabindex="0">
@@ -689,7 +718,14 @@
   /* Conditions arrivées : écrites à la place réservée ; chiffres qui montent et pastille en fondu si l’accueil est à l’écran. */
   function paintLive(el,e,anim){
     const h=Verdict.html(e);
-    if(el._acHtml!==h){el.innerHTML=h;el._acHtml=h;el.removeAttribute('data-ac-shown');}
+    if(el._acHtml!==h){
+      /* Conditions rafraîchies (retour après 30 min) : chaque chiffre repart de sa valeur d’avant, 20 puis 22, au lieu
+         de 0 (data-ui-from, lu par OceanVerdict.animate). Seulement quand les mêmes relevés sont là des deux côtés. */
+      const was=el.hasAttribute('data-ac-ok')?[...el.querySelectorAll('.ui-n[data-ui-n]')].map(n=>n.dataset.uiN):null;
+      el.innerHTML=h;el._acHtml=h;el.removeAttribute('data-ac-shown');
+      const now=el.querySelectorAll('.ui-n[data-ui-n]');
+      if(was&&was.length===now.length&&!el.querySelector('.ui-cond .is-none'))now.forEach((n,i)=>{n.dataset.uiFrom=was[i];});
+    }
     el.setAttribute('data-ac-ok','');fitLive(el);
     if(anim)showLive(el);
   }
@@ -697,6 +733,8 @@
     if(el.hasAttribute('data-ac-shown'))return;
     el.setAttribute('data-ac-shown','');el.classList.remove('ui-arrive');void el.offsetWidth;el.classList.add('ui-arrive');
     Verdict.animate(el);
+    /* La classe part une fois l’arrivée jouée : elle ne se rejoue pas toute seule quand l’accueil réapparaît (wakeV2 s’en charge). */
+    setTimeout(()=>el.classList.remove('ui-arrive'),900);
   }
   const onScreen=()=>(!Boot||Boot.lifted)&&body().dataset.screen==='home'&&!document.hidden;
 
@@ -708,14 +746,16 @@
   }
   function mineBody(m){
     if(m.spots.length)return `<div class="ui-spots" data-ac-mine>${m.spots.map((s,i)=>spotRow(s,i+1,{eager:true})).join('')}</div>`;
-    /* Ni favori ni spot vu : une carte courte, le nombre de spots du catalogue en grand et un bouton vers Explorer. */
-    return `<div class="ui-card ac-empty ac-in"${rise(1)}><img src="assets/poulpy/scenes/travel-v2.webp" alt="" width="960" height="640" decoding="async">
-      <div class="ac-empty-tx"><p class="ac-empty-n"><span class="ui-num">${SPOTS.length}</span><span class="ui-unit">spots à explorer</span></p><button type="button" class="ui-btn" data-ac-find>Trouver un spot</button></div></div>`;
+    /* Ni favori ni spot vu : une carte courte, le nombre de spots du catalogue en grand (il monte jusqu’à sa valeur à
+       l’entrée, OceanVerdict.animate) et un bouton vers Explorer. L’illustration est faite pour cette carte : une côte
+       et ses repères de spots (assets/ui/accueil-spots.webp, style des illustrations de la fiche). */
+    return `<div class="ui-card ac-empty ac-in"${rise(1)} data-ac-empty><img src="assets/ui/accueil-spots.webp" alt="" width="720" height="720" decoding="async">
+      <div class="ac-empty-tx"><p class="ac-empty-n"><span class="ui-num ui-n" data-ui-n="${SPOTS.length}" data-ui-d="0">${SPOTS.length}</span><span class="ui-unit">spots à explorer</span></p><button type="button" class="ui-btn" data-ac-find>Trouver un spot</button></div></div>`;
   }
   function mineSection(){
     const m=mineData();mineIds=m.spots.map(s=>s.id);mineKey=m.kind+':'+mineIds.join();
     return `<section class="ac-sec ac-mine" data-hf="mesSpots" aria-labelledby="acMineT">
-      <div class="as-sec ui-head ac-in"${rise(0)}><h2 class="ui-title" id="acMineT">Mes spots</h2><button type="button" class="ui-link" data-ac-edit${m.spots.length?'':' hidden'}>Modifier</button></div>
+      <div class="as-sec ui-head ac-in"${rise(0)}><h2 class="ui-title" id="acMineT">Mes spots</h2><span class="ac-fresh" data-ac-fresh hidden><i aria-hidden="true"></i><span data-ac-fresh-tx data-no-i18n></span></span><button type="button" class="ui-link" data-ac-edit${m.spots.length?'':' hidden'}>Modifier</button></div>
       <div data-ac-mine-box>${mineBody(m)}</div>
     </section>`;
   }
@@ -727,7 +767,33 @@
     if(key===mineKey)return false;
     mineIds=ids;mineKey=key;box.innerHTML=mineBody(m);
     const edit=$('[data-ac-edit]',home);if(edit)edit.hidden=!m.spots.length;
+    if(!ids.length){syncFresh(null);if(onScreen())Verdict?.animate($('[data-ac-empty]',box));}
     return true;
+  }
+  /* Heure du relevé des conditions de « Mes spots », à côté du titre : un point et « 14 h 05 » (le plus ancien des relevés
+     affichés, celui d’Open-Meteo gardé par le cache). Le point bat une fois quand un relevé plus récent arrive. Sans
+     relevé (hors ligne, carte sans favori), rien n’est affiché : aucune heure inventée. */
+  let freshAt=0;
+  function freshText(at){
+    const d=new Date(at);
+    if(/^fr/.test(lang()))return `${d.getHours()} h ${String(d.getMinutes()).padStart(2,'0')}`;
+    return fmt('hm',()=>new Intl.DateTimeFormat(lang(),{hour:'numeric',minute:'2-digit'})).format(d);
+  }
+  function syncFresh(map){
+    const el=$('[data-ac-fresh]',home);if(!el)return;
+    const ats=map?mineIds.map(id=>map.get(id)).filter(e=>e&&e.now&&e.at>0).map(e=>e.at):[];
+    if(!ats.length){el.hidden=true;freshAt=0;return;}
+    const at=Math.min(...ats),t=freshText(at),tx=$('[data-ac-fresh-tx]',el);
+    if(tx&&tx.textContent!==t)tx.textContent=t;
+    el.title=tr('Relevé à {0}').replace('{0}',t);el.hidden=false;
+    if(at>freshAt&&freshAt&&onScreen())beat(el);
+    freshAt=at;
+  }
+  /* Un battement : la classe est posée puis retirée (aucune boucle, rien en mouvement réduit). */
+  function beat(el){
+    if(!el||calmV2())return;
+    el.classList.remove('is-beat');void el.offsetWidth;el.classList.add('is-beat');
+    setTimeout(()=>el.classList.remove('is-beat'),1200);
   }
 
   /* ---------- « Bon aujourd’hui » ----------
@@ -775,6 +841,8 @@
       box.dataset.acKey=key;
       /* À l’écran : les lignes entrent une à une. Sous le rideau : elles entreront avec le reste (ac-in). */
       box.innerHTML=picks.map((s,i)=>spotRow(s,anim?i:i+1,{cls:anim?'ac-row-in':'ac-in'})).join('');
+      /* L’entrée jouée, sa classe part : elle ne se rejoue pas quand l’accueil réapparaît. */
+      if(anim)setTimeout(()=>box.querySelectorAll('.ac-row-in').forEach(r=>r.classList.remove('ac-row-in')),900);
     }
     const t=$('[data-ac-good-title]',home),title=goodTitle(picks,map,false);
     if(t&&t.dataset.acT!==title){t.dataset.acT=title;t.textContent=title;}
@@ -791,6 +859,7 @@
       const anim=onScreen();
       fillGood(map,anim);
       home.querySelectorAll('.hf-feed [data-ac-live]').forEach(el=>{const e=map.get(el.dataset.acLive);if(e)paintLive(el,e,anim);});
+      syncFresh(map);
     }).catch(e=>{setTimeout(()=>{throw e;});});
   }
   /* Niveau changé dans Réglages : la pastille du haut, les verdicts de « Mes spots » et les spots de « Bon aujourd’hui »
@@ -832,8 +901,13 @@
   /* ---------- « Cultures » : le mot du jour (cultures.js) et l’entrée vers le tour du monde ----------
      Une seule carte, à hauteur fixe. Le jeu est celui de cultures.js (quizHTML, choose, fitDone) : fermé, il montre le mot,
      une photo du pays à deviner et « Deviner le pays » ; un toucher affiche les trois réponses à la même place ; le
-     résultat (tampon) prend ensuite cette place. « Tour du monde » ouvre le carnet de tampons. */
-  const GLOBE='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.6 2.5 3.9 5.5 3.9 9s-1.3 6.5-3.9 9c-2.6-2.5-3.9-5.5-3.9-9s1.3-6.5 3.9-9z"/></svg>';
+     résultat (tampon) prend ensuite cette place. « Tour du monde » ouvre le carnet de tampons.
+     Illustrations (style de la fiche) : le cadre du jeu porte le globe et sa bulle (assets/ui/tour-du-monde.webp) tant
+     que la réponse n’est pas donnée ; la vraie photo du pays arrive par-dessus avec le résultat, comme une récompense
+     (avant, elle soufflait un peu la réponse). La ligne « Tour du monde » a son tampon à la vague (tampon-vague.webp).
+     Vie : le mot se pose, les trois réponses arrivent l’une après l’autre, le tampon du résultat s’imprime et la photo
+     se pose (ui-accueil.css, selon data-ac-quiz et data-ac-move) ; rien en mouvement réduit. */
+  const CHEVRON='<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"/></svg>';
   function culturesV2(){
     const C=window.OceanCultures;if(!C)return '';
     const view=C._view||null;
@@ -844,10 +918,10 @@
       <div class="as-sec ui-head ac-in"${rise(0)}><h2 class="ui-title" id="acCultT">Cultures</h2></div>
       <div class="ui-card ac-cult ac-in"${rise(1)}>
         <section class="cult-quiz ac-quiz" data-cult-quiz data-ac-quiz="wait" aria-label="Mot du jour">
-          <span class="ac-quiz-pic" aria-hidden="true">${GLOBE}<img data-ac-quiz-img alt="" decoding="async"></span>
+          <span class="ac-quiz-pic" aria-hidden="true"><img class="ac-quiz-art" src="assets/ui/tour-du-monde.webp" alt="" width="600" height="600" loading="lazy" decoding="async"><img data-ac-quiz-img alt="" decoding="async"></span>
           <div class="ac-quiz-main" data-ac-quiz-main><div class="cult-quiz-head"><span class="ui-label">Mot du jour</span><span class="cult-quiz-meta" data-cult-quiz-meta></span></div>${quiz}<button type="button" class="ui-btn ac-guess" data-ac-guess>Deviner le pays</button></div>
         </section>
-        <button type="button" class="ac-tour" data-cult-index>${GLOBE}<span>Tour du monde</span></button>
+        <button type="button" class="ac-tour" data-cult-index><img class="ac-tour-pic" src="assets/ui/tampon-vague.webp" alt="" width="230" height="230" loading="lazy" decoding="async"><span>Tour du monde</span>${CHEVRON}</button>
       </div>
     </section>`;
   }
@@ -856,18 +930,36 @@
   function syncQuiz(){
     const box=$('[data-ac-quiz]',home),b=box?.querySelector('[data-cult-quiz-body]');if(!box||!b)return;
     const now=box.dataset.acQuiz,next=b.classList.contains('is-wait')?'wait':b.classList.contains('is-done')?'done':now==='open'||b.classList.contains('is-busy')?'open':'closed';
-    if(now!==next)box.dataset.acQuiz=next;
-    if(next!=='wait')syncQuizPic(box);
+    if(now!==next){box.dataset.acQuiz=next;moveQuiz(box,next,now);}
+    syncQuizPic(box,next);
   }
-  /* Photo du pays à deviner : une vraie photo d’un de ses spots, la plus lumineuse. Posée en fondu dans la place réservée. */
-  function syncQuizPic(box){
+  /* L’état vient de changer : sa petite animation (ui-accueil.css, data-ac-move, et data-ac-from pour l’état d’avant)
+     se joue une fois, puis la marque part. Rien sous le rideau ni en mouvement réduit. */
+  let moveT=0;
+  function moveQuiz(box,state,from){
+    clearTimeout(moveT);
+    if(calmV2()||!onScreen()){box.removeAttribute('data-ac-move');return;}
+    box.dataset.acFrom=from||'';box.dataset.acMove=state;moveT=setTimeout(()=>box.removeAttribute('data-ac-move'),1000);
+  }
+  /* Photo du pays du jour : une vraie photo d’un de ses spots, la plus lumineuse. Elle n’est montrée qu’avec le résultat
+     (jusque-là le cadre garde son illustration : la photo ne souffle pas la réponse). Chargée dès que les réponses sont
+     ouvertes, elle arrive en fondu sur l’illustration, à la même place. Pays sans photo : l’illustration reste. */
+  function syncQuizPic(box,state){
     const view=window.OceanCultures?._view,M=window.CulturesModel,img=box.querySelector('[data-ac-quiz-img]');
     if(!view?.load||!M?.quiz||!img)return;
+    if(state!=='open'&&state!=='done'){img.classList.remove('is-on');return;}
     view.load().then(data=>{
-      const q=M.quiz(data,new Date()),c=q&&q.country;if(!c||quizPic===c+lang())return;
-      const best=SPOTS.filter(s=>s.country===c&&!s.custom).map(s=>({s,p:photo(s)})).filter(x=>x.p).sort((a,b)=>vib(b.s.id)-vib(a.s.id)||(a.s.id<b.s.id?-1:1))[0];
-      quizPic=c+lang();if(!best||!img.isConnected)return;
-      img.onload=()=>img.classList.add('is-on');img.src=best.p.thumb;
+      const q=M.quiz(data,new Date()),c=q&&q.country;if(!c||!img.isConnected)return;
+      if(quizPic!==c+lang()){
+        const best=SPOTS.filter(s=>s.country===c&&!s.custom).map(s=>({s,p:photo(s)})).filter(x=>x.p).sort((a,b)=>vib(b.s.id)-vib(a.s.id)||(a.s.id<b.s.id?-1:1))[0];
+        quizPic=c+lang();img.classList.remove('is-on');
+        if(!best){img.removeAttribute('src');return;}
+        img.src=best.p.thumb;
+      }
+      if(!img.getAttribute('src'))return;
+      const show=()=>{if(box.dataset.acQuiz==='done')img.classList.add('is-on');};
+      /* Déjà chargée : posée un instant après le retour du cadre, pour que le fondu se voie. */
+      if(img.complete&&img.naturalWidth)setTimeout(show,90);else img.onload=show;
     }).catch(()=>{});
   }
   function watchQuiz(){
@@ -879,7 +971,7 @@
   /* « Deviner le pays » : les trois réponses prennent la place du bouton (même hauteur) ; le jeu se charge s’il ne l’est pas. */
   function openQuiz(){
     const box=$('[data-ac-quiz]',home);if(!box)return;
-    if(box.dataset.acQuiz==='closed')box.dataset.acQuiz='open';
+    if(box.dataset.acQuiz==='closed'){box.dataset.acQuiz='open';moveQuiz(box,'open','closed');}
     window.OceanCultures?.ensure?.().then(()=>{syncQuiz();box.querySelector('[data-cult-choice]')?.focus({preventScroll:true});}).catch(()=>{window.OceanCultures?.offline?.();});
   }
 
@@ -913,8 +1005,14 @@
        réservées cachées (order). Ils ne sont plus affichés sur l’accueil et aucun ne pousse le fil en arrivant tard. */
     return cols.map(c=>`<div class="ac-col">${c.map(k=>B[k]||'').join('')}</div>`).join('')+`<div class="ac-off" hidden>${Object.keys(OWNED).map(slot).join('')}</div>`;
   }
-  /* Après le montage : jeu du jour suivi, conditions demandées. */
-  function bindV2(){watchQuiz();loadLive();}
+  /* Rangée du mois arrivée au bout : son fondu de droite part (tablette et ordinateur, ui-accueil.css). */
+  function watchRow(){
+    const row=$('.hf-feed .ac-row',home);if(!row)return;
+    const end=()=>row.classList.toggle('is-end',row.scrollLeft+row.clientWidth>=row.scrollWidth-8);
+    row.addEventListener('scroll',end,{passive:true});end();
+  }
+  /* Après le montage : jeu du jour suivi, rangée suivie, conditions demandées. */
+  function bindV2(){watchQuiz();watchRow();loadLive();}
   /* Entrée des blocs, une seule fois, quand le rideau se lève (jamais avant : elle se jouerait sans être vue), et chiffres
      qui montent pour les conditions déjà écrites. La classe est retirée ensuite : un fil remonté plus tard n’entre pas. */
   let entered=false;
@@ -923,6 +1021,52 @@
     const calm=matchMedia('(prefers-reduced-motion: reduce)').matches||body().classList.contains('reduce-motion');
     if(!calm){home.classList.add('ac-go');setTimeout(()=>home.classList.remove('ac-go'),1400);}
     home.querySelectorAll('.hf-feed [data-ac-live][data-ac-ok]').forEach(showLive);
+    /* Le grand chiffre de la carte sans favori monte jusqu’à sa valeur (rien en mouvement réduit). */
+    Verdict?.animate($('.hf-feed [data-ac-empty]',home));
+    if(!calm)watchSee();
+  }
+  /* Blocs sous le premier écran : ils entrent quand ils arrivent à l’écran, une fois, au lieu de jouer leur entrée sans
+     être vus à la levée du rideau. Ils attendent sans opacité (ac-wait), puis glissent en place (ac-see, retirée ensuite
+     pour ne pas se rejouer). Les cartes du mois encore hors de la rangée entrent de la même façon au défilement de côté.
+     Sans IntersectionObserver ou en mouvement réduit : rien n’attend, tout est déjà là. Aucune hauteur ne change. */
+  let seeIO=null;
+  /* Marge basse de 8 % : un bloc entre quand il a dépassé la barre d’onglets. Écrite par morceaux, pour ne pas ajouter
+     un faux texte à traduire (i18n-extract.cjs relève les chaînes entre guillemets qui contiennent une espace). */
+  const SEE_MARGIN=['0px','0px','-8%','0px'].join(' ');
+  function watchSee(){
+    seeIO?.disconnect();seeIO=null;
+    const wrap=home.closest('.screen-wrap');
+    if(!wrap||typeof IntersectionObserver!=='function')return;
+    const low=wrap.getBoundingClientRect().bottom,wide=wrap.getBoundingClientRect().right;
+    const far=[...home.querySelectorAll('.hf-feed .ac-in')].filter(el=>{const r=el.getBoundingClientRect();return r.height>0&&(r.top>=low||r.left>=wide);});
+    if(!far.length)return;
+    seeIO=new IntersectionObserver(list=>{
+      /* Les blocs arrivés ensemble entrent l’un après l’autre (--k, 45 ms par rang) ; une carte arrivée seule, tout de suite. */
+      let k=0;
+      for(const en of list){
+        if(!en.isIntersecting)continue;
+        const el=en.target;seeIO.unobserve(el);
+        el.style.setProperty('--k',String(Math.min(k++,5)));
+        el.classList.remove('ac-wait');el.classList.add('ac-see');
+        setTimeout(()=>el.classList.remove('ac-see'),1200);
+        if(el.hasAttribute('data-ac-empty'))Verdict?.animate(el);
+      }
+    },{root:wrap,rootMargin:SEE_MARGIN});
+    for(const el of far){el.classList.add('ac-wait');seeIO.observe(el);}
+  }
+  /* Retour sur l’accueil (fiche refermée, autre onglet, app rouverte) : un signe de vie, une fois par retour. Les pastilles
+     de verdict battent une fois l’une après l’autre (elles restent lisibles) et le point du relevé bat ; les chiffres ne
+     bougent que s’ils ont changé (paintLive). Classes posées puis retirées : aucune boucle, rien en mouvement réduit, aucune hauteur ne change. */
+  let wokeAt=0;
+  function wakeV2(){
+    if(!entered||calmV2()||!onScreen())return;
+    const t=Date.now();if(t-wokeAt<1500)return;wokeAt=t;
+    const rows=[...home.querySelectorAll('.hf-feed [data-ac-live][data-ac-ok]')];
+    rows.forEach((el,i)=>{el.style.setProperty('--w',String(i));el.classList.remove('ac-wake');});
+    void home.offsetWidth;
+    rows.forEach(el=>el.classList.add('ac-wake'));
+    setTimeout(()=>rows.forEach(el=>el.classList.remove('ac-wake')),1400);
+    beat($('[data-ac-fresh]:not([hidden])',home));
   }
   /* Données arrivées après la levée : seules les pastilles des cartes du mois changent, sur place. */
   function lateV2(){
@@ -1038,8 +1182,9 @@
   }
   /* Accueil prêt : la photo d’ouverture est décodée et les polices des titres chargées (avec un plafond). */
   function settle(){
-    /* Interface v2 : plus de grande photo ; les photos des premières lignes (« Mes spots ») et les polices des titres. */
-    const imgs=V2?[...home.querySelectorAll('.hf-feed [data-ac-mine] img')].slice(0,3):[home.querySelector('.hf-slide img')];
+    /* Interface v2 : plus de grande photo ; les photos des premières lignes (« Mes spots »), ou l’illustration de la carte
+       sans favori (le premier écran d’un nouveau venu), et les polices des titres. */
+    const imgs=V2?[...home.querySelectorAll('.hf-feed [data-ac-mine] img,.hf-feed [data-ac-empty]>img')].slice(0,3):[home.querySelector('.hf-slide img')];
     const jobs=imgs.map(img=>img?.decode?img.decode().catch(()=>{}):null);
     /* Graisses de Figtree de la v2 (800, 700, 500) : écrites à partir de la même chaîne, pour ne pas ajouter de faux
        textes à traduire (i18n-extract.cjs relève les chaînes entre guillemets). */
@@ -1119,10 +1264,13 @@
   window.addEventListener('ocean:navigate',e=>{if(e.detail==='home')syncQuick();});
   /* Interface v2 : au retour sur l’accueil (ou dans l’app), la date, le salut, « Mes spots » et les conditions sont
      remis à jour sur place ; les conditions de moins de 30 min viennent du cache, sans demande. */
-  function refreshV2(){if(!V2||!built)return;syncTop();syncMine();loadLive();}
+  function refreshV2(){if(!V2||!built)return;syncTop();syncMine();loadLive();wakeV2();}
   window.addEventListener('ocean:navigate',e=>{if(e.detail==='home')refreshV2();});
   document.addEventListener('visibilitychange',()=>{if(!document.hidden&&homeShown())refreshV2();});
   document.addEventListener('ocean:sport',()=>{if(V2)syncTop();});
+  /* Le salut et la pastille sont remesurés quand les polices sont là et quand la largeur change (rotation, fenêtre) ;
+     un changement de hauteur seule (barre du navigateur qui se replie au défilement) ne remesure rien. */
+  if(V2){try{document.fonts?.ready?.then(fitTop);document.fonts?.addEventListener?.('loadingdone',fitTop);}catch(_){}window.addEventListener('resize',()=>{const row=$('[data-ac-hello]',home);if(row&&row.clientWidth!==fitW)fitTop();},{passive:true});}
   /* Scène interrompue ou annulée avant le changement : la pastille revient à l’activité réellement appliquée. */
   document.addEventListener('ocean:transition',e=>{if(!e.detail)syncActs();});
 
