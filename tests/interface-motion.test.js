@@ -96,11 +96,11 @@ test('mouvement réduit : go() passe d’un écran à l’autre en fondu enchaî
   e.drain(); assert.equal(e.elements.home.active, false); assert.equal(e.elements.profile.active, true);
 });
 
-test('mouvement normal : go() garde son glissement court, en transform et opacity seulement', () => {
-  const e = navigationEnv(); e.go('profile');
+test('mouvement normal : une fiche garde son glissement court, en transform et opacity seulement', () => {
+  const e = navigationEnv(); e.go('detail');
   assert.ok(e.anims.some(a => 'transform' in a.frames[0]), 'glissement présent');
   assert.ok(e.anims.every(a => a.frames.every(f => Object.keys(f).every(k => k === 'transform' || k === 'opacity'))));
-  assert.ok(e.anims.every(a => a.opts.duration <= 350));
+  assert.ok(e.anims.every(a => a.opts.duration <= 300), '300 ms au plus');
 });
 
 /* ---------- Retour arrière : au bon endroit du défilement ---------- */

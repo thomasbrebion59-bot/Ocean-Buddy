@@ -3,7 +3,10 @@
    - la photo de la carte touchée grandit vers le héros de la fiche, et revient à sa carte au retour ;
    - l’indicateur de la barre d’onglets et celui des onglets de la fiche coulissent ;
    - quand un repli s’ouvre ou se ferme, ce qui suit glisse à sa nouvelle place au lieu de sauter ;
-   - réglages et quiz sortent en douceur ; le cœur des favoris bat à l’ajout.
+   - réglages et quiz sortent en douceur ; le cœur des favoris bat à l’ajout ;
+   - l’icône de l’onglet choisi fait un petit saut ; à la première arrivée sur Défis, Jeu ou Communauté, les blocs
+     entrent l’un après l’autre (une fois par session ; l’accueil, Explorer, Voyages, le Profil et la fiche ont
+     déjà leur entrée, dans leur propre module).
    Tout est en transform et opacity (Web Animations, présentes depuis iOS 13.1) : pas de View Transitions, pas de
    linear() obligatoire. En mouvement réduit, rien de tout cela ne bouge (les fondus courts viennent de design.css).
    Rien ici ne touche à l’accueil ni à la barre d’onglets avant la levée du rideau, et aucune transition ne retient
@@ -172,9 +175,14 @@
     return {hero,photo,scrim};
   }
 
+  /* Chaque fonction n’est enveloppée qu’une fois, au chargement de ce fichier (avant DOMContentLoaded) : si un autre
+     module l’enveloppe ensuite à son tour, les rappels de wrapAll ne la remplacent plus (pas de double enveloppe,
+     pas de dépendance à l’ordre). La fonction précédente est toujours appelée. */
+  const wrappedOnce={};
   function wrapOpenSpot(){
     const original=window.openSpot;
-    if(typeof original!=='function'||original.__motion)return;
+    if(typeof original!=='function'||original.__motion||wrappedOnce.openSpot)return;
+    wrappedOnce.openSpot=true;
     const wrapped=function(id){
       const t=tap;tap=null;
       const h=heroInfo();
@@ -248,14 +256,51 @@
     a.finished.then(done,()=>{});setTimeout(done,TAB_MS+120);
   }
 
+  /* ================= Petites touches à l’arrivée d’un écran =================
+     Icône de l’onglet choisi : un petit saut, une fois, seulement quand l’onglet change (pas de lecture de mise en
+     page ; sur ordinateur et sous la barre native de l’iPhone, l’icône n’est pas affichée et rien ne se passe). */
+  const activeTab=()=>document.querySelector('.ocean-v2 .nav>button[data-s].active');
+  function hopTab(before){
+    const now=activeTab(),ic=now&&now!==before?now.querySelector('.tab-ic'):null;
+    if(!ic||!canAnimate||reduced()||blocked())return;
+    try{ic.animate([{transform:'translate3d(0,0,0)'+SP+'scale(1)'},{transform:'translate3d(0,-3px,0)'+SP+'scale(1.1)',offset:.4},{transform:'translate3d(0,0,0)'+SP+'scale(1)'}],{duration:340,easing:M.easeOut});}catch(_){}
+  }
+  /* Première arrivée sur un écran qui n’a pas d’entrée à lui : ses premiers blocs montent l’un après l’autre, 26 ms
+     d’écart, dix au plus, une seule fois par session. Les blocs sont trouvés par la structure (children) : aucune
+     mesure, aucune mise en page forcée. Rien n’attend la fin : le premier bloc est lisible tout de suite. */
+  const ARRIVE={challenges:1,surf:1,community:1},arrived=new Set();
+  const KEEP=/^(HEADER|BUTTON|A|P|UL|OL|DETAILS|SUMMARY|TABLE|SVG|svg|ASIDE|H1|H2|H3|LABEL|FORM)$/;
+  function blocks(screen){
+    let list=[...screen.children];
+    for(let pass=0;pass<3&&list.length<4;pass++){
+      const next=[];
+      for(const el of list){if(el.children.length>=2&&!KEEP.test(el.tagName))next.push(...el.children);else next.push(el);}
+      if(next.length===list.length)break;
+      list=next;
+    }
+    return list.filter(el=>!el.hidden&&el.style.display!=='none'&&!/^(SCRIPT|STYLE|TEMPLATE)$/.test(el.tagName)).slice(0,10);
+  }
+  function arrive(s){
+    if(!ARRIVE[s]||arrived.has(s))return;
+    if(!canAnimate||reduced()||blocked())return; /* pas encore joué : la première arrivée animée reste à venir */
+    arrived.add(s);
+    const screen=document.getElementById(s);if(!screen)return;
+    blocks(screen).forEach((el,i)=>{
+      try{el.animate([{opacity:0,transform:'translate3d(0,14px,0)'},{opacity:1,transform:'translate3d(0,0,0)'}],{duration:280,delay:i*26,easing:M.snap,fill:'backwards'});}catch(_){}
+    });
+  }
+  M.arrive=arrive;
+
   function wrapGo(){
     const original=window.go;
-    if(typeof original!=='function'||original.__motion)return;
+    if(typeof original!=='function'||original.__motion||wrappedOnce.go)return;
+    wrappedOnce.go=true;
     const wrapped=function(s){
       const fromScreen=document.body.dataset.screen;
       const calm=!canAnimate||reduced()||blocked();
       /* Pastille : positions lues avant le changement d’écran (mise en page à jour, lecture sans coût). */
       let nav=null,r0=null,r1=null,nr=null,nb=0,mid=null;
+      const tab0=calm?null:activeTab();
       if(!calm&&fromScreen!==s&&!root.classList.contains('native-glass')&&innerWidth<960){
         nav=document.querySelector('.ocean-v2 .nav');
         const a=nav&&nav.querySelector('button[data-s].active'),b=nav&&nav.querySelector('button[data-s="'+s+'"]');
@@ -288,6 +333,7 @@
       try{res=original.apply(this,arguments);}finally{if(!nested)M.zoom=false;}
       try{
         if(r0&&r1&&document.body.dataset.screen===s)slideTab(nav,r0,r1,nr,nb,mid);
+        if(!calm&&!nested&&fromScreen!==s&&document.body.dataset.screen===s){hopTab(tab0);arrive(s);}
         if(back&&document.body.dataset.screen===s){
           const card=findCard(document.getElementById(s),back.id);
           if(card){
@@ -309,7 +355,8 @@
   /* ================= Onglets de la fiche : le trait glisse ================= */
   function wrapDetailTabs(){
     const original=window.showDetailCat;
-    if(typeof original!=='function'||original.__motion)return;
+    if(typeof original!=='function'||original.__motion||wrappedOnce.tabs)return;
+    wrappedOnce.tabs=true;
     let ink=null,anim=null;
     const wrapped=function(cat){
       const bar=document.getElementById('dTabs');
@@ -388,7 +435,8 @@
      fenêtre qui redescend en 200 ms, sans retenir les touchers. */
   function softClose(name,id){
     const original=window[name];
-    if(typeof original!=='function'||original.__motion)return;
+    if(typeof original!=='function'||original.__motion||wrappedOnce[name])return;
+    wrappedOnce[name]=true;
     const wrapped=function(){
       const el=document.getElementById(id);
       const ok=canAnimate&&el&&el.classList.contains('open')&&!root.classList.contains('ob-booting');
@@ -424,6 +472,10 @@
      comme au clavier (essai dans WKWebView, 18 nov. 2026) : un cercle coloré apparaissait autour d’un bouton que
      personne n’avait visé. La classe ob-touch est posée au premier toucher ou clic et retirée dès qu’une touche de
      déplacement sert (Tab, flèches) : l’anneau reste entier au clavier (motion.css). */
+  /* Retour au toucher (motion.css) : le moteur de l’iPhone n’applique :active qu’aux pages qui écoutent les touchers.
+     Écouteur vide et passif : il ne retarde ni le toucher ni le défilement. */
+  document.addEventListener('touchstart',function(){},{passive:true});
+
   const FOCUS_KEYS=/^(Tab|Arrow(Up|Down|Left|Right))$/;
   function pointerMode(e){if(e&&e.isPrimary===false)return;root.classList.add('ob-touch');}
   function keyMode(e){if(e&&FOCUS_KEYS.test(e.key||''))root.classList.remove('ob-touch');}

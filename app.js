@@ -2215,10 +2215,12 @@ function resetScreenLive(el){el.classList.remove('sw-live');el.style.top='';el.s
 /* Interface v2 : la barre a quatre onglets. Jeu et Défis s’ouvrent depuis Profil > Jouer : pendant qu’ils sont affichés,
    l’onglet actif reste le Profil (barre d’onglets, menu latéral, barre native iOS). */
 const TAB_PARENT={surf:'profile',challenges:'profile'};
+/* Écrans de la barre d’onglets : de l’un à l’autre, fondu sur place (aucun glissement). */
+const TAB_ROOT={home:1,spots:1,trips:1,community:1,profile:1};
 function tabOf(s){return TAB_PARENT[s]||s;}
 /* Durée d’un changement d’écran (ms) : sous 350 ms, l’écran suivant répond tout de suite. TAB_GO_MS : d’un onglet à
-   l’autre, fondu court (de 160 à 220 ms) ; GO_MS : la fiche, poussée plus franche. */
-const GO_MS=340,TAB_GO_MS=200;let goAnims=[];
+   l’autre, fondu court (de 160 à 220 ms) ; GO_MS : la fiche et les pages ouvertes depuis un onglet, poussée plus franche. */
+const GO_MS=300,TAB_GO_MS=200;let goAnims=[];
 function stopGoAnims(){const l=goAnims;goAnims=[];l.forEach(a=>{try{a.cancel();}catch(_){}});}
 let navPillHidden=null;
 function updateNavPill(s){
@@ -2283,7 +2285,9 @@ function go(s){
   }
   const dirFrom=SCREEN_ORDER.hasOwnProperty(cur.id)?SCREEN_ORDER[cur.id]:0;
   const dirTo=SCREEN_ORDER.hasOwnProperty(s)?SCREEN_ORDER[s]:0;
-  const dir=dirTo>=dirFrom?1:-1;
+  /* Sens : ouvrir une fiche, c’est toujours avancer (elle arrive par la droite, d’où qu’on vienne) ; la quitter, c’est
+     toujours revenir. Ailleurs, l’ordre des écrans décide. */
+  const dir=s==='detail'?1:cur.id==='detail'?-1:dirTo>=dirFrom?1:-1;
   /* Seul l’écran qui part sort du flux, posé exactement là où il se trouvait (marges intérieures de #screenWrap,
      largeur max.). Celui qui arrive reste dans le flux, à sa place définitive : il n’est mis en page qu’une fois,
      et la fin du glissement ne déclenche plus aucune mise en page (avant : les deux écrans passaient en absolu puis
@@ -2301,10 +2305,12 @@ function go(s){
   const fromY=wrapScrollY,toY=window.OceanNavigation?.restoreScroll?.()||0;
   cur.style.top=toY===fromY?padT:'calc('+padT+' + '+(toY-fromY)+'px)';cur.style.left=padL;cur.style.right=padR;cur.style.maxWidth=maxC;
   wrap.scrollTop=toY;
-  /* Fiche : poussée plus franche (comme une pile iOS). D’un onglet à l’autre (interface v2) : fondu court de 160 à
-     200 ms et déplacement de 10 px seulement, en transform et opacity. motion.js (OceanMotion.zoom) : la photo de la carte
-     fait le trajet, les écrans se fondent sans glisser. */
-  const far=s==='detail'||cur.id==='detail',still=reduce||!!window.OceanMotion?.zoom,inX=still?0:dir*(far?44:10),outX=still?0:-dir*(far?26:6);
+  /* D’un onglet à l’autre : fondu sur place, 160 à 200 ms. Une page ouverte depuis un onglet (fiche, Jeu, Défis) et
+     son retour : fondu avec un glissement court (comme une pile iOS), en avant par la droite, en arrière par la
+     gauche, en transform et opacity. motion.js (OceanMotion.zoom) : la photo de la carte fait le trajet, les écrans se
+     fondent sans glisser. */
+  const swap=!!(TAB_ROOT[s]&&TAB_ROOT[cur.id]),far=!swap;
+  const still=reduce||swap||!!window.OceanMotion?.zoom,inX=still?0:dir*(s==='detail'||cur.id==='detail'?44:28),outX=still?0:-dir*(s==='detail'||cur.id==='detail'?26:16);
   const goMs=reduce?160:far?GO_MS:TAB_GO_MS;
   /* Fondus : l’écran qui arrive, puis celui qui part. Entre deux onglets, presque toute la durée (180 et 160 ms). */
   const fadeIn=Math.round(goMs*(cur.id==='spots'?.35:reduce?1:far?.6:.9)),fadeOut=Math.round(goMs*(reduce?1:far?.5:.8));

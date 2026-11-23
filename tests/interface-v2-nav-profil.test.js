@@ -91,18 +91,18 @@ test('Retour de Jeu et de Défis : il mène au Profil (par l’historique s’il
 });
 
 /* ---------- Changement d’onglet : fondu court ---------- */
-test('changement d’onglet : fondu de 160 à 220 ms, en transform et opacity seulement ; la fiche garde sa poussée', () => {
+test('changement d’onglet : fondu sur place de 160 à 220 ms, sans glissement (23 nov.) ; la fiche garde sa poussée', () => {
   const e = navigationEnv(); e.go('profile');
-  assert.ok(e.anims.length >= 3);
+  assert.ok(e.anims.length >= 2);
   for (const a of e.anims) for (const f of a.frames) for (const k of Object.keys(f)) assert.ok(k === 'transform' || k === 'opacity', 'propriété animée : ' + k);
   const fades = e.anims.filter(a => 'opacity' in a.frames[0]).map(a => a.opts.duration);
   assert.ok(fades.length === 2 && fades.every(d => d >= 160 && d <= 220), 'fondus : ' + fades.join(', ') + ' ms');
   assert.ok(e.anims.every(a => a.opts.duration <= 220), 'rien ne dépasse 220 ms');
-  const slide = e.anims.find(a => a.id === 'profile' && 'transform' in a.frames[0]);
-  assert.match(slide.frames[0].transform, /^translate3d\(10px,0,0\)$/, 'déplacement de 10 px seulement');
+  assert.ok(!e.anims.some(a => 'transform' in a.frames[0]), 'd’un onglet à l’autre : aucun déplacement, fondu sur place');
   e.drain();
   const f = navigationEnv(); f.go('detail');
-  assert.ok(f.anims.some(a => a.opts.duration === 340), 'fiche : 340 ms');
+  assert.ok(f.anims.some(a => a.opts.duration === 300), 'fiche : 300 ms');
+  assert.match(f.anims.find(a => a.id === 'detail' && 'transform' in a.frames[0]).frames[0].transform, /^translate3d\(44px,0,0\)$/, 'la fiche entre par la droite');
   const r = navigationEnv({ reduce: true }); r.go('profile');
   assert.ok(r.anims.every(a => a.frames.every(fr => Object.keys(fr).every(k => k === 'opacity')) && a.opts.duration <= 160), 'mouvement réduit : fondu seul, 160 ms');
 });

@@ -154,13 +154,14 @@ test('avec Web Animations, go anime transform et opacity seulement et annule tou
   const e=navigationEnv();const anims=[];
   for(const id of ['home','spots','profile'])e.elements[id].animate=(frames,opts)=>{const a={id,frames,opts,cancelled:false,cancel(){a.cancelled=true;}};anims.push(a);return a;};
   e.go('profile');
-  assert.equal(anims.length,4);
+  /* D’un onglet à l’autre : fondu sur place (23 nov.), soit deux animations d’opacité, plus aucun glissement. */
+  assert.equal(anims.length,2);
   assert.ok(anims.every(a=>a.frames.every(f=>Object.keys(f).every(k=>k==='transform'||k==='opacity'))));
   assert.ok(anims.every(a=>a.opts.duration<=350),'aucune animation ne dépasse 350 ms');
   /* Pas de style en ligne à nettoyer sur l’écran qui arrive. */
   assert.equal(e.elements.profile.style.opacity,'');assert.equal(e.elements.profile.style.transform,'');
   e.go('home');
-  assert.ok(anims.slice(0,4).every(a=>a.cancelled),'les animations du fondu précédent sont annulées');
+  assert.ok(anims.slice(0,2).every(a=>a.cancelled),'les animations du fondu précédent sont annulées');
   e.drain();assert.equal(e.elements.home.active,true);assert.equal(e.elements.profile.active,false);
   assert.ok(anims.every(a=>a.cancelled));
 });

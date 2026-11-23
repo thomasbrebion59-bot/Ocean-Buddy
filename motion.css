@@ -49,7 +49,10 @@ html.ob-zoom-land #detailHero>:not(.ob-zoom,#dHeroPhoto,svg){animation:ob-fade-i
 /* Tout ce qui se touche répond : les boutons et liens-boutons sans réponse propre s’enfoncent d’un rien.
    Propriété « scale » (elle se compose avec un transform déjà posé) et spécificité nulle : la règle d’un composant
    passe toujours devant. Le relâché en ressort vient de la transition de base des boutons (design.css). */
-:where(.ocean-v2,.oba,.cult-sheet,.app-update,.as-news,.as-confirm) :where(button,[role=button],summary,a.field-map-link,a.experience-video-search,a.field-visit-source,.evt-a a):where(:not([class*=maplibregl],[disabled],.omap-ctrls *,.sf-pad *)):active{scale:.97;transition-duration:var(--ob-t-press)}
+:where(.ocean-v2,.oba,.cult-sheet,.app-update,.as-news,.as-confirm) :where(button,[role=button],summary,a[href],label.set-toggle,.evt-a a):where(:not([class*=maplibregl],[disabled],.omap-ctrls *,.sf-pad *)):active{scale:.97;transition-duration:var(--ob-t-press)}
+/* Les liens en forme de bouton ou de ligne (Aide, liens utiles, sources) passent par la même règle : un lien au fil
+   du texte, lui, ne change pas de taille (une boîte en ligne ne reçoit pas « scale »). Jamais un champ de saisie. */
+label.set-toggle{transition:scale var(--ob-t-release) var(--ob-snap)}
 /* Grandes surfaces : enfoncement plus discret. */
 .hf-slide:active,.ob-voyage-banner:active,.poulpy-profile-card:active,.im-postcard:active,.experience-photo-open:active{scale:.985}
 .hf-slide,.ob-voyage-banner,.poulpy-profile-card,.im-postcard,.experience-photo-open{transition:scale var(--ob-t-release) var(--ob-snap)}
