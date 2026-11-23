@@ -75,12 +75,12 @@
     if(context&&nodes){nodes.volume.gain.cancelScheduledValues(context.currentTime);nodes.volume.gain.setTargetAtTime(0,context.currentTime,.08);setTimeout(()=>{try{nodes.source.stop();nodes.swell.stop();}catch(_){}context.close().catch(()=>{});},280);}
     soundButton();
   }
-  const isAI=p=>!!p&&(p.ai||p.label==='Illustration IA'||/-ia\.webp$/.test(p.src||''));
+  const isAI=p=>!!p&&(p.ai||p.label==='Illustration'||/-ia\.webp$/.test(p.src||''));
   function frame(focus){
     const p=list[index];if(!p&&!spot)return;
     dialog.classList.toggle('show-whole',whole);
     dialog.classList.toggle('is-immersive',immersive);
-    const source=safeUrl(p?.source),credit=isAI(p)?'<span>Illustration générée par IA · ce n’est pas une photo du lieu</span>':source?`<a href="${esc(source)}" target="_blank" rel="noopener noreferrer">Photo : ${esc(p.author||'Auteur non indiqué')} · ${esc(p.license||'licence à vérifier')}</a>`:'<span>Crédit photographique à vérifier</span>';
+    const source=safeUrl(p?.source),credit=isAI(p)?'<span>Illustration, ce n’est pas une photo du lieu</span>':source?`<a href="${esc(source)}" target="_blank" rel="noopener noreferrer">Photo : ${esc(p.author||'Auteur non indiqué')} · ${esc(p.license||'licence à vérifier')}</a>`:'<span>Crédit photographique à vérifier</span>';
     const scene=p?`<img class="gallery-scene" src="${esc(p.src)}" alt="${esc(caption(p,spot))}">`:`<div class="gallery-empty"><small>LE CARNET PHOTO COMMENCE ICI</small><b>Aucune photo locale pour ce spot</b><span>Recherche des images réutilisables avec leurs crédits.</span></div>`;
     const note=p?.external?'Photo proposée par Wikimedia Commons · lieu à confirmer.':p?caption(p,spot):'Tu peux découvrir des images libres avec leurs auteurs et licences.';
     const findLabel=commonsSearching?'Recherche sur Commons…':commonsMessage||'Trouver d’autres photos';
@@ -136,9 +136,9 @@
       strip.hidden=true;strip.replaceChildren();return;
     }
     $('#detailHero')?.classList.remove('illustrated-hero');
-    if(more){more.hidden=false;more.setAttribute('aria-label',`Ouvrir les photos de ${s.name} ou en chercher d’autres`);more.title='Ouvrir les photos et en chercher d’autres';more.innerHTML=isAI(first)&&all.length<2?'<span>Illustration IA</span><b>chercher de vraies photos</b>':'<span>'+(all.length>1?`Voir les ${all.length} photos`:'Voir la photo')+'</span><b>et en chercher d’autres</b>';more.onclick=()=>open(s);}
+    if(more){more.hidden=false;more.setAttribute('aria-label',`Ouvrir les photos de ${s.name} ou en chercher d’autres`);more.title='Ouvrir les photos et en chercher d’autres';more.innerHTML=isAI(first)&&all.length<2?'<span>Illustration</span><b>chercher de vraies photos</b>':'<span>'+(all.length>1?`Voir les ${all.length} photos`:'Voir la photo')+'</span><b>et en chercher d’autres</b>';more.onclick=()=>open(s);}
     if(photo){photo.alt=caption(first,s);photo.style.objectPosition=/^[\w\d% .-]{1,40}$/.test(first.position||'')?first.position:'center';if(photo.getAttribute('src')!==first.src){photo.classList.remove('on');photo.onload=()=>photo.classList.add('on');photo.onerror=()=>photo.classList.remove('on');photo.src=first.src;}if(photo.complete&&photo.naturalWidth)photo.classList.add('on');}
-    if(credit)credit.textContent=isAI(first)?'Illustration IA · ce n’est pas une photo du lieu':(first.caption?first.caption+' · ':'')+(first.author||'Auteur non indiqué')+' · '+(first.license||'licence à vérifier');
+    if(credit)credit.textContent=isAI(first)?'Illustration, ce n’est pas une photo du lieu':(first.caption?first.caption+' · ':'')+(first.author||'Auteur non indiqué')+' · '+(first.license||'licence à vérifier');
     $('#detailHero')?.classList.toggle('underwater-hero',first.view==='underwater');
     strip.hidden=all.length<2;strip.innerHTML=`<div class="photo-strip-intro"><small>CHANGE DE POINT DE VUE</small><b>${all.some(p=>p.view==='underwater')?'De la surface aux profondeurs.':'Un lieu, plusieurs regards.'}</b><span>${all.length} photographies du lieu</span></div><div class="photo-strip-views">${all.map((p,i)=>`<button data-gallery-index="${i}" aria-label="${esc(label(p,i))} : voir la photo ${i+1} de ${esc(s.name)}"><img src="${esc(p.thumb||p.src)}" alt="" loading="lazy"><span><small>0${i+1}</small>${esc(label(p,i))}</span></button>`).join('')}</div>`;strip.onclick=e=>{const b=e.target.closest('[data-gallery-index]');if(b)open(s,+b.dataset.galleryIndex);};
   }
