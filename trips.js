@@ -3,17 +3,28 @@
    une carte légère par voyage (photo de la première étape, nom, dates, étapes, liste « Avant de partir », jours avant le
    départ en grand chiffre), puis « Nouveau voyage » et trois idées en petit. Plus de grande affiche ni de sur-titres en
    capitales. Vie : la barre se remplit à l’arrivée, le nombre de jours monte une fois, les ronds des étapes arrivent l’un
-   après l’autre (transform et opacity, rien en mouvement réduit). */
+   après l’autre (transform et opacity, rien en mouvement réduit).
+   Passe du 23 novembre 2026 : six idées parlantes (trois thèmes appuyés sur les données de l’app, trois destinations) en
+   affiches à faire défiler, illustration dédiée sans voyage, cartes et idées qui entrent l’une après l’autre, itinéraire
+   des ronds qui se trace, voyage ouvert qui arrive en douceur. */
 (() => {
   'use strict';
   const M=TripModel, $=s=>document.querySelector(s), knownIds=()=>SPOTS.map(s=>s.id);
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const icon=(path)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="${path}"/></svg>`;
-  const I={trash:icon('M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7'),plus:icon('M12 5v14M5 12h14'),route:icon('M5 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4m14 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4M5 9v4a4 4 0 0 0 4 4h4m-2-10h4a4 4 0 0 1 4 4v4'),calendar:icon('M5 5h14v16H5zM8 3v4m8-4v4M5 10h14'),bag:icon('M4 8h16v13H4zM8 8V3h8v5'),check:icon('m5 12 4 4 10-10'),close:icon('m6 6 12 12M6 18 18 6'),map:icon('m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zm6-2v16m6-14v16'),pin:icon('M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11zm0-13.300a2.300 2.300 0 1 0 0 4.600 2.300 2.300 0 0 0 0-4.600'),list:icon('M9 4h6v3H9zM9 5.500H6.500A1.500 1.500 0 0 0 5 7v12.500A1.500 1.500 0 0 0 6.500 21h11a1.500 1.500 0 0 0 1.500-1.500V7a1.500 1.500 0 0 0-1.500-1.500H15M9 14l2 2 4-4.500')};
+  const I={trash:icon('M4 6h16M9 6V3h6v3M6 6l1 15h10l1-15M10 10v7m4-7v7'),plus:icon('M12 5v14M5 12h14'),route:icon('M5 5a2 2 0 1 1 0 4 2 2 0 0 1 0-4m14 10a2 2 0 1 1 0 4 2 2 0 0 1 0-4M5 9v4a4 4 0 0 0 4 4h4m-2-10h4a4 4 0 0 1 4 4v4'),calendar:icon('M5 5h14v16H5zM8 3v4m8-4v4M5 10h14'),bag:icon('M4 8h16v13H4zM8 8V3h8v5'),check:icon('m5 12 4 4 10-10'),close:icon('m6 6 12 12M6 18 18 6'),map:icon('m3 5 6-2 6 2 6-2v16l-6 2-6-2-6 2zm6-2v16m6-14v16'),pin:icon('M12 21s-6.5-6-6.5-11A6.5 6.5 0 0 1 18.5 10c0 5-6.5 11-6.5 11zm0-13.300a2.300 2.300 0 1 0 0 4.600 2.300 2.300 0 0 0 0-4.600'),clock:icon('M12 3.500a8.500 8.500 0 1 0 0 17 8.500 8.500 0 0 0 0-17M12 7.500V12l3 2'),list:icon('M9 4h6v3H9zM9 5.500H6.500A1.500 1.500 0 0 0 5 7v12.500A1.500 1.500 0 0 0 6.500 21h11a1.500 1.500 0 0 0 1.500-1.500V7a1.500 1.500 0 0 0-1.500-1.500H15M9 14l2 2 4-4.500')};
+  /* Idées : trois thèmes (ceux de la maquette), puis trois destinations. Rien d’inventé : chaque thème s’appuie sur les
+     données de l’app, et tests/voyages-v2.test.js le vérifie. « Surf d’hiver » : trois spots de surf, tous en saison de
+     novembre à mars (data/seasons.json). « Plongée » et « Eau chaude » : la plus basse et la plus haute des températures de
+     mer mensuelles des trois étapes, telles que la fiche les affiche (normales NOAA, assets/data/spot-climate-lite.js).
+     months : premier et dernier mois (0 = janvier) ; sea : minimum et maximum, en °C ; sport : la pastille de l’affiche. */
   const ideas=[
-    {name:'La côte basque, au rythme des vagues',short:'Côte basque',destination:'France',photo:'biarritz',spots:['biarritz','anglet','hossegor']},
-    {name:'Du soleil et des vagues au Portugal',short:'Portugal',destination:'Portugal',photo:'praia_marinha',spots:['ericeira','supertubos','praia_marinha']},
-    {name:'Bali, d’une côte à l’autre',short:'Bali',destination:'Indonésie',photo:'uluwatu',spots:['uluwatu','padang','keramas']}
+    {name:'Surf d’hiver au Maroc',short:'Surf d’hiver',place:'Maroc',destination:'Maroc',sport:'surf',months:[10,2],photo:'mirleft',spots:['anchorpoint','tamraght','mirleft']},
+    {name:'Plongée en mer Rouge',short:'Plongée',place:'Mer Rouge',destination:'Égypte',sport:'plongee',sea:[22,29],photo:'dahab',spots:['rasmohammed','dahab','abudabbab']},
+    {name:'Eau chaude en Polynésie',short:'Eau chaude',place:'Polynésie',destination:'Polynésie française',sport:'baignade',sea:[26,29],photo:'moorea',spots:['moorea','borabora','maupiti']},
+    {name:'La côte basque, au rythme des vagues',short:'Côte basque',place:'France',destination:'France',sport:'surf',photo:'biarritz',spots:['biarritz','anglet','hossegor']},
+    {name:'Du soleil et des vagues au Portugal',short:'Côte portugaise',place:'Portugal',destination:'Portugal',sport:'surf',photo:'praia_marinha',spots:['ericeira','supertubos','praia_marinha']},
+    {name:'Bali, d’une côte à l’autre',short:'Bali',place:'Indonésie',destination:'Indonésie',sport:'surf',photo:'uluwatu',spots:['uluwatu','padang','keramas']}
   ];
   let trips=[],selected=null,view='itinerary',loadError='',tripMap=null,lastFocus=null,pendingSpot=null;
   try{trips=M.load(localStorage,knownIds())}catch(e){loadError='Ton carnet ne peut pas être chargé. Les données existantes sont conservées. Réessaie après avoir rechargé la page.';}
@@ -74,6 +85,23 @@
     if(more>0)items.push(`<li class="tv-step"><span class="tv-ph tv-more" translate="no">+${more}</span><b>${more>1?`${more} étapes`:`${more} étape`}</b></li>`);
     return `<ol class="tv-steps" aria-label="Étapes">${items.join('<li class="tv-link" aria-hidden="true"></li>')}</ol>`;
   }
+  /* Repère d’une idée (« Nov. à mars », « 26 à 29 °C »), écrit ici dans la langue choisie et jamais passé au traducteur de
+     page (data-no-i18n) : un gabarit « {0} à {1} » attraperait d’autres phrases. Hors du français, l’intervalle de la langue. */
+  function ideaFact(x){
+    const fr=(window.OB_I18N?.lang||'fr')==='fr',link=' à ';
+    if(x.sea)return fr?x.sea[0]+link+x.sea[1]+' °C':x.sea[0]+'–'+x.sea[1]+' °C';
+    if(!x.months)return '';
+    const a=new Date(2026,x.months[0],15),b=new Date(x.months[1]<x.months[0]?2027:2026,x.months[1],15);
+    let text='';
+    try{const f=new Intl.DateTimeFormat(fr?'fr-FR':window.OB_LOCALE||'en',{month:'short'});text=fr?f.format(a)+link+f.format(b):f.formatRange(a,b);}catch(_){return '';}
+    return text.charAt(0).toUpperCase()+text.slice(1);
+  }
+  const sportMark=id=>window.PoulpyIcons?.mono?`<i class="exl-mark" style="--m:url('${esc(PoulpyIcons.mono(id))}')"></i>`:'';
+  /* Affiche d’une idée : vraie photo d’une étape, sport en pastille, repère chiffré s’il existe, thème et lieu. */
+  function ideaCard(x,i){
+    const fact=ideaFact(x);
+    return `<button type="button" class="tv-idea" data-action="idea" data-index="${i}"><img src="${esc(spotPhotoUrl(x.photo,480)||photo(x.photo))}"${spotPhotoSrcset(x.photo)} sizes="(max-width:959px) 42vw, 200px" alt="" loading="lazy" decoding="async"><span class="tv-idea-sport" aria-hidden="true">${sportMark(x.sport)}</span>${fact?`<span class="tv-idea-fact" translate="no" data-no-i18n>${esc(fact)}</span>`:''}<span class="tv-idea-tx"><b>${x.short}</b><small>${x.place}</small></span></button>`;
+  }
   function tripCard(t,withSteps){
     const c=M.countdown(t,todayKey()),p=M.progress(t),n=t.steps.length,first=t.steps[0],dates=shortRange(t);
     const photoTag=`<img class="tv-photo" src="${esc(cover(t))}"${first&&spot(first.spotId)?spotPhotoSrcset(first.spotId):''} sizes="(max-width:959px) 30vw, 132px" alt="" loading="lazy" decoding="async">`;
@@ -98,21 +126,26 @@
     if(focus)document.querySelector(`[data-focus="${CSS.escape(focus)}"]`)?.focus({preventScroll:true});
     if(t&&view==='map')requestAnimationFrame(()=>drawMap(t));
     if(t)window.OceanSpotGuide?.fillTrip(t);
-    if(!t)enliven();
+    if(t)arriveTrip();else enliven();
   }
-  /* Vie de « Mes voyages », à l’arrivée sur l’écran seulement (pas à chaque nouveau rendu) : la barre « Avant de partir »
-     se remplit, les ronds des étapes arrivent l’un après l’autre ; le nombre de jours ne monte qu’une fois par voyage. */
+  /* Vie de « Mes voyages », à l’arrivée sur l’écran seulement (pas à chaque nouveau rendu) : les cartes puis les idées
+     entrent l’une après l’autre, la barre « Avant de partir » se remplit, l’itinéraire des ronds se trace d’étape en
+     étape ; le nombre de jours ne monte qu’une fois par voyage. transform et opacity seulement, aucune boucle. */
   let arriving=true;const counted=new Set();
   const still=()=>document.body.classList.contains('reduce-motion')||!!(window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches)||typeof Element.prototype.animate!=='function';
+  const rise=(el,delay,dy=14,duration=420)=>el.animate([{opacity:0,transform:`translate3d(0,${dy}px,0)`},{opacity:1,transform:'translate3d(0,0,0)'}],{duration,delay,easing:window.OceanMotion?.easeOut||'cubic-bezier(.22,.8,.3,1)',fill:'backwards'});
   function enliven(){
     const fresh=arriving;arriving=false;
     const cards=[...document.querySelectorAll('#tripContent [data-tv],#tripContent .tv-empty')];
     if(!fresh||still()||document.body.dataset.screen!=='trips')return;
     const ease=window.OceanMotion?.easeOut||'cubic-bezier(.22,.8,.3,1)';
     cards.forEach((card,k)=>{
+      rise(card,40+k*60);
+      const art=card.querySelector('.tv-empty-art>img');
+      if(art)art.animate([{transform:'scale(1.06)'},{transform:'scale(1)'}],{duration:900,delay:40,easing:ease,fill:'backwards'});
       const fill=card.querySelector('.tv-bar>i'),p=parseFloat(card.querySelector('.tv-bar')?.style.getPropertyValue('--p'))||0;
       if(fill&&p>0)fill.animate([{transform:'scaleX(0)'},{transform:`scaleX(${p})`}],{duration:700,delay:220+k*90,easing:ease,fill:'backwards'});
-      card.querySelectorAll('.tv-steps>li').forEach((li,i)=>li.animate(li.classList.contains('tv-link')?[{opacity:0},{opacity:1}]:[{opacity:0,transform:'scale(.82)'},{opacity:1,transform:'scale(1)'}],{duration:340,delay:320+i*70,easing:ease,fill:'backwards'}));
+      card.querySelectorAll('.tv-steps>li').forEach((li,i)=>li.animate(li.classList.contains('tv-link')?[{opacity:0,transform:'scaleX(0)'},{opacity:1,transform:'scaleX(1)'}]:[{opacity:0,transform:'scale(.82)'},{opacity:1,transform:'scale(1)'}],{duration:340,delay:320+i*70,easing:ease,fill:'backwards'}));
       const num=card.querySelector('[data-tv-num]'),to=num?+num.dataset.tvNum:0;
       if(num&&to>1&&!counted.has(card.dataset.tv)){
         const t0=performance.now()+180+k*90,span=Math.min(900,420+to*6);
@@ -122,6 +155,18 @@
       }
       counted.add(card.dataset.tv);
     });
+    const after=40+cards.length*60;
+    document.querySelectorAll('#tripContent .tv>.tv-new,#tripContent .tv-ideas-head').forEach((el,i)=>rise(el,after+i*50,10,360));
+    document.querySelectorAll('#tripContent .tv-idea').forEach((el,i)=>rise(el,after+90+i*45,12,400));
+  }
+  /* Voyage ouvert : à l’ouverture seulement (pas à chaque case cochée ou étape déplacée), la bannière puis les premières
+     étapes arrivent en douceur. */
+  let opening=false; /* posé juste avant le rendu qui reste à l’écran (go('trips') rend déjà une fois l’écran) */
+  function arriveTrip(){
+    const fresh=opening;opening=false;
+    if(!fresh||still()||document.body.dataset.screen!=='trips')return;
+    document.querySelectorAll('#tripContent .trip-banner>div>*,#tripContent .trip-banner>.trip-glass').forEach((el,i)=>rise(el,60+i*55,10,380));
+    [...document.querySelectorAll('#tripContent .trip-step')].slice(0,4).forEach((el,i)=>rise(el,220+i*70,16,440));
   }
   function storedTrips(title,list,trash=false){
     if(!list.length)return '';
@@ -129,19 +174,22 @@
   }
   function overview(saved){
     const archived=trips.filter(t=>t.archived&&!t.deleted),deleted=trips.filter(t=>t.deleted),star=featured(saved);
-    /* Sans voyage : une carte qui invite, « Nouveau voyage » en premier. L’image est celle de Poulpy déjà dans l’app,
-       en attendant une illustration dédiée ; dessous, des étapes à remplir, dessinées comme celles d’un vrai voyage. */
-    const empty=`<div class="tv-empty"><img class="tv-empty-art" src="assets/poulpy/scenes/travel-v2.webp" alt="" width="960" height="640" loading="lazy" decoding="async"><ol class="tv-steps" aria-hidden="true"><li class="tv-step"><span class="tv-ph">${I.pin}</span></li><li class="tv-link"></li><li class="tv-step"><span class="tv-ph">${I.pin}</span></li><li class="tv-link"></li><li class="tv-step"><span class="tv-ph">${I.pin}</span></li></ol><p class="ui-title">Pas encore de voyage</p><button type="button" class="ui-btn tv-new" data-action="new">${I.plus}<span>Nouveau voyage</span></button></div>`;
+    /* Sans voyage : une carte qui invite, « Nouveau voyage » en premier. Illustration dédiée (Poulpy devant sa carte
+       d’étapes, au style des illustrations de la fiche) ; dessous, des étapes à remplir, dessinées comme celles d’un vrai voyage. */
+    const empty=`<div class="tv-empty"><span class="tv-empty-art"><img src="assets/ui/voyage-vide.webp" srcset="assets/ui/voyage-vide-960.webp 960w, assets/ui/voyage-vide.webp 1536w" sizes="(max-width:959px) 92vw, 640px" alt="" width="1536" height="864" decoding="async"></span><ol class="tv-steps" aria-hidden="true"><li class="tv-step"><span class="tv-ph">${I.pin}</span></li><li class="tv-link"></li><li class="tv-step"><span class="tv-ph">${I.pin}</span></li><li class="tv-link"></li><li class="tv-step"><span class="tv-ph">${I.pin}</span></li></ol><p class="ui-title">Pas encore de voyage</p><button type="button" class="ui-btn tv-new" data-action="new">${I.plus}<span>Nouveau voyage</span></button></div>`;
     return `<section class="tv"><div class="ui-head"><h2 class="ui-title">Mes voyages</h2></div>
       ${saved.length?`<div class="tv-list">${saved.map(t=>tripCard(t,t.id===star)).join('')}</div><button type="button" class="ui-btn tv-new" data-action="new">${I.plus}<span>Nouveau voyage</span></button>`:empty}
       <div class="ui-head tv-ideas-head"><h2 class="ui-title">Idées</h2></div>
-      <div class="tv-ideas">${ideas.map((x,i)=>`<button type="button" class="tv-idea" data-action="idea" data-index="${i}"><img src="${esc(spotPhotoUrl(x.photo,480)||photo(x.photo))}"${spotPhotoSrcset(x.photo)} sizes="(max-width:959px) 30vw, 180px" alt="" loading="lazy" decoding="async"><b>${x.short}</b></button>`).join('')}</div>
+      <div class="tv-ideas">${ideas.map(ideaCard).join('')}</div>
       ${storedTrips('Voyages archivés',archived)}${storedTrips('Corbeille',deleted,true)}</section>`;
   }
   function tripDetail(t){
     const done=t.checklist.filter(c=>c.done).length;
+    /* Bannière : dates courtes (comme sur la carte du voyage), étapes et durée, chacune avec son pictogramme. */
+    const n=t.steps.length,days=M.duration(t),dates=shortRange(t);
+    const meta=`<p class="tv-meta"><span>${I.calendar}${dates?`<span translate="no" data-no-i18n>${esc(dates)}</span>`:'<span>Dates à définir</span>'}</span><span>${I.pin}<span>${n>1?`${n} étapes`:n===1?`${n} étape`:'Aucune étape'}</span></span>${days?`<span>${I.clock}<span>${days>1?`${days} jours`:`${days} jour`}</span></span>`:''}</p>`;
     const distance=routeDistance(t),hasArchived=t.steps.some(s=>!spot(s.spotId));
-    return `<div class="trip-banner" style="--trip-cover:url('${esc(cover(t))}')"><div>${t.destination?`<span class="trip-pill">${esc(t.destination)}</span>`:''}${when(t)?`<span class="trip-when">${when(t)}</span>`:''}<h2>${esc(t.name)}</h2><p>${I.calendar} ${esc(range(t))} <span>·</span> ${badge(t)}</p></div><button class="trip-glass" data-action="edit">Modifier le voyage</button></div>
+    return `<div class="trip-banner" style="--trip-cover:url('${esc(cover(t))}')"><div>${t.destination?`<span class="trip-pill">${esc(t.destination)}</span>`:''}${when(t)?`<span class="trip-when">${when(t)}</span>`:''}<h2>${esc(t.name)}</h2>${meta}</div><button class="trip-glass" data-action="edit">Modifier le voyage</button></div>
       <div class="trip-layout"><div class="trip-main"><div class="trip-toolbar"><div class="trip-view"><button data-action="view" data-view="itinerary" class="${view==='itinerary'?'active':''}">${I.route} Itinéraire</button><button data-action="view" data-view="map" class="${view==='map'?'active':''}">${I.map} Carte</button></div><span class="trip-route-distance">${distance!==null?I.route+(hasArchived?`<span class="trip-dist">${prettyDistance(distance)} entre les étapes connues</span>`:`<span class="trip-dist">${prettyDistance(distance)} entre les spots</span>`):'Ajoute 2 spots consécutifs pour mesurer le trajet'}</span><button class="trip-primary" data-action="add">${I.plus} Ajouter un spot</button></div>
       ${view==='map'?`<div id="tripMap" class="trip-map" aria-label="Carte des étapes"></div><p class="trip-map-note">La ligne relie les étapes consécutives dans l’ordre prévu. Elle ne représente pas un trajet routier.${hasArchived?' Les étapes archivées ne figurent pas sur la carte.':''}</p>`:`<div class="trip-steps">${t.steps.length?t.steps.map((s,i)=>stepCard(t,s,i)).join(''):`<div class="trip-no-steps">${I.route}<button class="trip-primary" data-action="add">Choisir mon premier spot</button></div>`}</div>`}
       <div class="trip-notes-panel"><h3>Le carnet de bord</h3><label for="tripNotes">Idées, bonnes adresses, envies à garder…</label><textarea id="tripNotes" data-field="notes" data-focus="notes" rows="3" maxlength="2000" placeholder="Un coucher de soleil à ne pas manquer, une adresse conseillée…">${esc(t.notes)}</textarea><div class="trip-footer-actions"><button data-action="export">Exporter mon carnet (.json)</button><button data-action="archive" class="trip-muted-button">Archiver ce voyage</button><button data-action="delete" data-id="${esc(t.id)}" class="trip-delete-action">${I.trash} Supprimer ce voyage</button></div></div></div>
@@ -182,12 +230,14 @@
     };
   }
   function editor(existing=null,idea=null,spotId=null){
-    const fields=existing||{name:idea?.name||'',destination:idea?.destination||(spotId?spot(spotId)?.loc:'')||'',start:'',end:''};
+    /* Une idée propose son nom et sa destination dans la langue de l’app (la valeur d’un champ n’est pas traduite par la page). */
+    const said=v=>(v&&typeof obT==='function'?obT(v):v)||'';
+    const fields=existing||{name:said(idea?.name),destination:said(idea?.destination)||(spotId?spot(spotId)?.loc:'')||'',start:'',end:''};
     openDialog(`<h2>${existing?'Les détails du voyage':'Nouveau voyage'}</h2><form id="tripEditForm"><label for="tripNameInput">Nom du voyage</label><input id="tripNameInput" name="name" value="${esc(fields.name)}" maxlength="70" placeholder="Mon été sur la côte basque" required><label for="tripDestinationInput">Destination</label><input id="tripDestinationInput" name="destination" value="${esc(fields.destination)}" maxlength="100" placeholder="Une région, un pays, un horizon…"><div class="trip-date-fields"><label>Départ<input name="start" type="date" value="${esc(fields.start)}"></label><label>Retour<input name="end" type="date" value="${esc(fields.end)}"></label></div><p class="trip-form-error" role="alert"></p><button class="trip-primary" type="submit">${existing?'Enregistrer les modifications':'Créer mon voyage'}</button></form>`);
     $('#tripEditForm').onsubmit=e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target));try{
       let next=existing?M.edit(existing,f):M.create(f,spotId?[spotId]:(idea?.spots||[]));
       window.OceanNavigation?.begin();
-      if(persist(existing?trips.map(t=>t.id===existing.id?next:t):[...trips,next])){selected=next.id;view='itinerary';closeDialog();go('trips');render();$('#screenWrap').scrollTop=0;toast(existing?'Voyage mis à jour':'Ton voyage est créé. À toi de choisir la suite !');}
+      if(persist(existing?trips.map(t=>t.id===existing.id?next:t):[...trips,next])){selected=next.id;view='itinerary';closeDialog();go('trips');opening=!existing;render();$('#screenWrap').scrollTop=0;toast(existing?'Voyage mis à jour':'Ton voyage est créé. À toi de choisir la suite !');}
     }catch(err){modal.querySelector('.trip-form-error').textContent=err.message}};
   }
   function picker(replacingStepId=null){
@@ -224,7 +274,7 @@
     if(a==='edit')editor(current());
     if(a==='idea')editor(null,ideas[+b.dataset.index]);
     if(a==='overview'){window.OceanNavigation?.begin();selected=null;render();$('#screenWrap').scrollTop=0;}
-    if(a==='select'){window.OceanNavigation?.begin();selected=id;view='itinerary';render();$('#screenWrap').scrollTop=0;}
+    if(a==='select'){window.OceanNavigation?.begin();selected=id;view='itinerary';opening=true;render();$('#screenWrap').scrollTop=0;}
     if(a==='add')picker();
     if(a==='replace')picker(id);
     if(a==='view'){view=b.dataset.view;render()}
@@ -270,7 +320,7 @@
   window.addEventListener('ocean:navigate',e=>{const from=lastScreen;lastScreen=e.detail;if(e.detail==='trips'){if(from!=='trips')arriving=true;render();}});
   /* Fiche spot : « Ajouter à un voyage » n’existe plus qu’une fois, dans la barre d’actions du bas (ocean-hub.js). */
   const homeCTA=document.createElement('button');homeCTA.className='home-trip-link';homeCTA.innerHTML=I.route+' Préparer mon voyage';homeCTA.onclick=()=>go('trips');$('.hero-cta').after(homeCTA);
-  window.OceanTrips={count:()=>active().length,list:()=>active(),openTrip:id=>{if(!active().some(t=>t.id===id))return;selected=id;view='itinerary';go('trips');render();$('#screenWrap').scrollTop=0;},fromSpot,open:()=>go('trips'),route:()=>({selected:current()?.id||null,view}),restoreRoute:r=>{selected=trips.some(t=>t.id===r?.selected&&!t.archived&&!t.deleted)?r.selected:null;view=r?.view==='map'?'map':'itinerary';}};
+  window.OceanTrips={count:()=>active().length,list:()=>active(),openTrip:id=>{if(!active().some(t=>t.id===id))return;selected=id;view='itinerary';go('trips');opening=true;render();$('#screenWrap').scrollTop=0;},fromSpot,open:()=>go('trips'),route:()=>({selected:current()?.id||null,view}),restoreRoute:r=>{selected=trips.some(t=>t.id===r?.selected&&!t.archived&&!t.deleted)?r.selected:null;view=r?.view==='map'?'map':'itinerary';}};
   /* Démarrage : l’écran Voyages n’est construit qu’à sa première ouverture (ocean:navigate « trips » ci-dessus),
      sauf s’il est déjà l’écran affiché. */
   if($('#trips').classList.contains('active'))render();

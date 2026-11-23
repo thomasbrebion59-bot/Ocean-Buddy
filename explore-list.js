@@ -15,6 +15,10 @@
      de l’utilisateur : jamais sous son doigt.
    - Vie : entrée décalée des lignes au premier affichage (une fois), réarrangement en douceur quand un filtre change,
      conditions en fondu. transform et opacity seulement, aucune boucle, rien en mouvement réduit.
+   - Passe du 23 novembre 2026 : pastilles jamais coupées sur un écran étroit (data-fit, mois abrégé au besoin), pastille
+     qui change en douceur, nombre de résultats qui défile jusqu’à sa valeur, sélecteur Liste / Carte qui glisse, photos et
+     conditions qui arrivent en fondu, pastille du verdict qui se pose, chiffres qui montent quand OceanVerdict sait le
+     faire (animate, appel facultatif), lignes hors de l’écran mises de côté pendant qu’on regarde une fiche.
    Chargé avant app.js (qui appelle OceanExploreList.render depuis renderSpots) ; ne lit ses fonctions qu’à l’usage. */
 
 /* ---------- Calculs purs (testés dans Node : tests/explore-list.test.js) ---------- */
@@ -107,21 +111,22 @@
   const LEVELS = ['debutant', 'intermediaire', 'expert', 'variable'];
   const levelName = l => (typeof lvlLabel !== 'undefined' && lvlLabel[l]) || l;
   const monthName = m => { const t = new Intl.DateTimeFormat(window.OB_LOCALE || 'fr-FR', { month: 'long' }).format(new Date(2026, m, 15)); return t.charAt(0).toUpperCase() + t.slice(1); };
+  const monthShort = m => { const t = new Intl.DateTimeFormat(window.OB_LOCALE || 'fr-FR', { month: 'short' }).format(new Date(2026, m, 15)); return t.charAt(0).toUpperCase() + t.slice(1); };
   const scopeName = () => { const c = A.country(), w = A.world(); if (c) return c; if (w && w !== 'all' && typeof worldOf === 'function') return worldOf(w)?.lab || ''; return ''; };
   /* Autres filtres actifs (bouton rond) : saison, nouveautés, favoris, près de moi, région. */
   const extraCount = () => { const p = A.parts(); return (p.season ? 1 : 0) + (p.fresh ? 1 : 0) + (A.fav() ? 1 : 0) + (A.near() ? 1 : 0) + (scopeName() ? 1 : 0); };
 
   /* ---------- En-tête ---------- */
-  let head = null, input = null, pills = null, count = null, seg = null, list = null, empty = null, tick = null, searchTimer = 0;
+  let head = null, input = null, pills = null, count = null, countShown = null, seg = null, list = null, empty = null, tick = null, searchTimer = 0;
   function build() {
     if (head) return;
     head = document.createElement('header'); head.className = 'exl-head';
     head.innerHTML = `<div class="exl-bar"><h1 class="exl-title">Explorer</h1><div class="exl-seg" role="group" aria-label="Affichage des spots"><button type="button" data-exl-view="list" aria-pressed="true">Liste</button><button type="button" data-exl-view="map" aria-pressed="false">Carte</button></div></div>
       <label class="exl-search">${ic(I.search)}<span class="exl-sr">Rechercher un spot, un pays</span><input type="search" enterkeyhint="search" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Spot, pays, île"><button type="button" data-exl="clear" aria-label="Effacer la recherche" hidden>${ic(I.close)}</button></label>
       <div class="exl-pills" role="group" aria-label="Filtres"></div>
-      <div class="exl-meta"><p class="exl-count" aria-live="polite"></p><span class="exl-legend" role="img" aria-label="Points de danger : estimation Ocean Buddy d’après les dangers listés" title="Points de danger : estimation Ocean Buddy d’après les dangers listés"><i class="ui-dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i></i><span>Danger estimé</span></span></div>`;
+      <div class="exl-meta"><p class="exl-count"><span class="exl-count-n" translate="no" data-no-i18n aria-hidden="true"></span><span class="exl-sr" translate="no" data-no-i18n aria-live="polite"></span></p><span class="exl-legend" role="img" aria-label="Points de danger : estimation Ocean Buddy d’après les dangers listés" title="Points de danger : estimation Ocean Buddy d’après les dangers listés"><i class="ui-dots" aria-hidden="true"><i class="on"></i><i class="on"></i><i></i><i></i></i><span>Danger estimé</span></span></div>`;
     screen.prepend(head);
-    input = $('input', head); pills = $('.exl-pills', head); count = $('.exl-count', head); seg = $('.exl-seg', head);
+    input = $('input', head); pills = $('.exl-pills', head); count = $('.exl-count .exl-sr', head); countShown = $('.exl-count-n', head); seg = $('.exl-seg', head);
     host.textContent = ''; host.classList.add('exl-host');
     empty = document.createElement('div'); empty.className = 'exl-empty'; empty.hidden = true;
     list = document.createElement('div'); list.className = 'exl-list'; list.setAttribute('role', 'list');
@@ -158,8 +163,14 @@
     const sp = A.sport(), p = A.parts(), plan = A.plan(), scope = scopeName(), extra = extraCount();
     const lv = p.levels.length === 1 ? levelName(p.levels[0]) : p.levels.length ? `${p.levels.length} niveaux` : 'Niveau';
     const sportLabel = sp && typeof SPORTMAP !== 'undefined' && SPORTMAP[sp] ? SPORTMAP[sp].label : 'Sport';
-    pills.innerHTML = `<div class="exl-scroll">${scope ? `<button type="button" class="exl-pill is-on" data-exl="scope" aria-label="Retirer le filtre ${esc(scope)}">${ic(I.globe)}<b>${esc(scope)}</b>${ic(I.close, 'exl-x')}</button>` : ''}<button type="button" class="exl-pill${sp ? ' is-on' : ''}" data-exl="sport" aria-haspopup="dialog">${sp ? sportMark(sp) : ic(I.wave)}<b>${esc(sportLabel)}</b></button><button type="button" class="exl-pill${p.levels.length ? ' is-on' : ''}" data-exl="level" aria-haspopup="dialog">${ic(I.level, 'exl-bars')}<b>${esc(lv)}</b></button><button type="button" class="exl-pill${plan ? ' is-on' : ''}" data-map-plan aria-haspopup="dialog">${ic(I.cal)}${plan ? `<b translate="no" data-no-i18n>${esc(monthName(plan.m))}</b>` : '<b>Quand ?</b>'}</button></div><button type="button" class="exl-more${extra ? ' is-on' : ''}" data-exl="more" aria-haspopup="dialog" aria-label="Autres filtres">${ic(I.more)}${extra ? `<i translate="no">${extra}</i>` : ''}</button>`;
-    count.textContent = n === 1 ? `${n} spot` : `${n} spots`;
+    /* Les libellés sont écrits dans la langue de l’app dès l’insertion (obT), pas après coup par le traducteur de page :
+       les pastilles sont mesurées aussitôt (fitPills), et une traduction plus longue ou plus courte fausserait la mesure. */
+    const said = t => esc(typeof obT === 'function' ? obT(t) : t), own = ' translate="no" data-no-i18n';
+    /* Pastille du mois : aucun <span> dedans. spot-plan.js (apply) réécrit le premier <span> de tout bouton [data-map-plan]
+       avec son propre libellé (« nov. · Belles vagues ») ; le mois long et le mois court sont donc des <bdi>. */
+    pills.innerHTML = `<div class="exl-scroll">${scope ? `<button type="button" class="exl-pill is-on" data-exl="scope" aria-label="Retirer le filtre ${esc(scope)}">${ic(I.globe)}<b${own}>${said(scope)}</b>${ic(I.close, 'exl-x')}</button>` : ''}<button type="button" class="exl-pill${sp ? ' is-on' : ''}" data-exl="sport" aria-haspopup="dialog">${sp ? sportMark(sp) : ic(I.wave)}<b${own}>${said(sportLabel)}</b></button><button type="button" class="exl-pill${p.levels.length ? ' is-on' : ''}" data-exl="level" aria-haspopup="dialog">${ic(I.level, 'exl-bars')}<b${own}>${said(lv)}</b></button><button type="button" class="exl-pill${plan ? ' is-on' : ''}" data-map-plan aria-haspopup="dialog">${ic(I.cal)}${plan ? `<b translate="no" data-no-i18n><bdi class="exl-long">${esc(monthName(plan.m))}</bdi><bdi class="exl-short">${esc(monthShort(plan.m))}</bdi></b>` : `<b${own}>${said('Quand ?')}</b>`}</button></div><button type="button" class="exl-more${extra ? ' is-on' : ''}" data-exl="more" aria-haspopup="dialog" aria-label="Autres filtres">${ic(I.more)}${extra ? `<i translate="no">${extra}</i>` : ''}</button>`;
+    fitPills(); popPills();
+    paintCount(n);
     const q = A.search();
     if (document.activeElement !== input && input.value.trim().toLowerCase() !== q) { input.value = q; $('[data-exl=clear]', head).hidden = !q; }
     paintSeg();
@@ -167,7 +178,55 @@
   function paintSeg() {
     if (!seg) return;
     const map = A.mapShown() && !!A.world();
+    seg.dataset.view = map ? 'map' : 'list';
     seg.querySelectorAll('[data-exl-view]').forEach(b => b.setAttribute('aria-pressed', String((b.dataset.exlView === 'map') === map)));
+  }
+
+  /* Écran et liste affichés, sans rien mesurer (aucune lecture de mise en page). */
+  const onScreen = () => body.dataset.screen === 'spots' && listView.style.display !== 'none';
+  /* Pastilles sur un écran étroit : jamais coupées au bord. data-fit sur la rangée : 0 = taille normale ; 1 = compactes ;
+     2 = mois abrégé (« Nov. ») ; 3 = sans les pictogrammes du niveau et du mois ; s = trop de pastilles (une région en
+     plus…) : la rangée garde sa forme la plus courte et défile, fondue au bord. La mesure n’a lieu qu’une fois par jeu de libellés et par largeur d’écran
+     (résultat gardé), et seulement quand la liste est à l’écran ; sinon elle attend le retour sur l’écran (sync). */
+  const fits = new Map(); let fitDue = false;
+  function fitPills() {
+    const row = pills && pills.firstElementChild; if (!row) return;
+    const base = innerWidth < 400 ? 1 : 0, key = innerWidth + '|' + row.textContent, known = fits.get(key);
+    if (known != null) { pills.dataset.fit = known; fitDue = false; return; }
+    if (!onScreen() || !row.clientWidth) { pills.dataset.fit = String(base); fitDue = true; return; }
+    let fit = 's';
+    for (let f = base; f <= 3; f++) { pills.dataset.fit = String(f); if (row.scrollWidth <= row.clientWidth + 1) { fit = String(f); break; } }
+    pills.dataset.fit = fit; fits.set(key, fit); fitDue = false;
+  }
+  /* Une pastille dont le libellé ou l’état vient de changer se pose en douceur (jamais au premier affichage). */
+  let pillSig = null;
+  function popPills() {
+    const all = [...pills.querySelectorAll('.exl-pill,.exl-more')], sig = {};
+    const keyOf = b => b.dataset.exl || 'plan';
+    all.forEach(b => { sig[keyOf(b)] = b.className + '|' + b.textContent; });
+    const prev = pillSig; pillSig = sig;
+    if (!prev || calm() || !onScreen()) return;
+    all.forEach(b => { if (prev[keyOf(b)] !== sig[keyOf(b)]) b.animate([{ opacity: .35, transform: 'scale(.9)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 280, easing: EASE() }); });
+  }
+  /* Nombre de résultats : il défile de l’ancienne valeur à la nouvelle (une fois, 420 ms). Le texte lu par les lecteurs
+     d’écran (.exl-sr, aria-live) ne reçoit que la valeur finale. Une seule traduction par changement : pendant qu’il
+     défile, le nombre prend la place du « 7 » de « 7 spots », traduit une fois pour toutes. */
+  const countLabel = v => { const t = v === 1 ? `${v} spot` : `${v} spots`; return typeof obT === 'function' ? obT(t) : t; };
+  let countNow = null, countFrame = 0, countMany = null;
+  function paintCount(n, start) {
+    const from = start != null ? start : countNow; countNow = n;
+    cancelAnimationFrame(countFrame);
+    const last = countLabel(n);
+    count.textContent = last;
+    if (from == null || from === n || calm() || !onScreen()) { countShown.textContent = last; return; }
+    if (!countMany) countMany = countLabel(7);
+    const t0 = performance.now(), span = 420;
+    const step = now => {
+      const x = Math.min(1, (now - t0) / span), e = 1 - Math.pow(1 - x, 3);
+      countShown.textContent = x >= 1 ? last : countMany.replace('7', String(Math.round(from + (n - from) * e)));
+      if (x < 1) countFrame = requestAnimationFrame(step);
+    };
+    countFrame = requestAnimationFrame(step);
   }
 
   /* ---------- Feuilles : sport, niveau, autres filtres ---------- */
@@ -208,6 +267,8 @@
     sheet = { kind, back, el, from: from || document.activeElement, focus: null };
     document.body.append(back, el); paintSheet();
     requestAnimationFrame(() => { back.classList.add('in'); el.classList.add('in'); $('#exlSheetTitle', el)?.focus({ preventScroll: true }); });
+    /* Les choix arrivent l’un après l’autre pendant que la feuille monte (une fois, à l’ouverture). */
+    if (!calm()) [...el.querySelectorAll('.exl-opt,.exl-chips button')].slice(0, 16).forEach((o, i) => o.animate([{ opacity: 0, transform: 'translate3d(0,10px,0)' }, { opacity: 1, transform: 'translate3d(0,0,0)' }], { duration: 300, delay: 90 + i * 22, easing: EASE(), fill: 'backwards' }));
     back.addEventListener('click', () => closeSheet());
     el.addEventListener('click', onSheetClick);
   }
@@ -279,7 +340,8 @@
   /* ---------- La liste ---------- */
   const S = { base: [], order: [], index: new Map(), spots: new Map(), mounted: new Map(), grid: null, rowH: 132, gap: 10, cols: 1,
     width: 0,
-    pending: null, entered: false, touched: false, placedY: 0, settle: false, vkey: null };
+    pending: null, entered: false, touched: false, placedY: 0, settle: false, vkey: null,
+    viewTop: 0, viewH: 0, parked: false };
   const gauges = new Map(), countries = new Map();
   const gaugeOf = s => { let g = gauges.get(s.id); if (!g) { g = typeof dangerGauge === 'function' ? dangerGauge(s) : { n: null, basis: 'catalogue' }; gauges.set(s.id, g); } return g; };
   const countryName = s => { let c = countries.get(s.id); if (c === undefined) { c = typeof countryOf === 'function' ? countryOf(s) : ''; countries.set(s.id, c); } return c; };
@@ -297,7 +359,9 @@
     const g = gaugeOf(s), photo = typeof spotPhotoUrl === 'function' ? spotPhotoUrl(s.id, 480) : null;
     const dist = A.near() && typeof spotDist === 'function' ? spotDist(s) : null, above = aboveLevel(s);
     const sport = (A.sport() && spotSports(s).includes(A.sport()) ? A.sport() : spotSports(s)[0]) || 'all';
-    const media = photo ? `<img src="${esc(photo)}"${typeof spotPhotoSrcset === 'function' ? spotPhotoSrcset(s.id) : ''} sizes="(min-width:960px) 150px, 36vw" alt="" loading="lazy" decoding="async" draggable="false">` : `<span class="ui-ph exl-ph" aria-hidden="true">${sportMark(sport)}</span>`;
+    /* La photo vit dans un cadre (.ui-ph, comme les lignes de l’accueil) : motion.js l’emprunte le temps du vol vers la
+       fiche, le cadre garde sa place et le texte de la ligne ne change pas de colonne. */
+    const media = photo ? `<span class="ui-ph exl-frame"><img src="${esc(photo)}"${typeof spotPhotoSrcset === 'function' ? spotPhotoSrcset(s.id) : ''} sizes="(min-width:960px) 150px, 36vw" alt="" loading="lazy" decoding="async" draggable="false"></span>` : `<span class="ui-ph exl-ph" aria-hidden="true">${sportMark(sport)}</span>`;
     return `<div class="ui-spot exl-row" role="button" tabindex="0" data-spot-id="${esc(s.id)}" aria-label="Découvrir ${esc(s.name)}">${media}<div><p class="ui-spot-name"><span translate="no" data-no-i18n>${esc(nm.main)}</span>${dotsHTML(g.n, g.basis)}</p><p class="ui-spot-sub">${nm.sub && !above ? `<span class="exl-part" translate="no" data-no-i18n>${esc(nm.sub)}</span>` : ''}<span class="exl-country">${esc(countryName(s))}</span>${dist != null ? `<span class="exl-dist" translate="no">${esc(fmtDist(dist))}</span>` : ''}${above ? '<span class="exl-warn">Au-dessus de ton niveau</span>' : ''}</p><div class="exl-live" data-state="wait"></div></div></div>`;
   }
   /* Spot à ne pas proposer à ton niveau (spot-rank-model.js : deux crans au-dessus, ou danger fort pour un débutant) :
@@ -312,7 +376,11 @@
     it.el.innerHTML = rowHTML(s); it.sig = sigOf(s);
     it.row = it.el.firstElementChild; it.live = it.el.querySelector('.exl-live');
     const img = it.row.querySelector('img');
-    if (img) img.addEventListener('error', () => { const ph = document.createElement('span'); ph.classList.add('ui-ph', 'exl-ph'); ph.setAttribute('aria-hidden', 'true'); if (img.isConnected) img.replaceWith(ph); }, { once: true });
+    /* Première entrée dans la liste : une photo pas encore chargée arrive en fondu (opacity, ui-listes.css). Ensuite
+       (défilement, filtres), plus de fondu : en défilant vite, des dizaines de fondus à la fois coûtaient des images. */
+    if (img && !S.entered && !img.complete && !calm()) { img.classList.add('is-wait'); img.addEventListener('load', () => img.classList.remove('is-wait'), { once: true }); }
+    /* Photo introuvable : le cadre devient le fond neutre des spots sans photo, avec la silhouette du sport. */
+    if (img) img.addEventListener('error', () => { const frame = img.parentNode; if (!img.isConnected || !frame) return; frame.classList.add('exl-ph'); frame.setAttribute('aria-hidden', 'true'); frame.innerHTML = sportMark((A.sport() && spotSports(s).includes(A.sport()) ? A.sport() : spotSports(s)[0]) || 'all'); }, { once: true });
     /* Premier rendu sans attente : ce que le cache du verdict connaît déjà est posé tout de suite, sans fondu. */
     const known = knownEntry(it.id); if (known) paint(it, known, false);
     io?.observe(it.row);
@@ -338,11 +406,13 @@
   }
   function currentRange() {
     const lr = list.getBoundingClientRect(), wr = wrap.getBoundingClientRect(), view = wrap.clientHeight || innerHeight;
-    return M.range({ top: wr.top - lr.top, view, rowH: S.rowH, gap: S.gap, cols: S.cols, count: S.order.length, over: view });
+    S.viewTop = wr.top - lr.top; S.viewH = view;
+    return M.range({ top: S.viewTop, view, rowH: S.rowH, gap: S.gap, cols: S.cols, count: S.order.length, over: view });
   }
   /* Pose un ordre. animate : les lignes qui restent glissent à leur nouvelle place, les nouvelles arrivent en fondu, les
      autres s’effacent (changement de filtre, tri après les réponses). Sinon tout est posé d’un coup. */
   function place(order, { animate = false } = {}) {
+    if (S.parked) unpark();
     const from = new Map(); S.mounted.forEach((it, id) => from.set(id, { x: it.x, y: it.y }));
     S.order = order; S.index = new Map(order.map((id, i) => [id, i]));
     measure(); list.style.height = S.grid.height + 'px';
@@ -378,6 +448,7 @@
     if (!S.grid || !visible()) return;
     const [a, b] = currentRange(), key = a + ':' + b;
     if (key === lastRange) return; lastRange = key;
+    if (S.parked) unpark();
     const keep = new Set();
     for (let i = a; i <= b; i++) { const id = S.order[i]; keep.add(id); if (!S.mounted.has(id)) mount(id, i); }
     [...S.mounted.values()].forEach(it => { if (!keep.has(it.id)) unmount(it); });
@@ -386,6 +457,7 @@
   function enter() {
     if (S.entered) return; S.entered = true;
     if (calm()) return;
+    paintCount(S.order.length, 0);
     const top = wrap.getBoundingClientRect().top, bottom = top + (wrap.clientHeight || innerHeight);
     [...S.mounted.values()].sort((p, q) => p.y - q.y || p.x - q.x).filter(it => { const r = it.el.getBoundingClientRect(); return r.bottom > top && r.top < bottom; })
       .forEach((it, k) => it.row.animate([{ opacity: 0, transform: 'translate3d(0,16px,0)' }, { opacity: 1, transform: 'translate3d(0,0,0)' }], { duration: 420, delay: 60 + k * 35, easing: EASE(), fill: 'backwards' }));
@@ -402,6 +474,7 @@
     const action = q ? (others ? '<button type="button" class="ui-btn is-soft" data-exl="everywhere">Chercher dans tous les spots</button>' : '') + '<button type="button" class="ui-link" data-exl="clear-q">Effacer la recherche</button>'
       : none ? '<button type="button" class="ui-btn is-soft" data-exl="favs-off">Voir tous les spots</button>' : filtered ? '<button type="button" class="ui-btn is-soft" data-exl="reset">Effacer les filtres</button>' : '';
     empty.innerHTML = `<img src="assets/poulpy/scenes/travel-v2.webp" alt="" width="96" height="96" loading="lazy" decoding="async"><p class="ui-text">${title}</p>${action}${archived ? '<button type="button" class="ui-link" data-exl="archived">Voir mes favoris archivés</button>' : ''}`;
+    if (!calm() && onScreen()) empty.firstElementChild.animate([{ opacity: 0, transform: 'scale(.86)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 360, easing: EASE() });
   }
 
   /* ---------- Verdict : seulement les lignes visibles ou proches, par lots ---------- */
@@ -424,7 +497,17 @@
       const cur = it.row.querySelector('.ui-dots');
       if (!cur || +cur.dataset.n !== Math.round(entry.danger)) { const t = document.createElement('template'); t.innerHTML = dotsHTML(entry.danger, 'catalogue'); if (cur) cur.replaceWith(t.content); else it.row.querySelector('.ui-spot-name')?.append(t.content); }
     }
-    if (fade && html && !calm()) it.live.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 280, easing: 'ease-out' });
+    /* Arrivée des conditions (jamais au premier rendu depuis le cache, jamais en mouvement réduit) : la ligne de chiffres
+       en fondu et la pastille du verdict qui se pose (classe ui-arrive, ui-listes.css). Si OceanVerdict sait faire monter
+       ses chiffres (animate : ajouté par l’accueil, hors du contrat de base), on le lui demande ; sinon rien ne manque.
+       Seulement pour une ligne à l’écran, et jamais pendant un défilement : les lignes montées en avance et celles qui
+       arrivent sous le doigt sont posées telles quelles (aucun calque, aucun décompte à chaque image). */
+    const seen = it.y + S.rowH > S.viewTop && it.y < S.viewTop + S.viewH, still = performance.now() - scrolledAt > 300;
+    const arrive = !!(fade && html && seen && still && !calm());
+    it.live.classList.toggle('ui-arrive', arrive);
+    if (arrive) { try { V()?.animate?.(it.live); } catch (_) {} }
+    /* Une animation CSS rejoue quand son élément réapparaît (retour d’une fiche) : la classe ne reste que le temps de jouer. */
+    if (arrive) { const live = it.live; setTimeout(() => live.classList.remove('ui-arrive'), 900); }
   }
   function ask(id) {
     const mine = entries.get(id);
@@ -476,6 +559,26 @@
     io = new IntersectionObserver(list => { list.forEach(e => { if (e.isIntersecting && e.target.dataset.spotId) ask(e.target.dataset.spotId); }); }, { root: wrap, rootMargin: '60% 0px' });
   }
 
+  /* ---------- Écran quitté : les lignes hors de l’écran sont mises de côté ---------- */
+  /* Au retour d’une fiche, go() (app.js) pose la position de défilement retrouvée, ce qui force la mise en page de tout
+     l’écran d’un coup. Les lignes montées en avance (un écran avant, un écran après) n’ont pas à en faire partie : en
+     quittant l’écran, elles passent en content-visibility:hidden (classe is-parked). Elles reviennent une fois la
+     transition du retour passée (420 ms), ou tout de suite si l’utilisateur touche l’écran, si la fenêtre des lignes
+     change ou si la liste est reposée : jamais une ligne vide sous le doigt, et leur mise en page ne s’ajoute plus à
+     celle de go(). Rien n’est mesuré ici : la position de l’écran dans la liste est celle du dernier défilement. */
+  function park() {
+    if (S.parked || !S.grid || !S.mounted.size || !S.viewH) return;
+    const a = S.viewTop - S.rowH * .5, b = S.viewTop + S.viewH + S.rowH * .5;
+    S.mounted.forEach(it => { if (it.y + S.rowH < a || it.y > b) it.el.classList.add('is-parked'); });
+    S.parked = true;
+  }
+  let parkTimer = 0;
+  function unpark() {
+    clearTimeout(parkTimer);
+    if (!S.parked) return; S.parked = false;
+    S.mounted.forEach(it => it.el.classList.remove('is-parked'));
+  }
+
   /* ---------- Rendu (appelé par renderSpots d’app.js) ---------- */
   function render(spots, opts) {
     build();
@@ -509,10 +612,12 @@
     if (!head) return;
     paintSeg();
     if (!visible()) return;
+    if (fitDue) fitPills();
     if (S.pending) apply(); else if (S.grid) { if (Math.abs(list.clientWidth - S.width) > 1) relayout(); else update(); }
   }
   function relayout() {
     if (!S.grid || !visible()) return;
+    fitPills();
     measure(); list.style.height = S.grid.height + 'px'; lastRange = '';
     S.mounted.forEach(it => { const i = S.index.get(it.id); if (i == null) return; it.x = S.grid.x(i); it.y = S.grid.y(i); it.el.style.transform = at(it.x, it.y); });
     update();
@@ -524,13 +629,19 @@
     scrolledAt = performance.now();
     if (!frame) frame = requestAnimationFrame(() => { frame = 0; update(); });
   }, { passive: true });
-  const touch = () => { S.touched = true; };
+  const touch = () => { S.touched = true; if (S.parked) unpark(); };
   wrap.addEventListener('pointerdown', touch, { passive: true, capture: true });
   wrap.addEventListener('wheel', touch, { passive: true });
   wrap.addEventListener('keydown', touch, true);
   let resizeFrame = 0;
   addEventListener('resize', () => { if (!resizeFrame) resizeFrame = requestAnimationFrame(() => { resizeFrame = 0; relayout(); }); });
-  window.addEventListener('ocean:navigate', e => { if (e.detail === 'spots') requestAnimationFrame(() => requestAnimationFrame(sync)); });
+  /* Retour sur l’écran : sync deux images plus tard (rendu en attente, fenêtre à jour) ; les lignes mises de côté
+     reviennent après la transition (420 ms), hors de l’image du retour elle-même. */
+  window.addEventListener('ocean:navigate', e => {
+    if (e.detail !== 'spots') { clearTimeout(parkTimer); if (head) park(); return; }
+    requestAnimationFrame(() => requestAnimationFrame(sync));
+    clearTimeout(parkTimer); parkTimer = setTimeout(unpark, 420);
+  });
   /* Filet : dès que la liste a une largeur (écran affiché après une transition, rotation, colonne latérale), elle se met à jour. */
   if ('ResizeObserver' in window) new ResizeObserver(() => { if (head && visible()) sync(); }).observe(host);
 
