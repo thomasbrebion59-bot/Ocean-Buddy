@@ -1184,6 +1184,53 @@ body.reduce-motion #detail .dcat[data-cat="faune"] .sd-species>.sd-sp,body.reduc
 @media (prefers-reduced-motion:reduce){#detail .fx-scene *{animation:none!important;transition:none!important}}
 body.reduce-motion #detail .fx-scene *{animation:none!important;transition:none!important}
 
+/* =====================================================================================================
+   CONDITIONS SANS DOUBLON (23 nov., accord du fondateur ; proposition approuvée, section Conditions)
+   Ordre : alerte de danger, heure du relevé, scène illustrée (houle et vent du moment en grands chiffres), tuiles Eau et
+   Marée, ton créneau, les prochains jours, puis les prévisions détaillées et leurs sources. Les blocs gardent leurs nœuds
+   et leurs id (spot-before.js écrit #dNow, spot-experience.js #spotWeek) : #dNow et #spotWeek s'effacent du rendu
+   (display:contents) et leurs enfants sont rangés dans la colonne du chapitre. Vent et houle ne s'écrivent plus qu'une
+   fois, dans la scène ; si la prévision échoue (pas de scène), les relevés reviennent en entier.
+   ===================================================================================================== */
+#detail .dcat[data-cat="meteo"]>#dNow,#detail .dcat[data-cat="meteo"]>#spotWeek{display:contents}
+#detail .dcat[data-cat="meteo"]>#immersionContext{order:0}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-alert{order:1}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-head{order:2}
+#detail .dcat[data-cat="meteo"] #spotWeek>:is(.fx-scene-wrap,.spot-week-loading,.spot-week-empty){order:3}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-row{order:4}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-slot{order:5}
+#detail .dcat[data-cat="meteo"] #spotWeek>.fx-next{order:6}
+#detail .dcat[data-cat="meteo"] #spotWeek>:is(.wx-block,.fx7-stamp){order:7}
+#detail .dcat[data-cat="meteo"] #spotWeek>:is(.spot-week-note,.wx-source){order:8}
+#detail .dcat[data-cat="meteo"]>:is(.obf-head[data-obf-group="lire"],#sdCoach,#imWeatherHelp){order:9}
+/* Espacements repris des blocs effacés. */
+#detail .dcat[data-cat="meteo"] #dNow>.fx-head{margin:0 0 8px}
+#detail .dcat[data-cat="meteo"] #spotWeek>.fx-scene-wrap>.fx-scene{margin:0 0 12px}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-row{margin:0 0 16px}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-slot{margin:0 0 var(--fiche-gap)}
+/* Le titre « Maintenant » passe dans la scène (son libellé de jour) : l'en-tête ne garde que l'heure du relevé, à droite,
+   et reste lu par les lecteurs d'écran. */
+#detail .dcat[data-cat="meteo"]:has(.fx-scene) #dNow>.fx-head{justify-content:flex-end}
+#detail .dcat[data-cat="meteo"]:has(.fx-scene) #dNow>.fx-head>.fx-title{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* Vent et houle : dans la scène seulement. Tant que la prévision charge, la place de la scène est réservée. */
+#detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings>:is([data-reading="wind"],[data-reading="wave"]){display:none}
+#detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:10px;min-height:calc(var(--fiche-label) * 1.25 + var(--fiche-num) * .95 + var(--fiche-note) * 1.3 + 32px)}
+/* Plan d'eau intérieur : seule la phrase reste sous la scène, sans hauteur réservée. */
+#detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings:has(>.fx-reading-note){min-height:0}
+/* Relevé indisponible (« Indisponible », « Réessayer ») : pas de grande case vide. */
+#detail .dcat[data-cat="meteo"] .fx-readings:has(>.ob-retry){min-height:0;align-items:center}
+#detail .dcat[data-cat="meteo"] .spot-week-loading:not(.is-failed){aspect-ratio:400 / 290;min-height:0;margin:0 0 12px;border-radius:var(--fiche-radius);background:color-mix(in srgb,var(--t-tint) 70%,var(--t-card));justify-content:center}
+/* Eau et Marée en tuiles légères (fx-card), côte à côte. */
+#detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings>:is([data-reading="temp"],[data-reading="tide"]){padding:12px 12px 13px;border-radius:var(--fiche-radius);background:var(--fiche-wash)}
+@media(min-width:960px){
+  /* Ordinateur : la scène garde une taille de lecture, les tuiles et les jours restent en dessous. */
+  #detail .dcat[data-cat="meteo"] #spotWeek>.fx-scene-wrap{max-width:640px}
+  #detail .dcat[data-cat="meteo"] #dNow>.fx-head{max-width:640px}
+  #detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings{max-width:640px}
+  #detail .fx-next{display:block}
+  #detail .fx-next>.fx-days{grid-template-columns:repeat(3,minmax(0,220px))}
+}
+
 /* ================= Mouvement réduit ================= */
 @media (prefers-reduced-motion:reduce){#detail .fx-wait{animation:none}}
 body.reduce-motion #detail .fx-wait{animation:none}
