@@ -359,3 +359,27 @@ test('coach débutant : les blocs de sécurité citent leurs sources (https, dat
   assert.ok(inter.find(b => b.h === 'Les priorités au pic').src.length);
   assert.match(flat({ levels: [{ blocks: inter }] }), /repères indicatifs, sans valeur officielle/);
 });
+
+test('périodes en toutes lettres : ni point médian ni tiret, en français, en anglais et en espagnol', () => {
+  const M = require('../spot-data-model.js');
+  const names = l => m => new Intl.DateTimeFormat(l, { month: 'long' }).format(new Date(2026, m, 15));
+  const fr = names('fr-FR'), en = names('en-US'), es = names('es-ES');
+  const r = [[2, 2], [4, 4], [6, 8]];
+  assert.equal(M.periodText(r, fr, 'fr', true), 'surtout en mars, en mai et de juillet à septembre');
+  assert.equal(M.periodText(r, en, 'en', true), 'mostly in March, in May and from July to September');
+  assert.equal(M.periodText(r, es, 'es', true), 'sobre todo en marzo, en mayo y de julio a septiembre');
+  assert.equal(M.periodText([[8, 2]], fr, 'fr'), 'de septembre à mars', 'plage à cheval sur l’année');
+  assert.equal(M.periodText([[3, 9]], fr, 'fr'), 'd’avril à octobre', 'élision');
+  assert.equal(M.periodText([[7, 9]], fr, 'fr'), 'd’août à octobre');
+  assert.equal(M.periodText([[9, 9]], fr, 'fr', true), 'surtout en octobre');
+  assert.equal(M.periodText([[0, 1], [10, 10]], es, 'es'), 'de enero a febrero y en noviembre');
+  assert.equal(M.periodText([[0, 11]], fr, 'fr', true), 'toute l’année', 'toute l’année se dit sans « surtout »');
+  assert.equal(M.periodText([[0, 11]], en, 'en'), 'all year round'); assert.equal(M.periodText([[0, 11]], es, 'es'), 'todo el año');
+  assert.equal(M.periodText([], fr, 'fr'), '');
+  for (const l of [['fr', fr], ['en', en], ['es', es]]) for (let a = 0; a < 12; a++) for (let b = 0; b < 12; b++)
+    assert.doesNotMatch(M.periodText([[a, b], [(b + 2) % 12, (b + 2) % 12]], l[1], l[0], true), /[·–—→]/);
+  /* La faune et le calendrier des Saisons s’en servent, hors traduction automatique. */
+  const fs = require('fs'), path = require('path'), js = fs.readFileSync(path.join(__dirname, '..', 'spot-data.js'), 'utf8');
+  assert.match(js, /<small translate="no" data-no-i18n>\$\{esc\(periodText\(rng\.length \? rng : \[\[peak, peak\]\], true\)\)\}<\/small>/);
+  assert.match(js, /const periodText = \(ranges, mostly\) => M\.periodText\(ranges, m => monthName\(m\), uiLang\(\), mostly\);/);
+});

@@ -104,12 +104,15 @@
   }
   const CALC_NOTE = 'Calculé d’après les moyennes de plusieurs années. Ce n’est jamais une prévision.';
   const GAP_NOTE = 'Nos carnets et les moyennes climatiques ne s’accordent pas ici : renseigne-toi sur place.';
-  /* sep : « · » pour l’aperçu de l’onglet Le spot et la faune ; l’onglet Saisons (fiche v2) les sépare d’une virgule. */
+  /* Aperçu de l’ancien onglet Le spot seulement (masqué dans la fiche v2) : la faune et les Saisons écrivent leurs périodes en toutes lettres (periodText). */
   function rangeText(ranges, sep = ' · ') {
     if (!ranges.length) return '';
     if (ranges.length === 1 && ranges[0][0] === 0 && ranges[0][1] === 11) return 'toute l’année';
     return ranges.map(([a, b]) => a === b ? monthName(a) : `${monthName(a)} – ${monthName(b)}`).join(sep);
   }
+  /* Faune et calendrier des Saisons : la période s’écrit en toutes lettres, dans la langue de l’app (SpotDataModel.periodText). */
+  const uiLang = () => (window.OB_I18N && OB_I18N.lang) || 'fr';
+  const periodText = (ranges, mostly) => M.periodText(ranges, m => monthName(m), uiLang(), mostly);
   function calendar(s, c) {
     const acts = (typeof spotSports === 'function' ? spotSports(s) : s.sports).filter(a => M.year(c, a, s.level).some(v => v != null));
     if (!acts.length) return '';
@@ -123,7 +126,7 @@
         const L = M.level(v);
         return `<button type="button" class="sd-cell l${L ?? 'x'}${m === selMonth && a === (selAct || curAct(s)) ? ' sel' : ''}" data-sd-month="${m}" data-sd-act="${a}" aria-label="${esc(monthName(m))} : ${esc(L == null ? 'donnée indisponible' : LEVEL_TXT[L])}">${L === 3 ? '<i aria-hidden="true">✓</i>' : ''}</button>`;
       }).join('');
-      return `<div class="sd-cal-row"><div class="sd-cal-act">${typeof sportIcon === 'function' ? sportIcon(a) : ''}<span><b>${esc(sportLabel(a))}</b><small>${b.ranges.length ? esc(rangeText(b.ranges, ', ')) : 'Pas de période nette'}</small></span></div><div class="sd-cal-cells">${cells}</div></div>`;
+      return `<div class="sd-cal-row"><div class="sd-cal-act">${typeof sportIcon === 'function' ? sportIcon(a) : ''}<span><b>${esc(sportLabel(a))}</b>${b.ranges.length ? `<small translate="no" data-no-i18n>${esc(periodText(b.ranges))}</small>` : '<small>Pas de période nette</small>'}</span></div><div class="sd-cal-cells">${cells}</div></div>`;
     }).join('');
     return `<div class="sd-cal" role="group" aria-label="Calendrier des activités">
       <div class="sd-cal-row sd-cal-head"><div class="sd-cal-act"></div><div class="sd-cal-cells">${head}</div></div>${rows}
@@ -391,7 +394,7 @@
       // Sous 8 relevés, « surtout en juillet » ne repose que sur quelques photos : on le dit sous la ligne. La mention vient en dernier pour ne pas décaler les {n} des gabarits traduits au-dessus.
       const fewTxt = o.c > 1 ? `${num(o.c)} observations seulement` : `${num(o.c)} observation seulement`;
       const few = M.fewObs(o.c) ? `<small class="sd-few">${fewTxt}</small>` : '';
-      return `<li class="sd-flag"><span class="sd-flag-name"><b${isFr() ? '' : NT}>${txt(spName(o.t))}</b><small>surtout ${esc(rangeText(rng) || monthName(peak))}</small></span>
+      return `<li class="sd-flag"><span class="sd-flag-name"><b${isFr() ? '' : NT}>${txt(spName(o.t))}</b><small translate="no" data-no-i18n>${esc(periodText(rng.length ? rng : [[peak, peak]], true))}</small></span>
         <span class="sd-spark" role="img" aria-label="Observations par mois, pic en ${esc(monthName(peak))}">${o.h.map((v, m) => `<i style="height:${Math.max(6, Math.round(100 * v / max))}%" class="${m === peak ? 'pk' : ''}"></i>`).join('')}</span>${few}</li>`;
     };
     /* Fiche v2 (onglet Nature) : titre simple, les deux chiffres en relevés posés sur le fond (grand chiffre, phrase dessous). */

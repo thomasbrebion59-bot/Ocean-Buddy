@@ -356,8 +356,9 @@ test('Saisons : un titre sans sur-titre, relevés du mois en composant de la fic
   assert.doesNotMatch(seasons, /sd-tiles|sd-tile /);
   /* Aucune chaîne à point médian dans l’onglet (l’aperçu de l’onglet Le spot garde le sien). */
   assert.doesNotMatch(seasons.replace(/\/\*[\s\S]*?\*\//g, ''), /' · '|` · `| · \$\{|\} · /);
-  assert.match(seasons, /esc\(rangeText\(b\.ranges, ', '\)\)/);
-  assert.match(js, /function rangeText\(ranges, sep = ' · '\)/, 'faune et aperçu inchangés');
+  /* Périodes en toutes lettres (« de septembre à mars »), hors traduction automatique : ni point médian ni tiret. */
+  assert.match(seasons, /<small translate="no" data-no-i18n>\$\{esc\(periodText\(b\.ranges\)\)\}<\/small>/);
+  assert.doesNotMatch(seasons, /rangeText\(/);
   /* Verdict : la pastille seule, le mois n’est plus répété (« En novembre » le dit) ; les raisons suivent. */
   assert.doesNotMatch(seasons, /<\/b> ce mois-ci|<\/b> en \$\{/);
   /* Sources visibles, une phrase par élément ; la houle du large seulement s’il y a des normales de houle ; le rappel

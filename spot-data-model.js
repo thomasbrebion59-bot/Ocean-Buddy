@@ -94,6 +94,22 @@
     const months = scores.map((s, m) => (has(s) && s >= top - .08 && s >= LEVELS[0]) ? m : -1).filter(m => m >= 0);
     return { months, ranges: ranges(months), top };
   }
+  /* Périodes en toutes lettres, dans la langue de l’app, sans point médian ni tiret : « en mars, en mai et de juillet à
+     septembre », « in March, in May and from July to September », « en marzo, en mayo y de julio a septiembre ».
+     ranges : [[début, fin]] (mois de 0 à 11, plage circulaire permise) ; name(m) : le nom du mois dans la langue. */
+  const PERIOD = {
+    fr: { all: 'toute l’année', one: m => 'en ' + m, span: (a, b) => (/^[aeiouyhàâéèêîôû]/i.test(a) ? 'd’' : 'de ') + a + ' à ' + b, and: ' et ', mostly: t => 'surtout ' + t },
+    en: { all: 'all year round', one: m => 'in ' + m, span: (a, b) => 'from ' + a + ' to ' + b, and: ' and ', mostly: t => 'mostly ' + t },
+    es: { all: 'todo el año', one: m => 'en ' + m, span: (a, b) => 'de ' + a + ' a ' + b, and: ' y ', mostly: t => 'sobre todo ' + t }
+  };
+  function periodText(rangeList, name, lang, mostly) {
+    const P = PERIOD[String(lang || 'fr').slice(0, 2)] || PERIOD.fr;
+    if (!Array.isArray(rangeList) || !rangeList.length) return '';
+    if (rangeList.length === 1 && rangeList[0][0] === 0 && rangeList[0][1] === 11) return P.all;
+    const parts = rangeList.map(([a, b]) => (a === b ? P.one(name(a)) : P.span(name(a), name(b))));
+    const text = parts.length > 1 ? parts.slice(0, -1).join(', ') + P.and + parts[parts.length - 1] : parts[0];
+    return mostly ? P.mostly(text) : text;
+  }
   /* [0,1,2,10,11] → [[10,2]] (plage circulaire novembre → mars) */
   function ranges(months) {
     if (!months.length) return [];
@@ -451,7 +467,7 @@
 
   const coachApi = { coach, coachKind, ripSafety, parseLive, windSide, windBand, swellBand, periodBand, COACH_LEVELS };
 
-  const api = Object.assign({},coachApi,{ clamp, ramp, blend, month, score, level, year, best, ranges, LEVELS, CRITERIA, lite, matches, sunTimes, SECTOR_DEG, DIR_FROM, WATER_ACTS, SUIT_ACTS, wetsuit, FEW_OBS, fewObs, decodeEntities, marineSpot, seasonsDisagree });
+  const api = Object.assign({},coachApi,{ clamp, ramp, blend, month, score, level, year, best, ranges, LEVELS, CRITERIA, lite, matches, sunTimes, SECTOR_DEG, DIR_FROM, WATER_ACTS, SUIT_ACTS, wetsuit, FEW_OBS, fewObs, periodText, decodeEntities, marineSpot, seasonsDisagree });
   if (typeof module !== 'undefined' && module.exports) module.exports = api;
   else root.SpotDataModel = api;
 })(typeof window !== 'undefined' ? window : globalThis);
