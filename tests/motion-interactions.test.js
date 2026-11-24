@@ -1,6 +1,9 @@
 /* Motion des interactions (23 novembre 2026) : retour au toucher par une règle commune, sens des transitions entre
    les pages, petites touches à l’arrivée d’un écran. Mouvement réduit respecté, rien avant la levée du rideau, aucun
-   calque animé qui retienne un toucher, enveloppes posées une seule fois. */
+   calque animé qui retienne un toucher, enveloppes posées une seule fois.
+   Seconde passe du même jour (« la motion des interactions manque ») : appui franc joué par motion.js, onde au point
+   de contact, glissé directionnel entre onglets, pages poussées, feuilles en ressort, petites récompenses ; jetons de
+   courbe communs, durées entre 120 et 380 ms, aucune boucle, aucune mesure de mise en page au toucher. */
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -17,14 +20,14 @@ test('retour au toucher : une règle commune couvre boutons, liens en forme de b
   const rule = css.match(/:where\(\.ocean-v2,[^)]*\) :where\(([^)]*)\):where\(:not\(([^)]*)\)\):active\{([^}]*)\}/);
   assert.ok(rule, 'règle commune présente');
   for (const sel of ['button', '[role=button]', 'summary', 'a[href]', 'label.set-toggle']) assert.ok(rule[1].split(',').includes(sel), sel + ' couvert');
-  assert.match(rule[3], /scale:\.97/, 'enfoncement léger (0,97)');
+  assert.match(rule[3], /scale:\.96/, 'enfoncement franc (0,96)');
   assert.match(rule[3], /transition-duration:var\(--ob-t-press\)/, 'appui court');
   assert.doesNotMatch(rule[3], /delay/, 'aucun délai');
   assert.doesNotMatch(rule[1], /input|textarea|select/, 'jamais un champ de saisie');
   assert.match(rule[2], /\[disabled\]/, 'un bouton désactivé ne répond pas');
-  assert.match(css, /--ob-t-press:\.11s;--ob-t-release:\.34s/, 'durées partagées');
+  assert.match(css, /--ob-t-press:\.12s;--ob-t-release:\.32s/, 'durées partagées');
   assert.match(design, /button,a\{transition:[^}]*scale var\(--ob-t-release,\.34s\) var\(--ob-snap,ease\)\}/, 'relâché souple des boutons et des liens');
-  assert.match(css, /label\.set-toggle\{transition:scale var\(--ob-t-release\) var\(--ob-snap\)\}/, 'relâché souple des interrupteurs');
+  assert.match(css, /label\.set-toggle\{transition:scale var\(--ob-t-release\) var\(--ob-spring\)\}/, 'relâché souple des interrupteurs');
 });
 
 test('retour au toucher : les enfoncements restent entre 0,92 et 0,985 et ne passent que par transform ou scale', () => {
@@ -69,28 +72,47 @@ function navigationEnv({ reduce = false, from = 'home' } = {}) {
 }
 const slideOf = (e, id) => { const a = e.anims.find(x => x.id === id && 'transform' in x.frames[0]); return a ? a.frames.map(f => +/translate3d\((-?[\d.]+)(?:px)?,/.exec(f.transform)[1]) : null; };
 
-test('transitions : d’un onglet à l’autre, fondu sur place (aucun glissement), 200 ms au plus', () => {
-  for (const [from, to] of [['home', 'spots'], ['home', 'profile'], ['profile', 'trips'], ['trips', 'home']]) {
+test('transitions : d’un onglet à l’autre, glissé court dans le sens de la barre, avec fondu, 280 ms au plus', () => {
+  /* Ordre de la barre : Accueil, Explorer, Voyages, Profil. +1 : l’onglet visé est à droite, son écran entre par la droite. */
+  for (const [from, to, dir] of [['home', 'profile', 1], ['home', 'trips', 1], ['profile', 'trips', -1], ['trips', 'home', -1], ['profile', 'home', -1]]) {
     const e = navigationEnv({ from }); e.go(to);
-    assert.ok(e.anims.length >= 2, from + ' vers ' + to + ' : fondu de l’écran qui arrive et de celui qui part');
-    assert.ok(e.anims.every(a => a.frames.every(f => Object.keys(f).every(k => k === 'opacity'))), from + ' vers ' + to + ' : opacité seulement');
-    assert.ok(e.anims.every(a => a.opts.duration <= 200));
-    assert.equal(e.elements[from].active, true, 'l’ancien écran reste dessous pendant le fondu (jamais d’écran vide)');
+    const inn = slideOf(e, to), out = slideOf(e, from);
+    assert.ok(inn && Math.sign(inn[0]) === dir && inn[1] === 0, from + ' vers ' + to + ' : l’écran entre du bon côté (' + inn + ')');
+    assert.ok(out && out[0] === 0 && Math.sign(out[1]) === -dir, from + ' vers ' + to + ' : l’ancien part de l’autre côté (' + out + ')');
+    assert.ok(Math.abs(inn[0]) >= 30 && Math.abs(inn[0]) <= 64 && Math.abs(out[1]) >= 16 && Math.abs(out[1]) <= 40, 'glissé court, visible');
+    assert.ok(e.anims.every(a => a.frames.every(f => Object.keys(f).every(k => k === 'transform' || k === 'opacity'))), 'transform et opacity seulement');
+    assert.ok(e.anims.every(a => a.frames.every(f => !/scale/.test(f.transform || ''))), 'entre onglets, aucun écran ne recule');
+    assert.ok(e.anims.filter(a => 'opacity' in a.frames[0]).length === 2, 'fondu des deux écrans');
+    assert.ok(e.anims.every(a => a.opts.duration >= 120 && a.opts.duration <= 280), 'entre 120 et 280 ms');
+    assert.equal(e.elements[from].active, true, 'l’ancien écran reste dessous pendant le passage (jamais d’écran vide)');
     e.end(); assert.equal(e.elements[from].active, false); assert.equal(e.elements[to].active, true);
   }
+  /* Explorer : ses calques sont fixes, il ne reçoit jamais de transform ; c’est l’autre écran qui donne le sens. */
+  const go = navigationEnv({ from: 'home' }); go.go('spots');
+  assert.equal(slideOf(go, 'spots'), null); assert.ok(slideOf(go, 'home')[1] < 0, 'l’accueil part vers la gauche');
+  const back = navigationEnv({ from: 'spots' }); back.go('home');
+  assert.equal(slideOf(back, 'spots'), null); assert.ok(slideOf(back, 'home')[0] < 0, 'l’accueil revient par la gauche');
 });
 
-test('transitions : une fiche arrive toujours par la droite et repart toujours vers la droite, d’où qu’on vienne', () => {
+test('transitions : une fiche est poussée par la droite et repart vers la droite, l’écran d’avant recule un peu', () => {
   for (const from of ['home', 'profile', 'trips']) {
     const open = navigationEnv({ from }); open.go('detail');
-    const inn = slideOf(open, 'detail'); assert.ok(inn && inn[0] > 0 && inn[1] === 0, from + ' vers la fiche : elle entre par la droite');
-    assert.ok(slideOf(open, from)[1] < 0, 'l’écran quitté recule vers la gauche');
+    const inn = slideOf(open, 'detail'); assert.ok(inn && inn[0] >= 80 && inn[1] === 0, from + ' vers la fiche : elle entre par la droite, franchement');
+    assert.ok(slideOf(open, from)[1] < 0, 'l’écran quitté glisse un peu vers la gauche');
+    const under = open.anims.find(a => a.id === from && 'transform' in a.frames[0]);
+    assert.match(under.frames[1].transform, /scale\(0?\.9\d+\)$/, 'et il recule (échelle un peu sous 1)');
+    assert.match(under.frames[0].transform, /scale\(1\)$/);
+    assert.match(open.elements[from].style.transformOrigin, /^50% \d+px$/, 'autour du milieu de ce qu’on regardait (aucune mesure : hauteur connue de motion.js)');
+    assert.ok(!/scale/.test(open.anims.find(a => a.id === 'detail' && 'transform' in a.frames[0]).frames[0].transform), 'la fiche, elle, ne change pas d’échelle');
     const back = navigationEnv({ from: 'detail' }); back.go(from);
     const ret = slideOf(back, from); assert.ok(ret && ret[0] < 0 && ret[1] === 0, 'retour vers ' + from + ' : l’écran retrouvé revient par la gauche');
-    assert.ok(slideOf(back, 'detail')[1] > 0, 'la fiche repart vers la droite');
+    assert.match(back.anims.find(a => a.id === from && 'transform' in a.frames[0]).frames[0].transform, /scale\(0?\.9\d+\)$/, 'en se rapprochant : le chemin inverse');
+    assert.ok(slideOf(back, 'detail')[1] >= 80, 'la fiche repart vers la droite');
     for (const e of [open, back]) {
       assert.ok(e.anims.every(a => a.frames.every(f => Object.keys(f).every(k => k === 'transform' || k === 'opacity'))), 'transform et opacity seulement');
-      assert.ok(e.anims.every(a => a.opts.duration >= 100 && a.opts.duration <= 300), '300 ms au plus');
+      assert.ok(e.anims.every(a => a.opts.duration >= 120 && a.opts.duration <= 380), 'entre 120 et 380 ms');
+      e.end();
+      for (const el of Object.values(e.elements)) assert.ok(!el.style.transformOrigin, 'origine rendue en fin de passage');
     }
   }
 });
@@ -195,7 +217,8 @@ test('enveloppes : posées une seule fois, sans remplacer une fonction envelopp�
 
 test('aucun calque animé ne retient un toucher', () => {
   const css = noComments(motionCss);
-  for (const layer of ['.ob-zoom', '.ob-tab-ink']) assert.match(css, new RegExp(layer.replace('.', '\\.') + '\\{[^}]*pointer-events:none'), layer);
+  for (const layer of ['.ob-zoom', '.ob-tab-ink', '.ob-ink-box', '.ob-ink', '.ob-burst', '.ob-ghost-back']) assert.match(css, new RegExp(layer.replace('.', '\\.') + '\\{[^}]*pointer-events:none'), layer);
+  assert.match(css, /dialog\.trip-dialog\.ob-ghost\[open\]\{[^}]*pointer-events:none/, 'copie du formulaire qui se ferme');
   assert.doesNotMatch(noComments(motionJs), /document\.createElement\('div'\)[^;]*;(?![^\n]*ob-zoom)/, 'un seul calque créé par le script : celui du vol, traversé par les touchers');
 });
 

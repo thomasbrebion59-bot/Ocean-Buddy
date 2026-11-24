@@ -100,7 +100,7 @@ test('mouvement normal : une fiche garde son glissement court, en transform et o
   const e = navigationEnv(); e.go('detail');
   assert.ok(e.anims.some(a => 'transform' in a.frames[0]), 'glissement présent');
   assert.ok(e.anims.every(a => a.frames.every(f => Object.keys(f).every(k => k === 'transform' || k === 'opacity'))));
-  assert.ok(e.anims.every(a => a.opts.duration <= 300), '300 ms au plus');
+  assert.ok(e.anims.every(a => a.opts.duration >= 120 && a.opts.duration <= 380), 'entre 120 et 380 ms');
 });
 
 /* ---------- Retour arrière : au bon endroit du défilement ---------- */
@@ -116,11 +116,11 @@ test('retour arrière : l’écran retrouvé s’affiche dès le début à sa po
 
 /* ---------- Pas de décalage de mise en page ---------- */
 const LAYOUT = /^(width|height|min-|max-|top|left|right|bottom|inset|margin|padding|font|line-height|grid|flex|gap|border-width|display)/;
-test('motion.css : les images clés n’animent que transform et opacity', () => {
+test('motion.css : les images clés n’animent que transform, opacity et translate (compositeur)', () => {
   const kf = keyframes(motionCss);
   assert.ok(Object.keys(kf).length >= 6);
   for (const [name, props] of Object.entries(kf))
-    for (const p of props) assert.ok(p === 'opacity' || p === 'transform', `@keyframes ${name} : ${p}`);
+    for (const p of props) assert.ok(p === 'opacity' || p === 'transform' || (p === 'translate' && name === 'ob-depth-x'), `@keyframes ${name} : ${p}`);
 });
 
 test('motion.css : aucune transition sur une propriété de mise en page', () => {
@@ -135,6 +135,9 @@ test('motion.css : aucune transition sur une propriété de mise en page', () =>
 test('motion.js : les animations ne portent que sur transform, opacity et le rayon du calque volant', () => {
   const keys = new Set([...noComments(motionJs).matchAll(/\{(transform|opacity|borderRadius|width|height|top|left|right|bottom|margin\w*|padding\w*|maxHeight|gridTemplateRows)\s*:/g)].map(m => m[1]));
   assert.deepEqual([...keys].sort(), ['borderRadius', 'opacity', 'transform']);
+  /* Les autres images clés du script : « scale » seulement (appui, relâché, rebonds), jamais une dimension. */
+  const all = new Set([...noComments(motionJs).matchAll(/\.animate\((?:\w+\?)?\[([\s\S]*?)\],\{/g)].flatMap(m => [...m[1].matchAll(/\{(\w+):/g)].map(k => k[1])));
+  assert.deepEqual([...all].sort(), ['opacity', 'scale', 'transform']);
   /* Le calque volant est hors flux et ne retient aucun toucher. */
   assert.match(motionCss, /\.ob-zoom\{position:fixed;[^}]*pointer-events:none/);
   assert.match(motionCss, /\.ob-tab-ink\{position:absolute;[^}]*pointer-events:none/);
@@ -154,9 +157,13 @@ test('iOS 16.4 : ni View Transitions, ni @starting-style, ni animation liée au 
     const code = noComments(src);
     assert.doesNotMatch(code, /view-transition|startViewTransition|viewTransitionName/i, nom + ' : View Transitions (Safari 18)');
     assert.doesNotMatch(code, /@starting-style/, nom + ' : @starting-style (Safari 17.5)');
-    assert.doesNotMatch(code, /animation-timeline|scroll-timeline|view-timeline|animation-range/, nom + ' : animations liées au défilement');
+    /* Animation liée au défilement : permise dans motion.css derrière @supports seulement (photos des idées de voyage). */
+    const guard = '@supports (view-timeline:--ob-idea inline) and (animation-range:cover)';
+    const free = nom === 'motion.css' && code.includes(guard) ? code.replace(guard, '').replace(block(code, code.indexOf(guard)), '') : code;
+    assert.doesNotMatch(free, /animation-timeline|scroll-timeline|view-timeline|animation-range/, nom + ' : animations liées au défilement');
     assert.doesNotMatch(code, /@container|transition-behavior|allow-discrete|interpolate-size|calc-size/, nom + ' : CSS trop récent');
   }
+  assert.match(noComments(motionCss), /@supports \(view-timeline:--ob-idea inline\) and \(animation-range:cover\)\{/, 'la profondeur des photos reste derrière @supports');
   assert.doesNotMatch(noComments(motionCss), /:has\(/, 'motion.css : pas de :has()');
 });
 

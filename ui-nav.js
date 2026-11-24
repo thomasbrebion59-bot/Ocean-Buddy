@@ -199,6 +199,8 @@
   let fullOpen=false,mainScroll=0;
   function swap(dir){
     if(calm())return;
+    /* motion.js : la vue arrive par le côté (droite en avançant, gauche en revenant), comme une page poussée. */
+    if(window.OceanMotion?.enter?.(profile,dir))return;
     profile.animate([{opacity:0,transform:`translate3d(${dir*10}px,0,0)`},{opacity:1,transform:'translate3d(0,0,0)'}],{duration:200,easing:ease()});
   }
   function openFull(opts){

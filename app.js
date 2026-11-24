@@ -2211,16 +2211,19 @@ function vibrate(pattern){try{if(navigator.userActivation&&!navigator.userActiva
 /* Ordre des écrans (sens du glissement) : celui de la barre d’onglets, Accueil, Explorer, Voyages, Profil ; Jeu et Défis
    s’ouvrent depuis le Profil (interface v2), donc après lui. */
 const SCREEN_ORDER={home:0,spots:1,detail:2,trips:2,community:3,profile:4,surf:5,challenges:5};
-function resetScreenLive(el){el.classList.remove('sw-live');el.style.top='';el.style.left='';el.style.right='';el.style.maxWidth='';el.style.transform='';el.style.opacity='';el.style.transition='';}
+function resetScreenLive(el){el.classList.remove('sw-live');el.style.top='';el.style.left='';el.style.right='';el.style.maxWidth='';el.style.transform='';el.style.transformOrigin='';el.style.opacity='';el.style.transition='';}
 /* Interface v2 : la barre a quatre onglets. Jeu et Défis s’ouvrent depuis Profil > Jouer : pendant qu’ils sont affichés,
    l’onglet actif reste le Profil (barre d’onglets, menu latéral, barre native iOS). */
 const TAB_PARENT={surf:'profile',challenges:'profile'};
-/* Écrans de la barre d’onglets : de l’un à l’autre, fondu sur place (aucun glissement). */
+/* Écrans de la barre d’onglets : de l’un à l’autre, glissé court dans le sens de la barre (vers la gauche ou vers la
+   droite, selon SCREEN_ORDER), avec fondu. */
 const TAB_ROOT={home:1,spots:1,trips:1,community:1,profile:1};
 function tabOf(s){return TAB_PARENT[s]||s;}
 /* Durée d’un changement d’écran (ms) : sous 350 ms, l’écran suivant répond tout de suite. TAB_GO_MS : d’un onglet à
-   l’autre, fondu court (de 160 à 220 ms) ; GO_MS : la fiche et les pages ouvertes depuis un onglet, poussée plus franche. */
-const GO_MS=300,TAB_GO_MS=200;let goAnims=[];
+   l’autre ; GO_MS : la fiche et les pages ouvertes depuis un onglet, poussée plus franche. Distances (px) : GO_TAB_IN
+   et GO_TAB_OUT entre deux onglets ; GO_PUSH pour la page qui arrive ou repart par le côté, GO_UNDER et GO_BACK
+   (échelle) pour l’écran du dessous, qui recule un peu quand on avance et se rapproche quand on revient. */
+const GO_MS=340,GO_ZOOM_MS=300,TAB_GO_MS=280,GO_TAB_IN=44,GO_TAB_OUT=26,GO_PUSH=104,GO_UNDER=34,GO_BACK=.965;let goAnims=[];
 function stopGoAnims(){const l=goAnims;goAnims=[];l.forEach(a=>{try{a.cancel();}catch(_){}});}
 let navPillHidden=null;
 function updateNavPill(s){
@@ -2305,16 +2308,25 @@ function go(s){
   const fromY=wrapScrollY,toY=window.OceanNavigation?.restoreScroll?.()||0;
   cur.style.top=toY===fromY?padT:'calc('+padT+' + '+(toY-fromY)+'px)';cur.style.left=padL;cur.style.right=padR;cur.style.maxWidth=maxC;
   wrap.scrollTop=toY;
-  /* D’un onglet à l’autre : fondu sur place, 160 à 200 ms. Une page ouverte depuis un onglet (fiche, Jeu, Défis) et
-     son retour : fondu avec un glissement court (comme une pile iOS), en avant par la droite, en arrière par la
-     gauche, en transform et opacity. motion.js (OceanMotion.zoom) : la photo de la carte fait le trajet, les écrans se
-     fondent sans glisser. */
+  /* D’un onglet à l’autre : glissé court dans le sens de la barre, avec fondu. Une page ouverte depuis un onglet
+     (fiche, Jeu, Défis) est poussée par la droite pendant que l’écran d’avant recule un peu (il glisse d’un rien et
+     rétrécit autour du milieu de ce qu’on regardait) ; au retour, le chemin inverse. transform et opacity seulement.
+     motion.js (OceanMotion.zoom) : la photo de la carte fait le trajet, les écrans se fondent sans glisser. */
   const swap=!!(TAB_ROOT[s]&&TAB_ROOT[cur.id]),far=!swap;
-  const still=reduce||swap||!!window.OceanMotion?.zoom,inX=still?0:dir*(s==='detail'||cur.id==='detail'?44:28),outX=still?0:-dir*(s==='detail'||cur.id==='detail'?26:16);
-  const goMs=reduce?160:far?GO_MS:TAB_GO_MS;
-  /* Fondus : l’écran qui arrive, puis celui qui part. Entre deux onglets, presque toute la durée (180 et 160 ms). */
-  const fadeIn=Math.round(goMs*(cur.id==='spots'?.35:reduce?1:far?.6:.9)),fadeOut=Math.round(goMs*(reduce?1:far?.5:.8));
+  /* zoom : la photo de la carte fait le trajet (motion.js) ; les deux écrans se fondent sur place, en 300 ms comme
+     avant (GO_ZOOM_MS) : l’ancien écran ne reste pas affiché plus longtemps pendant que la fiche se construit. */
+  const zoom=!!window.OceanMotion?.zoom,still=reduce||zoom;
+  const inX=still?0:dir*(swap?GO_TAB_IN:dir>0?GO_PUSH:GO_UNDER),outX=still?0:-dir*(swap?GO_TAB_OUT:dir>0?GO_UNDER:GO_PUSH);
+  const goMs=reduce?160:zoom?GO_ZOOM_MS:far?GO_MS:TAB_GO_MS;
+  /* Fondus : l’écran qui arrive, puis celui qui part (120 ms au moins ; 160 ms en mouvement réduit). En quittant
+     Explorer, l’arrivée est la plus courte : la planète disparaît d’un coup (app-shell), il ne faut pas de vide. */
+  const fadeIn=reduce?goMs:Math.max(120,Math.round(goMs*(cur.id==='spots'?.35:zoom?.6:far?.55:.7))),fadeOut=reduce?goMs:Math.max(120,Math.round(goMs*(far?.5:.45)));
   const OM=window.OceanMotion||{},spring=OM.snap||'cubic-bezier(.2,.9,.25,1)',easeOut=OM.easeOut||'cubic-bezier(.22,.8,.3,1)';
+  /* Écran du dessous (celui qu’on quitte en avançant, celui qu’on retrouve en revenant) : son échelle part du milieu
+     de l’écran visible. La hauteur de l’écran vient de motion.js (lue au redimensionnement), jamais d’une mesure ici. */
+  const under=still||swap?null:dir>0?cur:target;
+  const at=(el,x,k)=>'translate3d('+x+'px,0,0)'+(el===under?' scale('+k+')':'');
+  if(under&&under.id!=='spots')under.style.transformOrigin='50% '+Math.round((under===cur?fromY:toY)+(OM.vh||800)/2)+'px';
   let waapi=false;
   if(typeof target.animate==='function'){
     /* Web Animations : part dès la première image (plus d’attente de deux images), sur le compositeur (transform/opacity),
@@ -2323,10 +2335,10 @@ function go(s){
       const run=(el,frames,duration,easing,fill)=>{let a;try{a=el.animate(frames,{duration,easing,fill});}catch(_){a=el.animate(frames,{duration,easing:'cubic-bezier(.22,.9,.3,1)',fill});}goAnims.push(a);};
       /* Explorer : ses calques sont en position fixe (planète plein écran). Une animation de transform en ferait leur
          bloc conteneur et les rognerait pendant le glissement : fondu seul pour cet écran. */
-      if(s!=='spots'&&inX)run(target,[{transform:'translate3d('+inX+'px,0,0)'},{transform:'translate3d(0,0,0)'}],goMs,spring,'backwards');
+      if(s!=='spots'&&inX)run(target,[{transform:at(target,inX,GO_BACK)},{transform:at(target,0,1)}],goMs,spring,'backwards');
       /* En quittant Explorer, la planète disparaît d’un coup (app-shell) : fondu d’arrivée plus court, pas de vide. */
       run(target,[{opacity:0},{opacity:1}],fadeIn,easeOut,'backwards');
-      if(cur.id!=='spots'&&outX)run(cur,[{transform:'translate3d(0,0,0)'},{transform:'translate3d('+outX+'px,0,0)'}],Math.round(goMs*.7),easeOut,'forwards');
+      if(cur.id!=='spots'&&outX)run(cur,[{transform:at(cur,0,1)},{transform:at(cur,outX,GO_BACK)}],Math.round(goMs*.7),easeOut,'forwards');
       run(cur,[{opacity:1},{opacity:0}],fadeOut,easeOut,'forwards');
       waapi=true;
     }catch(_){stopGoAnims();}
