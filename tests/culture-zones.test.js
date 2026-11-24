@@ -112,7 +112,8 @@ test('illustrations propres aux faits : identifiant stable, fichier présent, si
     assert.match(v, /^[a-z0-9-]+$/);
     assert.ok(fs.existsSync(path.join(__dirname, '..', 'assets/fiche/faits', v + '.webp')), 'fichier : ' + v);
   }
-  assert.match(read('spot-guide.js'), /ILLU\(own&&\/\^\[a-z0-9-\]\+\$\/\.test\(own\)\?'faits\/'\+own:zoneIllu\(kind,title\)\)/);
+  assert.match(read('spot-guide.js'), /const big=!!own&&\/\^\[a-z0-9-\]\+\$\/\.test\(own\);/);
+  assert.match(read('spot-guide.js'), /\$\{big\?HERO\('faits\/'\+own\):ILLU\(zoneIllu\(kind,title\)\)\}/);
 });
 
 test('traductions : chaque fait a son titre et son texte en anglais et en espagnol, sans source propre ni décoration', () => {
@@ -164,15 +165,42 @@ test('fiche : les faits s’affichent dans la langue de l’app, la source reste
   assert.match(g, /then\(\(\)=>need\(\)\?inject\(ZONES_URL_I18N\[lg\]\)\.catch\(\(\)=>\{\}\):null\)/, 'une traduction absente ne bloque pas la fiche');
 });
 
-test('cartes de culture : compactes, vignette nette sur écran ×3, la carte suivante se devine', () => {
-  const css = read('fiche.css');
-  /* Vignette de 104 points : 312 px d’écran en ×3, moins que les 640 px du fichier (dessiné à environ 450 px). */
+test('cartes de culture : grande image nette pour chaque fait illustré, vignette pour les genres, la carte suivante se devine', () => {
+  const css = read('fiche.css'), g = read('spot-guide.js');
+  /* Choix du fondateur (23 nov.) : la grande image en tête de la carte, 4:3, sa place réservée (aucun saut). */
+  assert.match(g, /const HERO=k=>`<img class="gl-hero" src="assets\/fiche\/\$\{k\}\.webp" alt="" width="1080" height="810" loading="lazy" decoding="async" draggable="false">`;/);
+  assert.match(g, /\$\{big\?HERO\('faits\/'\+own\):ILLU\(zoneIllu\(kind,title\)\)\}/);
+  assert.match(css, /#detail \.gl-big-card>\.gl-hero\{[^}]*width:calc\(100% \+ 24px\);[^}]*aspect-ratio:4 \/ 3;/);
+  /* Les illustrations de genre (420 px) restent en vignette de 104 points (312 px d’écran en ×3). */
   assert.match(css, /#detail \.gl-card>\.gl-illu,#detail \.gl-card-go \.gl-illu\{grid-column:1;grid-row:1 \/ span 2;width:104px;height:104px;/);
-  const side = 104 * 3; for (const f of fs.readdirSync(path.join(__dirname, '..', 'assets/fiche/faits')).slice(0, 3)) assert.ok(f.endsWith('.webp') && side < 450, f);
   /* La carte ne prend jamais toute la largeur : 56 px restent pour l’écart et le bord de la suivante. */
   assert.match(css, /#detail \.gl-card\{flex:0 0 min\(330px,calc\(100% - 56px\)\);/);
   /* Aucun texte coupé : pas de hauteur fixe, pas de troncature dans la carte. */
   const card = css.slice(css.indexOf('/* Carte de culture (reprise le 23 nov.)'), css.indexOf('/* Budget sur place'));
   assert.doesNotMatch(card, /line-clamp|text-overflow|max-height|(?<!min-)height:\d+px(?!;aspect-ratio:1)/);
   assert.match(card, /#detail \.gl-fact-src\{align-self:end;display:block;min-height:44px;/, 'la source reste une cible de 44 points');
+});
+
+/* Chaque fait illustré a son fichier, en WebP, assez large pour la grande image (une carte d’environ 300 points demande
+   environ 900 px sur un écran ×3). Largeur lue dans l’en-tête VP8/VP8L/VP8X du fichier. */
+const webpWidth = buf => {
+  if (buf.toString('ascii', 0, 4) !== 'RIFF' || buf.toString('ascii', 8, 12) !== 'WEBP') return 0;
+  const kind = buf.toString('ascii', 12, 16);
+  if (kind === 'VP8 ') return buf.readUInt16LE(26) & 0x3fff;
+  if (kind === 'VP8L') return 1 + (((buf[22] & 0x3f) << 8) | buf[21]);
+  if (kind === 'VP8X') return 1 + buf.readUIntLE(24, 3);
+  return 0;
+};
+test('illustrations des faits : chaque fait illustré a son WebP d’au moins 1000 px de large', () => {
+  const illus = JSON.parse(read('data/culture-zones-illus.json'));
+  const files = [...new Set(Object.values(illus).map(v => (typeof v === 'string' ? v : v && v.file)).filter(Boolean))];
+  assert.ok(files.length >= 100, 'au moins 100 faits illustrés : ' + files.length);
+  const narrow = [];
+  for (const f of files) {
+    const p = path.join(__dirname, '..', 'assets/fiche/faits', f.replace(/\.webp$/, '') + '.webp');
+    assert.ok(fs.existsSync(p), 'fichier présent : ' + f);
+    const w = webpWidth(fs.readFileSync(p));
+    if (w < 1000) narrow.push(f + ' : ' + w);
+  }
+  assert.deepEqual(narrow, [], 'trop étroites');
 });

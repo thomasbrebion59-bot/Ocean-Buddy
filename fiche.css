@@ -908,6 +908,15 @@ html .ocean-v2 #detail .fx-notes[hidden],#detail .fx-notes-zone[hidden]{display:
 #detail .gl-fact-src:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
 #detail .gl-zone-src{margin:0;padding:0;list-style:none}
 #detail .gl-card-go{padding:0}
+/* Fait avec son illustration propre (23 nov., choix du fondateur) : la grande image en tête, sur toute la largeur de la
+   carte (4:3, 1080 px, nette sur écran ×3), puis le genre, le titre, le texte et la source dessous. La place de l’image est
+   réservée (aspect-ratio) : aucun saut quand elle arrive. Le texte d’un fait fait 140 caractères au plus : rien n’est coupé. */
+#detail .gl-card.gl-big-card{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto auto 1fr;padding-top:0;overflow:hidden}
+#detail .gl-big-card>.gl-hero{grid-column:1;grid-row:1;display:block;width:calc(100% + 24px);max-width:none;height:auto;aspect-ratio:4 / 3;margin:0 -12px 10px;object-fit:cover;
+  border-radius:var(--fiche-radius) var(--fiche-radius) 0 0;background:var(--fiche-wash);pointer-events:none;-webkit-user-select:none;user-select:none}
+#detail .gl-big-card>.fx-label{grid-column:1;grid-row:2;align-self:start}
+#detail .gl-big-card>b{grid-column:1;grid-row:3}
+#detail .gl-big-card>:is(small,a){grid-column:1}
 #detail .gl-card-go button{display:grid;grid-template-columns:104px minmax(0,1fr);grid-template-rows:auto auto auto 1fr;column-gap:12px;row-gap:2px;align-content:start;grid-column:1 / -1;grid-row:1 / -1;box-sizing:border-box;width:100%;height:100%;margin:0;padding:12px;border:0;background:none;color:inherit;font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .18s ease}
 #detail .gl-card-go button:active{transform:scale(.97)}
 #detail .gl-card-go b{color:var(--t-main)}
