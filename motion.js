@@ -613,7 +613,7 @@
       g.style.transform='translate3d('+(r.left+r.width/2).toFixed(1)+'px,'+(r.top+r.height/2).toFixed(1)+'px,0)';
       const N=8,reach=Math.max(22,Math.min(34,r.width*.75));
       const ring=document.createElement('i');ring.className='ob-ring';g.append(ring);
-      for(let i=0;i<N;i++){const dot=document.createElement('i');dot.className=i%3?'ob-dot':'ob-dot is-sun';g.append(dot);}
+      for(let i=0;i<N;i++){const dot=document.createElement('i');dot.className='ob-dot';if(!(i%3))dot.classList.add('is-sun');g.append(dot);}
       document.body.append(g);
       try{
         ring.animate([{opacity:.75,transform:'scale(.5)'},{opacity:0,transform:'scale(1.75)'}],{duration:POP_MS,easing:M.easeOut,fill:'both'});
