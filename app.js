@@ -586,9 +586,13 @@ function searchSpots(q){currentSearch=(q||'').toLowerCase().trim();renderSpots()
 function toggleFav(id,ev){if(ev)ev.stopPropagation();
   if(favs.has(id))favs.delete(id);else favs.add(id);
   /* La liste garde sa longueur (avant, un cœur touché repliait la liste à la première page). */
-  renderSpots(currentFilter,true);renderMap(true);saveState();
-  const df=document.getElementById('dFav');if(df&&currentSpot===id)df.innerHTML=favs.has(id)?FAV_ON:FAV_OFF;df.classList.toggle('on',favs.has(id));
+  /* Le cœur touché répond tout de suite ; la liste et la carte se redessinent à l'image suivante (sous charge, le rendu
+     synchrone retardait le cœur de la fiche d'environ 250 ms). */
+  const df=document.getElementById('dFav');if(df&&currentSpot===id){df.innerHTML=favs.has(id)?FAV_ON:FAV_OFF;df.classList.toggle('on',favs.has(id));}
+  saveState();
   toast(favs.has(id)?'Ajouté à tes favoris ❤️':'Retiré des favoris');
+  const redraw=()=>{renderSpots(currentFilter,true);renderMap(true);};
+  if(typeof requestAnimationFrame==='function')requestAnimationFrame(()=>setTimeout(redraw,0));else setTimeout(redraw,0);
 }
 /* ---- map ---- */
 function syncViewBtn(v){
