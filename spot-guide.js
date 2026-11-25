@@ -8,7 +8,7 @@
   const DATA_URL_EN='assets/data/spot-guides.en.js?v=09dc78f14a87';
   const DATA_URL_ES='assets/data/spot-guides.es.js?v=1738a29c9a1b';
   /* Culture locale sourcée, par zone (scripts/build-culture-zones.cjs) : chargée à l’ouverture d’une fiche, jamais au démarrage. */
-  const ZONES_URL='assets/data/culture-zones.js?v=8a299adc2301';
+  const ZONES_URL='assets/data/culture-zones.js?v=7184bd528e65';
   /* Traductions des faits de culture locale (titre, texte, nom de zone) : une par langue, chargée avec la zone. */
   const ZONES_URL_I18N={en:'assets/data/culture-zones.en.js?v=bf73a60bed15',es:'assets/data/culture-zones.es.js?v=5ecede979b85'};
   /* Lieux autour du spot (OpenStreetMap) et niveau des prix par pays (Banque mondiale) : scripts/build-spot-extras.cjs,
