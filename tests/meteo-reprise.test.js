@@ -109,7 +109,7 @@ test('conditions du moment : 503 partout, exactement deux demandes automatiques 
   assert.equal(head.textContent, 'Chargement…', 'la tête repasse à « Chargement… » pendant l’essai');
   await ck.advance(30 * 60 * 1000);
   assert.deepEqual(count(), { forecast: 3, marine: 3 });
-  assert.match(read('app.js'), /closest\?\.\('\[data-weather-retry="now"\]'\)&&nowTry\)nowTry\.again\(\)/);
+  assert.match(read('app.js'), /closest\?\.\('\[data-weather-retry\]'\)&&nowTry&&nowFailed\)nowTry\.again\(\)/);
 });
 
 test('conditions du moment : le spot change pendant l’attente, le nouvel essai n’a pas lieu ; lac = une seule demande par essai', async () => {

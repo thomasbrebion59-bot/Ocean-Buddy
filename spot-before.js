@@ -254,6 +254,13 @@
   function retry(s, key, family) {
     if (!same(s)) return;
     setRow(key, `<span class="db-muted">Indisponible</span><button type="button" class="ob-retry" data-weather-retry="${family === 'week' ? 'week' : 'now'}">Réessayer</button>`);
+    oneRetry();
+  }
+  /* Un seul « Réessayer » dans la fiche, même quand les conditions du moment et la semaine échouent toutes les deux : le
+     premier bouton reste, les autres sont masqués (chaque case garde « Indisponible »). Un toucher relance tout ce qui a
+     échoué (délégations de clic d’app.js et de spot-experience.js). */
+  function oneRetry() {
+    try { document.querySelectorAll('#detail [data-weather-retry]').forEach((b, i) => { b.hidden = i > 0; }); } catch (e) {}
   }
   /* Toucher « Réessayer » : la case repasse à l’attente (seulement si elle montrait l’échec, jamais sur des données). */
   function wait(s, key) {
@@ -279,5 +286,5 @@
     try { if (typeof showDetailCat === 'function') showDetailCat(go.dataset.fxTab); } catch (err) {}
   });
 
-  window.OceanBefore = {update, live, normal, stamp, season, slot, cardPill, openSafety, levelButton, retry, wait};
+  window.OceanBefore = {update, live, normal, stamp, season, slot, cardPill, openSafety, levelButton, retry, wait, oneRetry};
 })();

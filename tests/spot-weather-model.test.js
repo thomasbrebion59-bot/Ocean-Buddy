@@ -407,7 +407,7 @@ test('fiche : open-meteo en 503, exactement deux demandes automatiques, puis auc
   await ck.advance(10 * 60 * 1000);
   assert.deepEqual(count(), {forecast: 2, marine: 2}, 'aucune autre demande automatique, même dix minutes après');
   /* Toucher « Réessayer » : un essai ; un second toucher pendant cet essai ne relance rien. */
-  const tap = () => (listeners.click || []).forEach(f => f({target: {closest: s => (s === '[data-weather-retry="week"]' ? {} : null)}}));
+  const tap = () => (listeners.click || []).forEach(f => f({target: {closest: s => (s === '[data-weather-retry]' ? {} : null)}}));
   tap(); tap();
   assert.ok(week().includes('Chargement'), 'le toucher remet « Chargement… » à la place du bouton');
   await ck.advance(0);

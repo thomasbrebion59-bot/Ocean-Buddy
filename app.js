@@ -1590,9 +1590,9 @@ function tideFromMarine(mar){
    (SpotWeatherModel.retrier) ; l’écran garde « Chargement… » entre-temps et les parties reçues restent affichées. Si rien
    n’arrive : « Indisponible » et « Réessayer » dans « Maintenant » (Avant d’y aller) et en tête de l’onglet Conditions.
    Un toucher = un essai, jamais deux à la fois ; aucune autre reprise automatique. */
-let nowTry=null;
+let nowTry=null,nowFailed=false;
 function fetchConditions(s){
-  if(nowTry)nowTry.stop();nowTry=null;
+  if(nowTry)nowTry.stop();nowTry=null;nowFailed=false;
   const c=COORDS[s.id];if(!c){conditionsNone();return;}
   const inland=isInland(s),got={};
   const part=(k,url)=>got[k]?Promise.resolve(got[k]):fetch(url).then(r=>{if(!r.ok)throw Error('meteo-http-'+r.status);return r.json();}).then(d=>(got[k]=d||{}));
@@ -1610,6 +1610,7 @@ function fetchConditions(s){
   if(!W||!W.retrier){attempt().catch(()=>{if(currentSpot===s.id&&!LIVE[s.id]?.live)window.OceanBefore?.live(s,null);});return;}
   const tryer=nowTry=W.retrier(attempt,state=>{
     if(nowTry!==tryer||currentSpot!==s.id)return;
+    nowFailed=state==='failed';
     if(state==='busy')conditionsWait(s);
     else if(state==='failed'&&!LIVE[s.id]?.live)conditionsFailed(s);
   });
@@ -1626,6 +1627,7 @@ function conditionsFailed(s){
   try{window.OceanBefore?.retry(s,'live','now');}catch(e){}
   const head=document.getElementById('dCondHead');
   if(head)head.innerHTML='<span>Indisponible</span><button type="button" class="ob-retry" data-weather-retry="now">Réessayer</button>';
+  try{window.OceanBefore?.oneRetry?.();}catch(e){}
 }
 /* Toucher « Réessayer » : les cases qui montraient l’échec repassent à « Chargement… » (jamais celles qui ont des données). */
 function conditionsWait(s){
@@ -1633,7 +1635,8 @@ function conditionsWait(s){
   const head=document.getElementById('dCondHead');
   if(head&&head.querySelector('[data-weather-retry]'))head.textContent='Chargement…';
 }
-document.addEventListener('click',e=>{if(e.target.closest?.('[data-weather-retry="now"]')&&nowTry)nowTry.again();});
+/* Un seul bouton « Réessayer » dans la fiche (OceanBefore.oneRetry) : il relance aussi les conditions du moment si elles ont échoué. */
+document.addEventListener('click',e=>{if(e.target.closest?.('[data-weather-retry]')&&nowTry&&nowFailed)nowTry.again();});
 /* Affiche ce que les réponses contiennent ; renvoie false quand il n’y a aucune donnée (rien n’est alors touché). */
 function showConditions(s,w,mar){
   const wc=w.current||{},mc=mar.current||{};

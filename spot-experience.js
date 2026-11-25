@@ -483,14 +483,14 @@
      La houle reste facultative (sans elle, la semaine s’affiche sans vagues, comme avant). La fiche reste utilisable. */
   const WEEK_LOADING = '<div class="spot-week-loading"><i></i><span>Chargement de la météo du spot…</span></div>';
   const WEEK_FAILED = '<div class="spot-week-loading is-failed"><span>Prévision indisponible pour le moment</span><button type="button" class="ob-retry" data-weather-retry="week">Réessayer</button></div>';
-  let weekTry = null;
+  let weekTry = null, weekFailed = false;
   const HOURLY = 'temperature_2m,wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,precipitation,precipitation_probability,is_day';
   const DAILY = 'temperature_2m_max,temperature_2m_min,uv_index_max,precipitation_probability_max,wind_speed_10m_max,wind_gusts_10m_max,wind_direction_10m_dominant,weather_code,sunrise,sunset';
   function loadWeek(s, act) {
     const host = $('#spotWeek');
     const c = typeof COORDS !== 'undefined' ? COORDS[s.id] : null;
     if (weekTry) weekTry.stop();
-    weekTry = null;
+    weekTry = null; weekFailed = false;
     if (!c) { if (host) host.innerHTML = '<p class="spot-week-empty">Position non vérifiée : aucune prévision affichée pour ce spot.</p>'; return; }
     const key = `${s.id}:${new Date().toISOString().slice(0,10)}`;
     const n = ++request;
@@ -515,6 +515,7 @@
     if (!W || !W.retrier) { attempt().then(r => { if (mine()) later(() => { if (mine()) renderWeek(s, r.weather, r.marine, r.fetchedAt); }); }, () => { if (mine()) failed(); }); return; }
     const tryer = weekTry = W.retrier(attempt, (state, r) => {
       if (weekTry !== tryer || !mine()) return;
+      weekFailed = state === 'failed';
       const h = $('#spotWeek');
       if (state === 'ok') later(() => { if (mine()) renderWeek(s, r.weather, r.marine, r.fetchedAt); });
       else if (state === 'busy') { if (h && h.querySelector('[data-weather-retry]')) h.innerHTML = WEEK_LOADING; try { window.OceanBefore?.wait(s, 'slot'); } catch (e) {} }
@@ -522,7 +523,8 @@
     });
     tryer.start();
   }
-  document.addEventListener('click', e => { if (e.target.closest?.('[data-weather-retry="week"]') && weekTry) weekTry.again(); });
+  /* Un seul bouton « Réessayer » dans la fiche (OceanBefore.oneRetry) : il relance aussi la semaine si elle a échoué. */
+  document.addEventListener('click', e => { if (e.target.closest?.('[data-weather-retry]') && weekTry && weekFailed) weekTry.again(); });
   /* Niveau changé dans Réglages : le créneau suit, sans nouvel appel. */
   document.addEventListener('ocean:level', () => { try { if (shown && activeSpot?.id === shown.s.id) renderWeek(shown.s, shown.weather, shown.marine, shown.fetchedAt); } catch (e) {} });
 

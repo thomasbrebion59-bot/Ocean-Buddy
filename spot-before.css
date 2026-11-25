@@ -106,6 +106,7 @@
 .ob-retry{position:relative;display:inline-flex;align-items:center;flex:none;height:18px;margin:0;padding:0 10px;border:1px solid var(--t-line);border-radius:999px;
   background:var(--t-tint);color:var(--t-deep);font:800 12px/16px var(--body);letter-spacing:0;text-transform:none;white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent}
 .ob-retry::before{content:"";position:absolute;left:-4px;right:-4px;top:-13px;bottom:-13px}
+.ob-retry[hidden]{display:none}
 .ob-retry:active{transform:scale(.97)}
 .ob-retry:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
 /* En tête de l’onglet Conditions (ligne de 16,5 px) : le bouton tient dans la ligne, la tête ne grandit pas. */
