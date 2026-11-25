@@ -1239,6 +1239,26 @@ body.reduce-motion #detail .fx-scene *{animation:none!important;transition:none!
   #detail .fx-next{display:block}
   #detail .fx-next>.fx-days{grid-template-columns:repeat(3,minmax(0,220px))}
 }
+/* Ordinateur (25 nov.) : plus de place vide à droite des Conditions.
+   - Le nom du jour ne se coupe plus au milieu du mot (« Aujo urd’h ui ») : il prend sa ligne, les chiffres en dessous.
+   - Dès 1280 px, la scène reste à gauche (640 px au plus) et la colonne de droite reçoit les tuiles Eau et Marée, ton
+     créneau et les prochains jours (un jour par ligne). Même rangement pendant le chargement (place de la scène réservée) ;
+     si la prévision échoue, la colonne unique d’avant revient. */
+@media(min-width:960px){
+  #detail .fx-next>.fx-days>.fx-day{grid-template-columns:auto auto;justify-content:start}
+  #detail .fx-next>.fx-days>.fx-day>b{grid-column:1 / -1;overflow-wrap:normal}
+}
+@media(min-width:1280px){
+  .ocean-v2 #detail .dcat[data-cat="meteo"]:not([style*="none"]):has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))){display:grid;grid-template-columns:minmax(0,640px) minmax(300px,1fr);column-gap:28px;align-items:start}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed)))>:not(#dNow,#spotWeek),
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) :is(#dNow,#spotWeek)>*{grid-column:1 / -1}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>:is(.fx-scene-wrap,.spot-week-loading){grid-column:1;grid-row:span 3}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) :is(#dNow>.fx-row,#dNow>.fx-slot,#spotWeek>.fx-next){grid-column:2}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #dNow>.fx-slot{margin:0 0 16px}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>.fx-next>.fx-days{grid-template-columns:minmax(0,1fr)}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>.fx-next>.fx-days>.fx-day{grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:14px}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>.fx-next>.fx-days>.fx-day>b{grid-column:auto}
+}
 
 /* ================= Mouvement réduit ================= */
 @media (prefers-reduced-motion:reduce){#detail .fx-wait{animation:none}}
