@@ -1,0 +1,1277 @@
+/* @creme-tokens */
+/* Fiche de spot v2 (18 novembre 2026). Demande du fondateur : plus de bloc « Avant d’y aller », les conditions et les
+   prévisions tout de suite, un onglet Sécurité à part, moins de texte, une police et une mise en forme plus soignées.
+   Chargée après toutes les autres feuilles : elle pose l’en-tête compact, la rangée des sept onglets, les jetons et les
+   composants de la fiche, puis une section par onglet. Couleurs du thème actif seulement (--t-*).
+
+   CORPS DE TEXTE : tous les rôles lisent les variables posées sur #detail ci-dessous. Aucun corps en dur pour ces rôles :
+   changer une variable change toute la fiche (comparaison de tailles sans toucher au reste).
+     --fiche-num    grand chiffre d’un relevé (et numéro d’urgence)
+     --fiche-unit   unité à côté d’un grand chiffre
+     --fiche-title  titre de section
+     --fiche-label  libellé d’un relevé, d’une ligne, d’un bouton secondaire
+     --fiche-text   texte courant
+     --fiche-note   note, source, heure du relevé
+   À BANNIR dans la fiche : sur-titres en capitales espacées, numéros de section, chaînes reliées par des points médians,
+   cartes dans des cartes, bordures partout. Casse de phrase. Deux graisses au plus par bloc. */
+
+/* ================= Jetons ================= */
+.ocean-v2 #detail{
+  --fiche-num:42px;--fiche-unit:15px;--fiche-title:23px;--fiche-label:14.5px;--fiche-text:15.5px;--fiche-note:13px;
+  --fiche-gap:26px;        /* entre deux sections d’un onglet */
+  --fiche-radius:18px;     /* cartes ; 999px pour les pastilles et les boutons */
+  --fiche-soft:var(--t-ink2);
+  --fiche-wash:color-mix(in srgb,var(--t-main) 7%,var(--t-card));   /* fond d’une carte légère */
+  --fiche-hair:color-mix(in srgb,var(--t-ink) 12%,transparent);     /* filet discret */
+}
+
+/* ================= Composants (à réutiliser dans tous les onglets) ================= */
+/* Titre de section, texte, note. */
+#detail .fx-title{margin:0;font:800 var(--fiche-title)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
+#detail .fx-title-s{font-size:calc(var(--fiche-title) * .8)}
+#detail .fx-text{margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+#detail .fx-label{font:600 var(--fiche-label)/1.25 var(--body);color:var(--fiche-soft);letter-spacing:0;text-transform:none}
+#detail .fx-note,#detail .fx-stamp{font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft);letter-spacing:0;text-transform:none}
+/* Grand chiffre, unité, mot à la place d’un chiffre (« Descendante »). */
+#detail .fx-num{font:800 var(--fiche-num)/.95 var(--display);letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--t-ink)}
+#detail .fx-num.is-none{color:color-mix(in srgb,var(--t-ink) 35%,transparent)}
+#detail .fx-unit{font:500 var(--fiche-unit)/1.2 var(--body);color:var(--fiche-soft)}
+#detail .fx-word{font:700 calc(var(--fiche-num) * .52)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);overflow-wrap:anywhere}
+/* Pictogramme en trait. */
+#detail .fx-ic{flex:none;width:26px;height:26px;color:var(--t-ink)}
+/* Points de danger (quatre points, rouges jusqu’au niveau). */
+#detail .fx-dots{display:inline-flex;gap:4px;flex:none}
+#detail .fx-dots i,#detail .dtab-dots i{display:block;width:9px;height:9px;border-radius:50%;background:color-mix(in srgb,var(--t-ink) 20%,transparent)}
+#detail .fx-dots i.on,#detail .dtab-dots i.on{background:var(--t-danger)}
+/* Relevé : pictogramme, libellé, grand chiffre et unité, sous-ligne facultative. Posé sur le fond, sans cadre. */
+#detail .fx-readings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:20px 14px;align-items:start}
+#detail .fx-reading{display:grid;grid-template-columns:26px minmax(0,1fr);column-gap:11px;row-gap:2px;align-items:start;align-content:start;min-width:0}
+#detail .fx-reading>.fx-ic{grid-row:1 / span 2;margin-top:1px}
+#detail .fx-reading>.fx-label{grid-column:2}
+#detail .fx-reading>.fx-value{grid-column:2;display:flex;align-items:baseline;flex-wrap:wrap;column-gap:7px;min-height:calc(var(--fiche-num) * .95)}
+#detail .fx-reading>.fx-sub{grid-column:2;font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft);min-height:calc(var(--fiche-note) * 1.3)}
+#detail .fx-reading-note{grid-column:1 / -1;margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--fiche-soft)}
+/* Ligne : pictogramme et phrase (« Ton créneau »). */
+#detail .fx-line,#detail .fx-slot{display:grid;grid-template-columns:26px minmax(0,1fr);column-gap:11px;row-gap:3px;align-items:center}
+/* Carte légère (jour de prévision, urgences) : pour ce qui se touche ou se compare. */
+#detail .fx-card{border-radius:var(--fiche-radius);background:var(--fiche-wash);padding:14px 14px 13px;border:0;box-shadow:none}
+/* Pastille. */
+#detail .fx-pill{display:inline-flex;align-items:center;gap:6px;min-height:30px;padding:0 12px;border-radius:999px;background:var(--fiche-wash);font:600 var(--fiche-note)/1 var(--body);color:var(--t-ink)}
+/* Sans niveau choisi : un bouton court en pastille, le même dans Conditions, Prévisions et Sécurité (spot-before.js,
+   levelButton) ; ni bordure ni grand cadre. Dans Prévisions, il suit le libellé « Ton meilleur jour ». */
+html .ocean-v2 #detail .db-level{display:inline-flex;align-items:center;gap:8px;width:auto;max-width:100%;min-height:44px;margin:0;padding:10px 18px;box-sizing:border-box;
+  border:0;border-radius:999px;background:var(--fiche-wash);color:var(--t-main);font:700 var(--fiche-label)/1.25 var(--body);text-align:start;white-space:normal}
+html .ocean-v2 #detail .db-level::after{margin-left:0;margin-inline-start:2px}
+#detail .fx-level-line{display:flex;flex-wrap:wrap;align-items:center;gap:6px 12px;margin:0 0 12px}
+/* Section repliable : la même tête dans tous les onglets (replis.js). Une ligne posée sur le fond, sans cadre ni bordure :
+   le titre, une précision, et un chevron dans un rond, qui se remplit quand la section est ouverte. */
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head{min-height:48px;margin:6px 0 0;padding:4px 0;border:0;border-radius:0;background:none}
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head .obf-tx b{font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head .obf-tx small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft);white-space:normal;overflow:visible;text-overflow:clip}
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head .obf-chev{width:30px;height:30px;background:var(--fiche-wash);color:var(--t-main)}
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head[aria-expanded="true"]{margin-bottom:10px}
+html .ocean-v2 #detail :is(.dcat,.fx-notes) .obf-head[aria-expanded="true"] .obf-chev{background:var(--t-main);color:var(--t-on-main)}
+/* Lien d’action discret (« Toutes les prévisions »). */
+#detail .fx-more{display:inline-flex;align-items:center;gap:8px;min-height:44px;margin:0;padding:0 2px;border:0;background:none;font:700 var(--fiche-label)/1 var(--body);color:var(--t-main);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#detail .fx-more::after{content:"";width:7px;height:7px;border-top:2px solid currentColor;border-right:2px solid currentColor;transform:rotate(45deg)}
+[dir=rtl] #detail .fx-more::after{transform:rotate(-135deg)}
+#detail .fx-more:focus-visible,#detail .fx-alert:focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
+/* Alerte : danger élevé, phrase entière, jamais coupée. Première ligne : les points, le niveau, le lien. */
+#detail .fx-alert{display:grid;gap:5px;width:100%;box-sizing:border-box;margin:0 0 20px;padding:11px 14px 12px;border:0;border-radius:var(--fiche-radius);
+  background:color-mix(in srgb,var(--t-danger) 9%,var(--t-card));color:var(--t-ink);font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#detail .fx-alert-top{display:flex;flex-wrap:wrap;align-items:center;gap:4px 9px}
+#detail .fx-alert-top b{font:700 var(--fiche-text)/1.3 var(--body);color:var(--t-danger)}
+#detail .fx-alert-go{margin-inline-start:auto;font:700 var(--fiche-note)/1.3 var(--body);color:var(--t-ink);text-decoration:underline;text-underline-offset:3px}
+#detail .fx-alert-tx{font:400 var(--fiche-text)/1.4 var(--body);color:var(--t-ink)}
+
+/* ================= En-tête compact ================= */
+/* Environ un tiers de l’écran : la rangée d’onglets et les relevés se lisent sans défiler. Le nom, le lieu, les pastilles
+   niveau et sport, le crédit de la photo (obligatoire, petit). La température de l’eau du mois se lit dans Saisons. */
+@media(max-width:700px){
+  html .ocean-v2 #detail #detailHero{min-height:clamp(400px,62dvh,600px);height:auto}
+  html .ocean-v2 #detail #detailHero .htxt{padding:16px 20px 6px}
+  html .ocean-v2 #detail #detailHero h2{font-size:clamp(34px,10vw,46px);line-height:1}
+  html .ocean-v2 #detail #detailHero .eyebrow{display:none}
+  html .ocean-v2 #detail #detailHero .dfacts{padding-bottom:16px}
+}
+@media(min-width:701px){html .ocean-v2 #detail #detailHero{min-height:clamp(300px,40vh,420px)}}
+#detail .detail-hero .dfact-sea{display:none}
+/* « Voir la photo » : une pastille discrète sous le bouton de partage, sur une ligne (elle ne touche jamais les pastilles
+   niveau et sport du bas de la photo). */
+html body[data-screen=detail] #detail #detailHero .hero-more{min-height:34px;padding:0 12px;border-radius:999px;border:0;
+  background:color-mix(in srgb,var(--t-scrim) 55%,transparent);color:var(--t-on-main);font:600 var(--fiche-note)/1 var(--body)}
+html #detail #detailHero .hero-more>b{display:none}
+
+/* ================= Rangée d’onglets ================= */
+/* Texte seul, collée en haut au défilement ; l’onglet Sécurité porte les points de danger du spot. */
+.ocean-v2 #detail .dtabs{gap:22px;min-height:50px;margin-bottom:18px;align-items:stretch;justify-content:flex-start;overflow-x:auto;scrollbar-width:none}
+.ocean-v2 #detail .dtabs::-webkit-scrollbar{display:none}
+.ocean-v2 #detail .dtab{flex:0 0 auto;display:inline-flex;flex-direction:row;align-items:center;gap:7px;min-height:50px;padding:0 1px;font:500 16px/1 var(--body);letter-spacing:0;color:var(--fiche-soft)!important;white-space:nowrap}
+.ocean-v2 #detail .dtab.active{font-weight:700;color:var(--t-main)!important}
+.ocean-v2 #detail .dtab.active::after{height:3px;border-radius:3px 3px 0 0}
+#detail .dtab-dots{display:inline-flex;gap:3px}
+#detail .dtab-dots[hidden]{display:none}
+#detail .dtab-dots i{width:7px;height:7px}
+@media(max-width:430px){.ocean-v2 #detail .dtabs{gap:20px}}
+
+/* Panneaux : fondu court à l’affichage (motion.css), colonnes souples, rien ne déborde. */
+.ocean-v2 #detail .dcat{min-width:0}
+
+/* =====================================================================================================
+   ONGLET CONDITIONS (data-cat="meteo", data-view="now")
+   ===================================================================================================== */
+/* Deux vues du même panneau : « now » (Conditions) et « forecast » (Prévisions). */
+#detail .dcat[data-cat="meteo"][data-view="now"]:not([data-forecast="open"]) [data-fx-view="forecast"],
+#detail .dcat[data-cat="meteo"][data-view="forecast"] [data-fx-view="now"],
+#detail .dcat[data-cat="meteo"][data-view="forecast"]>:is(#dNow,.obf-head[data-obf-group="lire"],#sdCoach,#imWeatherHelp){display:none!important}
+/* Repris par les relevés : l’ancienne grille, son sur-titre et le bloc « comparé à la normale » ne sont plus affichés. */
+#detail .dcat[data-cat="meteo"]>:is(#dCondHead,#dWeather,#sdVsNormal){display:none!important}
+/* Ordre : activité, maintenant, prochains jours, puis l’aide. */
+#detail .dcat[data-cat="meteo"]>#immersionContext{order:0}
+#detail .dcat[data-cat="meteo"]>#dNow{order:1}
+#detail .dcat[data-cat="meteo"]>#spotWeek{order:2;margin:0}
+#detail .dcat[data-cat="meteo"]>:is(.obf-head[data-obf-group="lire"],#sdCoach,#imWeatherHelp){order:3}
+
+/* Sélecteur d’activité (spots à plusieurs activités) : pastilles, sans titre. */
+#detail .dcat[data-cat="meteo"]>#immersionContext{display:block;margin:0 0 18px;padding:0;border:0;background:none;box-shadow:none}
+#detail .dcat[data-cat="meteo"]>#immersionContext[hidden]{display:none}
+#detail #immersionContext .im-context-title{display:none}
+#detail #immersionContext .im-activity-choices{display:flex;flex-wrap:wrap;gap:8px;margin:0;padding:0}
+#detail #immersionContext .im-activity-choices button{display:inline-flex;flex-direction:row;align-items:center;gap:7px;width:auto;min-width:0;height:auto;min-height:40px;padding:0 14px 0 8px;border:0;border-radius:999px;background:var(--fiche-wash);color:var(--t-ink);font:600 var(--fiche-label)/1 var(--body);box-shadow:none}
+#detail #immersionContext .im-activity-choices button[aria-pressed="true"]{background:var(--t-main);color:var(--t-on-main)}
+#detail #immersionContext .im-activity-choices button img,#detail #immersionContext .im-activity-choices button svg{flex:none;width:26px;height:26px;margin:0;border-radius:50%}
+#detail #immersionContext .im-activity-choices button span{position:static;font:inherit;color:inherit;white-space:nowrap}
+
+/* Maintenant. */
+#detail .fx-now{margin:0 0 var(--fiche-gap)}
+#detail .fx-head{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin:0 0 14px}
+#detail .fx-now .fx-row{margin:0}
+/* Chargement : mêmes cases et même hauteur que les relevés ; une barre claire à la place du chiffre. */
+#detail .fx-readings.db-wait{color:inherit;-webkit-user-select:auto;user-select:auto;min-height:0}
+#detail .fx-readings.db-wait::before{content:none}
+#detail .fx-wait{display:block;width:64px;height:calc(var(--fiche-num) * .62);margin:calc(var(--fiche-num) * .16) 0;border-radius:8px;background:var(--fiche-wash);animation:ob-wait 1.3s ease-in-out infinite}
+#detail .fx-readings{min-height:calc(2 * (var(--fiche-label) * 1.25 + var(--fiche-num) * .95 + var(--fiche-note) * 1.3 + 4px) + 20px)}
+#detail .fx-readings:has(>.fx-reading-note){min-height:0}
+#detail .fx-readings:has(>.fx-reading-note:only-child){min-height:calc(var(--fiche-text) * 3)}
+#detail .fx-readings>.db-muted{grid-column:1 / -1;font:600 var(--fiche-text)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .fx-readings>.ob-retry{grid-column:1 / -1;justify-self:start}
+/* Ton créneau : une ligne. */
+#detail .fx-slot{margin:22px 0 0;padding:14px 0 0;border-top:1px solid var(--fiche-hair);align-items:start}
+#detail .fx-slot>.fx-ic{color:var(--t-sun);margin-top:-1px}
+#detail .fx-slot-k{grid-column:2;font:600 var(--fiche-label)/1.25 var(--body);color:var(--fiche-soft)}
+#detail .fx-slot>.db-v{grid-column:2;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 10px;min-height:calc(var(--fiche-text) * 1.4);font:400 var(--fiche-text)/1.4 var(--body);color:var(--t-ink)}
+#detail .fx-slot>.db-v b{font-weight:700}
+#detail .fx-slot .db-q{font:600 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail .fx-slot .db-muted{color:var(--fiche-soft)}
+#detail .fx-slot .fx-caution{flex-basis:100%;margin:6px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .fx-slot .db-level{margin:4px 0 0}
+/* Les prochains jours : trois cartes légères et un lien. */
+#detail .fx-next{margin:0 0 var(--fiche-gap)}
+#detail .fx-next>.fx-title{margin:0 0 12px}
+#detail .fx-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+#detail .fx-day{display:grid;gap:7px;min-width:0;padding:13px 11px 12px;border-radius:var(--fiche-radius);background:var(--fiche-wash)}
+#detail .fx-day.is-today{background:color-mix(in srgb,var(--t-sun) 22%,var(--t-card))}
+#detail .fx-day>b{font:700 var(--fiche-label)/1.2 var(--body);color:var(--t-ink);overflow-wrap:anywhere}
+#detail .fx-day-row{display:flex;align-items:center;gap:6px;min-width:0;font:500 var(--fiche-note)/1.2 var(--body);font-variant-numeric:tabular-nums;color:var(--t-ink);white-space:nowrap}
+#detail .fx-day-row .fx-ic{width:18px;height:18px;color:var(--fiche-soft)}
+#detail .fx-next>.fx-more{margin-top:6px}
+/* Pied : source du modèle et aide. */
+#detail .dcat[data-cat="meteo"] .spot-week-note,#detail .dcat[data-cat="meteo"] .wx-source{margin:0 0 6px;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="meteo"] .wx-source a{color:inherit}
+#detail .dcat[data-cat="meteo"]>.obf-head[data-obf-group="lire"]{margin-top:14px}
+
+/* fin de la section Conditions (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET PRÉVISIONS (data-cat="meteo", data-view="forecast")
+   ===================================================================================================== */
+/* Deux titres (« Les 7 jours », « Heure par heure »), posés sur le fond ; l’heure du relevé et les sources en pied.
+   Plus de sur-titre, plus de « Max du jour » isolé, plus de cartes dans des cartes. */
+#detail .dcat[data-cat="meteo"] .wx-block{margin:0 0 var(--fiche-gap)}
+#detail .dcat[data-cat="meteo"] .wx-block>.fx-title{margin:0 0 10px}
+#detail .fx7-why{margin:0 0 10px}
+/* Les 7 jours : une ligne par jour, colonnes alignées (jour, ciel, air, houle, période, vent), chiffres tabulaires. */
+/* Une seule grille pour l’en-tête et les sept lignes (sous-grilles) : chaque colonne prend la largeur de son contenu le
+   plus long, le jour prend le reste ; les colonnes restent alignées d’une ligne à l’autre, sans largeur fixée à la main. */
+#detail .fx7{display:grid;grid-template-columns:minmax(max-content,1fr) repeat(5,auto);column-gap:9px;min-width:0}
+#detail .fx7.is-inland{grid-template-columns:minmax(max-content,1fr) repeat(3,auto)}
+#detail .fx7-head,#detail .fx7-list,#detail .fx7-row,#detail .fx7-btn{display:grid;grid-column:1 / -1;grid-template-columns:subgrid;align-items:center}
+#detail .fx7-head{padding:0 8px 4px;font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail .fx7-head>span{text-align:end;white-space:nowrap}
+#detail .fx7-list{margin:0;padding:0;list-style:none}
+#detail .fx7-row>:not(.fx7-btn){grid-column:1 / -1;min-width:0;contain:inline-size}
+#detail .fx7-row{border-bottom:1px solid var(--fiche-hair)}
+#detail .fx7-btn{width:100%;min-height:46px;margin:0;padding:0 8px;border:0;background:none;color:var(--t-ink);text-align:start;cursor:pointer;
+  font:500 var(--fiche-label)/1.2 var(--body);font-variant-numeric:tabular-nums;-webkit-tap-highlight-color:transparent}
+#detail .fx7-btn:focus-visible{outline:2px solid var(--t-main);outline-offset:-2px;border-radius:12px}
+#detail .fx7-day{font-weight:700;white-space:nowrap}
+#detail .fx7-btn .wx-sky{justify-self:center;color:var(--t-main)}
+#detail .fx7-btn .wx-sky svg{width:22px;height:22px}
+#detail .fx7-c{text-align:end;white-space:nowrap}
+#detail .fx7-wave{font-weight:700}
+#detail .fx7-wind small{margin-inline-start:4px;font:inherit;color:var(--fiche-soft)}
+/* Le meilleur jour (créneau calculé par le code du modèle) : une touche de jaune soleil, ses heures et sa qualité. */
+#detail .fx7-row.is-best{border-bottom-color:transparent;border-radius:var(--fiche-radius);background:color-mix(in srgb,var(--t-sun) 20%,var(--t-card))}
+#detail .fx7-row:has(+ .fx7-row.is-best){border-bottom-color:transparent}
+#detail .fx7-best{display:grid;grid-template-columns:22px minmax(0,1fr) auto;column-gap:8px;row-gap:4px;align-items:center;padding:0 8px 11px}
+#detail .fx7-best>.fx-ic{width:22px;height:22px;color:var(--t-sun)}
+#detail .fx7-best-tx{min-width:0;font:400 var(--fiche-label)/1.3 var(--body);color:var(--t-ink)}
+#detail .fx7-best-tx b{font-weight:700;white-space:nowrap}
+#detail .fx7-q{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft);white-space:nowrap}
+#detail .fx7-caution{grid-column:2 / -1;margin:2px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--t-ink)}
+#detail .fx7-calc{grid-column:2 / -1;margin:2px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+/* L’autre jour calculé : sa ligne de créneau sous son jour, sans fond jaune (le jaune reste au meilleur jour). */
+#detail .fx7-alt{padding-top:0}
+/* Détail d’un jour, au toucher : rafales, pluie, UV, lever, coucher. */
+#detail .fx7-more{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0;padding:0 8px 12px}
+#detail .fx7-more[hidden]{display:none}
+#detail .fx7-more>div{display:flex;align-items:baseline;gap:6px;margin:0}
+#detail .fx7-more dt{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail .fx7-more dd{margin:0;font:600 var(--fiche-note)/1.3 var(--body);font-variant-numeric:tabular-nums;color:var(--t-ink)}
+#detail .fx7-hint{margin:8px 0 0}
+/* Heure par heure : 48 colonnes ouvertes qui défilent à l’horizontale, première colonne fixe, posé sur le fond. */
+#detail .wx-hours .wx-scroll{border:0;border-radius:0;background:none;margin:0 -2px}
+#detail .wx-hours .wx-table{font:500 var(--fiche-note)/1.2 var(--body);font-variant-numeric:tabular-nums;color:var(--t-ink)}
+#detail .wx-hours .wx-table th,#detail .wx-hours .wx-table td{padding:4px 3px;min-width:42px}
+#detail .wx-hours .wx-table th[scope=row],#detail .wx-hours .wx-table .wx-corner{min-width:62px;padding-inline-start:2px;background:var(--t-page);box-shadow:1px 0 var(--fiche-hair);font:600 var(--fiche-note)/1.2 var(--body);color:var(--fiche-soft)}
+#detail .wx-hours .wx-table th[scope=row] small,#detail .wx-hours .wx-table td small{font:400 calc(var(--fiche-note) * .85)/1.2 var(--body);color:var(--fiche-soft)}
+#detail .wx-hours .wx-days th{padding:2px 0 4px;border-left:1px solid var(--fiche-hair)}
+#detail .wx-hours .wx-days b{font:700 var(--fiche-note)/1.2 var(--body);color:var(--t-ink)}
+#detail .wx-hours .wx-hrow th{font:700 var(--fiche-note)/1.2 var(--body);color:var(--t-ink)}
+#detail .wx-hours .wx-table .is-day0{border-left:1px solid var(--fiche-hair)}
+#detail .wx-hours .wx-table .is-night{background:color-mix(in srgb,var(--t-main) 7%,var(--t-page))}
+#detail .wx-hours .wx-table .is-slot{background:color-mix(in srgb,var(--t-sun) 26%,var(--t-page))}
+#detail .wx-hours .wx-legend{margin:8px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+/* Pied : l’heure du relevé, puis les notes et la source communes aux deux vues. */
+#detail .fx7-stamp{margin:0 0 6px}
+
+/* fin de la section Prévisions (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET SÉCURITÉ (data-cat="securite") : rien de replié, rien de tronqué
+   ===================================================================================================== */
+/* L’intertitre « Sécurité » de l’ancien onglet Conditions n’a plus lieu d’être : l’onglet porte ce nom. */
+.ocean-v2 #detail .dcat[data-cat="securite"]{margin-top:0}
+.ocean-v2 #detail .dcat[data-cat="securite"]::before{content:none!important;display:none!important}
+.ocean-v2 #detail .dcat[data-cat="securite"]:not([style*="none"]){display:flex;flex-direction:column}
+/* Ordre : danger et danger principal, urgences, dangers à surveiller, baïnes et courants, courants du moment, drapeaux
+   et notes. RIEN n’est replié ni coupé dans cet onglet, à aucune largeur et dans aucune langue. */
+#detail .dcat[data-cat="securite"]>*{order:5;min-width:0}
+#detail .dcat[data-cat="securite"]>#dDanger{order:1}
+#detail .dcat[data-cat="securite"]>.safety-block{order:2}
+#detail .dcat[data-cat="securite"]>.sx-watch{order:3}
+#detail .dcat[data-cat="securite"]>#sdRip{order:4}
+#detail .dcat[data-cat="securite"]>#spotSafetyLive{order:6}
+#detail .dcat[data-cat="securite"]>.sx-foot{order:7}
+/* Les blocs de l’onglet sont posés sur le fond (pas de carte, pas de bordure), sauf les urgences : une carte, parce
+   qu’elle se touche. */
+html .ocean-v2 #detail .dcat[data-cat="securite"]>:is(.block,.spot-safety-live,.sx-foot){margin:0 0 var(--fiche-gap);padding:0;border:0;border-radius:0;background:none!important;box-shadow:none;color:var(--t-ink)}
+#detail .dcat[data-cat="securite"] .fx-title{margin:0 0 12px}
+
+#detail .fx-danger{margin:0 0 var(--fiche-gap)}
+#detail .fx-danger-head{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 8px}
+#detail .fx-danger-head .fx-dots i{width:12px;height:12px}
+#detail .fx-danger-text{margin:0 0 8px;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+#detail .fx-fit{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px;margin:0 0 8px}
+#detail .fx-danger .fx-note{display:block}
+/* Sans niveau choisi : un bouton court en pastille (sans bordure ni grand cadre), qui ouvre le choix du niveau. */
+html .ocean-v2 #detail #dDanger .sx-level{display:inline-flex;align-items:center;gap:8px;width:auto;max-width:100%;min-height:44px;margin:0;padding:10px 18px;box-sizing:border-box;
+  border:0;border-radius:999px;background:var(--fiche-wash);color:var(--t-main);font:700 var(--fiche-label)/1.25 var(--body);text-align:start;white-space:normal}
+html .ocean-v2 #detail #dDanger .sx-level::after{margin-left:0;margin-inline-start:2px}
+
+/* Urgences : une carte. Le libellé, le numéro en grand et le bouton rouge « Appeler le {numéro} » sur une rangée, puis
+   les secours en mer, les autres numéros, le poste de secours et la date de vérification. Les nœuds de app.js gardent
+   leurs id ; .safety-call et .sc-info s’effacent (display:contents) pour que la carte les range sur une seule grille. */
+html .ocean-v2 #detail .dcat[data-cat="securite"]>.safety-block{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:16px;align-items:center;
+  padding:16px 16px 12px;border:0!important;border-radius:var(--fiche-radius);background:var(--fiche-wash)!important}
+html .ocean-v2 #detail .sx-urg :is(.safety-call,.sc-info){display:contents}
+html .ocean-v2 #detail .sx-urg .sc-lab{grid-column:1 / -1;grid-row:1;display:flex;align-items:center;gap:10px;margin:0 0 6px;font:600 var(--fiche-label)/1.25 var(--body);letter-spacing:0;text-transform:none;color:var(--t-ink)}
+html .ocean-v2 #detail .sx-urg .sc-lab .fx-ic{width:24px;height:24px}
+html .ocean-v2 #detail .dcat[data-cat="securite"] .sx-urg .sc-num{grid-column:1;grid-row:2;font:800 var(--fiche-num)/.95 var(--display);letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--t-ink);overflow-wrap:anywhere}
+html .ocean-v2 #detail .sx-urg #dCall{grid-column:2;grid-row:2;justify-self:stretch;display:flex;align-items:center;justify-content:center;gap:8px;min-width:0;min-height:52px;margin:0;padding:8px 16px;box-sizing:border-box;
+  border:0;border-radius:999px;background:var(--t-danger);color:var(--t-on-alert);font:700 var(--fiche-text)/1.2 var(--body);text-align:center;white-space:normal;box-shadow:none;text-decoration:none}
+html .ocean-v2 #detail .sx-urg #dCall .uic{width:18px;height:18px;flex:none;color:currentColor}
+html .ocean-v2 #detail .sx-urg #dCall:focus-visible{outline:2px solid var(--t-danger);outline-offset:3px}
+/* Pas de numéro composable (« À confirmer ») : le texte prend toute la largeur. */
+html .ocean-v2 #detail .sx-urg:has(#dCall[hidden]) .sc-num{grid-column:1 / -1;font-size:calc(var(--fiche-num) * .62);line-height:1.1}
+html .ocean-v2 #detail .sx-urg :is(#dSea,#dEmergMore){grid-column:1 / -1;margin:10px 0 0;font:400 var(--fiche-text)/1.4 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .sx-urg #dEmergMore{grid-row:4;margin-top:4px}
+html .ocean-v2 #detail .sx-urg #dEmergMore .sc-sea{margin:2px 0 0;font:inherit;color:inherit}
+html .ocean-v2 #detail .sx-urg #dSea{grid-row:3}
+html .ocean-v2 #detail .sx-urg #dEmergMore[hidden],html .ocean-v2 #detail .sx-urg #dEmergChecked[hidden]{display:none}
+html .ocean-v2 #detail .sx-urg #dRescue{grid-column:1 / -1;grid-row:5;justify-self:start;display:inline-flex;align-items:center;gap:9px;width:auto;min-width:0;min-height:44px;margin:6px 0 0;padding:0 2px;
+  border:0;border-radius:0;background:none;box-shadow:none;font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-main);text-align:start;cursor:pointer}
+html .ocean-v2 #detail .sx-urg #dRescue .uic{width:20px;height:20px;flex:none;padding:0;background:none;color:currentColor}
+html .ocean-v2 #detail .sx-urg #dEmergChecked{grid-column:1 / -1;grid-row:6;margin:0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+
+/* À surveiller : une ligne par danger, pictogramme et phrase entière. Le danger principal (première ligne, data-main)
+   est déjà écrit en tête de l’onglet : il n’est pas répété. Sans autre danger, le bloc ne s’affiche pas. */
+#detail .sx-watch #dDangers>.danger-item[data-main]{display:none}
+html .ocean-v2 #detail .dcat[data-cat="securite"]>.sx-watch:has(#dDangers>.danger-item[data-main]):not(:has(#dDangers>.danger-item:not([data-main]))){display:none}
+html .ocean-v2 #detail .sx-watch .danger-item{display:grid;grid-template-columns:28px minmax(0,1fr);column-gap:14px;align-items:start;margin:0;padding:9px 0;border:0;background:none;
+  font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+/* Pictogramme en trait (dangerTrait, app.js), couleur du texte, aligné sur la première ligne de la phrase. */
+html .ocean-v2 #detail .sx-watch .danger-item .di{display:block;width:28px;height:28px;padding:0;border-radius:0;background:none!important;box-shadow:none;margin-top:-2px;color:var(--t-ink)!important}
+html .ocean-v2 #detail .sx-watch .danger-item .di .fx-ic{display:block;width:28px;height:28px;color:inherit}
+html .ocean-v2 #detail .sx-watch #dDangers>p{margin:0 0 4px;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+/* Sans danger listé : « Danger non évalué » est déjà le titre de l’onglet, seule la consigne reste ici. */
+#detail .sx-watch #dDangers>p[data-unrated]{display:none}
+html .ocean-v2 #detail .sx-watch .carnet-unverified{font:400 var(--fiche-note)/1.4 var(--body)!important;color:var(--fiche-soft)!important}
+
+/* Repérer une baïne ou un courant, Si tu es emporté : listes courtes, texte entier, sources dessous. */
+html .ocean-v2 #detail .dcat[data-cat="securite"]>#sdRip h4{display:block;margin:0 0 10px;font:800 calc(var(--fiche-title) * .8)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
+html .ocean-v2 #detail #sdRip h4 svg{display:none}
+html .ocean-v2 #detail #sdRip .sd-rip-part+.sd-rip-part{margin-top:var(--fiche-gap);padding-top:0;border-top:0}
+/* Consignes en étapes (19 nov.) : un titre de quelques mots toujours affiché, son détail d’un toucher (.is-detail).
+   « Si tu es emporté » est une suite d’actions, numérotée ; les signes d’un courant ont un simple point. */
+html .ocean-v2 #detail #sdRip .sx-steps{display:grid;gap:12px;margin:0;padding:0;list-style:none}
+html .ocean-v2 #detail #sdRip .sx-step{display:grid;grid-template-columns:26px minmax(0,1fr);column-gap:11px;align-items:start;margin:0;padding:0}
+html .ocean-v2 #detail #sdRip .sx-step-n{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--t-main);color:var(--t-on-main);font:700 var(--fiche-note)/1 var(--body);font-variant-numeric:tabular-nums}
+html .ocean-v2 #detail #sdRip .sx-step-dot{width:8px;height:8px;margin:9px 9px 0;border-radius:50%;background:var(--t-main)}
+html .ocean-v2 #detail #sdRip .sx-step-tx{display:grid;gap:2px;min-width:0;padding-top:2px}
+html .ocean-v2 #detail #sdRip .sx-step-tx b{font:600 var(--fiche-text)/1.35 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail #sdRip .sx-step-more{display:none;font:400 var(--fiche-note)/1.45 var(--body);color:var(--fiche-soft)}
+html .ocean-v2 #detail #sdRip .sd-rip-part.is-detail .sx-step-more{display:block}
+html .ocean-v2 #detail #sdRip .sx-steps-more{margin:4px 0 0 35px}
+html .ocean-v2 #detail #sdRip .sx-steps-more[hidden]{display:none}
+/* Valeur de modèle des courants : repliée (replis.js, groupe « courants ») ; son titre est celui de la ligne. */
+#detail .dcat[data-cat="securite"]>.obf-head[data-obf-group="courants"]{order:6;margin:0 0 var(--fiche-gap)}
+#detail .dcat[data-cat="securite"]>.obf-head[data-obf-group="courants"][aria-expanded="true"]{margin-bottom:12px}
+html .ocean-v2 #detail #spotSafetyLive .safety-live-head .fx-title{display:none}
+html .ocean-v2 #detail .dcat[data-cat="securite"] :is(.sd-coach-src,.sd-src,.sd-rip-part>p,.sd-rip-part a){font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+
+/* Courants et dangers à vérifier (données du moment) : titre, heure du modèle en note, schéma, deux relevés sans carte. */
+html .ocean-v2 #detail #spotSafetyLive .safety-live-head{display:block;margin:0 0 12px}
+html .ocean-v2 #detail #spotSafetyLive .safety-live-head .fx-title{margin:0 0 4px}
+html .ocean-v2 #detail #spotSafetyLive .safety-live-pill{display:block;padding:0;border:0;border-radius:0;background:none;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft);white-space:normal}
+html .ocean-v2 #detail #spotSafetyLive .safety-diagram{margin:0 0 12px;border-radius:var(--fiche-radius);overflow:hidden}
+/* Légendes du schéma en casse de phrase (spot-experience.js), sans approche élargie : un peu plus grandes qu’avant. */
+html .ocean-v2 #detail #spotSafetyLive .safety-diagram text{font-weight:700;font-size:var(--fiche-note);font-family:var(--body);letter-spacing:0}
+html .ocean-v2 #detail #spotSafetyLive .safety-readings{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:4px 0 10px}
+html .ocean-v2 #detail #spotSafetyLive .safety-readings>span{display:grid;gap:3px;align-content:start;min-width:0;padding:0;border:0;background:none;box-shadow:none}
+html .ocean-v2 #detail #spotSafetyLive .safety-readings b{font:800 calc(var(--fiche-num) * .62)/1.05 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--t-ink);overflow-wrap:anywhere}
+html .ocean-v2 #detail #spotSafetyLive .safety-readings small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+html .ocean-v2 #detail #spotSafetyLive :is(.safety-disclaimer,.safety-tip-source){font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+html .ocean-v2 #detail #spotSafetyLive .safety-tips{gap:10px;margin:0 0 12px}
+html .ocean-v2 #detail #spotSafetyLive .safety-tips li{padding:0;border:0;border-radius:0;background:none;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+
+/* Drapeaux de baignade et avertissements : texte entier, en pied d’onglet. */
+html .ocean-v2 #detail .sx-foot .flags{margin:0 0 14px}
+html .ocean-v2 #detail .sx-foot .fl-title{display:block;margin:0 0 8px}
+html .ocean-v2 #detail .sx-foot .field-flags-note{margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .sx-foot .safety-note{margin:0;padding:0;border:0;border-radius:0;background:none;font:400 var(--fiche-note)/1.45 var(--body);color:var(--fiche-soft)}
+
+/* fin de la section Sécurité (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET LE SPOT (data-cat="infos")
+   ===================================================================================================== */
+/* Déjà dans l’en-tête de la fiche : les tuiles « Ton activité / Le cadre / Repère de niveau ». */
+#detail .dcat[data-cat="infos"] #fieldAtAGlance{display:none!important}
+/* Numéros de chapitre des sections du guide. */
+#detail .guide-chapter-number{display:none!important}
+/* Les pastilles « Le mot du coin », « À goûter », « Dès … la nuit » : le mot et le plat sont sur la ligne vers la page
+   culture du pays (spot-guide.js), la nuit se lit dans Préparer. */
+#detail .dcat[data-cat="infos"] #guideGlance{display:none!important}
+
+/* Ordre : description, Le savais-tu ?, repères pratiques, conseil de Poulpy, le bon geste et la culture du pays,
+   sources et crédits, puis les replis « Photos et carte » et « Comprendre le spot », et « J’ai surfé ici » en bas.
+   Tout est posé sur le fond : ni carte, ni bordure (les replis se touchent : pastille de fond léger). */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>:is(.block,.field-visit,#guideSpirit,.field-reference){margin:0 0 var(--fiche-gap);padding:0;border:0;border-radius:0;background:none!important;box-shadow:none;color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .fx-title{margin:0 0 10px}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.block>h4{display:flex;align-items:center;gap:10px;margin:0 0 10px;font:800 calc(var(--fiche-title) * .8)/1.1 var(--display);letter-spacing:-.02em;text-transform:none;color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.block>h4>svg{display:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-story>h4{display:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.block p{margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+
+/* La description entière, en texte courant, puis sa provenance et les coordonnées en note. */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-story{padding:0}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #dDesc{margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-story .spot-provenance{display:block;margin:10px 0 0!important;padding:0;border:0;border-radius:0;background:none;font:400 var(--fiche-note)/1.4 var(--body)!important;color:var(--fiche-soft)!important}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .spot-provenance a{color:inherit}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-story>.field-coordinates{margin:4px 0 0;font:400 var(--fiche-note)/1.4 var(--body);letter-spacing:0;color:var(--fiche-soft)}
+
+/* Le savais-tu ? et « La vraie histoire ». */
+html .ocean-v2 #detail .dcat[data-cat="infos"] .anec-more{margin:12px 0 0;padding:0;border:0}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .anec-more b{display:block;margin:0 0 4px;font:600 var(--fiche-label)/1.25 var(--body);letter-spacing:0;text-transform:none;color:var(--fiche-soft)}
+
+/* Repères pratiques : libellé, texte, sources de chaque ligne. */
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-visit dl{margin:0}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-visit-row{display:block;padding:0;margin:0 0 14px;border:0}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-visit-row dt{margin:0 0 2px;font:600 var(--fiche-label)/1.25 var(--body);letter-spacing:0;color:var(--fiche-soft)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-visit-row dd{margin:0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-visit-cites .field-visit-source{display:block;margin:4px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft);text-decoration:underline;text-underline-offset:3px}
+html .ocean-v2 #detail .dcat[data-cat="infos"] span.field-visit-source{text-decoration:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"] :is(.field-visit-caution,.field-visit-pending){margin:0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+
+/* Le conseil de Poulpy : son visage à côté du titre, le texte dessous. */
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-tip .tip-head{display:flex;align-items:center;gap:10px;margin:0 0 8px}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-tip .tip-head h4{margin:0;font:800 calc(var(--fiche-title) * .8)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-tip .tip-octo,html .ocean-v2 #detail .dcat[data-cat="infos"] .field-tip .tip-octo svg{width:34px;height:34px}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-tip .carnet-unverified{font:400 var(--fiche-note)/1.4 var(--body)!important;color:var(--fiche-soft)!important}
+
+/* Le bon geste, puis une ligne vers la page culture du pays (le mot du coin et le plat à goûter dessous). */
+#detail .sg-geste{margin:0 0 18px}
+/* Bon geste qui reprend le conseil de Poulpy et le prolonge : le conseil n’est pas répété au-dessus (spot-guide.js). */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-tip[data-in-geste]{display:none!important}
+#detail .sg-cult{display:grid;grid-template-columns:26px minmax(0,1fr) auto;column-gap:12px;align-items:center;width:100%;min-height:56px;margin:0;padding:12px 16px 12px 14px;box-sizing:border-box;
+  border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash);color:var(--t-ink);font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent}
+#detail .sg-cult::after{content:"";width:8px;height:8px;margin-inline-end:4px;border-top:2px solid var(--t-main);border-right:2px solid var(--t-main);transform:rotate(45deg)}
+[dir=rtl] #detail .sg-cult::after{transform:rotate(-135deg)}
+#detail .sg-cult-static{cursor:default}
+#detail .sg-cult-static::after{content:none}
+#detail .sg-cult:focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
+#detail .sg-cult .fx-ic{color:var(--t-main)}
+#detail .sg-cult-tx{display:grid;gap:3px;min-width:0}
+#detail .sg-cult-tx>b{font:700 var(--fiche-text)/1.25 var(--body);color:var(--t-ink);overflow-wrap:anywhere}
+#detail .sg-cult-bits{display:flex;flex-wrap:wrap;gap:2px 12px;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .sg-cult-bit{min-width:0;overflow-wrap:anywhere}
+#detail #guideSpirit>.fx-note{margin:8px 0 0}
+
+/* Sources du catalogue et crédit de la photo : des notes. */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-reference{display:grid;gap:4px;padding:0}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.field-reference>a,html .ocean-v2 #detail .dcat[data-cat="infos"] .field-reference .field-source{display:block;max-width:none;min-height:0;margin:0;text-align:start;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+/* Le libellé « Source du catalogue » sur sa ligne, le nom de la source dessous : aucun signe ajouté par le CSS (il
+   échapperait à la traduction). */
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-reference .field-source small{display:block;margin:0;font:inherit;letter-spacing:0;text-transform:none;color:inherit}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-reference .field-source b{font:inherit;color:inherit;text-decoration:underline;text-underline-offset:3px}
+/* La légende de la photo n’existe qu’en français (photo-catalog.js) : ailleurs, seul le crédit traduit reste. */
+html:not([lang="fr"]) #detail #fieldPhotoLink .fg-photo-cap{display:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-reference .field-source span{display:block}
+html .ocean-v2 #detail .dcat[data-cat="infos"] .field-source-pending{margin:0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+
+/* Replis « Photos et carte » et « Comprendre le spot » : une pastille de fond léger, sans bordure. */
+
+/* Dans « Photos et carte » : les sur-titres en capitales ne s’affichent pas (le titre et le texte disent la même chose). */
+html .ocean-v2 #detail .dcat[data-cat="infos"] :is(#spotVideoPanel .experience-heading small,#spotAreaMap .area-map-heading small,#obVoyageBanner small,.gallery-empty>small){display:none}
+/* Les photos et la carte du secteur sont posées sur le fond (ni filet, ni carte autour de la carte), avec les titres et
+   les notes de la fiche. Le lien des vidéos est une carte légère, parce qu’il se touche. */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>:is(#spotVideoPanel,#spotAreaMap){margin:0 0 var(--fiche-gap);padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"] :is(#spotVideoPanel .experience-heading b,#spotAreaMap .area-map-heading h3){margin:0 0 4px;font:800 calc(var(--fiche-title) * .8)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotVideoPanel .experience-heading i{margin:0;font:400 var(--fiche-note)/1.4 var(--body);font-style:normal;color:var(--fiche-soft)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotVideoPanel .experience-video-search{min-height:56px;border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotVideoPanel .experience-video-search>span:first-child{background:var(--t-card);color:var(--t-main)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotVideoPanel .experience-video-search b{font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotVideoPanel .experience-video-search small{font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotAreaMap .area-map-heading p{max-width:none;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotAreaMap .area-map-canvas{margin-top:12px;margin-inline:0;border:0;border-radius:var(--fiche-radius)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotAreaMap .area-map-legend{font:600 var(--fiche-note)/1.3 var(--body);color:var(--t-ink)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotAreaMap .area-map-footer{display:grid;gap:4px;justify-content:start;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+html .ocean-v2 #detail .dcat[data-cat="infos"] #spotAreaMap .area-map-footer a{display:inline-flex;align-items:center;min-height:44px;font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-main)}
+
+/* « J’ai surfé ici » (ou son équivalent), en bas de l’onglet : un bouton large, texte entier. */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:6px 10px;width:100%;min-height:52px;margin:16px 0 8px;padding:10px 18px;box-sizing:border-box;
+  border:0;border-radius:999px;background:var(--t-main)!important;color:var(--t-on-main);box-shadow:none!important;font:700 var(--fiche-text)/1.2 var(--body);letter-spacing:0;text-transform:none;white-space:normal;overflow:visible;text-align:center}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn::before,html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn::after{content:none!important;display:none!important;animation:none!important}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn .cta-xp{flex:none;padding:4px 9px;border:0;border-radius:999px;background:color-mix(in srgb,var(--t-on-main) 18%,transparent);color:inherit;font:600 var(--fiche-note)/1 var(--body)}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn :is(svg,img,.spico){flex:none}
+
+/* fin de la section Le spot (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET SAISONS (data-cat="saisons")
+   ===================================================================================================== */
+/* Même fond, même contenu : quand partir (douze mois), le mois choisi et ses relevés, « L’année en courbes » repliée, les
+   sources visibles. Le grand panneau sombre du mois passe au style clair ; plus de sur-titre ni de cartes à bordure. */
+#detail #dSeasons .sd-head{margin:0 0 14px}
+#detail #dSeasons .sd-head .fx-title{margin:0}
+#detail #dSeasons .sd-head p.sd-calc{margin:6px 0 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail #dSeasons .sd-head p.sd-gap{margin:10px 0 0;padding:10px 12px;border:0;border-radius:14px;background:var(--fiche-wash);font:400 var(--fiche-note)/1.45 var(--body);color:var(--t-ink)}
+/* Quand partir : la bande des douze mois, posée sur le fond. */
+#detail #dSeasons .sd-cal{margin:0 0 var(--fiche-gap);padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+#detail #dSeasons .sd-cal-row{padding:6px 0}
+#detail #dSeasons .sd-cal-row+.sd-cal-row:not(.sd-cal-head){border-top:0}
+#detail #dSeasons .sd-cal-act b{font:600 var(--fiche-label)/1.2 var(--body);color:var(--t-ink)}
+/* La période (« de septembre à mars ») s’écrit sous la rangée, sur toute la largeur, alignée sur le nom du sport : dans la
+   colonne du nom (80 px utiles), elle se cassait en trois lignes. */
+#detail #dSeasons .sd-cal-when{grid-column:1 / -1;margin:-6px 0 2px;padding-left:38px;font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail #dSeasons .sd-cal-m{font:500 var(--fiche-note)/1 var(--body);color:var(--fiche-soft)}
+#detail #dSeasons .sd-cal-m.now{font-weight:700;color:var(--t-ink)}
+#detail #dSeasons .sd-cell.sel{box-shadow:0 0 0 2px var(--t-page),0 0 0 4px var(--t-ink)}
+#detail #dSeasons .sd-legend{margin:2px 0 0;padding:6px 0 0;border-top:0}
+#detail #dSeasons .sd-legend span{font:400 var(--fiche-note)/1.2 var(--body);color:var(--fiche-soft)}
+/* « Bon » entre « Possible » et « Top » : une teinte à mi-chemin, distincte des deux (cases et légende). */
+#detail #dSeasons .sd-cell.l2,#detail #dSeasons .sd-legend i.l2{background:color-mix(in srgb,var(--g-soft) 50%,var(--g-main))}
+/* Le mois choisi : titre, flèches de mois, verdict, repère de combinaison, relevés. */
+#detail #dSeasons .sd-month{margin:0 0 var(--fiche-gap);padding:0;border-radius:0;background:none;box-shadow:none;color:var(--t-ink)}
+#detail #dSeasons .sd-month::before,#detail #dSeasons .sd-month::after{content:none}
+#detail #dSeasons .sd-month-head .fx-title{margin:0;color:var(--t-ink)}
+#detail #dSeasons .sd-mpick button{width:44px;height:44px;border:0;border-radius:999px;background:var(--fiche-wash);color:var(--t-ink);font:600 var(--fiche-text)/1 var(--body)}
+#detail #dSeasons .sd-mpick button:active{background:color-mix(in srgb,var(--t-main) 16%,var(--t-card))}
+#detail #dSeasons .sd-verdict{margin:10px 0 12px!important;font:400 var(--fiche-text)/1.5 var(--body)!important;color:var(--t-ink)!important}
+#detail #dSeasons .sd-verdict b{display:inline-block;margin:0 2px 0 0;padding:3px 11px;border-radius:999px;background:var(--fiche-wash);color:var(--t-ink);font:700 var(--fiche-label)/1.35 var(--body)}
+#detail #dSeasons .sd-verdict.l2 b{background:color-mix(in srgb,var(--t-main) 16%,var(--t-card))}
+#detail #dSeasons .sd-verdict.l3 b{background:color-mix(in srgb,var(--t-sun) 34%,var(--t-card))}
+#detail #dSeasons .sd-suit{margin:0 0 16px;gap:2px}
+#detail #dSeasons .sd-suit b{font:600 var(--fiche-label)/1.35 var(--body);color:var(--t-ink)}
+#detail #dSeasons .sd-suit small{font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+/* Relevés du mois : le composant de relevé de la fiche, en version compacte (chiffre plus petit, sans hauteur réservée). */
+#detail #dSeasons .sd-readings{min-height:0;gap:16px 14px}
+#detail #dSeasons .sd-readings .fx-num{font-size:calc(var(--fiche-num) * .64)}
+#detail #dSeasons .sd-readings .fx-value{min-height:0}
+#detail #dSeasons .sd-readings .fx-sub{min-height:0}
+#detail #dSeasons .sd-readings .fx-ic{width:24px;height:24px;color:var(--t-ink)}
+/* L’année en courbes (repliée) : sans cadre, titre et précision séparés. */
+#detail #dSeasons .sd-charts{margin:0 0 14px;padding:0;border:0;border-radius:0;background:none;box-shadow:none}
+#detail #dSeasons .sd-panel figcaption{padding:0 0 2px}
+#detail #dSeasons .sd-panel figcaption b{font:600 var(--fiche-label)/1.3 var(--body);color:var(--t-ink)}
+#detail #dSeasons .sd-panel figcaption .sd-sub{flex:1 1 auto;font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail #dSeasons .sd-rose{margin:0 0 14px;padding:0;border:0;border-radius:0;background:none}
+#detail #dSeasons .sd-rose small{font:600 var(--fiche-label)/1.25 var(--body);letter-spacing:0;text-transform:none;color:var(--fiche-soft)}
+#detail #dSeasons .sd-rose b{font:700 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+#detail #dSeasons .sd-rose span{font:400 var(--fiche-note)/1.45 var(--body);color:var(--fiche-soft)}
+#detail #dSeasons .sd-table{margin:0 0 6px;border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash)}
+#detail #dSeasons .sd-table summary{min-height:44px;padding:0 14px;font:700 var(--fiche-label)/1.2 var(--body);color:var(--t-main)}
+#detail #dSeasons .sd-table tbody th{background:var(--fiche-wash)}
+/* Sources des normales : visibles, en note. */
+#detail #dSeasons>.sd-src{margin:16px 0 0;font:400 var(--fiche-note)/1.5 var(--body);color:var(--fiche-soft)}
+
+/* fin de la section Saisons (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET PRÉPARER (data-cat="activites")
+   ===================================================================================================== */
+/* Sections à titre simple, dans cet ordre : Y aller, Dormir, Autour (et Dans les environs), Matériel et cours, Avant de
+   partir, Ton carnet. Les blocs gardent leurs nœuds et leurs id ; l’ordre vient d’ici (flex, order). Plus de cartes autour
+   des sections, plus de sur-titres en capitales ni de numéros. Préfixe des classes propres à l’onglet : px-. */
+.ocean-v2 #detail .dcat[data-cat="activites"]:not([style*="none"]){display:flex;flex-direction:column}
+#detail .dcat[data-cat="activites"]>*{order:20;min-width:0}
+#detail .dcat[data-cat="activites"]>#dGo{order:1}
+#detail .dcat[data-cat="activites"]>#guideSleep{order:2}
+#detail .dcat[data-cat="activites"]>#guideAround{order:3}
+#detail .dcat[data-cat="activites"]>#fieldNearbyBlock{order:4}
+#detail .dcat[data-cat="activites"]>.field-local{order:5}
+#detail .dcat[data-cat="activites"]>#dZonesBlock{order:6}
+#detail .dcat[data-cat="activites"]>.field-preparation{order:7}
+/* Doublon : « Situer le lieu » est dans le point de départ, « Comparer » dans Dormir. */
+#detail .dcat[data-cat="activites"]>#fieldOverview{display:none!important}
+/* Les sections se posent sur le fond de la page. */
+.ocean-v2 #detail .dcat[data-cat="activites"]>:is(.block,.sd-go,.guide-section,.field-nearby){margin:0 0 var(--fiche-gap);padding:0;border:0;border-radius:0;background:none!important;box-shadow:none}
+.ocean-v2 #detail .dcat[data-cat="activites"]>.block::before,.ocean-v2 #detail .dcat[data-cat="activites"]>.block::after{content:none;display:none}
+.ocean-v2 #detail .dcat[data-cat="activites"] .fx-title{margin:0 0 12px;font:800 var(--fiche-title)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
+.ocean-v2 #detail .dcat[data-cat="activites"] .fx-title-s{font-size:calc(var(--fiche-title) * .8);margin-bottom:6px}
+#detail .dcat[data-cat="activites"] .px-lead{margin:-6px 0 12px}
+#detail .px-pills{display:flex;flex-wrap:wrap;gap:8px}
+#detail .px-pills .fx-pill{min-height:38px;padding:0 14px;font-size:var(--fiche-label);text-decoration:none}
+/* Replis de l’onglet (heure et pays, point de départ) : une ligne légère, sans cadre. */
+
+/* Y aller : les aéroports en lignes alignées (code, nom, distance), le vol, la source ; le détail du pays replié. */
+#detail .dcat[data-cat="activites"] .sd-airports{display:grid;gap:12px;margin:0 0 4px;padding:0;list-style:none}
+#detail .dcat[data-cat="activites"] .sd-airports li{display:grid;grid-template-columns:44px minmax(0,1fr) auto;align-items:baseline;column-gap:12px;padding:0;border:0}
+#detail .dcat[data-cat="activites"] .sd-iata,#detail .dcat[data-cat="activites"] .sd-airports li.first .sd-iata{min-width:0;padding:0;border-radius:0;background:none;text-align:start;font:700 var(--fiche-label)/1.3 var(--body);letter-spacing:0;font-variant-numeric:tabular-nums;color:var(--t-main)}
+#detail .dcat[data-cat="activites"] .sd-ap{display:grid;gap:1px;min-width:0}
+#detail .dcat[data-cat="activites"] .sd-ap b{font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink);white-space:normal;overflow:visible;overflow-wrap:anywhere}
+#detail .dcat[data-cat="activites"] .sd-ap small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="activites"] .sd-km{font:600 var(--fiche-text)/1.3 var(--body);font-variant-numeric:tabular-nums;color:var(--t-ink);text-align:end;white-space:nowrap}
+#detail .dcat[data-cat="activites"] .sd-km em{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft);white-space:normal}
+#detail .dcat[data-cat="activites"] #dGo>.sd-link{margin:4px 0 0;padding:0 2px;background:none;border-radius:0;font:700 var(--fiche-label)/1 var(--body);color:var(--t-main)}
+#detail .dcat[data-cat="activites"] #dGo>.sd-src{margin:2px 0 0}
+#detail .dcat[data-cat="activites"] #dGo>.obf-head{order:0}
+#detail .dcat[data-cat="activites"] .sd-facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 14px;margin:2px 0 12px}
+#detail .dcat[data-cat="activites"] .sd-facts>div{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:9px;row-gap:1px;align-content:start;padding:0;border-radius:0;background:none}
+#detail .dcat[data-cat="activites"] .sd-facts>div>svg{grid-row:1 / span 3;width:22px;height:22px;margin:1px 0 0;color:var(--fiche-soft)}
+#detail .dcat[data-cat="activites"] .sd-facts small{grid-column:2;font:600 var(--fiche-label)/1.25 var(--body);letter-spacing:0;text-transform:none;color:var(--fiche-soft)}
+#detail .dcat[data-cat="activites"] .sd-facts b{grid-column:2;font:700 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="activites"] .sd-facts span{grid-column:2;font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+
+/* Dormir : la nuit la moins chère en grand chiffre, sa source dessous, les recherches en pastilles. */
+#detail .px-sleep{display:grid;gap:4px;margin:0 0 16px}
+#detail .px-price{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:8px;row-gap:2px;margin:2px 0 4px}
+#detail .px-type{display:grid;gap:1px}
+#detail .px-type b{font-weight:600}
+#detail .px-type span{font-size:var(--fiche-note);line-height:1.4;color:var(--fiche-soft)}
+#detail .px-sleep .fx-note{margin:0}
+#detail .px-sleep .px-src{margin-top:4px}
+#detail .px-search{display:grid;gap:8px}
+#detail .px-search .fx-note{margin:0}
+/* Les recherches d’hébergement passent à la ligne : toutes visibles, « Comparer » compris, sans rien faire glisser. */
+#detail .px-search>.px-pills{flex-wrap:wrap}
+#detail .px-search>.px-pills>*{flex:none}
+#detail .px-search .spot-compare-button{display:inline-flex;align-items:center;gap:6px;min-height:38px;padding:0 14px;border:0;border-radius:999px;background:var(--fiche-wash);color:var(--t-ink);font:600 var(--fiche-label)/1 var(--body);box-shadow:none}
+#detail .px-search .spot-compare-button svg{width:16px;height:16px}
+#detail .px-search .spot-compare-button.selected{background:var(--t-main);color:var(--t-on-main)}
+
+/* Autour : les lieux en cartes compactes qu’on fait glisser, puis les spots voisins. */
+#detail .px-rail{display:grid;grid-auto-flow:column;grid-auto-columns:min(78%,270px);gap:10px;margin:0 -16px;padding:0 16px 4px;list-style:none;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:16px;scrollbar-width:none}
+#detail .px-rail::-webkit-scrollbar{display:none}
+#detail .px-place{display:grid;align-content:start;gap:4px;min-width:0;scroll-snap-align:start}
+#detail .px-place>b{font:700 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+#detail .px-place>p{margin:2px 0 0;color:var(--t-ink)}
+#detail .px-place-links{display:flex;flex-wrap:wrap;gap:0 16px;margin-top:0}
+#detail .px-place-links a{display:inline-flex;align-items:center;min-height:44px;font:700 var(--fiche-note)/1.2 var(--body);color:var(--t-main);text-decoration:none}
+#detail #guideAround .px-src{margin:8px 0 0}
+#detail #guideAround .guide-around-fallback{display:grid;gap:10px}
+#detail #fieldNearbyBlock .field-section-heading{display:block;margin:0 0 10px}
+#detail #fieldNearbyBlock .field-section-heading .fx-note{margin:0}
+#detail .dcat[data-cat="activites"] #fieldNearby{display:grid;grid-auto-flow:column;grid-auto-columns:min(44%,170px);grid-template-columns:none;gap:10px;margin:0 -16px;padding:0 16px 4px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x mandatory;scroll-padding-inline:16px;scrollbar-width:none}
+#detail .dcat[data-cat="activites"] #fieldNearby::-webkit-scrollbar{display:none}
+#detail .dcat[data-cat="activites"] .field-nearby-card{display:grid;grid-template-rows:auto 1fr;min-height:0;padding:0;border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash);overflow:hidden;text-align:start;scroll-snap-align:start;box-shadow:none}
+#detail .dcat[data-cat="activites"] .field-nearby-card img{width:100%;height:auto;aspect-ratio:4/3;object-fit:cover}
+#detail .dcat[data-cat="activites"] .field-nearby-card>span{display:grid;align-content:start;gap:2px;padding:10px 11px 12px}
+#detail .dcat[data-cat="activites"] .field-nearby-card b{margin:0;font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="activites"] .field-nearby-card small{margin:0;font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="activites"] .field-nearby-card .guide-from{margin-top:4px;padding:0;background:none;border-radius:0;font:600 var(--fiche-note)/1.3 var(--body);color:var(--t-main)}
+
+/* Matériel et cours : deux cartes à toucher, puis les zones du spot. */
+.ocean-v2 #detail .dcat[data-cat="activites"]>.field-local{display:block}
+#detail .dcat[data-cat="activites"] .field-local-links{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:0 0 8px}
+#detail .dcat[data-cat="activites"] .field-local-links a{display:block;min-height:0;padding:13px 14px;border:0;color:var(--t-ink);text-decoration:none}
+#detail .dcat[data-cat="activites"] .field-local-links b{display:block;font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-main)}
+#detail .dcat[data-cat="activites"] .field-local-links small{display:block;margin-top:3px;font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+.ocean-v2 #detail .dcat[data-cat="activites"]>.field-local>.fx-note{margin:0;max-width:none;font:400 var(--fiche-note)/1.4 var(--body)}
+.ocean-v2 #detail .dcat[data-cat="activites"]>#dZonesBlock{margin-top:calc(var(--fiche-gap) * -.4)}
+.ocean-v2 #detail .dcat[data-cat="activites"]>#dZonesBlock>h4{display:block;margin:0 0 6px;padding:0;font:800 calc(var(--fiche-title) * .8)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
+.ocean-v2 #detail .dcat[data-cat="activites"]>#dZonesBlock>h4 svg{display:none}
+.ocean-v2 #detail .dcat[data-cat="activites"] .zwrap{display:grid;gap:12px;padding:0;margin:0;border:0}
+.ocean-v2 #detail .dcat[data-cat="activites"] .zone{padding:0;border:0;background:none!important;color:inherit}
+.ocean-v2 #detail .dcat[data-cat="activites"] .zone::before{content:none}
+.ocean-v2 #detail .dcat[data-cat="activites"] .zone .zn{font:700 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="activites"] .zone .zd{margin-top:2px;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+/* Le niveau de la zone : une pastille légère, texte foncé (le blanc sur jaune ne se lisait pas), un point de la couleur
+   du niveau. */
+.ocean-v2 #detail .dcat[data-cat="activites"] .zone .zlvl{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;background:var(--fiche-wash);color:var(--t-ink);font:600 var(--fiche-note)/1 var(--body)}
+.ocean-v2 #detail .dcat[data-cat="activites"] .zone .zlvl::before{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;color:var(--t-ok)}
+.ocean-v2 #detail .dcat[data-cat="activites"] .zone .zlvl.zl-intermediaire::before{background:var(--t-warn)}
+.ocean-v2 #detail .dcat[data-cat="activites"] .zone .zlvl.zl-expert::before{background:var(--t-danger)}
+
+/* Les paragraphes des blocs (.block p) reçoivent ailleurs un corps imposé (app-shell.css, !important) : les rôles de la
+   fiche reprennent leur variable. */
+.ocean-v2 #detail .dcat[data-cat="activites"] .block p.fx-note,.ocean-v2 #detail .dcat[data-cat="activites"] .block p.g-note,.ocean-v2 #detail .dcat[data-cat="activites"] .block p.field-level-note{font-size:var(--fiche-note)!important;line-height:1.4!important}
+
+/* Avant de partir : la liste à cocher, compacte ; puis Ton carnet, puis le point de départ replié. */
+.ocean-v2 #detail .dcat[data-cat="activites"]>.field-preparation{display:flex;flex-direction:column}
+.ocean-v2 #detail .dcat[data-cat="activites"]>.field-preparation>h4{display:none}
+#detail .dcat[data-cat="activites"] .field-preparation>#dGuide{display:contents}
+/* La liste se lit d’un bloc : son titre, le choix de l’activité (spots à plusieurs activités) en pastilles, les cases. La
+   boîte de la liste s’efface (display:contents) pour que le choix vienne sous le titre sans déplacer de nœud. */
+#detail .dcat[data-cat="activites"] .field-preparation>*,#detail .dcat[data-cat="activites"] #dGuide>*,#detail .dcat[data-cat="activites"] .field-checklist>*{order:9;min-width:0}
+#detail .dcat[data-cat="activites"] .field-checklist{display:contents}
+#detail .dcat[data-cat="activites"] .field-checklist>.field-list-head{order:0}
+#detail .dcat[data-cat="activites"] .field-preparation>#dSports{order:1}
+#detail .dcat[data-cat="activites"] .field-checklist>.field-check{order:2}
+#detail .dcat[data-cat="activites"] .field-preparation>.g-note{order:3;margin:10px 0 var(--fiche-gap);font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="activites"] #dGuide>.field-notebook{order:4}
+#detail .dcat[data-cat="activites"] #dGuide>.obf-head{order:5}
+#detail .dcat[data-cat="activites"] #dGuide>.field-address{order:6}
+/* La phrase « Choisis ton activité… » redit ce que montrent les pastilles. */
+#detail .dcat[data-cat="activites"] .field-preparation>#dGuideSub{display:none}
+.ocean-v2 #detail .dcat[data-cat="activites"] #dSports{display:flex;flex-wrap:wrap;gap:8px;margin:0 0 8px}
+.ocean-v2 #detail .dcat[data-cat="activites"] #dSports[hidden],.ocean-v2 #detail .dcat[data-cat="activites"] #dSports.solo{display:none}
+.ocean-v2 #detail .dcat[data-cat="activites"] #dSports .sp{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 14px 0 10px;border:0;border-radius:999px;background:var(--fiche-wash);color:var(--t-ink);font:600 var(--fiche-label)/1 var(--body);box-shadow:none;white-space:nowrap}
+.ocean-v2 #detail .dcat[data-cat="activites"] #dSports .sp.on{background:var(--t-main);color:var(--t-on-main)}
+.ocean-v2 #detail .dcat[data-cat="activites"] #dSports .sp :is(img,svg){flex:none;width:22px;height:22px;margin:0}
+#detail .dcat[data-cat="activites"] .field-list-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin:0 0 10px}
+#detail .dcat[data-cat="activites"] .field-list-head .fx-title{margin:0}
+#detail .dcat[data-cat="activites"] .field-list-head .fx-pill{flex:none;font-variant-numeric:tabular-nums}
+#detail .dcat[data-cat="activites"] .field-progress-track,#detail .dcat[data-cat="activites"] .field-checklist>.field-text-button{display:none}
+#detail .dcat[data-cat="activites"] .field-check{display:grid;grid-template-columns:22px minmax(0,1fr);column-gap:12px;align-items:start;padding:8px 0;border:0}
+#detail .dcat[data-cat="activites"] .field-check input{width:22px;height:22px;margin:0}
+#detail .dcat[data-cat="activites"] .field-check>span{display:grid;gap:1px;min-width:0}
+#detail .dcat[data-cat="activites"] .field-check b{font:600 var(--fiche-text)/1.35 var(--body);color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="activites"] .field-check small{display:block;margin:0;max-width:none;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="activites"] .field-check-go{justify-self:start;min-height:44px;margin:2px 0 0;padding:0;border:0;background:none;font:700 var(--fiche-note)/1.2 var(--body);color:var(--t-main);text-decoration:underline;text-underline-offset:3px}
+/* Ton carnet : la note de l’utilisateur, toujours en vue. */
+#detail .dcat[data-cat="activites"] .field-notebook{display:grid;gap:8px;margin:0 0 4px;padding:0;border:0;background:none}
+#detail .dcat[data-cat="activites"] .notebook-heading{display:block;margin:0}
+#detail .dcat[data-cat="activites"] .notebook-heading .fx-title{margin:0}
+#detail .dcat[data-cat="activites"] .field-notebook label{font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="activites"] .field-notebook textarea{box-sizing:border-box;width:100%;min-height:96px;padding:12px 14px;border:1px solid var(--fiche-hair);border-radius:var(--fiche-radius);background:var(--fiche-wash);color:var(--t-ink);font:400 var(--fiche-text)/1.45 var(--body);resize:vertical}
+#detail .dcat[data-cat="activites"] .field-notebook textarea:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+#detail .dcat[data-cat="activites"] .notebook-footer{display:flex;flex-direction:row;justify-content:space-between;align-items:baseline;gap:12px;margin:0;font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="activites"] .notebook-footer>*{flex:0 1 auto;width:auto;margin:0}
+#detail .dcat[data-cat="activites"] .notebook-footer>#spotNoteCount{flex:none;font-variant-numeric:tabular-nums}
+/* Point de départ (replié) : des lignes simples. */
+#detail .dcat[data-cat="activites"] .field-address{padding:0 0 4px;border:0;border-radius:0;background:none}
+#detail .dcat[data-cat="activites"] .field-address h3{margin:0 0 6px;font:700 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="activites"] .field-address dl>div{padding:6px 0;border:0;font:400 var(--fiche-note)/1.4 var(--body)}
+#detail .dcat[data-cat="activites"] .field-address dt{font:600 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="activites"] .field-address dd{font:600 var(--fiche-note)/1.4 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="activites"] .field-address .field-level-note{margin:6px 0;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="activites"] .field-address .field-map-link{display:inline-flex;align-items:center;min-height:40px;font:700 var(--fiche-label)/1.2 var(--body);color:var(--t-main)}
+#detail .dcat[data-cat="activites"] .field-address .field-source{margin-top:4px;padding-top:0;border:0}
+
+/* fin de la section Préparer (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   ONGLET NATURE (data-cat="faune", puis data-cat="preserver")
+   ===================================================================================================== */
+#detail .dcat[data-cat="preserver"]{margin-top:var(--fiche-gap)}
+/* Faune : titre simple, les deux chiffres en relevés sur le fond, « Quand les voir », les espèces photographiées (repli,
+   crédits visibles), puis les espèces typiques de la zone. Préserver : l’enjeu en une phrase, les gestes en liste simple.
+   Plus de tuiles sombres, de bandeaux colorés, de sur-titres en capitales ni de pastilles numérotées. Préfixe : nx-. */
+.ocean-v2 #detail .dcat:is([data-cat="faune"],[data-cat="preserver"]) .fx-title{margin:0 0 10px;font:800 var(--fiche-title)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);text-transform:none}
+.ocean-v2 #detail .dcat:is([data-cat="faune"],[data-cat="preserver"]) .fx-title-s{font-size:calc(var(--fiche-title) * .8);margin-bottom:8px}
+.ocean-v2 #detail .dcat[data-cat="faune"] .block p.fx-note,.ocean-v2 #detail .dcat[data-cat="faune"] .block p.bio-note,.ocean-v2 #detail .dcat[data-cat="faune"] .block p.bio-t{font-size:var(--fiche-note)!important;line-height:1.4!important}
+.ocean-v2 #detail .dcat[data-cat="faune"] .block p.fx-text,.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head>p{font-size:var(--fiche-text)!important;line-height:1.45!important}
+#detail .dcat[data-cat="faune"] .sd-wild{margin:0 0 var(--fiche-gap)}
+#detail .dcat[data-cat="faune"] .nx-intro{margin:0 0 16px;color:var(--fiche-soft)}
+/* Les deux chiffres : grand chiffre, phrase dessous, posés sur le fond. */
+#detail .dcat[data-cat="faune"] .nx-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0 0 22px}
+#detail .dcat[data-cat="faune"] .nx-stats>.nx-stat{display:grid;align-content:start;gap:6px;padding:0;border-radius:0;background:none;color:var(--t-ink)}
+#detail .dcat[data-cat="faune"] .nx-stats .fx-num{display:block;margin:0}
+#detail .dcat[data-cat="faune"] .nx-stats .fx-note{display:block;margin:0;color:var(--fiche-soft)}
+/* Quand les voir. */
+#detail .dcat[data-cat="faune"] .nx-when{margin:0 0 14px;padding:0;border:0;border-radius:0;background:none}
+#detail .dcat[data-cat="faune"] .nx-when ul{display:grid;gap:12px}
+#detail .dcat[data-cat="faune"] .nx-when .sd-flag{display:grid;grid-template-columns:minmax(0,1fr) 108px;column-gap:14px;row-gap:2px;align-items:center;padding:0;border:0}
+#detail .dcat[data-cat="faune"] .nx-when .sd-flag-name b{font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="faune"] .nx-when .sd-flag-name small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="faune"] .nx-when .sd-spark{width:108px;height:28px}
+#detail .dcat[data-cat="faune"] .nx-when .sd-spark i.pk{background:var(--t-main)}
+#detail .dcat[data-cat="faune"] .nx-when small.sd-few{grid-column:1 / -1;margin:0;font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+/* Replis : une ligne légère, sans cadre (même dessin que dans Préparer). */
+/* Espèces photographiées : la photo arrondie, le nom, le nombre d’observations et le crédit, sans cadre. */
+#detail .dcat[data-cat="faune"] .sd-species{gap:18px 12px;margin:4px 0 12px}
+#detail .dcat[data-cat="faune"] .sd-sp{border:0;border-radius:0;background:none;overflow:visible}
+#detail .dcat[data-cat="faune"] .sd-sp figure{border-radius:14px;overflow:hidden}
+#detail .dcat[data-cat="faune"] .sd-sp>div{padding:8px 0 0;gap:1px}
+#detail .dcat[data-cat="faune"] .sd-sp b{font:600 var(--fiche-label)/1.25 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="faune"] .sd-sp i{font:400 var(--fiche-note)/1.3 var(--body);font-style:italic;color:var(--fiche-soft)}
+#detail .dcat[data-cat="faune"] .sd-sp small{margin:2px 0 0;font:600 var(--fiche-note)/1.3 var(--body);color:var(--t-main)}
+#detail .dcat[data-cat="faune"] .sd-credit{padding:2px 0 0;font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="faune"] .sd-iucn{font:600 var(--fiche-note)/1.1 var(--body)}
+#detail .dcat[data-cat="faune"] #dWild>.sd-link{margin:0;padding:0 2px;background:none;border-radius:0;font:700 var(--fiche-label)/1 var(--body);color:var(--t-main)}
+#detail .dcat[data-cat="faune"] #dWild>.sd-src{margin:4px 0 0}
+/* Espèces typiques de la zone : le bloc se pose sur le fond ; la zone en intertitre, sans bandeau ni pastilles. */
+.ocean-v2 #detail .dcat[data-cat="faune"]>.block{margin:0;padding:0;border:0;border-radius:0;background:none!important;box-shadow:none}
+.ocean-v2 #detail .dcat[data-cat="faune"]>.block::before,.ocean-v2 #detail .dcat[data-cat="faune"]>.block::after{content:none;display:none}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head{margin:0 0 4px;padding:0;border:0;border-radius:0;background:none;box-shadow:none!important;color:var(--t-ink);overflow:visible}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head::before,.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head::after{content:none;display:none}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head h5{display:block;margin:0 0 6px;font:800 calc(var(--fiche-title) * .8)/1.15 var(--display);letter-spacing:-.02em;color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head h5 svg{display:none}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-head>p{margin:0;opacity:1;color:var(--fiche-soft);font-weight:400}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-chip{display:none}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-sec{display:block;margin:18px 0 8px}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-sec b{font:700 var(--fiche-text)/1.3 var(--body);letter-spacing:0;text-transform:none;color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-sec i{display:none}
+/* À connaître avant de te mettre à l’eau : jamais replié, une carte d’avertissement légère. */
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-warn{display:grid;gap:12px;padding:14px;border:0;border-radius:var(--fiche-radius);background:color-mix(in srgb,var(--t-sun) 16%,var(--t-card));box-shadow:none}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-w .bio-n{font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-w .bio-sci{font:400 var(--fiche-note)/1.3 var(--body);font-style:italic;color:var(--fiche-soft)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-w .bio-t{margin-top:3px;font:400 var(--fiche-note)/1.4 var(--body);color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-n,.ocean-v2 #detail .dcat[data-cat="faune"] .bio-cap h6{font-family:var(--body);letter-spacing:0}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-t{font:400 var(--fiche-note)/1.4 var(--body)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-note{margin:12px 0 0;padding:0;color:var(--fiche-soft)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-note b{font-weight:600;color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .field-empty{margin:0;padding:4px 0 0;font:400 var(--fiche-text)/1.45 var(--body);color:var(--t-ink)}
+/* Espèces typiques ouvertes : même dessin que les espèces photographiées (photo arrondie, puis nom, nom savant et une
+   phrase dessous, rien d’écrit sur la photo), sans cadre ni ombre ; « Voir plus » en lien d’action. L’espèce mise en avant
+   garde seulement une photo plus large. */
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c){border:0;border-radius:0;background:none;box-shadow:none;overflow:visible}
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c) .bio-ph{border-radius:14px;overflow:hidden}
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c) .bio-in{padding:8px 0 0}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-c.wide .bio-in{padding:0 0 0 12px}
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c) .bio-n{font:600 var(--fiche-label)/1.25 var(--body);color:var(--t-ink)}
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c) .bio-sci{margin-top:1px;font:400 var(--fiche-note)/1.3 var(--body);font-style:italic;color:var(--fiche-soft)}
+.ocean-v2 #detail .dcat[data-cat="faune"] :is(.bio-hero,.bio-c) .bio-t{margin-top:3px;padding:0;color:var(--t-ink)}
+/* La pastille « À préserver » ou « Prudence » sur la photo : à la taille d’une note, lisible. */
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-badge{padding:4px 9px;font:600 var(--fiche-note)/1.2 var(--body)}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-grid{gap:18px 12px}
+.ocean-v2 #detail .dcat[data-cat="faune"] .bio-more{width:auto;margin:6px 0 0;padding:0 2px;min-height:44px;border:0;border-radius:0;background:none;box-shadow:none;font:700 var(--fiche-label)/1 var(--body);color:var(--t-main);text-align:start}
+/* Préserver ce spot : l’enjeu, puis les gestes en liste simple et leur bouton. */
+.ocean-v2 #detail .dcat[data-cat="preserver"] .nx-pres{margin:0;padding:0;border:0;border-radius:0;background:none;box-shadow:none;overflow:visible}
+#detail .dcat[data-cat="preserver"] .nx-pres-e{margin:0 0 16px}
+#detail .dcat[data-cat="preserver"] .pres-l{display:grid;gap:18px;margin:0;padding:0;list-style:none}
+#detail .dcat[data-cat="preserver"] .pres-g{display:block;padding:0;border:0}
+#detail .dcat[data-cat="preserver"] .pres-tx b{display:block;margin:0 0 2px;font:600 var(--fiche-text)/1.35 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="preserver"] .pres-tx p{margin:0;font:400 var(--fiche-note)/1.45 var(--body);color:var(--fiche-soft)}
+#detail .dcat[data-cat="preserver"] .pres-do{position:relative;display:inline-flex;gap:8px;min-height:36px;margin:8px 0 0;padding:0 14px;border:0;background:var(--fiche-wash);color:var(--t-ink);cursor:pointer}
+/* La pastille reste à 36 px de haut ; sa zone à toucher fait 44 px. */
+#detail .dcat[data-cat="preserver"] .pres-do::after{content:"";position:absolute;inset:-4px 0}
+#detail .dcat[data-cat="preserver"] .pres-do .nx-xp{font-weight:600;color:var(--t-main)}
+#detail .dcat[data-cat="preserver"] .pres-do.done{background:color-mix(in srgb,var(--t-ok) 14%,var(--t-card));color:var(--t-ok);cursor:default}
+#detail .dcat[data-cat="preserver"] .pres-do:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+
+/* fin de la section Nature (ne rien écrire entre ces deux lignes de séparation)
+   ----------------------------------------------------------------------------------------------------- */
+
+
+/* =====================================================================================================
+   MOINS DE TEXTE (19 nov. : « il y a trop de texte, tu dois trouver une alternative »)
+   Chaque onglet montre la réponse. Sources, précisions de méthode et explications restent à un toucher.
+   ===================================================================================================== */
+/* Le spot : l’anecdote est une section repliée (replis.js), son titre est celui de la ligne. Une ligne sans contenu s’efface. */
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.anec-block>h4{display:none}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head[data-obf-group="anecdote"]{margin:0 0 var(--fiche-gap)}
+html .ocean-v2 #detail .dcat[data-cat="infos"]>.obf-head[data-obf-group="anecdote"][aria-expanded="true"]{margin-bottom:8px}
+#detail .obf-head[hidden]{display:none!important}
+/* Sources et précisions : marquées par replis.js (NOTES), masquées dans la page, montrées en pied de fiche (#dNotes). */
+#detail .dcat [data-fx-note]{display:none!important}
+html .ocean-v2 #detail .fx-notes{margin:var(--fiche-gap) 0 0;padding-top:4px;border-top:1px solid var(--fiche-hair)}
+html .ocean-v2 #detail .fx-notes[hidden],#detail .fx-notes-zone[hidden]{display:none}
+#detail .fx-notes-zone{display:grid;gap:10px;padding:4px 0 8px}
+#detail .fx-notes-item,#detail .fx-notes-item *{margin:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;min-height:0!important;max-width:none!important;
+  font:400 var(--fiche-note)/1.45 var(--body)!important;letter-spacing:0!important;text-transform:none!important;color:var(--fiche-soft)!important;overflow-wrap:anywhere}
+#detail .fx-notes-item>*{display:block!important}
+#detail .fx-notes-item a{text-decoration:underline!important;text-underline-offset:3px}
+
+/* Préparer : aéroports sur une ligne (code, nom, distance), séparés par un filet. */
+#detail .dcat[data-cat="activites"] .sd-ap small{display:none}
+#detail .dcat[data-cat="activites"] .sd-airports{gap:0}
+#detail .dcat[data-cat="activites"] .sd-airports li{align-items:center;min-height:46px;border-bottom:1px solid var(--fiche-hair)}
+#detail .dcat[data-cat="activites"] .sd-airports li:last-child{border-bottom:0}
+/* Dormir : le prix en grand, le type d’hébergement, les recherches ; plus de libellés au-dessus. */
+#detail .px-sleep>.fx-label,#detail .px-search>.fx-label{display:none}
+/* Autour : cartes courtes (type, nom, distance, liens). La description est sur la page liée. */
+#detail .px-place>p{display:none}
+#detail .px-rail.px-places{grid-auto-columns:min(64%,230px)}
+/* Matériel et cours : deux pastilles. */
+#detail .dcat[data-cat="activites"] .field-local-links{display:flex;flex-direction:row;flex-wrap:wrap;justify-content:flex-start;gap:8px;margin:0 0 18px}
+#detail .dcat[data-cat="activites"] .field-local-links a{display:inline-flex;flex:0 0 auto;width:auto;align-items:center;min-height:44px;padding:0 16px;border-radius:999px}
+#detail .dcat[data-cat="activites"] .field-local-links small{display:none}
+/* Avant de partir : les titres seuls ; le détail des étapes d’un toucher. */
+.ocean-v2 #detail .dcat[data-cat="activites"] .field-checklist:not(.is-detail) .field-check small{display:none}
+#detail .dcat[data-cat="activites"] .field-check{align-items:center;min-height:44px;padding:4px 0}
+#detail .dcat[data-cat="activites"] .field-checklist.is-detail .field-check,#detail .dcat[data-cat="activites"] .field-check:has(.field-check-go){align-items:start;padding:8px 0}
+#detail .dcat[data-cat="activites"] .field-checklist>.field-check-more{order:2;justify-self:start;margin:0 0 var(--fiche-gap) 34px}
+#detail .dcat[data-cat="activites"] .field-check-more[hidden]{display:none}
+
+/* Nature : les photos des espèces observées en bande à faire glisser, sans compte d’observations. */
+#detail .dcat[data-cat="faune"] .sd-species{display:flex;gap:12px;margin:4px -16px 16px;padding:0 16px 4px;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scroll-padding-inline:16px;scrollbar-width:none;list-style:none}
+#detail .dcat[data-cat="faune"] .sd-species::-webkit-scrollbar{display:none}
+#detail .dcat[data-cat="faune"] .sd-species>.sd-sp{flex:0 0 44%;max-width:210px;min-width:0;scroll-snap-align:start}
+#detail .dcat[data-cat="faune"] .sd-sp small{display:none}
+/* Préserver : le geste et son bouton sur une ligne ; le pourquoi d’un toucher. */
+#detail .dcat[data-cat="preserver"] .pres-l{gap:10px}
+#detail .dcat[data-cat="preserver"] .pres-tx{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:4px 12px}
+#detail .dcat[data-cat="preserver"] .pres-tx b{margin:0}
+#detail .dcat[data-cat="preserver"] .pres-tx p{grid-column:1 / -1;grid-row:2}
+#detail .dcat[data-cat="preserver"] #presBlock:not(.is-detail) .pres-tx p{display:none}
+#detail .dcat[data-cat="preserver"] .pres-do{grid-column:2;grid-row:1;margin:0}
+#detail .dcat[data-cat="preserver"] .pres-more{margin-top:8px}
+#detail .dcat[data-cat="preserver"] .pres-more[hidden]{display:none}
+
+/* Ordinateur (20 nov., « un gros trou au milieu ») : les quatre relevés tiennent sur une rangée au lieu de deux colonnes
+   étirées sur toute la largeur, et le texte courant garde une largeur de lecture. */
+@media(min-width:960px){
+  #detail .fx-readings{grid-template-columns:repeat(4,minmax(0,1fr));gap:20px 24px;min-height:calc(var(--fiche-label) * 1.25 + var(--fiche-num) * .95 + var(--fiche-note) * 1.3 + 4px)}
+  #detail .dcat[data-cat="faune"] .nx-stats{grid-template-columns:repeat(2,minmax(0,280px))}
+  #detail .dcat :is(p,li,.fx-text,.fx-note,.danger-item),#detail .fx-notes-item{max-width:76ch}
+}
+
+
+/* =====================================================================================================
+   LE SPOT, EN VIE (20 nov. : « trop vide… chiffres importants grands… illustrations… il faut que les spots vivent »)
+   En tête de l’onglet « Le spot » (spot-guide.js, liveHTML) : grands chiffres illustrés, « Ici, on vit comme ça »,
+   « Budget sur place » avec l’échelle de prix, raccourcis. Illustrations : assets/fiche/*.webp, sans texte.
+   ===================================================================================================== */
+.ocean-v2 #detail .dcat[data-cat="infos"].field-overview>#guideLive{order:10;align-self:stretch;min-width:0;margin:0 0 var(--fiche-gap);padding:0;border:0;background:none;box-shadow:none}
+#detail #guideLive[hidden]{display:none}
+#detail #guideLive .gl-illu{display:block;pointer-events:none;-webkit-user-select:none;user-select:none;mix-blend-mode:multiply}
+/* Grands chiffres : une tuile par valeur, l’illustration posée en bas. */
+#detail .gl-tiles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:0 0 var(--fiche-gap)}
+#detail .gl-tiles.gl-n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+#detail .gl-tiles.gl-n1{grid-template-columns:minmax(0,1fr)}
+#detail .gl-tile{position:relative;display:grid;align-content:start;min-width:0;min-height:156px;margin:0;padding:12px 12px 0;border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash);color:var(--t-ink);font:inherit;text-align:start;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .18s ease}
+#detail .gl-tile:active{transform:scale(.97)}
+#detail .gl-tile:focus-visible,#detail .gl-link:focus-visible,#detail .gl-card-go button:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+#detail .gl-tile-tx{position:relative;z-index:1;display:grid;gap:2px;min-width:0}
+#detail .gl-tile .fx-label{font-size:var(--fiche-note);line-height:1.25}
+#detail .gl-big{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:5px}
+#detail .gl-big .fx-num{font-size:calc(var(--fiche-num) * .86)}
+#detail .gl-tile .gl-illu{position:absolute;inset:auto 0 -6px 0;width:100%;height:auto;aspect-ratio:1;max-height:50%;object-fit:cover;object-position:50% 80%}
+/* Ici, on vit comme ça : cartes illustrées à faire glisser. */
+#detail .gl-block{margin:0 0 var(--fiche-gap)}
+#detail .gl-block>.fx-title{margin:0 0 10px}
+#detail .gl-vibe{margin:0 0 14px}
+#detail .gl-rail{display:flex;gap:10px;margin:0 -16px;padding:0 16px 4px;list-style:none;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scroll-padding-inline:16px;scrollbar-width:none}
+#detail .gl-rail::-webkit-scrollbar{display:none}
+/* Carte de culture (reprise le 23 nov.) : la vignette carrée à gauche, le genre et le titre à sa droite, le texte dessous sur
+   toute la largeur, la source au pied. Deux raisons : la carte faisait 370 à 393 px de haut sur téléphone, et l’illustration
+   (640 px, dessinée à environ 450 px) était étirée sur 263 points, donc floue sur écran ×3 ; à 104 points (312 px d’écran)
+   elle est nette. La carte laisse toujours voir le bord de la suivante (environ 60 à 75 px) : on devine qu’on peut glisser. */
+#detail .gl-card{flex:0 0 min(330px,calc(100% - 56px));min-width:0;box-sizing:border-box;display:grid;grid-template-columns:104px minmax(0,1fr);grid-template-rows:auto auto auto 1fr;column-gap:12px;row-gap:2px;align-content:start;padding:12px 12px 4px;border-radius:var(--fiche-radius);background:var(--fiche-wash);overflow:hidden;scroll-snap-align:start}
+#detail .gl-card>.gl-illu,#detail .gl-card-go .gl-illu{grid-column:1;grid-row:1 / span 2;width:104px;height:104px;aspect-ratio:1;object-fit:cover;margin:0 0 8px;border-radius:14px}
+#detail .gl-card>.fx-label,#detail .gl-card-go .fx-label{grid-column:2;grid-row:1;align-self:end}
+#detail .gl-card>b,#detail .gl-card-go b{grid-column:2;grid-row:2;align-self:start}
+#detail .gl-card>:is(small,a),#detail .gl-card-go small{grid-column:1 / -1}
+#detail .gl-card b{font:700 17px/1.22 var(--body);color:var(--t-ink);overflow-wrap:anywhere}
+#detail .gl-card small{font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+/* Carte sans source (repère du carnet, page du pays) : le même pied que les autres. */
+#detail .gl-card:not(.gl-fact){padding-bottom:12px}
+/* Faits de la zone (culture locale sourcée) : le nom de la zone sous le titre, les mois d’une fête, la source au pied de la carte. */
+#detail .gl-zone{display:block;margin:-4px 0 10px}
+#detail .gl-card .gl-when{font-weight:600;color:var(--t-ink);margin-top:2px}
+#detail .gl-fact-src{align-self:end;display:block;min-height:44px;box-sizing:border-box;padding:13px 0 12px;font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft);text-decoration:underline;text-underline-offset:3px;overflow-wrap:anywhere}
+#detail .gl-fact-src:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+#detail .gl-zone-src{margin:0;padding:0;list-style:none}
+#detail .gl-card-go{padding:0}
+/* Fait avec son illustration propre (23 nov., choix du fondateur) : la grande image en tête, sur toute la largeur de la
+   carte (4:3, 1080 px, nette sur écran ×3), puis le genre, le titre, le texte et la source dessous. La place de l’image est
+   réservée (aspect-ratio) : aucun saut quand elle arrive. Le texte d’un fait fait 140 caractères au plus : rien n’est coupé. */
+#detail .gl-card.gl-big-card{grid-template-columns:minmax(0,1fr);grid-template-rows:auto auto auto auto 1fr;padding-top:0;overflow:hidden}
+#detail .gl-big-card>.gl-hero{grid-column:1;grid-row:1;display:block;width:calc(100% + 24px);max-width:none;height:auto;aspect-ratio:4 / 3;margin:0 -12px 10px;object-fit:cover;
+  border-radius:var(--fiche-radius) var(--fiche-radius) 0 0;background:var(--fiche-wash);pointer-events:none;-webkit-user-select:none;user-select:none}
+#detail .gl-big-card>.fx-label{grid-column:1;grid-row:2;align-self:start}
+#detail .gl-big-card>b{grid-column:1;grid-row:3}
+#detail .gl-big-card>:is(small,a){grid-column:1}
+#detail .gl-card-go button{display:grid;grid-template-columns:104px minmax(0,1fr);grid-template-rows:auto auto auto 1fr;column-gap:12px;row-gap:2px;align-content:start;grid-column:1 / -1;grid-row:1 / -1;box-sizing:border-box;width:100%;height:100%;margin:0;padding:12px;border:0;background:none;color:inherit;font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .18s ease}
+#detail .gl-card-go button:active{transform:scale(.97)}
+#detail .gl-card-go b{color:var(--t-main)}
+/* Budget sur place : l’échelle situe le prix de la nuit parmi tous les spots du guide. */
+#detail .gl-scale{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:10px;margin:0 0 6px;font:400 var(--fiche-note)/1.2 var(--body);color:var(--fiche-soft)}
+#detail .gl-track{position:relative;display:block;height:10px;border-radius:999px;background:linear-gradient(90deg,color-mix(in srgb,var(--t-main) 16%,var(--t-card)),var(--t-main))}
+#detail .gl-pin{position:absolute;left:var(--p,50%);top:50%;width:20px;height:20px;border-radius:50%;border:3px solid var(--t-card);background:var(--t-sun,var(--t-main));box-shadow:0 1px 4px color-mix(in srgb,var(--t-ink) 30%,transparent);transform:translate(-50%,-50%)}
+#detail .gl-rank{margin:0 0 12px;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
+#detail .gl-rank b{font-weight:700;color:var(--t-ink)}
+#detail .gl-prices{display:grid;gap:0;margin:0;padding:0;list-style:none}
+#detail .gl-prices li{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;column-gap:10px;min-height:48px;border-bottom:1px solid var(--fiche-hair)}
+#detail .gl-prices li:last-child{border-bottom:0}
+#detail .gl-ic{display:grid;place-items:center;width:30px;height:30px;color:var(--t-main)}
+#detail .gl-ic svg{width:24px;height:24px}
+#detail .gl-row-tx{min-width:0;font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
+#detail .gl-row-tx small{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail .gl-prices b{font:800 calc(var(--fiche-num) * .5)/1.1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--t-ink);white-space:nowrap}
+#detail .gl-unit{margin:6px 0 0}
+/* Raccourcis : de vrais liens, pictogramme dans un rond. */
+#detail .gl-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(62px,1fr));gap:10px 2px;margin:0 -6px}
+#detail .gl-link{display:grid;justify-items:center;align-content:start;gap:7px;min-width:0;min-height:44px;color:var(--t-main);text-decoration:none;font:700 var(--fiche-note)/1.2 var(--body);text-align:center;overflow-wrap:normal;-webkit-tap-highlight-color:transparent}
+#detail .gl-link>span:last-child{font-size:12.5px;letter-spacing:-.01em;white-space:nowrap}
+#detail .gl-link-ic{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:var(--fiche-wash);transition:transform .18s ease}
+#detail .gl-link:active .gl-link-ic{transform:scale(.92)}
+#detail .gl-link-ic svg{width:26px;height:26px}
+/* Entrée en scène, une fois par spot : les tuiles puis les cartes montent légèrement, l’une après l’autre. */
+@keyframes glRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+@keyframes glPin{from{left:3%}to{left:var(--p,50%)}}
+#detail #guideLive.gl-in :is(.gl-tile,.gl-card){animation:glRise .46s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0) * 70ms)}
+#detail #guideLive.gl-in .gl-card{animation-delay:calc(180ms + var(--i,0) * 70ms)}
+#detail #guideLive.gl-in .gl-pin{animation:glPin .8s cubic-bezier(.2,.8,.2,1) .25s backwards}
+@media (prefers-reduced-motion:reduce){#detail #guideLive :is(.gl-tile,.gl-card,.gl-pin){animation:none!important}#detail :is(.gl-tile,.gl-link-ic,.gl-card-go button){transition:none}}
+body.reduce-motion #detail #guideLive :is(.gl-tile,.gl-card,.gl-pin){animation:none!important}
+body.reduce-motion #detail :is(.gl-tile,.gl-link-ic,.gl-card-go button){transition:none}
+@media(max-width:389px){#detail .gl-big .fx-num{font-size:calc(var(--fiche-num) * .74)}#detail .gl-tile{padding:10px 10px 0;min-height:158px}#detail .gl-tile .gl-illu{max-height:42%}}
+@media(min-width:960px){
+  /* Le coin (25 nov.) : les tuiles remplissent la largeur en colonnes égales ; l'illustration carrée passe à droite du
+     chiffre, entière (contain, aucune coupe). */
+  #detail .gl-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #detail .gl-tile{grid-template-columns:minmax(0,1fr) minmax(72px,min(42%,132px));align-items:center;column-gap:12px;min-height:0;padding:14px}
+  #detail .gl-tile .gl-illu{position:static;grid-column:2;grid-row:1;width:100%;max-height:none;aspect-ratio:1;object-fit:contain;object-position:50% 50%;border-radius:12px}
+  #detail .gl-rail{margin:0;padding:0 0 4px}
+  #detail .gl-card{flex:0 0 330px}
+  #detail .gl-budget{max-width:560px}
+  #detail .gl-links{grid-template-columns:repeat(auto-fit,minmax(64px,96px));justify-content:start}
+}
+/* Niveau des prix du pays (Banque mondiale) : un grand pourcentage, puis l’échelle parmi les pays du guide. */
+#detail .gl-pli{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 8px}
+#detail .gl-pli .fx-num{white-space:nowrap}
+#detail .gl-pli-tx{display:grid;gap:2px;min-width:0;font:600 var(--fiche-label)/1.3 var(--body);color:var(--t-ink)}
+#detail .gl-pli-tx small{font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
+#detail .gl-pli+.gl-scale{margin-top:4px}
+#detail .gl-pli~.gl-rank{margin-bottom:16px}
+/* Autour du spot (OpenStreetMap) : par catégorie, une rangée de lieux à faire glisser ; chaque lieu s’ouvre sur la carte. */
+#detail .gl-around{margin-top:var(--fiche-gap)}
+#detail .gl-around-sub{margin:-4px 0 12px}
+#detail .gl-around-h{display:block;margin:14px 0 8px}
+#detail .gl-places{display:flex;gap:10px;margin:0 -16px;padding:0 16px 4px;list-style:none;overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;scroll-padding-inline:16px;scrollbar-width:none}
+#detail .gl-places::-webkit-scrollbar{display:none}
+#detail .gl-places>li{flex:0 0 min(62%,220px);min-width:0;scroll-snap-align:start}
+#detail .gl-place{display:grid;grid-template-columns:36px minmax(0,1fr);align-items:start;column-gap:10px;height:100%;box-sizing:border-box;min-height:74px;padding:12px;border-radius:var(--fiche-radius);
+  background:var(--fiche-wash);color:var(--t-ink);text-decoration:none;-webkit-tap-highlight-color:transparent;transition:transform .18s ease}
+#detail .gl-place:active{transform:scale(.97)}
+#detail .gl-place:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+#detail .gl-place-ic{display:grid;place-items:center;width:36px;height:36px;border-radius:50%;background:var(--t-card);color:var(--t-main)}
+#detail .gl-place-ic svg{width:20px;height:20px}
+#detail .gl-place-tx{display:grid;gap:2px;min-width:0}
+#detail .gl-place-tx b{font:700 var(--fiche-label)/1.25 var(--body);color:var(--t-ink);overflow-wrap:anywhere}
+#detail .gl-place-tx small{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
+#detail .gl-place-tx .gl-place-d{color:var(--t-main);font-weight:600}
+#detail .gl-osm{margin:8px 0 0}
+#detail .gl-osm a{color:inherit;text-decoration:underline;text-underline-offset:3px}
+@media (prefers-reduced-motion:reduce){#detail .gl-place{transition:none}}
+body.reduce-motion #detail .gl-place{transition:none}
+@media(min-width:960px){
+  #detail .gl-places{margin:0;padding:0 0 4px}
+  #detail .gl-places>li{flex:0 0 220px}
+}
+
+
+/* =====================================================================================================
+   PARCOURS EN CHAPITRES (20 nov. 2026 : « une vraie expérience, pas juste une fiche avec des chiffres »)
+   La fiche se lit d’un seul défilement : ouverture (grande photo, trois chiffres, sommaire), puis Conditions, Le coin,
+   Nature, Sécurité, Saisons, Préparer. Les panneaux .dcat gardent leurs nœuds ; l’ordre est posé ici.
+   ===================================================================================================== */
+.ocean-v2 #detail .detail-body{display:flex;flex-direction:column}
+.ocean-v2 #detail .detail-body>*{min-width:0}
+#detail .detail-body>:is(.dcat[data-cat="meteo"],[data-chapter="meteo"]){order:1}
+#detail .detail-body>:is(.dcat[data-cat="infos"],[data-chapter="infos"]){order:2}
+#detail .detail-body>:is(.dcat[data-cat="faune"],[data-chapter="faune"]){order:3}
+#detail .detail-body>.dcat[data-cat="preserver"]{order:4}
+#detail .detail-body>:is(.dcat[data-cat="securite"],[data-chapter="securite"]){order:5}
+#detail .detail-body>:is(.dcat[data-cat="saisons"],[data-chapter="saisons"]){order:6}
+#detail .detail-body>:is(.dcat[data-cat="activites"],[data-chapter="activites"]){order:7}
+#detail .detail-body>.fx-notes{order:9}
+/* De l’air entre deux chapitres ; « Préserver » suit la faune dans le même chapitre. */
+html .ocean-v2 #detail .detail-body>.dcat{margin:0 0 52px}
+html .ocean-v2 #detail .detail-body>.dcat[data-cat="faune"]{margin-bottom:var(--fiche-gap)}
+/* Titre de chapitre : la même lettre que le nom du spot, sous un filet. Posé devant son panneau (app.js). */
+html .ocean-v2 #detail .fx-chapter{margin:0 0 18px;padding:22px 0 0;border-top:1px solid var(--fiche-hair);font:800 38px/1 var(--as-condensed,'Barlow Condensed','Arial Narrow',sans-serif);letter-spacing:0;color:var(--t-ink)}
+/* Le premier titre garde, au-dessus de lui, la place de la barre collée (50 px) et son écart de 10 px : après un saut vers
+   « Conditions », la barre se pose au-dessus du titre et ne le recouvre plus. Le sommaire rend ces 60 px (pas de marge basse). */
+html .ocean-v2 #detail .fx-chapter[data-chapter="meteo"]{border-top:0;padding-top:0;margin-top:60px}
+/* Préparer : le budget et ses prix sont dans « Budget sur place » (Le coin) ; « Dormir » garde ses recherches. */
+#detail .dcat[data-cat="activites"] #guideSleep .px-sleep{display:none}
+
+/* ---------- Ouverture : trois chiffres du moment sur la photo, sur un voile sombre (pas de flou de verre : règle des jetons crème) ---------- */
+html .ocean-v2 #detail #detailHero{flex-wrap:wrap;align-content:flex-end}
+html .ocean-v2 #detail #detailHero>.htxt,html .ocean-v2 #detail #detailHero>.dfacts{flex:0 0 100%;box-sizing:border-box}
+#detail .hx-now{position:relative;z-index:3;flex:0 0 100%;box-sizing:border-box;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:0 16px 20px}
+#detail .hx-now.hx-n2{grid-template-columns:repeat(2,minmax(0,1fr))}
+#detail .hx-now.hx-n1{grid-template-columns:minmax(0,1fr)}
+#detail .hx-now[hidden]{display:none}
+#detail .hx-chip{display:flex;align-items:center;gap:8px;min-width:0;min-height:60px;box-sizing:border-box;margin:0;padding:9px 11px;border:1px solid color-mix(in srgb,var(--t-on-main) 24%,transparent);border-radius:16px;
+  background:color-mix(in srgb,var(--t-scrim) 62%,transparent);color:var(--t-on-main);font:inherit;text-align:start}
+#detail button.hx-chip{cursor:pointer;-webkit-tap-highlight-color:transparent}
+#detail .hx-chip>.fx-ic{flex:none;width:24px;height:24px;color:var(--t-on-main)}
+#detail .hx-tx{display:grid;gap:1px;min-width:0}
+#detail .hx-val{display:flex;align-items:baseline;gap:4px;font:800 23px/1.05 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--t-on-main)}
+#detail .hx-val small{font:600 13px/1 var(--body);letter-spacing:0;color:color-mix(in srgb,var(--t-on-main) 86%,transparent)}
+#detail .hx-lab{font:500 13px/1.2 var(--body);color:color-mix(in srgb,var(--t-on-main) 88%,transparent)}
+#detail .hx-wait{display:inline-block;width:38px;height:20px;border-radius:6px;background:color-mix(in srgb,var(--t-on-main) 26%,transparent)}
+#detail .hx-danger{justify-content:space-between}
+#detail .hx-danger .fx-dots{gap:3px}
+#detail .hx-danger .fx-dots i{width:8px;height:8px;background:color-mix(in srgb,var(--t-on-main) 34%,transparent)}
+#detail .hx-danger .fx-dots i.on{background:color-mix(in srgb,var(--t-danger) 72%,var(--t-on-main))}
+/* Point éteint : un anneau clair, pas un disque, pour ne jamais le confondre avec un point allumé sur le voile sombre. */
+#detail .hx-danger .fx-dots i:not(.on){background:transparent;box-shadow:inset 0 0 0 1.5px color-mix(in srgb,var(--t-on-main) 62%,transparent)}
+#detail button.hx-chip:focus-visible{outline:2px solid var(--t-on-main);outline-offset:2px}
+@media(max-width:380px){#detail .hx-chip{padding:8px 9px;gap:6px}#detail .hx-val{font-size:20px}#detail .hx-chip>.fx-ic{width:20px;height:20px}}
+@media(min-width:701px){
+  html .ocean-v2 #detail #detailHero{min-height:clamp(380px,56vh,560px)}
+  #detail .hx-now{max-width:560px;padding:0 32px 26px}
+}
+
+/* ---------- Sommaire d’ouverture : six médaillons illustrés ---------- */
+#detail .px-start{margin:0;padding:22px 0 0}
+#detail .px-start>.fx-title{margin:0 0 16px}
+#detail .px-meds{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px 10px}
+#detail .px-med{display:grid;justify-items:center;gap:7px;min-width:0;margin:0;padding:0;border:0;background:none;color:var(--t-ink);font:600 var(--fiche-note)/1.2 var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#detail .px-med img{display:block;width:100%;max-width:86px;height:auto;aspect-ratio:1;border-radius:50%;object-fit:cover;background:var(--fiche-wash)}
+#detail .px-med span{max-width:100%;overflow-wrap:anywhere;text-align:center}
+#detail .px-med:active img{transform:scale(.95)}
+#detail .px-med img{transition:transform .18s ease}
+#detail .px-med:focus-visible{outline:2px solid var(--t-main);outline-offset:4px;border-radius:12px}
+@media(min-width:701px){#detail .px-meds{grid-template-columns:repeat(6,minmax(0,110px));gap:18px}#detail .px-med img{max-width:92px}#detail .px-med{font-size:var(--fiche-label)}}
+
+/* ---------- Barre de progression : la rangée des chapitres, collée en haut une fois le sommaire passé ---------- */
+/* Elle ne prend pas de place dans la page (marge négative) : elle se pose sur le haut du chapitre lu. */
+@media(max-width:959px){html .ocean-v2 #detail .dtabs{margin-inline:calc(-1 * var(--as-gutter,16px));padding-inline:var(--as-gutter,16px)}}
+html .ocean-v2 #detail .dtabs{margin-top:0;margin-bottom:-50px;opacity:0;visibility:hidden;pointer-events:none;transition:opacity .2s ease,visibility 0s linear .2s}
+html .ocean-v2 #detail.is-past .dtabs{opacity:1;visibility:visible;pointer-events:auto;transition:opacity .2s ease}
+.reduce-motion #detail .dtabs{transition:none!important}
+/* Collée, elle cache vraiment ce qui défile dessous (simulateur, 20 nov. : la scène de Conditions se voyait par transparence
+   et un bord arrondi pâle dépassait à droite) : fond opaque du thème, pleine largeur, sans fondu de bord ni coins arrondis. */
+html .ocean-v2 #detail .dtabs{background:var(--t-page);border-radius:0;-webkit-mask-image:none;mask-image:none;box-shadow:none}
+
+/* ---------- Arrivée (une fois, moins d’une seconde) ----------
+   Tout part ensemble et se pose en douceur (même courbe « sortie lente » partout) : la photo recule, les trois chiffres
+   montent, les points de danger s’allument, le sommaire arrive en cascade serrée. Dernier mouvement fini à 0,95 s.
+   Seuls transform et opacity bougent : rien ne change de place dans la page. */
+@keyframes pxZoom{from{transform:scale(1.07)}to{transform:none}}
+@keyframes pxRise{from{opacity:0;transform:translate3d(0,12px,0)}to{opacity:1;transform:none}}
+@keyframes pxMed{from{opacity:0;transform:translate3d(0,16px,0) scale(.92)}60%{opacity:1}to{opacity:1;transform:none}}
+@keyframes pxDot{from{opacity:.2;transform:scale(.3)}70%{transform:scale(1.25)}to{opacity:1;transform:none}}
+html:not(.ob-zoom-open):not(.ob-zoom-land) #detail.px-in .hero-photo{animation:pxZoom .9s cubic-bezier(.22,1,.36,1) both}
+#detail.px-in .hx-chip{animation:pxRise .44s cubic-bezier(.22,1,.36,1) both}
+#detail.px-in .hx-chip:nth-child(1){animation-delay:.08s}
+#detail.px-in .hx-chip:nth-child(2){animation-delay:.14s}
+#detail.px-in .hx-chip:nth-child(3){animation-delay:.2s}
+#detail.px-in .hx-danger .fx-dots i.on{animation:pxDot .24s cubic-bezier(.3,.7,.3,1) both}
+#detail.px-in .hx-danger .fx-dots i.on:nth-child(1){animation-delay:.46s}
+#detail.px-in .hx-danger .fx-dots i.on:nth-child(2){animation-delay:.54s}
+#detail.px-in .hx-danger .fx-dots i.on:nth-child(3){animation-delay:.62s}
+#detail.px-in .hx-danger .fx-dots i.on:nth-child(4){animation-delay:.7s}
+#detail.px-in .px-start>.fx-title{animation:pxRise .42s cubic-bezier(.22,1,.36,1) .2s both}
+#detail.px-in .px-med{animation:pxMed .46s cubic-bezier(.22,1,.36,1) both;animation-delay:calc(.26s + var(--i,0) * .045s)}
+#detail .px-med:nth-child(2){--i:1}#detail .px-med:nth-child(3){--i:2}#detail .px-med:nth-child(4){--i:3}#detail .px-med:nth-child(5){--i:4}#detail .px-med:nth-child(6){--i:5}
+@media (prefers-reduced-motion:reduce){#detail.px-in .hero-photo,#detail.px-in .hx-chip,#detail.px-in .fx-dots i,#detail.px-in .px-start>.fx-title,#detail.px-in .px-med{animation:none!important}#detail .hero-photo{transform:none!important}}
+body.reduce-motion #detail.px-in .hero-photo,body.reduce-motion #detail.px-in .hx-chip,body.reduce-motion #detail.px-in .fx-dots i,body.reduce-motion #detail.px-in .px-start>.fx-title,body.reduce-motion #detail.px-in .px-med{animation:none!important}
+body.reduce-motion #detail .hero-photo{transform:none!important}
+
+
+/* Nature, frise des douze mois (spot-data.js, wildMonths) : une barre par mois, haute du nombre d’espèces photographiées
+   ce mois-là ; toucher un mois met en avant, dans la bande de photos, les espèces vues ce mois-là. */
+#detail .nx-months{margin:0 0 14px}
+#detail .nx-months>.fx-title{margin:0 0 10px}
+#detail .nx-mrow{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:4px;align-items:end;height:74px}
+#detail .nx-m{position:relative;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px;height:100%;min-width:0;min-height:44px;padding:0;border:0;background:none;color:var(--fiche-soft);font:600 var(--fiche-note)/1 var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent}
+#detail .nx-m i{display:block;width:100%;max-width:22px;border-radius:6px 6px 3px 3px;background:color-mix(in srgb,var(--t-main) 28%,var(--t-card));transition:background-color .2s ease}
+#detail .nx-m.now span{color:var(--t-ink);text-decoration:underline;text-underline-offset:3px}
+#detail .nx-m[aria-pressed="true"] i{background:var(--t-main)}
+#detail .nx-m[aria-pressed="true"] span{color:var(--t-main);font-weight:800}
+#detail .nx-m:focus-visible{outline:2px solid var(--t-main);outline-offset:2px;border-radius:6px}
+#detail .nx-mtx{margin:8px 0 0;font:500 var(--fiche-text)/1.4 var(--body);color:var(--t-ink)}
+#detail .dcat[data-cat="faune"] .sd-species>.sd-sp{transition:opacity .25s ease,transform .25s ease}
+#detail .dcat[data-cat="faune"] .sd-species>.sd-sp.is-seen{order:-1}
+#detail .dcat[data-cat="faune"] .sd-species>.sd-sp.is-off{opacity:.38}
+@media (prefers-reduced-motion:reduce){#detail .dcat[data-cat="faune"] .sd-species>.sd-sp,#detail .nx-m i{transition:none}}
+body.reduce-motion #detail .dcat[data-cat="faune"] .sd-species>.sd-sp,body.reduce-motion #detail .nx-m i{transition:none}
+
+/* =====================================================================================================
+   SCÈNE ILLUSTRÉE DE CONDITIONS (spot-experience.js, sceneHTML et paintScene)
+   Le jour choisi parmi « Les prochains jours » : vague à sa taille, va-et-vient au rythme de la période, vent dans son
+   sens quand il est connu. Rien ne bouge hors écran (.is-live posé par IntersectionObserver) ni en mouvement réduit.
+   ===================================================================================================== */
+/* Le cadre a le format du dessin (400 × 290) : la scène n’est jamais rognée sur téléphone, et les calques se déplacent
+   en pourcentage du cadre, donc en unités du dessin. */
+#detail .fx-scene{position:relative;overflow:hidden;aspect-ratio:400 / 290;margin:0 0 10px;border-radius:var(--fiche-radius);background:color-mix(in srgb,var(--t-tint) 70%,var(--t-card));isolation:isolate}
+#detail .fx-scene .sc-stage{position:absolute;left:0;right:0;bottom:0;aspect-ratio:400 / 290;pointer-events:none}
+#detail .fx-scene .sc-layer{position:absolute;inset:0;width:100%;height:100%;display:block;overflow:visible}
+#detail .fx-scene .sc-sky{fill:color-mix(in srgb,var(--t-tint) 70%,var(--t-card))}
+#detail .fx-scene .sc-sun{fill:color-mix(in srgb,var(--t-sun) 82%,var(--t-card))}
+#detail .fx-scene .sc-haze-0{stop-color:var(--t-sun);stop-opacity:0}
+#detail .fx-scene .sc-haze-1{stop-color:var(--t-sun);stop-opacity:.3}
+#detail .fx-scene .sc-glow-0{stop-color:var(--t-sun);stop-opacity:.55}
+#detail .fx-scene .sc-glow-1{stop-color:var(--t-sun);stop-opacity:0}
+/* La vague : sa taille suit la houle (--sc-k, posé par paintScene), depuis le pied droit du dessin. */
+#detail .fx-scene .sc-wave{position:absolute;inset:0;transform-origin:87.5% 100%;transform:scale(var(--sc-k,.76));transition:transform .6s cubic-bezier(.3,.7,.2,1)}
+#detail .fx-scene[data-size="s"] .sc-wave{transform:scale(var(--sc-k,.5))}
+#detail .fx-scene[data-size="m"] .sc-wave{transform:scale(var(--sc-k,.76))}
+#detail .fx-scene[data-size="l"] .sc-wave{transform:scale(var(--sc-k,1))}
+/* Mer presque plate ou plan d’eau : pas de vague qui déferle ; sur un plan d’eau, ni houle ni ressac. */
+#detail .fx-scene:is([data-size="xs"],[data-size="flat"]) .sc-wave{display:none}
+#detail .fx-scene[data-size="flat"] .sc-wash{display:none}
+#detail .fx-scene[data-size="flat"] .sc-swell{opacity:.6}
+#detail .fx-scene .sc-wash{opacity:.9}
+#detail .fx-scene .sc-wind{position:absolute;inset:0}
+/* Traits de vent : clairs, visibles seulement quand le sens (terre ou mer) est connu ; sinon rien n’est dessiné. */
+#detail .fx-scene .sc-wind i{position:absolute;left:8%;top:64%;width:18%;height:3px;border-radius:3px;background:linear-gradient(90deg,transparent,var(--t-on-main) 35%,var(--t-on-main) 65%,transparent);opacity:0}
+#detail .fx-scene:is([data-side="land"],[data-side="sea"]) .sc-wind i{opacity:.6}
+#detail .fx-scene .sc-wind i:nth-child(2){left:24%;top:70%;width:22%}
+#detail .fx-scene .sc-wind i:nth-child(3){left:3%;top:77%;width:17%}
+#detail .fx-scene .sc-wind i:nth-child(4){left:38%;top:66%;width:16%}
+#detail .fx-scene .sc-now{position:absolute;inset:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));grid-template-rows:auto auto 1fr;align-content:start;column-gap:16px;padding:14px 16px;color:var(--t-ink);pointer-events:none}
+#detail .fx-scene .sc-day{grid-column:1 / -1;margin:0 0 5px;font:700 var(--fiche-label)/1.2 var(--body);color:var(--t-ink)}
+#detail .fx-scene .sc-read{display:grid;gap:1px;align-content:start;min-width:0}
+#detail .fx-scene .sc-lab{font:600 var(--fiche-note)/1.25 var(--body);color:var(--fiche-soft)}
+#detail .fx-scene .sc-val{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:5px}
+#detail .fx-scene .sc-val .fx-num{font-size:calc(var(--fiche-num) * .92)}
+#detail .fx-scene .sc-sub{font:500 var(--fiche-note)/1.3 var(--body);color:var(--t-ink)}
+#detail .fx-scene .sc-max{font-weight:700}
+#detail .fx-scene .sc-arrow{width:18px;height:18px;align-self:center;color:var(--t-main)}
+#detail .fx-days-note{margin:0 0 8px}
+#detail .fx-day-row:first-of-type{font-weight:700;font-size:var(--fiche-label)}
+/* Ordinateur : la scène à gauche, les trois jours empilés à droite (pas de grande bande vide ni de vague géante). */
+@media(min-width:960px){
+  #detail .fx-next{display:grid;grid-template-columns:minmax(0,480px) minmax(220px,1fr);grid-template-rows:auto auto 1fr auto;column-gap:16px;align-items:stretch}
+  #detail .fx-next>.fx-title,#detail .fx-next>.fx-more{grid-column:1 / -1}
+  #detail .fx-next>.fx-scene{grid-column:1;grid-row:2 / span 2;margin:0}
+  #detail .fx-next>.fx-days-note{grid-column:2;margin:0 0 8px}
+  #detail .fx-next>.fx-days{grid-column:2;grid-template-columns:1fr;grid-auto-rows:1fr;gap:8px}
+  #detail .fx-next>.fx-days>.fx-day{grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:14px}
+  #detail .fx-scene .sc-now{grid-template-columns:repeat(2,minmax(0,240px))}
+}
+/* Les jours deviennent des boutons : celui qui est montré par la scène est marqué. */
+#detail button.fx-day{width:100%;border:0;font:inherit;color:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent;box-shadow:inset 0 0 0 0 var(--t-main);transition:box-shadow .2s ease}
+#detail button.fx-day.is-on{box-shadow:inset 0 0 0 2px var(--t-main)}
+#detail button.fx-day:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+/* Mouvement : seulement à l’écran (.is-live), sur transform et opacity seulement (calques composés, aucun dessin par image).
+   Lignes de houle : une longueur d’onde (160 unités, 40 % du cadre) par période réelle, vers la plage. La vague avance et
+   se creuse, son écume gonfle, le ressac monte sur le sable puis se retire : le tout sur la même période. */
+@keyframes scDrift{from{transform:translate3d(0,0,0)}to{transform:translate3d(-40%,0,0)}}
+@keyframes scSwell{0%,100%{transform:translate3d(1.8%,.6%,0)}45%{transform:translate3d(-2.6%,-1%,0)}}
+@keyframes scFoam{0%,100%{transform:translate3d(1.2%,.8%,0) scale(.96);opacity:.82}50%{transform:translate3d(-3.4%,0,0) scale(1.05);opacity:1}}
+@keyframes scWash{0%{transform:translate3d(4%,2%,0);opacity:0}18%{opacity:.95}46%{transform:translate3d(-2.4%,-1.2%,0);opacity:.95}62%{transform:translate3d(-2.4%,-1.2%,0);opacity:.8}100%{transform:translate3d(4%,2%,0);opacity:0}}
+@keyframes scWindLand{0%{transform:translate3d(-90%,0,0);opacity:0}25%{opacity:.6}100%{transform:translate3d(210%,0,0);opacity:0}}
+@keyframes scWindSea{0%{transform:translate3d(210%,0,0);opacity:0}25%{opacity:.6}100%{transform:translate3d(-90%,0,0);opacity:0}}
+#detail .fx-scene.is-live:not([data-size="flat"]) .sc-swell{animation:scDrift var(--sc-period,10s) linear infinite}
+#detail .fx-scene.is-live .sc-wave-move{animation:scSwell var(--sc-period,10s) ease-in-out infinite}
+#detail .fx-scene.is-live .sc-foam{transform-origin:55% 100%;animation:scFoam var(--sc-period,10s) ease-in-out calc(var(--sc-period,10s) * -.12) infinite}
+#detail .fx-scene.is-live .sc-wash{animation:scWash var(--sc-period,10s) ease-in-out calc(var(--sc-period,10s) * -.3) infinite}
+#detail .fx-scene.is-live[data-side="land"] .sc-wind i{animation:scWindLand var(--sc-wind,4s) linear infinite}
+#detail .fx-scene.is-live[data-side="sea"] .sc-wind i{animation:scWindSea var(--sc-wind,4s) linear infinite}
+#detail .fx-scene.is-live .sc-wind i:nth-child(2){animation-delay:calc(var(--sc-wind,4s) * -.35)}
+#detail .fx-scene.is-live .sc-wind i:nth-child(3){animation-delay:calc(var(--sc-wind,4s) * -.7)}
+#detail .fx-scene.is-live .sc-wind i:nth-child(4){animation-delay:calc(var(--sc-wind,4s) * -.2)}
+@media (prefers-reduced-motion:reduce){#detail .fx-scene *{animation:none!important;transition:none!important}}
+body.reduce-motion #detail .fx-scene *{animation:none!important;transition:none!important}
+
+/* =====================================================================================================
+   CONDITIONS SANS DOUBLON (23 nov., accord du fondateur ; proposition approuvée, section Conditions)
+   Ordre : alerte de danger, heure du relevé, scène illustrée (houle et vent du moment en grands chiffres), tuiles Eau et
+   Marée, ton créneau, les prochains jours, puis les prévisions détaillées et leurs sources. Les blocs gardent leurs nœuds
+   et leurs id (spot-before.js écrit #dNow, spot-experience.js #spotWeek) : #dNow et #spotWeek s'effacent du rendu
+   (display:contents) et leurs enfants sont rangés dans la colonne du chapitre. Vent et houle ne s'écrivent plus qu'une
+   fois, dans la scène ; si la prévision échoue (pas de scène), les relevés reviennent en entier.
+   ===================================================================================================== */
+#detail .dcat[data-cat="meteo"]>#dNow,#detail .dcat[data-cat="meteo"]>#spotWeek{display:contents}
+#detail .dcat[data-cat="meteo"]>#immersionContext{order:0}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-alert{order:1}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-head{order:2}
+#detail .dcat[data-cat="meteo"] #spotWeek>:is(.fx-scene-wrap,.spot-week-loading,.spot-week-empty){order:3}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-row{order:4}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-slot{order:5}
+#detail .dcat[data-cat="meteo"] #spotWeek>.fx-next{order:6}
+#detail .dcat[data-cat="meteo"] #spotWeek>:is(.wx-block,.fx7-stamp){order:7}
+#detail .dcat[data-cat="meteo"] #spotWeek>:is(.spot-week-note,.wx-source){order:8}
+#detail .dcat[data-cat="meteo"]>:is(.obf-head[data-obf-group="lire"],#sdCoach,#imWeatherHelp){order:9}
+/* Espacements repris des blocs effacés. */
+#detail .dcat[data-cat="meteo"] #dNow>.fx-head{margin:0 0 8px}
+#detail .dcat[data-cat="meteo"] #spotWeek>.fx-scene-wrap>.fx-scene{margin:0 0 12px}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-row{margin:0 0 16px}
+#detail .dcat[data-cat="meteo"] #dNow>.fx-slot{margin:0 0 var(--fiche-gap)}
+/* Le titre « Maintenant » passe dans la scène (son libellé de jour) : l'en-tête ne garde que l'heure du relevé, à droite,
+   et reste lu par les lecteurs d'écran. */
+#detail .dcat[data-cat="meteo"]:has(.fx-scene) #dNow>.fx-head{justify-content:flex-end}
+#detail .dcat[data-cat="meteo"]:has(.fx-scene) #dNow>.fx-head>.fx-title{position:absolute;width:1px;height:1px;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* Vent et houle : dans la scène seulement. Tant que la prévision charge, la place de la scène est réservée. */
+#detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings>:is([data-reading="wind"],[data-reading="wave"]){display:none}
+#detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings{grid-template-columns:repeat(2,minmax(0,1fr));align-items:stretch;gap:10px;min-height:calc(var(--fiche-label) * 1.25 + var(--fiche-num) * .95 + var(--fiche-note) * 1.3 + 32px)}
+/* Plan d'eau intérieur : seule la phrase reste sous la scène, sans hauteur réservée. */
+#detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings:has(>.fx-reading-note){min-height:0}
+/* Relevé indisponible (« Indisponible », « Réessayer ») : pas de grande case vide. */
+#detail .dcat[data-cat="meteo"] .fx-readings:has(>.ob-retry){min-height:0;align-items:center}
+#detail .dcat[data-cat="meteo"] .spot-week-loading:not(.is-failed){aspect-ratio:400 / 290;min-height:0;margin:0 0 12px;border-radius:var(--fiche-radius);background:color-mix(in srgb,var(--t-tint) 70%,var(--t-card));justify-content:center}
+/* Eau et Marée en tuiles légères (fx-card), côte à côte. */
+#detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings>:is([data-reading="temp"],[data-reading="tide"]){padding:12px 12px 13px;border-radius:var(--fiche-radius);background:var(--fiche-wash)}
+@media(min-width:960px){
+  /* Ordinateur : la scène garde une taille de lecture, les tuiles et les jours restent en dessous. */
+  #detail .dcat[data-cat="meteo"] #spotWeek>.fx-scene-wrap{max-width:640px}
+  #detail .dcat[data-cat="meteo"] #dNow>.fx-head{max-width:640px}
+  #detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings{max-width:640px}
+  #detail .fx-next{display:block}
+  #detail .fx-next>.fx-days{grid-template-columns:repeat(3,minmax(0,220px))}
+}
+/* Ordinateur (25 nov.) : plus de place vide à droite des Conditions.
+   - Le nom du jour ne se coupe plus au milieu du mot (« Aujo urd’h ui ») : il prend sa ligne, les chiffres en dessous.
+   - Dès 1280 px, la scène reste à gauche (640 px au plus) et la colonne de droite reçoit les tuiles Eau et Marée, ton
+     créneau et les prochains jours (un jour par ligne). Même rangement pendant le chargement (place de la scène réservée) ;
+     si la prévision échoue, la colonne unique d’avant revient. */
+/* De 960 à 1279 px (colonne unique), la scène, l'heure du relevé et les tuiles prennent toute la largeur du chapitre ;
+   la scène garde ses proportions, plafonnée à 520 px de haut. */
+@media(min-width:960px) and (max-width:1279px){
+  #detail .dcat[data-cat="meteo"] #spotWeek>.fx-scene-wrap,#detail .dcat[data-cat="meteo"] #dNow>.fx-head{max-width:none}
+  #detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings{max-width:none}
+  #detail .dcat[data-cat="meteo"] #spotWeek>.fx-scene-wrap>.fx-scene,#detail .dcat[data-cat="meteo"] .spot-week-loading:not(.is-failed){max-height:520px;width:100%}
+  #detail .dcat[data-cat="meteo"] #spotWeek>.fx-next>.fx-days{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(min-width:960px){
+  #detail .fx-next>.fx-days>.fx-day{grid-template-columns:auto auto;justify-content:start}
+  #detail .fx-next>.fx-days>.fx-day>b{grid-column:1 / -1;overflow-wrap:normal}
+}
+@media(min-width:1280px){
+  .ocean-v2 #detail .dcat[data-cat="meteo"]:not([style*="none"]):has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))){display:grid;grid-template-columns:minmax(0,640px) minmax(300px,1fr);column-gap:28px;align-items:start}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed)))>:not(#dNow,#spotWeek),
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) :is(#dNow,#spotWeek)>*{grid-column:1 / -1}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>:is(.fx-scene-wrap,.spot-week-loading){grid-column:1;grid-row:span 3}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) :is(#dNow>.fx-row,#dNow>.fx-slot,#spotWeek>.fx-next){grid-column:2}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #dNow>.fx-slot{margin:0 0 16px}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>.fx-next>.fx-days{grid-template-columns:minmax(0,1fr)}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>.fx-next>.fx-days>.fx-day{grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:14px}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>.fx-next>.fx-days>.fx-day>b{grid-column:auto}
+}
+
+/* ================= Mouvement réduit ================= */
+@media (prefers-reduced-motion:reduce){#detail .fx-wait{animation:none}}
+body.reduce-motion #detail .fx-wait{animation:none}

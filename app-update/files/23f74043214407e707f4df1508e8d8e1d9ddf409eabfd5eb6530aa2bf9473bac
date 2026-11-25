@@ -1,0 +1,224 @@
+/* @creme-tokens */
+/* Système de motion d’Ocean Buddy : courbes ressort, durées, retour tactile, feuilles, replis, photo qui grandit
+   vers la fiche (motion.js), indicateurs d’onglets, habillages d’attente et mouvement réduit.
+   Couleurs : jetons de thème seulement. Uniquement transform, opacity et les propriétés de transformation
+   (scale, translate) ; rien ne dépasse 380 ms, rien ne tourne en boucle.
+   Compatibilité iOS 16.4 (WKWebView) : pas de View Transitions, pas de @starting-style ; linear() et l’animation
+   liée au défilement seulement derrière @supports, avec un repli (courbe de Bézier, photo immobile).
+
+   Passe du 23 novembre 2026 (« la motion des interactions manque ») : trois courbes communes pour tout ce qui est
+   nouveau, à utiliser partout (motion.js les expose : OceanMotion.easeOut, .spring, .pop) :
+   - --ob-ease-out : fondus et arrivées simples ;
+   - --ob-spring   : ressort léger (dépasse de 2,5 %) : feuilles, fenêtres, curseurs des segments et des interrupteurs ;
+   - --ob-pop      : ressort vif (dépasse de 10 %) : relâché, pastilles, cœur, tampons, verdict qui se pose.
+   --ob-snap (ressort amorti, sans rebond : écrans, vol de la photo, replis) et --ob-ease-in (sorties) restent. */
+:root{--ob-ease-out:cubic-bezier(.22,.8,.3,1);--ob-spring:cubic-bezier(.34,1.2,.64,1);--ob-snap:cubic-bezier(.2,.9,.25,1);--ob-pop:cubic-bezier(.34,1.56,.64,1);
+  /* Sortie : départ franc, sans amorti (une feuille qui s’en va ne traîne pas). */
+  --ob-ease-in:cubic-bezier(.5,0,.8,.4);
+  /* Durées partagées, toutes entre 120 et 380 ms : appui, relâché en ressort, feuilles et fenêtres, sorties, fondus,
+     vol de la photo, onglets, pages poussées, petites récompenses. */
+  --ob-t-press:.12s;--ob-t-release:.32s;--ob-t-sheet:.36s;--ob-t-exit:.2s;--ob-t-fade:.16s;--ob-t-zoom:.38s;--ob-t-tab:.28s;--ob-t-page:.34s;--ob-t-pop:.36s;
+  /* Onde au point de contact : encre du thème sur une carte claire, claire sur une photo. */
+  --ob-ink:color-mix(in srgb,var(--t-main) 15%,transparent);--ob-ink-light:color-mix(in srgb,var(--t-on-main) 36%,transparent)}
+@supports (transition-timing-function:linear(0,1)){
+  :root{--ob-spring:linear(0,.046,.154,.291,.434,.569,.687,.785,.862,.921,.963,.992,1.01,1.02,1.025,1.025,1.023,1.02,1.017,1.013,1.01,1.007,1.005,1.003,1.002,1.001,1);
+    /* Ressort amorti (sans rebond), départ vif : écrans, relâché des cartes. */
+    --ob-snap:linear(0,.076,.228,.391,.538,.658,.752,.823,.875,.913,.940,.959,.972,.981,.988,.992,.995,.997,.998,.999,1);
+    --ob-pop:linear(0,.06,.204,.387,.574,.743,.881,.984,1.053,1.091,1.106,1.104,1.091,1.072,1.052,1.033,1.017,1.005,.996,.991,.989,.989,.99,.992,.994,.996,.998,.999,1,1.001,1)}
+}
+@keyframes ob-fade-in{from{opacity:0}}
+@keyframes ob-fade-out{to{opacity:0}}
+/* Montée seule (transform) : jouée avec ob-fade-in, court. La fenêtre est opaque en 160 ms et finit de monter en
+   ressort ; et passer en mouvement réduit pendant qu’elle est ouverte ne rejoue rien (le fondu, déjà fini, reste). */
+@keyframes ob-rise{from{transform:translate3d(0,44px,0) scale(.96)}}
+@keyframes ob-sink-out{to{opacity:0;transform:translate3d(0,30px,0) scale(.97)}}
+
+/* ---------- Netteté : aucun texte au repos sur un calque transformé ----------
+   L’entrée des blocs d’un écran (fadeUp, base.css) gardait son état final « both » : chaque bloc restait un calque
+   transformé tant qu’on n’avait pas changé d’écran (accueil au premier lancement). « backwards » rend le texte au
+   calque de la page dès la fin de l’entrée ; le premier affichage est identique. Même chose pour « Ton espace ». */
+.screen.active>*,.ocean-hub{animation-fill-mode:backwards}
+
+/* ---------- Photo de la carte qui grandit vers la fiche, et retour (motion.js) ----------
+   Un calque fixe posé sur le héros, animé en transform seulement ; les touchers le traversent. */
+.ob-zoom{position:fixed;z-index:70;overflow:hidden;pointer-events:none;transform-origin:0 0;background:var(--t-deep);contain:layout paint style;backface-visibility:hidden}
+.ob-zoom img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:50% 50%;backface-visibility:hidden}
+.ob-zoom i{position:absolute;inset:0}
+/* Pendant le vol, la vraie photo attend sous le calque (jamais deux fois la même image à l’écran). */
+html.ob-zoom-open #detailHero{visibility:hidden}
+html.ob-zoom-open #dHeroPhoto{transition:none}
+/* À l’arrivée, le calque devient la doublure de la photo sous le voile et le titre, qui se posent en fondu. */
+.ob-zoom.ob-zoom-rest{position:absolute;inset:0;z-index:1;border-radius:0;contain:none}
+html.ob-zoom-land #detailHero>:not(.ob-zoom,#dHeroPhoto,svg){animation:ob-fade-in .22s var(--ob-ease-out) backwards}
+.ob-zoom-landed>:not(img){animation:ob-fade-in .22s var(--ob-ease-out) backwards}
+
+/* ---------- Retour tactile : appui franc, relâché en ressort ----------
+   motion.js joue l’appui et le relâché (propriété « scale », Web Animations) : un toucher bref montre quand même tout
+   l’aller et retour, et un doigt qui fait défiler ne déclenche rien. Les règles :active ci-dessous servent au clavier
+   et de repli sans script ; elles ne portent que sur transform ou scale. */
+.hf-card,.hf-fy,.hf-mood,.hf-go,.hf-search{transition:transform var(--ob-t-release) var(--ob-snap)}
+.hf-card:active,.hf-fy:active,.hf-mood:active,.hf-go:active,.hf-search:active{transition-duration:var(--ob-t-press);transition-timing-function:var(--ob-ease-out)}
+/* Onglets de la fiche et puces : même réponse à l'appui. */
+.dtab,.htab{transition:transform var(--ob-t-release) var(--ob-snap),background-color .2s ease,color .2s ease,border-color .2s ease}
+.dtab:active,.htab:active{transform:scale(.95);transition-duration:var(--ob-t-press),.2s,.2s,.2s}
+/* Tout ce qui se touche répond : les boutons et liens-boutons s’enfoncent (0,96).
+   Propriété « scale » (elle se compose avec un transform déjà posé) et spécificité nulle : la règle d’un composant
+   passe toujours devant. Le relâché en ressort vient de la transition de base des boutons (design.css). */
+:where(.ocean-v2,.oba,.cult-sheet,.app-update,.as-news,.as-confirm) :where(button,[role=button],summary,a[href],label.set-toggle,.evt-a a):where(:not([class*=maplibregl],[disabled],.omap-ctrls *,.sf-pad *)):active{scale:.96;transition-duration:var(--ob-t-press)}
+/* Les liens en forme de bouton ou de ligne (Aide, liens utiles, sources) passent par la même règle : un lien au fil
+   du texte, lui, ne change pas de taille (une boîte en ligne ne reçoit pas « scale »). Jamais un champ de saisie. */
+label.set-toggle{transition:scale var(--ob-t-release) var(--ob-spring)}
+/* Grandes surfaces : enfoncement plus discret. */
+.hf-slide:active,.ob-voyage-banner:active,.poulpy-profile-card:active,.im-postcard:active,.experience-photo-open:active{scale:.975}
+.hf-slide,.ob-voyage-banner,.poulpy-profile-card,.im-postcard,.experience-photo-open{transition:scale var(--ob-t-release) var(--ob-snap)}
+
+/* motion.js joue l’appui (classe ob-tactile) : les composants de l’interface v2 et la barre d’onglets ne s’enfoncent
+   pas une seconde fois par leur propre règle :active (aucun n’a de transform au repos). Un sélecteur par composant,
+   chacun rangé sous sa classe ou sa balise : aucune règle n’est à essayer sur chaque élément de la page. */
+html.ob-tactile .ocean-v2 .ui-spot:active, html.ob-tactile .ocean-v2 .ui-btn:active, html.ob-tactile .ocean-v2 .ui-pill:active, html.ob-tactile .ocean-v2 .ui-card[role=button]:active,
+html.ob-tactile .ocean-v2 .ui-row>button:active, html.ob-tactile .ocean-v2 .ui-row>a:active, html.ob-tactile .ocean-v2 .pv-avatar:active, html.ob-tactile .ocean-v2 .pv-spot:active,
+html.ob-tactile .ocean-v2 .pv-tile:active, html.ob-tactile .ocean-v2 .pv-pass:active, html.ob-tactile .ocean-v2 .exl-pill:active, html.ob-tactile .ocean-v2 .exl-more:active,
+html.ob-tactile .ocean-v2 .tv-card:active, html.ob-tactile .ocean-v2 .tv-idea:active, html.ob-tactile .ocean-v2 .ac-tour:active, html.ob-tactile .ocean-v2 .nav>button[data-s]:active{transform:none}
+
+/* Onde au point de contact (grandes surfaces : cartes, lignes de spots, tuiles). Un calque fixe posé par motion.js
+   sur la surface touchée, rogné à ses coins ; le disque grandit depuis le doigt et s’efface (transform et opacity).
+   Rien n’est ajouté dans la surface elle-même : aucune mise en page ne bouge, les touchers traversent le calque. */
+.ob-ink-box{position:fixed;z-index:55;overflow:hidden;pointer-events:none;contain:strict}
+.ob-ink-box.is-top{z-index:2500}
+.ob-ink{position:absolute;left:0;top:0;width:120px;height:120px;margin:-60px 0 0 -60px;border-radius:50%;pointer-events:none;will-change:transform,opacity;
+  background:radial-gradient(closest-side,var(--ob-ink) 0,var(--ob-ink) 58%,transparent 100%)}
+.ob-ink-box.is-light>.ob-ink{background:radial-gradient(closest-side,var(--ob-ink-light) 0,var(--ob-ink-light) 58%,transparent 100%)}
+
+/* Interrupteurs des réglages : un vrai curseur qui glisse (avant : une case à cocher). Fond du rail en fondu, curseur
+   en transform avec le ressort léger. */
+.ocean-v2 label.set-toggle>input[type=checkbox]{-webkit-appearance:none;appearance:none;flex:none;position:relative;width:46px;height:28px;margin:0;border:0;border-radius:999px;
+  background-color:color-mix(in srgb,var(--t-ink) 24%,transparent);transition:background-color .2s ease;cursor:pointer}
+.ocean-v2 label.set-toggle>input[type=checkbox]::before{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:var(--t-card);
+  box-shadow:0 1px 3px color-mix(in srgb,var(--t-shadow) 34%,transparent);transition:transform var(--ob-t-release) var(--ob-spring)}
+.ocean-v2 label.set-toggle>input[type=checkbox]:checked{background-color:var(--t-main)}
+.ocean-v2 label.set-toggle>input[type=checkbox]:checked::before{transform:translate3d(18px,0,0)}
+.ocean-v2 label.set-toggle>input[type=checkbox]:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+/* Segments (niveau du Profil, Liste / Carte) : le curseur glisse avec le même ressort léger. */
+:root .ocean-v2 .pv-seg-ink{transition:transform var(--ob-t-release) var(--ob-spring),opacity var(--ob-t-fade)}
+:root .ocean-v2 .exl-seg::before{transition:transform var(--ob-t-release) var(--ob-spring)}
+
+/* ---------- Petites récompenses (classes posées par motion.js, retirées à la fin ; rien en boucle) ---------- */
+/* Cœur des favoris : il bat, puis éclate en quelques particules (calque fixe posé par motion.js). */
+.ob-burst{position:fixed;z-index:2500;left:0;top:0;width:0;height:0;pointer-events:none}
+.ob-dot{position:absolute;left:-3.5px;top:-3.5px;width:7px;height:7px;border-radius:50%;background:var(--t-danger);will-change:transform,opacity}
+.ob-dot.is-sun{background:var(--t-sun)}
+.ob-ring{position:absolute;left:-17px;top:-17px;width:34px;height:34px;border-radius:50%;box-shadow:inset 0 0 0 2.5px var(--t-danger);will-change:transform,opacity}
+.ob-burst.is-ok>.ob-dot{background:var(--t-ok)}
+.ob-burst.is-ok>.ob-dot.is-sun{background:var(--t-sun)}
+.ob-burst.is-ok>.ob-ring{box-shadow:inset 0 0 0 2.5px var(--t-ok)}
+/* Verdict « Bon pour toi » : la pastille se pose (elle arrive d’un peu plus haut, plus grande, et s’écrase d’un rien).
+   Une fois, à l’arrivée des conditions (classe .ui-arrive posée par l’accueil et par Explorer). */
+@keyframes ob-land{0%{opacity:0;transform:translate3d(0,-9px,0) scale(1.2)}55%{opacity:1;transform:translate3d(0,1px,0) scale(.95)}100%{opacity:1;transform:translate3d(0,0,0) scale(1)}}
+:root .ocean-v2 .ui-arrive .ui-verdict[data-v=bon]>b{animation:ob-land var(--ob-t-pop) var(--ob-ease-out) .1s backwards}
+/* Tampon de culture gagné : il s’imprime (frappe courte, 360 ms). */
+@keyframes ob-stamp{0%{opacity:0;transform:scale(1.8) rotate(-24deg)}50%{opacity:1;transform:scale(.9) rotate(-8deg)}75%{transform:scale(1.04) rotate(-10deg)}100%{opacity:1;transform:scale(1) rotate(-10deg)}}
+:root .cult-stamp.is-fresh{animation:ob-stamp var(--ob-t-pop) var(--ob-ease-out) both}
+
+/* ---------- Indicateurs d’onglets qui coulissent (motion.js) ----------
+   Barre du bas : la pastille déjà présente (#navPill) fait le trajet d’un onglet à l’autre ; au repos c’est le
+   bouton actif qui porte son fond et son anneau (aucune dépendance au script pour l’état affiché). */
+@media(max-width:959px){
+  .ocean-v2 .nav.ob-tab-move>.nav-pill{display:block!important;position:absolute;z-index:0;left:0;top:4px;bottom:4px;height:auto;margin:0;border-radius:8px;opacity:1!important;pointer-events:none;
+    background:var(--t-pill)!important;box-shadow:inset 0 0 0 2px var(--t-main)}
+  .ocean-v2 .nav.ob-tab-move>button[data-s].active,.ocean-v2 .nav.ob-tab-move>button[aria-current=page],
+  html[data-act] .ocean-v2 .nav.ob-tab-move>button[data-s].active,html[data-act] .ocean-v2 .nav.ob-tab-move>button[aria-current=page]{background:transparent!important;box-shadow:none!important}
+}
+/* Onglets de la fiche : un trait qui glisse sous l’onglet choisi. */
+.ob-tab-ink{position:absolute;left:0;bottom:0;height:3px;border-radius:3px;background:var(--t-main);pointer-events:none;transform-origin:0 50%;opacity:0}
+#dTabs.ob-tab-move .dtab.active::after{opacity:0}
+/* Contenu de l’onglet : fondu court sans déplacement vertical (le contenu ne « tombe » plus à chaque onglet). */
+#detail .dcat{animation:ob-fade-in var(--ob-t-fade) var(--ob-ease-out) backwards}
+
+/* ---------- Feuilles et fenêtres : montée en ressort, fond qui s’assombrit, sortie par le même chemin ---------- */
+/* Feuilles du bas (filtres d’Explorer, « Quand ? ») : elles montent avec le ressort léger et redescendent franchement.
+   Le ressort dépasse d’un rien : une ombre pleine, de la couleur de la feuille, la prolonge vers le bas pour que le
+   fond n’apparaisse jamais sous elle. Le voile suit : il s’assombrit à l’ouverture, s’éclaircit à la fermeture. */
+body .sd-sheet{transition:transform var(--ob-t-exit) var(--ob-ease-in);box-shadow:0 -20px 50px -20px color-mix(in srgb,var(--t-shadow) 50%,transparent),0 64px 0 0 var(--t-card)}
+body .sd-sheet.in{transition:transform var(--ob-t-sheet) var(--ob-spring)}
+body .sd-sheet-back{transition:opacity var(--ob-t-exit) ease}
+body .sd-sheet-back.in{transition:opacity var(--ob-t-sheet) var(--ob-ease-out)}
+.chat-sheet{transition:transform var(--ob-t-sheet) var(--ob-snap),opacity .2s var(--ob-ease-out)}
+/* « Crée ton compte » (styles de base injectés par account-sync.js : sélecteurs plus précis ici).
+   La feuille est retirée 220 ms après la fermeture : la sortie tient en 200 ms. */
+body .oba{transition:opacity var(--ob-t-exit) ease}
+body .oba.open{transition:opacity var(--ob-t-sheet) var(--ob-ease-out)}
+body .oba .oba-card{transform:translate3d(0,34px,0);opacity:0;transition:transform var(--ob-t-exit) var(--ob-ease-in),opacity var(--ob-t-exit) ease}
+body .oba.open .oba-card{transform:none;opacity:1;transition:transform var(--ob-t-sheet) var(--ob-spring),opacity var(--ob-t-fade) var(--ob-ease-out)}
+/* Réglages, quiz et fenêtres du même gabarit : le voile s’assombrit, la carte monte en ressort ; à la fermeture
+   (classe posée par motion.js) la carte redescend et les touchers passent déjà à l’écran du dessous. */
+.quiz-modal.open,.aqi.open{animation:ob-fade-in var(--ob-t-sheet) var(--ob-ease-out)}
+.quiz-modal.open>.quiz-card,.aqi.open>.aqi-card{animation:ob-fade-in var(--ob-t-fade) ease-out backwards,ob-rise var(--ob-t-sheet) var(--ob-spring) backwards}
+.quiz-modal.ob-closing,.aqi.ob-closing{animation:ob-fade-out var(--ob-t-exit) ease forwards;pointer-events:none}
+.quiz-modal.ob-closing>.quiz-card,.aqi.ob-closing>.aqi-card{animation:ob-sink-out var(--ob-t-exit) var(--ob-ease-in) forwards}
+/* Formulaire de voyage et fenêtres <dialog> : même montée, même voile. À la fermeture, motion.js laisse une copie
+   inerte redescendre (.ob-ghost) pendant que le voile s’éclaircit (.ob-ghost-back). */
+:root .ocean-v2 .trip-dialog[open]{animation:ob-fade-in var(--ob-t-fade) ease-out backwards,ob-rise var(--ob-t-sheet) var(--ob-spring) backwards}
+:root .ocean-v2 .trip-dialog[open]::backdrop{animation:ob-fade-in var(--ob-t-sheet) var(--ob-ease-out)}
+:root .ocean-v2 dialog.trip-dialog.ob-ghost[open]{position:fixed;inset:0;z-index:3000;margin:auto;animation:none;pointer-events:none}
+.ob-ghost-back{position:fixed;inset:0;z-index:2999;pointer-events:none;background:color-mix(in srgb,var(--t-scrim) 66%,transparent)}
+/* Mise à jour de l’app : même ressort que les autres feuilles (avant : rebond marqué). */
+.app-update{transition:opacity var(--ob-t-exit) ease}
+.app-update.show{transition:opacity var(--ob-t-sheet) var(--ob-ease-out)}
+.app-update-card{transition:transform var(--ob-t-exit) var(--ob-ease-in)}
+.app-update.show .app-update-card{transition:transform var(--ob-t-sheet) var(--ob-spring)}
+
+/* ---------- Habillage d’attente : « Avant d’y aller » ----------
+   Le mot « Chargement… » reste dans la page pour les lecteurs d’écran ; à l’œil, une barre de hauteur fixe
+   (la hauteur de la ligne de texte : rien ne bouge quand la valeur arrive). */
+@keyframes ob-wait{0%,100%{opacity:.5}50%{opacity:1}}
+#detail .db-v.db-wait{position:relative;color:transparent;-webkit-user-select:none;user-select:none;min-height:18px}
+#detail .db-v.db-wait::before{content:"";position:absolute;left:0;top:50%;width:min(132px,78%);height:10px;margin-top:-5px;border-radius:5px;background:var(--t-tint);animation:ob-wait 1.3s ease-in-out infinite}
+/* La valeur arrivée se pose en fondu (une seule fois : la classe d’attente vient d’être retirée). */
+#detail .db-v:not(.db-wait){animation:ob-fade-in var(--ob-t-fade) var(--ob-ease-out) backwards}
+
+/* ---------- Images : fond de couleur réservé pendant le chargement ---------- */
+.guide-spirit-cover{background-color:var(--t-tint)}
+
+/* ---------- Anneau de focus : au clavier seulement ----------
+   Après un toucher (classe ob-touch, motion.js), un focus déplacé par l’app ne dessine plus d’anneau autour d’un
+   bouton que personne n’a visé. Au clavier (Tab, flèches) la classe est retirée et tous les anneaux reviennent.
+   Les champs de saisie gardent leur repère dans les deux cas. */
+html.ob-touch :focus-visible:not(input):not(textarea):not(select):not([contenteditable]){outline-color:transparent!important}
+
+/* ---------- Défilement ---------- */
+/* Grand titre qui se replie en barre : dès que la page défile (classe is-scrolled), le titre de la barre monte se
+   poser avec le ressort léger pendant que le grand titre de l’écran s’efface vers elle, un peu plus petit.
+   transform et opacity seulement : rien ne change de place dans la page. */
+@media(max-width:959px){
+  :root .ocean-v2 .app-page-title,:root .ocean-v2 .pv-chrome-title{transform:translate3d(0,12px,0) scale(.9);transition:opacity var(--ob-t-fade) var(--ob-ease-out),transform var(--ob-t-release) var(--ob-spring)}
+  .ocean-v2 :is(.ac-top,.exl-head,.pv-top,.pv-sub-head,.as-large) h1,.ocean-v2 .ac-top .ac-date{transform-origin:0 100%;transition:opacity var(--ob-t-exit) var(--ob-ease-out),transform var(--ob-t-release) var(--ob-ease-out)}
+  body.is-scrolled.ocean-v2 :is(.ac-top,.exl-head,.pv-top,.pv-sub-head,.as-large) h1,body.is-scrolled.ocean-v2 .ac-top .ac-date{opacity:0;transform:translate3d(0,-10px,0) scale(.86)}
+}
+/* Effet de profondeur sur les grandes photos des idées de voyage : la photo glisse d’un rien dans son cadre pendant
+   que la rangée défile (propriété « translate », sur le compositeur). Seulement là où le navigateur sait lier une
+   animation au défilement ; ailleurs la photo reste immobile, à sa taille. Les photos qui s’envolent vers une fiche
+   (lignes de spots, cartes du mois) n’y passent pas : leur vol part de leur cadre exact. */
+@supports (view-timeline:--ob-idea inline) and (animation-range:cover){
+  @keyframes ob-depth-x{from{translate:-4.5% 0}to{translate:4.5% 0}}
+  @media (prefers-reduced-motion:no-preference){
+    body:not(.reduce-motion) .tv-idea{view-timeline:--ob-idea inline}
+    body:not(.reduce-motion) .tv-idea>img{scale:1.1;animation:ob-depth-x linear both;animation-timeline:--ob-idea;animation-range:cover}
+  }
+}
+
+/* ---------- Mouvement réduit ----------
+   La règle générale (design.css) retire les déplacements et garde des fondus courts (160 ms). Ici : rien de ce
+   fichier ne part d’une position décalée (seule l’opacité change), et motion.js ne pose ni onde, ni particule, ni
+   enfoncement, ni glissement. */
+@media (prefers-reduced-motion:reduce){
+  body .oba .oba-card,.app-update-card{transform:none}
+  body .sd-sheet:not(.in){opacity:0}
+  :root .ocean-v2 .app-page-title,:root .ocean-v2 .pv-chrome-title{transform:none}
+  body.is-scrolled.ocean-v2 :is(.ac-top,.exl-head,.pv-top,.pv-sub-head,.as-large) h1,body.is-scrolled.ocean-v2 .ac-top .ac-date{transform:none}
+  .ob-ink-box,.ob-burst{display:none}
+}
+body.reduce-motion .oba .oba-card,.reduce-motion .app-update-card{transform:none}
+body.reduce-motion .sd-sheet:not(.in){opacity:0}
+:root .ocean-v2.reduce-motion .app-page-title,:root .ocean-v2.reduce-motion .pv-chrome-title{transform:none}
+body.reduce-motion.is-scrolled.ocean-v2 :is(.ac-top,.exl-head,.pv-top,.pv-sub-head,.as-large) h1,body.reduce-motion.is-scrolled.ocean-v2 .ac-top .ac-date{transform:none}
+.reduce-motion .ob-ink-box,.reduce-motion .ob-burst{display:none}
