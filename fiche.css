@@ -953,7 +953,11 @@ body.reduce-motion #detail #guideLive :is(.gl-tile,.gl-card,.gl-pin){animation:n
 body.reduce-motion #detail :is(.gl-tile,.gl-link-ic,.gl-card-go button){transition:none}
 @media(max-width:389px){#detail .gl-big .fx-num{font-size:calc(var(--fiche-num) * .74)}#detail .gl-tile{padding:10px 10px 0;min-height:158px}#detail .gl-tile .gl-illu{max-height:42%}}
 @media(min-width:960px){
-  #detail .gl-tiles{grid-template-columns:repeat(3,minmax(0,220px))}
+  /* Le coin (25 nov.) : les tuiles remplissent la largeur en colonnes égales ; l'illustration carrée passe à droite du
+     chiffre, entière (contain, aucune coupe). */
+  #detail .gl-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #detail .gl-tile{grid-template-columns:minmax(0,1fr) minmax(72px,min(42%,132px));align-items:center;column-gap:12px;min-height:0;padding:14px}
+  #detail .gl-tile .gl-illu{position:static;grid-column:2;grid-row:1;width:100%;max-height:none;aspect-ratio:1;object-fit:contain;object-position:50% 50%;border-radius:12px}
   #detail .gl-rail{margin:0;padding:0 0 4px}
   #detail .gl-card{flex:0 0 330px}
   #detail .gl-budget{max-width:560px}
@@ -1244,6 +1248,14 @@ body.reduce-motion #detail .fx-scene *{animation:none!important;transition:none!
    - Dès 1280 px, la scène reste à gauche (640 px au plus) et la colonne de droite reçoit les tuiles Eau et Marée, ton
      créneau et les prochains jours (un jour par ligne). Même rangement pendant le chargement (place de la scène réservée) ;
      si la prévision échoue, la colonne unique d’avant revient. */
+/* De 960 à 1279 px (colonne unique), la scène, l'heure du relevé et les tuiles prennent toute la largeur du chapitre ;
+   la scène garde ses proportions, plafonnée à 520 px de haut. */
+@media(min-width:960px) and (max-width:1279px){
+  #detail .dcat[data-cat="meteo"] #spotWeek>.fx-scene-wrap,#detail .dcat[data-cat="meteo"] #dNow>.fx-head{max-width:none}
+  #detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings{max-width:none}
+  #detail .dcat[data-cat="meteo"] #spotWeek>.fx-scene-wrap>.fx-scene,#detail .dcat[data-cat="meteo"] .spot-week-loading:not(.is-failed){max-height:520px;width:100%}
+  #detail .dcat[data-cat="meteo"] #spotWeek>.fx-next>.fx-days{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
 @media(min-width:960px){
   #detail .fx-next>.fx-days>.fx-day{grid-template-columns:auto auto;justify-content:start}
   #detail .fx-next>.fx-days>.fx-day>b{grid-column:1 / -1;overflow-wrap:normal}
