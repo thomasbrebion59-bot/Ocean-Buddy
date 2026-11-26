@@ -266,6 +266,14 @@ test('« Sur place » : niveau des prix du pays sourcé, échelle parmi les pays
   assert.match(empty,/<b>Autour du spot<\/b>/); assert.match(empty,/Aucune adresse trouvée sur OpenStreetMap autour de ce spot/);
   assert.doesNotMatch(empty,/gl-places|Pour manger<\/h4>|gl-psub">\d/);
   assert.match(empty,/Trouver un restaurant/,'sans adresse : la tuile ouvre la carte');
+  /* Relecture du lot 4 : les listes s’arrêtent à 5 lieux et manquent souvent d’écoles ; la carte autour du spot reste à un
+     geste (restaurants, école, location), avec ou sans adresse. Plus de « recherches ci-dessous » qui ne montraient que l’hébergement. */
+  assert.match(html,/<h4 class="fx-label gl-around-h">Sur la carte<\/h4><div class="px-pills gl-around-more"><a class="fx-pill" href="https:\/\/www\.google\.com\/maps\/search\/restaurants\/@[^"]+"[^>]*><span>Restaurants<\/span><\/a><a [^>]*><span>École<\/span><\/a><a class="fx-pill" href="https:\/\/www\.google\.com\/maps\/search\/location%20mat%C3%A9riel[^"]*"[^>]*><span>Location<\/span><\/a><\/div>/);
+  /* Sans adresse, les tuiles Manger et Apprendre ouvrent déjà la carte : seule la location s’ajoute (aucun doublon). */
+  assert.match(empty,/<div class="px-pills gl-around-more"><a [^>]*><span>Location<\/span><\/a><\/div>/);
+  assert.doesNotMatch(empty,/ci-dessous/);
+  /* Spot sans entrée dans le fichier (hors des 74) : pas de carte « Autour du spot », mais la location reste cherchable. */
+  assert.doesNotMatch(none,/Autour du spot/); assert.match(none,/gl-around-more"><a [^>]*><span>Location<\/span>/);
   /* Chargement à l’ouverture d’une fiche, jamais au démarrage ; sources rangées dans « Sources et précisions ». */
   const g=text('spot-guide.js');
   assert.match(g,/if\(!window\.OCEAN_SPOT_EXTRAS\)loadExtras\(\)\.then\(\(\)=>\{if\(current===s\.id\)paintLive\(s,false\);\}\);/);

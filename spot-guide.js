@@ -240,17 +240,17 @@
   }
   /* Carte « Autour du spot » : un petit plan dessiné (mer, terre, route, trois repères), pas une carte réelle. */
   const MINIMAP='<svg class="gl-minimap" viewBox="0 0 160 110" aria-hidden="true" preserveAspectRatio="xMidYMid slice"><rect width="160" height="110" class="mm-land"/><path class="mm-sea" d="M0 0h58c-12 22 8 34-4 56S44 96 52 110H0Z"/><path class="mm-water" d="M96 42c12-8 34-6 42 6s-4 26-22 28-32-8-30-20c0-6 4-10 10-14Z"/><path class="mm-road" d="M52 18c26 6 44 4 70 26s26 40 28 66M18 86c34-6 58-14 88-30"/><circle class="mm-pin a" cx="74" cy="28" r="6"/><circle class="mm-pin b" cx="112" cy="84" r="6"/><circle class="mm-pin c" cx="46" cy="76" r="6"/></svg>';
-  function placesHTML(s){
+  function placesHTML(s,more=''){
     const d=window.OCEAN_SPOT_EXTRAS,p=s&&!s.custom&&d?.places?.[s.id];if(!p)return '';
     const CATS=[['R','Pour manger',P.food],['E','Écoles et clubs',P.school],['L','Location et boutiques',P.board]];
     const rows=CATS.filter(([k])=>Array.isArray(p[k])&&p[k].length).map(([k,title,ic])=>`<h4 class="fx-label gl-around-h">${title}</h4><ul class="gl-places">${p[k].map((x,i)=>{
       const tag=tagOf(k,x[2]);
       return `<li style="--i:${i}"><a class="gl-place" href="https://www.openstreetmap.org/${esc(x[3])}" target="_blank" rel="noopener noreferrer"><span class="gl-place-ic">${svg(ic)}</span><span class="gl-place-tx"><b${NT}>${esc(x[0])}</b>${tag?`<small>${tag}</small>`:''}<small class="gl-place-d">${around(x[1])}</small></span></a></li>`;}).join('')}</ul>`);
     const head=`<div class="gl-aroundcard">${MINIMAP}<span class="gl-aroundcard-tx"><b>Autour du spot</b><a href="${esc(d.osm?.source||'https://www.openstreetmap.org/copyright')}" target="_blank" rel="noopener noreferrer">Données OpenStreetMap</a></span></div>`;
-    if(!rows.length)return `<div class="gl-around" id="glAround">${head}<p class="fx-note gl-around-empty">Aucune adresse trouvée sur OpenStreetMap autour de ce spot. Les recherches ci-dessous ouvrent la carte.</p></div>`;
+    if(!rows.length)return `<div class="gl-around" id="glAround">${head}<p class="fx-note gl-around-empty">Aucune adresse trouvée sur OpenStreetMap autour de ce spot.</p>${more}</div>`;
     const km=nf(Math.round((p.r||3000)/1000)),radius=`Dans un rayon de ${km} km`;
     const date=frDate(d.osm?.extracted);
-    return `<div class="gl-around" id="glAround">${head}<p class="fx-note gl-around-sub">${radius}</p>${rows.join('')}<p class="fx-note gl-osm-src"><span>Lieux : © les contributeurs d’OpenStreetMap, sous licence ODbL, extraction du</span> <span${NT}>${esc(date)}</span>. <span>Les distances sont approximatives.</span></p></div>`;
+    return `<div class="gl-around" id="glAround">${head}<p class="fx-note gl-around-sub">${radius}</p>${rows.join('')}${more}<p class="fx-note gl-osm-src"><span>Lieux : © les contributeurs d’OpenStreetMap, sous licence ODbL, extraction du</span> <span${NT}>${esc(date)}</span>. <span>Les distances sont approximatives.</span></p></div>`;
   }
   /* « Dormir, manger, louer » : tout le pratique au même endroit. */
   function practicalHTML(s,e,ctry){
@@ -273,11 +273,16 @@
     const sportImg=TILE_IMG('assets/ui/sports/'+(SPORT_ILLU.includes(act)?act:'baignade')+'.webp');
     const eat=has('R')?goTile(ILLU_P('table'),'Manger',countText('R',p.R)):linkTile(mapsNear(s,qs.restaurants),ILLU_P('table'),'Manger','Trouver un restaurant');
     const learnParts=[has('E')?countText('E',p.E):'',has('L')?countText('L',p.L):''].filter(Boolean);
-    const learn=learnParts.length?goTile(sportImg,'Apprendre et louer',learnParts.map(t=>`<span>${t}</span>`).join(', ')):linkTile(mapsNear(s,qs.school),sportImg,'Apprendre et louer','Trouver une école ou une location');
+    const learn=learnParts.length?goTile(sportImg,'Apprendre et louer',learnParts.map(t=>`<span>${t}</span>`).join(', ')):linkTile(mapsNear(s,qs.school),sportImg,'Apprendre et louer','Trouver une école');
     const tiles=`<div class="gl-ptiles">${linkTile(links.camping,ILLU_P('sac'),'Camping','Trouver un camping')}${linkTile(links.google,ILLU_P('cabane'),'Hôtel','Trouver un hôtel')}${eat}${learn}</div>`;
     const pill=(h,label)=>`<a class="fx-pill" href="${esc(h)}" target="_blank" rel="noopener"><span${NT}>${label}</span></a>`;
+    /* Les listes OpenStreetMap s’arrêtent à 5 lieux et manquent souvent d’écoles : la carte autour du spot reste à un geste
+       (restaurants, école et location du sport, comme les anciens raccourcis du Coin et « Matériel et cours » de Préparer). */
+    const mapPill=(h,label)=>`<a class="fx-pill" href="${esc(h)}" target="_blank" rel="noopener"><span>${label}</span></a>`;
+    /* Une tuile qui ouvre déjà la carte (aucune adresse dans sa catégorie) n’est pas répétée ici. */
+    const more=`<h4 class="fx-label gl-around-h">Sur la carte</h4><div class="px-pills gl-around-more">${has('R')?mapPill(mapsNear(s,qs.restaurants),'Restaurants'):''}${learnParts.length?mapPill(mapsNear(s,qs.school),'École'):''}${mapPill(mapsNear(s,qs.rental),'Location')}</div>`;
     const search=`<div class="gl-psearch px-search">${dates?`<p class="fx-note">Dates de ton voyage « ${esc(dates.name)} » : du ${esc(fmtDate(dates.checkin))} au ${esc(fmtDate(dates.checkout))}.</p>`:''}<div class="px-pills">${pill(links.booking,'Booking.com')}${pill(links.hostelworld,'Hostelworld')}${pill(links.airbnb,'Airbnb')}${pill(mapsNear(s,qs.hotels),'Google Maps')}${window.OceanNotebook?.button(s.id)||''}</div><p class="fx-note gl-links-src">Recherches publiques, sans lien sponsorisé.</p></div>`;
-    return `<div class="gl-block gl-pratique" id="glPratique"><h3 class="fx-title">Dormir, manger, louer</h3>${level}${tiles}${placesHTML(s)}${search}</div>`;
+    return `<div class="gl-block gl-pratique" id="glPratique"><h3 class="fx-title">Dormir, manger, louer</h3>${level}${tiles}${placesHTML(s,more)||`<div class="gl-around">${more}</div>`}${search}</div>`;
   }
   /* Normales du mois en cours : fichier léger déjà utilisé par l’accueil ([eau, …, houle ×10, …], spot-data.js). */
   function monthNormals(s){

@@ -11466,7 +11466,6 @@
  "1 école ou club": "1 escuela o club",
  "1 location ou boutique": "1 alquiler o tienda",
  "Apprendre et louer": "Aprender y alquilar",
- "Aucune adresse trouvée sur OpenStreetMap autour de ce spot. Les recherches ci-dessous ouvrent la carte.": "No se ha encontrado ninguna dirección en OpenStreetMap alrededor de este spot. Las búsquedas de abajo abren el mapa.",
  "Dormir, manger, louer": "Dormir, comer, alquilar",
  "Google Maps": "Google Maps",
  "Hôtel": "Hotel",
@@ -11475,5 +11474,7 @@
  "Trouver un camping": "Busca un camping",
  "Trouver un hôtel": "Busca un hotel",
  "Trouver un restaurant": "Busca un restaurante",
- "Trouver une école ou une location": "Busca una escuela o un alquiler"
+ "Aucune adresse trouvée sur OpenStreetMap autour de ce spot.": "No se ha encontrado ninguna dirección en OpenStreetMap alrededor de este spot.",
+ "Sur la carte": "En el mapa",
+ "Trouver une école": "Busca una escuela"
 }
