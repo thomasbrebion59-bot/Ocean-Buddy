@@ -49,7 +49,7 @@
     if(!t)return '';
     if(typeof t==='string')return t;
     const name=t.name||t.label||t.trick||'',pts=num(t.points??t.score??t.pts);
-    return name&&pts?name+' · '+fmt(pts)+' pts':name||(pts?fmt(pts)+' pts':'');
+    return name&&pts?name+', '+fmt(pts)+' pts':name||(pts?fmt(pts)+' pts':'');
   }
   function stats(){
     let s=null;

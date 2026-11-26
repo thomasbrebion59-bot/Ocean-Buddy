@@ -36,7 +36,7 @@
       while(set.has((m+1)%12)&&!seen.has((m+1)%12)){m=(m+1)%12;run.push(m);seen.add(m);}
       runs.push(run);
     }
-    return runs.map(r=>r.length===1?monthName(r[0],'short'):`${monthName(r[0],'short')} – ${monthName(r[r.length-1],'short')}`).join(' · ');
+    return runs.map(r=>r.length===1?monthName(r[0],'short'):`${monthName(r[0],'short')} – ${monthName(r[r.length-1],'short')}`).join(', ');
   }
   /* Tirage du jour : stable dans la journée, différent le lendemain. */
   function daily(list,salt){
@@ -96,7 +96,7 @@
   const bright=list=>list.map((x,i)=>({x,i,k:Math.round(vib(x.id)/20)})).sort((a,b)=>b.k-a.k||a.i-b.i).map(o=>o.x);
   /* Pastilles d’une carte (donnée du mois, saison, activités) : aussi refaites sur place quand les données arrivent tard. */
   function chips(s,data,season,month){
-    const acts=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');
+    const acts=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(', ');
     return `${data?dataChip(s,data,month):''}${season?`<span class="hf-season">${esc(season)}</span>`:''}${acts?`<span>${esc(acts)}</span>`:''}`;
   }
   function card(s,{big=false,season=null,data=null,wantSeason=false,month=null}={}){
@@ -126,12 +126,12 @@
   function surfCard(){
     return `<section class="hf-sec hf-plan-sec hf-surf-sec" aria-label="Mini-jeu de surf"><button type="button" class="hf-plan hf-surf" data-surf-game>
       <span class="hf-surf-ic" aria-hidden="true"><svg viewBox="0 0 64 25"><path d="M2 21C12 21 14 6 26 6c9 0 10 8 6 11-3 2-7 0-6-3 1-3 6-3 8 0 2 3 1 7 10 7h20" fill="none" stroke="#e0ff91" stroke-width="3" stroke-linecap="round"/><path d="M2 24h60" stroke="rgba(255,255,255,.35)" stroke-width="2" stroke-linecap="round"/></svg></span>
-      <span class="hf-plan-tx"><small>Nouveau · mini-jeu</small><b>Surfe la vague, même sans réseau</b><span>Choisis ton surfeur ou ta surfeuse, glisse sur la face, entre dans le tube et enchaîne les figures.</span></span></button></section>`;
+      <span class="hf-plan-tx"><small>Nouveau, mini-jeu</small><b>Surfe la vague, même sans réseau</b><span>Choisis ton surfeur ou ta surfeuse, glisse sur la face, entre dans le tube et enchaîne les figures.</span></span></button></section>`;
   }
   function planCard(m){
     return `<section class="hf-sec hf-plan-sec" aria-label="Planifier par mois"><button type="button" class="hf-plan" data-map-plan>
       <span class="hf-plan-cal" aria-hidden="true">${Array.from({length:12},(_,k)=>`<i class="${k===m?'on':''}">${esc(monthName(k,'narrow'))}</i>`).join('')}</span>
-      <span class="hf-plan-tx"><small>Nouveau · planificateur</small><b>Choisis ton mois, Poulpy trouve le spot</b><span>Eau chaude, plein soleil, belles vagues ou vent : la planète s’allume là où c’est le bon moment.</span></span></button></section>`;
+      <span class="hf-plan-tx"><small>Nouveau, planificateur</small><b>Choisis ton mois, Poulpy trouve le spot</b><span>Eau chaude, plein soleil, belles vagues ou vent : la planète s’allume là où c’est le bon moment.</span></span></button></section>`;
   }
   /* Spots de rêve : la sélection du jour (HERO_IDS) pour « Tous » ; pour un sport choisi, des spots de ce sport (la
      sélection d’abord, puis le reste du catalogue, les photos HD devant, tirage du jour, 2 par pays au plus). Moins de
@@ -179,9 +179,9 @@
   function heroBox(){
     const slides=heroSpots();heroSport=curSport();
     return `<div class="hf-hero" data-hf-hero>
-        <div class="hf-slides" role="list">${slides.map((s,i)=>{const p=photo(s),a=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');return `<article class="hf-slide" role="listitem" data-spot="${esc(s.id)}" aria-label="${esc(String(s.name).split(' — ')[0])}, ${esc(s.country||'')}">
+        <div class="hf-slides" role="list">${slides.map((s,i)=>{const p=photo(s),a=(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(', ');return `<article class="hf-slide" role="listitem" data-spot="${esc(s.id)}" aria-label="${esc(String(s.name).split(' — ')[0])}, ${esc(s.country||'')}">
           <img src="${esc(p.src)}" alt="" ${i?'loading="lazy"':'fetchpriority="high" data-fade="off"'} decoding="async">
-          <div class="hf-slide-tx"><span class="hf-kicker">Spot de rêve · ${i+1}/${slides.length}</span><h2>${esc(String(s.name).split(' — ')[0])}</h2><p>${esc(s.country||s.loc||'')}${a?` · ${esc(a)}`:''}</p>
+          <div class="hf-slide-tx"><span class="hf-kicker">Spot de rêve, ${i+1}/${slides.length}</span><h2>${esc(String(s.name).split(' — ')[0])}</h2><p>${esc(s.country||s.loc||'')}${a?`, ${esc(a)}`:''}</p>
           <button type="button" class="hf-go" data-hf-open="${esc(s.id)}">Découvrir ce spot</button></div>
         </article>`;}).join('')}</div>
         <div class="hf-dots" aria-hidden="true">${slides.map((_,i)=>`<i${i?'':' class="on"'}></i>`).join('')}</div>
@@ -216,7 +216,7 @@
     }
     if(q.kind==='trip'){
       const when=q.state==='upcoming'?(q.days===1?'Départ demain':`J-${q.days}`):q.state==='ongoing'?'En voyage':'';
-      return `<button type="button" class="hf-q" data-hf-trip="${esc(q.id)}"><span class="hf-q-ic">${QI.trip}</span><span class="hf-q-tx"><b>Mon voyage</b><small>${when?`${esc(when)} · `:''}<span translate="no">${esc(q.name)}</span></small></span></button>`;
+      return `<button type="button" class="hf-q" data-hf-trip="${esc(q.id)}"><span class="hf-q-ic">${QI.trip}</span><span class="hf-q-tx"><b>Mon voyage</b><small>${when?`${esc(when)}, `:''}<span translate="no">${esc(q.name)}</span></small></span></button>`;
     }
     return '';
   }
@@ -233,7 +233,7 @@
     if(V2)return topV2();
     const n=SPOTS.length;
     return `<section class="hf-top" aria-label="Trouve ton spot">
-      <button type="button" class="hf-search" data-hf-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span><b>Où veux-tu aller ?</b><small>${n} spots · plages, lagons, vagues, récifs</small></span></button>
+      <button type="button" class="hf-search" data-hf-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span><b>Où veux-tu aller ?</b><small>${n} spots : plages, lagons, vagues, récifs</small></span></button>
       ${quickRow()}
       ${acts()}
       ${heroBox()}
@@ -522,7 +522,7 @@
   }
   function forYouSub(){
     const sp=curSport(),lv=curLevel();
-    return `${sp==='all'?'Toutes les activités':sportLabel(sp)||'Toutes les activités'} · ${lv?LEVEL_TX[lv]:'Tous niveaux'}`;
+    return `${sp==='all'?'Toutes les activités':sportLabel(sp)||'Toutes les activités'}, ${lv?LEVEL_TX[lv]:'Tous niveaux'}`;
   }
   /* Repères d’une ligne : niveau du spot, saison du mois, eau du mois, distance (si connue). Une seule ligne, sans retour. */
   function fyChips(s,why){
@@ -536,10 +536,10 @@
   }
   function fyRow({spot:s,why}){
     const p=photo(s),fav=typeof favs!=='undefined'&&favs.has(s.id),name=shortName(s);
-    const act=curSport()!=='all'?sportLabel(curSport()):(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(' · ');
+    const act=curSport()!=='all'?sportLabel(curSport()):(s.sports||[]).slice(0,2).map(sportLabel).filter(Boolean).join(', ');
     return `<article class="hf-fy" data-spot="${esc(s.id)}" role="listitem" tabindex="0" aria-label="${esc(name)}, ${esc(s.country||'')}">
       <img src="${esc(p.thumb)}" alt="" loading="lazy" decoding="async">
-      <div class="hf-fy-tx"><b>${esc(name)}</b><small>${esc(s.country||s.loc||'')}${act?` · ${esc(act)}`:''}</small><p class="hf-fy-why">${fyChips(s,why)}</p></div>
+      <div class="hf-fy-tx"><b>${esc(name)}</b><small>${esc(s.country||s.loc||'')}${act?`, ${esc(act)}`:''}</small><p class="hf-fy-why">${fyChips(s,why)}</p></div>
       <button type="button" class="hf-fav${fav?' on':''}" data-fav="${esc(s.id)}" aria-label="${fav?'Retirer des favoris':'Ajouter aux favoris'} : ${esc(name)}"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.4S3.8 14.9 3.8 9.4A4.6 4.6 0 0 1 12 6.6a4.6 4.6 0 0 1 8.2 2.8c0 5.5-8.2 11-8.2 11z"/></svg></button>
     </article>`;
   }

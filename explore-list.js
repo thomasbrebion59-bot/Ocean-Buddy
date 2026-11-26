@@ -351,7 +351,7 @@
   function dotsHTML(n, basis) {
     if (n == null) return '';
     const k = Math.max(0, Math.min(4, Math.round(n)));
-    const label = basis === 'carnet' ? `Danger estimé : ${k} sur 4 · estimation Ocean Buddy · carnet non vérifié` : `Danger estimé : ${k} sur 4 · estimation Ocean Buddy`;
+    const label = basis === 'carnet' ? `Danger estimé : ${k} sur 4, estimation Ocean Buddy, carnet non vérifié` : `Danger estimé : ${k} sur 4, estimation Ocean Buddy`;
     let d = ''; for (let i = 0; i < 4; i++) d += `<i${i < k ? ' class="on"' : ''}></i>`;
     return `<i class="ui-dots" role="img" data-n="${k}" aria-label="${label}" title="Danger : estimation Ocean Buddy">${d}</i>`;
   }

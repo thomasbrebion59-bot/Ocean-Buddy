@@ -730,7 +730,7 @@
     layer.append(hovEl,tipEl);
     function countryTip(em,p){
       tipEl.hidden=!em;if(!em)return;
-      tipEl.textContent=`${em.c.name} · ${em.c.n>1?em.c.n+' spots':'1 spot'}`;
+      tipEl.textContent=`${em.c.name}, ${em.c.n>1?em.c.n+' spots':'1 spot'}`;
       tipEl.style.transform=`translate(${cssPx(em.x)}px,${cssPx(em.y-em.r-8)}px)`;
     }
 

@@ -128,3 +128,12 @@ body.is-offline .app-chrome::after{content:'Hors connexion';position:absolute;le
 [dir=rtl] .mascot-card{direction:ltr}
 [dir=rtl] .mascot-card .poulpy-eyebrow,[dir=rtl] .mascot-card .poulpy-title,[dir=rtl] .mascot-card .poulpy-action,[dir=rtl] .mascot-card .bubble{unicode-bidi:plaintext}
 [dir=rtl] #fieldCoordinates,[dir=rtl] .hero-coordinate{direction:ltr;unicode-bidi:isolate}
+
+/* ================= Finitions du lot 1 (26 novembre 2026) : plus de sur-titres en capitales dans l'app =================
+   Les petits libellés posés au-dessus d'un titre ou d'un chiffre s'écrivent en casse normale (le texte source est déjà bien écrit).
+   Seuls les grands titres d'écran en capitales condensées (Barlow) restent comme dessinés. */
+.ob-dive-head small,.omap-list-intro,.omini-pop-body small,.trip-when,.tb-eyebrow,.tb-tier-pill span,.tb-tier,.tb-card h3,.tb-cele-eyebrow,
+.sd-head .sd-kicker,.sd-tile small,.sd-rose small,.sd-teaser-tx small,.sd-facts small,.sd-flags h5,.hf-plan-tx small,.sd-vs-title,.sst-k,
+.as-large p,.pp-head small,.guide-chapter-label,.guide-eyebrow,.guide-tile small,.guide-place-kind,.guide-ticket-top small,.guide-search>small,
+.trip-lodging-cheapest small,.field-main-danger-label,.trip-saved-body small,.trip-map-bar label,.trip-map-legs-head,.im-eyebrow,.hf-kicker,
+.hf-card-tx small,.community-kicker,.act-tr-eyebrow,body.is-offline .app-chrome::after,.seo-facts dt{text-transform:none!important;letter-spacing:normal!important}

@@ -240,7 +240,7 @@
     return `<a class="cult-src" href="${esc(src[1])}" target="_blank" rel="noopener"><span>Source :</span> <span${NT}>${esc(src[0])}</span></a>`;
   }
   function spotCard(x){
-    const s=x.s,sports=(s.sports||[]).slice(0,2).map(id=>(typeof SPORTMAP!=='undefined'&&SPORTMAP[id]?.label)||'').filter(Boolean).join(' · ');
+    const s=x.s,sports=(s.sports||[]).slice(0,2).map(id=>(typeof SPORTMAP!=='undefined'&&SPORTMAP[id]?.label)||'').filter(Boolean).join(', ');
     return `<button type="button" class="cult-spot" data-cult-spot="${esc(s.id)}">${x.p?`<img src="${esc(x.p.thumb)}"${window.OceanPhotos?.sharp?.(x.p,'344px')||''} alt="" loading="lazy" decoding="async">`:''}<span><b${NT}>${esc(shortName(s))}</b>${sports?`<small>${esc(sports)}</small>`:''}</span></button>`;
   }
   function pageHTML(c,{fresh=false}={}){
@@ -325,7 +325,7 @@
     const e=data[c],PUBLIC='https://oceanbuddy.app/';
     const base=/^https?:$/.test(location.protocol)&&!/^(localhost|127\.0\.0\.1)$/.test(location.hostname)?location.origin+location.pathname:PUBLIC;
     const url=base+'#culture='+encodeURIComponent(c);
-    const text=[e.name,e.hello?qt(e.hello[0]):'',e.thanks?qt(e.thanks.word):''].filter(Boolean).join(' · ');
+    const text=[e.name,e.hello?qt(e.hello[0]):'',e.thanks?qt(e.thanks.word):''].filter(Boolean).join(', ');
     try{
       if(navigator.share){await navigator.share({title:e.name,text,url});return;}
       await navigator.clipboard.writeText(text+' '+url);say('Lien du pays copié !');
@@ -372,7 +372,7 @@
     if(el.dataset.cultOpen!==c||el.hidden){
       const cv=cover(c),e=data[c],w=[e.hello?.[0],e.thanks?.word].filter(Boolean);
       el.dataset.cultOpen=c;
-      el.innerHTML=`${cv?`<img src="${esc(cv.p.thumb)}" alt="" loading="lazy" decoding="async">`:''}<span><small>Tour du monde des cultures</small><b${NT}>${esc(api.discover(c,LG(),local(c)))}</b>${w.length?`<em${NT}>${w.map(qw).join(' · ')}</em>`:''}</span>${stamped(c)?'<i class="cult-ex-ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i>':''}`;
+      el.innerHTML=`${cv?`<img src="${esc(cv.p.thumb)}" alt="" loading="lazy" decoding="async">`:''}<span><small>Tour du monde des cultures</small><b${NT}>${esc(api.discover(c,LG(),local(c)))}</b>${w.length?`<em${NT}>${w.map(qw).join(', ')}</em>`:''}</span>${stamped(c)?'<i class="cult-ex-ok" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i>':''}`;
       el.hidden=false;
     }
   }

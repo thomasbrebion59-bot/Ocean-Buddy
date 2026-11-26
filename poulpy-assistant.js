@@ -2,7 +2,7 @@
 (() => {
   'use strict';
   const $=s=>document.querySelector(s),originalOpen=openChat;
-  window.setChatStatus=()=>{const el=$('#chatStatus');if(el)el.textContent='Poulpy · guide intégré prêt';};
+  window.setChatStatus=()=>{const el=$('#chatStatus');if(el)el.textContent='Poulpy, guide intégré prêt';};
   const input=$('#chatInput');input.maxLength=1000;input.placeholder='Une question, une envie de voyage…';
   const reset=document.createElement('button');reset.type='button';reset.className='poulpy-chat-reset';reset.setAttribute('aria-label','Commencer une nouvelle discussion');reset.title='Nouvelle discussion';reset.textContent='↺';$('#chatSheet .chat-close').before(reset);
   reset.addEventListener('pointerdown',e=>e.stopPropagation());
@@ -11,7 +11,7 @@
   $('#chatMsgs').setAttribute('role','log');$('#chatMsgs').setAttribute('aria-live','polite');
   const context=document.createElement('div');context.className='poulpy-chat-context';context.id='poulpyChatContext';$('#chatSheet .chat-head').after(context);
   const info=document.createElement('p');info.className='poulpy-chat-privacy';info.textContent='Poulpy répond sur ton appareil, à partir des fiches d’Ocean Buddy. Tes messages ne sont envoyés nulle part.';$('#chatSheet .chat-input').before(info);
-  function refreshContext(){const s=document.body.dataset.screen==='detail'?SPOTS.find(s=>s.id===currentSpot):null;context.textContent=s?'On parle de '+s.name+' · '+s.loc:'Spots, voyages, océan… parlons de ton prochain départ.';}
+  function refreshContext(){const s=document.body.dataset.screen==='detail'?SPOTS.find(s=>s.id===currentSpot):null;context.textContent=s?'On parle de '+s.name+', '+s.loc:'Spots, voyages, océan… parlons de ton prochain départ.';}
   const art=$('#spotlightOcto');if(art&&!art.querySelector('image'))art.innerHTML='<image href="assets/poulpy/scenes/travel-v2.webp" x="0" y="0" width="140" height="140" preserveAspectRatio="xMidYMid slice"/>';
   window.openChat=function(){
     const first=!chatSeeded;if(first)chatSeeded=true;originalOpen();refreshContext();

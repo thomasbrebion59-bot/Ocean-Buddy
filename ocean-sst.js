@@ -62,7 +62,7 @@
       <div class="sst-scale" style="background:${grad()}" aria-hidden="true"></div>
       <div class="sst-ticks" aria-hidden="true">${[[0, '0°'], [10, '10°'], [20, '20°'], [24, '24°'], [30, '30 °C']].map(([t, l]) => `<span style="left:${((t + 2) / 34 * 100).toFixed(1)}%"${t === 24 ? ' class="hot"' : ''}>${l}</span>`).join('')}</div>
       <div class="sst-months">${Array.from({ length: 12 }, (_, m) => `<button type="button" data-sst-m="${m}" aria-pressed="${m === month}" aria-label="${monthName(m)}">${monthName(m, 'narrow')}</button>`).join('')}</div>
-      <p class="sst-src">Normales NOAA OISST 1991-2020 · trait blanc : 24 °C</p>`;
+      <p class="sst-src">Normales NOAA OISST 1991-2020, trait blanc : 24 °C</p>`;
   }
   /* Quitter l’explorateur : la lecture s’arrête. */
   window.addEventListener('ocean:navigate', e => { if (e.detail !== 'spots') stop(); });

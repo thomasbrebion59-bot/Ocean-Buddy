@@ -19,9 +19,9 @@
     expert:{title:'J’adapte mon expérience au lieu.',copy:'Tu as une pratique solide. Le niveau ne dispense pas d’observer, de demander les consignes locales ou de renoncer si les conditions ne conviennent pas.'}
   };
   const winds={
-    offshore:{label:'Vers le large',name:'Vent de terre · offshore',copy:'Il souffle de la terre vers l’eau. Une surface lisse ne signifie pas que le retour sera facile.',note:'En paddle, évite le vent qui pousse au large.',from:[95,130],to:[375,130]},
-    onshore:{label:'Vers la rive',name:'Vent de mer · onshore',copy:'Il souffle de l’eau vers la terre. Il peut agiter la surface et modifier les vagues au bord.',note:'Vérifie aussi les rafales, le déferlement et les conditions de sortie.',from:[375,130],to:[95,130]},
-    cross:{label:'Le long de la rive',name:'Vent de travers · sideshore',copy:'Il souffle parallèlement à la côte dans cet exemple. Il peut décaler ta trajectoire le long du rivage.',note:'La côte réelle peut changer d’orientation : repère ton trajet sur place.',from:[295,195],to:[295,65]}
+    offshore:{label:'Vers le large',name:'Vent de terre, offshore',copy:'Il souffle de la terre vers l’eau. Une surface lisse ne signifie pas que le retour sera facile.',note:'En paddle, évite le vent qui pousse au large.',from:[95,130],to:[375,130]},
+    onshore:{label:'Vers la rive',name:'Vent de mer, onshore',copy:'Il souffle de l’eau vers la terre. Il peut agiter la surface et modifier les vagues au bord.',note:'Vérifie aussi les rafales, le déferlement et les conditions de sortie.',from:[375,130],to:[95,130]},
+    cross:{label:'Le long de la rive',name:'Vent de travers, sideshore',copy:'Il souffle parallèlement à la côte dans cet exemple. Il peut décaler ta trajectoire le long du rivage.',note:'La côte réelle peut changer d’orientation : repère ton trajet sur place.',from:[295,195],to:[295,65]}
   };
   function topicList(inland){return topics.filter(([id])=>!inland||!['houle','maree'].includes(id));}
   function reading(topic,live,inland){

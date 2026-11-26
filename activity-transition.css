@@ -4,7 +4,7 @@
 .act-tr-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;transform:translate3d(0,100%,0) scale(1.06);will-change:transform;backface-visibility:hidden}
 .act-tr-shade{position:absolute;inset:0;opacity:0;background:linear-gradient(180deg,transparent 42%,color-mix(in srgb,var(--t-scrim) 80%,transparent) 100%)}
 .act-tr-cap{position:absolute;left:24px;right:24px;bottom:max(72px,calc(env(safe-area-inset-bottom) + 64px));opacity:0}
-.act-tr-eyebrow{display:block;font:600 11px/1 var(--body,system-ui);letter-spacing:.2em;text-transform:uppercase;opacity:.8}
+.act-tr-eyebrow{display:block;font:600 14px/1 var(--body,system-ui);opacity:.85}
 .act-tr-title{display:block;margin-top:10px;font:700 40px/1.04 var(--body,system-ui);letter-spacing:-.02em;color:var(--t-on-main);text-shadow:0 2px 18px color-mix(in srgb,var(--t-shadow) 45%,transparent)}
 .act-tr-count{display:block;margin-top:8px;font:500 15px/1.3 var(--body,system-ui);opacity:.82}
 

@@ -113,7 +113,7 @@
   const CALC_NOTE = 'Calculé d’après les moyennes de plusieurs années. Ce n’est jamais une prévision.';
   const GAP_NOTE = 'Nos carnets et les moyennes climatiques ne s’accordent pas ici : renseigne-toi sur place.';
   /* Aperçu de l’ancien onglet Le spot seulement (masqué dans la fiche v2) : la faune et les Saisons écrivent leurs périodes en toutes lettres (periodText). */
-  function rangeText(ranges, sep = ' · ') {
+  function rangeText(ranges, sep = ', ') {
     if (!ranges.length) return '';
     if (ranges.length === 1 && ranges[0][0] === 0 && ranges[0][1] === 11) return 'toute l’année';
     return ranges.map(([a, b]) => a === b ? monthName(a) : `${monthName(a)} – ${monthName(b)}`).join(sep);
@@ -305,7 +305,7 @@
     /* Bandeau « Avant d’y aller » : la même phrase que la puce du mois ci-dessous. */
     before(lnow != null ? `En ${monthName(now)} : ${LEVEL_TXT[lnow].toLowerCase()}` : null, lnow);
     host.innerHTML = `<button type="button" class="sd-teaser-btn" data-sd-open aria-label="Voir les saisons du spot">
-      <span class="sd-teaser-tx"><small>${icon(I.cal)}Quand partir ? · ${esc(sportLabel(act))}</small><b>${b.ranges.length ? esc(cap(rangeText(b.ranges))) : 'Selon les conditions du jour'}</b>
+      <span class="sd-teaser-tx"><small>${icon(I.cal)}Quand partir ? ${esc(sportLabel(act))}</small><b>${b.ranges.length ? esc(cap(rangeText(b.ranges))) : 'Selon les conditions du jour'}</b>
       <span class="sd-teaser-strip" aria-hidden="true">${y.map((v, m) => `<i class="l${M.level(v) ?? 'x'}${m === now ? ' now' : ''}"></i>`).join('')}</span>
       <span class="sd-teaser-meta">${lnow != null ? `<span class="sd-chip l${lnow}">En ${esc(monthName(now))} : ${esc(LEVEL_TXT[lnow].toLowerCase())}</span>` : ''}${sea}</span>
       <span class="sd-teaser-note">${CALC_NOTE}</span>${seasonsGap(s) ? `<span class="sd-teaser-note sd-gap">${GAP_NOTE}</span>` : ''}</span></button>`;
@@ -350,8 +350,8 @@
     const st = c ? M.sunTimes(now, c.lat, c.lon) : null;
     const ci = acc.countries[a.cc] || {};
     let cur = '', lng = '';
-    try { cur = (ci.cur || []).map(k => `${new Intl.DisplayNames([lang()], { type: 'currency' }).of(k)} (${k})`).join(' · '); } catch (e) { cur = (ci.cur || []).join(' · '); }
-    try { lng = (ci.lang || []).map(k => new Intl.DisplayNames([lang()], { type: 'language' }).of(k)).join(' · '); } catch (e) { lng = ''; }
+    try { cur = (ci.cur || []).map(k => `${new Intl.DisplayNames([lang()], { type: 'currency' }).of(k)} (${k})`).join(', '); } catch (e) { cur = (ci.cur || []).join(', '); }
+    try { lng = (ci.lang || []).map(k => new Intl.DisplayNames([lang()], { type: 'language' }).of(k)).join(', '); } catch (e) { lng = ''; }
     const ap = (a.ap || []).slice(0, 3).map((p, i) => `<li class="${i === 0 ? 'first' : ''}"><span class="sd-iata"${NT}>${esc(p[0])}</span><span class="sd-ap"><b${NT}>${esc(p[1])}</b><small${NT}>${esc(p[2] || '')}</small></span><span class="sd-km">${num(p[3])} km${p[4] ? '<em>international</em>' : ''}</span></li>`).join('');
     const flights = a.ap && a.ap[0] ? `<a class="sd-link fx-more" href="https://www.google.com/travel/flights?q=${encodeURIComponent('Flights to ' + a.ap[0][0])}" target="_blank" rel="noopener noreferrer">Chercher un vol vers ${esc(a.ap[0][0])}</a>` : '';
     /* Fiche v2 (onglet Préparer) : un titre simple, les aéroports en lignes alignées (code, nom, distance), leur source
@@ -564,7 +564,7 @@
       const more = rest.map((x, i) => `<details class="sd-coach-more"${!pick && i === 0 ? ' open' : ''}><summary><span>${pick ? 'Voir aussi' : 'Niveau'}</span> : <span>${esc(x.title)}</span></summary>${coachBlocks(x.blocks)}</details>`).join('');
       body = (pick ? `<h4 class="sd-coach-level">${esc(pick.title)}</h4>${r.warn ? `<p class="sd-coach-warn">${esc(r.warn)}</p>` : ''}${coachBlocks(pick.blocks)}` : '<p class="sd-coach-pick">Choisis ton niveau dans Réglages, « Mon sport et mon niveau » : tu verras seulement ce qui te concerne.</p>') + more;
     }
-    host.innerHTML = `<p class="sd-vs-title">Lire les conditions · ${esc(sport)}</p>${body}<p class="sd-coach-note">Repères pour apprendre à lire la mer, pas des consignes du lieu. Sur place, suis le poste de secours, le balisage et les drapeaux.</p>`;
+    host.innerHTML = `<p class="sd-vs-title">Lire les conditions : ${esc(sport)}</p>${body}<p class="sd-coach-note">Repères pour apprendre à lire la mer, pas des consignes du lieu. Sur place, suis le poste de secours, le balisage et les drapeaux.</p>`;
   }
   document.addEventListener('ocean:level', () => { try { renderCoach(); } catch (e) {} });
   /* Réglage « Unités » changé : normales, phrases, comparaison du jour et « Lire les conditions » sont redessinés sur place. */

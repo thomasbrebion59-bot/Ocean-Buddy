@@ -43,9 +43,9 @@
     /* Fiche sans conseil ni danger au catalogue : phrases du carnet, étiquetées « non vérifié » (champ carnet). */
     const note=s.carnet&&/^non vérifié$/.test(s.carnet.status)?s.carnet:null;
     if(s.tip)out.push({kicker:'Poulpy',title:'Le conseil de Poulpy',text:s.tip});
-    else if(note?.tip)out.push({kicker:'Carnet Ocean Buddy · non vérifié',title:'Le conseil du carnet',text:note.tip});
+    else if(note?.tip)out.push({kicker:'Carnet Ocean Buddy, non vérifié',title:'Le conseil du carnet',text:note.tip});
     const hazards=(s.dangers||[]).length?s.dangers:(note?.dangers||[]);
-    const kicker=(s.dangers||[]).length?'À surveiller':'Carnet Ocean Buddy · non vérifié';
+    const kicker=(s.dangers||[]).length?'À surveiller':'Carnet Ocean Buddy, non vérifié';
     hazards.slice(0,2).forEach(d=>out.push({kicker,title:d[0]+' '+(d[1].split(/[.:]/)[0]||'Sécurité'),text:d[1]}));
     if(s.anecdote)out.push({kicker:'Le savais-tu ?',title:'Une histoire du spot',text:s.anecdote});
     return out;
@@ -106,9 +106,9 @@
 
   function bars(){root.querySelector('[data-bars]').innerHTML=scenes.map((s,i)=>`<i class="${i<index?'done':i===index?'on':''}"><b></b></i>`).join('');}
   function card(sc){
-    const st=sc.step||{},credit=sc.type==='photo'&&sc.author?`<a href="${esc(sc.source||'#')}" target="_blank" rel="noopener noreferrer">Photo : ${esc(sc.author)} · ${esc(sc.license||'')}</a>`
-      :sc.type==='wide'?`<a href="${esc(sc.page)}" target="_blank" rel="noopener noreferrer">Panorama : ${esc(sc.author||'Wikimedia Commons')} · ${esc(sc.license||'')}</a>`
-      :sc.type==='pano'?`<a href="${esc(sc.page)}" target="_blank" rel="noopener noreferrer">360° : ${esc(sc.author||'Wikimedia Commons')} · ${esc(sc.license||'')}</a>`
+    const st=sc.step||{},credit=sc.type==='photo'&&sc.author?`<a href="${esc(sc.source||'#')}" target="_blank" rel="noopener noreferrer">Photo : ${esc(sc.author)}, ${esc(sc.license||'')}</a>`
+      :sc.type==='wide'?`<a href="${esc(sc.page)}" target="_blank" rel="noopener noreferrer">Panorama : ${esc(sc.author||'Wikimedia Commons')}, ${esc(sc.license||'')}</a>`
+      :sc.type==='pano'?`<a href="${esc(sc.page)}" target="_blank" rel="noopener noreferrer">360° : ${esc(sc.author||'Wikimedia Commons')}, ${esc(sc.license||'')}</a>`
       :sc.type==='ai'?'<span class="voyage-ai">Scène illustrée, pas une photo du lieu</span>':'';
     if(sc.type==='explore')return dock(sc);
     const chips=[levelLabel(spot.level),...(spot.sports||[]).slice(0,3).map(sportLabel)].map(x=>`<span>${esc(x)}</span>`).join('');
@@ -275,7 +275,7 @@
   function credit(v){
     if(v.src==='google'||v.src==='google-ll')return streetView()?'<span>Images © Google Street View</span> <button type="button" class="vx-link" data-vx-revoke>Ne plus charger Google</button>':'<span>Vue fournie par Google Street View</span>';
     if(v.src==='ai')return '<span class="voyage-ai">Illustration, pas une photo du lieu</span>';
-    return `<a href="${esc(v.page)}" target="_blank" rel="noopener noreferrer">360° : ${esc(v.author||'Wikimedia Commons')} · ${esc(v.license||'')}</a>`;
+    return `<a href="${esc(v.page)}" target="_blank" rel="noopener noreferrer">360° : ${esc(v.author||'Wikimedia Commons')}, ${esc(v.license||'')}</a>`;
   }
   function dock(sc){
     const c=root.querySelector('[data-card]');
@@ -287,7 +287,7 @@
     const gy=v&&(v.src==='commons'||v.src==='sphere')&&matchMedia('(pointer:coarse)').matches&&'DeviceOrientationEvent' in window?`<button type="button" class="voyage-cta" data-vx-gyro aria-pressed="false">${icon.gyro} Bouge ton téléphone</button>`:'';
     const noWater=water<0&&views.length?`<p class="vx-missing">${icon.wave}<span>Pas encore de vue réelle dans l’eau pour ce spot.</span></p>`:'';
     const strip=views.map((x,i)=>`<button type="button" class="vx-chip${i===sc.cur?' is-on':''}" data-vx="${i}"${i===sc.cur?' aria-current="true"':''}>${icon[KIND[x.k].icon]}<span>${esc(KIND[x.k].label)}</span></button>`).join('');
-    const kind=v?KIND[v.k]:null,place=v?[v.name,away(v,sc.origin)].filter(Boolean).join(' · '):'';
+    const kind=v?KIND[v.k]:null,place=v?[v.name,away(v,sc.origin)].filter(Boolean).join(', '):'';
     const min=root.classList.contains('vx-min'),focused=c.contains(document.activeElement)?document.activeElement:null;
     c.innerHTML=`<div class="voyage-kicker"><img src="${esc(window.PoulpyIcons?.src?.(spot.sports?.[0])||'assets/design/poulpy.webp')}" alt="" width="34" height="34"><span>Explorer le spot</span><em>${views.length?`${sc.cur+1} / ${views.length}`:''}</em><button type="button" class="vx-fold" data-vx-min aria-expanded="${!min}" aria-label="${min?'Afficher les infos':'Masquer les infos'}">${icon.fold}</button></div>
       ${kind?`<h2>${esc(kind.label)}</h2>${place?`<p class="vx-place">${icon.pin}<span>${esc(place)}</span></p>`:''}<p class="vx-text">${esc(v.src==='ai'?'Aucune vue réelle n’existe encore dans l’eau ici. Cette illustration te donne une idée de l’ambiance, ce n’est pas une photo du lieu.':kind.text)}</p>`:'<h2>Balade-toi sur le spot</h2>'}
@@ -382,7 +382,7 @@
     spot=s;scenes=build(s);index=0;paused=false;opener=document.activeElement;
     ensureRoot();syncPauseBtn();root.hidden=false;document.documentElement.classList.add('voyage-open');
     const worldLab=window.worldOf?.(s.world)?.lab;
-    root.querySelector('[data-place]').textContent=[s.loc,worldLab&&!String(s.loc||'').toLowerCase().includes(String(worldLab).toLowerCase())?worldLab:''].filter(Boolean).join(' · ');
+    root.querySelector('[data-place]').textContent=[s.loc,worldLab&&!String(s.loc||'').toLowerCase().includes(String(worldLab).toLowerCase())?worldLab:''].filter(Boolean).join(', ');
     root.querySelector('[data-name]').textContent=s.name.split(' — ')[0];
     requestAnimationFrame(()=>root.classList.add('is-open'));
     soundWasOn=!!window.OceanSound?.on;

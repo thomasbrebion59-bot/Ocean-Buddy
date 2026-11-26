@@ -173,8 +173,8 @@
     }).join('');
     var g=nextGoal(L),next;
     if(!g)next='Collection complète. Chapeau, légende du large !';
-    else if(g.progress&&g.progress.max>1)next='Prochain : <b>'+esc(g.name)+'</b> <span class="tb-nw">· '+(g.progress.pre||'')+Math.min(g.progress.cur,g.progress.max)+' / '+g.progress.max+'</span>';
-    else next='Prochain : <b>'+esc(g.name)+'</b> · '+esc(g.how);
+    else if(g.progress&&g.progress.max>1)next='Prochain : <b>'+esc(g.name)+'</b><span class="tb-nw">, '+(g.progress.pre||'')+Math.min(g.progress.cur,g.progress.max)+' / '+g.progress.max+'</span>';
+    else next='Prochain : <b>'+esc(g.name)+'</b>, '+esc(g.how);
     var groups=[['app','Exploits'],['quiz','Experts du quiz']].map(function(gr){
       var items=L.filter(function(b){return b.group===gr[0];});
       var n=items.filter(function(b){return b.unlocked;}).length;
@@ -273,7 +273,7 @@
     return '<div class="tb-info">'
       +'<span class="tb-chip tb-t-'+b.tier+'"><i></i>'+esc(b.tierLabel)+'</span>'
       +'<h2 id="tbSheetTitle">'+esc(b.name)+'</h2>'
-      +'<p class="tb-fam">'+esc(b.groupLabel)+' · Ocean Buddy</p>'
+      +'<p class="tb-fam">'+esc(b.groupLabel)+', Ocean Buddy</p>'
       +'<div class="tb-card"><h3>'+(b.unlocked?'Ton exploit':'Comment l’obtenir')+'</h3><p id="tbSheetDesc">'+esc(b.unlocked&&b.done?b.done:b.how)+'</p>'
       +(b.unlocked&&b.done?'<p style="margin-top:6px;font-size:12.5px;color:rgba(220,232,255,.66)">'+esc(b.how)+'</p>':'')
       +status+'</div>'
@@ -513,7 +513,7 @@
       +'<div class="tb-cele-stage" aria-hidden="true"><div class="tb-halo"></div><div class="tb-wave"></div><div class="tb-wave w2"></div>'
       +'<div class="tb-cmedal">'+medalHTML(b,{sweep:true})+'</div><div class="tb-sparks">'+(rm?'':sparks())+'</div></div>'
       +'<div class="tb-cele-txt">'
-      +'<p class="tb-cele-eyebrow">'+(batch.n>1?'Nouveau trophée · '+batch.i+' / '+batch.n:'Nouveau trophée')+'</p>'
+      +'<p class="tb-cele-eyebrow">'+(batch.n>1?'Nouveau trophée, '+batch.i+' / '+batch.n:'Nouveau trophée')+'</p>'
       +'<h2 id="tbCeleTitle">'+esc(b.name)+'</h2>'
       +'<div><span class="tb-chip tb-t-'+b.tier+'"><i></i>'+esc(b.tierLabel)+'</span></div>'
       +'<p class="tb-cele-done" id="tbCeleDone">'+esc(b.done||b.how)+'</p></div>'

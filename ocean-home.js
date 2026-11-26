@@ -27,7 +27,7 @@
       host.addEventListener('click',e=>{const b=e.target.closest('[data-voyage]');if(!b)return;const s=byId(b.dataset.voyage);if(s)window.OceanVoyage?.open(s);});}
     const panos=window.OCEAN_PANORAMAS||{};
     const total=(typeof SPOTS!=='undefined'?SPOTS.length:0);
-    host.innerHTML=`<div class="ob-dive-head"><div><small>Nouveau · Voyage dans le spot</small><h2 id="obDiveTitle">Pars en <span>immersion.</span></h2><p>Plein écran, son des vagues, vues à 360° et balade autour du spot. ${total} destinations t’attendent.</p></div></div>
+    host.innerHTML=`<div class="ob-dive-head"><div><small>Nouveau : Voyage dans le spot</small><h2 id="obDiveTitle">Pars en <span>immersion.</span></h2><p>Plein écran, son des vagues, vues à 360° et balade autour du spot. ${total} destinations t’attendent.</p></div></div>
       <div class="ob-dive-track">${picks().map((s,i)=>`<button type="button" class="ob-story${i===0?' is-lead':''}" data-voyage="${esc(s.id)}" aria-label="Voyage immersif : ${esc(s.name)}"><img src="${esc(photo(s.id,i===0?1280:720))}" alt="" loading="lazy" decoding="async"><span class="ob-story-ring"><i>${sphere(s.id)?orbit:play}</i>${sphere(s.id)?'360°':panos[s.id]?.length?'PANORAMA':'IMMERSION'}</span><span class="ob-story-txt"><small>${esc(s.loc)}</small><b>${esc(s.name.split(' — ')[0])}</b></span></button>`).join('')}</div>`;
   }
 
@@ -41,7 +41,7 @@
       b.addEventListener('click',()=>{const cur=byId(b.dataset.spot);if(cur)window.OceanVoyage?.open(cur);});}
     const pano=sphere(s.id),wide=(window.OCEAN_PANORAMAS?.[s.id]||[]).length;
     b.dataset.spot=s.id;b.style.setProperty('--ob-cover',`url("${photo(s.id,1280)}")`);
-    b.innerHTML=`<span><small>VOYAGE DANS LE SPOT${pano?' · 360°':''}</small><b>Vis ${esc(s.name.split(' — ')[0])}</b><em>${pano?'Vue à 360°, scènes animées et balade autour du spot.':wide?'Panoramas, scènes animées et balade autour du spot.':'Scènes animées, son des vagues et balade autour du spot.'}</em></span><span class="go" aria-hidden="true">${play}</span>`;
+    b.innerHTML=`<span><small>Voyage dans le spot${pano?', 360°':''}</small><b>Vis ${esc(s.name.split(' — ')[0])}</b><em>${pano?'Vue à 360°, scènes animées et balade autour du spot.':wide?'Panoramas, scènes animées et balade autour du spot.':'Scènes animées, son des vagues et balade autour du spot.'}</em></span><span class="go" aria-hidden="true">${play}</span>`;
   }
 
   /* L’ordre de l’accueil appartient à home-feed.js (un seul ordonnancement, sous le rideau de démarrage) :

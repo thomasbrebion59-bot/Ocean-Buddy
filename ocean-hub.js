@@ -56,7 +56,7 @@
     const nextAction=!t.steps.length?'Ajoute ta première étape':p.total&&p.done<p.total?'Continuer la préparation':'Revoir mon voyage';
     return `<button class="hub-trip" type="button" data-trip="${esc(t.id)}" style="--hub-cover:url('${esc(cover)}')">
       <span class="hub-trip-top"><small>${w.state==='ongoing'?'En voyage':'Prochain départ'}</small>${big}</span>
-      <span class="hub-trip-body"><b translate="no">${esc(t.name)}</b><em><span>${stepsTxt}</span>${t.destination?`<span translate="no"> · ${esc(t.destination)}</span>`:''}</em>
+      <span class="hub-trip-body"><b translate="no">${esc(t.name)}</b><em><span>${stepsTxt}</span>${t.destination?`<span translate="no">, ${esc(t.destination)}</span>`:''}</em>
       ${p.total?`<span class="hub-prep" style="--p:${p.pct}%"><i></i></span><small class="hub-prep-label">Préparation ${p.done}/${p.total}</small>`:''}
       <span class="hub-cta">${nextAction}</span></span></button>`;
   }

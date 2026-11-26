@@ -60,7 +60,7 @@
     document.querySelectorAll('.user-name').forEach(el=>el.textContent=name);
     document.querySelectorAll('.user-initial').forEach(el=>el.textContent=name.slice(0,1).toUpperCase());
     const L=window.OceanProgress?.level(typeof xp==='number'?xp:0);
-    $('#sidebarXp').textContent = L?`Niv. ${L.n} · ${L.title}`:`${typeof xp==='number'?xp:0} XP`;
+    $('#sidebarXp').textContent = L?`Niv. ${L.n}, ${L.title}`:`${typeof xp==='number'?xp:0} XP`;
   };
   identity();new MutationObserver(identity).observe($('#xpText'),{childList:true,characterData:true,subtree:true});
   new MutationObserver(identity).observe($('#profName'),{childList:true,characterData:true,subtree:true});
@@ -82,7 +82,7 @@
   }
 
   const credits=document.createElement('a');credits.className='photo-credits';credits.href='photos.html';credits.target='_blank';credits.rel='noopener';credits.textContent='Photographies & crédits';$('#worldPick').append(credits);
-  const photoNote=document.createElement('a');photoNote.className='hero-photo-credit';photoNote.href='photos.html';photoNote.target='_blank';photoNote.rel='noopener';photoNote.textContent='Photo · byronetmedia';$('#homeTop').append(photoNote);
+  const photoNote=document.createElement('a');photoNote.className='hero-photo-credit';photoNote.href='photos.html';photoNote.target='_blank';photoNote.rel='noopener';photoNote.textContent='Photo : byronetmedia';$('#homeTop').append(photoNote);
   const homeStats=document.createElement('div');homeStats.className='hero-stats';homeStats.innerHTML='<span><b>'+SPOTS.length+'</b> spots</span><span><b>9</b> activités</span><span><b>1</b> océan à protéger</span>';$('#homeTop').append(homeStats);
   const worldsSync=syncWorldUI;syncWorldUI=function(){worldsSync();document.body.classList.toggle('is-world-picker',!spotWorld);window.OceanPoulpy?.refresh()};syncWorldUI();
 

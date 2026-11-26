@@ -39,7 +39,7 @@ function showEcoLog(){
       + '<p>Ton carnet écolo, geste par geste.</p></div></div><div class="eco-l">';
   h+= ecoLog.length ? ecoLog.map(function(g){
         return '<div class="eco-g"><div class="eco-t">'+esc(g.t)+'</div>'
-             + '<div class="eco-m">'+(g.l?esc(g.l)+' · ':'')+esc(g.d)+'</div></div>';
+             + '<div class="eco-m">'+(g.l?esc(g.l)+', ':'')+esc(g.d)+'</div></div>';
       }).join('')
     : '<p class="eco-empty">Aucun geste enregistré pour l\'instant. Les défis écolo et les gestes des fiches spots viennent ici.</p>';
   h+='</div>';
@@ -238,9 +238,9 @@ function spotSports(s){
 }
 function spotCardMeta(s){
   const live=LIVE[s.id]||{};
-  if(!live.live)return '<span class="spot-preview">'+spotSports(s).slice(0,3).map(id=>SPORTMAP[id].label).join(' · ')+'</span>';
+  if(!live.live)return '<span class="spot-preview">'+spotSports(s).slice(0,3).map(id=>SPORTMAP[id].label).join(', ')+'</span>';
   const checked=live.fetchedAt?new Date(live.fetchedAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):'';
-  return `<span>${icoWind()} ${esc(ud(live.wind||'—'))}</span><span>${icoSwell()} ${esc(ud(live.swell||'—'))}</span><span>${icoTemp()} ${esc(ud(live.temp||'—'))}</span><span class="live-dot" title="${checked?`Modèle Open-Meteo · consulté à ${checked}`:'Modèle Open-Meteo'}"></span>`;
+  return `<span>${icoWind()} ${esc(ud(live.wind||'—'))}</span><span>${icoSwell()} ${esc(ud(live.swell||'—'))}</span><span>${icoTemp()} ${esc(ud(live.temp||'—'))}</span><span class="live-dot" title="${checked?`Modèle Open-Meteo, consulté à ${checked}`:'Modèle Open-Meteo'}"></span>`;
 }
 /* Jauge de danger calculée : le poids le plus fort parmi les lignes de danger, de 1 à 4 (barème validé le
    20 octobre 2026). Même normalisation que dangerWords : sans accents ni casse, mots entiers (« approche »
@@ -269,7 +269,7 @@ function spotCard(s){
   /* Aucune ligne de danger : la jauge ne dit pas « sans danger », elle dit « non évalué ».
      Sinon c'est une estimation d'Ocean Buddy, et celle tirée du carnet le dit aussi. */
   const gauge=dangerGauge(s),unrated=gauge.n===null;
-  const dangerLabel=unrated?'Danger non évalué':gauge.basis==='carnet'?`Danger estimé : ${gauge.n} sur 4 · estimation Ocean Buddy · carnet non vérifié`:`Danger estimé : ${gauge.n} sur 4 · estimation Ocean Buddy`;
+  const dangerLabel=unrated?'Danger non évalué':gauge.basis==='carnet'?`Danger estimé : ${gauge.n} sur 4, estimation Ocean Buddy, carnet non vérifié`:`Danger estimé : ${gauge.n} sur 4, estimation Ocean Buddy`;
   let dots='';for(let i=0;i<4;i++)dots+=`<span class="dot ${!unrated&&i<gauge.n?'on':''}"></span>`;
   const sports=spotSports(s),sp=sports.slice(0,6).map(id=>`<span title="${esc(SPORTMAP[id].label)}">${sportIcon(id)}</span>`).join('');
   const dist=(nearMode&&userPos)?spotDist(s):null;
@@ -405,7 +405,7 @@ var SPOT_PAGE=30, spotShown=SPOT_PAGE;
    L'écran ouvrait sur 118 fiches à faire défiler : un inventaire, pas un choix.
    On entre par une page de sélection, chaque monde avec sa lumière et sa
    silhouette. La répartition vient du champ `loc` de chaque spot. */
-var WORLDS=[{"id":"fr","lab":"France","sub":"Landes · Bretagne · Méditerranée","c":["#c6e2f8","#7ab8e0","#2b86c0","#12608f","#ffffff","#c2d4e1"],"sun":[214,28,17],"art":"<path fill=\"url(#wsh-fr)\" d=\"M40 78V34Q62 25 98 30L112 36L166 46L170 78H150V60Q150 51 139 51Q128 51 128 60V78Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".20\" d=\"M112 36L166 46L170 78H150V60Q150 51 139 51Z\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M186 78l8-36 8 36Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".20\" d=\"M194 42l8 36h-4Z\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M0 78V60q18-7 34-2v20Z\" opacity=\".8\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M300 78V68q28-9 60-4v14Z\" opacity=\".75\"/>"},{"id":"eu","lab":"Europe","sub":"Portugal · Espagne · Norvège","c":["#e3ecf3","#a8c4d6","#22759c","#0d4767","#9db6c7","#4d6779"],"sun":[176,24,15],"art":"<g fill=\"url(#wsh-eu)\">\n      <path d=\"M0 78V56q44-16 86-6l24 8v20Z\"/>\n      <path d=\"M250 78V68q36-13 72-8l38 6v12Z\"/>\n    </g>\n    <g fill=\"#f8fbfd\">\n      <path d=\"M50 64l4-28h18l4 28Z\"/>\n      <rect x=\"48\" y=\"31\" width=\"30\" height=\"5\" rx=\"2\"/>\n      <rect x=\"55\" y=\"21\" width=\"16\" height=\"10\"/>\n      <path d=\"M52 21h22l-11-9Z\"/>\n    </g>\n    <circle cx=\"63\" cy=\"26\" r=\"3.6\" fill=\"#ffd35e\"/>\n    <g fill=\"#e05a49\"><rect x=\"55\" y=\"40\" width=\"16\" height=\"5\"/><rect x=\"53\" y=\"52\" width=\"20\" height=\"5\"/></g>"},{"id":"af","lab":"Afrique","sub":"Maroc · Mer Rouge · Maurice","c":["#ffeccb","#ffbe86","#1cadc2","#0f7b98","#f1d29c","#cb9c5e"],"sun":[58,32,19],"art":"<path fill=\"url(#wsh-af)\" d=\"M0 78V62q66-26 138-12 60 12 118-6 52-15 104 4v30Z\"/>\n    <path fill=\"#ffffff\" opacity=\".22\" d=\"M0 78V62q66-26 138-12l-52 28Z\"/>\n    <path stroke=\"#6b5334\" stroke-width=\"4.5\" fill=\"none\" stroke-linecap=\"round\" d=\"M118 74q1-18 11-30\"/>\n    <g fill=\"#3f7a52\">\n      <path d=\"M129 44q-18-3-24 7 13-3 24-3Z\"/>\n      <path d=\"M129 44q17-6 25 4-13-2-25-1Z\"/>\n      <path d=\"M129 44q-10-14-24-13 10 5 24 15Z\"/>\n      <path d=\"M129 44q10-15 25-13-11 5-25 15Z\"/>\n    </g>"},{"id":"na","lab":"Amérique du Nord","sub":"Californie · Hawaï · Caraïbes","c":["#ffdcc6","#f79a86","#2f8dc6","#175f8d","#829584","#42574a"],"sun":[212,32,20],"art":"<path fill=\"url(#wsh-na)\" d=\"M0 78V48q34-16 74-8l92 14v24Z\"/>\n    <g fill=\"#2c4b3f\">\n      <path d=\"M28 44l8-18 8 18Z\"/><path d=\"M30 36l6-14 6 14Z\"/>\n      <path d=\"M64 41l9-20 9 20Z\"/><path d=\"M66 32l7-15 7 15Z\"/>\n      <path d=\"M104 45l7-16 7 16Z\"/>\n    </g>\n    <path fill=\"url(#wsh-na)\" opacity=\".6\" d=\"M262 78V68q34-12 66-5l32 6v9Z\"/>"},{"id":"sa","lab":"Amérique du Sud","sub":"Pérou · Brésil · Chili","c":["#ffeac6","#f6b06d","#2091ba","#0d5f81","#c68f68","#83583c"],"sun":[214,30,18],"art":"<path fill=\"url(#wsh-sa)\" d=\"M0 78V52q56-15 108-2 56 14 110 4 60-10 142-16v40Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".13\" d=\"M0 78V52q56-15 108-2l-64 28Z\"/>\n    <g fill=\"#3d7a4f\">\n      <path d=\"M152 78V36q0-7 6-7t6 7v42Z\"/>\n      <path d=\"M140 78V54q0-9 9-9v33Z\"/>\n      <path d=\"M176 78V48q0-9-9-9v39Z\"/>\n      <path d=\"M206 78V58q0-5 4-5t4 5v20Z\"/>\n      <path d=\"M198 78V66q0-6 6-6v18Z\"/>\n    </g>"},{"id":"as","lab":"Asie","sub":"Indonésie · Maldives · Japon","c":["#e2f6f2","#a8e3dd","#19bbb0","#0c7b81","#b9cdc2","#5e7d72"],"sun":[64,30,16],"art":"<g fill=\"url(#wsh-as)\">\n      <path d=\"M22 78V52q0-12 10-12t10 12v26Z\"/>\n      <path d=\"M62 78V28q0-18 16-18t16 18v50Z\"/>\n      <path d=\"M112 78V46q0-13 11-13t11 13v32Z\"/>\n      <path d=\"M244 78V56q0-11 9-11t9 11v22Z\"/>\n    </g>\n    <g fill=\"#1b4a6b\" opacity=\".16\">\n      <path d=\"M78 10q16 0 16 18v50h-10V28q0-14-6-18Z\"/>\n      <path d=\"M123 33q11 0 11 13v32h-7V46q0-10-4-13Z\"/>\n    </g>\n    <g fill=\"#2f5245\">\n      <path d=\"M62 30q16-13 32 0-16-5-32 0Z\"/>\n      <path d=\"M22 53q10-8 20 0-10-3-20 0Z\"/>\n      <path d=\"M112 47q11-9 22 0-11-3-22 0Z\"/>\n      <path d=\"M244 57q9-7 18 0-9-3-18 0Z\"/>\n    </g>"},{"id":"oc","lab":"Océanie","sub":"Australie · Tahiti · Fidji","c":["#d5edf9","#84c8e9","#1599d8","#0a5288","#7c92a8","#3a4c63"],"sun":[66,28,15],"art":"<path fill=\"url(#wsh-oc)\" d=\"M92 78l58-44q10-8 20 0l62 44Z\"/>\n    <path fill=\"#ffffff\" opacity=\".20\" d=\"M92 78l58-44q10-8 20 0l-26 44Z\"/>\n    <path fill=\"#16283c\" opacity=\".20\" d=\"M170 34l62 44h-38Z\"/>\n    <path fill=\"#f6fafc\" opacity=\".78\" d=\"M149 35q11-7 22 0-5-7-11-7t-11 7Z\"/>\n    <path fill=\"url(#wsh-oc)\" opacity=\".5\" d=\"M282 78V70q30-10 60-4l18 4v8Z\"/>"}];
+var WORLDS=[{"id":"fr","lab":"France","sub":"Landes, Bretagne, Méditerranée","c":["#c6e2f8","#7ab8e0","#2b86c0","#12608f","#ffffff","#c2d4e1"],"sun":[214,28,17],"art":"<path fill=\"url(#wsh-fr)\" d=\"M40 78V34Q62 25 98 30L112 36L166 46L170 78H150V60Q150 51 139 51Q128 51 128 60V78Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".20\" d=\"M112 36L166 46L170 78H150V60Q150 51 139 51Z\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M186 78l8-36 8 36Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".20\" d=\"M194 42l8 36h-4Z\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M0 78V60q18-7 34-2v20Z\" opacity=\".8\"/>\n    <path fill=\"url(#wsh-fr)\" d=\"M300 78V68q28-9 60-4v14Z\" opacity=\".75\"/>"},{"id":"eu","lab":"Europe","sub":"Portugal, Espagne, Norvège","c":["#e3ecf3","#a8c4d6","#22759c","#0d4767","#9db6c7","#4d6779"],"sun":[176,24,15],"art":"<g fill=\"url(#wsh-eu)\">\n      <path d=\"M0 78V56q44-16 86-6l24 8v20Z\"/>\n      <path d=\"M250 78V68q36-13 72-8l38 6v12Z\"/>\n    </g>\n    <g fill=\"#f8fbfd\">\n      <path d=\"M50 64l4-28h18l4 28Z\"/>\n      <rect x=\"48\" y=\"31\" width=\"30\" height=\"5\" rx=\"2\"/>\n      <rect x=\"55\" y=\"21\" width=\"16\" height=\"10\"/>\n      <path d=\"M52 21h22l-11-9Z\"/>\n    </g>\n    <circle cx=\"63\" cy=\"26\" r=\"3.6\" fill=\"#ffd35e\"/>\n    <g fill=\"#e05a49\"><rect x=\"55\" y=\"40\" width=\"16\" height=\"5\"/><rect x=\"53\" y=\"52\" width=\"20\" height=\"5\"/></g>"},{"id":"af","lab":"Afrique","sub":"Maroc, Mer Rouge, Maurice","c":["#ffeccb","#ffbe86","#1cadc2","#0f7b98","#f1d29c","#cb9c5e"],"sun":[58,32,19],"art":"<path fill=\"url(#wsh-af)\" d=\"M0 78V62q66-26 138-12 60 12 118-6 52-15 104 4v30Z\"/>\n    <path fill=\"#ffffff\" opacity=\".22\" d=\"M0 78V62q66-26 138-12l-52 28Z\"/>\n    <path stroke=\"#6b5334\" stroke-width=\"4.5\" fill=\"none\" stroke-linecap=\"round\" d=\"M118 74q1-18 11-30\"/>\n    <g fill=\"#3f7a52\">\n      <path d=\"M129 44q-18-3-24 7 13-3 24-3Z\"/>\n      <path d=\"M129 44q17-6 25 4-13-2-25-1Z\"/>\n      <path d=\"M129 44q-10-14-24-13 10 5 24 15Z\"/>\n      <path d=\"M129 44q10-15 25-13-11 5-25 15Z\"/>\n    </g>"},{"id":"na","lab":"Amérique du Nord","sub":"Californie, Hawaï, Caraïbes","c":["#ffdcc6","#f79a86","#2f8dc6","#175f8d","#829584","#42574a"],"sun":[212,32,20],"art":"<path fill=\"url(#wsh-na)\" d=\"M0 78V48q34-16 74-8l92 14v24Z\"/>\n    <g fill=\"#2c4b3f\">\n      <path d=\"M28 44l8-18 8 18Z\"/><path d=\"M30 36l6-14 6 14Z\"/>\n      <path d=\"M64 41l9-20 9 20Z\"/><path d=\"M66 32l7-15 7 15Z\"/>\n      <path d=\"M104 45l7-16 7 16Z\"/>\n    </g>\n    <path fill=\"url(#wsh-na)\" opacity=\".6\" d=\"M262 78V68q34-12 66-5l32 6v9Z\"/>"},{"id":"sa","lab":"Amérique du Sud","sub":"Pérou, Brésil, Chili","c":["#ffeac6","#f6b06d","#2091ba","#0d5f81","#c68f68","#83583c"],"sun":[214,30,18],"art":"<path fill=\"url(#wsh-sa)\" d=\"M0 78V52q56-15 108-2 56 14 110 4 60-10 142-16v40Z\"/>\n    <path fill=\"#1b4a6b\" opacity=\".13\" d=\"M0 78V52q56-15 108-2l-64 28Z\"/>\n    <g fill=\"#3d7a4f\">\n      <path d=\"M152 78V36q0-7 6-7t6 7v42Z\"/>\n      <path d=\"M140 78V54q0-9 9-9v33Z\"/>\n      <path d=\"M176 78V48q0-9-9-9v39Z\"/>\n      <path d=\"M206 78V58q0-5 4-5t4 5v20Z\"/>\n      <path d=\"M198 78V66q0-6 6-6v18Z\"/>\n    </g>"},{"id":"as","lab":"Asie","sub":"Indonésie, Maldives, Japon","c":["#e2f6f2","#a8e3dd","#19bbb0","#0c7b81","#b9cdc2","#5e7d72"],"sun":[64,30,16],"art":"<g fill=\"url(#wsh-as)\">\n      <path d=\"M22 78V52q0-12 10-12t10 12v26Z\"/>\n      <path d=\"M62 78V28q0-18 16-18t16 18v50Z\"/>\n      <path d=\"M112 78V46q0-13 11-13t11 13v32Z\"/>\n      <path d=\"M244 78V56q0-11 9-11t9 11v22Z\"/>\n    </g>\n    <g fill=\"#1b4a6b\" opacity=\".16\">\n      <path d=\"M78 10q16 0 16 18v50h-10V28q0-14-6-18Z\"/>\n      <path d=\"M123 33q11 0 11 13v32h-7V46q0-10-4-13Z\"/>\n    </g>\n    <g fill=\"#2f5245\">\n      <path d=\"M62 30q16-13 32 0-16-5-32 0Z\"/>\n      <path d=\"M22 53q10-8 20 0-10-3-20 0Z\"/>\n      <path d=\"M112 47q11-9 22 0-11-3-22 0Z\"/>\n      <path d=\"M244 57q9-7 18 0-9-3-18 0Z\"/>\n    </g>"},{"id":"oc","lab":"Océanie","sub":"Australie, Tahiti, Fidji","c":["#d5edf9","#84c8e9","#1599d8","#0a5288","#7c92a8","#3a4c63"],"sun":[66,28,15],"art":"<path fill=\"url(#wsh-oc)\" d=\"M92 78l58-44q10-8 20 0l62 44Z\"/>\n    <path fill=\"#ffffff\" opacity=\".20\" d=\"M92 78l58-44q10-8 20 0l-26 44Z\"/>\n    <path fill=\"#16283c\" opacity=\".20\" d=\"M170 34l62 44h-38Z\"/>\n    <path fill=\"#f6fafc\" opacity=\".78\" d=\"M149 35q11-7 22 0-5-7-11-7t-11 7Z\"/>\n    <path fill=\"url(#wsh-oc)\" opacity=\".5\" d=\"M282 78V70q30-10 60-4l18 4v8Z\"/>"}];
 var SPOT_WORLD=Object.fromEntries(SPOTS.map(spot=>[spot.id,spot.world]));
 var spotWorld=null,spotCountry=null;
 /* Pays dérivé du catalogue : cette étape garde les données locales et évite
@@ -1383,7 +1383,7 @@ function renderSpotSource(s){
   const source=s.source||window.OCEAN_SPOT_SOURCES?.[s.id];
   const checked=s.reviewed||source?.reviewed;
   if(!source?.url||!/^https:\/\//i.test(source.url)){
-    host.textContent=s.custom?'Spot privé enregistré sur cet appareil · informations non vérifiées.':'Informations éditoriales à confirmer auprès de sources locales.';
+    host.textContent=s.custom?'Spot privé enregistré sur cet appareil, informations non vérifiées.':'Informations éditoriales à confirmer auprès de sources locales.';
     return;
   }
   host.append('Source : ');
@@ -1427,7 +1427,7 @@ function pstatTile(svg,bg,color,v,l,on){return '<div class="pstat"'+(on?' onclic
 function renderProfile(){
   var L=levelInfo();
   var fill=document.getElementById('profXpFill');if(fill)fill.style.width=L.pct+'%';
-  var xt=document.getElementById('profXpText');if(xt)xt.textContent=L.max?`${L.title} · ${xp} XP · niveau maximum atteint`:`${L.title} · ${xp} XP, plus que ${L.remain} XP avant le niveau ${L.next.n}`;
+  var xt=document.getElementById('profXpText');if(xt)xt.textContent=L.max?`${L.title}, ${xp} XP, niveau maximum atteint`:`${L.title}, ${xp} XP, plus que ${L.remain} XP avant le niveau ${L.next.n}`;
   var pl=document.getElementById('profLevel');if(pl)pl.textContent=`Niv. ${L.n}`;
   var sk=window.OceanProgress?OceanProgress.streak():0;var ps=document.getElementById('profStreak');if(ps)ps.textContent=sk;var psl=document.getElementById('profStreakLab');if(psl)psl.textContent=sk>1?'jours d’affilée':(window.obT?obT('jour'):'jour');
   var rt=document.getElementById('profTrips');if(rt)rt.textContent=window.OceanTrips?OceanTrips.count():0;
@@ -1517,7 +1517,7 @@ function renderToday(){
       <div class="th-credit" id="todayCredit"></div>
       <div class="th-cap">
         <div class="nm">${esc(s.name.split(' — ')[0])}</div>
-        <div class="rc"><span>${actLab}</span> · <span>${(typeof LVLTXT!=='undefined'&&LVLTXT[s.level])||s.level}</span></div>
+        <div class="rc"><span>${actLab}</span>, <span>${(typeof LVLTXT!=='undefined'&&LVLTXT[s.level])||s.level}</span></div>
       </div>
       <div class="cond-row">
         <div class="cond">${icoWind()}<div class="cv">${ud(conditions.wind||'—')}</div><div class="cl">Vent</div></div>
@@ -1576,7 +1576,7 @@ function renderConditions(s,live){
   if(head){
     /* Heure du relevé, ou sa date si ce n’est pas aujourd’hui (même texte que « Maintenant », spot-before.js). */
     const stamp=live?.fetchedAt?(window.OceanBefore?.stamp?.(live.fetchedAt)||''):'';
-    head.textContent=live?(isInland(s)?'Plan d’eau intérieur · vent Open-Meteo':'Prévisions du modèle · Open-Meteo')+(stamp?' · '+stamp:''):'Chargement…';
+    head.textContent=live?(isInland(s)?'Plan d’eau intérieur, vent Open-Meteo':'Prévisions du modèle Open-Meteo')+(stamp?', '+stamp:''):'Chargement…';
   }
 }
 function tideFromMarine(mar){
@@ -1784,7 +1784,7 @@ function renderLiveTop(){
   document.getElementById('liveTopTitle').textContent=live?'La mer en chiffres':'À découvrir';
   el.innerHTML=list.map(s=>{
     const L=LIVE[s.id]||{};
-    const detail=live?[L.swell,L.wind,L.temp].filter(Boolean).map(ud).join(' · '):s.loc;
+    const detail=live?[L.swell,L.wind,L.temp].filter(Boolean).map(ud).join(', '):s.loc;
     return `<button class="lt-row" onclick="openSpot(${esc(JSON.stringify(String(s.id)))})"><span class="lt-info"><b>${esc(s.name.split(' — ')[0])}</b><span>${esc(detail)}</span></span><span class="lt-badge lt-ref">Voir</span></button>`;
   }).join('')+(live?'<p class="lt-note">Prévisions du modèle Open-Meteo.</p>':'');
 }
@@ -1795,7 +1795,7 @@ function renderForecastBars(barsId,bestId,days,vals,opt){
   opt=opt||{};var unit=opt.unit||'m',dec=unit==='km/h'?0:1;
   var max=Math.max.apply(null,vals)||1;
   var bi=opt.best==='min'?vals.indexOf(Math.min.apply(null,vals)):vals.indexOf(Math.max.apply(null,vals));
-  if(bestId)document.getElementById(bestId).innerHTML=(opt.liveOn?'<span class="live-badge"><i></i>'+(opt.badge||'Modèle Open-Meteo')+'</span>':'🤙 ')+(opt.bestLabel||'Houle la plus haute')+' : <b>'+days[bi]+'</b> · '+vals[bi].toFixed(dec)+' '+unit;
+  if(bestId)document.getElementById(bestId).innerHTML=(opt.liveOn?'<span class="live-badge"><i></i>'+(opt.badge||'Modèle Open-Meteo')+'</span>':'🤙 ')+(opt.bestLabel||'Houle la plus haute')+' : <b>'+days[bi]+'</b>, '+vals[bi].toFixed(dec)+' '+unit;
   document.getElementById(barsId).innerHTML=vals.map(function(v,i){var h=Math.round((v/max)*100);return '<div class="fc-col '+(i===bi?'best':'')+'"><div class="fc-val">'+(dec?num1(v):v.toFixed(0))+'</div><div class="fc-bar" style="height:'+h+'%"></div><div class="fc-day">'+days[i]+'</div></div>';}).join('');
 }
 async function fetchWaves(id,n){
@@ -1826,7 +1826,7 @@ function renderProg(){
   el.innerHTML=`
     <div class="prog-medal"><div class="lv">${L.n}</div><div class="nv">NIVEAU</div></div>
     <div class="prog-left">
-      <div class="pl-top"><span class="lvlnum">${esc(L.title)}</span><span class="lvlnext">${L.next?'Prochain : Niv. '+L.next.n+' · '+esc(L.next.title):'Niveau maximum'}</span></div>
+      <div class="pl-top"><span class="lvlnum">${esc(L.title)}</span><span class="lvlnext">${L.next?'Prochain : Niv. '+L.next.n+', '+esc(L.next.title):'Niveau maximum'}</span></div>
       <div class="progressbar" style="margin-top:9px"><i style="width:${L.pct}%"></i></div>
       <div class="pl-sub">${L.max?'Tu as tout débloqué. Continue à protéger l’océan !':'Plus que <b>'+L.remain+' XP</b> pour le niveau suivant'}</div>
     </div>
@@ -2087,7 +2087,7 @@ function renderCompetition(){
     ev.innerHTML=CMP_EVENTS.map(function(e){
       var sp=e.spot&&typeof SPOTS!=='undefined'&&SPOTS.some(function(x){return x.id===e.spot;});
       return '<div class="evt"><div class="evt-t">'+e.t+'</div>'
-        + '<div class="evt-m">'+e.when+' · '+e.loc+'</div>'
+        + '<div class="evt-m">'+e.when+', '+e.loc+'</div>'
         + '<div class="evt-o">'+e.org+'</div>'
         + '<div class="evt-d">'+e.d+'</div>'
         + '<div class="evt-a">'
@@ -2146,7 +2146,7 @@ function levelLabel(id){const l=LEVELS.find(x=>x.id===id);return l?l.label:'';}
 function renderMyChoice(full){
   const cur=activeSport&&SPORTMAP[activeSport]?activeSport:'all',sp=SPORTMAP[cur];
   const v=document.getElementById('profSportVal');
-  if(v)v.innerHTML=esc(sp?sp.label:'Tous les sports')+(chosenLevel?' · '+esc(levelLabel(chosenLevel)):'');
+  if(v)v.innerHTML=esc(sp?sp.label:'Tous les sports')+(chosenLevel?', '+esc(levelLabel(chosenLevel)):'');
   const pi=document.getElementById('profSportIc');if(pi&&pi.dataset.sp!==cur){pi.dataset.sp=cur;pi.innerHTML=sportIcon(cur).replace('<img ','<img style="width:32px;height:32px" ');}
   if(!full){
     document.querySelectorAll('#setSportGrid .sport-card').forEach(c=>{const on=c.dataset.sp===cur;c.classList.toggle('sel',on);c.setAttribute('aria-pressed',String(on));});
@@ -2188,7 +2188,7 @@ function popPoulpy(){['octo','octoHi'].forEach(function(id){var o=document.getEl
 function renderXpBar(){
   const L=levelInfo();
   const f=document.getElementById('xpFill');if(f)f.style.width=L.pct+'%';
-  const t=document.getElementById('xpText');if(t)t.textContent=L.max?`${xp} XP · niveau max`:`Niv. ${L.n} · ${xp - L.min} / ${L.next.min - L.min} XP`;
+  const t=document.getElementById('xpText');if(t)t.textContent=L.max?`${xp} XP, niveau max`:`Niv. ${L.n}, ${xp - L.min} / ${L.next.min - L.min} XP`;
 }
 function addXP(n,msg){
   const before=levelInfo().n;xp+=n;
@@ -2460,7 +2460,7 @@ function hideTyping(){const t=document.getElementById('typingMsg');if(t)t.remove
 function esc(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
 function pick(a){return a[Math.floor(Math.random()*a.length)];}
 /* poulpy-assistant.js completes this chat; every answer comes from the guide below. */
-function setChatStatus(){const el=document.getElementById('chatStatus');if(el)el.textContent='Ton guide océan · prêt';}
+function setChatStatus(){const el=document.getElementById('chatStatus');if(el)el.textContent='Ton guide océan, prêt';}
 function chatSend(text){text=String(text||'').trim();if(!text)return;addMsg('user',esc(text));const reply=poulpyReply(text);addMsg('bot',reply.html,reply.btn);}
 function chatSendInput(){const i=document.getElementById('chatInput');chatSend(i.value);i.value='';}
 function quick(t){const map={spot:"Quel spot tu me conseilles aujourd'hui ?",secu:"Donne-moi un conseil de sécurité",eco:"Un geste écolo à faire ?",prog:"Où en est ma progression ?"};chatSend(map[t]);}
@@ -3045,7 +3045,7 @@ function renderQuizPicker(){
   h+='<button class="quiz-daily'+(done?' done':'')+'" onclick="quizStartDaily()"><span class="qd-ic"><svg class="uic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><circle cx="12" cy="12" r="4.4"/><circle cx="12" cy="12" r="1.3" fill="currentColor" stroke="none"/></svg></span><span class="qd-tx"><b>Défi du jour</b><span>'+(done?'Déjà relevé aujourd’hui ✓ · rejouable':'Bonus +30 XP au 1ᵉʳ essai !')+'</span></span></button>';
   h+='<div class="quiz-mode"><span>Mode</span><button class="qm-btn'+(quizTimed?'':' on')+'" onclick="quizSetTimed(false)">Normal</button><button class="qm-btn'+(quizTimed?' on':'')+'" onclick="quizSetTimed(true)">⏱️ Chrono</button></div>';
   h+='<div class="quiz-cats">'+QUIZ_CATS.map(function(c){var bs=d.best[c.id]||0;var bd=d.badges.indexOf(c.id)>=0;return '<button class="quiz-cat" onclick="quizPick(\''+c.id+'\')"><span class="qc-e">'+c.emoji+'</span><span class="qc-l">'+c.label+(bd?' 🏅':'')+'</span>'+(bs?'<span class="qc-best">★ '+bs+'</span>':'')+'</button>';}).join('')+'</div>';
-  if(d.badges.length){h+='<div class="quiz-badges"><b>🏅 Tes badges :</b> '+d.badges.map(function(id){var c=QUIZ_CATS.filter(function(x){return x.id===id;})[0];return c?`Expert ${c.label}`:'';}).filter(Boolean).join(' · ')+'</div>';}
+  if(d.badges.length){h+='<div class="quiz-badges"><b>🏅 Tes badges :</b> '+d.badges.map(function(id){var c=QUIZ_CATS.filter(function(x){return x.id===id;})[0];return c?`Expert ${c.label}`:'';}).filter(Boolean).join(', ')+'</div>';}
   document.getElementById('quizBody').innerHTML=h;
 }
 function quizStartDaily(){quizDaily=true;quizCat='tout';quizQs=quizShuffle(QUIZ_BANK).slice(0,7);quizIdx=0;quizScore=0;quizStreak=0;renderQuizQuestion();}
@@ -3087,9 +3087,9 @@ function renderQuizResult(){
   else if(pct>=0.34){title='En progression, continue !';emo='🐠';}
   else{title='Poulpy va t’apprendre, recommence !';emo='🐚';}
   var xp=s*10+(s===n?20:0),extra='';
-  if(quizTimed){xp+=s*3;extra+=' · ⏱️ bonus chrono';}
+  if(quizTimed){xp+=s*3;extra+=', ⏱️ bonus chrono';}
   var d=quizLoad();
-  if(quizDaily&&d.daily!==quizToday()){xp+=30;d.daily=quizToday();extra+=' · 🎯 +30 défi du jour';}
+  if(quizDaily&&d.daily!==quizToday()){xp+=30;d.daily=quizToday();extra+=', 🎯 +30 défi du jour';}
   var key=quizDaily?'tout':quizCat;
   if(!d.best[key]||s>d.best[key])d.best[key]=s;
   var newBadge=null,bc=null;
