@@ -67,7 +67,8 @@ function buildPlaces(json) {
       ok.sort((a, b) => a[1] - b[1]);
       if (ok.length) out[key] = ok.slice(0, MAX_PER_CAT);
     }
-    if (Object.keys(out).length) { out.r = Number(v.radiusM) || Number(json.radiusM) || 3000; spots[id] = out; }
+    /* Un spot sans aucun lieu garde son entrée (rayon seul) : la fiche dit alors « aucune adresse trouvée ». */
+    out.r = Number(v && v.radiusM) || Number(json.radiusM) || 3000; spots[id] = out;
   }
   return { meta: { extracted: json.extracted, license: json.license, source: json.source }, spots, dropped };
 }

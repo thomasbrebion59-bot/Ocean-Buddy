@@ -11458,5 +11458,22 @@
  "Tire pour rafraîchir": "Tira para actualizar",
  "Unités": "Unidades",
  "Vent en nœuds": "Viento en nudos",
- "eau, moyenne en {0}": "agua, media de {0}"
+ "eau, moyenne en {0}": "agua, media de {0}",
+ "{0} adresses à moins de {1} km": "{0} direcciones a menos de {1} km",
+ "{0} écoles ou clubs": "{0} escuelas o clubes",
+ "{0} locations ou boutiques": "{0} alquileres o tiendas",
+ "1 adresse à moins de {0} km": "1 dirección a menos de {0} km",
+ "1 école ou club": "1 escuela o club",
+ "1 location ou boutique": "1 alquiler o tienda",
+ "Apprendre et louer": "Aprender y alquilar",
+ "Aucune adresse trouvée sur OpenStreetMap autour de ce spot. Les recherches ci-dessous ouvrent la carte.": "No se ha encontrado ninguna dirección en OpenStreetMap alrededor de este spot. Las búsquedas de abajo abren el mapa.",
+ "Dormir, manger, louer": "Dormir, comer, alquilar",
+ "Google Maps": "Google Maps",
+ "Hôtel": "Hotel",
+ "Les {0} plus proches, à moins de {1} km": "Las {0} más cercanas, a menos de {1} km",
+ "Manger": "Comer",
+ "Trouver un camping": "Busca un camping",
+ "Trouver un hôtel": "Busca un hotel",
+ "Trouver un restaurant": "Busca un restaurante",
+ "Trouver une école ou une location": "Busca una escuela o un alquiler"
 }

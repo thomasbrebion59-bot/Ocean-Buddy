@@ -1,7 +1,7 @@
 {
  "v": 1,
  "osm": {
-  "extracted": "2026-11-23",
+  "extracted": "2026-11-25",
   "license": "Données © les contributeurs d'OpenStreetMap, sous licence ODbL",
   "source": "https://www.openstreetmap.org/copyright"
  },
@@ -490,6 +490,9 @@
    ],
    "r": 3000
   },
+  "whitehaven": {
+   "r": 8000
+  },
   "kealakekua": {
    "R": [
     [
@@ -575,6 +578,9 @@
     ]
    ],
    "r": 3000
+  },
+  "petiteterre": {
+   "r": 8000
   },
   "ermitage": {
    "R": [
@@ -1095,6 +1101,9 @@
    ],
    "r": 3000
   },
+  "bluehole_belize": {
+   "r": 8000
+  },
   "rajaampat": {
    "L": [
     [
@@ -1279,6 +1288,9 @@
     ]
    ],
    "r": 3000
+  },
+  "tikehau": {
+   "r": 8000
   },
   "kohtao": {
    "R": [
@@ -1679,6 +1691,12 @@
    ],
    "r": 8000
   },
+  "losroques": {
+   "r": 8000
+  },
+  "beqa": {
+   "r": 8000
+  },
   "vavau": {
    "R": [
     [
@@ -1897,6 +1915,32 @@
      971,
      "",
      "way/555615609"
+    ]
+   ],
+   "E": [
+    [
+     "Darwin",
+     1225,
+     "scuba_diving",
+     "node/9173197176"
+    ],
+    [
+     "Galápagos Fun Dive",
+     1301,
+     "scuba_diving",
+     "node/13148418467"
+    ],
+    [
+     "Alpha",
+     1305,
+     "scuba_diving",
+     "node/6089330685"
+    ],
+    [
+     "Blue Evolution",
+     1326,
+     "scuba_diving",
+     "node/13147598265"
     ]
    ],
    "L": [
@@ -2148,6 +2192,14 @@
      2929,
      "seafood",
      "node/12137553647"
+    ]
+   ],
+   "E": [
+    [
+     "TGI diving",
+     2713,
+     "scuba_diving",
+     "node/10773178428"
     ]
    ],
    "r": 3000
@@ -2586,6 +2638,869 @@
     ]
    ],
    "r": 8000
+  },
+  "quiberon": {
+   "R": [
+    [
+     "La Strada",
+     71,
+     "pizza",
+     "way/66427648"
+    ],
+    [
+     "La gondole",
+     388,
+     "pizza",
+     "way/1323005688"
+    ],
+    [
+     "Au Bout du Bouchon",
+     524,
+     "",
+     "node/12101816456"
+    ],
+    [
+     "Tchou Tchou",
+     567,
+     "",
+     "node/11110055062"
+    ],
+    [
+     "Le Poulpiquet",
+     681,
+     "crepe",
+     "node/11052384805"
+    ]
+   ],
+   "L": [
+    [
+     "Ocean Gate",
+     1086,
+     "boutique",
+     "node/8959178938"
+    ],
+    [
+     "Decathlon",
+     1089,
+     "boutique",
+     "node/8752404132"
+    ],
+    [
+     "Quiberon Jet",
+     1293,
+     "location",
+     "node/12043828625"
+    ],
+    [
+     "Lokavoile",
+     1293,
+     "location",
+     "node/12043828631"
+    ]
+   ],
+   "r": 3000
+  },
+  "latranche": {
+   "R": [
+    [
+     "L'Equinoxe",
+     505,
+     "french",
+     "way/109619402"
+    ],
+    [
+     "L'équipage - Cafétéria",
+     544,
+     "",
+     "node/14031195401"
+    ],
+    [
+     "La villa",
+     596,
+     "",
+     "node/11173017360"
+    ],
+    [
+     "Le cosy (?)",
+     614,
+     "",
+     "node/9883861298"
+    ],
+    [
+     "Le Pass'Océan",
+     616,
+     "",
+     "node/11173044991"
+    ]
+   ],
+   "L": [
+    [
+     "Nova fun",
+     679,
+     "boutique",
+     "node/11196437389"
+    ]
+   ],
+   "r": 3000
+  },
+  "mimizan": {
+   "R": [
+    [
+     "June",
+     222,
+     "burger",
+     "node/10802729305"
+    ],
+    [
+     "O Courant",
+     365,
+     "french",
+     "node/7798105485"
+    ],
+    [
+     "L'authentique",
+     382,
+     "",
+     "node/13136326412"
+    ],
+    [
+     "Le Repair",
+     429,
+     "regional",
+     "node/8337866750"
+    ],
+    [
+     "Restaurant le Snack Beach",
+     469,
+     "",
+     "node/5009850057"
+    ]
+   ],
+   "L": [
+    [
+     "Canoe Mimizan",
+     852,
+     "location",
+     "node/12063279115"
+    ]
+   ],
+   "r": 3000
+  },
+  "capferret": {
+   "R": [
+    [
+     "Chez Hortense",
+     525,
+     "regional;seafood",
+     "node/2452563729"
+    ],
+    [
+     "Java",
+     768,
+     "french;seafood",
+     "node/9762902479"
+    ],
+    [
+     "Le Mirador",
+     846,
+     "",
+     "node/2451926694"
+    ],
+    [
+     "Sail Fish",
+     1291,
+     "",
+     "node/2452304568"
+    ],
+    [
+     "Le Bouchon du Ferret",
+     1473,
+     "seafood",
+     "node/9719065129"
+    ]
+   ],
+   "r": 3000
+  },
+  "bidart": {
+   "R": [
+    [
+     "Crêperie Ty Ouessant",
+     32,
+     "crepe",
+     "way/751924925"
+    ],
+    [
+     "Basuku",
+     45,
+     "japanese",
+     "node/12084767023"
+    ],
+    [
+     "La Pizzeria",
+     55,
+     "italian",
+     "way/751883963"
+    ],
+    [
+     "Bar du fronton",
+     75,
+     "",
+     "node/7359015506"
+    ],
+    [
+     "Mahaina",
+     79,
+     "french",
+     "node/3228598323"
+    ]
+   ],
+   "L": [
+    [
+     "Ona pilota",
+     603,
+     "boutique",
+     "way/72779651"
+    ],
+    [
+     "ND Surf",
+     1220,
+     "boutique",
+     "node/11151908328"
+    ],
+    [
+     "TT Rando Quad",
+     1273,
+     "location",
+     "node/7015112231"
+    ],
+    [
+     "École de surf H2O",
+     1310,
+     "boutique",
+     "node/9951918830"
+    ],
+    [
+     "Intersport",
+     1415,
+     "boutique",
+     "way/72772937"
+    ]
+   ],
+   "r": 3000
+  },
+  "nazare": {
+   "R": [
+    [
+     "OGGI",
+     593,
+     "",
+     "node/12542402552"
+    ],
+    [
+     "Arimar",
+     660,
+     "",
+     "node/4143175401"
+    ],
+    [
+     "Arimar",
+     680,
+     "",
+     "node/4143177429"
+    ],
+    [
+     "Tofa",
+     694,
+     "",
+     "node/4143178579"
+    ],
+    [
+     "Casa Pires- A Sardinha",
+     745,
+     "",
+     "node/4143198249"
+    ]
+   ],
+   "E": [
+    [
+     "Centro de Alto Rendimento de Surf da Nazaré",
+     974,
+     "surfing",
+     "way/411292413"
+    ]
+   ],
+   "r": 3000
+  },
+  "supertubos": {
+   "R": [
+    [
+     "Mar à Vista",
+     717,
+     "",
+     "node/11047797397"
+    ],
+    [
+     "Maresia",
+     1044,
+     "",
+     "node/10957850323"
+    ],
+    [
+     "Amanhecer",
+     1055,
+     "",
+     "node/10957705285"
+    ],
+    [
+     "Cafetaria Do Parque",
+     1353,
+     "",
+     "node/452000137"
+    ],
+    [
+     "Tasca da Ribeira",
+     1468,
+     "burger;crepe",
+     "node/12116966086"
+    ]
+   ],
+   "E": [
+    [
+     "Centro de Alto Rendimento de Peniche",
+     1165,
+     "surfing",
+     "way/563319945"
+    ]
+   ],
+   "L": [
+    [
+     "G3 Store",
+     1772,
+     "boutique",
+     "node/13058331991"
+    ],
+    [
+     "The Bunker",
+     1782,
+     "boutique",
+     "node/13058320548"
+    ],
+    [
+     "Peniche Kite & Surf Camp",
+     1854,
+     "location",
+     "node/13087601012"
+    ],
+    [
+     "Film Trucks",
+     2131,
+     "boutique",
+     "node/13058507110"
+    ],
+    [
+     "Sport Zone",
+     2981,
+     "boutique",
+     "node/6213542385"
+    ]
+   ],
+   "r": 3000
+  },
+  "bundoran": {
+   "R": [
+    [
+     "Roasted and Toasted",
+     106,
+     "",
+     "node/12383304299"
+    ],
+    [
+     "The Peak",
+     173,
+     "",
+     "node/5697262496"
+    ],
+    [
+     "Buoys & Gulls",
+     278,
+     "coffee_shop",
+     "node/12431524173"
+    ],
+    [
+     "La Sabbia",
+     406,
+     "italian",
+     "node/5098657622"
+    ],
+    [
+     "Stakes Restaurant",
+     656,
+     "",
+     "node/4938319120"
+    ]
+   ],
+   "L": [
+    [
+     "Bundoran Surf Co",
+     1223,
+     "boutique",
+     "node/3039732046"
+    ]
+   ],
+   "r": 3000
+  },
+  "rodiles": {
+   "R": [
+    [
+     "El Moreno",
+     28,
+     "",
+     "node/8335008022"
+    ],
+    [
+     "El Glamour de La Ría",
+     239,
+     "",
+     "node/8335049407"
+    ],
+    [
+     "Bar Cafeteria La Ensanada",
+     407,
+     "",
+     "node/8335385184"
+    ],
+    [
+     "Casa Aida",
+     456,
+     "",
+     "node/8335205906"
+    ],
+    [
+     "Bar Restaurante Entrepeñas",
+     1087,
+     "",
+     "way/613587647"
+    ]
+   ],
+   "r": 3000
+  },
+  "somo": {
+   "R": [
+    [
+     "El Culebrero",
+     753,
+     "regional",
+     "node/5497363879"
+    ],
+    [
+     "Asador Itxaski",
+     843,
+     "",
+     "way/964879679"
+    ],
+    [
+     "La Trainera",
+     1072,
+     "",
+     "node/2429964469"
+    ],
+    [
+     "Asador El Tronky",
+     1196,
+     "seafood",
+     "way/757456552"
+    ],
+    [
+     "Restaurante Asador Ezquerra",
+     1207,
+     "seafood",
+     "way/757456551"
+    ]
+   ],
+   "L": [
+    [
+     "Centro Buceo Pedreña",
+     1049,
+     "boutique",
+     "way/964879681"
+    ],
+    [
+     "Fineline",
+     2049,
+     "boutique",
+     "node/11127622083"
+    ],
+    [
+     "Northwind",
+     2062,
+     "boutique",
+     "node/11127622079"
+    ],
+    [
+     "Sunset",
+     2070,
+     "boutique",
+     "node/11127622077"
+    ],
+    [
+     "La Wave Surf",
+     2175,
+     "boutique",
+     "node/9195663078"
+    ]
+   ],
+   "r": 3000
+  },
+  "zarautz": {
+   "R": [
+    [
+     "Sanzenea",
+     55,
+     "",
+     "node/6811492277"
+    ],
+    [
+     "Hotel Alameda",
+     55,
+     "",
+     "node/891068284"
+    ],
+    [
+     "Labe-goxo",
+     133,
+     "",
+     "node/6813586242"
+    ],
+    [
+     "Kafe Lauok",
+     136,
+     "coffee_shop;bread;breakfast;smoothie;cafe",
+     "node/5756050414"
+    ],
+    [
+     "Aramendia",
+     148,
+     "",
+     "node/8485559436"
+    ]
+   ],
+   "E": [
+    [
+     "North Shore Surf Eskola Zarautz",
+     317,
+     "surfing",
+     "node/10059544711"
+    ],
+    [
+     "Pukas Surf Eskola",
+     370,
+     "surfing",
+     "node/10059558438"
+    ]
+   ],
+   "L": [
+    [
+     "Helmuga Kirolak",
+     181,
+     "boutique",
+     "node/9227811001"
+    ],
+    [
+     "Moor Surf Eskola",
+     255,
+     "boutique",
+     "node/13110258438"
+    ],
+    [
+     "Axi Muniain",
+     353,
+     "boutique",
+     "node/9232630808"
+    ],
+    [
+     "310 skate shop",
+     518,
+     "boutique",
+     "node/837553988"
+    ],
+    [
+     "Forum Sport",
+     650,
+     "boutique",
+     "way/1252782167"
+    ]
+   ],
+   "r": 3000
+  },
+  "lasanta": {
+   "R": [
+    [
+     "El Quemao",
+     666,
+     "",
+     "node/11897011169"
+    ],
+    [
+     "Salma Tina La Santa",
+     675,
+     "",
+     "node/11884787969"
+    ],
+    [
+     "El Barquillo",
+     692,
+     "regional",
+     "node/4189754260"
+    ],
+    [
+     "Verde Mar",
+     693,
+     "",
+     "node/5103543621"
+    ],
+    [
+     "Chinese Restaurant International",
+     714,
+     "chinese",
+     "node/7119092810"
+    ]
+   ],
+   "r": 3000
+  },
+  "anchorpoint": {
+   "R": [
+    [
+     "Résidence La Source",
+     735,
+     "",
+     "node/2080862374"
+    ],
+    [
+     "Surf Maroc Amourage Bar & Kitchen",
+     1241,
+     "",
+     "node/4897175685"
+    ],
+    [
+     "Café mouja",
+     1454,
+     "",
+     "node/6187945301"
+    ],
+    [
+     "Surf Berbere",
+     1547,
+     "",
+     "way/875417227"
+    ],
+    [
+     "Bella Vista",
+     1558,
+     "",
+     "way/875417226"
+    ]
+   ],
+   "L": [
+    [
+     "Surf Berbere",
+     1693,
+     "boutique",
+     "node/5315139396"
+    ],
+    [
+     "Tuareg Surf Shop",
+     1721,
+     "boutique",
+     "node/5315139025"
+    ],
+    [
+     "Atlantis",
+     1747,
+     "boutique",
+     "node/5315139519"
+    ],
+    [
+     "Wasna",
+     1820,
+     "boutique",
+     "way/874486783"
+    ],
+    [
+     "Africaspirit",
+     1846,
+     "boutique",
+     "way/874486796"
+    ]
+   ],
+   "r": 3000
+  },
+  "pipeline": {
+   "R": [
+    [
+     "Banzai Bowls",
+     1254,
+     "",
+     "node/14130161835"
+    ],
+    [
+     "The Sunrise Shack",
+     1379,
+     "",
+     "node/5527314121"
+    ],
+    [
+     "Lucky's",
+     1382,
+     "",
+     "node/14130092528"
+    ],
+    [
+     "Pupukea Grill",
+     1810,
+     "hawaiian",
+     "node/13358620301"
+    ],
+    [
+     "Waimea valley grill",
+     1929,
+     "",
+     "node/4454246389"
+    ]
+   ],
+   "r": 3000
+  },
+  "mavericks": {
+   "R": [
+    [
+     "Mezza Luna",
+     1685,
+     "italian",
+     "node/853387034"
+    ],
+    [
+     "Barbara's Fish Trap",
+     1689,
+     "",
+     "node/598480402"
+    ],
+    [
+     "Half Moon Bay Brewing Company",
+     1689,
+     "american",
+     "node/853385579"
+    ],
+    [
+     "Séville",
+     1706,
+     "",
+     "node/10684472596"
+    ],
+    [
+     "La Costanera",
+     1910,
+     "peruvian",
+     "node/11050232837"
+    ]
+   ],
+   "L": [
+    [
+     "Half Moon Bay Kayak Company",
+     2003,
+     "location",
+     "node/9604455104"
+    ]
+   ],
+   "r": 3000
+  },
+  "malibu": {
+   "R": [
+    [
+     "Jack in the Box",
+     208,
+     "burger",
+     "way/459111837"
+    ],
+    [
+     "Malibu Farm Restaurant",
+     249,
+     "",
+     "node/5092573623"
+    ],
+    [
+     "Malibu Farm Pier Cafe",
+     313,
+     "salad;burger;sandwich",
+     "node/5092573622"
+    ],
+    [
+     "Pitu Bu",
+     380,
+     "",
+     "way/459111474"
+    ],
+    [
+     "Broad Street Oyster",
+     453,
+     "",
+     "node/9135071817"
+    ]
+   ],
+   "r": 3000
+  },
+  "puerto": {
+   "R": [
+    [
+     "Cactus",
+     2594,
+     "",
+     "node/8313649617"
+    ],
+    [
+     "Los Buzos",
+     2606,
+     "",
+     "node/7123359785"
+    ],
+    [
+     "Kelly Cafe",
+     2606,
+     "",
+     "node/7442839964"
+    ],
+    [
+     "Hector the Protector",
+     2624,
+     "mexican;coffee_shop",
+     "node/6486912386"
+    ],
+    [
+     "Mar Y Solo",
+     2630,
+     "",
+     "node/13683710509"
+    ]
+   ],
+   "L": [
+    [
+     "Centro de buceo Deep Blue Dive - Lorenzo Bini",
+     2761,
+     "boutique",
+     "node/6436958086"
+    ],
+    [
+     "Surf Shop Punto Mágico",
+     2914,
+     "boutique",
+     "node/5378862331"
+    ],
+    [
+     "Juicy Papaya - Surfboards and Apparel",
+     2945,
+     "boutique",
+     "node/13351608316"
+    ]
+   ],
+   "r": 3000
   }
  },
  "prix": {

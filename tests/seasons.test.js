@@ -181,39 +181,36 @@ test('« Le spot » : la saison se lit dans l’onglet Saisons ; le mot du coin,
   assert.doesNotMatch(plain,/data-cult-open/);
   assert.match(plain,/Repères culturels généraux du pays\. La fiche détaillée de ce spot arrive bientôt\./);
 });
-test('« Le spot, en vie » : grands chiffres seulement s’il y a une donnée, échelle de prix calculée, raccourcis qui sont de vrais liens',()=>{
+test('« Le spot, en vie » : grands chiffres seulement s’il y a une donnée, aucune fourchette de nuit sans source, bloc unique « Dormir, manger, louer » aux liens de recherche',()=>{
   const c={hello:['Bonjour'],food:['Plat'],grounded:true};
   const html=liveBlock(c,undefined);
   /* Normales du mois en cours (fichier léger) : eau, houle ; prix de la nuit la moins chère. */
   const m=new Date().getMonth(),sea=[13,12,12,14,16,19,21,22,21,18,16,14][m],hs=[23,26,23,17,14,12,13,13,15,18,24,25][m]/10;
   assert.match(html,new RegExp(`data-gl-go="saisons"[^>]*>.*?<span>Eau en</span> <span translate="no" data-no-i18n>novembre</span>.*?data-gl-count="${sea}" data-gl-dec="0"`));
   assert.match(html,new RegExp(`<span>Houle en</span>.*?data-gl-count="${hs}" data-gl-dec="1"`));
-  assert.match(html,/data-gl-go="dormir".*?<span class="fx-label">La nuit, dès<\/span>.*?data-gl-count="12"/);
-  assert.match(html,/class="gl-tiles gl-n3"/);
-  /* Plan d’eau intérieur : pas de houle. Sans normales : seule la tuile du prix. */
+  /* Lot 4 : plus de grand chiffre « La nuit, dès » (fourchette sans source). */
+  assert.doesNotMatch(html,/La nuit, dès|data-gl-go="dormir"/);
+  assert.match(html,/class="gl-tiles gl-n2"/);
+  /* Plan d’eau intérieur : pas de houle. Sans normales : aucune tuile de chiffre. */
   assert.doesNotMatch(liveBlock(c,undefined,{water:'lake'}),/Houle en/);
   const bare=liveBlock(c,undefined,{lite:{}});
-  assert.doesNotMatch(bare,/Eau en|Houle en/); assert.match(bare,/class="gl-tiles gl-n1"/);
-  /* Budget : sans indice de prix du pays (données pas encore chargées, ou pays sans valeur), ni échelle ni pourcentage ;
-     les estimations de la nuit restent, avec leur mention. L’échelle ne compare plus les barèmes Ocean Buddy entre spots. */
-  assert.match(html,/<h3 class="fx-title">Budget sur place<\/h3>/);
-  assert.doesNotMatch(html,/gl-scale|gl-pin|gl-pli|des spots du guide/);
-  assert.match(html,/Camping<\/span><b translate="no" data-no-i18n>12–25 €<\/b>/);
-  assert.match(html,/<span>En haute saison<\/span> <small translate="no" data-no-i18n>juillet et août<\/small><\/span><b translate="no" data-no-i18n>16–30 €<\/b>/);
-  assert.match(html,/Auberge de jeunesse<\/span><b translate="no" data-no-i18n>25–40 €<\/b>/);
-  assert.match(html,/<p class="fx-note gl-src">Estimation indicative Ocean Buddy \(septembre 2026\), les prix varient selon la saison\.<\/p>/);
-  /* Aucun prix d’hôtel ni de restaurant : nous n’en avons pas de sourcé. */
-  assert.doesNotMatch(html,/Hôtel|H[oô]tel<\/span><b/);
-  assert.doesNotMatch(html,/Restaurants?<\/span><b/);
-  /* Raccourcis : Booking.com mène à booking.com ; école, location et restaurants cherchent autour du spot. */
-  assert.match(html,/<a class="gl-link" href="https:\/\/www\.booking\.com\/searchresults\.html\?ss=Hossegor" target="_blank" rel="noopener">.*?<span translate="no" data-no-i18n>Booking\.com<\/span><\/a>/);
-  assert.match(html,/href="https:\/\/www\.google\.com\/maps\/search\/restaurants\/@43\.6600,-1\.4400,13z"[^>]*>.*?<span>Restaurants<\/span>/);
+  assert.doesNotMatch(bare,/Eau en|Houle en|gl-tiles/);
+  /* Sans indice de prix du pays (données pas encore chargées, ou pays sans valeur), ni échelle ni pourcentage. Jamais de
+     fourchette de nuit : le bloc unique ne montre que l’indice sourcé, quatre tuiles et des recherches publiques. */
+  assert.match(html,/<h3 class="fx-title">Dormir, manger, louer<\/h3>/);
+  assert.doesNotMatch(html,/gl-scale|gl-pin|gl-pli|des spots du guide|Budget sur place|12–25|16–30|25–40|Estimation indicative|par nuit/);
+  assert.equal((html.match(/Booking\.com/g)||[]).length,1,'Booking une seule fois');
+  for(const t of ['Camping','Hôtel','Manger','Apprendre et louer'])assert.match(html,new RegExp('<b>'+t+'</b>'));
+  /* Sans lieu OpenStreetMap, les tuiles sont de vrais liens soulignés (recherche sur la carte autour du spot). */
+  assert.match(html,/<a class="gl-ptile" href="https:\/\/www\.google\.com\/maps\/search\/camping"[^>]*>.*?<span class="gl-psub gl-psub-link">Trouver un camping<\/span>/);
+  assert.match(html,/href="https:\/\/www\.google\.com\/maps\/search\/restaurants\/@43\.6600,-1\.4400,13z"[^>]*>.*?<b>Manger<\/b><span class="gl-psub gl-psub-link">Trouver un restaurant/);
   assert.match(html,/maps\/search\/%C3%A9cole%20Surf\/@43\.6600,-1\.4400,13z/);
-  assert.match(html,/maps\/search\/location%20mat%C3%A9riel%20Surf\/@/);
-  assert.match(html,/<span>Campings<\/span>/);
-  /* Sans estimation : ni tuile de prix ni budget, les raccourcis restent. */
+  assert.match(html,/<a class="fx-pill" href="https:\/\/www\.booking\.com\/searchresults\.html\?ss=Hossegor" target="_blank" rel="noopener"><span translate="no" data-no-i18n>Booking\.com<\/span><\/a>/);
+  assert.match(html,/<span translate="no" data-no-i18n>Google Maps<\/span>/);
+  assert.match(html,/<p class="fx-note gl-links-src">Recherches publiques, sans lien sponsorisé\.<\/p>/);
+  /* Sans estimation : le bloc reste (il ne montre aucun prix de nuit). */
   const none=liveBlock(c,undefined,{est:null});
-  assert.doesNotMatch(none,/Budget sur place|La nuit, dès/); assert.match(none,/Booking\.com/);
+  assert.doesNotMatch(none,/La nuit, dès/); assert.match(none,/Booking\.com/);
   /* Motion : une fois par spot, jamais en mouvement réduit ; précisions rangées en pied de fiche. */
   const src=text('spot-guide.js'),css=text('fiche.css');
   assert.match(src,/paintLive\(s,lastLive!==s\.id\);lastLive=s\.id;/);
@@ -223,11 +220,11 @@ test('« Le spot, en vie » : grands chiffres seulement s’il y a une donnée, 
   /* Section « Le spot, en vie » seulement (la scène de Conditions, plus bas, a sa propre règle : boucle douce à l’écran). */
   assert.doesNotMatch(css.slice(css.indexOf('LE SPOT, EN VIE'), css.indexOf('SCÈNE ILLUSTRÉE DE CONDITIONS')), /animation:[^;}]*infinite/);
   /* 20 nov. : les prix sont des barèmes par pays sans source ; leur mention d’estimation reste à côté des prix. */
-  assert.match(text('replis.js'),/'#guideLive \.gl-links-src', '#guideLive \.guide-note'/);
+  assert.match(text('replis.js'),/'#guideLive \.guide-note'/);
   assert.doesNotMatch(text('replis.js'),/'#guideLive \.gl-src'/,'l’estimation des prix n’est jamais rangée dans « Sources et précisions »');
   /* La houle du mois : seulement pour les sports de vague ou de vent (pas sur un spot de plongée ou un lac). */
   assert.match(text('spot-guide.js'),/swellSport=sportsOf\.some\(a=>\['surf','bodyboard','kitesurf','windsurf','wingfoil','foil'\]\.includes\(a\)\);\n\s+if\(n&&n\.hs!=null&&swellSport\)tiles\.push/);
-  for(const f of ['eau','houle','cabane','table','panneau','accueil','fete','coutume','marche'])assert.ok(fs.existsSync(path.join(__dirname,'..','assets/fiche',f+'.webp')),f);
+  for(const f of ['eau','houle','cabane','table','sac','panneau','accueil','fete','coutume','marche'])assert.ok(fs.existsSync(path.join(__dirname,'..','assets/fiche',f+'.webp')),f);
 });
 
 /* 21 nov. : niveau des prix du pays (Banque mondiale, sourcé) et lieux autour du spot (OpenStreetMap). */
@@ -239,13 +236,18 @@ test('« Sur place » : niveau des prix du pays sourcé, échelle parmi les pays
   const html=liveBlock(c,undefined,{extras:EXTRAS,id:'hossegor'});
   /* France 82,8 : deux pays moins chers sur quatre (50 %), un plus cher (25 %). */
   assert.match(html,/<div class="gl-pli"><b class="fx-num" translate="no" data-no-i18n>83&nbsp;%<\/b><span class="gl-pli-tx"><span>du coût de la vie aux États-Unis<\/span><small><span>France<\/span>, <span>Banque mondiale<\/span> <span translate="no" data-no-i18n>2025<\/span><\/small><\/span><\/div>/);
-  assert.match(html,/<i class="gl-pin" style="--p:50%"><\/i>/);
+  /* La jauge est placée à la valeur de l’indice (échelle 0 à 150) : 82,8 sur 150 = 55,2 %. */
+  assert.match(html,/<i class="gl-pin" style="--p:55\.2%"><\/i>/);
   assert.match(html,/<span>Plus cher que<\/span> <b translate="no" data-no-i18n>50&nbsp;%<\/b> <span>des pays du guide<\/span>/);
   assert.match(html,/<p class="fx-note gl-pli-src">.*href="https:\/\/data\.worldbank\.org\/indicator\/PA\.NUS\.PRVT\.PLI".*licence CC BY 4\.0, consultée le<\/span> <span translate="no" data-no-i18n>20\/11\/2026<\/span>/);
-  /* Les estimations de la nuit restent, mention d’estimation visible. */
-  assert.match(html,/<p class="fx-note gl-src">Estimation indicative Ocean Buddy/);
+  /* Aucune estimation de nuit dans le bloc. */
+  assert.doesNotMatch(html,/gl-src|gl-prices|Estimation indicative/);
   /* Lieux : par catégorie présente, nom hors traduction, étiquette connue, distance « à environ », lien OSM. */
-  assert.match(html,/<h3 class="fx-title">Autour du spot<\/h3><p class="fx-note gl-around-sub">Dans un rayon de 3 km<\/p>/);
+  assert.match(html,/<b>Autour du spot<\/b><a href="https:\/\/www\.openstreetmap\.org\/copyright"[^>]*>Données OpenStreetMap<\/a>/);
+  assert.match(html,/<p class="fx-note gl-around-sub">Dans un rayon de 3 km<\/p>/);
+  /* Tuiles chiffrées : texte simple (non souligné, pas un lien), qui mène à la liste ; « les plus proches » seulement à 5 lieux. */
+  assert.match(html,/<button type="button" class="gl-ptile" data-gl-around>.*?<b>Manger<\/b><span class="gl-psub">2 adresses à moins de 1 km<\/span>/);
+  assert.match(html,/<b>Apprendre et louer<\/b><span class="gl-psub"><span>1 école ou club<\/span><\/span>/);
   assert.match(html,/<h4 class="fx-label gl-around-h">Pour manger<\/h4>/);
   assert.match(html,/<h4 class="fx-label gl-around-h">Écoles et clubs<\/h4>/);
   assert.doesNotMatch(html,/Location et boutiques/,'catégorie vide : rien');
@@ -256,10 +258,14 @@ test('« Sur place » : niveau des prix du pays sourcé, échelle parmi les pays
   /* Rayon élargi : dit tel quel ; distance en kilomètres avec une décimale. */
   const far=liveBlock(c,undefined,{extras:EXTRAS,id:'teahupoo'});
   assert.match(far,/Dans un rayon de 8 km/); assert.match(far,/à environ 5,5 km/);
-  /* Spot sans lieux : pas de bloc ; pays sans indice : ni chiffre ni échelle, et aucune valeur de remplacement. */
+  /* Spot sans entrée : pas de carte ; spot dans le fichier mais sans aucun lieu : état « aucune adresse », sans liste. */
   const none=liveBlock(c,undefined,{extras:{...EXTRAS,prix:{...EXTRAS.prix,c:{Suisse:[128.2,2025,'CH']}}},id:'tikehau'});
   assert.doesNotMatch(none,/Autour du spot|gl-pli|gl-scale|des pays du guide/);
-  assert.match(none,/Budget sur place/);
+  assert.match(none,/Dormir, manger, louer/);
+  const empty=liveBlock(c,undefined,{extras:{...EXTRAS,places:{...EXTRAS.places,whitehaven:{r:8000}}},id:'whitehaven'});
+  assert.match(empty,/<b>Autour du spot<\/b>/); assert.match(empty,/Aucune adresse trouvée sur OpenStreetMap autour de ce spot/);
+  assert.doesNotMatch(empty,/gl-places|Pour manger<\/h4>|gl-psub">\d/);
+  assert.match(empty,/Trouver un restaurant/,'sans adresse : la tuile ouvre la carte');
   /* Chargement à l’ouverture d’une fiche, jamais au démarrage ; sources rangées dans « Sources et précisions ». */
   const g=text('spot-guide.js');
   assert.match(g,/if\(!window\.OCEAN_SPOT_EXTRAS\)loadExtras\(\)\.then\(\(\)=>\{if\(current===s\.id\)paintLive\(s,false\);\}\);/);
@@ -274,7 +280,7 @@ test('build-spot-extras : lieux valides seulement (lien OSM, distance, aucun cha
   const out=B.buildPlaces({...base,spots:{a:{restaurants:[{name:'Ok',lat:1,lon:1,distM:500,osm:'node/9'},{name:'Noté',lat:1,lon:1,distM:200,osm:'node/8',rating:4.5},{name:'Cher',lat:1,lon:1,distM:200,osm:'node/7',price:'€€'},{name:'Sans lien',lat:1,lon:1,distM:100,osm:'http://x'},{name:'Loin',lat:1,lon:1,distM:'3 km',osm:'node/6'}],ecoles:[],locations:[]},vide:{restaurants:[],ecoles:[],locations:[]}}});
   assert.deepEqual(out.spots.a.R,[['Ok',500,'','node/9']]);
   assert.equal(out.spots.a.r,3000);
-  assert.ok(!('vide' in out.spots),'spot sans lieu : absent');
+  assert.deepEqual(out.spots.vide,{r:3000},'spot sans lieu : gardé, rayon seul (la fiche dit « aucune adresse trouvée »)');
   assert.deepEqual(out.dropped.map(x=>x.why),['champ interdit : rating','champ interdit : price','référence OpenStreetMap invalide','distance invalide']);
   assert.throws(()=>B.buildPlaces({...base,license:'',spots:{}}),/ODbL/);
   const pr=B.buildPrices({source:{name:'WDI',url:'https://data.worldbank.org/x',license:'CC BY 4.0',consulted:'2026-11-20'},countries:{FR:{index:82.8,year:2025},XX:{index:'?',year:2025}}},{France:'FR','La Réunion':'RE',Bidon:'XX'});

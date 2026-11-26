@@ -11458,5 +11458,22 @@
  "Tire pour rafraîchir": "Pull to refresh",
  "Unités": "Units",
  "Vent en nœuds": "Wind in knots",
- "eau, moyenne en {0}": "water, average in {0}"
+ "eau, moyenne en {0}": "water, average in {0}",
+ "{0} adresses à moins de {1} km": "{0} addresses within {1} km",
+ "{0} écoles ou clubs": "{0} schools or clubs",
+ "{0} locations ou boutiques": "{0} rentals or shops",
+ "1 adresse à moins de {0} km": "1 address within {0} km",
+ "1 école ou club": "1 school or club",
+ "1 location ou boutique": "1 rental or shop",
+ "Apprendre et louer": "Learn and rent",
+ "Aucune adresse trouvée sur OpenStreetMap autour de ce spot. Les recherches ci-dessous ouvrent la carte.": "No address found on OpenStreetMap around this spot. The searches below open the map.",
+ "Dormir, manger, louer": "Sleep, eat, rent",
+ "Google Maps": "Google Maps",
+ "Hôtel": "Hotel",
+ "Les {0} plus proches, à moins de {1} km": "The {0} nearest, within {1} km",
+ "Manger": "Eat",
+ "Trouver un camping": "Find a campsite",
+ "Trouver un hôtel": "Find a hotel",
+ "Trouver un restaurant": "Find a restaurant",
+ "Trouver une école ou une location": "Find a school or a rental"
 }

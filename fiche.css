@@ -1282,3 +1282,34 @@ body.reduce-motion #detail .fx-wait{animation:none}
 #detail .fx-tide path{fill:none;stroke:var(--t-main);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
 #detail .fx-tide .fx-tide-past{opacity:.38}
 #detail .fx-tide .fx-tide-now{fill:var(--t-sun,var(--t-main));stroke:var(--t-card);stroke-width:1.6}
+
+/* ---------- Dormir, manger, louer (lot 4, maquette M3) : un seul bloc pratique dans Le coin ---------- */
+#detail .gl-pratique{margin-top:var(--fiche-gap)}
+#detail .gl-ptiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 var(--fiche-gap)}
+#detail .gl-ptile{display:grid;grid-template-rows:auto auto 1fr;align-content:start;gap:2px;min-width:0;margin:0;padding:8px 8px 12px;box-sizing:border-box;border:1px solid var(--fiche-hair);border-radius:var(--fiche-radius);background:var(--t-card);color:var(--t-ink);text-align:left;text-decoration:none;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .18s ease}
+#detail .gl-ptile:active{transform:scale(.97)}
+#detail .gl-ptile:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+#detail .gl-pimg{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--fiche-radius) - 4px);margin-bottom:8px;pointer-events:none;-webkit-user-select:none;user-select:none}
+#detail .gl-ptile>b{font:700 18px/1.2 var(--body);color:var(--t-ink);padding:0 4px;overflow-wrap:anywhere}
+#detail .gl-psub{display:block;padding:0 4px;font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft);text-decoration:none}
+#detail .gl-psub.gl-psub-link{color:var(--t-main);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+#detail .gl-aroundcard{display:grid;grid-template-columns:minmax(0,40%) minmax(0,1fr);align-items:stretch;gap:12px;overflow:hidden;border:1px solid var(--fiche-hair);border-radius:var(--fiche-radius);background:var(--t-card)}
+#detail .gl-minimap{display:block;width:100%;height:100%;min-height:92px}
+#detail .gl-minimap .mm-land{fill:color-mix(in srgb,var(--t-main) 7%,var(--t-card))}
+#detail .gl-minimap .mm-sea{fill:color-mix(in srgb,var(--t-main) 38%,var(--t-card))}
+#detail .gl-minimap .mm-water{fill:color-mix(in srgb,var(--t-main) 26%,var(--t-card))}
+#detail .gl-minimap .mm-road{fill:none;stroke:var(--t-card);stroke-width:5;stroke-linecap:round}
+#detail .gl-minimap .mm-pin{stroke:var(--t-card);stroke-width:3}
+#detail .gl-minimap .a{fill:var(--t-main)}#detail .gl-minimap .b{fill:var(--t-sun,var(--t-main))}#detail .gl-minimap .c{fill:var(--t-ink)}
+#detail .gl-aroundcard-tx{display:grid;align-content:center;gap:4px;padding:10px 12px 10px 0;min-width:0}
+#detail .gl-aroundcard-tx b{font:700 19px/1.2 var(--body);color:var(--t-ink)}
+#detail .gl-aroundcard-tx a{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft);text-decoration:underline;text-underline-offset:3px}
+#detail .gl-pratique>.gl-around{margin-top:0}
+#detail .gl-pratique .gl-around-sub{margin:12px 0 4px}
+#detail .gl-around-empty{margin:10px 0 0}
+#detail .gl-psearch{margin-top:var(--fiche-gap)}
+#detail .gl-psearch .gl-links-src{margin-top:8px}
+/* Préparer : « Dormir » et « Matériel et cours » sont dans « Dormir, manger, louer » (Le coin). */
+.ocean-v2 #detail .dcat[data-cat="activites"]>.field-local{display:none}
+@media (prefers-reduced-motion:reduce){#detail .gl-ptile{transition:none}}
+body.reduce-motion #detail .gl-ptile{transition:none}

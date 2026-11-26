@@ -15,9 +15,11 @@ const tabGroups = cat => {
   return [...m[1].matchAll(/\{ id: '(\w+)', title: '([^']+)', sub: '([^']+)', members: \[([^\]]+)\] \}/g)].map(x => ({ id: x[1], members: x[4] }));
 };
 
-test('Préparer : six sections à titre simple, dans l’ordre du brief (Y aller, Dormir, Autour, Matériel et cours, Avant de partir, Ton carnet)', () => {
+test('Préparer : sections à titre simple, dans l’ordre du brief (Y aller, Autour, Avant de partir, Ton carnet) ; Dormir et Matériel et cours sont fondus dans « Dormir, manger, louer » (Le coin)', () => {
   assert.match(data, /host\.innerHTML = `<h3 class="fx-title">Y aller<\/h3>/);
-  assert.match(fnSource(guide, 'sleepHTML'), /<h3 class="fx-title">Dormir<\/h3>/);
+  assert.match(fnSource(guide, 'practicalHTML'), /<h3 class="fx-title">Dormir, manger, louer<\/h3>/);
+  assert.doesNotMatch(guide, /function sleepHTML/, 'plus de bloc « Dormir » en double dans Préparer');
+  assert.match(css, /\.ocean-v2 #detail \.dcat\[data-cat="activites"\]>\.field-local\{display:none\}/, '« Matériel et cours » ne double plus les écoles et locations du Coin');
   assert.match(fnSource(guide, 'aroundHTML'), /<h3 class="fx-title">Autour<\/h3>/);
   assert.match(field, /<h3 class="fx-title">Matériel et cours<\/h3>/);
   assert.match(field, /<h3 class="fx-title">Avant de partir<\/h3>/);
@@ -30,7 +32,7 @@ test('Préparer : six sections à titre simple, dans l’ordre du brief (Y aller
 });
 
 test('Préparer : plus de sur-titres en capitales, de numéros de chapitre, de schéma radar ni de jauge de classement', () => {
-  for (const src of [fnSource(guide, 'aroundHTML'), fnSource(guide, 'sleepHTML')]) {
+  for (const src of [fnSource(guide, 'aroundHTML'), fnSource(guide, 'practicalHTML')]) {
     assert.doesNotMatch(src, /guide-chapter-number|guide-chapter-label/);
     assert.doesNotMatch(src, />[A-ZÀÉÈ’ ]{6,}</, 'aucun texte tout en capitales');
   }
@@ -47,11 +49,9 @@ test('Préparer : chaque fait garde sa source à côté (aéroports, lieux autou
   assert.ok(goTpl.indexOf('OurAirports') > goTpl.indexOf('${flights}') && goTpl.indexOf('OurAirports') < goTpl.indexOf('<div class="sd-facts">'));
   assert.match(fnSource(guide, 'aroundHTML'), /Lieux sélectionnés par Ocean Buddy et situés grâce aux coordonnées de Wikipédia/);
   assert.match(fnSource(guide, 'aroundHTML'), /wikiUrl\(lang,x\.title\)/, 'chaque lieu garde son lien Wikipédia');
-  assert.match(fnSource(guide, 'sleepHTML'), /Estimation indicative Ocean Buddy \(\$\{M\.EDITION\}\)/);
-  assert.match(fnSource(guide, 'sleepHTML'), /Recherches publiques, sans lien sponsorisé/);
-  /* La haute saison se traduit d’un bloc : aucun élément au milieu de la phrase (i18n.js la couperait en deux). */
-  const peak = fnSource(guide, 'sleepHTML').split('\n').find(l => l.includes('const peak='));
-  assert.ok(peak && !/months\(|<span/.test(peak), 'mois en texte simple dans « Haute saison (…) : … la nuit. »');
+  assert.match(fnSource(guide, 'practicalHTML'), /Recherches publiques, sans lien sponsorisé/);
+  /* Aucune fourchette de nuit sans source en grand chiffre : le bloc pratique ne montre que l’indice sourcé et des liens. */
+  assert.doesNotMatch(fnSource(guide, 'practicalHTML'), /M\.euros\(|La nuit, dès/, 'pas de prix de nuit dans « Dormir, manger, louer »');
 });
 
 test('Préparer : seuls le détail du pays et le point de départ sont repliés ; la liste et le carnet restent en vue', () => {
@@ -92,8 +92,8 @@ test('Nature, Préserver : l’enjeu en une phrase, puis les gestes en liste sim
 
 test('Préparer et Nature : les nouveaux textes sont traduits en anglais et en espagnol', () => {
   const src = new Set(JSON.parse(read('locales/source/fr.json')));
-  const keys = ['Y aller', 'Dormir', 'Autour', 'Matériel et cours', 'Ton carnet', 'Ton point de départ', 'Même activité, dans un rayon de 200 km',
-    'Chercher un vol vers {1}', 'Haute saison ({0}) : {1} la nuit.', 'Je l\'ai fait', 'Préserver ce spot', 'Quand les voir ?', 'Voir le détail des étapes', 'Pourquoi ces gestes ?', 'Sources et précisions'];
+  const keys = ['Y aller', 'Dormir, manger, louer', 'Autour', 'Matériel et cours', 'Ton carnet', 'Ton point de départ', 'Même activité, dans un rayon de 200 km',
+    'Chercher un vol vers {1}', 'Je l\'ai fait', 'Préserver ce spot', 'Quand les voir ?', 'Voir le détail des étapes', 'Pourquoi ces gestes ?', 'Sources et précisions'];
   for (const l of ['en', 'es']) {
     const tr = JSON.parse(read(`locales/translations/${l}.json`));
     for (const k of keys) {
@@ -130,7 +130,7 @@ test('Préparer, Dormir : toutes les recherches et « Comparer » sont visibles,
   const rule = /#detail \.px-search>\.px-pills\{([^}]*)\}/.exec(prep)[1];
   assert.match(rule, /flex-wrap:wrap/);
   assert.doesNotMatch(rule, /nowrap|overflow-x/);
-  assert.match(fnSource(guide, 'sleepHTML'), /OceanNotebook\?\.button\(s\.id\)/, 'le bouton Comparer reste dans Dormir');
+  assert.match(fnSource(guide, 'practicalHTML'), /OceanNotebook\?\.button\(s\.id\)/, 'le bouton Comparer reste dans Dormir, manger, louer');
 });
 
 test('Préparer et Nature : les zones à toucher font au moins 44 px', () => {
