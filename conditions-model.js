@@ -190,13 +190,13 @@
   function regionAnchor(points) {
     const pts = (points || []).filter(p => p && Number.isFinite(p.lat) && Number.isFinite(p.lon));
     if (!pts.length) return null;
-    if (pts.length === 1) return { lat: pts[0].lat, lon: pts[0].lon, n: 1 };
+    if (pts.length === 1) return Object.assign({ lat: pts[0].lat, lon: pts[0].lon, n: 1 }, pts[0].country ? { country: pts[0].country } : {});
     let best = null, bestSum = Infinity;
     for (const p of pts) {
       const sum = pts.reduce((t, q) => t + km(p, q), 0);
       if (sum < bestSum) { bestSum = sum; best = p; }
     }
-    return { lat: best.lat, lon: best.lon, n: pts.length };
+    return Object.assign({ lat: best.lat, lon: best.lon, n: pts.length }, best.country ? { country: best.country } : {});
   }
 
   /* ---------- Tirer pour rafraîchir ---------- */

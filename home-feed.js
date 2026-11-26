@@ -511,12 +511,12 @@
     if(!CM)return null;
     let ids=typeof favs!=='undefined'?[...favs]:[];
     if(!ids.length)ids=(window.OceanHub?.recent?.()||[]).map(x=>x&&typeof x==='object'?x.id:x);
-    const pts=ids.filter(id=>typeof id==='string'&&known(id)).map(id=>COORDS[id]||spotOf(id)?.coords).filter(Boolean);
+    const pts=ids.filter(id=>typeof id==='string'&&known(id)).map(id=>{const c=COORDS[id]||spotOf(id)?.coords;return c?{lat:c.lat,lon:c.lon,country:spotOf(id)?.country||null}:null;}).filter(Boolean);
     return CM.regionAnchor(pts);
   }
   function rankCtx(){
-    const pos=realPos()||regionPos();
-    return {sport:curSport(),level:curLevel(),month:new Date().getMonth(),seasons,photo:scores,pos,
+    const real=realPos(),reg=real?null:regionPos(),pos=real||reg;
+    return {sport:curSport(),level:curLevel(),month:new Date().getMonth(),seasons,photo:scores,pos,region:reg||null,
       favs:typeof favs!=='undefined'?favs:null,coords:s=>COORDS[s.id]||s.coords,gauge:s=>window.dangerGauge?.(s)?.n??null,
       hasPhoto:s=>!!photo(s),day:today(),jitter:30};
   }

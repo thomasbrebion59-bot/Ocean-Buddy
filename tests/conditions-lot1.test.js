@@ -108,6 +108,23 @@ test('région des favoris : le favori le plus central, jamais un barycentre en m
   assert.equal(CM.regionAnchor([]), null);
   assert.deepEqual(CM.regionAnchor([landes]), { lat: 43.66, lon: -1.44, n: 1 });
 });
+test('« Pour toi » sans position : la région des favoris d’abord, Kavieng seulement faute de mieux', () => {
+  const R = require('../spot-rank-model.js');
+  const mk = (id, country, lat, lon) => ({ id, country, sports: ['surf'], level: 'debutant', coords: { lat, lon } });
+  const spots = [mk('a', 'France', 43.6, -1.4), mk('b', 'Espagne', 43.3, -2.0), mk('c', 'Portugal', 39.3, -9.4),
+    mk('kav', 'Papouasie-Nouvelle-Guinée', -2.6, 150.8), mk('bali', 'Indonésie', -8.7, 115.2)];
+  const photo = { kav: 100, bali: 100, a: 10, b: 10, c: 10 };
+  const ctx = { sport: 'surf', level: 'debutant', month: 10, photo, pos: { lat: 43.66, lon: -1.44, country: 'France' }, region: { lat: 43.66, lon: -1.44, country: 'France' },
+    coords: s => s.coords, day: 5, jitter: 0, hasPhoto: () => true };
+  const ids = o => R.forYou(spots, ctx, o).map(p => p.spot.id);
+  assert.deepEqual(ids({ n: 2, perCountry: 1 }), ['a', 'b'], 'deux spots proches : aucun spot lointain, même très beau');
+  assert.ok(!ids({ n: 3, perCountry: 1 }).includes('kav'), 'Portugal (hors de 600 km) avant la Papouasie');
+  const rest = ids({ n: 5, perCountry: 1 });
+  assert.ok(rest.indexOf('kav') > rest.indexOf('a'), 'le reste du monde vient après, seulement s’il en faut plus');
+  assert.equal(rest.length, 5);
+  const all = R.forYou(spots, { ...ctx, region: null }, { n: 2, perCountry: 1 }).map(p => p.spot.id);
+  assert.ok(all.includes('kav') || all.includes('bali'), 'sans région : l’ancien classement, inchangé');
+});
 test('tirer pour rafraîchir : seuil de 72 px, une fois toutes les 20 s au plus', () => {
   assert.equal(CM.pullState(3), 'idle'); assert.equal(CM.pullState(40), 'pulling'); assert.equal(CM.pullState(72), 'ready');
   assert.equal(CM.canRefresh(0, 1000), true); assert.equal(CM.canRefresh(1000, 15000), false); assert.equal(CM.canRefresh(1000, 21000), true);

@@ -54,6 +54,7 @@
     h ^= h >>> 13; h = Math.imul(h, 0x5bd1e995); h ^= h >>> 15;
     return (h >>> 0) / 4294967296;
   }
+  const REGION_KM = 600;
   const sportsOf = s => Array.isArray(s && s.sports) ? s.sports : [];
 
   /* Contexte : {sport, level, month, pos:{lat,lon}|null, seasons:{id:[mois]}, photo:{id:score 0-100},
@@ -96,7 +97,34 @@
   function forYou(spots, ctx = {}, opts = {}) {
     const n = opts.n || 3, perCountry = opts.perCountry || 1, used = opts.used || null;
     const out = [], per = new Map();
-    for (const s of rank(spots, ctx)) {
+    let ranked = rank(spots, ctx);
+    /* Position seulement déduite des favoris (ctx.region) : les spots de la région passent d'abord (même pays, ou à
+       moins de REGION_KM du centre des favoris), le reste du monde seulement s'il n'y en a pas assez. */
+    if (ctx.region && ctx.pos) {
+      const near = s => {
+        if (ctx.region.country && s.country === ctx.region.country) return true;
+        const d = distKm(ctx.pos, ctx.coords ? ctx.coords(s) : s.coords);
+        return d != null && d <= REGION_KM;
+      };
+      const close = ranked.filter(near), far = ranked.filter(s => !near(s));
+      const pick = pool => {
+        const res = [], pc = new Map();
+        for (const s of pool) {
+          if (used && used.has(s.id)) continue;
+          if (ctx.hasPhoto && !ctx.hasPhoto(s)) continue;
+          if (explain(s, ctx).tier === 0) continue;
+          const c = s.country || '';
+          if ((pc.get(c) || 0) >= perCountry) continue;
+          pc.set(c, (pc.get(c) || 0) + 1);
+          res.push(s);
+        }
+        return res;
+      };
+      const first = pick(close);
+      if (first.length >= n) ranked = first;
+      else ranked = first.concat(pick(far).filter(s => !first.includes(s)));
+    }
+    for (const s of ranked) {
       if (out.length >= n) break;
       if (used && used.has(s.id)) continue;
       if (ctx.hasPhoto && !ctx.hasPhoto(s)) continue;
@@ -147,6 +175,6 @@
     return true;
   }
 
-  return { LEVELS, LEVEL_PARTS, PARTS, levelIndex, levelTier, seasonTier, distKm, dayHash, explain, score, rank, forYou,
+  return { LEVELS, LEVEL_PARTS, PARTS, levelIndex, levelTier, seasonTier, distKm, REGION_KM, dayHash, explain, score, rank, forYou,
     parseFilter, formatFilter, normFilter, hasPart, toggleFilter, countParts, matchFilter };
 });
