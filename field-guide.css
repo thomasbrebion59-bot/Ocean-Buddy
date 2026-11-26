@@ -20,7 +20,7 @@
 .ocean-v2 #detail .trip-add-from-spot{margin:16px 0 0;border-radius:8px;max-width:none;font-size:12px}
 .ocean-v2 #detail .field-overview:not([style*="none"]){grid-template-columns:minmax(0,1.55fr) minmax(260px,1fr);gap:0 38px;align-items:start}
 .ocean-v2 #detail .field-story{grid-column:auto;background:transparent!important;border:0;padding:12px 0 24px}
-.field-eyebrow{display:block;color:var(--t-main);font-size:11px;font-weight:750;letter-spacing:1.6px;line-height:1.55;text-transform:uppercase}
+.field-eyebrow{display:block;color:var(--t-main);font-size:11px;font-weight:750;letter-spacing:.3px;line-height:1.55}
 .field-coordinates{font-size:12px;letter-spacing:1.2px;color:var(--t-ink2);font-variant-numeric:tabular-nums;margin:0 0 26px}
 .ocean-v2 #detail .field-story h4{display:block;font:400 36px/1.12 var(--display);letter-spacing:-.5px;margin-bottom:20px}
 .field-story .field-eyebrow{margin-bottom:12px}

@@ -815,12 +815,11 @@
     const ids=Layout?.good?Layout.good(c,{n:goodN,perCountry:1}):c.slice(0,goodN).map(x=>x.id);
     return ids.map(spotOf).filter(Boolean);
   }
-  /* « Bon aujourd’hui » seulement si un spot montré a un créneau ; sinon ce que la liste est vraiment. */
-  function goodTitle(picks,map,pending){
-    if(pending)return goodIds.some(id=>Verdict&&Verdict.hasVerdict(id))?'Bon aujourd’hui':goodFallback(picks);
-    return Layout?.goodProven?.(picks.map(s=>map.get(s.id)))?'Bon aujourd’hui':goodFallback(picks);
-  }
-  const goodFallback=picks=>{const m=new Date().getMonth(),list=picks&&picks.length?picks:goodIds.map(spotOf).filter(Boolean);return seasons&&list.length&&list.every(s=>seasons[s.id]?.includes(m))?'En saison':'Pour toi aujourd’hui';};
+  /* Un seul titre, quelles que soient les données (il changeait entre « Bon aujourd’hui », « En saison » et « Pour toi
+     aujourd’hui » selon l’arrivée des conditions) : ce que la liste est vraiment. La pastille de chaque ligne dit le reste
+     (créneau, saison, pas aujourd’hui). */
+  const GOOD_TITLE='Pour toi aujourd’hui';
+  function goodTitle(){return GOOD_TITLE;}
   function goodInner(used){
     const cands=goodCands(used);goodIds=cands.map(s=>s.id);goodN=Math.min(3,cands.length);
     if(!goodN)return '';

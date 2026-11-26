@@ -130,6 +130,11 @@ body.mapfull .app-chrome{visibility:hidden}
 .omap-item-text{min-width:0}
 .omap-item-text b{display:block;font:800 13.5px/1.25 var(--body);color:var(--t-deep);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .omap-item-text small{display:block;margin-top:2px;font:600 11.5px/1.3 var(--body);color:var(--t-ink2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.omap-item-text .nm>.nm-main,.omap-item-text .nm>.nm-sub{overflow:hidden;text-overflow:ellipsis}
+.omap-item-text .nm>.nm-sub{margin-top:1px;font-weight:600;font-size:11.5px;color:var(--t-ink2)}
+.omap-sports{display:inline-flex;gap:5px;margin-inline-start:8px;vertical-align:middle}
+.omap-item .omap-sports .poulpy-mini{width:22px!important;height:22px!important;vertical-align:middle}
+.omini-pop-body b .nm>.nm-sub{font-size:11.5px;font-weight:600}
 .omap-item .omap-lvl{justify-self:start;grid-column:2;height:20px;font-size:10px}
 .omap-item-text{grid-column:2}
 .omap-dot{position:absolute;top:52px;inset-inline-start:52px;width:13px;height:13px;border:2.5px solid var(--t-card);border-radius:50%;background:var(--c);box-shadow:0 1px 3px color-mix(in srgb,var(--t-deep) 35%,transparent)}

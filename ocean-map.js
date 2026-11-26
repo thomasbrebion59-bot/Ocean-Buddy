@@ -54,6 +54,15 @@
 
   function candidates(){const found=typeof exploreSpots==='function'?exploreSpots(currentFilter,{sport:null}):SPOTS.filter(s=>inWorld(s));return found.filter(s=>COORDS[s.id]&&Number.isFinite(COORDS[s.id].lat)&&Number.isFinite(COORDS[s.id].lon));}
   const shortName=s=>window.SpotName?SpotName.short(s.name):String(s.name||'').split(' — ')[0];
+  /* Nom sur deux lignes, sans le tiret long (spot-name.js) ; les sports de la feuille de région : trois pictogrammes
+     au lieu des mots (« Plongée, Snorkeling, Surf » était coupé par « … »), les noms restent lus par l’étiquette. */
+  const nameHtml=s=>window.SpotName?SpotName.html(s.name):esc(s.name);
+  const sportsHtml=ids=>{
+    const list=ids.slice(0,3).filter(id=>SPORTMAP[id]);if(!list.length)return '';
+    const label=list.map(id=>(typeof window.obT==='function'?window.obT(SPORTMAP[id].label):SPORTMAP[id].label)).join(', ');
+    const icons=typeof sportIcon==='function'&&window.PoulpyIcons?list.map(id=>sportIcon(id)).join(''):'';
+    return icons?`<span class="omap-sports" role="img" aria-label="${esc(label)}" translate="no" data-no-i18n>${icons}</span>`:` ${esc(list.map(id=>SPORTMAP[id].label).join(', '))}`;
+  };
   const regionOf=s=>REGIONS.find(r=>r.worlds.includes(s.world||SPOT_WORLD?.[s.id]));
   const primary=s=>activeSport&&spotSports(s).includes(activeSport)?activeSport:spotSports(s)[0];
   const photoOf=s=>(typeof spotPhotoUrl==='function'&&spotPhotoUrl(s.id,480))||(typeof spotIllustration==='function'?spotIllustration(s.id):'assets/poulpy/scenes/travel-v2.webp');
@@ -186,7 +195,7 @@
     panel.addEventListener('click',onPanelClick);
     filters.addEventListener('click',e=>{
       const b=e.target.closest('[data-map-sport]');if(b){choose(b.dataset.mapSport||null);return;}
-      /* « En saison » et « Nouveaux » s’ajoutent au niveau choisi (même filtre que la liste d’Explorer). */
+      /* « En saison » et « Nouveautés » s’ajoutent au niveau choisi (même filtre que la liste d’Explorer). */
       const t=e.target.closest('[data-map-filter]');if(!t)return;
       const part=t.dataset.mapFilter;setFilter(window.SpotRank?window.SpotRank.toggleFilter(currentFilter,part):part);
       filters.querySelector(`[data-map-filter="${part}"]`)?.focus({preventScroll:true});
@@ -227,9 +236,9 @@
   function renderFilters(){
     const base=candidates(),count=id=>id?base.filter(s=>spotSports(s).includes(id)).length:base.length;
     const scroll=filters.querySelector('.omap-acts')?.scrollLeft||0;
-    /* Niveau dans le menu ; « En saison » et « Nouveaux » en interrupteurs à côté : les trois se combinent. */
+    /* Niveau dans le menu ; « En saison » et « Nouveautés » en interrupteurs à côté : les trois se combinent. */
     const levels=[['all','Tous les niveaux'],['debutant','Débutant'],['intermediaire','Intermédiaire'],['expert','Expert'],['variable','Niveau à évaluer']];
-    const toggles=[['season','En saison'],['new','Nouveaux']];
+    const toggles=[['season','En saison'],['new','Nouveautés']];
     const R=window.SpotRank,p=R?R.parseFilter(currentFilter):{levels:levels.some(([v])=>v===currentFilter&&v!=='all')?[currentFilter]:[],season:currentFilter==='season',fresh:currentFilter==='new'};
     const lv=p.levels.length>1?'multi':p.levels[0]||'all',on={season:p.season,new:p.fresh};
     filters.innerHTML=`<div class="omap-filt-main">${window.OceanPlan?.button()||''}<label class="omap-level"><span class="omap-sr">Niveau</span><select data-map-level aria-label="Niveau">${levels.map(([v,l])=>`<option value="${v}">${l}</option>`).join('')}${lv==='multi'?'<option value="multi">Plusieurs niveaux</option>':''}</select></label>${toggles.map(([v,l])=>`<button type="button" class="omap-toggle" data-map-filter="${v}" aria-pressed="${on[v]}">${l}</button>`).join('')}</div><div class="omap-acts" role="group" aria-label="Activités">${[{id:'',label:'Tout explorer'},...SPORTS].map(s=>{const n=count(s.id);return `<button type="button" data-map-sport="${s.id}" aria-pressed="${(activeSport||'')===s.id}" ${n||!s.id?'':'disabled'} style="--c:${s.id?color(s.id):'var(--t-deep,#0b2d7a)'}"><i aria-hidden="true"></i><span>${esc(s.label)}</span><small>${n}</small></button>`;}).join('')}</div>`;
@@ -935,7 +944,7 @@
   }
   function item(s){
     const acts=spotSports(s),lvl=levelOf(s);
-    return `<li><button type="button" class="omap-item${s.id===selected?' is-on':''}" data-spot="${esc(s.id)}"><img src="${esc(photoOf(s))}" alt="" width="56" height="56" loading="lazy" decoding="async"><span class="omap-item-text"><b>${esc(s.name)}</b><small>${esc(countryOf(s))} · ${esc(acts.slice(0,3).map(id=>SPORTMAP[id].label).join(', '))}</small></span><span class="omap-dot" style="--c:${color(primary(s))}" aria-hidden="true"></span><span class="omap-lvl lvl-${lvl}">${esc(lvlLabel[lvl]||'Niveau à évaluer')}</span></button></li>`;
+    return `<li><button type="button" class="omap-item${s.id===selected?' is-on':''}" data-spot="${esc(s.id)}"><img src="${esc(photoOf(s))}" alt="" width="56" height="56" loading="lazy" decoding="async"><span class="omap-item-text"><b>${nameHtml(s)}</b><small>${esc(countryOf(s))}${sportsHtml(acts)}</small></span><span class="omap-dot" style="--c:${color(primary(s))}" aria-hidden="true"></span><span class="omap-lvl lvl-${lvl}">${esc(lvlLabel[lvl]||'Niveau à évaluer')}</span></button></li>`;
   }
   function onPanelClick(e){
     const r=e.target.closest('[data-region]');if(r){zoomRegion(r.dataset.region);return;}
@@ -1198,7 +1207,7 @@
     function spotPopup(id,at){
       const s=SPOTS.find(x=>x.id===id);if(!s||!pop)return;
       const el=document.createElement('div');el.className='omini-pop-body';
-      el.innerHTML=`<small>${esc(countryOf(s))}</small><b>${esc(s.name)}</b><span>${esc(spotSports(s).slice(0,3).map(a=>SPORTMAP[a].label).join(', '))}</span>${id===cfg.focus?'':'<button type="button">Voir la fiche</button>'}`;
+      el.innerHTML=`<small>${esc(countryOf(s))}</small><b>${nameHtml(s)}</b><span>${esc(spotSports(s).slice(0,3).map(a=>SPORTMAP[a].label).join(', '))}</span>${id===cfg.focus?'':'<button type="button">Voir la fiche</button>'}`;
       el.querySelector('button')?.addEventListener('click',()=>{pop.remove();if(full)setFull(false);window.OceanNavigation?.begin();openSpot(id);});
       pop.setLngLat(at).setDOMContent(el).addTo(m);
     }

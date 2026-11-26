@@ -158,7 +158,10 @@
       const LV = { debutant: 'débutant', intermediaire: 'intermédiaire', expert: 'expert' };
       const sport = typeof spotSports === 'function' && typeof SPORTMAP !== 'undefined' ? (spotSports(spot).map(id => SPORTMAP[id] && SPORTMAP[id].label.replace(/\s*\(.*\)/, ''))[0] || '') : '';
       const tr = t => { try { return window.OB_I18N && OB_I18N.t ? OB_I18N.t(t) : t; } catch (_) { return t; } };
-      const text = [spot.name, LV[spot.level] && tr(LV[spot.level]), sport && tr(sport)].filter(Boolean).join(' · ');
+      /* Nom en clair (« Hossegor, La Gravière », sans tiret long), puis niveau et sport entre parenthèses ; pas de point médian. */
+      const nm = window.SpotName ? SpotName.parts(spot.name) : { main: spot.name, sub: '' };
+      const extra = [LV[spot.level] && tr(LV[spot.level]), sport && tr(sport)].filter(Boolean).join(', ');
+      const text = [nm.sub ? nm.main + ', ' + nm.sub : nm.main, extra && '(' + extra + ')'].filter(Boolean).join(' ');
       try {
         if (navigator.share) { await navigator.share({ title: spot.name, text, url }); return; }
         await navigator.clipboard.writeText(text + ' ' + url); say('Lien du spot copié !');

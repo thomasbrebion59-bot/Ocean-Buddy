@@ -179,8 +179,10 @@ test('« Bon aujourd’hui » : mêmes données que « Pour toi aujourd’hui »
   assert.match(c, /SpotFitModel\.fit\(s\.level,window\.dangerGauge\?\.\(s\)\?\.n\?\?null,curLevel\(\)\)\.kind!=='above'/);
   assert.match(c, /const season=list\.filter\(p=>p\.why\.inSeason\);/);
   assert.match(fn('goodPicks'), /Layout\.good\(c,\{n:goodN,perCountry:1\}\)/);
-  /* « Bon aujourd’hui » ne se dit que si un spot montré a un créneau. */
-  assert.match(fn('goodTitle'), /Layout\?\.goodProven\?\.\(picks\.map\(s=>map\.get\(s\.id\)\)\)\?'Bon aujourd’hui':goodFallback\(picks\)/);
+  /* Un seul titre (0.11) : il ne change plus selon les données, la pastille de chaque ligne dit le reste. */
+  assert.match(fn('goodTitle'), /return GOOD_TITLE/);
+  assert.match(read('home-feed.js'), /const GOOD_TITLE='Pour toi aujourd’hui';/);
+  assert.doesNotMatch(read('home-feed.js'), /goodFallback/);
   /* Une seule demande groupée pour les lignes de l’accueil : au plus 3 + 10 spots. */
   assert.match(fn('loadLive'), /ids=\[\.\.\.new Set\(mineIds\.concat\(goodIds\)\)\]/);
 });
@@ -349,7 +351,7 @@ test('tablette (700 à 959 px) : une colonne de 640 px au centre', () => {
 /* ---------- Textes ---------- */
 test('textes : chaque texte de la v2 est une clé du dictionnaire, traduite en anglais et en espagnol', () => {
   const fr = new Set(JSON.parse(read('locales/source/fr.json'))), en = JSON.parse(read('locales/translations/en.json')), es = JSON.parse(read('locales/translations/es.json'));
-  const keys = ['Mes spots', 'Modifier', 'Bon aujourd’hui', 'Tout voir', 'En {0}', 'En saison', 'Pour toi aujourd’hui', 'Cultures', 'Mot du jour', 'Deviner le pays', 'Tour du monde', 'Trouver un spot', 'spots à explorer',
+  const keys = ['Mes spots', 'Modifier', 'Tout voir', 'En {0}', 'En saison', 'Pour toi aujourd’hui', 'Cultures', 'Mot du jour', 'Deviner le pays', 'Tour du monde', 'Trouver un spot', 'spots à explorer',
     'Où veux-tu aller ?', 'Calendrier de l’Avent', 'Mon sport', 'Modifier mon sport et mon niveau', 'Danger {0} sur 4', 'Trouve ton spot', 'Bonjour', 'Bonsoir', 'Bon après-midi'];
   for (const k of keys) {
     assert.ok(fr.has(k), 'source FR : ' + k);
