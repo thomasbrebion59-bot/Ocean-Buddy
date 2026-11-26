@@ -308,9 +308,16 @@
   }
   /* Zone de culture locale du spot (window.OCEAN_CULTURE_ZONES : {zones:{id:{n,r,c,f}}, spots:{spot:id}}), ou null. */
   const ZONE_LABEL={gout:'À goûter',fete:'La fête',mot:'Le mot du coin',coutume:'La coutume',lieu:'À voir'};
-  const ZONE_ILLU={gout:'table',fete:'fete',mot:'panneau',coutume:'coutume',lieu:'soleil'};
-  /* Un « lieu » est souvent un marché ; sinon, un paysage de mer sans bâtiment (aucun dessin ne prétend montrer le vrai lieu). */
-  const zoneIllu=(kind,title)=>kind==='lieu'&&/march|market|mercad/i.test(title||'')?'marche':ZONE_ILLU[kind]||'accueil';
+  /* Un fait sans illustration propre n'a jamais de scène peinte : une image qui montrerait autre chose que le fait serait
+     pire qu'aucune image. Il reçoit une vignette sobre (crème, pétrole, soleil) avec le pictogramme de son genre. */
+  const PICTO_SVG={
+    gout:'<path d="M18 10v12a4 4 0 0 0 8 0V10M22 10v30M38 10c-4 3-5 9-5 14 0 4 2 5 5 5V10M38 29v11"/>',
+    fete:'<path d="M12 18h40"/><path d="M14 18l6 12 6-12M26 18l6 12 6-12M38 18l6 12 6-12"/><circle cx="32" cy="44" r="3" class="s"/>',
+    mot:'<path d="M12 16h40a2 2 0 0 1 2 2v20a2 2 0 0 1-2 2H30l-10 9v-9h-8a2 2 0 0 1-2-2V18a2 2 0 0 1 2-2z"/>',
+    coutume:'<circle cx="32" cy="22" r="7"/><circle cx="16" cy="28" r="5"/><circle cx="48" cy="28" r="5"/><path d="M20 50c0-9 5-14 12-14s12 5 12 14M6 48c0-6 4-10 10-10M58 48c0-6-4-10-10-10"/>',
+    lieu:'<path d="M32 54s-14-14-14-25a14 14 0 0 1 28 0c0 11-14 25-14 25z"/><circle cx="32" cy="29" r="5" class="s"/>'
+  };
+  const PICTO=k=>`<span class="gl-illu gl-picto" data-picto="${PICTO_SVG[k]?k:'lieu'}" aria-hidden="true"><svg viewBox="0 0 64 64" width="64" height="64" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" focusable="false"><circle class="sun" cx="52" cy="12" r="7"/>${PICTO_SVG[k]||PICTO_SVG.lieu}</svg></span>`;
   const frDate=d=>{const m=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(d||''));return m?`${m[3]}/${m[2]}/${m[1]}`:String(d||'');};
   /* La zone dans la langue de l’app : titre et texte traduits quand la traduction existe (sinon le français), nom de zone
      traduit. Genre, mois, source et illustration viennent toujours de la donnée française : une source ne change jamais. */
@@ -360,7 +367,7 @@
          (assets/fiche/faits/) quand elle existe, sinon celle du genre. */
       const [kind,title,text,months,url,publisher,,own]=f,when=kind==='fete'&&Array.isArray(months)&&months.length?M.monthsLabel(months,LG()):'';
       const big=!!own&&/^[a-z0-9-]+$/.test(own),srcL=M.sourceLabel(publisher,url,window.OB_I18N?.lang);
-      cards.push(`<li class="gl-card gl-fact${big?' gl-big-card':''}" data-kind="${esc(kind)}" style="--i:${cards.length}">${big?HERO('faits/'+own):ILLU(zoneIllu(kind,title))}<span class="fx-label">${ZONE_LABEL[kind]||''}</span><b${NT}>${esc(title)}</b><small${NT}>${esc(text)}</small>${when?`<small class="gl-when"><span>Souvent en</span> <span${NT}>${esc(when)}</span></small>`:''}<a class="gl-fact-src" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>Source :</span> <span${srcL.fixed?NT:''}>${esc(srcL.text)}</span></a></li>`);
+      cards.push(`<li class="gl-card gl-fact${big?' gl-big-card':''}" data-kind="${esc(kind)}" style="--i:${cards.length}">${big?HERO('faits/'+own):PICTO(kind)}<span class="fx-label">${ZONE_LABEL[kind]||''}</span><b${NT}>${esc(title)}</b><small${NT}>${esc(text)}</small>${when?`<small class="gl-when"><span>Souvent en</span> <span${NT}>${esc(when)}</span></small>`:''}<a class="gl-fact-src" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>Source :</span> <span${srcL.fixed?NT:''}>${esc(srcL.text)}</span></a></li>`);
     }
     const hello=has('mot')?'':c.hello?.[0]||'',helloMore=typeof c.hello?.[1]==='string'?c.hello[1]:'',food=has('gout')?'':c.food?.[0]||'',foodMore=typeof c.food?.[1]==='string'?c.food[1]:'';
     if(hello)cards.push(`<li class="gl-card" style="--i:${cards.length}">${ILLU('panneau')}<span class="fx-label">Le mot du coin</span><b${NT}>«&nbsp;${esc(hello)}&nbsp;»</b>${helloMore?`<small${NT}>${esc(helloMore)}</small>`:''}</li>`);

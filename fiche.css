@@ -886,6 +886,10 @@ html .ocean-v2 #detail .fx-notes[hidden],#detail .fx-notes-zone[hidden]{display:
    elle est nette. La carte laisse toujours voir le bord de la suivante (environ 60 à 75 px) : on devine qu’on peut glisser. */
 #detail .gl-card{flex:0 0 min(330px,calc(100% - 56px));min-width:0;box-sizing:border-box;display:grid;grid-template-columns:104px minmax(0,1fr);grid-template-rows:auto auto auto 1fr;column-gap:12px;row-gap:2px;align-content:start;padding:12px 12px 4px;border-radius:var(--fiche-radius);background:var(--fiche-wash);overflow:hidden;scroll-snap-align:start}
 #detail .gl-card>.gl-illu,#detail .gl-card-go .gl-illu{grid-column:1;grid-row:1 / span 2;width:104px;height:104px;aspect-ratio:1;object-fit:cover;margin:0 0 8px;border-radius:14px}
+#detail #guideLive .gl-picto{display:grid;place-items:center;box-sizing:border-box;mix-blend-mode:normal;color:var(--t-main);background:var(--t-tint);border:1px solid var(--t-line)}
+#detail .gl-picto svg{width:54%;height:auto;aspect-ratio:1;display:block}
+#detail .gl-picto .s{fill:var(--t-acc)}
+#detail .gl-picto .sun{fill:var(--t-acc);stroke:none}
 #detail .gl-card>.fx-label,#detail .gl-card-go .fx-label{grid-column:2;grid-row:1;align-self:end}
 #detail .gl-card>b,#detail .gl-card-go b{grid-column:2;grid-row:2;align-self:start}
 #detail .gl-card>:is(small,a),#detail .gl-card-go small{grid-column:1 / -1}

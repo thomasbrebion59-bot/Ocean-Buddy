@@ -113,7 +113,7 @@ test('illustrations propres aux faits : identifiant stable, fichier présent, si
     assert.ok(fs.existsSync(path.join(__dirname, '..', 'assets/fiche/faits', v + '.webp')), 'fichier : ' + v);
   }
   assert.match(read('spot-guide.js'), /const big=!!own&&\/\^\[a-z0-9-\]\+\$\/\.test\(own\),srcL=M\.sourceLabel\(publisher,url,window\.OB_I18N\?\.lang\);/);
-  assert.match(read('spot-guide.js'), /\$\{big\?HERO\('faits\/'\+own\):ILLU\(zoneIllu\(kind,title\)\)\}/);
+  assert.match(read('spot-guide.js'), /\$\{big\?HERO\('faits\/'\+own\):PICTO\(kind\)\}/);
 });
 
 test('traductions : chaque fait a son titre et son texte en anglais et en espagnol, sans source propre ni décoration', () => {
@@ -169,7 +169,7 @@ test('cartes de culture : grande image nette pour chaque fait illustré, vignett
   const css = read('fiche.css'), g = read('spot-guide.js');
   /* Choix du fondateur (23 nov.) : la grande image en tête de la carte, 4:3, sa place réservée (aucun saut). */
   assert.match(g, /const HERO=k=>`<img class="gl-hero" src="assets\/fiche\/\$\{k\}\.webp" alt="" width="1080" height="810" loading="lazy" decoding="async" draggable="false">`;/);
-  assert.match(g, /\$\{big\?HERO\('faits\/'\+own\):ILLU\(zoneIllu\(kind,title\)\)\}/);
+  assert.match(g, /\$\{big\?HERO\('faits\/'\+own\):PICTO\(kind\)\}/);
   assert.match(css, /#detail \.gl-big-card>\.gl-hero\{[^}]*width:calc\(100% \+ 24px\);[^}]*aspect-ratio:4 \/ 3;/);
   /* Les illustrations de genre (420 px) restent en vignette de 104 points (312 px d’écran en ×3). */
   assert.match(css, /#detail \.gl-card>\.gl-illu,#detail \.gl-card-go \.gl-illu\{grid-column:1;grid-row:1 \/ span 2;width:104px;height:104px;/);
@@ -245,6 +245,10 @@ test('ajout « 50 spots de plus » : 31 zones, aucun spot rattaché deux fois, c
   for (const l of ['en', 'es']) for (const id of added) assert.ok(tr[l].zones[id], `${l} : nom de ${id}`);
   /* Une carte sans illustration propre reçoit la vignette de son genre (fichier présent), jamais la grande image. */
   const g = read('spot-guide.js');
-  assert.match(g, /const ZONE_ILLU=\{gout:'table',fete:'fete',mot:'panneau',coutume:'coutume',lieu:'soleil'\};/);
-  for (const k of ['accueil', 'table', 'fete', 'coutume', 'marche', 'panneau', 'soleil']) assert.ok(fs.existsSync(path.join(__dirname, '..', 'assets/fiche', k + '.webp')), k);
+  /* Jamais d'image de genre peinte pour un fait sans illustration propre : un pictogramme sobre à la place. */
+  assert.doesNotMatch(g, /ZONE_ILLU|zoneIllu/);
+  const factCard = g.slice(g.indexOf('if(zone)for(const f of zone.f)'), g.indexOf("const hello=has('mot')"));
+  assert.doesNotMatch(factCard, /ILLU\(/, 'aucune image peinte sur la carte d’un fait');
+  assert.match(factCard, /\$\{big\?HERO\('faits\/'\+own\):PICTO\(kind\)\}/);
+  for (const k of ['gout', 'fete', 'mot', 'coutume', 'lieu']) assert.match(g, new RegExp('\\b' + k + ":'<"), 'pictogramme : ' + k);
 });
