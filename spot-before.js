@@ -229,7 +229,7 @@
 
   /* Créneau d’aujourd’hui, calculé par spot-experience.js (rule = SpotWeatherModel.rule, today = bestSlot du jour).
      caution : l’avertissement de vent de terre du créneau, repris en entier quand il s’applique (jamais coupé). */
-  function slot(s, rule, today, hourFmt, caution) {
+  function slot(s, rule, today, hourFmt, caution, tomorrow) {
     if (!same(s)) return;
     if (rule === null) { setRow('slot', '<span class="db-muted">Indisponible pour le moment</span>'); return; }
     const x = F ? F.slotSummary(rule, today) : {status: 'nodata'};
@@ -240,7 +240,10 @@
       return;
     }
     if (x.status === 'norule' && x.reason === 'level') { setRow('slot', levelButton()); return; }
-    const why = x.status === 'norule'
+    /* Rien aujourd’hui : la même phrase que l’accueil, avec le créneau de demain quand il y en a un (« Pas aujourd’hui. Demain de 15 h à 17 h. »). */
+    const y = x.status === 'none' && tomorrow && F ? F.slotSummary(rule, tomorrow) : null;
+    const nextText = y && y.status === 'ok' ? (y.start === y.end ? fmt(y.start) : `de ${fmt(y.start)} à ${fmt(y.end)}`) : '';
+    const why = nextText ? `Pas aujourd’hui. Demain ${nextText}.` : x.status === 'norule'
       ? (x.reason === 'expert' ? 'À juger toi-même heure par heure' : 'Pas de repère chiffré pour ce sport')
       : x.status === 'night' ? 'Plus d’heure de jour aujourd’hui'
       : x.status === 'none' ? 'Aucun aujourd’hui dans tes repères'

@@ -236,7 +236,7 @@ test('Conditions : « Ton créneau » sur une ligne, avec son avertissement de v
   assert.match(n.row('slot').innerHTML, /^<button type="button" class="db-level" data-open-level>Choisis ton niveau<\/button>$/);
   /* L’avertissement vient de la même règle que la carte du créneau (spot-experience.js). */
   assert.match(exp, /const cautionOf = r => \(r && r\.status === 'ok' && r\.offshore && \(r\.kind !== 'wave' \|\| r\.level === 'debutant'\)/);
-  assert.match(exp, /OceanBefore\?\.slot\(s, rule, today, hourFmt, cautionOf\(today\)\)/);
+  assert.match(exp, /OceanBefore\?\.slot\(s, rule, today, hourFmt, cautionOf\(today\), tomorrow\)/);
 });
 
 test('danger : alerte dans Conditions à partir de 3 sur 4, tête de l’onglet Sécurité, points sur l’onglet', () => {

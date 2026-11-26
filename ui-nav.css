@@ -41,6 +41,7 @@
   .pv-chrome-title{display:none}
   /* Menu latéral : Communauté rangée en bas, avec les Réglages (design.js). */
   .ocean-v2 .nav .sidebar-community{width:100%;height:32px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;margin:0 0 6px;padding:0 14px;border:0;border-radius:10px;background:none;box-shadow:none;color:var(--t-ink);font:500 11px var(--body);cursor:pointer}
+  .ocean-v2 .nav .n-community[hidden]{display:none!important}
   .ocean-v2 .nav .sidebar-community>svg{width:16px;height:16px;flex:none}
   .ocean-v2 .nav .sidebar-community .mobile-label{display:none}
   .ocean-v2 .nav .sidebar-community:hover{color:var(--t-main)}

@@ -240,7 +240,7 @@
     const fields=existing||{name:said(idea?.name),destination:said(idea?.destination)||(spotId?spot(spotId)?.loc:'')||'',start:'',end:''};
     openDialog(`<h2>${existing?'Les détails du voyage':'Nouveau voyage'}</h2><form id="tripEditForm"><label for="tripNameInput">Nom du voyage</label><input id="tripNameInput" name="name" value="${esc(fields.name)}" maxlength="70" placeholder="Mon été sur la côte basque" required><label for="tripDestinationInput">Destination</label><input id="tripDestinationInput" name="destination" value="${esc(fields.destination)}" maxlength="100" placeholder="Une région, un pays, un horizon…"><div class="trip-date-fields"><label>Départ<input name="start" type="date" value="${esc(fields.start)}"></label><label>Retour<input name="end" type="date" value="${esc(fields.end)}"></label></div><p class="trip-form-error" role="alert"></p><button class="trip-primary" type="submit">${existing?'Enregistrer les modifications':'Créer mon voyage'}</button></form>`);
     $('#tripEditForm').onsubmit=e=>{e.preventDefault();const f=Object.fromEntries(new FormData(e.target));try{
-      let next=existing?M.edit(existing,f):M.create(f,spotId?[spotId]:(idea?.spots||[]));
+      let next=existing?M.edit(existing,f):M.create(f,spotId?[spotId]:(idea?.spots||[]),{sport:sportFor(spotId||idea?.spots?.[0])});
       window.OceanNavigation?.begin();
       if(persist(existing?trips.map(t=>t.id===existing.id?next:t):[...trips,next])){selected=next.id;view='itinerary';closeDialog();go('trips');opening=!existing;render();$('#screenWrap').scrollTop=0;toast(existing?'Voyage mis à jour':'Ton voyage est créé. À toi de choisir la suite !');}
     }catch(err){modal.querySelector('.trip-form-error').textContent=err.message}};

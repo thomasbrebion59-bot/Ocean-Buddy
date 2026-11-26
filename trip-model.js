@@ -9,9 +9,13 @@
   const validDate=v=>!v||(/^\d{4}-\d{2}-\d{2}$/.test(v)&&!Number.isNaN(Date.parse(v+'T12:00:00Z'))&&new Date(v+'T12:00:00Z').toISOString().slice(0,10)===v);
   function dates(start,end){if(!validDate(start)||!validDate(end))throw Error('Choisis des dates valides.');if(start&&end&&end<start)throw Error('La date de retour doit suivre la date de départ.');}
   function stepDate(date,trip){if(!validDate(date))throw Error('Choisis une date valide pour cette étape.');if(date&&((trip.start&&date<trip.start)||(trip.end&&date>trip.end)))throw Error('Cette étape doit être comprise dans les dates du voyage.');}
+  /* Case « matériel » de la liste « Avant de partir » : selon le sport du premier spot (le surf garde « planche, leash et
+     combinaison » ; un plongeur ou un kayakiste ne prépare pas une planche). Sans sport connu : le surf, comme avant. */
+  const EQUIPMENT={surf:'Préparer planche, leash et combinaison',bodyboard:'Préparer bodyboard, palmes et leash',plongee:'Préparer ton matériel de plongée',snorkeling:'Préparer masque, tuba et palmes',paddle:'Préparer paddle, pagaie et aide à la flottabilité',kayak:'Préparer kayak, pagaie et aide à la flottabilité',baignade:'Préparer maillot et serviette',kitesurf:'Préparer aile, lignes et systèmes de sécurité',windsurf:'Préparer planche et gréement'};
+  const checklistFor=sport=>defaultChecklist.map((l,i)=>i===1&&EQUIPMENT[sport]?EQUIPMENT[sport]:l);
   const defaultChecklist=['Vérifier les conditions et l’accès aux spots','Préparer planche, leash et combinaison','Prévoir les transports','Choisir les hébergements','Préparer documents et assurance','Emporter gourde et protection solaire'];
-  function create(fields={},spotIds=[]){
-    const trip={id:uid(),name:text(fields.name,70)||'Mon voyage',destination:text(fields.destination,100),start:text(fields.start,10),end:text(fields.end,10),notes:'',accommodation:'',transport:'',budget:'',steps:[],checklist:defaultChecklist.map(label=>({id:uid(),label,done:false})),archived:false,deleted:false};
+  function create(fields={},spotIds=[],opts={}){
+    const trip={id:uid(),name:text(fields.name,70)||'Mon voyage',destination:text(fields.destination,100),start:text(fields.start,10),end:text(fields.end,10),notes:'',accommodation:'',transport:'',budget:'',steps:[],checklist:checklistFor(opts&&opts.sport).map(label=>({id:uid(),label,done:false})),archived:false,deleted:false};
     dates(trip.start,trip.end);spotIds.forEach(id=>trip.steps.push(newStep(id)));return trip;
   }
   function edit(trip,fields){
@@ -117,5 +121,5 @@
       cheapest:cheapest&&uniqueSpots>1?cheapest:null};
   }
   function progress(t){const total=t.checklist.length,done=t.checklist.filter(c=>c.done).length;return {done,total,pct:total?Math.round(done/total*100):0};}
-  return {KEY,uid,create,edit,addStep,replaceStep,editStep,moveStep,removeTrip,restoreTrip,load,save,duration,countdown,nextTrip,progress,stepNights,lodging,defaultChecklist};
+  return {KEY,uid,create,edit,addStep,replaceStep,editStep,moveStep,removeTrip,restoreTrip,load,save,duration,countdown,nextTrip,progress,stepNights,lodging,defaultChecklist,checklistFor};
 });

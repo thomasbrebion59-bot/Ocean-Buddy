@@ -868,7 +868,7 @@
   /* écran réglages */
   .set-card{max-width:330px;}
   .set-title{font-size:21px;font-weight:800;color:var(--ocean-deep);font-family:var(--display);text-align:center;margin-bottom:14px;}
-  .set-lab{display:block;font-size:12px;font-weight:700;color:var(--t-ink2);margin:10px 0 6px;}
+  .set-lab{display:block;font-size:13px;font-weight:700;color:var(--t-ink2);margin:10px 0 6px;}
   .set-row{display:flex;gap:8px;}
   .set-input{flex:1;border:2px solid var(--t-line);border-radius:14px;padding:12px 14px;font-size:15px;font-family:var(--body);color:var(--ocean-deep);outline:none;}
   .set-lang{display:block;width:100%;margin:0 0 14px;flex:none;}
@@ -878,7 +878,7 @@
   .set-toggle input{width:20px;height:20px;accent-color:var(--t-main);}
   .set-reset{width:100%;margin-top:16px;background:var(--t-tint);color:var(--t-danger);border:1.5px solid var(--t-cta);border-radius:14px;padding:13px;font-size:14px;font-weight:800;cursor:pointer;font-family:var(--display);}
   .set-reset:active{transform:scale(.98);}
-  .set-about{font-size:11px;color:var(--t-ink2);margin-top:16px;line-height:1.55;text-align:center;}
+  .set-about{font-size:13px;color:var(--t-ink2);margin-top:16px;line-height:1.55;text-align:center;}
   /* réduire les animations */
   body.reduce-motion *,body.reduce-motion *::before,body.reduce-motion *::after{animation:none!important;}
   .upin{font-size:26px;line-height:1;filter:drop-shadow(0 3px 5px color-mix(in srgb,var(--t-shadow) 35%,transparent));text-align:center;}

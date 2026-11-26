@@ -6,6 +6,9 @@
   const cfg=window.OCEAN_COMMUNITY_CONFIG||{};
   const publicKey=cfg.publishableKey||cfg.anonKey||'';
   const configured=/^https:\/\/[a-z0-9.-]+\.supabase\.co$/i.test(cfg.supabaseUrl||'')&&!!publicKey&&/^https:\/\//.test(cfg.endpoint||'');
+  /* Sans serveur configuré (community-config.js), la page n’est qu’un « bientôt » : le lien du menu de bureau est masqué
+     au lieu de mener à une impasse. Il reparaît dès que la configuration est remplie. */
+  if(!configured)document.querySelectorAll('.n-community').forEach(b=>{b.hidden=true;});
   const KEY='ob_community_session_v1',NAME='ob_community_name_v1',RULES='2026-09-23';
   // A native WebView keeps the sign-in only for its current session until a Keychain bridge exists.
   let sessionStore;try{sessionStore=window.OceanMobile?.native?sessionStorage:localStorage}catch(_){sessionStore={getItem:()=>null,setItem:()=>{},removeItem:()=>{}}}

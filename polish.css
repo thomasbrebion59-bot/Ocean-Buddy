@@ -59,6 +59,13 @@ body.has-app-back #detail .back-btn{display:none}
   #onb .sport-card[data-sp=all] .se{width:40px!important;height:40px!important;margin:0!important;border-radius:12px!important}
   #onb .sport-card[data-sp=all] h4{margin-top:0!important;font-size:14px!important}
 }
+/* Petits écrans en hauteur (iPhone SE, 375 × 667) : « Continuer » restait sous le pli. Pictogrammes à 48 px, et le bouton
+   reste collé en bas de l’écran même si le contenu défile (le bloc #onb défile, le bouton ne se perd plus). */
+@media (max-width:640px) and (max-height:700px){
+  #onb .sport-card .se{width:48px!important;height:48px!important}
+  #onb .sport-card{padding:8px 4px 7px!important}
+  #onb .onb-step.active .onb-btn{position:sticky;bottom:calc(8px + env(safe-area-inset-bottom));z-index:2;flex-shrink:0}
+}
 
 /* ---------- Défis : progression réelle ---------- */
 .chal-goal{display:block;margin-top:6px;font-size:12px;font-weight:600;color:var(--t-ink2);letter-spacing:.01em}

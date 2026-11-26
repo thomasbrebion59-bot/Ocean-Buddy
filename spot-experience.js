@@ -449,14 +449,14 @@
     shown = {s, weather, marine, fetchedAt};
     const inland = isInland(s);
     const daily = W ? W.days(weather, marine, {inland}) : [];
-    const toBefore = (rule, today) => { try { window.OceanBefore?.slot(s, rule, today, hourFmt, cautionOf(today)); } catch (e) {} };
+    const toBefore = (rule, today, tomorrow) => { try { window.OceanBefore?.slot(s, rule, today, hourFmt, cautionOf(today), tomorrow); } catch (e) {} };
     if (!W || !daily.length) { host.innerHTML = '<p class="spot-week-empty">Les prévisions détaillées se chargeront dès que le modèle répondra.</p>'; toBefore(null); return; }
     const off = weather && weather.utc_offset_seconds, nowIso = W.localHourIso(off);
     const all = W.hours(weather, marine, {inland}), next = inland ? W.upcoming(all, nowIso, 48) : W.trimMarine(W.upcoming(all, nowIso, 48));
     const today = nowIso.slice(0, 10), tomorrow = (daily.find(d => d.date > today) || {}).date;
     const slots = slotsBlock(s, activeAct, all, nowIso, [today, tomorrow].filter(Boolean), inland);
     /* Ligne « Ton créneau » de l’onglet Conditions : le créneau d’aujourd’hui déjà calculé ici, sans nouvel appel. */
-    toBefore(slots.rule, slots.today);
+    toBefore(slots.rule, slots.today, slots.res && slots.res[1] ? slots.res[1].r : null);
     /* Heure du relevé : la même phrase que « Maintenant » (« Relevé à 16 h 33 », ou la date si ce n’est pas aujourd’hui). */
     const updated = (fetchedAt && window.OceanBefore?.stamp?.(fetchedAt)) || (fetchedAt ? `Relevé ${new Intl.DateTimeFormat('fr-FR', {dateStyle: 'short', timeStyle: 'short'}).format(new Date(fetchedAt))}` : 'Relevé : heure non disponible');
     const gap = W.tzGap(off);

@@ -131,9 +131,12 @@
     bar.querySelector('.spot-bar-fav').onclick=e=>{toggleFav(currentSpot,e);sync();};
     bar.querySelector('.spot-bar-trip').onclick=()=>window.OceanTrips?.fromSpot(currentSpot);
     let ticking=false;
-    const check=()=>{ticking=false;const visible=document.body.dataset.screen==='detail';if(visible)sync();bar.classList.toggle('show',visible);};
+    /* La barre ne monte qu’une fois le sommaire d’ouverture passé (#detail.is-past, posé par app.js au défilement) : à
+       l’ouverture, elle ne couvre plus les six médaillons. */
+    const check=()=>{ticking=false;const onDetail=document.body.dataset.screen==='detail';if(onDetail)sync();bar.classList.toggle('show',onDetail&&detail.classList.contains('is-past'));};
     wrap.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(check);}},{passive:true});
-    window.addEventListener('ocean:navigate',e=>{bar.classList.toggle('show',e.detail==='detail');requestAnimationFrame(check);});
+    try{new MutationObserver(()=>requestAnimationFrame(check)).observe(detail,{attributes:true,attributeFilter:['class']});}catch(_){}
+    window.addEventListener('ocean:navigate',e=>{if(e.detail!=='detail')bar.classList.remove('show');setTimeout(check,90);});
     document.getElementById('dFav')?.addEventListener('click',()=>setTimeout(sync,0));
   }
 

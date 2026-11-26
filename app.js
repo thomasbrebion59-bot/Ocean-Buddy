@@ -2136,7 +2136,7 @@ function renderMyChoice(full){
   if(g)g.innerHTML=SPORTS.map(s=>[s.id,s.label]).concat([['all','Tout voir']]).map(([id,label])=>
     `<button type="button" class="sport-card${id===cur?' sel':''}" data-sp="${id}" aria-pressed="${id===cur}" onclick="chooseMySport('${id}')" style="font:inherit;min-height:0;padding:8px 4px 9px;gap:4px;min-width:0">`
     +`<span class="se" style="width:46px;height:46px;margin:0 auto;border-radius:14px;background:var(--t-tint)!important;box-shadow:none!important">${ic(sportIcon(id),34)}</span>`
-    +`<h4 style="font-size:12px!important;line-height:1.15;margin:0;max-width:100%;overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto">${esc(label)}</h4></button>`).join('');
+    +`<h4 style="font-size:13px!important;line-height:1.15;margin:0;max-width:100%;overflow-wrap:break-word;hyphens:auto;-webkit-hyphens:auto">${esc(label)}</h4></button>`).join('');
   const l=document.getElementById('setLvlCards');
   if(l)l.innerHTML=LEVELS.map(x=>`<button type="button" class="lvl-card${x.id===chosenLevel?' sel':''}" data-lvl="${x.id}" aria-pressed="${x.id===chosenLevel}" onclick="chooseMyLevel('${x.id}')" style="font:inherit;width:100%;padding:10px 12px;gap:12px">`
     +`<span class="lc-ic" style="width:44px;height:44px;border-radius:14px">${ic(levelIcon(x.id),34)}</span><span><h4 style="font-size:15px;margin:0">${esc(x.label)}</h4><p style="font-size:12px;margin:2px 0 0">${esc(x.desc)}</p></span></button>`).join('');
