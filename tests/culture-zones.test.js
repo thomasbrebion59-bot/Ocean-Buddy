@@ -112,7 +112,7 @@ test('illustrations propres aux faits : identifiant stable, fichier présent, si
     assert.match(v, /^[a-z0-9-]+$/);
     assert.ok(fs.existsSync(path.join(__dirname, '..', 'assets/fiche/faits', v + '.webp')), 'fichier : ' + v);
   }
-  assert.match(read('spot-guide.js'), /const big=!!own&&\/\^\[a-z0-9-\]\+\$\/\.test\(own\),srcL=M\.sourceLabel\(publisher,url\);/);
+  assert.match(read('spot-guide.js'), /const big=!!own&&\/\^\[a-z0-9-\]\+\$\/\.test\(own\),srcL=M\.sourceLabel\(publisher,url,window\.OB_I18N\?\.lang\);/);
   assert.match(read('spot-guide.js'), /\$\{big\?HERO\('faits\/'\+own\):ILLU\(zoneIllu\(kind,title\)\)\}/);
 });
 

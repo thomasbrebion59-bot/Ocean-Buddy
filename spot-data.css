@@ -211,7 +211,7 @@
 .sd-sheet-grab{width:44px;height:5px;border-radius:3px;background:var(--g-line);margin:0 auto 12px}
 .sd-sheet h3{margin:0;font:800 24px/1.1 var(--display);letter-spacing:-.6px;color:var(--sd-ink)}
 .sd-sheet p.sd-sub{margin:6px 0 14px;font:500 13.5px/1.5 var(--body);color:var(--sd-mute)}
-.sd-sheet h4{margin:16px 0 8px;font:800 12px/1 var(--display);letter-spacing:1.4px;text-transform:uppercase;color:var(--sd-mute)}
+.sd-sheet h4{margin:16px 0 8px;font:800 14px/1.2 var(--display);letter-spacing:0;text-transform:none;color:var(--sd-mute)}
 .sd-months{display:grid;grid-template-columns:repeat(6,1fr);gap:6px}
 .sd-months button,.sd-crit button{appearance:none;cursor:pointer;border:1px solid var(--sd-rule);background:var(--t-card);border-radius:12px;font:700 13px/1.1 var(--display);color:var(--sd-ink);min-height:42px;padding:6px 4px;text-transform:capitalize}
 .sd-months button[aria-pressed=true],.sd-crit button[aria-pressed=true]{background:var(--t-deep);border-color:var(--t-deep);color:var(--t-on-main)}

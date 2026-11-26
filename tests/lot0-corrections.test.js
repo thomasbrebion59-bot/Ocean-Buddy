@@ -85,7 +85,13 @@ test('0.4 sources du Coin : « Wikipedia (fr), « titre » », identique dans to
     if (!r.fixed) assert.ok(en[r.text] && es[r.text], 'éditeur non traduit : ' + r.text);
     else assert.match(r.text, /^Wik(ipedia|ivoyage|tionary) \([a-z-]+\)(, « .+ »)?$/);
   }
-  assert.match(read('spot-guide.js'), /M\.sourceLabel\(publisher,url\)/);
+  assert.match(read('spot-guide.js'), /M\.sourceLabel\(publisher,url,window\.OB_I18N\?\.lang\)/);
+  /* Guillemets selon la langue : “ ” en anglais, « » en français et en espagnol. */
+  assert.equal(M.sourceLabel('Wikipédia, article « Pastis landais »', 'https://fr.wikipedia.org/wiki/Pastis_landais', 'en').text, 'Wikipedia (fr), “Pastis landais”');
+  assert.equal(M.sourceLabel('Wikipédia, article « Pastis landais »', 'https://fr.wikipedia.org/wiki/Pastis_landais', 'es').text, 'Wikipedia (fr), « Pastis landais »');
+  assert.equal(M.sourceLabel('Wikipédia', 'https://fr.wikipedia.org/wiki/Pastis_landais', 'fr').text, 'Wikipedia (fr), « Pastis landais »');
+  assert.equal(M.sourceLabel('Wikipédia (en)', 'https://en.wikipedia.org/wiki/X', 'en').text, 'Wikipedia (en), “X”');
+  assert.equal(M.sourceLabel('Tourism Whitsundays', 'https://x', 'en').text, 'Tourism Whitsundays');
 });
 
 /* ---------- 0.5 : recherches dans la langue de l'app ---------- */
@@ -129,6 +135,7 @@ test('0.7 feuille de région : trois pictogrammes de sport, lus par une étiquet
   const js = read('ocean-map.js'), css = read('ocean-map.css');
   assert.match(js, /<small>\$\{esc\(countryOf\(s\)\)\}\$\{sportsHtml\(acts\)\}<\/small>/);
   assert.match(js, /role="img" aria-label="\$\{esc\(label\)\}"/);
+  assert.match(js, /:`, \$\{esc\(label\)\}`;/, 'repli sans pictogrammes : « Espagne, Surf, Plongée » (virgule après le pays)');
   assert.doesNotMatch(js, /esc\(countryOf\(s\)\)\} · \$\{esc\(acts\.slice/);
   assert.match(css, /\.omap-sports\{display:inline-flex/);
   assert.match(css, /\.omap-item \.omap-sports \.poulpy-mini\{width:22px!important/);

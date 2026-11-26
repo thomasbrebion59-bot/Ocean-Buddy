@@ -324,7 +324,7 @@
       /* Mois : seulement pour une fête (le mois d’une édition constatée, jamais une date). Illustration propre au fait
          (assets/fiche/faits/) quand elle existe, sinon celle du genre. */
       const [kind,title,text,months,url,publisher,,own]=f,when=kind==='fete'&&Array.isArray(months)&&months.length?M.monthsLabel(months,LG()):'';
-      const big=!!own&&/^[a-z0-9-]+$/.test(own),srcL=M.sourceLabel(publisher,url);
+      const big=!!own&&/^[a-z0-9-]+$/.test(own),srcL=M.sourceLabel(publisher,url,window.OB_I18N?.lang);
       cards.push(`<li class="gl-card gl-fact${big?' gl-big-card':''}" data-kind="${esc(kind)}" style="--i:${cards.length}">${big?HERO('faits/'+own):ILLU(zoneIllu(kind,title))}<span class="fx-label">${ZONE_LABEL[kind]||''}</span><b${NT}>${esc(title)}</b><small${NT}>${esc(text)}</small>${when?`<small class="gl-when"><span>Souvent en</span> <span${NT}>${esc(when)}</span></small>`:''}<a class="gl-fact-src" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>Source :</span> <span${srcL.fixed?NT:''}>${esc(srcL.text)}</span></a></li>`);
     }
     const hello=has('mot')?'':c.hello?.[0]||'',helloMore=typeof c.hello?.[1]==='string'?c.hello[1]:'',food=has('gout')?'':c.food?.[0]||'',foodMore=typeof c.food?.[1]==='string'?c.food[1]:'';
@@ -485,7 +485,7 @@
     if(!s||s.custom)return 'Estimation indisponible pour un spot privé.';
     if(!data){load().then(()=>window.OceanNotebook?.refresh?.()).catch(()=>{});return '<span class="guide-compare-wait">Estimation en cours…</span>';}
     const e=estimate(s);
-    return `<span class="guide-compare-price"><b>${M.euros({lo:e.lo,hi:e.hi})}</b><small>${lab(e)} · hors haute saison</small>${e.peak.length?`<small>Haute saison (${months(e.peak)}) : ${M.euros({lo:e.peakLo,hi:e.peakHi})}</small>`:''}</span>`;
+    return `<span class="guide-compare-price"><b>${M.euros({lo:e.lo,hi:e.hi})}</b><small>${lab(e)}, hors haute saison</small>${e.peak.length?`<small>Haute saison (${months(e.peak)}) : ${M.euros({lo:e.peakLo,hi:e.peakHi})}</small>`:''}</span>`;
   }
   function compareCheapest(ids){
     if(!data||ids.length<2)return null;
@@ -514,7 +514,7 @@
       if(!step.perNight||!s){host.innerHTML='';return;}
       const e=estimate(s);
       const nightsText=step.nights===null?'Ajoute la date de l’étape pour estimer le total.':step.nights===0?'Pas de nuit prévue ici : une étape à la journée.':(step.nights===1?`1 nuit : ${M.euros(step.total)} au total.`:step.basis==='split'?`${step.nights} nuits (réparties à parts égales) : ${M.euros(step.total)} au total.`:`${step.nights} nuits : ${M.euros(step.total)} au total.`);
-      host.innerHTML=`<span class="trip-lodging-icon">${icon(e.type)}</span><span><b>${lab(e)} · ${M.euros(step.perNight)} la nuit${step.perNight.peak?' (haute saison)':''}</b><small>${esc(nightsText)}</small></span>${est.cheapest&&est.cheapest.stepId===step.stepId?'<em>Le moins cher</em>':''}`;
+      host.innerHTML=`<span class="trip-lodging-icon">${icon(e.type)}</span><span><b>${lab(e)}, ${M.euros(step.perNight)} la nuit${step.perNight.peak?' (haute saison)':''}</b><small>${esc(nightsText)}</small></span>${est.cheapest&&est.cheapest.stepId===step.stepId?'<em>Le moins cher</em>':''}`;
       host.classList.toggle('is-cheapest',!!est.cheapest&&est.cheapest.stepId===step.stepId);
     });
     if(!panel)return;
@@ -526,7 +526,7 @@
       ${est.total?`<p class="trip-lodging-total"><strong>${M.euros(est.total)}</strong><span>${est.nights===1?(est.complete?'pour 1 nuit en solo':'pour 1 nuit en solo, sur les étapes datées'):(est.complete?`pour ${est.nights} nuits en solo`:`pour ${est.nights} nuits en solo, sur les étapes datées`)}</span></p>`:'<p class="trip-lodging-empty">Ajoute des dates au voyage ou à chaque étape pour estimer le total de tes nuits.</p>'}
       ${est.total&&budget>0?`<p class="trip-lodging-budget">${est.total.hi<=budget?'Cette estimation tient dans ton budget prévu.':est.total.lo>budget?'Cette estimation dépasse ton budget prévu.':'Cette estimation frôle ton budget prévu.'}</p>`:''}
       ${cheap?`<button type="button" class="trip-lodging-cheapest" data-guide-spot="${esc(cheap.id)}"><small>Le spot le moins cher de ton voyage</small><b>${esc(cheap.name.split(' — ')[0])}</b><span>${M.euros(est.cheapest.perNight)} la nuit</span></button>`:''}
-      <p class="trip-lodging-note">Estimation indicative Ocean Buddy · ${M.EDITION} · les prix varient selon la saison. Nuit la moins chère de chaque étape, pour une personne.</p>`;
+      <p class="trip-lodging-note">Estimation indicative Ocean Buddy, ${M.EDITION}. Les prix varient selon la saison. Nuit la moins chère de chaque étape, pour une personne.</p>`;
   }
   document.addEventListener('change',e=>{
     if(!e.target.closest?.('#tripContent')||!(e.target.dataset.stepDate!==undefined))return;

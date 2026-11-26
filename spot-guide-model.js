@@ -237,11 +237,11 @@
   }
   function euros(r){return r.lo===r.hi?`${r.lo} €`:`${r.lo}–${r.hi} €`;}
   /* Source d’un fait du Coin : pour une page Wikipédia, Wikivoyage ou Wiktionnaire, « Wikipedia (fr), « Titre » » (nom du
-     projet, langue de la page, puis le titre), le même texte dans toutes les langues de l’app ; la langue vient de
+     projet, langue de la page, puis le titre), les guillemets suivent la langue de l’app (« » en français et en espagnol, “ ” en anglais) ; la langue vient de
      l’éditeur (« Wikipédia (en), article « … » ») ou de l’adresse (fr.wikipedia.org), le titre de l’éditeur ou de l’adresse.
      Autre éditeur : tel quel, avec `fixed:false` (la page le traduit si elle le connaît : « tourisme régional »). */
   const WIKI={wikip:'Wikipedia',wikiv:'Wikivoyage',wikti:'Wiktionary'};
-  function sourceLabel(publisher,url){
+  function sourceLabel(publisher,url,lang){
     const p=String(publisher||'').trim(),m=/^(wikip[ée]dia|wikivoyage|wiktionnaire)\b/i.exec(p);
     if(!m)return {text:p,fixed:false};
     const k=m[1].toLowerCase().replace('é','e').slice(0,5),project=WIKI[k];
@@ -249,7 +249,8 @@
     const u=/^https?:\/\/([a-z-]+)\.(?:wikipedia|wikivoyage|wiktionary)\.org\/wiki\/([^#?]+)/i.exec(String(url||''));
     if(u){code=code||u[1].toLowerCase();if(!title){try{title=decodeURIComponent(u[2]).replace(/_/g,' ');}catch(e){title=u[2].replace(/_/g,' ');}}}
     if(!code)code='fr';
-    return {text:`${project} (${code})${title?`, « ${title} »`:''}`,fixed:true};
+    const q=lang==='en'?['“','”']:['«','»'];
+    return {text:`${project} (${code})${title?`, ${q[0]}${q[0]==='«'?' ':''}${title}${q[0]==='«'?' ':''}${q[1]}`:''}`,fixed:true};
   }
   /* Requêtes écrites dans la langue de l’app (Google Maps et Google Voyages cherchent dans la langue de la requête). */
   const QUERIES={

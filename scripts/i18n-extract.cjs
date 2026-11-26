@@ -261,6 +261,14 @@ for (const k of KEEP_KEYS) add(k, 'app.js (conservé)', true);
   }
 }
 
+// Écrits dans la langue de l'app par spot-guide-model.js lui-même (requêtes de recherche, noms de projets Wikimedia) :
+// ce ne sont pas des textes français à traduire. On les retire s'ils ne viennent que de ce fichier.
+const NOT_FRENCH = ['cheap hotels', 'hoteles baratos', 'escuela de', 'alquiler de material de', 'alquiler de material', 'equipment rental', 'Wikipedia', 'Wikivoyage', 'Wiktionary'];
+for (const k of NOT_FRENCH) {
+  const files = found.get(k);
+  if (files && [...files].every(f => f === 'spot-guide-model.js')) found.delete(k);
+}
+
 const keys = [...found.keys()].sort((a, b) => a.localeCompare(b, 'fr'));
 const outDir = path.join(ROOT, 'locales', 'source');
 fs.mkdirSync(outDir, { recursive: true });

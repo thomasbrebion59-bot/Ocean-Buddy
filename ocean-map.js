@@ -61,8 +61,10 @@
     const list=ids.slice(0,3).filter(id=>SPORTMAP[id]);if(!list.length)return '';
     const label=list.map(id=>(typeof window.obT==='function'?window.obT(SPORTMAP[id].label):SPORTMAP[id].label)).join(', ');
     const icons=typeof sportIcon==='function'&&window.PoulpyIcons?list.map(id=>sportIcon(id)).join(''):'';
-    return icons?`<span class="omap-sports" role="img" aria-label="${esc(label)}" translate="no" data-no-i18n>${icons}</span>`:` ${esc(list.map(id=>SPORTMAP[id].label).join(', '))}`;
+    return icons?`<span class="omap-sports" role="img" aria-label="${esc(label)}" translate="no" data-no-i18n>${icons}</span>`:`, ${esc(label)}`;
   };
+  /* Nom d’un spot sur une ligne, sans le tiret long (« Hossegor, La Gravière »). */
+  const terrainName=n=>{if(!window.SpotName)return String(n||'').split(' — ').join(', ');const p=SpotName.parts(n);return p.sub?p.main+', '+p.sub:p.main;};
   const regionOf=s=>REGIONS.find(r=>r.worlds.includes(s.world||SPOT_WORLD?.[s.id]));
   const primary=s=>activeSport&&spotSports(s).includes(activeSport)?activeSport:spotSports(s)[0];
   const photoOf=s=>(typeof spotPhotoUrl==='function'&&spotPhotoUrl(s.id,480))||(typeof spotIllustration==='function'?spotIllustration(s.id):'assets/poulpy/scenes/travel-v2.webp');
@@ -928,7 +930,7 @@
     if(isWorld()){
       title.textContent=rows.length>1?`${rows.length} spots dans le monde`:`${rows.length} spot dans le monde`;
       sub.textContent='Choisis une région pour commencer.';
-      list.innerHTML=`<p class="omap-list-intro">Les régions</p><ul class="omap-regions">${REGIONS.map(r=>{const inside=rows.filter(s=>regionOf(s)?.id===r.id);if(!inside.length)return '';const names=M.top(inside.map(countryOf),3).join(' · ');return `<li><button type="button" data-region="${r.id}"><span><b>${esc(r.lab)}</b><small>${esc(names)}</small></span><em>${total(inside.length)}</em>${icon('arrow')}</button></li>`;}).join('')}</ul>`;
+      list.innerHTML=`<p class="omap-list-intro">Les régions</p><ul class="omap-regions">${REGIONS.map(r=>{const inside=rows.filter(s=>regionOf(s)?.id===r.id);if(!inside.length)return '';const names=M.top(inside.map(countryOf),3).join(', ');return `<li><button type="button" data-region="${r.id}"><span><b>${esc(r.lab)}</b><small>${esc(names)}</small></span><em>${total(inside.length)}</em>${icon('arrow')}</button></li>`;}).join('')}</ul>`;
       return;
     }
     let visible;
@@ -938,7 +940,7 @@
     const inside=visible.map(s=>({s,d:M.distance(COORDS[s.id],center)})).sort((a,b)=>a.d-b.d).map(x=>x.s);
     const n=inside.length;
     title.textContent=n>1?`${n} spots dans cette zone`:n===1?'1 spot dans cette zone':'Aucun spot dans cette zone';
-    sub.textContent=n?M.top(inside.map(countryOf),3).join(' · '):'Dézoome ou reviens à la vue du monde.';
+    sub.textContent=n?M.top(inside.map(countryOf),3).join(', '):'Dézoome ou reviens à la vue du monde.';
     const shown=inside.slice(0,40);
     list.innerHTML=n?`<ul class="omap-items">${shown.map(item).join('')}</ul>${n>shown.length?`<p class="omap-more">${n-shown.length>1?`Et ${n-shown.length} autres spots : zoome pour les voir.`:'Et 1 autre spot : zoome pour le voir.'}</p>`:''}`:`<div class="omap-none"><p>Aucun spot dans cette zone avec ces filtres.</p><button type="button" data-omap-all>Voir tous les spots</button></div>`;
   }
@@ -994,7 +996,7 @@
   }
   function renderCard(s,waiting=false){
     const acts=spotSports(s),lvl=levelOf(s),reg=regionOf(s);
-    card.innerHTML=`<button type="button" class="omap-card-close" data-card="close" aria-label="Fermer l’aperçu">${icon('close')}</button><div class="omap-card-top"><img class="omap-card-photo" src="${esc(photoOf(s))}" alt="" width="96" height="96" decoding="async"><div class="omap-card-text"><small>${esc(countryOf(s))}${reg?` · ${esc(reg.lab)}`:''}</small><h3>${window.SpotName?SpotName.html(s.name):esc(s.name)}</h3><p class="omap-card-acts">${acts.slice(0,4).map(id=>`<span style="--c:${color(id)}"${id===activeSport?' class="is-on"':''}><i aria-hidden="true"></i>${esc(SPORTMAP[id].label)}</span>`).join('')}${acts.length>4?`<span class="omap-more-acts">+${acts.length-4}</span>`:''}</p><p class="omap-card-meta"><span class="omap-lvl lvl-${lvl}">${esc(lvlLabel[lvl]||'Niveau à évaluer')}</span></p>${liveLine(s)}</div></div><div class="omap-card-actions"><button type="button" class="omap-go" data-card="open">Voir le spot ${icon('arrow')}</button><button type="button" class="omap-trip" data-card="trip">${icon('trip')}Ajouter à un voyage</button><button type="button" class="omap-relief" data-card="relief" aria-label="Relief 3D" title="Relief 3D">${icon('relief')}</button></div>`;
+    card.innerHTML=`<button type="button" class="omap-card-close" data-card="close" aria-label="Fermer l’aperçu">${icon('close')}</button><div class="omap-card-top"><img class="omap-card-photo" src="${esc(photoOf(s))}" alt="" width="96" height="96" decoding="async"><div class="omap-card-text"><small>${esc(countryOf(s))}${reg?`, ${esc(reg.lab)}`:''}</small><h3>${window.SpotName?SpotName.html(s.name):esc(s.name)}</h3><p class="omap-card-acts">${acts.slice(0,4).map(id=>`<span style="--c:${color(id)}"${id===activeSport?' class="is-on"':''}><i aria-hidden="true"></i>${esc(SPORTMAP[id].label)}</span>`).join('')}${acts.length>4?`<span class="omap-more-acts">+${acts.length-4}</span>`:''}</p><p class="omap-card-meta"><span class="omap-lvl lvl-${lvl}">${esc(lvlLabel[lvl]||'Niveau à évaluer')}</span></p>${liveLine(s)}</div></div><div class="omap-card-actions"><button type="button" class="omap-go" data-card="open">Voir le spot ${icon('arrow')}</button><button type="button" class="omap-trip" data-card="trip">${icon('trip')}Ajouter à un voyage</button><button type="button" class="omap-relief" data-card="relief" aria-label="Relief 3D" title="Relief 3D">${icon('relief')}</button></div>`;
     card.dataset.spot=s.id;card.classList.remove('is-landing');card.classList.toggle('is-waiting',!!waiting);card.hidden=false;wrap.classList.add('has-card');
     card.querySelector('img').addEventListener('error',e=>{e.target.src=typeof spotIllustration==='function'?spotIllustration(s.id):'assets/poulpy/scenes/travel-v2.webp';},{once:true});
   }
@@ -1114,7 +1116,7 @@
     const generation=terrainGeneration;
     terrainOpener=opener;terrainTarget=chosen;
     terrainOverlay=document.createElement('section');terrainOverlay.className='terrain-overlay';terrainOverlay.setAttribute('role','region');terrainOverlay.setAttribute('aria-label',`Relief terrestre autour de ${chosen.name}`);terrainOverlay.setAttribute('aria-describedby','terrainExplanation');
-    terrainOverlay.innerHTML=`<div class="terrain-canvas"></div><div class="terrain-guide"><span>RELIEF TERRESTRE · ${esc(chosen.name)}</span><p id="terrainExplanation">Vue indicative du terrain côtier. Aucune profondeur marine ni condition de sécurité n’est représentée.</p><button type="button" data-terrain-close aria-describedby="terrainExplanation">Retour à la carte 2D</button></div><p class="terrain-loading" role="status">Préparation du relief 3D…</p>`;
+    terrainOverlay.innerHTML=`<div class="terrain-canvas"></div><div class="terrain-guide"><span>Relief terrestre : ${esc(terrainName(chosen.name))}</span><p id="terrainExplanation">Vue indicative du terrain côtier. Aucune profondeur marine ni condition de sécurité n’est représentée.</p><button type="button" data-terrain-close aria-describedby="terrainExplanation">Retour à la carte 2D</button></div><p class="terrain-loading" role="status">Préparation du relief 3D…</p>`;
     terrainOverlay.querySelector('[data-terrain-close]').onclick=()=>closeTerrain();
     terrainOverlay.addEventListener('keydown',event=>{if(event.key==='Escape'){event.preventDefault();event.stopPropagation();closeTerrain();}});
     terrainUnderlying=[...wrap.querySelectorAll(':scope>.omap-panel,:scope>.omap-stage>*')].map(element=>({element,inert:element.inert,ariaHidden:element.getAttribute('aria-hidden')}));

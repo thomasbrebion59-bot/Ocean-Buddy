@@ -41,7 +41,7 @@
 /* Optional MapLibre terrain view over the spot map. */
 .terrain-overlay{position:absolute;inset:0;z-index:2000;overflow:hidden;background:var(--g-line)}.terrain-overlay .terrain-canvas{position:absolute;inset:0;width:100%;height:100%}
 .terrain-guide{position:absolute;z-index:2;left:16px;top:16px;width:min(330px,calc(100% - 82px));padding:15px 17px;border:1px solid color-mix(in srgb,var(--g-pale) 65.88%,transparent);border-radius:14px;background:color-mix(in srgb,var(--t-deep) 86.27%,transparent);color:var(--t-on-main);box-shadow:0 12px 34px color-mix(in srgb,var(--g-night) 33.33%,transparent)}
-.terrain-guide span{font:800 9px/1.5 var(--body);letter-spacing:1px}.terrain-guide p{font:500 10px/1.55 var(--body);color:var(--t-tint);margin:7px 0 12px}
+.terrain-guide span{font:800 11px/1.5 var(--body);letter-spacing:0}.terrain-guide p{font:500 10px/1.55 var(--body);color:var(--t-tint);margin:7px 0 12px}
 .terrain-guide button{min-height:44px;border:1px solid var(--g-line);border-radius:999px;padding:8px 14px;background:var(--t-tint);color:var(--t-deep);font:750 11px var(--body);cursor:pointer}
 .terrain-guide button:focus-visible{outline:2px solid var(--t-acc);outline-offset:3px}.terrain-spot-pin:focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
 .terrain-overlay .maplibregl-ctrl button:focus-visible,.terrain-overlay .maplibregl-canvas:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
@@ -64,7 +64,7 @@
 @keyframes gallery-breathe{from{transform:scale(1)}to{transform:scale(1.045)}}
 @media(max-width:639px){
  .ocean-v2 #detail #detailHero{min-height:450px}.ocean-v2 #detail #detailHero h2{font-size:clamp(36px,11vw,50px)}.ocean-v2 #detail #detailHero .htxt{padding:22px}.ocean-v2 #detail #detailHero .dfacts{padding:0 22px 26px}
- .terrain-guide{left:10px;top:10px;width:min(260px,calc(100% - 70px));padding:11px 12px}.terrain-guide p{font-size:9px}.terrain-guide span{font-size:8px}
+ .terrain-guide{left:10px;top:10px;width:min(260px,calc(100% - 70px));padding:11px 12px}.terrain-guide p{font-size:9px}.terrain-guide span{font-size:11px}
  .spot-gallery footer{grid-template-columns:1fr;grid-template-areas:'thumbs' 'controls' 'note';gap:7px;padding-bottom:calc(12px + env(safe-area-inset-bottom))}.spot-gallery .gallery-controls{max-width:none;justify-content:center;gap:6px}.spot-gallery .gallery-thumbs{width:100%;max-width:100%}.spot-gallery .gallery-sound-note{text-align:center;font-size:8px}.spot-gallery figcaption{bottom:230px}.spot-gallery figcaption h2{font-size:clamp(30px,10vw,43px)}.spot-gallery [data-gallery-fit],.spot-gallery [data-gallery-sound]{margin-left:0;padding:0 9px;font-size:9px}
 }
 @media(max-height:600px){.spot-gallery footer{grid-template-columns:minmax(0,1fr) auto;grid-template-areas:'thumbs controls' 'note note'}.spot-gallery figcaption{bottom:140px}}
@@ -107,7 +107,7 @@
 .ocean-v2 #profTop{background:var(--t-deep)}
 @media(max-width:959px){.ocean-v2 .nav{background:var(--t-bar);border-color:var(--t-line)}.ocean-v2 .nav>button[data-s]{color:var(--t-ink2)}.ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{background:var(--t-pill);color:var(--t-main);box-shadow:inset 0 0 0 2px var(--t-main)}}
 .spot-gallery .gallery-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:28px;text-align:center;background:radial-gradient(ellipse at 70% 24%,color-mix(in srgb,var(--t-main2) 41.96%,transparent),transparent 38%),linear-gradient(145deg,var(--t-deep),var(--g-ink) 60%,var(--g-ink));color:var(--t-on-main)}
-.gallery-empty small{font:800 9px var(--body);letter-spacing:1.5px;color:var(--t-acc)}.gallery-empty b{font:750 clamp(28px,4vw,54px)/1.05 var(--display);max-width:650px}.gallery-empty span{max-width:480px;color:var(--g-pale);font:12px/1.7 var(--body)}
+.gallery-empty small{font:800 12px var(--body);letter-spacing:0;color:var(--t-acc)}.gallery-empty b{font:750 clamp(28px,4vw,54px)/1.05 var(--display);max-width:650px}.gallery-empty span{max-width:480px;color:var(--g-pale);font:12px/1.7 var(--body)}
 .spot-gallery .gallery-thumbs button.gallery-find{display:flex;flex:0 0 146px;height:87px;flex-direction:column;align-items:flex-start;justify-content:center;gap:5px;padding:9px 11px;border:1px dashed color-mix(in srgb,var(--g-line) 54.90%,transparent);border-radius:9px;background:linear-gradient(145deg,var(--t-main2),var(--t-deep));text-align:left;white-space:normal}
 .spot-gallery .gallery-thumbs button.gallery-find>span{position:static;display:block;padding:0;background:none;color:var(--t-acc);font:500 22px/1 var(--body)}
 .spot-gallery .gallery-thumbs button.gallery-find>small{color:var(--g-pale);font:800 7px/1.2 var(--body);letter-spacing:1px}

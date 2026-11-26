@@ -7,7 +7,7 @@
   let audioContext=null,audioNodes=null,audioStarting=false,audioEpoch=0,commonsSearching=false,commonsMessage='';
   const commonsCache=new Map(),commonsPending=new Map();
   const photos=s=>window.OceanPhotos?.list(s.id,typeof detailAct==='function'?detailAct(s):undefined)||[];
-  const caption=(p,s)=>p.caption||s.photoContext||s.name+' · '+s.loc;
+  const caption=(p,s)=>p.caption||s.photoContext||s.name+', '+s.loc;
   const label=(p,i)=>p.label||(p.view==='underwater'?'Sous la surface':i===0?'Le panorama':'Autre regard');
   const safeUrl=value=>/^https:\/\//i.test(String(value||''))?String(value):'';
   const soundAvailable=!!(window.AudioContext||window.webkitAudioContext);
@@ -34,7 +34,7 @@
           const author=plain(meta.Artist?.value||meta.Credit?.value||meta.Creator?.value);
           if(/^CC BY/i.test(license)&&!author)return null;
           const description=plain(meta.ImageDescription?.value).slice(0,280),title=plain(page.title?.replace(/^File:/,'').replace(/_/g,' '));
-          return {src,thumb:src,source,author:(author||'Domaine public · auteur non indiqué').slice(0,160),license,licenseUrl,commonsTitle:page.title,label:title||'Photo proposée',caption:(description||title||'Image proposée par Wikimedia Commons.')+' · lieu à confirmer',external:true};
+          return {src,thumb:src,source,author:(author||'Domaine public, auteur non indiqué').slice(0,160),license,licenseUrl,commonsTitle:page.title,label:title||'Photo proposée',caption:(description||title||'Image proposée par Wikimedia Commons.')+' · lieu à confirmer',external:true};
         }).filter(Boolean);
         const unique=[...new Map(photos.map(photo=>[photo.commonsTitle,photo])).values()].slice(0,12);if(unique.length){commonsCache.set(key,unique);return unique;}
         }
@@ -80,9 +80,9 @@
     const p=list[index];if(!p&&!spot)return;
     dialog.classList.toggle('show-whole',whole);
     dialog.classList.toggle('is-immersive',immersive);
-    const source=safeUrl(p?.source),credit=isAI(p)?'<span>Illustration, ce n’est pas une photo du lieu</span>':source?`<a href="${esc(source)}" target="_blank" rel="noopener noreferrer">Photo : ${esc(p.author||'Auteur non indiqué')} · ${esc(p.license||'licence à vérifier')}</a>`:'<span>Crédit photographique à vérifier</span>';
-    const scene=p?`<img class="gallery-scene" src="${esc(p.src)}" alt="${esc(caption(p,spot))}">`:`<div class="gallery-empty"><small>LE CARNET PHOTO COMMENCE ICI</small><b>Aucune photo locale pour ce spot</b><span>Recherche des images réutilisables avec leurs crédits.</span></div>`;
-    const note=p?.external?'Photo proposée par Wikimedia Commons · lieu à confirmer.':p?caption(p,spot):'Tu peux découvrir des images libres avec leurs auteurs et licences.';
+    const source=safeUrl(p?.source),credit=isAI(p)?'<span>Illustration, ce n’est pas une photo du lieu</span>':source?`<a href="${esc(source)}" target="_blank" rel="noopener noreferrer">Photo : ${esc(p.author||'Auteur non indiqué')}, ${esc(p.license||'licence à vérifier')}</a>`:'<span>Crédit photographique à vérifier</span>';
+    const scene=p?`<img class="gallery-scene" src="${esc(p.src)}" alt="${esc(caption(p,spot))}">`:`<div class="gallery-empty"><small>Le carnet photo commence ici</small><b>Aucune photo locale pour ce spot</b><span>Recherche des images réutilisables avec leurs crédits.</span></div>`;
+    const note=p?.external?'Photo proposée par Wikimedia Commons, lieu à confirmer.':p?caption(p,spot):'Tu peux découvrir des images libres avec leurs auteurs et licences.';
     const findLabel=commonsSearching?'Recherche sur Commons…':commonsMessage||'Trouver d’autres photos';
     dialog.innerHTML=`<figure>${scene}<figcaption><span class="gallery-place">${esc(spot.loc)}</span><h2>${esc(p?label(p,index):'Découvrir en images')}</h2><p id="galleryCaption" aria-live="polite">${esc(note)}</p>${credit}</figcaption></figure><header><span><small>${immersive?'OCEAN BUDDY · IMMERSION':'OCEAN BUDDY · ESCALE EN IMAGES'}</small><b id="galleryTitle">${esc(spot.name)}</b></span><button type="button" data-gallery-close aria-label="Fermer la galerie">×</button></header><footer><div class="gallery-controls"><button type="button" data-gallery-prev aria-label="Photo précédente" ${list.length<2?'disabled':''}>←</button><span aria-live="polite">${list.length?index+1+' / '+list.length:'0 photo'}</span><button type="button" data-gallery-next aria-label="Photo suivante" ${list.length<2?'disabled':''}>→</button><button type="button" data-gallery-fit ${p?'':'disabled'}>${whole?'Vue immersive':'Image entière'}</button><button type="button" data-gallery-sound aria-label="Ambiance sonore illustrative" aria-pressed="${isPlaying()}">${isPlaying()?'Couper le son':'Activer le son'}</button></div><div class="gallery-thumbs" role="group" aria-label="Choisir une photo ou en chercher d’autres"><button type="button" class="gallery-find" data-gallery-search ${commonsSearching?'disabled':''} aria-label="${esc(findLabel)}"><span aria-hidden="true">⌕</span><small>WIKIMEDIA COMMONS</small><b>${esc(findLabel)}</b></button>${list.map((photo,i)=>`<button type="button" data-gallery-pick="${i}" aria-label="${esc(label(photo,i))}, photo ${i+1}" aria-pressed="${i===index}"><img src="${esc(photo.thumb||photo.src)}" alt="" loading="lazy"><span>${esc(label(photo,i))}</span></button>`).join('')}</div><p class="gallery-sound-note">Les images Commons sont proposées avec leurs crédits et licences. Vérifie le lieu représenté avant de t’y fier. Ambiance sonore illustrative, créée pour Ocean Buddy.</p></footer>`;
     const img=dialog.querySelector('.gallery-scene');if(img){img.style.objectPosition=/^[\w\d% .-]{1,40}$/.test(p.position||'')?p.position:'center';img.onerror=()=>{img.hidden=true;dialog.querySelector('figcaption p').textContent='Cette photo n’a pas pu être chargée. Passe à la suivante ou réessaie avec une connexion.';};}
@@ -113,7 +113,7 @@
       if(added.length){index=existing.length;commonsMessage=`${added.length} photos à explorer`;}
       else if(found.length){list=[...existing,...found.filter(item=>!existing.some(old=>old.commonsTitle===item.commonsTitle))];index=list.findIndex(item=>(item.commonsTitle||item.src)===currentSource);if(index<0)index=0;commonsMessage='Toutes les photos trouvées sont déjà affichées';}
       else commonsMessage='Aucune photo libre trouvée pour ce lieu';
-    }catch(_){commonsMessage='Recherche indisponible · réessaie';}
+    }catch(_){commonsMessage='Recherche indisponible, réessaie';}
     finally{commonsSearching=false;if(dialog.open&&spot?.id===requested.id){frame('[data-gallery-search]');if(announce)dialog.querySelector('[data-gallery-search]')?.focus({preventScroll:true});}}
   }
   dialog.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();e.stopPropagation();dialog.close();return;}if(list.length<2)return;const ahead=document.documentElement.dir==='rtl'?-1:1;if(e.key==='ArrowRight'){e.preventDefault();move(ahead);}if(e.key==='ArrowLeft'){e.preventDefault();move(-ahead);}});
@@ -131,14 +131,14 @@
       /* Pas de photo du lieu : l'illustration Poulpy de l'activité remplace le dessin générique. */
       if(photo&&typeof spotIllustration==='function'){const art=spotIllustration(s.id,typeof detailAct==='function'?detailAct(s):null);photo.alt='';photo.style.objectPosition='center 35%';if(photo.getAttribute('src')!==art){photo.classList.remove('on');photo.onload=()=>photo.classList.add('on');photo.onerror=()=>photo.classList.remove('on');photo.src=art;}if(photo.complete&&photo.naturalWidth)photo.classList.add('on');}
       else if(photo){photo.classList.remove('on');photo.removeAttribute('src');photo.alt='';}
-      if(credit)credit.textContent='Illustration Ocean Buddy · photo du lieu à venir';
+      if(credit)credit.textContent='Illustration Ocean Buddy, photo du lieu à venir';
       $('#detailHero')?.classList.remove('underwater-hero');$('#detailHero')?.classList.add('illustrated-hero');
       strip.hidden=true;strip.replaceChildren();return;
     }
     $('#detailHero')?.classList.remove('illustrated-hero');
     if(more){more.hidden=false;more.setAttribute('aria-label',`Ouvrir les photos de ${s.name} ou en chercher d’autres`);more.title='Ouvrir les photos et en chercher d’autres';more.innerHTML=isAI(first)&&all.length<2?'<span>Illustration</span><b>chercher de vraies photos</b>':'<span>'+(all.length>1?`Voir les ${all.length} photos`:'Voir la photo')+'</span><b>et en chercher d’autres</b>';more.onclick=()=>open(s);}
     if(photo){photo.alt=caption(first,s);photo.style.objectPosition=/^[\w\d% .-]{1,40}$/.test(first.position||'')?first.position:'center';if(photo.getAttribute('src')!==first.src){photo.classList.remove('on');photo.onload=()=>photo.classList.add('on');photo.onerror=()=>photo.classList.remove('on');photo.src=first.src;}if(photo.complete&&photo.naturalWidth)photo.classList.add('on');}
-    if(credit)credit.textContent=isAI(first)?'Illustration, ce n’est pas une photo du lieu':(first.caption?first.caption+' · ':'')+(first.author||'Auteur non indiqué')+' · '+(first.license||'licence à vérifier');
+    if(credit)credit.textContent=isAI(first)?'Illustration, ce n’est pas une photo du lieu':(first.caption?first.caption+', ':'')+(first.author||'Auteur non indiqué')+' · '+(first.license||'licence à vérifier');
     $('#detailHero')?.classList.toggle('underwater-hero',first.view==='underwater');
     strip.hidden=all.length<2;strip.innerHTML=`<div class="photo-strip-intro"><small>CHANGE DE POINT DE VUE</small><b>${all.some(p=>p.view==='underwater')?'De la surface aux profondeurs.':'Un lieu, plusieurs regards.'}</b><span>${all.length} photographies du lieu</span></div><div class="photo-strip-views">${all.map((p,i)=>`<button data-gallery-index="${i}" aria-label="${esc(label(p,i))} : voir la photo ${i+1} de ${esc(s.name)}"><img src="${esc(p.thumb||p.src)}" alt="" loading="lazy"><span><small>0${i+1}</small>${esc(label(p,i))}</span></button>`).join('')}</div>`;strip.onclick=e=>{const b=e.target.closest('[data-gallery-index]');if(b)open(s,+b.dataset.galleryIndex);};
   }

@@ -53,7 +53,7 @@
 /* ---------- Réglages : rubriques par thème ---------- */
 .set-grp{margin-top:20px;padding-top:16px;border-top:1px solid var(--t-line)}
 .set-title+.set-grp{margin-top:0;padding-top:0;border-top:0}
-.set-grp-t,#settingsModal #obaSetTitle{margin:0 0 6px;font:800 13px/1.25 var(--body);letter-spacing:.7px;text-transform:uppercase;color:var(--t-main)}
+.set-grp-t,#settingsModal #obaSetTitle{margin:0 0 6px;font:800 14px/1.25 var(--body);letter-spacing:0;text-transform:none;color:var(--t-main)}
 .set-grp-t+.set-lab{margin-top:8px}
 .set-grp .set-toggle{margin-top:10px}
 .set-grp .set-reset{margin-top:10px}

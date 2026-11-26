@@ -722,7 +722,7 @@ function spotPhotoSrcset(id){
 function spotPhotoCredit(id){
   const photo=window.OceanPhotos?.lead(id,activeSport)||window.SPOT_PHOTOS?.[id]||SPOTS.find(s=>s.id===id)?.photo;
   if(photo&&(photo.ai||photo.label==='Illustration'))return 'Illustration, ce n’est pas une photo du lieu';
-  return photo?photo.author+' · '+photo.license+' — Wikimedia Commons':'';
+  return photo?photo.author+', '+photo.license+', Wikimedia Commons':'';
 }
 /* Numéro d'urgence selon le champ « country » du spot, par égalité exacte sur le nom normalisé
    (minuscules, sans accents, tirets à la place des espaces) : ni sous-chaîne, ni lecture de « loc ».

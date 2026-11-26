@@ -61,17 +61,17 @@
 
   // The photographic destination catalogue remains the main exploration surface.
   const worldNote=document.createElement('aside');worldNote.className='poulpy-world-note';
-  worldNote.innerHTML=`${image('travel')}<div><span class="section-kicker">POULPY L’EXPLORATEUR</span><p>Une carte. Mille envies.<br><b>Notre prochaine escale commence ici.</b></p></div><span class="world-note-step">01 <i>/</i> DESTINATION</span>`;
+  worldNote.innerHTML=`${image('travel')}<div><span class="section-kicker">Poulpy l’explorateur</span><p>Une carte. Mille envies.<br><b>Notre prochaine escale commence ici.</b></p></div><span class="world-note-step">01 <i>/</i> DESTINATION</span>`;
   $('#worldGrid').before(worldNote);
 
   const eco=document.createElement('aside');eco.className='poulpy-eco-banner';
-  eco.innerHTML=`${image('eco')}<div><span class="section-kicker">L’OCÉAN NOUS DONNE TANT</span><h2>À nous de lui rendre.</h2><p>Un déchet ramassé, une bonne habitude partagée. <br>Avec Poulpy, chaque geste compte.</p></div><span class="eco-seal" aria-hidden="true">EXPLORE<br>PROGRESSE<br><b>PROTÈGE.</b></span>`;
+  eco.innerHTML=`${image('eco')}<div><span class="section-kicker">L’océan nous donne tant</span><h2>À nous de lui rendre.</h2><p>Un déchet ramassé, une bonne habitude partagée. <br>Avec Poulpy, chaque geste compte.</p></div><span class="eco-seal" aria-hidden="true">EXPLORE<br>PROGRESSE<br><b>PROTÈGE.</b></span>`;
   /* Défis : le Quiz vient juste sous l’en-tête ; ce bandeau introduit les défis écolo, juste avant leur sélecteur. */
   const gsw=document.querySelector('#challenges .gsw');if(gsw)gsw.before(eco);else $('#chalTop').after(eco);
 
   // Native dialog supplies focus trapping, Escape and an inert background.
   const dialog=document.createElement('dialog');dialog.className='poulpy-dialog';dialog.id='poulpyDialog';dialog.setAttribute('aria-labelledby','poulpyDialogTitle');
-  dialog.innerHTML=`<div class="poulpy-dialog-heading"><div><span class="section-kicker">TOUJOURS LE MÊME COMPLICE</span><h2 id="poulpyDialogTitle">À chacun son Poulpy.</h2><p>Choisis celui qui t’accompagne sur ton profil.</p></div><button type="button" class="poulpy-close" aria-label="Fermer le choix de Poulpy" autofocus>×</button></div><button type="button" class="poulpy-auto" data-poulpy-choice="auto" aria-pressed="false"><span><b>Au rythme de mon activité</b><small>Poulpy change avec le sport que tu explores.</small></span><span class="choice-tick" aria-hidden="true">✓</span></button><div class="poulpy-wardrobe">${Object.entries(variants).map(([key,v])=>`<button class="poulpy-choice choice-${key}" type="button" data-poulpy-choice="${key}" aria-pressed="false"><span class="choice-tick" aria-hidden="true">✓</span>${image(key)}<b>${v.name}</b><span>${v.caption}</span></button>`).join('')}</div><p class="poulpy-save-note" id="poulpySaveNote" role="status">Ton choix est enregistré sur cet appareil.</p>`;
+  dialog.innerHTML=`<div class="poulpy-dialog-heading"><div><span class="section-kicker">Toujours le même complice</span><h2 id="poulpyDialogTitle">À chacun son Poulpy.</h2><p>Choisis celui qui t’accompagne sur ton profil.</p></div><button type="button" class="poulpy-close" aria-label="Fermer le choix de Poulpy" autofocus>×</button></div><button type="button" class="poulpy-auto" data-poulpy-choice="auto" aria-pressed="false"><span><b>Au rythme de mon activité</b><small>Poulpy change avec le sport que tu explores.</small></span><span class="choice-tick" aria-hidden="true">✓</span></button><div class="poulpy-wardrobe">${Object.entries(variants).map(([key,v])=>`<button class="poulpy-choice choice-${key}" type="button" data-poulpy-choice="${key}" aria-pressed="false"><span class="choice-tick" aria-hidden="true">✓</span>${image(key)}<b>${v.name}</b><span>${v.caption}</span></button>`).join('')}</div><p class="poulpy-save-note" id="poulpySaveNote" role="status">Ton choix est enregistré sur cet appareil.</p>`;
   document.body.append(dialog);let previousFocus=null;
   function openWardrobe(){previousFocus=document.activeElement;refresh();dialog.showModal();}
   $('.poulpy-close',dialog).onclick=()=>dialog.close();
@@ -80,11 +80,11 @@
   dialog.addEventListener('close',()=>{if(previousFocus?.isConnected)previousFocus.focus({preventScroll:true});});
   dialog.querySelectorAll('[data-poulpy-choice]').forEach(button=>button.onclick=()=>{
     preferred=button.dataset.poulpyChoice;
-    try{localStorage.setItem(storageKey,preferred);$('#poulpySaveNote').textContent=preferred==='auto'?'Poulpy suit ton activité · enregistré sur cet appareil.':`${variants[preferred].name} choisi · enregistré sur cet appareil.`;}catch(_){$('#poulpySaveNote').textContent='Choix appliqué pour cette session. Le stockage de ton navigateur est indisponible.';}
+    try{localStorage.setItem(storageKey,preferred);$('#poulpySaveNote').textContent=preferred==='auto'?'Poulpy suit ton activité, enregistré sur cet appareil.':`${variants[preferred].name} choisi, enregistré sur cet appareil.`;}catch(_){$('#poulpySaveNote').textContent='Choix appliqué pour cette session. Le stockage de ton navigateur est indisponible.';}
     refresh();
   });
   const profileCard=document.createElement('button');profileCard.type='button';profileCard.className='poulpy-profile-card';profileCard.onclick=openWardrobe;
-  profileCard.innerHTML=`<span class="profile-poulpy-art">${image('travel','personal-poulpy',false)}</span><span><span class="section-kicker">TON COMPAGNON D’AVENTURE</span><strong>Ton Poulpy, ton style.</strong><span id="poulpyPreference"></span></span><span class="profile-customize">Choisir</span>`;
+  profileCard.innerHTML=`<span class="profile-poulpy-art">${image('travel','personal-poulpy',false)}</span><span><span class="section-kicker">Ton compagnon d’aventure</span><strong>Ton Poulpy, ton style.</strong><span id="poulpyPreference"></span></span><span class="profile-customize">Choisir</span>`;
   /* Profil : le style de Poulpy se range à la fin du passeport complet (interface v2) ; l’avatar du Profil l’ouvre aussi. */
   const profEnd=document.getElementById('pvFullEnd');if(profEnd)profEnd.before(profileCard);else $('#profile')?.append(profileCard);
   document.querySelectorAll('.chrome-user,.sidebar-user').forEach(button=>button.insertAdjacentHTML('afterbegin',image('travel','personal-poulpy',false)));

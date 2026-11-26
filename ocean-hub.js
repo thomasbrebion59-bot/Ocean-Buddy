@@ -44,7 +44,7 @@
     const list=window.OceanTrips?.list?.()||[];
     const next=TripModel.nextTrip(list,todayKey());
     if(!next){
-      return `<button class="hub-trip hub-trip-empty" type="button" data-hub="new-trip"><span class="hub-trip-ic">${I.plane}</span><span><small>TON PROCHAIN DÉPART</small><b>Dessine ton prochain voyage</b><em>Choisis tes spots, l’ordre, le sac. Poulpy s’occupe du reste.</em></span></button>`;
+      return `<button class="hub-trip hub-trip-empty" type="button" data-hub="new-trip"><span class="hub-trip-ic">${I.plane}</span><span><small>Ton prochain départ</small><b>Dessine ton prochain voyage</b><em>Choisis tes spots, l’ordre, le sac. Poulpy s’occupe du reste.</em></span></button>`;
     }
     const t=next.trip,w=next.when,p=TripModel.progress(t);
     const first=t.steps.find(x=>spot(x.spotId));
@@ -55,7 +55,7 @@
     const stepsTxt=!t.steps.length?'Aucune étape':t.steps.length>1?`${t.steps.length} étapes`:'1 étape';
     const nextAction=!t.steps.length?'Ajoute ta première étape':p.total&&p.done<p.total?'Continuer la préparation':'Revoir mon voyage';
     return `<button class="hub-trip" type="button" data-trip="${esc(t.id)}" style="--hub-cover:url('${esc(cover)}')">
-      <span class="hub-trip-top"><small>${w.state==='ongoing'?'EN VOYAGE':'PROCHAIN DÉPART'}</small>${big}</span>
+      <span class="hub-trip-top"><small>${w.state==='ongoing'?'En voyage':'Prochain départ'}</small>${big}</span>
       <span class="hub-trip-body"><b translate="no">${esc(t.name)}</b><em><span>${stepsTxt}</span>${t.destination?`<span translate="no"> · ${esc(t.destination)}</span>`:''}</em>
       ${p.total?`<span class="hub-prep" style="--p:${p.pct}%"><i></i></span><small class="hub-prep-label">Préparation ${p.done}/${p.total}</small>`:''}
       <span class="hub-cta">${nextAction}</span></span></button>`;
