@@ -17,7 +17,7 @@
     fr: 'Français', en: 'English', es: 'Español'
   };
   var RTL = { ar: 1, he: 1, ur: 1 };
-  var VERSIONS = /*VERSIONS*/{"en":"aa285715ac","es":"9958bbb171"}/*/VERSIONS*/;
+  var VERSIONS = /*VERSIONS*/{"en":"c70122cfdf","es":"219cd2662c"}/*/VERSIONS*/;
   var STORE_KEY = 'oceanbuddy_lang';
 
   function resolve(tag) {
@@ -132,13 +132,38 @@
   var HAS_ARROW = /[\u2194-\u2199\u21A9\u21AA\u25B6\u25C0](?![\uFE0E\uFE0F])/;
   function textArrows(s) { return s && HAS_ARROW.test(s) ? s.replace(EMOJI_ARROW, '$1\uFE0E') : s; }
 
-  /* Français (pas de dictionnaire) : seules les flèches passent en version texte. */
+  /* Français : espace insécable (U+00A0, même largeur qu’une espace) devant : ; ! ? » et après «, pour qu’un signe ne
+     passe jamais seul en début de ligne (« tubulaires / : ne va à l’eau »). À l’affichage seulement : chaînes sources,
+     clés, traductions et données restent inchangées (changer de langue recharge la page). Ni devant « :// », ni dans un
+     deux-points entre deux chiffres (10 : 30) ; jamais dans ce qu’on saisit ni dans du code (NO_SPACES). */
+  var HAS_SPACE_PUNCT = / [:;!?\u00BB]|\u00AB /;
+  var NO_SPACES = 'script,style,textarea,input,select,[contenteditable],pre,code';
+  function frenchSpaces(s) {
+    if (!s || !HAS_SPACE_PUNCT.test(s)) return s;
+    return s.replace(/ +([:;!?\u00BB])/g, function (all, p, at, str) {
+      if (p === ':') {
+        var after = str.slice(at + all.length);
+        if (after.slice(0, 2) === '//') return all;
+        if (/[0-9]$/.test(str.slice(0, at)) && /^ *[0-9]/.test(after)) return all;
+      }
+      return '\u00A0' + p;
+    }).replace(/\u00AB +/g, '\u00AB\u00A0');
+  }
+  function spacesAllowed(node) { var p = node.parentNode; return !(p && p.closest && p.closest(NO_SPACES)); }
+
+  /* Français (pas de dictionnaire) : les flèches passent en version texte et l’espace avant la ponctuation devient
+     insécable. Idempotent : un nœud corrigé ne change plus, l’observateur ne boucle pas. */
   function arrowsOnly() {
     var fix = function (node) {
-      if (node.nodeType === 3) { var v = node.nodeValue, t = textArrows(v); if (t !== v) node.nodeValue = t; return; }
+      if (node.nodeType === 3) {
+        var v = node.nodeValue, t = textArrows(v);
+        if (HAS_SPACE_PUNCT.test(t) && spacesAllowed(node)) t = frenchSpaces(t);
+        if (t !== v) node.nodeValue = t;
+        return;
+      }
       if (node.nodeType !== 1 && node.nodeType !== 9 && node.nodeType !== 11) return;
       var tw = document.createTreeWalker(node, NodeFilter.SHOW_TEXT), n, list = [];
-      while ((n = tw.nextNode())) if (HAS_ARROW.test(n.nodeValue)) list.push(n);
+      while ((n = tw.nextNode())) if (HAS_ARROW.test(n.nodeValue) || HAS_SPACE_PUNCT.test(n.nodeValue)) list.push(n);
       for (var i = 0; i < list.length; i++) fix(list[i]);
     };
     fix(document.body);
@@ -151,7 +176,7 @@
     }).observe(document.body, { childList: true, subtree: true, characterData: true });
   }
 
-  if (lang === 'fr') { // texte source : rien à traduire, seulement les flèches
+  if (lang === 'fr') { // texte source : rien à traduire, seulement les flèches et les espaces avant la ponctuation
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', arrowsOnly); else arrowsOnly();
     return;
   }
