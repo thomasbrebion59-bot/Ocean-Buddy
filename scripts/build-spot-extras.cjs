@@ -45,32 +45,92 @@ function placeError(p) {
 }
 const osmUrl = ref => 'https://www.openstreetmap.org/' + ref;
 
-/* Lieux : [nom, distance en m, étiquette brute (cuisine, sports ou genre, séparés par « ; »), référence OSM]. */
-function buildPlaces(json) {
-  const dropped = [];
+/* Tri des « locations ou boutiques » (lot 4, finitions). OpenStreetMap range sous shop=surf|sports|dive… des activités sans
+ * rapport avec les sports d’eau du guide : excursions en bateau, voiliers, pêche, jet-ski, quad, tennis, pelote, ski, patins…
+ * Ces lieux sont écartés ici, à l’écriture du fichier de l’app ; la donnée de collecte (donnees-spots) reste intacte.
+ * Un jet-ski n’est gardé que si le spot a ce sport (aucun spot du catalogue ne l’a aujourd’hui).
+ * Une école rangée en location (nom : « school », « école », « escuela », « camp »…) passe dans les écoles.
+ * Un même lieu (même référence OSM ou même nom) n’apparaît que dans une catégorie : écoles, puis locations, puis restaurants. */
+const norm = t => String(t || '').normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+const OFF_TOPIC = [
+  /\b(peche|fishing|fisherman)\b|lystfisk/,                                 // pêche
+  /excursion|sorties?\b|voilier|\bvoiles?\b|\bsailing\b|catavoile|lokavoile|catamaran|yacht|croisiere|navigation/, // bateau, voile
+  /\bquad\b|\brando\b/,                                                    // quad, randonnée
+  /\bski(hut|s)?\b/,                                                       // ski
+  /\broller|\btrucks?\b|\bskate\b(?!.*(bike|velo|cycle))/,                 // patins et skate (sauf location de vélos)
+  /fitness|fitboxe|\bboxe\b|\brun\b|tennis|set et match|pilota|pelota|chistera|padel|\bgolf\b|\bgym\b|crossfit/
+];
+const JET = /\bjet\b|jet-?ski|scooter des mers/;
+const SCHOOL = /\bschool\b|\becoles?\b|\bescuela\b|\beskola\b|skolen|\bscuola\b|\bcamp\b/;
+/* Sport lu dans le nom d’une école reclassée, dans les étiquettes que l’app sait nommer (SPORT_TAG de spot-guide.js). */
+function sportsInName(n) {
+  const out = [];
+  if (/kite/.test(n)) out.push('kitesurfing');
+  if (/windsurf|vind/.test(n)) out.push('windsurfing');
+  if (/surf/.test(n)) out.push('surfing');
+  if (/dive|diving|diver|scuba|buceo|plong/.test(n)) out.push('scuba_diving');
+  return out;
+}
+function offTopic(name, sports) {
+  const n = norm(name);
+  if (JET.test(n)) return !(sports || []).includes('jetski');
+  return OFF_TOPIC.some(re => re.test(n));
+}
+
+/* Lieux : [nom, distance en m, étiquette brute (cuisine, sports ou genre, séparés par « ; »), référence OSM].
+ * spotSports : { idDuSpot: [sports du catalogue] }, facultatif (sans lui, aucun spot n’a de jet-ski). */
+function buildPlaces(json, spotSports) {
+  const dropped = [], filtered = [];
   if (!json || typeof json.spots !== 'object') throw new Error('spot-places.json : pas de spots');
   if (!/ODbL/.test(String(json.license || ''))) throw new Error('spot-places.json : licence ODbL absente');
   if (!/^https:\/\//.test(String(json.source || ''))) throw new Error('spot-places.json : source sans adresse https');
   if (!/^\d{4}-\d{2}-\d{2}$/.test(String(json.extracted || ''))) throw new Error('spot-places.json : date d’extraction absente');
   const spots = {};
   for (const [id, v] of Object.entries(json.spots)) {
-    const out = {};
+    const out = {}, valid = {};
     for (const [cat, key] of Object.entries(CATS)) {
       const list = Array.isArray(v && v[cat]) ? v[cat] : [];
       const ok = [];
       for (const p of list) {
         const err = placeError(p);
         if (err) { dropped.push({ spot: id, cat, name: p && p.name || '', why: err }); continue; }
-        const tag = cat === 'restaurants' ? (p.cuisine || '') : cat === 'ecoles' ? (p.sports || []).join(';') : (p.kind || '');
-        ok.push([p.name.trim(), Math.round(p.distM), tag, p.osm]);
+        ok.push(p);
       }
+      valid[cat] = ok;
+    }
+    const sports = (spotSports && spotSports[id]) || [];
+    /* Locations : on écarte le hors-sujet, on envoie les écoles chez les écoles. */
+    const keepL = [];
+    for (const p of valid.locations) {
+      if (offTopic(p.name, sports)) { filtered.push({ spot: id, name: p.name, why: 'hors sujet' }); continue; }
+      if (SCHOOL.test(norm(p.name))) { valid.ecoles.push({ ...p, sports: p.sports || sportsInName(norm(p.name)) }); filtered.push({ spot: id, name: p.name, why: 'école' }); continue; }
+      keepL.push(p);
+    }
+    valid.locations = keepL;
+    /* Un même lieu dans une seule catégorie. */
+    const seenOsm = new Set(), seenName = new Set();
+    for (const cat of ['ecoles', 'locations', 'restaurants']) {
+      const names = [];
+      valid[cat] = valid[cat].filter(p => {
+        const nn = norm(p.name).replace(/[^a-z0-9]/g, '');
+        if (seenOsm.has(p.osm) || seenName.has(nn)) { filtered.push({ spot: id, name: p.name, why: 'doublon' }); return false; }
+        names.push(nn); return true;
+      });
+      for (const p of valid[cat]) seenOsm.add(p.osm);
+      names.forEach(n => seenName.add(n));
+    }
+    for (const [cat, key] of Object.entries(CATS)) {
+      const ok = valid[cat].map(p => {
+        const tag = cat === 'restaurants' ? (p.cuisine || '') : cat === 'ecoles' ? (p.sports || []).join(';') : (p.kind || '');
+        return [p.name.trim(), Math.round(p.distM), tag, p.osm];
+      });
       ok.sort((a, b) => a[1] - b[1]);
       if (ok.length) out[key] = ok.slice(0, MAX_PER_CAT);
     }
     /* Un spot sans aucun lieu garde son entrée (rayon seul) : la fiche dit alors « aucune adresse trouvée ». */
     out.r = Number(v && v.radiusM) || Number(json.radiusM) || 3000; spots[id] = out;
   }
-  return { meta: { extracted: json.extracted, license: json.license, source: json.source }, spots, dropped };
+  return { meta: { extracted: json.extracted, license: json.license, source: json.source }, spots, dropped, filtered };
 }
 
 /* Niveau des prix : par nom de pays du catalogue, [indice (États-Unis = 100), année, code ISO2]. */
@@ -103,9 +163,13 @@ function run() {
   let data;
   const placesFile = path.join(dir, 'spot-places.json'), pricesFile = path.join(dir, 'price-index.json'), namesFile = path.join(dir, 'scripts/pays-iso2.json');
   if (fs.existsSync(placesFile) && fs.existsSync(pricesFile) && fs.existsSync(namesFile)) {
-    const places = buildPlaces(JSON.parse(fs.readFileSync(placesFile, 'utf8')));
+    const catFile = path.join(root, 'data/catalog.json');
+    const spotSports = {};
+    if (fs.existsSync(catFile)) for (const sp of JSON.parse(fs.readFileSync(catFile, 'utf8'))) spotSports[sp.id] = Array.isArray(sp.sports) ? sp.sports : [];
+    const places = buildPlaces(JSON.parse(fs.readFileSync(placesFile, 'utf8')), spotSports);
     const prices = buildPrices(JSON.parse(fs.readFileSync(pricesFile, 'utf8')), JSON.parse(fs.readFileSync(namesFile, 'utf8')));
     for (const x of places.dropped) console.log(`lieu écarté : ${x.spot} / ${x.cat} « ${x.name} » (${x.why})`);
+    for (const x of places.filtered) console.log(`lieu trié : ${x.spot} « ${x.name} » (${x.why})`);
     for (const x of prices.dropped) console.log(`pays écarté : ${x.country} (${x.why})`);
     data = compact(places, prices);
     fs.writeFileSync(kept, JSON.stringify(data, null, 1) + '\n');

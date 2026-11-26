@@ -11574,5 +11574,12 @@
  "vent moyen de {0}": "average wind of {0}",
  "Voyage dans le spot{0}": "Trip to the spot{0}",
  "Voyage public": "Public trip",
- "{0} % de jours ≥ {1}": "{0} % of days ≥ {1}"
+ "{0} % de jours ≥ {1}": "{0} % of days ≥ {1}",
+ "{0} adresses à environ {1} km": "{0} addresses, up to about {1} km away",
+ "{0} adresses à environ {1} m": "{0} addresses, up to about {1} m away",
+ "1 adresse à environ {0} km": "1 address, about {0} km away",
+ "1 adresse à environ {0} m": "1 address, about {0} m away",
+ "Les {0} plus proches, à environ {1} km": "The {0} nearest, up to about {1} km away",
+ "Les {0} plus proches, à environ {1} m": "The {0} nearest, up to about {1} m away",
+ "Carte du spot": "Spot map"
 }

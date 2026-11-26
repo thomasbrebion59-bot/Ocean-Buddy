@@ -11574,5 +11574,12 @@
  "vent moyen de {0}": "viento medio de {0}",
  "Voyage dans le spot{0}": "Viaje al spot{0}",
  "Voyage public": "Viaje público",
- "{0} % de jours ≥ {1}": "{0} % de días ≥ {1}"
+ "{0} % de jours ≥ {1}": "{0} % de días ≥ {1}",
+ "{0} adresses à environ {1} km": "{0} direcciones, hasta unos {1} km",
+ "{0} adresses à environ {1} m": "{0} direcciones, hasta unos {1} m",
+ "1 adresse à environ {0} km": "1 dirección, a unos {0} km",
+ "1 adresse à environ {0} m": "1 dirección, a unos {0} m",
+ "Les {0} plus proches, à environ {1} km": "Las {0} más cercanas, hasta unos {1} km",
+ "Les {0} plus proches, à environ {1} m": "Las {0} más cercanas, hasta unos {1} m",
+ "Carte du spot": "Mapa del spot"
 }

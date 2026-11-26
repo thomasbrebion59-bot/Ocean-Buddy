@@ -150,7 +150,7 @@ function liveBlock(culture,cultures,over={}){
   const src=text('spot-guide.js'),i=src.indexOf('  const ILLU=k=>'),j=src.indexOf('  /* Les chiffres comptent jusqu’à leur valeur');
   assert.ok(i>0&&j>i,'liveHTML introuvable');
   const est={type:'camping',label:'Camping',lo:12,hi:25,peakLo:16,peakHi:30,peak:[7,8],alt:{label:'Auberge de jeunesse',lo:25,hi:40},town:''};
-  const ctx=vm.createContext({culture:()=>culture,country:()=>'France',esc:v=>String(v??''),NT:' translate="no" data-no-i18n',svg:()=>'<svg></svg>',P:{},lab:e=>e.label,LG:()=>'fr',
+  const ctx=vm.createContext({culture:()=>culture,country:()=>over.country||'France',esc:v=>String(v??''),NT:' translate="no" data-no-i18n',svg:()=>'<svg></svg>',P:{},lab:e=>e.label,LG:()=>'fr',
     estimate:()=>('est' in over?over.est:est),allSpots:()=>[{id:'a'},{id:'b'},{id:'c'},{id:'d',custom:true}],coordsOf:()=>({lat:43.66,lon:-1.44}),place:()=>'Hossegor, France',tripDates:()=>null,
     M:{monthName:()=>'novembre',monthsLabel:()=>'juillet et août',euros:r=>r.lo===r.hi?`${r.lo} €`:`${r.lo}–${r.hi} €`,cheaperThan:(v,all)=>Math.round(all.filter(x=>x>v).length/all.length*100),EDITION:'septembre 2026',
       searchQueries:(lang,sport)=>({hotels:'hôtels pas chers',school:('école '+sport).trim(),rental:('location matériel '+sport).trim(),restaurants:'restaurants'}),
@@ -206,7 +206,16 @@ test('« Le spot, en vie » : grands chiffres seulement s’il y a une donnée, 
   assert.match(html,/href="https:\/\/www\.google\.com\/maps\/search\/restaurants\/@43\.6600,-1\.4400,13z"[^>]*>.*?<b>Manger<\/b><span class="gl-psub gl-psub-link">Trouver un restaurant/);
   assert.match(html,/maps\/search\/%C3%A9cole%20Surf\/@43\.6600,-1\.4400,13z/);
   assert.match(html,/<a class="fx-pill" href="https:\/\/www\.booking\.com\/searchresults\.html\?ss=Hossegor" target="_blank" rel="noopener"><span translate="no" data-no-i18n>Booking\.com<\/span><\/a>/);
-  assert.match(html,/<span translate="no" data-no-i18n>Google Maps<\/span>/);
+  /* Finitions du lot 4 : la pastille n’est plus une seconde recherche d’hôtels (la tuile Hôtel s’en charge) mais la carte du spot. */
+  assert.match(html,/<a class="fx-pill" href="https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=43\.6600,-1\.4400"[^>]*><span>Carte du spot<\/span><\/a>/);
+  assert.doesNotMatch(html,/Google Maps|hôtels pas chers/);
+  /* Tuile Camping seulement pour une estimation de type camping ; sinon trois tuiles, la dernière sur toute la largeur. */
+  assert.match(html,/<div class="gl-ptiles">/);
+  const noCamp=liveBlock(c,undefined,{est:{type:'hotel',label:'Hôtel',lo:60,hi:120,peak:[]}});
+  assert.match(noCamp,/<div class="gl-ptiles gl-p3">/);
+  assert.doesNotMatch(noCamp,/<b>Camping<\/b>/);
+  for(const t of ['Hôtel','Manger','Apprendre et louer'])assert.match(noCamp,new RegExp('<b>'+t+'</b>'));
+  assert.match(text('fiche.css'),/#detail \.gl-ptiles\.gl-p3 \.gl-ptile:last-child\{grid-column:1 \/ -1/);
   assert.match(html,/<p class="fx-note gl-links-src">Recherches publiques, sans lien sponsorisé\.<\/p>/);
   /* Sans estimation : le bloc reste (il ne montre aucun prix de nuit). */
   const none=liveBlock(c,undefined,{est:null});
@@ -236,8 +245,12 @@ test('« Sur place » : niveau des prix du pays sourcé, échelle parmi les pays
   const html=liveBlock(c,undefined,{extras:EXTRAS,id:'hossegor'});
   /* France 82,8 : deux pays moins chers sur quatre (50 %), un plus cher (25 %). */
   assert.match(html,/<div class="gl-pli"><b class="fx-num" translate="no" data-no-i18n>83&nbsp;%<\/b><span class="gl-pli-tx"><span>du coût de la vie aux États-Unis<\/span><small><span>France<\/span>, <span>Banque mondiale<\/span> <span translate="no" data-no-i18n>2025<\/span><\/small><\/span><\/div>/);
-  /* La jauge est placée à la valeur de l’indice (échelle 0 à 150) : 82,8 sur 150 = 55,2 %. */
-  assert.match(html,/<i class="gl-pin" style="--p:55\.2%"><\/i>/);
+  /* Le curseur est au rang du pays, comme la phrase qui suit : « plus cher que 50 % » = curseur à 50 %. */
+  assert.match(html,/<i class="gl-pin" style="--p:50\.0%"><\/i>/);
+  /* Indonésie 30,7 : moins chère que 75 % des pays, donc plus chère que 25 % : curseur à 25 %. */
+  const low=liveBlock(c,undefined,{extras:EXTRAS,id:'hossegor',country:'Indonésie'});
+  assert.match(low,/<i class="gl-pin" style="--p:25\.0%"><\/i>/);
+  assert.match(low,/<span>Moins cher que<\/span> <b translate="no" data-no-i18n>75&nbsp;%<\/b>/);
   assert.match(html,/<span>Plus cher que<\/span> <b translate="no" data-no-i18n>50&nbsp;%<\/b> <span>des pays du guide<\/span>/);
   assert.match(html,/<p class="fx-note gl-pli-src">.*href="https:\/\/data\.worldbank\.org\/indicator\/PA\.NUS\.PRVT\.PLI".*licence CC BY 4\.0, consultée le<\/span> <span translate="no" data-no-i18n>20\/11\/2026<\/span>/);
   /* Aucune estimation de nuit dans le bloc. */
@@ -246,7 +259,7 @@ test('« Sur place » : niveau des prix du pays sourcé, échelle parmi les pays
   assert.match(html,/<b>Autour du spot<\/b><a href="https:\/\/www\.openstreetmap\.org\/copyright"[^>]*>Données OpenStreetMap<\/a>/);
   assert.match(html,/<p class="fx-note gl-around-sub">Dans un rayon de 3 km<\/p>/);
   /* Tuiles chiffrées : texte simple (non souligné, pas un lien), qui mène à la liste ; « les plus proches » seulement à 5 lieux. */
-  assert.match(html,/<button type="button" class="gl-ptile" data-gl-around>.*?<b>Manger<\/b><span class="gl-psub">2 adresses à moins de 1 km<\/span>/);
+  assert.match(html,/<button type="button" class="gl-ptile" data-gl-around>.*?<b>Manger<\/b><span class="gl-psub">2 adresses à environ 300 m<\/span>/);
   assert.match(html,/<b>Apprendre et louer<\/b><span class="gl-psub"><span>1 école ou club<\/span><\/span>/);
   assert.match(html,/<h4 class="fx-label gl-around-h">Pour manger<\/h4>/);
   assert.match(html,/<h4 class="fx-label gl-around-h">Écoles et clubs<\/h4>/);
@@ -280,6 +293,29 @@ test('« Sur place » : niveau des prix du pays sourcé, échelle parmi les pays
   assert.match(g,/const EXTRAS_URL='assets\/data\/spot-extras\.js\?v=[0-9a-f]{12}';/);
   assert.doesNotMatch(text('index.html'),/spot-extras\.js/,'jamais chargé au démarrage');
   assert.match(text('replis.js'),/'#guideLive \.gl-pli-src', '#guideLive \.gl-osm-src'/);
+});
+
+test('build-spot-extras : « locations ou boutiques » triées (hors-sujet écarté, école reclassée, un lieu dans une seule catégorie)',()=>{
+  const B=require('../scripts/build-spot-extras.cjs');
+  const base={extracted:'2026-11-20',license:"Données © les contributeurs d'OpenStreetMap, sous licence ODbL",source:'https://www.openstreetmap.org/copyright',radiusM:3000};
+  const L=(name,distM,osm,kind='location')=>({name,lat:1,lon:1,distM,kind,osm});
+  const json={...base,spots:{a:{
+    ecoles:[{name:'French Kiss Divers Sairee',lat:1,lon:1,distM:900,sports:['scuba_diving'],osm:'node/50'}],
+    locations:[L('Spirit Surf School',400,'node/1'),L('Jet Landes Family',500,'node/2'),L('Cap Pêche loisirs',600,'node/3'),L("XCAT agence d'excursion en bateau",610,'node/4'),
+      L('Skipcool - sorties en voilier',620,'node/5'),L('Surf Shop',300,'node/6','boutique'),L('Pickle - Skate & Bike',310,'node/7'),L('310 skate shop',320,'node/8','boutique'),
+      L('Sail Fish Scuba',330,'node/9','boutique'),L('French Kiss Divers - Sairee',905,'node/51','boutique')]}}};
+  const out=B.buildPlaces(json,{a:['surf']});
+  const names=k=>(out.spots.a[k]||[]).map(x=>x[0]);
+  assert.deepEqual(names('E').sort(),['French Kiss Divers Sairee','Spirit Surf School']);
+  assert.deepEqual(names('L'),['Surf Shop','Pickle - Skate & Bike','Sail Fish Scuba']);
+  assert.equal(out.spots.a.E.find(x=>x[0]==='Spirit Surf School')[2],'surfing');
+  /* Un jet-ski n’est gardé que si le spot a ce sport. */
+  assert.ok(names('L').every(n=>!/Jet|Pêche|excursion|voilier/.test(n)));
+  const jet=B.buildPlaces({...base,spots:{a:{locations:[L('Jet Landes Family',500,'node/2')]}}},{a:['jetski']});
+  assert.deepEqual((jet.spots.a.L||[]).map(x=>x[0]),['Jet Landes Family']);
+  /* Le jeu de données livré : aucune activité hors-sujet ni école en location. */
+  const kept=JSON.parse(text('data/spot-extras.json')).places;
+  for(const [id,v] of Object.entries(kept))for(const x of v.L||[])assert.doesNotMatch(x[0],/Jet\b|Pêche|excursion|voilier|Catavoile|Lokavoile|School|École|Eskola/i,id+' : '+x[0]);
 });
 
 test('build-spot-extras : lieux valides seulement (lien OSM, distance, aucun champ de note ou de prix), pays sans valeur absents',()=>{

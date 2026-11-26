@@ -13,7 +13,7 @@
   const ZONES_URL_I18N={en:'assets/data/culture-zones.en.js?v=bf73a60bed15',es:'assets/data/culture-zones.es.js?v=5ecede979b85'};
   /* Lieux autour du spot (OpenStreetMap) et niveau des prix par pays (Banque mondiale) : scripts/build-spot-extras.cjs,
      chargés à l’ouverture d’une fiche, jamais au démarrage. */
-  const EXTRAS_URL='assets/data/spot-extras.js?v=cdf959da5786';
+  const EXTRAS_URL='assets/data/spot-extras.js?v=57b11b70ee03';
   /* Hors français, le contenu éditorial (esprit du lieu, lieux, libellés d’hébergement) s’affiche en anglais.
      Il est marqué translate="no" pour que i18n.js ne le retraduise pas par morceaux ; les libellés d’interface restent traduisibles. */
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||'fr';
@@ -222,7 +222,8 @@
   const KIND_TAG={location:'Location',boutique:'Boutique'};
   const tagOf=(cat,raw)=>{const map=cat==='R'?CUISINE:cat==='E'?SPORT_TAG:KIND_TAG;for(const t of String(raw||'').split(';')){const k=t.trim();if(map[k])return map[k];}return '';};
   /* Les coordonnées du catalogue sont au centième de degré : une distance « à environ », arrondie. */
-  const around=m=>m<950?`à environ ${Math.max(100,Math.round(m/100)*100)} m`:`à environ ${nf(Math.round(m/500)/2,Math.round(m/500)%2?1:0)} km`;
+  const distParts=m=>m<950?{km:false,v:Math.max(100,Math.round(m/100)*100)}:{km:true,v:nf(Math.round(m/500)/2,Math.round(m/500)%2?1:0)};
+  const around=m=>{const d=distParts(m);return d.km?`à environ ${d.v} km`:`à environ ${d.v} m`;};
   const SPORT_ILLU=['baignade','bodyboard','kayak','kitesurf','paddle','plongee','snorkeling','surf','windsurf'];
   /* Une photo de tuile : une illustration de l’app, jamais générée ici. Une seule image par tuile, 1:1 rognée en 16:10. */
   const TILE_IMG=src=>`<img class="gl-pimg" src="${src}" alt="" width="384" height="384" loading="lazy" decoding="async" draggable="false">`;
@@ -232,8 +233,10 @@
   function countText(k,list){
     const n=list.length;
     if(k==='R'){
-      const km=nf(Math.max(1,Math.ceil(Math.max(...list.map(x=>x[1]))/1000)));
-      return n>=5?`Les ${n} plus proches, à moins de ${km} km`:n===1?`1 adresse à moins de ${km} km`:`${n} adresses à moins de ${km} km`;
+      /* Même arrondi que les lignes de la liste (« à environ 1 km » pour 986 m) : jamais « moins de » à côté de « environ ». */
+      const d=distParts(Math.max(...list.map(x=>x[1])));
+      return d.km?(n>=5?`Les ${n} plus proches, à environ ${d.v} km`:n===1?`1 adresse à environ ${d.v} km`:`${n} adresses à environ ${d.v} km`)
+        :(n>=5?`Les ${n} plus proches, à environ ${d.v} m`:n===1?`1 adresse à environ ${d.v} m`:`${n} adresses à environ ${d.v} m`);
     }
     if(k==='E')return n===1?'1 école ou club':`${n} écoles ou clubs`;
     return n===1?'1 location ou boutique':`${n} locations ou boutiques`;
@@ -258,11 +261,12 @@
     const act=(typeof detailAct==='function'?detailAct(s):null)||(typeof spotSports==='function'?spotSports(s)[0]:(s.sports||[])[0])||'',sportName=(typeof SPORTMAP!=='undefined'&&SPORTMAP[act]?.label)||'';
     const qs=M.searchQueries(LG(),lg==='fr'||typeof window.obT!=='function'?sportName:window.obT(sportName));
     const ex=window.OCEAN_SPOT_EXTRAS,p=!s.custom&&ex?.places?.[s.id]||null,has=k=>!!p&&Array.isArray(p[k])&&p[k].length>0;
-    /* Niveau des prix du pays (Banque mondiale) : le grand chiffre et sa jauge, placée à la valeur de l’indice (échelle 0 à 150). */
+    /* Niveau des prix du pays (Banque mondiale) : le grand chiffre, puis la jauge dont le curseur est au rang du pays, comme la
+       phrase qui la suit (« plus cher que 72 % des pays du guide » : curseur à 72 %). */
     let level='';
     const pl0=priceLevel(ctry);
     if(pl0){
-      const pos=Math.max(3,Math.min(97,pl0.index/150*100));
+      const pos=Math.max(3,Math.min(97,pl0.pricier>=50?100-pl0.pricier:pl0.cheaper));
       const rank=pl0.pricier>=50?`<p class="gl-rank"><span>Moins cher que</span> <b${NT}>${pl0.pricier}&nbsp;%</b> <span>des pays du guide</span></p>`:`<p class="gl-rank"><span>Plus cher que</span> <b${NT}>${pl0.cheaper}&nbsp;%</b> <span>des pays du guide</span></p>`;
       level=`<div class="gl-pli"><b class="fx-num"${NT}>${nf(Math.round(pl0.index))}&nbsp;%</b><span class="gl-pli-tx"><span>du coût de la vie aux États-Unis</span><small><span>${esc(ctry)}</span>, <span>Banque mondiale</span> <span${NT}>${pl0.year}</span></small></span></div>
       <div class="gl-scale" aria-hidden="true"><span>moins cher</span><i class="gl-track"><i class="gl-pin" style="--p:${pos.toFixed(1)}%"></i></i><span>plus cher</span></div>${rank}
@@ -274,14 +278,17 @@
     const eat=has('R')?goTile(ILLU_P('table'),'Manger',countText('R',p.R)):linkTile(mapsNear(s,qs.restaurants),ILLU_P('table'),'Manger','Trouver un restaurant');
     const learnParts=[has('E')?countText('E',p.E):'',has('L')?countText('L',p.L):''].filter(Boolean);
     const learn=learnParts.length?goTile(sportImg,'Apprendre et louer',learnParts.map(t=>`<span>${t}</span>`).join(', ')):linkTile(mapsNear(s,qs.school),sportImg,'Apprendre et louer','Trouver une école');
-    const tiles=`<div class="gl-ptiles">${linkTile(links.camping,ILLU_P('sac'),'Camping','Trouver un camping')}${linkTile(links.google,ILLU_P('cabane'),'Hôtel','Trouver un hôtel')}${eat}${learn}</div>`;
+    /* Tuile Camping seulement là où le camping a du sens (estimation du spot de type camping, comme le lien « Campings » d’avant
+       le lot 4) ; ailleurs, trois tuiles (Hôtel, Manger, Apprendre et louer), la dernière sur toute la largeur. */
+    const camp=e&&e.type==='camping'?linkTile(links.camping,ILLU_P('sac'),'Camping','Trouver un camping'):'';
+    const tiles=`<div class="gl-ptiles${camp?'':' gl-p3'}">${camp}${linkTile(links.google,ILLU_P('cabane'),'Hôtel','Trouver un hôtel')}${eat}${learn}</div>`;
     const pill=(h,label)=>`<a class="fx-pill" href="${esc(h)}" target="_blank" rel="noopener"><span${NT}>${label}</span></a>`;
     /* Les listes OpenStreetMap s’arrêtent à 5 lieux et manquent souvent d’écoles : la carte autour du spot reste à un geste
        (restaurants, école et location du sport, comme les anciens raccourcis du Coin et « Matériel et cours » de Préparer). */
     const mapPill=(h,label)=>`<a class="fx-pill" href="${esc(h)}" target="_blank" rel="noopener"><span>${label}</span></a>`;
     /* Une tuile qui ouvre déjà la carte (aucune adresse dans sa catégorie) n’est pas répétée ici. */
     const more=`<h4 class="fx-label gl-around-h">Sur la carte</h4><div class="px-pills gl-around-more">${has('R')?mapPill(mapsNear(s,qs.restaurants),'Restaurants'):''}${learnParts.length?mapPill(mapsNear(s,qs.school),'École'):''}${mapPill(mapsNear(s,qs.rental),'Location')}</div>`;
-    const search=`<div class="gl-psearch px-search">${dates?`<p class="fx-note">Dates de ton voyage « ${esc(dates.name)} » : du ${esc(fmtDate(dates.checkin))} au ${esc(fmtDate(dates.checkout))}.</p>`:''}<div class="px-pills">${pill(links.booking,'Booking.com')}${pill(links.hostelworld,'Hostelworld')}${pill(links.airbnb,'Airbnb')}${pill(mapsNear(s,qs.hotels),'Google Maps')}${window.OceanNotebook?.button(s.id)||''}</div><p class="fx-note gl-links-src">Recherches publiques, sans lien sponsorisé.</p></div>`;
+    const search=`<div class="gl-psearch px-search">${dates?`<p class="fx-note">Dates de ton voyage « ${esc(dates.name)} » : du ${esc(fmtDate(dates.checkin))} au ${esc(fmtDate(dates.checkout))}.</p>`:''}<div class="px-pills">${pill(links.booking,'Booking.com')}${pill(links.hostelworld,'Hostelworld')}${pill(links.airbnb,'Airbnb')}${mapPill(mapOpen(s),'Carte du spot')}${window.OceanNotebook?.button(s.id)||''}</div><p class="fx-note gl-links-src">Recherches publiques, sans lien sponsorisé.</p></div>`;
     return `<div class="gl-block gl-pratique" id="glPratique"><h3 class="fx-title">Dormir, manger, louer</h3>${level}${tiles}${placesHTML(s,more)||`<div class="gl-around">${more}</div>`}${search}</div>`;
   }
   /* Normales du mois en cours : fichier léger déjà utilisé par l’accueil ([eau, …, houle ×10, …], spot-data.js). */
@@ -289,6 +296,11 @@
     const row=window.OCEAN_CLIMATE_LITE?.[s.id],m=new Date().getMonth();if(!Array.isArray(row))return null;
     const sea=Number(row[0]?.[m]),hs=Number(row[5]?.[m])/10,inland=typeof isInland==='function'?isInland(s):['lake','inland'].includes(s.waterType);
     return {sea:Number.isFinite(sea)&&row[0]?.[m]!=null?sea:null,hs:!inland&&Number.isFinite(hs)&&row[5]?.[m]!=null&&hs>0?hs:null};
+  }
+  /* La carte du spot elle-même (épingle sur ses coordonnées), pas une recherche d’hôtels : la tuile Hôtel s’en charge. */
+  function mapOpen(s){
+    const c=coordsOf(s.id)||s.coords,ok=c&&Number.isFinite(+c.lat)&&Number.isFinite(+c.lon);
+    return `https://www.google.com/maps/search/?api=1&query=${ok?(+c.lat).toFixed(4)+','+(+c.lon).toFixed(4):encodeURIComponent(place(s,estimate(s)))}`;
   }
   function mapsNear(s,what){
     const c=coordsOf(s.id)||s.coords,ok=c&&Number.isFinite(+c.lat)&&Number.isFinite(+c.lon);
@@ -385,11 +397,10 @@
 
   /* ---------- Aperçu en tête de fiche ---------- */
   function glanceHTML(s){
-    const c=culture(s),e=estimate(s);
+    const c=culture(s);
     const chips=[
       c.hello&&['speech','guideSpirit','Le mot du coin',c.hello[0]],
-      c.food&&['food','guideSpirit','À goûter',c.food[0]],
-      ['bed','guideSleep',`Dès ${e.lo} € la nuit`,null]
+      c.food&&['food','guideSpirit','À goûter',c.food[0]]
     ].filter(Boolean);
     return chips.map(([k,target,label,value])=>`<button type="button" class="guide-glance-chip" data-guide-jump="${target}">${icon(k)}<span>${esc(label)}</span>${value?`<b${NT}>${esc(value)}</b>`:''}</button>`).join('');
   }
@@ -469,8 +480,7 @@
     if(toAround){document.getElementById('glAround')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});return;}
     const tile=e.target.closest('#guideLive [data-gl-go]');
     if(tile&&typeof showDetailCat==='function'){
-      const go=tile.dataset.glGo;showDetailCat(go==='dormir'?'activites':go);
-      if(go==='dormir')setTimeout(()=>document.getElementById('guideSleep')?.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'}),60);
+      showDetailCat(tile.dataset.glGo);
       return;
     }
     const jump=e.target.closest('[data-guide-jump]');

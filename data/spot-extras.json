@@ -41,42 +41,16 @@
    ],
    "E": [
     [
+     "Spirit Surf School",
+     442,
+     "surfing",
+     "node/9642790108"
+    ],
+    [
      "Prévent Surf Cool",
      1145,
      "surfing",
      "node/11883865273"
-    ]
-   ],
-   "L": [
-    [
-     "Spirit Surf School",
-     442,
-     "location",
-     "node/9642790108"
-    ],
-    [
-     "Jet Landes Family",
-     561,
-     "location",
-     "node/11944554948"
-    ],
-    [
-     "Cap Pêche loisirs",
-     665,
-     "location",
-     "node/12883016640"
-    ],
-    [
-     "XCAT l'Océan Autrement agence d'excursion en bateau",
-     671,
-     "location",
-     "node/11944558999"
-    ],
-    [
-     "Skipcool - sorties en voilier",
-     671,
-     "location",
-     "node/11944665071"
     ]
    ],
    "r": 3000
@@ -114,13 +88,15 @@
      "node/13681399324"
     ]
    ],
-   "L": [
+   "E": [
     [
      "Lost Surf School",
      1354,
-     "boutique",
+     "surfing",
      "node/11081950406"
-    ],
+    ]
+   ],
+   "L": [
     [
      "Hossegor Lake Paddle",
      2602,
@@ -189,18 +165,6 @@
      1422,
      "location",
      "node/8364504496"
-    ],
-    [
-     "Landifornia Jet 40&64",
-     1639,
-     "location",
-     "node/12696747150"
-    ],
-    [
-     "Les Voiles s'en mèlent",
-     1699,
-     "location",
-     "node/11944559000"
     ]
    ],
    "r": 3000
@@ -238,6 +202,14 @@
      "node/7019218622"
     ]
    ],
+   "E": [
+    [
+     "École de surf H2O",
+     1441,
+     "surfing",
+     "node/9951918830"
+    ]
+   ],
    "L": [
     [
      "ProSurf Shop",
@@ -262,12 +234,6 @@
      1398,
      "boutique",
      "node/14107886055"
-    ],
-    [
-     "École de surf H2O",
-     1441,
-     "boutique",
-     "node/9951918830"
     ]
    ],
    "r": 3000
@@ -911,12 +877,6 @@
      1725,
      "boutique",
      "node/12184349071"
-    ],
-    [
-     "FITBOXE",
-     2260,
-     "boutique",
-     "node/7052888585"
     ]
    ],
    "r": 3000
@@ -1033,24 +993,6 @@
     ]
    ],
    "L": [
-    [
-     "Navigation Normande",
-     150,
-     "location",
-     "node/4772788735"
-    ],
-    [
-     "OD Run",
-     235,
-     "boutique",
-     "node/14020428394"
-    ],
-    [
-     "Set et Match",
-     382,
-     "boutique",
-     "node/10016122153"
-    ],
     [
      "Intersport",
      2045,
@@ -1365,12 +1307,6 @@
      "node/6357634087"
     ],
     [
-     "French Kiss Divers - Sairee",
-     963,
-     "boutique",
-     "node/5017843575"
-    ],
-    [
      "Evasion",
      1091,
      "location",
@@ -1479,11 +1415,11 @@
      "node/14004569623"
     ]
    ],
-   "L": [
+   "E": [
     [
      "Art Surf Camp",
      867,
-     "boutique",
+     "surfing",
      "node/4105178091"
     ]
    ],
@@ -1630,12 +1566,6 @@
    ],
    "L": [
     [
-     "Rollerwave",
-     832,
-     "boutique",
-     "node/1617944495"
-    ],
-    [
      "Surfsports",
      881,
      "boutique",
@@ -1646,12 +1576,6 @@
      889,
      "boutique",
      "node/1687084831"
-    ],
-    [
-     "De Skihut",
-     916,
-     "boutique",
-     "node/1628569370"
     ],
     [
      "Aloha surf",
@@ -1808,11 +1732,11 @@
      "node/6047622841"
     ]
    ],
-   "L": [
+   "E": [
     [
      "Vindskolen.no",
      3334,
-     "boutique",
+     "windsurfing",
      "node/12106803700"
     ]
    ],
@@ -1857,12 +1781,6 @@
      144,
      "boutique",
      "node/11090411121"
-    ],
-    [
-     "Lystfiskeren",
-     635,
-     "boutique",
-     "node/1580617163"
     ]
    ],
    "r": 3000
@@ -2049,6 +1967,12 @@
      "node/7667130326"
     ],
     [
+     "Ocean Ride Surf School",
+     250,
+     "surfing",
+     "node/7667130327"
+    ],
+    [
      "Big Mama Surf School",
      935,
      "surfing",
@@ -2079,12 +2003,6 @@
      202,
      "boutique",
      "node/7728533056"
-    ],
-    [
-     "Ocean Ride Surf School",
-     250,
-     "boutique",
-     "node/7667130327"
     ]
    ],
    "r": 3000
@@ -2436,18 +2354,6 @@
      "node/9694518748"
     ],
     [
-     "FitnessBoutique",
-     1966,
-     "boutique",
-     "node/12038308750"
-    ],
-    [
-     "Chisteras Gonzalez",
-     2308,
-     "boutique",
-     "node/11078440458"
-    ],
-    [
      "HEXA",
      2541,
      "boutique",
@@ -2625,12 +2531,6 @@
      "node/3230960894"
     ],
     [
-     "Catavoile",
-     6760,
-     "location",
-     "node/6738113005"
-    ],
-    [
      "Sport & Nature",
      6778,
      "location",
@@ -2684,18 +2584,6 @@
      1089,
      "boutique",
      "node/8752404132"
-    ],
-    [
-     "Quiberon Jet",
-     1293,
-     "location",
-     "node/12043828625"
-    ],
-    [
-     "Lokavoile",
-     1293,
-     "location",
-     "node/12043828631"
     ]
    ],
    "r": 3000
@@ -2854,30 +2742,20 @@
      "node/3228598323"
     ]
    ],
-   "L": [
+   "E": [
     [
-     "Ona pilota",
-     603,
-     "boutique",
-     "way/72779651"
-    ],
+     "École de surf H2O",
+     1310,
+     "surfing",
+     "node/9951918830"
+    ]
+   ],
+   "L": [
     [
      "ND Surf",
      1220,
      "boutique",
      "node/11151908328"
-    ],
-    [
-     "TT Rando Quad",
-     1273,
-     "location",
-     "node/7015112231"
-    ],
-    [
-     "École de surf H2O",
-     1310,
-     "boutique",
-     "node/9951918830"
     ],
     [
      "Intersport",
@@ -2970,6 +2848,12 @@
      1165,
      "surfing",
      "way/563319945"
+    ],
+    [
+     "Peniche Kite & Surf Camp",
+     1854,
+     "kitesurfing;surfing",
+     "node/13087601012"
     ]
    ],
    "L": [
@@ -2984,18 +2868,6 @@
      1782,
      "boutique",
      "node/13058320548"
-    ],
-    [
-     "Peniche Kite & Surf Camp",
-     1854,
-     "location",
-     "node/13087601012"
-    ],
-    [
-     "Film Trucks",
-     2131,
-     "boutique",
-     "node/13058507110"
     ],
     [
      "Sport Zone",
@@ -3186,6 +3058,12 @@
    ],
    "E": [
     [
+     "Moor Surf Eskola",
+     255,
+     "surfing",
+     "node/13110258438"
+    ],
+    [
      "North Shore Surf Eskola Zarautz",
      317,
      "surfing",
@@ -3206,22 +3084,10 @@
      "node/9227811001"
     ],
     [
-     "Moor Surf Eskola",
-     255,
-     "boutique",
-     "node/13110258438"
-    ],
-    [
      "Axi Muniain",
      353,
      "boutique",
      "node/9232630808"
-    ],
-    [
-     "310 skate shop",
-     518,
-     "boutique",
-     "node/837553988"
     ],
     [
      "Forum Sport",
@@ -3286,12 +3152,6 @@
      1454,
      "",
      "node/6187945301"
-    ],
-    [
-     "Surf Berbere",
-     1547,
-     "",
-     "way/875417227"
     ],
     [
      "Bella Vista",
