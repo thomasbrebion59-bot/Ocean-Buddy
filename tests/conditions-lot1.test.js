@@ -122,7 +122,7 @@ test('« Pour toi » sans position : la région des favoris d’abord, Kavieng s
   const rest = ids({ n: 5, perCountry: 1 });
   assert.ok(rest.indexOf('kav') > rest.indexOf('a'), 'le reste du monde vient après, seulement s’il en faut plus');
   assert.equal(rest.length, 5);
-  const all = R.forYou(spots, { ...ctx, region: null }, { n: 2, perCountry: 1 }).map(p => p.spot.id);
+  const all = R.forYou(spots, { ...ctx, region: null, pos: null }, { n: 2, perCountry: 1 }).map(p => p.spot.id);
   assert.ok(all.includes('kav') || all.includes('bali'), 'sans région : l’ancien classement, inchangé');
 });
 test('tirer pour rafraîchir : seuil de 72 px, une fois toutes les 20 s au plus', () => {
