@@ -1,5 +1,5 @@
 /* app-update-model.js : quand proposer la mise à jour (logique pure, sans DOM).
-   Écran « store » (nouvelle version sur l’App Store) : à chaque lancement, puis à chaque retour au premier plan après au
+   Écran « store » (nouvelle version sur l’App Store ET coque sous native_min ; sinon simple rappel, une fois par version) : à chaque lancement, puis à chaque retour au premier plan après au
    moins 10 minutes ailleurs ; « Plus tard » ne le ferme que pour ce moment-là ; plus de silence de 3 jours.
    Mise à jour directe (« live ») : comme avant, au lancement puis au plus une fois par demi-heure. */
 const test = require('node:test');
@@ -78,14 +78,49 @@ test('retour sans départ connu (premier événement) : pas de nouveau moment in
   assert.equal(s.hiddenAt, null);
 });
 
-test('decide : la mise à jour directe passe d’abord, puis l’App Store, sinon rien', () => {
+test('decide : la mise à jour directe passe d’abord ; coque sous native_min : écran entier ; sinon rappel une fois par version', () => {
+  assert.deepEqual(U.decide({ kind: 'live', id: 'x' }, { kind: 'store', version: '1.5.0' }, true, null), { kind: 'live' });
   assert.deepEqual(U.decide({ kind: 'live', id: 'x' }, { kind: 'store', version: '1.5.0' }), { kind: 'live' });
-  assert.deepEqual(U.decide(null, { kind: 'store', version: '1.5.0' }), { kind: 'store', version: '1.5.0' });
-  /* App sous native_min : checkLive répond { kind:'store' } sans version ; seule la réponse de l’App Store ouvre l’écran. */
+  /* Coque sous native_min : checkLive répond { kind:'store' } sans version ; seule la réponse de l’App Store ouvre l’écran. */
   assert.equal(U.decide({ kind: 'store' }, null), null);
   assert.deepEqual(U.decide({ kind: 'store' }, { kind: 'store', version: '1.5.1' }), { kind: 'store', version: '1.5.1' });
+  /* Même constat gardé d’une vérification précédente. */
+  assert.deepEqual(U.decide(null, { kind: 'store', version: '1.5.1' }, true, null), { kind: 'store', version: '1.5.1' });
+  assert.deepEqual(U.decide(null, { kind: 'store', version: '1.5.1' }, true, '1.5.1'), { kind: 'store', version: '1.5.1' }, 'l’écran entier ignore le rappel déjà vu');
+  /* Coque qui reçoit le web : rappel discret, une fois par version. */
+  assert.deepEqual(U.decide(null, { kind: 'store', version: '1.6.0' }, false, null), { kind: 'reminder', version: '1.6.0' });
+  assert.deepEqual(U.decide(null, { kind: 'store', version: '1.6.0' }), { kind: 'reminder', version: '1.6.0' });
+  assert.equal(U.decide(null, { kind: 'store', version: '1.6.0' }, false, '1.6.0'), null);
+  assert.deepEqual(U.decide(null, { kind: 'store', version: '1.6.1' }, false, '1.6.0'), { kind: 'reminder', version: '1.6.1' });
+  assert.equal(U.decide(null, { kind: 'store', version: '' }, false, '?'), null, 'version illisible : une seule fois aussi');
   assert.equal(U.decide(null, null), null);
   assert.equal(U.decide(undefined, undefined), null);
+});
+
+test('liveResult : « coque trop vieille » retenu, effacé par une réponse contraire, inchangé par un échec réseau', () => {
+  let s = U.initial();
+  assert.equal(s.forced, false);
+  s = U.liveResult(s, { kind: 'store' }, true);
+  assert.equal(s.forced, true);
+  assert.equal(U.liveResult(s, null, false).forced, true, 'échec réseau : on garde');
+  assert.equal(U.liveResult(s, null, true).forced, false, 'plus de constat : rappel simple');
+  assert.equal(U.liveResult(s, { kind: 'live' }, true).forced, false);
+});
+
+test('rappel vu : lu et écrit sans jamais lever d’erreur', () => {
+  const m = new Map();
+  const st = { getItem: k => (m.has(k) ? m.get(k) : null), setItem: (k, v) => m.set(k, String(v)) };
+  assert.equal(U.reminderSeen(st), null);
+  assert.equal(U.markReminder(st, '1.6.0'), true);
+  assert.equal(m.get('oceanbuddy_update_reminder_version'), '1.6.0');
+  assert.equal(U.reminderSeen(st), '1.6.0');
+  U.markReminder(st, '');
+  assert.equal(U.reminderSeen(st), '?');
+  const bad = { getItem() { throw new Error('x'); }, setItem() { throw new Error('x'); } };
+  assert.equal(U.reminderSeen(bad), null);
+  assert.equal(U.markReminder(bad, '1.6.0'), false);
+  assert.equal(U.reminderSeen(null), null);
+  assert.equal(U.markReminder(null, '1.6.0'), false);
 });
 
 test('cleanVersion : seulement un numéro de version, rien d’autre venu du réseau', () => {
@@ -95,7 +130,7 @@ test('cleanVersion : seulement un numéro de version, rien d’autre venu du ré
   for (const bad of ['', null, undefined, '1.5.0 (2)', '<img src=x onerror=alert(1)>', 'v1.5', '1..5', '1.5.0.0.1']) {
     assert.equal(U.cleanVersion(bad), '', String(bad));
   }
-  assert.deepEqual(U.decide(null, { kind: 'store', version: '<b>' }), { kind: 'store', version: '' });
+  assert.deepEqual(U.decide(null, { kind: 'store', version: '<b>' }, true), { kind: 'store', version: '' });
 });
 
 test('ancien silence de 3 jours : la clé est effacée si elle existe, rien sinon, jamais d’erreur', () => {

@@ -1,8 +1,11 @@
 /* Mises à jour de l’app mobile.
  * - « live » : le nouveau contenu est déjà téléchargé, il s’installe en un geste (fenêtre en bas d’écran, inchangée) ;
- * - « store » : une version native plus récente est sur l’App Store. Écran entier « Mets à jour Ocean Buddy », rappelé à
- *   chaque lancement et à chaque retour dans l’app après au moins 10 minutes ailleurs ; « Plus tard » ne le ferme que
- *   pour ce moment-là. Jamais bloquant : l’écran se ferme toujours. Quand proposer quoi : app-update-model.js.
+ * - « store » : la coque native est trop vieille pour recevoir les mises à jour directes (sous native_min) et une version
+ *   plus récente est sur l’App Store. Écran entier « Mets à jour Ocean Buddy », rappelé à chaque lancement et à chaque
+ *   retour dans l’app après au moins 10 minutes ailleurs ; « Plus tard » ne le ferme que pour ce moment-là ;
+ * - « reminder » : une version plus récente est sur l’App Store mais la coque reçoit encore tout en direct. Petite
+ *   bannière en bas d’écran, fermable, une seule fois par version de l’App Store.
+ *   Jamais bloquant : tout se ferme. Quand proposer quoi : app-update-model.js.
  * Sur le site web, ce fichier ne fait rien. */
 (function(){
   const M=window.OceanMobile;
@@ -10,7 +13,8 @@
   const U=window.AppUpdateModel;
   if(!U)return;
   /* L’ancien silence de 3 jours n’existe plus. */
-  U.forgetLegacySnooze((()=>{try{return window.localStorage;}catch(_){return null;}})());
+  const storage=()=>{try{return window.localStorage;}catch(_){return null;}};
+  U.forgetLegacySnooze(storage());
   let state=U.initial(),open=null,pending=null,running=false;
   /* Barre d’état : l’écran entier est crème, l’heure et la batterie passent en foncé le temps qu’il est ouvert. */
   let bar='light',ownBar=false;
@@ -84,13 +88,33 @@
     requestAnimationFrame(()=>wrap.classList.add('show'));
   }
 
+  /* Rappel discret : bannière non bloquante au-dessus de la barre du bas, sans piège de focus, une fois par version. */
+  function showReminder(version){
+    if(open)return;open='reminder';
+    const wrap=el('div','app-update-reminder');
+    wrap.setAttribute('role','status');wrap.setAttribute('aria-live','polite');
+    const body=el('div','app-update-reminder-text'),text=el('p','app-update-reminder-title','Une nouvelle version t’attend sur l’App Store.');
+    body.append(text);
+    if(version)body.append(el('p','app-update-reminder-version',`Version ${version}`));
+    const acts=el('div','app-update-reminder-actions'),go=el('button','app-update-reminder-go','Mettre à jour'),later=el('button','app-update-reminder-later','Plus tard');
+    go.type='button';later.type='button';acts.append(go,later);wrap.append(body,acts);
+    const close=()=>{wrap.classList.remove('show');setTimeout(()=>wrap.remove(),260);open=null;};
+    go.addEventListener('click',()=>{try{M.updates.openStore();}finally{close();}});
+    later.addEventListener('click',close);
+    wrap.addEventListener('keydown',e=>{if(e.key==='Escape'){e.preventDefault();close();}});
+    document.body.append(wrap);
+    requestAnimationFrame(()=>wrap.classList.add('show'));
+  }
+
   // Le téléchargement se fait tout de suite ; la fenêtre attend la fin de l’accueil, la fermeture de « Crée ton compte » (.oba)
   // et celle des feuilles <dialog> (page d’un pays, voyage…), qui passeraient sinon par-dessus elle.
   function showWhenFree(next){
     pending=next.kind;
     if(onboarding()||document.hidden||document.querySelector('.oba,dialog[open]')){setTimeout(()=>showWhenFree(next),5000);return;}
     pending=null;
-    if(next.kind==='live')showLive();else showStore(next.version);
+    if(next.kind==='live')showLive();
+    else if(next.kind==='reminder'){U.markReminder(storage(),next.version);showReminder(next.version);}
+    else showStore(next.version);
   }
   const screen=()=>open||pending||null;
 
@@ -101,13 +125,17 @@
     running=true;
     try{
       let live=null,store=null;
-      if(todo.live){state=U.liveChecked(state,now);live=await M.updates.checkLive().catch(()=>null);}
+      if(todo.live){
+        let liveOk=true;
+        state=U.liveChecked(state,now);live=await M.updates.checkLive().catch(()=>{liveOk=false;return null;});
+        state=U.liveResult(state,live,liveOk);
+      }
       if(todo.store&&!(live&&live.kind==='live')){
         let ok=true;
         store=await M.updates.checkStore().catch(()=>{ok=false;return null;});
         state=U.storeChecked(state,ok);
       }
-      const next=U.decide(live,store);
+      const next=U.decide(live,store,state.forced,U.reminderSeen(storage()));
       if(next)showWhenFree(next);
     }finally{running=false;}
   }

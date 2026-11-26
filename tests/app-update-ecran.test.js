@@ -2,7 +2,7 @@
    Faux DOM minimal et horloge simulée : le vrai app-update-model.js et le vrai app-update.js tournent dans un contexte vm.
    On vérifie le rappel « tout le temps » (chaque lancement, chaque retour après 10 min), « Plus tard » pour ce moment
    seulement, le bouton qui ouvre l’App Store, l’accessibilité (dialog, focus, piège du focus), le cas « live » inchangé,
-   le site web muet, puis les styles, les textes et leurs traductions. */
+   le site web muet, le rappel discret (coque qui reçoit encore le web : une fois par version), puis les styles, les textes et leurs traductions. */
 const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -63,7 +63,8 @@ function boot(opts = {}) {
   const clock = { t: 1_800_000_000_000 }, timers = [], doc = makeDoc();
   const calls = { live: 0, store: 0, open: 0, apply: 0 }, bars = [], toasts = [], winListeners = {};
   const storage = new Map(Object.entries(opts.storage || {})), removed = [];
-  const env = { live: opts.live || null, store: 'store' in opts ? opts.store : { kind: 'store', version: '1.5.0' }, storeFails: false };
+  /* Par défaut la coque est sous native_min (checkLive répond { kind:'store' }) : écran entier. Rappel : { live: null }. */
+  const env = { live: 'live' in opts ? opts.live : { kind: 'store' }, store: 'store' in opts ? opts.store : { kind: 'store', version: '1.5.0' }, storeFails: false };
   const ctx = {
     document: doc, console,
     localStorage: { getItem: k => (storage.has(k) ? storage.get(k) : null), setItem: (k, v) => storage.set(k, String(v)), removeItem: k => { removed.push(k); storage.delete(k); } },
@@ -290,6 +291,107 @@ test('le Retour (Android) et les autres fenêtres reconnaissent l’écran : cla
   for (const f of ['app.js', 'account-sync.js']) assert.match(read(f), /\.app-update,/, f + ' attend la fermeture de l’écran');
 });
 
+/* ---------- Rappel discret (décision 18) ---------- */
+const reminder = app => app.doc.body.children.find(c => c.cls.has('app-update-reminder')) || null;
+
+test('coque à jour pour le web mais version plus récente sur l’App Store : simple rappel, pas d’écran entier', async () => {
+  const app = boot({ live: null });
+  await app.advance(4000);
+  assert.equal(app.screens().length, 0, 'aucun écran entier ni fenêtre');
+  const r = reminder(app);
+  assert.ok(r, 'bannière affichée');
+  assert.ok(r.cls.has('show'));
+  assert.equal(r.getAttribute('role'), 'status');
+  assert.equal(r.getAttribute('aria-modal'), null, 'non bloquante');
+  assert.equal(find(r, 'app-update-reminder-title').textContent, 'Une nouvelle version t’attend sur l’App Store.');
+  assert.equal(find(r, 'app-update-reminder-version').textContent, 'Version 1.5.0');
+  assert.equal(find(r, 'app-update-reminder-go').textContent, 'Mettre à jour');
+  assert.equal(find(r, 'app-update-reminder-later').textContent, 'Plus tard');
+  assert.equal(app.doc.activeElement, app.doc.body, 'ne prend pas le focus');
+  assert.deepEqual(app.bars, [], 'barre d’état intacte');
+  assert.equal(app.storage.get('oceanbuddy_update_reminder_version'), '1.5.0');
+});
+
+test('rappel : « Mettre à jour » ouvre l’App Store, « Plus tard » ferme, Échap ferme', async () => {
+  const a = boot({ live: null });
+  await a.advance(4000);
+  find(reminder(a), 'app-update-reminder-go').click();
+  assert.equal(a.calls.open, 1);
+  await a.advance(300);
+  assert.equal(reminder(a), null);
+  const b = boot({ live: null });
+  await b.advance(4000);
+  find(reminder(b), 'app-update-reminder-later').click();
+  await b.advance(300);
+  assert.equal(reminder(b), null);
+  assert.equal(b.calls.open, 0);
+  const c = boot({ live: null });
+  await c.advance(4000);
+  reminder(c).dispatch('keydown', { key: 'Escape' });
+  await c.advance(300);
+  assert.equal(reminder(c), null);
+});
+
+test('rappel : une seule fois par version, même après 10 min ailleurs ou un relancement de l’app', async () => {
+  const app = boot({ live: null });
+  await app.advance(4000);
+  find(reminder(app), 'app-update-reminder-later').click();
+  await app.advance(300);
+  await app.away(15 * MIN);
+  assert.equal(reminder(app), null, 'retour après 15 min : rien');
+  assert.equal(app.calls.store, 2, 'l’App Store est bien reinterrogé');
+  const relaunch = boot({ live: null, storage: Object.fromEntries(app.storage) });
+  await relaunch.advance(4000);
+  assert.equal(reminder(relaunch), null, 'nouveau lancement : même version, rien');
+  /* Une version plus récente de l’App Store : le rappel revient une fois. */
+  const next = boot({ live: null, store: { kind: 'store', version: '1.6.0' }, storage: Object.fromEntries(app.storage) });
+  await next.advance(4000);
+  assert.ok(reminder(next), 'nouvelle version : nouveau rappel');
+  assert.equal(find(reminder(next), 'app-update-reminder-version').textContent, 'Version 1.6.0');
+  assert.equal(next.storage.get('oceanbuddy_update_reminder_version'), '1.6.0');
+});
+
+test('coque sous native_min : l’écran entier revient aussi quand la vérification directe n’a pas lieu au retour', async () => {
+  const app = boot();                                 // live : { kind:'store' } au lancement
+  await app.advance(4000);
+  find(app.storeScreen(), 'app-update-later').click();
+  await app.advance(300);
+  app.env.live = null;                                // la vérification directe (30 min) ne rejouera pas tout de suite
+  await app.away(11 * MIN);
+  assert.ok(app.storeScreen(), 'état « coque trop vieille » gardé : écran entier, pas un rappel');
+  assert.equal(reminder(app), null);
+  assert.equal(app.storage.size, 0, 'aucune clé de rappel posée pour l’écran entier');
+});
+
+test('rappel : attend la fin de l’accueil comme l’écran, jamais en même temps qu’une fenêtre, silence sans réseau ni mise à jour', async () => {
+  const app = boot({ live: null });
+  app.doc.busy = true;
+  await app.advance(4000 + 12000);
+  assert.equal(reminder(app), null);
+  assert.equal(app.storage.size, 0, 'rien retenu tant que la bannière n’est pas montrée');
+  app.doc.busy = false;
+  await app.advance(5000);
+  assert.ok(reminder(app));
+  const live = boot({ live: { kind: 'live', id: 'b1', seq: 1 } });
+  await live.advance(4000);
+  assert.equal(reminder(live), null, 'mise à jour directe prête : sa fenêtre seulement');
+  const fail = boot({ live: null }); fail.env.storeFails = true;
+  await fail.advance(4000);
+  assert.equal(reminder(fail), null);
+  const none = boot({ live: null, store: null });
+  await none.advance(4000);
+  assert.equal(reminder(none), null);
+  assert.equal(none.storage.size, 0);
+});
+
+test('rappel : stockage bloqué, jamais d’erreur (il peut revenir, il ne bloque rien)', async () => {
+  const app = boot({ live: null });
+  app.ctx.localStorage.setItem = () => { throw new Error('stockage plein'); };
+  await app.advance(4000);
+  assert.ok(reminder(app));
+});
+
+
 test('index.html charge le modèle juste avant app-update.js', () => {
   const html = read('index.html');
   const a = html.indexOf('<script src="app-update-model.js'), b = html.indexOf('<script src="app-update.js');
@@ -342,6 +444,15 @@ const lum = c => { const [r, g, b] = c.map(v => { v /= 255; return v <= 0.03928 
 const ratio = (a, b) => { const x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); };
 const mix = (a, b, p) => a.map((v, i) => Math.round(v * p + b[i] * (1 - p)));
 
+test('styles : rappel discret, zones de toucher de 44 px, zone sûre, jetons seulement, mouvement réduit', () => {
+  const c = noComments(css.slice(css.indexOf('Rappel discret'), css.indexOf('Écran entier « Mets à jour')));
+  assert.match(c, /\.app-update-reminder\{position:fixed;[^}]*env\(safe-area-inset-bottom,0px\)/);
+  assert.match(c, /\.app-update-reminder-actions button\{min-height:44px/);
+  assert.match(c, /@media\(prefers-reduced-motion:reduce\)\{\.app-update-reminder\{transition:none\}\}/);
+  assert.match(c, /body\.reduce-motion \.app-update-reminder\{transition:none\}/);
+  assert.doesNotMatch(c, /text-transform:uppercase|animation|infinite|#[0-9a-fA-F]{3,8}\b|rgba?\(/);
+});
+
 test('contraste AA sur le fond crème', () => {
   const t = tokens(), cream = rgb(t['--t-cream']), petrol = rgb(t['--t-petrol']), ink = rgb(t['--t-ink']), ink2 = rgb(t['--t-ink2']), sun = rgb(t['--t-sun']);
   assert.ok(ratio(petrol, cream) >= 4.5, 'titre pétrole sur crème');
@@ -374,6 +485,7 @@ test('textes : tutoiement, ni capitales, ni flèches, ni tirets longs, ni points
       assert.doesNotMatch(text.replace('{0}', ''), /\b[A-ZÀ-Ö]{2,}\b/, 'pas de mot en capitales : ' + text);
     }
   }
+  for (const k of ['Une nouvelle version t’attend sur l’App Store.', 'Version {0}', 'Mettre à jour', 'Plus tard']) assert.ok(src.split(k.replace('{0}', '${version}')).length > 2, 'rappel : texte réutilisé, déjà traduit : ' + k);
   assert.doesNotMatch(src, /\bvous\b|\bvotre\b/i, 'tutoiement');
   assert.ok(!fr.includes('Ocean Buddy évolue !'), 'ancienne fenêtre « store » retirée');
 });
