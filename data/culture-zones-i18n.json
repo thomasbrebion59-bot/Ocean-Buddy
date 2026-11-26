@@ -48,7 +48,38 @@
    "dk-jutland-hvidesande": "Hvide Sande",
    "ie-sligo-easkey": "Easkey",
    "ec-galapagos-puntacarola": "San Cristóbal",
-   "vi-saintjohn-trunkbay": "Trunk Bay and Saint John"
+   "vi-saintjohn-trunkbay": "Trunk Bay and Saint John",
+   "fr-paysbasque-cotebasque": "Biarritz, Anglet and Saint-Jean-de-Luz",
+   "fr-gironde-lacanau": "Lacanau",
+   "fr-morbihan-belleile": "Belle-Île-en-Mer, wild coast",
+   "fr-bretagne-saintmalo": "Saint-Malo",
+   "fr-normandie-etretat": "Étretat",
+   "fr-provence-calanques": "Calanques of Marseille and Cassis",
+   "fr-var-pampelonne": "Pampelonne and Saint-Tropez",
+   "gp-basseterre-cousteau": "Cousteau Reserve and the leeward coast",
+   "mq-anses-darlet-dufour": "Anse Dufour and Les Anses-d’Arlet",
+   "pt-leiria-nazare": "Nazaré",
+   "pt-peniche": "Peniche and Baleal",
+   "pt-madere-jardimdomar": "Madeira, south-west coast",
+   "es-paysbasque-guipuzcoa-biscaye": "Mundaka, Zarautz and San Sebastián",
+   "es-andalousie-tarifa": "Tarifa and Bolonia",
+   "es-canaries-lanzarote": "Famara and La Santa, Lanzarote",
+   "gb-cornwall-fistral": "Fistral and Newquay",
+   "ie-clare-lahinch": "Lahinch and County Clare",
+   "it-campanie-capri": "Capri",
+   "gr-cyclades-milos": "Milos",
+   "gr-crete-balos": "Balos and Kissamos Bay",
+   "hr-dalmatie-brac": "Bol and the island of Brač",
+   "ma-souss-agadir-taghazout": "Taghazout, Anchor Point and Agadir",
+   "ma-essaouira-sidikaouki": "Essaouira and Sidi Kaouki",
+   "cv-sal": "Sal island",
+   "sc-ladigue-praslin": "La Digue and Praslin",
+   "us-hawaii-oahu": "Oahu: North Shore and Waikiki",
+   "cr-nicoya": "Nicoya Peninsula",
+   "id-bali-bukit": "Uluwatu and Padang Padang",
+   "nz-raglan": "Raglan",
+   "jp-kanagawa-shonan": "Shonan, Kamakura and Enoshima",
+   "br-santacatarina-floripa": "Joaquina, Praia Mole and Santa Catarina island"
   },
   "facts": {
    "fr-landes-hossegor--le-pastis-landais": {
@@ -834,6 +865,506 @@
    "vi-saintjohn-trunkbay--le-sentier-sous-marin": {
     "title": "Underwater trail",
     "text": "The trail runs along Trunk Bay Cay for about 90 m (300 feet), and its plaques help beginners recognize marine life."
+   },
+   "fr-paysbasque-cotebasque--le-gateau-basque": {
+    "title": "Gâteau basque",
+    "text": "Shortcrust pastry filled with black cherries or custard: the “house biscuit” (etxeko biskotxa), served on feast days."
+   },
+   "fr-paysbasque-cotebasque--le-rocher-de-la-vierge": {
+    "title": "Rocher de la Vierge",
+    "text": "A promontory shaped like a ship’s hull, topped by a statue of the Virgin: the emblem of Biarritz, with views over the bay and the Pyrenees."
+   },
+   "fr-paysbasque-cotebasque--le-ttoro-de-saint-jean-de-luz": {
+    "title": "Ttoro of Saint-Jean-de-Luz",
+    "text": "The fishermen’s soup of Saint-Jean-de-Luz, Ciboure and Socoa, originally made from the unsold fish of the day: hake, shellfish and clams."
+   },
+   "fr-paysbasque-cotebasque--le-macaron-de-saint-jean-de-luz": {
+    "title": "Macaron of Saint-Jean-de-Luz",
+    "text": "A pastry cook named Adam is said to have offered them to Louis XIV for his wedding in 1660, and his descendants keep the tradition alive."
+   },
+   "fr-paysbasque-cotebasque--la-maison-de-l-infante": {
+    "title": "Maison de l’Infante",
+    "text": "A pink brick and stone house (about 1640) on the harbour, where the Infanta Maria Theresa was received to marry Louis XIV in 1660."
+   },
+   "fr-gironde-lacanau--le-lacanau-pro": {
+    "title": "Lacanau Pro",
+    "text": "France’s oldest professional surf competition, born in 1979 at the Lacanau Surf Club, is held every year in August."
+   },
+   "fr-gironde-lacanau--le-cannele": {
+    "title": "Cannelé",
+    "text": "A small Bordeaux cake with rum and vanilla, baked in a fluted mould, originally copper, that gives it a thin caramelised crust."
+   },
+   "fr-gironde-lacanau--le-lac-de-lacanau": {
+    "title": "Lake Lacanau",
+    "text": "At nearly 2,000 hectares, one of the big lakes of the Landes coast; the Canal des Étangs links it to Hourtin in the north and Arcachon Bay in the south."
+   },
+   "fr-gironde-lacanau--le-45e-parallele": {
+    "title": "The 45th parallel",
+    "text": "Lacanau lies on the 45th parallel north: halfway between the North Pole and the equator, about 5,000 km from each."
+   },
+   "fr-morbihan-belleile--les-aiguilles-de-port-coton": {
+    "title": "Aiguilles de Port-Coton",
+    "text": "These rocks on the wild coast are named after the foam which, in heavy swell, looks like a cotton veil. Monet painted them in 1886."
+   },
+   "fr-morbihan-belleile--les-acadiens-de-belle-ile": {
+    "title": "The Acadians of Belle-Île",
+    "text": "From 1765, 78 Acadian families driven out in the “Great Upheaval” of 1755 settled on the island."
+   },
+   "fr-morbihan-belleile--l-agneau-du-large": {
+    "title": "Agneau du large",
+    "text": "The “Agneau du large” label, created in 1994, certifies a lamb born on the island that has spent at least 60 days at pasture."
+   },
+   "fr-morbihan-belleile--le-bois-du-genie": {
+    "title": "Bois du Génie",
+    "text": "This wood was planted around Vauban’s fortifications to hide and protect them; its name comes from the army engineers who decided it."
+   },
+   "fr-bretagne-saintmalo--la-route-du-rhum": {
+    "title": "Route du Rhum",
+    "text": "A solo race between Saint-Malo and Guadeloupe, every four years since 1978, from late October to early November."
+   },
+   "fr-bretagne-saintmalo--le-grand-be": {
+    "title": "Grand Bé",
+    "text": "An uninhabited island below the ramparts, reached on foot at low tide: Chateaubriand is buried there, as he wished."
+   },
+   "fr-bretagne-saintmalo--la-cite-des-corsaires": {
+    "title": "The city of privateers",
+    "text": "Once a city of privateers, Saint-Malo gave birth to captains such as Duguay-Trouin and Surcouf; its people are the Malouins."
+   },
+   "fr-bretagne-saintmalo--les-huitres-plates-de-cancale": {
+    "title": "Flat oysters of Cancale",
+    "text": "Fifteen kilometres to the east, Cancale is known for its wild flat oysters, from natural deep-water beds."
+   },
+   "fr-normandie-etretat--les-falaises-et-les-trois-arches": {
+    "title": "Cliffs and the three arches",
+    "text": "Chalk cliffs pierced by three arches: Porte d’Amont, Porte d’Aval and the Manneporte, said to have been first carved by an underground river."
+   },
+   "fr-normandie-etretat--l-aiguille-creuse": {
+    "title": "L’Aiguille creuse",
+    "text": "Maurice Leblanc, who lived in Étretat, made the Needle the hideout of Arsène Lupin in his novel “L’Aiguille creuse” (1909)."
+   },
+   "fr-normandie-etretat--les-peintres-d-etretat": {
+    "title": "Painters of Étretat",
+    "text": "Monet, Courbet, Boudin and Marquet painted the character of the place, by turns calm or fierce, and made its reputation."
+   },
+   "fr-normandie-etretat--les-fetes-d-offenbach-et-de-maupassant": {
+    "title": "Offenbach and Maupassant parties",
+    "text": "In the 19th century, artists such as Offenbach and Maupassant threw parties here for their friends, as the resort became fashionable."
+   },
+   "fr-provence-calanques--la-bouillabaisse": {
+    "title": "Bouillabaisse",
+    "text": "Marseille’s emblematic fish soup, served with garlic-rubbed croutons spread with rouille, pieces of fish and potatoes."
+   },
+   "fr-provence-calanques--le-parc-national-des-calanques": {
+    "title": "Calanques National Park",
+    "text": "Created in April 2012, it is the first peri-urban national park in Europe and the third in the world."
+   },
+   "fr-provence-calanques--calanque": {
+    "title": "Calanque",
+    "text": "The word comes from the Provençal calanco: a valley carved by a river, then flooded by the sea."
+   },
+   "fr-provence-calanques--le-vin-de-cassis": {
+    "title": "Cassis wine",
+    "text": "Cassis is an appellation wine, the first AOC recognised in Provence, in 1936; it comes in white and rosé."
+   },
+   "fr-var-pampelonne--la-tarte-tropezienne": {
+    "title": "Tarte tropézienne",
+    "text": "A brioche split in two and filled with custard and butter cream; pastry cook Alexandre Micka’s original recipe is kept secret."
+   },
+   "fr-var-pampelonne--la-bravade-de-mai": {
+    "title": "Bravade of May",
+    "text": "On 16 May the mayor hands the pike to the Town Captain elected on Easter Monday; sailors and musketeers fire salvoes, and weapons are blessed."
+   },
+   "fr-var-pampelonne--la-bravade-du-15-juin": {
+    "title": "Bravade of 15 June",
+    "text": "On 15 June 1637 the people of Saint-Tropez defeated 21 Spanish galleys, a victory celebrated ever since with a bravade."
+   },
+   "fr-var-pampelonne--la-plage-de-pampelonne": {
+    "title": "Pampelonne beach",
+    "text": "A 4.5 km sandy beach covering 27 hectares, in the commune of Ramatuelle, not Saint-Tropez, on the state’s public maritime domain."
+   },
+   "gp-basseterre-cousteau--la-reserve-cousteau": {
+    "title": "Cousteau Reserve",
+    "text": "A marine reserve of about 400 hectares around the Pigeon islets, off Malendure beach: it protects the seabed and limits fishing."
+   },
+   "gp-basseterre-cousteau--le-gwoka": {
+    "title": "Gwoka",
+    "text": "Guadeloupean music played mostly on “ka” drums: the largest keeps the rhythm, the smallest follows the dancers and singers."
+   },
+   "gp-basseterre-cousteau--le-carnaval-de-guadeloupe": {
+    "title": "Guadeloupe carnival",
+    "text": "From January to Ash Wednesday: a grand parade in Pointe-à-Pitre on Fat Sunday, then Vaval, king of the carnival, is burned on the last day."
+   },
+   "gp-basseterre-cousteau--le-ti-punch": {
+    "title": "Ti’ punch",
+    "text": "Rum, lime and cane syrup: this little cocktail is said to have been born on Marie-Galante and is part of social life in the Antilles."
+   },
+   "mq-anses-darlet-dufour--deux-anses-deux-sables": {
+    "title": "Two coves, two sands",
+    "text": "Anse Dufour has white sand, its neighbour Anse Noire black volcanic sand, the only black sand beach in the south of Martinique."
+   },
+   "mq-anses-darlet-dufour--l-eglise-saint-henri": {
+    "title": "Saint-Henri church",
+    "text": "Beside the beach, one of Martinique’s most beautiful spots thanks to its line-up with the jetty; restored in 2008 after Hurricane Dean."
+   },
+   "mq-anses-darlet-dufour--le-feroce-d-avocat": {
+    "title": "Féroce d’avocat",
+    "text": "Mashed avocado with shredded salt cod and chilli: its name comes from the chilli. Mostly served as an aperitif or starter."
+   },
+   "mq-anses-darlet-dufour--le-madras": {
+    "title": "Madras",
+    "text": "A checked cloth from Madras, in India, turned into Creole headwraps in the Antilles; Joséphine de Beauharnais is said to have started the fashion."
+   },
+   "pt-leiria-nazare--les-sept-jupons": {
+    "title": "The seven petticoats",
+    "text": "Seven skirts, so tradition says. One disputed explanation: waiting for the fishermen, the women sheltered from the spray under the top ones."
+   },
+   "pt-leiria-nazare--la-fete-de-notre-dame-de-nazare": {
+    "title": "Feast of Our Lady of Nazaré",
+    "text": "8 September, a public holiday, falls during ten days of festivities: processions, fireworks, dancing, a fair and bullfights."
+   },
+   "pt-leiria-nazare--le-funiculaire-du-sitio": {
+    "title": "Sítio funicular",
+    "text": "Three districts: Praia, along the beach, the Sítio, the old village on the cliff, and Pederneira; a funicular links the beach to the Sítio."
+   },
+   "pt-leiria-nazare--la-plus-grosse-vague-surfee": {
+    "title": "Biggest wave surfed",
+    "text": "In 2020, Germany’s Sebastian Steudtner surfed a wave measured at 26.2 metres at Nazaré, the biggest ever surfed."
+   },
+   "pt-peniche--les-dentelles-aux-fuseaux": {
+    "title": "Bobbin lace",
+    "text": "Peniche lace (rendas de bilros) won a silver medal at the international exhibitions of Paris and London in 1851."
+   },
+   "pt-peniche--la-forteresse-de-peniche": {
+    "title": "Peniche fortress",
+    "text": "This fortress served as a political prison under the Estado Novo; today it houses a museum on the resistance to that regime."
+   },
+   "pt-peniche--un-grand-port-de-peche": {
+    "title": "A major fishing port",
+    "text": "One of Portugal’s major fishing ports, with shipyards and fish canneries; the town is partly ringed by 16th-century ramparts."
+   },
+   "pt-peniche--l-archipel-des-berlengas": {
+    "title": "Berlengas archipelago",
+    "text": "Off Peniche, lead anchor bars (2.5 m, 420 kg) have been found; one dates from the late 5th century BC."
+   },
+   "pt-madere-jardimdomar--la-poncha": {
+    "title": "Poncha",
+    "text": "A Madeiran drink: cane spirit, honey, lemon or orange. Its name comes from a word for “five”, like the original ingredients."
+   },
+   "pt-madere-jardimdomar--le-bolo-do-caco": {
+    "title": "Bolo do caco",
+    "text": "A flat round bread baked on a basalt slab, the “caco”, in Madeira and Porto Santo; served with garlic butter or as a sandwich."
+   },
+   "pt-madere-jardimdomar--les-malasadas-du-carnaval": {
+    "title": "Carnival malasadas",
+    "text": "A sweet treat of the island, eaten mostly during Madeira’s carnival."
+   },
+   "pt-madere-jardimdomar--le-vin-de-madere": {
+    "title": "Madeira wine",
+    "text": "English merchants settled in Funchal from the 17th century and controlled the wine trade; the Blandy’s house dates from 1811."
+   },
+   "es-paysbasque-guipuzcoa-biscaye--la-tamborrada": {
+    "title": "Tamborrada",
+    "text": "On 20 January in San Sebastián the flag is raised at midnight and the festival lasts 24 hours: cooks and soldiers parade drumming."
+   },
+   "es-paysbasque-guipuzcoa-biscaye--les-pintxos": {
+    "title": "Pintxos",
+    "text": "Small snacks to skewer (“pintxo” means thorn), eaten in bars and taverns; hugely popular all over the Basque Country."
+   },
+   "es-paysbasque-guipuzcoa-biscaye--le-txakoli-de-getaria": {
+    "title": "Getaria txakoli",
+    "text": "A very pale white wine, yellow to green, made around Getaria, Zarautz and Aia: the first txakoli to receive an appellation."
+   },
+   "es-paysbasque-guipuzcoa-biscaye--l-estuaire-d-urdaibai": {
+    "title": "Urdaibai estuary",
+    "text": "The Mundaka estuary, also called the Gernika estuary, is a 220 km² biosphere reserve on the Basque coast."
+   },
+   "es-andalousie-tarifa--levante-et-poniente": {
+    "title": "Levante and Poniente",
+    "text": "The Strait of Gibraltar at Tarifa speeds up the east (Levante) and west (Poniente) winds: an average of over 10 knots."
+   },
+   "es-andalousie-tarifa--le-chateau-de-guzman": {
+    "title": "Guzmán Castle",
+    "text": "Well preserved near the port, it was ordered around 960 by Caliph Abd al-Rahman III; the 13th-century Guzmán el Bueno tower is attached."
+   },
+   "es-andalousie-tarifa--la-peche-a-l-almadraba": {
+    "title": "Almadraba tuna fishing",
+    "text": "Ancient net traps for bluefin tuna, which enters the Mediterranean from February to July; Tarifa is one of the almadraba ports."
+   },
+   "es-andalousie-tarifa--baelo-claudia": {
+    "title": "Baelo Claudia",
+    "text": "At Bolonia, 22 km from Tarifa, the Roman town lived off tuna, salting and garum; Emperor Claudius made it a municipium."
+   },
+   "es-canaries-lanzarote--les-papas-arrugadas": {
+    "title": "Papas arrugadas",
+    "text": "Boiled “wrinkled” potatoes served with mojo rojo; you eat them without cutlery, straight from the shared dishes."
+   },
+   "es-canaries-lanzarote--le-mojo": {
+    "title": "Mojo",
+    "text": "A sauce of olive oil, garlic, chilli and spices, born in the Canaries: green (mojo verde), red (mojo rojo) or very spicy (mojo picón)."
+   },
+   "es-canaries-lanzarote--les-vignes-de-la-geria": {
+    "title": "Vines of La Geria",
+    "text": "At La Geria, lava from the 1730 Timanfaya eruption covers the ground: each vine is rooted down to the old soil, sheltered from the wind by a wall, the zoco."
+   },
+   "es-canaries-lanzarote--cesar-manrique": {
+    "title": "César Manrique",
+    "text": "The local artist César Manrique (born 1919) transformed the volcanic caves of Jameos del Agua in the 1970s, respecting nature."
+   },
+   "gb-cornwall-fistral--le-cornish-pasty": {
+    "title": "Cornish pasty",
+    "text": "A crimped pastry parcel filled with beef, potato, swede and onion; it has had protected geographical status in Europe since 2011."
+   },
+   "gb-cornwall-fistral--les-boardmasters": {
+    "title": "Boardmasters",
+    "text": "Music, surf and skate in Newquay, about five days over the second weekend of August; a surf contest since 1981, with music since 2005."
+   },
+   "gb-cornwall-fistral--le-huer-s-hut": {
+    "title": "Huer’s Hut",
+    "text": "A small stone building, perhaps 14th century, a lookout in the 16th: the “huer” signalled the sardines and guided the fishermen to them."
+   },
+   "gb-cornwall-fistral--le-saffron-bun": {
+    "title": "Saffron bun",
+    "text": "A sweet bun with saffron, raisins and spices, called a “revel bun” in Cornwall; baked in a large tin, it becomes a “saffron cake”."
+   },
+   "ie-clare-lahinch--leath-inse": {
+    "title": "Leath Inse",
+    "text": "Lahinch comes from the Irish Leath Inse, “half-island” or “peninsula”."
+   },
+   "ie-clare-lahinch--le-golf-sur-les-dunes": {
+    "title": "Golf on the dunes",
+    "text": "Lahinch Golf Club, founded in 1892, is a links course; in 2024 its Old Course is ranked 27th best golf course in the world by Golf Digest."
+   },
+   "ie-clare-lahinch--les-falaises-de-moher": {
+    "title": "Cliffs of Moher",
+    "text": "In the same County Clare, they run for about 14 km and rise to 214 metres, just north of O’Brien’s Tower."
+   },
+   "ie-clare-lahinch--l-ecole-de-musique-willie-clancy": {
+    "title": "Willie Clancy Summer School",
+    "text": "At Milltown Malbay, the world’s largest summer school of traditional music: nearly a thousand students, in early July."
+   },
+   "it-campanie-capri--la-fete-de-san-costanzo": {
+    "title": "Feast of San Costanzo",
+    "text": "On 14 May the town of Capri celebrates San Costanzo, its patron saint; Anacapri celebrates its own, Sant’Antonio, on 13 June."
+   },
+   "it-campanie-capri--l-insalata-caprese": {
+    "title": "Insalata caprese",
+    "text": "Mozzarella, tomatoes and basil with olive oil; its name points to Capri, where it is thought to have been born. Famous in the 1950s."
+   },
+   "it-campanie-capri--la-grotte-bleue": {
+    "title": "Blue Grotto",
+    "text": "A sea cave: sunlight enters through an underwater opening and makes the water glow bright blue; it runs 50 m into the cliff."
+   },
+   "it-campanie-capri--le-limoncello": {
+    "title": "Limoncello",
+    "text": "A lemon-zest liqueur made mostly around the Gulf of Naples; served well chilled as a digestif."
+   },
+   "gr-cyclades-milos--la-venus-de-milo": {
+    "title": "Venus de Milo",
+    "text": "The statue was found in 1820 on the island of Milos and has been on show at the Louvre in Paris since 1821."
+   },
+   "gr-cyclades-milos--l-obsidienne-de-milos": {
+    "title": "Obsidian of Milos",
+    "text": "Since the Early Helladic period, the island sold obsidian to much of mainland Greece, and to Cyprus, Crete and Egypt."
+   },
+   "gr-cyclades-milos--phylakopi": {
+    "title": "Phylakopi",
+    "text": "One of the most important sites of the Aegean world for the Early Bronze Age; Milos was a major economic centre of the Minoans."
+   },
+   "gr-cyclades-milos--les-sculptures-de-milos": {
+    "title": "Sculptures of Milos",
+    "text": "The island gave us the Poseidon of Milos (in Athens), the Asclepius of Milos (British Museum) and an Archaic Apollo, besides the Venus."
+   },
+   "gr-crete-balos--le-dakos": {
+    "title": "Dakos",
+    "text": "A Cretan salad: soaked hard bread (paximadi), tomatoes, feta or mizithra, herbs such as oregano; olives and capers are often added."
+   },
+   "gr-crete-balos--la-tsikoudia": {
+    "title": "Tsikoudia",
+    "text": "A grape-pomace spirit from Crete, 40 to 65% alcohol; in eastern Crete it is often called raki."
+   },
+   "gr-crete-balos--le-paximadi": {
+    "title": "Paximadi",
+    "text": "A hard bread of wholemeal wheat, chickpea or barley, like a rusk; often served at breakfast with jam or cheese."
+   },
+   "gr-crete-balos--imeri-gramvousa": {
+    "title": "Imeri Gramvousa",
+    "text": "The neighbouring island keeps a Venetian fort and the buildings of Cretan insurgents who lived there as pirates during the Greek War of Independence."
+   },
+   "hr-dalmatie-brac--le-zlatni-rat": {
+    "title": "Zlatni Rat",
+    "text": "A spit of white pebbles 2 km west of the port of Bol. Its tip shifts with wind and currents, sometimes within a few hours."
+   },
+   "hr-dalmatie-brac--la-pierre-blanche-de-brac": {
+    "title": "White stone of Brač",
+    "text": "The island’s white limestone, quarried for thousands of years, built Diocletian’s Palace in Split (295 to 305) and the Vimy Memorial."
+   },
+   "hr-dalmatie-brac--la-grotte-de-kopacina": {
+    "title": "Kopačina cave",
+    "text": "Between Supetar and Donji Humac, a cave with human traces from the 12th millennium BC, among the oldest in Dalmatia."
+   },
+   "hr-dalmatie-brac--l-huile-d-olive-de-brac": {
+    "title": "Olive oil of Brač",
+    "text": "Olives have been grown on the island since Roman times, and its oil now has a protected designation of origin."
+   },
+   "ma-souss-agadir-taghazout--l-huile-d-argan": {
+    "title": "Argan oil",
+    "text": "In Morocco, you dip bread in it at breakfast or pour some on couscous; the argan tree comes from Morocco and south-west Algeria."
+   },
+   "ma-souss-agadir-taghazout--l-amlou": {
+    "title": "Amlou",
+    "text": "A spread of crushed roasted almonds, honey and argan oil, served at breakfast or teatime with crêpes and pastries."
+   },
+   "ma-souss-agadir-taghazout--le-the-a-la-menthe": {
+    "title": "Mint tea",
+    "text": "Morocco’s most popular drink, atay: making a good mint tea is considered an art."
+   },
+   "ma-souss-agadir-taghazout--agadir-reconstruite": {
+    "title": "Agadir, rebuilt",
+    "text": "Destroyed by an earthquake in 1960, the city was rebuilt to anti-seismic standards; it is Morocco’s biggest seaside resort."
+   },
+   "ma-essaouira-sidikaouki--le-festival-gnaoua": {
+    "title": "Gnaoua Festival",
+    "text": "Founded in 1998, this yearly festival brings Gnaoua musicians from Morocco and guest artists from around the world to Essaouira."
+   },
+   "ma-essaouira-sidikaouki--le-bois-de-thuya": {
+    "title": "Thuya wood",
+    "text": "Thuya marquetry is the craft that supports most of Essaouira: in 2011, 58% of the town’s craftsmen worked this wood."
+   },
+   "ma-essaouira-sidikaouki--les-vents-de-la-baie": {
+    "title": "Winds of the bay",
+    "text": "Strong winds blow almost all the time in the bay: a renowned windsurfing and kitesurfing spot, with a World Cup stage."
+   },
+   "ma-essaouira-sidikaouki--sidi-kaouki": {
+    "title": "Sidi Kaouki",
+    "text": "25 km south of Essaouira, this small town is a windsurfing spot thanks to strong, steady winds and a moderate swell."
+   },
+   "cv-sal--la-cachupa": {
+    "title": "Cachupa",
+    "text": "Cape Verde’s national dish: a stew of maize, beans and fish or meat; leftovers are refried for breakfast with an egg."
+   },
+   "cv-sal--sal-le-sel": {
+    "title": "Sal, “the salt”",
+    "text": "Discovered on 3 December 1460, the island was called Chã (“flat”); it became Sal when two big salt pans were found there."
+   },
+   "cv-sal--le-grogue-et-le-ponche": {
+    "title": "Grogue and ponche",
+    "text": "Grogue is a sugar-cane spirit, popular in Cape Verde; it is the base of ponche, a kind of punch."
+   },
+   "cv-sal--le-pastel": {
+    "title": "Pastel",
+    "text": "A small fried turnover filled with fish or meat, served as a starter in Cape Verde."
+   },
+   "sc-ladigue-praslin--la-charrette-a-b-ufs": {
+    "title": "Ox cart",
+    "text": "On La Digue you hire bicycles near the jetty; the other way to get around is the ox cart, whose slow pace suits the island."
+   },
+   "sc-ladigue-praslin--la-vallee-de-mai": {
+    "title": "Vallée de Mai",
+    "text": "A 19.5-hectare palm forest on Praslin, a UNESCO site since 1983; home to the coco de mer and five other endemic palms."
+   },
+   "sc-ladigue-praslin--le-moutya": {
+    "title": "Moutya",
+    "text": "An African dance close to the séga: dancers follow a goatskin drum heated over a fire before the start; the rhythm is slow, then speeds up."
+   },
+   "sc-ladigue-praslin--la-cuisine-de-poisson": {
+    "title": "Fish cooking",
+    "text": "Fish has hundreds of recipes here: curry, raw with lemon, grilled or steamed; fried octopus and garlic lobster too."
+   },
+   "us-hawaii-oahu--eddie-aikau": {
+    "title": "Eddie Aikau",
+    "text": "The Eddie Aikau Big Wave Invitational, “The Eddie”, is named after him; he died in 1978 during the voyage of the canoe Hōkūleʻa."
+   },
+   "us-hawaii-oahu--duke-kahanamoku": {
+    "title": "Duke Kahanamoku",
+    "text": "Born under the Kingdom of Hawaii, this swimmer held the 100 m freestyle world record and won five Olympic medals (1912, 1920, 1924)."
+   },
+   "us-hawaii-oahu--lei-day": {
+    "title": "Lei Day",
+    "text": "On 1 May, the lei festival, official since 1929; each island has its flower, yellow ilima for Oahu. Big ceremony at Kapiʻolani Park."
+   },
+   "us-hawaii-oahu--le-plate-lunch": {
+    "title": "Plate lunch",
+    "text": "A typical Hawaiian meal: one or two scoops of rice, macaroni salad and a dish often Japanese in style, like chicken katsu."
+   },
+   "cr-nicoya--le-gallo-pinto": {
+    "title": "Gallo pinto",
+    "text": "“Spotted rooster” in Spanish: rice and beans cooked with garlic, oregano and onion. National dish of Costa Rica and Nicaragua."
+   },
+   "cr-nicoya--une-zone-bleue": {
+    "title": "A blue zone",
+    "text": "Nicoya is cited among the “blue zones” (exceptional longevity). The idea is unproven: those born after 1930 do not live longer there."
+   },
+   "cr-nicoya--les-chorotega": {
+    "title": "The Chorotega",
+    "text": "Before the Spanish arrived, the Chorotega people lived here, in towns such as Zapatí, Nacaome and Nicopasaya."
+   },
+   "cr-nicoya--le-refuge-d-ostional": {
+    "title": "Ostional refuge",
+    "text": "An 85.7 km² refuge, protected since 1982, with nesting beaches for the olive ridley turtle: per the WWF, one of the two main sites in the world."
+   },
+   "id-bali-bukit--le-temple-d-uluwatu": {
+    "title": "Uluwatu temple",
+    "text": "Built on the edge (ulu) of a 70 m cliff (watu); legend says this rock is part of the petrified boat of the goddess Dewi Danu."
+   },
+   "id-bali-bukit--le-kecak": {
+    "title": "Kecak",
+    "text": "A dance sung by a chorus of men, performed daily at 6 p.m. in Balinese temples such as Uluwatu and Tanah Lot."
+   },
+   "id-bali-bukit--melasti": {
+    "title": "Melasti",
+    "text": "Before Nyepi, Balinese Hindus go to the sea to purify themselves: they symbolically cast the past’s evil into it and wash the temples’ sacred objects."
+   },
+   "id-bali-bukit--nyepi-le-jour-du-silence": {
+    "title": "Nyepi, the day of silence",
+    "text": "The Balinese new year: silence, fasting and meditation. No one, tourists included, goes on the beaches or the streets; the airport closes."
+   },
+   "nz-raglan--waikeri": {
+    "title": "Waikeri",
+    "text": "The traditional name of Manu Bay is Waikeri, “turning waters”; this surf spot appears in the film The Endless Summer (1966)."
+   },
+   "nz-raglan--le-film-the-endless-summer": {
+    "title": "The film The Endless Summer",
+    "text": "Bruce Brown’s 1966 documentary: the Californian surfers Mike Hynson and Robert August travel the world, Manu Bay included."
+   },
+   "nz-raglan--le-hangi": {
+    "title": "Hāngī",
+    "text": "Māori cooking in an earth oven (umu): stones are heated, then the food is buried; still used for big occasions."
+   },
+   "nz-raglan--le-mont-karioi": {
+    "title": "Mount Karioi",
+    "text": "An extinct volcano 2.4 million years old, 8 km south-west of Raglan, the first of six aligned volcanoes, the biggest being Pirongia."
+   },
+   "jp-kanagawa-shonan--le-grand-bouddha-de-kamakura": {
+    "title": "Great Buddha of Kamakura",
+    "text": "A bronze statue 13.35 m high and about 93 tonnes, dated to around 1252 in the temple records; it is hollow and can be visited inside."
+   },
+   "jp-kanagawa-shonan--le-yabusame": {
+    "title": "Yabusame",
+    "text": "Mounted archery: the archer shoots three arrows at three wooden targets. Seen at Tsurugaoka Hachiman-gū shrine, in Kamakura."
+   },
+   "jp-kanagawa-shonan--l-ile-d-enoshima": {
+    "title": "Enoshima island",
+    "text": "Linked by a 389 m bridge, the island is dedicated to Benzaiten, goddess of music, said to have raised it from the sea in the 6th century."
+   },
+   "jp-kanagawa-shonan--kamakura-capitale-des-shoguns": {
+    "title": "Kamakura, capital of the shoguns",
+    "text": "In 1192, shogun Minamoto no Yoritomo made Kamakura, then a mere town, his capital; his government ruled the country until 1333."
+   },
+   "br-santacatarina-floripa--l-heritage-acorien": {
+    "title": "Azorean heritage",
+    "text": "In the mid-18th century, thousands of Azoreans migrated here; Florianópolis still shows it: houses, crafts, cooking."
+   },
+   "br-santacatarina-floripa--les-huitres-de-ribeirao-da-ilha": {
+    "title": "Oysters of Ribeirão da Ilha",
+    "text": "This district of Florianópolis, one of the oldest Azorean settlements, is Brazil’s biggest oyster producer."
+   },
+   "br-santacatarina-floripa--joaquina-et-ses-dunes": {
+    "title": "Joaquina and its dunes",
+    "text": "The beach, prized by surfers for the quality of its waves, is surrounded by the Lagoa da Conceição dunes municipal nature park."
+   },
+   "br-santacatarina-floripa--praia-mole": {
+    "title": "Praia Mole",
+    "text": "A 960-metre beach on the island’s east coast, known for drawing young people, surfers and paragliders."
    }
   }
  },
@@ -885,7 +1416,38 @@
    "dk-jutland-hvidesande": "Hvide Sande",
    "ie-sligo-easkey": "Easkey",
    "ec-galapagos-puntacarola": "San Cristóbal",
-   "vi-saintjohn-trunkbay": "Trunk Bay y Saint John"
+   "vi-saintjohn-trunkbay": "Trunk Bay y Saint John",
+   "fr-paysbasque-cotebasque": "Biarritz, Anglet y San Juan de Luz",
+   "fr-gironde-lacanau": "Lacanau",
+   "fr-morbihan-belleile": "Belle-Île-en-Mer, costa salvaje",
+   "fr-bretagne-saintmalo": "Saint-Malo",
+   "fr-normandie-etretat": "Étretat",
+   "fr-provence-calanques": "Calanques de Marsella y de Cassis",
+   "fr-var-pampelonne": "Pampelonne y Saint-Tropez",
+   "gp-basseterre-cousteau": "Reserva Cousteau y costa a sotavento",
+   "mq-anses-darlet-dufour": "Anse Dufour y Les Anses-d’Arlet",
+   "pt-leiria-nazare": "Nazaré",
+   "pt-peniche": "Peniche y Baleal",
+   "pt-madere-jardimdomar": "Madeira, costa suroeste",
+   "es-paysbasque-guipuzcoa-biscaye": "Mundaka, Zarautz y San Sebastián",
+   "es-andalousie-tarifa": "Tarifa y Bolonia",
+   "es-canaries-lanzarote": "Famara y La Santa, Lanzarote",
+   "gb-cornwall-fistral": "Fistral y Newquay",
+   "ie-clare-lahinch": "Lahinch y el condado de Clare",
+   "it-campanie-capri": "Capri",
+   "gr-cyclades-milos": "Milos",
+   "gr-crete-balos": "Balos y la bahía de Kissamos",
+   "hr-dalmatie-brac": "Bol y la isla de Brač",
+   "ma-souss-agadir-taghazout": "Taghazout, Anchor Point y Agadir",
+   "ma-essaouira-sidikaouki": "Essaouira y Sidi Kaouki",
+   "cv-sal": "Isla de Sal",
+   "sc-ladigue-praslin": "La Digue y Praslin",
+   "us-hawaii-oahu": "Oahu: North Shore y Waikiki",
+   "cr-nicoya": "Península de Nicoya",
+   "id-bali-bukit": "Uluwatu y Padang Padang",
+   "nz-raglan": "Raglan",
+   "jp-kanagawa-shonan": "Shonan, Kamakura y Enoshima",
+   "br-santacatarina-floripa": "Joaquina, Praia Mole y la isla de Santa Catarina"
   },
   "facts": {
    "fr-landes-hossegor--le-pastis-landais": {
@@ -1671,6 +2233,506 @@
    "vi-saintjohn-trunkbay--le-sentier-sous-marin": {
     "title": "El sendero submarino",
     "text": "El sendero bordea Trunk Bay Cay a lo largo de unos 90 m (300 pies) y sus placas ayudan a los principiantes a reconocer la vida marina."
+   },
+   "fr-paysbasque-cotebasque--le-gateau-basque": {
+    "title": "El gâteau basque",
+    "text": "Masa quebrada rellena de cerezas negras o de crema pastelera: el «bizcocho de la casa» (etxeko biskotxa), que se sirve en los días de fiesta."
+   },
+   "fr-paysbasque-cotebasque--le-rocher-de-la-vierge": {
+    "title": "La roca de la Virgen",
+    "text": "Promontorio con forma de casco de barco, coronado por una estatua de la Virgen: el emblema de Biarritz, con vistas a la bahía y a los Pirineos."
+   },
+   "fr-paysbasque-cotebasque--le-ttoro-de-saint-jean-de-luz": {
+    "title": "El ttoro de San Juan de Luz",
+    "text": "La sopa de los pescadores de San Juan de Luz, Ciboure y Socoa, hecha en origen con el pescado sin vender: merluza, crustáceos y mariscos."
+   },
+   "fr-paysbasque-cotebasque--le-macaron-de-saint-jean-de-luz": {
+    "title": "El macaron de San Juan de Luz",
+    "text": "Un pastelero llamado Adam se los habría ofrecido a Luis XIV en su boda de 1660, y sus descendientes mantienen la tradición."
+   },
+   "fr-paysbasque-cotebasque--la-maison-de-l-infante": {
+    "title": "La casa de la Infanta",
+    "text": "Casa de ladrillo rosa y piedra (hacia 1640) en el puerto, donde fue recibida la infanta María Teresa para casarse con Luis XIV, en 1660."
+   },
+   "fr-gironde-lacanau--le-lacanau-pro": {
+    "title": "El Lacanau Pro",
+    "text": "La competición profesional de surf más antigua de Francia, nacida en 1979 en el Lacanau Surf Club, se celebra cada año en agosto."
+   },
+   "fr-gironde-lacanau--le-cannele": {
+    "title": "El cannelé",
+    "text": "Pastelito bordelés con ron y vainilla, cocido en un molde acanalado, antes de cobre, que le da una fina corteza caramelizada."
+   },
+   "fr-gironde-lacanau--le-lac-de-lacanau": {
+    "title": "El lago de Lacanau",
+    "text": "Con casi 2.000 hectáreas, uno de los grandes lagos de las Landas; el canal des Étangs lo une a Hourtin al norte y a la cuenca de Arcachon al sur."
+   },
+   "fr-gironde-lacanau--le-45e-parallele": {
+    "title": "El paralelo 45",
+    "text": "Lacanau está en el paralelo 45 norte: a medio camino entre el polo Norte y el ecuador, a unos 5.000 km de cada uno."
+   },
+   "fr-morbihan-belleile--les-aiguilles-de-port-coton": {
+    "title": "Las agujas de Port-Coton",
+    "text": "Estas rocas de la costa salvaje deben su nombre a la espuma que, con mucho oleaje, parece un velo de algodón. Monet las pintó en 1886."
+   },
+   "fr-morbihan-belleile--les-acadiens-de-belle-ile": {
+    "title": "Los acadianos de Belle-Île",
+    "text": "A partir de 1765, 78 familias acadianas expulsadas en la «gran deportación» de 1755 se instalaron en la isla."
+   },
+   "fr-morbihan-belleile--l-agneau-du-large": {
+    "title": "El cordero del mar abierto",
+    "text": "La etiqueta «Agneau du large», creada en 1994, certifica un cordero nacido en la isla que ha pasado al menos 60 días en el prado."
+   },
+   "fr-morbihan-belleile--le-bois-du-genie": {
+    "title": "El bosque del Génie",
+    "text": "Este bosque se plantó alrededor de las fortificaciones de Vauban para ocultarlas y protegerlas; su nombre viene del cuerpo de ingenieros militares que lo decidió."
+   },
+   "fr-bretagne-saintmalo--la-route-du-rhum": {
+    "title": "La Route du Rhum",
+    "text": "Regata en solitario entre Saint-Malo y Guadalupe, cada cuatro años desde 1978, de finales de octubre a principios de noviembre."
+   },
+   "fr-bretagne-saintmalo--le-grand-be": {
+    "title": "El Grand Bé",
+    "text": "Isla deshabitada al pie de las murallas, a la que se llega a pie con la marea baja: allí está enterrado Chateaubriand, según su deseo."
+   },
+   "fr-bretagne-saintmalo--la-cite-des-corsaires": {
+    "title": "La ciudad de los corsarios",
+    "text": "Antigua ciudad de corsarios, Saint-Malo vio nacer a capitanes como Duguay-Trouin y Surcouf; sus habitantes son los malouinos."
+   },
+   "fr-bretagne-saintmalo--les-huitres-plates-de-cancale": {
+    "title": "Las ostras planas de Cancale",
+    "text": "A quince kilómetros al este, Cancale es famosa por sus ostras planas salvajes, de bancos naturales en aguas profundas."
+   },
+   "fr-normandie-etretat--les-falaises-et-les-trois-arches": {
+    "title": "Los acantilados y los tres arcos",
+    "text": "Acantilados de creta con tres arcos: la porte d’Amont, la porte d’Aval y la Manneporte, que un río subterráneo habría excavado primero."
+   },
+   "fr-normandie-etretat--l-aiguille-creuse": {
+    "title": "La Aguja hueca",
+    "text": "Maurice Leblanc, que vivía en Étretat, hizo de la Aguja el escondite de Arsène Lupin en su novela «La Aguja hueca» (1909)."
+   },
+   "fr-normandie-etretat--les-peintres-d-etretat": {
+    "title": "Los pintores de Étretat",
+    "text": "Monet, Courbet, Boudin o Marquet pintaron aquí el carácter del lugar, ora sereno ora violento, y forjaron su fama."
+   },
+   "fr-normandie-etretat--les-fetes-d-offenbach-et-de-maupassant": {
+    "title": "Las fiestas de Offenbach y Maupassant",
+    "text": "En el siglo XIX, artistas como Offenbach o Maupassant daban aquí fiestas para sus amigos, cuando el balneario se ponía de moda."
+   },
+   "fr-provence-calanques--la-bouillabaisse": {
+    "title": "La bullabesa",
+    "text": "Sopa de pescado emblemática de Marsella, servida con costrones frotados con ajo y untados de rouille, trozos de pescado y patatas."
+   },
+   "fr-provence-calanques--le-parc-national-des-calanques": {
+    "title": "El Parque Nacional de las Calanques",
+    "text": "Creado en abril de 2012, es el primer parque nacional periurbano de Europa y el tercero del mundo."
+   },
+   "fr-provence-calanques--calanque": {
+    "title": "Calanque",
+    "text": "La palabra viene del provenzal calanco: un valle excavado por un río y luego invadido por el mar."
+   },
+   "fr-provence-calanques--le-vin-de-cassis": {
+    "title": "El vino de Cassis",
+    "text": "El cassis es un vino con denominación de origen, la primera AOC reconocida en Provenza, en 1936; se hace blanco y rosado."
+   },
+   "fr-var-pampelonne--la-tarte-tropezienne": {
+    "title": "La tarte tropézienne",
+    "text": "Brioche partida en dos y rellena de crema pastelera y crema de mantequilla; la receta original del pastelero Alexandre Micka es secreta."
+   },
+   "fr-var-pampelonne--la-bravade-de-mai": {
+    "title": "La bravade de mayo",
+    "text": "El 16 de mayo, el alcalde entrega la pica al Capitán de la Ciudad elegido el lunes de Pascua; marineros y mosqueteros disparan salvas y se bendicen las armas."
+   },
+   "fr-var-pampelonne--la-bravade-du-15-juin": {
+    "title": "La bravade del 15 de junio",
+    "text": "El 15 de junio de 1637, los tropezianos vencieron a 21 galeras españolas, una victoria que desde entonces se celebra con una bravade."
+   },
+   "fr-var-pampelonne--la-plage-de-pampelonne": {
+    "title": "La playa de Pampelonne",
+    "text": "Playa de arena de 4,5 km y 27 hectáreas, en el municipio de Ramatuelle y no en Saint-Tropez, en el dominio público marítimo del Estado."
+   },
+   "gp-basseterre-cousteau--la-reserve-cousteau": {
+    "title": "La reserva Cousteau",
+    "text": "Reserva marina de unas 400 hectáreas alrededor de los islotes Pigeon, frente a la playa de Malendure: protege los fondos y limita la pesca."
+   },
+   "gp-basseterre-cousteau--le-gwoka": {
+    "title": "El gwoka",
+    "text": "Música de Guadalupe que se toca sobre todo con tambores «ka»: el más grande lleva el ritmo y el más pequeño sigue a los bailarines y cantantes."
+   },
+   "gp-basseterre-cousteau--le-carnaval-de-guadeloupe": {
+    "title": "El carnaval de Guadalupe",
+    "text": "De enero al miércoles de Ceniza: gran desfile en Pointe-à-Pitre el Domingo Gordo y, el último día, se quema a Vaval, rey del carnaval."
+   },
+   "gp-basseterre-cousteau--le-ti-punch": {
+    "title": "El ti-punch",
+    "text": "Ron, lima y sirope de caña: este pequeño cóctel habría nacido en Marie-Galante y forma parte de la vida social de las Antillas."
+   },
+   "mq-anses-darlet-dufour--deux-anses-deux-sables": {
+    "title": "Dos calas, dos arenas",
+    "text": "Anse Dufour tiene arena blanca y su vecina Anse Noire, arena negra volcánica, la única playa de arena negra del sur de Martinica."
+   },
+   "mq-anses-darlet-dufour--l-eglise-saint-henri": {
+    "title": "La iglesia de Saint-Henri",
+    "text": "Junto a la playa, uno de los lugares más bonitos de Martinica por su alineación con el embarcadero; restaurada en 2008 tras el huracán Dean."
+   },
+   "mq-anses-darlet-dufour--le-feroce-d-avocat": {
+    "title": "El féroce de aguacate",
+    "text": "Aguacate machacado con bacalao salado desmenuzado y guindilla: su nombre viene de la guindilla. Se sirve sobre todo de aperitivo o de entrante."
+   },
+   "mq-anses-darlet-dufour--le-madras": {
+    "title": "El madrás",
+    "text": "Tela a cuadros venida de Madrás, en la India, convertida en tocado criollo en las Antillas; Josefina de Beauharnais habría lanzado la moda."
+   },
+   "pt-leiria-nazare--les-sept-jupons": {
+    "title": "Las siete enaguas",
+    "text": "Siete faldas, dice la tradición. Una explicación discutida: mientras esperaban a los pescadores, se protegían del rocío bajo las de arriba."
+   },
+   "pt-leiria-nazare--la-fete-de-notre-dame-de-nazare": {
+    "title": "La fiesta de Nuestra Señora de Nazaré",
+    "text": "El 8 de septiembre, festivo, cae durante diez días de fiesta: procesiones, fuegos artificiales, bailes, feria y corridas de toros."
+   },
+   "pt-leiria-nazare--le-funiculaire-du-sitio": {
+    "title": "El funicular del Sítio",
+    "text": "Tres barrios: Praia, junto a la playa, el Sítio, el casco viejo del acantilado, y Pederneira; un funicular une la playa con el Sítio."
+   },
+   "pt-leiria-nazare--la-plus-grosse-vague-surfee": {
+    "title": "La ola más grande surfeada",
+    "text": "En 2020, el alemán Sebastian Steudtner surfeó en Nazaré una ola medida en 26,2 metros, la más grande jamás surfeada."
+   },
+   "pt-peniche--les-dentelles-aux-fuseaux": {
+    "title": "Los encajes de bolillos",
+    "text": "Los encajes de Peniche (rendas de bilros) recibieron una medalla de plata en las exposiciones internacionales de París y Londres en 1851."
+   },
+   "pt-peniche--la-forteresse-de-peniche": {
+    "title": "La fortaleza de Peniche",
+    "text": "Esta fortaleza fue prisión política bajo el Estado Novo; hoy alberga un museo dedicado a la resistencia contra ese régimen."
+   },
+   "pt-peniche--un-grand-port-de-peche": {
+    "title": "Un gran puerto pesquero",
+    "text": "Gran puerto pesquero de Portugal, con astilleros y conserveras; la ciudad está en parte rodeada de murallas del siglo XVI."
+   },
+   "pt-peniche--l-archipel-des-berlengas": {
+    "title": "El archipiélago de las Berlengas",
+    "text": "Frente a Peniche se han encontrado barras de ancla de plomo (2,5 m, 420 kg); una data de finales del siglo V antes de nuestra era."
+   },
+   "pt-madere-jardimdomar--la-poncha": {
+    "title": "La poncha",
+    "text": "Bebida de Madeira: aguardiente de caña, miel, limón o naranja. Su nombre viene de una palabra que significa «cinco», como los ingredientes de origen."
+   },
+   "pt-madere-jardimdomar--le-bolo-do-caco": {
+    "title": "El bolo do caco",
+    "text": "Pan redondo y plano cocido sobre una losa de basalto, el «caco», en Madeira y Porto Santo; se sirve con mantequilla de ajo o en bocadillo."
+   },
+   "pt-madere-jardimdomar--les-malasadas-du-carnaval": {
+    "title": "Las malasadas del carnaval",
+    "text": "Dulce de la isla que se come sobre todo durante el carnaval de Madeira."
+   },
+   "pt-madere-jardimdomar--le-vin-de-madere": {
+    "title": "El vino de Madeira",
+    "text": "Comerciantes ingleses instalados en Funchal desde el siglo XVII controlaron el comercio del vino; la casa Blandy’s data de 1811."
+   },
+   "es-paysbasque-guipuzcoa-biscaye--la-tamborrada": {
+    "title": "La Tamborrada",
+    "text": "El 20 de enero en San Sebastián se iza la bandera a medianoche y la fiesta dura 24 horas: cocineros y soldados desfilan tocando el tambor."
+   },
+   "es-paysbasque-guipuzcoa-biscaye--les-pintxos": {
+    "title": "Los pintxos",
+    "text": "Pequeños bocados para pinchar («pintxo» significa espina), que se comen en bares y tabernas; muy populares en todo el País Vasco."
+   },
+   "es-paysbasque-guipuzcoa-biscaye--le-txakoli-de-getaria": {
+    "title": "El txakoli de Getaria",
+    "text": "Vino blanco muy pálido, de amarillo a verde, producido en torno a Getaria, Zarautz y Aia: el primer txakoli con denominación de origen."
+   },
+   "es-paysbasque-guipuzcoa-biscaye--l-estuaire-d-urdaibai": {
+    "title": "La ría de Urdaibai",
+    "text": "La ría de Mundaka, llamada también ría de Gernika, es una reserva de la biosfera de 220 km² en la costa vasca."
+   },
+   "es-andalousie-tarifa--levante-et-poniente": {
+    "title": "Levante y Poniente",
+    "text": "El estrecho de Gibraltar, en Tarifa, acelera los vientos del este (Levante) y del oeste (Poniente): más de 10 nudos de media."
+   },
+   "es-andalousie-tarifa--le-chateau-de-guzman": {
+    "title": "El castillo de Guzmán",
+    "text": "Bien conservado junto al puerto, lo mandó construir hacia 960 el califa Abderramán III; le está adosada la torre de Guzmán el Bueno (siglo XIII)."
+   },
+   "es-andalousie-tarifa--la-peche-a-l-almadraba": {
+    "title": "La pesca de almadraba",
+    "text": "Antiguas trampas de redes para el atún rojo, que entra en el Mediterráneo de febrero a julio; Tarifa figura entre los puertos de almadrabas."
+   },
+   "es-andalousie-tarifa--baelo-claudia": {
+    "title": "Baelo Claudia",
+    "text": "En Bolonia, a 22 km de Tarifa, la ciudad romana vivía del atún, la salazón y el garum; el emperador Claudio la hizo municipio."
+   },
+   "es-canaries-lanzarote--les-papas-arrugadas": {
+    "title": "Las papas arrugadas",
+    "text": "Patatas hervidas «arrugadas», servidas con mojo rojo; se comen sin cubiertos, de las fuentes compartidas."
+   },
+   "es-canaries-lanzarote--le-mojo": {
+    "title": "El mojo",
+    "text": "Salsa de aceite de oliva, ajo, pimiento picante y especias, nacida en Canarias: verde (mojo verde), roja (mojo rojo) o muy picante (mojo picón)."
+   },
+   "es-canaries-lanzarote--les-vignes-de-la-geria": {
+    "title": "Las viñas de La Geria",
+    "text": "En La Geria, la lava del Timanfaya (1730) cubre el suelo: cada cepa se hunde hasta la tierra antigua, protegida del viento por un muro, el zoco."
+   },
+   "es-canaries-lanzarote--cesar-manrique": {
+    "title": "César Manrique",
+    "text": "El artista César Manrique (nacido en 1919) transformó las cuevas volcánicas de Jameos del Agua en los años 1970, respetando la naturaleza."
+   },
+   "gb-cornwall-fistral--le-cornish-pasty": {
+    "title": "El Cornish pasty",
+    "text": "Empanadilla de masa rizada, rellena de ternera, patata, nabo sueco y cebolla; tiene indicación geográfica protegida en Europa desde 2011."
+   },
+   "gb-cornwall-fistral--les-boardmasters": {
+    "title": "Los Boardmasters",
+    "text": "Música, surf y skate en Newquay, unos cinco días, el segundo fin de semana de agosto; competición de surf desde 1981, música desde 2005."
+   },
+   "gb-cornwall-fistral--le-huer-s-hut": {
+    "title": "El Huer’s Hut",
+    "text": "Pequeña construcción de piedra, quizá del siglo XIV, puesto de vigía en el XVI: el «huer» avisaba de las sardinas y guiaba a los pescadores."
+   },
+   "gb-cornwall-fistral--le-saffron-bun": {
+    "title": "El saffron bun",
+    "text": "Bollo dulce con azafrán, pasas y especias, llamado «revel bun» en Cornualles; en molde grande, es el «saffron cake»."
+   },
+   "ie-clare-lahinch--leath-inse": {
+    "title": "Leath Inse",
+    "text": "Lahinch viene del irlandés Leath Inse, «media isla» o «península»."
+   },
+   "ie-clare-lahinch--le-golf-sur-les-dunes": {
+    "title": "El golf entre las dunas",
+    "text": "El Lahinch Golf Club, fundado en 1892, es un campo de links; en 2024, su Old Course figura en el puesto 27 de los mejores campos del mundo según Golf Digest."
+   },
+   "ie-clare-lahinch--les-falaises-de-moher": {
+    "title": "Los acantilados de Moher",
+    "text": "En el mismo condado de Clare, se extienden unos 14 km y alcanzan 214 metros, justo al norte de la torre de O’Brien."
+   },
+   "ie-clare-lahinch--l-ecole-de-musique-willie-clancy": {
+    "title": "La escuela de música Willie Clancy",
+    "text": "En Milltown Malbay, la mayor escuela de verano de música tradicional del mundo: casi mil alumnos, a principios de julio."
+   },
+   "it-campanie-capri--la-fete-de-san-costanzo": {
+    "title": "La fiesta de San Costanzo",
+    "text": "El 14 de mayo, la ciudad de Capri celebra a San Costanzo, su santo patrón; Anacapri celebra al suyo, Sant’Antonio, el 13 de junio."
+   },
+   "it-campanie-capri--l-insalata-caprese": {
+    "title": "La insalata caprese",
+    "text": "Mozzarella, tomate y albahaca con aceite de oliva; su nombre alude a Capri, donde se cree que nació. Se hizo famosa en los años 1950."
+   },
+   "it-campanie-capri--la-grotte-bleue": {
+    "title": "La Gruta Azul",
+    "text": "Cueva marina: el sol entra por una abertura bajo el agua y hace brillar el agua con un azul luminoso; se adentra 50 m en el acantilado."
+   },
+   "it-campanie-capri--le-limoncello": {
+    "title": "El limoncello",
+    "text": "Licor de cáscara de limón, elaborado sobre todo en torno al golfo de Nápoles; se sirve bien frío como digestivo."
+   },
+   "gr-cyclades-milos--la-venus-de-milo": {
+    "title": "La Venus de Milo",
+    "text": "La estatua fue descubierta en 1820 en la isla de Milos y se expone en el Louvre, en París, desde 1821."
+   },
+   "gr-cyclades-milos--l-obsidienne-de-milos": {
+    "title": "La obsidiana de Milos",
+    "text": "Desde el Heládico antiguo, la isla vendía obsidiana a gran parte de la Grecia continental, a Chipre, a Creta y a Egipto."
+   },
+   "gr-cyclades-milos--phylakopi": {
+    "title": "Phylakopi",
+    "text": "Uno de los yacimientos más importantes del mundo egeo para la Edad del Bronce antigua; Milos era un gran centro económico de los minoicos."
+   },
+   "gr-cyclades-milos--les-sculptures-de-milos": {
+    "title": "Las esculturas de Milos",
+    "text": "La isla dio el Poseidón de Milos (en Atenas), el Asclepio de Milos (en el British Museum) y un Apolo arcaico, además de la Venus."
+   },
+   "gr-crete-balos--le-dakos": {
+    "title": "El dakos",
+    "text": "Ensalada cretense: pan duro (paximadi) remojado, tomates, feta o mizithra y hierbas como el orégano; se le añaden aceitunas y alcaparras."
+   },
+   "gr-crete-balos--la-tsikoudia": {
+    "title": "La tsikoudia",
+    "text": "Aguardiente de orujo de uva de origen cretense, de 40 a 65 % de alcohol; en el este de Creta suele llamarse raki."
+   },
+   "gr-crete-balos--le-paximadi": {
+    "title": "El paximadi",
+    "text": "Pan duro de trigo integral, garbanzo o cebada, parecido a una tostada; suele servirse en el desayuno con mermelada o queso."
+   },
+   "gr-crete-balos--imeri-gramvousa": {
+    "title": "Imeri Gramvousa",
+    "text": "La isla vecina conserva un fuerte veneciano y los edificios de insurgentes cretenses que vivieron allí como piratas durante la guerra de independencia griega."
+   },
+   "hr-dalmatie-brac--le-zlatni-rat": {
+    "title": "El Zlatni Rat",
+    "text": "Lengua de guijarros blancos a 2 km al oeste del puerto de Bol. Su punta se desplaza con el viento y las corrientes, a veces en pocas horas."
+   },
+   "hr-dalmatie-brac--la-pierre-blanche-de-brac": {
+    "title": "La piedra blanca de Brač",
+    "text": "La caliza blanca de la isla, extraída desde hace milenios, sirvió para construir el palacio de Diocleciano en Split (295 a 305) y el memorial de Vimy."
+   },
+   "hr-dalmatie-brac--la-grotte-de-kopacina": {
+    "title": "La cueva de Kopačina",
+    "text": "Entre Supetar y Donji Humac, una cueva con huellas humanas del XII milenio antes de nuestra era, entre las más antiguas de Dalmacia."
+   },
+   "hr-dalmatie-brac--l-huile-d-olive-de-brac": {
+    "title": "El aceite de oliva de Brač",
+    "text": "Se cultiva el olivo en la isla desde la época romana, y su aceite goza hoy de una denominación de origen protegida."
+   },
+   "ma-souss-agadir-taghazout--l-huile-d-argan": {
+    "title": "El aceite de argán",
+    "text": "En Marruecos se moja el pan en él en el desayuno o se echa un chorrito sobre el cuscús; el argán es originario de Marruecos y del suroeste de Argelia."
+   },
+   "ma-souss-agadir-taghazout--l-amlou": {
+    "title": "El amlou",
+    "text": "Crema para untar de almendras tostadas machacadas, miel y aceite de argán, que se sirve en el desayuno o la merienda con crepes y pasteles."
+   },
+   "ma-souss-agadir-taghazout--le-the-a-la-menthe": {
+    "title": "El té a la menta",
+    "text": "La bebida más popular de Marruecos, el atay: preparar un buen té a la menta se considera un arte."
+   },
+   "ma-souss-agadir-taghazout--agadir-reconstruite": {
+    "title": "Agadir, reconstruida",
+    "text": "Destruida por un terremoto en 1960, la ciudad se reconstruyó con normas antisísmicas; es el mayor balneario de Marruecos."
+   },
+   "ma-essaouira-sidikaouki--le-festival-gnaoua": {
+    "title": "El festival Gnaoua",
+    "text": "Fundado en 1998, este festival anual reúne en Essaouira a músicos gnaua de Marruecos y a artistas invitados de todo el mundo."
+   },
+   "ma-essaouira-sidikaouki--le-bois-de-thuya": {
+    "title": "La madera de tuya",
+    "text": "La marquetería de tuya es la artesanía que más hace vivir a Essaouira: en 2011, el 58 % de los artesanos de la ciudad trabajaba esta madera."
+   },
+   "ma-essaouira-sidikaouki--les-vents-de-la-baie": {
+    "title": "Los vientos de la bahía",
+    "text": "Vientos potentes casi todo el tiempo en la bahía: lugar famoso de windsurf y kitesurf, con una etapa de la copa del mundo."
+   },
+   "ma-essaouira-sidikaouki--sidi-kaouki": {
+    "title": "Sidi Kaouki",
+    "text": "A 25 km al sur de Essaouira, esta pequeña ciudad es un lugar de windsurf gracias a vientos fuertes y regulares y a un oleaje moderado."
+   },
+   "cv-sal--la-cachupa": {
+    "title": "La cachupa",
+    "text": "Plato nacional de Cabo Verde: guiso de maíz, alubias y pescado o carne; las sobras se refríen para el desayuno con un huevo."
+   },
+   "cv-sal--sal-le-sel": {
+    "title": "Sal, «la sal»",
+    "text": "Descubierta el 3 de diciembre de 1460, la isla se llamaba Chã («llana»); pasó a ser Sal al hallarse en ella dos grandes salinas."
+   },
+   "cv-sal--le-grogue-et-le-ponche": {
+    "title": "El grogue y el ponche",
+    "text": "El grogue es un aguardiente de jugo de caña de azúcar, popular en Cabo Verde; es la base del ponche, una especie de ponche."
+   },
+   "cv-sal--le-pastel": {
+    "title": "El pastel",
+    "text": "Pequeña empanadilla frita rellena de pescado o de carne, que se sirve de entrante en Cabo Verde."
+   },
+   "sc-ladigue-praslin--la-charrette-a-b-ufs": {
+    "title": "La carreta de bueyes",
+    "text": "En La Digue se alquilan bicicletas cerca del muelle; el otro medio de transporte es la carreta de bueyes, cuyo paso lento va con la isla."
+   },
+   "sc-ladigue-praslin--la-vallee-de-mai": {
+    "title": "El Valle de Mai",
+    "text": "Bosque de palmeras de 19,5 hectáreas en Praslin, inscrito por la UNESCO en 1983; alberga el coco de mar y otras cinco palmeras endémicas."
+   },
+   "sc-ladigue-praslin--le-moutya": {
+    "title": "El moutya",
+    "text": "Danza africana próxima al séga: se sigue un tambor de piel de cabra calentado al fuego antes de empezar; el ritmo es lento y luego se acelera."
+   },
+   "sc-ladigue-praslin--la-cuisine-de-poisson": {
+    "title": "La cocina de pescado",
+    "text": "El pescado tiene aquí cientos de recetas: al curry, crudo con limón, a la parrilla o al vapor; también pulpo frito y langosta al ajo."
+   },
+   "us-hawaii-oahu--eddie-aikau": {
+    "title": "Eddie Aikau",
+    "text": "El Eddie Aikau Big Wave Invitational, «The Eddie», lleva su nombre; murió en 1978 durante el viaje de la canoa Hōkūleʻa."
+   },
+   "us-hawaii-oahu--duke-kahanamoku": {
+    "title": "Duke Kahanamoku",
+    "text": "Nacido bajo el Reino de Hawái, este nadador tuvo el récord mundial de los 100 m libres y ganó cinco medallas olímpicas (1912, 1920, 1924)."
+   },
+   "us-hawaii-oahu--lei-day": {
+    "title": "Lei Day",
+    "text": "El 1 de mayo, fiesta del lei, oficial desde 1929; cada isla tiene su flor, la ilima amarilla para Oahu. Gran ceremonia en el parque Kapiʻolani."
+   },
+   "us-hawaii-oahu--le-plate-lunch": {
+    "title": "El plate lunch",
+    "text": "Comida típica de Hawái: una o dos bolas de arroz, ensalada de macarrones y un plato a menudo japonés, como el pollo katsu."
+   },
+   "cr-nicoya--le-gallo-pinto": {
+    "title": "El gallo pinto",
+    "text": "«Gallo pinto» en español: arroz y frijoles cocinados con ajo, orégano y cebolla. Plato nacional de Costa Rica y de Nicaragua."
+   },
+   "cr-nicoya--une-zone-bleue": {
+    "title": "Una zona azul",
+    "text": "Nicoya figura entre las «zonas azules» (longevidad fuera de lo común). El concepto no está probado: los nacidos después de 1930 no viven más años."
+   },
+   "cr-nicoya--les-chorotega": {
+    "title": "Los chorotegas",
+    "text": "Antes de la llegada de los españoles, el pueblo chorotega vivía aquí, en ciudades como Zapatí, Nacaome o Nicopasaya."
+   },
+   "cr-nicoya--le-refuge-d-ostional": {
+    "title": "El refugio de Ostional",
+    "text": "Refugio de 85,7 km², protegido desde 1982, con playas de anidación de la tortuga golfina: según el WWF, uno de los dos sitios principales del mundo."
+   },
+   "id-bali-bukit--le-temple-d-uluwatu": {
+    "title": "El templo de Uluwatu",
+    "text": "Construido al borde (ulu) de un acantilado (watu) de 70 m; según la leyenda, esta roca es parte de la barca petrificada de la diosa Dewi Danu."
+   },
+   "id-bali-bukit--le-kecak": {
+    "title": "El kecak",
+    "text": "Danza cantada por un coro de hombres, que se representa cada día a las 18 h en templos balineses como Uluwatu y Tanah Lot."
+   },
+   "id-bali-bukit--melasti": {
+    "title": "Melasti",
+    "text": "Antes de Nyepi, los hindúes balineses van al mar para purificarse: arrojan simbólicamente el mal pasado y lavan los objetos sagrados de sus templos."
+   },
+   "id-bali-bukit--nyepi-le-jour-du-silence": {
+    "title": "Nyepi, el día del silencio",
+    "text": "El año nuevo balinés: silencio, ayuno y meditación. Nadie, turistas incluidos, va a las playas ni a las calles; el aeropuerto cierra."
+   },
+   "nz-raglan--waikeri": {
+    "title": "Waikeri",
+    "text": "El nombre tradicional de Manu Bay es Waikeri, «aguas que giran»; este spot de surf aparece en la película The Endless Summer (1966)."
+   },
+   "nz-raglan--le-film-the-endless-summer": {
+    "title": "La película The Endless Summer",
+    "text": "Documental de Bruce Brown (1966): los surfistas californianos Mike Hynson y Robert August dan la vuelta al mundo, con parada en Manu Bay."
+   },
+   "nz-raglan--le-hangi": {
+    "title": "El hāngī",
+    "text": "Cocción maorí en un horno de tierra (umu): se calientan piedras y luego se entierra la comida; aún se usa en las grandes ocasiones."
+   },
+   "nz-raglan--le-mont-karioi": {
+    "title": "El monte Karioi",
+    "text": "Volcán extinto de 2,4 millones de años, a 8 km al suroeste de Raglan, el primero de seis volcanes alineados, el mayor de los cuales es el Pirongia."
+   },
+   "jp-kanagawa-shonan--le-grand-bouddha-de-kamakura": {
+    "title": "El gran Buda de Kamakura",
+    "text": "Estatua de bronce de 13,35 m y unas 93 toneladas, fechada hacia 1252 en los archivos del templo; es hueca y se visita por dentro."
+   },
+   "jp-kanagawa-shonan--le-yabusame": {
+    "title": "El yabusame",
+    "text": "Tiro con arco a caballo: el arquero lanza tres flechas a tres blancos de madera. Se ve en el santuario Tsurugaoka Hachiman-gū, en Kamakura."
+   },
+   "jp-kanagawa-shonan--l-ile-d-enoshima": {
+    "title": "La isla de Enoshima",
+    "text": "Unida por un puente de 389 m, la isla está dedicada a Benzaiten, diosa de la música, que la habría hecho surgir del mar en el siglo VI."
+   },
+   "jp-kanagawa-shonan--kamakura-capitale-des-shoguns": {
+    "title": "Kamakura, capital de los shogunes",
+    "text": "En 1192, el shogun Minamoto no Yoritomo hizo de Kamakura, entonces un simple pueblo, su capital; su gobierno dominó el país hasta 1333."
+   },
+   "br-santacatarina-floripa--l-heritage-acorien": {
+    "title": "La herencia azoriana",
+    "text": "A mediados del siglo XVIII, miles de azorianos migraron aquí; Florianópolis conserva su huella: casas, artesanía, cocina."
+   },
+   "br-santacatarina-floripa--les-huitres-de-ribeirao-da-ilha": {
+    "title": "Las ostras de Ribeirão da Ilha",
+    "text": "Este distrito de Florianópolis, uno de los primeros núcleos de colonización azoriana, es el mayor productor de ostras de Brasil."
+   },
+   "br-santacatarina-floripa--joaquina-et-ses-dunes": {
+    "title": "Joaquina y sus dunas",
+    "text": "La playa, muy apreciada por los surfistas por la calidad de sus olas, está rodeada por el parque natural municipal de las dunas de la Lagoa da Conceição."
+   },
+   "br-santacatarina-floripa--praia-mole": {
+    "title": "Praia Mole",
+    "text": "Playa de 960 metros en la costa este de la isla, conocida por atraer a jóvenes, surfistas y parapentistas."
    }
   }
  }

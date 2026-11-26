@@ -1,6 +1,6 @@
 {
  "version": 1,
- "updated": "2026-11-20",
+ "updated": "2026-11-26",
  "zones": {
   "fr-landes-hossegor": {
    "name": "Hossegor, Seignosse et Capbreton",
@@ -2740,6 +2740,1736 @@
      }
     }
    ]
+  },
+  "fr-paysbasque-cotebasque": {
+   "name": "Biarritz, Anglet et Saint-Jean-de-Luz",
+   "region": "Côte basque",
+   "country": "FR",
+   "spots": [
+    "biarritz",
+    "anglet",
+    "saintjeandeluz",
+    "lafitenia"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le gâteau basque",
+     "text": "Pâte sablée fourrée de cerises noires ou de crème pâtissière : le « biscuit de la maison » (etxeko biskotxa), servi les jours de fête.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/G%C3%A2teau_basque",
+      "publisher": "Wikipédia, article « Gâteau basque »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le rocher de la Vierge",
+     "text": "Promontoire en forme de coque de navire, surmonté d’une statue de la Vierge : l’emblème de Biarritz, avec vue sur la baie et les Pyrénées.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Rocher_de_la_Vierge",
+      "publisher": "Wikipédia, article « Rocher de la Vierge »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le ttoro de Saint-Jean-de-Luz",
+     "text": "Soupe des pêcheurs de Saint-Jean-de-Luz, Ciboure et Socoa, faite à l’origine des morceaux invendus : merlu, crustacés, coquillages.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Ttoro",
+      "publisher": "Wikipédia, article « Ttoro »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le macaron de Saint-Jean-de-Luz",
+     "text": "Un pâtissier nommé Adam en aurait offert à Louis XIV pour son mariage en 1660, et ses descendants perpétuent la tradition.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Saint-Jean-de-Luz",
+      "publisher": "Wikipédia, article « Saint-Jean-de-Luz »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La maison de l’Infante",
+     "text": "Demeure de brique rose et de pierre (vers 1640) sur le port, où l’infante Marie-Thérèse fut accueillie pour épouser Louis XIV, en 1660.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Maison_de_l%27Infante",
+      "publisher": "Wikipédia, article « Maison de l'Infante »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "fr-gironde-lacanau": {
+   "name": "Lacanau",
+   "region": "Médoc, Gironde",
+   "country": "FR",
+   "spots": [
+    "lacanau"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "Le Lacanau Pro",
+     "text": "La plus vieille compétition professionnelle de surf de France, née en 1979 au Lacanau Surf Club, se tient chaque année au mois d’août.",
+     "months": [
+      8
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Lacanau_Pro",
+      "publisher": "Wikipédia, article « Lacanau Pro »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le cannelé",
+     "text": "Petit gâteau bordelais au rhum et à la vanille, cuit dans un moule cannelé, d’abord en cuivre, qui lui donne sa fine croûte caramélisée.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Canel%C3%A9",
+      "publisher": "Wikipédia, article « Canelé »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le lac de Lacanau",
+     "text": "Avec près de 2 000 hectares, l’un des grands lacs landais ; le canal des Étangs le relie à Hourtin au nord et au bassin d’Arcachon au sud.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Lac_de_Lacanau",
+      "publisher": "Wikipédia, article « Lac de Lacanau »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le 45e parallèle",
+     "text": "Lacanau est traversée par le 45e parallèle nord : à égale distance du pôle Nord et de l’équateur, soit environ 5 000 km de chacun.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Lacanau",
+      "publisher": "Wikipédia, article « Lacanau »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "fr-morbihan-belleile": {
+   "name": "Belle-Île-en-Mer, côte sauvage",
+   "region": "Morbihan",
+   "country": "FR",
+   "spots": [
+    "donnant"
+   ],
+   "facts": [
+    {
+     "kind": "lieu",
+     "title": "Les aiguilles de Port-Coton",
+     "text": "Ces rochers de la côte sauvage doivent leur nom à l’écume qui, par forte houle, ressemble à un voile de coton. Monet les a peints en 1886.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Aiguilles_de_Port-Coton",
+      "publisher": "Wikipédia, article « Aiguilles de Port-Coton »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Les Acadiens de Belle-Île",
+     "text": "À partir de 1765, 78 familles d’Acadiens chassés lors du « grand dérangement » de 1755 se sont installées sur l’île.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Belle-%C3%8Ele-en-Mer",
+      "publisher": "Wikipédia, article « Belle-Île-en-Mer »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "L’agneau du large",
+     "text": "Le label « Agneau du large », créé en 1994, certifie un agneau né sur l’île, qui a passé au moins 60 jours au pré.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Belle-%C3%8Ele-en-Mer",
+      "publisher": "Wikipédia, article « Belle-Île-en-Mer »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le bois du Génie",
+     "text": "Ce bois a été planté autour des fortifications de Vauban pour les cacher et les protéger ; son nom vient du génie militaire qui l’a décidé.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Belle-%C3%8Ele-en-Mer",
+      "publisher": "Wikipédia, article « Belle-Île-en-Mer »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "fr-bretagne-saintmalo": {
+   "name": "Saint-Malo",
+   "region": "Ille-et-Vilaine",
+   "country": "FR",
+   "spots": [
+    "saintmalo"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "La Route du Rhum",
+     "text": "Course en solitaire entre Saint-Malo et la Guadeloupe, tous les quatre ans depuis 1978, de fin octobre à début novembre.",
+     "months": [
+      10,
+      11
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Route_du_Rhum",
+      "publisher": "Wikipédia, article « Route du Rhum »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le Grand Bé",
+     "text": "Île inhabitée au pied des remparts, accessible à pied à marée basse : Chateaubriand y est enterré, selon son vœu.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Grand_B%C3%A9",
+      "publisher": "Wikipédia, article « Grand Bé »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La cité des corsaires",
+     "text": "Autrefois cité de corsaires, Saint-Malo a vu naître des capitaines comme Duguay-Trouin et Surcouf ; ses habitants sont les Malouins.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Saint-Malo",
+      "publisher": "Wikipédia, article « Saint-Malo »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Les huîtres plates de Cancale",
+     "text": "À quinze kilomètres à l’est, Cancale est réputée pour ses huîtres plates sauvages, issues de bancs naturels en eau profonde.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Cancale",
+      "publisher": "Wikipédia, article « Cancale »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "fr-normandie-etretat": {
+   "name": "Étretat",
+   "region": "Pays de Caux, Normandie",
+   "country": "FR",
+   "spots": [
+    "etretat"
+   ],
+   "facts": [
+    {
+     "kind": "lieu",
+     "title": "Les falaises et les trois arches",
+     "text": "Falaises de craie percées de trois arches : porte d’Amont, porte d’Aval et Manneporte, qu’une rivière souterraine aurait d’abord creusées.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/%C3%89tretat",
+      "publisher": "Wikipédia, article « Étretat »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "L’Aiguille creuse",
+     "text": "Maurice Leblanc, qui vivait à Étretat, en a fait le repaire d’Arsène Lupin dans son roman « L’Aiguille creuse » (1909).",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/%C3%89tretat",
+      "publisher": "Wikipédia, article « Étretat »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Les peintres d’Étretat",
+     "text": "Monet, Courbet, Boudin ou Marquet y ont peint la singularité du site, tour à tour apaisé ou violent, et ont fait sa réputation.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/%C3%89tretat",
+      "publisher": "Wikipédia, article « Étretat »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Les fêtes d’Offenbach et de Maupassant",
+     "text": "Au XIXe siècle, des artistes comme Offenbach ou Maupassant y donnaient des fêtes pour leurs amis, quand la station devenait à la mode.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/%C3%89tretat",
+      "publisher": "Wikipédia, article « Étretat »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "fr-provence-calanques": {
+   "name": "Calanques de Marseille et de Cassis",
+   "region": "Bouches-du-Rhône",
+   "country": "FR",
+   "spots": [
+    "calanques",
+    "envau"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "La bouillabaisse",
+     "text": "Soupe de poissons emblème de Marseille, servie avec des croûtons frottés à l’ail et tartinés de rouille, du poisson et des pommes de terre.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Bouillabaisse",
+      "publisher": "Wikipédia, article « Bouillabaisse »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le parc national des Calanques",
+     "text": "Créé en avril 2012, c’est le premier parc national périurbain d’Europe et le troisième au monde.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Calanques_de_Marseille",
+      "publisher": "Wikipédia, article « Calanques de Marseille »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Calanque",
+     "text": "Le mot vient du provençal calanco : une vallée creusée par une rivière, puis envahie par la mer.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Calanques_de_Marseille",
+      "publisher": "Wikipédia, article « Calanques de Marseille »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le vin de Cassis",
+     "text": "Le cassis est un vin d’appellation d’origine contrôlée, la première AOC reconnue en Provence, en 1936 ; il se fait en blanc et en rosé.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Cassis_%28Bouches-du-Rh%C3%B4ne%29",
+      "publisher": "Wikipédia, article « Cassis (Bouches-du-Rhône) »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "fr-var-pampelonne": {
+   "name": "Pampelonne et Saint-Tropez",
+   "region": "Var",
+   "country": "FR",
+   "spots": [
+    "pampelonne"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "La tarte tropézienne",
+     "text": "Brioche fendue en deux et garnie de crème pâtissière et de crème au beurre ; la recette originale du pâtissier Alexandre Micka est secrète.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Tarte_trop%C3%A9zienne",
+      "publisher": "Wikipédia, article « Tarte tropézienne »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La bravade de mai",
+     "text": "Le 16 mai, le maire remet la pique au Capitaine de Ville élu le lundi de Pâques ; marins et mousquetaires tirent des salves, armes bénies.",
+     "months": [
+      5
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Bravade_de_Saint-Tropez",
+      "publisher": "Wikipédia, article « Bravade de Saint-Tropez »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La bravade du 15 juin",
+     "text": "Le 15 juin 1637, les Tropéziens ont vaincu 21 galères espagnoles, victoire fêtée depuis par une bravade.",
+     "months": [
+      6
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Saint-Tropez",
+      "publisher": "Wikipédia, article « Saint-Tropez »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La plage de Pampelonne",
+     "text": "Plage de sable de 4,5 km sur 27 hectares, sur la commune de Ramatuelle et non à Saint-Tropez, dans le domaine public maritime de l’État.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Plage_de_Pampelonne",
+      "publisher": "Wikipédia, article « Plage de Pampelonne »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "gp-basseterre-cousteau": {
+   "name": "Réserve Cousteau et côte sous le vent",
+   "region": "Guadeloupe",
+   "country": "GP",
+   "spots": [
+    "cousteau"
+   ],
+   "facts": [
+    {
+     "kind": "lieu",
+     "title": "La réserve Cousteau",
+     "text": "Réserve marine d’environ 400 hectares autour des îlets Pigeon, face à la plage de Malendure : elle protège les fonds et limite la pêche.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/R%C3%A9serve_Cousteau",
+      "publisher": "Wikipédia, article « Réserve Cousteau »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le gwoka",
+     "text": "Musique de Guadeloupe jouée surtout aux tambours « ka » : le plus grand tient le rythme, le plus petit suit les danseurs et les chanteurs.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Gwoka",
+      "publisher": "Wikipédia, article « Gwoka »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Le carnaval de Guadeloupe",
+     "text": "De janvier au mercredi des Cendres : grande parade à Pointe-à-Pitre le Dimanche gras, puis on brûle Vaval, roi du carnaval, le dernier jour.",
+     "months": [
+      1,
+      2,
+      3
+     ],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Carnaval_de_Guadeloupe",
+      "publisher": "Wikipédia, article « Carnaval de Guadeloupe »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le ti-punch",
+     "text": "Rhum, citron vert et sirop de canne : ce petit cocktail serait né à Marie-Galante et fait partie de la vie sociale des Antilles.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Ti-punch",
+      "publisher": "Wikipédia, article « Ti-punch »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "mq-anses-darlet-dufour": {
+   "name": "Anse Dufour et Les Anses-d’Arlet",
+   "region": "Martinique",
+   "country": "MQ",
+   "spots": [
+    "ansedufour"
+   ],
+   "facts": [
+    {
+     "kind": "lieu",
+     "title": "Deux anses, deux sables",
+     "text": "Anse Dufour a du sable blanc, sa voisine Anse Noire du sable noir volcanique, la seule plage de sable noir du sud de la Martinique.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Les_Anses-d%27Arlet",
+      "publisher": "Wikipédia, article « Les Anses-d'Arlet »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "L’église Saint-Henri",
+     "text": "Au bord de la plage, l’un des plus beaux sites de Martinique grâce à son alignement avec le ponton ; restaurée en 2008 après l’ouragan Dean.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Les_Anses-d%27Arlet",
+      "publisher": "Wikipédia, article « Les Anses-d'Arlet »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le féroce d’avocat",
+     "text": "Avocats écrasés avec de la morue salée en chiquetaille et du piment : son nom vient du piment. On le sert surtout en apéritif ou en entrée.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/F%C3%A9roce_d%27avocat",
+      "publisher": "Wikipédia, article « Féroce d'avocat »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le madras",
+     "text": "Étoffe à carreaux venue de Madras, en Inde, devenue coiffe créole aux Antilles ; Joséphine de Beauharnais en aurait lancé la mode.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Madras_%28tissu%29",
+      "publisher": "Wikipédia, article « Madras (tissu) »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "pt-leiria-nazare": {
+   "name": "Nazaré",
+   "region": "Centre, Portugal",
+   "country": "PT",
+   "spots": [
+    "nazare"
+   ],
+   "facts": [
+    {
+     "kind": "coutume",
+     "title": "Les sept jupons",
+     "text": "Sept jupes, dit la tradition. Explication discutée : en attendant les pêcheurs, elles s’abritaient des embruns sous celles du dessus.",
+     "months": [],
+     "source": {
+      "url": "https://pt.wikipedia.org/wiki/Nazar%C3%A9_%28Portugal%29",
+      "publisher": "Wikipédia (pt), article « Nazaré (Portugal) »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "La fête de Notre-Dame de Nazaré",
+     "text": "Le 8 septembre, jour férié, tombe pendant dix jours de fête : processions, feux d’artifice, danses, foire et courses de taureaux.",
+     "months": [
+      9
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Nazar%C3%A9%2C_Portugal",
+      "publisher": "Wikipédia (en), article « Nazaré, Portugal »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le funiculaire du Sítio",
+     "text": "Trois quartiers : Praia, le long de la plage, le Sítio, vieux village de la falaise, et Pederneira ; un funiculaire relie la plage au Sítio.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Nazar%C3%A9%2C_Portugal",
+      "publisher": "Wikipédia (en), article « Nazaré, Portugal »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La plus grosse vague surfée",
+     "text": "En 2020, l’Allemand Sebastian Steudtner a surfé à Nazaré une vague mesurée à 26,2 mètres, la plus grande jamais surfée.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Nazar%C3%A9%2C_Portugal",
+      "publisher": "Wikipédia (en), article « Nazaré, Portugal »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "pt-peniche": {
+   "name": "Peniche et Baleal",
+   "region": "Centre, Portugal",
+   "country": "PT",
+   "spots": [
+    "supertubos",
+    "baleal"
+   ],
+   "facts": [
+    {
+     "kind": "coutume",
+     "title": "Les dentelles aux fuseaux",
+     "text": "Les dentelles de Peniche (rendas de bilros) ont reçu une médaille d’argent aux expositions internationales de Paris et de Londres en 1851.",
+     "months": [],
+     "source": {
+      "url": "https://pt.wikipedia.org/wiki/Peniche",
+      "publisher": "Wikipédia (pt), article « Peniche »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La forteresse de Peniche",
+     "text": "Cette forteresse a servi de prison politique sous l’Estado Novo ; elle abrite aujourd’hui un musée consacré à la résistance à ce régime.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Peniche_Fortress",
+      "publisher": "Wikipédia (en), article « Peniche Fortress »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Un grand port de pêche",
+     "text": "Grand port de pêche du Portugal, avec chantiers navals et conserveries ; la ville est en partie ceinte de remparts du XVIe siècle.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Peniche",
+      "publisher": "Wikipédia, article « Peniche »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "L’archipel des Berlengas",
+     "text": "Au large de Peniche, on a retrouvé des barres d’ancre en plomb (2,5 m, 420 kg) ; l’une date de la fin du Ve siècle avant notre ère.",
+     "months": [],
+     "source": {
+      "url": "https://pt.wikipedia.org/wiki/Peniche",
+      "publisher": "Wikipédia (pt), article « Peniche »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "pt-madere-jardimdomar": {
+   "name": "Madère, côte sud-ouest",
+   "region": "Madère",
+   "country": "PT",
+   "spots": [
+    "jardimdomar"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "La poncha",
+     "text": "Boisson de Madère : eau-de-vie de canne, miel, citron ou orange. Son nom vient d’un mot pour « cinq », comme les ingrédients d’origine.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Poncha",
+      "publisher": "Wikipédia, article « Poncha »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le bolo do caco",
+     "text": "Pain rond plat cuit sur une dalle de basalte, le « caco », à Madère et Porto Santo ; on le sert avec du beurre à l’ail ou en sandwich.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Bolo_do_caco",
+      "publisher": "Wikipédia (en), article « Bolo do caco »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Les malasadas du carnaval",
+     "text": "Douceur de l’île que l’on mange surtout pendant le carnaval de Madère.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Madeira",
+      "publisher": "Wikipédia (en), article « Madeira »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le vin de Madère",
+     "text": "Des marchands anglais installés à Funchal dès le XVIIe siècle ont contrôlé le commerce du vin ; la maison Blandy’s date de 1811.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Madeira_wine",
+      "publisher": "Wikipédia (en), article « Madeira wine »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "es-paysbasque-guipuzcoa-biscaye": {
+   "name": "Mundaka, Zarautz et Saint-Sébastien",
+   "region": "Pays basque espagnol",
+   "country": "ES",
+   "spots": [
+    "mundaka",
+    "zarautz",
+    "laconcha"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "La Tamborrada",
+     "text": "Le 20 janvier à Saint-Sébastien, le drapeau est hissé à minuit et la fête dure 24 heures : cuisiniers et soldats défilent au tambour.",
+     "months": [
+      1
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Tamborrada",
+      "publisher": "Wikipédia (en), article « Tamborrada »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Les pintxos",
+     "text": "Petits en-cas à piquer (« pintxo » veut dire épine), mangés dans les bars et les tavernes ; très populaires dans tout le Pays basque.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Pintxo",
+      "publisher": "Wikipédia (en), article « Pintxo »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le txakoli de Getaria",
+     "text": "Vin blanc très pâle, jaune à vert, produit autour de Getaria, Zarautz et Aia : le premier txakoli à recevoir une appellation d’origine.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Txakoli",
+      "publisher": "Wikipédia (en), article « Txakoli »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "L’estuaire d’Urdaibai",
+     "text": "L’estuaire de Mundaka, aussi appelé estuaire de Gernika, est une réserve de biosphère de 220 km² sur la côte basque.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Urdaibai",
+      "publisher": "Wikipédia (en), article « Urdaibai »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "es-andalousie-tarifa": {
+   "name": "Tarifa et Bolonia",
+   "region": "Cadix, Andalousie",
+   "country": "ES",
+   "spots": [
+    "tarifa",
+    "bolonia"
+   ],
+   "facts": [
+    {
+     "kind": "mot",
+     "title": "Levante et Poniente",
+     "text": "Le détroit de Gibraltar, à Tarifa, accélère les vents d’est (Levante) et d’ouest (Poniente) : plus de 10 nœuds de moyenne.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Tarifa",
+      "publisher": "Wikipédia (en), article « Tarifa »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le château de Guzmán",
+     "text": "Près du port, bien conservé, il fut ordonné vers 960 par le calife Abd al-Rahman III ; la tour de Guzmán el Bueno (XIIIe siècle) s’y accole.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Tarifa",
+      "publisher": "Wikipédia (en), article « Tarifa »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La pêche à l’almadraba",
+     "text": "Pièges à filets ancestraux pour le thon rouge, qui entre en Méditerranée de février à juillet ; Tarifa figure parmi les ports d’almadrabas.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Almadraba",
+      "publisher": "Wikipédia (en), article « Almadraba »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Baelo Claudia",
+     "text": "À Bolonia, à 22 km de Tarifa, la ville romaine vivait du thon, de la salaison et du garum ; l’empereur Claude en fit un municipe.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Baelo_Claudia",
+      "publisher": "Wikipédia (en), article « Baelo Claudia »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "es-canaries-lanzarote": {
+   "name": "Famara et La Santa, Lanzarote",
+   "region": "Lanzarote, Canaries",
+   "country": "ES",
+   "spots": [
+    "famara",
+    "lasanta"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Les papas arrugadas",
+     "text": "Pommes de terre bouillies « fripées », servies avec le mojo rojo ; on les mange sans couverts, dans les plats partagés.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Papas_arrugadas",
+      "publisher": "Wikipédia (en), article « Papas arrugadas »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le mojo",
+     "text": "Sauce d’huile d’olive, d’ail, de piment et d’épices, née aux Canaries : verte (mojo verde), rouge (mojo rojo) ou très piquante (mojo picón).",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Mojo_%28sauce%29",
+      "publisher": "Wikipédia (en), article « Mojo (sauce) »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Les vignes de La Geria",
+     "text": "À La Geria, la lave du Timanfaya (1730) couvre le sol : chaque cep plonge jusqu’à l’ancienne terre, abrité du vent par un muret, le zoco.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/La_Geria",
+      "publisher": "Wikipédia, article « La Geria »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "César Manrique",
+     "text": "L’artiste César Manrique (né en 1919) a transformé les grottes volcaniques de Jameos del Agua dans les années 1970, en respectant la nature.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/C%C3%A9sar_Manrique",
+      "publisher": "Wikipédia (en), article « César Manrique »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "gb-cornwall-fistral": {
+   "name": "Fistral et Newquay",
+   "region": "Cornouailles",
+   "country": "GB",
+   "spots": [
+    "fistral"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le Cornish pasty",
+     "text": "Chausson de pâte serti, fourré de bœuf, pommes de terre, rutabaga et oignon ; indication géographique protégée en Europe depuis 2011.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Cornish_pasty",
+      "publisher": "Wikipédia (en), article « Cornish pasty »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Les Boardmasters",
+     "text": "Musique, surf et skate à Newquay, cinq jours environ, le deuxième week-end d’août ; compétition de surf dès 1981, musique depuis 2005.",
+     "months": [
+      8
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Boardmasters_Festival",
+      "publisher": "Wikipédia (en), article « Boardmasters Festival »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le Huer’s Hut",
+     "text": "Petite construction de pierre, peut-être du XIVe siècle, poste de guet au XVIe : le « huer » signalait les sardines et guidait les pêcheurs.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Huer%27s_Hut",
+      "publisher": "Wikipédia (en), article « Huer's Hut »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le saffron bun",
+     "text": "Brioche sucrée au safran, aux raisins secs et aux épices, appelée « revel bun » en Cornouailles ; en grand moule, c’est le « saffron cake ».",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Saffron_bun",
+      "publisher": "Wikipédia (en), article « Saffron bun »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "ie-clare-lahinch": {
+   "name": "Lahinch et le comté de Clare",
+   "region": "Comté de Clare",
+   "country": "IE",
+   "spots": [
+    "lahinch"
+   ],
+   "facts": [
+    {
+     "kind": "mot",
+     "title": "Leath Inse",
+     "text": "Lahinch vient de l’irlandais Leath Inse, « demi-île » ou « péninsule ».",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Lahinch",
+      "publisher": "Wikipédia (en), article « Lahinch »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le golf sur les dunes",
+     "text": "Le Lahinch Golf Club, fondé en 1892, est un golf de links ; en 2024, son Old Course est classé 27e meilleur golf du monde par Golf Digest.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Lahinch_Golf_Club",
+      "publisher": "Wikipédia (en), article « Lahinch Golf Club »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Les falaises de Moher",
+     "text": "Dans le même comté de Clare, elles courent sur environ 14 km et culminent à 214 mètres, juste au nord de la tour d’O’Brien.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Cliffs_of_Moher",
+      "publisher": "Wikipédia (en), article « Cliffs of Moher »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "L’école de musique Willie Clancy",
+     "text": "À Milltown Malbay, la plus grande école d’été de musique traditionnelle du monde : près de mille élèves, début juillet.",
+     "months": [
+      7
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Willie_Clancy_Summer_School",
+      "publisher": "Wikipédia (en), article « Willie Clancy Summer School »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "it-campanie-capri": {
+   "name": "Capri",
+   "region": "Campanie",
+   "country": "IT",
+   "spots": [
+    "capri"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "La fête de San Costanzo",
+     "text": "Le 14 mai, la ville de Capri fête San Costanzo, son saint patron ; Anacapri fête Sant’Antonio, le sien, le 13 juin.",
+     "months": [
+      5,
+      6
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Capri",
+      "publisher": "Wikipédia (en), article « Capri »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "L’insalata caprese",
+     "text": "Mozzarella, tomates et basilic à l’huile d’olive ; son nom renvoie à Capri, où on la croit née. Célèbre dans les années 1950.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Caprese_salad",
+      "publisher": "Wikipédia (en), article « Caprese salad »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La Grotte bleue",
+     "text": "Grotte marine : le soleil passe par une cavité sous l’eau et fait briller l’eau d’un bleu lumineux ; elle s’enfonce de 50 m dans la falaise.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Blue_Grotto_%28Capri%29",
+      "publisher": "Wikipédia (en), article « Blue Grotto (Capri) »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le limoncello",
+     "text": "Liqueur de zeste de citron, produite surtout autour du golfe de Naples ; on la sert bien fraîche en digestif.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Limoncello",
+      "publisher": "Wikipédia (en), article « Limoncello »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "gr-cyclades-milos": {
+   "name": "Milos",
+   "region": "Cyclades",
+   "country": "GR",
+   "spots": [
+    "sarakiniko"
+   ],
+   "facts": [
+    {
+     "kind": "lieu",
+     "title": "La Vénus de Milo",
+     "text": "La statue a été découverte en 1820 sur l’île de Milos et elle est exposée au Louvre, à Paris, depuis 1821.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Venus_de_Milo",
+      "publisher": "Wikipédia (en), article « Venus de Milo »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "L’obsidienne de Milos",
+     "text": "Dès l’Helladique ancien, l’île vendait de l’obsidienne à une grande partie de la Grèce continentale, à Chypre, à la Crète et à l’Égypte.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Milos",
+      "publisher": "Wikipédia, article « Milos »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Phylakopi",
+     "text": "L’un des sites les plus importants du monde égéen pour l’âge du bronze ancien ; Milos était un centre économique majeur des Minoens.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Milos",
+      "publisher": "Wikipédia, article « Milos »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Les sculptures de Milos",
+     "text": "L’île a livré le Poséidon de Milos (à Athènes), l’Asclépios de Milos (au British Museum) et un Apollon archaïque, en plus de la Vénus.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Milos",
+      "publisher": "Wikipédia (en), article « Milos »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "gr-crete-balos": {
+   "name": "Balos et la baie de Kissamos",
+   "region": "Crète",
+   "country": "GR",
+   "spots": [
+    "balos"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le dakos",
+     "text": "Salade crétoise : pain dur (paximadi) trempé, tomates, feta ou mizithra, herbes comme l’origan ; olives et câpres s’y ajoutent.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Dakos",
+      "publisher": "Wikipédia (en), article « Dakos »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "La tsikoudia",
+     "text": "Eau-de-vie de marc de raisin d’origine crétoise, de 40 à 65 % d’alcool ; dans l’est de la Crète, on l’appelle souvent raki.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Tsikoudia",
+      "publisher": "Wikipédia (en), article « Tsikoudia »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le paximadi",
+     "text": "Pain dur de blé complet, de pois chiches ou d’orge, comparable à une biscotte ; souvent servi au petit déjeuner avec confiture ou fromage.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Paximadi",
+      "publisher": "Wikipédia (en), article « Paximadi »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Imeri Gramvousa",
+     "text": "L’île voisine garde un fort vénitien et les bâtiments d’insurgés crétois qui y ont vécu en pirates pendant la guerre d’indépendance grecque.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Gramvousa",
+      "publisher": "Wikipédia (en), article « Gramvousa »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "hr-dalmatie-brac": {
+   "name": "Bol et l’île de Brač",
+   "region": "Dalmatie",
+   "country": "HR",
+   "spots": [
+    "zlatnirat"
+   ],
+   "facts": [
+    {
+     "kind": "lieu",
+     "title": "Le Zlatni Rat",
+     "text": "Langue de galets blancs à 2 km à l’ouest du port de Bol. Sa pointe se déplace avec le vent et les courants, parfois en quelques heures.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Zlatni_Rat",
+      "publisher": "Wikipédia (en), article « Zlatni Rat »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "La pierre blanche de Brač",
+     "text": "Le calcaire blanc de l’île, extrait depuis des millénaires, a bâti le palais de Dioclétien à Split (295 à 305) et le mémorial de Vimy.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Bra%C4%8D",
+      "publisher": "Wikipédia (en), article « Brač »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La grotte de Kopačina",
+     "text": "Entre Supetar et Donji Humac, une grotte aux traces humaines du XIIe millénaire avant notre ère, parmi les plus anciennes de Dalmatie.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Bra%C4%8D",
+      "publisher": "Wikipédia (en), article « Brač »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "L’huile d’olive de Brač",
+     "text": "On cultive l’olivier sur l’île depuis l’époque romaine, et son huile bénéficie aujourd’hui d’une appellation d’origine protégée.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Bra%C4%8D",
+      "publisher": "Wikipédia (en), article « Brač »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "ma-souss-agadir-taghazout": {
+   "name": "Taghazout, Anchor Point et Agadir",
+   "region": "Souss, Maroc",
+   "country": "MA",
+   "spots": [
+    "anchorpoint",
+    "taghazout"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "L’huile d’argan",
+     "text": "Au Maroc, on y trempe le pain au petit déjeuner ou on en verse sur le couscous ; l’arganier vient du Maroc et du sud-ouest algérien.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Argan_oil",
+      "publisher": "Wikipédia (en), article « Argan oil »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "L’amlou",
+     "text": "Pâte à tartiner d’amandes grillées écrasées, de miel et d’huile d’argan, servie au petit déjeuner ou au goûter avec crêpes et pâtisseries.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Amlou",
+      "publisher": "Wikipédia (en), article « Amlou »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le thé à la menthe",
+     "text": "La boisson la plus populaire du Maroc, l’atay : préparer un bon thé à la menthe y est considéré comme un art.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Moroccan_cuisine",
+      "publisher": "Wikipédia (en), article « Moroccan cuisine »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Agadir, reconstruite",
+     "text": "Détruite par un séisme en 1960, la ville a été rebâtie selon des normes antisismiques ; c’est la plus grande station balnéaire du Maroc.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Agadir",
+      "publisher": "Wikipédia (en), article « Agadir »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "ma-essaouira-sidikaouki": {
+   "name": "Essaouira et Sidi Kaouki",
+   "region": "Marrakech-Safi, Maroc",
+   "country": "MA",
+   "spots": [
+    "essaouira",
+    "sidikaouki"
+   ],
+   "facts": [
+    {
+     "kind": "fete",
+     "title": "Le festival Gnaoua",
+     "text": "Fondé en 1998, ce festival annuel réunit à Essaouira des musiciens gnaoua du Maroc et des artistes invités du monde entier.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Gnaoua_World_Music_Festival",
+      "publisher": "Wikipédia (en), article « Gnaoua World Music Festival »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le bois de thuya",
+     "text": "La marqueterie de thuya est l’artisanat qui fait le plus vivre Essaouira : en 2011, 58 % des artisans de la ville travaillaient ce bois.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Essaouira",
+      "publisher": "Wikipédia, article « Essaouira »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Les vents de la baie",
+     "text": "Vents puissants presque tout le temps dans la baie : lieu réputé de windsurf et de kitesurf, avec une étape de coupe du monde.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Essaouira",
+      "publisher": "Wikipédia, article « Essaouira »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Sidi Kaouki",
+     "text": "À 25 km au sud d’Essaouira, cette petite ville est un lieu de windsurf grâce à des vents forts et réguliers et à une houle moyenne.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Sidi_Kaouki",
+      "publisher": "Wikipédia (en), article « Sidi Kaouki »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "cv-sal": {
+   "name": "Île de Sal",
+   "region": "Cap-Vert",
+   "country": "CV",
+   "spots": [
+    "salkite",
+    "pontapreta"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "La cachupa",
+     "text": "Plat national du Cap-Vert : ragoût de maïs, de haricots et de poisson ou de viande ; les restes sont refrits au petit déjeuner avec un œuf.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Cachupa",
+      "publisher": "Wikipédia (en), article « Cachupa »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "mot",
+     "title": "Sal, « le sel »",
+     "text": "Découverte le 3 décembre 1460, l’île s’appelait Chã (« plate ») ; elle est devenue Sal quand on y a trouvé deux grandes salines.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Sal%2C_Cape_Verde",
+      "publisher": "Wikipédia (en), article « Sal, Cape Verde »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le grogue et le ponche",
+     "text": "Le grogue est une eau-de-vie de jus de canne à sucre, populaire au Cap-Vert ; il sert de base au ponche, une sorte de punch.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Cape_Verde",
+      "publisher": "Wikipédia (en), article « Cape Verde »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le pastel",
+     "text": "Petit chausson frit fourré de poisson ou de viande, que l’on sert en entrée au Cap-Vert.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Cape_Verde",
+      "publisher": "Wikipédia (en), article « Cape Verde »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "sc-ladigue-praslin": {
+   "name": "La Digue et Praslin",
+   "region": "Seychelles",
+   "country": "SC",
+   "spots": [
+    "anse_source",
+    "anselazio"
+   ],
+   "facts": [
+    {
+     "kind": "coutume",
+     "title": "La charrette à bœufs",
+     "text": "À La Digue, on loue des vélos près du quai ; l’autre moyen de transport est la charrette à bœufs, dont le pas lent convient à l’île.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/La_Digue",
+      "publisher": "Wikipédia (en), article « La Digue »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "La vallée de Mai",
+     "text": "Forêt de palmiers de 19,5 hectares sur Praslin, inscrite à l’UNESCO en 1983 ; elle abrite le coco de mer et cinq autres palmiers endémiques.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Vall%C3%A9e_de_Mai_Nature_Reserve",
+      "publisher": "Wikipédia (en), article « Vallée de Mai Nature Reserve »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le moutya",
+     "text": "Danse africaine proche du séga : on suit un tambour en peau de chèvre chauffé au feu avant le début ; le rythme est lent puis s’accélère.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Moutya",
+      "publisher": "Wikipédia (en), article « Moutya »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "La cuisine de poisson",
+     "text": "Le poisson y a des centaines de recettes : curry, cru au citron, grillé ou vapeur ; poulpe frit et langouste à l’ail aussi.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/La_Digue",
+      "publisher": "Wikipédia (en), article « La Digue »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "us-hawaii-oahu": {
+   "name": "Oahu : North Shore et Waikiki",
+   "region": "Hawaï (Oahu)",
+   "country": "US",
+   "spots": [
+    "pipeline",
+    "sunsetbeach",
+    "waikiki"
+   ],
+   "facts": [
+    {
+     "kind": "coutume",
+     "title": "Eddie Aikau",
+     "text": "Le Eddie Aikau Big Wave Invitational, « The Eddie », porte son nom ; il est mort en 1978 pendant le voyage de la pirogue Hōkūleʻa.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Eddie_Aikau",
+      "publisher": "Wikipédia (en), article « Eddie Aikau »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Duke Kahanamoku",
+     "text": "Né sous le Royaume d’Hawaï, ce nageur a détenu le record du monde du 100 m nage libre et gagné cinq médailles olympiques (1912, 1920, 1924).",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Duke_Kahanamoku",
+      "publisher": "Wikipédia (en), article « Duke Kahanamoku »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Lei Day",
+     "text": "Le 1er mai, fête du lei, officielle depuis 1929 ; chaque île a sa fleur, l’ilima jaune pour Oahu. Grande cérémonie au parc Kapiʻolani.",
+     "months": [
+      5
+     ],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Lei_Day",
+      "publisher": "Wikipédia (en), article « Lei Day »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le plate lunch",
+     "text": "Repas typique d’Hawaï : une ou deux boules de riz, de la salade de macaronis et un plat souvent japonais, comme le poulet katsu.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Plate_lunch",
+      "publisher": "Wikipédia (en), article « Plate lunch »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "cr-nicoya": {
+   "name": "Péninsule de Nicoya",
+   "region": "Guanacaste et Puntarenas",
+   "country": "CR",
+   "spots": [
+    "tamarindo",
+    "santateresa",
+    "nosara"
+   ],
+   "facts": [
+    {
+     "kind": "gout",
+     "title": "Le gallo pinto",
+     "text": "« Coq tacheté » en espagnol : riz et haricots cuits à l’ail, à l’origan et à l’oignon. Plat national du Costa Rica et du Nicaragua.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Gallo_pinto",
+      "publisher": "Wikipédia (en), article « Gallo pinto »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Une zone bleue",
+     "text": "Nicoya est citée parmi les « zones bleues » (longévité hors norme). Concept non prouvé : les nés après 1930 n’y vivent pas plus longtemps.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Blue_Zone",
+      "publisher": "Wikipédia (en), article « Blue Zone »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Les Chorotega",
+     "text": "Avant l’arrivée des Espagnols, le peuple chorotega y vivait, dans des villes comme Zapatí, Nacaome ou Nicopasaya.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Guanacaste_Province",
+      "publisher": "Wikipédia (en), article « Guanacaste Province »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le refuge d’Ostional",
+     "text": "Refuge de 85,7 km² protégé depuis 1982, avec des plages de ponte de la tortue olivâtre : selon le WWF, l’un des deux sites majeurs au monde.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Ostional_Wildlife_Refuge",
+      "publisher": "Wikipédia (en), article « Ostional Wildlife Refuge »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "id-bali-bukit": {
+   "name": "Uluwatu et Padang Padang",
+   "region": "Bukit, Bali",
+   "country": "ID",
+   "spots": [
+    "uluwatu",
+    "padang"
+   ],
+   "facts": [
+    {
+     "kind": "lieu",
+     "title": "Le temple d’Uluwatu",
+     "text": "Bâti au bord (ulu) d’une falaise (watu) de 70 m ; selon la légende, ce rocher est une part de la barque pétrifiée de la déesse Dewi Danu.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Uluwatu_Temple",
+      "publisher": "Wikipédia (en), article « Uluwatu Temple »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le kecak",
+     "text": "Danse chantée par un chœur d’hommes, jouée chaque jour à 18 h dans des temples balinais comme Uluwatu et Tanah Lot.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Kecak",
+      "publisher": "Wikipédia (en), article « Kecak »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Melasti",
+     "text": "Avant Nyepi, les hindous balinais vont à la mer pour se purifier : ils y jettent symboliquement le mal passé et y lavent les objets sacrés.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Melasti",
+      "publisher": "Wikipédia (en), article « Melasti »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "fete",
+     "title": "Nyepi, le jour du silence",
+     "text": "Le nouvel an balinais : silence, jeûne et méditation. Personne, touristes compris, ne va sur les plages ni dans les rues ; l’aéroport ferme.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Nyepi",
+      "publisher": "Wikipédia (en), article « Nyepi »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "nz-raglan": {
+   "name": "Raglan",
+   "region": "Waikato",
+   "country": "NZ",
+   "spots": [
+    "raglan"
+   ],
+   "facts": [
+    {
+     "kind": "mot",
+     "title": "Waikeri",
+     "text": "Le nom traditionnel de Manu Bay est Waikeri, « eaux qui tournent » ; ce site de surf apparaît dans le film The Endless Summer (1966).",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Raglan%2C_New_Zealand",
+      "publisher": "Wikipédia (en), article « Raglan, New Zealand »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le film The Endless Summer",
+     "text": "Documentaire de Bruce Brown (1966) : les surfeurs californiens Mike Hynson et Robert August font le tour du monde, dont Manu Bay.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/The_Endless_Summer",
+      "publisher": "Wikipédia (en), article « The Endless Summer »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Le hāngī",
+     "text": "Cuisson maorie dans un four en terre (umu) : on y chauffe des pierres puis on y enterre la nourriture ; encore pour les grandes occasions.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/H%C4%81ng%C4%AB",
+      "publisher": "Wikipédia (en), article « Hāngī »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Le mont Karioi",
+     "text": "Volcan éteint de 2,4 millions d’années, à 8 km au sud-ouest de Raglan, premier de six volcans alignés, dont le plus grand est le Pirongia.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Mount_Karioi",
+      "publisher": "Wikipédia (en), article « Mount Karioi »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "jp-kanagawa-shonan": {
+   "name": "Shonan, Kamakura et Enoshima",
+   "region": "Kanagawa",
+   "country": "JP",
+   "spots": [
+    "shonan"
+   ],
+   "facts": [
+    {
+     "kind": "lieu",
+     "title": "Le grand Bouddha de Kamakura",
+     "text": "Statue de bronze de 13,35 m et environ 93 tonnes, datée d’environ 1252 dans les archives du temple ; elle est creuse et se visite.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/K%C5%8Dtoku-in",
+      "publisher": "Wikipédia (en), article « Kōtoku-in »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Le yabusame",
+     "text": "Tir à l’arc à cheval : l’archer tire trois flèches sur trois cibles de bois. À voir au sanctuaire Tsurugaoka Hachiman-gū, à Kamakura.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Yabusame",
+      "publisher": "Wikipédia (en), article « Yabusame »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "L’île d’Enoshima",
+     "text": "Reliée par un pont de 389 m, l’île est dédiée à Benzaiten, déesse de la musique, qui l’aurait fait surgir de la mer au VIe siècle.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Enoshima",
+      "publisher": "Wikipédia (en), article « Enoshima »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "coutume",
+     "title": "Kamakura, capitale des shoguns",
+     "text": "En 1192, le shogun Minamoto no Yoritomo fit de Kamakura, simple bourg, sa capitale ; son gouvernement domina le pays jusqu’en 1333.",
+     "months": [],
+     "source": {
+      "url": "https://fr.wikipedia.org/wiki/Kamakura",
+      "publisher": "Wikipédia, article « Kamakura »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
+  },
+  "br-santacatarina-floripa": {
+   "name": "Joaquina, Praia Mole et l’île de Santa Catarina",
+   "region": "Florianópolis",
+   "country": "BR",
+   "spots": [
+    "floripa",
+    "praiamole"
+   ],
+   "facts": [
+    {
+     "kind": "coutume",
+     "title": "L’héritage açorien",
+     "text": "Au milieu du XVIIIe siècle, des milliers d’Açoriens ont migré ici ; Florianópolis en garde la trace : maisons, artisanat, cuisine.",
+     "months": [],
+     "source": {
+      "url": "https://pt.wikipedia.org/wiki/Florian%C3%B3polis",
+      "publisher": "Wikipédia (pt), article « Florianópolis »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "gout",
+     "title": "Les huîtres de Ribeirão da Ilha",
+     "text": "Ce district de Florianópolis, l’un des plus anciens noyaux de colonisation açorienne, est le plus grand producteur d’huîtres du Brésil.",
+     "months": [],
+     "source": {
+      "url": "https://pt.wikipedia.org/wiki/Ribeir%C3%A3o_da_Ilha",
+      "publisher": "Wikipédia (pt), article « Ribeirão da Ilha »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Joaquina et ses dunes",
+     "text": "La plage, très prisée des surfeurs pour la qualité de ses vagues, est entourée du parc naturel municipal des dunes de la Lagoa da Conceição.",
+     "months": [],
+     "source": {
+      "url": "https://pt.wikipedia.org/wiki/Praia_da_Joaquina",
+      "publisher": "Wikipédia (pt), article « Praia da Joaquina »",
+      "consulted": "2026-11-26"
+     }
+    },
+    {
+     "kind": "lieu",
+     "title": "Praia Mole",
+     "text": "Plage de 960 mètres de long sur la côte est de l’île, connue pour attirer des jeunes, des surfeurs et des parapentistes.",
+     "months": [],
+     "source": {
+      "url": "https://en.wikipedia.org/wiki/Praia_Mole",
+      "publisher": "Wikipédia (en), article « Praia Mole »",
+      "consulted": "2026-11-26"
+     }
+    }
+   ]
   }
  },
  "spots": {
@@ -2792,6 +4522,56 @@
   "hvidesande": "dk-jutland-hvidesande",
   "easkey": "ie-sligo-easkey",
   "puntacarola": "ec-galapagos-puntacarola",
-  "trunkbay": "vi-saintjohn-trunkbay"
+  "trunkbay": "vi-saintjohn-trunkbay",
+  "biarritz": "fr-paysbasque-cotebasque",
+  "anglet": "fr-paysbasque-cotebasque",
+  "saintjeandeluz": "fr-paysbasque-cotebasque",
+  "lafitenia": "fr-paysbasque-cotebasque",
+  "lacanau": "fr-gironde-lacanau",
+  "donnant": "fr-morbihan-belleile",
+  "saintmalo": "fr-bretagne-saintmalo",
+  "etretat": "fr-normandie-etretat",
+  "calanques": "fr-provence-calanques",
+  "envau": "fr-provence-calanques",
+  "pampelonne": "fr-var-pampelonne",
+  "cousteau": "gp-basseterre-cousteau",
+  "ansedufour": "mq-anses-darlet-dufour",
+  "nazare": "pt-leiria-nazare",
+  "supertubos": "pt-peniche",
+  "baleal": "pt-peniche",
+  "jardimdomar": "pt-madere-jardimdomar",
+  "mundaka": "es-paysbasque-guipuzcoa-biscaye",
+  "zarautz": "es-paysbasque-guipuzcoa-biscaye",
+  "laconcha": "es-paysbasque-guipuzcoa-biscaye",
+  "tarifa": "es-andalousie-tarifa",
+  "bolonia": "es-andalousie-tarifa",
+  "famara": "es-canaries-lanzarote",
+  "lasanta": "es-canaries-lanzarote",
+  "fistral": "gb-cornwall-fistral",
+  "lahinch": "ie-clare-lahinch",
+  "capri": "it-campanie-capri",
+  "sarakiniko": "gr-cyclades-milos",
+  "balos": "gr-crete-balos",
+  "zlatnirat": "hr-dalmatie-brac",
+  "anchorpoint": "ma-souss-agadir-taghazout",
+  "taghazout": "ma-souss-agadir-taghazout",
+  "essaouira": "ma-essaouira-sidikaouki",
+  "sidikaouki": "ma-essaouira-sidikaouki",
+  "salkite": "cv-sal",
+  "pontapreta": "cv-sal",
+  "anse_source": "sc-ladigue-praslin",
+  "anselazio": "sc-ladigue-praslin",
+  "pipeline": "us-hawaii-oahu",
+  "sunsetbeach": "us-hawaii-oahu",
+  "waikiki": "us-hawaii-oahu",
+  "tamarindo": "cr-nicoya",
+  "santateresa": "cr-nicoya",
+  "nosara": "cr-nicoya",
+  "uluwatu": "id-bali-bukit",
+  "padang": "id-bali-bukit",
+  "raglan": "nz-raglan",
+  "shonan": "jp-kanagawa-shonan",
+  "floripa": "br-santacatarina-floripa",
+  "praiamole": "br-santacatarina-floripa"
  }
 }

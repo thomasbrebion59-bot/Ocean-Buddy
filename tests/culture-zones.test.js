@@ -204,3 +204,47 @@ test('illustrations des faits : chaque fait illustré a son WebP d’au moins 10
   }
   assert.deepEqual(narrow, [], 'trop étroites');
 });
+
+/* Ajout du 26 nov. 2026 : 31 zones et 50 spots de plus (grandes destinations), faits sourcés sans illustration propre
+   (les phrases d’illustration sont gardées hors dépôt, dans la préparation, pour la génération d’après le 12 déc.). */
+test('ajout « 50 spots de plus » : 31 zones, aucun spot rattaché deux fois, chaque fait sourcé et traduit, la vignette du genre pour ceux sans image', () => {
+  const d = JSON.parse(read('data/culture-zones.json')), tr = JSON.parse(read('data/culture-zones-i18n.json'));
+  const added = ['fr-paysbasque-cotebasque', 'fr-gironde-lacanau', 'fr-morbihan-belleile', 'fr-bretagne-saintmalo', 'fr-normandie-etretat',
+    'fr-provence-calanques', 'fr-var-pampelonne', 'gp-basseterre-cousteau', 'mq-anses-darlet-dufour', 'pt-leiria-nazare', 'pt-peniche',
+    'pt-madere-jardimdomar', 'es-paysbasque-guipuzcoa-biscaye', 'es-andalousie-tarifa', 'es-canaries-lanzarote', 'gb-cornwall-fistral',
+    'ie-clare-lahinch', 'it-campanie-capri', 'gr-cyclades-milos', 'gr-crete-balos', 'hr-dalmatie-brac', 'ma-souss-agadir-taghazout',
+    'ma-essaouira-sidikaouki', 'cv-sal', 'sc-ladigue-praslin', 'us-hawaii-oahu', 'cr-nicoya', 'id-bali-bukit', 'nz-raglan',
+    'jp-kanagawa-shonan', 'br-santacatarina-floripa'];
+  assert.equal(added.length, 31);
+  assert.ok(Object.keys(d.zones).length >= 78);
+  /* Aucun spot dans deux zones, et l’index spot → zone est exactement la réunion des listes. */
+  const seen = new Map();
+  for (const [id, z] of Object.entries(d.zones)) for (const s of z.spots) {
+    assert.ok(!seen.has(s), `${s} rattaché à ${seen.get(s)} et à ${id}`);
+    seen.set(s, id);
+  }
+  assert.deepEqual(Object.fromEntries(seen), d.spots);
+  let spots = 0, facts = 0;
+  const illus = JSON.parse(read('data/culture-zones-illus.json'));
+  for (const id of added) {
+    const z = d.zones[id];
+    assert.ok(z && z.facts.length >= 4 && z.facts.length <= 5, id);
+    spots += z.spots.length;
+    for (const f of z.facts) {
+      facts++;
+      assert.ok(!('illustration' in f), `${id} « ${f.title} » : pas de champ illustration dans la donnée`);
+      assert.match(f.source.url, /^https:\/\/(fr|en|pt)\.wikipedia\.org\//, `${id} « ${f.title} »`);
+      assert.equal(f.source.consulted, '2026-11-26');
+      /* Sans image propre : la fiche prend la vignette du genre, jamais un cadre vide ni une image cassée. */
+      assert.ok(!illus[B.factId(id, f.title)], `${id} « ${f.title} » : pas encore illustré`);
+    }
+  }
+  assert.equal(spots, 50);
+  assert.equal(facts, 125);
+  for (const [s, id] of [['biarritz', 'fr-paysbasque-cotebasque'], ['nazare', 'pt-leiria-nazare'], ['uluwatu', 'id-bali-bukit'], ['capri', 'it-campanie-capri']]) assert.equal(d.spots[s], id);
+  for (const l of ['en', 'es']) for (const id of added) assert.ok(tr[l].zones[id], `${l} : nom de ${id}`);
+  /* Une carte sans illustration propre reçoit la vignette de son genre (fichier présent), jamais la grande image. */
+  const g = read('spot-guide.js');
+  assert.match(g, /const ZONE_ILLU=\{gout:'table',fete:'fete',mot:'panneau',coutume:'coutume',lieu:'soleil'\};/);
+  for (const k of ['accueil', 'table', 'fete', 'coutume', 'marche', 'panneau', 'soleil']) assert.ok(fs.existsSync(path.join(__dirname, '..', 'assets/fiche', k + '.webp')), k);
+});
