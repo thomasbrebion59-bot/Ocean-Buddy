@@ -65,6 +65,8 @@
        entrée.climate { month, seaC, inSeason, months } | null : sans relevé du tout, l'eau et la saison du mois (normales
                      déjà sur l'appareil), écrites comme une moyenne ; null si rien n'est connu.
        entrée.id     l'identifiant du spot (html() en a besoin pour la saison).
+       entrée.until  fin réelle du créneau (ms), quand il y en a un : un relevé gardé ne reprend plus « Bon » ni son créneau
+                     une fois ce créneau terminé (relecture du 26 nov.).
      L'affichage suit les unités choisies (OceanUnits : nœuds, pieds, °F) ; les valeurs de l'entrée restent métriques.
      OceanVerdict.forSpots(ids, { force: true }) oublie la mesure en mémoire de ces spots et redemande le service (tirer pour
      rafraîchir) ; la mesure de moins de 30 min d'avant n'est pas reprise.
@@ -211,7 +213,12 @@
       if (tomorrow) { r = W.bestSlot(list, Object.assign({ date: tomorrow, nowIso: null }, base)); day = 'tomorrow'; }
     }
     const x = F.slotSummary(rule, r);
-    if (x.status === 'ok') { out.verdict = x.quality === 'good' ? 'bon' : 'possible'; out.slot = range(x.start, x.end); out.day = day; }
+    if (x.status === 'ok') {
+      out.verdict = x.quality === 'good' ? 'bon' : 'possible'; out.slot = range(x.start, x.end); out.day = day;
+      /* Fin réelle du créneau (dernière heure comprise) : un relevé gardé n'en reprend plus le verdict une fois le créneau passé. */
+      const end = W.instant ? W.instant(r.end, wx.utc_offset_seconds) : NaN;
+      if (Number.isFinite(end)) out.until = end + 36e5;
+    }
     else if (x.status === 'none') {
       out.verdict = 'non'; out.day = day;
       /* Rien aujourd'hui : le meilleur créneau de demain, s'il y en a un (même calcul, heures du spot). */

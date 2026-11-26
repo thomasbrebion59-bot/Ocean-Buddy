@@ -309,10 +309,12 @@
     /* 1. Grands chiffres. Le mois s’écrit déjà dans la langue de l’app, hors traduction. */
     const tile=(go,label,value,dec,unit,illu,i)=>`<button type="button" class="gl-tile" data-gl-go="${go}" style="--i:${i}"><span class="gl-tile-tx"><span class="fx-label"><span>${label}</span> <span${NT}>${month}</span></span><span class="gl-big"><b class="fx-num" data-gl-count="${value}" data-gl-dec="${dec}"${NT}>${nf(value,dec)}</b><span class="fx-unit"${NT}>${unit}</span></span></span>${ILLU(illu)}</button>`;
     const tiles=[];
-    if(n&&n.sea!=null)tiles.push(tile('saisons','Eau en',n.sea,0,'°C','eau',tiles.length));
+    /* Unités choisies (Réglages : °F, pieds ; units-model.js) : la normale reste métrique, seul l’affichage convertit. */
+    const mt=(kind,v,dec,unit)=>{const c=window.OceanUnits&&OceanUnits.showConvert(kind,v);return c?[c.v,c.d,c.unit]:[v,dec,unit];};
+    if(n&&n.sea!=null)tiles.push(tile('saisons','Eau en',...mt('temp',n.sea,0,'°C'),'eau',tiles.length));
     /* La houle du mois ne parle qu’à ceux qui cherchent la vague ou le vent : pas de tuile sur un spot de plongée ou un lac. */
     const sportsOf=typeof spotSports==='function'?spotSports(s):(s.sports||[]),swellSport=sportsOf.some(a=>['surf','bodyboard','kitesurf','windsurf','wingfoil','foil'].includes(a));
-    if(n&&n.hs!=null&&swellSport)tiles.push(tile('saisons','Houle en',n.hs,1,'m','houle',tiles.length));
+    if(n&&n.hs!=null&&swellSport)tiles.push(tile('saisons','Houle en',...mt('length',n.hs,1,'m'),'houle',tiles.length));
     if(e)tiles.push(`<button type="button" class="gl-tile" data-gl-go="dormir" style="--i:${tiles.length}"><span class="gl-tile-tx"><span class="fx-label">La nuit, dès</span><span class="gl-big"><b class="fx-num" data-gl-count="${e.lo}" data-gl-dec="0"${NT}>${nf(e.lo)}</b><span class="fx-unit"${NT}>€</span></span></span>${ILLU('cabane')}</button>`);
     /* 2. Ici, on vit comme ça : seulement ce que le carnet contient (mot du coin, à goûter), puis la page du pays. */
     const cards=[];

@@ -9,7 +9,7 @@
      1. Un relevé porte toujours son heure réelle de mesure (at, en ms), jamais l'heure de sa lecture.
      2. Relevé de 3 h ou moins : ses chiffres s'affichent avec « Relevé à 7 h 50 ». Son verdict (bon, possible, pas
         aujourd'hui) et son créneau ne sont repris que s'il a été calculé le MÊME JOUR, pour le même sport et le même
-        niveau : sinon les chiffres seuls.
+        niveau, et seulement tant que son créneau n'est pas terminé (v.until) : sinon les chiffres seuls.
      3. Relevé de plus de 3 h : chiffres grisés, heure ET date (« Relevé hier à 7 h 50 »), JAMAIS de verdict ni de créneau.
         Un vieux relevé ne donne donc jamais « Bon pour toi ».
      4. Relevé de plus de 7 jours, daté d'un instant futur (horloge de l'appareil changée) ou illisible : ignoré.
@@ -18,7 +18,7 @@
    La clé de stockage commence par ob_ (et non oceanbuddy_) : tout ce qui commence par oceanbuddy_ est recopié dans les
    préférences natives ; un relevé n'a pas à l'être. Elle est ajoutée à l'effacement des données (privacy.js).
 
-   Forme gardée : { [spotId]: { at, inland, now: {windKmh, windDir, swellM, swellS, waterC}, v?: {key, verdict, slot, day, next?} } }
+   Forme gardée : { [spotId]: { at, inland, now: {windKmh, windDir, swellM, swellS, waterC}, v?: {key, verdict, slot, day, until?, next?} } }
    (valeurs métriques : les unités choisies ne changent que l'affichage). */
 (function (root, factory) {
   const api = factory();
@@ -51,6 +51,7 @@
     const v = r.v;
     if (v && typeof v === 'object' && typeof v.key === 'string' && VERDICTS.includes(v.verdict)) {
       out.v = { key: v.key, verdict: v.verdict, slot: typeof v.slot === 'string' ? v.slot : null, day: v.day === 'tomorrow' ? 'tomorrow' : 'today' };
+      if (num(v.until) != null && +v.until > 0) out.v.until = +v.until;
       const n = v.next;
       if (n && typeof n === 'object' && (n.verdict === 'bon' || n.verdict === 'possible') && typeof n.slot === 'string') out.v.next = { verdict: n.verdict, slot: n.slot, day: 'tomorrow' };
     }
@@ -94,6 +95,7 @@
     const rec = { at: entry.at, inland: !!entry.inland, now: entry.now };
     if (VERDICTS.includes(entry.verdict) && typeof key === 'string') {
       rec.v = { key, verdict: entry.verdict, slot: entry.slot || null, day: entry.day === 'tomorrow' ? 'tomorrow' : 'today' };
+      if (entry.until > 0) rec.v.until = entry.until;
       if (entry.next) rec.v.next = entry.next;
     }
     return cleanRec(rec);
@@ -113,6 +115,8 @@
     const nowMs = o.now, danger = o.danger == null ? null : o.danger;
     const out = { now: Object.assign({}, rec.now), verdict: null, slot: null, day: 'today', danger, at: rec.at, inland: !!rec.inland, kept: true };
     if (isStale(rec, nowMs)) { out.stale = true; return out; }
+    /* Créneau déjà terminé (rec.v.until : fin réelle de sa dernière heure) : plus de verdict, les chiffres et l'heure seuls. */
+    if (rec.v && rec.v.until > 0 && nowMs >= rec.v.until) return out;
     if (rec.v && rec.v.key === o.key && sameDay(rec.at, nowMs)) {
       out.verdict = rec.v.verdict; out.slot = rec.v.slot; out.day = rec.v.day;
       if (rec.v.next) out.next = Object.assign({}, rec.v.next);

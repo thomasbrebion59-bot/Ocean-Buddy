@@ -210,3 +210,36 @@ test('textes du lot : traduits en anglais et en espagnol, ni flèche ni tiret lo
     for (const t of [k, en[k], es[k]]) assert.doesNotMatch(t, /[→←↗—·]/, t);
   }
 });
+
+/* ---------- Relecture du 26 nov. ---------- */
+test('relecture : un relevé gardé ne reprend plus « Bon » ni son créneau une fois ce créneau terminé', () => {
+  const at = local(26, 8);
+  const v = { key: 'surf|intermediaire', verdict: 'bon', slot: '9 h à 10 h', day: 'today', until: local(26, 11) };
+  const rec = CM.parse({ s: { at, now: NOW, v } }).s;
+  assert.equal(rec.v.until, local(26, 11), 'la fin du créneau est gardée');
+  assert.equal(CM.keptEntry(rec, { now: local(26, 10, 30), key: v.key }).verdict, 'bon');
+  const after = CM.keptEntry(rec, { now: local(26, 11), key: v.key });
+  assert.equal(after.verdict, null); assert.equal(after.slot, null); assert.equal(after.kept, true); assert.equal(after.now.windKmh, 12);
+  assert.equal(CM.recordOf({ at, now: NOW, verdict: 'bon', slot: '9 h à 10 h', until: local(26, 11) }, v.key).v.until, local(26, 11));
+});
+test('relecture : OceanVerdict garde la fin réelle du créneau (heure du spot), puis n’affiche plus le verdict après', async () => {
+  disk = null;
+  const w = world({ now: at(10) }); w.stampAt = at(10);
+  const on = (await V.forSpots(['surf'])).get('surf');
+  assert.equal(on.verdict, 'bon');
+  assert.ok(on.until > on.at, 'fin du créneau après le relevé');
+  V.flushKept();
+  assert.equal(CM.parse(disk).surf.v.until, on.until);
+  world({ now: on.until + 60e3, offline: true });
+  const e = (await V.forSpots(['surf'])).get('surf');
+  assert.equal(e.verdict, null);
+  assert.doesNotMatch(V.html(e), /Bon pour toi|ui-verdict/);
+});
+test('relecture : effacement après suppression du compte, phrase entière de l’heure, air du plan d’eau dans l’unité choisie', () => {
+  assert.ok(read('account-sync.js').includes("'" + CM.KEY + "'"), 'la suppression du compte efface aussi les relevés gardés');
+  const feed = read('home-feed.js');
+  assert.doesNotMatch(feed, /tr\('Relevé à \{0\}'\)\.replace\('\{0\}',freshLabel/, 'jamais « Relevé à 24 nov. 7 h 50 »');
+  assert.match(feed, /CM\.stampText\(/);
+  const before = read('spot-before.js');
+  assert.doesNotMatch(before, /'Air', num\(\[String\(Math\.round\(l\.airC\)\)\]\), '°C'/);
+});

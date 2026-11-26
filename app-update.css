@@ -23,7 +23,7 @@
 .app-update-reminder p{margin:0;font-size:15px;line-height:1.35}
 .app-update-reminder-version{margin-top:2px;font-size:13px;color:var(--t-deep2)}
 .app-update-reminder-actions{display:flex;gap:6px;justify-content:flex-end}
-.app-update-reminder-actions button{min-height:44px;padding:0 16px;border:0;border-radius:999px;font:700 15px/1 inherit;cursor:pointer}
+.app-update-reminder-actions button{min-height:44px;padding:0 16px;border:0;border-radius:999px;font:700 15px/1 var(--body,'Figtree',sans-serif);cursor:pointer}
 .app-update-reminder-go{background:var(--t-main);color:var(--t-on-main)}
 .app-update-reminder-later{background:transparent;color:var(--t-main)}
 @media(prefers-reduced-motion:reduce){.app-update-reminder{transition:none}}

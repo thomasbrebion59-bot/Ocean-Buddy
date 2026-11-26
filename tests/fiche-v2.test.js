@@ -109,7 +109,7 @@ test('ouverture : trois chiffres du moment sur la photo, la motion d’arrivée 
   /* Le vent : chiffre et unité dans la valeur, direction dans le libellé (« Vent S »), pour tenir sur une ligne à trois cases. */
   assert.match(hero, /const wind = \(\) => \{ const w = ready \? split\(disp\(l\.wind\)\) : null, m = w \? \/\^\(km\\\/h\|kn\)\\s\*\(\.\*\)\$\/\.exec\(w\[1\]\) : null; chips\.push\(hxChip\('wind', m && m\[2\] \? `<span>Vent<\/span> <span translate="no" data-no-i18n>\$\{esc\(m\[2\]\)\}<\/span>` : 'Vent'/);
   assert.match(read('app.js'), /&current=wind_speed_10m,wind_direction_10m,temperature_2m&wind_speed_unit=kmh&timezone=auto&cell_selection=\$\{meteoCell\(s\)\}/, 'l’air du moment est demandé avec le vent (même appel)');
-  assert.match(hero, /if \(inland\(s\)\) \{[^}]*\n\s+wind\(\);\n\s+if \(ready && Number\.isFinite\(l\.airC\)\) chips\.push\(hxChip\('temp', 'Air'/, 'plan d’eau intérieur : le vent et l’air, pas la houle');
+  assert.match(hero, /if \(inland\(s\)\) \{[^}]*\n\s+wind\(\);\n(?:\s*\/\*[^*]*\*\/\n)?\s+const air = ready && Number\.isFinite\(l\.airC\) \? [^\n]*\n\s+if \(air\) chips\.push\(hxChip\('temp', 'Air'/, 'plan d’eau intérieur : le vent et l’air, pas la houle');
   /* Spot de mer sans sport de vague ni de vent (plongée, snorkeling) : le vent du moment remplace la houle. */
   assert.match(hero, /if \(waveSpot\(s\)\) chips\.push\(hxChip\('wave', 'Houle'[^\n]*\n\s+else wind\(\);/);
   const waveSpot = new Function('spotSports', before.match(/const WAVE_SPORTS = [^\n]+\n\s+const waveSpot = [^\n]+/)[0] + '; return waveSpot;')(s => s.sports);

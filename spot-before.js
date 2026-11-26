@@ -113,7 +113,9 @@
     if (inland(s)) {
       /* Plan d’eau : le vent, puis l’air du moment quand le relevé le donne (ni houle marine, ni eau en direct). */
       wind();
-      if (ready && Number.isFinite(l.airC)) chips.push(hxChip('temp', 'Air', num([String(Math.round(l.airC))]), '°C'));
+      /* L'air aussi suit l'unité choisie (°F), comme l'eau et les prévisions. */
+      const air = ready && Number.isFinite(l.airC) ? split(disp(`${Math.round(l.airC)} °C`)) : null;
+      if (air) chips.push(hxChip('temp', 'Air', num(air), esc(air[1])));
     } else {
       const sw = ready ? split(disp(l.swell)) : null, te = ready ? split(disp(l.temp)) : null;
       /* Spot sans sport de vague ni de vent (plongée, snorkeling, baignade) : la houle au large n’y dit rien d’utile

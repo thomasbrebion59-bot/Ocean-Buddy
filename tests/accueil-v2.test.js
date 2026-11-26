@@ -519,7 +519,8 @@ test('heure du relevé à côté de « Mes spots » : la vraie heure des conditi
   assert.match(f, /const ents=map\?mineIds\.map\(id=>map\.get\(id\)\)\.filter\(e=>e&&e\.now&&e\.at>0\):\[\];\n    const ats=ents\.map\(e=>e\.at\);/, 'les relevés de « Mes spots » qui ont des chiffres');
   assert.match(f, /if\(!ats\.length\)\{el\.hidden=true;freshAt=0;return;\}/, 'sans relevé : rien, aucune heure inventée');
   assert.match(f, /const at=Math\.min\(\.\.\.ats\)/, 'le plus ancien des relevés affichés');
-  assert.match(f, /el\.title=tr\('Relevé à \{0\}'\)\.replace\('\{0\}',t\);/);
+  /* Relecture du 26 nov. : la phrase entière (« Relevé à 7 h 50 », « Relevé hier à … », « Relevé le … à … »). */
+  assert.match(f, /el\.title=freshSentence\(at\);/);
   assert.match(fn('loadLive'), /syncFresh\(map\);/);
   /* « 14 h 05 » en français, l’heure de la langue ailleurs. */
   const c = load('home-feed.js', ['freshText'], { lang: () => 'fr', fmt: (k, make) => make(), Intl });

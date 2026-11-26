@@ -803,6 +803,9 @@
     const now=Date.now(),t=freshText(at);
     return CM&&CM.daysAgo(at,now)>0?`${CM.dateText(at,lang(),window.OB_I18N?.locale)} ${t}`:t;
   };
+  /* Phrase entière de l'heure du relevé (titre de l'heure, pastille du tirer) : « Relevé à 7 h 50 », « Relevé hier à 7 h 50 »,
+     « Relevé le 24 nov. à 7 h 50 » (jamais « Relevé à 24 nov. 7 h 50 »). */
+  const freshSentence=at=>CM?CM.stampText({at},Date.now(),{tr,lang:lang(),locale:window.OB_I18N?.locale}):tr('Relevé à {0}').replace('{0}',freshText(at));
   function syncFresh(map){
     const el=$('[data-ac-fresh]',home);if(!el)return;
     const ents=map?mineIds.map(id=>map.get(id)).filter(e=>e&&e.now&&e.at>0):[];
@@ -812,7 +815,7 @@
     if(tx&&tx.textContent!==t)tx.textContent=t;
     /* Relevé gardé de plus de 3 h : le point n'est plus vert (rien de « frais »). */
     el.toggleAttribute('data-old',ents.some(e=>e.stale));
-    el.title=tr('Relevé à {0}').replace('{0}',t);el.hidden=false;
+    el.title=freshSentence(at);el.hidden=false;
     if(at>freshAt&&freshAt&&onScreen())beat(el);
     freshAt=at;
   }
@@ -1128,12 +1131,12 @@
   function refreshNow(){
     if(!V2||!built||!Verdict||!CM)return Promise.resolve(null);
     const t=Date.now();
-    if(!CM.canRefresh(lastPull,t)){pullShow(freshAt?tr('Relevé à {0}').replace('{0}',freshLabel(freshAt)):tr('Mise à jour…'),40);pullHide(1400);return Promise.resolve(null);}
+    if(!CM.canRefresh(lastPull,t)){pullShow(freshAt?freshSentence(freshAt):tr('Mise à jour…'),40);pullHide(1400);return Promise.resolve(null);}
     lastPull=t;pullShow(tr('Mise à jour…'),40);
     return loadLive(true).then(map=>{
       const ents=map?[...map.values()].filter(e=>e&&e.now):[];
       const noNew=offlineNow()||!ents.length||ents.every(e=>e.kept);
-      pullShow(noNew?tr('Pas de réseau. Derniers relevés gardés.'):tr('Relevé à {0}').replace('{0}',freshLabel(freshAt||Date.now())),40);
+      pullShow(noNew?tr('Pas de réseau. Derniers relevés gardés.'):freshSentence(freshAt||Date.now()),40);
       pullHide(1800);return map;
     });
   }

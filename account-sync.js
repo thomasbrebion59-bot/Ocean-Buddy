@@ -255,7 +255,7 @@
           window.toast?.(message(e));return;}
         save({...M.freshState(),invite:load().invite,linked:false});me=null;renderSettings();
         const wipe=await confirmBox('Ton compte est supprimé. Effacer aussi les données de cet appareil ?',{ok:'Effacer aussi',cancel:'Garder sur cet appareil',danger:true});
-        if(wipe){const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&k.startsWith('oceanbuddy_'))keys.push(k);}keys.forEach(k=>localStorage.removeItem(k));
+        if(wipe){const keys=[];for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&(k.startsWith('oceanbuddy_')||k==='ob_conditions_v1'))keys.push(k);}keys.forEach(k=>localStorage.removeItem(k));
           try{await window.OceanMobile?.persist?.();}catch(_){}location.reload();}
         else window.toast?.('Compte supprimé. Tes données restent sur cet appareil.');
       };
