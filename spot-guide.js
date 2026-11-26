@@ -199,7 +199,7 @@
      spots (jauge) et la répétition du lieu de recherche. */
   function sleepHTML(s){
     const e=estimate(s),now=monthNow(),dates=tripDates(s),pl=place(s,e);
-    const links=M.searchLinks(pl,{checkin:dates?.checkin,checkout:dates?.checkout,coords:coordsOf(s.id)});
+    const links=M.searchLinks(pl,{checkin:dates?.checkin,checkout:dates?.checkout,coords:coordsOf(s.id),lang:LG()});
     const inPeak=e.peak.includes(now),hasPeak=e.peak.length>0;
     /* Les mois s’écrivent ici en texte simple, déjà dans la langue de l’app : un élément au milieu de la phrase la
        couperait en deux pour i18n.js, qui ne reconnaîtrait plus « Haute saison ({0}) : {1} la nuit. ». */
@@ -324,8 +324,8 @@
       /* Mois : seulement pour une fête (le mois d’une édition constatée, jamais une date). Illustration propre au fait
          (assets/fiche/faits/) quand elle existe, sinon celle du genre. */
       const [kind,title,text,months,url,publisher,,own]=f,when=kind==='fete'&&Array.isArray(months)&&months.length?M.monthsLabel(months,LG()):'';
-      const big=!!own&&/^[a-z0-9-]+$/.test(own);
-      cards.push(`<li class="gl-card gl-fact${big?' gl-big-card':''}" data-kind="${esc(kind)}" style="--i:${cards.length}">${big?HERO('faits/'+own):ILLU(zoneIllu(kind,title))}<span class="fx-label">${ZONE_LABEL[kind]||''}</span><b${NT}>${esc(title)}</b><small${NT}>${esc(text)}</small>${when?`<small class="gl-when"><span>Souvent en</span> <span${NT}>${esc(when)}</span></small>`:''}<a class="gl-fact-src" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>Source :</span> <span${NT}>${esc(publisher)}</span></a></li>`);
+      const big=!!own&&/^[a-z0-9-]+$/.test(own),srcL=M.sourceLabel(publisher,url);
+      cards.push(`<li class="gl-card gl-fact${big?' gl-big-card':''}" data-kind="${esc(kind)}" style="--i:${cards.length}">${big?HERO('faits/'+own):ILLU(zoneIllu(kind,title))}<span class="fx-label">${ZONE_LABEL[kind]||''}</span><b${NT}>${esc(title)}</b><small${NT}>${esc(text)}</small>${when?`<small class="gl-when"><span>Souvent en</span> <span${NT}>${esc(when)}</span></small>`:''}<a class="gl-fact-src" href="${esc(url)}" target="_blank" rel="noopener noreferrer"><span>Source :</span> <span${srcL.fixed?NT:''}>${esc(srcL.text)}</span></a></li>`);
     }
     const hello=has('mot')?'':c.hello?.[0]||'',helloMore=typeof c.hello?.[1]==='string'?c.hello[1]:'',food=has('gout')?'':c.food?.[0]||'',foodMore=typeof c.food?.[1]==='string'?c.food[1]:'';
     if(hello)cards.push(`<li class="gl-card" style="--i:${cards.length}">${ILLU('panneau')}<span class="fx-label">Le mot du coin</span><b${NT}>«&nbsp;${esc(hello)}&nbsp;»</b>${helloMore?`<small${NT}>${esc(helloMore)}</small>`:''}</li>`);
@@ -362,12 +362,13 @@
       budget=`<div class="gl-block gl-budget"><h3 class="fx-title">Budget sur place</h3>${level}${nights}</div>`;
     }
     /* 4. Raccourcis : de vrais liens (recherches publiques, sans lien sponsorisé). */
-    const pl=place(s,e),dates=tripDates(s),links=M.searchLinks(pl,{checkin:dates?.checkin,checkout:dates?.checkout,coords:coordsOf(s.id)});
+    const pl=place(s,e),dates=tripDates(s),links=M.searchLinks(pl,{checkin:dates?.checkin,checkout:dates?.checkout,coords:coordsOf(s.id),lang:LG()});
     const act=(typeof detailAct==='function'?detailAct(s):null)||(typeof spotSports==='function'?spotSports(s)[0]:(s.sports||[])[0])||'',sportName=(typeof SPORTMAP!=='undefined'&&SPORTMAP[act]?.label)||'';
     const link=(href,ic,label,nt)=>`<a class="gl-link" href="${esc(href)}" target="_blank" rel="noopener"><span class="gl-link-ic">${svg(ic)}</span><span${nt?NT:''}>${label}</span></a>`;
     const shortcuts=[link(links.booking,P.bed,'Booking.com',1)];
     if(e&&e.type==='camping')shortcuts.push(link(links.camping,P.tent,'Campings'));
-    shortcuts.push(link(mapsNear(s,('école '+sportName).trim()),P.school,'École'),link(mapsNear(s,('location matériel '+sportName).trim()),P.board,'Location'),link(mapsNear(s,'restaurants'),P.food,'Restaurants'));
+    const qs=M.searchQueries(LG(),LG()==='fr'||typeof window.obT!=='function'?sportName:window.obT(sportName));
+    shortcuts.push(link(mapsNear(s,qs.school),P.school,'École'),link(mapsNear(s,qs.rental),P.board,'Location'),link(mapsNear(s,qs.restaurants),P.food,'Restaurants'));
     return `${tiles.length?`<div class="gl-tiles gl-n${tiles.length}">${tiles.join('')}</div>`:''}${life}${budget}<nav class="gl-links" aria-label="Raccourcis pratiques">${shortcuts.join('')}</nav><p class="fx-note gl-links-src">Recherches publiques, sans lien sponsorisé.</p>${placesHTML(s)}`;
   }
   /* Les chiffres comptent jusqu’à leur valeur, une fois, à l’ouverture ; jamais en mouvement réduit. */
@@ -512,7 +513,7 @@
       const s=spotById(step.spotId);
       if(!step.perNight||!s){host.innerHTML='';return;}
       const e=estimate(s);
-      const nightsText=step.nights===null?'Ajoute la date de l’étape pour estimer le total.':step.nights===0?'Pas de nuit prévue ici : une étape à la journée.':`${step.nights===1?'1 nuit':step.nights+' nuits'}${step.basis==='split'?' (réparties à parts égales)':''} : ${M.euros(step.total)} au total.`;
+      const nightsText=step.nights===null?'Ajoute la date de l’étape pour estimer le total.':step.nights===0?'Pas de nuit prévue ici : une étape à la journée.':(step.nights===1?`1 nuit : ${M.euros(step.total)} au total.`:step.basis==='split'?`${step.nights} nuits (réparties à parts égales) : ${M.euros(step.total)} au total.`:`${step.nights} nuits : ${M.euros(step.total)} au total.`);
       host.innerHTML=`<span class="trip-lodging-icon">${icon(e.type)}</span><span><b>${lab(e)} · ${M.euros(step.perNight)} la nuit${step.perNight.peak?' (haute saison)':''}</b><small>${esc(nightsText)}</small></span>${est.cheapest&&est.cheapest.stepId===step.stepId?'<em>Le moins cher</em>':''}`;
       host.classList.toggle('is-cheapest',!!est.cheapest&&est.cheapest.stepId===step.stepId);
     });
@@ -522,7 +523,7 @@
     const cheap=est.cheapest?spotById(est.cheapest.spotId):null;
     const budget=Number(String(t.budget||'').replace(',','.'));
     panel.innerHTML=`<div class="trip-panel-title">${icon('bed')}<h3>Nuits à petit prix</h3></div>
-      ${est.total?`<p class="trip-lodging-total"><strong>${M.euros(est.total)}</strong><span>pour ${est.nights===1?'1 nuit':est.nights+' nuits'} en solo${est.complete?'':', sur les étapes datées'}</span></p>`:'<p class="trip-lodging-empty">Ajoute des dates au voyage ou à chaque étape pour estimer le total de tes nuits.</p>'}
+      ${est.total?`<p class="trip-lodging-total"><strong>${M.euros(est.total)}</strong><span>${est.nights===1?(est.complete?'pour 1 nuit en solo':'pour 1 nuit en solo, sur les étapes datées'):(est.complete?`pour ${est.nights} nuits en solo`:`pour ${est.nights} nuits en solo, sur les étapes datées`)}</span></p>`:'<p class="trip-lodging-empty">Ajoute des dates au voyage ou à chaque étape pour estimer le total de tes nuits.</p>'}
       ${est.total&&budget>0?`<p class="trip-lodging-budget">${est.total.hi<=budget?'Cette estimation tient dans ton budget prévu.':est.total.lo>budget?'Cette estimation dépasse ton budget prévu.':'Cette estimation frôle ton budget prévu.'}</p>`:''}
       ${cheap?`<button type="button" class="trip-lodging-cheapest" data-guide-spot="${esc(cheap.id)}"><small>Le spot le moins cher de ton voyage</small><b>${esc(cheap.name.split(' — ')[0])}</b><span>${M.euros(est.cheapest.perNight)} la nuit</span></button>`:''}
       <p class="trip-lodging-note">Estimation indicative Ocean Buddy · ${M.EDITION} · les prix varient selon la saison. Nuit la moins chère de chaque étape, pour une personne.</p>`;

@@ -236,17 +236,41 @@
     return Math.round(list.filter(v=>v>value).length/list.length*100);
   }
   function euros(r){return r.lo===r.hi?`${r.lo} €`:`${r.lo}–${r.hi} €`;}
+  /* Source d’un fait du Coin : pour une page Wikipédia, Wikivoyage ou Wiktionnaire, « Wikipedia (fr), « Titre » » (nom du
+     projet, langue de la page, puis le titre), le même texte dans toutes les langues de l’app ; la langue vient de
+     l’éditeur (« Wikipédia (en), article « … » ») ou de l’adresse (fr.wikipedia.org), le titre de l’éditeur ou de l’adresse.
+     Autre éditeur : tel quel, avec `fixed:false` (la page le traduit si elle le connaît : « tourisme régional »). */
+  const WIKI={wikip:'Wikipedia',wikiv:'Wikivoyage',wikti:'Wiktionary'};
+  function sourceLabel(publisher,url){
+    const p=String(publisher||'').trim(),m=/^(wikip[ée]dia|wikivoyage|wiktionnaire)\b/i.exec(p);
+    if(!m)return {text:p,fixed:false};
+    const k=m[1].toLowerCase().replace('é','e').slice(0,5),project=WIKI[k];
+    let code=(/\(([a-z-]{2,5})\)/.exec(p)||[])[1],title=(/«\s*(.+?)\s*»/.exec(p)||[])[1];
+    const u=/^https?:\/\/([a-z-]+)\.(?:wikipedia|wikivoyage|wiktionary)\.org\/wiki\/([^#?]+)/i.exec(String(url||''));
+    if(u){code=code||u[1].toLowerCase();if(!title){try{title=decodeURIComponent(u[2]).replace(/_/g,' ');}catch(e){title=u[2].replace(/_/g,' ');}}}
+    if(!code)code='fr';
+    return {text:`${project} (${code})${title?`, « ${title} »`:''}`,fixed:true};
+  }
+  /* Requêtes écrites dans la langue de l’app (Google Maps et Google Voyages cherchent dans la langue de la requête). */
+  const QUERIES={
+    fr:{hotels:'hôtels pas chers',school:s=>('école '+s).trim(),rental:s=>('location matériel '+s).trim(),restaurants:'restaurants'},
+    en:{hotels:'cheap hotels',school:s=>(s?s+' school':'school'),rental:s=>(s?s+' equipment rental':'equipment rental'),restaurants:'restaurants'},
+    es:{hotels:'hoteles baratos',school:s=>(s?'escuela de '+s:'escuela'),rental:s=>(s?'alquiler de material de '+s:'alquiler de material'),restaurants:'restaurantes'}
+  };
+  const queryLang=l=>QUERIES[l]?l:'fr';
+  function searchQueries(lang,sport){const q=QUERIES[queryLang(lang)],sp=String(sport||'').trim().toLowerCase();return {hotels:q.hotels,school:q.school(sp),rental:q.rental(sp),restaurants:q.restaurants};}
   /* Liens de recherche publics, sans identifiant d’affiliation ni clé d’API. */
   function searchLinks(place,opts={}){
     const q=String(place||'').trim();const enc=encodeURIComponent(q);
     const dated=/^\d{4}-\d{2}-\d{2}$/.test(opts.checkin||'')&&/^\d{4}-\d{2}-\d{2}$/.test(opts.checkout||'')&&opts.checkout>opts.checkin;
     const booking=`https://www.booking.com/searchresults.html?ss=${enc}&group_adults=1&no_rooms=1&group_children=0`+(dated?`&checkin=${opts.checkin}&checkout=${opts.checkout}`:'');
     const airbnb=`https://www.airbnb.com/s/${encodeURIComponent(q.replace(/,\s*/g,'--').replace(/\s+/g,'-'))}/homes?adults=1`+(dated?`&checkin=${opts.checkin}&checkout=${opts.checkout}`:'');
-    const hostelworld=`https://www.google.com/search?q=${encodeURIComponent('Hostelworld '+q)}`;
-    const google=`https://www.google.com/travel/search?q=${encodeURIComponent('hôtels pas chers '+q)}`;
+    /* Adresse de recherche publiée par Hostelworld lui-même (balisage SearchAction de sa page d’accueil). */
+    const hostelworld=`https://www.hostelworld.com/find/keywordsuggestions?search_keywords=${enc}&internalsearch=yes`;
+    const google=`https://www.google.com/travel/search?q=${encodeURIComponent(QUERIES[queryLang(opts.lang)].hotels+' '+q)}`;
     const c=opts.coords&&Number.isFinite(+opts.coords.lat)&&Number.isFinite(+opts.coords.lon)?opts.coords:null;
     const camping=`https://www.google.com/maps/search/${encodeURIComponent('camping')}${c?`/@${(+c.lat).toFixed(4)},${(+c.lon).toFixed(4)},12z`:encodeURIComponent(' '+q)}`;
     return {booking,hostelworld,airbnb,google,camping};
   }
-  return {EDITION,TYPES,LABELS,DETAILS,PEAK_FACTOR,COUNTRIES:C,REGIONS,WORLD,baseline,estimate,nightly,monthOf,monthsLabel,cheaperThan,euros,searchLinks,round,monthName};
+  return {EDITION,TYPES,LABELS,DETAILS,PEAK_FACTOR,COUNTRIES:C,REGIONS,WORLD,baseline,estimate,nightly,monthOf,monthsLabel,cheaperThan,euros,searchLinks,searchQueries,sourceLabel,round,monthName};
 });

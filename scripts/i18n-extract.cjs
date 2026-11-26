@@ -243,6 +243,24 @@ const KEEP_KEYS = [
 ];
 for (const k of KEEP_KEYS) add(k, 'app.js (conservé)', true);
 
+// Légendes et titres des photos (photo-catalog.js, ignoré plus haut car c'est surtout des données) : seuls les champs
+// « caption » et « label » sont des textes affichés (galerie et crédits du spot).
+{
+  const vm = require('vm');
+  const ctx = { window: {} };
+  vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync(path.join(ROOT, 'photo-catalog.js'), 'utf8'), ctx);
+  const rows = [...Object.values(ctx.window.SPOT_PHOTOS || {}), ...[].concat(...Object.values(ctx.window.SPOT_GALLERIES || {}))];
+  for (const p of rows) for (const f of ['caption', 'label']) if (typeof p[f] === 'string' && p[f].trim()) add(p[f], 'photo-catalog.js (légendes)', true);
+  // Éditeurs des sources du Coin (data/culture-zones.json) : le nom d'un site se garde, « tourisme régional » se traduit.
+  // Les pages Wikipédia, Wikivoyage et Wiktionnaire sont écrites par spot-guide-model.js (sourceLabel), sans traduction.
+  const zones = JSON.parse(fs.readFileSync(path.join(ROOT, 'data', 'culture-zones.json'), 'utf8')).zones || {};
+  for (const z of Object.values(zones)) for (const fact of z.facts || []) {
+    const pub = fact.source && fact.source.publisher;
+    if (typeof pub === 'string' && pub.trim() && !/^(wikip[ée]dia|wikivoyage|wiktionnaire)\b/i.test(pub.trim())) add(pub.trim(), 'data/culture-zones.json (éditeurs)', true);
+  }
+}
+
 const keys = [...found.keys()].sort((a, b) => a.localeCompare(b, 'fr'));
 const outDir = path.join(ROOT, 'locales', 'source');
 fs.mkdirSync(outDir, { recursive: true });

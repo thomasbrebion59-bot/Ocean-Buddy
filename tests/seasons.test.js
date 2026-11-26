@@ -153,6 +153,7 @@ function liveBlock(culture,cultures,over={}){
   const ctx=vm.createContext({culture:()=>culture,country:()=>'France',esc:v=>String(v??''),NT:' translate="no" data-no-i18n',svg:()=>'<svg></svg>',P:{},lab:e=>e.label,LG:()=>'fr',
     estimate:()=>('est' in over?over.est:est),allSpots:()=>[{id:'a'},{id:'b'},{id:'c'},{id:'d',custom:true}],coordsOf:()=>({lat:43.66,lon:-1.44}),place:()=>'Hossegor, France',tripDates:()=>null,
     M:{monthName:()=>'novembre',monthsLabel:()=>'juillet et août',euros:r=>r.lo===r.hi?`${r.lo} €`:`${r.lo}–${r.hi} €`,cheaperThan:(v,all)=>Math.round(all.filter(x=>x>v).length/all.length*100),EDITION:'septembre 2026',
+      searchQueries:(lang,sport)=>({hotels:'hôtels pas chers',school:('école '+sport).trim(),rental:('location matériel '+sport).trim(),restaurants:'restaurants'}),
       searchLinks:()=>({booking:'https://www.booking.com/searchresults.html?ss=Hossegor',camping:'https://www.google.com/maps/search/camping'})},
     window:{OCEAN_CLIMATE_LITE:'lite' in over?over.lite:{x:[[13,12,12,14,16,19,21,22,21,18,16,14],[],[],[],[],[23,26,23,17,14,12,13,13,15,18,24,25],[]]},OB_LOCALE:'fr-FR',OCEAN_SPOT_EXTRAS:over.extras},
     OceanCultures:cultures,Date,Number,Math,encodeURIComponent,SPORTMAP:{surf:{label:'Surf'}},spotSports:()=>['surf']});

@@ -39,18 +39,25 @@
   const active = () => !!(state && lite && state.c.length);
   function ok(s) { if (!active()) return true; return M.matches(lite[s.id], state.m, state.c); }
   function count(st) { if (!lite || typeof SPOTS === 'undefined') return null; return SPOTS.filter(s => M.matches(lite[s.id], st.m, st.c)).length; }
+  /* Texte simple de la pastille (lecteurs d’écran, autres écrans) ; l’affichage utilise labelHtml. */
   function label(st = state) {
     if (!st || !st.c.length) return 'Quand ?';
-    return `${monthName(st.m, 'short')} · ${st.c.length === 1 ? CRIT.find(c => c[0] === st.c[0])[2] : st.c.length + ' envies'}`;
+    return `${monthName(st.m, 'short')}, ${st.c.length === 1 ? CRIT.find(c => c[0] === st.c[0])[2] : st.c.length + ' envies'}`;
+  }
+  /* Pastille : le mois est protégé du traducteur de page (« Mar » ne doit pas devenir « Tue »), le reste est traduit. */
+  function labelHtml(st = state) {
+    if (!st || !st.c.length) return 'Quand ?';
+    const what = st.c.length === 1 ? esc(CRIT.find(c => c[0] === st.c[0])[2]) : `${st.c.length} envies`;
+    return `<span translate="no">${esc(monthName(st.m, 'short'))}</span>, <span>${what}</span>`;
   }
   function button() {
-    return `<button type="button" class="omap-plan${active() ? ' on' : ''}" data-map-plan aria-haspopup="dialog">${svg(P.cal)}<span>${esc(label())}</span></button>`;
+    return `<button type="button" class="omap-plan${active() ? ' on' : ''}" data-map-plan aria-haspopup="dialog">${svg(P.cal)}<span>${labelHtml()}</span></button>`;
   }
   function apply() {
     try { if (typeof renderSpots === 'function') renderSpots(); window.OceanMap?.render?.(false); } catch (e) {}
-    document.querySelectorAll('[data-map-plan]').forEach(b => { b.classList.toggle('on', active()); const sp = b.querySelector('span'); if (sp) sp.textContent = label(); });
+    document.querySelectorAll('[data-map-plan]').forEach(b => { b.classList.toggle('on', active()); const sp = b.querySelector('span'); if (sp) sp.innerHTML = labelHtml(); });
     const chip = document.getElementById('sdPlanChip');
-    if (chip) { chip.hidden = !active(); chip.innerHTML = active() ? `${svg(P.cal)}${esc(label())} <i aria-hidden="true">✕</i>` : ''; }
+    if (chip) { chip.hidden = !active(); chip.innerHTML = active() ? `${svg(P.cal)}${labelHtml()} <i aria-hidden="true">✕</i>` : ''; }
   }
 
   /* ---------- Feuille ---------- */
@@ -73,7 +80,7 @@
       <h3 id="sdPlanTitle" tabindex="-1">Quand veux-tu partir ?</h3>
       <p class="sd-sub">Choisis un mois et tes envies : la planète ne garde que les spots où c’est d’habitude le cas.</p>
       <h4>Le mois</h4>
-      <div class="sd-months" role="group" aria-label="Mois">${Array.from({ length: 12 }, (_, m) => `<button type="button" data-plan-m="${m}" aria-pressed="${draft.m === m}">${esc(monthName(m, 'short'))}</button>`).join('')}</div>
+      <div class="sd-months" role="group" aria-label="Mois">${Array.from({ length: 12 }, (_, m) => `<button type="button" data-plan-m="${m}" translate="no" aria-pressed="${draft.m === m}">${esc(monthName(m, 'short'))}</button>`).join('')}</div>
       <h4>Tes envies</h4>
       <div class="sd-crit" role="group" aria-label="Envies">${CRIT.map(c => `<button type="button" data-plan-c="${c[0]}" aria-pressed="${draft.c.includes(c[0])}"${c[0] === 'big' ? ' aria-describedby="sdBigWarn"' : ''}>${svg(P[c[1]])}<span><b>${esc(c[2])}</b><small>${esc(c[3])}</small></span></button>`).join('')}</div>
       <p class="sd-plan-warn" id="sdBigWarn" data-plan-warn role="note" aria-hidden="${!draft.c.includes('big')}">Grosse houle : pour pratiquants confirmés. Vérifie ton niveau et les conditions sur place.</p>

@@ -12,6 +12,10 @@ let userName='Explorateur';
    dans Réglages, le profil, l’onboarding et « Bon retour ». Un prénom saisi par l’utilisateur n’est jamais traduit : le titre
    du profil est exclu de la traduction automatique (index.html, translate="no"), qui changeait « Rider » en « Surfista ». */
 function shownName(){return userName==='Explorateur'&&typeof window.obT==='function'?window.obT('Explorateur'):userName;}
+/* Message avec le prénom : la phrase entière est traduite d’un bloc (« Welcome back, {0}! The ocean was waiting for you. »),
+   puis le prénom est posé à la place de {0}. Le prénom n’est jamais passé au traducteur : « Explorer » (déjà traduit) y
+   redevenait le verbe « Explore ». Une phrase par message, ponctuation de la langue (pas d’espace avant « ! » en anglais). */
+function greet(sentence,name){const t=typeof window.obT==='function'?window.obT(sentence):sentence;return t.replace('{0}',name==null?shownName():name);}
 /* Le compteur de gestes écolo était une décoration : 23, écrit en dur,
    relié à rien. C'est maintenant un carnet, comme celui des sessions —
    on peut le toucher et voir ce qu'on a fait. */
@@ -45,7 +49,7 @@ function showEcoLog(){
 function closeEcoLog(){
   var o=document.getElementById('ecoInfo'); if(o)o.classList.remove('open');
 }
-function applyName(){var nm=shownName();var hh=document.getElementById('homeHello');if(hh)hh.textContent='Salut '+nm;var pn=document.getElementById('profName');if(pn)pn.textContent=nm;var rt=document.getElementById('readyTitle');if(rt)rt.textContent='C’est parti, '+nm+' !';}
+function applyName(){var nm=shownName();var hh=document.getElementById('homeHello');if(hh)hh.textContent='Salut '+nm;var pn=document.getElementById('profName');if(pn)pn.textContent=nm;var rt=document.getElementById('readyTitle');if(rt)rt.textContent=greet('C’est parti, {0} !',nm);}
 const COORDS=Object.fromEntries(SPOTS.map(spot=>[spot.id,spot.coords]));
 /* ---- persistance (localStorage) ---- */
 const STORE_KEY='oceanbuddy_v1';
@@ -3115,7 +3119,7 @@ if(returning&&onbDone){
   const overlayOpen=()=>{try{if(sessionStorage.getItem('ob_account_after'))return true;}catch(_){}return !!document.querySelector('.oba,.as-confirm,.quiz-modal.open,.aqi.open,.app-update,.tb-cele,dialog[open]');};
   let helloWait=0;
   const hello=()=>{if(overlayOpen()){if(helloWait++<240)setTimeout(hello,500);return;}
-    toast('Bon retour, '+shownName()+' ! L’océan t’attendait.',2500);
+    toast(greet('Bon retour, {0} ! L’océan t’attendait.'),2500);
     /* Texte comparé sans les espaces insécables que le français pose à l’affichage (i18n.js, passage français). */
     const plain=s=>String(s).replace(/\u00a0/g,' '),t=document.getElementById('toast'),said=plain(t.textContent);let n=0;
     const watch=()=>{if(!t.classList.contains('show')||plain(t.textContent)!==said||n++>15)return;if(overlayOpen()){t.classList.remove('show');return;}setTimeout(watch,200);};

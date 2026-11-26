@@ -143,6 +143,8 @@ test('bon retour : attend la fenêtre « C’est sauvegardé » annoncée puis o
     userName: 'Explorateur',
     /* Prénom montré (app.js, shownName) : en français, le prénom tel quel. */
     shownName: () => 'Explorateur',
+    /* Phrase entière traduite puis prénom posé (app.js, greet) : en français, la phrase telle quelle. */
+    greet: (sentence, name) => sentence.replace('{0}', name == null ? 'Explorateur' : name),
     sessionStorage: { getItem: k => (k === 'ob_account_after' ? after : null) },
     document: { querySelector: s => (sheet && s.includes('.oba') ? {} : null), getElementById: () => toastEl },
     setTimeout: (f, ms) => timers.push({ at: now + ms, f }),

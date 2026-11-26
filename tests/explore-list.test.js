@@ -168,7 +168,7 @@ test('pastilles sur écran étroit : jamais coupées (compactes, puis mois abré
   /* Aucun <span> dans la pastille du mois : spot-plan.js réécrit le premier <span> de tout bouton [data-map-plan]. */
   const planPill = src.slice(src.indexOf('data-map-plan aria-haspopup="dialog">'), src.indexOf("`<b${own}>${said('Quand ?')}</b>`}</button>"));
   assert.ok(planPill.length > 50 && !/<span/.test(planPill), 'pastille du mois sans <span>');
-  assert.match(read('spot-plan.js'), /document\.querySelectorAll\('\[data-map-plan\]'\)\.forEach\(b => \{ b\.classList\.toggle\('on', active\(\)\); const sp = b\.querySelector\('span'\); if \(sp\) sp\.textContent = label\(\); \}\);/);
+  assert.match(read('spot-plan.js'), /document\.querySelectorAll\('\[data-map-plan\]'\)\.forEach\(b => \{ b\.classList\.toggle\('on', active\(\)\); const sp = b\.querySelector\('span'\); if \(sp\) sp\.innerHTML = labelHtml\(\); \}\);/);
   assert.match(src, /: `<b\$\{own\}>\$\{said\('Quand \?'\)\}<\/b>`\}/, 'sans mois choisi : « Quand ? » (comportement gardé, question posée au fondateur)');
   /* Les libellés sont écrits dans la langue de l’app avant la mesure : la largeur mesurée est celle qui s’affiche. */
   assert.match(src, /const said = t => esc\(typeof obT === 'function' \? obT\(t\) : t\), own = ' translate="no" data-no-i18n';/);

@@ -7,7 +7,7 @@ function ctx(lang, name, value) {
   const c = i18nContext(lang, {});
   c.document.getElementById = id => els[id] || null;
   c.userName = name;
-  loadInto(c, 'app.js', ['shownName', 'applyName', 'saveName']);
+  loadInto(c, 'app.js', ['shownName', 'greet', 'applyName', 'saveName']);
   c.toast = () => {}; c.saveState = () => {}; c.closeSettings = () => {};
   return { c, els };
 }
@@ -18,7 +18,9 @@ test('prénom par défaut : « Explorer » en anglais, « Explorador » en espag
   assert.equal(ctx('fr', 'Explorateur').c.shownName(), 'Explorateur');
   const { c, els } = ctx('en', 'Explorateur'); c.applyName();
   assert.equal(els.profName.textContent, 'Explorer');
-  assert.equal(els.readyTitle.textContent, 'C’est parti, Explorer !', 'i18n traduit ensuite le reste de la phrase');
+  assert.equal(els.readyTitle.textContent, 'Let\'s go, Explorer!', 'la phrase entière est traduite, puis le prénom posé : « Explorer » ne repasse jamais par le dictionnaire');
+  assert.equal(ctx('es', 'Explorateur').c.greet('C’est parti, {0} !'), '¡Vamos, Explorador!');
+  assert.equal(ctx('fr', 'Léa').c.greet('C’est parti, {0} !'), 'C’est parti, Léa !');
 });
 
 test('prénom saisi : jamais traduit ; le défaut enregistré tel quel reste le défaut', () => {
@@ -30,7 +32,7 @@ test('prénom saisi : jamais traduit ; le défaut enregistré tel quel reste le 
   assert.equal(typed.c.userName, 'Maya');
   const src = read('app.js');
   assert.match(src, /var i=document\.getElementById\('setName'\);if\(i\)i\.value=shownName\(\);/, 'Réglages');
-  assert.match(src, /toast\('Bon retour, '\+shownName\(\)\+' ! L’océan t’attendait\.',2500\);/, 'Bon retour');
+  assert.match(src, /toast\(greet\('Bon retour, \{0\} ! L’océan t’attendait\.'\),2500\);/, 'Bon retour');
 });
 
 test('profil : le titre (prénom) n’est jamais passé au dictionnaire, il reçoit le prénom déjà dans la bonne langue', () => {

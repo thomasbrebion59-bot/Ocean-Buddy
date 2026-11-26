@@ -73,7 +73,7 @@ test('fiche : un fait par carte, sa source d’un toucher et dans « Sources et 
   assert.match(g, /if\(!window\.OCEAN_CULTURE_ZONES\|\|\(zoneLang\(\)!=='fr'&&!window\['OCEAN_CULTURE_ZONES_'\+zoneLang\(\)\.toUpperCase\(\)\]\)\)loadZones\(\)\.then\(\(\)=>\{if\(current===s\.id&&zoneOf\(s\)\)paintLive\(s,false\);\}\);/);
   assert.match(g, /const d=window\.OCEAN_CULTURE_ZONES,id=s&&!s\.custom&&d\?\.spots\?\.\[s\.id\],z=id&&d\.zones\?\.\[id\];/, 'rattachement par l’identifiant du spot ; jamais pour un spot personnel');
   /* Carte : genre, titre, texte, source (lien externe) ; le texte du fait n’est pas envoyé au traducteur de page. */
-  assert.match(g, /<a class="gl-fact-src" href="\$\{esc\(url\)\}" target="_blank" rel="noopener noreferrer"><span>Source :<\/span> <span\$\{NT\}>\$\{esc\(publisher\)\}<\/span><\/a><\/li>/);
+  assert.match(g, /<a class="gl-fact-src" href="\$\{esc\(url\)\}" target="_blank" rel="noopener noreferrer"><span>Source :<\/span> <span\$\{srcL\.fixed\?NT:''\}>\$\{esc\(srcL\.text\)\}<\/span><\/a><\/li>/);
   assert.match(g, /<b\$\{NT\}>\$\{esc\(title\)\}<\/b><small\$\{NT\}>\$\{esc\(text\)\}<\/small>/);
   assert.match(g, /const ZONE_LABEL=\{gout:'À goûter',fete:'La fête',mot:'Le mot du coin',coutume:'La coutume',lieu:'À voir'\};/);
   /* Mois d’une fête : une édition constatée, pas une date. */
@@ -112,7 +112,7 @@ test('illustrations propres aux faits : identifiant stable, fichier présent, si
     assert.match(v, /^[a-z0-9-]+$/);
     assert.ok(fs.existsSync(path.join(__dirname, '..', 'assets/fiche/faits', v + '.webp')), 'fichier : ' + v);
   }
-  assert.match(read('spot-guide.js'), /const big=!!own&&\/\^\[a-z0-9-\]\+\$\/\.test\(own\);/);
+  assert.match(read('spot-guide.js'), /const big=!!own&&\/\^\[a-z0-9-\]\+\$\/\.test\(own\),srcL=M\.sourceLabel\(publisher,url\);/);
   assert.match(read('spot-guide.js'), /\$\{big\?HERO\('faits\/'\+own\):ILLU\(zoneIllu\(kind,title\)\)\}/);
 });
 
