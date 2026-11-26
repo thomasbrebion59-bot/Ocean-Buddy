@@ -1290,3 +1290,8 @@ body.reduce-motion #detail .fx-wait{animation:none}
 .ocean-v2 #detail .dcat[data-cat="activites"]>.field-local{display:none}
 @media (prefers-reduced-motion:reduce){#detail .gl-ptile{transition:none}}
 body.reduce-motion #detail .gl-ptile{transition:none}
+
+/* Relecture finale (26 nov.) : le mot de la marée (« Descendante », « Descendente ») sortait de sa case à 390 px et moins.
+   La case de la marée devient un conteneur : le mot garde sa taille quand il tient, et rapetisse seulement s'il le faut. */
+#detail .fx-reading[data-reading="tide"]{container-type:inline-size}
+#detail .fx-reading[data-reading="tide"] .fx-word{font-size:min(calc(var(--fiche-num) * .52),5.6vw,calc((100cqi - 37px) / 5.9))}

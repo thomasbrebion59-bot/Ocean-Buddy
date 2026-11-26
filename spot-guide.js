@@ -10,7 +10,7 @@
   /* Culture locale sourcée, par zone (scripts/build-culture-zones.cjs) : chargée à l’ouverture d’une fiche, jamais au démarrage. */
   const ZONES_URL='assets/data/culture-zones.js?v=85a2b2a35343';
   /* Traductions des faits de culture locale (titre, texte, nom de zone) : une par langue, chargée avec la zone. */
-  const ZONES_URL_I18N={en:'assets/data/culture-zones.en.js?v=fe1911c6e391',es:'assets/data/culture-zones.es.js?v=d84de3809433'};
+  const ZONES_URL_I18N={en:'assets/data/culture-zones.en.js?v=f2068d31fa96',es:'assets/data/culture-zones.es.js?v=d84de3809433'};
   /* Lieux autour du spot (OpenStreetMap) et niveau des prix par pays (Banque mondiale) : scripts/build-spot-extras.cjs,
      chargés à l’ouverture d’une fiche, jamais au démarrage. */
   const EXTRAS_URL='assets/data/spot-extras.js?v=57b11b70ee03';

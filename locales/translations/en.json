@@ -11581,5 +11581,21 @@
  "1 adresse à environ {0} m": "1 address, about {0} m away",
  "Les {0} plus proches, à environ {1} km": "The {0} nearest, up to about {1} km away",
  "Les {0} plus proches, à environ {1} m": "The {0} nearest, up to about {1} m away",
- "Carte du spot": "Spot map"
+ "Carte du spot": "Spot map",
+ "Au large ≠ au bord": "Offshore ≠ at the shore",
+ "Change de point de vue": "Change your perspective",
+ "Définition des vagues, NOAA": "Wave definition, NOAA",
+ "Déjà relevé aujourd’hui ✓, rejouable": "Already completed today ✓, play again",
+ "Des repères, pas des diplômes": "Guides, not qualifications",
+ "Données marines, Open-Meteo": "Marine data, Open-Meteo",
+ "La direction change tout": "Direction changes everything",
+ "Le confort se prépare": "Prepare for comfort",
+ "Marée et courant, NOAA": "Tide and current, NOAA",
+ "Même activité, rayon de 200 km": "Same activity, 200 km radius",
+ "Ocean Buddy, escale en images": "Ocean Buddy, stop in pictures",
+ "Ocean Buddy, immersion": "Ocean Buddy, immersion",
+ "Repère indiqué pour ce secteur": "Marker shown for this area",
+ "Repères de sécurité, RNLI": "Safety guidance, RNLI",
+ "Sur l’eau. Sous l’eau. Avec toi.": "On the water. Under the water. With you.",
+ "Un rivage qui change": "A changing shoreline"
 }

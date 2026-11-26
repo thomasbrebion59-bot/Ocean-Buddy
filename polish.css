@@ -136,4 +136,4 @@ body.is-offline .app-chrome::after{content:'Hors connexion';position:absolute;le
 .sd-head .sd-kicker,.sd-tile small,.sd-rose small,.sd-teaser-tx small,.sd-facts small,.sd-flags h5,.hf-plan-tx small,.sd-vs-title,.sst-k,
 .as-large p,.pp-head small,.guide-chapter-label,.guide-eyebrow,.guide-tile small,.guide-place-kind,.guide-ticket-top small,.guide-search>small,
 .trip-lodging-cheapest small,.field-main-danger-label,.trip-saved-body small,.trip-map-bar label,.trip-map-legs-head,.im-eyebrow,.hf-kicker,
-.hf-card-tx small,.community-kicker,.act-tr-eyebrow,body.is-offline .app-chrome::after,.seo-facts dt{text-transform:none!important;letter-spacing:normal!important}
+.hf-card-tx small,.community-kicker,.act-tr-eyebrow,.photo-strip-intro small,.spot-gallery header small,.experience-placeholder small,.im-level-current small,.section-kicker,body.is-offline .app-chrome::after,.seo-facts dt{text-transform:none!important;letter-spacing:normal!important}

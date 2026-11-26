@@ -184,7 +184,7 @@
   /* Coordonnées après la description et sa provenance (fiche-apercu) : le repli « Le lieu » s’ouvre sur le texte du lieu. */
   $('#dSource').insertAdjacentHTML('afterend','<div class="field-coordinates" id="fieldCoordinates"></div>');
   infos.querySelectorAll('.block').forEach(b=>{if(b!==intro)b.classList.add('field-extra');});
-  infos.insertAdjacentHTML('beforeend','<aside id="fieldOverview" class="field-trip"></aside><div class="field-reference"><div id="fieldLocalSource"></div><a id="fieldPhotoLink" target="_blank" rel="noopener"></a></div><section id="fieldNearbyBlock" class="field-nearby"><div class="field-section-heading"><div><span class="field-eyebrow">Prolonger l’escapade</span><h3>Dans les environs</h3></div><span>Même activité · rayon de 200 km</span></div><div id="fieldNearby"></div></section>');
+  infos.insertAdjacentHTML('beforeend','<aside id="fieldOverview" class="field-trip"></aside><div class="field-reference"><div id="fieldLocalSource"></div><a id="fieldPhotoLink" target="_blank" rel="noopener"></a></div><section id="fieldNearbyBlock" class="field-nearby"><div class="field-section-heading"><div><span class="field-eyebrow">Prolonger l’escapade</span><h3>Dans les environs</h3></div><span>Même activité, rayon de 200 km</span></div><div id="fieldNearby"></div></section>');
   /* Fiche v2 (onglet Préparer, « Autour ») : les spots voisins sous un intertitre simple, sans sur-titre en capitales. */
   $('#fieldNearbyBlock .field-section-heading').outerHTML='<div class="field-section-heading"><h4 class="fx-title fx-title-s">Dans les environs</h4><p class="fx-note">Même activité, dans un rayon de 200 km</p></div>';
   $('#dZonesBlock').classList.add('field-zones');

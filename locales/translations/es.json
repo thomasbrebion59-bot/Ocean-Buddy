@@ -11581,5 +11581,21 @@
  "1 adresse à environ {0} m": "1 dirección, a unos {0} m",
  "Les {0} plus proches, à environ {1} km": "Las {0} más cercanas, hasta unos {1} km",
  "Les {0} plus proches, à environ {1} m": "Las {0} más cercanas, hasta unos {1} m",
- "Carte du spot": "Mapa del spot"
+ "Carte du spot": "Mapa del spot",
+ "Au large ≠ au bord": "Mar adentro ≠ en la orilla",
+ "Change de point de vue": "Cambia de perspectiva",
+ "Définition des vagues, NOAA": "Definición de las olas, NOAA",
+ "Déjà relevé aujourd’hui ✓, rejouable": "Ya completado hoy ✓, puedes repetirlo",
+ "Des repères, pas des diplômes": "Referencias, no diplomas",
+ "Données marines, Open-Meteo": "Datos marinos, Open-Meteo",
+ "La direction change tout": "La dirección lo cambia todo",
+ "Le confort se prépare": "La comodidad se prepara",
+ "Marée et courant, NOAA": "Marea y corriente, NOAA",
+ "Même activité, rayon de 200 km": "Misma actividad, radio de 200 km",
+ "Ocean Buddy, escale en images": "Ocean Buddy, escala en imágenes",
+ "Ocean Buddy, immersion": "Ocean Buddy, inmersión",
+ "Repère indiqué pour ce secteur": "Referencia indicada para esta zona",
+ "Repères de sécurité, RNLI": "Consejos de seguridad, RNLI",
+ "Sur l’eau. Sous l’eau. Avec toi.": "Sobre el agua. Bajo el agua. Contigo.",
+ "Un rivage qui change": "Una costa cambiante"
 }
