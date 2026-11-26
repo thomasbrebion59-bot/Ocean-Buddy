@@ -115,7 +115,7 @@ test('forecast bar heights preserve ratios and zero, with the calmest day highli
  ctx.render('bars','best',['Auj','Lun','Mar'],[0,7,14],{unit:'km/h',best:'min',bestLabel:'Vent le plus faible'});
  assert.deepEqual([...elements.bars.innerHTML.matchAll(/height:(\d+)%/g)].map(m=>Number(m[1])),[0,50,100]);
  assert.match(elements.bars.innerHTML,/^<div class="fc-col best">/);
- assert.match(elements.best.innerHTML,/Vent le plus faible : <b>Auj<\/b> · 0 km\/h/);
+ assert.match(elements.best.innerHTML,/Vent le plus faible : <b>Auj<\/b>, 0 km\/h/);
 });
 test('search matches accents consistently',()=>{
  const ctx={};vm.runInNewContext(functionSource('function searchable','function searchSpots')+';this.normalize=searchable;',ctx);

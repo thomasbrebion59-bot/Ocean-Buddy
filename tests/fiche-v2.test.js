@@ -391,8 +391,8 @@ test('Saisons : période sous le sport = mois de la meilleure case, « Bon » d�
   const sec = css.slice(css.indexOf('ONGLET SAISONS'), css.indexOf('fin de la section Saisons'));
   assert.match(sec, /#detail #dSeasons \.sd-cell\.l2,#detail #dSeasons \.sd-legend i\.l2\{background:color-mix\(in srgb,var\(--g-soft\) 50%,var\(--g-main\)\)\}/);
   /* « 8 % de jours ≥ 25 km/h » ne se coupe plus entre le chiffre et son unité (espaces insécables, aussi en traduction). */
-  assert.ok(js.includes('`${num(d.kite)} % de jours ≥ 25 km/h`'));
-  for (const l of ['en', 'es']) assert.match(JSON.parse(read(`locales/translations/${l}.json`))['{0} % de jours ≥ 25 km/h'], /^\{0\} % .+ ≥ 25 km\/h$/);
+  assert.ok(js.includes("`${num(d.kite)}\u00a0% de jours ≥\u00a0${uShow('wind', 25).replace(' ', '\u00a0')}`"));
+  for (const l of ['en', 'es']) assert.match(JSON.parse(read(`locales/translations/${l}.json`))['{0} % de jours ≥ {1}'], /^\{0\}\u00a0% .+ ≥\u00a0\{1\}$/);
   /* « L’année en courbes » : un sous-titre juste aussi sur un lac (pas de houle annoncée). */
   assert.match(read('replis.js'), /title: 'L’année en courbes', sub: 'Températures, soleil, pluie et vent'/);
 });

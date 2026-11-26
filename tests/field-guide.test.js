@@ -427,11 +427,11 @@ test('voyage : sans conseil ni danger, le carnet remplace, étiqueté « non vé
   v.open({...base,tip:'',dangers:[],carnet:notebook});
   const [arrival,tip,danger]=v.cards(3);
   assert.match(arrival,/<span>Arrivée<\/span>/);
-  assert.match(tip,/<span>Carnet Ocean Buddy · non vérifié<\/span>/);
+  assert.match(tip,/<span>Carnet Ocean Buddy, non vérifié<\/span>/);
   assert.match(tip,/<h2>Le conseil du carnet<\/h2>/);
   assert.match(tip,/<p>Les baïnes créent des courants qui t’entraînent vers le large\.<\/p>/);
   assert.doesNotMatch(tip,/Le conseil de Poulpy|<span>Poulpy<\/span>/,'le carnet n’est jamais présenté comme le conseil de Poulpy');
-  assert.match(danger,/<span>Carnet Ocean Buddy · non vérifié<\/span>/);
+  assert.match(danger,/<span>Carnet Ocean Buddy, non vérifié<\/span>/);
   assert.match(danger,/<h2>🌀 Les baïnes créent des courants qui t’entraînent vers le large<\/h2>/);
 });
 
@@ -449,7 +449,7 @@ test('voyage : le conseil et les dangers du catalogue passent avant le carnet, q
   const x=loadVoyage();
   x.open({...base,tip:'',dangers:[['⚠️','Courants forts.']],carnet:notebook});
   const [,first,second]=x.cards(3);
-  assert.match(first,/<span>Carnet Ocean Buddy · non vérifié<\/span>/,'le conseil vient du carnet');
+  assert.match(first,/<span>Carnet Ocean Buddy, non vérifié<\/span>/,'le conseil vient du carnet');
   assert.match(second,/<span>À surveiller<\/span>/,'les dangers du catalogue restent « À surveiller »');
   assert.match(second,/Courants forts\./);
 });

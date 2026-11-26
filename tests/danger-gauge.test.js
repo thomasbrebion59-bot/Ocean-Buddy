@@ -79,8 +79,8 @@ test('fiche sans danger au catalogue : la jauge lit le carnet et le dit (basis �
 test('carte de spot : role="img", aria-label et title disent qu’il s’agit d’une estimation',()=>{
  const card=functionSource('function spotCard(s){','let currentFilter');
  assert.match(card,/class="danger-dots" role="img" aria-label="\$\{dangerLabel\}"/);
- assert.match(card,/`Danger estimé : \$\{gauge\.n\} sur 4 · estimation Ocean Buddy`/);
- assert.match(card,/`Danger estimé : \$\{gauge\.n\} sur 4 · estimation Ocean Buddy · carnet non vérifié`/);
+ assert.match(card,/`Danger estimé : \$\{gauge\.n\} sur 4, estimation Ocean Buddy`/);
+ assert.match(card,/`Danger estimé : \$\{gauge\.n\} sur 4, estimation Ocean Buddy, carnet non vérifié`/);
  assert.match(card,/'Danger : estimation Ocean Buddy'/);
  assert.match(card,/'Danger non évalué'/);
  assert.doesNotMatch(code(card),/sans danger/i);

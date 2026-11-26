@@ -120,7 +120,7 @@ test('Réglages sans profil : un choix fait dans Réglages vaut onboarding', () 
 test('le résumé du profil affiche le sport et le niveau enregistrés', () => {
   const a = env({ oceanbuddy_v1: JSON.stringify({ sport: 'kayak', level: 'expert', onboarded: true }) });
   a.api.loadState(); a.api.renderMyChoice();
-  assert.match(a.els.get('profSportVal').innerHTML, /kayak · Expert/);
+  assert.match(a.els.get('profSportVal').innerHTML, /kayak, Expert/);
 });
 
 test('relance du WebView : la route de session ne remplace pas le sport enregistré', () => {

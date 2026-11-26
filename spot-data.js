@@ -163,7 +163,7 @@
     if (d.wet != null) { const [n, u] = unitParts(d.wet); tiles.push(reading('rain', 'Pluie', n, u, `${num(d.rain)} mm dans le mois`, 'rain')); }
     /* Houle : la période à côté de la hauteur, comme dans Conditions (« m (12 s) ») ; la direction en sous-ligne. */
     if (d.waves) { const c = uConv('length', d.hs); tiles.push(reading('wave', 'Houle au large', num(c.v, c.d), `${c.unit} (${num(d.tp)} s)`, M.DIR_FROM[d.dir] ? `venue ${M.DIR_FROM[d.dir]}` : '', 'wave')); }
-    if (d.wind != null) { const c = uConv('wind', d.wind); tiles.push(reading('wind', 'Vent', num(c.v, c.d), c.unit, d.kite != null ? `${num(d.kite)} % de jours ≥ ${uShow('wind', 25)}` : '', 'wind')); }
+    if (d.wind != null) { const c = uConv('wind', d.wind); tiles.push(reading('wind', 'Vent', num(c.v, c.d), c.unit, d.kite != null ? `${num(d.kite)} % de jours ≥ ${uShow('wind', 25).replace(' ', ' ')}` : '', 'wind')); }
     /* Verdict : une pastille à elle seule (gabarit « <b>{0} : {1}</b> », traduit d’un bloc par i18n.js, ponctuation de la
        langue) ; le titre « En novembre » dit déjà le mois, le verdict ne le répète plus. Puis les raisons (verdictWhy). */
     const head = L == null ? '' : `<b>${esc(sportLabel(act))} : ${esc(LEVEL_TXT[L].toLowerCase())}</b>`;

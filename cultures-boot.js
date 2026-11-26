@@ -11,7 +11,7 @@
 (() => {
   'use strict';
   /* Empreinte des fichiers chargés à la demande : écrite par scripts/build-cultures.cjs. */
-  const V='d11b2034b28b';
+  const V='eebe09419411';
   const api=window.OceanCultures={};
   const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   const lang=()=>(window.OB_I18N&&OB_I18N.lang)||document.documentElement.lang||'fr';
