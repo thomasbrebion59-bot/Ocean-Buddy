@@ -380,6 +380,8 @@
     window.OceanNotebook?.sync?.();
     if(animate){section.live.classList.remove('gl-in');void section.live.offsetWidth;section.live.classList.add('gl-in');countUp(section.live);}
   }
+  /* Réglage « Unités » changé : les tuiles du Coin sont repeintes sur place, sans rejouer l’entrée en scène. */
+  document.addEventListener('ocean:units',()=>{try{const sp=current&&typeof spotById==='function'?spotById(current):null;if(sp)paintLive(sp,false);}catch(_){}});
 
   /* ---------- Aperçu en tête de fiche ---------- */
   function glanceHTML(s){

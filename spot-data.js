@@ -21,6 +21,14 @@
   const isFr = () => !(window.OB_I18N && OB_I18N.lang && OB_I18N.lang !== 'fr');
   const NT = ' translate="no" data-no-i18n';
   const num = (v, d = 0) => v == null ? '–' : new Intl.NumberFormat(lang(), { maximumFractionDigits: d, minimumFractionDigits: d }).format(v);
+  /* Unités d'affichage (lot 1, réglage « Unités ») : les normales et les relevés restent métriques ici, seul l'affichage
+     convertit. Chaque texte reçoit sa valeur AVEC son unité (« 16 °C » ou « 61 °F »), jamais une unité écrite en dur. */
+  const OU = () => window.OceanUnits || null;
+  const uShow = (kind, v) => { const U = OU(); return U ? U.show(kind, v) : kind === 'wind' ? `${num(v, 0)} km/h` : kind === 'length' ? `${num(v, 1)} m` : `${num(v, 0)} °C`; };
+  const uConv = (kind, v) => { const U = OU(); return (U && U.showConvert(kind, v)) || { v: kind === 'length' ? Math.round(v * 10) / 10 : Math.round(v), d: kind === 'length' ? 1 : 0, unit: kind === 'wind' ? 'km/h' : kind === 'length' ? 'm' : '°C' }; };
+  const uUnit = kind => uConv(kind, 0).unit;
+  /* Écart de température (pas de décalage de 32 en °F). */
+  const uDelta = d => { const f = OU() && OU().get().temp === 'F'; return f ? `${num(Math.round(Math.abs(d) * 9 / 5), 0)} °F` : `${num(Math.abs(d), 0)} °C`; };
   const monthName = (m, style = 'long') => new Intl.DateTimeFormat(lang(), { month: style }).format(new Date(2026, m, 15));
   const monthLetter = m => monthName(m, 'narrow');
   /* Jours de pluie dans la langue de l’interface (« 21 j », « 21 days », « 21 d ») : Intl, sans phrase à traduire. */
@@ -149,13 +157,13 @@
   function monthCard(s, c) {
     const d = M.month(c, selMonth), act = selAct || curAct(s), sc = M.score(act, d, s.level), L = M.level(sc);
     const tiles = [];
-    if (d.sea != null) tiles.push(reading('temp', 'Eau', num(d.sea), '°C', 'moyenne de surface', 'sea'));
-    if (d.tx != null) tiles.push(reading('sun', 'Air', `${num(d.tx)}°`, `/ ${num(d.tn)}°`, 'max / min du jour', 'air'));
+    if (d.sea != null) { const c = uConv('temp', d.sea); tiles.push(reading('temp', 'Eau', num(c.v, c.d), c.unit, 'moyenne de surface', 'sea')); }
+    if (d.tx != null) tiles.push(reading('sun', 'Air', `${num(uConv('temp', d.tx).v)}°`, `/ ${num(uConv('temp', d.tn).v)}°`, 'max / min du jour', 'air'));
     if (d.sun != null) tiles.push(reading('sun', 'Soleil', `≈ ${num(d.sun)}`, 'h', 'par jour, estimé', 'sunh'));
     if (d.wet != null) { const [n, u] = unitParts(d.wet); tiles.push(reading('rain', 'Pluie', n, u, `${num(d.rain)} mm dans le mois`, 'rain')); }
     /* Houle : la période à côté de la hauteur, comme dans Conditions (« m (12 s) ») ; la direction en sous-ligne. */
-    if (d.waves) tiles.push(reading('wave', 'Houle au large', num(d.hs, 1), `m (${num(d.tp)} s)`, M.DIR_FROM[d.dir] ? `venue ${M.DIR_FROM[d.dir]}` : '', 'wave'));
-    if (d.wind != null) tiles.push(reading('wind', 'Vent', num(d.wind), 'km/h', d.kite != null ? `${num(d.kite)} % de jours ≥ 25 km/h` : '', 'wind'));
+    if (d.waves) { const c = uConv('length', d.hs); tiles.push(reading('wave', 'Houle au large', num(c.v, c.d), `${c.unit} (${num(d.tp)} s)`, M.DIR_FROM[d.dir] ? `venue ${M.DIR_FROM[d.dir]}` : '', 'wave')); }
+    if (d.wind != null) { const c = uConv('wind', d.wind); tiles.push(reading('wind', 'Vent', num(c.v, c.d), c.unit, d.kite != null ? `${num(d.kite)} % de jours ≥ ${uShow('wind', 25)}` : '', 'wind')); }
     /* Verdict : une pastille à elle seule (gabarit « <b>{0} : {1}</b> », traduit d’un bloc par i18n.js, ponctuation de la
        langue) ; le titre « En novembre » dit déjà le mois, le verdict ne le répète plus. Puis les raisons (verdictWhy). */
     const head = L == null ? '' : `<b>${esc(sportLabel(act))} : ${esc(LEVEL_TXT[L].toLowerCase())}</b>`;
@@ -169,10 +177,10 @@
   }
   function verdictWhy(act, d) {
     const bits = [];
-    if (['baignade', 'snorkeling', 'plongee'].includes(act) && d.sea != null) bits.push(`eau à ${num(d.sea)} °C`);
-    if (['surf', 'bodyboard'].includes(act) && d.waves) bits.push(`houle moyenne de ${num(d.hs, 1)} m au large`);
+    if (['baignade', 'snorkeling', 'plongee'].includes(act) && d.sea != null) bits.push(`eau à ${uShow('temp', d.sea)}`);
+    if (['surf', 'bodyboard'].includes(act) && d.waves) bits.push(`houle moyenne de ${uShow('length', d.hs)} au large`);
     if (['kitesurf', 'windsurf', 'wingfoil'].includes(act) && d.kite != null) bits.push(`vent soutenu ${num(d.kite)} % des jours`);
-    if (['paddle', 'kayak'].includes(act) && d.wind != null) bits.push(`vent moyen de ${num(d.wind)} km/h`);
+    if (['paddle', 'kayak'].includes(act) && d.wind != null) bits.push(`vent moyen de ${uShow('wind', d.wind)}`);
     if (d.sun != null && d.sun >= 8) bits.push('beaucoup de soleil');
     if (d.wet != null && d.wet >= 15) bits.push('mois pluvieux');
     /* Chaque raison dans son propre élément : i18n.js les traduit une à une (« eau à {0} °C », « mois pluvieux »…). */
@@ -197,7 +205,7 @@
       const vals = [...(c.sea || []), ...(a.tx || []), ...(a.tn || [])].filter(v => v != null);
       let lo = Math.floor(Math.min(...vals) / 5) * 5, hi = Math.ceil(Math.max(...vals) / 5) * 5; if (hi - lo < 10) hi = lo + 10;
       const y = v => bot - (v - lo) / (hi - lo) * (bot - top);
-      let g = band(H) + ticks(lo, hi, y, v => v + '°');
+      let g = band(H) + ticks(lo, hi, y, v => uConv('temp', v).v + '°');
       if (a.tx && a.tn) {
         const up = a.tx.map((v, m) => `${x(m)},${y(v)}`), dn = a.tn.map((v, m) => `${x(m)},${y(v)}`).reverse();
         g += `<polygon class="sd-airband" points="${up.concat(dn).join(' ')}"/><polyline class="sd-airline" points="${up.join(' ')}"/>`;
@@ -228,8 +236,8 @@
     /* Titre et précision dans deux éléments (plus de chaîne reliée par un point médian). */
     bars('sun', a.sun, ['Soleil', 'heures par jour (estimation)'], ' h', 0, 'b-sun');
     bars('wet', a.wet, ['Pluie', 'jours de pluie dans le mois'], days, 0, 'b-rain');
-    if (c.wave) bars('hs', c.wave.hs, ['Houle au large', 'hauteur moyenne'], ' m', 1, 'b-wave');
-    bars('wind', a.wind, ['Vent', 'vitesse moyenne'], ' km/h', 0, 'b-wind');
+    if (c.wave) bars('hs', c.wave.hs, ['Houle au large', 'hauteur moyenne'], v => uShow('length', v), 1, 'b-wave');
+    bars('wind', a.wind, ['Vent', 'vitesse moyenne'], v => uShow('wind', v), 0, 'b-wind');
     const axis = `<svg class="sd-axis" viewBox="0 0 ${W} 18" width="100%" aria-hidden="true">${Array.from({ length: 12 }, (_, m) => `<text x="${x(m)}" y="13" text-anchor="middle" class="${m === selMonth ? 'on' : ''}">${esc(monthLetter(m))}</text>`).join('')}</svg>`;
     return `<div class="sd-charts">${panels.map(p => `<figure class="sd-panel"><figcaption><b>${esc(p.title)}</b>${p.sub ? `<span class="sd-sub">${esc(p.sub)}</span>` : ''}${p.legend ? `<span class="sd-keys">${p.legend}</span>` : ''}</figcaption><svg viewBox="0 0 ${W} ${p.H}" width="100%" role="img" aria-label="${esc(p.title)}, de janvier à décembre">${p.g}</svg></figure>`).join('')}${axis}</div>`;
   }
@@ -250,13 +258,15 @@
   }
   const avg = a => { const v = (a || []).filter(x => x != null); return v.length ? v.reduce((p, q) => p + q, 0) / v.length : null; };
 
+  /* Case du tableau des normales : convertie selon le réglage (l'eau garde sa décimale en °C). */
+  const cell = (r, v) => { if (!r[3] || v == null) return num(v, r[2]); if (r[3] === 'temp' && uUnit('temp') === '°C') return num(v, r[2]); const c = uConv(r[3], v); return num(c.v, c.d); };
   function table(c) {
     const a = c.air || {}, w = c.wave;
     const rows = [
-      ['Eau (°C)', c.sea, 1], ['Air max (°C)', a.tx, 0], ['Air min (°C)', a.tn, 0], ['Soleil (h/j)', a.sun, 0], ['Jours de pluie', a.wet, 0], ['Pluie (mm)', a.rain, 0],
-      ['Vent (km/h)', a.wind, 0], ['Jours ventés (%)', a.kite, 0], ['Houle (m)', w && w.hs, 1], ['Houle forte, 1 jour sur 10 (m)', w && w.p90, 1], ['Période (s)', w && w.tp, 0]
+      [`Eau (${uUnit('temp')})`, c.sea, 1, 'temp'], [`Air max (${uUnit('temp')})`, a.tx, 0, 'temp'], [`Air min (${uUnit('temp')})`, a.tn, 0, 'temp'], ['Soleil (h/j)', a.sun, 0], ['Jours de pluie', a.wet, 0], ['Pluie (mm)', a.rain, 0],
+      [`Vent (${uUnit('wind')})`, a.wind, 0, 'wind'], ['Jours ventés (%)', a.kite, 0], [`Houle (${uUnit('length')})`, w && w.hs, 1, 'length'], [`Houle forte, 1 jour sur 10 (${uUnit('length')})`, w && w.p90, 1, 'length'], ['Période (s)', w && w.tp, 0]
     ].filter(r => r[1] && r[1].some(v => v != null));
-    return `<details class="sd-table"><summary>${icon(I.table)}Voir le tableau des normales</summary><div class="sd-table-scroll"><table><thead><tr><th scope="col"></th>${Array.from({ length: 12 }, (_, m) => `<th scope="col">${esc(monthName(m, 'short'))}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr><th scope="row">${esc(r[0])}</th>${r[1].map(v => `<td>${esc(num(v, r[2]))}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`;
+    return `<details class="sd-table"><summary>${icon(I.table)}Voir le tableau des normales</summary><div class="sd-table-scroll"><table><thead><tr><th scope="col"></th>${Array.from({ length: 12 }, (_, m) => `<th scope="col">${esc(monthName(m, 'short'))}</th>`).join('')}</tr></thead><tbody>${rows.map(r => `<tr><th scope="row">${esc(r[0])}</th>${r[1].map(v => `<td>${esc(cell(r, v))}</td>`).join('')}</tr>`).join('')}</tbody></table></div></details>`;
   }
 
   function sources(c) {
@@ -290,7 +300,7 @@
     const act = curAct(s), y = M.year(c, act, s.level), b = M.best(y), now = new Date().getMonth();
     if (!y.some(v => v != null)) { host.hidden = true; before(null); return; }
     host.hidden = false;
-    const sea = c.sea ? `<span class="sd-chip">${icon(I.temp)}Eau ${num(Math.min(...c.sea))}–${num(Math.max(...c.sea))} °C</span>` : '';
+    const sea = c.sea ? `<span class="sd-chip">${icon(I.temp)}Eau ${num(uConv('temp', Math.min(...c.sea)).v)}–${num(uConv('temp', Math.max(...c.sea)).v)} ${uUnit('temp')}</span>` : '';
     const lnow = M.level(y[now]);
     /* Bandeau « Avant d’y aller » : la même phrase que la puce du mois ci-dessous. */
     before(lnow != null ? `En ${monthName(now)} : ${LEVEL_TXT[lnow].toLowerCase()}` : null, lnow);
@@ -303,9 +313,11 @@
     const facts = $('#dFacts');
     if (facts && c.sea) {
       facts.querySelector('.dfact-sea')?.remove();
-      facts.insertAdjacentHTML('beforeend', `<span class="dfact dfact-sea">${icon(I.temp)}Eau ≈ ${num(c.sea[now])} °C en ${esc(monthName(now))}</span>`);
+      facts.insertAdjacentHTML('beforeend', `<span class="dfact dfact-sea">${icon(I.temp)}Eau ≈ ${uShow('temp', c.sea[now])} en ${esc(monthName(now))}</span>`);
     }
   }
+  /* Seuils de vent « 10, 20, 30 km/h » : repères écrits dans l'unité choisie (5, 11, 16 kn). */
+  const thresholds = () => { const a = [10, 20, 30].map(v => uConv('wind', v).v); return `${a.join(', ')} ${uUnit('wind')}`; };
   const cap = t => t ? t.charAt(0).toUpperCase() + t.slice(1) : t;
 
   /* ---------------- Y aller ---------------- */
@@ -497,13 +509,13 @@
     const short = { sea: '', swell: '' };
     if (c && c.sea && t != null) {
       const d = Math.round((t - c.sea[m]) * 10) / 10;
-      short.sea = Math.abs(d) < 1 ? 'Proche de la normale du mois' : d > 0 ? `${num(Math.abs(d), 0)} °C au-dessus de la normale` : `${num(Math.abs(d), 0)} °C sous la normale`;
-      rows.push([I.temp, `Eau ${num(t, 0)} °C`, Math.abs(d) < 1 ? `proche de la normale de ${monthName(m)} (${num(c.sea[m])} °C)` : `${d > 0 ? '+' : '−'}${num(Math.abs(d), 0)} °C par rapport à la normale de ${monthName(m)} (${num(c.sea[m])} °C)`, d >= 1 ? 'up' : d <= -1 ? 'down' : '']);
+      short.sea = Math.abs(d) < 1 ? 'Proche de la normale du mois' : d > 0 ? `${uDelta(d)} au-dessus de la normale` : `${uDelta(d)} sous la normale`;
+      rows.push([I.temp, `Eau ${uShow('temp', t)}`, Math.abs(d) < 1 ? `proche de la normale de ${monthName(m)} (${uShow('temp', c.sea[m])})` : `${d > 0 ? '+' : '−'}${uDelta(d)} par rapport à la normale de ${monthName(m)} (${uShow('temp', c.sea[m])})`, d >= 1 ? 'up' : d <= -1 ? 'down' : '']);
     }
     if (c && c.wave && h != null) {
       const n = c.wave.hs[m], r = n ? h / n : 1;
       short.swell = r > 1.35 ? 'Plus forte que d’habitude' : r < 0.65 ? 'Plus calme que d’habitude' : 'Dans la moyenne du mois';
-      rows.push([I.wave, `Houle ${num(h, 1)} m`, r > 1.35 ? `plus forte que d’habitude en ${monthName(m)} (moyenne ${num(n, 1)} m)` : r < 0.65 ? `plus calme que d’habitude en ${monthName(m)} (moyenne ${num(n, 1)} m)` : `dans la moyenne de ${monthName(m)} (${num(n, 1)} m)`, r > 1.35 ? 'up' : r < 0.65 ? 'down' : '']);
+      rows.push([I.wave, `Houle ${uShow('length', h)}`, r > 1.35 ? `plus forte que d’habitude en ${monthName(m)} (moyenne ${uShow('length', n)})` : r < 0.65 ? `plus calme que d’habitude en ${monthName(m)} (moyenne ${uShow('length', n)})` : `dans la moyenne de ${monthName(m)} (${uShow('length', n)})`, r > 1.35 ? 'up' : r < 0.65 ? 'down' : '']);
     }
     try { window.OceanBefore?.normal(s, short); } catch (e) {}
     host.hidden = !rows.length;
@@ -539,7 +551,7 @@
     const parsed = M.parseLive(l);
     const suitTxt = M.SUIT_ACTS.includes(act) && parsed.tempC != null ? SUIT_TXT[M.wetsuit(parsed.tempC).join(',')] : null;
     const m = new Date().getMonth();
-    const r = M.coach({ act, inland, level: myLevel(), spot: s, live: l, clim: window.OCEAN_CLIMATE ? OCEAN_CLIMATE.spots[s.id] : null, m, monthName: monthName(m), fmt: num, suit: suitTxt });
+    const r = M.coach({ act, inland, level: myLevel(), spot: s, live: l, clim: window.OCEAN_CLIMATE ? OCEAN_CLIMATE.spots[s.id] : null, m, monthName: monthName(m), fmt: num, suit: suitTxt, units: { wind: v => uShow('wind', v), length: v => uShow('length', v), temp: v => uShow('temp', v), thr: () => thresholds() } });
     if (!r) { host.hidden = true; host.innerHTML = ''; return; }
     host.hidden = false;
     const sport = sportLabel(act);
@@ -555,6 +567,8 @@
     host.innerHTML = `<p class="sd-vs-title">Lire les conditions · ${esc(sport)}</p>${body}<p class="sd-coach-note">Repères pour apprendre à lire la mer, pas des consignes du lieu. Sur place, suis le poste de secours, le balisage et les drapeaux.</p>`;
   }
   document.addEventListener('ocean:level', () => { try { renderCoach(); } catch (e) {} });
+  /* Réglage « Unités » changé : normales, phrases, comparaison du jour et « Lire les conditions » sont redessinés sur place. */
+  document.addEventListener('ocean:units', () => { try { if (cur) { const open = $('#dSeasons .sd-table')?.open, c = window.OCEAN_CLIMATE && OCEAN_CLIMATE.spots[cur.id]; if (c) { renderSeasons(cur, c); renderTeaser(cur, c); if (open) $('#dSeasons .sd-table').open = true; } if (lastLive && lastLive.s === cur) live(lastLive.s, lastLive.l); renderCoach(); } } catch (e) {} });
 
   /* ---------------- Courants : les repérer, en sortir (onglet Conditions, JAMAIS replié) ----------------
      Règle du fondateur : la sécurité n’est jamais repliée. Les deux blocs du modèle (M.ripSafety) sont posés juste après

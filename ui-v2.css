@@ -150,6 +150,7 @@
 .ocean-v2 .ui-stamp{margin:0;font:500 var(--ui-note)/1.2 var(--body);color:var(--ui-soft);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .ocean-v2 .ui-cond.is-old,.ocean-v2 .ui-cond.is-old .ui-n{color:var(--ui-soft);font-weight:600}
 .ocean-v2 .ui-cond.is-old .ui-ic{opacity:.6}
-.ocean-v2 .ui-clim{flex-wrap:nowrap;gap:4px 10px}
-.ocean-v2 .ui-clim .ui-clim-m{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.ocean-v2 .ui-clim,.ocean-v2 .ui-live .ui-cond.ui-clim{flex-wrap:wrap;gap:0 10px;align-items:baseline;overflow:visible}
+/* Le mois n'est plus coupé : si « eau, moyenne en novembre » ne tient pas à côté du chiffre, il passe à la ligne entier. */
+.ocean-v2 .ui-clim .ui-clim-m{white-space:normal;min-width:0;overflow-wrap:anywhere}
 .ocean-v2 .ui-verdict.ui-season{min-height:26px}

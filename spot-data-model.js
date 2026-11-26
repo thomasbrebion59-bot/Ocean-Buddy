@@ -262,15 +262,15 @@
 
   /* Lignes « aujourd’hui ici » : une phrase par donnée disponible, formulée selon le niveau. */
   function wavesToday(level, c) {
-    const { h, w, side, tide, suit, tp, tpBand, p90, mon, fmt, tpToday } = c, out = [];
+    const { h, w, side, tide, suit, tp, tpBand, p90, mon, fmt, tpToday, U } = c, out = [];
     const sb = swellBand(h), wb = windBand(w);
     if (h != null) {
       if (level === 'debutant') {
-        out.push([`Houle de ${fmt(h, 1)} m au large selon le modèle.`, sb === 'petite' ? 'Petite houle : les vagues seront petites et douces, c’est le bon moment pour apprendre.' : sb === 'modeste' ? 'Houle modeste : assez petite pour apprendre, mais elle pousse déjà. Reste dans la mousse, près du bord.' : sb === 'moyenne' ? 'Houle moyenne : en cassant sur le banc, les vagues peuvent dépasser ta taille. Demande conseil au poste ou à l’école avant d’entrer.' : 'Grosse houle : les vagues sont puissantes et les courants plus forts. Pour débuter, regarde depuis la plage ou prends un cours encadré.']);
+        out.push([`Houle de ${U.length(h)} au large selon le modèle.`, sb === 'petite' ? 'Petite houle : les vagues seront petites et douces, c’est le bon moment pour apprendre.' : sb === 'modeste' ? 'Houle modeste : assez petite pour apprendre, mais elle pousse déjà. Reste dans la mousse, près du bord.' : sb === 'moyenne' ? 'Houle moyenne : en cassant sur le banc, les vagues peuvent dépasser ta taille. Demande conseil au poste ou à l’école avant d’entrer.' : 'Grosse houle : les vagues sont puissantes et les courants plus forts. Pour débuter, regarde depuis la plage ou prends un cours encadré.']);
       } else if (level === 'intermediaire') {
-        out.push([`Houle de ${fmt(h, 1)} m au large.`, sb === 'petite' ? 'Petite houle : vagues molles, prends plus de volume et vise les pics les plus ouverts.' : sb === 'modeste' ? 'Houle modeste : jouable sur la plupart des pics, le vent et la marée feront la différence.' : sb === 'moyenne' ? 'Houle moyenne : les vagues ont de la force, choisis un pic où tu peux ramer sans te faire rattraper par les séries.' : 'Grosse houle : seuls les pics bien protégés restent jouables. Observe dix minutes avant de décider.']);
+        out.push([`Houle de ${U.length(h)} au large.`, sb === 'petite' ? 'Petite houle : vagues molles, prends plus de volume et vise les pics les plus ouverts.' : sb === 'modeste' ? 'Houle modeste : jouable sur la plupart des pics, le vent et la marée feront la différence.' : sb === 'moyenne' ? 'Houle moyenne : les vagues ont de la force, choisis un pic où tu peux ramer sans te faire rattraper par les séries.' : 'Grosse houle : seuls les pics bien protégés restent jouables. Observe dix minutes avant de décider.']);
       } else {
-        out.push(`Houle modèle : ${fmt(h, 1)} m au large. La hauteur seule ne dit rien : croise-la avec la période et la direction avant de juger le pic.`);
+        out.push(`Houle modèle : ${U.length(h)} au large. La hauteur seule ne dit rien : croise-la avec la période et la direction avant de juger le pic.`);
       }
     }
     if (tp != null) {
@@ -278,30 +278,30 @@
       if (level === 'debutant') out.push([typ, tpBand === 'courte' ? 'Courte : des vagues brouillonnes qui se suivent vite, mais peu puissantes.' : tpBand === 'moyenne' ? 'Moyenne : des vagues plutôt régulières.' : 'Longue : des vagues plus puissantes et plus espacées, même à hauteur égale.']);
       else if (level === 'intermediaire') out.push([typ, tpBand === 'courte' ? 'Mer du vent : vagues courtes et peu de puissance, la planche doit aider.' : tpBand === 'moyenne' ? 'Houle correcte : de la puissance sans surprise, séries assez régulières.' : 'Houle de fond : beaucoup de puissance et des séries espacées. Prévois plus de rame et plus de temps pour sortir.']);
       else out.push([typ, tpBand === 'longue' ? 'Période longue : la houle ressent le fond plus tôt, les vagues cassent plus au large et plus fort. Compte les séries avant de ramer.' : tpBand === 'moyenne' ? 'Période moyenne : les bancs décident presque tout.' : 'Période courte : la mer du vent domine, le vent local pèse plus que la houle.']);
-      if (level === 'expert' && p90 != null) out.push(`Les 10 % de jours les plus forts dépassent ${fmt(p90, 1)} m en ${mon} (moyenne de plusieurs années).`);
+      if (level === 'expert' && p90 != null) out.push(`Les 10 % de jours les plus forts dépassent ${U.length(p90)} en ${mon} (moyenne de plusieurs années).`);
     }
     if (w != null) {
       const force = wb === 'faible' ? 'Vent faible : la surface reste lisse.' : wb === 'modere' ? 'Vent modéré : la surface commence à se plisser.' : wb === 'soutenu' ? 'Vent soutenu : la mer devient hachée et fatigante.' : 'Vent fort : la mer est chaotique et on dérive vite.';
       if (level === 'debutant') {
-        out.push([`Vent de ${fmt(w, 0)} km/h.`, force]);
+        out.push([`Vent de ${U.wind(w)}.`, force]);
         if (wb === 'fort') out.push('Reste à terre aujourd’hui.');
         if (w >= 10 && side === 'offshore') out.push('Le vent vient de la terre (offshore) : il lisse les vagues, mais il te pousse vers le large. Reste près du bord et ne lâche pas ta planche.');
         else if (w >= 10 && side === 'onshore') out.push('Le vent vient du large (onshore) : il écrase les vagues et les rend désordonnées. Ça fatigue plus vite.');
         else if (w >= 10 && side === 'cross') out.push('Le vent arrive de côté : il te déporte le long de la plage. Repère-toi sur un point fixe à terre.');
         else if (w >= 10) out.push('Pour ce spot, on ne connaît pas le sens du vent par rapport à la plage. Regarde les drapeaux et les rides sur l’eau.');
       } else if (level === 'intermediaire') {
-        out.push([`Vent de ${fmt(w, 0)} km/h.`, w < 10 ? 'Presque nul : surface lisse, c’est une bonne fenêtre.' : side === 'offshore' ? (w < 25 ? 'Offshore modéré : il tient les vagues et les creuse. Bonne fenêtre.' : 'Offshore fort : il retient trop les vagues et complique la rame. Cherche un abri.') : side === 'onshore' ? (w < 15 ? 'Onshore léger : surface un peu froissée, encore jouable.' : 'Onshore marqué : vagues écrasées et désordonnées. Attends que ça tourne ou change de spot.') : side === 'cross' ? 'Vent de côté : la surface se dégrade et tu dérives. Regarde de quel côté du pic ça tient.' : (w < 20 ? 'Modéré : le sens par rapport à la plage n’est pas connu pour ce spot, regarde la surface.' : 'Soutenu : le sens par rapport à la plage n’est pas connu pour ce spot, regarde si la surface tient.')]);
+        out.push([`Vent de ${U.wind(w)}.`, w < 10 ? 'Presque nul : surface lisse, c’est une bonne fenêtre.' : side === 'offshore' ? (w < 25 ? 'Offshore modéré : il tient les vagues et les creuse. Bonne fenêtre.' : 'Offshore fort : il retient trop les vagues et complique la rame. Cherche un abri.') : side === 'onshore' ? (w < 15 ? 'Onshore léger : surface un peu froissée, encore jouable.' : 'Onshore marqué : vagues écrasées et désordonnées. Attends que ça tourne ou change de spot.') : side === 'cross' ? 'Vent de côté : la surface se dégrade et tu dérives. Regarde de quel côté du pic ça tient.' : (w < 20 ? 'Modéré : le sens par rapport à la plage n’est pas connu pour ce spot, regarde la surface.' : 'Soutenu : le sens par rapport à la plage n’est pas connu pour ce spot, regarde si la surface tient.')]);
       } else {
-        out.push([`Vent de ${fmt(w, 0)} km/h.`].concat(side === 'offshore' ? ['Offshore d’après l’orientation du catalogue.'] : side === 'onshore' ? ['Onshore d’après l’orientation du catalogue.'] : side === 'cross' ? ['De travers d’après l’orientation du catalogue.'] : []).concat(['Compare avec la brise thermique de l’après-midi : une session de matin ne vaut pas celle de 16 h.']));
+        out.push([`Vent de ${U.wind(w)}.`].concat(side === 'offshore' ? ['Offshore d’après l’orientation du catalogue.'] : side === 'onshore' ? ['Onshore d’après l’orientation du catalogue.'] : side === 'cross' ? ['De travers d’après l’orientation du catalogue.'] : []).concat(['Compare avec la brise thermique de l’après-midi : une session de matin ne vaut pas celle de 16 h.']));
       }
     }
-    if (w != null && level !== 'expert') out.push('Les seuils de vent (10, 20, 30 km/h) sont des repères indicatifs, pas des limites officielles.');
+    if (w != null && level !== 'expert') out.push(`Les seuils de vent (${U.thr()}) sont des repères indicatifs, pas des limites officielles.`);
     if (tide) {
       if (level === 'debutant') out.push(tide === 'Descendante' ? 'Marée descendante : l’eau qui repart se concentre dans les chenaux, les baïnes et les courants de retour sont souvent plus forts. Sois plus prudent.' : 'Marée montante : l’eau avance vers la plage, les courants de retour sont en général moins marqués. Reste vigilant malgré tout.');
       else if (level === 'intermediaire') out.push(tide === 'Descendante' ? 'Marée descendante : les bancs se découvrent et les vagues ferment plus vite. Prends les heures de marée dans l’annuaire local pour caler ta session.' : 'Marée montante : les vagues gagnent en rondeur à mesure que l’eau monte. Prends les heures de marée dans l’annuaire local pour caler ta session.');
       else out.push([tide === 'Descendante' ? 'Marée descendante.' : 'Marée montante.', 'Le coefficient du jour n’est pas calculé ici : prends-le dans l’annuaire de marées local. Un coefficient élevé veut dire plus de courant et des bancs qui changent vite.']);
     }
-    if (suit && level !== 'expert') out.push(`Eau à ${fmt(c.t, 0)} °C : prévois une combinaison ${suit}.`);
+    if (suit && level !== 'expert') out.push(`Eau à ${U.temp(c.t)} : prévois une combinaison ${suit}.`);
     return out;
   }
 
@@ -415,23 +415,23 @@
 
   /* Vent seul (kite, windsurf) et plan d’eau (baignade, paddle, kayak, snorkeling) : un seul bloc, sans découpage par niveau. */
   function windOnly(kind, level, c) {
-    const { w, side, fmt, tide } = c, lines = [];
+    const { w, side, fmt, tide, U } = c, lines = [];
     const wb = windBand(w);
     if (w != null) {
       if (kind === 'wind') {
-        lines.push([`Vent de ${fmt(w, 0)} km/h.`, wb === 'faible' ? 'Trop faible pour tracter une aile ou une voile.' : wb === 'modere' ? 'Vent modéré : suffisant pour les grandes voiles et les grandes ailes, sans excès.' : wb === 'soutenu' ? 'Vent soutenu : choisis une voile ou une aile plus petite.' : 'Vent fort : seuls les pratiquants expérimentés sortent, avec du matériel adapté.']);
+        lines.push([`Vent de ${U.wind(w)}.`, wb === 'faible' ? 'Trop faible pour tracter une aile ou une voile.' : wb === 'modere' ? 'Vent modéré : suffisant pour les grandes voiles et les grandes ailes, sans excès.' : wb === 'soutenu' ? 'Vent soutenu : choisis une voile ou une aile plus petite.' : 'Vent fort : seuls les pratiquants expérimentés sortent, avec du matériel adapté.']);
       } else {
-        lines.push([`Vent de ${fmt(w, 0)} km/h.`, wb === 'faible' ? 'Vent faible : la surface reste lisse.' : wb === 'modere' ? 'Vent modéré : un peu de clapot, surtout au large.' : wb === 'soutenu' ? 'Vent soutenu : le clapot grossit et fatigue vite.' : 'Vent fort : mer hachée, reste à terre.']);
+        lines.push([`Vent de ${U.wind(w)}.`, wb === 'faible' ? 'Vent faible : la surface reste lisse.' : wb === 'modere' ? 'Vent modéré : un peu de clapot, surtout au large.' : wb === 'soutenu' ? 'Vent soutenu : le clapot grossit et fatigue vite.' : 'Vent fort : mer hachée, reste à terre.']);
       }
       if (w >= 10 && side === 'offshore') lines.push('Le vent vient de la terre : il te pousse vers le large et la mer paraît calme près du bord. Reste près du bord et préviens quelqu’un.');
       else if (w >= 10 && side === 'onshore') lines.push('Le vent vient du large : il te ramène vers la plage, mais le clapot se lève vite.');
       else if (w >= 10 && side == null) lines.push('Le sens du vent par rapport à la plage n’est pas connu pour ce spot. Regarde les drapeaux et les rides sur l’eau avant de partir.');
     }
-    if (c.t != null && c.suit) lines.push(`Eau à ${fmt(c.t, 0)} °C : prévois une combinaison ${c.suit}.`);
-    if (kind === 'water' && c.t != null && c.t < 20 && !c.suit) lines.push(`Eau à ${fmt(c.t, 0)} °C : l’eau fraîche épuise plus vite qu’on ne le croit. Sors dès que tu as froid.`);
+    if (c.t != null && c.suit) lines.push(`Eau à ${U.temp(c.t)} : prévois une combinaison ${c.suit}.`);
+    if (kind === 'water' && c.t != null && c.t < 20 && !c.suit) lines.push(`Eau à ${U.temp(c.t)} : l’eau fraîche épuise plus vite qu’on ne le croit. Sors dès que tu as froid.`);
     if (tide) lines.push(tide === 'Descendante' ? 'Marée descendante : l’eau qui repart crée des courants vers le large, surtout dans les chenaux.' : 'Marée montante : l’eau avance vers la plage, les courants sont en général moins marqués.');
     lines.push(level === 'debutant' ? 'Entre dans une zone surveillée et demande conseil au poste de secours ou à l’école.' : level === 'expert' ? 'Prévois ton retour avant de partir et ne sors pas seul.' : 'Repère où tu pourras sortir de l’eau si le vent tombe ou tourne, et préviens un proche.');
-    if (w != null) lines.push('Les seuils de vent (10, 20, 30 km/h) sont des repères indicatifs, pas des limites officielles.');
+    if (w != null) lines.push(`Les seuils de vent (${U.thr()}) sont des repères indicatifs, pas des limites officielles.`);
     return [{ h: 'Lire les conditions du jour', lines }];
   }
 
@@ -441,6 +441,8 @@
     const kind = coachKind(ctx.act, !!ctx.inland);
     if (!kind) return null;
     const lv = parseLive(ctx.live), s = ctx.spot || {}, fmt = ctx.fmt || defFmt;
+    /* Unités d'affichage (lot 1) : ctx.units fournit les textes avec leur unité (« 13 km/h » ou « 7 kn »), les valeurs restent métriques ici. */
+    const U = Object.assign({ wind: v => `${fmt(v, 0)} km/h`, length: v => `${fmt(v, 1)} m`, temp: v => `${fmt(v, 0)} °C`, thr: () => '10, 20, 30 km/h' }, ctx.units || {});
     const w = ctx.clim && ctx.clim.wave ? ctx.clim.wave : null, m = ctx.m;
     const tpNormal = w && w.tp && has(w.tp[m]) ? w.tp[m] : null;
     /* La période du jour passe avant la normale du mois, qui reste le repli (et reste annoncée comme telle). */
@@ -451,7 +453,7 @@
     const dirLive = lv.swellDirDeg != null && lv.swellDirDeg >= 0 && lv.swellDirDeg <= 360 ? Math.round(lv.swellDirDeg / 45) % 8 : null;
     const c = {
       h: lv.swellM, w: lv.windKmh, t: lv.tempC, tide: ctx.inland ? null : lv.tide, side: windSide(lv.windDir, s.wind), suit: ctx.suit || null,
-      tp, tpToday, tpBand: periodBand(tp), p90, dirToday: dirLive != null, dirTxt: dirLive != null ? DIR_FROM[dirLive] : di == null ? null : DIR_FROM[di], mon: ctx.monthName || '', fmt
+      tp, tpToday, tpBand: periodBand(tp), p90, dirToday: dirLive != null, dirTxt: dirLive != null ? DIR_FROM[dirLive] : di == null ? null : DIR_FROM[di], mon: ctx.monthName || '', fmt, U
     };
     const sel = COACH_LEVELS.includes(ctx.level) ? ctx.level : null;
     if (kind !== 'wave') return { kind, selected: sel, levels: [{ id: 'all', title: 'Lire les conditions du jour', blocks: windOnly(kind, sel, c) }] };
