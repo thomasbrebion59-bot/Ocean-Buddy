@@ -140,7 +140,7 @@
       passe: `<svg viewBox="0 0 420 150" role="img" aria-label="Schéma d’un courant de passe"><path class="sea" d="M0 0h420v150H0z"/><path class="sand" d="M0 150v-30q70-12 140 0t140 6 140-10v34z"/><path class="arrow" d="M30 100h270m-17-11 17 11-17 11"/><path class="reef" d="M140 74h0M170 68h0M200 76h0"/><path class="safe" d="M170 62V36"/><path class="wave" d="M170 30h0"/><text x="18" y="18">Sens du courant</text><text x="186" y="34">Bouée en surface</text><text x="30" y="143">Ne lutte pas, reste groupé avec ton guide</text></svg>`,
       riviere: `<svg viewBox="0 0 420 150" role="img" aria-label="Schéma d’une rivière à courant"><path class="sand" d="M0 0h420v26H0zM0 124h420v26H0z"/><path class="sea" d="M0 26h420v98H0z"/><path class="arrow" d="M25 50h120m-16-10 16 10-16 10M25 102h120m-16-10 16 10-16 10"/><path class="safe" d="M190 76l72 48"/><path class="wave" d="M190 76h0"/><path class="reef" d="M280 26l30 56m-22-22 14-4m-4 22 16-6"/><text x="18" y="18">Sens du courant</text><text x="316" y="50">Arbre : évite</text><text x="18" y="143">Ne lutte pas, rejoins la rive en biais</text></svg>`
     };
-    const current = live?.current && live.current !== '—' ? live.current : 'Donnée indisponible';
+    const current = live?.current && live.current !== '—' ? (window.OceanUnits ? OceanUnits.showText(live.current) : live.current) : 'Donnée indisponible';
     const updated=Number.isFinite(live?.fetchedAt)?new Intl.DateTimeFormat('fr-FR',{dateStyle:'short',timeStyle:'short'}).format(new Date(live.fetchedAt)):'heure indisponible';
     /* Fiche v2 : un titre en casse de phrase, sans sur-titre en capitales ; l’heure du modèle passe en note dessous. */
     const head = '<h3 class="fx-title fx-title-s" id="spotSafetyLiveTitle">Courants & dangers à vérifier</h3>';
@@ -167,6 +167,14 @@
   const later = fn => { try { if (window.requestIdleCallback) return requestIdleCallback(fn, {timeout: 400}); } catch (e) {} return setTimeout(fn, 30); };
   const fmt1 = v => (window.obNum ? obNum(v, 1) : (+v).toFixed(1).replace('.', ','));
   const round = v => (v == null ? '—' : String(Math.round(v)));
+  /* Unités choisies (Réglages : nœuds, pieds, °F ; units-model.js) : les prévisions restent en métrique, seul l'affichage
+     convertit. uc(genre, valeur) -> { v, d, unit } ; un(c) écrit le nombre dans la langue ; uTxt = nombre et unité. */
+  const uc = (kind, v) => {
+    const c = window.OceanUnits && OceanUnits.showConvert(kind, v);
+    return c || (kind === 'wind' ? {v: Math.round(v), d: 0, unit: 'km/h'} : kind === 'length' ? {v: Math.round(v * 10) / 10, d: 1, unit: 'm'} : {v: Math.round(v), d: 0, unit: '°C'});
+  };
+  const un = c => (c.d ? fmt1(c.v) : String(c.v));
+  const uTxt = (kind, v) => { const c = uc(kind, v); return un(c) + ' ' + c.unit; };
   const hourFmt = (() => { let f = null; return h => { if (!window.OB_I18N || /^(fr|es)/.test(OB_I18N.lang || 'fr')) return `${h} h`; try { f = f || new Intl.DateTimeFormat((window.OB_I18N && OB_I18N.locale) || 'fr-FR', {hour: 'numeric', timeZone: 'UTC'}); return f.format(Date.UTC(2000, 0, 1, h)); } catch (e) { return h + ' h'; } }; })();
   /* Lever et coucher du soleil, écrits comme les autres heures de l’onglet : « 7 h 37 » en français et en espagnol. */
   const clock = iso => { const m = /T(\d\d):(\d\d)/.exec(String(iso || '')); if (!m) return '—'; if (!window.OB_I18N || /^(fr|es)/.test(OB_I18N.lang || 'fr')) return `${+m[1]} h ${m[2]}`; try { return new Intl.DateTimeFormat((window.OB_I18N && OB_I18N.locale) || 'fr-FR', {hour: '2-digit', minute: '2-digit', timeZone: 'UTC'}).format(Date.UTC(2000, 0, 1, +m[1], +m[2])); } catch (e) { return m[1] + ':' + m[2]; } };
@@ -257,10 +265,10 @@
     const head = `<tr class="wx-days"><td class="wx-corner"></td>${groups.map(g => `<th scope="colgroup" colspan="${g.n}"><span><b>${esc(dayName(g.date, dayIdx(g.date)))}</b></span></th>`).join('')}</tr>`
       + `<tr class="wx-hrow"><th scope="row">Heure</th>${list.map(x => `<th scope="col"${cls(x) ? ` class="${cls(x)}"` : ''}>${esc(hourFmt(x.hour))}</th>`).join('')}</tr>`;
     const body = row('Ciel', '', x => skyIcon(x.code, x.isDay))
-      + row('Air', '°C', x => (x.temp == null ? '—' : `${Math.round(x.temp)}°`))
-      + row('Vent', 'km/h', x => (x.wind == null ? '—' : `<span class="wx-v">${windFrom(x.windDir)}${Math.round(x.wind)}</span>`))
-      + row('Rafales', 'km/h', x => round(x.gust))
-      + (inland ? '' : row('Houle', 'm', x => (x.wave == null ? '—' : `<span class="wx-v">${swellFrom(x.waveDir)}${fmt1(x.wave)}</span>`)) + row('Période', 's', x => round(x.period)))
+      + row('Air', uc('temp', 0).unit, x => (x.temp == null ? '—' : `${uc('temp', x.temp).v}°`))
+      + row('Vent', uc('wind', 0).unit, x => (x.wind == null ? '—' : `<span class="wx-v">${windFrom(x.windDir)}${un(uc('wind', x.wind))}</span>`))
+      + row('Rafales', uc('wind', 0).unit, x => (x.gust == null ? '—' : un(uc('wind', x.gust))))
+      + (inland ? '' : row('Houle', uc('length', 0).unit, x => (x.wave == null ? '—' : `<span class="wx-v">${swellFrom(x.waveDir)}${un(uc('length', x.wave))}</span>`)) + row('Période', 's', x => round(x.period)))
       + row('Pluie', '%', x => `${x.pop == null ? '—' : Math.round(x.pop)}${x.rain != null && x.rain >= 0.1 ? `<small>${fmt1(x.rain)} mm</small>` : ''}`);
     /* Les heures surlignées sont celles de chaque créneau calculé : « Tes créneaux » quand aujourd’hui et demain en ont un. */
     const slotDays = new Set([...slotHours].map(t => t.slice(0, 10))).size;
@@ -275,11 +283,11 @@
     const head = `<div class="fx7-head" aria-hidden="true"><span></span><span></span><span>Air</span>${inland ? '' : '<span>Houle</span><span>Période</span>'}<span>Vent</span></div>`;
     const rows = daily.map((d, i) => {
       const id = `fx7Day${i}`, top = best && best.date === d.date;
-      const more = [['Rafales', v(d.gust, g => Math.round(g) + ' km/h')], ['Pluie', v(d.pop, p => Math.round(p) + ' %')], ['UV', v(d.uv, u => String(Math.round(u)))], ['Lever', clock(d.sunrise)], ['Coucher', clock(d.sunset)]];
-      const wind = d.wind == null ? '—' : `${Math.round(d.wind)} km/h<small>${esc(direction(d.windDir))}</small>`;
+      const more = [['Rafales', v(d.gust, g => uTxt('wind', g))], ['Pluie', v(d.pop, p => Math.round(p) + ' %')], ['UV', v(d.uv, u => String(Math.round(u)))], ['Lever', clock(d.sunrise)], ['Coucher', clock(d.sunset)]];
+      const wind = d.wind == null ? '—' : `${uTxt('wind', d.wind)}<small>${esc(direction(d.windDir))}</small>`;
       return `<li class="fx7-row${top ? ' is-best' : ''}"><button type="button" class="fx7-btn" aria-expanded="false" aria-controls="${id}">`
-        + `<span class="fx7-day">${esc(dayName(d.date, i))}</span>${skyIcon(d.code, true)}<span class="fx7-c">${v(d.tmax, t => Math.round(t) + '°')}</span>`
-        + (inland ? '' : `<span class="fx7-c fx7-wave">${v(d.wave, w => fmt1(w) + ' m')}</span><span class="fx7-c">${v(d.period, p => Math.round(p) + ' s')}</span>`)
+        + `<span class="fx7-day">${esc(dayName(d.date, i))}</span>${skyIcon(d.code, true)}<span class="fx7-c">${v(d.tmax, t => uc('temp', t).v + '°')}</span>`
+        + (inland ? '' : `<span class="fx7-c fx7-wave">${v(d.wave, w => uTxt('length', w))}</span><span class="fx7-c">${v(d.period, p => Math.round(p) + ' s')}</span>`)
         + `<span class="fx7-c fx7-wind">${wind}</span></button>`
         + (top ? bestLine(best.r, slots.note) : alt.has(d.date) ? altLine(alt.get(d.date)) : '')
         + `<dl class="fx7-more" id="${id}" hidden>${more.map(([k, x]) => `<div><dt>${k}</dt><dd>${esc(x)}</dd></div>`).join('')}</dl></li>`;
@@ -306,9 +314,9 @@
      le maximum du jour (c’est écrit juste au-dessus des cartes). Aujourd’hui, ce maximum n’est jamais plus bas que le
      relevé du moment (todayMax) : la scène peut dire « 2,4 m maintenant, jusqu’à 3,5 m aujourd’hui » sans se contredire. */
   function nextDay(d, i, inland) {
-    const first = inland ? `<span class="fx-day-row">${dayIc('air')}<span data-day-v="air">${d.tmax != null ? Math.round(d.tmax) + '°' : '—'}</span></span>`
-      : `<span class="fx-day-row">${dayIc('wave')}<span data-day-v="wave">${d.wave != null ? fmt1(d.wave) + ' m' : '—'}</span></span>`;
-    return `<button type="button" class="fx-day${i === 0 ? ' is-today' : ''}" data-scene-day="${i}" aria-pressed="${i === 0}"><b>${esc(dayName(d.date, i))}</b>${first}<span class="fx-day-row">${dayIc('wind')}<span data-day-v="wind">${d.wind != null ? Math.round(d.wind) + ' km/h' : '—'}</span></span></button>`;
+    const first = inland ? `<span class="fx-day-row">${dayIc('air')}<span data-day-v="air">${d.tmax != null ? uc('temp', d.tmax).v + '°' : '—'}</span></span>`
+      : `<span class="fx-day-row">${dayIc('wave')}<span data-day-v="wave">${d.wave != null ? uTxt('length', d.wave) : '—'}</span></span>`;
+    return `<button type="button" class="fx-day${i === 0 ? ' is-today' : ''}" data-scene-day="${i}" aria-pressed="${i === 0}"><b>${esc(dayName(d.date, i))}</b>${first}<span class="fx-day-row">${dayIc('wind')}<span data-day-v="wind">${d.wind != null ? uTxt('wind', d.wind) : '—'}</span></span></button>`;
   }
   const hi = (a, b) => (a == null ? b : b == null ? a : Math.max(+a, +b));
   /* Maximum d’aujourd’hui : celui de la prévision, relevé au niveau du relevé du moment s’il le dépasse. */
@@ -316,8 +324,8 @@
   function paintToday(host, d, now, inland) {
     const card = host && host.querySelector('[data-scene-day="0"]'); if (!card || !d) return;
     const m = todayMax(d, now), put = (k, t) => { const el = card.querySelector(`[data-day-v="${k}"]`); if (el && el.textContent !== t) el.textContent = t; };
-    if (inland) put('air', m.tmax != null ? Math.round(m.tmax) + '°' : '—'); else put('wave', m.wave != null ? fmt1(m.wave) + ' m' : '—');
-    put('wind', m.wind != null ? Math.round(m.wind) + ' km/h' : '—');
+    if (inland) put('air', m.tmax != null ? uc('temp', m.tmax).v + '°' : '—'); else put('wave', m.wave != null ? uTxt('length', m.wave) : '—');
+    put('wind', m.wind != null ? uTxt('wind', m.wind) : '—');
   }
 
   /* ---------- Scène illustrée de Conditions (20 nov., reprise le 23 nov.) ----------
@@ -420,11 +428,12 @@
        est dit en toutes lettres et montré par les traits. */
     const arrow = '';
     const upTo = (shown, max, unit) => (now && max != null && shown !== max ? `<span class="sc-sub sc-max">${esc(`jusqu’à ${max} ${unit} aujourd’hui`)}</span>` : '');
-    const airNow = d.tmax != null ? String(Math.round(d.tmax)) : '—', waveNow = h != null ? fmt1(h) : '—';
+    const airNow = d.tmax != null ? String(uc('temp', d.tmax).v) : '—', waveNow = h != null ? un(uc('length', h)) : '—';
+    const tU = uc('temp', 0).unit, lU = uc('length', 0).unit, wU = uc('wind', 0).unit, windNow = d.wind != null ? un(uc('wind', d.wind)) : null;
     const first = inland
-      ? `<div class="sc-read"><span class="sc-lab">${now ? 'Air' : 'Air, au plus chaud'}</span><span class="sc-val"><b class="fx-num">${airNow}</b><span class="fx-unit">°C</span></span>${upTo(airNow, top && top.tmax != null ? String(Math.round(top.tmax)) : null, '°C')}</div>`
-      : `<div class="sc-read"><span class="sc-lab">${now ? 'Houle' : 'Houle, au plus haut'}</span><span class="sc-val"><b class="fx-num">${waveNow}</b><span class="fx-unit">m</span></span>${per ? `<span class="sc-sub">${esc(`une vague toutes les ${Math.round(per)} s`)}</span>` : ''}${upTo(waveNow, top && top.wave != null ? fmt1(top.wave) : null, 'm')}</div>`;
-    const wind = `<div class="sc-read sc-read-wind"><span class="sc-lab">${now ? 'Vent' : 'Vent, au plus fort'}</span><span class="sc-val"><b class="fx-num">${w != null ? w : '—'}</b><span class="fx-unit">km/h</span>${arrow}<span class="fx-unit">${esc(direction(d.windDir))}</span></span>${side ? `<span class="sc-sub">${esc(SIDE_LABEL[side])}</span>` : ''}${upTo(w != null ? String(w) : '—', top && top.wind != null ? String(Math.round(top.wind)) : null, 'km/h')}</div>`;
+      ? `<div class="sc-read"><span class="sc-lab">${now ? 'Air' : 'Air, au plus chaud'}</span><span class="sc-val"><b class="fx-num">${airNow}</b><span class="fx-unit">${tU}</span></span>${upTo(airNow, top && top.tmax != null ? String(uc('temp', top.tmax).v) : null, tU)}</div>`
+      : `<div class="sc-read"><span class="sc-lab">${now ? 'Houle' : 'Houle, au plus haut'}</span><span class="sc-val"><b class="fx-num">${waveNow}</b><span class="fx-unit">${lU}</span></span>${per ? `<span class="sc-sub">${esc(`une vague toutes les ${Math.round(per)} s`)}</span>` : ''}${upTo(waveNow, top && top.wave != null ? un(uc('length', top.wave)) : null, lU)}</div>`;
+    const wind = `<div class="sc-read sc-read-wind"><span class="sc-lab">${now ? 'Vent' : 'Vent, au plus fort'}</span><span class="sc-val"><b class="fx-num">${windNow != null ? windNow : '—'}</b><span class="fx-unit">${wU}</span>${arrow}<span class="fx-unit">${esc(direction(d.windDir))}</span></span>${side ? `<span class="sc-sub">${esc(SIDE_LABEL[side])}</span>` : ''}${upTo(windNow != null ? windNow : '—', top && top.wind != null ? un(uc('wind', top.wind)) : null, wU)}</div>`;
     sc.dataset.now = now ? '1' : '0';
     sc.querySelector('.sc-now').innerHTML = `<span class="sc-day">${esc(now ? 'Maintenant' : dayName(d.date, i))}</span>${first}${wind}`;
     host.querySelectorAll('[data-scene-day]').forEach(b => { const on = +b.dataset.sceneDay === i; b.setAttribute('aria-pressed', String(on)); b.classList.toggle('is-on', on); });
@@ -527,6 +536,8 @@
   document.addEventListener('click', e => { if (e.target.closest?.('[data-weather-retry]') && weekTry && weekFailed) weekTry.again(); });
   /* Niveau changé dans Réglages : le créneau suit, sans nouvel appel. */
   document.addEventListener('ocean:level', () => { try { if (shown && activeSpot?.id === shown.s.id) renderWeek(shown.s, shown.weather, shown.marine, shown.fetchedAt); } catch (e) {} });
+  /* Unités changées dans Réglages (nœuds, pieds, °F) : la semaine, la scène et les courants sont réécrits, sans nouvel appel. */
+  document.addEventListener('ocean:units', () => { try { if (shown && activeSpot?.id === shown.s.id) { renderWeek(shown.s, shown.weather, shown.marine, shown.fetchedAt); drawSafety(shown.s, window.LIVE?.[shown.s.id]); } } catch (e) {} });
 
   function openImmersion(s) { if(window.OceanVoyage)window.OceanVoyage.open(s);else window.OceanGallery?.open(s,0,{immersive:true}); }
 

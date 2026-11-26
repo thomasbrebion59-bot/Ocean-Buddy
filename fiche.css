@@ -1275,3 +1275,10 @@ body.reduce-motion #detail .fx-scene *{animation:none!important;transition:none!
 /* ================= Mouvement réduit ================= */
 @media (prefers-reduced-motion:reduce){#detail .fx-wait{animation:none}}
 body.reduce-motion #detail .fx-wait{animation:none}
+
+/* Lot 1 (26 nov. 2026) : petite courbe du niveau de la mer sous « Montante » ou « Descendante » (spot-before.js, tideCurve).
+   Sans chiffre ni heure ; la partie déjà passée est plus claire, le point est « maintenant ». */
+#detail .fx-tide{flex:0 0 100%;display:block;width:100%;max-width:132px;height:auto;margin-top:6px;overflow:visible}
+#detail .fx-tide path{fill:none;stroke:var(--t-main);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#detail .fx-tide .fx-tide-past{opacity:.38}
+#detail .fx-tide .fx-tide-now{fill:var(--t-sun,var(--t-main));stroke:var(--t-card);stroke-width:1.6}

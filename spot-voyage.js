@@ -112,7 +112,7 @@
       :sc.type==='ai'?'<span class="voyage-ai">Scène illustrée, pas une photo du lieu</span>':'';
     if(sc.type==='explore')return dock(sc);
     const chips=[levelLabel(spot.level),...(spot.sports||[]).slice(0,3).map(sportLabel)].map(x=>`<span>${esc(x)}</span>`).join('');
-    const live=typeof LIVE!=='undefined'?LIVE[spot.id]:null;const cond=live?.live?`<div class="voyage-live"><span><small>Vent</small><b>${esc(live.wind)}</b></span><span><small>Houle</small><b>${esc(live.swell)}</b></span><span><small>Eau</small><b>${esc(live.temp)}</b></span></div>`:'';
+    const live=typeof LIVE!=='undefined'?LIVE[spot.id]:null;const cond=live?.live?`<div class="voyage-live"><span><small>Vent</small><b>${esc(window.OceanUnits?OceanUnits.showText(live.wind):live.wind)}</b></span><span><small>Houle</small><b>${esc(window.OceanUnits?OceanUnits.showText(live.swell):live.swell)}</b></span><span><small>Eau</small><b>${esc(window.OceanUnits?OceanUnits.showText(live.temp):live.temp)}</b></span></div>`:'';
     root.querySelector('[data-card]').innerHTML=`<div class="voyage-kicker"><img src="${esc(window.PoulpyIcons?.src?.(spot.sports?.[0])||'assets/design/poulpy.webp')}" alt="" width="34" height="34"><span>${esc(st.kicker||'')}</span><em>${index+1} / ${scenes.length}</em></div>
       <h2>${esc(st.title||spot.name)}</h2><p>${esc(st.text||'')}</p>${cond}<div class="voyage-chips">${chips}</div>
       <div class="voyage-actions"><button type="button" class="voyage-cta" data-explore>${icon.orbit} Explorer en 360°</button><button type="button" class="voyage-cta voyage-cta-main" data-trip>${icon.plus} Ajouter à un voyage</button></div><div class="voyage-credit">${credit}</div>`;

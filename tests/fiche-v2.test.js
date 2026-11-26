@@ -107,7 +107,7 @@ test('ouverture : trois chiffres du moment sur la photo, la motion d’arrivée 
   assert.match(hero, /if \(!s \|\| s\.custom\) \{ el\.innerHTML = ''; el\.hidden = true; return; \}/, 'rien sur un spot personnel');
   assert.match(hero, /chips\.push\(hxChip\('wave', 'Houle'/); assert.match(hero, /chips\.push\(hxChip\('temp', 'Eau'/);
   /* Le vent : chiffre et unité dans la valeur, direction dans le libellé (« Vent S »), pour tenir sur une ligne à trois cases. */
-  assert.match(hero, /const wind = \(\) => \{ const w = ready \? split\(l\.wind\) : null, m = w \? \/\^\(km\\\/h\)\\s\*\(\.\*\)\$\/\.exec\(w\[1\]\) : null; chips\.push\(hxChip\('wind', m && m\[2\] \? `<span>Vent<\/span> <span translate="no" data-no-i18n>\$\{esc\(m\[2\]\)\}<\/span>` : 'Vent'/);
+  assert.match(hero, /const wind = \(\) => \{ const w = ready \? split\(disp\(l\.wind\)\) : null, m = w \? \/\^\(km\\\/h\|kn\)\\s\*\(\.\*\)\$\/\.exec\(w\[1\]\) : null; chips\.push\(hxChip\('wind', m && m\[2\] \? `<span>Vent<\/span> <span translate="no" data-no-i18n>\$\{esc\(m\[2\]\)\}<\/span>` : 'Vent'/);
   assert.match(read('app.js'), /&current=wind_speed_10m,wind_direction_10m,temperature_2m&wind_speed_unit=kmh&timezone=auto&cell_selection=\$\{meteoCell\(s\)\}/, 'l’air du moment est demandé avec le vent (même appel)');
   assert.match(hero, /if \(inland\(s\)\) \{[^}]*\n\s+wind\(\);\n\s+if \(ready && Number\.isFinite\(l\.airC\)\) chips\.push\(hxChip\('temp', 'Air'/, 'plan d’eau intérieur : le vent et l’air, pas la houle');
   /* Spot de mer sans sport de vague ni de vent (plongée, snorkeling) : le vent du moment remplace la houle. */

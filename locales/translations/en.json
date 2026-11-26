@@ -11441,5 +11441,22 @@
  "Recherche indisponible, réessaie": "Search unavailable, try again",
  "Relief terrestre : {0}": "Land relief: {0}",
  "Ton compagnon d’aventure": "Your adventure companion",
- "Toujours le même complice": "Still the same trusty companion"
+ "Toujours le même complice": "Still the same trusty companion",
+ "Aucun relevé pour l’instant": "No reading yet",
+ "Hors connexion. Derniers relevés gardés.": "Offline. Last readings kept.",
+ "Houle en pieds": "Swell in feet",
+ "Niveau de la mer modélisé autour de maintenant, sans horaire": "Modelled sea level around now, without times",
+ "Niveau modélisé, sans horaire": "Modelled level, no tide times",
+ "Pas de réseau. Derniers relevés gardés.": "No connection. Last readings kept.",
+ "Rafraîchir les conditions": "Refresh conditions",
+ "Relâche pour rafraîchir": "Release to refresh",
+ "Relevé aujourd’hui à {0}": "Measured today at {0}",
+ "Relevé hier à {0}": "Measured yesterday at {0}",
+ "Relevé le {0} à {1}": "Measured on {0} at {1}",
+ "Saison : {0}": "Season: {0}",
+ "Températures en °F": "Temperatures in °F",
+ "Tire pour rafraîchir": "Pull to refresh",
+ "Unités": "Units",
+ "Vent en nœuds": "Wind in knots",
+ "eau, moyenne en {0}": "water, average in {0}"
 }

@@ -176,14 +176,15 @@ test('plan d’eau intérieur : le vent seulement, ni houle ni eau de mer', () =
 test('sans donnée : now null, aucun chiffre inventé', async () => {
   const w = world({ answer: () => null });
   const map = await V.forSpots(['surf', 'nowhere', 'inconnu']);
-  assert.deepEqual(map.get('surf'), { now: null, verdict: null, slot: null, day: 'today', danger: 3, at: 0 });
+  /* Lot 1 : l'entrée porte aussi son id et l'eau et la saison du mois (null ici : aucune normale chargée dans ce monde factice). */
+  assert.deepEqual(map.get('surf'), { now: null, verdict: null, slot: null, day: 'today', danger: 3, at: 0, id: 'surf', climate: null });
   assert.equal(map.get('nowhere').now, null, 'position non vérifiée : aucune demande, aucune valeur');
   assert.equal(map.get('nowhere').danger, 2);
   assert.equal(map.get('inconnu').now, null);
   assert.ok(w.calls.every(u => !/latitude=[^&]*(null|undefined|NaN)/.test(u)));
   assert.equal(V.cached('surf'), null, 'un refus n’est pas gardé : la prochaine demande réessaie');
-  assert.equal(V.html(map.get('surf')), '<p class="ui-cond"><span class="is-none">Conditions indisponibles</span></p>');
-  assert.equal(V.html(null), V.html(map.get('surf')));
+  assert.equal(V.html(map.get('surf')), '<p class="ui-cond"><span class="is-none">Aucun relevé pour l’instant</span></p>', 'ni relevé gardé ni normale : la ligne le dit');
+  assert.equal(V.html(null), '<p class="ui-cond"><span class="is-none">Conditions indisponibles</span></p>');
   /* Réponse d’erreur du service ({error:true}) : comme une absence. */
   world({ answer: () => ({ error: true, reason: 'x' }) });
   assert.equal((await V.forSpots(['surf'])).get('surf').now, null);
@@ -275,7 +276,7 @@ test('sans meteoCached : mêmes règles, 30 min par adresse et pause de 2 min ap
       fetch: url => { n++; return Promise.resolve(mode === 'refuse' ? { status, ok: false } : { status: 200, ok: true, json: () => Promise.resolve(/marine/.test(url) ? marine() : weather()) }); }
     });
     /* Dans l’app, meteoCached (app.js) d’abord ; sans lui (ici), le chargeur du module avec les mêmes règles. */
-    assert.match(src, /load: url => \(typeof meteoCached === 'function' \? meteoCached\(url\) : ownLoad\(url\)\)/);
+    assert.match(src, /load: \(url, force\) => \(typeof meteoCached === 'function' \? meteoCached\(url, force\) : ownLoad\(url, force\)\)/);
     assert.equal((await V.forSpots(['surf'])).get('surf').now, null);
     const refused = n;
     assert.ok(refused >= 1);

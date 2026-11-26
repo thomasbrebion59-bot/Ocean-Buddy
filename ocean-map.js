@@ -990,7 +990,7 @@
   }
   function liveLine(s){
     const live=typeof LIVE!=='undefined'&&LIVE[s.id];if(!live?.live)return '';
-    const part=(fn,v)=>v&&v!=='—'?`<span>${typeof fn==='function'?fn():''}${esc(v)}</span>`:'';
+    const part=(fn,v)=>v&&v!=='—'?`<span>${typeof fn==='function'?fn():''}${esc(window.OceanUnits?OceanUnits.showText(String(v)):v)}</span>`:'';
     const html=part(window.icoWind,live.wind)+part(window.icoSwell,live.swell)+part(window.icoTemp,live.temp);
     return html?`<p class="omap-live" title="Modèle Open-Meteo">${html}</p>`:'';
   }

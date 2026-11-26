@@ -240,7 +240,7 @@ function spotCardMeta(s){
   const live=LIVE[s.id]||{};
   if(!live.live)return '<span class="spot-preview">'+spotSports(s).slice(0,3).map(id=>SPORTMAP[id].label).join(' · ')+'</span>';
   const checked=live.fetchedAt?new Date(live.fetchedAt).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'}):'';
-  return `<span>${icoWind()} ${esc(live.wind||'—')}</span><span>${icoSwell()} ${esc(live.swell||'—')}</span><span>${icoTemp()} ${esc(live.temp||'—')}</span><span class="live-dot" title="${checked?`Modèle Open-Meteo · consulté à ${checked}`:'Modèle Open-Meteo'}"></span>`;
+  return `<span>${icoWind()} ${esc(ud(live.wind||'—'))}</span><span>${icoSwell()} ${esc(ud(live.swell||'—'))}</span><span>${icoTemp()} ${esc(ud(live.temp||'—'))}</span><span class="live-dot" title="${checked?`Modèle Open-Meteo · consulté à ${checked}`:'Modèle Open-Meteo'}"></span>`;
 }
 /* Jauge de danger calculée : le poids le plus fort parmi les lignes de danger, de 1 à 4 (barème validé le
    20 octobre 2026). Même normalisation que dangerWords : sans accents ni casse, mots entiers (« approche »
@@ -1465,7 +1465,7 @@ function renderSessionStats(){
   el.innerHTML='<div class="ss-item"><b>'+total+'</b><span>sessions</span></div><div class="ss-item"><b>'+nspots+'</b><span>spots</span></div><div class="ss-item"><b class="ss-act">'+favLab+'</b><span>activité préférée</span></div>';
 }
 /* ===== Réglages / personnalisation ===== */
-function openSettings(section){renderMyChoice(true);var i=document.getElementById('setName');if(i)i.value=shownName();var r=document.getElementById('setReduce');if(r)r.checked=document.body.classList.contains('reduce-motion');document.getElementById('settingsModal').classList.add('open');
+function openSettings(section){renderMyChoice(true);try{window.OceanUnits?.syncSettings();}catch(e){}var i=document.getElementById('setName');if(i)i.value=shownName();var r=document.getElementById('setReduce');if(r)r.checked=document.body.classList.contains('reduce-motion');document.getElementById('settingsModal').classList.add('open');
   /* Depuis le profil : la section « Mon sport et mon niveau » s’affiche d’emblée. */
   if(section==='sport')requestAnimationFrame(()=>{const m=document.getElementById('setMine');if(m)m.scrollIntoView({block:'start'});});}
 function closeSettings(){document.getElementById('settingsModal').classList.remove('open');}
@@ -1520,9 +1520,9 @@ function renderToday(){
         <div class="rc"><span>${actLab}</span> · <span>${(typeof LVLTXT!=='undefined'&&LVLTXT[s.level])||s.level}</span></div>
       </div>
       <div class="cond-row">
-        <div class="cond">${icoWind()}<div class="cv">${conditions.wind||'—'}</div><div class="cl">Vent</div></div>
-        <div class="cond">${icoSwell()}<div class="cv">${conditions.swell||'—'}</div><div class="cl">Houle</div></div>
-        <div class="cond">${icoTemp()}<div class="cv">${conditions.temp||'—'}</div><div class="cl">Eau</div></div>
+        <div class="cond">${icoWind()}<div class="cv">${ud(conditions.wind||'—')}</div><div class="cl">Vent</div></div>
+        <div class="cond">${icoSwell()}<div class="cv">${ud(conditions.swell||'—')}</div><div class="cl">Houle</div></div>
+        <div class="cond">${icoTemp()}<div class="cv">${ud(conditions.temp||'—')}</div><div class="cl">Eau</div></div>
         ${conditions.tide&&!/^[\s–—-]*$/.test(conditions.tide)?`<div class="cond">${icoTide()}<div class="cv small">${conditions.tide}</div><div class="cl">Marée</div></div>`:''}
       </div>
     </div>
@@ -1545,6 +1545,9 @@ function renderForecast(){
 function cardinal(deg){if(deg==null||isNaN(deg))return '';return ((window.OB_I18N&&OB_I18N.lang!=='fr')?['N','NE','E','SE','S','SW','W','NW']:['N','NE','E','SE','S','SO','O','NO'])[Math.round(deg/45)%8];}
 function isInland(s){return ['lake','inland'].includes(s?.waterType);}
 /* Météo d’un spot côtier : maille « mer » d’Open-Meteo (sinon la maille du relief voisin donnait 22 °C à Bora Bora). */
+/* Unités choisies (Réglages : nœuds, pieds, °F) : les relevés restent écrits en métrique (« 12 km/h NO », « 1,8 m », « 17 °C »),
+   seul l’affichage les convertit (units-model.js). Sans le module, la chaîne telle quelle. */
+function ud(v){return window.OceanUnits&&typeof v==='string'?window.OceanUnits.showText(v):v;}
 function meteoCell(s){return isInland(s)?'land':'sea';}
 /* Aperçus de conditions : réponses gardées 30 min et pause de 2 min après un refus (429/503) du service. */
 var meteoPauseUntil=0;
@@ -1552,15 +1555,16 @@ var meteoPauseUntil=0;
 function whenIdle(fn){try{if(window.requestIdleCallback)requestIdleCallback(()=>fn(),{timeout:1500});else setTimeout(fn,200);}catch(e){fn();}}
 /* Réponse reprise du cache de session : son heure de relevé réelle (et non celle de la lecture) suit les données. */
 const meteoTimes=new WeakMap();
-function meteoCached(url){
+function meteoCached(url,force){
   const key='oceanbuddy_meteo:'+url;
-  try{const hit=JSON.parse(sessionStorage.getItem(key)||'null');if(hit&&Date.now()-hit.t<18e5){if(hit.d&&typeof hit.d==='object')meteoTimes.set(hit.d,hit.t);return Promise.resolve(hit.d);}}catch(e){}
+  /* force : tirer pour rafraîchir (accueil) redemande le service sans reprendre la réponse gardée 30 min. */
+  try{const hit=force?null:JSON.parse(sessionStorage.getItem(key)||'null');if(hit&&Date.now()-hit.t<18e5){if(hit.d&&typeof hit.d==='object')meteoTimes.set(hit.d,hit.t);return Promise.resolve(hit.d);}}catch(e){}
   if(Date.now()<meteoPauseUntil)return Promise.resolve(null);
   return fetch(url).then(r=>{if(r.status===429||r.status===503){meteoPauseUntil=Date.now()+12e4;throw Error('busy');}if(!r.ok)throw Error('Conditions indisponibles');return r.json();})
     .then(d=>{const t=Date.now();whenIdle(()=>{try{sessionStorage.setItem(key,JSON.stringify({t,d}));}catch(e){}});return d;}).catch(()=>null);
 }
 function renderConditions(s,live){
-  const wind=live?.wind||'—',swell=live?.swell||'—',temp=live?.temp||'—',tide=live?.tide||'—';
+  const wind=ud(live?.wind||'—'),swell=ud(live?.swell||'—'),temp=ud(live?.temp||'—'),tide=live?.tide||'—';
   document.getElementById('dWeather').innerHTML=`
     <div class="wc">${icoWind()}<div class="v" style="font-size:12px">${wind}</div><div class="l">Vent</div></div>
     <div class="wc">${icoSwell()}<div class="v">${isInland(s)?'—':swell}</div><div class="l">${isInland(s)?'Houle marine non applicable':'Houle'}</div></div>
@@ -1588,6 +1592,20 @@ function tideFromMarine(mar){
   let pv=null;for(let i=idx-1;i>=0;i--){if(lv[i]!=null){pv=lv[i];break;}}
   const rising=nx!=null?nx>cur:(pv!=null?cur>pv:true);
   return rising?'Montante':'Descendante';
+}
+/* Courbe du niveau modélisé autour de « maintenant » (lot 1) : 6 heures avant, 12 heures après, ramenées de 0 (le plus bas de la
+   fenêtre) à 1 (le plus haut). Rien d'autre n'en sort : ni heure ni hauteur, donc aucune heure de pleine ou basse mer
+   (Open-Meteo le déconseille près des côtes ; tests/spot-weather-model.test.js). null si le niveau n'est pas dans la réponse. */
+function tideSeries(mar){
+  const hh=(mar&&mar.hourly)||{};const t=hh.time||[],lv=hh.sea_level_height_msl||[];
+  if(t.length<6||lv.length<6)return null;
+  const off=tideOffset(mar),now=Date.now();let idx=0,best=Infinity;
+  for(let i=0;i<t.length;i++){const d=Math.abs(tideMs(t[i],off)-now);if(d<best){best=d;idx=i;}}
+  const pts=[];let at=-1;
+  for(let i=Math.max(0,idx-6);i<=Math.min(lv.length-1,idx+12);i++){if(lv[i]==null||!Number.isFinite(+lv[i]))continue;if(i===idx)at=pts.length;pts.push(+lv[i]);}
+  if(pts.length<6||at<0)return null;
+  const lo=Math.min(...pts),hi=Math.max(...pts),span=hi-lo;
+  return {pts:pts.map(v=>span>0.02?+((v-lo)/span).toFixed(3):0.5),now:at};
 }
 /* Conditions du moment de la fiche (vent, houle, eau, marée). Open-meteo répond parfois 503 : une partie refusée (statut
    d’erreur, réseau coupé, réponse illisible) est redemandée UNE fois, quelques secondes plus tard, et seule
@@ -1656,7 +1674,7 @@ function showConditions(s,w,mar){
     /* Période et direction de la houle du jour (modèle Open-Meteo, au large) : lues par « Lire les conditions ». */
     period:mc.wave_period!=null?`${num1(+mc.wave_period)} s`:'—',periodS:mc.wave_period!=null?+mc.wave_period:null,
     swellDir:mc.wave_direction!=null?cardinal(mc.wave_direction):'—',swellDirDeg:mc.wave_direction!=null?+mc.wave_direction:null,
-    tide:tide||'—',live:true,fetchedAt:Date.now(),
+    tide:tide||'—',tideCurve:tide?tideSeries(mar):null,live:true,fetchedAt:Date.now(),
     /* Valeurs brutes du moment, pour la scène de Conditions (« Maintenant » plutôt que le maximum du jour). */
     waveM:wv!=null?+wv:null,windK:ws!=null?+ws:null,windDeg:wd!=null?+wd:null,airC:wc.temperature_2m!=null?+wc.temperature_2m:null
   };
@@ -1667,6 +1685,11 @@ function showConditions(s,w,mar){
   return true;
 }
 function num1(v){ return typeof obNum==='function'?obNum(v,1):v.toFixed(1); }
+/* Unités changées dans Réglages : les conditions de la fiche ouverte et la carte du jour sont réécrites, sans nouvel appel. */
+document.addEventListener('ocean:units',()=>{
+  try{const s=currentSpot&&SPOTS.find(x=>x.id===currentSpot),L=s&&LIVE[s.id];if(s&&L&&L.live){renderConditions(s,L);window.OceanBefore?.live(s,L);}}catch(e){}
+  try{if(typeof renderToday==='function'&&document.getElementById('todayCard')?.firstChild)renderToday();}catch(e){}
+});
 /* SITUER un instant : l'heure murale du spot (timezone=auto) convertie en instant reel grace a
    utc_offset_seconds. Sert seulement a trouver le point "maintenant" pour le sens montant/descendant
    du niveau modelise : aucun horaire de pleine ou basse mer n'est affiche (Open-Meteo le deconseille pres des cotes). */
@@ -1761,7 +1784,7 @@ function renderLiveTop(){
   document.getElementById('liveTopTitle').textContent=live?'La mer en chiffres':'À découvrir';
   el.innerHTML=list.map(s=>{
     const L=LIVE[s.id]||{};
-    const detail=live?[L.swell,L.wind,L.temp].filter(Boolean).join(' · '):s.loc;
+    const detail=live?[L.swell,L.wind,L.temp].filter(Boolean).map(ud).join(' · '):s.loc;
     return `<button class="lt-row" onclick="openSpot(${esc(JSON.stringify(String(s.id)))})"><span class="lt-info"><b>${esc(s.name.split(' — ')[0])}</b><span>${esc(detail)}</span></span><span class="lt-badge lt-ref">Voir</span></button>`;
   }).join('')+(live?'<p class="lt-note">Prévisions du modèle Open-Meteo.</p>':'');
 }

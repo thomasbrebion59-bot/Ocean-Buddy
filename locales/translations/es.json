@@ -11441,5 +11441,22 @@
  "Recherche indisponible, réessaie": "Búsqueda no disponible, vuelve a intentarlo",
  "Relief terrestre : {0}": "Relieve terrestre: {0}",
  "Ton compagnon d’aventure": "Tu compañero de aventuras",
- "Toujours le même complice": "Siempre el mismo cómplice"
+ "Toujours le même complice": "Siempre el mismo cómplice",
+ "Aucun relevé pour l’instant": "Sin medición por ahora",
+ "Hors connexion. Derniers relevés gardés.": "Sin conexión. Últimas mediciones guardadas.",
+ "Houle en pieds": "Oleaje en pies",
+ "Niveau de la mer modélisé autour de maintenant, sans horaire": "Nivel del mar modelado alrededor de ahora, sin horas",
+ "Niveau modélisé, sans horaire": "Nivel modelado, sin horas de marea",
+ "Pas de réseau. Derniers relevés gardés.": "Sin conexión. Últimas mediciones guardadas.",
+ "Rafraîchir les conditions": "Actualizar las condiciones",
+ "Relâche pour rafraîchir": "Suelta para actualizar",
+ "Relevé aujourd’hui à {0}": "Medido hoy a las {0}",
+ "Relevé hier à {0}": "Medido ayer a las {0}",
+ "Relevé le {0} à {1}": "Medido el {0} a las {1}",
+ "Saison : {0}": "Temporada: {0}",
+ "Températures en °F": "Temperaturas en °F",
+ "Tire pour rafraîchir": "Tira para actualizar",
+ "Unités": "Unidades",
+ "Vent en nœuds": "Viento en nudos",
+ "eau, moyenne en {0}": "agua, media de {0}"
 }

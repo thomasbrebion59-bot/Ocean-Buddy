@@ -73,6 +73,9 @@
     tide: '<path d="M2 8c2 0 3-1.5 5-1.5S10 8 12 8s3-1.5 5-1.5S20 8 22 8M2 13c2 0 3-1.5 5-1.5s3 1.5 5 1.5 3-1.5 5-1.5 3 1.5 5 1.5M2 18c2 0 3-1.5 5-1.5s3 1.5 5 1.5 3-1.5 5-1.5 3 1.5 5 1.5"/>',
     sun: '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2.4M12 19.1v2.4M2.5 12h2.4M19.1 12h2.4M5.3 5.3 7 7M17 17l1.7 1.7M5.3 18.7 7 17M17 7l1.7-1.7"/>'
   };
+  /* Relevés écrits dans les unités choisies (Réglages : nœuds, pieds, °F ; units-model.js). Les relevés de LIVE restent en
+     métrique (« 12 km/h NO », « 1,8 m », « 17 °C ») : seul l'affichage les convertit. */
+  const disp = v => (window.OceanUnits && typeof v === 'string' ? window.OceanUnits.showText(v) : v);
   const icon = k => `<svg class="fx-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${ICON[k]}</svg>`;
 
   /* Un relevé : pictogramme, libellé, grand chiffre et unité, puis une sous-ligne facultative (écart à la normale). */
@@ -106,13 +109,13 @@
     const num = p => `<span data-hx-count>${esc(p[0])}</span>`;
     const ready = !!(l && l.live), g = gaugeOf(s), chips = [];
     /* « 15 km/h S » : le chiffre et son unité ; la direction passe dans le libellé (« Vent S ») pour que la case tienne sur une ligne. */
-    const wind = () => { const w = ready ? split(l.wind) : null, m = w ? /^(km\/h)\s*(.*)$/.exec(w[1]) : null; chips.push(hxChip('wind', m && m[2] ? `<span>Vent</span> <span translate="no" data-no-i18n>${esc(m[2])}</span>` : 'Vent', ready ? (w ? num(w) : '—') : hxWait, w ? esc(m ? m[1] : w[1]) : '')); };
+    const wind = () => { const w = ready ? split(disp(l.wind)) : null, m = w ? /^(km\/h|kn)\s*(.*)$/.exec(w[1]) : null; chips.push(hxChip('wind', m && m[2] ? `<span>Vent</span> <span translate="no" data-no-i18n>${esc(m[2])}</span>` : 'Vent', ready ? (w ? num(w) : '—') : hxWait, w ? esc(m ? m[1] : w[1]) : '')); };
     if (inland(s)) {
       /* Plan d’eau : le vent, puis l’air du moment quand le relevé le donne (ni houle marine, ni eau en direct). */
       wind();
       if (ready && Number.isFinite(l.airC)) chips.push(hxChip('temp', 'Air', num([String(Math.round(l.airC))]), '°C'));
     } else {
-      const sw = ready ? split(l.swell) : null, te = ready ? split(l.temp) : null;
+      const sw = ready ? split(disp(l.swell)) : null, te = ready ? split(disp(l.temp)) : null;
       /* Spot sans sport de vague ni de vent (plongée, snorkeling, baignade) : la houle au large n’y dit rien d’utile
          (Tulamben : 0,5 m). Le vent du moment la remplace ; c’est le même relevé que « Maintenant ». */
       if (waveSpot(s)) chips.push(hxChip('wave', 'Houle', ready ? (sw ? num(sw) : '—') : hxWait, sw ? esc(sw[1]) : ''));
@@ -201,18 +204,31 @@
     if (st) st.textContent = l && l.live ? stamp(l.fetchedAt) : '';
     if (!l || !l.live) { setRow('live', '<p class="fx-reading-note">Prévision indisponible pour le moment</p>'); return; }
     /* « 20 km/h SO » : le chiffre en grand, l’unité et la direction en petit. */
-    const w = has(l.wind) ? /^\s*(\d+(?:[.,]\d+)?)\s*(km\/h)\s*(.*)$/.exec(String(l.wind)) : null;
+    const w = has(l.wind) ? /^\s*(\d+(?:[.,]\d+)?)\s*(km\/h|kn)\s*(.*)$/.exec(String(disp(l.wind))) : null;
     /* « 3,9 m », « 17 °C » : le nombre (signe et décimale compris), puis l’unité. */
     const split = v => { const m = has(v) ? /^\s*([-−]?\d+(?:[.,]\d+)?)\s*(.*)$/.exec(String(v)) : null; return m ? [m[1], m[2]] : null; };
     const wind = w ? reading('wind', 'Vent', big(w[1]), esc(`${w[2]}${w[3] ? ' ' + w[3] : ''}`)) : reading('wind', 'Vent', has(l.wind) ? big(l.wind) : none, '');
     if (inland(s)) { setRow('live', wind + inlandNote()); return; }
-    const sw = split(l.swell), period = Number.isFinite(l.periodS) ? ` (${Math.round(l.periodS)} s)` : '';
-    const te = split(l.temp);
+    const sw = split(disp(l.swell)), period = Number.isFinite(l.periodS) ? ` (${Math.round(l.periodS)} s)` : '';
+    const te = split(disp(l.temp));
     const n = normals && normals.id === s.id ? normals : {};
     setRow('live', wind
       + (sw ? reading('wave', 'Houle', big(sw[0]), esc(sw[1] + period), n.swell) : reading('wave', 'Houle', none, '', ''))
       + (te ? reading('temp', 'Eau', big(te[0]), esc(te[1]), n.sea) : reading('temp', 'Eau', none, '', ''))
-      + reading('tide', 'Marée', has(l.tide) ? `<span class="fx-word">${esc(l.tide)}</span>` : none, '', ''));
+      + reading('tide', 'Marée', has(l.tide) ? `<span class="fx-word">${esc(l.tide)}</span>${tideCurve(l.tideCurve)}` : none, '', has(l.tide) && l.tideCurve ? 'Niveau modélisé, sans horaire' : ''));
+  }
+
+  /* Petite courbe du niveau de la mer sur les heures qui entourent « maintenant » (lot 1) : sens montant ou descendant déjà
+     calculé par app.js, courbe du niveau modélisé, un point pour maintenant. AUCUN chiffre, AUCUNE heure de pleine ou basse
+     mer : Open-Meteo déconseille ce niveau près des côtes pour dater les marées. La partie déjà passée est plus claire.
+     curve = { pts: [0 à 1, du plus bas au plus haut de la fenêtre], now: rang du point « maintenant » } (app.js, tideSeries). */
+  function tideCurve(curve) {
+    if (!curve || !Array.isArray(curve.pts) || curve.pts.length < 4 || !(curve.now >= 0)) return '';
+    const n = curve.pts.length, W = 120, H = 30, pad = 3, x = i => pad + (W - 2 * pad) * i / (n - 1), y = v => H - pad - (H - 2 * pad) * Math.max(0, Math.min(1, v));
+    const path = (a, b) => curve.pts.slice(a, b + 1).map((v, k) => `${k ? 'L' : 'M'}${x(a + k).toFixed(1)} ${y(v).toFixed(1)}`).join('');
+    const now = Math.min(n - 1, curve.now), cx = x(now), cy = y(curve.pts[now]);
+    return `<svg class="fx-tide" viewBox="0 0 ${W} ${H}" role="img" aria-label="Niveau de la mer modélisé autour de maintenant, sans horaire" focusable="false">`
+      + `<path class="fx-tide-past" d="${path(0, now)}"/><path class="fx-tide-next" d="${path(now, n - 1)}"/><circle class="fx-tide-now" cx="${cx.toFixed(1)}" cy="${cy.toFixed(1)}" r="3.2"/></svg>`;
   }
 
   /* Écart à la normale du mois (spot-data.js, normales chargées) : une sous-ligne courte sous l’eau et la houle. */

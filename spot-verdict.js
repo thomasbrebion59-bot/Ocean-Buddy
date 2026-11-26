@@ -55,6 +55,20 @@
                                                           mouvement réduit) ; à appeler juste après avoir posé html().
      OceanVerdict.LOT                                     taille d'un lot.
 
+   AJOUTS DU LOT 1 (26 novembre 2026 ; le contrat ci-dessus n'a pas changé, rien n'est retiré) : « les conditions d'abord, jamais vides ».
+     Règles complètes dans conditions-model.js. En bref : chaque relevé calculé en ligne est gardé sur l'appareil avec son heure
+     de mesure (clé ob_conditions_v1). Quand la demande échoue (hors connexion, 429, 503), l'entrée est reconstruite depuis ce
+     relevé gardé :
+       entrée.kept   vrai : les chiffres viennent du relevé gardé, pas d'une mesure du moment ; html() écrit « Relevé à 7 h 50 » ;
+       entrée.stale  vrai : ce relevé a plus de 3 h : chiffres grisés, heure et date, verdict et créneau toujours null
+                     (un vieux relevé ne donne jamais « Bon pour toi ») ;
+       entrée.climate { month, seaC, inSeason, months } | null : sans relevé du tout, l'eau et la saison du mois (normales
+                     déjà sur l'appareil), écrites comme une moyenne ; null si rien n'est connu.
+       entrée.id     l'identifiant du spot (html() en a besoin pour la saison).
+     L'affichage suit les unités choisies (OceanUnits : nœuds, pieds, °F) ; les valeurs de l'entrée restent métriques.
+     OceanVerdict.forSpots(ids, { force: true }) oublie la mesure en mémoire de ces spots et redemande le service (tirer pour
+     rafraîchir) ; la mesure de moins de 30 min d'avant n'est pas reprise.
+
    AJOUTS DU 23 NOVEMBRE 2026 (passe d'amélioration de l'accueil ; le contrat ci-dessus n'a pas changé, rien n'est retiré) :
      entrée.next = { verdict: 'bon' | 'possible', slot: '9 h à 12 h', day: 'tomorrow' }
                                                           repère positif d'une journée sans créneau : le meilleur créneau
@@ -75,6 +89,8 @@
   const node = typeof module !== 'undefined' && !!module.exports;
   const W = root.SpotWeatherModel || (node ? require('./spot-weather-model.js') : null);
   const F = root.SpotFitModel || (node ? require('./spot-fit-model.js') : null);
+  const CM = root.ConditionsModel || (node ? require('./conditions-model.js') : null);
+  const U = root.OceanUnits || (node ? require('./units-model.js') : null);
   const TTL = 30 * 60 * 1000, PAUSE = 2 * 60 * 1000, LOT = 10;
   const FORECAST = 'https://api.open-meteo.com/v1/forecast', MARINE = 'https://marine-api.open-meteo.com/v1/marine';
   const HOURLY = 'wind_speed_10m,wind_gusts_10m,wind_direction_10m,weather_code,is_day';
@@ -102,7 +118,7 @@
       try { const d = JSON.parse(localStorage.getItem('oceanbuddy_v1') || 'null'); return (d && d.level) || null; } catch (e) { return null; }
     },
     /* Même cache et même pause que les aperçus de conditions (meteoCached, app.js) ; sans l'app, les mêmes règles ici. */
-    load: url => (typeof meteoCached === 'function' ? meteoCached(url) : ownLoad(url)),
+    load: (url, force) => (typeof meteoCached === 'function' ? meteoCached(url, force) : ownLoad(url, force)),
     /* Heure réelle du relevé d'une réponse reprise du cache (meteoTimes, app.js). */
     stamp: d => { try { if (typeof meteoTimes !== 'undefined' && d && typeof d === 'object') return meteoTimes.get(d) || 0; } catch (e) {} return (d && typeof d === 'object' && times.get(d)) || 0; },
     lang: () => (root.OB_I18N && root.OB_I18N.lang) || 'fr',
@@ -110,15 +126,25 @@
     t: s => (typeof root.obT === 'function' ? root.obT(s) : s),
     num: (v, d) => (typeof root.obNum === 'function' ? root.obNum(v, d) : (+v).toFixed(d).replace('.', ',')),
     fetch: url => fetch(url),
+    /* Relevés gardés sur l'appareil (conditions-model.js) : texte brut lu et écrit ici, jamais d'erreur si le stockage est refusé. */
+    keptRead: () => { try { return localStorage.getItem(CM.KEY); } catch (e) { return null; } },
+    keptWrite: txt => { try { localStorage.setItem(CM.KEY, txt); } catch (e) {} },
+    /* Eau et saison du mois d'un spot, depuis les normales déjà chargées (assets/data/spot-climate-lite.js, data/seasons.json). */
+    climate(s, t) {
+      const L = root.OCEAN_CLIMATE_LITE, S = root.OCEAN_SEASONS, rec = L && L[s.id];
+      return CM.climate({ sea: rec && rec[0], months: S && S[s.id], month: new Date(t).getMonth(), inland: !!env.inland(s) });
+    },
+    seasonLabel: ms => { try { return (root.OceanHomeFeed && root.OceanHomeFeed.seasonLabel && root.OceanHomeFeed.seasonLabel(ms)) || ''; } catch (e) { return ''; } },
+    units: (kind, v) => (U ? U.showConvert(kind, v) : null),
     reduced: () => { try { return document.body.classList.contains('reduce-motion') || matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return true; } }
   };
 
   /* Sans meteoCached (tests, page sans app.js) : mêmes règles, 30 min par adresse et 2 min de pause après un 429 ou un 503. */
   let pauseUntil = 0;
   const own = new Map();
-  function ownLoad(url) {
+  function ownLoad(url, force) {
     const t = env.now(), hit = own.get(url);
-    if (hit && t - hit.t < TTL) return Promise.resolve(hit.d);
+    if (!force && hit && t - hit.t < TTL) return Promise.resolve(hit.d);
     if (t < pauseUntil) return Promise.resolve(null);
     let p;
     try { p = Promise.resolve(env.fetch(url)); } catch (e) { return Promise.resolve(null); }
@@ -210,9 +236,9 @@
       marine: inland ? null : `${MARINE}?latitude=${lat}&longitude=${lon}&current=wave_height,wave_period,sea_surface_temperature&hourly=wave_height,wave_period,wave_direction&forecast_days=2&timezone=auto&cell_selection=sea`
     };
   }
-  function fetchLot(spots, inland) {
+  function fetchLot(spots, inland, force) {
     const u = urls(spots.map(s => env.coords(s)), inland);
-    return Promise.all([env.load(u.weather), u.marine ? env.load(u.marine) : Promise.resolve(null)]).then(([w, m]) => {
+    return Promise.all([env.load(u.weather, force), u.marine ? env.load(u.marine, force) : Promise.resolve(null)]).then(([w, m]) => {
       const wa = asList(w), ma = asList(m), t = env.now();
       const at = Math.min(env.stamp(w) || t, (u.marine && m && env.stamp(m)) || t);
       spots.forEach((s, i) => {
@@ -222,13 +248,38 @@
       });
     });
   }
+  /* ---------- Relevés gardés sur l'appareil (conditions-model.js) ---------- */
+  let keptMap = null, keptTimer = 0;
+  const kept = () => { if (!keptMap) keptMap = CM ? CM.parse(env.keptRead()) : {}; return keptMap; };
+  /* Une écriture par rafale de relevés (une par spot sinon). */
+  function keptSave() {
+    if (keptTimer || !CM) return;
+    keptTimer = setTimeout(() => { keptTimer = 0; env.keptWrite(CM.serialize(keptMap)); }, 0);
+  }
+  const verdictKey = o => [o.sport || '', o.level || ''].join('|');
+  function keep(id, e, o, t) {
+    if (!CM || !e || !e.now) return;
+    const r = CM.recordOf(e, verdictKey(o));
+    if (r) { keptMap = CM.remember(kept(), id, r, t); keptSave(); }
+  }
+  /* Rien de frais (hors connexion, service qui refuse, spot sans position) : le dernier relevé gardé, sinon l'eau et la saison du mois. */
+  function fallback(s, o, t) {
+    const danger = dangerOf(s);
+    const r = CM ? CM.recall(kept(), s.id, t) : null;
+    const k = r ? CM.keptEntry(r, { now: t, key: verdictKey(o), danger }) : null;
+    if (k) { k.id = s.id; return k; }
+    const out = empty(danger);
+    out.id = s.id;
+    out.climate = CM ? env.climate(s, t) : null;
+    return out;
+  }
   function entry(id, o, t) {
     const s = env.spot(id);
     if (!s) return empty(null);
     const rec = store.get(id);
-    if (!fresh(rec, t)) return empty(dangerOf(s));
+    if (!fresh(rec, t)) return fallback(s, o, t);
     const key = [o.sport || '', o.level || '', env.lang(), Math.floor(t / 9e5)].join('|');
-    if (!rec.memo || rec.memo.key !== key) rec.memo = { key, e: compute(s, rec, o, t) };
+    if (!rec.memo || rec.memo.key !== key) { rec.memo = { key, e: compute(s, rec, o, t) }; rec.memo.e.id = id; if (rec.full) keep(id, rec.memo.e, o, t); /* un relevé partiel (vent sans houle ni eau) n'écrase pas un relevé complet gardé */ }
     return rec.memo.e;
   }
 
@@ -236,12 +287,12 @@
   api.LOT = LOT;
   api.forSpots = function (ids, opts) {
     const o = want(opts), list = [...new Set(Array.isArray(ids) ? ids : [])], t = env.now();
-    const need = [];
+    const force = !!(opts && opts.force), need = [];
     for (const id of list) {
       const s = env.spot(id), c = s && env.coords(s);
       if (!s || !c || num(c.lat) == null || num(c.lon) == null || flying.has(id)) continue;
       const rec = store.get(id);
-      if (rec && rec.full && fresh(rec, t)) continue;
+      if (!force && rec && rec.full && fresh(rec, t)) continue;
       need.push(s);
     }
     for (const inland of [false, true]) {
@@ -249,7 +300,7 @@
       for (let i = 0; i < group.length; i += LOT) {
         const lot = group.slice(i, i + LOT);
         let p;
-        try { p = fetchLot(lot, inland); } catch (e) { p = Promise.resolve(); }
+        try { p = fetchLot(lot, inland, force); } catch (e) { p = Promise.resolve(); }
         p = p.catch(() => {}).then(() => { lot.forEach(s => flying.delete(s.id)); });
         lot.forEach(s => flying.set(s.id, p));
       }
@@ -272,21 +323,51 @@
   const NAME = { wind: 'Vent', wave: 'Houle', temp: 'Eau' };
   const UNIT = { wind: 'km/h', wave: 'm', temp: '°C' };
   const DEC = { wind: 0, wave: 1, temp: 0 };
+  /* Genre de grandeur pour OceanUnits : le vent en km/h, la houle en mètres, l'eau en °C (valeurs métriques en entrée). */
+  const KIND = { wind: 'wind', wave: 'length', temp: 'temp' };
+  /* Valeur à écrire : { n, d, unit } dans les unités choisies (nœuds, pieds, °F) ; sans OceanUnits, le métrique d'avant. */
+  function shownOf(k, v) {
+    const c = env.units(KIND[k], v);
+    return c ? { n: c.v, d: c.d, unit: c.unit } : { n: DEC[k] ? Math.round(v * 10) / 10 : Math.round(v), d: DEC[k], unit: UNIT[k] };
+  }
   const ic = k => `<svg class="ui-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="${NAME[k]}">${IC[k]}</svg>`;
   const shown = (v, d) => (d ? env.num(v, d) : String(Math.round(v)));
   function reading(k, v) {
     if (v == null) return `<span class="is-none">${ic(k)}—</span>`;
-    const d = DEC[k], n = d ? Math.round(v * 10) / 10 : Math.round(v);
-    return `<span>${ic(k)}<span class="ui-n" data-ui-n="${n}" data-ui-d="${d}">${esc(shown(n, d))}</span><small>${UNIT[k]}</small></span>`;
+    const { n, d, unit } = shownOf(k, v);
+    return `<span>${ic(k)}<span class="ui-n" data-ui-n="${n}" data-ui-d="${d}">${esc(shown(n, d))}</span><small>${unit}</small></span>`;
   }
   const LABEL = { bon: 'Bon pour toi', possible: 'Possible', non: 'Pas aujourd’hui' };
   /* Soleil levant (repère de demain) : même trait que les pictogrammes de la ligne, décoratif (le texte dit « Demain »). */
   const SUNRISE = '<svg class="ui-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 18.5h18M7 18.5a5 5 0 0 1 10 0M12 6.5v3M5.3 10.8l2 2M18.7 10.8l-2 2"/></svg>';
+  /* Sans relevé : l'eau et la saison du mois, écrites comme une moyenne (jamais comme une mesure). Rien de connu : la ligne le dit. */
+  function climateHtml(e) {
+    const c = e.climate;
+    if (!c) return '<p class="ui-cond"><span class="is-none">Aucun relevé pour l’instant</span></p>';
+    let h = '';
+    if (c.seaC != null) {
+      const { n, d, unit } = shownOf('temp', c.seaC), mon = monthLong(c.month);
+      h += `<p class="ui-cond ui-clim"><span>${ic('temp')}<span class="ui-n" data-ui-n="${n}" data-ui-d="${d}">${esc(shown(n, d))}</span><small>${unit}</small></span><small class="ui-clim-m">${esc(obT('eau, moyenne en {0}').split('{0}').join(mon))}</small></p>`;
+    }
+    if (c.inSeason === true) h += `<p class="ui-verdict ui-season" data-v="bon"><b>${esc(obT('En saison'))}</b></p>`;
+    else if (c.months) {
+      const lab = env.seasonLabel(c.months);
+      if (lab) h += `<p class="ui-stamp">${esc(obT('Saison : {0}').split('{0}').join(lab))}</p>`;
+    }
+    return h || '<p class="ui-cond"><span class="is-none">Aucun relevé pour l’instant</span></p>';
+  }
+  function monthLong(m) {
+    try { return new Intl.DateTimeFormat(env.locale(), { month: 'long' }).format(new Date(2026, m, 15)); } catch (x) { return String(m + 1); }
+  }
+  /* « Relevé à 7 h 50 » (relevé de 3 h au plus), « Relevé hier à 7 h 50 » (relevé grisé). */
+  const stampLine = e => `<p class="ui-stamp${e.stale ? ' is-old' : ''}">${esc(CM.stampText({ at: e.at }, env.now(), { tr: obT, lang: env.lang(), locale: env.locale() }))}</p>`;
   api.html = function (e) {
-    if (!e || !e.now) return '<p class="ui-cond"><span class="is-none">Conditions indisponibles</span></p>';
+    if (!e || (!e.now && !e.id)) return '<p class="ui-cond"><span class="is-none">Conditions indisponibles</span></p>';
+    if (!e.now) return climateHtml(e);
     const n = e.now, sea = e.inland === false || n.swellM != null || n.swellS != null || n.waterC != null;
     /* Plan d'eau intérieur : ni houle marine ni température de mer, seulement le vent. */
-    let h = `<p class="ui-cond">${reading('wind', n.windKmh)}${sea ? reading('wave', n.swellM) + reading('temp', n.waterC) : ''}</p>`;
+    let h = `<p class="ui-cond${e.stale ? ' is-old' : ''}">${reading('wind', n.windKmh)}${sea ? reading('wave', n.swellM) + reading('temp', n.waterC) : ''}</p>`;
+    if (e.kept && e.at > 0 && CM && !LABEL[e.verdict]) h += stampLine(e);
     if (LABEL[e.verdict]) {
       const tomorrow = e.day === 'tomorrow';
       const label = e.verdict === 'non' && tomorrow ? 'Pas demain' : LABEL[e.verdict];
@@ -295,6 +376,7 @@
       const n = e.verdict === 'non' && !tomorrow && e.next && (e.next.verdict === 'bon' || e.next.verdict === 'possible') && e.next.slot ? e.next : null;
       const next = n ? `<span class="ui-next" data-v="${n.verdict}">${SUNRISE}<span><em>${esc(obT('Demain'))}</em> ${esc(n.slot)}</span></span>` : '';
       h += `<p class="ui-verdict" data-v="${e.verdict}"><b>${label}</b>${when ? `<span>${esc(when)}</span>` : ''}${next}</p>`;
+      if (e.kept && e.at > 0 && CM) h += stampLine(e);
     }
     return h;
   };
@@ -335,8 +417,10 @@
 
   /* Tests (Node) : remplacer ce que le module lit dans l'app, vider les caches, appeler le calcul pur. */
   api.setup = function (over) { Object.assign(env, over || {}); byId = null; hourFmt = null; return api; };
-  api.reset = function (o) { store.clear(); flying.clear(); if (!o || !o.keepOwn) { own.clear(); pauseUntil = 0; } return api; };
+  api.reset = function (o) { store.clear(); flying.clear(); keptMap = null; if (keptTimer) { clearTimeout(keptTimer); keptTimer = 0; } if (!o || !o.keepOwn) { own.clear(); pauseUntil = 0; } return api; };
   api.ownLoad = ownLoad;
+  api.keptNow = () => Object.assign({}, kept());
+  api.flushKept = () => { if (keptTimer) { clearTimeout(keptTimer); keptTimer = 0; } if (CM && keptMap) env.keptWrite(CM.serialize(keptMap)); };
   api.compute = (s, rec, opts, nowMs) => compute(s, rec, want(opts), nowMs == null ? env.now() : nowMs);
   api.urls = urls;
   if (node) module.exports = api;

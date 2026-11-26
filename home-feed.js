@@ -83,8 +83,10 @@
   const num=(v,d=0)=>fmt('n'+d,()=>new Intl.NumberFormat(lang(),{maximumFractionDigits:d,minimumFractionDigits:d})).format(v);
   function dataChip(s,kind,month){
     const m=month??new Date().getMonth();let v=null,t='';
-    if(kind==='sea'){v=val(s,'sea',m);t=v==null?'':`${num(v)} °C`;}
-    else if(kind==='wave'){v=val(s,'hs',m);t=v==null?'':`${num(v/10,1)} m`;}
+    /* Unités choisies (OceanUnits : °F, pieds) ; sans le module, le métrique d'avant. */
+    const U=window.OceanUnits;
+    if(kind==='sea'){v=val(s,'sea',m);t=v==null?'':U?U.show('temp',v):`${num(v)} °C`;}
+    else if(kind==='wave'){v=val(s,'hs',m);t=v==null?'':U?U.show('length',v/10):`${num(v/10,1)} m`;}
     else if(kind==='wind'){v=val(s,'kite',m);t=v==null?'':`${num(v)} %`;}
     if(!t)return '';
     return `<span class="hf-data" title="${kind==='sea'?(m===new Date().getMonth()?'Eau ce mois-ci':m===0?'Eau en janvier':'Eau en décembre'):kind==='wave'?'Houle moyenne au large ce mois-ci':'Jours de vent fort ce mois-ci'}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">${DI[kind]}</svg>${esc(t)}</span>`;
@@ -497,12 +499,23 @@
      ici), puis l’éclat de la photo ; un tirage du jour fait tourner les spots équivalents. Aucun appel réseau : seuls les
      repères déjà chargés (saisons, normales légères) sont lus. La section est posée avec le fil, sous le rideau, à hauteur
      fixe (home-feed.css) ; un changement de niveau remplace ses trois lignes sur place, à la même hauteur. */
-  const Rank=window.SpotRank;
+  const Rank=window.SpotRank,CM=window.ConditionsModel;
   const curLevel=()=>(typeof chosenLevel!=='undefined'&&chosenLevel)||null;
   const LEVEL_TX={debutant:'Débutant',intermediaire:'Intermédiaire',expert:'Expert',variable:'Niveau à évaluer'};
   const today=()=>{const d=new Date();return Math.floor((d.getTime()-d.getTimezoneOffset()*60000)/86400000);};
+  /* Position réelle (jamais demandée ici), sinon la région des favoris (lot 1) : le favori le plus central, ou à défaut les
+     derniers spots vus (ConditionsModel.regionAnchor). Sans position, « Pour toi » ne propose plus le monde entier à
+     quelqu'un dont les favoris sont tous dans les Landes. Sans favori ni spot vu : aucune région, le classement d'avant. */
+  const realPos=()=>typeof userPos!=='undefined'&&userPos&&Number.isFinite(userPos.lat)?{lat:userPos.lat,lon:userPos.lon}:null;
+  function regionPos(){
+    if(!CM)return null;
+    let ids=typeof favs!=='undefined'?[...favs]:[];
+    if(!ids.length)ids=(window.OceanHub?.recent?.()||[]).map(x=>x&&typeof x==='object'?x.id:x);
+    const pts=ids.filter(id=>typeof id==='string'&&known(id)).map(id=>COORDS[id]||spotOf(id)?.coords).filter(Boolean);
+    return CM.regionAnchor(pts);
+  }
   function rankCtx(){
-    const pos=typeof userPos!=='undefined'&&userPos&&Number.isFinite(userPos.lat)?{lat:userPos.lat,lon:userPos.lon}:null;
+    const pos=realPos()||regionPos();
     return {sport:curSport(),level:curLevel(),month:new Date().getMonth(),seasons,photo:scores,pos,
       favs:typeof favs!=='undefined'?favs:null,coords:s=>COORDS[s.id]||s.coords,gauge:s=>window.dangerGauge?.(s)?.n??null,
       hasPhoto:s=>!!photo(s),day:today(),jitter:30};
@@ -637,6 +650,10 @@
   }
   const meHTML=()=>{const [a,b]=meText();return `<span class="ac-me-a">${esc(a)}</span>${b?`<span class="ac-me-sep">, </span><span class="ac-me-b">${esc(b)}</span>`:''}`;};
   const meIcon=()=>`url('assets/pictos/sports/${curSport()==='all'?'all':curSport()}-mono.webp')`;
+  /* Hors connexion : seulement quand l'appareil le dit (navigator.onLine). Posé avec le haut, sous le rideau ; ensuite il
+     apparaît ou part quand la connexion change. Un service météo qui répond mal ne le fait pas apparaître : il ne déplacerait
+     l'accueil qu'après la levée du rideau. Le point de fraîcheur du titre dit alors l'heure du relevé affiché. */
+  const offlineNow=()=>{try{return navigator.onLine===false;}catch(_){return false;}};
   function topV2(){
     return `<section class="hf-top ac-top" aria-label="Trouve ton spot">
       <header class="ac-head ac-in"${rise(0)}>
@@ -644,6 +661,7 @@
         <div class="ac-hello" data-ac-hello><h1 class="ac-hi" data-ac-hi data-no-i18n>${esc(helloText())}</h1>
           <button type="button" class="ui-pill ac-me" data-ac-me title="Modifier mon sport et mon niveau"><span class="ac-me-ic" data-ac-me-ic style="--ic:${esc(meIcon())}" aria-hidden="true"></span><span class="ac-me-tx" data-ac-me-tx data-no-i18n>${meHTML()}</span></button></div>
       </header>
+      <p class="ac-offline ac-in"${rise(1)} data-ac-offline role="status"${offlineNow()?'':' hidden'}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.5 19H17a4 4 0 0 0 1.2-7.8 6 6 0 0 0-10.9-1.6A4.6 4.6 0 0 0 7.5 19z"/><path d="m3.5 3.5 17 17"/></svg><span>Hors connexion. Derniers relevés gardés.</span></p>
       <button type="button" class="hf-search ac-search ac-in"${rise(1)} data-hf-search><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><span><b>Où veux-tu aller ?</b></span></button>
     </section>`;
   }
@@ -699,15 +717,15 @@
     if(ILLUS.has(a))return `<span class="ui-ph is-illus" style="--il:url('assets/ui/sports/${a}.webp')"></span>`;
     return `<span class="ui-ph is-none" style="--ic:url('assets/pictos/sports/${esc(a)}-mono.webp')"></span>`;
   }
-  function spotRow(s,i,{eager=false,cls='ac-in'}={}){
+  function spotRow(s,i,{eager=false,cls='ac-in',country=false}={}){
     const p=photo(s),g=window.dangerGauge?.(s)?.n??null;
     return `<div class="ui-spot ${cls}"${rise(i)} data-spot="${esc(s.id)}" role="button" tabindex="0">
       ${p?`<span class="ui-ph"><img src="${esc(p.thumb)}"${sharp(p,'114px')} alt="" decoding="async"${eager?'':' loading="lazy"'}></span>`:noPhoto(s)}
-      <div><p class="ui-spot-name">${rowName(s)}${dotsHTML(g)}</p>${liveHTML(s.id)}</div>
+      <div><p class="ui-spot-name">${rowName(s)}${dotsHTML(g)}</p>${country&&s.country?`<p class="ui-spot-sub">${esc(s.country)}</p>`:''}${liveHTML(s.id)}</div>
     </div>`;
   }
   /* Ligne en attente (« Bon aujourd’hui » avant l’arrivée des conditions) : même hauteur qu’une ligne. */
-  const waitRow=()=>`<div class="ui-spot is-wait" aria-hidden="true"><span class="ui-ph"></span><div><p class="ui-spot-name"><i class="ui-skel"></i></p><div class="ui-live">${Verdict?Verdict.pending(null):''}</div></div></div>`;
+  const waitRow=()=>`<div class="ui-spot is-wait" aria-hidden="true"><span class="ui-ph"></span><div><p class="ui-spot-name"><i class="ui-skel"></i></p><p class="ui-spot-sub">&nbsp;</p><div class="ui-live">${Verdict?Verdict.pending(null):''}</div></div></div>`;
   /* Le verdict tient sur une ligne : s’il déborde (heures longues en anglais, téléphone étroit), corps réduit, puis les
      heures sur deux lignes à côté de la pastille. La hauteur réservée ne change jamais. */
   function fitLive(el){
@@ -755,7 +773,7 @@
   function mineSection(){
     const m=mineData();mineIds=m.spots.map(s=>s.id);mineKey=m.kind+':'+mineIds.join();
     return `<section class="ac-sec ac-mine" data-hf="mesSpots" aria-labelledby="acMineT">
-      <div class="as-sec ui-head ac-in"${rise(0)}><h2 class="ui-title" id="acMineT">Mes spots</h2><span class="ac-fresh" data-ac-fresh hidden><i aria-hidden="true"></i><span data-ac-fresh-tx data-no-i18n></span></span><button type="button" class="ui-link" data-ac-edit${m.spots.length?'':' hidden'}>Modifier</button></div>
+      <div class="as-sec ui-head ac-in"${rise(0)}><h2 class="ui-title" id="acMineT">Mes spots</h2><span class="ac-fresh" data-ac-fresh role="button" tabindex="0" aria-label="Rafraîchir les conditions" hidden><i aria-hidden="true"></i><span data-ac-fresh-tx data-no-i18n></span></span><button type="button" class="ui-link" data-ac-edit${m.spots.length?'':' hidden'}>Modifier</button></div>
       <div data-ac-mine-box>${mineBody(m)}</div>
     </section>`;
   }
@@ -779,12 +797,21 @@
     if(/^fr/.test(lang()))return `${d.getHours()} h ${String(d.getMinutes()).padStart(2,'0')}`;
     return fmt('hm',()=>new Intl.DateTimeFormat(lang(),{hour:'numeric',minute:'2-digit'})).format(d);
   }
+  /* Relevé d'un autre jour que celui d'aujourd'hui (conditions gardées sur l'appareil) : la date devant l'heure, jamais
+     l'heure seule (« 7 h 50 » hier lirait comme ce matin). */
+  const freshLabel=at=>{
+    const now=Date.now(),t=freshText(at);
+    return CM&&CM.daysAgo(at,now)>0?`${CM.dateText(at,lang(),window.OB_I18N?.locale)} ${t}`:t;
+  };
   function syncFresh(map){
     const el=$('[data-ac-fresh]',home);if(!el)return;
-    const ats=map?mineIds.map(id=>map.get(id)).filter(e=>e&&e.now&&e.at>0).map(e=>e.at):[];
+    const ents=map?mineIds.map(id=>map.get(id)).filter(e=>e&&e.now&&e.at>0):[];
+    const ats=ents.map(e=>e.at);
     if(!ats.length){el.hidden=true;freshAt=0;return;}
-    const at=Math.min(...ats),t=freshText(at),tx=$('[data-ac-fresh-tx]',el);
+    const at=Math.min(...ats),t=freshLabel(at),tx=$('[data-ac-fresh-tx]',el);
     if(tx&&tx.textContent!==t)tx.textContent=t;
+    /* Relevé gardé de plus de 3 h : le point n'est plus vert (rien de « frais »). */
+    el.toggleAttribute('data-old',ents.some(e=>e.stale));
     el.title=tr('Relevé à {0}').replace('{0}',t);el.hidden=false;
     if(at>freshAt&&freshAt&&onScreen())beat(el);
     freshAt=at;
@@ -826,7 +853,7 @@
     /* Conditions déjà en cache (retour sur l’accueil dans la demi-heure) : les lignes sont écrites tout de suite. */
     const map=goodEntries(),ready=!Verdict||goodIds.every(id=>map.get(id)),picks=ready?goodPicks(map):[];
     return `<div class="as-sec ui-head ac-in"${rise(0)}><h2 class="ui-title" id="acGoodT" data-ac-good-title>${goodTitle(picks,map,!ready)}</h2><button type="button" class="ui-link" data-hf-more="bon">Tout voir</button></div>
-      <div class="ui-spots" data-ac-good data-ac-key="${ready?esc(picks.map(s=>s.id).join()):''}">${ready?picks.map((s,i)=>spotRow(s,i+1)).join(''):Array.from({length:goodN},waitRow).join('')}</div>`;
+      <div class="ui-spots" data-ac-good data-ac-key="${ready?esc(picks.map(s=>s.id).join()):''}">${ready?picks.map((s,i)=>spotRow(s,i+1,{country:true})).join(''):Array.from({length:goodN},waitRow).join('')}</div>`;
   }
   /* La rubrique garde sa place dans le fil même sans candidat (cachée) : un changement de niveau la remplit sur place. */
   function goodSection(used){
@@ -839,7 +866,7 @@
     if(box.dataset.acKey!==key){
       box.dataset.acKey=key;
       /* À l’écran : les lignes entrent une à une. Sous le rideau : elles entreront avec le reste (ac-in). */
-      box.innerHTML=picks.map((s,i)=>spotRow(s,anim?i:i+1,{cls:anim?'ac-row-in':'ac-in'})).join('');
+      box.innerHTML=picks.map((s,i)=>spotRow(s,anim?i:i+1,{cls:anim?'ac-row-in':'ac-in',country:true})).join('');
       /* L’entrée jouée, sa classe part : elle ne se rejoue pas quand l’accueil réapparaît. */
       if(anim)setTimeout(()=>box.querySelectorAll('.ac-row-in').forEach(r=>r.classList.remove('ac-row-in')),900);
     }
@@ -849,18 +876,22 @@
 
   /* ---------- Conditions et verdicts : une demande groupée pour les lignes de l’accueil ---------- */
   let liveGen=0;
-  function loadLive(){
-    if(!Verdict)return;
+  /* force : tirer pour rafraîchir redemande le service (OceanVerdict.forSpots, { force }) ; renvoie la table des entrées. */
+  function loadLive(force){
+    if(!Verdict)return Promise.resolve(null);
     const g=++liveGen,ids=[...new Set(mineIds.concat(goodIds))];
-    if(!ids.length)return;
-    Verdict.forSpots(ids).then(map=>{
-      if(g!==liveGen)return;
+    if(!ids.length)return Promise.resolve(null);
+    return Verdict.forSpots(ids,force?{force:true}:undefined).then(map=>{
+      if(g!==liveGen)return null;
       const anim=onScreen();
       fillGood(map,anim);
       home.querySelectorAll('.hf-feed [data-ac-live]').forEach(el=>{const e=map.get(el.dataset.acLive);if(e)paintLive(el,e,anim);});
       syncFresh(map);
-    }).catch(e=>{setTimeout(()=>{throw e;});});
+      return map;
+    }).catch(e=>{setTimeout(()=>{throw e;});return null;});
   }
+
+
   /* Niveau changé dans Réglages : la pastille du haut, les verdicts de « Mes spots » et les spots de « Bon aujourd’hui »
      (candidats de ce niveau) suivent, sur place ; le reste du fil ne bouge pas. */
   function relevelV2(){
@@ -1011,7 +1042,7 @@
     row.addEventListener('scroll',end,{passive:true});end();
   }
   /* Après le montage : jeu du jour suivi, rangée suivie, conditions demandées. */
-  function bindV2(){watchQuiz();watchRow();loadLive();}
+  function bindV2(){watchQuiz();watchRow();bindPull();loadLive();}
   /* Entrée des blocs, une seule fois, quand le rideau se lève (jamais avant : elle se jouerait sans être vue), et chiffres
      qui montent pour les conditions déjà écrites. La classe est retirée ensuite : un fil remonté plus tard n’entre pas. */
   let entered=false;
@@ -1072,6 +1103,72 @@
     home.querySelectorAll('.hf-feed .ac-card[data-spot]').forEach(c=>{const s=spotOf(c.dataset.spot),p=c.querySelector('[data-ac-chips]');if(s&&p)p.innerHTML=monthChips(s,+c.dataset.hfM);});
   }
   /* ================= Fin de l’accueil v2 ================= */
+
+  /* ---------- Tirer pour rafraîchir (lot 1) ----------
+     Tiré depuis le haut de l'accueil (défilement à zéro), au-delà de 72 px : les conditions de « Mes spots » et de « Pour toi »
+     sont redemandées au service sans reprendre la mesure gardée 30 min. Pas plus d'un rafraîchissement toutes les 20 s
+     (quota d'Open-Meteo). Le geste n'est jamais seul : toucher l'heure du relevé, à côté du titre, fait la même chose.
+     L'indication est une pastille fixe au-dessus de l'écran : elle ne déplace rien. Après : l'heure du relevé, ou « Pas de
+     réseau. Derniers relevés gardés. » quand rien de plus récent n'est arrivé. */
+  let pullEl=null,pullHideT=0,lastPull=0,pullBound=false;
+  function pullPill(){
+    /* La pastille est posée dans index.html (fixe, cachée) : rien n'est inséré dans la page ici. */
+    if(!pullEl)pullEl=document.getElementById('acPull')||document.createElement('div');
+    return pullEl;
+  }
+  function pullShow(text,dy){
+    clearTimeout(pullHideT);const el=pullPill();
+    if(el.textContent!==text)el.textContent=text;
+    el.style.setProperty('--py',Math.min(dy||0,90)+'px');el.hidden=false;void el.offsetWidth;el.classList.add('on');
+  }
+  function pullHide(after){
+    clearTimeout(pullHideT);
+    pullHideT=setTimeout(()=>{if(!pullEl)return;pullEl.classList.remove('on');setTimeout(()=>{if(pullEl&&!pullEl.classList.contains('on'))pullEl.hidden=true;},260);},after||0);
+  }
+  function refreshNow(){
+    if(!V2||!built||!Verdict||!CM)return Promise.resolve(null);
+    const t=Date.now();
+    if(!CM.canRefresh(lastPull,t)){pullShow(freshAt?tr('Relevé à {0}').replace('{0}',freshLabel(freshAt)):tr('Mise à jour…'),40);pullHide(1400);return Promise.resolve(null);}
+    lastPull=t;pullShow(tr('Mise à jour…'),40);
+    return loadLive(true).then(map=>{
+      const ents=map?[...map.values()].filter(e=>e&&e.now):[];
+      const noNew=offlineNow()||!ents.length||ents.every(e=>e.kept);
+      pullShow(noNew?tr('Pas de réseau. Derniers relevés gardés.'):tr('Relevé à {0}').replace('{0}',freshLabel(freshAt||Date.now())),40);
+      pullHide(1800);return map;
+    });
+  }
+  function bindPull(){
+    if(pullBound||!V2)return;
+    const wrap=home.closest('.screen-wrap');if(!wrap)return;
+    pullBound=true;
+    let y0=0,dy=0,on=false;
+    wrap.addEventListener('touchstart',e=>{on=wrap.scrollTop<=0&&onScreen()&&e.touches.length===1;dy=0;if(on)y0=e.touches[0].clientY;},{passive:true});
+    wrap.addEventListener('touchmove',e=>{
+      if(!on)return;
+      if(wrap.scrollTop>0){on=false;pullHide();return;}
+      dy=e.touches[0].clientY-y0;
+      const st=CM.pullState(dy);
+      if(st==='idle'){pullHide();return;}
+      pullShow(st==='ready'?tr('Relâche pour rafraîchir'):tr('Tire pour rafraîchir'),dy*.6);
+    },{passive:true});
+    const end=()=>{if(!on)return;on=false;const st=CM.pullState(dy);dy=0;if(st==='ready')refreshNow();else pullHide();};
+    wrap.addEventListener('touchend',end,{passive:true});
+    wrap.addEventListener('touchcancel',()=>{on=false;dy=0;pullHide();},{passive:true});
+  }
+  /* Connexion perdue ou revenue : le bandeau du haut suit ; au retour, les conditions sont redemandées (sans forcer). */
+  function syncOffline(){
+    const el=$('[data-ac-offline]',home);if(!el)return;
+    const off=offlineNow();if(el.hidden===off)el.hidden=!off;
+  }
+  window.addEventListener('offline',syncOffline);
+  window.addEventListener('online',()=>{syncOffline();if(built&&onScreen())loadLive();});
+  /* Unités changées (Réglages : nœuds, pieds, °F) : les lignes de conditions et les repères du mois sont réécrits sur place. */
+  document.addEventListener('ocean:units',()=>{
+    if(!V2||!built)return;
+    home.querySelectorAll('.hf-feed [data-ac-live]').forEach(el=>{el._acHtml=null;el.removeAttribute('data-ac-ok');});
+    loadLive();lateV2();
+  });
+
 
   function render(){
     if(V2)return renderV2();
@@ -1171,7 +1268,12 @@
      pastilles des cartes déjà affichées changent, sur place (aucune section ajoutée, retirée ni déplacée). */
   function late(){
     if(!Boot||!Boot.lifted){mount();ready();return;}
-    if(V2){lateV2();return;}
+    if(V2){
+      lateV2();
+      /* Normales arrivées après les lignes (eau et saison du mois d'un spot sans relevé) : elles sont réécrites sur place. */
+      home.querySelectorAll('.hf-feed [data-ac-live]').forEach(el=>{el._acHtml=null;});loadLive();
+      return;
+    }
     const byId=new Map(SPOTS.map(s=>[s.id,s]));
     home.querySelectorAll('.hf-feed .hf-card[data-spot]').forEach(c=>{
       const s=byId.get(c.dataset.spot),p=c.querySelector('.hf-card-tx p');if(!s||!p)return;
@@ -1201,6 +1303,7 @@
     const av=e.target.closest('[data-hf-avent]');
     if(av){openAvent(av);return;}
     /* Interface v2 : pastille « sport, niveau », « Modifier » (tes favoris), « Trouver un spot », « Deviner le pays ». */
+    if(e.target.closest('[data-ac-fresh]')){refreshNow();return;}
     if(e.target.closest('[data-ac-me]')){if(typeof openSettings==='function')openSettings('sport');return;}
     if(e.target.closest('[data-ac-edit]')){if(typeof openFavorites==='function')openFavorites();return;}
     if(e.target.closest('[data-ac-find]')){go('spots');return;}
@@ -1247,6 +1350,7 @@
   });
   home.addEventListener('keydown',e=>{
     if((e.key==='Enter'||e.key===' ')&&e.target.matches('.hf-card,.hf-fy,.ui-spot[data-spot]')){e.preventDefault();e.target.click();return;}
+    if((e.key==='Enter'||e.key===' ')&&e.target.matches('[data-ac-fresh]')){e.preventDefault();refreshNow();return;}
     /* Groupe radio : les flèches déplacent le focus, Espace ou Entrée choisit (motif ARIA « radio group »). */
     if(e.target.matches('.hf-act')&&['ArrowRight','ArrowLeft','ArrowDown','ArrowUp','Home','End'].includes(e.key)){
       const all=[...home.querySelectorAll('.hf-act')],i=all.indexOf(e.target),rtl=getComputedStyle(e.target).direction==='rtl';

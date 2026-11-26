@@ -44,7 +44,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
   mo.observe(d,{childList:true,subtree:true});addEventListener('DOMContentLoaded',function(){mo.disconnect();});})(A[new Date().getDate()%A.length][1]);}
 })();</script>
 <noscript><style>#obBoot{display:none}</style></noscript>
-<script src="i18n.js?v=b0e451cc1f19"></script>
+<script src="i18n.js?v=f38a0be23cf1"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <title>Ocean Buddy : Explore. Progresse. Protège.</title>
 <meta name="theme-color" content="#fef9eb">
@@ -94,11 +94,11 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <link rel="stylesheet" href="cultures.css?v=fabacb2adac7">
 <link rel="stylesheet" href="replis.css?v=15d2762b11d2">
 <link rel="stylesheet" href="fiches-organisation.css?v=e977add6e883">
-<link rel="stylesheet" href="ui-v2.css?v=45c509434f95">
-<link rel="stylesheet" href="ui-accueil.css?v=ef9b15ceb7c9">
+<link rel="stylesheet" href="ui-v2.css?v=fd5f99610b7b">
+<link rel="stylesheet" href="ui-accueil.css?v=1da4c78a3a72">
 <link rel="stylesheet" href="ui-nav.css?v=daa721e2a267">
 <link rel="stylesheet" href="ui-listes.css?v=4b27be1546e3">
-<link rel="stylesheet" href="fiche.css?v=f76c3b010a87">
+<link rel="stylesheet" href="fiche.css?v=3ee5e5905593">
 <link rel="manifest" href="manifest.webmanifest">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ocean Buddy">
@@ -618,6 +618,10 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
         <label class="set-lab" for="setLang">Langue</label>
         <select id="setLang" class="set-input set-lang" translate="no"></select>
         <label class="set-toggle"><span>Réduire les animations</span><input type="checkbox" id="setReduce" onchange="toggleReduceMotion(this.checked)"></label>
+        <div class="set-lab set-units-t" role="heading" aria-level="4">Unités</div>
+        <label class="set-toggle set-unit"><span>Vent en nœuds</span><input type="checkbox" id="setUnitWind"></label>
+        <label class="set-toggle set-unit"><span>Houle en pieds</span><input type="checkbox" id="setUnitLength"></label>
+        <label class="set-toggle set-unit"><span>Températures en °F</span><input type="checkbox" id="setUnitTemp"></label>
         <label class="set-toggle" id="setNoelRow" hidden><span>Ambiance de Noël</span><input type="checkbox" id="setNoel"></label>
       </section>
       <section class="set-grp" aria-labelledby="setGrpData">
@@ -640,6 +644,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 
   <div class="confetti" id="confetti"></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="ac-pull" id="acPull" role="status" aria-live="polite" hidden></div>
 </div>
 
 <script src="photo-catalog.js?v=423c5aeed81e"></script>
@@ -650,23 +655,25 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="spot-name.js?v=4e77491c7ec1"></script>
 <script src="ocean-map-model.js?v=b08a2e51332b"></script>
 <script src="ocean-globe.js?v=ab8b7c313deb"></script>
-<script src="ocean-map.js?v=e994381390b2"></script>
+<script src="ocean-map.js?v=7534d0887089"></script>
 <script src="activity-theme.js?v=c741de22dee3"></script>
 <script src="activity-transition.js?v=9115991e9dfb"></script>
 <script src="spot-photos.js?v=ece4f2871d12"></script>
 <script src="progression.js?v=573fcb54b5ba"></script>
+<script src="units-model.js?v=5c47b8a6bc29"></script>
+<script src="conditions-model.js?v=5a08296683f8"></script>
 <script src="spot-rank-model.js?v=475e2af88a53"></script>
 <script src="explore-list.js?v=ce60599046aa"></script>
-<script src="app.js?v=8f4de31e3fd1"></script>
+<script src="app.js?v=e51bc6fbf3e4"></script>
 <script src="spot-fit-model.js?v=23cae691490e"></script>
-<script src="spot-before.js?v=af7d772a370c"></script>
+<script src="spot-before.js?v=cc50c59c6d21"></script>
 <script src="private-spots.js?v=683221818ade"></script>
 <script src="poulpy-knowledge.js?v=00c4ab3bd0f8"></script>
 <script src="design.js?v=4334daaede34"></script>
 <script src="trips.js?v=4f7f98ae6aec"></script>
 <script src="ocean-hub.js?v=8ed3939a9c22"></script>
 <script src="poulpy-config.js?v=23289565237d"></script>
-<script src="privacy.js?v=5be854237760"></script>
+<script src="privacy.js?v=2724c39a4b80"></script>
 <script src="poulpy-assistant.js?v=fdc0b8ec4927"></script>
 <script src="poulpy.js?v=d3a180880788"></script>
 <script src="spot-notebook-model.js?v=8982c4683ab8"></script>
@@ -679,12 +686,12 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="spot-guide.js?v=3904c63296fc"></script>
 <script src="spot-data-model.js?v=693ac45c7a68"></script>
 <script src="spot-weather-model.js?v=96ad189a5406"></script>
-<script src="spot-verdict.js?v=aa2aa46f4839"></script>
+<script src="spot-verdict.js?v=48fb7691a958"></script>
 <script src="spot-data.js?v=09a72f0c20a6"></script>
 <script src="spot-plan.js?v=cf81e0b62cfe"></script>
 <script src="ocean-sst.js?v=d283a91350a2"></script>
 <script src="deep-link.js?v=7f961879456a"></script>
-<script src="spot-experience.js?v=e72e2c397ba8"></script>
+<script src="spot-experience.js?v=1a493f17d646"></script>
 <script src="community-config.js?v=991b61c2fed6"></script>
 <script src="trip-sharing.js?v=e29f4931ffd4"></script>
 <script src="community.js?v=bc692676caa3"></script>
@@ -693,7 +700,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="polish.js?v=dc0aa9ea7958"></script>
 <script src="spot-scenes.js?v=4834c147d84c"></script>
 <script src="spot-panoramas.js?v=75a041ebb045"></script>
-<script src="spot-voyage.js?v=f50446cbd998"></script>
+<script src="spot-voyage.js?v=dd131a700aa2"></script>
 <script src="app-update-model.js?v=d8429980ee54"></script>
 <script src="app-update.js?v=f3bfc933c183"></script>
 <script src="ocean-home.js?v=5b1c975669f1"></script>
@@ -701,7 +708,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 <script src="noel-model.js?v=e20ee64f411f"></script>
 <script src="cultures-boot.js?v=90cc45a27762"></script>
 <script src="home-layout-model.js?v=8d77c0b3c9d2"></script>
-<script src="home-feed.js?v=8874c033c354"></script>
+<script src="home-feed.js?v=9022e1e0d400"></script>
 <script src="passport.js?v=1807a8ddf71f"></script>
 <script src="surf-model.js?v=db29a0e31c9a"></script>
 <script src="surf-render.js?v=f094a635d338"></script>

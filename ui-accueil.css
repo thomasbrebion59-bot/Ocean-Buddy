@@ -317,3 +317,20 @@ html[data-act] body.ocean-v2[data-screen=home]{--t-page:var(--t-cream);--as-page
   .ocean-v2 #home .ac-row{margin:0;padding:0;grid-auto-columns:minmax(150px,31%)}
   .ocean-v2 #home .ac-cult .cult-quiz-go{max-width:260px}
 }
+
+/* ================= Lot 1 (26 novembre 2026) : conditions d'abord, jamais vides (home-feed.js) =================
+   Bandeau « Hors connexion » : crème foncé discret (la page à peine assombrie), jamais une alerte orange.
+   Pastille « tirer pour rafraîchir » : fixe, au-dessus de tout, elle ne déplace rien. L'heure du relevé touchable. */
+.ocean-v2 .ac-offline{display:flex;align-items:center;gap:8px;margin:2px 0 12px;padding:9px 12px;border:1px solid var(--ui-hair);border-radius:12px;background:var(--ui-wash);color:var(--t-ink2);font:600 var(--ui-note)/1.25 var(--body)}
+.ocean-v2 .ac-offline[hidden]{display:none}
+.ocean-v2 .ac-offline>svg{flex:none;width:18px;height:18px}
+.ocean-v2 .ac-fresh{cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ocean-v2 .ac-fresh:focus-visible{outline:2px solid var(--t-main);outline-offset:4px;border-radius:6px}
+.ocean-v2 .ac-fresh[data-old]>i{background:color-mix(in srgb,var(--t-ink) 35%,transparent)}
+.ac-pull{position:fixed;left:50%;top:calc(env(safe-area-inset-top,0px) + 10px);z-index:230;max-width:calc(100% - 32px);padding:9px 16px;border-radius:999px;background:var(--t-deep);color:var(--t-on-main);font:600 13px/1.2 var(--body,system-ui);box-shadow:0 6px 22px color-mix(in srgb,var(--t-deep) 25%,transparent);opacity:0;transform:translate(-50%,calc(var(--py,0px) - 24px));transition:opacity .18s ease-out,transform .18s ease-out;pointer-events:none;text-align:center}
+.ac-pull.on{opacity:1;transform:translate(-50%,var(--py,0px))}
+.ac-pull[hidden]{display:none}
+@media (prefers-reduced-motion:reduce){.ac-pull{transition:none}}
+.ocean-v2.reduce-motion .ac-pull{transition:none}
+/* Le bandeau du haut dit déjà « Hors connexion » sur l'accueil : la pastille en capitales de la barre (polish.css) s'y efface. */
+body.ocean-v2[data-screen="home"].is-offline .app-chrome::after{content:none}

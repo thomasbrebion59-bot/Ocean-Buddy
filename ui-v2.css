@@ -143,3 +143,13 @@
 .ocean-v2 .ui-live .ui-verdict[data-fit]>.ui-next{font-size:12px}
 .ocean-v2 .ui-live .ui-verdict[data-fit="2"]>.ui-next>span{display:grid;line-height:13px;white-space:nowrap}
 
+
+/* ================= Lot 1 (26 novembre 2026) : les conditions d'abord, jamais vides (spot-verdict.js, conditions-model.js) =================
+   Ajouts seulement. .ui-stamp : « Relevé à 7 h 50 » sous les chiffres d'un relevé gardé sur l'appareil, ou la saison du mois.
+   .is-old : relevé de plus de 3 h, chiffres grisés (couleur secondaire, jamais effacés : ils restent lisibles). */
+.ocean-v2 .ui-stamp{margin:0;font:500 var(--ui-note)/1.2 var(--body);color:var(--ui-soft);font-variant-numeric:tabular-nums;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ocean-v2 .ui-cond.is-old,.ocean-v2 .ui-cond.is-old .ui-n{color:var(--ui-soft);font-weight:600}
+.ocean-v2 .ui-cond.is-old .ui-ic{opacity:.6}
+.ocean-v2 .ui-clim{flex-wrap:nowrap;gap:4px 10px}
+.ocean-v2 .ui-clim .ui-clim-m{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.ocean-v2 .ui-verdict.ui-season{min-height:26px}

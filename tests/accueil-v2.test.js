@@ -113,7 +113,7 @@ test('rubriques : Mes spots, Bon aujourd’hui, En <mois>, Cultures ; trois lign
   assert.match(css, /\.ocean-v2 #home\.hf-on>\.mm-band\{display:none\}/);
   assert.doesNotMatch(html, /class="hf-ambient"/);
   /* Titres de 1 à 3 mots, liens à droite. */
-  assert.match(fn('mineSection'), /<h2 class="ui-title" id="acMineT">Mes spots<\/h2><span class="ac-fresh" data-ac-fresh hidden>[^`]*<\/span><button type="button" class="ui-link" data-ac-edit\$\{m\.spots\.length\?'':' hidden'\}>Modifier<\/button>/);
+  assert.match(fn('mineSection'), /<h2 class="ui-title" id="acMineT">Mes spots<\/h2><span class="ac-fresh" data-ac-fresh role="button" tabindex="0" aria-label="Rafraîchir les conditions" hidden>[^`]*<\/span><button type="button" class="ui-link" data-ac-edit\$\{m\.spots\.length\?'':' hidden'\}>Modifier<\/button>/);
   assert.match(fn('goodInner'), /data-ac-good-title>\$\{goodTitle\(picks,map,!ready\)\}<\/h2><button type="button" class="ui-link" data-hf-more="bon">Tout voir<\/button>/);
   assert.match(fn('monthSection'), /const title=`En \$\{monthName\(m\)\}`;/);
   assert.match(fn('monthSection'), /data-hf-more="mois">Tout voir<\/button>/);
@@ -148,7 +148,7 @@ test('lignes de spot : photo, nom, points de danger, conditions, verdict ; touch
   /* Conditions et verdict : OceanVerdict, à une place réservée. */
   assert.match(fn('liveHTML'), /<div class="ui-live\$\{Verdict\.hasVerdict\(id\)\?'':' is-solo'\}" data-ac-live="\$\{esc\(id\)\}">\$\{Verdict\.pending\(id\)\}<\/div>/);
   assert.match(fn('paintLive'), /const h=Verdict\.html\(e\);/);
-  assert.match(fn('loadLive'), /Verdict\.forSpots\(ids\)\.then\(/);
+  assert.match(fn('loadLive'), /Verdict\.forSpots\(ids,force\?\{force:true\}:undefined\)\.then\(/);
   /* Le vol de la photo : motion.js suit les cartes [data-spot] qui portent une image, puis openSpot ; rien à lui ajouter. */
   assert.match(read('motion.js'), /const CARD='\[data-spot\],\[data-spot-id\],\[data-cult-spot\],\.field-nearby-card';/);
   assert.match(feed, /const card=e\.target\.closest\('\.hf-card\[data-spot\],\.hf-fy\[data-spot\],\.ui-spot\[data-spot\],\.ac-card\[data-spot\]'\);\n    if\(card&&typeof openSpot==='function'\)\{openSpot\(card\.dataset\.spot\);\}/);
@@ -234,7 +234,7 @@ test('démarrage : l’étape « feed » est toujours signalée ; un seul montag
   assert.match(fn('relevelV2'), /sec\.innerHTML=inner;sec\.hidden=!inner;/);
   for (const f of ['fillGood', 'paintLive', 'syncMine', 'lateV2', 'syncTop', 'relevelV2']) assert.doesNotMatch(fn(f), /feed\.innerHTML|\.hf-feed'\)\.innerHTML/, f + ' ne refait pas le fil');
   /* Données arrivées après la levée : seules les pastilles des cartes du mois changent. */
-  assert.match(feed, /if\(!Boot\|\|!Boot\.lifted\)\{mount\(\);ready\(\);return;\}\n    if\(V2\)\{lateV2\(\);return;\}/);
+  assert.match(feed, /if\(!Boot\|\|!Boot\.lifted\)\{mount\(\);ready\(\);return;\}\n    if\(V2\)\{\n      lateV2\(\);/);
 });
 
 test('aucun saut : places réservées pour les conditions, les lignes, les pastilles et les photos', () => {
@@ -516,7 +516,7 @@ test('illustrations : la carte sans favori, une par activité pour les spots san
 
 test('heure du relevé à côté de « Mes spots » : la vraie heure des conditions affichées, rien sans relevé', () => {
   const f = fn('syncFresh');
-  assert.match(f, /const ats=map\?mineIds\.map\(id=>map\.get\(id\)\)\.filter\(e=>e&&e\.now&&e\.at>0\)\.map\(e=>e\.at\):\[\];/, 'les relevés de « Mes spots » qui ont des chiffres');
+  assert.match(f, /const ents=map\?mineIds\.map\(id=>map\.get\(id\)\)\.filter\(e=>e&&e\.now&&e\.at>0\):\[\];\n    const ats=ents\.map\(e=>e\.at\);/, 'les relevés de « Mes spots » qui ont des chiffres');
   assert.match(f, /if\(!ats\.length\)\{el\.hidden=true;freshAt=0;return;\}/, 'sans relevé : rien, aucune heure inventée');
   assert.match(f, /const at=Math\.min\(\.\.\.ats\)/, 'le plus ancien des relevés affichés');
   assert.match(f, /el\.title=tr\('Relevé à \{0\}'\)\.replace\('\{0\}',t\);/);
@@ -537,7 +537,7 @@ test('tablette et ordinateur : la rangée du mois tient dans sa colonne, avec un
   assert.match(noComments(css), /@media\(min-width:700px\)\{\s*\.ocean-v2 #home \.ac-row:not\(\.is-end\)\{-webkit-mask-image:linear-gradient\(90deg,black calc\(100% - 56px\),transparent\);mask-image:linear-gradient\(90deg,black calc\(100% - 56px\),transparent\)\}\s*\}/);
   assert.match(fn('watchRow'), /row\.classList\.toggle\('is-end',row\.scrollLeft\+row\.clientWidth>=row\.scrollWidth-8\)/);
   assert.match(fn('watchRow'), /row\.addEventListener\('scroll',end,\{passive:true\}\);end\(\);/);
-  assert.match(v2, /function bindV2\(\)\{watchQuiz\(\);watchRow\(\);loadLive\(\);\}/);
+  assert.match(v2, /function bindV2\(\)\{watchQuiz\(\);watchRow\(\);bindPull\(\);loadLive\(\);\}/);
 });
 
 test('vie après l’entrée : blocs révélés au défilement, signe de vie au retour, chiffres qui repartent de leur valeur d’avant', () => {

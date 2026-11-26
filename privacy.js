@@ -7,7 +7,7 @@
     if(!(await (window.OceanConfirm?OceanConfirm(q,{ok:'Tout effacer',danger:true}):Promise.resolve(confirm(q)))))return;
     /* Compte : déconnexion de cet appareil d'abord (cookies du site, ou jetons du Trousseau dans l'app iPhone). */
     try{if(window.OceanAccount?.forget)await OceanAccount.forget();else if(window.OceanMobile?.account)await OceanMobile.account.request('/auth/logout',{method:'POST',body:{}});}catch(_){}
-    const keys=[];for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key?.startsWith('oceanbuddy_')||['ob_community_session_v1','ob_community_name_v1'].includes(key))keys.push(key);}keys.forEach(key=>localStorage.removeItem(key));
+    const keys=[];for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key?.startsWith('oceanbuddy_')||['ob_community_session_v1','ob_community_name_v1','ob_conditions_v1'].includes(key))keys.push(key);}keys.forEach(key=>localStorage.removeItem(key));
     try{sessionStorage.removeItem('ob_community_session_v1')}catch(_){}
     try{await window.OceanMobile?.persist();location.reload();}catch(_){toast('La copie native n’a pas pu être effacée. Réessaie avant de fermer l’application.');}
   };
