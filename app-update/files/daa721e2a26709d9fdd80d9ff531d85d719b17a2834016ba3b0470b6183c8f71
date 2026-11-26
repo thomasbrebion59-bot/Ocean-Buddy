@@ -1,0 +1,251 @@
+/* @creme-tokens */
+/* Interface v2, écran « nav » (voir ~/Projects/Ocean-Buddy-orga-docs/interface-v2/BRIEF.md). Composants communs : ui-v2.css.
+   Maquette validée : maquette-5-profil.png. Trois parties :
+   1. la barre d’onglets à quatre entrées (Accueil, Explorer, Voyages, Profil) et le menu latéral sur ordinateur ;
+   2. le Profil court (.pv) : mon niveau, mes spots, jouer, passeport en résumé, réglages ;
+   3. les écrans rattachés au Profil : passeport complet, Jeu, Défis (en-tête simple, Retour dans la barre du haut).
+   Le contenu est posé par index.html et ui-nav.js. Mouvements en transform et opacity seulement, jamais en boucle, coupés
+   en mouvement réduit (réglage du système et body.reduce-motion). Couleurs du thème actif (--t-*). */
+
+/* ================= 1. Barre d’onglets (téléphone et tablette) ================= */
+/* Mêmes sélecteurs que app-shell.css, chargé avant : à poids égal, cette feuille l’emporte ; les règles de motion.css
+   pour l’indicateur qui coulisse (.nav.ob-tab-move), plus précises, restent prioritaires pendant le trajet. */
+@media(max-width:959px){
+  .ocean-v2 .nav,html[data-act] .ocean-v2 .nav{padding:5px!important;gap:2px;background:var(--t-card)!important}
+  .ocean-v2 .nav>button[data-s],html[data-act] .ocean-v2 .nav>button[data-s]{
+    min-width:0;padding:4px 0 3px;gap:1px;border-radius:999px;color:var(--t-ink)!important;
+    font:500 12px/1.35 var(--body);letter-spacing:0;transition:color .2s,transform .2s var(--as-spring)}
+  /* Onglet actif : le bleu de l’app (pictogramme plein, libellé gras) sur une pastille très légère, la même que
+     l’indicateur qui coulisse d’un onglet à l’autre (motion.js). */
+  .ocean-v2 .nav>button[data-s].active,.ocean-v2 .nav>button[aria-current=page]{color:var(--t-main)!important;background:color-mix(in srgb,var(--t-main) 9%,transparent)!important;box-shadow:none!important;font-weight:700}
+  html[data-act] .ocean-v2 .nav>button[data-s].active,html[data-act] .ocean-v2 .nav>button[aria-current=page]{color:var(--t-main)!important;background:color-mix(in srgb,var(--t-main) 9%,transparent)!important;box-shadow:none!important;font-weight:700}
+  .ocean-v2 .nav>button[data-s].active .tab-label,.ocean-v2 .nav>button[aria-current=page] .tab-label{margin-left:0;margin-right:0}
+  .ocean-v2 .nav .tab-label{padding:0 2px}
+  .ocean-v2 .nav.ob-tab-move>.nav-pill{top:5px;bottom:5px;border-radius:999px;background:color-mix(in srgb,var(--t-main) 9%,transparent)!important;box-shadow:none}
+  @media(max-width:430px){.ocean-v2 .nav{padding:5px!important}.ocean-v2 .nav>button[data-s]{font-size:12px;letter-spacing:0}.ocean-v2 .nav .tab-label{padding:0 2px}}
+  @media(max-width:359px){.ocean-v2 .nav>button[data-s]{font-size:11px}}
+
+  /* Profil, Jeu, Défis : pas de loupe en haut à droite (la recherche est l’onglet Explorer). */
+  body[data-screen=profile].ocean-v2 .app-chrome .mobile-search,body[data-screen=surf].ocean-v2 .app-chrome .mobile-search,body[data-screen=challenges].ocean-v2 .app-chrome .mobile-search{display:none!important}
+  /* La barre du haut, transparente tant qu’on n’a pas défilé, recouvre la ligne du titre : sur le Profil, elle laisse
+     passer le toucher vers l’avatar (ses propres boutons restent actifs). Une fois opaque, elle le reprend. */
+  body[data-screen=profile]:not(.is-scrolled).ocean-v2 .app-chrome{pointer-events:none}
+  body[data-screen=profile]:not(.is-scrolled).ocean-v2 .app-chrome>button{pointer-events:auto}
+  /* Titre de la barre au défilement : celui de l’écran rattaché (Passeport, Mini-jeu, Défis), posé par ui-nav.js. */
+  body.pv-sub.ocean-v2 .app-page-title{display:none!important}
+  .ocean-v2 .pv-chrome-title{display:block;font:700 17px/1 var(--body);letter-spacing:-.2px;color:var(--as-ink);opacity:0;transform:translateY(4px);transition:opacity .2s,transform .2s;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+  body.is-scrolled.pv-sub .pv-chrome-title{opacity:1;transform:none}
+  body:not(.pv-sub) .pv-chrome-title{display:none}
+}
+@media(min-width:960px){
+  .pv-chrome-title{display:none}
+  /* Menu latéral : Communauté rangée en bas, avec les Réglages (design.js). */
+  .ocean-v2 .nav .sidebar-community{width:100%;height:32px;display:flex;flex-direction:row;align-items:center;justify-content:flex-start;gap:12px;margin:0 0 6px;padding:0 14px;border:0;border-radius:10px;background:none;box-shadow:none;color:var(--t-ink);font:500 11px var(--body);cursor:pointer}
+  .ocean-v2 .nav .n-community[hidden]{display:none!important}
+  .ocean-v2 .nav .sidebar-community>svg{width:16px;height:16px;flex:none}
+  .ocean-v2 .nav .sidebar-community .mobile-label{display:none}
+  .ocean-v2 .nav .sidebar-community:hover{color:var(--t-main)}
+  .ocean-v2 .nav .sidebar-community.active,.ocean-v2 .nav .sidebar-community[aria-current=page]{color:var(--t-main);font-weight:700}
+  /* Plus de sur-titre en capitales au-dessus des quatre entrées (« Ton terrain de jeu », posé par design.js). */
+  .ocean-v2 .nav .sidebar-label{display:none}
+}
+/* Communauté (ordinateur seulement) : elle garde son entrée en bas du menu, mais son écran prend le vocabulaire de
+   l’interface v2 : un titre simple à la place de la grande affiche sombre, plus de sur-titres en capitales, titres en
+   casse de phrase, cartes blanches à filet. Le contenu (community.js) ne change pas. */
+.ocean-v2 #community .community-kicker{display:none}
+.ocean-v2 #community .community-hero{padding:0 2px;border-radius:0;background:none;box-shadow:none;color:var(--t-ink)}
+.ocean-v2 #community .community-hero h1{margin:0 0 8px;font:800 34px/1.05 var(--body);letter-spacing:-.8px;text-transform:none;color:var(--t-ink)}
+.ocean-v2 #community .community-hero h1 br{display:none}
+.ocean-v2 #community .community-hero h1 b{margin-left:.24em;color:var(--t-main)}
+.ocean-v2 #community .community-hero p{max-width:none;font:400 var(--ui-text)/1.45 var(--body);color:var(--ui-soft)}
+.ocean-v2 #community .community-panel{border:0;border-radius:var(--ui-radius);background:var(--ui-surface);box-shadow:inset 0 0 0 1px var(--ui-hair)}
+.ocean-v2 #community .community-panel :is(h2,h3){margin:0 0 10px;font:800 var(--ui-title)/1.1 var(--display);letter-spacing:-.02em;text-transform:none;color:var(--t-ink)}
+
+/* ================= 2. Profil court ================= */
+/* Cartes blanches à filet (ui-v2.css : --ui-surface et --ui-hair), comme la maquette ; --ui-wash pour les pastilles. */
+.ocean-v2 #profile:not(.pv-full-open)>.pv-sub-head,.ocean-v2 #profile:not(.pv-full-open)>.pv-sub-head~*{display:none!important}
+.ocean-v2 #profile.pv-full-open>.pv{display:none}
+.ocean-v2 .pv{display:grid;gap:var(--ui-gap);min-width:0}
+/* Deux groupes de blocs : le niveau et les spots ; puis jouer, le passeport et les réglages. Sur téléphone, ils se
+   suivent (display:contents : chaque bloc reste un élément de la grille). Sur ordinateur large, ce sont deux colonnes. */
+.ocean-v2 .pv-col{display:contents}
+/* Ordinateur : une colonne de lecture, calée à gauche comme les titres, plutôt que des cartes étirées sur tout l’écran. */
+/* !important : design.css remet « max-width:none » sur chaque enfant direct d’un écran, avec un sélecteur plus précis. */
+@media(min-width:960px){.ocean-v2 .pv{max-width:760px!important;padding-top:14px}.ocean-v2 .pv-sub-head{padding-top:14px}}
+/* Ordinateur large (1200 px et plus) : deux colonnes, plus de bande vide à droite. À gauche, le niveau et les spots ; à
+   droite, jouer, le passeport et les réglages. À 1440 × 900, tout le Profil tient à l’écran sans défiler. */
+@media(min-width:1200px){
+  .ocean-v2 .pv{max-width:1240px!important;grid-template-columns:minmax(0,1.7fr) minmax(0,1fr);column-gap:40px;align-items:start}
+  .ocean-v2 .pv-top{grid-column:1/-1}
+  .ocean-v2 .pv-col{display:grid;gap:var(--ui-gap);min-width:0;align-content:start}
+}
+.ocean-v2 .pv>*,.ocean-v2 .pv-col>*{min-width:0;margin:0}
+.ocean-v2 .pv :is(h1,h2):focus{outline:none}
+/* Première arrivée : un bloc attend, invisible, d’arriver à l’écran pour entrer (ui-nav.js). Jamais en mouvement réduit. */
+.ocean-v2 .pv-wait{opacity:0}
+
+/* Titre et avatar. L’avatar garde l’élément .ph-avatar à sa taille d’origine (76 px, 100 px sur ordinateur), réduit par
+   une transformation : le bonnet de Noël de noel.css, posé sur .ph-avatar::before, reste à la bonne proportion. */
+.ocean-v2 .pv-top{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:44px;padding:10px 2px 0}
+.ocean-v2 .pv-h1{margin:0;font:800 34px/1.05 var(--body);letter-spacing:-.8px;color:var(--t-ink)}
+.ocean-v2 .pv-avatar{position:relative;flex:none;width:44px;height:44px;margin:0;padding:0;border:0;border-radius:50%;background:none;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1)}
+.ocean-v2 .pv-avatar:active{transform:scale(.94)}
+.ocean-v2 .pv-avatar .ph-avatar{position:absolute;left:0;top:0;display:block;width:76px;height:76px;margin:0;transform:scale(.579);transform-origin:0 0}
+.ocean-v2 .pv-avatar .ph-avatar>svg{display:block;width:76px;height:76px;border-radius:50%;filter:none}
+@media(min-width:960px){
+  .ocean-v2 .pv-avatar .ph-avatar{width:100px;height:100px;transform:scale(.44)}
+  .ocean-v2 .pv-avatar .ph-avatar>svg{width:100px;height:100px}
+}
+
+/* Mon niveau : le sport (touche pour changer) et le niveau en trois segments. */
+.ocean-v2 .pv-level{padding:14px}
+.ocean-v2 .pv-sport{display:flex;align-items:center;gap:12px;width:100%;min-height:48px;margin:4px 0 8px;padding:0;border:0;background:none;color:var(--t-ink);font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ocean-v2 .pv-sport-ic{flex:none;width:44px;height:44px;object-fit:contain}
+.ocean-v2 .pv-sport>b{min-width:0;font:700 20px/1.15 var(--display);letter-spacing:-.01em;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ocean-v2 .pv-chev{flex:none;width:18px;height:18px;margin-left:auto;color:var(--ui-soft)}
+.ocean-v2 .pv-seg{position:relative;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:4px;border-radius:999px;background:var(--ui-wash)}
+.ocean-v2 .pv-seg>button{position:relative;z-index:1;min-width:0;min-height:38px;margin:0;padding:0 4px;border:0;border-radius:999px;background:none;color:var(--t-ink);font:500 14.5px/1 var(--body);white-space:nowrap;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .16s}
+.ocean-v2 .pv-seg>button[aria-checked=true]{color:var(--t-on-main);font-weight:700}
+.ocean-v2 .pv-seg-ink{position:absolute;z-index:0;top:4px;bottom:4px;left:4px;width:calc((100% - 8px)/3);border-radius:999px;background:var(--t-main);opacity:0;pointer-events:none;transition:transform .22s var(--ob-snap,cubic-bezier(.2,.9,.25,1)),opacity .16s}
+.ocean-v2 .pv-seg[data-lvl=debutant] .pv-seg-ink{opacity:1;transform:translateX(0)}
+.ocean-v2 .pv-seg[data-lvl=intermediaire] .pv-seg-ink{opacity:1;transform:translateX(100%)}
+.ocean-v2 .pv-seg[data-lvl=expert] .pv-seg-ink{opacity:1;transform:translateX(200%)}
+@media(max-width:389px){.ocean-v2 .pv-seg>button{font-size:13.5px;letter-spacing:-.1px}}
+
+/* Mes spots : deux onglets, puis une rangée de vignettes carrées (trois par écran, le reste en glissant). */
+.ocean-v2 .pv-sec>.ui-title{margin:0 0 4px}
+.ocean-v2 .pv-tabs{display:flex;gap:26px;margin:0 0 14px;box-shadow:inset 0 -2px 0 var(--ui-hair)}
+.ocean-v2 .pv-tabs>button{position:relative;display:inline-flex;align-items:baseline;gap:6px;min-height:44px;margin:0;padding:0 2px;border:0;background:none;color:var(--ui-soft);font:700 16px/44px var(--body);cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .16s}
+.ocean-v2 .pv-tabs>button>b{font-weight:inherit;font-variant-numeric:tabular-nums}
+.ocean-v2 .pv-tabs>button[aria-selected=true]{color:var(--t-main)}
+.ocean-v2 .pv-tabs>button::after{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;border-radius:3px;background:var(--t-main);opacity:0;transform:scaleX(.35);transition:opacity .16s,transform .22s var(--ob-snap,cubic-bezier(.2,.9,.25,1))}
+.ocean-v2 .pv-tabs>button[aria-selected=true]::after{opacity:1;transform:none}
+/* Côté d’une vignette : un tiers de la largeur utile (écran moins les marges de 16 px et deux espaces de 12 px), 190 px au
+   plus. Écrit en vw pour servir aussi de hauteur : la rangée garde la même hauteur avec ou sans spot. */
+.ocean-v2 .pv-spots{--pv-th:min(calc((100vw - 56px)/3),190px);display:grid;grid-auto-flow:column;grid-auto-columns:var(--pv-th);gap:12px;min-height:calc(var(--pv-th) + 41.6px);margin:0 -16px;padding:0 16px;overflow-x:auto;scroll-snap-type:x proximity;scroll-padding:0 16px;scrollbar-width:none}
+.ocean-v2 .pv-spots::-webkit-scrollbar{display:none}
+.ocean-v2 .pv-spot{display:grid;align-content:start;gap:8px;min-width:0;margin:0;padding:0;border:0;background:none;color:var(--t-ink);font:inherit;text-align:center;cursor:pointer;scroll-snap-align:start;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1)}
+.ocean-v2 .pv-spot:active{transform:scale(.97)}
+.ocean-v2 .pv-ph{display:block;aspect-ratio:1;border-radius:14px;overflow:hidden;background:var(--ui-hair)}
+.ocean-v2 .pv-ph>img{display:block;width:100%;height:100%;object-fit:cover}
+/* Nom sur deux lignes au plus (« Les Sables-d’Olonne »), hauteur réservée. */
+.ocean-v2 .pv-spot-n{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;min-height:33.6px;font:700 14px/1.2 var(--body);overflow:hidden;overflow-wrap:anywhere;text-wrap:balance}
+/* Ordinateur : les vignettes passent à la ligne au lieu de défiler (une souris ne fait pas glisser une rangée). */
+@media(min-width:960px){.ocean-v2 .pv-spots:not(.is-empty){grid-auto-flow:row;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));row-gap:16px;margin:0;padding:0;overflow:visible}}
+/* Aucun spot : une scène dessinée pour cet état (assets/ui/mes-spots-vide.webp), une ligne et un bouton. La scène prend
+   toute la hauteur de la rangée de vignettes (photo et nom) : passer d’un onglet à l’autre ne fait pas sauter la suite. */
+.ocean-v2 .pv-spots.is-empty{grid-auto-flow:row;grid-template-columns:calc(var(--pv-th) + 41.6px) minmax(0,1fr);align-items:center;gap:16px;overflow:visible}
+.ocean-v2 .pv-empty-art{border-radius:16px;background:var(--t-tint)}
+.ocean-v2 .pv-empty{display:grid;justify-items:start;gap:12px;min-width:0}
+.ocean-v2 .pv-empty .ui-btn{min-height:44px}
+
+/* Jouer : trois tuiles illustrées (assets/ui/jouer-*.webp, dans le style des illustrations de la fiche). */
+.ocean-v2 .pv .ui-head{margin:0 0 12px}
+.ocean-v2 .pv-xp{font-variant-numeric:tabular-nums}
+.ocean-v2 .pv-play{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.ocean-v2 .pv-tile{position:relative;display:block;min-width:0;margin:0;padding:0;border:0;border-radius:var(--ui-radius);overflow:hidden;background:var(--ui-surface);color:var(--t-ink);font:inherit;text-align:center;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1)}
+.ocean-v2 .pv-tile:active{transform:scale(.96)}
+/* Le filet passe par-dessus l’illustration : la tuile garde son bord sur tout son tour. */
+.ocean-v2 .pv-tile::after{content:"";position:absolute;inset:0;border-radius:inherit;box-shadow:inset 0 0 0 1px var(--ui-hair);pointer-events:none}
+/* Avant l’arrivée de l’image : le sable clair du thème, pas un gris. */
+.ocean-v2 .pv-tile-art{display:block;aspect-ratio:4/3;overflow:hidden;background:var(--t-tint)}
+.ocean-v2 .pv-tile-art>img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.3,1)}
+@media(hover:hover){.ocean-v2 .pv-tile:hover .pv-tile-art>img{transform:scale(1.05)}}
+.ocean-v2 .pv-tile>b{display:block;padding:9px 4px 11px;font:700 16px/1.15 var(--body);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Passeport en résumé : la carte du monde (terres teintées et trait, scripts/build-world-trait.py), trois chiffres, puis
+   les pays visités en tampons. */
+.ocean-v2 .pv-pass{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(0,1fr);align-items:center;gap:14px;width:100%;margin:0;color:var(--t-ink);font:inherit;text-align:start;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .12s cubic-bezier(.2,.7,.3,1)}
+.ocean-v2 .pv-pass:active{transform:scale(.985)}
+.ocean-v2 .pv-map{position:relative;display:block;aspect-ratio:2400/946}
+.ocean-v2 .pv-map-fill{position:absolute;inset:0;background:var(--t-tint);-webkit-mask:url("assets/ui/monde-terres.svg") center/100% 100% no-repeat;mask:url("assets/ui/monde-terres.svg") center/100% 100% no-repeat}
+.ocean-v2 .pv-map-land{position:absolute;inset:0;background:var(--t-ink);-webkit-mask:url("assets/ui/monde-trait.svg") center/100% 100% no-repeat;mask:url("assets/ui/monde-trait.svg") center/100% 100% no-repeat}
+.ocean-v2 .pv-dots{position:absolute;inset:0;display:block}
+.ocean-v2 .pv-dot{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%}
+/* Spot visité : point plein et halo ; envie (favori) : point creux. */
+.ocean-v2 .pv-dot.been{background:var(--t-main);box-shadow:0 0 0 2px var(--ui-surface),0 0 0 5px color-mix(in srgb,var(--t-main) 20%,transparent)}
+.ocean-v2 .pv-dot.wish{background:var(--ui-surface);box-shadow:inset 0 0 0 1.5px var(--t-main)}
+/* Onde d’un point visité : une seule fois, posée puis retirée par ui-nav.js. */
+.ocean-v2 .pv-ring{position:absolute;width:9px;height:9px;margin:-4.5px 0 0 -4.5px;border-radius:50%;box-shadow:0 0 0 1.5px var(--t-main);opacity:0;pointer-events:none}
+.ocean-v2 .pv-nums{display:grid;gap:8px;padding-left:14px;border-left:1px solid var(--ui-hair)}
+.ocean-v2 .pv-nums>span{display:flex;align-items:baseline;gap:10px;min-width:0}
+.ocean-v2 .pv-n{flex:none;min-width:1.25ch;font:800 26px/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--t-ink)}
+.ocean-v2 .pv-l{min-width:0;font:500 var(--ui-label)/1.2 var(--body);color:var(--ui-soft);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+/* Tampons : un par pays visité (trois au plus, puis « +2 »), légèrement de travers comme dans un vrai passeport. Sans
+   pays visité, une case en pointillé dit comment gagner le premier. Hauteur réservée : une ligne. Rien n’est rogné :
+   un tampon qui se pose dépasse un instant de sa place. */
+.ocean-v2 .pv-stamps{grid-column:1/-1;display:flex;flex-wrap:wrap;align-items:center;gap:8px;min-height:46px;margin:-2px 0 -3px;padding:13px 2px 3px;border-top:1px solid var(--ui-hair);box-sizing:border-box}
+.ocean-v2 .pv-stamp{display:inline-flex;align-items:center;min-width:0;max-width:100%;height:30px;padding:0 11px;box-sizing:border-box;border:1.5px dashed color-mix(in srgb,var(--t-main) 60%,transparent);border-radius:9px;color:var(--t-main);font:700 13.5px/1 var(--body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.ocean-v2 .pv-stamp:nth-child(3n+1){rotate:-2.5deg}
+.ocean-v2 .pv-stamp:nth-child(3n+2){rotate:1.5deg}
+.ocean-v2 .pv-stamp:nth-child(3n){rotate:-1deg}
+.ocean-v2 .pv-stamp.is-more{border-style:solid;border-color:var(--ui-hair);color:var(--ui-soft);rotate:none}
+.ocean-v2 .pv-stamp.is-todo{border-color:color-mix(in srgb,var(--t-ink) 30%,transparent);color:var(--ui-soft);font-weight:600;rotate:none}
+
+/* Réglages et aide. */
+.ocean-v2 .pv-list{display:grid;padding:2px 16px;border-radius:var(--ui-radius);background:var(--ui-surface);box-shadow:inset 0 0 0 1px var(--ui-hair)}
+.ocean-v2 .pv-row{display:flex;align-items:center;gap:14px;min-height:54px;margin:0;padding:0;border:0;background:none;color:var(--t-ink);font:inherit;text-align:start;text-decoration:none;cursor:pointer;-webkit-tap-highlight-color:transparent}
+.ocean-v2 .pv-row+.pv-row{border-top:1px solid var(--ui-hair)}
+.ocean-v2 .pv-row>.ui-ic{width:24px;height:24px}
+.ocean-v2 .pv-row>b{font:700 16px/1.2 var(--body)}
+.ocean-v2 .pv :is(.pv-avatar,.pv-sport,.pv-seg>button,.pv-tabs>button,.pv-spot,.pv-tile,.pv-pass,.pv-row):focus-visible{outline:2px solid var(--t-main);outline-offset:3px}
+
+/* ================= 3. Écrans rattachés au Profil : passeport complet, Jeu, Défis ================= */
+/* En-tête simple : un titre. Le Retour est le bouton rond de la barre du haut (ui-nav.js), toujours visible. */
+.ocean-v2 .pv-sub-head{display:flex;align-items:center;flex-wrap:wrap;gap:6px 12px;min-height:44px;margin:0 2px 18px}
+.ocean-v2 .pv-sub-head>h1{margin:0;font:800 34px/1.05 var(--body);letter-spacing:-.8px;color:var(--t-ink);text-transform:none}
+.ocean-v2 .pv-sub-head>h1:focus{outline:none}
+.ocean-v2 .pv-sub-note{margin-left:auto}
+@media(max-width:959px){
+  /* Le titre se cale à droite du bouton Retour (40 px, à 12 px du bord), sur la même ligne. */
+  .ocean-v2 .pv-sub-head{min-height:40px;margin-top:-2px;padding-left:44px}
+}
+
+/* Passeport complet : la carte et ses chiffres sans grande affiche sombre (passport.js). */
+.ocean-v2 #profile .pp{margin:0 0 var(--ui-gap);padding:0;border-radius:0;background:none;color:var(--t-ink);box-shadow:none}
+.ocean-v2 #profile .pp::before,.ocean-v2 #profile .pp::after{display:none}
+.ocean-v2 #profile .pp-map{margin:0 0 10px;border-radius:var(--ui-radius);box-shadow:none}
+.ocean-v2 #profile .pp-legend{padding-left:3px;color:var(--ui-soft)}
+.ocean-v2 #profile .pp-dot.wish{background:var(--t-card)}
+.ocean-v2 #profile .pp-stats{margin:14px 0}
+.ocean-v2 #profile .pp-stat{background:var(--ui-surface);box-shadow:inset 0 0 0 1px var(--ui-hair)}
+.ocean-v2 #profile .pp-stat b{font:800 var(--ui-num-s)/1 var(--display);letter-spacing:-.03em;font-variant-numeric:tabular-nums;color:var(--t-ink)}
+.ocean-v2 #profile .pp-stat span{color:var(--ui-soft)}
+.ocean-v2 #profile .pp-empty{color:var(--ui-soft)}
+.ocean-v2 #profile .pp-go{background:var(--t-main);color:var(--t-on-main);font:700 var(--ui-label)/1 var(--body)}
+/* Ordinateur : la carte ne s’étale plus sur tout l’écran (elle faisait 630 px de haut à 1440 px, une affiche). Carte à
+   gauche, légende, chiffres et bouton à droite. */
+@media(min-width:960px){
+  .ocean-v2 #profile .pp{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);grid-template-rows:auto auto 1fr auto;column-gap:32px;align-items:start}
+  .ocean-v2 #profile .pp-map{grid-row:1/-1;margin:0}
+  .ocean-v2 #profile .pp>:not(.pp-map){grid-column:2}
+  .ocean-v2 #profile .pp-stats{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0}
+  .ocean-v2 #profile .pp-stat{padding:16px 6px}
+  .ocean-v2 #profile .pp-go{align-self:end}
+}
+/* Titres des blocs du passeport complet : casse de phrase, comme le reste de l’interface v2 ; sur-titres retirés. */
+.ocean-v2 #profile .sec h2,.ocean-v2 #profile .cult-pp-head h2{margin:0;padding:0;font:800 var(--ui-title)/1.1 var(--display);letter-spacing:-.02em;text-transform:none;color:var(--t-ink)}
+.ocean-v2 #profile :is(.cult-pp-head small,.poulpy-profile-card .section-kicker,.tb-eyebrow){display:none}
+/* Vitrine des trophées (« 0 / 13 trophées ») et sous-titre des badges du quiz : plus de capitales. */
+.ocean-v2 #profile .tb-title{font:800 26px/1.05 var(--display);letter-spacing:-.02em;text-transform:none}
+.ocean-v2 #profile .sub-lab{letter-spacing:0;text-transform:none}
+.ocean-v2 #profile .pv-full-end{height:22px}
+
+/* Défis et Jeu : pas de sur-titre en capitales, titres en casse de phrase. */
+.ocean-v2 #challenges .poulpy-eco-banner .section-kicker{display:none}
+/* Dates et lieux des compétitions (Défis surf) : casse de phrase, corps lisible. */
+.ocean-v2 #challenges .evt-m{font-size:12.5px;letter-spacing:0;text-transform:none}
+.ocean-v2 #surf .sf-body{padding-top:0}
+.ocean-v2 #surf .sf-card h3{font:800 var(--ui-title)/1.1 var(--display);letter-spacing:-.02em;text-transform:none}
+.ocean-v2 #surf .sf-play{font:700 18px/1 var(--body);letter-spacing:0;text-transform:none}
+.ocean-v2 #surf .sf-how b{font:700 15px/1.2 var(--body);text-transform:none}
+
+/* ================= Mouvement réduit ================= */
+@media (prefers-reduced-motion:reduce){
+  .ocean-v2 :is(.pv-avatar,.pv-spot,.pv-tile,.pv-tile-art>img,.pv-pass,.pv-seg>button,.pv-seg-ink,.pv-tabs>button,.pv-chrome-title),.ocean-v2 .pv-tabs>button::after{transition:none}
+  .ocean-v2 :is(.pv-avatar,.pv-spot,.pv-tile,.pv-pass):active,.ocean-v2 .pv-tile:hover .pv-tile-art>img{transform:none}
+  .ocean-v2 .pv-wait{opacity:1}
+}
+.ocean-v2.reduce-motion :is(.pv-avatar,.pv-spot,.pv-tile,.pv-tile-art>img,.pv-pass,.pv-seg>button,.pv-seg-ink,.pv-tabs>button,.pv-chrome-title),.ocean-v2.reduce-motion .pv-tabs>button::after{transition:none}
+.ocean-v2.reduce-motion :is(.pv-avatar,.pv-spot,.pv-tile,.pv-pass):active,.ocean-v2.reduce-motion .pv-tile:hover .pv-tile-art>img{transform:none}
+.ocean-v2.reduce-motion .pv-wait{opacity:1}
