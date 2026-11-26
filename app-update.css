@@ -11,7 +11,7 @@
 .app-update-card h2{margin:10px 0 6px;font-family:"Barlow Condensed",sans-serif;font-size:30px;font-weight:800;line-height:1;text-transform:uppercase}
 .app-update-card p{margin:0 0 18px;font-size:15px;line-height:1.5;color:var(--t-deep2)}
 .app-update-actions{display:grid;gap:8px}
-.app-update-actions button{min-height:50px;border:0;border-radius:16px;font:800 16px/1 inherit;cursor:pointer}
+.app-update-actions button{min-height:50px;border:0;border-radius:16px;font:800 16px/1 var(--body,'Figtree',sans-serif);cursor:pointer}
 .app-update-go{background:var(--t-main);color:var(--t-on-main);box-shadow:0 10px 22px -10px var(--t-main)}
 .app-update-go[disabled]{opacity:.7}
 .app-update-later{background:transparent;color:var(--t-main)}
