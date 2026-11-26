@@ -47,15 +47,17 @@
   function storeChecked(state,ok){return ok?{...state,storeDue:false}:state;}
 
   /* Quelle fenêtre montrer ? live : réponse de checkLive ; store : réponse de checkStore (absente si non demandée) ;
-     forced : la coque est sous native_min (état gardé) ; seen : dernière version dont le rappel a déjà été montré.
+     forced : la coque est sous native_min (état gardé) ; seen : dernière version dont le rappel a déjà été montré ; liveFailed : la vérification directe de ce lancement a échoué.
      Coque trop vieille : écran entier. Sinon, version plus récente sur l’App Store : rappel, une fois par version. */
-  function decide(live,store,forced,seen){
+  function decide(live,store,forced,seen,liveFailed){
     if(live&&live.kind==='live')return {kind:'live'};
     if(!store||store.kind!=='store')return null;
     const version=cleanVersion(store.version);
     if(forced||(live&&live.kind==='store'))return {kind:'store',version};
     if(seen!=null&&String(seen)===(version||'?'))return null;
-    return {kind:'reminder',version};
+    /* La vérification directe a échoué : on ne sait pas si la coque est trop vieille. Le rappel est montré mais pas retenu
+       comme vu (unsure), pour que l'écran entier revienne à la prochaine vérification réussie si la coque l'exige. */
+    return liveFailed?{kind:'reminder',version,unsure:true}:{kind:'reminder',version};
   }
 
   /* Dernière version de l’App Store dont le rappel a été montré (null si aucune ou si le stockage est bloqué). */

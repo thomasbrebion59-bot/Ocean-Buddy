@@ -113,7 +113,7 @@
     if(onboarding()||document.hidden||document.querySelector('.oba,dialog[open]')){setTimeout(()=>showWhenFree(next),5000);return;}
     pending=null;
     if(next.kind==='live')showLive();
-    else if(next.kind==='reminder'){U.markReminder(storage(),next.version);showReminder(next.version);}
+    else if(next.kind==='reminder'){if(!next.unsure)U.markReminder(storage(),next.version);showReminder(next.version);}
     else showStore(next.version);
   }
   const screen=()=>open||pending||null;
@@ -124,10 +124,11 @@
     if(!todo.live&&!todo.store)return;
     running=true;
     try{
-      let live=null,store=null;
+      let live=null,store=null,liveFailed=false;
       if(todo.live){
         let liveOk=true;
         state=U.liveChecked(state,now);live=await M.updates.checkLive().catch(()=>{liveOk=false;return null;});
+        liveFailed=!liveOk;
         state=U.liveResult(state,live,liveOk);
       }
       if(todo.store&&!(live&&live.kind==='live')){
@@ -135,7 +136,7 @@
         store=await M.updates.checkStore().catch(()=>{ok=false;return null;});
         state=U.storeChecked(state,ok);
       }
-      const next=U.decide(live,store,state.forced,U.reminderSeen(storage()));
+      const next=U.decide(live,store,state.forced,U.reminderSeen(storage()),liveFailed);
       if(next)showWhenFree(next);
     }finally{running=false;}
   }

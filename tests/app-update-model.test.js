@@ -156,3 +156,16 @@ test('le module s’expose sur window comme les autres *-model.js', () => {
   assert.equal(typeof ctx.AppUpdateModel.plan, 'function');
   assert.equal(ctx.AppUpdateModel.AWAY_MIN, 10 * MIN);
 });
+
+test('vérification directe en échec au lancement : rappel montré mais jamais retenu comme vu, l’écran entier peut revenir', () => {
+  const store = { kind: 'store', version: '1.6.0' };
+  assert.deepEqual(U.decide(null, store, false, null, true), { kind: 'reminder', version: '1.6.0', unsure: true });
+  assert.deepEqual(U.decide(null, store, false, null, false), { kind: 'reminder', version: '1.6.0' }, 'vérification réussie : rappel normal, retenu');
+  assert.equal(U.decide(null, store, false, '1.6.0', true), null, 'déjà vu pour cette version : rien de plus');
+  /* Constat gardé d’une vérification précédente : l’écran entier passe avant, échec ou non. */
+  assert.deepEqual(U.decide(null, store, true, null, true), { kind: 'store', version: '1.6.0' });
+  /* Câblage : seul un rappel sûr est retenu (app-update.js). */
+  const src = require('node:fs').readFileSync(require('node:path').join(__dirname, '..', 'app-update.js'), 'utf8');
+  assert.match(src, /if\(!next\.unsure\)U\.markReminder\(storage\(\),next\.version\)/);
+  assert.match(src, /U\.decide\(live,store,state\.forced,U\.reminderSeen\(storage\(\)\),liveFailed\)/);
+});
