@@ -139,7 +139,9 @@ test('0.8 la barre d’action de la fiche ne monte qu’une fois le sommaire pas
   const src = read('ocean-hub.js');
   assert.match(src, /bar\.classList\.toggle\('show',onDetail&&detail\.classList\.contains\('is-past'\)\)/);
   assert.match(src, /new MutationObserver\(\(\)=>requestAnimationFrame\(check\)\)\.observe\(detail,\{attributes:true,attributeFilter:\['class'\]\}\)/);
-  assert.match(read('app.js'), /detail\.classList\.toggle\('is-past',past\)/);
+  assert.match(read('app.js'), /detail\.classList\.toggle\('is-past',past\)/);  /* Relecture : cachée, la barre n’est ni atteignable au clavier ni lue par VoiceOver. */
+  assert.match(src, /bar\.inert=true;/);
+  assert.match(src, /bar\.inert=!bar\.classList\.contains\('show'\);/);
 });
 
 /* ---------- 0.9, 0.10, 0.11 ---------- */

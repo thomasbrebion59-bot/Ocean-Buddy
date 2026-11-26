@@ -121,22 +121,24 @@
   }
 
   /* Fiche spot : la barre d’action du bas, seule place du ♥ et de « Ajouter à un voyage » (sans doublon dans la fiche).
-     Elle reste affichée sur toute la fiche ; la barre d’onglets se range pendant ce temps (app-shell.css). */
+     Elle monte une fois le sommaire passé, puis reste sur la suite de la fiche ; la barre d’onglets se range pendant ce temps (app-shell.css). */
   function mountSpotBar(){
     const detail=$('#detail'),hero=$('#detailHero'),wrap=$('#screenWrap');if(!detail||!hero||!wrap)return;
     const bar=document.createElement('div');bar.className='spot-bar';bar.setAttribute('role','toolbar');bar.setAttribute('aria-label','Actions du spot');
     bar.innerHTML=`<span class="spot-bar-name" translate="no"></span><button type="button" class="spot-bar-fav" aria-label="Ajouter aux favoris">${I.heart}</button><button type="button" class="spot-bar-trip">${I.plus}<span>Ajouter à un voyage</span></button>`;
     detail.appendChild(bar);
+    /* Barre cachée (opacité 0) : retirée du clavier et de VoiceOver tant qu’elle n’est pas montée (inert). */
+    bar.inert=true;
     const sync=()=>{const on=favs.has(currentSpot);bar.querySelector('.spot-bar-fav').classList.toggle('on',on);bar.querySelector('.spot-bar-fav').setAttribute('aria-pressed',String(on));const s=spot(currentSpot);bar.querySelector('.spot-bar-name').textContent=s?s.name.split(' — ')[0]:'';};
     bar.querySelector('.spot-bar-fav').onclick=e=>{toggleFav(currentSpot,e);sync();};
     bar.querySelector('.spot-bar-trip').onclick=()=>window.OceanTrips?.fromSpot(currentSpot);
     let ticking=false;
     /* La barre ne monte qu’une fois le sommaire d’ouverture passé (#detail.is-past, posé par app.js au défilement) : à
        l’ouverture, elle ne couvre plus les six médaillons. */
-    const check=()=>{ticking=false;const onDetail=document.body.dataset.screen==='detail';if(onDetail)sync();bar.classList.toggle('show',onDetail&&detail.classList.contains('is-past'));};
+    const check=()=>{ticking=false;const onDetail=document.body.dataset.screen==='detail';if(onDetail)sync();bar.classList.toggle('show',onDetail&&detail.classList.contains('is-past'));bar.inert=!bar.classList.contains('show');};
     wrap.addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(check);}},{passive:true});
     try{new MutationObserver(()=>requestAnimationFrame(check)).observe(detail,{attributes:true,attributeFilter:['class']});}catch(_){}
-    window.addEventListener('ocean:navigate',e=>{if(e.detail!=='detail')bar.classList.remove('show');setTimeout(check,90);});
+    window.addEventListener('ocean:navigate',e=>{if(e.detail!=='detail'){bar.classList.remove('show');bar.inert=true;}setTimeout(check,90);});
     document.getElementById('dFav')?.addEventListener('click',()=>setTimeout(sync,0));
   }
 
