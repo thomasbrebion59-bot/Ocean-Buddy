@@ -193,6 +193,7 @@
   .ex-search svg{width:18px;height:18px;flex:none;opacity:.85}
   .ex-search input{flex:1;min-width:0;height:40px;border:0;background:transparent;color:var(--t-on-main);font:500 16px var(--body);outline:none}
   .ex-search input::placeholder{color:color-mix(in srgb,var(--t-on-main) 70%,transparent)}
+  .ex-search input::-webkit-search-cancel-button{display:none}
   .ex-search button{display:grid;place-items:center;width:32px;height:32px;padding:0;border:0;border-radius:50%;background:color-mix(in srgb,var(--t-card) 14%,transparent);color:var(--t-on-main);cursor:pointer}
   .ex-search button[hidden]{display:none}
   .ex-search button svg{width:16px;height:16px}
