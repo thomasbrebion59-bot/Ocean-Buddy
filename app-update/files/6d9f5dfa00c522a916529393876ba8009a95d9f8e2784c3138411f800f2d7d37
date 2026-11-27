@@ -44,61 +44,61 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
   mo.observe(d,{childList:true,subtree:true});addEventListener('DOMContentLoaded',function(){mo.disconnect();});})(A[new Date().getDate()%A.length][1]);}
 })();</script>
 <noscript><style>#obBoot{display:none}</style></noscript>
-<script src="i18n.js?v=6c653f656778"></script>
+<script src="i18n.js?v=8eeacf662b4f"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-<title>Ocean Buddy — Explore. Progresse. Protège.</title>
+<title>Ocean Buddy : Explore. Progresse. Protège.</title>
 <meta name="theme-color" content="#fef9eb">
 <meta name="color-scheme" content="light only">
 <link rel="icon" type="image/png" sizes="32x32" href="assets/app/favicon-32.png">
 <link rel="icon" type="image/png" sizes="192x192" href="assets/app/icon-192.png">
 <meta name="description" content="Trouve ton prochain spot nautique, prépare ta session et protège l’océan avec Poulpy, ton guide Ocean Buddy.">
-<link rel="stylesheet" href="base.css?v=fc88cb7c501f">
-<link rel="stylesheet" href="design.css?v=9ee387947166">
+<link rel="stylesheet" href="base.css?v=688354c43718">
+<link rel="stylesheet" href="design.css?v=6a999308e146">
 <link rel="stylesheet" href="adventure.css?v=24e854d3aa32">
 <link rel="stylesheet" href="coastal.css?v=35042c38d04e">
 <link rel="stylesheet" href="trips.css?v=b4bd36ab32c1">
-<link rel="stylesheet" href="poulpy.css?v=9e9adc4a23a1">
+<link rel="stylesheet" href="poulpy.css?v=5948f79a416c">
 <link rel="stylesheet" href="navigation.css?v=43c6c798ccb0">
-<link rel="stylesheet" href="field-guide.css?v=003e794cb769">
+<link rel="stylesheet" href="field-guide.css?v=3f888ec9dca7">
 <link rel="stylesheet" href="spot-immersion.css?v=1c3678123a20">
-<link rel="stylesheet" href="ocean-explore.css?v=d3eb85989201">
-<link rel="stylesheet" href="community.css?v=73cb165570ca">
+<link rel="stylesheet" href="ocean-explore.css?v=efc9e375d68a">
+<link rel="stylesheet" href="community.css?v=d1a110d3c2c9">
 <link rel="stylesheet" href="spot-experience.css?v=ed9c8335cb26">
-<link rel="stylesheet" href="polish.css?v=ce8eea434e59">
-<link rel="stylesheet" href="ocean-hub.css?v=febd9bce212b">
+<link rel="stylesheet" href="polish.css?v=2fda94c8f196">
+<link rel="stylesheet" href="ocean-hub.css?v=78e9285bb82c">
 <link rel="stylesheet" href="spot-guide.css?v=5dab4e238f32">
 <link rel="stylesheet" href="spot-voyage.css?v=a0c0d36daf34">
 <link rel="stylesheet" href="ocean-blue.css?v=5bda5f8ed7bb">
-<link rel="stylesheet" href="ocean-map.css?v=047fe6b5c1be">
+<link rel="stylesheet" href="ocean-map.css?v=b5815564fb62">
 <link rel="stylesheet" href="activity-theme.css?v=5d76d476787c">
-<link rel="stylesheet" href="activity-transition.css?v=74e898caefd5">
-<link rel="stylesheet" href="app-update.css?v=6d599b619d1e">
+<link rel="stylesheet" href="activity-transition.css?v=b23e383473cf">
+<link rel="stylesheet" href="app-update.css?v=ef23f78eb66e">
 <link rel="stylesheet" href="i18n.css?v=61f0c9cbabe6">
 <link rel="stylesheet" href="badges.css?v=42530ac82882">
 <link rel="stylesheet" href="home-feed.css?v=95f63ed28ab3">
 <link rel="stylesheet" href="surf.css?v=7f9aab4ef4b3">
 <link rel="stylesheet" href="surf-tab.css?v=b8ebffc8da38">
-<link rel="stylesheet" href="app-shell.css?v=18cfc2257728">
+<link rel="stylesheet" href="app-shell.css?v=53ccd0f045bc">
 <link rel="stylesheet" href="native-glass.css?v=e71e87cb9e31">
-<link rel="stylesheet" href="motion.css?v=e627d25113fa">
+<link rel="stylesheet" href="motion.css?v=23f740432144">
 <link rel="stylesheet" href="motion-media.css?v=b4bf64579b7e">
-<link rel="stylesheet" href="spot-data.css?v=588f3f896cf8">
+<link rel="stylesheet" href="spot-data.css?v=02d32841759c">
 <link rel="stylesheet" href="brand.css?v=0d498cc50f5b">
 <link rel="stylesheet" href="icons.css?v=71179c5f65be">
 <link rel="stylesheet" href="noel.css?v=f2506597979b">
-<link rel="stylesheet" href="spot-before.css?v=c2d81c0f79b3">
-<link rel="stylesheet" href="organisation.css?v=92b417c9b269">
+<link rel="stylesheet" href="spot-before.css?v=c3933483abee">
+<link rel="stylesheet" href="organisation.css?v=ce42483a5bee">
 <link rel="stylesheet" href="cultures.css?v=fabacb2adac7">
 <link rel="stylesheet" href="replis.css?v=15d2762b11d2">
 <link rel="stylesheet" href="fiches-organisation.css?v=e977add6e883">
-<link rel="stylesheet" href="ui-v2.css?v=45c509434f95">
-<link rel="stylesheet" href="ui-accueil.css?v=ef9b15ceb7c9">
-<link rel="stylesheet" href="ui-nav.css?v=ab6de5bc48d6">
+<link rel="stylesheet" href="ui-v2.css?v=e46b0a8cc35f">
+<link rel="stylesheet" href="ui-accueil.css?v=1da4c78a3a72">
+<link rel="stylesheet" href="ui-nav.css?v=daa721e2a267">
 <link rel="stylesheet" href="ui-listes.css?v=4b27be1546e3">
-<link rel="stylesheet" href="fiche.css?v=9fa910b161a6">
+<link rel="stylesheet" href="fiche.css?v=c1bb5ca07ee1">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Ocean Buddy">
-<meta property="og:title" content="Ocean Buddy — Explore. Progresse. Protège.">
+<meta property="og:title" content="Ocean Buddy : Explore. Progresse. Protège.">
 <meta property="og:description" content="Des centaines de spots nautiques dans le monde, prévisions, voyages et défis pour protéger l’océan, avec Poulpy.">
 <meta property="og:image" content="https://oceanbuddy.app/assets/brand/og-partage-1200x630.png">
 <meta property="og:image:width" content="1200">
@@ -126,7 +126,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
     <div id="onbBubbles"></div>
     <div class="onb-step active" data-step="0">
       <div class="onb-logo"><img class="onb-manta" src="assets/brand/manta-petrole-512.png" alt="Ocean Buddy" width="512" height="512" decoding="async"><svg class="logo-svg" id="logoOcto" viewBox="0 0 140 140" hidden></svg></div>
-      <span class="onb-kicker">BIENVENUE CHEZ OCEAN BUDDY</span><h1>L’océan t’appelle<span class="o">.</span></h1>
+      <span class="onb-kicker">Bienvenue chez Ocean Buddy</span><h1>L’océan t’appelle<span class="o">.</span></h1>
       <div class="tag">Des spots à explorer. Des sessions à vivre.<br>Un océan à protéger, avec Poulpy.</div>
       <div class="dots"><span class="on"></span><span></span><span></span><span></span></div>
       <button class="onb-btn" onclick="onbNext()">L’aventure commence ici</button>
@@ -135,7 +135,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
       <h2 id="sportStepTitle">Quelle activité ?</h2>
       <div class="tag" style="margin-top:2px">Choisis ton sport nautique. Tu pourras changer quand tu veux.</div>
       <div class="sport-grid" id="sportGrid"></div>
-      <button class="onb-near" onclick="goNearMe()"><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/pin.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> Je ne sais pas, montre-moi les activités près de moi</button>
+      <button class="onb-near" onclick="goNearMe()"><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/pin.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> Je ne sais pas, montre-moi les activités près de moi (on te demandera ta position)</button>
       <div class="dots"><span></span><span class="on"></span><span></span><span></span></div>
       <button class="onb-btn" onclick="onbNext()">Continuer</button>
     </div>
@@ -173,7 +173,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
           <p class="hero-description">Ta prochaine session commence ici.<br>Des spots qui font vibrer. Un océan à préserver.</p>
           <button class="hero-cta" onclick="OceanPoulpy.openWorlds()">Trouver mon spot</button>
           <div class="hero-foot"><span>Ton océan. À ton rythme.</span><span class="hero-coordinate" aria-hidden="true">SUR & SOUS L’EAU</span></div>
-          <div class="level-row"><div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div><span class="xp-text" id="xpText">Niv. 1 · 0 / 100 XP</span></div>
+          <div class="level-row"><div class="xp-bar"><div class="xp-fill" id="xpFill" style="width:0%"></div></div><span class="xp-text" id="xpText">Niv. 1, 0 / 100 XP</span></div>
         </div>
         <div class="mascot-card" id="welcomeCard" onclick="OceanPoulpy.openWorlds()" role="button" tabindex="0" aria-label="Explorer les continents avec Poulpy l’explorateur">
           <div class="poulpy-eyebrow"><i></i> POULPY L’EXPLORATEUR</div>
@@ -187,10 +187,10 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
       <section class="poulpy-spotlight" id="poulpySpotlight" aria-labelledby="poulpySpotlightTitle">
         <div class="poulpy-spotlight-art" aria-hidden="true"><svg id="spotlightOcto" viewBox="0 0 140 140"></svg></div>
         <div class="poulpy-spotlight-copy">
-          <span class="poulpy-spotlight-kicker">POULPY · TON GUIDE</span>
+          <span class="poulpy-spotlight-kicker">Poulpy, ton guide</span>
           <h2 id="poulpySpotlightTitle">Une question&nbsp;? <span>Poulpy sait t’aider.</span></h2>
           <p>Spots, météo, marées, sécurité, matériel, voyage, faune ou écologie : écris-lui comme à un vrai compagnon de session.</p>
-          <div class="poulpy-spotlight-actions"><button type="button" onclick="openChat()">Parler à Poulpy</button><small>Réponses sur ton appareil · aucun message envoyé</small></div>
+          <div class="poulpy-spotlight-actions"><button type="button" onclick="openChat()">Parler à Poulpy</button><small>Réponses sur ton appareil, aucun message envoyé</small></div>
         </div>
       </section>
 
@@ -249,7 +249,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
         <div class="ql-tx"><b>Le Quiz de Poulpy</b><span>Teste tes connaissances océan & gagne de l'XP</span></div>
         <span class="ql-go">Jouer</span>
       </div>
-      <p class="seo-browse" style="text-align:center;font-size:13px;margin:18px 16px 8px;opacity:.85"><a href="spots/" style="color:inherit;text-decoration:underline">Parcourir tous les spots Ocean Buddy</a> · <a href="https://apps.apple.com/fr/app/ocean-buddy/id6811870966" style="color:inherit;text-decoration:underline">Télécharger sur l’App Store</a></p>
+      <p class="seo-browse" style="text-align:center;font-size:13px;margin:18px 16px 8px;opacity:.85"><a href="spots/" style="color:inherit;text-decoration:underline">Parcourir tous les spots Ocean Buddy</a>, <a href="https://apps.apple.com/fr/app/ocean-buddy/id6811870966" style="color:inherit;text-decoration:underline">Télécharger sur l’App Store</a></p>
       </div>
 </section>
 
@@ -403,7 +403,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
       </div>
       <div class="cmp">
         <div class="cmp-head">
-          <h4><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/trophee.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> Compétition · ta saison</h4>
+          <h4><svg class="oi uic" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><image href="assets/pictos/pictos/trophee.webp" x="0" y="0" width="24" height="24" preserveAspectRatio="xMidYMid meet"/></svg> Ta saison de compétition</h4>
           <p>Les Points Océan comptent double pour les gestes : ici, protéger rapporte plus que rider.</p>
         </div>
         <div class="cmp-body" id="cmpBody"></div>
@@ -578,7 +578,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
   <div class="chat-sheet" id="chatSheet">
     <div class="chat-head">
       <div class="av"><svg id="chatOcto" viewBox="0 0 140 140"></svg></div>
-      <div><h3>Poulpy</h3><div class="st" id="chatStatus"><span class="dot-on"></span> Ton guide océan · prêt</div></div>
+      <div><h3>Poulpy</h3><div class="st" id="chatStatus"><span class="dot-on"></span> Ton guide océan, prêt</div></div>
       <button aria-label="Fermer la discussion" class="chat-close" onclick="closeChat()">✕</button>
     </div>
     <div class="chat-msgs" id="chatMsgs"></div>
@@ -604,7 +604,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
         <div class="set-row"><input id="setName" class="set-input" maxlength="18" placeholder="Ton prénom"><button class="set-save" onclick="saveName()">OK</button></div>
         <section class="set-mine" id="setMine" aria-labelledby="setMineTitle" style="scroll-margin-top:8px">
           <div class="set-lab" id="setMineTitle" role="heading" aria-level="4">Mon sport et mon niveau</div>
-          <p style="margin:0 0 4px;font-size:12px;line-height:1.35;color:var(--t-ink2)">Enregistré tout de suite. L’app prend la couleur de ton sport.</p>
+          <p style="margin:0 0 4px;font-size:13px;line-height:1.35;color:var(--t-ink2)">Enregistré tout de suite. L’app prend la couleur de ton sport.</p>
           <div class="sport-grid" id="setSportGrid" role="group" aria-label="Mon sport" style="grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;max-height:none;overflow:visible;margin:6px 0 4px"></div>
           <div class="lvl-cards" id="setLvlCards" role="group" aria-label="Mon niveau" style="gap:8px;margin:8px 0 4px"></div>
         </section>
@@ -614,6 +614,10 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
         <label class="set-lab" for="setLang">Langue</label>
         <select id="setLang" class="set-input set-lang" translate="no"></select>
         <label class="set-toggle"><span>Réduire les animations</span><input type="checkbox" id="setReduce" onchange="toggleReduceMotion(this.checked)"></label>
+        <div class="set-lab set-units-t" role="heading" aria-level="4">Unités</div>
+        <label class="set-toggle set-unit"><span>Vent en nœuds</span><input type="checkbox" id="setUnitWind"></label>
+        <label class="set-toggle set-unit"><span>Houle en pieds</span><input type="checkbox" id="setUnitLength"></label>
+        <label class="set-toggle set-unit"><span>Températures en °F</span><input type="checkbox" id="setUnitTemp"></label>
         <label class="set-toggle" id="setNoelRow" hidden><span>Ambiance de Noël</span><input type="checkbox" id="setNoel"></label>
       </section>
       <section class="set-grp" aria-labelledby="setGrpData">
@@ -623,7 +627,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
       <section class="set-grp set-grp-about" aria-labelledby="setGrpAbout">
         <h3 class="set-grp-t" id="setGrpAbout">À propos</h3>
         <img class="set-logo" src="assets/brand/logo-complet-640.png" alt="Ocean Buddy" width="640" height="604" loading="lazy" decoding="async">
-        <div class="set-about"><b>Ocean Buddy</b><br>Explore. Progresse. Protège.<br><br>Météo & marées : Open-Meteo.<br>Carte : OpenStreetMap. Photos : Wikimedia Commons et Unsplash.<br><a href="photos.html" target="_blank" rel="noopener">Photographes et licences</a><br><a href="privacy.html" target="_blank" rel="noopener">Confidentialité</a> · <a href="support.html" target="_blank" rel="noopener">Assistance</a><br><b>Poulpy</b> répond à tes questions directement sur ton appareil, même hors connexion.</div>
+        <div class="set-about"><b>Ocean Buddy</b><br>Explore. Progresse. Protège.<br><br>Météo & marées : Open-Meteo.<br>Carte : OpenStreetMap. Photos : Wikimedia Commons et Unsplash.<br><a href="photos.html" target="_blank" rel="noopener">Photographes et licences</a><br><a href="privacy.html" target="_blank" rel="noopener">Confidentialité</a>, <a href="support.html" target="_blank" rel="noopener">Assistance</a><br><b>Poulpy</b> répond à tes questions directement sur ton appareil, même hors connexion.</div>
       </section>
     </div>
   </div>
@@ -636,6 +640,7 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 
   <div class="confetti" id="confetti"></div>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="ac-pull" id="acPull" role="status" aria-live="polite" hidden></div>
 </div>
 
 
@@ -710,5 +715,8 @@ if(A.length&&window.MutationObserver){(function(u){var l=document.createElement(
 
 
 
-<script src="native.js"></script><script>OceanMobile.boot().then(()=>new Promise((resolve,reject)=>{let last;for(const src of ["photo-catalog.js?v=423c5aeed81e","legacy-spots.js?v=a2ed015635e8","catalog-runtime.js?v=73f85be484c6","trip-model.js?v=fdd76d1468be","poulpy-icons.js?v=793d1a2e6e83","spot-name.js?v=4e77491c7ec1","ocean-map-model.js?v=b08a2e51332b","ocean-globe.js?v=ab8b7c313deb","ocean-map.js?v=4327b0d0b6b8","activity-theme.js?v=c741de22dee3","activity-transition.js?v=9115991e9dfb","spot-photos.js?v=ece4f2871d12","progression.js?v=573fcb54b5ba","spot-rank-model.js?v=475e2af88a53","explore-list.js?v=ce60599046aa","app.js?v=5da47d017edc","spot-fit-model.js?v=23cae691490e","spot-before.js?v=819d8c975a77","private-spots.js?v=683221818ade","poulpy-knowledge.js?v=00c4ab3bd0f8","design.js?v=4334daaede34","trips.js?v=297510750ae5","ocean-hub.js?v=98c78a7cb965","poulpy-config.js?v=23289565237d","privacy.js?v=5be854237760","poulpy-assistant.js?v=fdc0b8ec4927","poulpy.js?v=9c9ca33b1592","spot-notebook-model.js?v=8982c4683ab8","spot-notebook.js?v=36db8df6485e","spot-gallery.js?v=c45fadc3519e","field-guide.js?v=0f7971d97f84","spot-immersion-model.js?v=8c6489617564","spot-immersion.js?v=43370efce8a4","spot-guide-model.js?v=c3f7a4f0dd2b","spot-guide.js?v=a1ea69912ef6","spot-data-model.js?v=693ac45c7a68","spot-weather-model.js?v=96ad189a5406","spot-verdict.js?v=aa2aa46f4839","spot-data.js?v=09a72f0c20a6","spot-plan.js?v=8ff389198595","ocean-sst.js?v=d283a91350a2","deep-link.js?v=7f961879456a","spot-experience.js?v=8c03ff62112c","community-config.js?v=991b61c2fed6","trip-sharing.js?v=e29f4931ffd4","community.js?v=43352388a466","navigation.js?v=77696998b5ad","ocean-sound.js?v=7e7f5190346a","polish.js?v=7b989c7f5998","spot-scenes.js?v=4834c147d84c","spot-panoramas.js?v=75a041ebb045","spot-voyage.js?v=f50446cbd998","app-update.js?v=3ee5e50641f1","ocean-home.js?v=5b1c975669f1","badges.js?v=0f98a53a54b1","noel-model.js?v=e20ee64f411f","cultures-boot.js?v=90cc45a27762","home-layout-model.js?v=8d77c0b3c9d2","home-feed.js?v=ab410ebfc996","passport.js?v=1807a8ddf71f","surf-model.js?v=db29a0e31c9a","surf-render.js?v=f094a635d338","surf-input.js?v=03ea6458fadc","surf-game.js?v=1ed766fb8a9a","surf-tab.js?v=fce394cfa30a","app-shell.js?v=3e028e804393","ui-nav.js?v=06a5a7b62e66","native-glass-model.js?v=688b34d578c2","native-glass.js?v=1e031ad3005b","motion.js?v=8c43e307b3a8","motion-media.js?v=21145e2c7af3","replis.js?v=c6b7dd9ed442"]){const s=document.createElement('script');s.src=src;s.async=false;s.onerror=reject;document.body.append(s);last=s;}last.onload=resolve;})).then(()=>OceanMobile.appReady()).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script></body>
+
+
+
+<script src="native.js"></script><script>OceanMobile.boot().then(()=>new Promise((resolve,reject)=>{let last;for(const src of ["photo-catalog.js?v=423c5aeed81e","legacy-spots.js?v=a2ed015635e8","catalog-runtime.js?v=73f85be484c6","trip-model.js?v=c09c02b32cac","poulpy-icons.js?v=793d1a2e6e83","spot-name.js?v=4e77491c7ec1","ocean-map-model.js?v=b08a2e51332b","ocean-globe.js?v=4aaeacdb0d3e","ocean-map.js?v=7534d0887089","activity-theme.js?v=c741de22dee3","activity-transition.js?v=9115991e9dfb","spot-photos.js?v=ece4f2871d12","progression.js?v=573fcb54b5ba","units-model.js?v=5c47b8a6bc29","conditions-model.js?v=51bd3f383cb9","spot-rank-model.js?v=2bd7a2cf335f","explore-list.js?v=956b8f617880","app.js?v=7a1b12fb037f","spot-fit-model.js?v=23cae691490e","spot-before.js?v=a742f912cbde","private-spots.js?v=683221818ade","poulpy-knowledge.js?v=00c4ab3bd0f8","design.js?v=9b3ba5b78971","trips.js?v=4f7f98ae6aec","ocean-hub.js?v=b3b2d76ca6a5","poulpy-config.js?v=23289565237d","privacy.js?v=13274aa1ca36","poulpy-assistant.js?v=df052d62d32f","poulpy.js?v=878a4ce08291","spot-notebook-model.js?v=8982c4683ab8","spot-notebook.js?v=54af0898192e","spot-gallery.js?v=46c241d06491","field-guide.js?v=b6acb929489c","spot-immersion-model.js?v=407e63cd3ca7","spot-immersion.js?v=024afad61b0e","spot-guide-model.js?v=74a69c3d0d9c","spot-guide.js?v=966ea76cad54","spot-data-model.js?v=1090121d16e4","spot-weather-model.js?v=96ad189a5406","spot-verdict.js?v=c8680525fae5","spot-data.js?v=e6355334ec80","spot-plan.js?v=cf81e0b62cfe","ocean-sst.js?v=9cc9bf9f3982","deep-link.js?v=7f961879456a","spot-experience.js?v=b9555e299416","community-config.js?v=991b61c2fed6","trip-sharing.js?v=e29f4931ffd4","community.js?v=5ed6a8945c60","navigation.js?v=5c4bb0c20207","ocean-sound.js?v=7e7f5190346a","polish.js?v=dc0aa9ea7958","spot-scenes.js?v=4834c147d84c","spot-panoramas.js?v=75a041ebb045","spot-voyage.js?v=1d07ec10bdca","app-update-model.js?v=304dfbd4bfe0","app-update.js?v=6b8ee3563318","ocean-home.js?v=ae17e09b75f3","badges.js?v=5dd0c97a7359","noel-model.js?v=e20ee64f411f","cultures-boot.js?v=bb864fc82528","home-layout-model.js?v=8d77c0b3c9d2","home-feed.js?v=d7146868e41f","passport.js?v=1807a8ddf71f","surf-model.js?v=db29a0e31c9a","surf-render.js?v=f094a635d338","surf-input.js?v=03ea6458fadc","surf-game.js?v=1ed766fb8a9a","surf-tab.js?v=d409d86bb9e3","app-shell.js?v=3e028e804393","ui-nav.js?v=e0d3493c9eb6","native-glass-model.js?v=688b34d578c2","native-glass.js?v=1e031ad3005b","motion.js?v=b3569ec952f1","motion-media.js?v=21145e2c7af3","replis.js?v=d2b11aaa8067"]){const s=document.createElement('script');s.src=src;s.async=false;s.onerror=reject;document.body.append(s);last=s;}last.onload=resolve;})).then(()=>OceanMobile.appReady()).catch(()=>{document.body.innerHTML='<main class="native-load-error"><h1>Ocean Buddy</h1><p>L’application n’a pas pu démarrer.</p><button onclick="location.reload()">Réessayer</button></main>'});</script></body>
 </html>

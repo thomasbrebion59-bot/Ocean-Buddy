@@ -36,7 +36,7 @@
 #detail .fx-num{font:800 var(--fiche-num)/.95 var(--display);letter-spacing:-.035em;font-variant-numeric:tabular-nums;color:var(--t-ink)}
 #detail .fx-num.is-none{color:color-mix(in srgb,var(--t-ink) 35%,transparent)}
 #detail .fx-unit{font:500 var(--fiche-unit)/1.2 var(--body);color:var(--fiche-soft)}
-#detail .fx-word{font:700 calc(var(--fiche-num) * .52)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);overflow-wrap:anywhere}
+#detail .fx-word{font:700 min(calc(var(--fiche-num) * .52),5.6vw)/1.1 var(--display);letter-spacing:-.02em;color:var(--t-ink);overflow-wrap:break-word}
 /* Pictogramme en trait. */
 #detail .fx-ic{flex:none;width:26px;height:26px;color:var(--t-ink)}
 /* Points de danger (quatre points, rouges jusqu’au niveau). */
@@ -584,14 +584,7 @@ html .ocean-v2 #detail .dcat[data-cat="infos"]>#dLogBtn :is(svg,img,.spico){flex
 #detail .dcat[data-cat="activites"] .sd-facts b{grid-column:2;font:700 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
 #detail .dcat[data-cat="activites"] .sd-facts span{grid-column:2;font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft)}
 
-/* Dormir : la nuit la moins chère en grand chiffre, sa source dessous, les recherches en pastilles. */
-#detail .px-sleep{display:grid;gap:4px;margin:0 0 16px}
-#detail .px-price{display:flex;flex-wrap:wrap;align-items:baseline;column-gap:8px;row-gap:2px;margin:2px 0 4px}
-#detail .px-type{display:grid;gap:1px}
-#detail .px-type b{font-weight:600}
-#detail .px-type span{font-size:var(--fiche-note);line-height:1.4;color:var(--fiche-soft)}
-#detail .px-sleep .fx-note{margin:0}
-#detail .px-sleep .px-src{margin-top:4px}
+/* Recherches d’hébergement en pastilles. */
 #detail .px-search{display:grid;gap:8px}
 #detail .px-search .fx-note{margin:0}
 /* Les recherches d’hébergement passent à la ligne : toutes visibles, « Comparer » compris, sans rien faire glisser. */
@@ -822,8 +815,7 @@ html .ocean-v2 #detail .fx-notes[hidden],#detail .fx-notes-zone[hidden]{display:
 #detail .dcat[data-cat="activites"] .sd-airports{gap:0}
 #detail .dcat[data-cat="activites"] .sd-airports li{align-items:center;min-height:46px;border-bottom:1px solid var(--fiche-hair)}
 #detail .dcat[data-cat="activites"] .sd-airports li:last-child{border-bottom:0}
-/* Dormir : le prix en grand, le type d’hébergement, les recherches ; plus de libellés au-dessus. */
-#detail .px-sleep>.fx-label,#detail .px-search>.fx-label{display:none}
+/* Dormir, manger, louer : pas de libellé au-dessus des recherches. */
 /* Autour : cartes courtes (type, nom, distance, liens). La description est sur la page liée. */
 #detail .px-place>p{display:none}
 #detail .px-rail.px-places{grid-auto-columns:min(64%,230px)}
@@ -876,7 +868,7 @@ html .ocean-v2 #detail .fx-notes[hidden],#detail .fx-notes-zone[hidden]{display:
 #detail .gl-tiles.gl-n1{grid-template-columns:minmax(0,1fr)}
 #detail .gl-tile{position:relative;display:grid;align-content:start;min-width:0;min-height:156px;margin:0;padding:12px 12px 0;border:0;border-radius:var(--fiche-radius);background:var(--fiche-wash);color:var(--t-ink);font:inherit;text-align:start;overflow:hidden;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .18s ease}
 #detail .gl-tile:active{transform:scale(.97)}
-#detail .gl-tile:focus-visible,#detail .gl-link:focus-visible,#detail .gl-card-go button:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+#detail .gl-tile:focus-visible,#detail .gl-card-go button:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
 #detail .gl-tile-tx{position:relative;z-index:1;display:grid;gap:2px;min-width:0}
 #detail .gl-tile .fx-label{font-size:var(--fiche-note);line-height:1.25}
 #detail .gl-big{display:flex;align-items:baseline;flex-wrap:wrap;column-gap:5px}
@@ -894,6 +886,10 @@ html .ocean-v2 #detail .fx-notes[hidden],#detail .fx-notes-zone[hidden]{display:
    elle est nette. La carte laisse toujours voir le bord de la suivante (environ 60 à 75 px) : on devine qu’on peut glisser. */
 #detail .gl-card{flex:0 0 min(330px,calc(100% - 56px));min-width:0;box-sizing:border-box;display:grid;grid-template-columns:104px minmax(0,1fr);grid-template-rows:auto auto auto 1fr;column-gap:12px;row-gap:2px;align-content:start;padding:12px 12px 4px;border-radius:var(--fiche-radius);background:var(--fiche-wash);overflow:hidden;scroll-snap-align:start}
 #detail .gl-card>.gl-illu,#detail .gl-card-go .gl-illu{grid-column:1;grid-row:1 / span 2;width:104px;height:104px;aspect-ratio:1;object-fit:cover;margin:0 0 8px;border-radius:14px}
+#detail #guideLive .gl-picto{display:grid;place-items:center;box-sizing:border-box;mix-blend-mode:normal;color:var(--t-main);background:var(--t-tint);border:1px solid var(--t-line)}
+#detail .gl-picto svg{width:54%;height:auto;aspect-ratio:1;display:block}
+#detail .gl-picto .s{fill:var(--t-acc)}
+#detail .gl-picto .sun{fill:var(--t-acc);stroke:none}
 #detail .gl-card>.fx-label,#detail .gl-card-go .fx-label{grid-column:2;grid-row:1;align-self:end}
 #detail .gl-card>b,#detail .gl-card-go b{grid-column:2;grid-row:2;align-self:start}
 #detail .gl-card>:is(small,a),#detail .gl-card-go small{grid-column:1 / -1}
@@ -926,38 +922,24 @@ html .ocean-v2 #detail .fx-notes[hidden],#detail .fx-notes-zone[hidden]{display:
 #detail .gl-pin{position:absolute;left:var(--p,50%);top:50%;width:20px;height:20px;border-radius:50%;border:3px solid var(--t-card);background:var(--t-sun,var(--t-main));box-shadow:0 1px 4px color-mix(in srgb,var(--t-ink) 30%,transparent);transform:translate(-50%,-50%)}
 #detail .gl-rank{margin:0 0 12px;font:400 var(--fiche-note)/1.4 var(--body);color:var(--fiche-soft)}
 #detail .gl-rank b{font-weight:700;color:var(--t-ink)}
-#detail .gl-prices{display:grid;gap:0;margin:0;padding:0;list-style:none}
-#detail .gl-prices li{display:grid;grid-template-columns:30px minmax(0,1fr) auto;align-items:center;column-gap:10px;min-height:48px;border-bottom:1px solid var(--fiche-hair)}
-#detail .gl-prices li:last-child{border-bottom:0}
-#detail .gl-ic{display:grid;place-items:center;width:30px;height:30px;color:var(--t-main)}
-#detail .gl-ic svg{width:24px;height:24px}
-#detail .gl-row-tx{min-width:0;font:600 var(--fiche-text)/1.3 var(--body);color:var(--t-ink)}
-#detail .gl-row-tx small{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft)}
-#detail .gl-prices b{font:800 calc(var(--fiche-num) * .5)/1.1 var(--display);letter-spacing:-.02em;font-variant-numeric:tabular-nums;color:var(--t-ink);white-space:nowrap}
-#detail .gl-unit{margin:6px 0 0}
-/* Raccourcis : de vrais liens, pictogramme dans un rond. */
-#detail .gl-links{display:grid;grid-template-columns:repeat(auto-fit,minmax(62px,1fr));gap:10px 2px;margin:0 -6px}
-#detail .gl-link{display:grid;justify-items:center;align-content:start;gap:7px;min-width:0;min-height:44px;color:var(--t-main);text-decoration:none;font:700 var(--fiche-note)/1.2 var(--body);text-align:center;overflow-wrap:normal;-webkit-tap-highlight-color:transparent}
-#detail .gl-link>span:last-child{font-size:12.5px;letter-spacing:-.01em;white-space:nowrap}
-#detail .gl-link-ic{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:var(--fiche-wash);transition:transform .18s ease}
-#detail .gl-link:active .gl-link-ic{transform:scale(.92)}
-#detail .gl-link-ic svg{width:26px;height:26px}
 /* Entrée en scène, une fois par spot : les tuiles puis les cartes montent légèrement, l’une après l’autre. */
 @keyframes glRise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @keyframes glPin{from{left:3%}to{left:var(--p,50%)}}
 #detail #guideLive.gl-in :is(.gl-tile,.gl-card){animation:glRise .46s cubic-bezier(.2,.8,.2,1) backwards;animation-delay:calc(var(--i,0) * 70ms)}
 #detail #guideLive.gl-in .gl-card{animation-delay:calc(180ms + var(--i,0) * 70ms)}
 #detail #guideLive.gl-in .gl-pin{animation:glPin .8s cubic-bezier(.2,.8,.2,1) .25s backwards}
-@media (prefers-reduced-motion:reduce){#detail #guideLive :is(.gl-tile,.gl-card,.gl-pin){animation:none!important}#detail :is(.gl-tile,.gl-link-ic,.gl-card-go button){transition:none}}
+@media (prefers-reduced-motion:reduce){#detail #guideLive :is(.gl-tile,.gl-card,.gl-pin){animation:none!important}#detail :is(.gl-tile,.gl-card-go button){transition:none}}
 body.reduce-motion #detail #guideLive :is(.gl-tile,.gl-card,.gl-pin){animation:none!important}
-body.reduce-motion #detail :is(.gl-tile,.gl-link-ic,.gl-card-go button){transition:none}
+body.reduce-motion #detail :is(.gl-tile,.gl-card-go button){transition:none}
 @media(max-width:389px){#detail .gl-big .fx-num{font-size:calc(var(--fiche-num) * .74)}#detail .gl-tile{padding:10px 10px 0;min-height:158px}#detail .gl-tile .gl-illu{max-height:42%}}
 @media(min-width:960px){
-  #detail .gl-tiles{grid-template-columns:repeat(3,minmax(0,220px))}
+  /* Le coin (25 nov.) : les tuiles remplissent la largeur en colonnes égales ; l'illustration carrée passe à droite du
+     chiffre, entière (contain, aucune coupe). */
+  #detail .gl-tiles{grid-template-columns:repeat(3,minmax(0,1fr))}
+  #detail .gl-tile{grid-template-columns:minmax(0,1fr) minmax(72px,min(42%,132px));align-items:center;column-gap:12px;min-height:0;padding:14px}
+  #detail .gl-tile .gl-illu{position:static;grid-column:2;grid-row:1;width:100%;max-height:none;aspect-ratio:1;object-fit:contain;object-position:50% 50%;border-radius:12px}
   #detail .gl-rail{margin:0;padding:0 0 4px}
   #detail .gl-card{flex:0 0 330px}
-  #detail .gl-budget{max-width:560px}
-  #detail .gl-links{grid-template-columns:repeat(auto-fit,minmax(64px,96px));justify-content:start}
 }
 /* Niveau des prix du pays (Banque mondiale) : un grand pourcentage, puis l’échelle parmi les pays du guide. */
 #detail .gl-pli{display:flex;align-items:baseline;flex-wrap:wrap;gap:4px 10px;margin:0 0 8px}
@@ -1017,7 +999,6 @@ html .ocean-v2 #detail .fx-chapter{margin:0 0 18px;padding:22px 0 0;border-top:1
    « Conditions », la barre se pose au-dessus du titre et ne le recouvre plus. Le sommaire rend ces 60 px (pas de marge basse). */
 html .ocean-v2 #detail .fx-chapter[data-chapter="meteo"]{border-top:0;padding-top:0;margin-top:60px}
 /* Préparer : le budget et ses prix sont dans « Budget sur place » (Le coin) ; « Dormir » garde ses recherches. */
-#detail .dcat[data-cat="activites"] #guideSleep .px-sleep{display:none}
 
 /* ---------- Ouverture : trois chiffres du moment sur la photo, sur un voile sombre (pas de flou de verre : règle des jetons crème) ---------- */
 html .ocean-v2 #detail #detailHero{flex-wrap:wrap;align-content:flex-end}
@@ -1239,7 +1220,82 @@ body.reduce-motion #detail .fx-scene *{animation:none!important;transition:none!
   #detail .fx-next{display:block}
   #detail .fx-next>.fx-days{grid-template-columns:repeat(3,minmax(0,220px))}
 }
+/* Ordinateur (25 nov.) : plus de place vide à droite des Conditions.
+   - Le nom du jour ne se coupe plus au milieu du mot (« Aujo urd’h ui ») : il prend sa ligne, les chiffres en dessous.
+   - Dès 1280 px, la scène reste à gauche (640 px au plus) et la colonne de droite reçoit les tuiles Eau et Marée, ton
+     créneau et les prochains jours (un jour par ligne). Même rangement pendant le chargement (place de la scène réservée) ;
+     si la prévision échoue, la colonne unique d’avant revient. */
+/* De 960 à 1279 px (colonne unique), la scène, l'heure du relevé et les tuiles prennent toute la largeur du chapitre ;
+   la scène garde ses proportions, plafonnée à 520 px de haut. */
+@media(min-width:960px) and (max-width:1279px){
+  #detail .dcat[data-cat="meteo"] #spotWeek>.fx-scene-wrap,#detail .dcat[data-cat="meteo"] #dNow>.fx-head{max-width:none}
+  #detail .dcat[data-cat="meteo"]:not(:has(.spot-week-empty,.spot-week-loading.is-failed)) .fx-readings{max-width:none}
+  #detail .dcat[data-cat="meteo"] #spotWeek>.fx-scene-wrap>.fx-scene,#detail .dcat[data-cat="meteo"] .spot-week-loading:not(.is-failed){max-height:520px;width:100%}
+  #detail .dcat[data-cat="meteo"] #spotWeek>.fx-next>.fx-days{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(min-width:960px){
+  #detail .fx-next>.fx-days>.fx-day{grid-template-columns:auto auto;justify-content:start}
+  #detail .fx-next>.fx-days>.fx-day>b{grid-column:1 / -1;overflow-wrap:normal}
+}
+@media(min-width:1280px){
+  .ocean-v2 #detail .dcat[data-cat="meteo"]:not([style*="none"]):has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))){display:grid;grid-template-columns:minmax(0,640px) minmax(300px,1fr);column-gap:28px;align-items:start}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed)))>:not(#dNow,#spotWeek),
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) :is(#dNow,#spotWeek)>*{grid-column:1 / -1}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>:is(.fx-scene-wrap,.spot-week-loading){grid-column:1;grid-row:span 3}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) :is(#dNow>.fx-row,#dNow>.fx-slot,#spotWeek>.fx-next){grid-column:2}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #dNow>.fx-slot{margin:0 0 16px}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>.fx-next>.fx-days{grid-template-columns:minmax(0,1fr)}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>.fx-next>.fx-days>.fx-day{grid-template-columns:minmax(0,1fr) auto auto;align-items:center;column-gap:14px}
+  #detail .dcat[data-cat="meteo"]:has(#spotWeek>:is(.fx-scene-wrap,.spot-week-loading:not(.is-failed))) #spotWeek>.fx-next>.fx-days>.fx-day>b{grid-column:auto}
+}
 
 /* ================= Mouvement réduit ================= */
 @media (prefers-reduced-motion:reduce){#detail .fx-wait{animation:none}}
 body.reduce-motion #detail .fx-wait{animation:none}
+
+/* Lot 1 (26 nov. 2026) : petite courbe du niveau de la mer sous « Montante » ou « Descendante » (spot-before.js, tideCurve).
+   Sans chiffre ni heure ; la partie déjà passée est plus claire, le point est « maintenant ». */
+#detail .fx-tide{flex:0 0 100%;display:block;width:100%;max-width:132px;height:auto;margin-top:6px;overflow:visible}
+#detail .fx-tide path{fill:none;stroke:var(--t-main);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+#detail .fx-tide .fx-tide-past{opacity:.38}
+#detail .fx-tide .fx-tide-now{fill:var(--t-sun,var(--t-main));stroke:var(--t-card);stroke-width:1.6}
+
+/* ---------- Dormir, manger, louer (lot 4, maquette M3) : un seul bloc pratique dans Le coin ---------- */
+#detail .gl-pratique{margin-top:var(--fiche-gap)}
+#detail .gl-ptiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:14px 0 var(--fiche-gap)}
+#detail .gl-ptile{display:grid;grid-template-rows:auto auto 1fr;align-content:start;gap:2px;min-width:0;margin:0;padding:8px 8px 12px;box-sizing:border-box;border:1px solid var(--fiche-hair);border-radius:var(--fiche-radius);background:var(--t-card);color:var(--t-ink);text-align:left;text-decoration:none;font:inherit;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:transform .18s ease}
+/* Sans tuile Camping : trois tuiles, la dernière (Apprendre et louer) sur toute la largeur, image à gauche. */
+#detail .gl-ptiles.gl-p3 .gl-ptile:last-child{grid-column:1 / -1;grid-template-columns:minmax(0,38%) minmax(0,1fr);grid-template-rows:auto 1fr;column-gap:12px;align-items:start}
+#detail .gl-ptiles.gl-p3 .gl-ptile:last-child .gl-pimg{grid-row:1 / span 2;margin-bottom:0;height:100%;aspect-ratio:auto;min-height:108px}
+#detail .gl-ptiles.gl-p3 .gl-ptile:last-child>b{align-self:end;padding-top:4px}
+#detail .gl-ptile:active{transform:scale(.97)}
+#detail .gl-ptile:focus-visible{outline:2px solid var(--t-main);outline-offset:2px}
+#detail .gl-pimg{display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:cover;border-radius:calc(var(--fiche-radius) - 4px);margin-bottom:8px;pointer-events:none;-webkit-user-select:none;user-select:none}
+#detail .gl-ptile>b{font:700 18px/1.2 var(--body);color:var(--t-ink);padding:0 4px;overflow-wrap:anywhere}
+#detail .gl-psub{display:block;padding:0 4px;font:400 var(--fiche-note)/1.35 var(--body);color:var(--fiche-soft);text-decoration:none}
+#detail .gl-psub.gl-psub-link{color:var(--t-main);font-weight:600;text-decoration:underline;text-underline-offset:3px}
+#detail .gl-aroundcard{display:grid;grid-template-columns:minmax(0,40%) minmax(0,1fr);align-items:stretch;gap:12px;overflow:hidden;border:1px solid var(--fiche-hair);border-radius:var(--fiche-radius);background:var(--t-card)}
+#detail .gl-minimap{display:block;width:100%;height:100%;min-height:92px}
+#detail .gl-minimap .mm-land{fill:color-mix(in srgb,var(--t-main) 7%,var(--t-card))}
+#detail .gl-minimap .mm-sea{fill:color-mix(in srgb,var(--t-main) 38%,var(--t-card))}
+#detail .gl-minimap .mm-water{fill:color-mix(in srgb,var(--t-main) 26%,var(--t-card))}
+#detail .gl-minimap .mm-road{fill:none;stroke:var(--t-card);stroke-width:5;stroke-linecap:round}
+#detail .gl-minimap .mm-pin{stroke:var(--t-card);stroke-width:3}
+#detail .gl-minimap .a{fill:var(--t-main)}#detail .gl-minimap .b{fill:var(--t-sun,var(--t-main))}#detail .gl-minimap .c{fill:var(--t-ink)}
+#detail .gl-aroundcard-tx{display:grid;align-content:center;gap:4px;padding:10px 12px 10px 0;min-width:0}
+#detail .gl-aroundcard-tx b{font:700 19px/1.2 var(--body);color:var(--t-ink)}
+#detail .gl-aroundcard-tx a{font:400 var(--fiche-note)/1.3 var(--body);color:var(--fiche-soft);text-decoration:underline;text-underline-offset:3px}
+#detail .gl-pratique>.gl-around{margin-top:0}
+#detail .gl-pratique .gl-around-sub{margin:12px 0 4px}
+#detail .gl-around-empty{margin:10px 0 0}
+#detail .gl-psearch{margin-top:var(--fiche-gap)}
+#detail .gl-psearch .gl-links-src{margin-top:8px}
+/* Préparer : « Dormir » et « Matériel et cours » sont dans « Dormir, manger, louer » (Le coin). */
+.ocean-v2 #detail .dcat[data-cat="activites"]>.field-local{display:none}
+@media (prefers-reduced-motion:reduce){#detail .gl-ptile{transition:none}}
+body.reduce-motion #detail .gl-ptile{transition:none}
+
+/* Relecture finale (26 nov.) : le mot de la marée (« Descendante », « Descendente ») sortait de sa case à 390 px et moins.
+   La case de la marée devient un conteneur : le mot garde sa taille quand il tient, et rapetisse seulement s'il le faut. */
+#detail .fx-reading[data-reading="tide"]{container-type:inline-size}
+#detail .fx-reading[data-reading="tide"] .fx-word{font-size:min(calc(var(--fiche-num) * .52),5.6vw,calc((100cqi - 37px) / 5.9))}
